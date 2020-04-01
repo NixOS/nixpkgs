@@ -33,7 +33,7 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
         environment.systemPackages = [ pkgs.hello ];
       };
       testScript = ''
-        $machine->succeed("hello");
+        machine.succeed("hello")
       '';
     });
 

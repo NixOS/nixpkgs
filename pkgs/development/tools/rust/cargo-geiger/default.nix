@@ -6,22 +6,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
-    owner = "anderejd";
+    owner = "rust-secure-code";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0yn4m94bklxyg0cxzhqm1m976z66rbi58ri1phffvqz457mxj3hk";
+    sha256 = "0kvmjahyx5dcjhry2hkvcshi0lbgipfj0as74a3h3bllfvdfkkg0";
   };
 
-  cargoSha256 = "0608wvbdw4i9pp3x6dgny186if6bzlbivkvfd5lfp1x1f53534za";
+  cargoSha256 = "0v50fkyf0a77l7whxalwnfqfi8lxy82z2gpd0fa0ib80qjla2n5z";
+  cargoPatches = [ ./cargo-lock.patch ];
 
   # Multiple tests require internet connectivity, so they are disabled here.
   # If we ever get cargo-insta (https://crates.io/crates/insta) in tree,
   # we might be able to run these with something like
   # `cargo insta review` in the `preCheck` phase.
   checkPhase = ''
+    cd cargo-geiger/tests/snapshots
+    for file in *
+    do
+      mv $file r#$file
+    done
+    cd -
     cargo test -- \
     --skip test_package::case_2 \
     --skip test_package::case_3 \
@@ -40,7 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Detects usage of unsafe Rust in a Rust crate and its dependencies.";
-    homepage = https://github.com/anderejd/cargo-geiger;
+    homepage = https://github.com/rust-secure-code/cargo-geiger;
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ evanjs ];
     platforms = platforms.all;

@@ -4,11 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "1.24.0";
+  version = "1.24.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1yg6r0srz3knhgvplprl3pikrq5c02dmdxgfwcynd6hjih9h16hb";
+    sha256 = "1162dr7smmfb02czmhshr0f93hqj7w0nw29bys5lzfvwarxcyflw";
   };
 
   nativeBuildInputs = [ pkgconfig meson ninja gettext gobject-introspection ];
@@ -16,10 +18,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     # Required by libpeas-1.0.pc
     gobject-introspection
-  ];
-
-  patches = [
-    ./fix-libpeas-gtk-pc.patch
   ];
 
   passthru = {

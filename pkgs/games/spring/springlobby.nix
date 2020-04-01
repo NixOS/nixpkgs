@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "springlobby";
-  version = "0.267";
+  version = "0.269";
 
   src = fetchurl {
-    url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "0yv7j9l763iqx7hdi2pcz5jkj0068yrffb8nrav7pwg0g3s0znak";
+    url = "https://springlobby.springrts.com/dl/stable/springlobby-${version}.tar.bz2";
+    sha256 = "1shgrfs4ssjj8m0c7805jisjzpc60796l0vja3yjfdksrz7yxvhg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://springlobby.info/;
+    homepage = https://springlobby.info/;
     repositories.git = git://github.com/springlobby/springlobby.git;
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;

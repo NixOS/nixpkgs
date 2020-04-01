@@ -17,7 +17,7 @@ self = stdenv.mkDerivation rec {
   version = "${luaversion}.${sourceVersion.patch}";
 
   src = fetchurl {
-    url = "https://www.lua.org/ftp/${pname}-${luaversion}.tar.gz";
+    url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
     sha256 = hash;
   };
 

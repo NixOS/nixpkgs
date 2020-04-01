@@ -6,11 +6,11 @@
 }:
 mkDerivation {
   pname = "elm-format";
-  version = "0.8.2";
+  version = "0.8.3";
   src = fetchgit {
     url = "https://github.com/avh4/elm-format";
-    sha256 = "0ly37fszrfviwqgrww57ikdcr7i8lcpczhqm8xqp5s7mrlpdxv7z";
-    rev = "ab3627cce01e5556b3fe8c2b5e3d92b80bfc74af";
+    sha256 = "0n6lrqj6mq044hdyraj3ss5cg74dn8k4z05xmwn2apjpm146iaw8";
+    rev = "b97e3593d564a1e069c0a022da8cbd98ca2c5a4b";
   };
   postPatch = ''
     mkdir -p ./generated
@@ -18,7 +18,7 @@ mkDerivation {
     module Build_elm_format where
 
     gitDescribe :: String
-    gitDescribe = "0.8.2"
+    gitDescribe = "0.8.3"
     EOHS
   '';
   isLibrary = false;

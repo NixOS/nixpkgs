@@ -1,17 +1,17 @@
-{ stdenv, fetchgit, cmake, itk, Cocoa }:
+{ stdenv, fetchgit, cmake, itk4, Cocoa }:
 
 stdenv.mkDerivation {
   pname   = "c3d";
-  version = "2018-10-04";
+  version = "unstable-2019-10-22";
 
   src = fetchgit {
-    url = "https://git.code.sf.net/p/c3d/git";
-    rev = "351929a582b2ef68fb9902df0b11d38f44a0ccd0";
-    sha256 = "0mpv4yl6hdnxgvnwrmd182h64n3ppp30ldzm0jz6jglk0nvpzq9w";
+    url    = "https://github.com/pyushkevich/c3d";
+    rev    = "c04e2b84568654665c64d8843378c8bbd58ba9b0";
+    sha256 = "0lzldxvshl9q362mg76byc7s5zc9qx7mxf2wgyij5vysx8mihx3q";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ itk ]
+  buildInputs = [ itk4 ]
     ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
   meta = with stdenv.lib; {
@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.gpl2;
-    broken = true;
+    broken = stdenv.isAarch64;
+    # /build/git-3453f61/itkextras/OneDimensionalInPlaceAccumulateFilter.txx:311:10: fatal error: xmmintrin.h: No such file or directory
   };
 }

@@ -27,16 +27,16 @@ buildGoPackage rec {
   nativeBuildInputs = [
     pkgconfig
     dbus-factory
-    dde-api
-    go-dbus-factory
-    go-gir-generator
-    go-lib
     jq
     wrapGAppsHook
     deepin.setupHook
   ];
 
   buildInputs = [
+    dde-api
+    go-dbus-factory
+    go-gir-generator
+    go-lib
     alsaLib
     dde-daemon
     dde-dock

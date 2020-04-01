@@ -3,20 +3,22 @@
 , python3, perl, w3m, dante
 }:
 
-buildGoModule rec {
+let
+  rev = "ea0df7bee433fedae5716906ea56141f92b9ce53";
+in buildGoModule rec {
   pname = "aerc";
-  version = "0.3.0";
+  version = "unstable-2020-02-01";
 
   src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/aerc/archive/${version}.tar.gz";
-    sha256 = "188jln8hmgiqn5il5m54bns0wk4grj09di8y6mmid58ibw6spma4";
+    url = "https://git.sr.ht/~sircmpwn/aerc/archive/${rev}.tar.gz";
+    sha256 = "1bx2fypw053v3bzalfgyi6a0s5fvv040z8jy4i63s7p53m8gmzs9";
   };
 
+  modSha256 = "127xrah6xxrvc224g5dxn432sagrssx8v7phzapcsdajsnmagq6x";
+
   nativeBuildInputs = [
-    go
     scdoc
     python3.pkgs.wrapPython
-    notmuch
   ];
 
   patches = [
@@ -27,7 +29,7 @@ buildGoModule rec {
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 perl ];
+  buildInputs = [ python3 notmuch ];
 
   GOFLAGS="-tags=notmuch";
 
@@ -50,8 +52,6 @@ buildGoModule rec {
     wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
       ${stdenv.lib.makeBinPath [ w3m dante ]}
   '';
-
-  modSha256 = "0pxbv4zfhii0g41cy0ycfpkkxw6nnd4ibavic6zqw30j476jnm2x";
 
   meta = with stdenv.lib; {
     description = "aerc is an email client for your terminal";

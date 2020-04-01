@@ -24,6 +24,7 @@
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
 * [NixOS Weekly](https://weekly.nixos.org/)
 * [Community-maintained wiki](https://nixos.wiki/)
+* [Community-maintained list of ways to get in touch](https://nixos.wiki/wiki/Get_In_Touch#Chat) (Discord, Matrix, Telegram, other IRC channels, etc.)
 
 # Other Project Repositories
 

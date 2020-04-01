@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip
+{ stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
 , asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
 , jdk ? null, python ? null, systemd, libunwind, which, minizip
@@ -6,13 +6,16 @@
 }:
 
 stdenv.mkDerivation rec {
-
   pname = "spring";
-  version = "104.0";
+  version = "104.0.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/springrts/spring_${version}_src.tar.lzma";
-    sha256 = "05pclcbw7v481pqz7bgirlk37494hy4hx4jghhnlzhdaz1cvzc6f";
+  # taken from https://github.com/spring/spring/commits/maintenance
+  src = fetchFromGitHub {
+    owner = "spring";
+    repo = "spring";
+    rev = "69b06d03411fd97f0042a348d839e88d16bd6cb1";
+    sha256 = "16dfh0alb3zz5q8d00fy91banicrn69hf1scmq6vgjhzhzsvnlxj";
+    fetchSubmodules = true;
   };
 
   # The cmake included module correcly finds nix's glew, however
@@ -21,8 +24,12 @@ stdenv.mkDerivation rec {
     substituteInPlace ./rts/build/cmake/FindAsciiDoc.cmake \
       --replace "PATHS /usr /usr/share /usr/local /usr/local/share" "PATHS ${docbook_xsl}"\
       --replace "xsl/docbook/manpages" "share/xml/docbook-xsl/manpages"
+    substituteInPlace ./rts/Rendering/GL/myGL.cpp \
+      --replace "static constexpr const GLubyte* qcriProcName" "static const GLubyte* qcriProcName"
     patchShebangs .
     rm rts/build/cmake/FindGLEW.cmake
+
+    echo "104.0.1-1474-g69b06d0 maintenance" > VERSION
   '';
 
   cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
@@ -50,6 +57,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

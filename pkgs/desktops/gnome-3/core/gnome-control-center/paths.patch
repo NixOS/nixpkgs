@@ -55,7 +55,7 @@ index 96b25140c..1ad704d4a 100644
  typedef struct _TzDB TzDB;
  typedef struct _TzLocation TzLocation;
 diff --git a/panels/info/cc-info-overview-panel.c b/panels/info/cc-info-overview-panel.c
-index 4541986db..da7826bfe 100644
+index 7fce8691e..b839f8b69 100644
 --- a/panels/info/cc-info-overview-panel.c
 +++ b/panels/info/cc-info-overview-panel.c
 @@ -187,7 +187,7 @@ load_gnome_version (char **version,
@@ -84,10 +84,10 @@ index 9390a3308..d30b4a68e 100644
          }
  
 diff --git a/panels/network/net-device-wifi.c b/panels/network/net-device-wifi.c
-index 360fbfc72..870157a11 100644
+index dd99a7485..4baa88a4e 100644
 --- a/panels/network/net-device-wifi.c
 +++ b/panels/network/net-device-wifi.c
-@@ -1385,7 +1385,7 @@ device_wifi_edit (NetObject *object)
+@@ -1445,7 +1445,7 @@ device_wifi_edit (NetObject *object)
                  return;
          }
          uuid = nm_connection_get_uuid (NM_CONNECTION (connection));
@@ -123,10 +123,10 @@ index f53ba217e..d24bcaeb9 100644
  
    /* Use SNMP to get printer's informations */
 diff --git a/panels/region/cc-region-panel.c b/panels/region/cc-region-panel.c
-index 35859526d..21486c917 100644
+index e0604b8c3..fc323c1b2 100644
 --- a/panels/region/cc-region-panel.c
 +++ b/panels/region/cc-region-panel.c
-@@ -755,10 +755,10 @@ row_layout_cb (CcRegionPanel *self,
+@@ -763,10 +763,10 @@ row_layout_cb (CcRegionPanel *self,
          layout_variant = cc_input_source_get_layout_variant (source);
  
          if (layout_variant && layout_variant[0])
@@ -140,7 +140,7 @@ index 35859526d..21486c917 100644
  
          g_spawn_command_line_async (commandline, NULL);
 diff --git a/panels/user-accounts/run-passwd.c b/panels/user-accounts/run-passwd.c
-index 00239ce0f..617c98870 100644
+index 19934f186..9f41a9620 100644
 --- a/panels/user-accounts/run-passwd.c
 +++ b/panels/user-accounts/run-passwd.c
 @@ -150,7 +150,7 @@ spawn_passwd (PasswdHandler *passwd_handler, GError **error)
@@ -152,6 +152,19 @@ index 00239ce0f..617c98870 100644
          argv[1] = NULL;
  
          envp = g_get_environ ();
+diff --git a/panels/user-accounts/user-utils.c b/panels/user-accounts/user-utils.c
+index 83d4cd091..e8784c722 100644
+--- a/panels/user-accounts/user-utils.c
++++ b/panels/user-accounts/user-utils.c
+@@ -486,7 +486,7 @@ is_valid_username_async (const gchar *username,
+          * future, so it would be nice to have some official way for this
+          * instead of relying on the current "--login" implementation.
+          */
+-        argv[0] = "/usr/sbin/usermod";
++        argv[0] = "@usermod@";
+         argv[1] = "--login";
+         argv[2] = data->username;
+         argv[3] = "--";
 diff --git a/tests/datetime/test-endianess.c b/tests/datetime/test-endianess.c
 index 9cb92007a..84d2f0fa3 100644
 --- a/tests/datetime/test-endianess.c

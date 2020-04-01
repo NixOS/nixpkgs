@@ -101,7 +101,12 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Whether to activate VESA video mode on boot.
+        (Deprecated) This option, if set, activates the VESA 800x600 video
+        mode on boot and disables kernel modesetting. It is equivalent to
+        specifying <literal>[ "vga=0x317" "nomodeset" ]</literal> in the
+        <option>boot.kernelParams</option> option. This option is
+        deprecated as of 2020: Xorg now works better with modesetting, and
+        you might want a different VESA vga setting, anyway.
       '';
     };
 
@@ -187,139 +192,144 @@ in
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkMerge
+    [ (mkIf config.boot.initrd.enable {
+        boot.initrd.availableKernelModules =
+          [ # Note: most of these (especially the SATA/PATA modules)
+            # shouldn't be included by default since nixos-generate-config
+            # detects them, but I'm keeping them for now for backwards
+            # compatibility.
 
-    system.build = { inherit kernel; };
+            # Some SATA/PATA stuff.
+            "ahci"
+            "sata_nv"
+            "sata_via"
+            "sata_sis"
+            "sata_uli"
+            "ata_piix"
+            "pata_marvell"
 
-    system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
+            # Standard SCSI stuff.
+            "sd_mod"
+            "sr_mod"
 
-    # Implement consoleLogLevel both in early boot and using sysctl
-    # (so you don't need to reboot to have changes take effect).
-    boot.kernelParams =
-      [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
-      optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
+            # SD cards and internal eMMC drives.
+            "mmc_block"
 
-    boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
+            # Support USB keyboards, in case the boot fails and we only have
+            # a USB keyboard, or for LUKS passphrase prompt.
+            "uhci_hcd"
+            "ehci_hcd"
+            "ehci_pci"
+            "ohci_hcd"
+            "ohci_pci"
+            "xhci_hcd"
+            "xhci_pci"
+            "usbhid"
+            "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
+            "hid_logitech_hidpp" "hid_logitech_dj"
 
-    boot.kernelModules = [ "loop" "atkbd" ];
+          ] ++ optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+            # Misc. x86 keyboard stuff.
+            "pcips2" "atkbd" "i8042"
 
-    boot.initrd.availableKernelModules =
-      [ # Note: most of these (especially the SATA/PATA modules)
-        # shouldn't be included by default since nixos-generate-config
-        # detects them, but I'm keeping them for now for backwards
-        # compatibility.
+            # x86 RTC needed by the stage 2 init script.
+            "rtc_cmos"
+          ];
 
-        # Some SATA/PATA stuff.
-        "ahci"
-        "sata_nv"
-        "sata_via"
-        "sata_sis"
-        "sata_uli"
-        "ata_piix"
-        "pata_marvell"
+        boot.initrd.kernelModules =
+          [ # For LVM.
+            "dm_mod"
+          ];
+      })
 
-        # Standard SCSI stuff.
-        "sd_mod"
-        "sr_mod"
+      (mkIf (!config.boot.isContainer) {
+        system.build = { inherit kernel; };
 
-        # SD cards and internal eMMC drives.
-        "mmc_block"
+        system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
-        # Support USB keyboards, in case the boot fails and we only have
-        # a USB keyboard, or for LUKS passphrase prompt.
-        "uhci_hcd"
-        "ehci_hcd"
-        "ehci_pci"
-        "ohci_hcd"
-        "ohci_pci"
-        "xhci_hcd"
-        "xhci_pci"
-        "usbhid"
-        "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
-        "hid_logitech_hidpp" "hid_logitech_dj"
+        # Implement consoleLogLevel both in early boot and using sysctl
+        # (so you don't need to reboot to have changes take effect).
+        boot.kernelParams =
+          [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
+          optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
 
-      ] ++ optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
-        # Misc. x86 keyboard stuff.
-        "pcips2" "atkbd" "i8042"
+        boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
-        # x86 RTC needed by the stage 2 init script.
-        "rtc_cmos"
-      ];
+        boot.kernelModules = [ "loop" "atkbd" ];
 
-    boot.initrd.kernelModules =
-      [ # For LVM.
-        "dm_mod"
-      ];
+        # The Linux kernel >= 2.6.27 provides firmware.
+        hardware.firmware = [ kernel ];
 
-    # The Linux kernel >= 2.6.27 provides firmware.
-    hardware.firmware = [ kernel ];
-
-    # Create /etc/modules-load.d/nixos.conf, which is read by
-    # systemd-modules-load.service to load required kernel modules.
-    environment.etc =
-      { "modules-load.d/nixos.conf".source = kernelModulesConf;
-      };
-
-    systemd.services.systemd-modules-load =
-      { wantedBy = [ "multi-user.target" ];
-        restartTriggers = [ kernelModulesConf ];
-        serviceConfig =
-          { # Ignore failed module loads.  Typically some of the
-            # modules in ‘boot.kernelModules’ are "nice to have but
-            # not required" (e.g. acpi-cpufreq), so we don't want to
-            # barf on those.
-            SuccessExitStatus = "0 1";
+        # Create /etc/modules-load.d/nixos.conf, which is read by
+        # systemd-modules-load.service to load required kernel modules.
+        environment.etc =
+          { "modules-load.d/nixos.conf".source = kernelModulesConf;
           };
-      };
 
-    lib.kernelConfig = {
-      isYes = option: {
-        assertion = config: config.isYes option;
-        message = "CONFIG_${option} is not yes!";
-        configLine = "CONFIG_${option}=y";
-      };
+        systemd.services.systemd-modules-load =
+          { wantedBy = [ "multi-user.target" ];
+            restartTriggers = [ kernelModulesConf ];
+            serviceConfig =
+              { # Ignore failed module loads.  Typically some of the
+                # modules in ‘boot.kernelModules’ are "nice to have but
+                # not required" (e.g. acpi-cpufreq), so we don't want to
+                # barf on those.
+                SuccessExitStatus = "0 1";
+              };
+          };
 
-      isNo = option: {
-        assertion = config: config.isNo option;
-        message = "CONFIG_${option} is not no!";
-        configLine = "CONFIG_${option}=n";
-      };
+        lib.kernelConfig = {
+          isYes = option: {
+            assertion = config: config.isYes option;
+            message = "CONFIG_${option} is not yes!";
+            configLine = "CONFIG_${option}=y";
+          };
 
-      isModule = option: {
-        assertion = config: config.isModule option;
-        message = "CONFIG_${option} is not built as a module!";
-        configLine = "CONFIG_${option}=m";
-      };
+          isNo = option: {
+            assertion = config: config.isNo option;
+            message = "CONFIG_${option} is not no!";
+            configLine = "CONFIG_${option}=n";
+          };
 
-      ### Usually you will just want to use these two
-      # True if yes or module
-      isEnabled = option: {
-        assertion = config: config.isEnabled option;
-        message = "CONFIG_${option} is not enabled!";
-        configLine = "CONFIG_${option}=y";
-      };
+          isModule = option: {
+            assertion = config: config.isModule option;
+            message = "CONFIG_${option} is not built as a module!";
+            configLine = "CONFIG_${option}=m";
+          };
 
-      # True if no or omitted
-      isDisabled = option: {
-        assertion = config: config.isDisabled option;
-        message = "CONFIG_${option} is not disabled!";
-        configLine = "CONFIG_${option}=n";
-      };
-    };
+          ### Usually you will just want to use these two
+          # True if yes or module
+          isEnabled = option: {
+            assertion = config: config.isEnabled option;
+            message = "CONFIG_${option} is not enabled!";
+            configLine = "CONFIG_${option}=y";
+          };
 
-    # The config options that all modules can depend upon
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      # !!! Should this really be needed?
-      (isYes "MODULES")
-      (isYes "BINFMT_ELF")
-    ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
+          # True if no or omitted
+          isDisabled = option: {
+            assertion = config: config.isDisabled option;
+            message = "CONFIG_${option} is not disabled!";
+            configLine = "CONFIG_${option}=n";
+          };
+        };
 
-    # nixpkgs kernels are assumed to have all required features
-    assertions = if config.boot.kernelPackages.kernel ? features then [] else
-      let cfg = config.boot.kernelPackages.kernel.config; in map (attrs:
-        { assertion = attrs.assertion cfg; inherit (attrs) message; }
-      ) config.system.requiredKernelConfig;
+        # The config options that all modules can depend upon
+        system.requiredKernelConfig = with config.lib.kernelConfig;
+          [
+            # !!! Should this really be needed?
+            (isYes "MODULES")
+            (isYes "BINFMT_ELF")
+          ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
 
-  };
+        # nixpkgs kernels are assumed to have all required features
+        assertions = if config.boot.kernelPackages.kernel ? features then [] else
+          let cfg = config.boot.kernelPackages.kernel.config; in map (attrs:
+            { assertion = attrs.assertion cfg; inherit (attrs) message; }
+          ) config.system.requiredKernelConfig;
+
+      })
+
+    ];
 
 }

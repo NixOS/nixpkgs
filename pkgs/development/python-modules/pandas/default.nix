@@ -30,11 +30,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.25.3";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52da74df8a9c9a103af0a72c9d5fdc8e0183a90884278db7f386b5692a2220a4";
+    sha256 = "11j5s6hz29yh3rwa2rjgric0knbhp9shphd4i7hx00xr5wr2xx1j";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -67,6 +67,12 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
+  setupPyBuildFlags = [
+    # As suggested by
+    # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
+    "--parallel=$NIX_BUILD_CORES"
+  ];
+
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
     # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
@@ -87,6 +93,8 @@ in buildPythonPackage rec {
     # ordering logic has changed
     "numpy_ufuncs_other"
     "order_without_freq"
+    # tries to import from pandas.tests post install
+    "util_in_top_level"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"

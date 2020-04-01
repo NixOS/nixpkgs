@@ -1,6 +1,10 @@
-{ stdenv, ... }:
-attrs: {
-  env = attrs.env // {
-    NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + stdenv.lib.optionalString stdenv.isx86_64 " -mno-fma";
-  };
+{ stdenv, kdeIntegration, ... }:
+attrs:
+{
+  postConfigure = attrs.postConfigure + ''
+    sed -e '/CPPUNIT_TEST(Import_Export_Import);/d' -i './sw/qa/inc/swmodeltestbase.hxx'
+  '';
+  configureFlags = attrs.configureFlags ++ [
+    (stdenv.lib.enableFeature kdeIntegration "kf5")
+  ];
 }

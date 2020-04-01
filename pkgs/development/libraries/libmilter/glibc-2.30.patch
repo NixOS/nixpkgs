@@ -1,0 +1,44 @@
+diff --git a/libmilter/sm_gethost.c b/libmilter/sm_gethost.c
+index 2423c34..f00468c 100644
+--- a/libmilter/sm_gethost.c
++++ b/libmilter/sm_gethost.c
+@@ -52,16 +52,8 @@ sm_getipnodebyname(name, family, flags, err)
+ 	bool resv6 = true;
+ 	struct hostent *h;
+ 
+-	if (family == AF_INET6)
+-	{
+-		/* From RFC2133, section 6.1 */
+-		resv6 = bitset(RES_USE_INET6, _res.options);
+-		_res.options |= RES_USE_INET6;
+-	}
+ 	SM_SET_H_ERRNO(0);
+-	h = gethostbyname(name);
+-	if (family == AF_INET6 && !resv6)
+-		_res.options &= ~RES_USE_INET6;
++	h = gethostbyname2(name, family);
+ 
+ 	/* the function is supposed to return only the requested family */
+ 	if (h != NULL && h->h_addrtype != family)
+diff --git a/sendmail/conf.c b/sendmail/conf.c
+index c73334e..500dafb 100644
+--- a/sendmail/conf.c
++++ b/sendmail/conf.c
+@@ -4243,16 +4243,8 @@ sm_getipnodebyname(name, family, flags, err)
+ # else /* HAS_GETHOSTBYNAME2 */
+ 	bool resv6 = true;
+ 
+-	if (family == AF_INET6)
+-	{
+-		/* From RFC2133, section 6.1 */
+-		resv6 = bitset(RES_USE_INET6, _res.options);
+-		_res.options |= RES_USE_INET6;
+-	}
+ 	SM_SET_H_ERRNO(0);
+-	h = gethostbyname(name);
+-	if (!resv6)
+-		_res.options &= ~RES_USE_INET6;
++	h = gethostbyname2(name, family);
+ 
+ 	/* the function is supposed to return only the requested family */
+ 	if (h != NULL && h->h_addrtype != family)

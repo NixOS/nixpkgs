@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid ];
 
-  env.NIX_CFLAGS_COMPILE = "-std=gnu90";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu90 -D_GNU_SOURCE";
 
   meta = {
     inherit version;

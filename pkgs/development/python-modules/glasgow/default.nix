@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "glasgow";
-  version = "unstable-2019-10-16";
+  version = "unstable-2020-02-08";
   # python software/setup.py --version
-  realVersion = "0.1.dev1286+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.1.dev1352+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "4f968dbe6cf4e9d8e2d0a5163d82e996c24d5e30";
-    sha256 = "1b50n12dc0b3jmim5ywg7daq62k5j4wkgmwzk88ric5ri3b8dl2r";
+    rev = "2a8bfc981b90ba5d86c310911dbd6ffe71acd498";
+    sha256 = "01v5269bv09ggvmq6lqyhr5am51hzmwya1p5n62h84b7rdwd8q9m";
   };
 
   nativeBuildInputs = [ setuptools_scm sdcc ];
@@ -44,6 +44,8 @@ buildPythonPackage rec {
 
   checkInputs = [ yosys icestorm nextpnr ];
 
+  enableParallelBuilding = true;
+
   preBuild = ''
     make -C firmware LIBFX2=${fx2}/share/libfx2
     cp firmware/glasgow.ihex software/glasgow
@@ -55,7 +57,7 @@ buildPythonPackage rec {
   doInstallCheck = false;
 
   checkPhase = ''
-    python -m unittest discover
+    python -W ignore::DeprecationWarning test.py
   '';
 
   makeWrapperArgs = [

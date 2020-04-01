@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiorun";
-  version = "2019.11.1";
+  version = "2020.2.1";
   format = "flit";
 
   disabled = isPy27;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "cjrh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04p3sci6af6qqfkcqamsqhmqqrigcwvl4bmx8yv5ppvkyq39pxi7";
+    sha256 = "0wcj8prkijb889ic8n6varms7xkwy028hhw0imgkd1i0p64lm3m4";
   };
 
   checkInputs = [

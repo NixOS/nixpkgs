@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "throttled";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "erpalma";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1icb2288pj25vbdnd16zvisw9c01hp8vkk25ilkc74gy76xhpcs4";
+    sha256 = "1y1sczvj2qc8ml9i1rdzr8hklvci9bdphm3mmri2ncaqys8wdbh4";
   };
 
   nativeBuildInputs = [ python3Packages.wrapPython ];
 
-  pythonPath = with python3Packages; [ 
+  pythonPath = with python3Packages; [
     configparser
     dbus-python
     pygobject3
   ];
 
-  # The upstream unit both assumes the install location, and tries to run in a virtualenv 
+  # The upstream unit both assumes the install location, and tries to run in a virtualenv
   postPatch = ''sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/lenovo_fix.py|' -i systemd/lenovo_fix.service'';
 
   installPhase = ''

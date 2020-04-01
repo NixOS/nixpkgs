@@ -1,16 +1,17 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , pandas, shapely, fiona, descartes, pyproj
 , pytest, Rtree }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.6.2";
+  version = "0.7.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     rev = "v${version}";
-    sha256 = "1wy2n204vf5bbswgma205lr1is7nnxr385m4x3v7pra05bq8ag3q";
+    sha256 = "0cfdvl4cvi0nim1qbmzf7vg0all272i8r0kj4xgdd0hr2j4jdg9p";
   };
 
   checkInputs = [ pytest Rtree ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command-line time tracker";
-    homepage = https://taskwarrior.org/docs/timewarrior;
+    homepage = "https://timewarrior.net";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "eth-utils";
-  version = "1.7.0";
+  version = "1.8.4";
 
   # Tests are missing from the PyPI source tarball so let's use GitHub
   # https://github.com/ethereum/eth-utils/issues/130
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hhhdz764xgwj5zg3pjzpx10vh54q7kbvlnj9d67qkgwl3fkfgw2";
+    sha256 = "1hfzb3xz3j50dgp51nx2jssh9j07np24fqmpnyr2ycsll90g1j6q";
   };
 
   checkInputs = [ pytest hypothesis ];

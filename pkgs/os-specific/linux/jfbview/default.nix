@@ -15,14 +15,19 @@ in
 
 stdenv.mkDerivation rec {
   name = "${package}-${version}";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     repo = "JFBView";
     owner = "jichu4n";
     rev = version;
-    sha256 = "09rcmlf04aka0yzr25imadi0fl4nlbsxcahs7fhvzx4nql4halqw";
+    sha256 = "0ppns49hnmp04zdjw6wc28v0yvz31rkzvd5ylcj7arikx20llpxf";
   };
+
+  postPatch = ''
+    substituteInPlace main.cpp \
+      --replace "<stropts.h>" "<sys/ioctl.h>"
+  '';
 
   hardeningDisable = [ "format" ];
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mailmanclient" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.gnu.org/software/mailman/";
+    homepage = "https://www.gnu.org/software/mailman/";
     description = "REST client for driving Mailman 3";
     license = licenses.lgpl3;
     platforms = platforms.linux;

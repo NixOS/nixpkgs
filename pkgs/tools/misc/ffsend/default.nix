@@ -25,7 +25,7 @@ buildRustPackage rec {
     sha256 = "0yqigqh5vldzmp7wc1mxi5a4bxzm81xycx5h0ghak74vbjibps49";
   };
 
-  cargoSha256 = "1wwdnm6a5g4gpd1f89qii8v4f6mcfc1bif1v6mdlcbrpwax5skh4";
+  cargoSha256 = "0m2931fmc8jczjpb08077cpz9klhhf3aq15j2h76sb254qndagzy";
 
   nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
   buildInputs = [ openssl ]

@@ -12,6 +12,8 @@
 # any build is allowed, so this parameter acts as a simple whitelist.
 # Takes the package version and returns the build version.
 , makeBuildVersion ? (v: v)
+, enableClient ? true
+, enableServer ? true
 }:
 
 let
@@ -19,14 +21,14 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "102";
+  version = "104.6";
   buildVersion = makeBuildVersion version;
 
   src = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "0g4zy2zlynv6f427pq1ngnl0zpr6nnih10wd2l8vl9bxwzjygwdr";
+    sha256 = "1crdfiymaz57gnma6bmdcsnbl635nhjdndrjv467c4xfq9vvap2i";
   };
 
   desktopItem = makeDesktopItem {
@@ -52,6 +54,9 @@ let
     pname = "${pname}-deps";
     inherit version src postPatch;
     nativeBuildInputs = [ gradle_5 perl ];
+    # Here we build both the server and the client so we only have to specify
+    # one hash for 'deps'. Deps can be garbage collected after the build,
+    # so this is not really an issue.
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon desktop:dist -Pbuildversion=${buildVersion}
@@ -65,33 +70,51 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1sscxrr32f2agwz34pm491xqkz7m4bwdc1p3g64kcnl3p6rg7r7k";
+    outputHash = "08yrczz1qn78qy3x67gs7d0xvihbfbb8ggiczq2nj812745zcizw";
   };
 
-in stdenv.mkDerivation rec {
+  # Separate commands for building and installing the server and the client
+  buildClient = ''
+    gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
+  '';
+  buildServer = ''
+    gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
+  '';
+  installClient = ''
+    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
+    mkdir -p $out/bin
+    makeWrapper ${jre}/bin/java $out/bin/mindustry \
+      --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
+      --add-flags "-jar $out/share/mindustry.jar"
+    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+    install -Dm644 ${desktopItem}/share/applications/Mindustry.desktop $out/share/applications/Mindustry.desktop
+  '';
+  installServer = ''
+    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
+    mkdir -p $out/bin
+    makeWrapper ${jre}/bin/java $out/bin/mindustry-server \
+      --add-flags "-jar $out/share/mindustry-server.jar"
+  '';
+
+in
+assert stdenv.lib.assertMsg (enableClient || enableServer)
+  "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
+stdenv.mkDerivation rec {
   inherit pname version src postPatch;
 
   nativeBuildInputs = [ gradle_5 makeWrapper ];
 
-  buildPhase = ''
+  buildPhase = with stdenv.lib; ''
     export GRADLE_USER_HOME=$(mktemp -d)
     # point to offline repo
     sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
-    gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
-    gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
+    ${optionalString enableClient buildClient}
+    ${optionalString enableServer buildServer}
   '';
 
-  installPhase = ''
-    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
-    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
-    mkdir $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/mindustry \
-      --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
-      --add-flags "-jar $out/share/mindustry.jar"
-    makeWrapper ${jre}/bin/java $out/bin/mindustry-server \
-      --add-flags "-jar $out/share/mindustry-server.jar"
-    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
-    install -Dm644 ${desktopItem}/share/applications/Mindustry.desktop $out/share/applications/Mindustry.desktop
+  installPhase = with stdenv.lib; ''
+    ${optionalString enableClient installClient}
+    ${optionalString enableServer installServer}
   '';
 
   meta = with stdenv.lib; {

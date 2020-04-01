@@ -1,13 +1,13 @@
 {stdenv, fetchurl}: 
 
-let version = "1.5.0"; in
+let version = "1.5.1"; in
 stdenv.mkDerivation {
   pname = "tetgen";
   inherit version;
 
   src = fetchurl {
     url = "http://wias-berlin.de/software/tetgen/1.5/src/tetgen${version}.tar.gz";
-    sha256 = "1www3x2r6r7pck43ismlwy82x0j6xj2qiwvfs2pn687gsmhlh4ad";
+    sha256 = "0l5q066crs4cjj7qr0r2gnz8ajkgighngwglr1201h77lcs48sp4";
   };
 
   installPhase = ''

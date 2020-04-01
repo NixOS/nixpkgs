@@ -30,11 +30,11 @@ let
 in
 mkDerivation rec {
   pname = "calibre";
-  version = "4.8.0";
+  version = "4.12.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1lk44qh3hzqhpz2b00iik7cgjg4xm36qjh2pxflkjnbk691gbpqk";
+    sha256 = "144vl5p0adcywcqaarrriq5zd8q5i934yfjg9himiq1vdp9vy4fi";
   };
 
   patches = [
@@ -93,12 +93,13 @@ mkDerivation rec {
       netifaces
       pillow
       python
-      pyqt5_with_qtwebkit
+      pyqt5
       sip
       regex
       msgpack
       beautifulsoup4
       html2text
+      pyqtwebengine
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ]

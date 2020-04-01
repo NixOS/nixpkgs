@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
   project = "mailutils";
-  version = "3.8";
+  version = "3.9";
 
   src = fetchurl {
     url = "mirror://gnu/${project}/${name}.tar.xz";
-    sha256 = "1wkn9ch664477r4d8jk9153w5msljsbj99907k7zgzpmywbs6ba7";
+    sha256 = "1g1xf2lal04nsnf1iym9n9n0wxjpqbcr9nysxpm98v4pniinqwsz";
   };
 
   postPatch = ''

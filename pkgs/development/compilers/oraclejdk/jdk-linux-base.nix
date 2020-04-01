@@ -1,15 +1,13 @@
 { productVersion
 , patchVersion
-, buildVersion
 , sha256
 , jceName
-, releaseToken
 , sha256JCE
 }:
 
 { swingSupport ? true
 , stdenv
-, fetchurl
+, requireFile
 , makeWrapper
 , unzip
 , file
@@ -18,7 +16,6 @@
 , pluginSupport ? true
 , installjce ? false
 , config
-, licenseAccepted ? config.oraclejdk.accept_license or false
 , glib
 , libxml2
 , libav_0_8
@@ -38,13 +35,6 @@
 
 assert swingSupport -> xorg != null;
 
-if !licenseAccepted then throw ''
-    You must accept the Oracle Binary Code License Agreement for Java SE at
-    https://www.oracle.com/technetwork/java/javase/terms/license/index.html
-    by setting nixpkgs config option 'oraclejdk.accept_license = true;'
-  ''
-else assert licenseAccepted;
-
 let
 
   /**
@@ -55,14 +45,14 @@ let
     x86_64-linux  = "amd64";
     armv7l-linux  = "arm";
     aarch64-linux = "aarch64";
-  }.${stdenv.hostPlatform.system};
+  }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   jce =
     if installjce then
-      fetchurl {
-        url = "http://download.oracle.com/otn-pub/java/jce/${productVersion}/${jceName}";
+      requireFile {
+        name = jceName;
+        url = "http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html";
         sha256 = sha256JCE;
-        curlOpts = "-b oraclelicense=a";
       }
     else
       "";
@@ -76,25 +66,23 @@ let
 
 in
 
-assert sha256 ? ${stdenv.hostPlatform.system};
-
 let result = stdenv.mkDerivation rec {
-  name =
-    if installjdk then "oraclejdk-${productVersion}u${patchVersion}" else "oraclejre-${productVersion}u${patchVersion}";
+  pname = if installjdk then "oraclejdk" else "oraclejre";
+  version = "${productVersion}u${patchVersion}";
 
-  src = let
-    platformName = {
-      i686-linux    = "linux-i586";
-      x86_64-linux  = "linux-x64";
-      armv7l-linux  = "linux-arm32-vfp-hflt";
-      aarch64-linux = "linux-arm64-vfp-hflt";
-    }.${stdenv.hostPlatform.system};
-    javadlPlatformName = "linux-i586";
-  in fetchurl {
-   url = "http://javadl.oracle.com/webapps/download/GetFile/1.${productVersion}.0_${patchVersion}-b${buildVersion}/${releaseToken}/${javadlPlatformName}/jdk-${productVersion}u${patchVersion}-${platformName}.tar.gz";
-   curlOpts = "-b oraclelicense=a";
-   sha256 = sha256.${stdenv.hostPlatform.system};
-  };
+  src =
+    let
+      platformName = {
+        i686-linux    = "linux-i586";
+        x86_64-linux  = "linux-x64";
+        armv7l-linux  = "linux-arm32-vfp-hflt";
+        aarch64-linux = "linux-arm64-vfp-hflt";
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    in requireFile {
+      name = "jdk-${productVersion}u${patchVersion}-${platformName}.tar.gz";
+      url = "http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html";
+      sha256 = sha256.${stdenv.hostPlatform.system};
+    };
 
   nativeBuildInputs = [ file ]
     ++ stdenv.lib.optional installjce unzip;

@@ -48,11 +48,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.62.4";
+  version = "2.62.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1g2vj9lyh032kcwij7avx5d6a99rcsnkd07sbl9i55zsfw6h712c";
+    sha256 = "0bj5hagvfiqcjd20w543pvbnrlqvs8nbxvqjflyvcn36ljpwvldq";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
-    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"

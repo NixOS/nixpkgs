@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "playerctl";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "playerctl";
     rev = "v${version}";
-    sha256 = "1f3njnpd52djx3dmhh9a8p5a67f0jmr1gbk98icflr2q91149gjz";
+    sha256 = "03f3645ssqf8dpkyzj9rlglrzh0840sflalskx9s4i03bgq3v4r9";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gtk-doc docbook_xsl gobject-introspection ];

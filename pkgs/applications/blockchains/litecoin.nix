@@ -1,33 +1,37 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, mkDerivation, fetchFromGitHub
 , pkgconfig, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
-, glib, protobuf, utillinux, qt4, qrencode
+, glib, protobuf, utillinux, qrencode
 , AppKit
 , withGui ? true, libevent
+, qtbase, qttools
+, zeromq
 }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
 
   name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.16.3";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "litecoin-project";
     repo = "litecoin";
     rev = "v${version}";
-    sha256 = "0vc184qfdkjky1qffa7309k6973k4197bkzwcmffc9r5sdfhrhkp";
+    sha256 = "08a0ghs4aa9m3qv3ppydyshfibykdwxk07i1vcqvg0ycqisdpb7y";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib
+  buildInputs = [ openssl db48 boost zlib zeromq
                   miniupnpc glib protobuf utillinux libevent ]
                   ++ optionals stdenv.isDarwin [ AppKit ]
-                  ++ optionals withGui [ qt4 qrencode ];
+                  ++ optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt4" ];
+                   ++ optionals withGui [
+                      "--with-gui=qt5"
+                      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin" ];
 
   enableParallelBuilding = true;
 

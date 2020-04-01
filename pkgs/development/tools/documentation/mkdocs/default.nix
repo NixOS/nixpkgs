@@ -1,6 +1,6 @@
-{ stdenv, lib, python, fetchFromGitHub }:
+{ stdenv, lib, python3, fetchFromGitHub }:
 
-with python.pkgs;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mkdocs";

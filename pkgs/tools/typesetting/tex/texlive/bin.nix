@@ -68,6 +68,9 @@ let
       done
       cp -pv ${pdftoepdf} texk/web2c/pdftexdir/pdftoepdf.cc
       cp -pv ${pdftosrc} texk/web2c/pdftexdir/pdftosrc.cc
+
+      # poppler 0.84 compat fixups, use 0.83 files otherwise
+      patch -p1 -i ${./poppler84.patch}
     '';
 
     # remove when removing synctex-missing-header.patch
@@ -393,6 +396,27 @@ pygmentex = python2Packages.buildPythonApplication rec {
     license = licenses.lppl13c;
     maintainers = with maintainers; [ romildo ];
   };
+};
+
+
+texlinks = stdenv.mkDerivation rec {
+  name = "texlinks.sh";
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
+
+  dontBuild = true;
+  doCheck = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    # Patch texlinks.sh back to 2015 version;
+    # otherwise some bin/ links break, e.g. xe(la)tex.
+    patch --verbose -R scripts/texlive-extra/texlinks.sh < '${./texlinks.diff}'
+    install -Dm555 scripts/texlive-extra/texlinks.sh "$out"
+
+    runHook postInstall
+  '';
 };
 
 

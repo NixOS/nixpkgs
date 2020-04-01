@@ -1,22 +1,26 @@
-{ lib, fetchFromGitHub, gotools, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "mtail";
-  version = "3.0.0-rc4";
-  goPackagePath = "github.com/google/mtail";
+  version = "3.0.0-rc35";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mtail";
     rev = "v${version}";
-    sha256 = "1n7pqvid48ayn15qfpgpbsx0iqg24x08wphzpc08mlfw47gq7jg3";
+    sha256 = "04hzr0cw0dq7hmqvp1lhm5wl239yrxmcpsl25sqk74wy06cgrrqd";
   };
 
-  buildInputs = [ gotools ];
-  goDeps = ./deps.nix;
-  patches = [ ./fix-gopath.patch ];
-  preBuild = "go generate -x ./go/src/github.com/google/mtail/vm/";
+  modSha256 = "0h3q1qd9a01wlfkk0yv74a4bk5nilpsppq522cv7kl8ysnrjh5yi";
+  subPackages = [ "cmd/mtail" ];
 
+  preBuild = ''
+    go generate -x ./internal/vm/
+  '';
+
+  buildFlagsArray = [
+    "-ldflags=-X main.Version=${version}"
+  ];
 
   meta = with lib; {
     license = licenses.asl20;

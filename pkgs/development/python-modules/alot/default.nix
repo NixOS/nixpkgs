@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, python, fetchFromGitHub, isPy3k
+{ stdenv, lib, buildPythonPackage, python, fetchFromGitHub, fetchpatch, isPy3k
 , notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
 , service-identity
 , gnupg ? null, sphinx, awk ? null, procps ? null, future ? null
@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "alot";
-  version = "0.8.1";
+  version = "0.9";
   outputs = [ "out" ] ++ lib.optional withManpage "man";
 
   disabled = !isPy3k;
@@ -16,8 +16,17 @@ buildPythonPackage rec {
     owner = "pazz";
     repo = "alot";
     rev = version;
-    sha256 = "1gzis6w45d860mr2qbmjhnbrhy6d9xwhw27wpmvs56vndafvv9d3";
+    sha256 = "sha256-WUwOJcq8JE7YO8sFeZwYikCRhpufO0pL6MKu54ZYsHI=";
   };
+
+  patches = [
+    # can't compose email if signature is set: https://github.com/pazz/alot/issues/1468
+    (fetchpatch {
+      name = "envelope-body.patch";
+      url = "https://github.com/pazz/alot/commit/28a4296c7f556c251d71d9502681980d46d9fa55.patch";
+      sha256 = "1iwvmjyz4mh1g08vr85ywhah2xarcqg8dazagygk19icgsn45w06";
+    })
+  ];
 
   nativeBuildInputs = lib.optional withManpage sphinx;
 

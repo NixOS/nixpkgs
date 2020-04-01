@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   # perf refers both to newt and slang
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-    flex bison libiberty audit makeWrapper pkgconfig
+    flex bison libiberty audit makeWrapper pkgconfig python3
   ];
   buildInputs = [
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
@@ -53,6 +53,10 @@ stdenv.mkDerivation {
     "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
     "-Wno-error=stringop-truncation"
   ];
+
+  postPatch = ''
+    patchShebangs scripts/bpf_helpers_doc.py
+  '';
 
   doCheck = false; # requires "sparse"
   doInstallCheck = false; # same

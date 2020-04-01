@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
   # fix build with gcc9, can be removed after bumping to current version
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preConfigure =
     ''

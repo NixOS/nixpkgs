@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
     sha256 = "0936ix7lfwsamssap58b265zid7x2m97azrr2qpjcln3xysd16lg";
   };
 
+  bootstrapper = ./rebar3-nix-bootstrap;
+
   buildInputs = [ erlang tree ];
 
   postPatch = ''

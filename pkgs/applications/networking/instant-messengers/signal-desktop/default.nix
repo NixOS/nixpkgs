@@ -1,9 +1,8 @@
-{ stdenv, lib, fetchurl, dpkg, wrapGAppsHook
+{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
 , cups, expat, systemd, libnotify, libuuid, at-spi2-core, libappindicator-gtk3
-, autoPatchelfHook
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -24,7 +23,7 @@ let
       else "");
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "1.29.6"; # Please backport all updates to the stable channel.
+  version = "1.32.3"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -34,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "1s1rc4kyv0nxz5fy5ia7fflphf3izk80ks71q4wd67k1g9lvcw24";
+    sha256 = "1aqk0hdgdxjznj0nbh2glvyzdq2af8xgiw3qb4k7wpjd0my28r2l";
   };
 
   nativeBuildInputs = [
@@ -81,6 +80,7 @@ in stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     systemd.lib
+    libnotify
   ];
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -88,12 +88,20 @@ in stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
   dontPatchELF = true;
+  # We need to run autoPatchelf manually with the "no-recurse" option, see
+  # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
+  dontAutoPatchelf = true;
 
   installPhase = ''
     mkdir -p $out/lib
 
     mv usr/share $out/share
-    mv opt/Signal $out/lib
+    mv opt/Signal $out/lib/Signal
+
+    # Note: The following path contains bundled libraries:
+    # $out/lib/Signal/resources/app.asar.unpacked/node_modules/sharp/vendor/lib/
+    # We run autoPatchelf with the "no-recurse" option to avoid picking those
+    # up, but resources/app.asar still requires them.
 
     # Symlink to bin
     mkdir -p $out/bin
@@ -109,6 +117,8 @@ in stdenv.mkDerivation rec {
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
       --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
+
+    autoPatchelf --no-recurse -- $out/lib/Signal/
   '';
 
   meta = {
@@ -117,7 +127,8 @@ in stdenv.mkDerivation rec {
       Signal Desktop is an Electron application that links with your
       "Signal Android" or "Signal iOS" app.
     '';
-    homepage    = https://signal.org/;
+    homepage    = "https://signal.org/";
+    changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
     license     = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
     platforms   = [ "x86_64-linux" ];

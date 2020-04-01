@@ -4,10 +4,10 @@ with python3;
 
 pkgs.buildPythonApplication rec {
   pname = "pypi2nix";
-  version = "2.0.3";
+  version = "2.0.4";
   src = pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0mja8q5lc0lils6s0v0l35knsj7n7779kw246jfmyvkc3l07j8df";
+    sha256 = "0y4zkkcijz5hchd8j6a106ysrg1dnad7dzdgnmz38rgm6zbrky0d";
   };
   propagatedBuildInputs = with pkgs; [
     attrs

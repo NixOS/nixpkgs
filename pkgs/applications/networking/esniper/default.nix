@@ -1,12 +1,12 @@
 { stdenv, fetchgit, openssl, curl, coreutils, gawk, bash, which }:
 
 stdenv.mkDerivation {
-  name = "esniper-2.35.0-18-g4a59da0";
+  name = "esniper-2.35.0-21-g6379846";
 
   src = fetchgit {
     url    = "https://git.code.sf.net/p/esniper/git";
-    rev    = "4a59da032aa4536b9e5ea95633247650412511db";
-    sha256 = "0d3vazh5q7wymqahggbb2apl9hgrm037y4s3j91d24hjgk2pzzyd";
+    rev    = "637984623984ef36782d52d8968df7fae7bbb0a7";
+    sha256 = "1md3fzs0k88f6mgvrj1yrh96mn0qlca2p6vfqj6dnpyb8pjjwp8w";
   };
 
   buildInputs = [ openssl curl ];

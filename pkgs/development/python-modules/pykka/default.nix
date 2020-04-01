@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "1.2.0";
+  version = "2.0.1";
 
   src = fetchgit {
     url = "https://github.com/jodal/pykka.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0qlfw1054ap0cha1m6dbnq51kjxqxaf338g7jwnwy33b3gr8x0hg";
+    sha256 = "011rvv3vzj9rpwaq6vfpz9hfwm6gx1jmad4iri6z12g8nnlpydhs";
   };
 
   # There are no tests

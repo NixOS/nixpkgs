@@ -6,6 +6,7 @@
 , libuv
 , psutil
 , isPy27
+, pythonAtLeast
 , CoreServices
 , ApplicationServices
 }:
@@ -13,7 +14,8 @@
 buildPythonPackage rec {
   pname = "uvloop";
   version = "0.14.0";
-  disabled = isPy27;
+  # python 3.8 hangs on tests, assuming it's subtly broken with race condition
+  disabled = isPy27 || pythonAtLeast "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fast implementation of asyncio event loop on top of libuv";
-    homepage = http://github.com/MagicStack/uvloop;
+    homepage = https://github.com/MagicStack/uvloop;
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

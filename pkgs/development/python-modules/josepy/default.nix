@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lq2s1649zinfii9ccl1wk6aqpaj35r8xwz44020ylp9ky1rmv4w";
+    sha256 = "068nkdbag049cjs9q3rrs5j5f1239202y0g9xblii6rr0fjgyhf3";
   };
 
   propagatedBuildInputs = [

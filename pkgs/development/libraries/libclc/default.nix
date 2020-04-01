@@ -3,23 +3,24 @@
 let
   llvm = llvmPackages.llvm;
   clang = llvmPackages.clang;
+  clang-unwrapped = llvmPackages.clang-unwrapped;
 in
 
 stdenv.mkDerivation {
-  name = "libclc-2017-11-29";
+  name = "libclc-2019-06-09";
 
   src = fetchFromGitHub {
     owner = "llvm-mirror";
     repo = "libclc";
-    rev = "d6384415ab854c68777dd77451aa2bc0d959da99";
-    sha256 = "10fqrlnqlknh58x7pfsbg9r07fblfg2mgq2m4fr1jbb836ncn3wh";
+    rev = "9f6204ec04a8cadb6bef57caa71e3161c4f398f2";
+    sha256 = "03l9frx3iw3qdsb9rrscgzdwm6872gv6mkssvn027ndf9y321xk7";
   };
 
   nativeBuildInputs = [ python ];
-  buildInputs = [ llvm clang ];
+  buildInputs = [ llvm clang clang-unwrapped ];
 
   postPatch = ''
-    sed -i 's,llvm_clang =.*,llvm_clang = "${clang}/bin/clang",' configure.py
+    sed -i 's,llvm_clang =.*,llvm_clang = "${clang-unwrapped}/bin/clang",' configure.py
     sed -i 's,cxx_compiler =.*,cxx_compiler = "${clang}/bin/clang++",' configure.py
   '';
 
@@ -27,11 +28,12 @@ stdenv.mkDerivation {
     ${python.interpreter} ./configure.py --prefix=$out
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://libclc.llvm.org/;
     description = "Implementation of the library requirements of the OpenCL C programming language";
     license = licenses.mit;
     platforms = platforms.all;
-    broken = true;
   };
 }

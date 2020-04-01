@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
 , libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg
-, leveldb, postgresql, hiredis
+, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
+, leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
 }:
 
 with stdenv.lib;
@@ -46,6 +46,9 @@ let
 
     buildInputs = [
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      gmp libspatialindex
+    ] ++ optionals stdenv.isDarwin [
+      libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
       libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
     ] ++ optionals buildServer [
@@ -61,7 +64,7 @@ let
       homepage = http://minetest.net/;
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [ pyrolagus fpletz ];
     };
   };
@@ -73,8 +76,8 @@ let
   };
 
   v5 = {
-    version = "5.1.0";
-    sha256 = "184n9gxfa7yr0j85z2x736maaymsnppd5jzm326wlqri3c0qqy3z";
+    version = "5.1.1";
+    sha256 = "0cjj63333b7j4ydfq0h9yc6d2jvmyjd7n7zbd08yrf0rcibrj2k0";
     dataSha256 = "1r9fxz2j24q74a9injvbxbf2xk67fzabv616i676zw2cvgv9hn39";
   };
 

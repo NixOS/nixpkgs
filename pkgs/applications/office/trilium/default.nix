@@ -19,7 +19,7 @@ let
     maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];
   };
 
-  version = "0.38.2";
+  version = "0.40.5";
 
 in {
   
@@ -30,14 +30,14 @@ in {
 
     src = fetchurl {
       url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-      sha256 = "10f5zfqcfcjynw04d5xzrfmkbqpk85i4mq7njhkibx2f1m0br2qa";
+      sha256 = "02hmfgv8viy1hn2ix4b0gdzbcj7piddsmjdnb0b5hpwahqrikiyi";
     };
   
     # Fetch from source repo, no longer included in release.
     # (they did special-case icon.png but we want the scalable svg)
     # Use the version here to ensure we get any changes.
     trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/src/public/images/trilium.svg";
+      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/trilium.svg";
       sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
     };
   
@@ -78,7 +78,7 @@ in {
 
     src = fetchurl {
       url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-      sha256 = "1df0cx9gpzk0086lgha0qm1g03l8f4rz7y2xzgpzng5rrxjkgz61";
+      sha256 = "00b7qx2h26qrdhw2a7y0irhbr442yynnzpm1pz55hi33zpckbrc7";
     };
 
     nativeBuildInputs = [

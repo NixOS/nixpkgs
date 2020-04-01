@@ -1,25 +1,28 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels, qtpy, pyzmq, chardet
-, pyqtwebengine
+  spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
+, pyqtwebengine, atomicwrites, pyxdg, diff-match-patch
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "4.0.0";
+  version = "4.1.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2bfece9743188e3d1da68f02271a7c6eb7f0a3b692c3df4952458ab96b037a8";
+    sha256 = "13ajjifyf7w895vpl0h9r59m73zisby81xjw2c5pk49fh5l6ycs9";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
+    intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine
+    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
+    atomicwrites pyxdg diff-match-patch
   ];
 
   # There is no test for spyder
@@ -42,8 +45,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
   '';
 
-  # Create desktop item
   postInstall = ''
+    # add Python libs to env so Spyder subprocesses
+    # created to run compute kernels don't fail with ImportErrors
+    wrapProgram $out/bin/spyder3 --prefix PYTHONPATH : "$PYTHONPATH"
+
+    # Create desktop item
     mkdir -p $out/share/icons
     cp spyder/images/spyder.svg $out/share/icons
     cp -r $desktopItem/share/applications/ $out/share

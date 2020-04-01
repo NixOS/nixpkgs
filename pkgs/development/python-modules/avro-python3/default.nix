@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "avro-python3";
-  version = "1.8.2";
+  version = "1.9.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f82cf0d66189600b1e6b442f650ad5aca6c189576723dcbf6f9ce096eab81bd6";
+    sha256 = "daab2cea71b942a1eb57d700d4a729e9d6cd93284d4dd4d65a378b9f958aa0d2";
   };
 
   doCheck = false;        # No such file or directory: './run_tests.py

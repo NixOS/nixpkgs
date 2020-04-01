@@ -1,4 +1,8 @@
-{ pkgs, fetchgit, php }:
+{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
+, bzip2, curl, libxml2, openssl, gmp5, icu, oniguruma, libsodium, html-tidy
+, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl, uwimap
+, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng, freetype
+, libffi, freetds, postgresql, sqlite, recode, net-snmp, unixODBC }:
 
 let
   self = with self; {
@@ -74,12 +78,12 @@ let
   };
 
   composer = mkDerivation rec {
-    version = "1.9.1";
+    version = "1.9.3";
     pname = "composer";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "04a1fqxhxrckgxw9xbx7mplkzw808k2dz4jqsxq2dy7w6y80n88z";
+      sha256 = "VRZVwvyB9BBlCPQrvEsk6r00sCKxO8Hn2WQr9IPQp9Q=";
     };
 
     dontUnpack = true;
@@ -201,13 +205,13 @@ let
 
   maxminddb = buildPecl rec {
     pname = "maxminddb";
-    version = "1.5.0";
+    version = "1.6.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "maxmind";
       repo = "MaxMind-DB-Reader-php";
       rev = "v${version}";
-      sha256 = "1ilgpx36rgihjr8s4bvkbms5hl6xy7mymna3ym2bl4lb15vkr0sm";
+      sha256 = "0sa943ij9pgz55aik93lllb8lh063bvr66ibn77p3y3p41vdiabz";
     };
 
     buildInputs = [ pkgs.libmaxminddb ];
@@ -287,15 +291,27 @@ let
     meta.broken = isPhp74; # Build error
   };
 
+  pdo_oci = buildPecl rec {
+    inherit (php) src version;
+
+    pname = "pdo_oci";
+    sourceRoot = "php-${version}/ext/pdo_oci";
+
+    buildInputs = [ pkgs.oracle-instantclient ];
+    configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
+
+    postPatch = ''
+      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+    '';
+  };
+
   pdo_sqlsrv = buildPecl {
-    version = "5.6.1";
+    version = "5.8.0";
     pname = "pdo_sqlsrv";
 
-    sha256 = "02ill1iqffa5fha9iz4y91823scml24ikfk8pn90jyycfwv07x6a";
+    sha256 = "0z4vbyd851b4jr6p69l2ylk91iihndsm2qjb429pxcv8g6dqzqll";
 
-    buildInputs = [ pkgs.unixODBC ];
-
-    meta.broken = isPhp74; # Build error
+    buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
   };
 
   php-cs-fixer = mkDerivation rec {
@@ -429,12 +445,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.12.4";
+    version = "0.12.14";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "1h386zsbfw9f1r00pjbvj749q1fg5q22sgrnx7rqjrnwmbl5mh36";
+      sha256 = "JAq1/+bVhTgKRR7oFusqZ/yBOYewaOM38ZoiCjirsTg=";
     };
 
     phases = [ "installPhase" ];
@@ -524,12 +540,12 @@ let
   };
 
   psalm = mkDerivation rec {
-    version = "3.7.2";
+    version = "3.9.3";
     pname = "psalm";
 
     src = pkgs.fetchurl {
       url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-      sha256 = "0mcxlckycvpxxc6h0x0kdidbq2l4m3xws1v3kdf797js234x0vjx";
+      sha256 = "KHm2n06y/yxN5B2rCVxT5ja7HxkyxAMsjZ5HLb3xr4M=";
     };
 
     phases = [ "installPhase" ];
@@ -614,14 +630,12 @@ let
   };
 
   sqlsrv = buildPecl {
-    version = "5.6.1";
+    version = "5.8.0";
     pname = "sqlsrv";
 
-    sha256 = "0ial621zxn9zvjh7k1h755sm2lc9aafc389yxksqcxcmm7kqmd0a";
+    sha256 = "1kv4krk1w4hri99b0sdgwgy9c4y0yh217wx2y3irhkfi46kdrjnw";
 
-    buildInputs = [ pkgs.unixODBC ];
-
-    meta.broken = isPhp74; # Build error
+    buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
   };
 
   v8 = buildPecl {
@@ -654,6 +668,8 @@ let
 
     doCheck = true;
     checkTarget = "test";
+
+    zendExtension = true;
   };
 
   yaml = buildPecl {
@@ -681,4 +697,217 @@ let
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
   };
+
+  exts = let
+    # Function to build a single php extension based on the php version.
+    #
+    # Name passed is the name of the extension and is automatically used
+    # to add the configureFlag "--enable-${name}", which can be overriden.
+    #
+    # Build inputs is used for extra deps that may be needed. And zendExtension
+    # will mark the extension as a zend extension or not.
+    mkExtension = {
+      name
+      , configureFlags ? [ "--enable-${name}" ]
+      , buildInputs ? []
+      , zendExtension ? false
+      , ...
+    }: stdenv.mkDerivation {
+      pname = "php-ext-${name}";
+
+      inherit (php) version src;
+      sourceRoot = "php-${php.version}/ext/${name}";
+
+      enableParallelBuilding = true;
+      nativeBuildInputs = [ php autoconf pkgconfig re2c ];
+      inherit configureFlags buildInputs zendExtension;
+
+      preConfigure = "phpize";
+
+      installPhase = ''
+        mkdir -p $out/lib/php/extensions
+        cp modules/${name}.so $out/lib/php/extensions/ext-${name}.so
+      '';
+    };
+
+    # This list contains build instructions for different modules that one may
+    # want to build.
+    #
+    # These will be passed as arguments to mkExtension above.
+    extensionData = let
+      pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
+    in [
+      { name = "bcmath"; }
+      { name = "bz2"; buildInputs = [ bzip2 ]; configureFlags = [ "--with-bz2=${bzip2.dev}" ]; }
+      { name = "calendar"; }
+      { name = "ctype"; }
+      { name = "curl"; buildInputs = [ curl ]; configureFlags = [ "--with-curl=${curl.dev}" ]; }
+      { name = "dba"; }
+      { name = "dom";
+        buildInputs = [ libxml2 ];
+        configureFlags = [ "--enable-dom" ]
+          # Required to build on darwin.
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+      { name = "enchant";
+        buildInputs = [ enchant1 ];
+        configureFlags = [ "--with-enchant=${enchant1}" ];
+        # enchant1 doesn't build on darwin.
+        enable = (!stdenv.isDarwin); }
+      { name = "exif"; }
+      { name = "ffi"; buildInputs = [ libffi ]; enable = lib.versionAtLeast php.version "7.4"; }
+      { name = "fileinfo"; buildInputs = [ pcre' ]; }
+      { name = "filter"; buildInputs = [ pcre' ]; }
+      { name = "ftp"; buildInputs = [ openssl ]; }
+      { name = "gd";
+        buildInputs = [ zlib gd ];
+        configureFlags = [
+          "--enable-gd"
+          "--with-external-gd=${gd.dev}"
+          "--enable-gd-jis-conv"
+        ];
+        enable = lib.versionAtLeast php.version "7.4"; }
+      { name = "gd";
+        buildInputs = [ zlib gd libXpm ];
+        configureFlags = [
+          "--with-gd=${gd.dev}"
+          "--with-freetype-dir=${freetype.dev}"
+          "--with-jpeg-dir=${libjpeg.dev}"
+          "--with-png-dir=${libpng.dev}"
+          "--with-webp-dir=${libwebp}"
+          "--with-xpm-dir=${libXpm.dev}"
+          "--with-zlib-dir=${zlib.dev}"
+          "--enable-gd-jis-conv"
+        ];
+        enable = lib.versionOlder php.version "7.4"; }
+      ## gettext (7.2, 7.3, 7.4) -- configure: error: Cannot locate header file libintl.h
+      #{ name = "gettext";
+      #  buildInputs = [ gettext ];
+      #  configureFlags = "--with-gettext=${gettext}"; }
+      { name = "gmp";
+        buildInputs = [ gmp5 ];
+        configureFlags = [ "--with-gmp=${gmp5.dev}" ];
+        # gmp5 doesn't build on darwin.
+        enable = (!stdenv.isDarwin); }
+      { name = "hash"; enable = lib.versionOlder php.version "7.4"; }
+      { name = "iconv"; configureFlags = if stdenv.isDarwin then
+                           [ "--with-iconv=${libiconv}" ]
+                         else
+                           [ "--with-iconv" ]; }
+      { name = "imap";
+        buildInputs = [ uwimap openssl pam pcre' ];
+        configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
+        # uwimap doesn't build on darwin.
+        enable = (!stdenv.isDarwin); }
+      # interbase (7.3, 7.2)
+      { name = "intl"; buildInputs = [ icu ]; }
+      { name = "json"; }
+      { name = "ldap";
+        buildInputs = [ openldap cyrus_sasl ];
+        configureFlags = [
+          "--with-ldap"
+          "LDAP_DIR=${openldap.dev}"
+          "LDAP_INCDIR=${openldap.dev}/include"
+          "LDAP_LIBDIR=${openldap.out}/lib"
+        ] ++ lib.optional stdenv.isLinux "--with-ldap-sasl=${cyrus_sasl.dev}"; }
+      { name = "mbstring"; buildInputs = [ oniguruma ]; }
+      { name = "mysqli"; configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ]; }
+      # oci8 (7.4, 7.3, 7.2)
+      # odbc (7.4, 7.3, 7.2)
+      { name = "opcache"; buildInputs = [ pcre' ]; zendExtension = true; }
+      { name = "pcntl"; }
+      { name = "pdo"; }
+      { name = "pdo_dblib";
+        configureFlags = [ "--with-pdo-dblib=${freetds}" ];
+        # Doesn't seem to work on darwin.
+        enable = (!stdenv.isDarwin); }
+      # pdo_firebird (7.4, 7.3, 7.2)
+      { name = "pdo_mysql"; configureFlags = [ "--with-pdo-mysql=mysqlnd" ]; }
+      # pdo_oci (7.4, 7.3, 7.2)
+      { name = "pdo_odbc"; configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ]; }
+      { name = "pdo_pgsql"; configureFlags = [ "--with-pdo-pgsql=${postgresql}" ]; }
+      { name = "pdo_sqlite"; buildInputs = [ sqlite ]; configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ]; }
+      { name = "pgsql"; buildInputs = [ pcre' ]; configureFlags = [ "--with-pgsql=${postgresql}" ]; }
+      { name = "phar"; buildInputs = [ pcre' openssl ]; }
+      { name = "posix"; }
+      { name = "pspell"; configureFlags = [ "--with-pspell=${aspell}" ]; }
+      ## readline (7.4, 7.3, 7.2) -- configure: error: Please reinstall libedit - I cannot find readline.h
+      #{ name = "readline";
+      #  buildInputs = [ libedit readline ];
+      #  configureFlags = [ "--with-readline=${readline.dev}" ]; }
+      { name = "recode";
+        configureFlags = [ "--with-recode=${recode}" ];
+        # Removed in php 7.4.
+        enable = lib.versionOlder php.version "7.4"; }
+      { name = "session"; }
+      { name = "shmop"; }
+      { name = "simplexml";
+        buildInputs = [ libxml2 pcre' ];
+        configureFlags = [ "--enable-simplexml" ]
+          # Required to build on darwin.
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+      { name = "snmp";
+        buildInputs = [ net-snmp openssl ];
+        configureFlags = [ "--with-snmp" ];
+        # net-snmp doesn't build on darwin.
+        enable = (!stdenv.isDarwin); }
+      { name = "soap";
+        buildInputs = [ libxml2 ];
+        configureFlags = [ "--enable-soap" ]
+          # Required to build on darwin.
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+      { name = "sockets"; }
+      { name = "sodium"; buildInputs = [ libsodium ]; }
+      { name = "sysvmsg"; }
+      { name = "sysvsem"; }
+      { name = "sysvshm"; }
+      { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; }
+      { name = "tokenizer"; }
+      { name = "wddx";
+        buildInputs = [ libxml2 ];
+        configureFlags = [ "--enable-wddx" "--with-libxml-dir=${libxml2.dev}" ];
+        # Removed in php 7.4.
+        enable = lib.versionOlder php.version "7.4"; }
+      { name = "xml";
+        buildInputs = [ libxml2 ];
+        configureFlags = [ "--enable-xml" ]
+          # Required to build on darwin.
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+      { name = "xmlreader";
+        buildInputs = [ libxml2 ];
+        configureFlags = [ "--enable-xmlreader CFLAGS=-I../.." ]
+          # Required to build on darwin.
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+      { name = "xmlrpc";
+        buildInputs = [ libxml2 libiconv ];
+        configureFlags = [ "--with-xmlrpc" ]
+          # Required to build on darwin.
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+      { name = "xmlwriter";
+        buildInputs = [ libxml2 ];
+        configureFlags = [ "--enable-xmlwriter" ]
+          # Required to build on darwin.
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+      { name = "xsl"; buildInputs = [ libxslt libxml2 ]; configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
+      { name = "zend_test"; }
+      { name = "zip"; buildInputs = [ libzip pcre' ];
+        configureFlags = [ "--with-zip" ]
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]
+          ++ lib.optional (lib.versionOlder php.version "7.3") [ "--with-libzip" ]; }
+    ];
+
+    # Convert the list of attrs:
+    # [ { name = <name>; ... } ... ]
+    # to a list of
+    # [ { name = <name>; value = <extension drv>; } ... ]
+    #
+    # which we later use listToAttrs to make all attrs available by name.
+    #
+    # Also filter out extensions based on the enable property.
+    namedExtensions = builtins.map (drv: {
+      name = drv.name;
+      value = mkExtension drv;
+    }) (builtins.filter (i: i.enable or true) extensionData);
+
+    # Produce the final attribute set of all extensions defined.
+  in builtins.listToAttrs namedExtensions;
 }; in self

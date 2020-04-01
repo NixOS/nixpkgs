@@ -1,13 +1,13 @@
 { fetchPypi, buildPythonPackage, lib }:
 
 buildPythonPackage rec {
-  version = "3.9.11";
+  version = "3.10.0";
   pname = "thespian";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "84887f0437ec144f7266ae22678bc5dc5d2a9e60a89f1f7c1707cbea5e03022a";
+    sha256 = "0n85nhj5hr8kv33jk4by8hnxm3kni5f4z1jhiw27dlf6cbgsv892";
   };
 
   # Do not run the test suite: it takes a long time and uses
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Actor concurrency library";
-    homepage = http://thespianpy.com/;
+    homepage = "http://thespianpy.com/";
     license = licenses.mit;
     maintainers = [ maintainers.kquick ];
   };

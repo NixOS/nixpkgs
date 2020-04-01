@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.8.30";
+  version = "1.8.31";
 
   src = fetchurl {
     url = "ftp://ftp.sudo.ws/pub/sudo/${pname}-${version}.tar.gz";
-    sha256 = "1rvrqlqrrjsd06dczgj9cwjdkpkqil5zzlwh87h06ms6qzfx6nm3";
+    sha256 = "0ks5mm9hda5idivncyfpiz4lrd8fv0dpmsl711788k7f7ixdka3y";
   };
 
   prePatch = ''

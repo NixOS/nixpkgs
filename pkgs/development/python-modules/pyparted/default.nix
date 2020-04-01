@@ -1,18 +1,22 @@
 { stdenv
+, fetchFromGitHub
 , buildPythonPackage
 , isPyPy
 , pkgs
 , python
+, six
 }:
 
 buildPythonPackage rec {
   pname = "pyparted";
-  version = "3.10.7";
+  version = "3.11.4";
   disabled = isPyPy;
 
-  src = pkgs.fetchurl {
-    url = "https://github.com/rhinstaller/pyparted/archive/v${version}.tar.gz";
-    sha256 = "0c9ljrdggwawd8wdzqqqzrna9prrlpj6xs59b0vkxzip0jkf652r";
+  src = fetchFromGitHub {
+    repo = pname;
+    owner = "dcantrell";
+    rev = "v${version}";
+    sha256 = "0wd0xhv1y1zw7djzcnimj8irif3mg0shbhgz0jn5yi914is88h6n";
   };
 
   postPatch = ''
@@ -26,11 +30,16 @@ buildPythonPackage rec {
       tests/test__ped_ped.py
   '';
 
+  patches = [
+    ./fix-test-pythonpath.patch
+  ];
+
   preConfigure = ''
     PATH="${pkgs.parted}/sbin:$PATH"
   '';
 
   nativeBuildInputs = [ pkgs.pkgconfig ];
+  checkInputs = [ six ];
   propagatedBuildInputs = [ pkgs.parted ];
 
   checkPhase = ''
@@ -39,10 +48,10 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://fedorahosted.org/pyparted/";
+    homepage = "https://github.com/dcantrell/pyparted/";
     description = "Python interface for libparted";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ lsix ];
   };
-
 }

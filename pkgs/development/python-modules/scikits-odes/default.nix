@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , fetchurl
 , cython
 , enum34
@@ -11,19 +11,16 @@
 , pytest
 , python
 , scipy
-, sundials_3
+, sundials
 }:
 
 buildPythonPackage rec {
   pname = "scikits.odes";
-  version = "2.4.0-9-g93075ae";
+  version = "2.6.1";
 
-  # we fetch github instead of Pypi, as we want #104 and #105, which don't apply cleanly on 2.4.0
-  src = fetchFromGitHub {
-    owner = "bmcage";
-    repo = "odes";
-    rev = "93075ae25c409f572f13ca7207fada5706f73c73";
-    sha256 = "161rab7hy6r1a9xw1zby9xhnnmxi0zwdpzxfpjkw9651xn2k5xyw";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0kbf2n16h9s35x6pavlx6sff0pqr68i0x0609z92a4vadni32n6b";
   };
 
   nativeBuildInputs = [
@@ -33,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    sundials_3
+    sundials
     scipy
   ] ++ lib.optionals (!isPy3k) [ enum34 ];
 

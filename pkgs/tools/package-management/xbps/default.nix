@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xbps";
-  version = "0.57.1";
+  version = "0.59";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
     rev = version;
-    sha256 = "0adxhhvn5r6hwwqp42iwwfrslmps30ycndi6v39934v38rf0wx9s";
+    sha256 = "0m00h1f004gsa998cr93b4zmsn4162983d360pzpd3hfi3qzan5d";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/void-linux/xbps;
+    homepage = "https://github.com/void-linux/xbps";
     description = "The X Binary Package System";
     platforms = platforms.linux; # known to not work on Darwin, at least
     license = licenses.bsd2;

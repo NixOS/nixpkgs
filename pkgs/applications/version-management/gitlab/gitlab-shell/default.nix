@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitLab, buildGoPackage, ruby }:
 
 buildGoPackage rec {
-  pname = "gitlab-shell-go";
-  version = "10.3.0";
+  pname = "gitlab-shell";
+  version = "11.0.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "0kxbw2n5kabh0876xqn1dcjbxyrp82ms566rw065nqrb32g8c2hk";
+    sha256 = "1ca4yil8gp1cm7w939irp1x2y907z2mkdqiap8ik8mqp8svv1m44";
   };
 
   buildInputs = [ ruby ];

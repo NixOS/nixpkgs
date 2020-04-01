@@ -7,7 +7,7 @@
 
 { stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
-, buildIde ? true
+, buildIde ? !(stdenv.isDarwin && stdenv.lib.versionAtLeast version "8.10")
 , glib, gnome3, wrapGAppsHook
 , darwin
 , csdp ? null
@@ -32,7 +32,7 @@ let
    "8.10.0" = "138jw94wp4mg5dgjc2asn8ng09ayz1mxdznq342n0m469j803gzg";
    "8.10.1" = "072v2zkjzf7gj48137wpr3c9j0hg9pdhlr5l8jrgrwynld8fp7i4";
    "8.10.2" = "0znxmpy71bfw0p6x47i82jf5k7v41zbz9bdpn901ysn3ir8l3wrz";
-   "8.11+beta1" = "06dlxj6v7gd51dh6ir121z7lgqdagkq717xxxrc8bdqhz7d2z7qj";
+   "8.11.0" = "1rfdic6mp7acx2zfwz7ziqk12g95bl9nyj68z4n20a5bcjv2pxpn";
   }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;

@@ -20,14 +20,14 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt5 != null;
 
 buildPythonPackage rec {
-  version = "3.1.2";
+  version = "3.1.3";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e8e2c2fe3d873108735c6ee9884e6f36f467df4a143136209cff303b183bada";
+    sha256 = "db3121f12fb9b99f105d1413aebaeb3d943f269f3d262b45586d12765866f0c6";
   };
 
   env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
+    [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
       libpng mock pytz ]
     ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]

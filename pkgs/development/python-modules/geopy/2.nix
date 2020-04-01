@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "1.20.0";
+  version = "1.21.0";
 
   disabled = !isPy27; # only Python 2.7
   doCheck = false; # Needs network access
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9419bc90ee6231590c4ae7acf1cf126cefbd0736942da7a6a1436946e80830e2";
+    sha256 = "1p1sgy2p59j0297bp7c82b45bx4d3i1p4kvbgf89c9i0llyb80nw";
   };
 
   meta = with stdenv.lib; {

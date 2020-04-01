@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, bokeh
 , emcee
 , matplotlib
 , netcdf4
@@ -21,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     rev = version;
-    sha256 = "0p600cakix24wz2ridnzy6sp3l1p2kr5s60qc7s82wpv7fw0i9ry";
+    sha256 = "1qc4piz18hfik32gj4v65ckwv516mppq2ac0jyqs21lhqfwbgv9w";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    bokeh
     emcee
     numba
     pytest

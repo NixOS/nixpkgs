@@ -1,6 +1,9 @@
 [
-  "nijs"
-, "coffee-script"
+  "coffee-script"
 , "grunt-cli"
+, "nijs"
 , "node2nix"
+, "node-gyp"
+, "node-gyp-build"
+, "node-pre-gyp"
 ]

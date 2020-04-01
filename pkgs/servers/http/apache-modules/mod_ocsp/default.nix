@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_ocsp";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchurl {
     url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
-    sha256 = "1vwgai56krdf8knb0mgy07ni9mqxk82bcb4gibwpnxvl6qwgv2i0";
+    sha256 = "0wy5363m4gq1w08iny2b3sh925bnznlln88pr9lgj9vgbn8pqnrn";
   };
 
   nativeBuildInputs = [ pkgconfig ];

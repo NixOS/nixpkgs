@@ -65,7 +65,7 @@ let
         let
           m                = builtins.match "([0-9.]+):([0-9-]+)" fwd.destination;
           destinationIP    = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 0;
-          destinationPorts = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 1;
+          destinationPorts = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else builtins.replaceStrings ["-"] [":"] (elemAt m 1);
         in ''
           # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
           iptables -w -t nat -A nixos-nat-out \

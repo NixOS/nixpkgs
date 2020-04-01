@@ -256,7 +256,7 @@
      </question>
      <answer>
       <para>
-<programlisting>doCheck = stdenv.hostPlatform != stdenv.buildPlatfrom;</programlisting>
+<programlisting>doCheck = stdenv.hostPlatform == stdenv.buildPlatfrom;</programlisting>
        Add it to your <function>mkDerivation</function> invocation.
       </para>
      </answer>

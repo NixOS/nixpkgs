@@ -1,7 +1,15 @@
-{ lib, python3Packages, gtk3, cairo
-, aspellDicts, buildEnv
-, gnome3, librsvg
-, xvfb_run, dbus, libnotify
+{ lib
+, python3Packages
+, gtk3
+, cairo
+, aspellDicts
+, buildEnv
+, gnome3
+, librsvg
+, xvfb_run
+, dbus
+, libnotify
+, wrapGAppsHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -46,9 +54,23 @@ python3Packages.buildPythonApplication rec {
     paths = lib.collect lib.isDerivation aspellDicts;
   }}/lib/aspell";
 
+  postInstall = ''
+    # paperwork-shell needs to be re-wrapped with access to paperwork
+    cp ${python3Packages.paperwork-backend}/bin/.paperwork-shell-wrapped $out/bin/paperwork-shell
+    # install desktop files and icons
+    XDG_DATA_HOME=$out/share $out/bin/paperwork-shell install
+  '';
+
   checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    gnome3.adwaita-icon-theme libnotify librsvg
+    gnome3.adwaita-icon-theme
+    libnotify
+    librsvg
   ];
 
   # A few parts of chkdeps need to have a display and a dbus session, so we not
@@ -61,21 +83,20 @@ python3Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    paperwork-backend pypillowfight gtk3 cairo pyxdg dateutil setuptools pandas
-  ];
-
-  makeWrapperArgs = [
-    "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
-    "--set GDK_PIXBUF_MODULE_FILE \"$GDK_PIXBUF_MODULE_FILE\""
-    "--prefix XDG_DATA_DIRS : \"$out/share\""
-    "--suffix XDG_DATA_DIRS : \"$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\""
+    paperwork-backend
+    pypillowfight
+    gtk3
+    cairo
+    pyxdg
+    dateutil
+    setuptools
   ];
 
   meta = {
     description = "A personal document manager for scanned documents";
     homepage = https://openpaper.work/;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.aszlig ];
+    maintainers = with lib.maintainers; [ aszlig symphorien ];
     platforms = lib.platforms.linux;
   };
 }

@@ -228,8 +228,8 @@ mkDerivation rec {
   ];
 
   preBuild = ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${zlib}/lib";
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${libX11}/lib";
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${zlib}/lib";
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libX11}/lib";
   '';
 
   dontWrapQtApps = true;

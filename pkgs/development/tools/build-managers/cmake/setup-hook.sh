@@ -51,12 +51,11 @@ cmakeConfigurePhase() {
         # because we usually do not package the framework
         "-DCMAKE_FIND_FRAMEWORK=last"
 
+        # on macOS i686 was only relevant for 10.5 or earlier.
+        "-DCMAKE_OSX_ARCHITECTURES=x86_64"
+
         # we never want to use the global macOS SDK
         "-DCMAKE_OSX_SYSROOT="
-
-        # disable OSX deployment target
-        # we don't want our binaries to have a "minimum" OSX version
-        "-DCMAKE_OSX_DEPLOYMENT_TARGET="
 
         # correctly detect our clang compiler
         "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"

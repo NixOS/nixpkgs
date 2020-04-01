@@ -100,6 +100,13 @@ stdenv.mkDerivation {
       url = "https://savannah.gnu.org/patch/download.php?file_id=47859";
       sha256 = "0aimayzgi5065gkcfcr8d5lkd9c0471q7dqmln42hjzq847n6d5y";
     })
+
+    # Fix build with modern Pango
+    # https://savannah.gnu.org/bugs/index.php?57759
+    (fetchpatch {
+      url = "https://savannah.gnu.org/file/0001-Do-not-depend-on-pangox.patch?file_id=48366";
+      sha256 = "02x7sl5zwd1ld2n4b6bp16c5gk91qsap0spfbb5iwpglq3galv2l";
+    })
   ];
 
   configureFlags = with stdenv.lib; [

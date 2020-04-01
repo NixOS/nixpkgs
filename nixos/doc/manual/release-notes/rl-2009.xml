@@ -1,0 +1,144 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09">
+ <title>Release 20.09 (“Nightingale”, 2020.09/??)</title>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-highlights">
+  <title>Highlights</title>
+
+  <para>
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Support is planned until the end of April 2021, handing over to 21.03.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     PHP now defaults to PHP 7.4, updated from 7.3.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
+     and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
+     been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
+     in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
+     make use of these new options instead.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-new-services">
+  <title>New Services</title>
+
+  <para>
+   The following new services were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Grafana is now built without support for phantomjs by default. Phantomjs support has been
+     <link xlink:href="https://grafana.com/docs/grafana/latest/guides/whats-new-in-v6-4/">deprecated in Grafana</link>
+     and the <package>phantomjs</package> project is
+     <link xlink:href="https://github.com/ariya/phantomjs/issues/15344#issue-302015362">currently unmaintained</link>.
+     It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instanciation:
+<programlisting>{
+  services.grafana.package = pkgs.grafana.overrideAttrs (oldAttrs: rec {
+    phantomJsSupport = false;
+  });
+}</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <link linkend="opt-services.supybot.enable">supybot</link> module now uses <literal>/var/lib/supybot</literal>
+      as its default <link linkend="opt-services.supybot.stateDir">stateDir</link> path if <literal>stateVersion</literal>
+      is 20.09 or higher. It also enables number of
+      <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Sandboxing">systemd sandboxing options</link>
+      which may possibly interfere with some plugins. If this is the case you can disable the options through attributes in
+      <option>systemd.services.supybot.serviceConfig</option>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>security.duosec.skey</literal> option, which stored a secret in the
+      nix store, has been replaced by a new
+      <link linkend="opt-security.duosec.secretKeyFile">security.duosec.secretKeyFile</link>
+      option for better security.
+    </para>
+    <para>
+      <literal>security.duosec.ikey</literal> has been renamed to
+      <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The initrd SSH support now uses OpenSSH rather than Dropbear to
+     allow the use of Ed25519 keys and other OpenSSH-specific
+     functionality. Host keys must now be in the OpenSSH format, and at
+     least one pre-generated key must be specified.
+    </para>
+    <para>
+     If you used the <option>boot.initrd.network.ssh.host*Key</option>
+     options, you'll get an error explaining how to convert your host
+     keys and migrate to the new
+     <option>boot.initrd.network.ssh.hostKeys</option> option.
+     Otherwise, if you don't have any host keys set, you'll need to
+     generate some; see the <option>hostKeys</option> option
+     documentation for instructions.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-notable-changes">
+  <title>Other Notable Changes</title>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+ </section>
+</section>

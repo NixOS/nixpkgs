@@ -17,7 +17,7 @@ let
     ${cfg.extraConfig}
     EOL
 
-    ssh-keygen -f mock-hostkey -N ""
+    ssh-keygen -q -f mock-hostkey -N ""
     sshd -t -f $out -h mock-hostkey
   '';
 
@@ -236,6 +236,26 @@ in
         type = types.listOf types.str;
         default = [];
         description = "Files from which authorized keys are read.";
+      };
+
+      authorizedKeysCommand = mkOption {
+        type = types.str;
+        default = "none";
+        description = ''
+          Specifies a program to be used to look up the user's public
+          keys. The program must be owned by root, not writable by group
+          or others and specified by an absolute path.
+        '';
+      };
+
+      authorizedKeysCommandUser = mkOption {
+        type = types.str;
+        default = "nobody";
+        description = ''
+          Specifies the user under whose account the AuthorizedKeysCommand
+          is run. It is recommended to use a dedicated user that has no
+          other role on the host than running authorized keys commands.
+        '';
       };
 
       kexAlgorithms = mkOption {
@@ -485,6 +505,10 @@ in
         PrintMotd no # handled by pam_motd
 
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
+        ${optionalString (cfg.authorizedKeysCommand != "none") ''
+          AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
+          AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
+        ''}
 
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}

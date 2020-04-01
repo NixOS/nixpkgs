@@ -14,9 +14,9 @@
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
 , limitedSupportedSystems ? [ "i686-linux" ]
   # Strip most of attributes when evaluating to spare memory usage
-,  scrubJobs ? true
+, scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-,  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+, nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
@@ -57,7 +57,8 @@ let
               jobs.python3.x86_64-darwin
               jobs.ruby.x86_64-darwin
               jobs.rustc.x86_64-darwin
-              jobs.stack.x86_64-darwin
+              # blocking ofBorg CI 2020-02-28
+              # jobs.stack.x86_64-darwin
               jobs.stdenv.x86_64-darwin
               jobs.vim.x86_64-darwin
               jobs.cachix.x86_64-darwin
@@ -76,8 +77,6 @@ let
               jobs.tests.cc-wrapper.x86_64-darwin
               jobs.tests.cc-wrapper-clang.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-39.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.patch-shebangs.x86_64-darwin
@@ -116,10 +115,6 @@ let
 
               jobs.tests.cc-wrapper-clang.x86_64-linux
               jobs.tests.cc-wrapper-libcxx.x86_64-linux
-              jobs.tests.cc-wrapper-clang-39.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx-39.x86_64-linux
-              jobs.tests.cc-wrapper-clang-4.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx-4.x86_64-linux
               jobs.tests.cc-wrapper-clang-5.x86_64-linux
               jobs.tests.cc-wrapper-libcxx-5.x86_64-linux
               jobs.tests.cc-wrapper-clang-6.x86_64-linux
@@ -149,10 +144,6 @@ let
               # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
               jobs.tests.cc-wrapper-clang.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-39.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-4.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-4.x86_64-darwin
               jobs.tests.cc-wrapper-clang-5.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
               jobs.tests.cc-wrapper-clang-6.x86_64-darwin

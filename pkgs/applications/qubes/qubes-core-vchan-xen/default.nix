@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Libraries required for the higher-level Qubes daemons and tools";
     homepage = "https://qubes-os.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ "0x4A6F" ];
+    maintainers = [ maintainers."0x4A6F" ];
     platforms = platforms.linux;
   };
 }

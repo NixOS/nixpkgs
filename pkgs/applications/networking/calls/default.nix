@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "calls";
     rev = "v${version}";
-    sha256 = "01inx4mvrzvklwrfryw5hw9p89v8cn78m3qmv97g7a3v0h5c0n35";
+    sha256 = "105r631a0rva1k1fa50lravsfk5dd3f0k3gfc7lvpn2jkd99s1g6";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A phone dialer and call handler";
-    homepage = https://source.puri.sm/Librem5/calls;
+    homepage = "https://source.puri.sm/Librem5/calls";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ craigem lheckemann ];
     platforms = platforms.linux;

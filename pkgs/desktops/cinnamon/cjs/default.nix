@@ -17,7 +17,6 @@
 , libffi
 , gtk3
 , readline
-, networkmanagerapplet
 }:
 
 let
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     keybinder3
     upower
     xapps
-    networkmanagerapplet
   ];
 
   nativeBuildInputs = [
@@ -78,6 +76,12 @@ stdenv.mkDerivation rec {
       This module contains JavaScript bindings based on gobject-introspection.
     '';
 
+    license = with licenses; [
+     gpl2Plus
+     lgpl2Plus
+     mit
+     mpl11
+   ];
     platforms = platforms.linux;
     maintainers = [ maintainers.mkg20001 ];
   };

@@ -8,12 +8,12 @@ let
   _kernel = kernel;
   pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.12.0";
+  version = "2.13.0";
   pname = "openvswitch";
 
   src = fetchurl {
     url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1y78ix5inhhcvicbvyy2ij38am1215nr55vydhab3d4065q45z8k";
+    sha256 = "0cd5vmfr6zwgcnkwys6rag6cmz68v0librpaplianv734xs74pyx";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = https://www.openvswitch.org/;
+    homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ netixx kmcopper ];
   };

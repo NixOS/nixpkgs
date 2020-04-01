@@ -272,13 +272,13 @@ let
     , sourceRoot ? dictFileName }:
     mkDict rec {
       name = "hunspell-dict-${shortName}-libreoffice-${version}";
-      version = "6.2.0.3";
+      version = "6.3.0.4";
       inherit dictFileName readmeFile;
       src = fetchFromGitHub {
         owner = "LibreOffice";
         repo = "dictionaries";
         rev = "libreoffice-${version}";
-        sha256 = "0rw9ahhynia5wsgyd67lrhinqqn1s1rizgiykb3palbyk0lv72xj";
+        sha256 = "14z4b0grn7cw8l9s7sl6cgapbpwhn1b3gwc3kn6b0k4zl3dq7y63";
       };
       buildPhase = ''
         cp -a ${sourceRoot}/* .
@@ -731,5 +731,27 @@ in rec {
     dictFileName = "ru_RU";
     shortDescription = "Russian (Russian)";
     license = with stdenv.lib.licenses; [ mpl20 lgpl3 ];
+  };
+
+  /* CZECH */
+
+  cs_CZ = cs-cz;
+  cs-cz = mkDictFromLibreOffice {
+    shortName = "cs-cz";
+    dictFileName = "cs_CZ";
+    shortDescription = "Czech (Czechia)";
+    readmeFile = "README_cs.txt";
+    license = with stdenv.lib.licenses; [ gpl2 ];
+  };
+
+  /* SLOVAK */
+
+  sk_SK = sk-sk;
+  sk-sk = mkDictFromLibreOffice {
+    shortName = "sk-sk";
+    dictFileName = "sk_SK";
+    shortDescription = "Slovak (Slovakia)";
+    readmeFile = "README_sk.txt";
+    license = with stdenv.lib.licenses; [ gpl2 lgpl21 mpl11 ];
   };
 }

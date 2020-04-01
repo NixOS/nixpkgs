@@ -133,7 +133,7 @@ in
       tcpcryptd = 93; # tcpcryptd uses a hard-coded uid. We patch it in Nixpkgs to match this choice.
       firebird = 95;
       #keys = 96; # unused
-      #haproxy = 97; # DynamicUser as of 2019-11-08
+      #haproxy = 97; # dynamically allocated as of 2020-03-11
       mongodb = 98;
       openldap = 99;
       #users = 100; # unused
@@ -299,7 +299,7 @@ in
       couchpotato = 267;
       gogs = 268;
       pdns-recursor = 269;
-      kresd = 270;
+      #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
       geoip = 272;
       fcron = 273;
@@ -448,7 +448,7 @@ in
       #tcpcryptd = 93; # unused
       firebird = 95;
       keys = 96;
-      #haproxy = 97; # DynamicUser as of 2019-11-08
+      #haproxy = 97; # dynamically allocated as of 2020-03-11
       #mongodb = 98; # unused
       openldap = 99;
       munin = 102;
@@ -600,7 +600,7 @@ in
       headphones = 266;
       couchpotato = 267;
       gogs = 268;
-      kresd = 270;
+      #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
       #geoip = 272; # unused
       fcron = 273;

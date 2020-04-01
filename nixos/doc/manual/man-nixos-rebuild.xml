@@ -77,7 +77,14 @@
     <option>--builders</option> <replaceable>builder-spec</replaceable>
    </arg>
 
+   <sbr/>
+
+   <arg>
+    <option>--flake</option> <replaceable>flake-uri</replaceable>
+   </arg>
+
    <sbr />
+
    <arg>
     <group choice='req'>
     <arg choice='plain'>
@@ -129,14 +136,17 @@
   <title>Description</title>
 
   <para>
-   This command updates the system so that it corresponds to the configuration
-   specified in <filename>/etc/nixos/configuration.nix</filename>. Thus, every
-   time you modify <filename>/etc/nixos/configuration.nix</filename> or any
-   NixOS module, you must run <command>nixos-rebuild</command> to make the
-   changes take effect. It builds the new system in
-   <filename>/nix/store</filename>, runs its activation script, and stop and
-   (re)starts any system services if needed. Please note that user services need
-   to be started manually as they aren't detected by the activation script at the moment.
+   This command updates the system so that it corresponds to the
+   configuration specified in
+   <filename>/etc/nixos/configuration.nix</filename> or
+   <filename>/etc/nixos/flake.nix</filename>. Thus, every time you
+   modify the configuration or any other NixOS module, you must run
+   <command>nixos-rebuild</command> to make the changes take
+   effect. It builds the new system in
+   <filename>/nix/store</filename>, runs its activation script, and
+   stop and (re)starts any system services if needed. Please note that
+   user services need to be started manually as they aren't detected
+   by the activation script at the moment.
   </para>
 
   <para>
@@ -508,6 +518,24 @@
      </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--flake</option> <replaceable>flake-uri</replaceable>[<replaceable>name</replaceable>]
+    </term>
+    <listitem>
+     <para>
+      Build the NixOS system from the specified flake. It defaults to
+      the directory containing the target of the symlink
+      <filename>/etc/nixos/flake.nix</filename>, if it exists. The
+      flake must contain an output named
+      <literal>nixosConfigurations.<replaceable>name</replaceable></literal>. If
+      <replaceable>name</replaceable> is omitted, it default to the
+      current host name.
+     </para>
+    </listitem>
+   </varlistentry>
+
   </variablelist>
 
   <para>
@@ -553,6 +581,21 @@
   <title>Files</title>
 
   <variablelist>
+
+   <varlistentry>
+    <term>
+     <filename>/etc/nixos/flake.nix</filename>
+    </term>
+    <listitem>
+     <para>
+      If this file exists, then <command>nixos-rebuild</command> will
+      use it as if the <option>--flake</option> option was given. This
+      file may be a symlink to a <filename>flake.nix</filename> in an
+      actual flake; thus <filename>/etc/nixos</filename> need not be a
+      flake.
+     </para>
+    </listitem>
+   </varlistentry>
 
    <varlistentry>
     <term>

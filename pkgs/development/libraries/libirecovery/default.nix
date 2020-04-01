@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libirecovery";
-  version = "2019-01-28";
+  version = "2020-01-14";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "5da2a0d7d60f79d93c283964888c6fbbc17be1a3";
-    sha256 = "0fqmr1h4b3qn608dn606y7aqv3bsm949gx72b5d6433xlw9b23n8";
+    rev = "10a1f8dd11a11a0b8980fbf26f11e3ce74e7a923";
+    sha256 = "1v5c9dbbkrsplj1zkcczzm0i31ar3wcx6fpxb0pi4dsgj8846aic";
   };
 
   outputs = [ "out" "dev" ];

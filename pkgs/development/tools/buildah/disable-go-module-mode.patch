@@ -12,22 +12,21 @@ buildGoPackage may lead to inconsistencies.
  1 file changed, 5 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 9d04177d..4cf9b6a2 100644
+index 07724ce4..6383646e 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -15,12 +15,7 @@ BUILDAH := buildah
+@@ -15,14 +15,8 @@ BUILDAH := buildah
  GO := go
  GO110 := 1.10
  GOVERSION := $(findstring $(GO110),$(shell go version))
 -# test for go module support
 -ifeq ($(shell go help mod >/dev/null 2>&1 && echo true), true)
 -export GO_BUILD=GO111MODULE=on $(GO) build -mod=vendor
+-export GO_TEST=GO111MODULE=on $(GO) test -mod=vendor
 -else
  export GO_BUILD=$(GO) build
+ export GO_TEST=$(GO) test
 -endif
- 
+
  GIT_COMMIT ?= $(if $(shell git rev-parse --short HEAD),$(shell git rev-parse --short HEAD),$(error "git failed"))
  SOURCE_DATE_EPOCH ?= $(if $(shell date +%s),$(shell date +%s),$(error "date failed"))
--- 
-2.24.0
-

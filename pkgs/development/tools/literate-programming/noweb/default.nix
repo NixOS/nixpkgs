@@ -27,16 +27,19 @@ let noweb = stdenv.mkDerivation rec {
     "CC=clang"
   ];
 
+
   installFlags = [
-    "BIN=$(out)/bin"
-    "ELISP=$(out)/share/emacs/site-lisp"
-    "LIB=$(out)/lib/noweb"
-    "MAN=$(out)/share/man"
-    "TEXINPUTS=$(tex)/tex/latex/noweb"
   ];
 
   preInstall = ''
     mkdir -p "$tex/tex/latex/noweb"
+    installFlagsArray+=(                                   \
+        "BIN=${placeholder "out"}/bin"                     \
+        "ELISP=${placeholder "out"}/share/emacs/site-lisp" \
+        "LIB=${placeholder "out"}/lib/noweb"               \
+        "MAN=${placeholder "out"}/share/man"               \
+        "TEXINPUTS=${placeholder "tex"}/tex/latex/noweb"   \
+    )
   '';
 
   installTargets = [ "install-code" "install-tex" "install-elisp" ];
@@ -57,7 +60,7 @@ let noweb = stdenv.mkDerivation rec {
 
     # HACK: This is ugly, but functional.
     PATH=$out/bin:$PATH make -BC xdoc
-    make "''${installFlags[@]}" install-man
+    make "''${installFlagsArray[@]}" install-man
 
     ln -s "$tex" "$out/share/texmf"
   '';

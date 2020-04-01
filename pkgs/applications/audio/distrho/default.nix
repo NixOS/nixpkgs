@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -e "s#@./scripts#sh scripts#" -i Makefile
   '';
 

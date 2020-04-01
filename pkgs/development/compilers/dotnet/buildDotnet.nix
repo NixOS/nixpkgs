@@ -36,6 +36,7 @@ in stdenv.mkDerivation rec {
     sourceRoot = ".";
 
     dontPatchELF = true;
+    noDumpEnvVars = true;
 
     installPhase = ''
         runHook preInstall

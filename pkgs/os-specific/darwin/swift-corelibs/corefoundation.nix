@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, python, ninja, libxml2, objc4, ICU, curl }:
+{ stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
     sha256 = "17kpql0f27xxz4jjw84vpas5f5sn4vdqwv10g151rc3rswbwln1z";
   };
 
-  nativeBuildInputs = [ ninja python ];
-  buildInputs = [ libxml2 objc4 ICU curl ];
+  nativeBuildInputs = [ ninja python3 ];
+  buildInputs = [ curl libxml2 objc4 ICU ];
 
   sourceRoot = "source/CoreFoundation";
 

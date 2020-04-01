@@ -1,14 +1,14 @@
-{callPackage, stdenv, fetchFromGitHub, ...}:
+{ callPackage, stdenv, fetchFromGitHub, ...}:
 
 stdenv.mkDerivation {
   pname = "gitstatus";
-  version = "unstable-2019-12-18";
+  version = "unstable-2020-03-15";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "gitstatus";
-    rev = "8ae9c17a60158dcf91f56d9167493e3988a5e921";
-    sha256 = "1czjwsgbmxd1d656srs3n6wj6bmqr8p3aw5gw61q4wdxw3mni2a6";
+    rev = "c07996bc3ea1912652f52a816b830a5a3ee9b49c";
+    sha256 = "07s8hwx3i5mnafi2xfim44z3q2nsvlcibfdxj17w8mkjhfpywi00";
   };
 
   buildInputs = [ (callPackage ./romkatv_libgit2.nix {}) ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sed -i "1i GITSTATUS_DAEMON=$out/bin/gitstatusd" gitstatus.plugin.zsh
   '';
   installPhase = ''
-    install -Dm755 gitstatusd $out/bin/gitstatusd
+    install -Dm755 usrbin/gitstatusd $out/bin/gitstatusd
     install -Dm444 gitstatus.plugin.zsh $out
   '';
 
@@ -25,6 +25,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/romkatv/gitstatus;
     license = [ licenses.gpl3 ];
 
-    maintainers = [ maintainers.mmlb ];
+    maintainers = with maintainers; [ mmlb hexa ];
   };
 }

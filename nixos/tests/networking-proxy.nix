@@ -10,7 +10,7 @@ let default-config = {
 
         virtualisation.memorySize = 128;
       };
-in import ./make-test.nix ({ pkgs, ...} : {
+in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "networking-proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [  ];
@@ -66,46 +66,70 @@ in import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     ''
-      startAll;
+      from typing import Dict, Optional
 
-      # no proxy at all
-      print $machine->execute("env | grep -i proxy");
-      print $machine->execute("su - alice -c 'env | grep -i proxy'");
-      $machine->mustFail("env | grep -i proxy");
-      $machine->mustFail("su - alice -c 'env | grep -i proxy'");
 
-      # Use a default proxy option
-      print $machine2->execute("env | grep -i proxy");
-      print $machine2->execute("su - alice -c 'env | grep -i proxy'");
-      $machine2->mustSucceed("env | grep -i proxy");
-      $machine2->mustSucceed("su - alice -c 'env | grep -i proxy'");
+      def get_machine_env(machine: Machine, user: Optional[str] = None) -> Dict[str, str]:
+          """
+          Gets the environment from a given machine, and returns it as a
+          dictionary in the form:
+              {"lowercase_var_name": "value"}
 
-      # explicitly set each proxy option
-      print $machine3->execute("env | grep -i proxy");
-      print $machine3->execute("su - alice -c 'env | grep -i proxy'");
-      $machine3->mustSucceed("env | grep -i http_proxy | grep 123");
-      $machine3->mustSucceed("env | grep -i https_proxy | grep 456");
-      $machine3->mustSucceed("env | grep -i rsync_proxy | grep 789");
-      $machine3->mustSucceed("env | grep -i ftp_proxy | grep 101112");
-      $machine3->mustSucceed("env | grep -i no_proxy | grep 131415");
-      $machine3->mustSucceed("su - alice -c 'env | grep -i http_proxy | grep 123'");
-      $machine3->mustSucceed("su - alice -c 'env | grep -i https_proxy | grep 456'");
-      $machine3->mustSucceed("su - alice -c 'env | grep -i rsync_proxy | grep 789'");
-      $machine3->mustSucceed("su - alice -c 'env | grep -i ftp_proxy | grep 101112'");
-      $machine3->mustSucceed("su - alice -c 'env | grep -i no_proxy | grep 131415'");
+          Duplicate environment variables with the same name
+          (e.g. "foo" and "FOO") are handled in an undefined manner.
+          """
+          if user is not None:
+              env = machine.succeed("su - {} -c 'env -0'".format(user))
+          else:
+              env = machine.succeed("env -0")
+          ret = {}
+          for line in env.split("\0"):
+              if "=" not in line:
+                  continue
 
-      # set default proxy option + some other specifics
-      print $machine4->execute("env | grep -i proxy");
-      print $machine4->execute("su - alice -c 'env | grep -i proxy'");
-      $machine4->mustSucceed("env | grep -i http_proxy | grep 000");
-      $machine4->mustSucceed("env | grep -i https_proxy | grep 000");
-      $machine4->mustSucceed("env | grep -i rsync_proxy | grep 123");
-      $machine4->mustSucceed("env | grep -i ftp_proxy | grep 000");
-      $machine4->mustSucceed("env | grep -i no_proxy | grep 131415");
-      $machine4->mustSucceed("su - alice -c 'env | grep -i http_proxy | grep 000'");
-      $machine4->mustSucceed("su - alice -c 'env | grep -i https_proxy | grep 000'");
-      $machine4->mustSucceed("su - alice -c 'env | grep -i rsync_proxy | grep 123'");
-      $machine4->mustSucceed("su - alice -c 'env | grep -i ftp_proxy | grep 000'");
-      $machine4->mustSucceed("su - alice -c 'env | grep -i no_proxy | grep 131415'");
+              key, val = line.split("=", 1)
+              ret[key.lower()] = val
+          return ret
+
+
+      start_all()
+
+      with subtest("no proxy"):
+          assert "proxy" not in machine.succeed("env").lower()
+          assert "proxy" not in machine.succeed("su - alice -c env").lower()
+
+      with subtest("default proxy"):
+          assert "proxy" in machine2.succeed("env").lower()
+          assert "proxy" in machine2.succeed("su - alice -c env").lower()
+
+      with subtest("explicitly-set proxy"):
+          env = get_machine_env(machine3)
+          assert "123" in env["http_proxy"]
+          assert "456" in env["https_proxy"]
+          assert "789" in env["rsync_proxy"]
+          assert "101112" in env["ftp_proxy"]
+          assert "131415" in env["no_proxy"]
+
+          env = get_machine_env(machine3, "alice")
+          assert "123" in env["http_proxy"]
+          assert "456" in env["https_proxy"]
+          assert "789" in env["rsync_proxy"]
+          assert "101112" in env["ftp_proxy"]
+          assert "131415" in env["no_proxy"]
+
+      with subtest("default proxy + some other specifics"):
+          env = get_machine_env(machine4)
+          assert "000" in env["http_proxy"]
+          assert "000" in env["https_proxy"]
+          assert "123" in env["rsync_proxy"]
+          assert "000" in env["ftp_proxy"]
+          assert "131415" in env["no_proxy"]
+
+          env = get_machine_env(machine4, "alice")
+          assert "000" in env["http_proxy"]
+          assert "000" in env["https_proxy"]
+          assert "123" in env["rsync_proxy"]
+          assert "000" in env["ftp_proxy"]
+          assert "131415" in env["no_proxy"]
     '';
 })

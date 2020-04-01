@@ -41,9 +41,10 @@ stdenv.mkDerivation rec {
     -DSSH_SOURCE_BASHRC
   '';
 
-  patchFlags = [ "-p0" ];
+  patchFlags = [ "-p0" "-T" ];
 
-  patches = upstreamPatches;
+  patches = upstreamPatches
+    ++ [ ./pgrp-pipe-5.0.patch ];
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")

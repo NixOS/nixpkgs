@@ -1,23 +1,33 @@
-{ stdenv, lib, fetchhg, pkg-config, meson, ninja, wayland, gtk3 }:
+{ stdenv, lib, fetchhg, fetchpatch, pkg-config, meson, ninja, wayland, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "1.0";
+  version = "1.1.2";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/wofi";
     rev = "v${version}";
-    sha256 = "147yarm26nl0zc0a2rs7qi4jd7bz48vvyaygsif1qsv8fx0xiqqf";
+    sha256 = "086j5wshawjbwdmmmldivfagc2rr7g5a2gk11l0snqqslm294xsn";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook ];
   buildInputs = [ wayland gtk3 ];
+
+  # Fixes icon bug on NixOS.
+  # Will need to be removed on next release
+  # see https://todo.sr.ht/~scoopta/wofi/54
+  patches = [
+    (fetchpatch {
+      url = "https://paste.sr.ht/blob/1cbddafac3806afb203940c029e78ce8390d8f49";
+      sha256 = "1n4jpmh66p7asjhj0z2s94ny91lmaq4hhh2356nj406vlqr15vbb";
+    })
+  ];
 
   meta = with lib; {
     description = "A launcher/menu program for wlroots based wayland compositors such as sway";
     homepage = "https://hg.sr.ht/~scoopta/wofi";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [ elyhaka ];
     platforms = with platforms; linux;
   };
 }

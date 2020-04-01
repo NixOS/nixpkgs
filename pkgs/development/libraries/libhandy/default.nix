@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "0.0.12";
+  version = "0.0.13";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];
   outputBin = "dev";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09wlknarzsbk9hr5ws6s7x5kibkhx9ayrbhshfqib4zkhq2f76hw";
+    sha256 = "1y23k623sjkldfrdiwfarpchg5mg58smcy1pkgnwfwca15wm1ra5";
   };
 
   nativeBuildInputs = [

@@ -1,17 +1,21 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, isPy27
 , ansible
 , pyyaml
 , six
 , nose
 , setuptools_scm
 , ruamel_yaml
+, pathlib2
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
   version = "4.2.0";
+  # pip is not able to import version info on raumel.yaml
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +25,8 @@ buildPythonPackage rec {
   format = "pyproject";
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ pyyaml six ansible ruamel_yaml ];
+  propagatedBuildInputs = [ pyyaml six ansible ruamel_yaml ]
+    ++ lib.optionals isPy27 [ pathlib2 ];
   checkInputs = [ nose ];
 
   postPatch = ''
@@ -45,6 +50,5 @@ buildPythonPackage rec {
     description = "Best practices checker for Ansible";
     license = licenses.mit;
     maintainers = [ maintainers.sengaya ];
-    broken = true; # requires new flit to build
   };
 }

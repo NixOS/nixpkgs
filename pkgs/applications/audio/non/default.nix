@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, python2, cairo, libjpeg, ntk, libjack2
-, libsndfile, ladspaH, liblrdf, liblo, libsigcxx, wafHook
+, libsndfile, ladspaH, liblo, libsigcxx, lrdf, wafHook
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ python2 cairo libjpeg ntk libjack2 libsndfile
-    ladspaH liblrdf liblo libsigcxx
+    ladspaH liblo libsigcxx lrdf
   ];
 
   meta = {

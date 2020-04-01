@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkwave";
-  version = "3.3.103";
+  version = "3.3.104";
 
   src = fetchurl {
     url    = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
-    sha256 = "0djqfnxy772a9p44wnm5ansbih7jg76xv1hvcpkv3gblhkzg49ay";
+    sha256 = "1qvldbnlp3wkqr5ff93f6pdvv9yzij7lxfhpqlizakz08l1xb391";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];

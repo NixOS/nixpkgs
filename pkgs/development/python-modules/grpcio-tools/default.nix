@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.26.0";
+  version = "1.27.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5580b86cf49936c9c74f0def44d3582a7a1bb720eba8a14805c3a61efa790c70";
+    sha256 = "e29aa3f7a47d37f8a15605e97bec580baa6bb7ead7114b8d2f20d7b28da30c5c";
   };
 
   enableParallelBuilding = true;
@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "Protobuf code generator for gRPC";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }

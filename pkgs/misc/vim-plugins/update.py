@@ -10,12 +10,14 @@
 
 import argparse
 import functools
+import http
 import json
 import os
 import subprocess
 import sys
 import traceback
 import urllib.error
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -32,6 +34,7 @@ ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 ROOT = Path(__file__).parent
 DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
+DEPRECATED = ROOT.joinpath("deprecated.json")
 
 import time
 from functools import wraps
@@ -71,9 +74,11 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
 
 class Repo:
-    def __init__(self, owner: str, name: str) -> None:
+    def __init__(self, owner: str, name: str, alias: str) -> None:
         self.owner = owner
         self.name = name
+        self.alias = alias
+        self.redirect: Dict[str, str] = {}
 
     def url(self, path: str) -> str:
         return urljoin(f"https://github.com/{self.owner}/{self.name}/", path)
@@ -96,7 +101,9 @@ class Repo:
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
-        with urllib.request.urlopen(self.url("commits/master.atom"), timeout=10) as req:
+        commit_url = self.url("commits/master.atom")
+        with urllib.request.urlopen(commit_url, timeout=10) as req:
+            self.check_for_redirect(commit_url, req)
             xml = req.read()
             root = ET.fromstring(xml)
             latest_entry = root.find(ATOM_ENTRY)
@@ -110,6 +117,19 @@ class Repo:
             ), f"No updated tag found feed entry {xml}"
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
             return Path(str(url.path)).name, updated
+
+    def check_for_redirect(self, url: str, req: http.client.HTTPResponse):
+        response_url = req.geturl()
+        if url != response_url:
+            new_owner, new_name = (
+                urllib.parse.urlsplit(response_url).path.strip("/").split("/")[:2]
+            )
+            end_line = "\n" if self.alias is None else f" as {self.alias}\n"
+            plugin_line = "{owner}/{name}" + end_line
+
+            old_plugin = plugin_line.format(owner=self.owner, name=self.name)
+            new_plugin = plugin_line.format(owner=new_owner, name=new_name)
+            self.redirect[old_plugin] = new_plugin
 
     def prefetch_git(self, ref: str) -> str:
         data = subprocess.check_output(
@@ -197,15 +217,17 @@ def get_current_plugins() -> List[Plugin]:
     return plugins
 
 
-def prefetch_plugin(user: str, repo_name: str, alias: str, cache: "Cache") -> Plugin:
-    repo = Repo(user, repo_name)
+def prefetch_plugin(
+    user: str, repo_name: str, alias: str, cache: "Cache"
+) -> Tuple[Plugin, Dict[str, str]]:
+    repo = Repo(user, repo_name, alias)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit]
     if cached_plugin is not None:
         cached_plugin.name = alias or repo_name
         cached_plugin.date = date
-        return cached_plugin
+        return cached_plugin, repo.redirect
 
     print(f"prefetch {user}/{repo_name}")
     if has_submodules:
@@ -213,7 +235,10 @@ def prefetch_plugin(user: str, repo_name: str, alias: str, cache: "Cache") -> Pl
     else:
         sha256 = repo.prefetch_github(commit)
 
-    return Plugin(alias or repo_name, commit, has_submodules, sha256, date=date)
+    return (
+        Plugin(alias or repo_name, commit, has_submodules, sha256, date=date),
+        repo.redirect,
+    )
 
 
 def print_download_error(plugin: str, ex: Exception):
@@ -227,20 +252,22 @@ def print_download_error(plugin: str, ex: Exception):
 
 
 def check_results(
-    results: List[Tuple[str, str, Union[Exception, Plugin]]]
-) -> List[Tuple[str, str, Plugin]]:
+    results: List[Tuple[str, str, Union[Exception, Plugin], Dict[str, str]]]
+) -> Tuple[List[Tuple[str, str, Plugin]], Dict[str, str]]:
     failures: List[Tuple[str, Exception]] = []
     plugins = []
-    for (owner, name, result) in results:
+    redirects: Dict[str, str] = {}
+    for (owner, name, result, redirect) in results:
         if isinstance(result, Exception):
             failures.append((name, result))
         else:
             plugins.append((owner, name, result))
+            redirects.update(redirect)
 
     print(f"{len(results) - len(failures)} plugins were checked", end="")
     if len(failures) == 0:
         print()
-        return plugins
+        return plugins, redirects
     else:
         print(f", {len(failures)} plugin(s) could not be downloaded:\n")
 
@@ -328,15 +355,15 @@ class Cache:
 
 def prefetch(
     args: Tuple[str, str, str], cache: Cache
-) -> Tuple[str, str, Union[Exception, Plugin]]:
+) -> Tuple[str, str, Union[Exception, Plugin], dict]:
     assert len(args) == 3
     owner, repo, alias = args
     try:
-        plugin = prefetch_plugin(owner, repo, alias, cache)
+        plugin, redirect = prefetch_plugin(owner, repo, alias, cache)
         cache[plugin.commit] = plugin
-        return (owner, repo, plugin)
+        return (owner, repo, plugin, redirect)
     except Exception as e:
-        return (owner, repo, e)
+        return (owner, repo, e, {})
 
 
 header = (
@@ -386,6 +413,49 @@ in lib.fix' (lib.extends overrides packages)
     print(f"updated {outfile}")
 
 
+def rewrite_input(input_file: Path, output_file: Path, redirects: dict):
+    with open(input_file, "r") as f:
+        lines = f.readlines()
+
+    if redirects:
+        lines = [redirects.get(line, line) for line in lines]
+
+        cur_date_iso = datetime.now().strftime("%Y-%m-%d")
+        with open(DEPRECATED, "r") as f:
+            deprecations = json.load(f)
+        for old, new in redirects.items():
+            old_name = old.split("/")[1].split(" ")[0].strip("\n")
+            new_name = new.split("/")[1].split(" ")[0].strip("\n")
+            if old_name != new_name:
+                deprecations[old_name] = {
+                    "new": new_name,
+                    "date": cur_date_iso,
+                }
+        with open(DEPRECATED, "w") as f:
+            json.dump(deprecations, f, indent=4, sort_keys=True)
+
+        print(
+            f"""\
+Redirects have been detected and {input_file} has been updated. Please take the
+following steps:
+    1. Go ahead and commit just the updated expressions as you intended to do:
+            git add {output_file}
+            git commit -m "vimPlugins: Update"
+    2. Run this script again so these changes will be reflected in the
+    generated expressions:
+            ./update.py
+    3. Commit {input_file} along with deprecations and generated expressions:
+            git add {output_file} {input_file} {DEPRECATED}
+            git commit -m "vimPlugins: Update redirects"
+        """
+        )
+
+    lines = sorted(lines, key=str.casefold)
+
+    with open(input_file, "w") as f:
+        f.writelines(lines)
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description=(
@@ -407,6 +477,14 @@ def parse_args():
         default=DEFAULT_OUT,
         help="Filename to save generated nix code",
     )
+    parser.add_argument(
+        "--proc",
+        "-p",
+        dest="proc",
+        type=int,
+        default=30,
+        help="Number of concurrent processes to spawn.",
+    )
 
     return parser.parse_args()
 
@@ -421,16 +499,16 @@ def main() -> None:
     prefetch_with_cache = functools.partial(prefetch, cache=cache)
 
     try:
-        # synchronous variant for debugging
-        # results = list(map(prefetch_with_cache, plugin_names))
-        pool = Pool(processes=30)
+        pool = Pool(processes=args.proc)
         results = pool.map(prefetch_with_cache, plugin_names)
     finally:
         cache.store()
 
-    plugins = check_results(results)
+    plugins, redirects = check_results(results)
 
     generate_nix(plugins, args.outfile)
+
+    rewrite_input(args.input_file, args.outfile, redirects)
 
 
 if __name__ == "__main__":

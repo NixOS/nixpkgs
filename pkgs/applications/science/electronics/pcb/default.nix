@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pcb";
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/pcb/${pname}-${version}.tar.gz";
-    sha256 = "1i9zvcj0vgwp2g2hkmvafdq0k39klj90jsdanqx9xl7gl70345cq";
+    sha256 = "0pbfyfadbia1jf9ywkf02j8mfdh8c3mj390c2jdqnl70vcdszvhw";
   };
 
   nativeBuildInputs = [

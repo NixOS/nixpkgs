@@ -1,4 +1,5 @@
 { buildPythonPackage
+, isPy27
 , asn1crypto
 , azure-storage-blob
 , boto3
@@ -24,11 +25,12 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.1.2";
+  version = "2.2.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06061d59lapqrlg3gzdk4bi3v9c3q5zxfs0if5v2chg1f2l80ncr";
+    sha256 = "1qqlqypxj3j5qz8jjzil7250alf0w4bx8k8ndyj2ymp8kq2z1v0j";
   };
 
   propagatedBuildInputs = [
@@ -52,6 +54,11 @@ buildPythonPackage rec {
     pyasn1-modules
     urllib3
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'cffi>=1.9,<1.14'," "'cffi~=1.9',"
+  '';
 
   # tests are not working
   # XXX: fix the tests

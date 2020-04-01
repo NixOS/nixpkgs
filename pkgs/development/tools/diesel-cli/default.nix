@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--no-default-features --features \"${features}\"" ];
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "0xlcskddhy7xsiwj54gmn1xlgkfxb4dwrys7rbamfz1h8aa6ixjx";
+  cargoSha256 = "1vbb7r0dpmq8363i040bkhf279pz51c59kcq9v5qr34hs49ish8g";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]

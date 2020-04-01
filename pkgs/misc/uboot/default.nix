@@ -6,10 +6,10 @@
 }:
 
 let
-  defaultVersion = "2019.10";
+  defaultVersion = "2020.01";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "053hcrwwlacqh2niisn0zas95zkbffw5aw5sdhixs8lmfdq60vcd";
+    sha256 = "1w9ml4jl15q6ixpdqzspxjnl7d3rgxd7f99ms1xv5c8869h3qida";
   };
   buildUBoot = {
     version ? null
@@ -28,19 +28,7 @@ let
 
     src = if src == null then defaultSrc else src;
 
-    patches = [
-      # Submitted upstream: https://patchwork.ozlabs.org/patch/1203693/
-      (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
-        sha256 = "07jafdnxvqv8lz256qy29agjc2k1zj5ad4k28r1w5qkhwj4ixmf8";
-      })
-      # Submitted upstream: https://patchwork.ozlabs.org/patch/1203678/
-      (fetchpatch {
-        name = "rockchip-allow-loading-larger-kernels.patch";
-        url = "https://marc.info/?l=u-boot&m=157537843004298&q=raw";
-        sha256 = "0l3l88cc9xkxkraql82pfgpx6nqn4dj7cvfaagh5pzfwkxyw0n3p";
-      })
-    ] ++ extraPatches;
+    patches = extraPatches;
 
     postPatch = ''
       patchShebangs tools
@@ -53,7 +41,7 @@ let
       dtc
       flex
       openssl
-      (buildPackages.python2.withPackages (p: [ p.libfdt ]))
+      (buildPackages.python3.withPackages (p: [ p.libfdt ]))
       swig
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -124,6 +112,12 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootAmx335xEVM = buildUBoot {
+    defconfig = "am335x_evm_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["MLO" "u-boot.img"];
+  };
+
   ubootBananaPi = buildUBoot {
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -141,12 +135,6 @@ in {
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
-  };
-
-  ubootBeagleboneBlack = buildUBoot {
-    defconfig = "am335x_boneblack_defconfig";
-    extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["MLO" "u-boot.img"];
   };
 
   # http://git.denx.de/?p=u-boot.git;a=blob;f=board/solidrun/clearfog/README;hb=refs/heads/master

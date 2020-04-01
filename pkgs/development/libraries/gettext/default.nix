@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libiconv, xz }:
+{ stdenv, lib, fetchurl, libiconv, xz, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "gettext";
@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./absolute-paths.diff
     ./gettext.git-2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch
-  ];
+  ]
+  ++ lib.optional stdenv.isDarwin
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/gettext.git/patch?id=ec0e6b307456ceab352669ae6bccca9702108753";
+        sha256 = "0xqs01c7xl7vmw6bqvsmrzxxjxk2a4spcdpmlwm3b4hi2wc2lxnf";
+      });
 
   outputs = [ "out" "man" "doc" "info" ];
 

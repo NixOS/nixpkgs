@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librelp";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "rsyslog";
     repo = "librelp";
     rev = "v${version}";
-    sha256 = "1q0k8zm7p6wpkri419kkpz734lp1hnxfqx1aa3xys4pj7zgx9jck";
+    sha256 = "1il8dany6y981ficrwnxjlc13v5lj6gqia5678p5pj6bcbq7l7lb";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

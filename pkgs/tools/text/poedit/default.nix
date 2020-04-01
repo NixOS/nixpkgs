@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "2.2.4";
+  version = "2.3";
 
   src = fetchurl {
     url = "https://github.com/vslavik/poedit/archive/v${version}-oss.tar.gz";
-    sha256 = "1k5ql41g635z01s1i9bchvf72ynwsvg54gs3s40f07f9dihb23gd";
+    sha256 = "0smvdpvb4hdhqc327pcj29bzjqbzgad6mr7r5pg81461fi2r2myw";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook 

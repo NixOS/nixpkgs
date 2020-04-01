@@ -12,9 +12,7 @@ buildDunePackage rec {
     sha256 = "114gq48cpj2mvycypa9lfyqqb26wa2gkdfwkcqhnx7m6sdwv9a38";
   };
 
-  buildInputs = [ base64 bos lwt_react ocamlgraph rresult tyxml ];
-
-  propagatedBuildInputs = [ core ];
+  propagatedBuildInputs = [ base64 bos core lwt_react ocamlgraph rresult tyxml ];
 
   minimumOCamlVersion = "4.07";
 

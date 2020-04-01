@@ -2,10 +2,8 @@
 , lib ? pkgs.lib
 , version
 }:
-
 let
   inherit (pkgs) python3;
-
 in
 pkgs.stdenv.mkDerivation {
   pname = "poetry2nix";
@@ -25,7 +23,6 @@ pkgs.stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    ${python3.pkgs.black}/bin/black --quiet --check poetry2nix
     patchShebangs poetry2nix
     runHook postBuild
   '';

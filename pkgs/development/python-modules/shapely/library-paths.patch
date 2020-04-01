@@ -1,9 +1,9 @@
 diff --git a/shapely/geos.py b/shapely/geos.py
-index 09bf1ab..837aa98 100644
+index d5a67d2..19b7ffc 100644
 --- a/shapely/geos.py
 +++ b/shapely/geos.py
-@@ -55,100 +55,10 @@ def load_dll(libname, fallbacks=None, mode=DEFAULT_MODE):
-             "Could not find lib {0} or load any of its variants {1}.".format(
+@@ -61,123 +61,11 @@ def load_dll(libname, fallbacks=None, mode=DEFAULT_MODE):
+             "Could not find lib {} or load any of its variants {}.".format(
                  libname, fallbacks or []))
  
 -_lgeos = None
@@ -16,15 +16,25 @@ index 09bf1ab..837aa98 100644
 -    if len(geos_whl_so) == 1:
 -        _lgeos = CDLL(geos_whl_so[0])
 -        LOG.debug("Found GEOS DLL: %r, using it.", _lgeos)
+-    elif hasattr(sys, 'frozen'):
+-        geos_pyinstaller_so = glob.glob(os.path.join(sys.prefix, 'libgeos_c-*.so.*'))
+-        if len(geos_pyinstaller_so) == 1:
+-            _lgeos = CDLL(geos_pyinstaller_so[0])
+-            LOG.debug("Found GEOS DLL: %r, using it.", _lgeos)
+-    elif os.getenv('CONDA_PREFIX', ''):
+-        # conda package.
+-        _lgeos = CDLL(os.path.join(sys.prefix, 'lib', 'libgeos_c.so'))
 -    else:
 -        alt_paths = [
 -            'libgeos_c.so.1',
 -            'libgeos_c.so',
--            # anaconda
--            os.path.join(sys.prefix, "lib", "libgeos_c.so"),
 -        ]
 -        _lgeos = load_dll('geos_c', fallbacks=alt_paths)
--    free = load_dll('c').free
+-    # Necessary for environments with only libc.musl
+-    c_alt_paths = [
+-        'libc.musl-x86_64.so.1'
+-    ]
+-    free = load_dll('c', fallbacks=c_alt_paths).free
 -    free.argtypes = [c_void_p]
 -    free.restype = None
 -
@@ -32,10 +42,19 @@ index 09bf1ab..837aa98 100644
 -    # Test to see if we have a delocated wheel with a GEOS dylib.
 -    geos_whl_dylib = os.path.abspath(os.path.join(os.path.dirname(
 -        __file__), '.dylibs/libgeos_c.1.dylib'))
--    if os.path.exists(geos_whl_dylib):
--        _lgeos = CDLL(geos_whl_dylib)
--        LOG.debug("Found GEOS DLL: %r, using it.", _lgeos)
 -
+-    if os.path.exists(geos_whl_dylib):
+-        handle = CDLL(None)
+-        if hasattr(handle, "initGEOS_r"):
+-            LOG.debug("GEOS already loaded")
+-            _lgeos = handle
+-        else:
+-            _lgeos = CDLL(geos_whl_dylib)
+-            LOG.debug("Found GEOS DLL: %r, using it.", _lgeos)
+-
+-    elif os.getenv('CONDA_PREFIX', ''):
+-        # conda package.
+-        _lgeos = CDLL(os.path.join(sys.prefix, 'lib', 'libgeos_c.dylib'))
 -    else:
 -        if hasattr(sys, 'frozen'):
 -            try:
@@ -52,12 +71,12 @@ index 09bf1ab..837aa98 100644
 -                        os.path.join(sys._MEIPASS, 'libgeos_c.1.dylib'))
 -        else:
 -            alt_paths = [
--                # anaconda
--                os.path.join(sys.prefix, "lib", "libgeos_c.dylib"),
 -                # The Framework build from Kyng Chaos
 -                "/Library/Frameworks/GEOS.framework/Versions/Current/GEOS",
 -                # macports
 -                '/opt/local/lib/libgeos_c.dylib',
+-                # homebrew
+-                '/usr/local/lib/libgeos_c.dylib',
 -            ]
 -        _lgeos = load_dll('geos_c', fallbacks=alt_paths)
 -
@@ -66,30 +85,34 @@ index 09bf1ab..837aa98 100644
 -    free.restype = None
 -
 -elif sys.platform == 'win32':
--    try:
--        egg_dlls = os.path.abspath(
--            os.path.join(os.path.dirname(__file__), 'DLLs'))
--        if hasattr(sys, "frozen"):
--            wininst_dlls = os.path.normpath(
--                os.path.abspath(sys.executable + '../../DLLS'))
--        else:
--            wininst_dlls = os.path.abspath(os.__file__ + "../../../DLLs")
--        original_path = os.environ['PATH']
--        os.environ['PATH'] = "%s;%s;%s" % \
--            (egg_dlls, wininst_dlls, original_path)
--        _lgeos = load_dll("geos_c.dll", fallbacks=[
--            os.path.join(sys.prefix, "Library", "lib", "geos_c.dll"),
--        ])
--    except (ImportError, WindowsError, OSError):
--        raise
--
--    def free(m):
+-    if os.getenv('CONDA_PREFIX', ''):
+-        # conda package.
+-        _lgeos = CDLL(os.path.join(sys.prefix, 'Library', 'bin', 'geos_c.dll'))
+-    else:
 -        try:
--            cdll.msvcrt.free(m)
--        except WindowsError:
--            # XXX: See http://trac.gispython.org/projects/PCL/ticket/149
--            pass
+-            egg_dlls = os.path.abspath(
+-                os.path.join(os.path.dirname(__file__), 'DLLs'))
+-            if hasattr(sys, '_MEIPASS'):
+-                wininst_dlls = sys._MEIPASS
+-            elif hasattr(sys, "frozen"):
+-                wininst_dlls = os.path.normpath(
+-                    os.path.abspath(sys.executable + '../../DLLS'))
+-            else:
+-                wininst_dlls = os.path.abspath(os.__file__ + "../../../DLLs")
+-            original_path = os.environ['PATH']
+-            os.environ['PATH'] = "%s;%s;%s" % \
+-                (egg_dlls, wininst_dlls, original_path)
+-            _lgeos = load_dll("geos_c.dll")
+-        except (ImportError, WindowsError, OSError):
+-            raise
 -
+-        def free(m):
+-            try:
+-                cdll.msvcrt.free(m)
+-            except WindowsError:
+-                # XXX: See http://trac.gispython.org/projects/PCL/ticket/149
+-                pass
+ 
 -elif sys.platform == 'sunos5':
 -    _lgeos = load_dll('geos_c', fallbacks=['libgeos_c.so.1', 'libgeos_c.so'])
 -    free = CDLL('libc.so.1').free

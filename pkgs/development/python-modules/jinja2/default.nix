@@ -1,17 +1,25 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, markupsafe }:
+{ stdenv
+, buildPythonPackage
+, isPy3k
+, fetchPypi
+, pytest
+, markupsafe }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "2.10.3";
+  version = "2.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de";
+    sha256 = "93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250";
   };
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ markupsafe ];
+
+  # Multiple tests run out of stack space on 32bit systems with python2.
+  # See https://github.com/pallets/jinja/issues/1158
+  doCheck = !stdenv.is32bit || isPy3k;
 
   checkPhase = ''
     pytest -v tests

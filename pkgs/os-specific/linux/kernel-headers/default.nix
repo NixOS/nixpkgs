@@ -1,7 +1,4 @@
-{ stdenvNoCC, lib, buildPackages
-, fetchurl, perl
-, elf-header
-}:
+{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header }:
 
 let
   makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
@@ -36,28 +33,31 @@ let
       "HOSTCXX:=$(BUILD_CXX)"
     ];
 
-    # For some reason, doing `make install_headers` twice, first without
-    # INSTALL_HDR_PATH=$out then with, is neccessary to get this to work
-    # for darwin cross. @Ericson2314 has no idea why.
-    buildFlags = [ "headers_install" ];
-    checkTarget = [ "headers_check" ];
-    installTargets = [ "headers_install" ];
-    installFlags = [ "INSTALL_HDR_PATH=${placeholder "out"}" ];
-
     # Skip clean on darwin, case-sensitivity issues.
-    preBuild = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
-      make mrproper "''${makeFlags[@]}"
+    buildPhase = lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
+      make mrproper ''${makeFlags[@]}
+    '' + ''
+      make headers ''${makeFlags[@]}
     '';
 
+    checkPhase = ''
+      make headers_check ''${makeFlags[@]}
+    '';
+
+    # The following command requires rsync:
+    #   make headers_install INSTALL_HDR_PATH=$out $makeFlags
+    # but rsync depends on popt which does not compile on aarch64 without
+    # updateAutotoolsGnuConfigScriptsHook which is not enabled in stage2,
+    # so we replicate it with cp. This also reduces bootstrap closure size.
+    installPhase = ''
+      mkdir -p $out
+      cp -r usr/include $out
+      find $out -type f ! -name '*.h' -delete
+    ''
     # Some builds (e.g. KVM) want a kernel.release.
-    postInstall = ''
+    + ''
       mkdir -p $out/include/config
       echo "${version}-default" > $out/include/config/kernel.release
-    ''
-    # These oddly named file records the `SHELL` passed, which causes bootstrap
-    # tools run-time dependency.
-    + ''
-      find "$out" -name '..install.cmd' -print0 | xargs -0 rm
     '';
 
     meta = with lib; {
@@ -69,16 +69,15 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "4.19.16"; in
+  linuxHeaders = let version = "5.5"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
-        url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-        sha256 = "1pqvn6dsh0xhdpawz4ag27vkw1abvb6sn3869i4fbrz33ww8i86q";
+        url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+        sha256 = "0c131fi6s7vgvka1c0597vnvcmwn1pp968rci5kq64iwj3pd9yx6";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
-         ./no-dynamic-cc-version-check.patch # so we can use `stdenvNoCC`, see `makeFlags` above
       ];
     };
 }

@@ -20,6 +20,25 @@ in rustPlatform.buildRustPackage rec {
     sha256 = "1rm787kkh3ya8ix0rjvj7sbrg9armm0rnpkga6gjmsbg5bx20y4q";
   };
 
+  cargoSha256 = "0rf8qmgzgyl718yznbskzafyg963ygibjmqncd93zdandgl9nj5v";
+
+  # N.B. The cargo depfile checker expects us to have unpacked the src tarball
+  # into the standard dirname "source".
+  cargoDepsHook = ''
+    ln -s ${pname}-${version} source
+  '';
+
+  # TODO: Delete once pijul fixes upstream:
+  # https://nest.pijul.com/pijul_org/pijul/discussions/447
+  postPatch = ''
+    pushd ../${pname}-${version}-vendor.tar.gz/thrussh/
+    patch -p1 < ${./thrussh-build-fix.patch}
+    substituteInPlace .cargo-checksum.json --replace \
+      9696ed2422a483cd8de48ac241178a0441be6636909c76174c536b8b1cba9d45 \
+      a199f2bba520d56e11607b77be4dde0cfae576c90badb9fbd39af4784e8120d1
+    popd
+  '';
+
   nativeBuildInputs = [ pkgconfig clang ];
 
   postInstall = ''
@@ -35,8 +54,6 @@ in rustPlatform.buildRustPackage rec {
     (with darwin.apple_sdk.frameworks; [ CoreServices Security ]);
 
   doCheck = false;
-
-  cargoSha256 = "1w77s5q18yr1gqqif15wmrfdvv2chq8rq3w4dnmxg2gn0r7bmz2k";
 
   meta = with stdenv.lib; {
     description = "A distributed version control system";

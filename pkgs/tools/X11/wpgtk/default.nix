@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
-  version = "6.0.11";
+  version = "6.0.13";
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = version;
-    sha256 = "0da4gj54c361a0bicrjhhb9bp9yr5lx7p1knrsc4dykap1xn23vi";
+    sha256 = "1fphv6k2hqfi3fzazjqmvip7sz9fhy5ccsgpqv68vfylrf8g1f92";
   };
 
   buildInputs = [
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
 
      INFO: To work properly, this tool needs "programs.dconf.enable = true" on nixos or dconf installed. A reboot may be required after installing dconf.
      '';
-    homepage = https://github.com/deviantfero/wpgtk;
+    homepage = "https://github.com/deviantfero/wpgtk";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.melkor333 ];

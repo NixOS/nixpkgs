@@ -1,8 +1,9 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub
-, bottle, click, colorama
+{ stdenv, lib, buildPythonApplication, fetchFromGitHub, fetchpatch
+, bottle, click, colorama, semantic-version
 , lockfile, pyserial, requests
-, pytest, semantic-version, tox, tabulate
-, git
+, tabulate, pyelftools, marshmallow
+, pytest, tox, jsondiff
+, git, spdx-license-list-data
 }:
 
 let
@@ -39,6 +40,7 @@ let
     "test_pkgmanifest.py::test_packages"
   ]) ++ (map (e: "--ignore=tests/${e}") [
     "commands/test_boards.py"
+    "commands/test_check.py"
     "commands/test_platform.py"
     "commands/test_update.py"
     "test_maintenance.py"
@@ -47,25 +49,25 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "4.0.3";
+  version = "4.1.0";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "1naaa53cc7n7zyqggqjvvgkcq8cyzngdf904y9ag0x1vvb70f8j9";
+    sha256 = "10v9jw1zjfqr3wl6kills3cfp0ky7xbm1gc3z0n57wrqbc6cmz95";
   };
 
   propagatedBuildInputs =  [
     bottle click colorama git lockfile
     pyserial requests semantic-version
-    tabulate
+    tabulate pyelftools marshmallow
   ];
 
   HOME = "/tmp";
 
-  checkInputs = [ pytest tox ];
+  checkInputs = [ pytest tox jsondiff ];
 
   checkPhase = ''
     runHook preCheck
@@ -75,7 +77,20 @@ in buildPythonApplication rec {
     runHook postCheck
   '';
 
-  patches = [ ./fix-searchpath.patch ];
+  patches = [
+    ./fix-searchpath.patch
+    (fetchpatch {
+      url = "https://github.com/platformio/platformio-core/commit/442a7e357636522e844d95375c246644b21a7802.patch";
+      sha256 = "0a3kj3k02237gr2yk30gpwc6vm04dsd1wxldj4dsbzs4a9yyi70m";
+      excludes = ["HISTORY.rst"];
+    })
+    ./use-local-spdx-license-list.patch
+  ];
+
+  postPatch = ''
+    substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
+      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
+  '';
 
   meta = with stdenv.lib; {
     broken = stdenv.isAarch64;

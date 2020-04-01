@@ -1,12 +1,12 @@
 {stdenv, fetchurl, cyrus_sasl, libevent}:
 
 stdenv.mkDerivation rec {
-  version = "1.5.20";
+  version = "1.6.2";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "1r511qr95q0ywdaql3pdjiwzkfqxhhfzb13ilvl7mznfm4iv1myg";
+    sha256 = "12qn8m0jdvdckz53m2akrvixbrn64g5kv6r4hl5vx286qhc02wh6";
   };
 
   configureFlags = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A distributed memory object caching system";
     repositories.git = https://github.com/memcached/memcached.git;
-    homepage = http://memcached.org/;
+    homepage = "http://memcached.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];
     platforms = platforms.linux ++ platforms.darwin;

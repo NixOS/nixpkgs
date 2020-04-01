@@ -1,9 +1,11 @@
-{ stdenv, fetchFromGitLab, buildGoPackage, ruby, bundlerEnv, pkgconfig, libgit2 }:
+{ stdenv, fetchFromGitLab, fetchFromGitHub, buildGoPackage, ruby,
+  bundlerEnv, pkgconfig, libgit2 }:
 
 let
   rubyEnv = bundlerEnv rec {
     name = "gitaly-env";
     inherit ruby;
+    copyGemFiles = true;
     gemdir = ./.;
     gemset =
       let x = import (gemdir + "/gemset.nix");
@@ -16,15 +18,24 @@ let
         };
       };
   };
+  libgit2_0_27 = libgit2.overrideAttrs (oldAttrs: rec {
+    version = "0.27.8";
+    src = fetchFromGitHub {
+      owner = "libgit2";
+      repo = "libgit2";
+      rev = "v${version}";
+      sha256 = "0wzx8nkyy9m7mx6cks58chjd4289vjsw97mxm9w6f1ggqsfnmbr9";
+    };
+  });
 in buildGoPackage rec {
-  version = "1.77.1";
+  version = "12.8.8";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "08xc9lxlvga36yq1wdvb1h4zk70c36qspyd7azhkw84kzwfrif1c";
+    sha256 = "182jqglzbzq8jnlq6l634125jkvi67pfr1xck68n4k09gyzqllxv";
   };
 
   # Fix a check which assumes that hook files are writeable by their
@@ -38,7 +49,7 @@ in buildGoPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2 ];
+  buildInputs = [ rubyEnv.wrappedRuby libgit2_0_27 ];
   goDeps = ./deps.nix;
   preBuild = "rm -r go/src/gitlab.com/gitlab-org/labkit/vendor";
 
@@ -60,7 +71,7 @@ in buildGoPackage rec {
     homepage = https://gitlab.com/gitlab-org/gitaly;
     description = "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ roblabla globin fpletz ];
+    maintainers = with maintainers; [ roblabla globin fpletz talyz ];
     license = licenses.mit;
   };
 }

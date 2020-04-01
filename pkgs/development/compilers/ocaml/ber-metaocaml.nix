@@ -50,10 +50,10 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make world
-    make -i install
 
     make bootstrap
     make opt.opt
+    make -i install
     make installopt
     mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml

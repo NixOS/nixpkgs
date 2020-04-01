@@ -1,0 +1,12 @@
+diff --git a/repo b/repo
+index 8b05def..f394b3e 100755
+--- a/repo
++++ b/repo
+@@ -236,6 +236,7 @@ import optparse
+ import re
+ import shutil
+ import stat
++import ssl
+ 
+ if sys.version_info[0] == 3:
+   import urllib.request

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for reading and writing ZIM files";
-    homepage =  http://www.openzim.org/wiki/Zimlib;
+    homepage =  https://www.openzim.org/wiki/Zimlib;
     license = licenses.gpl2;
     maintainers = with maintainers; [ robbinch ];
     platforms = platforms.linux;

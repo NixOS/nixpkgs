@@ -61,7 +61,7 @@ in {
       ExecStart = ''
         ${pkgs.prometheus-blackbox-exporter}/bin/blackbox_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          --config.file ${adjustedConfigFile} \
+          --config.file ${escapeShellArg adjustedConfigFile} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

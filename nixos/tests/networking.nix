@@ -533,7 +533,7 @@ let
           useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1 = {
-            preferTempAddress = true;
+            tempAddress = "default";
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
             useDHCP = true;
@@ -546,7 +546,7 @@ let
           useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1 = {
-            preferTempAddress = false;
+            tempAddress = "enabled";
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
             useDHCP = true;
@@ -653,6 +653,31 @@ let
             assert (
                 ipv6Residue is ""
             ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
+      '';
+    };
+    # even with disabled networkd, systemd.network.links should work
+    # (as it's handled by udev, not networkd)
+    link = {
+      name = "Link";
+      nodes.client = { pkgs, ... }: {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+        };
+        systemd.network.links."50-foo" = {
+          matchConfig = {
+            Name = "foo";
+            Driver = "dummy";
+          };
+          linkConfig.MTUBytes = "1442";
+        };
+      };
+      testScript = ''
+        print(client.succeed("ip l add name foo type dummy"))
+        print(client.succeed("stat /etc/systemd/network/50-foo.link"))
+        client.succeed("udevadm settle")
+        assert "mtu 1442" in client.succeed("ip l show dummy0")
       '';
     };
   };

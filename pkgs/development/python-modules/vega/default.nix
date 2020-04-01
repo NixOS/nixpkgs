@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage , fetchPypi
-, pytest, jupyter_core, pandas }:
+, pytest, jupyter_core, pandas, ipywidgets }:
 
 buildPythonPackage rec {
   pname = "vega";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ jupyter_core pandas ];
+  propagatedBuildInputs = [ jupyter_core pandas ipywidgets ];
 
   meta = with stdenv.lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";

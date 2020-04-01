@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ zimbatm ];
+    broken = true; # 2020-01-28
   };
 }

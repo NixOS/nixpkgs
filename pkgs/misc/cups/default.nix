@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   pname = "cups";
 
   # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.3.0";
+  version = if stdenv.isDarwin then "2.2.6" else "2.3.1";
 
   passthru = { inherit version; };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = if version == "2.2.6"
              then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
-             else "19d1jpdpxy0fclq37pchi7ldnw9dssxx3zskcgqai3h0rwlh5bxc";
+             else "1kkpmj17205j8w9hdff2bfpk6lwdmr3gx0j4r35nhgvya24rvjhv";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];

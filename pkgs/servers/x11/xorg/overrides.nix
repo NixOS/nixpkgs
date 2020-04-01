@@ -22,6 +22,11 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ self.xorgproto ];
   });
 
+  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
+    # https://gitlab.freedesktop.org/xorg/app/fonttosfnt/merge_requests/6
+    patches = [ ./fix-uninitialised-memory.patch ];
+  });
+
   bitmap = super.bitmap.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
     postInstall = ''
@@ -182,6 +187,16 @@ self: super:
     propagatedBuildInputs = [ self.libXrender freetype fontconfig ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
+
+    patches = [
+      # Adds color emoji rendering support.
+      # https://gitlab.freedesktop.org/xorg/lib/libxft/merge_requests/1
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/fe41537b5714a2301808eed2d76b2e7631176573.patch";
+        sha256 = "045lp1q50i2wlwvpsq6ycxdc6p3asm2r3bk2nbad1dwkqw2xf9jc";
+      })
+    ];
+
     # the include files need ft2build.h, and Requires.private isn't enough for us
     postInstall = ''
       sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
@@ -261,11 +276,6 @@ self: super:
   });
 
   libXpm = super.libXpm.overrideAttrs (attrs: {
-    name = "libXpm-3.5.12";
-    src = fetchurl {
-      url = mirror://xorg/individual/lib/libXpm-3.5.12.tar.bz2;
-      sha256 = "1v5xaiw4zlhxspvx76y3hq4wpxv7mpj6parqnwdqvpj8vbinsspx";
-    };
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   });

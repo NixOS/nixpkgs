@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , pantheon
 , vala
 , pkgconfig
@@ -15,26 +14,28 @@
 , glib-networking
 , libsoup
 , libunity
+, desktop-file-utils
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "fondo";
-  version = "1.3.2";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "calo001";
     repo = pname;
     rev = version;
-    sha256 = "0w7qai261l9m7ckzxc2gj3ywa55wm6p5br1xdk7607ql44lfpgba";
+    sha256 = "126diirhmm2igxdpgfv1l20wnz5q8hadgq53d0j83ka72mfd3qg6";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
-    vala
     pkgconfig
     python3
+    vala
     wrapGAppsHook
   ];
 
@@ -48,14 +49,6 @@ stdenv.mkDerivation rec {
     libsoup
     libunity
     pantheon.granite
-  ];
-
-  patches = [
-    # Fix hardcoded FHS gsettings path
-    (fetchpatch {
-      url = "https://github.com/calo001/fondo/commit/98afdd834201321a3242f0b53bfba4b2ffa04a4c.patch";
-      sha256 = "0vvgbgjja6vyrk6in3sgv8jbl4bwxkm6fhllgjzq7r65gkj4jg79";
-    })
   ];
 
   postPatch = ''

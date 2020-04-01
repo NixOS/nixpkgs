@@ -5,7 +5,7 @@
 stdenv.lib.appendToName "with-fonts" (symlinkJoin {
   inherit (lilypond) meta name version ;
 
-  paths = [ lilypond ];
+  paths = [ lilypond ] ++ openlilylib-fonts.all;
 
   buildInputs = [ makeWrapper lndir ];
 

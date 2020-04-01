@@ -3,7 +3,6 @@
 
   iptables ? null,
   iproute ? null,
-  libmnl ? null,
   makeWrapper ? null,
   openresolv ? null,
   procps ? null,
@@ -14,17 +13,18 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "1.0.20200102";
+  version = "1.0.20200319";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
-    sha256 = "0ry3vbckcbkx43bz0bqinrd1hkll67jbwb72ak0b41wkxjsc8fmv";
+    sha256 = "0g9vlngg9dnh7qqfhaycw35fq8ij5hfz6p1cykh4ncjgr93i7rbx";
   };
+
+  outputs = [ "out" "man" ];
 
   sourceRoot = "source/src";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = optional stdenv.isLinux libmnl;
 
   makeFlags = [
     "DESTDIR=$(out)"

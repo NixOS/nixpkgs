@@ -31,6 +31,7 @@ let
       nix = config.nix.package.out;
       nix_x86_64_linux = fallback.x86_64-linux;
       nix_i686_linux = fallback.i686-linux;
+      path = makeBinPath [ pkgs.jq ];
     };
 
   nixos-generate-config = makeProg {
@@ -41,12 +42,23 @@ let
     inherit (config.system.nixos-generate-config) configuration;
   };
 
-  nixos-option = pkgs.callPackage ./nixos-option { };
+  nixos-option =
+    if lib.versionAtLeast (lib.getVersion pkgs.nix) "2.4pre"
+    then null
+    else pkgs.callPackage ./nixos-option { };
 
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
     inherit (config.system.nixos) version codeName revision;
+    inherit (config.system) configurationRevision;
+    json = builtins.toJSON ({
+      nixosVersion = config.system.nixos.version;
+    } // optionalAttrs (config.system.nixos.revision != null) {
+      nixpkgsRevision = config.system.nixos.revision;
+    } // optionalAttrs (config.system.configurationRevision != null) {
+      configurationRevision = config.system.configurationRevision;
+    });
   };
 
   nixos-enter = makeProg {
@@ -175,10 +187,9 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
-        nixos-option
         nixos-version
         nixos-enter
-      ];
+      ] ++ lib.optional (nixos-option != null) nixos-option;
 
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;

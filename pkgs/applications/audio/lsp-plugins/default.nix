@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.13";
+  version = "1.1.15";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "00mhrr873kgcnqy3q0yi1r5zacfcvz7fqpzsmfhw5d095jm970al";
+    sha256 = "0lynyjs5zp27gnzcv8a23pvb7c1ghzc2dspypca3ciq40bfpfzik";
   };
 
   nativeBuildInputs = [ pkgconfig php makeWrapper ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder ''out''}"
+    "ETC_PATH=$(out)/etc"
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";

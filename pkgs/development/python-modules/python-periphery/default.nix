@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-periphery";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1arsibmc19iyzr70lqfrkq0fk6gd6imm3zxa7zxv93b6lwl5bw1d";
+    sha256 = "1v0qpv0i2kqhjvl6wvvvy29hazjdcym7nn14qzv4r5zq1zsdb92x";
   };
 
   # Some tests require physical probing and additional physical setup

@@ -3,14 +3,15 @@
 , isPy3k, isPyPy
 
 , pyenchant, simplebayes, pillow, pycountry, whoosh, termcolor
-, python-Levenshtein, pyinsane2, pygobject3, pyocr, natsort
+, python-Levenshtein, pygobject3, pyocr, natsort, libinsane
+, distro
 
 , pkgs
 }:
 
 buildPythonPackage rec {
   pname = "paperwork-backend";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     group = "World";
     owner = "OpenPaperwork";
     rev = version;
-    sha256 = "0wjjiw99aswmppnhzq3jir0p5p78r3m8hjinhdirkgm6h7skq5p4";
+    sha256 = "1219yz8z4r1yn6miq8zc2z1m1lnhf3dmkhwfw23n05bg842nvg65";
   };
 
   sourceRoot = "source/paperwork-backend";
@@ -34,14 +35,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyenchant simplebayes pillow pycountry whoosh termcolor
-    python-Levenshtein pyinsane2 pygobject3 pyocr natsort
-    pkgs.poppler_gi pkgs.gtk3
+    python-Levenshtein libinsane pygobject3 pyocr natsort
+    pkgs.poppler_gi pkgs.gtk3 distro
   ];
 
   meta = {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = https://openpaper.work/;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.aszlig ];
+    maintainers = with lib.maintainers; [ aszlig symphorien ];
   };
 }

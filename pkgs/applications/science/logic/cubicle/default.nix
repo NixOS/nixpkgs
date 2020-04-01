@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://cubicle.lri.fr/;
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lucas8 ];
+    maintainers = with maintainers; [ dwarfmaster ];
   };
 }

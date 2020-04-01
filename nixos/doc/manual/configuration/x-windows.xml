@@ -85,11 +85,14 @@
 <programlisting>
 <xref linkend="opt-services.xserver.displayManager.defaultSession"/> = "none+i3";
 </programlisting>
-  And, finally, to enable auto-login for a user <literal>johndoe</literal>:
+  Every display manager in NixOS supports auto-login, here is an example
+  using lightdm for a user <literal>alice</literal>:
 <programlisting>
-<xref linkend="opt-services.xserver.displayManager.auto.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.auto.user"/> = "johndoe";
+<xref linkend="opt-services.xserver.displayManager.lightdm.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin.user"/> = "alice";
 </programlisting>
+  The options are named identically for all other display managers.
   </para>
  </simplesect>
  <simplesect xml:id="sec-x11-graphics-cards-nvidia">

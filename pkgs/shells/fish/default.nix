@@ -90,7 +90,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.0.2";
+    version = "3.1.0";
 
     etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
@@ -98,7 +98,7 @@ let
       # There are differences between the release tarball and the tarball github packages from the tag
       # Hence we cannot use fetchFromGithub
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
-      sha256 = "03j3jl9jzlnhq4p86zj8wqsh5sx45j1d1fvfa80ks1cfdg68qwhl";
+      sha256 = "0s2356mlx7fp9kgqgw91lm5ds2i9iq9hq071fbqmcp3875l1xnz5";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -109,11 +109,10 @@ let
     '';
 
     patches = [
-      # Fixes "Integer 243 in '243 (243)' followed by non-digit" error with systemctl completion.
-      # https://github.com/fish-shell/fish-shell/issues/5689 (will be included in fish 3.1.0)
+      # Fixes compilation on old Apple SDKs
       (fetchpatch {
-        url = "https://github.com/fish-shell/fish-shell/commit/c6ec4235136e82c709e8d7b455f7c463f9714b48.patch";
-        sha256 = "02m6pkhhx6y21csydznsxkbpnwhcpzyz99xgd9ryh7s03v7wbigw";
+        url = "https://github.com/fish-shell/fish-shell/commit/10385d422b3e2a823faebfdaf13edd0e7f48a27f.patch";
+        sha256 = "0hj13kyjf5wr9j5afd4mfylcr7mz68ilbncbcf307drk1lv1lvrn";
       })
     ];
 
@@ -128,7 +127,7 @@ let
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
       sed -i "s|which |${which}/bin/which |"               \
-              "$out/share/fish/functions/type.fish"
+             "$out/share/fish/functions/type.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
           -i "$out/share/fish/functions/fish_prompt.fish"
       sed -e "s|gettext |${gettext}/bin/gettext |"         \
@@ -136,18 +135,18 @@ let
           -i "$out/share/fish/functions/_.fish"
       sed -e "s|uname|${coreutils}/bin/uname|"             \
           -i "$out/share/fish/functions/__fish_pwd.fish"   \
-            "$out/share/fish/functions/prompt_pwd.fish"
+             "$out/share/fish/functions/prompt_pwd.fish"
       sed -e "s|sed |${gnused}/bin/sed |"                  \
           -i "$out/share/fish/functions/alias.fish"        \
-            "$out/share/fish/functions/prompt_pwd.fish"
+             "$out/share/fish/functions/prompt_pwd.fish"
       sed -i "s|nroff |${groff}/bin/nroff |"               \
-            "$out/share/fish/functions/__fish_print_help.fish"
-      sed -i "s|/sbin /usr/sbin||" \
-            "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
-      sed -e "s|clear;|${getBin ncurses}/bin/clear;|" \
+             "$out/share/fish/functions/__fish_print_help.fish"
+      sed -e "s|clear;|${getBin ncurses}/bin/clear;|"      \
           -i "$out/share/fish/functions/fish_default_key_bindings.fish"
-      sed -e "s|python3|${getBin python3}/bin/python3|" \
+      sed -e "s|python3|${getBin python3}/bin/python3|"    \
           -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
+      sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
+             $out/share/fish/completions/{sudo.fish,doas.fish}
 
     '' + optionalString stdenv.isLinux ''
       sed -e "s| ul| ${utillinux}/bin/ul|" \

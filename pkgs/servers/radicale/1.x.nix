@@ -29,6 +29,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ edwtjo pSub aneeshusa ];
+    maintainers = with maintainers; [ edwtjo pSub ];
   };
 }

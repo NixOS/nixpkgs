@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
 , openal, freealut, libGLU, libGL, libvorbis, libogg, gettext, curl, freetype
-, fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet }:
+, fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet, harfbuzz }:
 
 let
   dir = "stk-code";
 
 in stdenv.mkDerivation rec {
   pname = "supertuxkart";
-  version = "1.0";
+  version = "1.1";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "supertuxkart";
       repo   = "stk-code";
       rev    = version;
-      sha256 = "03mrnzrvfdgjc687n718f5zsray6vbdlv4irzy2mfi78bz3bkjll";
+      sha256 = "01vxxl94583ixswzmi4caz8dk64r56pn3zxh7v63zml60yfvxbvp";
       name   = dir;
     })
     (fetchsvn {
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     libX11 libXrandr
     openal freealut libGLU libGL libvorbis libogg zlib freetype
-    curl fribidi bluez libjpeg libpng enet
+    curl fribidi bluez libjpeg libpng enet harfbuzz
   ];
 
   enableParallelBuilding = true;

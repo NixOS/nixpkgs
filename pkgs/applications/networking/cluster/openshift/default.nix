@@ -33,7 +33,9 @@ in buildGoPackage rec {
 
   goPackagePath = "github.com/openshift/origin";
 
-  buildInputs = [ which rsync go-bindata kerberos clang ];
+  buildInputs = [ kerberos ];
+
+  nativeBuildInputs = [ which rsync go-bindata clang ];
 
   patchPhase = ''
     patchShebangs ./hack

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "serd";
-  version = "0.30.0";
+  version = "0.30.2";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "1yyfyvc6kwagi5w43ljp1bbjdvdpmgpds74lmjxycm91bkx0xyvf";
+    sha256 = "00kjjgs5a8r72khgpya14scvl3n58wqwl5927y14z03j25q04ccx";
   };
 
   nativeBuildInputs = [ pkgconfig python3 wafHook ];

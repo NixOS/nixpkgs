@@ -6,6 +6,7 @@
 , pytest_xdist
 , pytest-django
 , mock
+, django
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,8 @@ buildPythonPackage rec {
     pytest-django
     mock
   ];
+
+  disabled = lib.versionAtLeast django.version "2.0";
 
   checkPhase = ''
     pytest

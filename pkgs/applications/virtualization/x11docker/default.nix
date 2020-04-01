@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg, getopt, gnugrep, gawk, ps, mount, iproute }:
 stdenv.mkDerivation rec {
   pname = "x11docker";
-  version = "6.5.0";
+  version = "6.6.0";
   src = fetchFromGitHub {
     owner = "mviereck";
     repo = "x11docker";
     rev = "v${version}";
-    sha256 = "1lh45cxzpdwvhahlcayzqwq1q5hra25mszs13j0dswklcjvjqw8b";
+    sha256 = "0a7fggyaybfppsvqyll1gsh19pp41nkly4x1sgy5pk1d9j1lblgx";
   };
   nativeBuildInputs = [ makeWrapper ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Run graphical applications with Docker";
-    homepage = https://github.com/mviereck/x11docker;
+    homepage = "https://github.com/mviereck/x11docker";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ jD91mZM2 ];
     platforms = stdenv.lib.platforms.linux;

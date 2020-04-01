@@ -6,11 +6,11 @@
 assert tlsSupport -> gnutls != null;
 
 stdenv.mkDerivation rec {
-  name = "tintin-2.01.92";
+  name = "tintin-2.02.02";
 
   src = fetchurl {
     url    = "mirror://sourceforge/tintin/${name}.tar.gz";
-    sha256 = "0id8rd2yhh6ccjnlwyixflsay1rq3sw6pwlhz1ic3nzj22cd91ik";
+    sha256 = "11ylbp8ip7dwmh4gzb53z147pcfxkl3lwhyy8ngyn2zc634vdn65";
   };
 
   nativeBuildInputs = lib.optional tlsSupport gnutls.dev;

@@ -556,8 +556,7 @@ in
 
     services.xserver.displayManager.lightdm.enable =
       let dmconf = cfg.displayManager;
-          default = !( dmconf.auto.enable
-                    || dmconf.gdm.enable
+          default = !(dmconf.gdm.enable
                     || dmconf.sddm.enable
                     || dmconf.xpra.enable );
       in mkIf (default) true;
@@ -574,7 +573,7 @@ in
            then { modules = [xorg.${"xf86video" + name}]; }
            else null)
           knownVideoDrivers;
-      in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
+      in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
 
     assertions = [
       { assertion = config.security.polkit.enable;
@@ -652,8 +651,7 @@ in
     systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "systemd-udev-settle.service" "acpid.service" "systemd-logind.service" ];
-        wants = [ "systemd-udev-settle.service" ];
+        after = [ "acpid.service" "systemd-logind.service" ];
 
         restartIfChanged = false;
 
@@ -741,7 +739,7 @@ in
           ${cfg.serverLayoutSection}
           # Reference the Screen sections for each driver.  This will
           # cause the X server to try each in turn.
-          ${flip concatMapStrings cfg.drivers (d: ''
+          ${flip concatMapStrings (filter (d: d.display) cfg.drivers) (d: ''
             Screen "Screen-${d.name}[0]"
           '')}
         EndSection
@@ -765,42 +763,44 @@ in
             ${driver.deviceSection or ""}
             ${xrandrDeviceSection}
           EndSection
+          ${optionalString driver.display ''
 
-          Section "Screen"
-            Identifier "Screen-${driver.name}[0]"
-            Device "Device-${driver.name}[0]"
-            ${optionalString (cfg.monitorSection != "") ''
-              Monitor "Monitor[0]"
-            ''}
+            Section "Screen"
+              Identifier "Screen-${driver.name}[0]"
+              Device "Device-${driver.name}[0]"
+              ${optionalString (cfg.monitorSection != "") ''
+                Monitor "Monitor[0]"
+              ''}
 
-            ${cfg.screenSection}
-            ${driver.screenSection or ""}
+              ${cfg.screenSection}
+              ${driver.screenSection or ""}
 
-            ${optionalString (cfg.defaultDepth != 0) ''
-              DefaultDepth ${toString cfg.defaultDepth}
-            ''}
+              ${optionalString (cfg.defaultDepth != 0) ''
+                DefaultDepth ${toString cfg.defaultDepth}
+              ''}
 
-            ${optionalString
-                (driver.name != "virtualbox" &&
-                 (cfg.resolutions != [] ||
-                  cfg.extraDisplaySettings != "" ||
-                  cfg.virtualScreen != null))
-              (let
-                f = depth:
-                  ''
-                    SubSection "Display"
-                      Depth ${toString depth}
-                      ${optionalString (cfg.resolutions != [])
-                        "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
-                      ${cfg.extraDisplaySettings}
-                      ${optionalString (cfg.virtualScreen != null)
-                        "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
-                    EndSubSection
-                  '';
-              in concatMapStrings f [8 16 24]
-            )}
+              ${optionalString
+                  (driver.name != "virtualbox" &&
+                  (cfg.resolutions != [] ||
+                    cfg.extraDisplaySettings != "" ||
+                    cfg.virtualScreen != null))
+                (let
+                  f = depth:
+                    ''
+                      SubSection "Display"
+                        Depth ${toString depth}
+                        ${optionalString (cfg.resolutions != [])
+                          "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
+                        ${cfg.extraDisplaySettings}
+                        ${optionalString (cfg.virtualScreen != null)
+                          "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
+                      EndSubSection
+                    '';
+                in concatMapStrings f [8 16 24]
+              )}
 
-          EndSection
+            EndSection
+          ''}
         '')}
 
         ${xrandrMonitorSections}

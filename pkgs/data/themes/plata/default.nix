@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plata-theme";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "0rva56xdvsj6vwwvrn55137mw83c9p4xy00i3mq0ryh43imyj4mg";
+    sha256 = "183kas7b5vxm6l2m5c4yh8cnq05sfa82afcp9h6cfj2rh2iv6kqy";
   };
 
   preferLocalBuild = true;
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A GTK theme based on Material Design Refresh";
-    homepage = https://gitlab.com/tista500/plata-theme;
+    homepage = "https://gitlab.com/tista500/plata-theme";
     license = with licenses; [ gpl2 cc-by-sa-40 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.tadfisher ];

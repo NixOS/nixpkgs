@@ -121,5 +121,5 @@ import ./make-test-python.nix {
     client.succeed("check-mail-landed >&2")
   '';
 
-  meta.timeout = 30;
+  meta.timeout = 1800;
 }

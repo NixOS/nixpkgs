@@ -1,14 +1,14 @@
 { fetchFromGitHub, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
 
 stdenv.mkDerivation rec {
-  pname = "z88dk";
-  version = "unstable-2019-05-09";
+  pname = "z88dk-unstable";
+  version = "2020-01-27";
 
   src = fetchFromGitHub {
     owner = "z88dk";
     repo  = "z88dk";
-    rev = "826d68632c3a7c17df88dd2ec54571a6041da69c";
-    sha256 = "104qgb01sdb97mkcxnq1cdlqi5qvjm4rd9bg5r42pdfz81ss49xj";
+    rev = "efdd07c2e2229cac7cfef97ec01f478004846e39";
+    sha256 = "0jcks5ygp256lmzmllffp4yb38cxjgdyqnnimkj4s65095cfasyb";
     fetchSubmodules = true;
   };
 

@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "2.8.7";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible";
     rev = "v${version}";
-    sha256 = "08vqjk85j0g1x0iad03d7ysws433dikii8j2lr3a1mlx6d186vv8";
+    sha256 = "06vxvn5q13rxzndwzq3g6yxiqm361ma9zcvwbrfn630xkmsg4pd8";
   };
 
   prePatch = ''

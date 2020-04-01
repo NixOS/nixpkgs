@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://subgit.com/download/${name}.zip";
+    url = "https://subgit.com/download/${name}.zip";
     sha256 = "0dwd2kymmprci3b61ayr6axzlkc8zgbc40jqxvvyzschfxw9y0v5";
   };
 }

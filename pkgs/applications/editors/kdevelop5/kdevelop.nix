@@ -10,11 +10,11 @@
 
 mkDerivation rec {
   pname = "kdevelop";
-  version = "5.4.6";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "01jmrmwbc1hrvq7jdfcc7mxl03q2l6kz57yca2j26xwyvfcfv5sz";
+    sha256 = "0438721v24pim5q0q54ivsws9a679fm7ymrm1nn9g1fv06qsm4d8";
   };
 
   nativeBuildInputs = [

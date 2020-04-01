@@ -82,5 +82,44 @@
     "legacy_s": "05madj529y18ndxrih96mivbzng1vz2zbzicrcnj58i2084zm23f",
     "legacy32": "0rapcydiic2nq6idjf7fg53xsxk8dxzyi1vflpz554ghdrnsmwjv",
     "legacy32_s": "16fgbd3lx4r270dxqj6gr1g1iqjj8cv389h2hw1l646xx28g8d2m"
+  },
+  "0.47.01": {
+    "linux": "1wbybkfpgvpd2yliy8mfgddnz806ac4rv4j0lhlsqwpk8jj0mx81",
+    "linux32": "1fnz1mydqgybcm8kzranvjzc2x9g6bcalxv3fsjngvpv13x6izzv",
+    "osx": "18wdffidasbrsbhqjwds08ckbrjhcw0759aynz7zggyy5is9q8iw",
+    "osx32": "1b4kf3vg0zd5w5s0rdhzfz0rswkl6sq0j1f8qmimnw7qd09h43wx",
+    "win": "1v3v2z7g67d6926h9lxakznvbddyxyr85i1ym34y2wywnc886z7r",
+    "win_s": "0yahynimhz4nvdi5qp5a612vf7ikg87w2aj2r8s1lhdw6xwdkpyc",
+    "win32": "07mqhm64c1ddjc3vpyhf9qf14lp19xwz3pgg4c2pvcwy4yyrys22",
+    "win32_s": "07acbxai8g04yxg7n68nyx4jwcqqkgjn7n96q2lzxdvc988kiivz",
+    "legacy32_s": "1gxmc3rsl9glai3wb4wzsda3qyhdimd8s5kbr5m753n8lmzasafx"
+  },
+  "0.47.02": {
+    "linux": "1zbsygbfiqxxs767qxkxjp3ayywi5q0d8xlrqlbd0l8a3ccg5avw",
+    "linux32": "1ddc9s4n408j8gidgign51bgv2wgy5z4cy74jzx00pvnhsfp2mpy",
+    "osx": "1mwy88yxip1wys1kxpfsbg7wlvfrkc4lg04gqw0d266a88dj7a30",
+    "osx32": "08ssnzl52gqqgcqhl0ynyikbxz76825kpcg1d6yx8g7ifjndf19n",
+    "win": "08g7fy18y8q32l0158314bny0qg57xz37qj9fri9r4xbhci67ldk",
+    "win_s": "0x56s1md62yk661aqcdgnz8k0zir0zr8qwan5vrqc0q9yh069yl1",
+    "win32": "0ww64mymbilb235n93d7w4c9axq3ww2mxa0f7bl4x8yrxwc8k942",
+    "win32_s": "0r801vip807v88icf47i3s82v7lshx67q4ilzfjirqfslh1x00bs",
+    "legacy": "14f4d6r7swfjnlaalg4l5916ihj6wvhlsgjp7cygamzp4c2wgng8",
+    "legacy_s": "1jxf52kaijf4crwxj30a4f6z7rzs6xa91y6vn5s8jr0cvbr5pz64",
+    "legacy32": "0j7shqdv3gimacj03cil2y0fmr0j0fp57cwmdjwnxwx3m96k3xwm",
+    "legacy32_s": "1wc7pcp9dwz0q1na3i5pbqknya595qdkmr7hsmgh2kk8rsp3g9g2"
+  },
+  "0.47.04": {
+    "linux": "1ri82c5hja6n0wv538srf2nbcyb8ip49w4l201m90cmcycmqgr8x",
+    "linux32": "00yz8gl75sbx15d7vl22ij0a5qd325kpc9mgm1lh5g7i065vgzn8",
+    "osx": "0c1g655bn5n4pbzxw3v83gmy54va5y87m7ksi6iryfal0m9lshhv",
+    "osx32": "1knfgqbwa7v9va1w6i8yzz6xp3dj633dbs50izx6ldszm0ra42pg",
+    "win": "0j7ixr3rf9900zzfw3nd3vg97kdkspm530cmf9dkwhf6klmpks7s",
+    "win_s": "11amw5gjhi753mvf17wifcjiyikjx0qwa16787gfhj9jfp0yw764",
+    "win32": "1xw9f49n85c31kbzkm5zh81kccjx9msjyy3xwr0klak5w398a59l",
+    "win32_s": "0s26hrgfk2b5wg4dvg90wgw1mvrrvbyjhmsys9f5fl7zn1pjbxxr",
+    "legacy": "103bcnn8gxi2rkpjmjfgv5a5kxmh1zd7vagrsscv55sppd7fcl7n",
+    "legacy_s": "19ai7lvxx0y3iha9qrbl5krric547rzs6vm4ibk8x61vv97jrbd8",
+    "legacy32": "0lli6s1g7yj3p3h26ajgq3h619n88qn6s7amyz6z8w7hyzfi7wij",
+    "legacy32_s": "1wzxbzgln9pmsk2nchrl94d2yd09xdgynmjl4qwcaqzkrnf3sfqc"
   }
 }

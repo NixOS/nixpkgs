@@ -121,8 +121,6 @@ stdenv.mkDerivation rec {
     Version: ${version}
     Libs: -L$out/lib -lv8 -pthread
     Cflags: -I$out/include
-    Libs: -L$out/lib -lpulse
-    Cflags: -I$out/include
     EOF
   '';
 

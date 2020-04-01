@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
+    broken = true;
   };
 }

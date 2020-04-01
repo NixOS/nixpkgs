@@ -42,4 +42,23 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Jailbreak to fix the build.
+  async = doJailbreak super.async;
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
+  hashable = doJailbreak super.hashable;
+  parallel = doJailbreak super.parallel;
+  regex-base = doJailbreak super.regex-base;
+  regex-compat = doJailbreak super.regex-compat;
+  regex-pcre-builtin = doJailbreak super.regex-pcre-builtin;
+  regex-posix = doJailbreak super.regex-posix;
+  regex-tdfa = doJailbreak super.regex-tdfa;
+  split = doJailbreak super.split;
+  tar = doJailbreak super.tar;
+  tasty-expected-failure = doJailbreak super.tasty-expected-failure;
+  unliftio-core = doJailbreak super.unliftio-core;
+  vector = doJailbreak super.vector;
+  zlib = doJailbreak super.zlib;
+
+  # Use the latest version to fix the build.
+
 }

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "mozdevice";
-  version = "3.0.6";
+  version = "3.0.7";
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gw2lk16fz2n1953i29hgw47s2h0c6z911zzg8am1in8qq2318xv";
+    sha256 = "1n7l3drdh3rm3320v98c9hhh37ljk9l861hyw18psca7jdd717n5";
     format = "wheel";
   };
 

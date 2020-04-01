@@ -2,7 +2,7 @@
 
 pkgs.runCommandNoCC "nixpkgs-lib-tests" {
   buildInputs = [ pkgs.nix (import ./check-eval.nix) ];
-  env.NIX_PATH="nixpkgs=${pkgs.path}";
+  env.NIX_PATH="nixpkgs=${toString pkgs.path}";
 } ''
     datadir="${pkgs.nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp

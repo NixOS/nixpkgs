@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "6.4.0";
+  version = "6.5.1";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "praw";
     rev = "v${version}";
-    sha256 = "0j92wqyppif2k80zhzq30b04r8ljwjviply400kn4rjn54hxd4hb";
+    sha256 = "0d5whaw4731gllffhwrh2qqnlki4j8q83xaf3v4spkd40ps3q7b4";
   };
 
   nativeBuildInputs = [

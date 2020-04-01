@@ -92,8 +92,11 @@ in {
         "-o cat"
         "-n1"
       ] ++ (map (name: "-t ${escapeShellArg name}") cfg.services));
+      backend = if config.networking.nftables.enable
+        then "sshg-fw-nft-sets"
+        else "sshg-fw-ipset";
     in ''
-      BACKEND="${pkgs.sshguard}/libexec/sshg-fw-ipset"
+      BACKEND="${pkgs.sshguard}/libexec/${backend}"
       LOGREADER="LANG=C ${pkgs.systemd}/bin/journalctl ${args}"
     '';
 
@@ -104,7 +107,9 @@ in {
       after = [ "network.target" ];
       partOf = optional config.networking.firewall.enable "firewall.service";
 
-      path = with pkgs; [ iptables ipset iproute systemd ];
+      path = with pkgs; if config.networking.nftables.enable
+        then [ nftables iproute systemd ]
+        else [ iptables ipset iproute systemd ];
 
       # The sshguard ipsets must exist before we invoke
       # iptables. sshguard creates the ipsets after startup if
@@ -112,14 +117,14 @@ in {
       # the iptables rules because postStart races with the creation
       # of the ipsets. So instead, we create both the ipsets and
       # firewall rules before sshguard starts.
-      preStart = ''
+      preStart = optionalString config.networking.firewall.enable ''
         ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:net family inet
         ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:net family inet6
         ${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP
         ${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP
       '';
 
-      postStop = ''
+      postStop = optionalString config.networking.firewall.enable ''
         ${pkgs.iptables}/bin/iptables  -D INPUT -m set --match-set sshguard4 src -j DROP
         ${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP
         ${pkgs.ipset}/bin/ipset -quiet destroy sshguard4

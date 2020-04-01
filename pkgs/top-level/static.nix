@@ -88,7 +88,6 @@ self: super: let
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
   gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
-  gcc5Stdenv = foldl (flip id) super.gcc5Stdenv staticAdapters;
   gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
   gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
   gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
@@ -267,6 +266,13 @@ in {
   ) super.ocaml-ng;
 
   python27 = super.python27.override { static = true; };
+  python35 = super.python35.override { static = true; };
+  python36 = super.python36.override { static = true; };
+  python37 = super.python37.override { static = true; };
+  python38 = super.python38.override { static = true; };
+  python39 = super.python39.override { static = true; };
+  python3Minimal = super.python3Minimal.override { static = true; };
+
 
   libev = super.libev.override { static = true; };
 }

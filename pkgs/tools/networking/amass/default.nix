@@ -1,30 +1,33 @@
 { buildGoModule
 , fetchFromGitHub
-, lib
+, stdenv
+, Security
 }:
 
 buildGoModule rec {
   pname = "amass";
-  version = "3.0.25";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
     rev = "v${version}";
-    sha256 = "04vsahqmbs9rysdwyjq0zgwcn6dgdvkyz8lsp1g1p9d3amrgbqjy";
+    sha256 = "1lir0j6av5zl1jb3513cf7mlrydgnsvy0chn5ihg1fvbdiv5lww9";
   };
 
-  modSha256 = "0kwi4pys08kszrh5kz64gs68k20y00v2zqh5hyrgpy9nivqrlj62";
+  modSha256 = "1nahmgzd2akkr0zb80k6s1lz2s1fkggvilwi6bnafwqlaw0qxwcl";
 
   outputs = [ "out" "wordlists" ];
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   postInstall = ''
     mkdir -p $wordlists
-    cp -R $src/wordlists/*.txt $wordlists
+    cp -R $src/examples/wordlists/*.txt $wordlists
     gzip $wordlists/*.txt
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "In-Depth DNS Enumeration and Network Mapping";
     longDescription = ''
       The OWASP Amass tool suite obtains subdomain names by scraping data

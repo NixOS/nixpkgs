@@ -7,11 +7,11 @@
 stdenv.mkDerivation rec {
 
   pname = "groonga";
-  version = "9.1.0";
+  version = "10.0.0";
 
   src = fetchurl {
     url    = "https://packages.groonga.org/source/groonga/${pname}-${version}.tar.gz";
-    sha256 = "11mlpnaldb6z438qdb7qjq9dxbh71l6v6lrv69fxka34izpgyhkk";
+    sha256 = "01wacd9rijnjydshsl7z0waasr87gxkwr0kr647chczcxlh1b9gr";
   };
 
   buildInputs = with stdenv.lib;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   installCheckPhase = "$out/bin/groonga --version";
 
   meta = with stdenv.lib; {
-    homepage    = http://groonga.org/;
+    homepage    = https://groonga.org/;
     description = "An open-source fulltext search engine and column store";
     license     = licenses.lgpl21;
     maintainers = [ maintainers.ericsagnes ];

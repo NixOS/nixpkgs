@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0fh5rz6slyjzz03bpjcl9gplk36vm7qcc0i0gvhsikwvw0cf3hym";
   };
 
-  cargoSha256 = "0377jbjkrrjss3w8xmjsjjynycpdk19grp20hffxschg4ryvniin";
+  cargoSha256 = "1z7sg9b7qsjw1hhc7dkvxz8xgf4k8jddr7gbnjr4d2569g97jf3f";
 
   preFixup = ''
     install -Dm644 -t $out/share/zsh/site-functions/ target/release/build/lsd-*/out/_lsd

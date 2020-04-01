@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-ly";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x98dv7p8mg26p4816yy8hz4f34zf6hpnnfmr56msgh9jnsm2qfl";
+    sha256 = "0s5hvsf17f4w1xszrf4pg29wfv9znkj195klq1v2qhlpxfp6772d";
   };
 
   # tests not shipped on `pypi` and
@@ -16,6 +16,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Tool and library for manipulating LilyPond files";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

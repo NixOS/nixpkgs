@@ -5,6 +5,8 @@ buildDunePackage rec {
   pname = "phylogenetics";
   version = "unstable-2019-11-15";
 
+  useDune2 = true;
+
   src = fetchFromGitHub {
     owner  = "biocaml";
     repo   = pname;
@@ -20,7 +22,7 @@ buildDunePackage rec {
   doCheck = false;  # many tests require bppsuite
 
   meta = with stdenv.lib; {
-    inherit (std.meta) homepage;
+    inherit (src.meta) homepage;
     description = "Bioinformatics library for Ocaml";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.cecill-b;

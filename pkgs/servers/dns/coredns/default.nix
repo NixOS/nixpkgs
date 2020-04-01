@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "coredns";
-  version = "1.6.6";
+  version = "1.6.7";
 
   goPackagePath = "github.com/coredns/coredns";
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "1x8sgchp0kkk5xdharjrq29qxgv1mdzrw3f12s2kchgqf1m6r0sx";
+    sha256 = "05r0dm8h23s5dafxisya48izc2ywpn5ywvhf9q6m20qkpwr8gd10";
   };
 
-  modSha256 = "10ljggg1g5x00gpgzc5m29n1k5akf0s0g3hkdh8adcbrcz0pgr5c";
+  modSha256 = "0wlffk6wkcyn2lphw2vmdsmzag0wxljcxrvm7sv3i124x2x3yvy4";
 
   meta = with stdenv.lib; {
     homepage = "https://coredns.io";

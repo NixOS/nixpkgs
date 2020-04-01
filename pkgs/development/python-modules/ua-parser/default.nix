@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ua-parser";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "97bbcfc9321a3151d96bb5d62e54270247b0e3be0590a6f2ff12329851718dcb";
+    sha256 = "0csh307zfz666kkk5idrw3crj1x8q8vsqgwqil0r1n1hs4p7ica7";
   };
 
   buildInputs = [ pyyaml ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A python implementation of the UA Parser";
-    homepage = https://github.com/ua-parser/uap-python;
+    homepage = "https://github.com/ua-parser/uap-python";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];

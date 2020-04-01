@@ -57,7 +57,7 @@ let
 
   # Recursively composes the dependencies of a package
   composePackage = { name, packageName, src, dependencies ? [], ... }@args:
-    ''
+    builtins.addErrorContext "while evaluating node package '${packageName}'" ''
       DIR=$(pwd)
       cd $TMPDIR
 
@@ -400,6 +400,8 @@ let
         ++ stdenv.lib.optional (stdenv.isDarwin) libtool
         ++ buildInputs;
 
+      inherit nodejs;
+
       inherit dontStrip; # Stripping may fail a build for some package deployments
       inherit dontNpmInstall preRebuild unpackPhase buildPhase;
 
@@ -528,8 +530,8 @@ let
       # Provide the dependencies in a development shell through the NODE_PATH environment variable
       inherit nodeDependencies;
       shellHook = stdenv.lib.optionalString (dependencies != []) ''
-        export NODE_PATH=$nodeDependencies/lib/node_modules
-        export PATH="$nodeDependencies/bin:$PATH"
+        export NODE_PATH=${nodeDependencies}/lib/node_modules
+        export PATH="${nodeDependencies}/bin:$PATH"
       '';
     };
 in

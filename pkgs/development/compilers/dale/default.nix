@@ -3,12 +3,12 @@
 , cmake
 , pkgconfig
 , libffi
-, llvm_35
+, llvm_6
 , doCheck ? false
 , perl
 }:
 
-let version = "20170519";
+let version = "20181024";
 
 in stdenv.mkDerivation {
   pname = "dale";
@@ -17,15 +17,13 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "tomhrr";
     repo = "dale";
-    rev = "39e16d8e89fa070de65a673d4462e783d530f95a";
-    sha256 = "0dc5cjahv7lzlp92hidlh83rwgrpgb6xz2pnba2pm5xrv2pnsskl";
+    rev = "f5db8b486f4e7c423fc25941a8315f1209bc0e54";
+    sha256 = "0v4ajrzrqvf279kd7wsd9flrpsav57lzxlwwimk9vnfwh7xpzf9v";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libffi llvm_35 ]
+  buildInputs = [ cmake libffi llvm_6 ]
              ++ stdenv.lib.optional doCheck perl;
-
-  patches = [ ./link-llvm.patch ];
 
   inherit doCheck;
 

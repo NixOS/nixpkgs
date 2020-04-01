@@ -12,8 +12,8 @@
 # };
 with lib;
 let
-  mkLib = name: attrs:
-    stdenv.mkDerivation (
+  mkLib = name:
+    stdenv.mkDerivation
       {
         pname = "kicad-${name}";
         version = "${version}";
@@ -27,16 +27,13 @@ let
         );
         nativeBuildInputs = [ cmake ];
         meta.license = licenses.cc-by-sa-40;
-      } // attrs
-    );
+      };
 in
 {
-  symbols = mkLib "symbols" { };
-  templates = mkLib "templates" { };
-  footprints = mkLib "footprints" { };
-  packages3d = mkLib "packages3d" {
-    hydraPlatforms = []; # this is a ~1 GiB download, occupies ~5 GiB in store
-  };
+  symbols = mkLib "symbols";
+  templates = mkLib "templates";
+  footprints = mkLib "footprints";
+  packages3d = mkLib "packages3d";
 
   # i18n is a special case, not actually a library
   # more a part of kicad proper, but also optional and separate

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   baseName = "ipmiutil";
-  version = "3.1.5";
+  version = "3.1.6";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${baseName}/${name}.tar.gz";
-    sha256 = "18q1nc2caaixy3dr2axdvwq37iz916piarvmg0jdfzaxfpaxpk2q";
+    sha256 = "0jlfb4firph3hc0854n7cw7yjwlax3wdxn37r2jl0l94dj684548";
   };
 
   buildInputs = [ openssl ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An easy-to-use IPMI server management utility";
-    homepage = http://ipmiutil.sourceforge.net/;
+    homepage = "http://ipmiutil.sourceforge.net/";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.bsd3;

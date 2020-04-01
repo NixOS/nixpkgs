@@ -8,18 +8,24 @@
 
 buildBazelPackage rec {
   name = "bazel-remote-${version}";
-  version = "2019-01-12";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "buchgr";
     repo = "bazel-remote";
-    rev = "3f65b6ccf69e223950c77275a743d0d3a04a8583";
-    sha256 = "0fklrlylmc55yzhm3m1f211x5gmk7hpqjb7k5kml7n3gw3npbjda";
+    rev = "v${version}";
+    sha256 = "1fpdw139d5q1377qnqbgkahmdr4mdaa17d2m10wkyvyvijwm4r2m";
   };
 
   nativeBuildInputs = [ go git ];
 
   bazelTarget = "//:bazel-remote";
+
+  removeRulesCC = false;
+
+  # this is to work around `test -f` failing when called by gazelle
+  # https://github.com/bazelbuild/bazel-gazelle/blob/v0.19.1/internal/go_repository.bzl#L135
+  patches = [ ./disable_build_file_generation.patch ];
 
   fetchAttrs = {
     preBuild = ''
@@ -28,12 +34,11 @@ buildBazelPackage rec {
       # tell rules_go to use the Go binary found in the PATH
       sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
 
-      # update gazelle to work around https://github.com/golang/go/issues/29850
-      sed -e 's,https://github.com/bazelbuild/bazel-gazelle/releases/download/0.15.0/bazel-gazelle-0.15.0.tar.gz,https://github.com/bazelbuild/bazel-gazelle/releases/download/0.16.0/bazel-gazelle-0.16.0.tar.gz,g' -i WORKSPACE
-      sed -e 's,6e875ab4b6bf64a38c352887760f21203ab054676d9c1b274963907e0768740d,7949fc6cc17b5b191103e97481cf8889217263acf52e00b560683413af204fcb,g' -i WORKSPACE
-
       # tell rules_go to invoke GIT with custom CAINFO path
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
+
+      # force gazelle to use the nix go cache rather than its own
+      # export GO_REPOSITORY_USE_HOST_CACHE=1
     '';
 
     preInstall = ''
@@ -47,6 +52,11 @@ buildBazelPackage rec {
       rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
       sed -e '/^FILE:@go_sdk.*/d' -i $bazelOut/external/\@*.marker
 
+      # Remove the gazelle repository cache as it contains built binaries
+      chmod -R u+w $bazelOut/external/bazel_gazelle_go_repository_cache
+      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_cache,\@bazel_gazelle_go_repository_cache.marker}
+      sed -e '/^FILE:@bazel_gazelle_go_repository_cache.*/d' -i $bazelOut/external/\@*.marker
+
       # Remove the gazelle tools, they contain go binaries that are built
       # non-deterministically. As long as the gazelle version matches the tools
       # should be equivalent.
@@ -54,7 +64,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "1wvyv3w5y6vj6qs6v5qyd356j1lxc3mf7n3j2pcib1bqmx3igw35";
+    sha256 = "141kw2zpr612xdcrg6x9kslg4d5b3fbpzx0vgp3lqwdihfj3sc1l";
   };
 
   buildAttrs = {
@@ -75,7 +85,6 @@ buildBazelPackage rec {
     description = "A remote HTTP/1.1 cache for Bazel.";
     license = licenses.asl20;
     maintainers = [ maintainers.uri-canva ];
-    platforms = platforms.darwin;
-    broken = true; # global variable '_layer' is referenced before assignment.
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }

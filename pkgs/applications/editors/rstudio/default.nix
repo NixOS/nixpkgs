@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
+{ lib, mkDerivation, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
 , openssl, R, qtbase, qtxmlpatterns, qtsensors, qtwebengine, qtwebchannel
 , libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 , llvmPackages
 }:
 
-with stdenv.lib;
+with lib;
 let
   verMajor = "1";
   verMinor = "2";
-  verPatch = "1335";
+  verPatch = "5033";
   version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "2.1.2";
   gwtVer = "2.8.1";
 in
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "RStudio";
   inherit version;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "0jv1d4yznv2lzwp0fdf377vqpg0k2q4z9qvji4sj86fabj835lqd";
+    sha256 = "0f3p2anz9xay2859bxj3bvyj582igsp628qxsccpkgn0jifvi4np";
   };
 
   # Hack RStudio to only use the input R and provided libclang.
@@ -116,15 +116,16 @@ stdenv.mkDerivation rec {
     mimeType = "text/x-r-source;text/x-r;text/x-R;text/x-r-doc;text/x-r-sweave;text/x-r-markdown;text/x-r-html;text/x-r-presentation;application/x-r-data;application/x-r-project;text/x-r-history;text/x-r-profile;text/x-tex;text/x-markdown;text/html;text/css;text/javascript;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;";
   };
 
+  qtWrapperArgs = [ ''--suffix PATH : ${gnumake}/bin'' ];
+
   postInstall = ''
-      wrapProgram $out/bin/rstudio --suffix PATH : ${gnumake}/bin
       mkdir $out/share
       cp -r ${desktopItem}/share/applications $out/share
       mkdir $out/share/icons
       ln $out/rstudio.png $out/share/icons
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Set of integrated tools for the R language";
       homepage = https://www.rstudio.com/;
       license = licenses.agpl3;

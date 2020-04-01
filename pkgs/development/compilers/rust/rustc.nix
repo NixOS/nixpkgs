@@ -4,8 +4,10 @@
 , pkgconfig, openssl
 , which, libffi
 , withBundledLLVM ? false
+, enableRustcDev ? true
 , version
 , sha256
+, patches ? []
 }:
 
 let
@@ -103,6 +105,8 @@ in stdenv.mkDerivation rec {
   # the rust build system complains that nix alters the checksums
   dontFixLibtool = true;
 
+  inherit patches;
+
   postPatch = ''
     patchShebangs src/etc
 
@@ -132,9 +136,15 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
-  # and thus a transitive dependency on ncurses
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString enableRustcDev ''
+    # install rustc-dev components. Necessary to build rls, clippy...
+    python x.py dist rustc-dev
+    tar xf build/dist/rustc-dev*tar.gz
+    cp -r rustc-dev*/rustc-dev*/lib/* $out/lib/
+
+  '' + ''
+    # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
+    # and thus a transitive dependency on ncurses
     find $out/lib -name "*.so" -type f -exec remove-references-to -t ${llvmShared} '{}' '+'
   '';
 
@@ -148,8 +158,10 @@ in stdenv.mkDerivation rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.llvm = llvmShared;
+
   meta = with stdenv.lib; {
-    homepage = https://www.rust-lang.org/;
+    homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan globin havvy ];
     license = [ licenses.mit licenses.asl20 ];

@@ -1,16 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, stdenv
+, file
 }:
 
 buildPythonPackage rec {
   pname = "sqlmap";
-  version = "1.3.12";
+  version = "1.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3bad3275e2f29ffa54d4013a2ac2c77e87d01a1d745065d54ed5e60bc68dfbf0";
+    sha256 = "0qp9j8c92zbkwlbv5ywrszil6kvlkkf3wkc4krh2vdsrwd9cnf2g";
   };
+
+  postPatch = ''
+    substituteInPlace sqlmap/thirdparty/magic/magic.py --replace "ctypes.util.find_library('magic')" \
+      "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
+
+    # the check for the last update date does not work in Nix,
+    # since the timestamp of the all files in the nix store is reset to the unix epoch
+    echo 'LAST_UPDATE_NAGGING_DAYS = float("inf")' >> sqlmap/lib/core/settings.py
+  '';
 
   # No tests in archive
   doCheck = false;

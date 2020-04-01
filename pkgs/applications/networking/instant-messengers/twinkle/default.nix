@@ -47,9 +47,15 @@ mkDerivation rec {
   ];
 
   patches = [
-    (fetchurl { # https://github.com/LubosD/twinkle/pull/152 patch for bcg729 1.0.2+
+    # patch for bcg729 1.0.2+
+    (fetchurl { # https://github.com/LubosD/twinkle/pull/152
       url = "https://github.com/LubosD/twinkle/compare/05082ae12051821b1d969e6672d9e4e5afe1bc07...7a6c533cda387652b5b4cb2a867be1a18585890c.patch";
       sha256 = "39fc6cef3e88cfca8db44612b2d082fb618027b0f99509138d3c0d2777a494c2";
+    })
+    # patch manual link to not link to old url, which now points to NSFW page
+    (fetchurl { # https://github.com/LubosD/twinkle/commit/05082ae12051821b1d969e6672d9e4e5afe1bc07
+      url = "https://github.com/LubosD/twinkle/commit/05082ae12051821b1d969e6672d9e4e5afe1bc07.diff";
+      sha256 = "1iamragr9wp2vczsnp6n261fpr1ai2nc2abp0228jlar9zafksw0";
     })
   ];
 

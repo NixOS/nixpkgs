@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "frp";
-  version = "0.31.1";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "fatedier";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cf2f0nbcg76i4mv8l3d38c13lw0mma6d2xzwkb9iqn7jflj1j9y";
+    sha256 = "1hj3xy7ihwl66hyxc1m8k3fwgz5jyx1bd32f80d7266klhjqf6nw";
   };
 
-  modSha256 = "1zbl0gfc99pbzdacxhfa1k3y6i7v13sb441wpbp9aygxhvwqrms9";
+  modSha256 = "1v90w5grc0vjpcp0m56d73zi0qnbswgz1rcvcwrjfa3rwqhigbal";
 
   subPackages = [ "cmd/frpc" "cmd/frps" ];
 

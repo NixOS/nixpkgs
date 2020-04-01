@@ -34,8 +34,8 @@ index c81213b..305aece 100644
  
 +#include <sys/cdefs.h>
 +
- void magic_init __P((void));	/* Initialize the magic number generator */
- u_int32_t magic __P((void));	/* Returns the next magic number */
+ void magic_init (void);	/* Initialize the magic number generator */
+ u_int32_t magic (void);	/* Returns the next magic number */
  
 diff --git a/pppd/plugins/rp-pppoe/if.c b/pppd/plugins/rp-pppoe/if.c
 index 91e9a57..9c0fac3 100644
@@ -119,7 +119,7 @@ index 6d71530..86d224e 100644
  #define MAX_ADDR_LEN 7
  #endif
  
--#if __GLIBC__ >= 2
+-#if !defined(__GLIBC__) || __GLIBC__ >= 2
  #include <asm/types.h>		/* glibc 2 conflicts with linux/types.h */
  #include <net/if.h>
  #include <net/if_arp.h>
