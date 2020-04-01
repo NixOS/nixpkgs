@@ -31,8 +31,7 @@
     ];
   };
 
-  security.sudo.configFile =
-    ''
+  security.sudo.configFile = ''
       Defaults:root,%wheel env_keep+=LOCALE_ARCHIVE
       Defaults:root,%wheel env_keep+=NIX_PATH
       Defaults:root,%wheel env_keep+=TERMINFO_DIRS
