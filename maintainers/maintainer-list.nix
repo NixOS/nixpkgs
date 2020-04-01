@@ -1085,6 +1085,12 @@
     githubId = 3465841;
     name = "Boris Sukholitko";
   };
+  bqv = {
+    email = "nixpkgs@fron.io";
+    github = "bqv";
+    githubId = 822863;
+    name = "Tony Olagbaiye";
+  };
   bradediger = {
     email = "brad@bradediger.com";
     github = "bradediger";
