@@ -7336,6 +7336,12 @@
     githubId = 378734;
     name = "TG ⊗ Θ";
   };
+  th0rgal = {
+    email = "thomas.marchand@tuta.io";
+    github = "Th0rgal";
+    githubId = 41830259;
+    name = "Thomas Marchand";
+  };
   thall = {
     email = "niclas.thall@gmail.com";
     github = "thall";
