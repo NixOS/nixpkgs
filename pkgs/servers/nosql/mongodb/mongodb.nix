@@ -1,5 +1,5 @@
 { stdenv, fetchurl, scons, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, python27, curl, Security, CoreFoundation, cctools }:
+, sasl, openssl, libpcap, python27, python35, curl, Security, CoreFoundation, cctools }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
@@ -10,8 +10,18 @@ with stdenv.lib;
 , license ? stdenv.lib.licenses.sspl
 }@args:
 
+
 let
-  python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+  ifdef = if versionAtLeast version "4.2.5"
+          then { python = python35.withPackages (ps: with ps; [ pyyaml typing cheetah3 psutil setuptools ]);
+                 mozjsVersion = "60";
+                 mozjsReplace = "defined(HAVE___SINCOS)";
+               }
+          else { python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+                 mozjsVersion = "45";
+                 mozjsReplace = "defined(HAVE_SINCOS)";
+               };
+  python = ifdef.python;
   system-libraries = [
     "boost"
     "pcre"
@@ -59,7 +69,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/third_party/mozjs-45/extract/js/src/jsmath.cpp --replace 'defined(HAVE_SINCOS)' 0
+    substituteInPlace src/third_party/mozjs-${ifdef.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${ifdef.mozjsReplace}' 0
 
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder

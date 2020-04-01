@@ -2300,6 +2300,8 @@ in {
   chart-studio = callPackage ../development/python-modules/chart-studio { };
 
   cheetah = callPackage ../development/python-modules/cheetah { };
+  
+  cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
   cherrypy = if isPy3k then
     callPackage ../development/python-modules/cherrypy { }
