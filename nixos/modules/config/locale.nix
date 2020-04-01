@@ -64,6 +64,8 @@ in
         type = types.enum [ "manual" "geoclue2" ];
         default = "manual";
         description = ''
+          DEPRECATED: please set `services.geoclue2.enable = true;`
+
           The location provider to use for determining your location. If set to
           <literal>manual</literal> you must also provide latitude/longitude.
         '';
@@ -76,7 +78,11 @@ in
 
     environment.sessionVariables.TZDIR = "/etc/zoneinfo";
 
-    services.geoclue2.enable = mkIf (lcfg.provider == "geoclue2") true;
+    services.geoclue2.enable = mkIf (lcfg.provider == "geoclue2") (
+      lib.warn ''
+        Setting 'location.provider = "geoclue2";' is deprecated.
+        Please use 'services.geoclue2.enable = true;'
+      '' true);
 
     # This way services are restarted when tzdata changes.
     systemd.globalEnvironment.TZDIR = tzdir;
