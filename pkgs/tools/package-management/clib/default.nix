@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C micro-package manager";
-    homepage = https://github.com/clibs/clib;
+    homepage = "https://github.com/clibs/clib";
     license = licenses.mit;
     maintainers = with maintainers; [ jb55 ];
     platforms = platforms.all;

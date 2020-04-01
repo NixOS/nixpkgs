@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       platforms, along with an xterm terminal emulator.
       It is written and maintained primarily by Simon Tatham.
     '';
-    homepage = https://www.chiark.greenend.org.uk/~sgtatham/putty/;
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/putty/";
     license = licenses.mit;
     platforms = platforms.unix ++ platforms.windows;
   };

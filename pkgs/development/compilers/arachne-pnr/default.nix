@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       is a textual bitstream representation for assembly by
       the IceStorm [2] icepack command.
     '';
-    homepage = https://github.com/cseed/arachne-pnr;
+    homepage = "https://github.com/cseed/arachne-pnr";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
     platforms = stdenv.lib.platforms.linux;

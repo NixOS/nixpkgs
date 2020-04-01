@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = https://gitlab.com/cryptsetup/cryptsetup/;
+    homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ];

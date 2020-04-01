@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     branch = "1.4";
-    homepage = http://golang.org/;
+    homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan ];

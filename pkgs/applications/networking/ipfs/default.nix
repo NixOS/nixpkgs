@@ -20,7 +20,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "A global, versioned, peer-to-peer filesystem";
-    homepage = https://ipfs.io/;
+    homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

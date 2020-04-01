@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Generate documentation for Nix functions";
-    homepage    = https://github.com/tazjin/nixdoc;
+    homepage    = "https://github.com/tazjin/nixdoc";
     license     = [ licenses.gpl3 ];
     maintainers = [ maintainers.tazjin ];
     platforms   = platforms.unix;

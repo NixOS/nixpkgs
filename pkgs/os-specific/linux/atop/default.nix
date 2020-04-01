@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     '';
     inherit version;
     license = licenses.gpl2;
-    downloadPage = http://atoptool.nl/downloadatop.php;
+    downloadPage = "http://atoptool.nl/downloadatop.php";
   };
 }

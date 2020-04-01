@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
       Please fill bug reports on http://bugs.pharo.org under the 'Ubuntu
       packaging (ppa:pharo/stable)' project.
     '';
-    homepage = http://pharo.org;
+    homepage = "http://pharo.org";
     license = licenses.mit;
     maintainers = [ maintainers.lukego ];
     platforms = [ "i686-linux" "x86_64-linux" ];

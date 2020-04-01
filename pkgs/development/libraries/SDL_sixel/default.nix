@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library, that supports sixel graphics on consoles";
-    homepage    = https://github.com/saitoha/SDL1.2-SIXEL;
+    homepage    = "https://github.com/saitoha/SDL1.2-SIXEL";
     maintainers = with maintainers; [ vrthra ];
     platforms   = platforms.linux;
     license     = licenses.lgpl21;

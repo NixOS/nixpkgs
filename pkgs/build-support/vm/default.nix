@@ -831,15 +831,15 @@ rec {
       fullName = "Ubuntu 12.04 Precise (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/precise/main/binary-i386/Packages.bz2;
+            url = "mirror://ubuntu/dists/precise/main/binary-i386/Packages.bz2";
             sha256 = "18ns9h4qhvjfcip9z55grzi371racxavgqkp6b5kfkdq2wwwax2d";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/precise/universe/binary-i386/Packages.bz2;
+            url = "mirror://ubuntu/dists/precise/universe/binary-i386/Packages.bz2";
             sha256 = "085lkzbnzkc74kfdmwdc32sfqyfz8dr0rbiifk8kx9jih3xjw2jk";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
@@ -848,15 +848,15 @@ rec {
       fullName = "Ubuntu 12.04 Precise (amd64)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/precise/main/binary-amd64/Packages.bz2;
+            url = "mirror://ubuntu/dists/precise/main/binary-amd64/Packages.bz2";
             sha256 = "1aabpn0hdih6cbabyn87yvhccqj44q9k03mqmjsb920iqlckl3fc";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/precise/universe/binary-amd64/Packages.bz2;
+            url = "mirror://ubuntu/dists/precise/universe/binary-amd64/Packages.bz2";
             sha256 = "0x4hz5aplximgb7gnpvrhkw8m7a40s80rkm5b8hil0afblwlg4vr";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
@@ -865,15 +865,15 @@ rec {
       fullName = "Ubuntu 14.04 Trusty (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/trusty/main/binary-i386/Packages.bz2;
+            url = "mirror://ubuntu/dists/trusty/main/binary-i386/Packages.bz2";
             sha256 = "1d5y3v3v079gdq45hc07ja0bjlmzqfwdwwlq0brwxi8m75k3iz7x";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/trusty/universe/binary-i386/Packages.bz2;
+            url = "mirror://ubuntu/dists/trusty/universe/binary-i386/Packages.bz2";
             sha256 = "03x9w92by320rfklrqhcl3qpwmnxds9c8ijl5zhcb21d6dcz5z1a";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -882,15 +882,15 @@ rec {
       fullName = "Ubuntu 14.04 Trusty (amd64)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/trusty/main/binary-amd64/Packages.bz2;
+            url = "mirror://ubuntu/dists/trusty/main/binary-amd64/Packages.bz2";
             sha256 = "1hhzbyqfr5i0swahwnl5gfp5l9p9hspywb1vpihr3b74p1z935bh";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/trusty/universe/binary-amd64/Packages.bz2;
+            url = "mirror://ubuntu/dists/trusty/universe/binary-amd64/Packages.bz2";
             sha256 = "04560ba8s4z4v5iawknagrkn9q1nzvpn081ycmqvhh73p3p3g1jm";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -899,15 +899,15 @@ rec {
       fullName = "Ubuntu 16.04 Xenial (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz";
             sha256 = "13r75sp4slqy8w32y5dnr7pp7p3cfvavyr1g7gwnlkyrq4zx4ahy";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz";
             sha256 = "14fid1rqm3sc0wlygcvn0yx5aljf51c2jpd4x0zxij4019316hsh";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -916,15 +916,15 @@ rec {
       fullName = "Ubuntu 16.04 Xenial (amd64)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz";
             sha256 = "110qnkhjkkwm316fbig3aivm2595ydz6zskc4ld5cr8ngcrqm1bn";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/xenial/universe/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/xenial/universe/binary-amd64/Packages.xz";
             sha256 = "0mm7gj491yi6q4v0n4qkbsm94s59bvqir6fk60j73w7y4la8rg68";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -933,15 +933,15 @@ rec {
       fullName = "Ubuntu 17.10 Artful (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/artful/main/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/artful/main/binary-i386/Packages.xz";
             sha256 = "18yrj4kqdzm39q0527m97h5ing58hkm9yq9iyj636zh2rclym3c8";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/artful/universe/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/artful/universe/binary-i386/Packages.xz";
             sha256 = "1v0njw2w80xfmxi7by76cs8hyxlla5h3gqajlpdw5srjgx2qrm2g";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -950,15 +950,15 @@ rec {
       fullName = "Ubuntu 17.10 Artful (amd64)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/artful/main/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/artful/main/binary-amd64/Packages.xz";
             sha256 = "104g57j1l3vi8wb5f7rgjvjhf82ccs0vwhc59jfc4ynd51z7fqjk";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/artful/universe/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/artful/universe/binary-amd64/Packages.xz";
             sha256 = "1qzs95wfy9inaskfx9cf1l5yd3aaqwzy72zzi9xyvkxi75k5gcn4";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -967,15 +967,15 @@ rec {
       fullName = "Ubuntu 18.04 Bionic (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz";
             sha256 = "0f0v4131kwf7m7f8j3288rlqdxk1k3vqy74b7fcfd6jz9j8d840i";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/bionic/universe/binary-i386/Packages.xz;
+            url = "mirror://ubuntu/dists/bionic/universe/binary-i386/Packages.xz";
             sha256 = "1v75c0dqr0wp0dqd4hnci92qqs4hll8frqdbpswadgxm5chn91bw";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -984,15 +984,15 @@ rec {
       fullName = "Ubuntu 18.04 Bionic (amd64)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz";
             sha256 = "1ls81bjyvmfz6i919kszl7xks1ibrh1xqhsk6698ackndkm0wp39";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/bionic/universe/binary-amd64/Packages.xz;
+            url = "mirror://ubuntu/dists/bionic/universe/binary-amd64/Packages.xz";
             sha256 = "1832nqpn4ap95b3sj870xqayrza9in4kih9jkmjax27pq6x15v1r";
           })
         ];
-      urlPrefix = mirror://ubuntu;
+      urlPrefix = "mirror://ubuntu";
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
@@ -1000,10 +1000,10 @@ rec {
       name = "debian-8.11-jessie-i386";
       fullName = "Debian 8.11 Jessie (i386)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
+        url = "mirror://debian/dists/jessie/main/binary-i386/Packages.xz";
         sha256 = "0adblarhx50yga900il6m25ng0csa81i3wid1dxxmydbdmri7v7d";
       };
-      urlPrefix = mirror://debian;
+      urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
@@ -1011,10 +1011,10 @@ rec {
       name = "debian-8.11-jessie-amd64";
       fullName = "Debian 8.11 Jessie (amd64)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
+        url = "mirror://debian/dists/jessie/main/binary-amd64/Packages.xz";
         sha256 = "09y1mv4kqllhxpk1ibjsyl5jig5bp0qxw6pp4sn56rglrpygmn5x";
       };
-      urlPrefix = mirror://debian;
+      urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
@@ -1022,10 +1022,10 @@ rec {
       name = "debian-9.8-stretch-i386";
       fullName = "Debian 9.8 Stretch (i386)";
       packagesList = fetchurl {
-        url = http://snapshot.debian.org/archive/debian/20200301T030401Z/dists/stretch/main/binary-i386/Packages.xz;
+        url = "http://snapshot.debian.org/archive/debian/20200301T030401Z/dists/stretch/main/binary-i386/Packages.xz";
         sha256 = "1jglr1d1jys3xddp8f7w9j05db39fah8xy4gfkpqbd1b5d2caslz";
       };
-      urlPrefix = mirror://debian;
+      urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
@@ -1033,10 +1033,10 @@ rec {
       name = "debian-9.8-stretch-amd64";
       fullName = "Debian 9.8 Stretch (amd64)";
       packagesList = fetchurl {
-        url = http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-amd64/Packages.xz;
+        url = "http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-amd64/Packages.xz";
         sha256 = "01q00nl47p12n7wx0xclx59wf3zlkzrgj3zxpshyvb91xdnw5sh6";
       };
-      urlPrefix = mirror://debian;
+      urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 

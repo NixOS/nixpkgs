@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command-line tools for converting between MessagePack and JSON";
-    homepage = https://github.com/ludocode/msgpack-tools;
+    homepage = "https://github.com/ludocode/msgpack-tools";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ alibabzo ];

@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
       addition to the traditional BSD sockets.
     '';
 
-    homepage = ftp://ftp.porcupine.org/pub/security/index.html;
+    homepage = "ftp://ftp.porcupine.org/pub/security/index.html";
     license = "BSD-style";
     platforms = stdenv.lib.platforms.linux;
   };

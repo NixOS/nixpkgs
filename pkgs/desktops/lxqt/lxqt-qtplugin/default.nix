@@ -37,7 +37,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "LXQt Qt platform integration plugin";
-    homepage = https://github.com/lxqt/lxqt-qtplugin;
+    homepage = "https://github.com/lxqt/lxqt-qtplugin";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

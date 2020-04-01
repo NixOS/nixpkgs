@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A refreshed Python toolbox for building complex digital hardware";
-    homepage = https://github.com/nmigen/nmigen;
+    homepage = "https://github.com/nmigen/nmigen";
     license = licenses.bsd2;
     maintainers = with maintainers; [ emily ];
   };

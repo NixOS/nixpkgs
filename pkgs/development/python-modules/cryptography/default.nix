@@ -66,7 +66,7 @@ buildPythonPackage rec {
       Our goal is for it to be your "cryptographic standard library". It
       supports Python 2.7, Python 3.4+, and PyPy 5.3+.
     '';
-    homepage = https://github.com/pyca/cryptography;
+    homepage = "https://github.com/pyca/cryptography";
     license = with licenses; [ asl20 bsd3 psfl ];
     maintainers = with maintainers; [ primeos ];
   };

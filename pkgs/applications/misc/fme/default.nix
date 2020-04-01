@@ -26,7 +26,7 @@ stdenv.mkDerivation rec{
       Its user-friendly interface will help you to edit, delete, move (Drag and Drop)
       a row, a submenu, etc very easily.
     '';
-    homepage = https://github.com/rdehouss/fme/;
+    homepage = "https://github.com/rdehouss/fme/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

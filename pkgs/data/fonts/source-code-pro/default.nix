@@ -5,7 +5,7 @@ let
 in fetchzip {
   name = "source-code-pro-${version}";
 
-  url = https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip;
+  url = "https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -18,7 +18,7 @@ in fetchzip {
     description = "A set of monospaced OpenType fonts designed for coding environments";
     maintainers = with lib.maintainers; [ relrod ];
     platforms = with lib.platforms; all;
-    homepage = https://adobe-fonts.github.io/source-code-pro/;
+    homepage = "https://adobe-fonts.github.io/source-code-pro/";
     license = lib.licenses.ofl;
   };
 }

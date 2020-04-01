@@ -6,7 +6,7 @@ buildPythonPackage {
   format = "other";
 
   src = fetchgit {
-    url = https://code.alephobjects.com/source/arcus.git;
+    url = "https://code.alephobjects.com/source/arcus.git";
     rev = "aeda02d7727f45b657afb72cef203283fbf09325";
     sha256 = "1ak0d4k745sx7paic27was3s4987z9h3czscjs21hxbi6qy83g99";
   };
@@ -24,7 +24,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Communication library between internal components for Ultimaker software";
-    homepage = https://code.alephobjects.com/source/arcus/;
+    homepage = "https://code.alephobjects.com/source/arcus/";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];

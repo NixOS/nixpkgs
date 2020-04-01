@@ -24,7 +24,7 @@ buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "CloudFlare Dynamic DNS Client";
-    homepage = https://github.com/colemickens/cfdyndns;
+    homepage = "https://github.com/colemickens/cfdyndns";
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [ colemickens ];
     platforms = with platforms; linux;

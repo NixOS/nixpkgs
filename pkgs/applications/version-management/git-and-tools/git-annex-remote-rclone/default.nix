@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/DanielDent/git-annex-remote-rclone;
+    homepage = "https://github.com/DanielDent/git-annex-remote-rclone";
     description = "Use rclone supported cloud storage providers with git-annex";
     license = licenses.gpl3;
     maintainers = [ maintainers.montag451 ];

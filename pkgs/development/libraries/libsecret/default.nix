@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for storing and retrieving passwords and other secrets";
-    homepage = https://wiki.gnome.org/Projects/Libsecret;
+    homepage = "https://wiki.gnome.org/Projects/Libsecret";
     license = stdenv.lib.licenses.lgpl21Plus;
     inherit (glib.meta) platforms maintainers;
   };

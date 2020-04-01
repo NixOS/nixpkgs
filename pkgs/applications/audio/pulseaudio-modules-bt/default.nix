@@ -75,7 +75,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/EHfive/pulseaudio-modules-bt;
+    homepage = "https://github.com/EHfive/pulseaudio-modules-bt";
     description = "LDAC, aptX, aptX HD, AAC codecs (A2DP Audio) support for Linux PulseAudio";
     platforms = platforms.linux;
     license = licenses.mit;

@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = https://github.com/eerimoq/bitstruct;
+    homepage = "https://github.com/eerimoq/bitstruct";
     description = "Python bit pack/unpack package";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

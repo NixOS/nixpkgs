@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/GnomeShell/Extensions;
+    homepage = "https://wiki.gnome.org/Projects/GnomeShell/Extensions";
     description = "Modify and extend GNOME Shell functionality and behavior";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

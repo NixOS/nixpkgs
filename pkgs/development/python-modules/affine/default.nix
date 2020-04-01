@@ -15,7 +15,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Matrices describing affine transformation of the plane";
     license = licenses.bsd3;
-    homepage = https://github.com/sgillies/affine;
+    homepage = "https://github.com/sgillies/affine";
     maintainers = with maintainers; [ mredaelli ];
   };
 

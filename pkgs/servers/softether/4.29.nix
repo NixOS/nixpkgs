@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An Open-Source Free Cross-platform Multi-protocol VPN Program";
-    homepage = https://www.softether.org/;
+    homepage = "https://www.softether.org/";
     license = licenses.asl20;
     maintainers = [ maintainers.rick68 ];
     platforms = [ "x86_64-linux" ];

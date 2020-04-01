@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/hashicorp/envconsul/;
+    homepage = "https://github.com/hashicorp/envconsul/";
     description = "Read and set environmental variables for processes from Consul";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;

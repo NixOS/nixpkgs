@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       Check C/C++ code for memory leaks, mismatching allocation-deallocation,
       buffer overruns and more.
     '';
-    homepage = http://cppcheck.sourceforge.net/;
+    homepage = "http://cppcheck.sourceforge.net/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ joachifm ];

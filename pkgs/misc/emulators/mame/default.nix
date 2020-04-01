@@ -77,7 +77,7 @@ in mkDerivation {
 
   meta = with lib; {
     description = "Is a multi-purpose emulation framework";
-    homepage = https://www.mamedev.org/;
+    homepage = "https://www.mamedev.org/";
     license = with licenses; [ bsd3 gpl2Plus ];
     platforms = platforms.unix;
     # makefile needs fixes for install target

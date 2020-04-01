@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An efficient, portable library for different kinds of mail access: IMAP, SMTP, POP, and NNTP";
-    homepage = http://www.etpan.org/libetpan.html;
+    homepage = "http://www.etpan.org/libetpan.html";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

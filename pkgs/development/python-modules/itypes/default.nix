@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple immutable types for python";
-    homepage = https://github.com/tomchristie/itypes;
+    homepage = "https://github.com/tomchristie/itypes";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ivegotasthma ];
   };

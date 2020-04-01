@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapyAirspy;
+    homepage = "https://github.com/pothosware/SoapyAirspy";
     description = "SoapySDR plugin for Airspy devices";
     license = licenses.mit;
     maintainers = with maintainers; [ markuskowa ];

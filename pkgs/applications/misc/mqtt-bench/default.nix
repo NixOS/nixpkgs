@@ -26,7 +26,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Mosquitto benchmark tool";
-    homepage = https://github.com/takanorig/mqtt-bench;
+    homepage = "https://github.com/takanorig/mqtt-bench";
     maintainers = with maintainers; [ disassembler ];
   };
 }

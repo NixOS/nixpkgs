@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Generic spell checking library";
-    homepage = https://abiword.github.io/enchant;
+    homepage = "https://abiword.github.io/enchant";
     platforms = platforms.unix;
     badPlatforms = [ "x86_64-darwin" ];
     license = licenses.lgpl21;

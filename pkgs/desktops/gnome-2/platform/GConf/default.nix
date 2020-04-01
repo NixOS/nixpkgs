@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://projects.gnome.org/gconf/;
+    homepage = "https://projects.gnome.org/gconf/";
     description = "Deprecated system for storing application preferences";
     platforms = platforms.unix;
   };

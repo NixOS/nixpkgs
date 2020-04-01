@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "WTForms integration for peewee models";
-    homepage = https://github.com/coleifer/wtf-peewee/;
+    homepage = "https://github.com/coleifer/wtf-peewee/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

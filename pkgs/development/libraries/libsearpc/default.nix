@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/haiwen/libsearpc;
+    homepage = "https://github.com/haiwen/libsearpc";
     description = "A simple and easy-to-use C language RPC framework (including both server side & client side) based on GObject System";
     license = licenses.lgpl3;
     platforms = platforms.linux;

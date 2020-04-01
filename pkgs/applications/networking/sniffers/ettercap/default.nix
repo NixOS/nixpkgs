@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       of many protocols and includes many features for network and host
       analysis.
     '';
-    homepage = https://www.ettercap-project.org/;
+    homepage = "https://www.ettercap-project.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];

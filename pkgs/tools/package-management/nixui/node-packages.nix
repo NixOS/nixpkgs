@@ -98,7 +98,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "nix-env frontend written with Polymer";
-      homepage = https://github.com/matejc/nixui;
+      homepage = "https://github.com/matejc/nixui";
       license = "Apache-2.0";
     };
     production = true;

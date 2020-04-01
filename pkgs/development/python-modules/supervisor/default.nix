@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A system for controlling process state under UNIX";
-    homepage = http://supervisord.org/;
+    homepage = "http://supervisord.org/";
     license = licenses.free; # http://www.repoze.org/LICENSE.txt
     maintainers = with maintainers; [ zimbatm ];
   };

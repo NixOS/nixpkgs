@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+    homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture tools";
 
     longDescription = ''

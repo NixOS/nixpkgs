@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Allows to analyze samples of musical instruments, and to combine them (morphing) to construct hybrid sounds";
-    homepage = http://spectmorph.org;
+    homepage = "http://spectmorph.org";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.magnetophon ];

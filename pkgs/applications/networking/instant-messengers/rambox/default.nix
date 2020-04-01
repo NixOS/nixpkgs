@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free and Open Source messaging and emailing app that combines common web applications into one";
-    homepage = http://rambox.pro;
+    homepage = "http://rambox.pro";
     license = licenses.mit;
     maintainers = with maintainers; [ gnidorah ma27 ];
     platforms = ["i686-linux" "x86_64-linux"];

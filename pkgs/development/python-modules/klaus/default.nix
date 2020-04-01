@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The first Git web viewer that Just Works";
-    homepage    = https://github.com/jonashaag/klaus;
+    homepage    = "https://github.com/jonashaag/klaus";
     license     = licenses.isc;
     maintainers = with maintainers; [ pSub ];
   };

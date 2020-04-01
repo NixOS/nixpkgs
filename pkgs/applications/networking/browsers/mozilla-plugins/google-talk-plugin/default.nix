@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   passthru.mozillaPlugin = "/lib/mozilla/plugins";
 
   meta = {
-    homepage = http://www.google.com/chat/video/;
+    homepage = "http://www.google.com/chat/video/";
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A backport of the new features added to the unittest testing framework";
-    homepage = https://pypi.python.org/pypi/unittest2;
+    homepage = "https://pypi.python.org/pypi/unittest2";
     license = licenses.bsd0;
   };
 

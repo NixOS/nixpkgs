@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Find the most beautiful wallpapers for your desktop";
-    homepage = https://github.com/calo001/fondo;
+    homepage = "https://github.com/calo001/fondo";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;

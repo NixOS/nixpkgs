@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A commandline access to addic7ed subtitles";
-    homepage = https://github.com/BenoitZugmeyer/addic7ed-cli;
+    homepage = "https://github.com/BenoitZugmeyer/addic7ed-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ aethelz ];
     platforms = platforms.unix;

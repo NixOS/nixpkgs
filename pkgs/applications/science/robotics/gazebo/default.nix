@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     ++ optional withHdf5Support hdf5;
 
   meta = with stdenv.lib; {
-    homepage = http://gazebosim.org/;
+    homepage = "http://gazebosim.org/";
     description = "Multi-robot simulator for outdoor environments";
     license = licenses.asl20;
     maintainers = with maintainers; [ pxc ];

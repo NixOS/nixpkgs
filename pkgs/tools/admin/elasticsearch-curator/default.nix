@@ -58,7 +58,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/elastic/curator;
+    homepage = "https://github.com/elastic/curator";
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
     license = licenses.asl20;
     longDescription = ''

@@ -27,7 +27,7 @@ in bundlerApp {
 
   meta = with lib; {
     description = "Simple SQL linter";
-    homepage    = https://github.com/purcell/sqlint;
+    homepage    = "https://github.com/purcell/sqlint";
     license     = licenses.mit;
     maintainers = with maintainers; [ ariutta nicknovitski ];
     platforms   = with platforms; [ "x86_64-linux" "x86_64-darwin" ];

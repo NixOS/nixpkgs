@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Basic notebook checks and linting";
-    homepage = https://github.com/pyviz/nbsmoke;
+    homepage = "https://github.com/pyviz/nbsmoke";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

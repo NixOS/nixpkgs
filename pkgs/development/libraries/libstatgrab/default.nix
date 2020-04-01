@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [] ++ stdenv.lib.optional stdenv.isDarwin IOKit;
 
   meta = with stdenv.lib; {
-    homepage = https://www.i-scream.org/libstatgrab/;
+    homepage = "https://www.i-scream.org/libstatgrab/";
     description = "A library that provides cross platforms access to statistics about the running system";
     license = licenses.gpl2;
     platforms = platforms.unix;

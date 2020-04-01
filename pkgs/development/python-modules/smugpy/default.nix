@@ -14,7 +14,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python library for the SmugMug API";
     license = with licenses; [ mit ];
-    homepage = https://github.com/chrishoffman/smugpy;
+    homepage = "https://github.com/chrishoffman/smugpy";
   };
 
   doCheck = false; # Tries to login to Smugmug…

@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
       modularity in mind. It is developed by the Berkeley Vision and Learning
       Center (BVLC) and by community contributors.
     '';
-    homepage = http://caffe.berkeleyvision.org/;
+    homepage = "http://caffe.berkeleyvision.org/";
     maintainers = with maintainers; [ jb55 ];
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;

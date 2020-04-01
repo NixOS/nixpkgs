@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Prometheus exporter that exposes metrics from a Ubiquiti UniFi Controller and UniFi devices";
-    homepage = https://github.com/mdlayher/unifi_exporter;
+    homepage = "https://github.com/mdlayher/unifi_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ bachp globin ];
     platforms = platforms.unix;

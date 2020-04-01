@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High-level tracing language for Linux eBPF";
-    homepage    = https://github.com/iovisor/bpftrace;
+    homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;
     maintainers = with maintainers; [ rvl thoughtpolice ];
   };

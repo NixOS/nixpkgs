@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sjaehn/BSlizr;
+    homepage = "https://github.com/sjaehn/BSlizr";
     description = "Sequenced audio slicing effect LV2 plugin (step sequencer effect)";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

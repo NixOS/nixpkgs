@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://opensource.perlig.de/rcssmin/;
+    homepage = "http://opensource.perlig.de/rcssmin/";
     license = licenses.asl20;
     description = "CSS minifier written in pure python";
   };

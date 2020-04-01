@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Power Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-power;
+    homepage = "https://github.com/elementary/wingpanel-indicator-power";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

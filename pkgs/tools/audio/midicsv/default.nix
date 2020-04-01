@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Losslessly translate MIDI to CSV and back";
-    homepage = http://www.fourmilab.ch/webtools/midicsv/;
+    homepage = "http://www.fourmilab.ch/webtools/midicsv/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

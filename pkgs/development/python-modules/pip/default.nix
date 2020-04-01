@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = {
     description = "The PyPA recommended tool for installing Python packages";
     license = with lib.licenses; [ mit ];
-    homepage = https://pip.pypa.io/;
+    homepage = "https://pip.pypa.io/";
     priority = 10;
   };
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Qt frontend for MAME/MESS";
-    homepage = https://qmc2.batcom-it.net;
+    homepage = "https://qmc2.batcom-it.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.genesis ];
     platforms = platforms.linux;

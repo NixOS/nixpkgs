@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/buildinspace/peru;
+    homepage = "https://github.com/buildinspace/peru";
     description = "A tool for including other people's code in your projects";
     license = licenses.mit;
     platforms = platforms.unix;

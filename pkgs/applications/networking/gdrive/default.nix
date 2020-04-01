@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/prasmussen/gdrive;
+    homepage    = "https://github.com/prasmussen/gdrive";
     description = "A command line utility for interacting with Google Drive";
     platforms   = platforms.unix;
     license     = licenses.mit;

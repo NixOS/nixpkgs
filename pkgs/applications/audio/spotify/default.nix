@@ -158,7 +158,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.spotify.com/;
+    homepage = "https://www.spotify.com/";
     description = "Play music from the Spotify music service";
     license = licenses.unfree;
     maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri timokau ma27 ];

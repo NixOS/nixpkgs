@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
       meta = with stdenv.lib; {
             description = "GL-based laptop model that rotates in real-time via hdaps";
-            homepage = https://sourceforge.net/projects/hdaps/;
+            homepage = "https://sourceforge.net/projects/hdaps/";
             license = licenses.gpl2;
             platforms = platforms.linux;
             maintainers = [ maintainers.symphorien ];

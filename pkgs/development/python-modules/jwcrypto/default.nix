@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Implementation of JOSE Web standards";
-    homepage = https://github.com/latchset/jwcrypto;
+    homepage = "https://github.com/latchset/jwcrypto";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.costrouc ];
   };

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "FFMPEG wrapper for Python";
-    homepage = https://github.com/imageio/imageio-ffmpeg;
+    homepage = "https://github.com/imageio/imageio-ffmpeg";
     license = licenses.bsd2;
     maintainers = [ maintainers.pmiddend ];
   };

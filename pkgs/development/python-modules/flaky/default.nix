@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/box/flaky;
+    homepage = "https://github.com/box/flaky";
     description = "Plugin for nose or py.test that automatically reruns flaky tests";
     license = licenses.asl20;
   };

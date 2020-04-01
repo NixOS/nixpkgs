@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/thk/LTWheelConf;
+    homepage = "https://github.com/thk/LTWheelConf";
     description = "Logitech wheels configuration tool";
     license = licenses.gpl3;
     maintainers = [ maintainers.ebzzry ];

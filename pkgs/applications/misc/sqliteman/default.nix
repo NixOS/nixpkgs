@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple but powerful Sqlite3 GUI database manager";
-    homepage = http://sqliteman.yarpen.cz/;
+    homepage = "http://sqliteman.yarpen.cz/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.eikek ];

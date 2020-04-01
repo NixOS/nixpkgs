@@ -11,7 +11,7 @@ let
       buildInputs = [ocaml zlib pcre neko camlp4];
 
       src = fetchgit {
-        url = https://github.com/HaxeFoundation/haxe.git;
+        url = "https://github.com/HaxeFoundation/haxe.git";
         inherit sha256;
         fetchSubmodules = true;
         rev = "refs/tags/${version}";
@@ -76,7 +76,7 @@ let
 
       meta = with stdenv.lib; {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
-        homepage = https://haxe.org;
+        homepage = "https://haxe.org";
         license = with licenses; [ gpl2 bsd2 /*?*/ ];  # -> docs/license.txt
         maintainers = [ maintainers.marcweber ];
         platforms = platforms.linux ++ platforms.darwin;

@@ -26,7 +26,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Execute SQL against structured text like CSV or TSV";
-    homepage = https://github.com/dinedal/textql;
+    homepage = "https://github.com/dinedal/textql";
     license = licenses.mit;
     maintainers = with maintainers; [ vrthra ];
   };

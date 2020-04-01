@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
 
   meta = with stdenv.lib; {
-    homepage = https://zeit.co/now;
+    homepage = "https://zeit.co/now";
     description = "The Command Line Interface for Now - Global Serverless Deployments";
     license = licenses.asl20;
     platforms = platforms.linux;

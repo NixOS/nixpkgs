@@ -103,7 +103,7 @@ in buildPythonPackage {
 
   meta = with lib; {
     description = "Library for probabilistic reasoning and statistical analysis";
-    homepage = https://www.tensorflow.org/probability/;
+    homepage = "https://www.tensorflow.org/probability/";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
   };

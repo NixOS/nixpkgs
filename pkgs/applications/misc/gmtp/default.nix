@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A simple MP3 and Media player client for UNIX and UNIX like systems.";
-    homepage = https://gmtp.sourceforge.io;
+    homepage = "https://gmtp.sourceforge.io";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ ];
     license = stdenv.lib.licenses.bsd3;

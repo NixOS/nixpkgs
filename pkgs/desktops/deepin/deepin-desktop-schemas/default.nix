@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GSettings deepin desktop-wide schemas";
-    homepage = https://github.com/linuxdeepin/deepin-desktop-schemas;
+    homepage = "https://github.com/linuxdeepin/deepin-desktop-schemas";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

@@ -125,7 +125,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An easy-to-use database designer and user interface";
-    homepage = http://www.glom.org/;
+    homepage = "http://www.glom.org/";
     license = [ licenses.lgpl2 licenses.gpl2 ];
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

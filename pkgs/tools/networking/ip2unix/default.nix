@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/nixcloud/ip2unix;
+    homepage = "https://github.com/nixcloud/ip2unix";
     description = "Turn IP sockets into Unix domain sockets";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;

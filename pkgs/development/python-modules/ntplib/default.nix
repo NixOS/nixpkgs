@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python NTP library";
-    homepage = http://code.google.com/p/ntplib/;
+    homepage = "http://code.google.com/p/ntplib/";
     license = licenses.mit;
   };
 

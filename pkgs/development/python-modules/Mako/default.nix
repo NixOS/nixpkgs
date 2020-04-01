@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Super-fast templating language";
-    homepage = http://www.makotemplates.org;
+    homepage = "http://www.makotemplates.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ domenkozar ];

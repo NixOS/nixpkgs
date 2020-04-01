@@ -25,7 +25,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "An ASN.1 compiler with a backend for Quick DER";
-    homepage = https://github.com/vanrein/asn2quickder;
+    homepage = "https://github.com/vanrein/asn2quickder";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];

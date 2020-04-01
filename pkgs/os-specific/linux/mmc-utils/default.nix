@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Configure MMC storage devices from userspace";
-    homepage = http://git.kernel.org/cgit/linux/kernel/git/cjb/mmc-utils.git/;
+    homepage = "http://git.kernel.org/cgit/linux/kernel/git/cjb/mmc-utils.git/";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

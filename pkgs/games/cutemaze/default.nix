@@ -19,7 +19,7 @@ mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gottcode.org/cutemaze/;
+    homepage = "https://gottcode.org/cutemaze/";
     description = "Simple, top-down game in which mazes are randomly generated";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

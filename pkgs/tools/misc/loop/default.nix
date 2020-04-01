@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
 
   meta = with stdenv.lib; {
     description = "UNIX's missing `loop` command";
-    homepage = https://github.com/Miserlou/Loop;
+    homepage = "https://github.com/Miserlou/Loop";
     maintainers = with maintainers; [ koral ];
     license = licenses.mit;
   };

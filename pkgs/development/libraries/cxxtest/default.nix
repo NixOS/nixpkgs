@@ -18,7 +18,7 @@ in python2Packages.buildPythonApplication {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://cxxtest.com;
+    homepage = "http://cxxtest.com";
     description = "Unit testing framework for C++";
     platforms = platforms.unix ;
     license = licenses.lgpl3;

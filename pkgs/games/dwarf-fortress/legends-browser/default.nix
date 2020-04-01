@@ -31,6 +31,6 @@ buildEnv {
     maintainers = with maintainers; [ Baughn ];
     license = licenses.mit;
     platforms = platforms.all;
-    homepage = https://github.com/robertjanetzko/LegendsBrowser;
+    homepage = "https://github.com/robertjanetzko/LegendsBrowser";
   };
 }

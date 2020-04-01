@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Official OpenCL runtime for Intel CPUs";
-    homepage    = https://software.intel.com/en-us/articles/opencl-drivers;
+    homepage    = "https://software.intel.com/en-us/articles/opencl-drivers";
     license     = stdenv.lib.licenses.unfree;
     platforms   = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.kierdavis ];

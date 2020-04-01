@@ -27,7 +27,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Build and publish crates with pyo3 bindings as python packages";
-    homepage = https://github.com/PyO3/maturin;
+    homepage = "https://github.com/PyO3/maturin";
     license = licenses.mit;
     maintainers = [ maintainers.danieldk ];
     platforms = platforms.all;

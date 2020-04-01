@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       together geometry, algebra, spreadsheets, graphing, statistics and
       calculus in one easy-to-use package.
     '';
-    homepage = https://www.geogebra.org/;
+    homepage = "https://www.geogebra.org/";
     maintainers = with maintainers; [ ma27 ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = platforms.all;

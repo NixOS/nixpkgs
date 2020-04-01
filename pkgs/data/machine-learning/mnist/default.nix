@@ -37,7 +37,7 @@ in
         Technology database) is a large database of handwritten digits that is
         commonly used for training various image processing systems.
       '';
-      homepage = http://yann.lecun.com/exdb/mnist/index.html;
+      homepage = "http://yann.lecun.com/exdb/mnist/index.html";
       license = licenses.cc-by-sa-30;
       platforms = platforms.all;
       maintainers = with maintainers; [ cmcdragonkai ];

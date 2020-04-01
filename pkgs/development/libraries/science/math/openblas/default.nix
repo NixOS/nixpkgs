@@ -181,7 +181,7 @@ EOF
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
-    homepage = https://github.com/xianyi/OpenBLAS;
+    homepage = "https://github.com/xianyi/OpenBLAS";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };

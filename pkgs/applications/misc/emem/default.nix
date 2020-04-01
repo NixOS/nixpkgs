@@ -29,7 +29,7 @@ EOF
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/emem;
+    homepage = "https://github.com/ebzzry/emem";
     description = "A trivial Markdown to HTML converter";
     license = licenses.epl10;
     maintainers = [ maintainers.ebzzry ];

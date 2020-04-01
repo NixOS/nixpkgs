@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Google Authentication Library: httplib2 transport";
-    homepage = https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2;
+    homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2";
     license = lib.licenses.asl20;
   };
 

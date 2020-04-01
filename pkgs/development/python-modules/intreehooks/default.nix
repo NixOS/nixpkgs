@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Load a PEP 517 backend from inside the source tree";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.fridh ];
-    homepage = https://github.com/takluyver/intreehooks;
+    homepage = "https://github.com/takluyver/intreehooks";
   };
 }

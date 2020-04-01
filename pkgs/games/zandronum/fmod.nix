@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Programming library and toolkit for the creation and playback of interactive audio";
-    homepage    = http://www.fmod.org/;
+    homepage    = "http://www.fmod.org/";
     license     = licenses.unfreeRedistributable;
     platforms   = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.lassulus ];

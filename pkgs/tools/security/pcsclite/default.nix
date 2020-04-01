@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
-    homepage = https://pcsclite.apdu.fr/;
+    homepage = "https://pcsclite.apdu.fr/";
     license = licenses.bsd3;
     platforms = with platforms; unix;
   };

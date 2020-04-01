@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Date & Time Plug";
-    homepage = https://github.com/elementary/switchboard-plug-datetime;
+    homepage = "https://github.com/elementary/switchboard-plug-datetime";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

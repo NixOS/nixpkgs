@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
-    homepage = http://sphinx-doc.org/;
+    homepage = "http://sphinx-doc.org/";
     license = licenses.bsd0;
   };
 

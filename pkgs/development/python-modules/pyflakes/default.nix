@@ -12,7 +12,7 @@ buildPythonPackage rec {
   checkInputs = [ unittest2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/pyflakes;
+    homepage = "https://launchpad.net/pyflakes";
     description = "A simple program which checks Python source files for errors";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

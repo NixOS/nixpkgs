@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python datetimes made easy";
-    homepage = https://github.com/sdispater/pendulum;
+    homepage = "https://github.com/sdispater/pendulum";
     license = licenses.mit;
   };
 }

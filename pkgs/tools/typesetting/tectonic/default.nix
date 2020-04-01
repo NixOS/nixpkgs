@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
-    homepage = https://tectonic-typesetting.github.io/;
+    homepage = "https://tectonic-typesetting.github.io/";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.lluchs ];
     platforms = platforms.all;

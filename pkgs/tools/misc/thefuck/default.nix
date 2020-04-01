@@ -29,7 +29,7 @@ buildPythonApplication rec {
   doCheck = false; # The above is only enough for tests to pass outside the sandbox.
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/nvbn/thefuck;
+    homepage = "https://github.com/nvbn/thefuck";
     description = "Magnificent app which corrects your previous console command.";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];

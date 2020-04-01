@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/rauchg/wifi-password;
+    homepage = "https://github.com/rauchg/wifi-password";
     description = "Get the password of the wifi you're on";
     platforms = stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.mit;

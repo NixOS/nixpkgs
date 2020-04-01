@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ help2man ];
 
   meta = with stdenv.lib; {
-    homepage = http://fatsort.sourceforge.net/;
+    homepage = "http://fatsort.sourceforge.net/";
     description = "Sorts FAT partition table, for devices that don't do sorting of files";
     maintainers = [ maintainers.kovirobi ];
     license = licenses.gpl2;

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/schwehr/libais;
+    homepage = "https://github.com/schwehr/libais";
     description = "Library for decoding maritime Automatic Identification System messages";
     license = licenses.asl20;
     platforms = platforms.unix;

@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   #Patch from dev branch to make compilation work.
   #Will be removed when it gets merged into master.
   patches = [(fetchurl {
-    url = https://github.com/Ripser/ripser/commit/dc78d8ce73ee35f3828f0aad67a4e53620277ebf.patch;
+    url = "https://github.com/Ripser/ripser/commit/dc78d8ce73ee35f3828f0aad67a4e53620277ebf.patch";
     sha256 = "1y93aqpqz8fm1cxxrf90dhh67im3ndkr8dnxgbw5y96296n4r924";
   })];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A lean C++ code for the computation of Vietoris–Rips persistence barcodes";
-    homepage = https://github.com/Ripser/ripser;
+    homepage = "https://github.com/Ripser/ripser";
     license = stdenv.lib.licenses.lgpl3;
     maintainers = with stdenv.lib.maintainers; [erikryb];
     platforms = stdenv.lib.platforms.linux;

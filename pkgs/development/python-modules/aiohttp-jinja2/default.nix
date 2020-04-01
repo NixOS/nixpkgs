@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jinja2 support for aiohttp";
-    homepage = https://github.com/aio-libs/aiohttp_jinja2;
+    homepage = "https://github.com/aio-libs/aiohttp_jinja2";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
   };

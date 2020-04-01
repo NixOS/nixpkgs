@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Bash script debugger";
-    homepage = http://bashdb.sourceforge.net/;
+    homepage = "http://bashdb.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

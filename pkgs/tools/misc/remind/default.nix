@@ -17,7 +17,7 @@ let
 in stdenv.mkDerivation {
   name = "remind-3.1.16";
   src = fetchurl {
-    url = https://dianne.skoll.ca/projects/remind/download/remind-03.01.16.tar.gz;
+    url = "https://dianne.skoll.ca/projects/remind/download/remind-03.01.16.tar.gz";
     sha256 = "14yavwqmimba8rdpwx3wlav9sfb0v5rcd1iyzqrs08wx07a9pdzf";
   };
 
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://dianne.skoll.ca/projects/remind/;
+    homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [raskin kovirobi];

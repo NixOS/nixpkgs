@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Generic tool for sequence alignment";
-    homepage = https://www.ebi.ac.uk/about/vertebrate-genomics/software/exonerate;
+    homepage = "https://www.ebi.ac.uk/about/vertebrate-genomics/software/exonerate";
     license = licenses.gpl3;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix ;

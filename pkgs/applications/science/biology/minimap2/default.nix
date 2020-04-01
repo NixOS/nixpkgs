@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "A versatile pairwise aligner for genomic and spliced nucleotide sequences";
-    homepage = https://lh3.github.io/minimap2;
+    homepage = "https://lh3.github.io/minimap2";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.arcadio ];

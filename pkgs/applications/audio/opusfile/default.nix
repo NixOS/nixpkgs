@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High-level API for decoding and seeking in .opus files";
-    homepage = http://www.opus-codec.org/;
+    homepage = "http://www.opus-codec.org/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];

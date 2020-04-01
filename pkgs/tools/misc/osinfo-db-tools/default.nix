@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools for managing the osinfo database";
-    homepage = https://libosinfo.org/;
+    homepage = "https://libosinfo.org/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

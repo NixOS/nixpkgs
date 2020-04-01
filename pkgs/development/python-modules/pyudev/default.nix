@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://pyudev.readthedocs.org/;
+    homepage = "https://pyudev.readthedocs.org/";
     description = "Pure Python libudev binding";
     license = lib.licenses.lgpl21Plus;
   };

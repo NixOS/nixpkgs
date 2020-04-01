@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGL libGLU ];
 
   meta = with stdenv.lib; {
-    homepage = http://dri.freedesktop.org/wiki/S3TC;
-    repositories.git = git://people.freedesktop.org/~mareko/libtxc_dxtn;
+    homepage = "http://dri.freedesktop.org/wiki/S3TC";
+    repositories.git = "git://people.freedesktop.org/~mareko/libtxc_dxtn";
     license = licenses.mit;
     platforms = platforms.unix;
   };

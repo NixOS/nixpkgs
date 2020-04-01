@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bitprophet/alabaster;
+    homepage = "https://github.com/bitprophet/alabaster";
     description = "Convert xlsx to csv";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jb55 ];

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   doCheck = !isPy3k;
 
   meta = {
-    homepage = https://github.com/michaeljones/breathe;
+    homepage = "https://github.com/michaeljones/breathe";
     license = lib.licenses.bsd3;
     description = "Sphinx Doxygen renderer";
     inherit (sphinx.meta) platforms;

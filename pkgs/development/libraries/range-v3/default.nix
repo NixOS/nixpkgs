@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Experimental range library for C++11/14/17";
-    homepage = https://github.com/ericniebler/range-v3;
+    homepage = "https://github.com/ericniebler/range-v3";
     license = licenses.boost;
     platforms = platforms.all;
     maintainers = with maintainers; [ primeos xwvvvvwx ];

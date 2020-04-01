@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       HMMER is designed to detect remote homologs as sensitively as possible, relying on the strength of its underlying probability models. In the past, this strength came at significant computational expense, but as of the new HMMER3 project, HMMER is now essentially as fast as BLAST.
       HMMER can be downloaded and installed as a command line tool on your own hardware, and now it is also more widely accessible to the scientific community via new search servers at the European Bioinformatics Institute.
     '';
-    homepage = http://hmmer.org/;
+    homepage = "http://hmmer.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.iimog ];
     platforms = [ "x86_64-linux" "i686-linux" ];

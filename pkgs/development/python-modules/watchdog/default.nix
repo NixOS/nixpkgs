@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python API and shell utilities to monitor file system events";
-    homepage = https://github.com/gorakhargosh/watchdog;
+    homepage = "https://github.com/gorakhargosh/watchdog";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
   };

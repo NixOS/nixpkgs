@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";
-    homepage = https://github.com/torchbox/django-modelcluster/;
+    homepage = "https://github.com/torchbox/django-modelcluster/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };

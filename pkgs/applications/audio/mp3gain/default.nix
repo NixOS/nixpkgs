@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Lossless mp3 normalizer with statistical analysis";
-    homepage = http://mp3gain.sourceforge.net/;
+    homepage = "http://mp3gain.sourceforge.net/";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

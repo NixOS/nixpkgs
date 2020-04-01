@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       extensible. GILDAS is written in Fortran-90, with a
       few parts in C/C++ (mainly keyboard interaction,
       plotting, widgets).'';
-    homepage = http://www.iram.fr/IRAMFR/GILDAS/gildas.html;
+    homepage = "http://www.iram.fr/IRAMFR/GILDAS/gildas.html";
     license = stdenv.lib.licenses.free;
     maintainers = [ stdenv.lib.maintainers.bzizou stdenv.lib.maintainers.smaret ];
     platforms = stdenv.lib.platforms.all;

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Displays Plug";
-    homepage = https://github.com/elementary/switchboard-plug-display;
+    homepage = "https://github.com/elementary/switchboard-plug-display";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

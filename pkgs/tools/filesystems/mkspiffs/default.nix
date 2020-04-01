@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tool to build and unpack SPIFFS images";
     license = licenses.mit;
-    homepage = https://github.com/igrr/mkspiffs;
+    homepage = "https://github.com/igrr/mkspiffs";
     maintainers = with maintainers; [ haslersn ];
     platforms = platforms.linux;
   };

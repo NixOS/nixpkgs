@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Bitcoin command line tool";
-    homepage = https://github.com/libbitcoin/libbitcoin-explorer;
+    homepage = "https://github.com/libbitcoin/libbitcoin-explorer";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ chris-martin asymmetric ];
 

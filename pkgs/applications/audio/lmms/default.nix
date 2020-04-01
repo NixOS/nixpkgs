@@ -41,7 +41,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "DAW similar to FL Studio (music production software)";
-    homepage = https://lmms.io;
+    homepage = "https://lmms.io";
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ goibhniu yegortimoshenko ];

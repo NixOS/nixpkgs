@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C99 HTML parsing algorithm";
-    homepage = https://github.com/google/gumbo-parser;
+    homepage = "https://github.com/google/gumbo-parser";
     maintainers = [ maintainers.nico202 ];
     platforms = platforms.linux;
     license = licenses.asl20;

@@ -5,7 +5,7 @@ let
 in mkDerivation {
   name = "qarte-4.6.0";
   src = fetchbzr {
-    url = http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-4;
+    url = "http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-4";
     rev = "22";
     sha256 = "0v4zpj8w67ydvnmanxbl8pwvn0cfv70c0mlw36a1r4n0rvgxffcn";
   };
@@ -33,7 +33,7 @@ in mkDerivation {
   '';
 
   meta = {
-    homepage = https://launchpad.net/qarte;
+    homepage = "https://launchpad.net/qarte";
     description = "A recorder for Arte TV Guide and Arte Concert";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ vbgl ];

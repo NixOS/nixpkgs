@@ -22,7 +22,7 @@ python2Packages.buildPythonApplication rec {
     maintainers = [ stdenv.lib.maintainers.raskin stdenv.lib.maintainers.domenkozar ];
     platforms = stdenv.lib.platforms.linux;
 
-    homepage = http://pyropus.ca/software/getmail/;
+    homepage = "http://pyropus.ca/software/getmail/";
     inherit version;
     updateWalker = true;
     license = stdenv.lib.licenses.gpl2Plus;

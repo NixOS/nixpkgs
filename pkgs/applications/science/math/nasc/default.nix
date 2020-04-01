@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       answers in to future equations and if that answer changes, so does
       the equations it’s used in.
     '';
-    homepage = https://github.com/parnold-x/nasc;
+    homepage = "https://github.com/parnold-x/nasc";
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

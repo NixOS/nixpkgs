@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform system power status information";
-    homepage = https://github.com/Kentzo/Power;
+    homepage = "https://github.com/Kentzo/Power";
     license = licenses.mit;
   };
 

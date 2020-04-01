@@ -129,7 +129,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://www.openssl.org/;
+      homepage = "https://www.openssl.org/";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       platforms = platforms.all;

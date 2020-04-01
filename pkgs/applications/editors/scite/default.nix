@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "4.0.5";
 
   src = fetchurl {
-    url = https://www.scintilla.org/scite405.tgz;
+    url = "https://www.scintilla.org/scite405.tgz";
     sha256 = "0h16wk2986nkkhhdv5g4lxlcn02qwyja24x1r6vf02r1hf46b9q2";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.scintilla.org/SciTE.html;
+    homepage = "https://www.scintilla.org/SciTE.html";
     description = "SCIntilla based Text Editor";
     license = licenses.mit;
     platforms = platforms.linux;

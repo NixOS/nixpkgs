@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mock D-Bus objects for tests";
-    homepage = https://github.com/martinpitt/python-dbusmock;
+    homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ callahad ];
     platforms = platforms.linux;

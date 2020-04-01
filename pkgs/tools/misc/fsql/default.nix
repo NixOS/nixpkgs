@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Search through your filesystem with SQL-esque queries";
-    homepage = https://github.com/kshvmdn/fsql;
+    homepage = "https://github.com/kshvmdn/fsql";
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;

@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   version = "0.6.169";
 
   src = fetchhg {
-    url = https://bitbucket.org/teamretro/retrofe;
+    url = "https://bitbucket.org/teamretro/retrofe";
     rev = "8793e03";
     sha256 = "0cvsg07ff0fdqh5zgiv2fs7s6c98hn150kpxmpw5fn6jilaszwkm";
   };
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A frontend for arcade cabinets and media PCs";
-    homepage = http://retrofe.com;
+    homepage = "http://retrofe.com";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];
     platforms = with platforms; linux;

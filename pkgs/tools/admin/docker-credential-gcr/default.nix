@@ -20,7 +20,7 @@ buildGoPackage rec {
       helper. It allows for Docker clients v1.11+ to easily make
       authenticated requests to GCR's repositories (gcr.io, eu.gcr.io, etc.).
     '';
-    homepage = https://github.com/GoogleCloudPlatform/docker-credential-gcr;
+    homepage = "https://github.com/GoogleCloudPlatform/docker-credential-gcr";
     license = licenses.asl20;
     maintainers = with maintainers; [ suvash ];
   };

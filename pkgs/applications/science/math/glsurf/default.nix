@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://raffalli.eu/~christophe/glsurf/;
+    homepage = "https://raffalli.eu/~christophe/glsurf/";
     description = "A program to draw implicit surfaces and curves";
     license = stdenv.lib.licenses.lgpl21;
   };

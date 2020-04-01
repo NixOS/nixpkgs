@@ -36,7 +36,7 @@ buildPythonApplication rec {
   meta = {
     description = "Automatic movie downloading via NZBs and torrents";
     license     = lib.licenses.gpl3;
-    homepage    = https://couchpota.to/;
+    homepage    = "https://couchpota.to/";
     maintainers = with lib.maintainers; [ fadenb ];
   };
 }

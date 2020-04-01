@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/portalmod/lv2bm;
+    homepage = "https://github.com/portalmod/lv2bm";
     description = "A benchmark tool for LV2 plugins";
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cli and curses mixer for pulseaudio";
-    homepage = https://github.com/GeorgeFilipkin/pulsemixer;
+    homepage = "https://github.com/GeorgeFilipkin/pulsemixer";
     license = licenses.mit;
     maintainers = [ maintainers.woffs ];
     platforms = platforms.all;

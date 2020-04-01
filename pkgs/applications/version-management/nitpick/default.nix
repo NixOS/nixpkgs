@@ -33,7 +33,7 @@ buildPythonPackage rec {
       should pick. It's intended to be used with source code such that the issues can
       follow the code via whatever VCS or distribution mechanism.
     '';
-    homepage = http://travisbrown.ca/projects/nitpick/docs/nitpick.html;
+    homepage = "http://travisbrown.ca/projects/nitpick/docs/nitpick.html";
     license = with stdenv.lib.licenses; gpl2;
     maintainers = [];
   };

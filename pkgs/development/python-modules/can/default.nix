@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/hardbyte/python-can;
+    homepage = "https://github.com/hardbyte/python-can";
     description = "CAN support for Python";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ sorki ];

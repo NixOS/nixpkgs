@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Extracts revision metadata from your VCS repository";
-    homepage = https://autorevision.github.io/;
+    homepage = "https://autorevision.github.io/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

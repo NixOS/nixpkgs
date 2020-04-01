@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Emulate a Cisco-style telnet command-line interface";
-    homepage = http://sites.dparrish.com/libcli;
+    homepage = "http://sites.dparrish.com/libcli";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

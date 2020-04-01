@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://wiki.muiline.com/obex-data-server;
+    homepage = "http://wiki.muiline.com/obex-data-server";
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Automatically sync files via secure, distributed technology";
-    homepage    = https://www.resilio.com/;
+    homepage    = "https://www.resilio.com/";
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];

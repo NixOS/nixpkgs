@@ -164,7 +164,7 @@ let
         Factorio has been in development since spring of 2012 and it is
         currently in late alpha.
       '';
-      homepage = https://www.factorio.com/;
+      homepage = "https://www.factorio.com/";
       license = stdenv.lib.licenses.unfree;
       maintainers = with stdenv.lib.maintainers; [ Baughn elitak ];
       platforms = [ "i686-linux" "x86_64-linux" ];

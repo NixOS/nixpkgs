@@ -106,7 +106,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/tobiasmelcher/EclipseAceJump;
+      homepage = "https://github.com/tobiasmelcher/EclipseAceJump";
       description = "Provides fast jumps to text based on initial letter";
       license = licenses.mit;
       platforms = platforms.all;
@@ -153,7 +153,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = https://www.antlr.org/;
+      homepage = "https://www.antlr.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -176,7 +176,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = https://www.antlr.org/;
+      homepage = "https://www.antlr.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -198,7 +198,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://andrei.gmxhome.de/anyedit/;
+      homepage = "http://andrei.gmxhome.de/anyedit/";
       description = "Adds new tools to the context menu of text-based editors";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -221,7 +221,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/cypher256/eclipse-encoding-plugin;
+      homepage = "https://github.com/cypher256/eclipse-encoding-plugin";
       description = "Show file encoding and line ending for the active editor in the eclipse status bar";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -244,7 +244,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://andrei.gmxhome.de/bytecode/;
+      homepage = "http://andrei.gmxhome.de/bytecode/";
       description = "Shows disassembled bytecode of current java editor or class file";
       license = licenses.bsd2;
       platforms = platforms.all;
@@ -263,7 +263,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://eclipse.org/cdt/;
+      homepage = "https://eclipse.org/cdt/";
       description = "C/C++ development tooling";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -282,7 +282,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://eclipse-cs.sourceforge.net/;
+      homepage = "https://eclipse-cs.sourceforge.net/";
       description = "Checkstyle integration into the Eclipse IDE";
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -306,7 +306,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://eclipsecolorthemes.org/;
+      homepage = "http://eclipsecolorthemes.org/";
       description = "Plugin to switch color themes conveniently and without side effects";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -339,7 +339,7 @@ rec {
     propagatedBuildInputs = [ zest ];
 
     meta = with stdenv.lib; {
-      homepage = http://www2.cs.tum.edu/projects/cup/eclipse.php;
+      homepage = "http://www2.cs.tum.edu/projects/cup/eclipse.php";
       description = "IDE for developing CUP based parsers";
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
@@ -367,7 +367,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://www.drools.org/;
+      homepage = "https://www.drools.org/";
       description = "Drools is a Business Rules Management System (BRMS) solution";
       license = licenses.asl20;
     };
@@ -384,7 +384,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://www.eclemma.org/;
+      homepage = "https://www.eclemma.org/";
       description = "EclEmma is a free Java code coverage tool for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -407,7 +407,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://findbugs.sourceforge.net/;
+      homepage = "http://findbugs.sourceforge.net/";
       description = "Plugin that uses static analysis to look for bugs in Java code";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -426,7 +426,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://gnuarmeclipse.livius.net/;
+      homepage = "http://gnuarmeclipse.livius.net/";
       description = "GNU ARM Eclipse Plug-ins";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -465,7 +465,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "Adds support for JSON files to Eclipse";
-      homepage = https://github.com/boothen/Json-Eclipse-Plugin;
+      homepage = "https://github.com/boothen/Json-Eclipse-Plugin";
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -483,7 +483,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://www.eclipse.org/jdt/;
+      homepage = "https://www.eclipse.org/jdt/";
       description = "Eclipse Java development tools";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -506,7 +506,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/angelozerr/jdt-codemining;
+      homepage = "https://github.com/angelozerr/jdt-codemining";
       description = "Provides JDT Java CodeMining";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -532,7 +532,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/RustDT;
+      homepage = "https://github.com/RustDT";
       description = "Rust development tooling";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -549,7 +549,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://scala-ide.org/;
+      homepage = "http://scala-ide.org/";
       description = "The Scala IDE for Eclipse";
       license = licenses.bsd3;
       platforms = platforms.all;
@@ -568,7 +568,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://spotbugs.github.io/;
+      homepage = "https://spotbugs.github.io/";
       description = "Plugin that uses static analysis to look for bugs in Java code";
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -591,7 +591,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://testng.org/doc/;
+      homepage = "https://testng.org/doc/";
       description = "Eclipse plugin for the TestNG testing framework";
       license = licenses.asl20;
       platforms = platforms.all;
@@ -636,7 +636,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/oyse/yedit;
+      homepage = "https://github.com/oyse/yedit";
       description = "A YAML editor plugin for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -654,7 +654,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://www.eclipse.org/gef/zest/;
+      homepage = "https://www.eclipse.org/gef/zest/";
       description = "The Eclipse Visualization Toolkit";
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];

@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open Data Plane optimized for DPDK";
-    homepage = https://www.opendataplane.org;
+    homepage = "https://www.opendataplane.org";
     license = licenses.bsd3;
     platforms =  platforms.linux;
     maintainers = [ maintainers.abuibrahim ];

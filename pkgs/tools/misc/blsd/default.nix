@@ -19,7 +19,7 @@ buildGoPackage {
   buildInputs = [ libgit2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/junegunn/blsd;
+    homepage = "https://github.com/junegunn/blsd";
     description = "List directories in breadth-first order";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];

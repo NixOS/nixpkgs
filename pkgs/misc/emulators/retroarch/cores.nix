@@ -51,7 +51,7 @@ let
     meta = with stdenv.lib; {
       inherit (a) description license;
       broken = a.broken or false;
-      homepage = https://www.libretro.com/;
+      homepage = "https://www.libretro.com/";
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
       platforms = platforms.unix;
     };

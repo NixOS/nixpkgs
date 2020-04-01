@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja ];
 
   meta = with stdenv.lib; {
-    homepage = https://poppler.freedesktop.org/;
+    homepage = "https://poppler.freedesktop.org/";
     description = "Encoding files for Poppler, a PDF rendering library";
     platforms = platforms.all;
     license = licenses.free; # more free licenses combined

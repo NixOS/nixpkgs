@@ -57,7 +57,7 @@ stdenv.mkDerivation {
       506 (2003) 250-303, and IEEE Transactions on Nuclear Science 53 No. 1
       (2006) 270-278.
     '';
-    homepage = http://www.geant4.org;
+    homepage = "http://www.geant4.org";
     license = stdenv.lib.licenses.g4sl;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

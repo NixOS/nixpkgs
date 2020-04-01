@@ -21,7 +21,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "A tool for exploring each layer in a docker image";
-    homepage = https://github.com/wagoodman/dive;
+    homepage = "https://github.com/wagoodman/dive";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam spacekookie ];
   };

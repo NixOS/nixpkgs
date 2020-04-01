@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
-    homepage = https://github.com/Mic92/nixpkgs-review;
+    homepage = "https://github.com/Mic92/nixpkgs-review";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

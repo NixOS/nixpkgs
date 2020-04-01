@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://kristaps.bsd.lv/kcgi;
+    homepage = "https://kristaps.bsd.lv/kcgi";
     description = "Minimal CGI and FastCGI library for C/C++";
     license = licenses.isc;
     platforms = platforms.all;

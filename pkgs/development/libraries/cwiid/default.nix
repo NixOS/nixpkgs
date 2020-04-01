@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linux Nintendo Wiimote interface";
-    homepage    = http://cwiid.org;
+    homepage    = "http://cwiid.org";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ bennofs ];
     platforms   = platforms.linux;

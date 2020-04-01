@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Wolfram Mathematica computational software system";
-    homepage = http://www.wolfram.com/mathematica/;
+    homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;
     maintainers = with maintainers; [ herberteuler ];
     platforms = [ "x86_64-linux" ];

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++11 port of docopt";
-    homepage = https://github.com/docopt/docopt.cpp;
+    homepage = "https://github.com/docopt/docopt.cpp";
     license = with licenses; [ mit boost ];
     platforms = platforms.all;
     maintainers = with maintainers; [ knedlsepp ];

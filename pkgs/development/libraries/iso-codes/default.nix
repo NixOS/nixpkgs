@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext python3 ];
 
   meta = with stdenv.lib; {
-    homepage = https://salsa.debian.org/iso-codes-team/iso-codes;
+    homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
     description = "Various ISO codes packaged as XML files";
     license = licenses.lgpl21;
     platforms = platforms.all;

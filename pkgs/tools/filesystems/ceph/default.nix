@@ -173,7 +173,7 @@ in rec {
     doCheck = false; # uses pip to install things from the internet
 
     meta = {
-      homepage = https://ceph.com/;
+      homepage = "https://ceph.com/";
       description = "Distributed storage system";
       license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
       maintainers = with maintainers; [ adev ak krav johanot ];
@@ -185,7 +185,7 @@ in rec {
 
   ceph-client = runCommand "ceph-client-${version}" {
      meta = {
-        homepage = https://ceph.com/;
+        homepage = "https://ceph.com/";
         description = "Tools needed to mount Ceph's RADOS Block Devices";
         license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
         maintainers = with maintainers; [ adev ak johanot krav ];

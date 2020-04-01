@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       isn't necessary to reconfigure the involved NAT gateways, either.
       nat-traverse works out-of-the-box.
     '';
-    homepage = https://www.speicherleck.de/iblech/nat-traverse/;
+    homepage = "https://www.speicherleck.de/iblech/nat-traverse/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.iblech ];

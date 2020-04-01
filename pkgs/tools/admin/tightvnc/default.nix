@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "tightvnc-1.3.10";
 
   src = fetchurl {
-    url = mirror://sourceforge/vnc-tight/tightvnc-1.3.10_unixsrc.tar.bz2;
+    url = "mirror://sourceforge/vnc-tight/tightvnc-1.3.10_unixsrc.tar.bz2";
     sha256 = "f48c70fea08d03744ae18df6b1499976362f16934eda3275cead87baad585c0d";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://vnc-tight.sourceforge.net/;
+    homepage = "http://vnc-tight.sourceforge.net/";
     description = "Improved version of VNC";
 
     longDescription = ''

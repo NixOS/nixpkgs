@@ -31,8 +31,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/html5lib/html5lib-python;
-    downloadPage = https://github.com/html5lib/html5lib-python/releases;
+    homepage = "https://github.com/html5lib/html5lib-python";
+    downloadPage = "https://github.com/html5lib/html5lib-python/releases";
     description = "HTML parser based on WHAT-WG HTML5 specification";
     longDescription = ''
       html5lib is a pure-python library for parsing HTML. It is designed to

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.avr-asm-tutorial.net/gavrasm;
+    homepage = "http://www.avr-asm-tutorial.net/gavrasm";
     description = "AVR Assembler for ATMEL AVR-Processors";
     license = licenses.unfree;
     maintainers = with maintainers; [ mafo ];

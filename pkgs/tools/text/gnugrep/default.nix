@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/grep/;
+    homepage = "https://www.gnu.org/software/grep/";
     description = "GNU implementation of the Unix grep command";
 
     longDescription = ''

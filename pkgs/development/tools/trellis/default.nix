@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       to provide sufficient information to develop a free and
       open Verilog to bitstream toolchain for these devices.
     '';
-    homepage    = https://github.com/SymbiFlow/prjtrellis;
+    homepage    = "https://github.com/SymbiFlow/prjtrellis";
     license     = stdenv.lib.licenses.isc;
     maintainers = with maintainers; [ q3k thoughtpolice emily ];
     platforms   = stdenv.lib.platforms.all;

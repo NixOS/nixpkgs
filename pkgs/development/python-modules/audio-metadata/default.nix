@@ -37,7 +37,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   meta = with lib; {
-    homepage = https://github.com/thebigmunch/audio-metadata;
+    homepage = "https://github.com/thebigmunch/audio-metadata";
     description = "A library for reading and, in the future, writing metadata from audio files";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

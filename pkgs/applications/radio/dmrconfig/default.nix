@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       DMRconfig is a utility for programming digital radios via USB programming cable.
     '';
-    homepage = https://github.com/sergev/dmrconfig;
+    homepage = "https://github.com/sergev/dmrconfig";
     license = licenses.asl20;
     maintainers = [ maintainers.etu ];
     platforms = platforms.linux;

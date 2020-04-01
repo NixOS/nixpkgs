@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Proxy for sending IIO sensor data to D-Bus";
-    homepage = https://github.com/hadess/iio-sensor-proxy;
+    homepage = "https://github.com/hadess/iio-sensor-proxy";
     license = licenses.gpl3 ;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;

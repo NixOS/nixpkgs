@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://code.kryo.se/iodine/;
+    homepage = "http://code.kryo.se/iodine/";
     description = "Tool to tunnel IPv4 data through a DNS server";
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.unix;

@@ -26,7 +26,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
-    homepage    = https://github.com/kubernetes-sigs/kind;
+    homepage    = "https://github.com/kubernetes-sigs/kind";
     maintainers = with maintainers; [ offline rawkode ];
     license     = stdenv.lib.licenses.asl20;
     platforms   = platforms.unix;

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   
   meta = with stdenv.lib; {
     description = "Cython hash tables that assume keys are pre-hashed";
-    homepage = https://github.com/explosion/preshed;
+    homepage = "https://github.com/explosion/preshed";
     license = licenses.mit;
     maintainers = with maintainers; [ sdll ];
     };

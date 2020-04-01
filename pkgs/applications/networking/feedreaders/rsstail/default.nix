@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       RSSTail is more or less an RSS reader: it monitors an RSS feed and if it
       detects a new entry it'll emit only that new entry.
     '';
-    homepage = http://www.vanheusden.com/rsstail/;
+    homepage = "http://www.vanheusden.com/rsstail/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

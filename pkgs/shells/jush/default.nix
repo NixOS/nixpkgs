@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "just a useless shell";
-    homepage = https://github.com/troglobit/jush;
+    homepage = "https://github.com/troglobit/jush";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];

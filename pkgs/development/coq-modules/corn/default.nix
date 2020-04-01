@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = {
-    homepage = http://c-corn.github.io/;
+    homepage = "http://c-corn.github.io/";
     license = stdenv.lib.licenses.gpl2;
     description = "A Coq library for constructive analysis";
     maintainers = [ stdenv.lib.maintainers.vbgl ];

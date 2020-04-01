@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Helps to create full-screen text UIs (from interactive forms to ASCII animations) on any platform";
-    homepage = https://github.com/peterbrittain/asciimatics;
+    homepage = "https://github.com/peterbrittain/asciimatics";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai ];
   };

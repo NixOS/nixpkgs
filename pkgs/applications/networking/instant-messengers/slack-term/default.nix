@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Slack client for your terminal";
-    homepage = https://github.com/erroneousboat/slack-term;
+    homepage = "https://github.com/erroneousboat/slack-term";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };

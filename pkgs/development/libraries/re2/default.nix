@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   installCheckTarget = "testinstall";
 
   meta = {
-    homepage = https://github.com/google/re2;
+    homepage = "https://github.com/google/re2";
     description = "An efficient, principled regular expression library";
     license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; all;

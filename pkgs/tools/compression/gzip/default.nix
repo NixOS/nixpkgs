@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "SHELL=/bin/sh" "GREP=grep" ];
 
   meta = {
-    homepage = https://www.gnu.org/software/gzip/;
+    homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
 
     longDescription =

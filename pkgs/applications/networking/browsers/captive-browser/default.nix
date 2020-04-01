@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Dedicated Chrome instance to log into captive portals without messing with DNS settings";
-    homepage = https://blog.filippo.io/captive-browser;
+    homepage = "https://blog.filippo.io/captive-browser";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ volth ];

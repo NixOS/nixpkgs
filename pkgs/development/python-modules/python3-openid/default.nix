@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "OpenID support for modern servers and consumers";
-    homepage = https://github.com/necaris/python3-openid;
+    homepage = "https://github.com/necaris/python3-openid";
     license = licenses.asl20;
   };
 }

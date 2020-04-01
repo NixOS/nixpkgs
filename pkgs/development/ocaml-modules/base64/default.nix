@@ -18,7 +18,7 @@ buildDunePackage {
   doCheck = true;
 
   meta = {
-    homepage = https://github.com/mirage/ocaml-base64;
+    homepage = "https://github.com/mirage/ocaml-base64";
     description = "Base64 encoding and decoding in OCaml";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];

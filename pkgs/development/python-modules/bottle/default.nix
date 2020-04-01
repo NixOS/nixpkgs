@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools ];
 
   meta = with stdenv.lib; {
-    homepage = http://bottlepy.org;
+    homepage = "http://bottlepy.org";
     description = "A fast and simple micro-framework for small web-applications";
     license = licenses.mit;
     platforms = platforms.all;

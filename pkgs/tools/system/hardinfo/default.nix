@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://hardinfo.org/;
+    homepage = "http://hardinfo.org/";
     description = "Display information about your hardware and operating system";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];

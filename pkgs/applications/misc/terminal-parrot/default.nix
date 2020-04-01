@@ -15,7 +15,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Shows colorful, animated party parrot in your terminial";
-    homepage = https://github.com/jmhobbs/terminal-parrot;
+    homepage = "https://github.com/jmhobbs/terminal-parrot";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.heel ];

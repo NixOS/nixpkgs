@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A robust and highly flexible tunneling application";
     downloadPage = "https://openvpn.net/index.php/open-source/downloads.html";
-    homepage = https://openvpn.net/;
+    homepage = "https://openvpn.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Using Ledger as hardware-based SSH/PGP agent";
-    homepage = https://github.com/romanz/trezor-agent;
+    homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;
     maintainers = with maintainers; [ hkjn np mmahut ];
   };

@@ -143,7 +143,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Rogue-like game";
-    homepage = http://nethack.org/;
+    homepage = "http://nethack.org/";
     license = "nethack";
     platforms = if x11Mode then platforms.linux else platforms.unix;
     maintainers = with maintainers; [ abbradar ];

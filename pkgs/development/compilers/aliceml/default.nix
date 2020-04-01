@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   gecodeSrc = fetchurl {
-    url = http://www.gecode.org/download/gecode-1.3.1.tar.gz;
+    url = "http://www.gecode.org/download/gecode-1.3.1.tar.gz";
     sha256 = "0mgc6llbq166jmlq3alvagqsg3730670zvbwwkdgsqklw70v9355";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
       extended with rich support for concurrent, distributed, and constraint
       programming.
     '';
-    homepage = https://www.ps.uni-saarland.de/alice/;
+    homepage = "https://www.ps.uni-saarland.de/alice/";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.doublec ];
     broken = true;

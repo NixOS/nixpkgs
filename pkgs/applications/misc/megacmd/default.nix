@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MEGA Command Line Interactive and Scriptable Application";
-    homepage    = https://mega.nz/;
+    homepage    = "https://mega.nz/";
     license     = licenses.unfree;
     platforms   = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ maintainers.wedens ];

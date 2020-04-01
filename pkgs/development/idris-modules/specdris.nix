@@ -21,7 +21,7 @@ build-idris-package {
 
   meta = {
     description = "A testing library for Idris";
-    homepage = https://github.com/pheymann/specdris;
+    homepage = "https://github.com/pheymann/specdris";
     license = lib.licenses.mit;
   };
 }

@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A free and open source speech synthesizer for Russian language and others";
-    homepage = https://github.com/Olga-Yakovleva/RHVoice/wiki;
+    homepage = "https://github.com/Olga-Yakovleva/RHVoice/wiki";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ berce ];
     platforms = with lib.platforms; all;

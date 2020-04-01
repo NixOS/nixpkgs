@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://crates.io;
+    homepage = "https://crates.io";
     description = "Downloads your Rust project's dependencies and builds your project";
     maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];

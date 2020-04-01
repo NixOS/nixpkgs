@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Control Snapcast, a multi-room synchronous audio solution";
-    homepage = https://github.com/happyleavesaoc/python-snapcast/;
+    homepage = "https://github.com/happyleavesaoc/python-snapcast/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
 meta = with stdenv.lib; {
     description = "OCR tool for scanned PDFs";
-    homepage = http://www.tobias-elze.de/pdfsandwich/;
+    homepage = "http://www.tobias-elze.de/pdfsandwich/";
     license = licenses.gpl2;
     maintainers = [ maintainers.rps ];
     platforms = platforms.linux;

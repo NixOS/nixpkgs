@@ -28,7 +28,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "The LXQt notification daemon";
-    homepage = https://github.com/lxqt/lxqt-notificationd;
+    homepage = "https://github.com/lxqt/lxqt-notificationd";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

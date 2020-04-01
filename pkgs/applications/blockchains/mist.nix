@@ -8,7 +8,7 @@ let
 
   meta = with stdenv.lib; {
     description = "Browse and use Ðapps on the Ethereum network";
-    homepage = https://github.com/ethereum/mist;
+    homepage = "https://github.com/ethereum/mist";
     license = licenses.gpl3;
     maintainers = with maintainers; [];
     platforms = [ "x86_64-linux" "i686-linux" ];

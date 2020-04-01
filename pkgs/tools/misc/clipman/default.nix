@@ -21,7 +21,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/yory8/clipman;
+    homepage = "https://github.com/yory8/clipman";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ma27 ];
     description = "A simple clipboard manager for Wayland";

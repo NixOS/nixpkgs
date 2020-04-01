@@ -16,7 +16,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ ounit ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/pa_ounit;
+    homepage = "https://github.com/janestreet/pa_ounit";
     description = "OCaml inline testing";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

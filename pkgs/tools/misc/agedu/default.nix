@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "agedu-${date}.${rev}";
   # upstream provides tarballs but it seems they disappear after the next version is released
   src = fetchgit {
-    url = https://git.tartarus.org/simon/agedu.git;
+    url = "https://git.tartarus.org/simon/agedu.git";
     inherit rev;
     sha256 = "0i930izna3s73p2q52qa377ixd14zij5q1n7w3irl7csyy78g0cd";
   };
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
        agedu uses this information to tell you which files waste disk space when
        you haven't used them since a long time.
     '';
-    homepage = https://www.chiark.greenend.org.uk/~sgtatham/agedu/;
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/agedu/";
     license = licenses.mit;
     maintainers = with maintainers; [ symphorien ];
     platforms = platforms.linux;

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Redis and Memcached traffic generation and benchmarking tool";
-    homepage    = https://github.com/redislabs/memtier_benchmark;
+    homepage    = "https://github.com/redislabs/memtier_benchmark";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];

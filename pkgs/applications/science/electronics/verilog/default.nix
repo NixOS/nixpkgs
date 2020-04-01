@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Icarus Verilog compiler";
-    repositories.git = https://github.com/steveicarus/iverilog.git;
+    repositories.git = "https://github.com/steveicarus/iverilog.git";
     homepage = "http://iverilog.icarus.com/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ winden ];

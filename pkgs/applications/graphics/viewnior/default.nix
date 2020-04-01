@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3;
 
-    homepage = http://siyanpanayotov.com/project/viewnior/;
+    homepage = "http://siyanpanayotov.com/project/viewnior/";
 
     maintainers = [ stdenv.lib.maintainers.smironov ];
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Easy to use python subprocess interface";
-    homepage = https://github.com/ponty/EasyProcess;
+    homepage = "https://github.com/ponty/EasyProcess";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ layus ];
   };

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pidgin intltool python ];
 
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/rekkanoryo/purple-plugin-pack;
+    homepage = "https://bitbucket.org/rekkanoryo/purple-plugin-pack";
     description = "Plugin pack for Pidgin 2.x";
     license = licenses.gpl2;
     platforms = platforms.linux;

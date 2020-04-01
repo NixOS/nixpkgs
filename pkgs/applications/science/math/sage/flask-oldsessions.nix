@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Provides a session class that works like the one in Flask before 0.10.";
     license = licenses.bsd2;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/mitsuhiko/flask-oldsessions;
+    homepage = "https://github.com/mitsuhiko/flask-oldsessions";
   };
 }

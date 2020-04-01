@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.typerex.org/ocp-build.html;
+    homepage = "https://www.typerex.org/ocp-build.html";
     description = "A build tool for OCaml";
     longDescription = ''
       ocp-build is a build system for OCaml application, based on simple

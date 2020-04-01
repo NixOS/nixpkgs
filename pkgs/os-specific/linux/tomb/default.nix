@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File encryption on GNU/Linux";
-    homepage    = https://www.dyne.org/software/tomb/;
+    homepage    = "https://www.dyne.org/software/tomb/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.linux;

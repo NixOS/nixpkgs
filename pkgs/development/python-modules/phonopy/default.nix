@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A package for phonon calculations at harmonic and quasi-harmonic levels";
-    homepage = https://atztogo.github.io/phonopy/;
+    homepage = "https://atztogo.github.io/phonopy/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ psyanticy ];
   };

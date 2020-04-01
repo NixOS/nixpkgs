@@ -86,7 +86,7 @@ pythonPackages.buildPythonApplication rec {
       such a way that it remains available even when some of the peers
       are unavailable, malfunctioning, or malicious.
     '';
-    homepage = http://tahoe-lafs.org/;
+    homepage = "http://tahoe-lafs.org/";
     license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;

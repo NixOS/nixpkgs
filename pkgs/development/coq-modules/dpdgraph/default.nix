@@ -61,7 +61,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Build dependency graphs between Coq objects";
     license = stdenv.lib.licenses.lgpl21;
-    homepage = https://github.com/Karmaki/coq-dpdgraph/;
+    homepage = "https://github.com/Karmaki/coq-dpdgraph/";
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
     platforms = coq.meta.platforms;
   };

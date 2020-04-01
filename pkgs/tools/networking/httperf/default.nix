@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The httperf HTTP load generator";
-    homepage = https://github.com/httperf/httperf;
+    homepage = "https://github.com/httperf/httperf";
     maintainers = with maintainers; [ nand0p ];
     license = licenses.gpl2;
     platforms = platforms.linux;

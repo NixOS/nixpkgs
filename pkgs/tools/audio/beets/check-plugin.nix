@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Beets plugin to Verify and store checksums in your library";
-    homepage = https://github.com/geigerzaehler/beets-check;
+    homepage = "https://github.com/geigerzaehler/beets-check";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
   };

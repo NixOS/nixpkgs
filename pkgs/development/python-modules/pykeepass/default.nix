@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/pschmitt/pykeepass;
+    homepage = "https://github.com/pschmitt/pykeepass";
     description = "Python library to interact with keepass databases (supports KDBX3 and KDBX4)";
     license = lib.licenses.gpl3;
   };

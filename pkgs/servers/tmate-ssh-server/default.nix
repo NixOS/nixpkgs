@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = https://tmate.io/;
+    homepage    = "https://tmate.io/";
     description = "tmate SSH Server";
     license     = licenses.mit;
     platforms   = platforms.unix;

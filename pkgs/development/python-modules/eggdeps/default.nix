@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool which computes a dependency graph between active Python eggs";
-    homepage = http://thomas-lotze.de/en/software/eggdeps/;
+    homepage = "http://thomas-lotze.de/en/software/eggdeps/";
     license = licenses.zpl20;
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fucking fucking fast file fucker (afffff)";
-    homepage = https://github.com/buffet/filet;
+    homepage = "https://github.com/buffet/filet";
     license = licenses.mpl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ buffet ];

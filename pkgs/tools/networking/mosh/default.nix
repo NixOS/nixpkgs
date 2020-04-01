@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = {
-    homepage = https://mosh.org/;
+    homepage = "https://mosh.org/";
     description = "Mobile shell (ssh replacement)";
     longDescription = ''
       Remote terminal application that allows roaming, supports intermittent

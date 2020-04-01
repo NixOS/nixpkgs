@@ -15,7 +15,7 @@ let
       inherit name version src wmClass jdk;
       product = "CLion";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/clion/;
+        homepage = "https://www.jetbrains.com/clion/";
         inherit description license;
         longDescription = ''
           Enhancing productivity for every C and C++
@@ -83,7 +83,7 @@ let
       inherit name version src wmClass jdk;
       product = "DataGrip";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/datagrip/;
+        homepage = "https://www.jetbrains.com/datagrip/";
         inherit description license;
         longDescription = ''
           DataGrip is a new IDE from JetBrains built for database admins.
@@ -100,7 +100,7 @@ let
       inherit name version src wmClass jdk;
       product = "Goland";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/go/;
+        homepage = "https://www.jetbrains.com/go/";
         inherit description license;
         longDescription = ''
           Goland is the codename for a new commercial IDE by JetBrains
@@ -125,7 +125,7 @@ let
       inherit name version src wmClass jdk;
       product = "IDEA";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/idea/;
+        homepage = "https://www.jetbrains.com/idea/";
         inherit description license;
         longDescription = ''
           IDE for Java SE, Groovy & Scala development Powerful
@@ -143,7 +143,7 @@ let
       inherit name version src wmClass jdk;
       product = "PhpStorm";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/phpstorm/;
+        homepage = "https://www.jetbrains.com/phpstorm/";
         inherit description license;
         longDescription = ''
           PhpStorm provides an editor for PHP, HTML and JavaScript
@@ -160,7 +160,7 @@ let
       inherit name version src wmClass jdk;
       product = "PyCharm";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/pycharm/;
+        homepage = "https://www.jetbrains.com/pycharm/";
         inherit description license;
         longDescription = ''
           Python IDE with complete set of tools for productive
@@ -187,7 +187,7 @@ let
       inherit name version src wmClass jdk;
       product = "Rider";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/rider/;
+        homepage = "https://www.jetbrains.com/rider/";
         inherit description license;
         longDescription = ''
           JetBrains Rider is a new .NET IDE based on the IntelliJ
@@ -213,7 +213,7 @@ let
       inherit name version src wmClass jdk;
       product = "RubyMine";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/ruby/;
+        homepage = "https://www.jetbrains.com/ruby/";
         inherit description license;
         longDescription = description;
         maintainers = with maintainers; [ edwtjo ];
@@ -226,7 +226,7 @@ let
       inherit name version src wmClass jdk;
       product = "WebStorm";
       meta = with stdenv.lib; {
-        homepage = https://www.jetbrains.com/webstorm/;
+        homepage = "https://www.jetbrains.com/webstorm/";
         inherit description license;
         longDescription = ''
           WebStorm provides an editor for HTML, JavaScript (incl. Node.js),

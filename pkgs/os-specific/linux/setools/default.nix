@@ -35,7 +35,7 @@ buildPythonApplication rec {
 
   meta = {
     description = "SELinux Policy Analysis Tools";
-    homepage = https://github.com/SELinuxProject/setools;
+    homepage = "https://github.com/SELinuxProject/setools";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

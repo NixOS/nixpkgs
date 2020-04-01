@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Persistent Memory Development Kit";
-    homepage    = https://github.com/pmem/pmdk;
+    homepage    = "https://github.com/pmem/pmdk";
     license     = licenses.lgpl21;
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = [ "x86_64-linux" ]; # aarch64 is experimental

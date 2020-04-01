@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Automatically find diff lines that need test coverage";
-    homepage = https://github.com/Bachmann1234/diff-cover;
+    homepage = "https://github.com/Bachmann1234/diff-cover";
     license = licenses.asl20;
     maintainers = with maintainers; [ dzabraev ];
   };

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Go bindings for Deepin Desktop Environment development";
-    homepage = https://github.com/linuxdeepin/go-lib;
+    homepage = "https://github.com/linuxdeepin/go-lib";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

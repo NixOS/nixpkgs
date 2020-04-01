@@ -25,7 +25,7 @@ mkDerivation {
       can be included directly in papers typeset using LaTeX.
       For preview support the texlive package 'preview' has to be installed.
     '';
-    homepage = https://tikzit.github.io/;
+    homepage = "https://tikzit.github.io/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.iblech maintainers.mgttlinger ];

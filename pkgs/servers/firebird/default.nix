@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SQL relational database management system";
-    homepage = https://www.firebirdnews.org;
+    homepage = "https://www.firebirdnews.org";
     license = ["IDPL" "Interbase-1.0"];
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

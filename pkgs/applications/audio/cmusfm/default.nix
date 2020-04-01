@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       + run `cmusfm init` to generate configuration file under ~/.config/cmus/cmusfm.conf
       + Inside cmus run `:set status_display_program=cmusfm` to set up cmusfm
     '';
-    homepage = https://github.com/Arkq/cmusfm/;
+    homepage = "https://github.com/Arkq/cmusfm/";
     maintainers = with stdenv.lib.maintainers; [ CharlesHD ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

@@ -20,7 +20,7 @@ if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Port of the 3.3+ ipaddress module to 2.6, 2.7, and 3.2";
-    homepage = https://github.com/phihag/ipaddress;
+    homepage = "https://github.com/phihag/ipaddress";
     license = licenses.psfl;
   };
 

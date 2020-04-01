@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python modules for implementing LDAP clients";
-    homepage = https://www.python-ldap.org/;
+    homepage = "https://www.python-ldap.org/";
     license = licenses.psfl;
   };
 }

@@ -17,7 +17,7 @@ fetchFromGitHub rec {
 
   meta = with lib; {
     description = "A reinterpretation and expansion based on the 1912 Morris Fuller Benton’s classic.";
-    homepage = https://github.com/impallari/Libre-Franklin;
+    homepage = "https://github.com/impallari/Libre-Franklin";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

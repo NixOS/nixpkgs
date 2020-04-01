@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-mpi;
+    homepage = "https://github.com/dask/dask-mpi";
     description = "Deploy Dask using mpi4py";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

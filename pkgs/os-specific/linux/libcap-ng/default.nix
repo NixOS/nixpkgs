@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = let inherit (stdenv.lib) platforms licenses; in {
     description = "Library for working with POSIX capabilities";
-    homepage = https://people.redhat.com/sgrubb/libcap-ng/;
+    homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
     platforms = platforms.linux;
     license = licenses.lgpl21;
   };

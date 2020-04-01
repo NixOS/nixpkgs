@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A package for symbolic computation";
-    homepage = https://mathema.tician.de/software/pymbolic;
+    homepage = "https://mathema.tician.de/software/pymbolic";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

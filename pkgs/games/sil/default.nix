@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       Walk the dark halls of Angband.  Slay creatures black and fell.  Wrest a shining 
       Silmaril from Morgoth’s iron crown.
     '';
-    homepage = http://www.amirrorclear.net/flowers/game/sil/index.html;
+    homepage = "http://www.amirrorclear.net/flowers/game/sil/index.html";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.michaelpj ];
     platforms = stdenv.lib.platforms.linux;

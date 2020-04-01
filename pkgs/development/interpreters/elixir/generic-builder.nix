@@ -60,7 +60,7 @@ in
 
     pos = builtins.unsafeGetAttrPos "sha256" args;
     meta = with stdenv.lib; {
-      homepage = https://elixir-lang.org/;
+      homepage = "https://elixir-lang.org/";
       description = "A functional, meta-programming aware language built on top of the Erlang VM";
 
       longDescription = ''

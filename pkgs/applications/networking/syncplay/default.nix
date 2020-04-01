@@ -23,7 +23,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://syncplay.pl/;
+    homepage = "https://syncplay.pl/";
     description = "Free software that synchronises media players";
     license = licenses.asl20;
     platforms = platforms.linux;

@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "AIGER model checking for Property Directed Reachability";
-    homepage    = https://arieg.bitbucket.io/avy/;
+    homepage    = "https://arieg.bitbucket.io/avy/";
     license     = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
     platforms   = stdenv.lib.platforms.linux;

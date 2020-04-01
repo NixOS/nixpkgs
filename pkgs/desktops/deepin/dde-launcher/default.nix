@@ -76,7 +76,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Deepin Desktop Environment launcher module";
-    homepage = https://github.com/linuxdeepin/dde-launcher;
+    homepage = "https://github.com/linuxdeepin/dde-launcher";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

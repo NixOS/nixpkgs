@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C Library for reading, writing and updating ESRI Shapefiles";
-    homepage = http://shapelib.maptools.org/;
+    homepage = "http://shapelib.maptools.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
   };

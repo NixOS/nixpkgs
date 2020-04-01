@@ -43,7 +43,7 @@ buildGoPackage rec {
   postBuild = "mv go/bin/terraform-provider-libvirt{,_v${version}}";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dmacvicar/terraform-provider-libvirt;
+    homepage = "https://github.com/dmacvicar/terraform-provider-libvirt";
     description = "Terraform provider for libvirt";
     platforms = platforms.linux;
     license = licenses.asl20;

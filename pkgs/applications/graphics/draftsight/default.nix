@@ -80,7 +80,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "2D design & drafting application, meant to be similar to AutoCAD";
     longDescription = "Professional-grade 2D design and drafting solution from Dassault Systèmes that lets you create, edit, view and mark up any kind of 2D CAD drawing.";
-    homepage = https://www.3ds.com/products-services/draftsight-cad-software/;
+    homepage = "https://www.3ds.com/products-services/draftsight-cad-software/";
     license = stdenv.lib.licenses.unfree;
     maintainers = with maintainers; [ hodapp ];
     platforms = [ "x86_64-linux" ];

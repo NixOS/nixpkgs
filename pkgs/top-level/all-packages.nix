@@ -1330,7 +1330,7 @@ in
   };
 
   bsh = fetchurl {
-    url = http://www.beanshell.org/bsh-2.0b5.jar;
+    url = "http://www.beanshell.org/bsh-2.0b5.jar";
     sha256 = "0p2sxrpzd0vsk11zf3kb5h12yl1nq4yypb5mpjrm8ww0cfaijck2";
   };
 
@@ -13885,7 +13885,7 @@ in
 
   portaudio2014 = portaudio.overrideAttrs (oldAttrs: {
     src = fetchurl {
-      url = http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz;
+      url = "http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz";
       sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
     };
   });

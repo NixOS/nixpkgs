@@ -45,7 +45,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     */
     name = "gap-2.6.0";
     src = fetchurl {
-      url = https://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2;
+      url = "https://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2";
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
     };
     NIX_LDFLAGS = "-lm";
@@ -56,7 +56,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     hardeningDisable = [ "format" ];
     meta = with stdenv.lib; {
       description = "The GIMP Animation Package";
-      homepage = https://www.gimp.org;
+      homepage = "https://www.gimp.org";
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
       # falls inside "free".
       license = with licenses; [ gpl3 free ];
@@ -143,7 +143,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     name = "wavelet-sharpen-0.1.2";
     NIX_LDFLAGS = "-lm";
     src = fetchurl {
-      url = http://registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz;
+      url = "http://registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
     };
     installPhase = "installPlugins src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
@@ -156,7 +156,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     name = "lqr-plugin-0.6.1";
     buildInputs = with pkgs; [ liblqr1 ];
     src = fetchurl {
-      url = http://registry.gimp.org/files/gimp-lqr-plugin-0.6.1.tar.bz2;
+      url = "http://registry.gimp.org/files/gimp-lqr-plugin-0.6.1.tar.bz2";
       sha256 = "00hklkpcimcbpjly4rjhfipaw096cpy768g9wixglwrsyqhil7l9";
     };
     #postInstall = ''mkdir -p $out/nix-support; echo "${liblqr1}" > "$out/nix-support/propagated-user-env-packages"'';
@@ -189,7 +189,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     meta = {
       description = "GIMP plugin to correct lens distortion using the lensfun library and database";
 
-      homepage = http://lensfun.sebastiankraft.net/;
+      homepage = "http://lensfun.sebastiankraft.net/";
 
       license = stdenv.lib.licenses.gpl3Plus;
       maintainers = [ ];
@@ -203,7 +203,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
   exposureBlend = scriptDerivation {
     name = "exposure-blend";
     src = fetchurl {
-      url = http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm;
+      url = "http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm";
       sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
     };
     meta.broken = true;
@@ -212,7 +212,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
   lightning = scriptDerivation {
     name = "Lightning";
     src = fetchurl {
-      url = http://registry.gimp.org/files/Lightning.scm;
+      url = "http://registry.gimp.org/files/Lightning.scm";
       sha256 = "c14a8f4f709695ede3f77348728a25b3f3ded420da60f3f8de3944b7eae98a49";
     };
   };
@@ -235,7 +235,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     # http://registry.gimp.org/node/153
     name = "lightning-gate";
     src = fetchurl {
-      url = http://registry.gimp.org/files/LightningGate.scm;
+      url = "http://registry.gimp.org/files/LightningGate.scm";
       sha256 = "181w1zi9a99kn2mfxjp43wkwcgw5vbb6iqjas7a9mhm8p04csys2";
     };
   };

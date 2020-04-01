@@ -37,7 +37,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "RAR archive reader for Python";
-    homepage = https://github.com/markokr/rarfile;
+    homepage = "https://github.com/markokr/rarfile";
     license = licenses.isc;
   };
 }

@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = https://python-sql.tryton.org/;
+    homepage = "https://python-sql.tryton.org/";
     description = "A library to write SQL queries in a pythonic way";
     maintainers = with lib.maintainers; [ johbo ];
     license = lib.licenses.bsd3;

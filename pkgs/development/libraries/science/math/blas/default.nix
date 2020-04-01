@@ -65,7 +65,7 @@ EOF
   meta = {
     description = "Basic Linear Algebra Subprograms";
     license = stdenv.lib.licenses.publicDomain;
-    homepage = http://www.netlib.org/blas/;
+    homepage = "http://www.netlib.org/blas/";
     platforms = stdenv.lib.platforms.unix;
   };
 

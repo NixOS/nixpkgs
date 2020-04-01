@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Non-blocking backup tool for MySQL";
-    homepage = http://www.percona.com/software/percona-xtrabackup;
+    homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];

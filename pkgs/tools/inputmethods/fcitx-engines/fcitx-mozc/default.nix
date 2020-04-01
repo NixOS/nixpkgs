@@ -96,7 +96,7 @@ in clangStdenv.mkDerivation rec {
   meta = with clangStdenv.lib; {
     isFcitxEngine = true;
     description   = "Fcitx engine for Google japanese input method";
-    homepage      = https://github.com/google/mozc;
+    homepage      = "https://github.com/google/mozc";
     downloadPage  = "http://download.fcitx-im.org/fcitx-mozc/";
     license       = licenses.free;
     platforms     = platforms.linux;

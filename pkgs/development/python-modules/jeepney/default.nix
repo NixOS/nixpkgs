@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://gitlab.com/takluyver/jeepney;
+    homepage = "https://gitlab.com/takluyver/jeepney";
     description = "Pure Python DBus interface";
     license = licenses.mit;
   };

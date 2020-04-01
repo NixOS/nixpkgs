@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "https://www.torproject.org/";
-    repositories.git = https://git.torproject.org/git/tor;
+    repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";
 
     longDescription = ''

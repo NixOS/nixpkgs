@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SIP SIMPLE implementation for Python";
-    homepage = https://sipsimpleclient.org/;
+    homepage = "https://sipsimpleclient.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
   };

@@ -93,7 +93,7 @@ rec {
         be set to match the lamps in your room.
       '';
       license = licenses.gpl3Plus;
-      homepage = http://jonls.dk/redshift;
+      homepage = "http://jonls.dk/redshift";
       platforms = platforms.unix;
       maintainers = with maintainers; [ yegortimoshenko globin ];
     };
@@ -112,7 +112,7 @@ rec {
 
     meta = redshift.meta // {
       description = redshift.meta.description + "(with wlroots patches)";
-      homepage = https://github.com/minus7/redshift;
+      homepage = "https://github.com/minus7/redshift";
     };
   };
 }

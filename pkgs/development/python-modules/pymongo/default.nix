@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/mongodb/mongo-python-driver;
+    homepage = "https://github.com/mongodb/mongo-python-driver";
     license = licenses.asl20;
     description = "Python driver for MongoDB";
   };

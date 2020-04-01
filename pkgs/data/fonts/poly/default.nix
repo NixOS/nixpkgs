@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       line. Poly is a Unicode typeface family that supports Open Type features
       and languages that use the Latin script and its variants.
     '';
-    homepage = http://www.fontsquirrel.com/fonts/poly;
+    homepage = "http://www.fontsquirrel.com/fonts/poly";
     license = stdenv.lib.licenses.ofl;
     maintainers = with stdenv.lib.maintainers; [ relrod ];
   };

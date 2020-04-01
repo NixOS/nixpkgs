@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   name = "ghidra-9.1";
 
   src = fetchurl {
-    url = https://ghidra-sre.org/ghidra_9.1_PUBLIC_20191023.zip;
+    url = "https://ghidra-sre.org/ghidra_9.1_PUBLIC_20191023.zip";
     sha256 = "0pl7s59008gvgwz4mxp7rz3xr3vaa12a6s5zvx2yr9jxx3gk1l99";
   };
 

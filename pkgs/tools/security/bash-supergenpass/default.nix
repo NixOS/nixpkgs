@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fgaz ];
-    homepage = https://github.com/lanzz/bash-supergenpass;
+    homepage = "https://github.com/lanzz/bash-supergenpass";
   };
 }
 

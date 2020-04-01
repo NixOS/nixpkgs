@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Music notation and composition software used with lilypond";
-    homepage = http://denemo.org;
+    homepage = "http://denemo.org";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.olynch ];

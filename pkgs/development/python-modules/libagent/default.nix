@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Using hardware wallets as SSH/GPG agent";
-    homepage = https://github.com/romanz/trezor-agent;
+    homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np ];
   };

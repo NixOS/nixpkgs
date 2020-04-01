@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Mutable mapping tools.";
-    homepage = https://github.com/dask/zict;
+    homepage = "https://github.com/dask/zict";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };

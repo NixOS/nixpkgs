@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     })
     # https://github.com/hzbd/kazam/pull/21
     (fetchpatch {
-      url = https://github.com/hzbd/kazam/commit/37e53a5aa61f4223a9ea03ceeda26eeba2b9d37b.patch;
+      url = "https://github.com/hzbd/kazam/commit/37e53a5aa61f4223a9ea03ceeda26eeba2b9d37b.patch";
       sha256 = "1q5dpmdm6cvgzw8xa7bwclnqa05xc73ja1lszwmwv5glyik0fk4z";
     })
   ];
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A screencasting program created with design in mind";
-    homepage = https://code.launchpad.net/kazam;
+    homepage = "https://code.launchpad.net/kazam";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];

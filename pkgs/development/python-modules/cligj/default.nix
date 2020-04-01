@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Click params for commmand line interfaces to GeoJSON";
-    homepage = https://github.com/mapbox/cligj;
+    homepage = "https://github.com/mapbox/cligj";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

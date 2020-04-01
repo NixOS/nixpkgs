@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Attempt to guess a canonical system name";
-    homepage = https://savannah.gnu.org/projects/config;
+    homepage = "https://savannah.gnu.org/projects/config";
     license = licenses.gpl3;
     # In addition to GPLv3:
     #   As a special exception to the GNU General Public License, if you

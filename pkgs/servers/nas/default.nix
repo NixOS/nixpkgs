@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A network transparent, client/server audio transport system";
-    homepage = http://radscan.com/nas.html;
+    homepage = "http://radscan.com/nas.html";
     license = licenses.mit;
     maintainers = [ maintainers.gnidorah ];
     platforms = platforms.linux;

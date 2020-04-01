@@ -17,7 +17,7 @@ python2.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A free, open-source tool for programming your amateur radio";
-    homepage = https://chirp.danplanet.com/;
+    homepage = "https://chirp.danplanet.com/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.the-kenny ];

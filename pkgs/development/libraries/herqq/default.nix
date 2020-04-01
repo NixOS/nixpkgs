@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://herqq.org;
+    homepage = "http://herqq.org";
     description = "A software library for building UPnP devices and control points";
     platforms = platforms.linux;
     maintainers = [ ];

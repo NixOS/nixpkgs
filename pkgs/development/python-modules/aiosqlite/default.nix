@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asyncio bridge to the standard sqlite3 module";
-    homepage = https://github.com/jreese/aiosqlite;
+    homepage = "https://github.com/jreese/aiosqlite";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

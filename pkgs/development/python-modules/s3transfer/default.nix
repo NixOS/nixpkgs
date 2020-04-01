@@ -44,7 +44,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/boto/s3transfer;
+    homepage = "https://github.com/boto/s3transfer";
     license = stdenv.lib.licenses.asl20;
     description = "A library for managing Amazon S3 transfers";
   };

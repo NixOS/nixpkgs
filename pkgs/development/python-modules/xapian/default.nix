@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Bindings for Xapian";
-    homepage = https://xapian.org/;
+    homepage = "https://xapian.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonringer ];
   };

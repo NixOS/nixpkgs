@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/gkdr/lurch;
+    homepage = "https://github.com/gkdr/lurch";
     description = "XEP-0384: OMEMO Encryption for libpurple";
     license = licenses.gpl3;
     platforms = platforms.linux;

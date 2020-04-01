@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Py.test fixture for benchmarking code";
-    homepage = https://github.com/ionelmc/pytest-benchmark;
+    homepage = "https://github.com/ionelmc/pytest-benchmark";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ costrouc ];
   };

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for the Docker Remote API";
-    homepage = https://github.com/docker/docker-py/;
+    homepage = "https://github.com/docker/docker-py/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.pmiddend ];
   };

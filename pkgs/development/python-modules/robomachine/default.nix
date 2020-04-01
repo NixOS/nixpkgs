@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Test data generator for Robot Framework";
-    homepage = https://github.com/mkorpela/RoboMachine;
+    homepage = "https://github.com/mkorpela/RoboMachine";
     license = licenses.asl20;
     maintainers = with maintainers; [ bjornfor ];
   };

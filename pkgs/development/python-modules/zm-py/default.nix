@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A loose python wrapper around the ZoneMinder REST API";
-    homepage = https://github.com/rohankapoorcom/zm-py;
+    homepage = "https://github.com/rohankapoorcom/zm-py";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
   };

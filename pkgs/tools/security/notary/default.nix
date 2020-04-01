@@ -58,7 +58,7 @@ buildGoPackage rec {
       integrity of the received content.
     '';
     license = licenses.asl20;
-    homepage = https://github.com/theupdateframework/notary;
+    homepage = "https://github.com/theupdateframework/notary";
     maintainers = with maintainers; [ vdemeester ];
     platforms = platforms.unix;
   };

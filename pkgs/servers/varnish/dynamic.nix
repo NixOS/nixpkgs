@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dynamic director similar to the DNS director from Varnish 3";
-    homepage = https://github.com/nigoroll/libvmod-dynamic;
+    homepage = "https://github.com/nigoroll/libvmod-dynamic";
     inherit (varnish.meta) license platforms maintainers;
   };
 }

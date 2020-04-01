@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ itk ];
 
   meta = with stdenv.lib; {
-    homepage = http://elastix.isi.uu.nl/;
+    homepage = "http://elastix.isi.uu.nl/";
     description = "Image registration toolkit based on ITK";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.linux;

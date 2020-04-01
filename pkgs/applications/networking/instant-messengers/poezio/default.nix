@@ -23,7 +23,7 @@ buildPythonApplication rec {
 
     meta = with lib; {
       description = "Free console XMPP client";
-      homepage = https://poez.io;
+      homepage = "https://poez.io";
       license = licenses.mit;
       maintainers = [ maintainers.lsix ];
     };

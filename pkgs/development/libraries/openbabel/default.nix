@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [
     # ARM / AArch64 fixes.
     (fetchpatch {
-      url = https://github.com/openbabel/openbabel/commit/ee11c98a655296550710db1207b294f00e168216.patch;
+      url = "https://github.com/openbabel/openbabel/commit/ee11c98a655296550710db1207b294f00e168216.patch";
       sha256 = "0wjqjrkr4pfirzzicdvlyr591vppydk572ix28jd2sagnfnf566g";
     })
   ];

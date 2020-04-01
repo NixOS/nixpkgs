@@ -14,7 +14,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ type_conv ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/comparelib;
+    homepage = "https://github.com/janestreet/comparelib";
     description = "Syntax extension for deriving \"compare\" functions automatically";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

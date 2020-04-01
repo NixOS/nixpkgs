@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A spell-checking library for GTK applications";
-    homepage = https://wiki.gnome.org/Projects/gspell;
+    homepage = "https://wiki.gnome.org/Projects/gspell";
     license = licenses.lgpl21Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

@@ -41,7 +41,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
-    homepage = https://github.com/prometheus/pushgateway;
+    homepage = "https://github.com/prometheus/pushgateway";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;

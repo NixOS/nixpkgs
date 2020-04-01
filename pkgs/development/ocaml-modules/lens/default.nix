@@ -13,7 +13,7 @@ buildDunePackage rec {
   buildInputs = [ ppx_deriving ppxfind ];
 
   meta = with lib; {
-    homepage = https://github.com/pdonadeo/ocaml-lens;
+    homepage = "https://github.com/pdonadeo/ocaml-lens";
     description = "Functional lenses";
     license = licenses.bsd3;
     maintainers = with maintainers; [

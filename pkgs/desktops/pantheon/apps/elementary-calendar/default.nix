@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Desktop calendar app designed for elementary OS";
-    homepage = https://github.com/elementary/calendar;
+    homepage = "https://github.com/elementary/calendar";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

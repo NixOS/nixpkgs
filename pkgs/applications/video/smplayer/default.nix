@@ -19,7 +19,7 @@ mkDerivation rec {
   meta = {
     description = "A complete front-end for MPlayer";
     longDescription = "Either mplayer or mpv should also be installed for smplayer to play medias";
-    homepage = https://www.smplayer.info;
+    homepage = "https://www.smplayer.info";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

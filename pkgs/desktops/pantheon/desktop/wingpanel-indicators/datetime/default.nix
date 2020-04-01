@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Date & Time Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-datetime;
+    homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -30,7 +30,7 @@ EOF
 
   meta = with stdenv.lib; {
     description = "Create file hierarchies from media tags";
-    homepage = https://www.emacswiki.org/emacs/Bongo;
+    homepage = "https://www.emacswiki.org/emacs/Bongo";
     platforms = ruby.meta.platforms;
     maintainers = [ maintainers.livnev maintainers.dbrock ];
     license = licenses.gpl2Plus;

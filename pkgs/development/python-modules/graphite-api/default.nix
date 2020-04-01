@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Graphite-web, without the interface. Just the rendering HTTP API";
-    homepage = https://github.com/brutasse/graphite-api;
+    homepage = "https://github.com/brutasse/graphite-api";
     license = licenses.asl20;
   };
 }

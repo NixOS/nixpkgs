@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/beerfactory/hbmqtt;
+    homepage = "https://github.com/beerfactory/hbmqtt";
     description = "MQTT client/broker using Python asynchronous I/O";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

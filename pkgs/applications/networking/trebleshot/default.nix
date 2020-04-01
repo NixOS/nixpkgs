@@ -20,7 +20,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Android file transferring tool for desktop";
-    homepage = https://github.com/genonbeta/TrebleShot-Desktop;
+    homepage = "https://github.com/genonbeta/TrebleShot-Desktop";
     license = licenses.gpl2;
 
     platforms = platforms.linux;

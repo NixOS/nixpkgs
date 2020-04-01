@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "liblzf python bindings";
-    homepage = https://github.com/teepark/python-lzf;
+    homepage = "https://github.com/teepark/python-lzf";
     license = licenses.mit;
     platforms = platforms.unix;
   };

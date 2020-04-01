@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch { /* glibmm 2.50 fix */
-      url = https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch;
+      url = "https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch";
       sha256 = "162icv1hicr2dirkb9ijacvg9bhz5j30yfwg7b45ijavk8rns62j";
     })
   ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";
-    homepage = http://www.k-3d.org/;
+    homepage = "http://www.k-3d.org/";
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;

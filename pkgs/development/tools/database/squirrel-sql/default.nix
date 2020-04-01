@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Universal SQL Client";
-    homepage = http://squirrel-sql.sourceforge.net/;
+    homepage = "http://squirrel-sql.sourceforge.net/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ khumba ];

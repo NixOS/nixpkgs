@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gtk theme inspired by the NextStep look";
-    homepage = http://www.vide.memoire.free.fr/perso/OneStepBack;
+    homepage = "http://www.vide.memoire.free.fr/perso/OneStepBack";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

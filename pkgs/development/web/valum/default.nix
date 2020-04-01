@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib vala ctpl libgee libsoup fcgi ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/valum-framework/valum;
+    homepage = "https://github.com/valum-framework/valum";
     description = "Web micro-framework written in Vala";
     license = licenses.lgpl3;
     platforms = platforms.linux;

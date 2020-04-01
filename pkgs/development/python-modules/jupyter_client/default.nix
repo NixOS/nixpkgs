@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Jupyter protocol implementation and client libraries";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Weather;
+    homepage = "https://wiki.gnome.org/Apps/Weather";
     description = "Access current weather conditions and forecasts";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

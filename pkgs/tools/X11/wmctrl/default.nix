@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   patches = [ ./64-bit-data.patch ];
 
   meta = {
-    homepage = https://sites.google.com/site/tstyblo/wmctrl;
+    homepage = "https://sites.google.com/site/tstyblo/wmctrl";
     description = "CLI tool to interact with EWMH/NetWM compatible X Window Managers";
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; all;

@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/0x776b7364/toggle.sg-download;
+    homepage = "https://github.com/0x776b7364/toggle.sg-download";
     description = "Command-line tool to download videos from toggle.sg written in Python";
     longDescription = ''
       toggle.sg requires SilverLight in order to view videos. This tool will

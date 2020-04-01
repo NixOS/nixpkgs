@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://qpid.apache.org/;
+    homepage = "http://qpid.apache.org/";
     description = "Python client implementation and AMQP conformance tests for Apache Qpid";
     license = licenses.asl20;
   };

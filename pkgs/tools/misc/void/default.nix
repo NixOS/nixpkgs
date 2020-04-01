@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Terminal-based personal organizer";
-    homepage = https://github.com/spacejam/void;
+    homepage = "https://github.com/spacejam/void";
     license = licenses.gpl3;
     maintainers = with maintainers; [ spacekookie ];
     platforms = platforms.all;

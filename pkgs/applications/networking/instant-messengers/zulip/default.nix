@@ -32,7 +32,7 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Desktop client for Zulip Chat";
-    homepage = https://zulipchat.com;
+    homepage = "https://zulipchat.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ jonafato ];
     platforms = [ "x86_64-linux" ];

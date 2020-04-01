@@ -5,13 +5,13 @@ stdenv.mkDerivation {
   name = "hugs98-200609";
 
   src = fetchurl {
-    url = http://cvs.haskell.org/Hugs/downloads/2006-09/hugs98-Sep2006.tar.gz;
+    url = "http://cvs.haskell.org/Hugs/downloads/2006-09/hugs98-Sep2006.tar.gz";
     sha256 = "1dj65c39zpy6qqvvrwns2hzj6ipnd4ih655xj7kgyk2nfdvd5x1w";
   };
 
   patches =
     [ (fetchurl {
-        url = https://aur.archlinux.org/cgit/aur.git/plain/hsbase_inline.patch?h=hugs;
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/hsbase_inline.patch?h=hugs";
         name = "hsbase_inline.patch";
         sha256 = "1h0sp16d17hlm6gj7zdbgwrjwi2l4q02m8p0wd60dp4gn9i9js0v";
       })
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.haskell.org/hugs;
+    homepage = "https://www.haskell.org/hugs";
     description = "Haskell interpreter";
     maintainers = with maintainers; [ joachifm ];
     license = licenses.bsd3;

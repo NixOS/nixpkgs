@@ -29,7 +29,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Go Assembler Formatter";
-    homepage = https://github.com/klauspost/asmfmt;
+    homepage = "https://github.com/klauspost/asmfmt";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

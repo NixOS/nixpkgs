@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Extensible Markdown library and tool in OCaml";
-    homepage = https://github.com/ocaml/omd;
+    homepage = "https://github.com/ocaml/omd";
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;

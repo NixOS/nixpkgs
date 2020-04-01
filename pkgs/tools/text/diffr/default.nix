@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Yet another diff highlighting tool";
-    homepage = https://github.com/mookid/diffr;
+    homepage = "https://github.com/mookid/diffr";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ davidtwco ];
     platforms = platforms.all;

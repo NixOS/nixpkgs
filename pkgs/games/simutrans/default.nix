@@ -160,7 +160,7 @@ let
         places. Simutrans is an open source remake of Transport Tycoon.
       '';
 
-      homepage = http://www.simutrans.com/;
+      homepage = "http://www.simutrans.com/";
       license = with licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ kkallio vcunat phile314 ];
       platforms = with platforms; linux; # TODO: ++ darwin;

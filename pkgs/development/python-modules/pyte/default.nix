@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple VTXXX-compatible linux terminal emulator";
-    homepage = https://github.com/selectel/pyte;
+    homepage = "https://github.com/selectel/pyte";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ flokli ];
   };

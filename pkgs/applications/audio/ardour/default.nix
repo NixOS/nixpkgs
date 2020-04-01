@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       Please consider supporting the ardour project financially:
       https://community.ardour.org/node/8288
     '';
-    homepage = http://ardour.org/;
+    homepage = "http://ardour.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu maintainers.fps ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/mkropat/jumpapp;
+    homepage = "https://github.com/mkropat/jumpapp";
     description = "A run-or-raise application switcher for any X11 desktop";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matklad ];

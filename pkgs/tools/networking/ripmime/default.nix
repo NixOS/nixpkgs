@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Attachment extractor for MIME messages";
     maintainers = with maintainers; [ raskin ];
-    homepage = http://www.pldaniels.com/ripmime/;
+    homepage = "http://www.pldaniels.com/ripmime/";
     platforms = platforms.linux;
   };
 

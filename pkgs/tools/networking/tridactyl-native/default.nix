@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tridactyl native messaging host application";
-    homepage = https://github.com/tridactyl/tridactyl;
+    homepage = "https://github.com/tridactyl/tridactyl";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ timokau ];

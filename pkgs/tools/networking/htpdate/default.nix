@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utility to fetch time and set the system clock over HTTP";
-    homepage = http://www.vervest.org/htp/;
+    homepage = "http://www.vervest.org/htp/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

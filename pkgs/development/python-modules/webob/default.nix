@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "WSGI request and response object";
-    homepage = http://pythonpaste.org/webob/;
+    homepage = "http://pythonpaste.org/webob/";
     license = licenses.mit;
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/hannesm/xml;
+    homepage = "https://github.com/hannesm/xml";
     description = "XML Parser for discrete data";
     platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.bsd3;

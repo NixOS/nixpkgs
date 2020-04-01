@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       Linux/BSD distributions that the official software doesn't
       support.
     '';
-    homepage = http://fribid.se;
+    homepage = "http://fribid.se";
     license = with licenses; [ gpl2 mpl10 ];
     maintainers = [ maintainers.edwtjo ];
     platforms = platforms.linux;

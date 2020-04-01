@@ -35,7 +35,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "The LXQt PolicyKit agent";
-    homepage = https://github.com/lxqt/lxqt-policykit;
+    homepage = "https://github.com/lxqt/lxqt-policykit";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

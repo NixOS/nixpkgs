@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Schematic editor and PCB layout tool from CadSoft";
-    homepage = http://www.cadsoftusa.com/;
+    homepage = "http://www.cadsoftusa.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

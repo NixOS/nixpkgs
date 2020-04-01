@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A VNC server connected to a real X11 screen";
-    homepage = https://github.com/LibVNC/x11vnc/;
+    homepage = "https://github.com/LibVNC/x11vnc/";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ OPNA2608 ];

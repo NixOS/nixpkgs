@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       Balls who live in the beautiful World of Goo don't know that they are in a
       game, or that they are extremely delicious.
     '';
-    homepage = http://worldofgoo.com;
+    homepage = "http://worldofgoo.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ jcumming ];
   };

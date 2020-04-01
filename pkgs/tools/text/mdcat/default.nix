@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "cat for markdown";
-    homepage = https://github.com/lunaryorn/mdcat;
+    homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ davidtwco ];
     platforms = platforms.all;

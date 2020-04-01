@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://caffe2.ai/;
+    homepage = "https://caffe2.ai/";
     description = "A new lightweight, modular, and scalable deep learning framework";
     longDescription = ''
       Caffe2 aims to provide an easy and straightforward way for you to experiment

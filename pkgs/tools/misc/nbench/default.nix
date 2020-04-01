@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.math.utah.edu/~mayer/linux/bmark.html;
+    homepage = "https://www.math.utah.edu/~mayer/linux/bmark.html";
     description = "A synthetic computing benchmark program";
     platforms = platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ bennofs ];

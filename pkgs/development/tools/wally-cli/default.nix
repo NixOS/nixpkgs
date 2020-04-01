@@ -26,7 +26,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "A tool to flash firmware to mechanical keyboards";
-    homepage = https://ergodox-ez.com/pages/wally-planck;
+    homepage = "https://ergodox-ez.com/pages/wally-planck";
     license = licenses.mit;
     maintainers = [ maintainers.spacekookie ];
   };

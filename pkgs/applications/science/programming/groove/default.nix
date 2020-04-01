@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GRaphs for Object-Oriented VErification";
-    homepage = http://groove.cs.utwente.nl/;
+    homepage = "http://groove.cs.utwente.nl/";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];

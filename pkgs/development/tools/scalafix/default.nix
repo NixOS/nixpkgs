@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Refactoring and linting tool for Scala";
-    homepage = https://scalacenter.github.io/scalafix/;
+    homepage = "https://scalacenter.github.io/scalafix/";
     license = licenses.bsd3;
     maintainers = [ maintainers.tomahna ];
   };

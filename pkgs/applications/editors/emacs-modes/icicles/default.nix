@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   installPhase = "mkdir -p $out/share/emacs/site-lisp/emacswiki/${pname}-${version}/; cp *.el *.elc $out/share/emacs/site-lisp/emacswiki/${pname}-${version}/";
 
   meta = {
-    homepage = https://www.emacswiki.org/emacs/Icicles;
+    homepage = "https://www.emacswiki.org/emacs/Icicles";
     description = "Enhance Emacs minibuffer input with cycling and powerful completion";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms   = emacs.meta.platforms;

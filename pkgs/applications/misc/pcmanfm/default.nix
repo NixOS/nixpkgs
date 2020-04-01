@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = optional withGtk3 "--with-gtk=3";
 
   meta = with stdenv.lib; {
-    homepage = https://blog.lxde.org/category/pcmanfm/;
+    homepage = "https://blog.lxde.org/category/pcmanfm/";
     license = licenses.gpl2Plus;
     description = "File manager with GTK interface";
     maintainers = [ maintainers.ttuegel ];

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Power Plug";
-    homepage = https://github.com/elementary/switchboard-plug-power;
+    homepage = "https://github.com/elementary/switchboard-plug-power";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

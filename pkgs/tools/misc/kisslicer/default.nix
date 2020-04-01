@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Convert STL files into Gcode";
-    homepage = http://www.kisslicer.com;
+    homepage = "http://www.kisslicer.com";
     license = licenses.unfree;
     maintainers = [ maintainers.cransom ];
     platforms = [ "x86_64-linux" ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Filter IPv4 and IPv6 addresses matching CIDR patterns";
-    homepage = http://www.pc-tools.net/unix/grepcidr/;
+    homepage = "http://www.pc-tools.net/unix/grepcidr/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.fadenb ];

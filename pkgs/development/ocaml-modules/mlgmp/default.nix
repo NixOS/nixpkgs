@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://opam.ocamlpro.com/pkg/mlgmp.20120224.html;
+    homepage = "http://opam.ocamlpro.com/pkg/mlgmp.20120224.html";
     description = "OCaml bindings to GNU MP library";
     license = "Free software ?";
   };

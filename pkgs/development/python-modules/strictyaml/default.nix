@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Strict, typed YAML parser";
-    homepage = https://hitchdev.com/strictyaml/;
+    homepage = "https://hitchdev.com/strictyaml/";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

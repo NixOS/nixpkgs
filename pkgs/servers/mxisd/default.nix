@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "a federated matrix identity server";
-    homepage = https://github.com/kamax-matrix/mxisd;
+    homepage = "https://github.com/kamax-matrix/mxisd";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;

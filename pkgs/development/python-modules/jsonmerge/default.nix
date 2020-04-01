@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Merge a series of JSON documents";
-    homepage = https://github.com/avian2/jsonmerge;
+    homepage = "https://github.com/avian2/jsonmerge";
     changelog = "https://github.com/avian2/jsonmerge/blob/jsonmerge-${version}/ChangeLog";
     license = licenses.mit;
     maintainers = with maintainers; [ emily ];

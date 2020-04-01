@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface to Library Genesis";
-    homepage = https://pypi.org/project/pylibgen/;
+    homepage = "https://pypi.org/project/pylibgen/";
     license = licenses.mit;
     maintainers = [ maintainers.nico202 ];
   };

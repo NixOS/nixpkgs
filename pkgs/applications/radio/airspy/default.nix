@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ "-DINSTALL_UDEV_RULES=ON" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/airspy/airspyone_host;
+    homepage = "https://github.com/airspy/airspyone_host";
     description = "Host tools and driver library for the AirSpy SDR";
     license = licenses.bsd3;
     platforms = with platforms; linux ++ darwin;

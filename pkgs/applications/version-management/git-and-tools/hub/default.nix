@@ -37,7 +37,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";
     license = licenses.mit;
-    homepage = https://hub.github.com/;
+    homepage = "https://hub.github.com/";
     maintainers = with maintainers; [ the-kenny globin ];
     platforms = with platforms; unix;
   };

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       Window manipulations de-/iconify, raise/lower, maximize/restore and reset are also supported.
       To complete the feature set; xtermcontrol lets advanced users issue any xterm control sequence of their choosing.
     '';
-    homepage = http://thrysoee.dk/xtermcontrol;
+    homepage = "http://thrysoee.dk/xtermcontrol";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.derchris ];

@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ uralbash ];
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.bsd3;
-    homepage = https://www.red-lang.org/;
+    homepage = "https://www.red-lang.org/";
   };
 }

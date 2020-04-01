@@ -76,7 +76,7 @@ in
       a reports interface, a complete data modeling solution, and a migration
       platform for moving your 3rd party databases to Oracle.
     '';
-    homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
+    homepage = "http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ ardumont ma27 ];

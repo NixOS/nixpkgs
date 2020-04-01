@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://pygobject.readthedocs.io/;
+    homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jtojnar ];

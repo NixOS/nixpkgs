@@ -14,6 +14,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Add flag to ignore unicode literal prefixes in doctests";
     license = with licenses; [ asl20 ];
-    homepage = https://github.com/gnublade/doctest-ignore-unicode;
+    homepage = "https://github.com/gnublade/doctest-ignore-unicode";
   };
 }

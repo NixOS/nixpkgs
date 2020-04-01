@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Radically simplified static file serving for WSGI applications";
-    homepage = http://whitenoise.evans.io/;
+    homepage = "http://whitenoise.evans.io/";
     license = licenses.mit;
   };
 }

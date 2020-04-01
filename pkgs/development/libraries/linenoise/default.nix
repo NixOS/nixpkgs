@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/antirez/linenoise;
+    homepage = "https://github.com/antirez/linenoise";
     description = "A minimal, zero-config, BSD licensed, readline replacement";
     maintainers = with stdenv.lib.maintainers; [ mpsyco ];
     platforms = stdenv.lib.platforms.unix;

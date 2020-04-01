@@ -20,7 +20,7 @@ in fetchzip rec {
   sha256 = "1gs4vhys0m3qsw06qaxzyi81f06w5v66kbyl64yw3pq2rb656779";
 
   meta = with lib; {
-    homepage = http://comicneue.com/;
+    homepage = "http://comicneue.com/";
     description = "A casual type face: Make your lemonade stand look like a fortune 500 company";
     longDescription = ''
       It is inspired by Comic Sans but more regular.  The font was

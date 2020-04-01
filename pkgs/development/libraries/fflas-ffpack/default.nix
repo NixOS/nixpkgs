@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ raskin timokau ];
     platforms = platforms.unix;
-    homepage = https://linbox-team.github.io/fflas-ffpack/;
+    homepage = "https://linbox-team.github.io/fflas-ffpack/";
   };
 }

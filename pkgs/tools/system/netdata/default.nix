@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Real-time performance monitoring tool";
-    homepage = https://my-netdata.io/;
+    homepage = "https://my-netdata.io/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   version = "2016-11-03";
 
   src = fetchgit {
-    url = https://github.com/SoundScapeRenderer/ssr;
+    url = "https://github.com/SoundScapeRenderer/ssr";
     rev = "0dd0136dd24e47b63d8a4e05de467f5c7b047ec9";
     sha256 = "095x2spv9bmg6pi71mpajnghbqj58ziflg16f9854awx0qp9d8x7";
   };
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://spatialaudio.net/ssr/;
+    homepage = "http://spatialaudio.net/ssr/";
     description = "The SoundScape Renderer (SSR) is a tool for real-time spatial audio reproduction";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.fridh ];

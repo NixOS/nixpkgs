@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
   meta = with lib; {
-    homepage = https://github.com/celery/celery/;
+    homepage = "https://github.com/celery/celery/";
     description = "Distributed task queue";
     license = licenses.bsd3;
   };

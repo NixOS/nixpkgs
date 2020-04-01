@@ -20,7 +20,7 @@ buildOcaml rec {
   hasSharedObjects = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/bin_prot;
+    homepage = "https://github.com/janestreet/bin_prot";
     description = "Binary protocol generator ";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

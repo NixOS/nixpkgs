@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
         - to adapt the code so that people can more easily make their own
           spin-offs, thereby making zillions more people happy!
     '';
-    homepage = http://sc2.sourceforge.net/;
+    homepage = "http://sc2.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jcumming aszlig ];
     platforms = with lib.platforms; linux;

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Painless structural logging";
-    homepage = http://www.structlog.org/;
+    homepage = "http://www.structlog.org/";
     license = lib.licenses.asl20;
   };
 }

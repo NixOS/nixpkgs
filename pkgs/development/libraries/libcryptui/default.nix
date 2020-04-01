@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Interface components for OpenPGP";
-    homepage = https://gitlab.gnome.org/GNOME/libcryptui;
+    homepage = "https://gitlab.gnome.org/GNOME/libcryptui";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
   };

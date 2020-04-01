@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/asottile/future-fstrings;
+    homepage = "https://github.com/asottile/future-fstrings";
     description = "A backport of fstrings to python<3.6";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];

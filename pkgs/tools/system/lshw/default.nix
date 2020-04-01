@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://ezix.org/project/wiki/HardwareLiSter;
+    homepage = "https://ezix.org/project/wiki/HardwareLiSter";
     description = "Provide detailed information on the hardware configuration of the machine";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom ];

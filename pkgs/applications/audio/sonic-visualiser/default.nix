@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "View and analyse contents of music audio files";
-    homepage = https://www.sonicvisualiser.org/;
+    homepage = "https://www.sonicvisualiser.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];
     platforms = platforms.linux;

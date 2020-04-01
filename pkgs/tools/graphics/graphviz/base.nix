@@ -12,7 +12,7 @@ let
     # https://gitlab.com/graphviz/graphviz/issues/1367 CVE-2018-10196
     fetchpatch {
       name = "CVE-2018-10196.patch";
-      url = https://gitlab.com/graphviz/graphviz/uploads/30f8f0b00e357c112ac35fb20241604a/p.diff;
+      url = "https://gitlab.com/graphviz/graphviz/uploads/30f8f0b00e357c112ac35fb20241604a/p.diff";
       sha256 = "074qx6ch9blrnlilmz7p96fkiz2va84x2fbqdza5k4808rngirc7";
       excludes = ["tests/*"]; # we don't run them and they don't apply
     };
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://graphviz.org;
+    homepage = "https://graphviz.org";
     description = "Graph visualization tools";
     license = licenses.epl10;
     platforms = platforms.unix;

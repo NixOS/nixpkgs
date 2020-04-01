@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SubBand Codec Library";
-    homepage = http://www.bluez.org/;
+    homepage = "http://www.bluez.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

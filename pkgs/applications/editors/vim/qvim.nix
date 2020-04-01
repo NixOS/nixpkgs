@@ -32,7 +32,7 @@ in {
   enableParallelBuilding = true; # test this
 
   src = fetchgit {
-    url = https://bitbucket.org/equalsraf/vim-qt.git;
+    url = "https://bitbucket.org/equalsraf/vim-qt.git";
     rev = "refs/tags/package-" + tag;
     inherit sha256;
   };
@@ -104,7 +104,7 @@ in {
 
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor (Qt GUI fork)";
-    homepage    = https://bitbucket.org/equalsraf/vim-qt/wiki/Home;
+    homepage    = "https://bitbucket.org/equalsraf/vim-qt/wiki/Home";
     license = licenses.vim;
     maintainers = with maintainers; [ smironov ttuegel ];
     platforms   = platforms.linux;

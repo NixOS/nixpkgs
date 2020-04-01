@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Collection of perceptually uniform colormaps";
-    homepage = https://colorcet.pyviz.org;
+    homepage = "https://colorcet.pyviz.org";
     license = licenses.cc-by-40;
     maintainers = [ maintainers.costrouc ];
   };

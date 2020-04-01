@@ -72,7 +72,7 @@ let noweb = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple, extensible literate-programming tool";
-    homepage = https://www.cs.tufts.edu/~nr/noweb;
+    homepage = "https://www.cs.tufts.edu/~nr/noweb";
     license = licenses.bsd2;
     maintainers = with maintainers; [ yurrriq ];
     platforms = with platforms; linux ++ darwin;

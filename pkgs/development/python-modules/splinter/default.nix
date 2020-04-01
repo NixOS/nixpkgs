@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Browser abstraction for web acceptance testing";
-    homepage = https://github.com/cobrateam/splinter;
+    homepage = "https://github.com/cobrateam/splinter";
     license = lib.licenses.bsd3;
   };
 }

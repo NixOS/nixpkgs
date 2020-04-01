@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A powerful editor targeted towards programmers and webdevelopers";
-    homepage = http://bluefish.openoffice.nl/;
+    homepage = "http://bluefish.openoffice.nl/";
     license = licenses.gpl3Plus;
     maintainers = [maintainers.vbgl];
     platforms = platforms.all;

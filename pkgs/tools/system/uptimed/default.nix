@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       each other. Uptimed comes with a console front-end to parse the records,
       which can also easily be used to show your records on a web page.
     '';
-    homepage = https://github.com/rpodgorny/uptimed/;
+    homepage = "https://github.com/rpodgorny/uptimed/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -10,7 +10,7 @@ buildRustPackage rec {
     longDescription = ''
       The fastest JavaScript bundler in the galaxy. Fully supports ECMAScript module syntax (import/export) in addition to CommonJS require(<string>).
     '';
-    homepage = https://github.com/nathan/pax;
+    homepage = "https://github.com/nathan/pax";
     license = licenses.mit;
     maintainers = [ maintainers.klntsky ];
     platforms = platforms.linux;

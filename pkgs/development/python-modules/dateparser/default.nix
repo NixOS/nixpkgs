@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Date parsing library designed to parse dates from HTML pages";
-    homepage = https://github.com/scrapinghub/dateparser;
+    homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
   };
 }

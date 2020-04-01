@@ -45,7 +45,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/louipc/turses;
+    homepage = "https://github.com/louipc/turses";
     description = "A Twitter client for the console";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];

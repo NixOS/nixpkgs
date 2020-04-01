@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A port of the Adapta theme for Plasma";
-    homepage = https://git.io/adapta-kde;
+    homepage = "https://git.io/adapta-kde";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.tadfisher ];
     platforms = stdenv.lib.platforms.all;

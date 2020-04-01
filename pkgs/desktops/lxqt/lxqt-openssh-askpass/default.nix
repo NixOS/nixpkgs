@@ -28,7 +28,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "GUI to query passwords on behalf of SSH agents";
-    homepage = https://github.com/lxqt/lxqt-openssh-askpass;
+    homepage = "https://github.com/lxqt/lxqt-openssh-askpass";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

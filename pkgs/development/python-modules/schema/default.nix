@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Library for validating Python data structures";
-    homepage = https://github.com/keleshev/schema;
+    homepage = "https://github.com/keleshev/schema";
     license = licenses.mit;
     maintainers = [ maintainers.tobim ];
   };

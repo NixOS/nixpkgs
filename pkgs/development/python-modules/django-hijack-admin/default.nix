@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Admin integration for django-hijack";
-    homepage = https://github.com/arteria/django-hijack-admin;
+    homepage = "https://github.com/arteria/django-hijack-admin";
     license = licenses.mit;
     maintainers = with maintainers; [ lsix ];
   };

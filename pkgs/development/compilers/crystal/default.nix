@@ -170,7 +170,7 @@ let
 
     meta = with lib; {
       description = "A compiled language with Ruby like syntax and type inference";
-      homepage = https://crystal-lang.org/;
+      homepage = "https://crystal-lang.org/";
       license = licenses.asl20;
       maintainers = with maintainers; [ manveru david50407 peterhoeg ];
       platforms = builtins.attrNames archs;

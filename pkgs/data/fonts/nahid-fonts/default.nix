@@ -16,7 +16,7 @@ in fetchFromGitHub {
   sha256 = "0df169sibq14j2mj727sq86c00jm1nz8565v85hkvh4zgz2plb7c";
 
   meta = with lib; {
-    homepage = https://github.com/rastikerdar/nahid-font;
+    homepage = "https://github.com/rastikerdar/nahid-font";
     description = "A Persian (Farsi) Font - قلم (فونت) فارسی ناهید";
     license = licenses.free;
     platforms = platforms.all;

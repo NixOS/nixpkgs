@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for parsing JSON config files";
-    homepage = https://github.com/andrewrk/liblaxjson;
+    homepage = "https://github.com/andrewrk/liblaxjson";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.andrewrk ];

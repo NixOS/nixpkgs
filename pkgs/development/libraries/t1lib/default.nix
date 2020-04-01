@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A type 1 font rasterizer library for UNIX/X11";
-    homepage = http://www.t1lib.org/;
+    homepage = "http://www.t1lib.org/";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.unix;
   };

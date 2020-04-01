@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ fuse readline libgcrypt gmp ];
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/simonvetter/afpfs-ng;
+    homepage    = "https://github.com/simonvetter/afpfs-ng";
     description = "A client implementation of the Apple Filing Protocol";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];

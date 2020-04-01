@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python docstring style checker";
-    homepage = https://github.com/PyCQA/pydocstyle/;
+    homepage = "https://github.com/PyCQA/pydocstyle/";
     license = licenses.mit;
     maintainers = with maintainers; [ dzabraev ];
   };

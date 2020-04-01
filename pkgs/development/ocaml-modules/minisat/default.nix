@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   meta = {
-    homepage = https://c-cube.github.io/ocaml-minisat/;
+    homepage = "https://c-cube.github.io/ocaml-minisat/";
     description = "Simple bindings to Minisat-C";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mgttlinger ];

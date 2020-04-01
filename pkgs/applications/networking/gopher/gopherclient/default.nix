@@ -35,7 +35,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/prologic/gopherclient;
+    homepage = "https://github.com/prologic/gopherclient";
     description = "Gopher Qt GUI client";
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];

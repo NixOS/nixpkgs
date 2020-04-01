@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parse gdb machine interface output with Python";
-    homepage = https://github.com/cs01/pygdbmi;
+    homepage = "https://github.com/cs01/pygdbmi";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

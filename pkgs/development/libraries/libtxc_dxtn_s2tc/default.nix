@@ -16,8 +16,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A patent-free S3TC compatible implementation";
-    homepage = https://github.com/divVerent/s2tc;
-    repositories.git = https://github.com/divVerent/s2tc.git;
+    homepage = "https://github.com/divVerent/s2tc";
+    repositories.git = "https://github.com/divVerent/s2tc.git";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.cpages ];

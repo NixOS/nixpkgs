@@ -19,7 +19,7 @@ stdenv.mkDerivation  rec {
   meta = with stdenv.lib; {
     description = "MIDI controllable audio sampler";
     longDescription = "a fork of Specimen";
-    homepage = http://petri-foo.sourceforge.net;
+    homepage = "http://petri-foo.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
