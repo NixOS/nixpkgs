@@ -9,7 +9,7 @@
     },
     "vundle": {
         "date": "2020-03-27",
-        "new": "Vundle.vim"
+        "new": "Vundle-vim"
     },
     "youcompleteme": {
         "date": "2020-03-27",
