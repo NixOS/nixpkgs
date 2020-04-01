@@ -16,7 +16,12 @@ stdenv.mkDerivation {
     zlib SDL lua5_1
   ];
 
-  sconsFlags = "OPENGL=false GTK=false CREATE_AVI=false LOGO=false";
+  sconsFlags = [
+    "OPENGL=false"
+    "GTK=false"
+    "CREATE_AVI=false"
+    "LOGO=false"
+  ];
   prefixKey = "--prefix=";
 
   # sed allows scons to find libraries in nix.

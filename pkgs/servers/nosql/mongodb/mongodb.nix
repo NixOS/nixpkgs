@@ -86,10 +86,9 @@ in stdenv.mkDerivation rec {
   ] ++ map (lib: "--use-system-${lib}") system-libraries;
 
   preBuild = ''
-    sconsFlags+=" CC=$CC"
-    sconsFlags+=" CXX=$CXX"
+    sconsFlags+=("CC=$CC" "CXX=$CXX")
   '' + optionalString stdenv.isAarch64 ''
-    sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
+    sconsFlags+=("CCFLAGS='-march=armv8-a+crc'")
   '';
 
   preInstall = ''

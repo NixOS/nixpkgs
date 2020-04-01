@@ -34,7 +34,11 @@ in stdenv.mkDerivation {
     export LIBPATH="${galeraLibs}/lib"
   '';
 
-  sconsFlags = "ssl=1 system_asio=1 strict_build_flags=0";
+  sconsFlags = [
+    "ssl=1"
+    "system_asio=1"
+    "strict_build_flags=0"
+  ];
 
   enableParallelBuilding = true;
 

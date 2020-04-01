@@ -11,8 +11,8 @@ sconsBuildPhase() {
 
     local flagsArray=(
       ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
-      $sconsFlags ${sconsFlagsArray[@]}
-      $buildFlags ${buildFlagsArray[@]}
+      ${sconsFlags[@]}
+      ${buildFlags[@]} ${buildFlagsArray[@]}
     )
 
     echoCmd 'build flags' "${flagsArray[@]}"
@@ -33,8 +33,8 @@ sconsInstallPhase() {
     fi
 
     local flagsArray=(
-        $sconsFlags ${sconsFlagsArray[@]}
-        $installFlags ${installFlagsArray[@]}
+        ${sconsFlags[@]}
+        ${installFlags[@]} ${installFlagsArray[@]}
         ${installTargets:-install}
     )
 
@@ -60,7 +60,7 @@ sconsCheckPhase() {
     else
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
-            $sconsFlags ${sconsFlagsArray[@]}
+            ${sconsFlags[@]}
             ${checkFlagsArray[@]}
         )
 

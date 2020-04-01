@@ -17,14 +17,18 @@ stdenv.mkDerivation rec {
 
   prefixKey = "PREFIX=";
 
+  sconsFlags = [
+    "OPENSSL=${openssl}"
+    "ZLIB=${zlib}"
+  ] ++ stdenv.lib.optional (!stdenv.isCygwin)
+    "GSSAPI=${kerberos.dev}";
+
   preConfigure = ''
-    sconsFlags+=" APR=$(echo ${apr.dev}/bin/*-config)"
-    sconsFlags+=" APU=$(echo ${aprutil.dev}/bin/*-config)"
-    sconsFlags+=" CC=$CC"
-    sconsFlags+=" OPENSSL=${openssl}"
-    sconsFlags+=" ZLIB=${zlib}"
-  '' + stdenv.lib.optionalString (!stdenv.isCygwin) ''
-    sconsFlags+=" GSSAPI=${kerberos.dev}"
+    sconsFlags+=(
+      "APR=$(echo ${apr.dev}/bin/*-config)"
+      "APU=$(echo ${aprutil.dev}/bin/*-config)"
+      "CC=$CC"
+    )
   '';
 
   enableParallelBuilding = true;

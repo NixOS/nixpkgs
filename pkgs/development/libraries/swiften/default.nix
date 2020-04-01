@@ -20,10 +20,8 @@ stdenv.mkDerivation rec {
     "boost_libdir=${boost.out}/lib"
     "boost_bundled_enable=false"
   ];
-  preInstall = ''
-    installTargets="$out"
-    installFlags+=" SWIFT_INSTALLDIR=$out"
-  '';
+  installFlags = [ "SWIFT_INSTALLDIR=${placeholder "out"}" ];
+  installTargets = [ "${placeholder "out"}" ];
 
   enableParallelBuilding = true;
 

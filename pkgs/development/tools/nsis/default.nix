@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    sconsFlagsArray+=("PATH=$PATH")
+    sconsFlags+=("PATH=$PATH")
   '';
 
   prefixKey = "PREFIX=";
