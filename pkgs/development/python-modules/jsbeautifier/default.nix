@@ -2,14 +2,14 @@
 
 buildPythonApplication rec {
   pname = "jsbeautifier";
-  version = "1.10.2";
+  version = "1.10.3";
 
   propagatedBuildInputs = [ six editorconfig ];
   checkInputs = [ pytest ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a5ce5195c0b54a68eb813649829143373823ca28caa4d7aa682442b87ebea1ce";
+    sha256 = "0aaxi56qm2wmccsdj4v1lc158625c2g6ikqq950yv43i0pyyi3lp";
   };
 
   meta = with lib; {
