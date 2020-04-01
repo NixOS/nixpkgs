@@ -39,6 +39,12 @@ stdenv.mkDerivation rec {
       sha256 = "0wa7iq0vfp2av5v23w94a5844ddj4g48d4wk3yrp745dyrimg739";
     })
 
+    # Fix media key syntax
+    (fetchpatch {
+      url = "https://github.com/elementary/default-settings/commit/332aefe1883be5dfe90920e165c39e331a53b2ea.patch";
+      sha256 = "0ypcaga55pw58l30srq3ga1mhz2w6hkwanv41jjr6g3ia9jvq69n";
+    })
+
     # https://github.com/elementary/default-settings/pull/119
     ./0001-Build-with-Meson.patch
   ];
