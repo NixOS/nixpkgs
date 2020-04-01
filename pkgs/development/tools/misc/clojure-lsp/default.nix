@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 $src $out/bin/clojure-lsp
+    sed -i -e '1 s!java!${jre}/bin/java!' $out/bin/clojure-lsp
   '';
 
   meta = with stdenv.lib; {
