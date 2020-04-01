@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A Dashboard for the sensu monitoring framework";
-    homepage    = http://sensuapp.org/;
+    homepage    = "http://sensuapp.org/";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A small, fast run-time speech synthesis engine";
-    homepage = http://www.festvox.org/flite/;
+    homepage = "http://www.festvox.org/flite/";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
   };

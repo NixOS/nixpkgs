@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/thejoshwolfe/wolfebin;
+    homepage = "https://github.com/thejoshwolfe/wolfebin";
     description = "Quick and easy file sharing";
     license = licenses.mit;
     maintainers = [ maintainers.andrewrk ];

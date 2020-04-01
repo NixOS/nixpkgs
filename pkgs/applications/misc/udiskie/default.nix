@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Removable disk automounter for udisks";
     license = licenses.mit;
-    homepage = https://github.com/coldfix/udiskie;
+    homepage = "https://github.com/coldfix/udiskie";
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }

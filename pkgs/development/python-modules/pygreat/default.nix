@@ -24,7 +24,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Python library for talking with libGreat devices";
-    homepage = https://greatscottgadgets.com/greatfet/;
+    homepage = "https://greatscottgadgets.com/greatfet/";
     license = with licenses; [ bsd3 ];
   };
 

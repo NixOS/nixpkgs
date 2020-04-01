@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool to graphically examine ddrescue mapfiles";
-    homepage = https://sourceforge.net/projects/ddrescueview/;
+    homepage = "https://sourceforge.net/projects/ddrescueview/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];

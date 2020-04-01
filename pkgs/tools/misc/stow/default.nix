@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     '';
 
     license = stdenv.lib.licenses.gpl3Plus;
-    homepage = https://www.gnu.org/software/stow/;
+    homepage = "https://www.gnu.org/software/stow/";
 
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     platforms = stdenv.lib.platforms.all;

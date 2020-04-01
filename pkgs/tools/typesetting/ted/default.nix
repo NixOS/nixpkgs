@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       MS-Word. Additionally, Ted also is an RTF to PostScript and an RTF to
       Acrobat PDF converter.
     '';
-    homepage    = https://nllgg.nl/Ted/;
+    homepage    = "https://nllgg.nl/Ted/";
     license     = licenses.gpl2;
     platforms   = platforms.all;
     broken      = stdenv.isDarwin;

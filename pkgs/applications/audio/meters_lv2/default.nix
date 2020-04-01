@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib;
     { description = "Collection of audio level meters with GUI in LV2 plugin format";
-      homepage = http://x42.github.io/meters.lv2/;
+      homepage = "http://x42.github.io/meters.lv2/";
       maintainers = with maintainers; [ ehmry ];
       license = licenses.gpl2;
       platforms = platforms.linux;

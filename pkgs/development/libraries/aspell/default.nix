@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Spell checker for many languages";
-    homepage = http://aspell.net/;
+    homepage = "http://aspell.net/";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ ];
     platforms = with stdenv.lib.platforms; all;

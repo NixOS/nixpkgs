@@ -32,7 +32,7 @@ stdenv.mkDerivation rec{
       expand/explore/exploit/exterminate games, including Civilization and
       Master of Orion.
     '';
-    homepage = http://catb.org/~esr/vms-empire/;
+    homepage = "http://catb.org/~esr/vms-empire/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

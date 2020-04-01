@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Simple, lightweight tool for sniping eBay auctions";
-    homepage    = http://esniper.sourceforge.net;
+    homepage    = "http://esniper.sourceforge.net";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 peti ];
     platforms   = platforms.all;

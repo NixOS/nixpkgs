@@ -44,7 +44,7 @@ in stdenv.mkDerivation (libs // rec {
 
   meta = with stdenv.lib; {
     description = "Multiplayer FPS game designed for competitive gaming (engine only)";
-    homepage = http://www.warsow.net;
+    homepage = "http://www.warsow.net";
     license = licenses.gpl2;
     maintainers = with maintainers; [ astsmtl abbradar ];
     platforms = platforms.linux;

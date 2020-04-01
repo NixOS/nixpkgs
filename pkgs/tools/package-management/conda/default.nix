@@ -66,7 +66,7 @@ in
 
     meta = {
       description = "Conda is a package manager for Python";
-      homepage = https://conda.io/;
+      homepage = "https://conda.io/";
       platforms = lib.platforms.linux;
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ jluttine bhipple ];

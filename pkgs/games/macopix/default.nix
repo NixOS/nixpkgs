@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mascot Constructive Pilot for X";
-    homepage = http://rosegray.sakura.ne.jp/macopix/index-e.html;
+    homepage = "http://rosegray.sakura.ne.jp/macopix/index-e.html";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };

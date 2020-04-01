@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://plugin.org.uk/;
+    homepage = "http://plugin.org.uk/";
     description = "LADSPA format audio plugins";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

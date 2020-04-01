@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       It is an advanced terminal emulator with workspace, multiple
       windows, remote management, quake mode and other features.
      '';
-    homepage = https://github.com/linuxdeepin/deepin-terminal;
+    homepage = "https://github.com/linuxdeepin/deepin-terminal";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

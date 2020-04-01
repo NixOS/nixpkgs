@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An improved Python library to control i3wm and sway";
-    homepage    = https://github.com/acrisci/i3ipc-python;
+    homepage    = "https://github.com/acrisci/i3ipc-python";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ vanzef ];
   };

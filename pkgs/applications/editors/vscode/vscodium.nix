@@ -51,8 +51,8 @@ in
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences
       '';
-      homepage = https://github.com/VSCodium/vscodium;
-      downloadPage = https://github.com/VSCodium/vscodium/releases;
+      homepage = "https://github.com/VSCodium/vscodium";
+      downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
       maintainers = with maintainers; [ synthetica ];
       platforms = [ "x86_64-linux" "x86_64-darwin" ];

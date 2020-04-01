@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       planning, requirements gathering, presentation of information, etc.
     '';
 
-    homepage    = http://strlen.com/treesheets/;
+    homepage    = "http://strlen.com/treesheets/";
     maintainers = with maintainers; [ obadz avery ];
     platforms   = platforms.linux;
     license     = licenses.zlib;

@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
       hard drive, or any arbitrarily large collection of files, limited only
       by the host computer's memory and graphics hardware.
     '';
-    homepage    = https://github.com/mcuelenaere/fsv;
+    homepage    = "https://github.com/mcuelenaere/fsv";
     license     = licenses.lgpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];

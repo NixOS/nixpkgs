@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";
-    homepage = https://github.com/vinceliuice/Mojave-gtk-theme;
+    homepage = "https://github.com/vinceliuice/Mojave-gtk-theme";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

@@ -133,7 +133,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A freeware web browser developed by Google";
-    homepage = https://www.google.com/chrome/browser/;
+    homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
     maintainers = [ maintainers.msteen ];
     platforms = [ "x86_64-linux" ];

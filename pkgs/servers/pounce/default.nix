@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://code.causal.agency/june/pounce;
+    homepage = "https://code.causal.agency/june/pounce";
     description = "Simple multi-client TLS-only IRC bouncer";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Async database support for Python";
-    homepage = https://github.com/encode/databases;
+    homepage = "https://github.com/encode/databases";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

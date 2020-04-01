@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
       </para>
     '';
 
-    homepage = http://www.freedroid.org/;
+    homepage = "http://www.freedroid.org/";
 
     license = licenses.gpl2Plus;
 

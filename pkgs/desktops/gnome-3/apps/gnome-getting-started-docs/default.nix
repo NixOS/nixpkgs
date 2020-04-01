@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool itstool libxml2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://live.gnome.org/DocumentationProject;
+    homepage = "https://live.gnome.org/DocumentationProject";
     description = "Help a new user get started in GNOME";
     maintainers = gnome3.maintainers;
     license = licenses.cc-by-sa-30;

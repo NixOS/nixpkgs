@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Infrastructure for exploration, analysis, and manipulation of source code";
-    homepage = https://www.srcml.org;
+    homepage = "https://www.srcml.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ leenaars ];
   };

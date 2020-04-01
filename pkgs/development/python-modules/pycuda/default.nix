@@ -61,7 +61,7 @@ buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/inducer/pycuda/;
+    homepage = "https://github.com/inducer/pycuda/";
     description = "CUDA integration for Python.";
     license = licenses.mit;
     maintainers = with maintainers; [ artuuge ];

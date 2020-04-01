@@ -23,7 +23,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    homepage = https://github.com/c-cube/ocaml-containers;
+    homepage = "https://github.com/c-cube/ocaml-containers";
     description = "A modular standard library focused on data structures";
     longDescription = ''
       Containers is a standard library (BSD license) focused on data structures,

@@ -40,7 +40,7 @@ buildPythonPackage rec {
         (Google Doc files do not have a particular format).
       - Allow for the same file at multiple paths.
     '';
-    homepage = https://github.com/dsoprea/GDriveFS;
+    homepage = "https://github.com/dsoprea/GDriveFS";
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

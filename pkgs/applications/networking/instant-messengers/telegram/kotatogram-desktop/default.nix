@@ -48,7 +48,7 @@ mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.linux;
-    homepage = https://kotatogram.github.io;
+    homepage = "https://kotatogram.github.io";
     maintainers = with maintainers; [ ilya-fedin ];
   };
 }

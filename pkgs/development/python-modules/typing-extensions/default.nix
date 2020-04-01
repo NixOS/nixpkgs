@@ -24,7 +24,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Backported and Experimental Type Hints for Python 3.5+";
-    homepage = https://github.com/python/typing;
+    homepage = "https://github.com/python/typing";
     license = licenses.psfl;
     maintainers = with maintainers; [ pmiddend ];
   };

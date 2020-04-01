@@ -4,7 +4,7 @@ let
   # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
   curaBinaryDataVersion = "3.6.21"; # Marlin v2.0.0.174 for Bio, v2.0.0.144 for others.
   curaBinaryData = fetchgit {
-    url = https://code.alephobjects.com/diffusion/CBD/cura-binary-data.git;
+    url = "https://code.alephobjects.com/diffusion/CBD/cura-binary-data.git";
     rev = "5c75d0f6c10d8b7a903e2072a48cd1f08059509e";
     sha256 = "1qdsj6rczwzdwzyr7nz7fnypbphckjrnwl8c9dr6izsxyzs465c4";
   };
@@ -30,7 +30,7 @@ mkDerivation rec {
   version = "3.6.21";
 
   src = fetchgit {
-    url = https://code.alephobjects.com/source/cura-lulzbot.git;
+    url = "https://code.alephobjects.com/source/cura-lulzbot.git";
     rev = "7faeb18604c83004846a02c60cb240708db0034f";
     sha256 = "10q38s8c8x6xkh1vns4p3iqa5y267vrjh5vq8h55mg1q5001scyq";
   };
@@ -74,7 +74,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
-    homepage = https://code.alephobjects.com/diffusion/CURA/;
+    homepage = "https://code.alephobjects.com/diffusion/CURA/";
     license = licenses.agpl3;  # a partial relicense to LGPL has happened, but not certain that all AGPL bits are expunged
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];

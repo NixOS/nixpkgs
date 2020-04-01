@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "meo-20121113";
   
   src = fetchhg {
-    url = http://oss.stamfest.net/hg/meo;
+    url = "http://oss.stamfest.net/hg/meo";
     rev = "b48e5f16cff8";
     sha256 = "0ifg7y28s89i9gwda6fyj1jbrykbcvq8bf1m6rxmdcv5afi3arbq";
   };
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://oss.stamfest.net/wordpress/meo-multiple-eyepairs-only;
+    homepage = "http://oss.stamfest.net/wordpress/meo-multiple-eyepairs-only";
     description = "Tools to use cryptography for things like four-eyes principles";
     license = stdenv.lib.licenses.agpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];

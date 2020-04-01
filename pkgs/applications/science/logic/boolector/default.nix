@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An extremely fast SMT solver for bit-vectors and arrays";
-    homepage    = https://boolector.github.io;
+    homepage    = "https://boolector.github.io";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

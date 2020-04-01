@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       Profanity is a console based XMPP client written in C using ncurses and
       libstrophe, inspired by Irssi.
     '';
-    homepage = http://www.profanity.im/;
+    homepage = "http://www.profanity.im/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];

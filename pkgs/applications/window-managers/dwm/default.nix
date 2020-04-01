@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   buildPhase = " make ";
 
   meta = {
-    homepage = https://suckless.org/;
+    homepage = "https://suckless.org/";
     description = "Dynamic window manager for X";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [viric];

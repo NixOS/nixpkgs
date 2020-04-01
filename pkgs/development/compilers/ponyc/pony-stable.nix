@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A simple dependency manager for the Pony language.";
-    homepage = https://www.ponylang.org;
+    homepage = "https://www.ponylang.org";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ dipinhora kamilchm patternspandemic ];
     platforms = stdenv.lib.platforms.unix;

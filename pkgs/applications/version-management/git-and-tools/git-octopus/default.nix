@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = https://github.com/lesfurets/git-octopus;
+    homepage = "https://github.com/lesfurets/git-octopus";
     description = "The continuous merge workflow";
     license = licenses.lgpl3;
     platforms = platforms.unix;

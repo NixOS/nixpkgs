@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools for monitoring the health of hard drives";
-    homepage    = https://www.smartmontools.org/;
+    homepage    = "https://www.smartmontools.org/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ peti Frostman ];
     platforms   = with platforms; linux ++ darwin;

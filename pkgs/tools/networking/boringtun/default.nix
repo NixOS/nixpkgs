@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Userspace WireGuard® implementation in Rust";
-    homepage = https://github.com/cloudflare/boringtun;
+    homepage = "https://github.com/cloudflare/boringtun";
     license = licenses.bsd3;
     maintainers = with maintainers; [ xrelkd marsam ];
     platforms = platforms.linux ++ platforms.darwin;

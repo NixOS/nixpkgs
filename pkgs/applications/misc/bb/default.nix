@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = http://aa-project.sourceforge.net/bb;
+    homepage    = "http://aa-project.sourceforge.net/bb";
     description = "AA-lib demo";
     license     = licenses.gpl2;
     maintainers = [ maintainers.rnhmjoj ];

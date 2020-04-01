@@ -31,7 +31,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://traefik.io;
+    homepage = "https://traefik.io";
     description = "A modern reverse proxy";
     license = licenses.mit;
     maintainers = with maintainers; [ hamhut1066 vdemeester ];

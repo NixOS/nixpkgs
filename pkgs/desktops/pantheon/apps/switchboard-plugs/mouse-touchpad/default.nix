@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";
-    homepage = https://github.com/elementary/switchboard-plug-mouse-touchpad;
+    homepage = "https://github.com/elementary/switchboard-plug-mouse-touchpad";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

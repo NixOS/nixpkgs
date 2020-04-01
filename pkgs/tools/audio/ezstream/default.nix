@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       from standard input without reencoding and thus requires only
       very little CPU resources.
     '';
-    homepage = http://icecast.org/ezstream/;
+    homepage = "http://icecast.org/ezstream/";
     license = licenses.gpl2;
     maintainers = [ maintainers.barrucadu ];
     platforms = platforms.all;

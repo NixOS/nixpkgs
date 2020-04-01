@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Convert .mht files to .html";
-    homepage    = http://pgm.bpalanka.com/mht2htm.html;
+    homepage    = "http://pgm.bpalanka.com/mht2htm.html";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.all;

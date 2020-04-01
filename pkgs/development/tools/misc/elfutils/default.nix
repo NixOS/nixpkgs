@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails 70 out of 174 tests
 
   meta = {
-    homepage = https://sourceware.org/elfutils/;
+    homepage = "https://sourceware.org/elfutils/";
     description = "A set of utilities to handle ELF objects";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;

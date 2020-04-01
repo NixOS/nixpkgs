@@ -18,7 +18,7 @@ let
     enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/grimfang4/sdl-gpu;
+      homepage = "https://github.com/grimfang4/sdl-gpu";
       description = "A library for high-performance, modern 2D graphics with SDL written in C";
       license = licenses.mit;
       maintainers = with maintainers; [ CrazedProgrammer ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/incinirate/Riko4;
+    homepage = "https://github.com/incinirate/Riko4";
     description = "Fantasy console for pixel art game development";
     license = licenses.mit;
     maintainers = with maintainers; [ CrazedProgrammer ];

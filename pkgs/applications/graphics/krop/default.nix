@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = http://arminstraub.com/software/krop;
+    homepage = "http://arminstraub.com/software/krop";
     description = "Graphical tool to crop the pages of PDF files";
     longDescription = ''
     Krop is a tool that allows you to optimise your PDF files, and remove

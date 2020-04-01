@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
 
   meta = with stdenv.lib; {
-    homepage = https://nghttp2.org/;
+    homepage = "https://nghttp2.org/";
     description = "A C implementation of HTTP/2";
     license = licenses.mit;
     platforms = platforms.all;

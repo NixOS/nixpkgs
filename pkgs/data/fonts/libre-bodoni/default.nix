@@ -28,7 +28,7 @@ fetchFromGitHub rec {
       Libre Bodoni currently features four styles: Regular, Italic, Bold and
       Bold Italic.
     '';
-    homepage = https://github.com/impallari/Libre-Bodoni;
+    homepage = "https://github.com/impallari/Libre-Bodoni";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

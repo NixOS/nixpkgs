@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "IPython Kernel for Jupyter";
-    homepage = http://ipython.org/;
+    homepage = "http://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

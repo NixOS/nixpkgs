@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description  = "Private, secure, untraceable currency";
-    homepage     = https://getmonero.org/;
+    homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;
     platforms    = platforms.all;
     badPlatforms = platforms.darwin;

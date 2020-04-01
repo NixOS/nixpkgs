@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/gccxml/pygccxml;
+    homepage = "https://github.com/gccxml/pygccxml";
     description = "Python package for easy C++ declarations navigation";
     license = licenses.boost;
     maintainers = with maintainers; [ teto ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Scientific calculator for the Lumina Desktop";
-    homepage = https://github.com/lumina-desktop/lumina-calculator;
+    homepage = "https://github.com/lumina-desktop/lumina-calculator";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

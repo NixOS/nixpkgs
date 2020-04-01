@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple schema-based serialization and deserialization library";
-    homepage = https://docs.pylonsproject.org/projects/colander/en/latest/;
+    homepage = "https://docs.pylonsproject.org/projects/colander/en/latest/";
     license = licenses.free; # http://repoze.org/LICENSE.txt
     maintainers = with maintainers; [ domenkozar ];
   };

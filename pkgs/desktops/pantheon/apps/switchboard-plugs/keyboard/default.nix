@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Keyboard Plug";
-    homepage = https://github.com/elementary/switchboard-plug-keyboard;
+    homepage = "https://github.com/elementary/switchboard-plug-keyboard";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "A CSS4 selector implementation for Beautiful Soup";
     license = lib.licenses.mit;
-    homepage = https://github.com/facelessuser/soupsieve;
+    homepage = "https://github.com/facelessuser/soupsieve";
   };
 
 }

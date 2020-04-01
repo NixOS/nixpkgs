@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Convert CUE to ISO suitable to POPStarter";
-    homepage = https://github.com/makefu/cue2pops-linux;
+    homepage = "https://github.com/makefu/cue2pops-linux";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };

@@ -40,7 +40,7 @@ let
 
       meta = with lib; {
         description = "Beautiful and free fonts for many languages";
-        homepage = https://www.google.com/get/noto/;
+        homepage = "https://www.google.com/get/noto/";
         longDescription =
         ''
           When text is rendered by a computer, sometimes characters are
@@ -89,7 +89,7 @@ in
 
     meta = with lib; {
       description = "Beautiful and free fonts for CJK languages";
-      homepage = https://www.google.com/get/noto/help/cjk/;
+      homepage = "https://www.google.com/get/noto/help/cjk/";
       longDescription =
       ''
         Noto Sans CJK is a sans serif typeface designed as an intermediate style
@@ -140,7 +140,7 @@ in
     meta = with lib; {
       inherit version;
       description = "Color and Black-and-White emoji fonts";
-      homepage = https://github.com/googlei18n/noto-emoji;
+      homepage = "https://github.com/googlei18n/noto-emoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
       maintainers = with maintainers; [ mathnerd314 ];

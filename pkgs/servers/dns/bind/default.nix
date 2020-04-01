@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # requires root and the net
 
   meta = with stdenv.lib; {
-    homepage = https://www.isc.org/downloads/bind/;
+    homepage = "https://www.isc.org/downloads/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
 

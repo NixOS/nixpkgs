@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "190107";
 
   src = fetchgit {
-    url = git://repo.or.cz/fast-export.git;
+    url = "git://repo.or.cz/fast-export.git";
     rev = "v${version}";
     sha256 = "14azfps9jd5anivcvfwflgsvqdyy6gm9jy284kzx2ng9f7871d14";
   };
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Import mercurial into git";
-    homepage = https://repo.or.cz/w/fast-export.git;
+    homepage = "https://repo.or.cz/w/fast-export.git";
     license = licenses.gpl2;
     maintainers = [ maintainers.koral ];
     platforms = platforms.unix;

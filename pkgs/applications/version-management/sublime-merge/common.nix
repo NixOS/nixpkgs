@@ -109,7 +109,7 @@ in stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     description = "Git client from the makers of Sublime Text";
-    homepage = https://www.sublimemerge.com;
+    homepage = "https://www.sublimemerge.com";
     maintainers = with maintainers; [ zookatron ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

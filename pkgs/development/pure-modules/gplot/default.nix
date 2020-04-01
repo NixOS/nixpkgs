@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A pure binding to gnuplot";
-    homepage = http://puredocs.bitbucket.org/pure-gplot.html;
+    homepage = "http://puredocs.bitbucket.org/pure-gplot.html";
     license = stdenv.lib.licenses.lgpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

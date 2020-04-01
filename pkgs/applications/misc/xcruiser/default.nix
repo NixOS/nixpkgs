@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "xcruiser-0.30";
 
   src = fetchurl {
-      url = mirror://sourceforge/xcruiser/xcruiser/xcruiser-0.30/xcruiser-0.30.tar.gz;
+      url = "mirror://sourceforge/xcruiser/xcruiser/xcruiser-0.30/xcruiser-0.30.tar.gz";
       sha256 = "1r8whva38xizqdh7jmn6wcmfmsndc67pkw22wzfzr6rq0vf6hywi";
     };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       It constructs a virtually 3-D formed universe from a directory
       tree and allows you to "cruise" within a visualized filesystem.
     '';
-    homepage = http://xcruiser.sourceforge.net/;
+    homepage = "http://xcruiser.sourceforge.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux;

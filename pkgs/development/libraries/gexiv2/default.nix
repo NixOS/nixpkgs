@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/gexiv2;
+    homepage = "https://wiki.gnome.org/Projects/gexiv2";
     description = "GObject wrapper around the Exiv2 photo metadata library";
     license = licenses.gpl2;
     platforms = platforms.unix;

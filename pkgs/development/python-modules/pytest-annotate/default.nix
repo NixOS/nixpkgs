@@ -31,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kensho-technologies/pytest-annotate;
+    homepage = "https://github.com/kensho-technologies/pytest-annotate";
     description = "Generate PyAnnotate annotations from your pytest tests";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];

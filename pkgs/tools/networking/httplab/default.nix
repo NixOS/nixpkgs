@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/gchaincl/httplab;
+    homepage = "https://github.com/gchaincl/httplab";
     description = "Interactive WebServer";
     license = licenses.mit;
     maintainers = with maintainers; [ pradeepchhetri ];

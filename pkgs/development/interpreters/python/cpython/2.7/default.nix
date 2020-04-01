@@ -263,7 +263,7 @@ in with passthru; stdenv.mkDerivation ({
     doCheck = false; # expensive, and fails
 
     meta = {
-      homepage = http://python.org;
+      homepage = "http://python.org";
       description = "A high-level dynamically-typed programming language";
       longDescription = ''
         Python is a remarkably powerful dynamic programming language that

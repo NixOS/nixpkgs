@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Wavelet transform module";
-    homepage = https://github.com/PyWavelets/pywt;
+    homepage = "https://github.com/PyWavelets/pywt";
     license = licenses.mit;
   };
 

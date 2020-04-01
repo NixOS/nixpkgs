@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple flexible popup dialog to run on X";
-    homepage = https://github.com/emgram769/lighthouse;
+    homepage = "https://github.com/emgram769/lighthouse";
     license = licenses.mit;
     maintainers = with maintainers; [ ramkromberg ];
     platforms = platforms.linux;

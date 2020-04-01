@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Node.js virtual environment builder";
-    homepage = https://github.com/ekalinin/nodeenv;
+    homepage = "https://github.com/ekalinin/nodeenv";
     license = licenses.bsd3;
   };
 }

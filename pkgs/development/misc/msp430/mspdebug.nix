@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A free programmer, debugger, and gdb proxy for MSP430 MCUs";
-    homepage = https://dlbeer.co.nz/mspdebug/;
+    homepage = "https://dlbeer.co.nz/mspdebug/";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ aerialx ];

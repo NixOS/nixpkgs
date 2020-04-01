@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
                 ++ optional withGUI qt5.qtbase ;
 
   meta = with stdenv.lib; {
-    homepage = https://www.caida.org/projects/spoofer;
+    homepage = "https://www.caida.org/projects/spoofer";
     description = "Assess and report on deployment of source address validation";
     longDescription = ''
       Spoofer is a new client-server system for Windows, MacOS, and

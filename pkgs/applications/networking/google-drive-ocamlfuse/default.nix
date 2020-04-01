@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   installPhase = "mkdir $out && dune install --prefix $out";
 
   meta = {
-    homepage = http://gdfuse.forge.ocamlcore.org/;
+    homepage = "http://gdfuse.forge.ocamlcore.org/";
     description = "A FUSE-based file system backed by Google Drive, written in OCaml";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Brings all icons back to the top panel, so that it's easier to keep track of apps running in the backround";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
-    homepage = https://github.com/phocean/TopIcons-plus;
+    homepage = "https://github.com/phocean/TopIcons-plus";
     # Unmaintained and no longer working with GNOME Shell 3.34+
     broken = stdenv.lib.versionAtLeast gnome3.gnome-shell.version "3.32";
   };

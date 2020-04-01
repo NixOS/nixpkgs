@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       support Bitcoin conflict resolution as originally envisioned by its founder -
       consider running a Bitcoin Unlimited client.
     '';
-    homepage = https://www.bitcoinunlimited.info/;
+    homepage = "https://www.bitcoinunlimited.info/";
     maintainers = with maintainers; [ DmitryTsygankov ];
     license = licenses.mit;
     broken = stdenv.isDarwin;

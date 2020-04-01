@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ cmake SDL qt4 ];
 
   meta = with stdenv.lib; {
-    homepage    = http://www.holdingnuts.net/;
+    homepage    = "http://www.holdingnuts.net/";
     description = "Open Source Poker client and server";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ obadz ];

@@ -14,7 +14,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "A python based websocket server that is simple and easy to use";
-    homepage = https://github.com/dpallot/simple-websocket-server/;
+    homepage = "https://github.com/dpallot/simple-websocket-server/";
     license = licenses.mit;
     maintainers = with maintainers; [ rvolosatovs ];
     platforms = platforms.all;

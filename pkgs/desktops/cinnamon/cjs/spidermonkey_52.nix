@@ -27,11 +27,11 @@ in stdenv.mkDerivation {
     # needed to build gnome3.gjs
     (fetchpatch {
       name = "mozjs52-disable-mozglue.patch";
-      url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/mozjs52-disable-mozglue.patch?h=packages/js52&id=4279d2e18d9a44f6375f584911f63d13de7704be;
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/mozjs52-disable-mozglue.patch?h=packages/js52&id=4279d2e18d9a44f6375f584911f63d13de7704be";
       sha256 = "18wkss0agdyff107p5lfflk72qiz350xqw2yqc353alkx4fsfpz0";
     })
     (fetchpatch {
-      url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/no-error.diff?h=packages/js52;
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/no-error.diff?h=packages/js52";
       sha256 = "1vsw6558lxiy0r1mg6y49cgddan1mfqvqlkyv734bgxyg6n3pb9i";
     })
     ./fix-werror.patch
@@ -79,7 +79,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
-    homepage = https://developer.mozilla.org/en/SpiderMonkey;
+    homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.linux;

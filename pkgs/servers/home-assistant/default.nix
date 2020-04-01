@@ -119,7 +119,7 @@ in with py.pkgs; buildPythonApplication rec {
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
   meta = with lib; {
-    homepage = https://home-assistant.io/;
+    homepage = "https://home-assistant.io/";
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin mic92 ];

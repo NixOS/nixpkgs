@@ -99,7 +99,7 @@ let
 
     meta = with lib; {
       description = "Scan, index, and archive all of your paper documents";
-      homepage = https://github.com/the-paperless-project/paperless;
+      homepage = "https://github.com/the-paperless-project/paperless";
       license = licenses.gpl3;
       maintainers = [ maintainers.earvstedt ];
     };

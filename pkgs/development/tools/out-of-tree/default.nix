@@ -23,7 +23,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "kernel {module, exploit} development tool";
-    homepage = https://out-of-tree.io;
+    homepage = "https://out-of-tree.io";
     maintainers = [ maintainers.dump_stack ];
     license = licenses.agpl3Plus;
   };

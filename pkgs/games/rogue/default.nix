@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
   meta = with stdenv.lib; {
-    homepage = http://rogue.rogueforge.net/rogue-5-4/;
+    homepage = "http://rogue.rogueforge.net/rogue-5-4/";
     description = "The final version of the original Rogue game developed for the UNIX operating system";
     platforms = platforms.all;
     license = licenses.bsd3;

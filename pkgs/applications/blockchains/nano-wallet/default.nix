@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "Wallet for Nano cryptocurrency";
-    homepage = https://nano.org/en/wallet/;
+    homepage = "https://nano.org/en/wallet/";
     license = lib.licenses.bsd2;
     # Fails on Darwin. See:
     # https://github.com/NixOS/nixpkgs/pull/39295#issuecomment-386800962

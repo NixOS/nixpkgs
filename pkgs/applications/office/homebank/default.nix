@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free, easy, personal accounting for everyone";
-    homepage = http://homebank.free.fr/;
+    homepage = "http://homebank.free.fr/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

@@ -16,7 +16,7 @@ in fetchzip rec {
 
   meta = with lib; {
     description = "The Latin Modern Math (LM Math) font completes the modernization of the Computer Modern family of typefaces designed and programmed by Donald E. Knuth.";
-    homepage = http://www.gust.org.pl/projects/e-foundry/lm-math;
+    homepage = "http://www.gust.org.pl/projects/e-foundry/lm-math";
     # "The Latin Modern Math font is licensed under the GUST Font License (GFL),
     # which is a free license, legally equivalent to the LaTeX Project Public
     # License (LPPL), version 1.3c or later." - GUST website

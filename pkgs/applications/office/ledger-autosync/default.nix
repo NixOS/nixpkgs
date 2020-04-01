@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/egh/ledger-autosync;
+    homepage = "https://github.com/egh/ledger-autosync";
     description = "OFX/CSV autosync for ledger and hledger";
     license = licenses.gpl3;
     maintainers = with maintainers; [ eamsden ];

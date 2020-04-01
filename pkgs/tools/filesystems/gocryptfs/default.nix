@@ -43,7 +43,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Encrypted overlay filesystem written in Go";
     license = licenses.mit;
-    homepage = https://nuetzlich.net/gocryptfs/;
+    homepage = "https://nuetzlich.net/gocryptfs/";
     maintainers = with maintainers; [ flokli offline ];
     platforms = platforms.unix;
   };

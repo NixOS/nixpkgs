@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU software calculator";
-    homepage = https://www.gnu.org/software/bc/;
+    homepage = "https://www.gnu.org/software/bc/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   name = "indilib-1.1.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/indi/libindi_1.1.0.tar.gz;
+    url = "mirror://sourceforge/indi/libindi_1.1.0.tar.gz";
     sha256 = "1bs6lkwqd4aashg93mqqkc7nrg7fbx9mdw85qs5263jqa6sr780w";
   };
 

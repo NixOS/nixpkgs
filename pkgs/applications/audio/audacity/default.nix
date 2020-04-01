@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Sound editor with graphical UI";
-    homepage = http://audacityteam.org/;
+    homepage = "http://audacityteam.org/";
     license = licenses.gpl2Plus;
     platforms = intersectLists platforms.linux platforms.x86; # fails on ARM
     maintainers = with maintainers; [ the-kenny ];

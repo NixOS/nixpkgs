@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python binding of ptrace library";
-    homepage = https://github.com/vstinner/python-ptrace;
+    homepage = "https://github.com/vstinner/python-ptrace";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 ];
   };

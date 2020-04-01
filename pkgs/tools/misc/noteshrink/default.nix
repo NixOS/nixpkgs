@@ -17,7 +17,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Convert scans of handwritten notes to beautiful, compact PDFs";
-    homepage    = https://mzucker.github.io/2016/09/20/noteshrink.html;
+    homepage    = "https://mzucker.github.io/2016/09/20/noteshrink.html";
     license     = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj ];
   };

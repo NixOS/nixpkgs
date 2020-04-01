@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight implementation of some Unix command line utilities";
-    homepage = https://landley.net/toybox/;
+    homepage = "https://landley.net/toybox/";
     license = licenses.bsd0;
     platforms = with platforms; linux ++ darwin ++ freebsd;
     maintainers = with maintainers; [ hhm ];

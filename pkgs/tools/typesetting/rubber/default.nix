@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
       of pdfLaTeX to produce PDF documents.
     '';
     license = licenses.gpl2Plus;
-    homepage = https://launchpad.net/rubber;
+    homepage = "https://launchpad.net/rubber";
     maintainers = with maintainers; [ ttuegel peterhoeg ];
     platforms = platforms.unix;
   };

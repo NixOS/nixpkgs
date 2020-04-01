@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Kakoune Language Server Protocol Client";
-    homepage = https://github.com/ul/kak-lsp;
+    homepage = "https://github.com/ul/kak-lsp";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = [ maintainers.spacekookie ];
     platforms = platforms.all;

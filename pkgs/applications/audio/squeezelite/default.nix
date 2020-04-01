@@ -62,7 +62,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Lightweight headless squeezebox client emulator";
-    homepage = https://github.com/ralph-irving/squeezelite;
+    homepage = "https://github.com/ralph-irving/squeezelite";
     license = with licenses; [ gpl3 ] ++ optional dsdSupport bsd2;
     maintainers = with maintainers; [ samdoshi ];
     platforms = platforms.linux;

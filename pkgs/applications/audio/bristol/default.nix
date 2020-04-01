@@ -26,7 +26,7 @@ stdenv.mkDerivation  rec {
 
   meta = with stdenv.lib; {
     description = "A range of synthesiser, electric piano and organ emulations";
-    homepage = http://bristol.sourceforge.net;
+    homepage = "http://bristol.sourceforge.net";
     license = licenses.gpl3;
     platforms = ["x86_64-linux" "i686-linux"];
     maintainers = [ maintainers.goibhniu ];

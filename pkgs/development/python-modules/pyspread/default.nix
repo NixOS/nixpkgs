@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pyspread is a non-traditional spreadsheet application that is based on and written in the programming language Python";
-    homepage = https://manns.github.io/pyspread/;
+    homepage = "https://manns.github.io/pyspread/";
     license = licenses.gpl3;
   };
 }

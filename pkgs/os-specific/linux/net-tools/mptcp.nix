@@ -12,7 +12,7 @@ nettools.overrideAttrs(oa: rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/multipath-tcp/net-tools;
+    homepage = "https://github.com/multipath-tcp/net-tools";
     description = "A set of tools for controlling the network subsystem in Linux";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -70,7 +70,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://scalacenter.github.io/bloop/;
+    homepage = "https://scalacenter.github.io/bloop/";
     license = licenses.asl20;
     description = "Bloop is a Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way.";
     maintainers = with maintainers; [ tomahna ];

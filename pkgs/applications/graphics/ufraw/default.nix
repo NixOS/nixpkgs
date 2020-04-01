@@ -64,7 +64,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sergiomb2/ufraw;
+    homepage = "https://github.com/sergiomb2/ufraw";
 
     description = "Utility to read and manipulate raw images from digital cameras";
 

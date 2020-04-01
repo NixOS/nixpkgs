@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A minimal image viewer using raw XLib";
-    homepage = https://www.johnhawthorn.com/meh/;
+    homepage = "https://www.johnhawthorn.com/meh/";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
   };

@@ -67,7 +67,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
-    homepage = http://eduke32.com;
+    homepage = "http://eduke32.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     # Darwin is untested (supported by upstream)

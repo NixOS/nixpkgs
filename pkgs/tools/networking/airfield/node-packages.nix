@@ -694,7 +694,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Template engine consolidation library";
-      homepage = https://github.com/visionmedia/consolidate.js;
+      homepage = "https://github.com/visionmedia/consolidate.js";
     };
     production = true;
     bypassCache = true;
@@ -717,7 +717,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "A high performance Redis client.";
-      homepage = https://github.com/NodeRedis/node-redis;
+      homepage = "https://github.com/NodeRedis/node-redis";
       license = "MIT";
     };
     production = true;
@@ -753,7 +753,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Higher-order functions and common patterns for asynchronous code";
-      homepage = https://caolan.github.io/async/;
+      homepage = "https://caolan.github.io/async/";
       license = "MIT";
     };
     production = true;

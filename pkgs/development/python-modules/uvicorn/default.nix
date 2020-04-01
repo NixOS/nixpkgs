@@ -50,7 +50,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://www.uvicorn.org/;
+    homepage = "https://www.uvicorn.org/";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
           run 3 or 4 times faster.) gp2c currently only understands a subset
            of the GP language.
     '';
-    homepage    = http://pari.math.u-bordeaux.fr;
-    downloadPage = http://pari.math.u-bordeaux.fr/download.html;
+    homepage    = "http://pari.math.u-bordeaux.fr";
+    downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
     platforms   = platforms.linux ++ platforms.darwin;

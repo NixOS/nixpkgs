@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Perl script which converts Texinfo source files to HTML output";
-    homepage = https://www.nongnu.org/texi2html/;
+    homepage = "https://www.nongnu.org/texi2html/";
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;

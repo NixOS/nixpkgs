@@ -203,7 +203,7 @@ stdenv.mkDerivation rec {
       proprietary software with GTK without any license fees or
       royalties.
     '';
-    homepage = https://www.gtk.org/;
+    homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin vcunat lethalman worldofpeace ];
     platforms = platforms.all;

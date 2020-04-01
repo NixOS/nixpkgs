@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vrthra ];
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    homepage = http://www.rebol.com/;
+    homepage = "http://www.rebol.com/";
   };
 }

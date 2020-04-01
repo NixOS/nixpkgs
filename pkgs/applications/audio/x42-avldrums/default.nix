@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Drum sample player LV2 plugin dedicated to Glen MacArthur's AVLdrums";
-    homepage = https://x42-plugins.com/x42/x42-avldrums;
+    homepage = "https://x42-plugins.com/x42/x42-avldrums";
     maintainers = with maintainers; [ magnetophon orivej ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

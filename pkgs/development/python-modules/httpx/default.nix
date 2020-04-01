@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The next generation HTTP client";
-    homepage = https://github.com/encode/httpx;
+    homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

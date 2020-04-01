@@ -119,6 +119,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
-    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
+    repositories.git = "https://git.kernel.org/pub/scm/bluetooth/bluez.git";
   };
 }

@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A packaging tool built around IPFS";
-    homepage = https://github.com/whyrusleeping/gx;
+    homepage = "https://github.com/whyrusleeping/gx";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
   };

@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Camera app designed for elementary OS";
-    homepage = https://github.com/elementary/camera;
+    homepage = "https://github.com/elementary/camera";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Autotuner Jack application to correct the pitch of vocal tracks";
-    homepage = https://kokkinizita.linuxaudio.org/linuxaudio/index.html;
+    homepage = "https://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

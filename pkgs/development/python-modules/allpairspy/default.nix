@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pairwise test combinations generator";
-    homepage = https://github.com/thombashi/allpairspy;
+    homepage = "https://github.com/thombashi/allpairspy";
     license = licenses.mit;
   };
 }

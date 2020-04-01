@@ -32,7 +32,7 @@ let requireXcode = version: sha256:
       '';
     };
     meta = with stdenv.lib; {
-      homepage = https://developer.apple.com/downloads/;
+      homepage = "https://developer.apple.com/downloads/";
       description = "Apple's XCode SDK";
       license = licenses.unfree;
       platforms = platforms.darwin ++ platforms.linux;

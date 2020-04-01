@@ -23,8 +23,8 @@ stdenv.mkDerivation {
       binaries, bin_replace_string may only replace a given C-string with a
       shorter C-string.
     '';
-    homepage = http://ohnopub.net/~ohnobinki/bin_replace_string/;
-    downloadPage = ftp://ohnopub.net/mirror/;
+    homepage = "http://ohnopub.net/~ohnobinki/bin_replace_string/";
+    downloadPage = "ftp://ohnopub.net/mirror/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

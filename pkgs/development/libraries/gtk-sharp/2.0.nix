@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical User Interface Toolkit for mono and .Net";
-    homepage = https://www.mono-project.com/docs/gui/gtksharp;
+    homepage = "https://www.mono-project.com/docs/gui/gtksharp";
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

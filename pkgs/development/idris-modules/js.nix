@@ -19,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "Js libraries for idris";
-    homepage = https://github.com/rbarreiro/idrisjs;
+    homepage = "https://github.com/rbarreiro/idrisjs";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

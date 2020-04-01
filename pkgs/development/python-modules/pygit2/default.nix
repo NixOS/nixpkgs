@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of Python bindings to the libgit2 shared library";
-    homepage = https://pypi.python.org/pypi/pygit2;
+    homepage = "https://pypi.python.org/pypi/pygit2";
     license = licenses.gpl2;
   };
 }

@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://alarm-clock.pseudoberries.com/;
+    homepage = "http://alarm-clock.pseudoberries.com/";
     description = "A fully-featured alarm clock for your GNOME panel or equivalent";
     license = licenses.gpl2;
     platforms = platforms.linux;

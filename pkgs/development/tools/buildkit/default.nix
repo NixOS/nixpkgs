@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Concurrent, cache-efficient, and Dockerfile-agnostic builder toolkit";
-    homepage = https://github.com/moby/buildkit;
+    homepage = "https://github.com/moby/buildkit";
     license = licenses.asl20;
     maintainers = with maintainers; [ vdemeester marsam ];
   };

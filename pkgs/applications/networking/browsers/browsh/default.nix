@@ -53,7 +53,7 @@ in buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A fully-modern text-based browser, rendering to TTY and browsers";
-    homepage = https://www.brow.sh/;
+    homepage = "https://www.brow.sh/";
     maintainers = [ maintainers.kalbasit ];
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

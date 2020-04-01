@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Polkit Agent for the Pantheon Desktop";
-    homepage = https://github.com/elementary/pantheon-agent-polkit;
+    homepage = "https://github.com/elementary/pantheon-agent-polkit";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

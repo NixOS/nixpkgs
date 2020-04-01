@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://privateer.sourceforge.net/;
+    homepage = "http://privateer.sourceforge.net/";
     description = "Adventure space flight simulation computer game";
     license = licenses.gpl2Plus; # and a special license for art data
     # https://sourceforge.net/p/privateer/code/HEAD/tree/privgold/trunk/data/art-license.txt

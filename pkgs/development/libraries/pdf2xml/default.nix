@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pdf2xml";
 
   src = fetchurl {
-      url = http://tarballs.nixos.org/pdf2xml.tar.gz;
+      url = "http://tarballs.nixos.org/pdf2xml.tar.gz";
       sha256 = "04rl7ppxqgnvxvvws669cxp478lnrdmiqj0g3m4p69bawfjc4z3w";
   };
   sourceRoot = "pdf2xml/pdf2xml";

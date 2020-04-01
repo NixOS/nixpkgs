@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "OAuth2 goodies for the Djangonauts";
-    homepage = https://github.com/jazzband/django-oauth-toolkit;
+    homepage = "https://github.com/jazzband/django-oauth-toolkit";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mmai ];
   };

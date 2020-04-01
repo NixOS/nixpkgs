@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Select a region in a Wayland compositor";
-    homepage = https://github.com/emersion/slurp;
+    homepage = "https://github.com/emersion/slurp";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ buffet ];

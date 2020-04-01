@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Command line utility to live-reload your application.";
-    homepage = https://github.com/devlocker/tychus;
+    homepage = "https://github.com/devlocker/tychus";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;
   };

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python client library for Core Schema";
-    homepage = https://github.com/ivegotasthma/python-coreschema;
+    homepage = "https://github.com/ivegotasthma/python-coreschema";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ivegotasthma ];
   };

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set.";
-    homepage = https://github.com/manahl/pytest-plugins;
+    homepage = "https://github.com/manahl/pytest-plugins";
     license = licenses.mit;
     maintainers = with maintainers; [ ryansydnor ];
   };

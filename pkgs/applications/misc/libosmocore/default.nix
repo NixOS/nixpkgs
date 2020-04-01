@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "libosmocore";
-    homepage = https://github.com/osmocom/libosmocore;
+    homepage = "https://github.com/osmocom/libosmocore";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mog ];

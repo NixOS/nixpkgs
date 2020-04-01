@@ -180,10 +180,10 @@ stdenv.mkDerivation {
   };
   meta = with stdenv.lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
-    homepage = http://www.mozilla.org/thunderbird/;
+    homepage = "http://www.mozilla.org/thunderbird/";
     license = {
       free = false;
-      url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
+      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = platforms.linux;

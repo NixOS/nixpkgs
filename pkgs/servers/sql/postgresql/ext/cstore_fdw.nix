@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Columnar storage for PostgreSQL";
-    homepage    = https://www.citusdata.com/;
+    homepage    = "https://www.citusdata.com/";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;

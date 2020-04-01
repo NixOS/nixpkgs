@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "It's like cat, but for images";
-    homepage = https://github.com/eddieantonio/imgcat;
+    homepage = "https://github.com/eddieantonio/imgcat";
     license = licenses.isc;
     maintainers = with maintainers; [ jwiegley ];
     platforms = platforms.unix;

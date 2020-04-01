@@ -17,7 +17,7 @@ buildGoPackage {
 
   meta = with stdenv.lib; {
     description = "Live coding demos without Context Switching";
-    homepage = https://github.com/dgageot/demoit;
+    homepage = "https://github.com/dgageot/demoit";
     license = licenses.asl20;
     maintainers = [ maintainers.freezeboy ];
   };

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://en.wikipedia.org/wiki/GNOME_Disks;
+    homepage = "https://en.wikipedia.org/wiki/GNOME_Disks";
     description = "A udisks graphical front-end";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

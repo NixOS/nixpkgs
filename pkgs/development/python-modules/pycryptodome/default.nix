@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = https://www.pycryptodome.org/;
+    homepage = "https://www.pycryptodome.org/";
     description = "Python Cryptography Toolkit";
     platforms = stdenv.lib.platforms.unix;
   };

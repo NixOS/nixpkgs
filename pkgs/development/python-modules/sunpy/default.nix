@@ -77,7 +77,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SunPy: Python for Solar Physics";
-    homepage = https://sunpy.org;
+    homepage = "https://sunpy.org";
     license = licenses.bsd2;
     maintainers = [ maintainers.costrouc ];
   };

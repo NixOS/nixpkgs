@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage = https://github.com/devkitPro/ndstool;
+    homepage = "https://github.com/devkitPro/ndstool";
     description = "A tool to unpack and repack nds rom";
     maintainers = [ stdenv.lib.maintainers.marius851000 ];
     license = stdenv.lib.licenses.gpl3;

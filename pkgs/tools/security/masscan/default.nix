@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fast scan of the Internet";
-    homepage    = https://github.com/robertdavidgraham/masscan;
+    homepage    = "https://github.com/robertdavidgraham/masscan";
     license     = licenses.agpl3;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];

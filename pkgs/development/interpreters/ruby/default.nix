@@ -190,7 +190,7 @@ let
 
         meta = with stdenv.lib; {
           description = "The Ruby language";
-          homepage    = http://www.ruby-lang.org/en/;
+          homepage    = "http://www.ruby-lang.org/en/";
           license     = licenses.ruby;
           maintainers = with maintainers; [ vrthra manveru ];
           platforms   = platforms.all;

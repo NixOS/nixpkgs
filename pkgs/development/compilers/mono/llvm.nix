@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies - Mono build";
-    homepage    = http://llvm.org/;
+    homepage    = "http://llvm.org/";
     license     = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
     platforms   = stdenv.lib.platforms.all;

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.sentex.net/~mwandel/jhead/;
+    homepage = "http://www.sentex.net/~mwandel/jhead/";
     description = "Exif Jpeg header manipulation tool";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ rycee ];

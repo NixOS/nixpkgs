@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Access your meal tracking data stored in MyFitnessPal programatically";
-    homepage = https://github.com/coddingtonbear/python-myfitnesspal;
+    homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];
   };

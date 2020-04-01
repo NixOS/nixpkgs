@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       After a package upgrade, empty the `var/cache` folder.
     '';
     license = licenses.mit;
-    homepage = http://wallabag.org;
+    homepage = "http://wallabag.org";
     maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
   };

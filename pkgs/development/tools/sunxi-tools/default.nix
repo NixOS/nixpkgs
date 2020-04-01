@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tools for Allwinner SoC devices";
-    homepage = http://linux-sunxi.org/;
+    homepage = "http://linux-sunxi.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ elitak ];

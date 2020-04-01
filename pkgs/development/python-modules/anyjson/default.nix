@@ -15,7 +15,7 @@ buildPythonPackage rec {
   buildInputs = [ nose ];
 
   meta = with lib; {
-    homepage = https://bitbucket.org/runeh/anyjson/;
+    homepage = "https://bitbucket.org/runeh/anyjson/";
     description = "Wrapper that selects the best available JSON implementation";
     license = licenses.bsd2;
   };

@@ -22,7 +22,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Docker proxy binary to forward traffic between host and containers";
     license = licenses.asl20;
-    homepage = https://github.com/docker/libnetwork;
+    homepage = "https://github.com/docker/libnetwork";
     maintainers = with maintainers; [vdemeester];
     platforms = platforms.linux;
   };

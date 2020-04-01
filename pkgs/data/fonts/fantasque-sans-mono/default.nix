@@ -18,7 +18,7 @@ fetchzip rec {
   sha256 = "07y2w6xzkbaj6vr95fvvnmwq1pw9jib4z02xf8937dx812yic9ni";
 
   meta = with lib; {
-    homepage = https://github.com/belluzj/fantasque-sans;
+    homepage = "https://github.com/belluzj/fantasque-sans";
     description = "A font family with a great monospaced variant for programmers";
     license = licenses.ofl;
     platforms = platforms.all;

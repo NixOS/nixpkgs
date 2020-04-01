@@ -50,7 +50,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/Diaoul/subliminal;
+    homepage = "https://github.com/Diaoul/subliminal";
     description = "Python library to search and download subtitles";
     license = licenses.mit;
   };

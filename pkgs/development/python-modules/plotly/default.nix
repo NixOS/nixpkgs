@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";
-    homepage = https://plot.ly/python/;
+    homepage = "https://plot.ly/python/";
     license = with lib.licenses; [ mit ];
   };
 }

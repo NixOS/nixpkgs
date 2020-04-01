@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An adhoc wireless mesh routing daemon";
     license = stdenv.lib.licenses.bsd3;
-    homepage = http://olsr.org/;
+    homepage = "http://olsr.org/";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };

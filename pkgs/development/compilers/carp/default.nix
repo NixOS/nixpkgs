@@ -38,7 +38,7 @@ haskellPackages.mkDerivation rec {
   '';
 
   description = "A statically typed lisp, without a GC, for real-time applications";
-  homepage    = https://github.com/carp-lang/Carp;
+  homepage    = "https://github.com/carp-lang/Carp";
   license     = stdenv.lib.licenses.asl20;
   maintainers = with stdenv.lib.maintainers; [ jluttine ];
 

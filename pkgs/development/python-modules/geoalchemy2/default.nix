@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ sqlalchemy shapely ];
 
   meta = with stdenv.lib; {
-    homepage =  http://geoalchemy.org/;
+    homepage =  "http://geoalchemy.org/";
     license = licenses.mit;
     description = "Toolkit for working with spatial databases";
   };

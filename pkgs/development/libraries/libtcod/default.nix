@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "API for roguelike games";
-    homepage = http://roguecentral.org/doryen/libtcod/;
+    homepage = "http://roguecentral.org/doryen/libtcod/";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.skeidel ];

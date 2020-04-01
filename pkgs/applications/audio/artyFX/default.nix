@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cairomm cmake libjack2 libpthreadstubs libXdmcp libxshmfence libsndfile lv2 ntk   ];
 
   meta = with stdenv.lib; {
-    homepage = http://openavproductions.com/artyfx/;
+    homepage = "http://openavproductions.com/artyfx/";
     description = "A LV2 plugin bundle of artistic realtime effects";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

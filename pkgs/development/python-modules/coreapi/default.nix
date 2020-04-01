@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python client library for Core API";
-    homepage = https://github.com/core-api/python-client;
+    homepage = "https://github.com/core-api/python-client";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ivegotasthma ];
   };

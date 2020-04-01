@@ -19,7 +19,7 @@ buildOcaml rec {
                             fieldslib_p4 herelib pipebang pa_test sexplib_p4 ];
 
    meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async_unix;
+    homepage = "https://github.com/janestreet/async_unix";
     description = "Jane Street Capital's asynchronous execution library (unix)";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

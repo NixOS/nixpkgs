@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     platforms = if mediaSupport then platforms.linux else platforms.unix;
     license = licenses.gpl2;
     downloadPage = "https://vifm.info/downloads.shtml";
-    homepage = https://vifm.info/;
+    homepage = "https://vifm.info/";
     inherit version;
     updateWalker = true;
   };

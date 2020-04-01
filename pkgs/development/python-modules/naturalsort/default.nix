@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple natural order sorting API for Python that just works";
-    homepage = https://github.com/xolox/python-naturalsort;
+    homepage = "https://github.com/xolox/python-naturalsort";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

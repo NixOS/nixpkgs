@@ -26,7 +26,7 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/winterheart/broadcom-bt-firmware/;
+    homepage = "https://github.com/winterheart/broadcom-bt-firmware/";
     description = "A tool that converts hex to hcd based on inf file";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Pass extension for auditing your password repository.";
-    homepage = https://github.com/roddhjav/pass-audit;
+    homepage = "https://github.com/roddhjav/pass-audit";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ma27 ];

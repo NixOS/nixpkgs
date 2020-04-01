@@ -37,7 +37,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://progressbar-2.readthedocs.io/en/latest/;
+    homepage = "https://progressbar-2.readthedocs.io/en/latest/";
     description = "Text progressbar library for python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];

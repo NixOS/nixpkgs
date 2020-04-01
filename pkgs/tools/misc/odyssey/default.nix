@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Scalable PostgreSQL connection pooler";
-    homepage = https://github.com/yandex/odyssey;
+    homepage = "https://github.com/yandex/odyssey";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
     platforms = [ "x86_64-linux" ];

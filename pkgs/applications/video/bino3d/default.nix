@@ -17,7 +17,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Stereoscopic 3D and multi-display video player";
-    homepage = https://bino3d.org/;
+    homepage = "https://bino3d.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

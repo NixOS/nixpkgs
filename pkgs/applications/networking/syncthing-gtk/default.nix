@@ -57,7 +57,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "GTK3 & python based GUI for Syncthing";
-    homepage = https://github.com/syncthing/syncthing-gtk;
+    homepage = "https://github.com/syncthing/syncthing-gtk";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = syncthing.meta.platforms;

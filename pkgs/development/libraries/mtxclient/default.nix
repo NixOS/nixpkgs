@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Client API library for Matrix, built on top of Boost.Asio";
-    homepage = https://github.com/Nheko-Reborn/mtxclient;
+    homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;

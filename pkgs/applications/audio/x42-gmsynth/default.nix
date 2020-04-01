@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Chris Colins' General User soundfont player LV2 plugin";
-    homepage = https://x42-plugins.com/x42/x42-gmsynth;
+    homepage = "https://x42-plugins.com/x42/x42-gmsynth";
     maintainers = with maintainers; [ orivej ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

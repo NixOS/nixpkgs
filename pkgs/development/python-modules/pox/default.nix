@@ -15,7 +15,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Utilities for filesystem exploration and automated builds";
     license = licenses.bsd3;
-    homepage = https://github.com/uqfoundation/pox/;
+    homepage = "https://github.com/uqfoundation/pox/";
   };
 
 }

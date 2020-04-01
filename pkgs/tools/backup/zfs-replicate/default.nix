@@ -34,7 +34,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/alunduil/zfs-replicate;
+    homepage = "https://github.com/alunduil/zfs-replicate";
     description = "ZFS Snapshot Replication";
     license = licenses.bsd2;
     maintainers = with maintainers; [ alunduil ];

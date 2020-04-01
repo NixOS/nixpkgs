@@ -6,7 +6,7 @@ in fetchzip {
   name = "babelstone-han-${version}";
 
   # upstream download links are unversioned, so hash changes
-  url = https://web.archive.org/web/20200210125314/https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip;
+  url = "https://web.archive.org/web/20200210125314/https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip";
   postFetch = ''
     mkdir -p $out/share/fonts/truetype
     unzip $downloadedFile '*.ttf' -d $out/share/fonts/truetype
@@ -15,7 +15,7 @@ in fetchzip {
 
   meta = with lib; {
     description = "Unicode CJK font with over 36000 Han characters";
-    homepage = https://www.babelstone.co.uk/Fonts/Han.html;
+    homepage = "https://www.babelstone.co.uk/Fonts/Han.html";
 
     license = licenses.free;
     platforms = platforms.all;

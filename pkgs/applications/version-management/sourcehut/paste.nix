@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/paste.sr.ht;
+    homepage = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
     description = "Ad-hoc text file hosting service for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A python nose plugin to profile using cProfile rather than the default Hotshot profiler";
-    homepage = https://github.com/msherry/nose-cprof;
+    homepage = "https://github.com/msherry/nose-cprof";
     license = licenses.bsd0;
   };
 

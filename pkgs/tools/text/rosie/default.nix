@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "rosie";
   version = "unstable-2020-01-11";
   src = fetchgit {
-    url = https://gitlab.com/rosie-pattern-language/rosie;
+    url = "https://gitlab.com/rosie-pattern-language/rosie";
     rev = "670e9027563609ba2ea31e14e2621a1302742795";
     sha256 = "0jc512dbn62a1fniknhbp6q0xa1p7xi3hn5v60is8sy9jgi3afxv";
     fetchSubmodules = true;
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libbsd readline ];
 
   meta = with lib; {
-    homepage = https://rosie-lang.org;
+    homepage = "https://rosie-lang.org";
     description = "Tools for searching using parsing expression grammars";
     license = licenses.mit;
     maintainers = with maintainers; [ kovirobi ];

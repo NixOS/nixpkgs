@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
   passthru.updateScript = gnome3.updateScript { packageName = pname; };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Tepl;
+    homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
     maintainers = [ maintainers.manveru ];
     license = licenses.lgpl21Plus;

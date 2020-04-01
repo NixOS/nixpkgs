@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Relax NG Compact Syntax validator";
-    homepage = http://www.davidashen.net/rnv.html;
+    homepage = "http://www.davidashen.net/rnv.html";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A pluggable API specification generator. Currently supports the OpenAPI Specification (f.k.a. the Swagger specification";
-    homepage = https://github.com/marshmallow-code/apispec;
+    homepage = "https://github.com/marshmallow-code/apispec";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

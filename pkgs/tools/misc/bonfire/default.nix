@@ -39,7 +39,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ arrow click keyring parsedatetime requests six termcolor ];
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/bonfire;
+    homepage = "https://pypi.python.org/pypi/bonfire";
     description = "CLI Graylog Client with Follow Mode";
     license = licenses.bsd3;
     maintainers = [ maintainers.womfoo ];

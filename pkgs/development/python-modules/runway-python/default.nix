@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Helper library for creating Runway models";
-    homepage = https://github.com/runwayml/model-sdk;
+    homepage = "https://github.com/runwayml/model-sdk";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ prusnak ];
   };

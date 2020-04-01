@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       your Makefile, Makefile.in, or Makefile.am.  See the
       documentation for details.
     '';
-    homepage = https://www.gnu.org/software/libtool/;
+    homepage = "https://www.gnu.org/software/libtool/";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;

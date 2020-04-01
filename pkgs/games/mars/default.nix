@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     chmod +x "$out/bin/mars"
   '';
   meta = with stdenv.lib; {
-    homepage = http://mars-game.sourceforge.net/;
+    homepage = "http://mars-game.sourceforge.net/";
     description = "A game about fighting with ships in a 2D space setting";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.astsmtl ];

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://dispatch.sr.ht/~sircmpwn/dispatch.sr.ht;
+    homepage = "https://dispatch.sr.ht/~sircmpwn/dispatch.sr.ht";
     description = "Task dispatcher and service integration tool for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

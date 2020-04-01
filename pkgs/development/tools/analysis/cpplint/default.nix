@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/cpplint/cpplint;
+    homepage = "https://github.com/cpplint/cpplint";
     description = "Static code checker for C++";
     maintainers = [ maintainers.bhipple ];
     license = [ licenses.bsd3 ];

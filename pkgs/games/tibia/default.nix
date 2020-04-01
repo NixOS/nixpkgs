@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "tibia-10.90";
 
   src = fetchurl {
-    url = http://static.tibia.com/download/tibia1090.tgz;
+    url = "http://static.tibia.com/download/tibia1090.tgz";
     sha256 = "11mkh2dynmbpay51yfaxm5dmcys3rnpk579s9ypfkhblsrchbkhx";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Top-down MMORPG set in a fantasy world";
-    homepage = http://tibia.com;
+    homepage = "http://tibia.com";
     license = stdenv.lib.licenses.unfree;
     platforms = ["i686-linux"];
     maintainers = with stdenv.lib.maintainers; [ ];

@@ -19,6 +19,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "A password hashing library for Python";
-    homepage    = https://code.google.com/p/passlib/;
+    homepage    = "https://code.google.com/p/passlib/";
   };
 }

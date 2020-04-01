@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       developed using Qt framework and with online feed synchronization support
       for ownCloud/Nextcloud.
     '';
-    homepage = https://github.com/martinrotter/rssguard;
+    homepage = "https://github.com/martinrotter/rssguard";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];

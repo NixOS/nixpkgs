@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Solarized version of the Arc theme";
-    homepage = https://github.com/schemar/solarc-theme;
+    homepage = "https://github.com/schemar/solarc-theme";
     license = licenses.gpl3;
     maintainers = [ maintainers.bricewge ];
     platforms = platforms.linux;

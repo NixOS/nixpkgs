@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://pmt.sourceforge.net/pngcrush;
+    homepage = "http://pmt.sourceforge.net/pngcrush";
     description = "Verifies the integrity of PNG, JNG and MNG files";
     license = stdenv.lib.licenses.free;
     platforms = with stdenv.lib.platforms; linux;

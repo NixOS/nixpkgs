@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       KDevelop-PG-Qt is the parser-generator from KDevplatform.
       It is used for some KDevelop-languagesupport-plugins (Ruby, PHP, CSS...).
     '';
-    homepage = https://www.kdevelop.org;
+    homepage = "https://www.kdevelop.org";
     license = with stdenv.lib.licenses; [ lgpl2Plus ];
   };
 }

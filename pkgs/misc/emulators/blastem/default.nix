@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://www.retrodev.com/blastem/;
+    homepage = "https://www.retrodev.com/blastem/";
     description = "The fast and accurate Genesis emulator";
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     license = stdenv.lib.licenses.gpl3;

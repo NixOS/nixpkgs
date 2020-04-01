@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "An executable and OCaml library to run, read and write Web Assembly (wasm) files and manipulate their AST";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
-    homepage = https://github.com/WebAssembly/spec/tree/master/interpreter;
+    homepage = "https://github.com/WebAssembly/spec/tree/master/interpreter";
     inherit (ocaml.meta) platforms;
   };
 }

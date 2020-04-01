@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Gray variation of Numix theme";
-    homepage = https://www.gnome-look.org/p/1117412/;
+    homepage = "https://www.gnome-look.org/p/1117412/";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.sauyon ];

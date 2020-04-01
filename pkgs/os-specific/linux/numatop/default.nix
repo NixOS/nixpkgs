@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool for runtime memory locality characterization and analysis of processes and threads on a NUMA system";
-    homepage = https://01.org/numatop;
+    homepage = "https://01.org/numatop";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dtzWill ];
     platforms = [

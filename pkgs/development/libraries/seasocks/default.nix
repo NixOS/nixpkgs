@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib python ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mattgodbolt/seasocks;
+    homepage = "https://github.com/mattgodbolt/seasocks";
     description = "Tiny embeddable C++ HTTP and WebSocket server";
     license = licenses.bsd2;
     platforms = platforms.linux;

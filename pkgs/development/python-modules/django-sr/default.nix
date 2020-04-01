@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Django settings resolver";
-    homepage = https://github.com/jespino/django-sr;
+    homepage = "https://github.com/jespino/django-sr";
     license = lib.licenses.bsd3;
   };
 

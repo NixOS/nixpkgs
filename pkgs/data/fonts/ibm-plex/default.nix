@@ -13,7 +13,7 @@ in fetchzip {
 
   meta = with lib; {
     description = "IBM Plex Typeface";
-    homepage = https://www.ibm.com/plex/;
+    homepage = "https://www.ibm.com/plex/";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

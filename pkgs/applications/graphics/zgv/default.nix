@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-    url = https://foss.aueb.gr/mirrors/linux/gentoo/media-gfx/zgv/files/zgv-5.9-libpng15.patch;
+    url = "https://foss.aueb.gr/mirrors/linux/gentoo/media-gfx/zgv/files/zgv-5.9-libpng15.patch";
     sha256 = "1blw9n04c28bnwcmcn64si4f5zpg42s8yn345js88fyzi9zm19xw";
     })
     ./switch.patch
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.svgalib.org/rus/zgv/;
+    homepage = "http://www.svgalib.org/rus/zgv/";
     description = "Picture viewer with a thumbnail-based selector";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

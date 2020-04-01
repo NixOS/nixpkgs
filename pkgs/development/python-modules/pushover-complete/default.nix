@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python package for interacting with *all* aspects of the Pushover API";
-    homepage = https://github.com/scolby33/pushover_complete;
+    homepage = "https://github.com/scolby33/pushover_complete";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

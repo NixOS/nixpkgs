@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ];
 
   meta = {
-    homepage = http://bashdb.sourceforge.net/remake/;
+    homepage = "http://bashdb.sourceforge.net/remake/";
     license = stdenv.lib.licenses.gpl3;
     description = "GNU Make with comprehensible tracing and a debugger";
     platforms = with stdenv.lib.platforms; linux ++ darwin;

@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Parallels Tools for Linux guests";
-    homepage = https://parallels.com;
+    homepage = "https://parallels.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.unfree;
     # I was making this package blindly and requesting testing from the real user,

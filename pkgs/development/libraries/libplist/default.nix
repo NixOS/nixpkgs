@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to handle Apple Property List format in binary or XML";
-    homepage = https://github.com/libimobiledevice/libplist;
+    homepage = "https://github.com/libimobiledevice/libplist";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.linux;

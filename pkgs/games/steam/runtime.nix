@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "The official runtime used by Steam";
-    homepage = https://github.com/ValveSoftware/steam-runtime;
+    homepage = "https://github.com/ValveSoftware/steam-runtime";
     license = licenses.unfreeRedistributable; # Includes NVIDIA CG toolkit
     maintainers = with maintainers; [ hrdinka abbradar ];
   };

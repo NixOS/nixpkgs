@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure python implementation of the adb client";
-    homepage = https://github.com/JeffLIrion/pure-python-adb;
+    homepage = "https://github.com/JeffLIrion/pure-python-adb";
     license = licenses.mit;
     maintainers = [ maintainers.makefu ];
   };

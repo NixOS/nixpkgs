@@ -71,7 +71,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Open source, physically based, unbiased rendering engine";
-    homepage = https://luxcorerender.org/;
+    homepage = "https://luxcorerender.org/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.asl20;
     platforms = platforms.linux;

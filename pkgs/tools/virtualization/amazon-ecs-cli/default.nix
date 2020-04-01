@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';  # */
 
   meta = with stdenv.lib; {
-    homepage = https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html;
+    homepage = "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html";
     description = "The Amazon ECS command line interface";
     longDescription = "The Amazon Elastic Container Service (Amazon ECS) command line interface (CLI) provides high-level commands to simplify creating, updating, and monitoring clusters and tasks from a local development environment.";
     license = licenses.asl20;

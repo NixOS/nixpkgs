@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SCSI Tape Encryption Manager";
-    homepage = https://github.com/scsitape/stenc;
+    homepage = "https://github.com/scsitape/stenc";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ woffs ];
     platforms = stdenv.lib.platforms.linux;

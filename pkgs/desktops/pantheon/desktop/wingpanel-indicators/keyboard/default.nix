@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Keyboard Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-keyboard;
+    homepage = "https://github.com/elementary/wingpanel-indicator-keyboard";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

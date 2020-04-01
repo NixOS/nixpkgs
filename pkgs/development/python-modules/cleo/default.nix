@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/cleo;
+    homepage = "https://github.com/sdispater/cleo";
     description = "Allows you to create beautiful and testable command-line interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

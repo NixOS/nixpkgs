@@ -187,12 +187,12 @@ in stdenv.mkDerivation rec {
   patches = [
     # 2.1.2 -> 2.2.1
     (fetchpatch {
-      url = https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch;
+      url = "https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch";
       sha256 = "0hdq634f72fihdy10nx2ajbps561w03dfdsy5r35afv9fapla6mv";
     })
     # 2.2.1 -> 2.2.2
     (fetchpatch {
-      url = https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch;
+      url = "https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch";
       sha256 = "0a8mwmwb39pr5ag3q11nv81ncdk51shndqrkm92shqrmdq14va52";
     })
   ];
@@ -228,7 +228,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A retargetable machine-code decompiler based on LLVM";
-    homepage = https://retdec.com;
+    homepage = "https://retdec.com";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill timokau ];
     platforms = ["x86_64-linux" "i686-linux"];

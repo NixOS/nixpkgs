@@ -38,7 +38,7 @@ let
         x86hash   = "16v3kgavrh62z6vxcbw6mn7h0bfishpl7m92k7g1p2882r1f8vaf";
         x64suffix = "60";
         x86suffix = "60";
-        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest.html;
+        homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest.html";
       };
 
       "19.8.0" = {
@@ -49,7 +49,7 @@ let
         x86hash   = "0afcqirb4q349r3izy88vqkszg6y2wg14iwypk6nrmvwgvcl6jdn";
         x64suffix = "20";
         x86suffix = "20";
-        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1908.html;
+        homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1908.html";
       };
 
       "19.10.0" = {
@@ -60,7 +60,7 @@ let
         x86hash   = "000zjik8wf8b6fadnsai0p77b4n2l95544zx503iyrb9pv53bj3y";
         x64suffix = "15";
         x86suffix = "15";
-        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1910.html;
+        homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1910.html";
       };
 
       "19.12.0" = {
@@ -71,7 +71,7 @@ let
         x86hash   = "07rfp90ksnvr8zv7ix7f0z6a59n48s7bd4kqbzilfwxgs4ddqmcy";
         x64suffix = "19";
         x86suffix = "19";
-        homepage  = https://www.citrix.com/de-de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html;
+        homepage  = "https://www.citrix.com/de-de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
       };
     };
 

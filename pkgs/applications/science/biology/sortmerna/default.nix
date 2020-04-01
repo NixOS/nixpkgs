@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Tools for filtering, mapping, and OTU-picking from shotgun genomics data";
     license = licenses.lgpl3;
     platforms = platforms.x86_64;
-    homepage = https://bioinfo.lifl.fr/RNA/sortmerna/;
+    homepage = "https://bioinfo.lifl.fr/RNA/sortmerna/";
     maintainers = with maintainers; [ luispedro ];
   };
 }

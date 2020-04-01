@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Implementation of Bitcoin BIP-0039";
-    homepage = https://github.com/trezor/python-mnemonic;
+    homepage = "https://github.com/trezor/python-mnemonic";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ np ];
   };

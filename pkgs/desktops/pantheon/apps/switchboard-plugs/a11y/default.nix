@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Universal Access Plug";
-    homepage = https://github.com/elementary/switchboard-plug-a11y;
+    homepage = "https://github.com/elementary/switchboard-plug-a11y";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

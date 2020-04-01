@@ -10,7 +10,7 @@ buildOcamlJane {
       ppx_assert ppx_bench ppx_driver ppx_expect ppx_inline_test ppx_jane ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/textutils;
+    homepage = "https://github.com/janestreet/textutils";
     description = "Text output utilities";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;

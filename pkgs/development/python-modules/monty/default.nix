@@ -48,7 +48,7 @@ buildPythonPackage rec {
       standard library. Examples include useful utilities like transparent support for zipped files, useful design
       patterns such as singleton and cached_class, and many more.
     ";
-    homepage = https://github.com/materialsvirtuallab/monty;
+    homepage = "https://github.com/materialsvirtuallab/monty";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "ssmtp-2.64";
 
   src = fetchurl {
-    url = mirror://debian/pool/main/s/ssmtp/ssmtp_2.64.orig.tar.bz2;
+    url = "mirror://debian/pool/main/s/ssmtp/ssmtp_2.64.orig.tar.bz2";
     sha256 = "0dps8s87ag4g3jr6dk88hs9zl46h3790marc5c2qw7l71k4pvhr2";
   };
 

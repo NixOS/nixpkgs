@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Allows the keyboard, mouse on one X display to be used to control another X display";
-    homepage = https://github.com/dottedmag/x2x;
+    homepage = "https://github.com/dottedmag/x2x";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

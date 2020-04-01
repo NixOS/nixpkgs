@@ -4,8 +4,8 @@ fetchzip {
   name = "paratype-pt-serif";
 
   url = [
-    https://company.paratype.com/system/attachments/634/original/ptserif.zip
-    http://rus.paratype.ru/system/attachments/634/original/ptserif.zip
+    "https://company.paratype.com/system/attachments/634/original/ptserif.zip"
+    "http://rus.paratype.ru/system/attachments/634/original/ptserif.zip"
   ];
 
   postFetch = ''
@@ -17,7 +17,7 @@ fetchzip {
   sha256 = "1iw5qi4ag3yp1lwmi91lb18gr768bqwl46xskaqnkhr9i9qp0v6d";
 
   meta = with stdenv.lib; {
-    homepage = http://www.paratype.ru/public/;
+    homepage = "http://www.paratype.ru/public/";
     description = "An open Paratype font";
 
     license = "Open Paratype license";

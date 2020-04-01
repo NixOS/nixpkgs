@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Global Arrays Programming Models";
-    homepage = http://hpc.pnl.gov/globalarrays/;
+    homepage = "http://hpc.pnl.gov/globalarrays/";
     maintainers = [ maintainers.markuskowa ];
     license = licenses.bsd3;
     platforms = platforms.linux;

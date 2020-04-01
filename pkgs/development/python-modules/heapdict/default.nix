@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "a heap with decrease-key and increase-key operations.";
-    homepage = http://stutzbachenterprises.com;
+    homepage = "http://stutzbachenterprises.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };

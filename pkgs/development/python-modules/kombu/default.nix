@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Messaging library for Python";
-    homepage    = https://github.com/celery/kombu;
+    homepage    = "https://github.com/celery/kombu";
     license     = licenses.bsd3;
   };
 }

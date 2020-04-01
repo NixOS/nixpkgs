@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "asyncio package to talk to Philips Hue";
-    homepage = https://github.com/balloob/aiohue;
+    homepage = "https://github.com/balloob/aiohue";
     license = licenses.asl20;
   };
 }

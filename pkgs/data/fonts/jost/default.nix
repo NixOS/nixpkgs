@@ -14,7 +14,7 @@ in fetchzip {
   sha256="0l78vhmbsyfmrva5wc76pskhxqryyg8q5xddpj9g5wqsddy525dq";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/indestructible-type/Jost;
+    homepage = "https://github.com/indestructible-type/Jost";
     description = "A sans serif font by Indestructible Type";
     license = licenses.ofl;
     maintainers = [ maintainers.ar1a ];

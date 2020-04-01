@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://software.internet2.edu/owamp/;
+    homepage = "http://software.internet2.edu/owamp/";
     description = ''A tool for performing one-way active measurements'';
     platforms = platforms.linux;
     maintainers = [maintainers.teto];

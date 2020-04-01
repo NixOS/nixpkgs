@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Interrupt and signal handling for Cython";
-    homepage = https://github.com/sagemath/cysignals/;
+    homepage = "https://github.com/sagemath/cysignals/";
     maintainers = with lib.maintainers; [ timokau ];
     license = lib.licenses.lgpl3Plus;
   };

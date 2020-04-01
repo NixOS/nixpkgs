@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A sqlalchemy plugin that allows postgres use of CITEXT";
-    homepage = https://github.com/mahmoudimus/sqlalchemy-citext;
+    homepage = "https://github.com/mahmoudimus/sqlalchemy-citext";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

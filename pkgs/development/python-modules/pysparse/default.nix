@@ -41,7 +41,7 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/PythonOptimizers/pysparse;
+    homepage = "https://github.com/PythonOptimizers/pysparse";
     description = "A Sparse Matrix Library for Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];

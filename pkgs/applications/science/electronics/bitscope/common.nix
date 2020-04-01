@@ -23,7 +23,7 @@ let
     name = "${toolName}-${version}";
 
     meta = with stdenv.lib; {
-      homepage = http://bitscope.com/software/;
+      homepage = "http://bitscope.com/software/";
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [

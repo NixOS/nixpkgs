@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Console-based Audio Visualizer for Alsa";
-    homepage = https://github.com/karlstav/cava;
+    homepage = "https://github.com/karlstav/cava";
     license = licenses.mit;
     maintainers = with maintainers; [ offline mirrexagon ];
     platforms = platforms.linux;

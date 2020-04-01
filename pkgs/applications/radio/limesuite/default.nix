@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Driver and GUI for LMS7002M-based SDR platforms";
-    homepage = https://github.com/myriadrf/LimeSuite;
+    homepage = "https://github.com/myriadrf/LimeSuite";
     license = licenses.asl20;
     maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.linux;

@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Code editor designed for elementary OS";
-    homepage = https://github.com/elementary/code;
+    homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

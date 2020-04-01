@@ -37,7 +37,7 @@ buildPythonPackage rec {
       pages if appropriate.  Once a form post has validated
       successfully, the method will be called with the coerced values.
     '';
-    homepage = https://github.com/twisted/nevow;
+    homepage = "https://github.com/twisted/nevow";
     license = licenses.mit;
   };
 }

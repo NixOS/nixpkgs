@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       after death. Other structures provide automated base defense (to some
       degree), healing functions and much more...
     '';
-    homepage = http://www.tremulous.net;
+    homepage = "http://www.tremulous.net";
     license = with licenses; [
       gpl2
       cc-by-sa-25 /* media */

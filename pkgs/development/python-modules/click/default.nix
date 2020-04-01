@@ -25,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = http://click.pocoo.org/;
+    homepage = "http://click.pocoo.org/";
     description = "Create beautiful command line interfaces in Python";
     longDescription = ''
       A Python package for creating beautiful command line interfaces in a

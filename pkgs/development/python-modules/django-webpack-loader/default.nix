@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Use webpack to generate your static bundles";
-    homepage = https://github.com/owais/django-webpack-loader;
+    homepage = "https://github.com/owais/django-webpack-loader";
     maintainers = with maintainers; [ peterromfeldhk ];
     license = with licenses; [ mit ];
   };

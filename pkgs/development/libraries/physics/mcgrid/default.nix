@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A software package that provides access to the APPLgrid and fastNLO interpolation tools for Monte Carlo event generator codes, allowing for fast and flexible variations of scales, coupling parameters and PDFs in cutting edge leading- and next-to-leading-order QCD calculations";
     license     = stdenv.lib.licenses.gpl3;
-    homepage    = http://mcgrid.hepforge.org;
+    homepage    = "http://mcgrid.hepforge.org";
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };

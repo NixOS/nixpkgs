@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "MacBook Air 6,1 and 6,2 (mid 2013) backlight driver";
-    homepage = https://github.com/patjak/mba6x_bl;
+    homepage = "https://github.com/patjak/mba6x_bl";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.simonvandel ];

@@ -24,7 +24,7 @@ let
 
     meta = with lib; {
       description = "C++ game engine coded on top of SFML used for EmptyEpsilon";
-      homepage = https://github.com/daid/SeriousProton;
+      homepage = "https://github.com/daid/SeriousProton";
       license = licenses.mit;
       maintainers = with maintainers; [ fpletz ];
       platforms = platforms.linux;
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Open source bridge simulator based on Artemis";
-    homepage = https://daid.github.io/EmptyEpsilon/;
+    homepage = "https://daid.github.io/EmptyEpsilon/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fpletz lheckemann ma27 ];
     platforms = platforms.linux;

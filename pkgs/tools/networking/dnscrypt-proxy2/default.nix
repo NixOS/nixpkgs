@@ -17,7 +17,7 @@ buildGoPackage rec {
     description = "A tool that provides secure DNS resolution";
 
     license = licenses.isc;
-    homepage = https://dnscrypt.info/;
+    homepage = "https://dnscrypt.info/";
     maintainers = with maintainers; [ atemu waynr ];
     platforms = with platforms; unix;
   };

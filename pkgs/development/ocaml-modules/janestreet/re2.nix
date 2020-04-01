@@ -12,7 +12,7 @@ buildOcamlJane {
       ppx_assert ppx_bench ppx_driver ppx_expect ppx_inline_test ppx_jane ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/re2;
+    homepage = "https://github.com/janestreet/re2";
     description = "OCaml bindings for RE2";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;

@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Share your terminal as a web application";
-    homepage = https://github.com/yudai/gotty;
+    homepage = "https://github.com/yudai/gotty";
     maintainers = with maintainers; [ ];
     license = licenses.mit;
   };

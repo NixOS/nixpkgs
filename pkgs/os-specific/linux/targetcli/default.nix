@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A command shell for managing the Linux LIO kernel target";
-    homepage = https://github.com/open-iscsi/targetcli-fb;
+    homepage = "https://github.com/open-iscsi/targetcli-fb";
     license = licenses.asl20;
     platforms = platforms.linux;
   };

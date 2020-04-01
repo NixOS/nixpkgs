@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";
-    homepage = http://www.gegl.org;
+    homepage = "http://www.gegl.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

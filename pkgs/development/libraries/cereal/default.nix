@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A header-only C++11 serialization library";
-    homepage    = https://uscilab.github.io/cereal/;
+    homepage    = "https://uscilab.github.io/cereal/";
     platforms   = platforms.all;
     license     = licenses.mit;
   };

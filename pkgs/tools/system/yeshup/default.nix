@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/RhysU/yeshup;
+    homepage = "https://github.com/RhysU/yeshup";
     platforms = platforms.linux;
     license = licenses.cc-by-sa-30; # From Stackoverflow answer
     maintainers = with maintainers; [ obadz ];

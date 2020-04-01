@@ -18,7 +18,7 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.06";
 
   meta = with lib; {
-    homepage = https://github.com/mirleft/ocaml-x509;
+    homepage = "https://github.com/mirleft/ocaml-x509";
     description = "X509 (RFC5280) handling in OCaml";
     license = licenses.bsd2;
     maintainers = with maintainers; [ vbgl ];

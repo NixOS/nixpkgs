@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = https://gitorious.org/beret/beret/archive-tarball/ae029777;
+    url = "https://gitorious.org/beret/beret/archive-tarball/ae029777";
     name = "beret-1.2.0.tar.gz";
     sha256 = "1rx9z72id1810fgv8mizk8qxwd1kh5xi07fdhmjc62mh3fn38szc";
   };
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A 2D puzzle-platformer game about a scientist with telekinetic abilities";
-    homepage    = http://kiwisauce.com/beret/;
+    homepage    = "http://kiwisauce.com/beret/";
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;

@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       the machine. Software must be patched in order to take advantage of
       MiniSSDPd, and MiniSSDPd must be started before any other UPnP program.
     '';
-    homepage = http://miniupnp.free.fr/minissdpd.html;
-    downloadPage = http://miniupnp.free.fr/files/;
+    homepage = "http://miniupnp.free.fr/minissdpd.html";
+    downloadPage = "http://miniupnp.free.fr/files/";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

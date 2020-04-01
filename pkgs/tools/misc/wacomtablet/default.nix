@@ -22,7 +22,7 @@ mkDerivation rec {
       This module implements a GUI for the Wacom Linux Drivers and extends it
       with profile support to handle different button / pen layouts per profile.
     '';
-    homepage = https://cgit.kde.org/wacomtablet.git/about/;
+    homepage = "https://cgit.kde.org/wacomtablet.git/about/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.Thra11 ];
     platforms = lib.platforms.linux;

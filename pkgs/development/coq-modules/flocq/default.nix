@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://flocq.gforge.inria.fr/;
+    homepage = "http://flocq.gforge.inria.fr/";
     description = "A floating-point formalization for the Coq system";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jwiegley ];

@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Flexible and fast BitTorrent daemon";
-    homepage = https://synapse-bt.org/;
+    homepage = "https://synapse-bt.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;

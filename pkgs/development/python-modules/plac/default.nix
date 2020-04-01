@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Parsing the Command Line the Easy Way";
-    homepage = https://github.com/micheles/plac;
+    homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ sdll ];
     };

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       thereby preloading the required LaTeX packages, it is also useful in a
       purely local setting.
     '';
-    homepage = https://github.com/iblech/sshlatex;
+    homepage = "https://github.com/iblech/sshlatex";
     license = stdenv.lib.licenses.gpl3Plus;  # actually dual-licensed gpl3Plus | lppl13cplus
     platforms = stdenv.lib.platforms.all;
     maintainers = [ maintainers.iblech ];

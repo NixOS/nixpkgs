@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Qt Cryptographic Architecture";
     license = "LGPL";
-    homepage = http://delta.affinix.com/qca;
+    homepage = "http://delta.affinix.com/qca";
     maintainers = [ maintainers.sander ];
     platforms = platforms.unix;
   };

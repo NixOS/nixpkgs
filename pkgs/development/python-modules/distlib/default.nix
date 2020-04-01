@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Low-level components of distutils2/packaging";
-    homepage = https://distlib.readthedocs.io;
+    homepage = "https://distlib.readthedocs.io";
     license = licenses.psfl;
     maintainers = with maintainers; [ lnl7 ];
   };

@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Django PostgreSQL netfields implementation";
-    homepage = https://github.com/jimfunk/django-postgresql-netfields;
+    homepage = "https://github.com/jimfunk/django-postgresql-netfields";
     license = licenses.bsd2;
   };
 }

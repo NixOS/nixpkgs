@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Know the forecast of the next hours & days";
-    homepage = https://gitlab.com/bitseater/meteo;
+    homepage = "https://gitlab.com/bitseater/meteo";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;

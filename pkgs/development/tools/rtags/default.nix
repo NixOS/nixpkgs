@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C/C++ client-server indexer based on clang";
-    homepage = https://github.com/andersbakken/rtags;
+    homepage = "https://github.com/andersbakken/rtags";
     license = stdenv.lib.licenses.gpl3;
     platforms = with stdenv.lib.platforms; x86_64 ++ aarch64;
   };

@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit skia; };
 
   meta = with lib; {
-    homepage = https://www.aseprite.org/;
+    homepage = "https://www.aseprite.org/";
     description = "Animated sprite editor & pixel art tool";
     license = if unfree then licenses.unfree else licenses.gpl2;
     longDescription =

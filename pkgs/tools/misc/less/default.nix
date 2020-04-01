@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.greenwoodsoftware.com/less/;
+    homepage = "http://www.greenwoodsoftware.com/less/";
     description = "A more advanced file pager than ‘more’";
     platforms = platforms.unix;
     license = licenses.gpl3;

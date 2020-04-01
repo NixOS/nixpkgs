@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ncurses libpcap];
 
   meta = with stdenv.lib; {
-    homepage = http://sipp.sf.net;
+    homepage = "http://sipp.sf.net";
     description = "The SIPp testing tool";
     license = licenses.gpl3;
     platforms = platforms.unix;

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       also has several switches to allow for optional features of the
       WS-Management specification and Testing.
     '';
-    downloadPage = https://github.com/Openwsman/wsmancli/releases;
+    downloadPage = "https://github.com/Openwsman/wsmancli/releases";
     inherit (openwsman.meta) homepage license maintainers platforms;
     inherit version;
   };

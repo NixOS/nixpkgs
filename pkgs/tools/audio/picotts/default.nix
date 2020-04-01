@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   preConfigure = "./autogen.sh";
   meta = {
     description = "Text to speech voice sinthesizer from SVox.";
-    homepage = https://github.com/naggety/picotts;
+    homepage = "https://github.com/naggety/picotts";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.canndrew ];
     platforms = stdenv.lib.platforms.linux;

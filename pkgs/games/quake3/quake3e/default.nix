@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ec-/Quake3e;
+    homepage = "https://github.com/ec-/Quake3e";
     description = "Improved Quake III Arena engine";
     license = licenses.gpl2;
     platforms = platforms.linux;

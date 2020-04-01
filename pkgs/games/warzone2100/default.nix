@@ -60,7 +60,7 @@ mkDerivation rec {
       technologies, combined with the unit design system, allows for a wide
       variety of possible units and tactics.
     '';
-    homepage = http://wz2100.net;
+    homepage = "http://wz2100.net";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.astsmtl ];
     platforms = platforms.linux;

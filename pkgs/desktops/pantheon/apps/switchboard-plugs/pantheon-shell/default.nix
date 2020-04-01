@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Desktop Plug";
-    homepage = https://github.com/elementary/switchboard-plug-pantheon-shell;
+    homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

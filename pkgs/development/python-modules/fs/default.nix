@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Filesystem abstraction";
-    homepage    = https://github.com/PyFilesystem/pyfilesystem2;
+    homepage    = "https://github.com/PyFilesystem/pyfilesystem2";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

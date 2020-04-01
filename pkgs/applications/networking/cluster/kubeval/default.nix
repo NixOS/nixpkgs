@@ -15,7 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Validate your Kubernetes configuration files";
-    homepage = https://github.com/instrumenta/kubeval;
+    homepage = "https://github.com/instrumenta/kubeval";
     license = licenses.asl20;
     maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.all;

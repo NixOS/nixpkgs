@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools for managing the Linux Non-Volatile Memory Device sub-system";
-    homepage    = https://github.com/pmem/ndctl;
+    homepage    = "https://github.com/pmem/ndctl";
     license     = licenses.lgpl21;
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.linux;

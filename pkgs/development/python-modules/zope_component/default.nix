@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/zopefoundation/zope.component;
+    homepage = "https://github.com/zopefoundation/zope.component";
     description = "Zope Component Architecture";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

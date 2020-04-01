@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0r2zb59rpja9z7q0gsylqaq4vqm5rp57fy56ajjrm6k6z06nq7bv";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cantino/mcfly;
+    homepage = "https://github.com/cantino/mcfly";
     description = "An upgraded ctrl-r for Bash whose history results make sense for what you're working on right now.";
     license = licenses.mit;
     maintainers = [ maintainers.melkor333 ];

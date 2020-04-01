@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A(nother) Common Lisp FullScreen Window Manager";
-    homepage    = https://common-lisp.net/project/clfswm/;
+    homepage    = "https://common-lisp.net/project/clfswm/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ robgssp ];
     platforms   = platforms.linux;

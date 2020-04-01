@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fast, free, validating XML editor";
-    homepage = http://xml-copy-editor.sourceforge.net/;
+    homepage = "http://xml-copy-editor.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ candeira ];

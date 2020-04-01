@@ -73,7 +73,7 @@ in buildGoPackage rec {
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
-    homepage    = https://www.datadoghq.com;
+    homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl ];

@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "openjump-1.3.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/jump-pilot/OpenJUMP/1.3.1/openjump-1.3.1.zip;
+    url = "mirror://sourceforge/jump-pilot/OpenJUMP/1.3.1/openjump-1.3.1.zip";
     sha256 = "0y4z53yx0x7rp3c8rnj028ni3gr47r35apgcpqp3jl7r2di6zgqm";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Open source Geographic Information System (GIS) written in the Java programming language";
-    homepage = http://www.openjump.org/index.html;
+    homepage = "http://www.openjump.org/index.html";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

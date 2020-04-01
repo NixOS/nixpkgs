@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Stupidly-simple sticky notes applet";
-    homepage = https://github.com/lainsce/notejot;
+    homepage = "https://github.com/lainsce/notejot";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;

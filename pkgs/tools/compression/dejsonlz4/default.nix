@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     meta = with stdenv.lib; {
       description = "Decompress Mozilla Firefox bookmarks backup files";
-      homepage = https://github.com/avih/dejsonlz4;
+      homepage = "https://github.com/avih/dejsonlz4";
       license = licenses.bsd2;
       maintainers = with maintainers; [ mt-caret ];
       platforms = platforms.linux;

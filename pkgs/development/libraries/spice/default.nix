@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
       VD-Interfaces. The VD-Interfaces (VDI) enable both ends of the solution to be easily
       utilized by a third-party component.
     '';
-    homepage = https://www.spice-space.org/;
+    homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
 
     maintainers = [ maintainers.bluescreen303 ];

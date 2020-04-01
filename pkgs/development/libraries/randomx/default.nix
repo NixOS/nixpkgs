@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Proof of work algorithm based on random code execution";
-    homepage = https://github.com/tevador/RandomX;
+    homepage = "https://github.com/tevador/RandomX";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.unix;

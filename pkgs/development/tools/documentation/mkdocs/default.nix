@@ -44,7 +44,7 @@ buildPythonApplication rec {
       
       MkDocs can also be used to generate general-purpose Websites.
     '';
-    homepage = http://mkdocs.org/;
+    homepage = "http://mkdocs.org/";
     license = lib.licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.rkoe ];

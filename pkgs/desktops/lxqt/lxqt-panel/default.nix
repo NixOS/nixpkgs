@@ -51,7 +51,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "The LXQt desktop panel";
-    homepage = https://github.com/lxqt/lxqt-panel;
+    homepage = "https://github.com/lxqt/lxqt-panel";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

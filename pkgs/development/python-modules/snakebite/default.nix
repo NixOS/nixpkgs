@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Python HDFS client";
-    homepage = https://github.com/spotify/snakebite;
+    homepage = "https://github.com/spotify/snakebite";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

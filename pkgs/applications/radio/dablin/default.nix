@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Play DAB/DAB+ from ETI-NI aligned stream";
-    homepage = https://github.com/Opendigitalradio/dablin;
+    homepage = "https://github.com/Opendigitalradio/dablin";
     license = with licenses; [ gpl3 lgpl21 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Visualization program for exploring high-dimensional data";
-    homepage = http://www.ggobi.org/;
+    homepage = "http://www.ggobi.org/";
     license = licenses.cpl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.michelk ];

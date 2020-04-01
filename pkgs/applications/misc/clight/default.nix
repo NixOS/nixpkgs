@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C daemon that turns your webcam into a light sensor";
-    homepage = https://github.com/FedeDP/Clight;
+    homepage = "https://github.com/FedeDP/Clight";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [

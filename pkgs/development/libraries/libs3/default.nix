@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   makeFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bji/libs3;
+    homepage = "https://github.com/bji/libs3";
     description = "A library for interfacing with amazon s3";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;

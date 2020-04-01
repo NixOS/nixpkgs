@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/vzaliva/simpleproxy;
+    homepage = "https://github.com/vzaliva/simpleproxy";
     description = "A simple TCP proxy";
     license = licenses.gpl2;
     maintainers = [ maintainers.montag451 ];

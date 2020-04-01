@@ -25,7 +25,7 @@ buildGoModule rec {
       metrics from a DigitalOcean Droplet (on which the program runs) and sends
       them to DigitalOcean to provide resource usage graphs and alerting.
     '';
-    homepage = https://github.com/digitalocean/do-agent;
+    homepage = "https://github.com/digitalocean/do-agent";
     license = licenses.asl20;
     maintainers = with maintainers; [ yvt ];
     platforms = platforms.linux;

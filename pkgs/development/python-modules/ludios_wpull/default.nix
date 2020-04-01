@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Web crawler; fork of wpull used by grab-site";
-    homepage = https://github.com/ludios/wpull;
+    homepage = "https://github.com/ludios/wpull";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ivan ];
   };

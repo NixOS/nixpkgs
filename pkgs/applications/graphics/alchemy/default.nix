@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Experimental in nature, Alchemy lets you brainstorm visually to explore
       an expanded range of ideas and possibilities in a serendipitous way.
     '';
-    homepage = http://al.chemy.org/;
+    homepage = "http://al.chemy.org/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux;

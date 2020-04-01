@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Interact with radare2";
-    homepage = https://github.com/radare/radare2-r2pipe;
+    homepage = "https://github.com/radare/radare2-r2pipe";
     license = licenses.mit;
     maintainers = with maintainers; [ timokau ];
   };

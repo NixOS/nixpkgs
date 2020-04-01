@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Disk usage analyzer with an ncurses interface";
-    homepage = https://dev.yorhel.nl/ncdu;
+    homepage = "https://dev.yorhel.nl/ncdu";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];

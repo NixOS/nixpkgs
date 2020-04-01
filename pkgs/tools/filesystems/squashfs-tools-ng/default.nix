@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib xz lz4 lzo zstd ];
 
   meta = with lib; {
-    homepage = https://github.com/AgentD/squashfs-tools-ng;
+    homepage = "https://github.com/AgentD/squashfs-tools-ng";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;

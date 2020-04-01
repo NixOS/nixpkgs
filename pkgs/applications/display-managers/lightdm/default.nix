@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/CanonicalLtd/lightdm;
+    homepage = "https://github.com/CanonicalLtd/lightdm";
     description = "A cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;

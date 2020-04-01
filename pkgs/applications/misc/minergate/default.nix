@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Minergate CPU/GPU mining software";
-    homepage = https://www.minergate.com/;
+    homepage = "https://www.minergate.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ bfortz ];
     platforms = [ "x86_64-linux" ];

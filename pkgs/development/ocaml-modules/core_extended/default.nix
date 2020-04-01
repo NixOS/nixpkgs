@@ -25,7 +25,7 @@ buildOcaml rec {
                            pipebang textutils_p4 re2_p4 sexplib_p4 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/core_extended;
+    homepage = "https://github.com/janestreet/core_extended";
     description = "Jane Street Capital's standard library overlay";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

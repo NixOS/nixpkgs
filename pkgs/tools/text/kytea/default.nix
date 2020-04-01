@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = with stdenv.lib; {
-    homepage = http://www.phontron.com/kytea/;
+    homepage = "http://www.phontron.com/kytea/";
     description = "General toolkit developed for analyzing text";
 
     longDescription = ''

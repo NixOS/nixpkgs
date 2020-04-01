@@ -51,7 +51,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://sat.goffi.org/;
+      homepage = "http://sat.goffi.org/";
       description = "A multi-frontend XMPP client";
       platforms = platforms.linux;
       maintainers = [ maintainers.raskin ];

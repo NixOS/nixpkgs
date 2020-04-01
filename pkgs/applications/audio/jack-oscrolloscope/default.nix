@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; { 
     description = "A simple waveform viewer for JACK";
-    homepage = http://das.nasophon.de/jack_oscrolloscope;
+    homepage = "http://das.nasophon.de/jack_oscrolloscope";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = stdenv.lib.platforms.linux;

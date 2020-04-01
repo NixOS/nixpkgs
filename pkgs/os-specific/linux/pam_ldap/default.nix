@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pam openldap ];
 
   meta = {
-    homepage = https://www.padl.com/OSS/pam_ldap.html;
+    homepage = "https://www.padl.com/OSS/pam_ldap.html";
     description = "LDAP backend for PAM";
     longDescription = ''
       The pam_ldap module provides the means for Solaris and Linux servers and

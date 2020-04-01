@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
 
-    homepage = https://www.gnu.org/software/libmicrohttpd/;
+    homepage = "https://www.gnu.org/software/libmicrohttpd/";
 
     maintainers = with maintainers; [ eelco vrthra fpletz ];
     platforms = platforms.unix;

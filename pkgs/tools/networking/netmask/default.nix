@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tlby/netmask;
+    homepage = "https://github.com/tlby/netmask";
     description = "An IP address formatting tool ";
     license = licenses.gpl2;
     platforms = platforms.linux;

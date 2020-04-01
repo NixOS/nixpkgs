@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     description = "X-Ray Engine 1.6 expansion. Original version was used in S.T.A.L.K.E.R.: Call of Pripyat";
     homepage = src.meta.homepage;
     license = licenses.unfree // {
-      url = https://github.com/OpenXRay/xray-16/blob/xd_dev/License.txt;
+      url = "https://github.com/OpenXRay/xray-16/blob/xd_dev/License.txt";
     };
     maintainers = [ maintainers.gnidorah ];
     platforms = [ "x86_64-linux" "i686-linux" ];

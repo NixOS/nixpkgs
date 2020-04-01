@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   meta = with stdenv.lib; {
     description = "A DSL to organize functor applications";
-    homepage    = https://github.com/mirage/functoria;
+    homepage    = "https://github.com/mirage/functoria";
     license     = licenses.isc;
     maintainers = [ maintainers.vbgl ];
   };

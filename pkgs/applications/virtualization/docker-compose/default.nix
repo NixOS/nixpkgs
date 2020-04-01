@@ -41,7 +41,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://docs.docker.com/compose/;
+    homepage = "https://docs.docker.com/compose/";
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;
     maintainers = with maintainers; [ Frostman ];

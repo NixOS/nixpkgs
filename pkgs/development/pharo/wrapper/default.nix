@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
         http://www.mirandabanda.org/cogblog/about-cog/
     '';
 
-    homepage = http://pharo.org;
+    homepage = "http://pharo.org";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.lukego ];
     # Pharo VM sources are packaged separately for darwin (OS X)

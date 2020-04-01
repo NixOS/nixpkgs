@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
       The TNEF program allows one to unpack the attachments which were encapsulated into the TNEF attachment. Thus alleviating the need to use Microsoft Outlook to view the attachment.
     '';
-    homepage = https://github.com/verdammelt/tnef;
+    homepage = "https://github.com/verdammelt/tnef";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;

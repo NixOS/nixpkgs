@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python USB access module (wraps libusb 1.0)";  # can use other backends
-    homepage = http://pyusb.sourceforge.net/;
+    homepage = "http://pyusb.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor ];
   };

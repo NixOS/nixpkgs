@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easily capture stdout/stderr of the current process and subprocesses";
-    homepage = https://github.com/xolox/python-capturer;
+    homepage = "https://github.com/xolox/python-capturer";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

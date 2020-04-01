@@ -17,7 +17,7 @@ let
 
     meta = {
       description = "KeePass plugin to expose password entries securely (256bit AES/CBC) over HTTP";
-      homepage    = https://github.com/pfn/keepasshttp;
+      homepage    = "https://github.com/pfn/keepasshttp";
       platforms   = with stdenv.lib.platforms; linux;
       license     = stdenv.lib.licenses.gpl3;
     };

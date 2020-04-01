@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pjdelport/backports.os;
+    homepage = "https://github.com/pjdelport/backports.os";
     description = "Backport of new features in Python's os module";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

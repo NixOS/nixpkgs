@@ -36,7 +36,7 @@ stdenv.mkDerivation  rec {
       ZynAddSubFX along with very good Jack and Alsa midi/audio
       functionality on Linux
     '';
-    homepage = http://yoshimi.sourceforge.net;
+    homepage = "http://yoshimi.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

@@ -49,7 +49,7 @@ in mkDerivation rec {
 
   meta = {
     description = "A Free and Open Source Geographic Information System";
-    homepage = http://www.qgis.org;
+    homepage = "http://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ lsix ];

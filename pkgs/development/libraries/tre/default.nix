@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = https://sources.debian.net/data/main/t/tre/0.8.0-6/debian/patches/03-cve-2016-8859;
+      url = "https://sources.debian.net/data/main/t/tre/0.8.0-6/debian/patches/03-cve-2016-8859";
       sha256 = "0navhizym6qxd4gngrsslbij8x9r3s67p1jzzhvsnq6ky49j7w3p";
     })
   ];

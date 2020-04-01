@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 	names: picket fence animation, barrier grid animation, Moiré
 	animation, to name a few.
     '';
-    homepage = http://animbar.mnim.org;
+    homepage = "http://animbar.mnim.org";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.gpl3;

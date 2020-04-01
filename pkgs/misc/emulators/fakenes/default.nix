@@ -4,7 +4,7 @@
 stdenv.mkDerivation {
   name = "fakenes-0.5.9b3";
   src = fetchurl {
-    url = mirror://sourceforge/fakenes/fakenes-0.5.9-beta3.tar.gz;
+    url = "mirror://sourceforge/fakenes/fakenes-0.5.9-beta3.tar.gz";
     sha256 = "026h67s4pzc1vma59pmzk02iy379255qbai2q74wln9bxqcpniy4";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   patches = [ ./build.patch ];
 
   meta = {
-    homepage = http://fakenes.sourceforge.net/;
+    homepage = "http://fakenes.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Portable Open Source NES Emulator";
     platforms = stdenv.lib.platforms.linux;

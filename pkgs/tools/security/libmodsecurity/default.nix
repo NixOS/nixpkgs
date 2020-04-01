@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       the ModSecurity SecRules format and apply them to HTTP content provided
       by your application via Connectors.
     '';
-    homepage = https://modsecurity.org/;
+    homepage = "https://modsecurity.org/";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Raku implementation on top of Moar virtual machine";
-    homepage    = https://www.rakudo.org;
+    homepage    = "https://www.rakudo.org";
     license     = licenses.artistic2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];

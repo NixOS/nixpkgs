@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
-    homepage = https://www.polyml.org/;
+    homepage = "https://www.polyml.org/";
     license = stdenv.lib.licenses.lgpl21;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = [ #Add your name here!

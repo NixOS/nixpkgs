@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Wolfram Mathematica computational software system";
-    homepage = http://www.wolfram.com/mathematica/;
+    homepage = "http://www.wolfram.com/mathematica/";
     license = stdenv.lib.licenses.unfree;
   };
 }

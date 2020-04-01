@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       - manipulate ISO-files
       - and probably more...
     '';
-    homepage = http://bashburn.dose.se/;
+    homepage = "http://bashburn.dose.se/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

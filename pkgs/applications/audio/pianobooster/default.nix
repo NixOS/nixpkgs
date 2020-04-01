@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A MIDI file player that teaches you how to play the piano";
-    homepage = https://github.com/captnfab/PianoBooster;
+    homepage = "https://github.com/captnfab/PianoBooster";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu orivej ];

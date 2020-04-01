@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pure python implementation of SSL and TLS.";
-    homepage = https://pypi.python.org/pypi/tlslite-ng;
+    homepage = "https://pypi.python.org/pypi/tlslite-ng";
     license = licenses.lgpl2;
     maintainers = [ maintainers.erictapen ];
   };

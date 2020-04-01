@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://pypi.org/project/pytesseract/;
+    homepage = "https://pypi.org/project/pytesseract/";
     license = licenses.asl20;
     description = "A Python wrapper for Google Tesseract";
     maintainers = with maintainers; [ ma27 ];

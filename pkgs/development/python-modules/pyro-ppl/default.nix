@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python library for probabilistic modeling and inference";
-    homepage = http://pyro.ai;
+    homepage = "http://pyro.ai";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teh ];
     broken = true;

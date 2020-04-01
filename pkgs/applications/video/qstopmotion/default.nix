@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.qstopmotion.org;
+    homepage = "http://www.qstopmotion.org";
     description = "Create stopmotion animation with a (web)camera";
     longDescription = ''
       Qstopmotion is a tool to create stopmotion

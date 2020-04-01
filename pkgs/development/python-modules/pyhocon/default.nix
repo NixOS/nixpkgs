@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/chimpler/pyhocon/;
+    homepage = "https://github.com/chimpler/pyhocon/";
     description = "HOCON parser for Python";
     # Long description copied from
     # https://github.com/chimpler/pyhocon/blob/55a9ea3ebeeac5764bdebebfbeacbf099f64db26/setup.py

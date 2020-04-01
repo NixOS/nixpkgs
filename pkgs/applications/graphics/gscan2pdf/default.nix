@@ -100,7 +100,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = {
     description = "A GUI to produce PDFs or DjVus from scanned documents";
-    homepage = http://gscan2pdf.sourceforge.net/;
+    homepage = "http://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pacien ];
   };

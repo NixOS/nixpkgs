@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A tool for monitoring webpages for updates";
-    homepage = https://thp.io/2008/urlwatch/;
+    homepage = "https://thp.io/2008/urlwatch/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tv ];
   };

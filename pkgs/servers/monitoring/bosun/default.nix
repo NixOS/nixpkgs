@@ -17,7 +17,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Time Series Alerting Framework";
     license = licenses.mit;
-    homepage = https://bosun.org;
+    homepage = "https://bosun.org";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };

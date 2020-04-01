@@ -53,7 +53,7 @@ buildRustPackage rec {
       may be up to 2GB. Others are able to download these files with this tool, or through their
       web browser.
     '';
-    homepage = https://gitlab.com/timvisee/ffsend;
+    homepage = "https://gitlab.com/timvisee/ffsend";
     license = licenses.gpl3;
     maintainers = with maintainers; [ lilyball equirosa ];
     platforms = platforms.unix;

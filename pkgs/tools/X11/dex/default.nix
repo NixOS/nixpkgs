@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = https://github.com/jceb/dex/commit/107358ddf5e1ca4fa56ef1a7ab161dc3b6adc45a.patch;
+      url = "https://github.com/jceb/dex/commit/107358ddf5e1ca4fa56ef1a7ab161dc3b6adc45a.patch";
       sha256 = "06dfkfzxp8199by0jc5wim8g8qw38j09dq9p6n9w4zaasla60pjq";
     })
   ];
 
   meta = with stdenv.lib; {
     description = "A program to generate and execute DesktopEntry files of the Application type";
-    homepage = https://github.com/jceb/dex;
+    homepage = "https://github.com/jceb/dex";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
   };

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Address lookup tool for Notmuch in C";
-    homepage = https://github.com/aperezdc/notmuch-addrlookup-c;
+    homepage = "https://github.com/aperezdc/notmuch-addrlookup-c";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.unix;
     license = licenses.mit;

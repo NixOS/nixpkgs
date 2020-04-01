@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A dict with attribute-style access";
-    homepage = https://github.com/bcj/AttrDict;
+    homepage = "https://github.com/bcj/AttrDict";
     license = licenses.mit;
   };
 }

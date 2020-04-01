@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
          * available on MacOS X, Linux, and Windows under GPL
          * part of the sndtools distribution.
     '';
-    homepage = https://soundlab.cs.princeton.edu/software/sndpeek/;
+    homepage = "https://soundlab.cs.princeton.edu/software/sndpeek/";
     license = licenses.gpl2;
     maintainers = [ maintainers.laikq ];
   };

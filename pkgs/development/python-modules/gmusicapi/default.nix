@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An unofficial API for Google Play Music";
-    homepage = https://pypi.python.org/pypi/gmusicapi/;
+    homepage = "https://pypi.python.org/pypi/gmusicapi/";
     license = licenses.bsd3;
   };
 }

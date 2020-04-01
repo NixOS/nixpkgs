@@ -15,7 +15,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Database migration tool";
-    homepage = https://github.com/amacneil/dbmate;
+    homepage = "https://github.com/amacneil/dbmate";
     license = licenses.mit;
     maintainers = [ maintainers.manveru ];
     platforms = platforms.unix;

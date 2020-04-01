@@ -74,7 +74,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Advanced quantum chemistry software package";
-    homepage = https://gitlab.com/Molcas/OpenMolcas;
+    homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
     license = licenses.lgpl21;
     platforms = platforms.linux;

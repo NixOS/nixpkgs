@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python wrapper for the mediainfo library";
-    homepage = https://github.com/sbraz/pymediainfo;
+    homepage = "https://github.com/sbraz/pymediainfo";
     license = licenses.mit;
     maintainers = with maintainers; [ jfrankenau ];
   };

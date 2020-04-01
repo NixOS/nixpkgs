@@ -9,7 +9,7 @@ buildOcamlJane {
                             fieldslib herelib pipebang sexplib async_rpc_kernel ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async_extra;
+    homepage = "https://github.com/janestreet/async_extra";
     description = "Jane Street Capital's asynchronous execution library (extra)";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer maintainers.ericbmerritt ];

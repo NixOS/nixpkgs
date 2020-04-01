@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Wayland kiosk";
-    homepage    = https://www.hjdskes.nl/projects/cage/;
+    homepage    = "https://www.hjdskes.nl/projects/cage/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];

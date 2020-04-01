@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";
-    homepage = https://github.com/bids-standard/pybids;
+    homepage = "https://github.com/bids-standard/pybids";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

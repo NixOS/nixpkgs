@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Generic drawing program tailored to circuit diagrams";
-    homepage = http://opencircuitdesign.com/xcircuit;
+    homepage = "http://opencircuitdesign.com/xcircuit";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ spacefrogg thoughtpolice ];

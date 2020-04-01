@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://openavproductions.com/luppp/;
+    homepage = "http://openavproductions.com/luppp/";
     description = "A music creation tool, intended for live use";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ prusnak ];

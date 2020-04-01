@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Sharing Plug";
-    homepage = https://github.com/elementary/switchboard-plug-sharing;
+    homepage = "https://github.com/elementary/switchboard-plug-sharing";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

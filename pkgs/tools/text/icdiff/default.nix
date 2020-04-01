@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.jefftk.com/icdiff;
+    homepage = "https://www.jefftk.com/icdiff";
     description = "Side-by-side highlighted command line diffs";
     maintainers = with maintainers; [ aneeshusa ];
     license = licenses.psfl;

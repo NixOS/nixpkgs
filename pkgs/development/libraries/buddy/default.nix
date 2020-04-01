@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = https://sourceforge.net/projects/buddy/;
+    homepage = "https://sourceforge.net/projects/buddy/";
     description = "Binary decision diagram package";
     license = "as-is";
 

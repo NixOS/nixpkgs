@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       structure of a parsed AsciiDoc document from Java and other JVM 
       languages.
     '';
-    homepage = https://asciidoctor.org/docs/asciidoctorj/;
+    homepage = "https://asciidoctor.org/docs/asciidoctorj/";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse];
 
   meta = {
-    homepage = http://djmount.sourceforge.net/;
+    homepage = "http://djmount.sourceforge.net/";
     description = "UPnP AV client, mounts as a Linux filesystem the media content of compatible UPnP AV devices";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.jagajaga ];

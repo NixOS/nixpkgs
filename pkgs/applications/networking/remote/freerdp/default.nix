@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
-    homepage = http://www.freerdp.com/;
+    homepage = "http://www.freerdp.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

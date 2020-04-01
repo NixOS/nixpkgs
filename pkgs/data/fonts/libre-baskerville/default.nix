@@ -23,7 +23,7 @@ fetchFromGitHub rec {
       counters and less contrast that allow it to work on small sizes in any
       screen.
     '';
-    homepage = http://www.impallari.com/projects/overview/libre-baskerville;
+    homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

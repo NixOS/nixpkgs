@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A Scheme shell";
-    homepage = http://www.scsh.net/;
+    homepage = "http://www.scsh.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ joachifm ];
     platforms = with platforms; unix;

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Audio/MIDI multi-track sequencer";
-    homepage = http://qtractor.sourceforge.net;
+    homepage = "http://qtractor.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

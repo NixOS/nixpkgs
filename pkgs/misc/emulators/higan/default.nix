@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
         - NEC's PC Engine, SuperGrafx;
         - Bandai's WonderSwan, WonderSwan Color.
     '';
-    homepage = https://byuu.org/emulation/higan/;
+    homepage = "https://byuu.org/emulation/higan/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;

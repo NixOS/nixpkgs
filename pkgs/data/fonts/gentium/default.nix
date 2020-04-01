@@ -18,7 +18,7 @@ in fetchzip rec {
   sha256 = "1qr2wjdmm93167b0w9cidlf3wwsyjx4838ja9jmm4jkyian5whhp";
 
   meta = with lib; {
-    homepage = https://software.sil.org/gentium/;
+    homepage = "https://software.sil.org/gentium/";
     description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
     longDescription = ''
       Gentium is a typeface family designed to enable the diverse ethnic groups

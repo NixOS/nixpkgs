@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple and elegant cross-platform IRC client";
-    homepage = https://github.com/communi/communi-desktop;
+    homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hrdinka ];
     platforms = platforms.all;

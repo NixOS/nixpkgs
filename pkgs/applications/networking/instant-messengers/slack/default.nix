@@ -46,7 +46,7 @@ let
 
   meta = with stdenv.lib; {
     description = "Desktop client for Slack";
-    homepage = https://slack.com;
+    homepage = "https://slack.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];

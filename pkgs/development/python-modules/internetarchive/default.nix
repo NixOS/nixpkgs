@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python wrapper for the various Internet Archive APIs";
-    homepage = https://github.com/jjjake/internetarchive;
+    homepage = "https://github.com/jjjake/internetarchive";
     license = licenses.agpl3;
   };
 }

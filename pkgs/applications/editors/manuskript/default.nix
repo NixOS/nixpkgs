@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "A open-source tool for writers";
-    homepage = http://www.theologeek.ch/manuskript;
+    homepage = "http://www.theologeek.ch/manuskript";
     longDescription = ''
     Manuskript is a tool for those writer who like to organize and
     plan everything before writing.  The snowflake method can help you

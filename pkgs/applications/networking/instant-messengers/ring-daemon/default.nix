@@ -44,7 +44,7 @@ let
   ]);
 
   src = fetchgit {
-    url = https://gitlab.savoirfairelinux.com/ring/ring-daemon.git;
+    url = "https://gitlab.savoirfairelinux.com/ring/ring-daemon.git";
     rev = "006b8dc7be08fe9beb68709af71004e7bc1ceb5c";
     sha256 = "0ih9g0rismrhx6nqcy3jqfbcs166grg0shnfmrnmykl9h0xy8z47";
   };
@@ -140,7 +140,7 @@ stdenv.mkDerivation {
       graphical user interfaces and even scripts to control the daemon from the
       shell.
     '';
-    homepage = https://ring.cx;
+    homepage = "https://ring.cx";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch ];
     platforms = platforms.linux;

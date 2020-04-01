@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://flask.pocoo.org/;
+    homepage = "http://flask.pocoo.org/";
     description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
     license = licenses.bsd3;
   };

@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "crack-attack-1.1.14";
 
   src = fetchurl {
-    url = mirror://savannah/crack-attack/crack-attack-1.1.14.tar.gz;
+    url = "mirror://savannah/crack-attack/crack-attack-1.1.14.tar.gz";
     sha256 = "1sakj9a2q05brpd7lkqxi8q30bccycdzd96ns00s6jbxrzjlijkm";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A fast-paced puzzle game inspired by the classic Super NES title Tetris Attack!";
-    homepage = https://www.nongnu.org/crack-attack/;
+    homepage = "https://www.nongnu.org/crack-attack/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.piotr ];

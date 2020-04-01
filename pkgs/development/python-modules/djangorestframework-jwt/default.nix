@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "JSON Web Token Authentication support for Django REST Framework";
-    homepage = https://github.com/GetBlimp/django-rest-framework-jwt;
+    homepage = "https://github.com/GetBlimp/django-rest-framework-jwt";
     license = licenses.mit;
     maintainers = [ maintainers.ivegotasthma ];
   };

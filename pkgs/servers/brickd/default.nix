@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://www.tinkerforge.com/;
+    homepage = "https://www.tinkerforge.com/";
     description = "A daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages";
     maintainers = [ stdenv.lib.maintainers.qknight ];
     license = stdenv.lib.licenses.gpl2;

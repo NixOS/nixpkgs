@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     command line interface or in a text-oriented interactive interface.
     '';
     license = with stdenv.lib.licenses; [ gpl2Plus lgpl2Plus ];
-    homepage = http://hamlib.sourceforge.net;
+    homepage = "http://hamlib.sourceforge.net";
     maintainers = with stdenv.lib.maintainers; [ relrod ];
     platforms = with stdenv.lib.platforms; unix;
   };

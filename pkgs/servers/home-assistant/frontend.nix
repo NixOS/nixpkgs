@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Polymer frontend for Home Assistant";
-    homepage = https://github.com/home-assistant/home-assistant-polymer;
+    homepage = "https://github.com/home-assistant/home-assistant-polymer";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin ];
   };

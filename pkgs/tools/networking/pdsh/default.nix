@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/chaos/pdsh;
+    homepage = "https://github.com/chaos/pdsh";
     description = "High-performance, parallel remote shell utility";
     license = stdenv.lib.licenses.gpl2;
 

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dirvish is a fast, disk based, rotating network backup system";
-    homepage = http://dirvish.org/;
+    homepage = "http://dirvish.org/";
     license = stdenv.lib.licenses.osl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.winpat ];

@@ -19,7 +19,7 @@ crystal.buildCrystalPackage rec {
 
   meta = {
     description = "A refreshing language for the front-end web";
-    homepage = https://mint-lang.com/;
+    homepage = "https://mint-lang.com/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ manveru ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];

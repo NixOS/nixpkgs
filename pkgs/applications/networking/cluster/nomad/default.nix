@@ -32,7 +32,7 @@ buildGoPackage rec {
  '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.nomadproject.io/;
+    homepage = "https://www.nomadproject.io/";
     description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
     platforms = platforms.unix;
     license = licenses.mpl20;

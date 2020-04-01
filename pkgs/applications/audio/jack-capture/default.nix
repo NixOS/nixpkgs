@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A program for recording soundfiles with jack";
-    homepage = http://archive.notam02.no/arkiv/src;
+    homepage = "http://archive.notam02.no/arkiv/src";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = stdenv.lib.platforms.linux;

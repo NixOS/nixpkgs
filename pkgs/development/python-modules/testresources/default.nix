@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pyunit extension for managing expensive test resources";
-    homepage = https://launchpad.net/testresources;
+    homepage = "https://launchpad.net/testresources";
     license = licenses.bsd2;
   };
 }

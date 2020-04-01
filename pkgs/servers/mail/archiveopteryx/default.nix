@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://archiveopteryx.org/;
+    homepage = "http://archiveopteryx.org/";
     description = "An advanced PostgreSQL-based IMAP/POP server";
     license = licenses.postgresql;
     maintainers = [ maintainers.phunehehe ];

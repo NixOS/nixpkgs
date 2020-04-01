@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A simple Lisp with an integrated database";
-    homepage = https://picolisp.com/;
+    homepage = "https://picolisp.com/";
     license = licenses.mit;
     platforms = platforms.all;
     broken = stdenv.isDarwin; # times out

@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   '';
   meta = {
     description = "NodeWebkit user interface for Nix";
-    homepage = https://github.com/matejc/nixui;
+    homepage = "https://github.com/matejc/nixui";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.unix;

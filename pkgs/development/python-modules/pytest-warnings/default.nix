@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Plugin to list Python warnings in pytest report";
-    homepage = https://github.com/fschulze/pytest-warnings;
+    homepage = "https://github.com/fschulze/pytest-warnings";
     license = lib.licenses.mit;
   };
 }

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://salmon-mail.readthedocs.org/;
+    homepage = "https://salmon-mail.readthedocs.org/";
     description = "Pythonic mail application server";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jluttine ];

@@ -15,7 +15,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ async_kernel_p4 async_unix_p4 async_extra_p4 pa_ounit ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async;
+    homepage = "https://github.com/janestreet/async";
     description = "Jane Street Capital's asynchronous execution library";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

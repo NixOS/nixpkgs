@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.shrew.net/software;
+    homepage = "https://www.shrew.net/software";
     description = "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
     platforms = platforms.unix;
     maintainers = [ maintainers.domenkozar ];

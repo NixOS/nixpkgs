@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Live GLSL coding renderer";
-    homepage = http://patriciogonzalezvivo.com/2015/glslViewer/;
+    homepage = "http://patriciogonzalezvivo.com/2015/glslViewer/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.hodapp ];

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "byzanz";
 
   src = fetchgit {
-    url = git://github.com/GNOME/byzanz;
+    url = "git://github.com/GNOME/byzanz";
     rev = "1875a7f6a3903b83f6b1d666965800f47db9286a";
     sha256 = "0a72fw2mxl8vdcdnzy0bwis4jk28pd7nc8qgr4vhyw5pd48dynvh";
   };
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";
-    homepage = https://github.com/GNOME/byzanz;
+    homepage = "https://github.com/GNOME/byzanz";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ ];

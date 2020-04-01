@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/twisted/constantly;
+    homepage = "https://github.com/twisted/constantly";
     description = "symbolic constant support";
     license = licenses.mit;
     maintainers = [ ];

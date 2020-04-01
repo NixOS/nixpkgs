@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool to integrate C/Cpp code with Lua";
-    homepage = http://www.codenix.com/~tolua/;
+    homepage = "http://www.codenix.com/~tolua/";
     license = licenses.mit;
     maintainers = with maintainers; [ vrthra ];
     platforms = with platforms; unix;

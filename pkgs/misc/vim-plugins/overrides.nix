@@ -534,7 +534,7 @@ self: super: {
     dependencies = with super; [ vim-misc ];
     patches = [
       (fetchpatch { # https://github.com/xolox/vim-easytags/pull/170 fix version detection for universal-ctags
-        url = https://github.com/xolox/vim-easytags/commit/46e4709500ba3b8e6cf3e90aeb95736b19e49be9.patch;
+        url = "https://github.com/xolox/vim-easytags/commit/46e4709500ba3b8e6cf3e90aeb95736b19e49be9.patch";
         sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
       })
     ];
@@ -694,7 +694,7 @@ self: super: {
 
   unicode-vim = let
     unicode-data = fetchurl {
-      url = http://www.unicode.org/Public/UNIDATA/UnicodeData.txt;
+      url = "http://www.unicode.org/Public/UNIDATA/UnicodeData.txt";
       sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
     };
   in super.unicode-vim.overrideAttrs(old: {

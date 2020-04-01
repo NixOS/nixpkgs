@@ -55,7 +55,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://sfepy.org/;
+    homepage = "https://sfepy.org/";
     description = "Simple Finite Elements in Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

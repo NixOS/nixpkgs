@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OSC injection/ejection from/to UDP/TCP/Serial for LV2";
-    homepage = https://open-music-kontrollers.ch/lv2/eteroj;
+    homepage = "https://open-music-kontrollers.ch/lv2/eteroj";
     license = licenses.artistic2;
     maintainers = with maintainers; [ magnetophon ];
   };

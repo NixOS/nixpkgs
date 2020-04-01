@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Efficient arrays of booleans";
-    homepage = https://github.com/ilanschnell/bitarray;
+    homepage = "https://github.com/ilanschnell/bitarray";
     license = licenses.psfl;
     maintainers = [ maintainers.bhipple ];
   };

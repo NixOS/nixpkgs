@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [ "-DMYGUI_BUILD_TOOLS=OFF" "-DMYGUI_BUILD_DEMOS=OFF" "-DMYGUI_RENDERSYSTEM=${renderSystem}" ];
 
   meta = with stdenv.lib; {
-    homepage = http://mygui.info/;
+    homepage = "http://mygui.info/";
     description = "Library for creating GUIs for games and 3D applications";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;

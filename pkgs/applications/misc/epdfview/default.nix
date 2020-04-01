@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
             ];
 
   meta = with stdenv.lib; {
-    homepage = https://packages.debian.org/wheezy/epdfview;
+    homepage = "https://packages.debian.org/wheezy/epdfview";
     description = "A lightweight PDF document viewer using Poppler and GTK";
     longDescription = ''
       ePDFView is a free lightweight PDF document viewer using Poppler and

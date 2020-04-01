@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An authorization library that supports access control models like ACL, RBAC, ABAC in Python";
-    homepage = https://github.com/casbin/pycasbin;
+    homepage = "https://github.com/casbin/pycasbin";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Scientific Graphics and GUI Library for Python";
-    homepage = http://www.pyqtgraph.org/;
+    homepage = "http://www.pyqtgraph.org/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ koral ];

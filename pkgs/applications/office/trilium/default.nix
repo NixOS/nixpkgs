@@ -13,7 +13,7 @@ let
 
   meta = with stdenv.lib; {
     inherit description;
-    homepage = https://github.com/zadam/trilium;
+    homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];

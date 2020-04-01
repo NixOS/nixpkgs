@@ -39,7 +39,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Electrum DASH";
-    homepage = https://github.com/dashpay/electrum-dash;
+    homepage = "https://github.com/dashpay/electrum-dash";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np ];
     knownVulnerabilities = [ "CVE-2018-1000022" ];

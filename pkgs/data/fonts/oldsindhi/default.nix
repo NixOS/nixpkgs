@@ -17,7 +17,7 @@ in fetchzip rec {
   sha256 = "0d4l9cg2vmh2pvnqsla8mgcwvc7wjxzcabhlli6633h3ifj2yp7b";
 
   meta = with lib; {
-    homepage = https://github.com/MihailJP/oldsindhi;
+    homepage = "https://github.com/MihailJP/oldsindhi";
     description = "Free Sindhi Khudabadi font";
     maintainers = with maintainers; [ mathnerd314 ];
     license = licenses.bsd2;

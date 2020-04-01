@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = stdenv.lib.optional stdenv.hostPlatform.isWindows "format";
 
   meta = with stdenv.lib; {
-    homepage = https://rocksdb.org;
+    homepage = "https://rocksdb.org";
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.asl20;
     maintainers = with maintainers; [ adev magenbluten ];

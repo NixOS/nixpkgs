@@ -14,7 +14,7 @@ buildGoModule rec {
   modSha256 = "1nnp5ijz4n34gc97rar4wlvlbx21ndpjyb2mc6gxdk1wzx3mgswp";
 
   meta = {
-    homepage = https://github.com/sachaos/todoist;
+    homepage = "https://github.com/sachaos/todoist";
     description = "Todoist CLI Client";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

@@ -17,7 +17,7 @@ buildPythonApplication rec {
   patches = [
     # Fix tests on Python 2.7
     (fetchpatch {
-      url = https://github.com/behave/behave/commit/0a9430a94881cd18437deb03d2ae23afea0f009c.patch;
+      url = "https://github.com/behave/behave/commit/0a9430a94881cd18437deb03d2ae23afea0f009c.patch";
       sha256 = "1nrh9ii6ik6gw2kjh8a6jk4mg5yqw3jfjfllbyxardclsab62ydy";
     })
   ];
@@ -44,7 +44,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/behave/behave;
+    homepage = "https://github.com/behave/behave";
     description = "behaviour-driven development, Python style";
     license = licenses.bsd2;
     maintainers = with maintainers; [ alunduil ];

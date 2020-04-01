@@ -32,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A steampunk-themed strategy game where you have to manage a steam supply network";
-    homepage = http://jwhitham.org.uk/20kly/;
+    homepage = "http://jwhitham.org.uk/20kly/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
   };

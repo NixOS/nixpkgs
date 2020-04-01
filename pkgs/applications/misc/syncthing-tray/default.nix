@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple application tray for syncthing";
-    homepage = https://github.com/alex2108/syncthing-tray;
+    homepage = "https://github.com/alex2108/syncthing-tray";
     license = licenses.mit;
     maintainers = with maintainers; [ nickhu ];
     platforms = platforms.all;

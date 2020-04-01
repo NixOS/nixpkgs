@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SCM Microsystems SCL011 chipcard reader user space driver";
-    homepage = http://www.scm-pc-card.de/index.php?lang=en&page=product&function=show_product&product_id=630;
-    downloadPage = https://support.identiv.com/scl010-scl011/;
+    homepage = "http://www.scm-pc-card.de/index.php?lang=en&page=product&function=show_product&product_id=630";
+    downloadPage = "https://support.identiv.com/scl010-scl011/";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ sephalon ];
     platforms = platforms.linux;

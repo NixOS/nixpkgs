@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2016-05-13";
 
   src = fetchzip {
-    url = https://github.com/stark/siji/archive/95369afac3e661cb6d3329ade5219992c88688c1.zip;
+    url = "https://github.com/stark/siji/archive/95369afac3e661cb6d3329ade5219992c88688c1.zip";
     sha256 = "1408g4nxwdd682vjqpmgv0cp0bfnzzzwls62cjs9zrds16xa9dpf";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "bdf" "otb" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/stark/siji;
+    homepage = "https://github.com/stark/siji";
     description = "An iconic bitmap font based on Stlarch with additional glyphs";
     license = licenses.gpl2;
     platforms = platforms.all;

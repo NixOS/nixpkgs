@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "TeamSpeak voice communication server";
-    homepage = https://teamspeak.com/;
+    homepage = "https://teamspeak.com/";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn gerschtli ];

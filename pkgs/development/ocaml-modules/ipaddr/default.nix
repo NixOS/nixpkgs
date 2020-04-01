@@ -14,7 +14,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = https://github.com/mirage/ocaml-ipaddr;
+    homepage = "https://github.com/mirage/ocaml-ipaddr";
     description = "A library for manipulation of IP (and MAC) address representations ";
     license = licenses.isc;
     maintainers = with maintainers; [ alexfmpe ericbmerritt ];
