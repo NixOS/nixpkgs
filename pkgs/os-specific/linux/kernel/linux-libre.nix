@@ -1,8 +1,8 @@
 { stdenv, lib, fetchsvn, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "17318";
-    sha256 = "1advlajxkcwjp6ffhg31wpxmp9xqj04mg0g4rbmff4vkrz68kraf";
+    rev = "17402";
+    sha256 = "1g151h6hdiwpvpip1r2rhbma8j13xghcyxddh0ppg9h548wwwack";
   }
 , ...
 }:
@@ -22,7 +22,8 @@ in linux.override {
       name = "${linux.name}-libre-src";
       src = linux.src;
       buildPhase = ''
-        ${scripts}/${majorMinor}/deblob-${majorMinor} \
+        # --force flag to skip empty files after deblobbing
+        ${scripts}/${majorMinor}/deblob-${majorMinor} --force \
             ${major} ${minor} ${patch}
       '';
       checkPhase = ''

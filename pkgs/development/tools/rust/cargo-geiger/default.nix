@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0kvmjahyx5dcjhry2hkvcshi0lbgipfj0as74a3h3bllfvdfkkg0";
   };
 
-  cargoSha256 = "0aykhhxk416p237safmqh5dhwjgrhvgc6zikkmxi9rq567ypp914";
+  cargoSha256 = "0v50fkyf0a77l7whxalwnfqfi8lxy82z2gpd0fa0ib80qjla2n5z";
   cargoPatches = [ ./cargo-lock.patch ];
 
   # Multiple tests require internet connectivity, so they are disabled here.
@@ -23,6 +23,12 @@ rustPlatform.buildRustPackage rec {
   # we might be able to run these with something like
   # `cargo insta review` in the `preCheck` phase.
   checkPhase = ''
+    cd cargo-geiger/tests/snapshots
+    for file in *
+    do
+      mv $file r#$file
+    done
+    cd -
     cargo test -- \
     --skip test_package::case_2 \
     --skip test_package::case_3 \

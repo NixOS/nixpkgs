@@ -428,14 +428,14 @@ in
       ++ (attrValues (
         mapAttrs (name: value: {
           assertion = value.generatePrivateKeyFile -> (value.privateKey == null);
-          message = "networking.wireguard.interfaces.${name}.generatePrivateKey must not be set if networking.wireguard.interfaces.${name}.privateKey is set.";
+          message = "networking.wireguard.interfaces.${name}.generatePrivateKeyFile must not be set if networking.wireguard.interfaces.${name}.privateKey is set.";
         }) cfg.interfaces))
         ++ map ({ interfaceName, peer, ... }: {
           assertion = (peer.presharedKey == null) || (peer.presharedKeyFile == null);
           message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
         }) all_peers;
 
-    boot.extraModulePackages = [ kernel.wireguard ];
+    boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
     systemd.services =

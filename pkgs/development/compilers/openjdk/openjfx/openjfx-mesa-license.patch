@@ -1,0 +1,17 @@
+--- a/modules/javafx.graphics/src/main/legal/mesa3d.md	1969-12-31 19:00:01.000000000 -0500
++++ b/modules/javafx.graphics/src/main/legal/mesa3d.md	2019-08-08 01:05:04.000000000 -0400
+@@ -1,7 +1,7 @@
+ ## Mesa 3-D Graphics Library v5.0
+ 
+ ### Mesa License
+-```
++<pre>
+ 
+ Mesa 3-D graphics library
+ Version:  5.0
+@@ -25,4 +25,4 @@
+ AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ 
+-```
++</pre>

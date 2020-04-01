@@ -42,12 +42,22 @@ let
               doCheck = false;
               jailbreak = true;
             }));
+
             elmi-to-json = justStaticExecutables (overrideCabal (self.callPackage ./packages/elmi-to-json.nix {}) (drv: {
               prePatch = ''
                 substituteInPlace package.yaml --replace "- -Werror" ""
                 hpack
               '';
               jailbreak = true;
+            }));
+
+            elm-instrument = justStaticExecutables (overrideCabal (self.callPackage ./packages/elm-instrument.nix {}) (drv: {
+              prePatch = ''
+                sed "s/desc <-.*/let desc = \"${drv.version}\"/g" Setup.hs --in-place
+              '';
+              jailbreak = true;
+              # Tests are failing because of missing instances for Eq and Show type classes
+              doCheck = false;
             }));
 
             inherit fetchElmDeps;
@@ -76,6 +86,26 @@ let
     in with hsPkgs.elmPkgs; {
       elm-test = patchBinwrap [elmi-to-json] nodePkgs.elm-test;
       elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples;
+      elm-coverage =
+        let patched = patchBinwrap [elmi-to-json] nodePkgs.elm-coverage;
+        in patched.override {
+          preRebuild = ''
+            sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
+
+            # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
+            # in case of just this package
+            sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
+
+            rm node_modules/elm/install.js
+            echo "console.log('no-op');" > node_modules/elm/install.js
+          '';
+
+          # Link Elm instrument binary
+          postInstall = patched.postInstall + ''
+            mkdir -p unpacked_bin
+            ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
+          '';
+        };
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
 
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;

@@ -3,14 +3,15 @@
 # To make use of this derivation, use
 # `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";`
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.1";
+  version = "1.5.0";
+
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
-    rev = "9d9c50611da19044370ee759e593ccadbad32a6a";
-    sha256 = "0jl4jamh7i8w7lp3qbbakh1wsyrrmslsrjwh9jgyvw50a83hp6fj";
+    rev = "v${version}";
+    sha256 = "0r8vccgfy85ryswaigzgwmvhvrhlap7nrg7bi66w63877znqlksj";
   };
 
   patches = [

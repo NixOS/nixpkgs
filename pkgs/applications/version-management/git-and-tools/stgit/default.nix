@@ -2,7 +2,7 @@
 
 let
   name = "stgit-${version}";
-  version = "0.21";
+  version = "0.22";
 in
 stdenv.mkDerivation {
   inherit name;
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "ctmarinas";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "16gwdad18rc9bivyzrjccp83iccmqr45fp2zawycmrfp2ancffc7";
+    sha256 = "0xpvs5fa50rrvl2c8naha1nblk5ip2mgg63a9srqqxfx6z8qmrfz";
   };
 
   buildInputs = [ python2 git ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A patch manager implemented on top of Git";
-    homepage = http://procode.org/stgit/;
+    homepage = "http://procode.org/stgit/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ the-kenny ];
     platforms = platforms.unix;

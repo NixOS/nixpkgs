@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libtool, ninja
+{ stdenv, fetchFromGitHub, cmake, libtool, lldClang, ninja
 , boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion, gperftools
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl
 , poco, protobuf, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
@@ -7,16 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "19.13.6.51";
+  version = "19.17.9.60";
 
   src = fetchFromGitHub {
     owner  = "yandex";
     repo   = "ClickHouse";
     rev    = "v${version}-stable";
-    sha256 = "0mcwfam1nrs2g54syw7vvpfkjn3l4gfzvla7xbg92lr03fn6kbn2";
+    sha256 = "0k1ncn7i4szpw4jlhv3zmw6mrkkm8qfs39nj1zbawjqrkgnw70kg";
   };
 
-  nativeBuildInputs = [ cmake libtool ninja ];
+  nativeBuildInputs = [ cmake libtool lldClang.bintools ninja ];
   buildInputs = [
     boost brotli capnproto cctz clang-unwrapped double-conversion gperftools
     icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
-    homepage = https://clickhouse.yandex/;
+    homepage = "https://clickhouse.yandex/";
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];

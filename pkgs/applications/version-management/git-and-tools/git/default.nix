@@ -21,7 +21,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.25.0";
+  version = "2.25.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1l58v42aazj0x9276gk8r9mwyl9pgp9w99aakz4xfhzv7wd2jq60";
+    sha256 = "09lzwa183nblr6l8ib35g2xrjf9wm9yhk3szfvyzkwivdv69c9r2";
   };
 
   outputs = [ "out" ];
@@ -139,8 +139,6 @@ stdenv.mkDerivation {
       # Install contrib stuff.
       mkdir -p $out/share/git
       cp -a contrib $out/share/git/
-      mkdir -p $out/share/emacs/site-lisp
-      ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
       mkdir -p $out/etc/bash_completion.d
@@ -234,6 +232,7 @@ stdenv.mkDerivation {
        for prog in bin/gitk libexec/git-core/{git-gui,git-citool,git-gui--askpass}; do
          sed -i -e "s|exec 'wish'|exec '${tk}/bin/wish'|g" \
                 -e "s|exec wish|exec '${tk}/bin/wish'|g" \
+                -e "s|exec \"[^\"]*/MacOS/Wish\"|exec '${tk}/bin/wish'|g" \
                 "$out/$prog"
        done
        ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk

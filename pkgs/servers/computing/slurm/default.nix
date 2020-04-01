@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
 , python, munge, perl, pam, openssl, zlib
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
-, readline, freeipmi, libssh2, xorg, lz4
+, readline, freeipmi, libssh2, xorg, lz4, rdma-core
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
     curl python munge perl pam openssl zlib
-      libmysqlclient ncurses gtk2 lz4
+      libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       "--with-munge=${munge}"
       "--with-ssl=${openssl.dev}"
       "--with-zlib=${zlib}"
+      "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
       ++ (optional enableX11 "--with-libssh2=${libssh2.dev}")

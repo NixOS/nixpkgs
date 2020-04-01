@@ -7,7 +7,12 @@
 , wrapGAppsHook
 , glib
 , coreutils
+, accountsservice
 , dbus
+, flatpak
+, gtk3
+, pam
+, desktop-file-utils
 , polkit
 , glib-testing
 , python3
@@ -16,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.4.0";
+  version = "0.6.0";
 
   outputs = [ "bin" "out" "dev" "man" "installedTests" ];
 
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = pname;
     rev = version;
-    sha256 = "0d703r20djvrgy711jvn90i8dwbb0p7qj4j43z101afpkiizq810";
+    sha256 = "COh6N3CmLIcxx6tW4jcP0m6TZv0Z1YJUM/nlG0RzYHQ=";
   };
 
   patches = [
@@ -42,11 +47,16 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     gobject-introspection
+    desktop-file-utils
     wrapGAppsHook
   ];
 
   buildInputs = [
+    accountsservice
     dbus
+    flatpak
+    gtk3
+    pam
     polkit
     glib-testing
     (python3.withPackages (pp: with pp; [

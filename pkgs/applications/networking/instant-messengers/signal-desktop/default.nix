@@ -23,7 +23,7 @@ let
       else "");
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "1.30.1"; # Please backport all updates to the stable channel.
+  version = "1.32.3"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "08l51f1fq9jlnqb4j38lxdfwfbqfzb85zrim57wlgcj8azp2ash6";
+    sha256 = "1aqk0hdgdxjznj0nbh2glvyzdq2af8xgiw3qb4k7wpjd0my28r2l";
   };
 
   nativeBuildInputs = [
@@ -80,6 +80,7 @@ in stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     systemd.lib
+    libnotify
   ];
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -126,7 +127,8 @@ in stdenv.mkDerivation rec {
       Signal Desktop is an Electron application that links with your
       "Signal Android" or "Signal iOS" app.
     '';
-    homepage    = https://signal.org/;
+    homepage    = "https://signal.org/";
+    changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
     license     = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
     platforms   = [ "x86_64-linux" ];

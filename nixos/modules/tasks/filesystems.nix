@@ -305,7 +305,8 @@ in
       in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
 
     systemd.tmpfiles.rules = [
-      "Z /run/keys 0750 root ${toString config.ids.gids.keys}"
+      "d /run/keys 0750 root ${toString config.ids.gids.keys}"
+      "z /run/keys 0750 root ${toString config.ids.gids.keys}"
     ];
 
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
-  version = "6.2.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ephemeral";
     rev = version;
-    sha256 = "1y0n1p14kg24qnybi201181q7j6vm20ka4xwmgggjll9v6qflvaz";
+    sha256 = "13rl26lv5xgagiv21yp5pz69bkwh4nnz1lx9wryhsplki45xm1sq";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The always-incognito web browser";
-    homepage = https://github.com/cassidyjames/ephemeral;
+    homepage = "https://github.com/cassidyjames/ephemeral";
     maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;

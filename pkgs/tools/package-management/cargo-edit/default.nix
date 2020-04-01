@@ -4,25 +4,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-edit";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "killercup";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16gpljbzk6cibry9ssnl22xbcsx2cr57mrs3x3n6cfmldbp6bhbr";
+    sha256 = "19jnvsbddn52ibjv48jyfss25gg9mmvxzfhbr7s7bqyf3bq68jbm";
   };
 
-  cargoSha256 = "1cjpbfgbqzlfs5hck2j3d2v719fwandpnc7bdk4243j7j0k1ng9q";
+  cargoSha256 = "0b06jsilj87rnr1qlarn29hnz0i9p455fdxg6nf6r2fli2xpv1f0";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
+  doCheck = false; # integration tests depend on changing cargo config
+
   meta = with lib; {
     description = "A utility for managing cargo dependencies from the command line";
     homepage = https://github.com/killercup/cargo-edit;
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ gerschtli jb55 filalex77 ];
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ gerschtli jb55 filalex77 killercup ];
     platforms = platforms.all;
   };
 }

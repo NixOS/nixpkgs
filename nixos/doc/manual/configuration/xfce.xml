@@ -9,7 +9,6 @@
 <programlisting>
 <xref linkend="opt-services.xserver.desktopManager.xfce.enable" /> = true;
 <xref linkend="opt-services.xserver.displayManager.defaultSession" /> = "xfce";
-};
 </programlisting>
  </para>
  <para>

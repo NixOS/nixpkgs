@@ -1,9 +1,9 @@
+#!/usr/bin/env bash
 
-#!/usr/bin/env nix-shell
-#! nix-shell -i bash -p nodePackages.node2nix
+ROOT="$(realpath "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")"/../../../..)"
 
-node2nix \
-  --nodejs-10 \
+$(nix-build $ROOT -A  nodePackages.node2nix --no-out-link)/bin/node2nix \
+  --nodejs-12 \
   --node-env ../../../development/node-packages/node-env.nix \
   --development \
   --input package.json \

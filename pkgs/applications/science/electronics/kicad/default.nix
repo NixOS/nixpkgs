@@ -35,8 +35,8 @@ let
   python = python3;
   wxPython = python3Packages.wxPython_4_0;
 
-  kicad-libraries = callPackages ./libraries.nix versionConfig.libVersion;
-  kicad-base = callPackage ./base.nix {
+  libraries = callPackages ./libraries.nix versionConfig.libVersion;
+  base = callPackage ./base.nix {
     pname = baseName;
     inherit versions stable baseName;
     inherit wxGTK python wxPython;
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   inherit pname;
   version = versions.${baseName}.kicadVersion.version;
 
-  src = kicad-base;
+  src = base;
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = optionals (scriptingSupport)
     [ pythonPackages.wrapPython ];
 
-  # wrapGAppsHook added the equivalent to ${kicad-base}/share
+  # wrapGAppsHook added the equivalent to ${base}/share
   # though i noticed no difference without it
   makeWrapperArgs = [
-    "--prefix XDG_DATA_DIRS : ${kicad-base}/share"
+    "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gnome3.defaultIconTheme}/share"
     "--prefix XDG_DATA_DIRS : ${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}"
@@ -73,13 +73,13 @@ stdenv.mkDerivation rec {
     "--prefix XDG_DATA_DIRS : ${cups}/share"
     "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
 
-    "--set KISYSMOD ${kicad-libraries.footprints}/share/kicad/modules"
-    "--set KICAD_SYMBOL_DIR ${kicad-libraries.symbols}/share/kicad/library"
-    "--set KICAD_TEMPLATE_DIR ${kicad-libraries.templates}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${kicad-libraries.symbols}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${kicad-libraries.footprints}/share/kicad/template"
+    "--set KISYSMOD ${libraries.footprints}/share/kicad/modules"
+    "--set KICAD_SYMBOL_DIR ${libraries.symbols}/share/kicad/library"
+    "--set KICAD_TEMPLATE_DIR ${libraries.templates}/share/kicad/template"
+    "--prefix KICAD_TEMPLATE_DIR : ${libraries.symbols}/share/kicad/template"
+    "--prefix KICAD_TEMPLATE_DIR : ${libraries.footprints}/share/kicad/template"
   ]
-  ++ optionals (with3d) [ "--set KISYS3DMOD ${kicad-libraries.packages3d}/share/kicad/modules/packages3d" ]
+  ++ optionals (with3d) [ "--set KISYS3DMOD ${libraries.packages3d}/share/kicad/modules/packages3d" ]
   ++ optionals (ngspiceSupport) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493
@@ -88,30 +88,30 @@ stdenv.mkDerivation rec {
 
   # dunno why i have to add $makeWrapperArgs manually...
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
-  # not sure if anything has to be done with the other stuff in kicad-base/bin
+  # not sure if anything has to be done with the other stuff in base/bin
   # dxf2idf, idf2vrml, idfcyl, idfrect, kicad2step, kicad-ogltest
   installPhase =
-    optionalString (scriptingSupport) '' buildPythonPath "${kicad-base} $pythonPath"
+    optionalString (scriptingSupport) '' buildPythonPath "${base} $pythonPath"
     '' +
-    '' makeWrapper ${kicad-base}/bin/kicad $out/bin/kicad $makeWrapperArgs ''
+    '' makeWrapper ${base}/bin/kicad $out/bin/kicad $makeWrapperArgs ''
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     '' +
-    '' makeWrapper ${kicad-base}/bin/pcbnew $out/bin/pcbnew $makeWrapperArgs ''
+    '' makeWrapper ${base}/bin/pcbnew $out/bin/pcbnew $makeWrapperArgs ''
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     '' +
-    '' makeWrapper ${kicad-base}/bin/eeschema $out/bin/eeschema $makeWrapperArgs ''
+    '' makeWrapper ${base}/bin/eeschema $out/bin/eeschema $makeWrapperArgs ''
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     '' +
-    '' makeWrapper ${kicad-base}/bin/gerbview $out/bin/gerbview $makeWrapperArgs ''
+    '' makeWrapper ${base}/bin/gerbview $out/bin/gerbview $makeWrapperArgs ''
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     '' +
-    '' makeWrapper ${kicad-base}/bin/pcb_calculator $out/bin/pcb_calculator $makeWrapperArgs ''
+    '' makeWrapper ${base}/bin/pcb_calculator $out/bin/pcb_calculator $makeWrapperArgs ''
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     '' +
-    '' makeWrapper ${kicad-base}/bin/pl_editor $out/bin/pl_editor $makeWrapperArgs ''
+    '' makeWrapper ${base}/bin/pl_editor $out/bin/pl_editor $makeWrapperArgs ''
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     '' +
-    '' makeWrapper ${kicad-base}/bin/bitmap2component $out/bin/bitmap2component $makeWrapperArgs ''
+    '' makeWrapper ${base}/bin/bitmap2component $out/bin/bitmap2component $makeWrapperArgs ''
     + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     ''
   ;
@@ -137,5 +137,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ evils kiwi berce ];
     # kicad's cross-platform, not sure what to fill in here
     platforms = with platforms; linux;
+  } // optionalAttrs with3d {
+    # We can't download the 3d models on Hydra - they are a ~1 GiB download and
+    # they occupy ~5 GiB in store.
+    hydraPlatforms = [];
   };
 }

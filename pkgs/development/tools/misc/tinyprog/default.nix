@@ -24,6 +24,7 @@ with python3Packages; buildPythonApplication rec {
     tqdm
     six
     packaging
+    setuptools
     pyusb
   ];
 

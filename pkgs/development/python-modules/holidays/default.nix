@@ -1,18 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi , six, dateutil }:
+{ stdenv, buildPythonPackage, fetchPypi, six, dateutil, convertdate }:
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.9.12";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3182c4a6fef8d01a829468362ace9c3bba7645873610535fef53454dbb4ea092";
+    sha256 = "1dx39krafb6cdnd7h5vgwmw4y075s6k3d31a6vhwvqhmdig3294h";
   };
 
-  propagatedBuildInputs = [ six dateutil ];
+  propagatedBuildInputs = [ six dateutil convertdate ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dr-prodigy/python-holidays;
+    homepage = "https://github.com/dr-prodigy/python-holidays";
     description = "Generate and work with holidays in Python";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];

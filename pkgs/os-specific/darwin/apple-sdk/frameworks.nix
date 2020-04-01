@@ -75,6 +75,7 @@ with frameworks; with libs; {
   LocalAuthentication     = [];
   MapKit                  = [];
   MediaAccessibility      = [ CoreGraphics CoreText QuartzCore ];
+  MediaPlayer             = [];
   MediaToolbox            = [ AudioToolbox AudioUnit CoreMedia ];
   Metal                   = [];
   MetalKit                = [ ModelIO Metal ];

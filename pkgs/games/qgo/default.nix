@@ -1,17 +1,17 @@
-{ stdenv
+{ lib
+, mkDerivation
 , fetchFromGitHub
-, makeWrapper
 , qmake
 , qtbase
 , qtmultimedia
 , qttranslations
 }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "qgo";
   version = "unstable-2017-12-18";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Go client based on Qt5";
     longDescription = ''
       qGo is a Go Client based on Qt 5. It supports playing online at
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
   '';
-  nativeBuildInputs = [ makeWrapper qmake ];
+  nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtmultimedia qttranslations ];
   enableParallelBuilding = true;
 

@@ -1,21 +1,21 @@
 { stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
-, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
+, boost168, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
 , libjpeg, libGLU, libGL, glew, libxslt
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.8";
+  version = "0.4.9";
   pname = "freeorion";
 
   src = fetchFromGitHub {
     owner  = "freeorion";
     repo   = "freeorion";
     rev = "v${version}";
-    sha256 = "1lj1q2ljjgbbiqxb53wdrrcz0zxxr3vv9jqrhbzvfsss7q808jfw";
+    sha256 = "18xigx4qla225ybf7mc1w8zfm81nhcm1i5181n5l2fbndvslb1wf";
   };
 
   buildInputs = [
-	(boost.override { enablePython = true; })
+	(boost168.override { enablePython = true; })
     SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU libGL glew ];
 
   nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];

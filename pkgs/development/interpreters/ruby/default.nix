@@ -26,7 +26,6 @@ let
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
-    atLeast25 = lib.versionAtLeast ver.majMin "2.5";
     atLeast27 = lib.versionAtLeast ver.majMin "2.7";
     baseruby = self.override {
       useRailsExpress = false;
@@ -77,14 +76,13 @@ let
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
           ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
-        buildInputs =
-             (op fiddleSupport libffi)
+        buildInputs = [ autoconf ]
+          ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
-          ++ (op atLeast25 autoconf)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
@@ -106,15 +104,10 @@ let
           cp -r ${rubygems}/test/rubygems $sourceRoot/test
         '';
 
-        postPatch = if atLeast25 then ''
+        postPatch = ''
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
-        ''
-        else opString useRailsExpress ''
-          sed -i configure.in -e '/config.guess/d'
-          cp ${config}/config.guess tool/
-          cp ${config}/config.sub tool/
         '';
 
         # Force the revision.h generation. Somehow `revision.tmp` is an empty
@@ -230,35 +223,27 @@ let
     ) args; in self;
 
 in {
-  ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "9" "";
-    sha256 = {
-      src = "1bn6n5b920qy3lsx99jr8495jkc3sg89swgb96d5fgd579g6p6zr";
-      git = "066kb1iki7mx7qkm10xhj5b6v8s47wg68v43l3nc36y2hyim1w2c";
-    };
-  };
-
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "7" "";
+    version = rubyVersion "2" "5" "8" "";
     sha256 = {
-      src = "1m6nmnj9shifp8g3yh7aimac01vl035bzcc19x2spdji6ig0sb8b";
-      git = "0wppf82c9ccdbnvj30mppr5a3mc7sxm05diahjdw7hhk29n43knp";
+      src = "16md4jspjwixjlbhx3pnd5iwpca07p23ghkxkqd82sbchw3xy2vc";
+      git = "19gkk3q9l33cwkfsp5k8f8fipq7gkyqkqirm9farbvy425519rv2";
     };
   };
 
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "5" "";
+    version = rubyVersion "2" "6" "6" "";
     sha256 = {
-      src = "0zgdrgylq6avbblf78kpaf0k2xnkpc3jng3wkd7x67ycdrqnp5v6";
-      git = "0pay6ic22ag3bnvxffhgwp7z6clkd0p93944a1l4lvc5hxc8v77j";
+      src = "1492x795qzgp3zhpl580kd1sdp50n5hfsmpbfhdsq2rnxwyi8jrn";
+      git = "1jr9v99a7awssqmw7531afbx4a8i9x5yfqyffha545g7r4s7kj50";
     };
   };
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "0" "";
+    version = rubyVersion "2" "7" "1" "";
     sha256 = {
-      src = "1glc3zpnih6h8mrgfcak0aa7cgmi4zyvxfyi6y2brwg2nn9sm6cc";
-      git = "11iz64k95czs273mb10195d1j75mmbcgddfdx1vay5876ffw81dq";
+      src = "0674x98f542y02r7n2yv2qhmh97blqhi2mvh2dn5f000vlxlh66l";
+      git = "0qk729kr5wm67xmwpljpdprwhp5wvn5y4ikqy00p1zcgwlwdcs33";
     };
   };
 }

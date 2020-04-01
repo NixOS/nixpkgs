@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildInputs = [ go-bindata ];
+  nativeBuildInputs = [ go-bindata ];
 
   preConfigure = ''
     sed -e '/jteeuwen\/go-bindata/d' \

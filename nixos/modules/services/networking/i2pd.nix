@@ -158,10 +158,10 @@ let
       (sec "addressbook")
       (strOpt "defaulturl" cfg.addressbook.defaulturl)
     ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
-      ++ (flip mapAttrs
-      (collect (name: proto: proto ? port && proto ? address && proto ? name) cfg.proto)
+      ++ (flip map
+      (collect (proto: proto ? port && proto ? address) cfg.proto)
       (proto: let protoOpts = [
-        (sec name)
+        (sec proto.name)
         (boolOpt "enabled" proto.enable)
         (strOpt "address" proto.address)
         (intOpt "port" proto.port)
@@ -181,10 +181,10 @@ let
 
   tunnelConf = let opts = [
     notice
-    (flip mapAttrs
-      (collect (name: tun: tun ? port && tun ? destination) cfg.outTunnels)
+    (flip map
+      (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
       (tun: let outTunOpts = [
-        (sec name)
+        (sec tun.name)
         "type = client"
         (intOpt "port" tun.port)
         (strOpt "destination" tun.destination)
@@ -204,10 +204,10 @@ let
         ++ (if tun ? crypto.tagsToSend then
             optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else []);
         in concatStringsSep "\n" outTunOpts))
-    (flip mapAttrs
-      (collect (name: tun: tun ? port && tun ? address) cfg.inTunnels)
+    (flip map
+      (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
       (tun: let inTunOpts = [
-        (sec name)
+        (sec tun.name)
         "type = server"
         (intOpt "port" tun.port)
         (strOpt "host" tun.address)
@@ -606,7 +606,7 @@ in
 
       outTunnels = mkOption {
         default = {};
-        type = with types; loaOf (submodule (
+        type = with types; attrsOf (submodule (
           { name, ... }: {
             options = {
               destinationPort = mkOption {
@@ -627,7 +627,7 @@ in
 
       inTunnels = mkOption {
         default = {};
-        type = with types; loaOf (submodule (
+        type = with types; attrsOf (submodule (
           { name, ... }: {
             options = {
               inPort = mkOption {

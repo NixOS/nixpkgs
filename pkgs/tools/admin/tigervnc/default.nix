@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   inherit fontDirectories;
 
+  patches = [ ./u_xorg-server-1.20.7-ddxInputThreadInit.patch ];
+
   postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver
     fontPath=

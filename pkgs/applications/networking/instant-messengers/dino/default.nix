@@ -2,7 +2,7 @@
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
 , gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup, libgee, utillinux, libselinux, libsepol, libpsl, brotli
+, libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
 , libgcrypt
 , epoxy
@@ -52,18 +52,12 @@ stdenv.mkDerivation rec {
     pcre
     xorg.libxcb
     xorg.libpthreadstubs
-    xorg.libXtst
     libXdmcp
     libxkbcommon
     epoxy
     at-spi2-core
     dbus
     icu
-    utillinux
-    libselinux
-    libsepol
-    libpsl
-    brotli
     libsignal-protocol-c
     librsvg
   ];

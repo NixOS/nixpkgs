@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swiftformat";
-  version = "0.44.0";
+  version = "0.44.2";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
     rev = "${version}";
-    sha256 = "13s6syzpxklkv07s1dzdccnqz6p316rrhjpxg8y8dy19ynj5jzvg";
+    sha256 = "17g4w8kmkrhcp7lrfi525ck9jhcm96d0nn93yadacdjcdnchmih1";
   };
 
   preConfigure = "LD=$CC";

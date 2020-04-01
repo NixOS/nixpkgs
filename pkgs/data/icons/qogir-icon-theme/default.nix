@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qogir-icon-theme";
-  version = "2020-01-29";
+  version = "2020-02-21";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0g6qiry4gzkr48xn4qi8sdna0hi3982sywskz9adkzqcznir542h";
+    sha256 = "0m7f26dzzz5gkxi9dbbc96pl0xcvayr1ibxbjkrlsjcdvfg7p3rr";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A colorful design icon theme for linux desktops";
+    description = "Flat colorful design icon theme";
     homepage = "https://github.com/vinceliuice/Qogir-icon-theme";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;

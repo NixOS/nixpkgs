@@ -6,8 +6,10 @@ basexx,,,,,
 binaryheap,,,,,vcunat
 bit32,,,,lua5_1,lblasc
 busted,,,,,
+cassowary,,,,,marsam
 cjson,lua-cjson,,,,
 compat53,,,,,vcunat
+cosmo,,,,,marsam
 coxpcall,,,1.17.0-1,,
 cqueues,,,,,vcunat
 cyrussasl,,,,,vcunat

@@ -8,7 +8,7 @@ with lib;
 let
   verMajor = "1";
   verMinor = "2";
-  verPatch = "1335";
+  verPatch = "5033";
   version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "2.1.2";
   gwtVer = "2.8.1";
@@ -26,7 +26,7 @@ mkDerivation rec {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "0jv1d4yznv2lzwp0fdf377vqpg0k2q4z9qvji4sj86fabj835lqd";
+    sha256 = "0f3p2anz9xay2859bxj3bvyj582igsp628qxsccpkgn0jifvi4np";
   };
 
   # Hack RStudio to only use the input R and provided libclang.

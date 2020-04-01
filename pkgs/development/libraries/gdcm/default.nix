@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake, vtk, darwin }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
+  version = "3.0.5";
   pname = "gdcm";
 
   src = fetchurl {
     url = "mirror://sourceforge/gdcm/${pname}-${version}.tar.bz2";
-    sha256 = "0g46l7fjvn37sg29m0nb7wlnnpnxmlm9ryp7vam26ni02l73paid";
+    sha256 = "16d3sf81n4qhwbbx1d80jg6fhrla5paan384c4bbbqvbhm222yby";
   };
 
   dontUseCmakeBuildDir = true;

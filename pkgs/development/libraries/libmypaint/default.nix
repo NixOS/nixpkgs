@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libmypaint";
-  version = "1.4.0";
+  version = "1.5.1";
 
   outputs = [ "out" "dev" ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "mypaint";
     repo = "libmypaint";
     rev = "v${version}";
-    sha256 = "1ynm2g2wdb9zsymncndlgs6gpcbsa122n52d11161jrj5nrdliaq";
+    sha256 = "1pxx8fjdabcindxhzgbhg4p7yanl4ihbd8kq71y2nyi9dqsjr2fw";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = http://mypaint.org/;
+    homepage = "http://mypaint.org/";
     description = "Library for making brushstrokes which is used by MyPaint and other projects";
     license = licenses.isc;
     maintainers = with maintainers; [ goibhniu jtojnar ];

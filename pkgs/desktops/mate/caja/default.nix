@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libnotify, libxml2, libexif, exempi, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, libnotify, libxml2, libexif, exempi, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "caja";
-  version = "1.22.3";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1w2liq9h1kr5zyaaq82xz8pic04qi5sra8kaycfg1iddmknkfqn7";
+    sha256 = "1cnfy481hcwjv3ia3kw0d4h7ga8cng0pqm3z349v4qcmfdapmqc0";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     wrapGAppsHook
   ];
 
@@ -31,9 +31,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-update-mimedb" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "File manager for the MATE desktop";
-    homepage = https://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = with stdenv.lib.licenses; [ gpl2 lgpl2 ];
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

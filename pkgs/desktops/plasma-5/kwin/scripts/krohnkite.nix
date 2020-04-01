@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "krohnkite";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "esjeon";
     repo = "krohnkite";
     rev = "v${version}";
-    sha256 = "0gib39vvnpdynyfqfrkzri67dhr4lf3zpk3njw4zzkz97c8k6psq";
+    sha256 = "0j3rm1w6d545qlmx02xs72b5zsigm48hp7lp7yh30z3cjqm00aap";
   };
 
   buildInputs = [

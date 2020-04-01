@@ -14,14 +14,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "yosys";
-  version = "2020.02.07";
+  pname   = "yosys";
+  version = "2020.03.24";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "2e8d6ec0b06b4e51e222c15c8049130bc264ae57";
-    sha256 = "0asnqhxs5r5r2xmvsk9pbgyqgk53j1snh7c9qizcppn4csapda81";
+    rev    = "c9555c9adeba886a308c60615ac794ec20d9276e";
+    sha256 = "1fh118fv06jyfmkx6zy0w2k0rjj22m0ffyll3k5giaw8zzaf0j3a";
   };
 
   enableParallelBuilding = true;
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
 
-    if ! grep -q "ABCREV = ${shortAbcRev}" Makefile;then
+    if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
       echo "yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
       exit 1
     fi
@@ -60,20 +60,21 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkInputs = [ verilog ];
 
-  meta = {
-    description = "Framework for RTL synthesis tools";
-    longDescription = ''
-      Yosys is a framework for RTL synthesis tools. It currently has
-      extensive Verilog-2005 support and provides a basic set of
-      synthesis algorithms for various application domains.
-      Yosys can be adapted to perform any synthesis job by combining
-      the existing passes (algorithms) using synthesis scripts and
-      adding additional passes as needed by extending the yosys C++
-      code base.
-    '';
-    homepage    = http://www.clifford.at/yosys/;
-    license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+  # Internally, yosys knows to use the specified hardcoded ABCEXTERNAL binary.
+  # But other tools (like mcy or symbiyosys) can't know how yosys was built, so
+  # they just assume that 'yosys-abc' is available -- but it's not installed
+  # when using ABCEXTERNAL
+  #
+  # add a symlink to fake things so that both variants work the same way.
+  postInstall = ''
+    ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Open RTL synthesis framework and tools";
+    homepage    = "http://www.clifford.at/yosys/";
+    license     = licenses.isc;
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ shell thoughtpolice emily ];
   };
 }

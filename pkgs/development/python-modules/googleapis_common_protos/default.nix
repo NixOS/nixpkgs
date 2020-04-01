@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.6.0";
+  version = "1.51.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e61b8ed5e36b976b487c6e7b15f31bb10c7a0ca7bd5c0e837f4afab64b53a0c6";
+    sha256 = "0vi2kr0daivx2q1692lp3y61bfnvdw471xsfwi8924br89q92g01";
   };
 
   propagatedBuildInputs = [ protobuf setuptools ];
@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "Common protobufs used in Google APIs";
     homepage = "https://github.com/googleapis/googleapis";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }

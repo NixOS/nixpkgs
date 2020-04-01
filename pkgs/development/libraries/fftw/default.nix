@@ -1,7 +1,8 @@
-{ fetchurl, stdenv, lib, precision ? "double", perl }:
+{ fetchurl, stdenv, lib, llvmPackages ? null, precision ? "double", perl }:
 
 with lib;
 
+assert stdenv.cc.isClang -> llvmPackages != null;
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
 let
@@ -24,6 +25,11 @@ stdenv.mkDerivation {
     ++ optional withDoc "info"; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
+  buildInputs = lib.optionals stdenv.cc.isClang [
+    # TODO: This may mismatch the LLVM version sin the stdenv, see #79818.
+    llvmPackages.openmp
+  ];
+
   configureFlags =
     [ "--enable-shared"
       "--enable-threads"
@@ -32,7 +38,7 @@ stdenv.mkDerivation {
     # all x86_64 have sse2
     # however, not all float sizes fit
     ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
-    ++ optional (stdenv.cc.isGNU && !stdenv.hostPlatform.isMusl) "--enable-openmp"
+    ++ [ "--enable-openmp" ]
     # doc generation causes Fortran wrapper generation which hard-codes gcc
     ++ optional (!withDoc) "--disable-doc";
 

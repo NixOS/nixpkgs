@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "alure2";
-  version = "unstable-2020-01-09";
+  version = "unstable-2020-02-06";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "alure";
-    rev = "4b7b58d3f0de444d6f26aa705704deb59145f586";
-    sha256 = "0ds18hhy2wpvx498z5hcpzfqz9i60ixsi0cjihyvk20rf4qy12vg";
+    rev = "50f92fe528e77da82197fd947d1cf9b0a82a0c7d";
+    sha256 = "1gmc1yfhwaj6lik0vn7zv8y23i05f4rw25v2jg34n856jcs02svx";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -208,9 +208,11 @@ let
       find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
 
+    strictDeps = true;
+
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go go-modules; };
+    passthru = passthru // { inherit go go-modules modSha256; };
 
     meta = {
       # Add default meta information

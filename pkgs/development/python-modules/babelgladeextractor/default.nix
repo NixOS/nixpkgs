@@ -8,13 +8,14 @@
 
 buildPythonPackage rec {
   pname = "babelgladeextractor";
-  version = "0.6.3";
+  version = "0.7.0";
+  disabled = (!isPy3k); # uses python3 specific file io in setup.py
 
   src = fetchPypi {
     pname = "BabelGladeExtractor";
     inherit version;
     extension = "tar.bz2";
-    sha256 = "12i2i97wai5vv5h522rj6pfcdsfyrkgmjqc699m5v4af0yy3rqsq";
+    sha256 = "160p4wi2ss69g141c2z59azvrhn7ymy5m9h9d65qrcabigi0by5w";
   };
 
   propagatedBuildInputs = [

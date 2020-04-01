@@ -69,7 +69,7 @@ let
       unzip $src
       mv Electron.app $out/Applications
       mkdir -p $out/bin
-      ln -s $out/Applications/Electron.app/Contents/MacOs/Electron $out/bin/electron
+      ln -s $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
     '';
   };
 in

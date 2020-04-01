@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "5.0.4";
+  version = "5.0.5";
 
   repoName = "music";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "02qjsf9xnfh043xbls9mll2r1wcdvclw60x8wysv12rhbm90gwvp";
+    sha256 = "0cb0mwsp5w2bmjq8ap9mi0jvaqr9fgq00gfrkj0mzb5x5c26hrnw";
   };
 
   passthru = {
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Music player and library designed for elementary OS";
-    homepage = https://github.com/elementary/music;
+    homepage = "https://github.com/elementary/music";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

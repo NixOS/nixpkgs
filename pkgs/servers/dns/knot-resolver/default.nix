@@ -23,6 +23,14 @@ unwrapped = stdenv.mkDerivation rec {
     sha256 = "4a93264ad0cda7ea2252d1ba057e474722f77848165f2893e0c76e21ae406415";
   };
 
+  patches = [
+    (fetchpatch { # merged to upstream master, remove on update
+      name = "zfs-cpu-usage.diff";
+      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/merge_requests/946.diff";
+      sha256 = "0mcvx4pfnl19h6zrv2fcgxdjarqzczn2dz85sylcczsfvdmn6i5m";
+    })
+  ];
+
   outputs = [ "out" "dev" ];
 
   # Path fixups for the NixOS service.

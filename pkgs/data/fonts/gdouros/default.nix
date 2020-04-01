@@ -26,10 +26,11 @@ let
 
     meta = {
       inherit description;
-      # In lieu of a license:
-      # Fonts in this site are offered free for any use;
-      # they may be installed, embedded, opened, edited, modified, regenerated, posted, packaged and redistributed.
-      license = lib.licenses.free;
+      # see http://users.teilar.gr/~g1951d/License.pdf
+      # quite draconian: non-commercial, no modifications,
+      # no redistribution, "a single instantiation and no
+      # network installation"
+      license = lib.licenses.unfree;
       homepage = http://users.teilar.gr/~g1951d/;
     };
   };

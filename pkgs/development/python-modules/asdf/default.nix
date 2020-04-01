@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.5.0";
+  version = "2.5.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qddczr5vhlbhmzmw6bwmkrvsj8dml76zf9gnk22qzab60ali99j";
+    sha256 = "0ai5l62ldaq1cqfmq3hvnzp8gp0hjjmjnck9d3cnx5r8la5ig18y";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python tools to handle ASDF files";
-    homepage = https://github.com/spacetelescope/asdf;
+    homepage = "https://github.com/spacetelescope/asdf";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

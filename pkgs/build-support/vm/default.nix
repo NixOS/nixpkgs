@@ -126,6 +126,10 @@ rec {
     mkdir -p /fs/etc
     ln -sf /proc/mounts /fs/etc/mtab
     echo "127.0.0.1 localhost" > /fs/etc/hosts
+    # Ensures tools requiring /etc/passwd will work (e.g. nix)
+    if [ ! -e /fs/etc/passwd ]; then
+      echo "root:x:0:0:System administrator:/root:/bin/sh" > /fs/etc/passwd
+    fi
 
     echo "starting stage 2 ($command)"
     exec switch_root /fs $command $out
@@ -1018,8 +1022,8 @@ rec {
       name = "debian-9.8-stretch-i386";
       fullName = "Debian 9.8 Stretch (i386)";
       packagesList = fetchurl {
-        url = http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-i386/Packages.xz;
-        sha256 = "1dr3skl35iyj85qlc33lq4whippbqf327vnbcyfqqrv6h86k68mw";
+        url = http://snapshot.debian.org/archive/debian/20200301T030401Z/dists/stretch/main/binary-i386/Packages.xz;
+        sha256 = "1jglr1d1jys3xddp8f7w9j05db39fah8xy4gfkpqbd1b5d2caslz";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

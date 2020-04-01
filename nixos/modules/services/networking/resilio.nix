@@ -244,7 +244,7 @@ in
       group           = "rslsync";
     };
 
-    users.groups = [ { name = "rslsync"; } ];
+    users.groups.rslsync = {};
 
     systemd.services.resilio = with pkgs; {
       description = "Resilio Sync Service";

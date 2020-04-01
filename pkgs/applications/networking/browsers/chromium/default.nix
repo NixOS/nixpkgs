@@ -1,4 +1,4 @@
-{ newScope, config, stdenv, llvmPackages_9
+{ newScope, config, stdenv, llvmPackages_9, llvmPackages_10
 , makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
@@ -13,14 +13,17 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , useVaapi ? false # test video on radeon, before enabling this
+, useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
 }:
 
 let
-  stdenv = llvmPackages_9.stdenv;
-  llvmPackages = llvmPackages_9;
+  llvmPackages = if channel == "dev"
+    then llvmPackages_10
+    else llvmPackages_9;
+  stdenv = llvmPackages.stdenv;
 
   callPackage = newScope chromium;
 
@@ -30,7 +33,7 @@ let
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useVaapi;
+      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useVaapi useOzone;
     };
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };

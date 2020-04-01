@@ -8,11 +8,11 @@ assert stdenv.lib.versionAtLeast ocaml.version "4.01";
 
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
-  version = "11.0.0";
+  version = "12.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1j0v3dg19sq13fmbx4kzy3n1hjiv7hkm1ysxyrdva430jvqw23df";
+    sha256 = "031fxixp37hjv45mib87wxm865k82903w72x60hp6v36k7jn34a4";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg uutf cmdliner ];

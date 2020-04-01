@@ -1,14 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, acme, aiohttp, snitun, attrs, pytest-aiohttp, warrant, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
+, acme, aiohttp, snitun, attrs, pycognito, warrant
+, pytest-aiohttp, asynctest, pytest  }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.29";
+  version = "0.32.2";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "182nh5i3hlj0kqkbynk69md0ddq83w02l8lz4m03d8xbjixzi1k1";
+    sha256 = "1hfi5q222kgbgrj5yvr4lbhca49hcs6sc2yhxc4pjxqsc12bv1f1";
   };
 
   # upstreamed in https://github.com/NabuCasa/hass-nabucasa/pull/119
@@ -17,13 +19,13 @@ buildPythonPackage rec {
     cat setup.py
   '';
 
-  propagatedBuildInputs = [ acme aiohttp snitun attrs warrant ];
+  propagatedBuildInputs = [ acme aiohttp snitun attrs warrant pycognito ];
 
-  checkInputs = [ pytest pytest-aiohttp ];
+  checkInputs = [ pytest pytest-aiohttp asynctest ];
 
   checkPhase = ''
     pytest tests/
-    '';
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";

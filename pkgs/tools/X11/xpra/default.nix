@@ -14,11 +14,11 @@ let
   xf86videodummy = callPackage ./xf86videodummy { };
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "3.0.5";
+  version = "3.0.7";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "1zy4q8sq0j00ybxw3v8ylaj2aj10x2gb0a05aqbcnrwp3hf983vz";
+    sha256 = "0i4c5cdr5prbz54jinsinhvb60s5s5yskjzjg47zbw0if17sp26w";
   };
 
   patches = [
@@ -88,7 +88,7 @@ in buildPythonApplication rec {
   passthru = { inherit xf86videodummy; };
 
   meta = {
-    homepage = http://xpra.org/;
+    homepage = "http://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";

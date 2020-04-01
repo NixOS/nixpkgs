@@ -6,17 +6,24 @@ with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
+  makePostgresqlWalReceiverTest = subTestName: postgresqlPackage: let
+
   postgresqlDataDir = "/var/db/postgresql/test";
   replicationUser = "wal_receiver_user";
   replicationSlot = "wal_receiver_slot";
   replicationConn = "postgresql://${replicationUser}@localhost";
   baseBackupDir = "/tmp/pg_basebackup";
   walBackupDir = "/tmp/pg_wal";
-  recoveryConf = pkgs.writeText "recovery.conf" ''
+  atLeast12 = versionAtLeast postgresqlPackage.version "12.0";
+  restoreCommand = ''
     restore_command = 'cp ${walBackupDir}/%f %p'
   '';
 
-  makePostgresqlWalReceiverTest = subTestName: postgresqlPackage: makeTest {
+  recoveryFile = if atLeast12
+      then pkgs.writeTextDir "recovery.signal" ""
+      else pkgs.writeTextDir "recovery.conf" "${restoreCommand}";
+
+  in makeTest {
     name = "postgresql-wal-receiver-${subTestName}";
     meta.maintainers = with maintainers; [ pacien ];
 
@@ -29,6 +36,9 @@ let
           wal_level = archive # alias for replica on pg >= 9.6
           max_wal_senders = 10
           max_replication_slots = 10
+        '' + optionalString atLeast12 ''
+          ${restoreCommand}
+          recovery_end_command = 'touch recovery.done'
         '';
         authentication = ''
           host replication ${replicationUser} all trust
@@ -45,6 +55,9 @@ let
         slot = replicationSlot;
         directory = walBackupDir;
       };
+      # This is only to speedup test, it isn't time racing. Service is set to autorestart always,
+      # default 60sec is fine for real system, but is too much for a test
+      systemd.services.postgresql-wal-receiver-main.serviceConfig.RestartSec = mkForce 5;
     };
 
     testScript = ''
@@ -70,7 +83,7 @@ let
       # prepare WAL and recovery
       $machine->succeed('chmod a+rX -R ${walBackupDir}');
       $machine->execute('for part in ${walBackupDir}/*.partial; do mv $part ''${part%%.*}; done'); # make use of partial segments too
-      $machine->succeed('cp ${recoveryConf} ${postgresqlDataDir}/recovery.conf && chmod 666 ${postgresqlDataDir}/recovery.conf');
+      $machine->succeed('cp ${recoveryFile}/* ${postgresqlDataDir}/ && chmod 666 ${postgresqlDataDir}/recovery*');
 
       # replay WAL
       $machine->systemctl('start postgresql');

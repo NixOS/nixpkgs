@@ -4,7 +4,7 @@
 
 buildDunePackage rec {
   pname = "biocaml";
-  version = "0.10.0";
+  version = "0.10.1";
 
   owner = "biocaml";
 
@@ -14,7 +14,7 @@ buildDunePackage rec {
     inherit owner;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0dghqx6jbzihmga8jjwwavs0wqksgcns4z1nmwj0ds9ik3mcra30";
+    sha256 = "1f19nc8ld0iv45jjnsvaah3ddj88s2n9wj8mrz726kzg85cfr8xj";
   };
 
   buildInputs = [ ppx_jane ppx_sexp_conv ];
@@ -23,7 +23,7 @@ buildDunePackage rec {
 
   meta = with stdenv.lib; {
     description = "Bioinformatics library for Ocaml";
-    homepage = "http://${owner}.github.io/${pname}";
+    homepage = "http://${pname}.org";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.gpl2;
   };

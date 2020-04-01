@@ -5,13 +5,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
-  version = "1.0.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0670c1c84lcf5vl3h6mlff00fz2fnm766bzlk526sjjzysx3zjya";
+    sha256 = "19snm6cicxagcw9ys2jmjf6fchzs6pwm7h4jmyr0pn6zks2yjf1i";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkgconfig ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/CanonicalLtd/dqlite/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ joko ];
+    maintainers = with maintainers; [ joko wucke13 ];
     platforms = platforms.unix;
   };
 }

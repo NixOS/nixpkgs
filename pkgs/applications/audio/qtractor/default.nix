@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
       suil
     ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Audio/MIDI multi-track sequencer";
     homepage = http://qtractor.sourceforge.net;

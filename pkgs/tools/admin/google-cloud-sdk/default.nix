@@ -21,18 +21,20 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "10h0khh8npj2j5f7h3z86h46zbb1skbfs74firssich6jk7rx6km";
+      sha256 = "0v83faz0jwnx603acmkc3bsl7vg2xxsm1jfw88fmnj6zcsa5b9ql";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "182r9lgpks50ihcrkarc5w6l4rfmpdnx825lazamj5j2jsha73xw";
+      sha256 = "1z9liqzgwfavh3m3q1s871gxnwnsxdbny2vqzh9sjlwdk26f76gi";
     };
   }.${system};
 
+  strip = if stdenv.isDarwin then "strip -x" else "strip";
+
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "268.0.0";
+  version = "286.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -42,6 +44,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./gcloud-path.patch
+    ./gsutil-disable-updates.patch
   ];
 
   installPhase = ''
@@ -83,6 +86,7 @@ in stdenv.mkDerivation rec {
 
     # remove tests and test data
     find $out -name tests -type d -exec rm -rf '{}' +
+    rm $out/google-cloud-sdk/platform/gsutil/gslib/commands/test.py
 
     # compact all the JSON
     find $out -name \*.json | while read path; do
@@ -91,7 +95,7 @@ in stdenv.mkDerivation rec {
     done
 
     # strip the Cython gRPC library
-    strip $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
+    ${strip} $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
   '';
 
   meta = with stdenv.lib; {

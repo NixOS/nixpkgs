@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "helm";
-  version = "3.0.3";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "1gdrm3zz7524c8v3g128drfzdyalxlipbzxmwhalm7px4p5z4n0j";
+    sha256 = "0pg5cwgyfb4isy2fn233kj3bdn0i8qqp90yzix0khs5maalpnrk1";
   };
-  modSha256 = "1kmm6yb03g9lsz380rvf32j4icp3rcq7ixxcgsxfgpwqvq08zkn6";
+  modSha256 = "0618zzi4x37ahsrazsr82anghhfva8yaryzb3p5d737p3ixbiyv8";
 
   subPackages = [ "cmd/helm" ];
   buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.version=v${version}" ];

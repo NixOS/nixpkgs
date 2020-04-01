@@ -78,7 +78,6 @@ self: super: {
   # hackage-db uses must match, so take the latest
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
     Cabal = self.Cabal_3_0_0_0;
-    hackage-db = self.hackage-db_2_1_0;
   });
 
   # cabal2spec needs a recent version of Cabal
@@ -86,5 +85,9 @@ self: super: {
 
   # Builds only with ghc-8.8.x and beyond.
   policeman = markBroken super.policeman;
+
+  # https://github.com/pikajude/stylish-cabal/issues/12
+  stylish-cabal = doDistribute (markUnbroken (super.stylish-cabal.override { haddock-library = self.haddock-library_1_7_0; }));
+  haddock-library_1_7_0 = dontCheck super.haddock-library_1_7_0;
 
 }

@@ -1,47 +1,62 @@
-diff a/pyproj/datadir.py b/pyproj/datadir.py
---- a/pyproj/datadir.py
-+++ b/pyproj/datadir.py
-@@ -52,6 +52,7 @@ def get_data_dir():
-     str: The valid data directory.
-
-     """
-+    return "@proj@/share/proj"
-     # to avoid re-validating
-     global _VALIDATED_PROJ_DATA
+diff -Nur a/pyproj/datadir.py b/pyproj/datadir.py
+--- a/pyproj/datadir.py	2020-03-24 12:53:39.417440608 +0100
++++ b/pyproj/datadir.py	2020-03-24 12:56:19.870089479 +0100
+@@ -66,9 +66,7 @@
      if _VALIDATED_PROJ_DATA is not None:
-diff a/setup.py b/setup.py
---- a/setup.py
-+++ b/setup.py
-@@ -16,7 +16,7 @@ INTERNAL_PROJ_DIR = os.path.join(CURRENT_FILE_PATH, "pyproj", BASE_INTERNAL_PROJ
-
+         return _VALIDATED_PROJ_DATA
+     global _USER_PROJ_DATA
+-    internal_datadir = os.path.join(
+-        os.path.dirname(os.path.abspath(__file__)), "proj_dir", "share", "proj"
+-    )
++    internal_datadir = "@proj@/share/proj"
+     proj_lib_dirs = os.environ.get("PROJ_LIB", "")
+     prefix_datadir = os.path.join(sys.prefix, "share", "proj")
+ 
+diff -Nur a/setup.py b/setup.py
+--- a/setup.py	2020-03-24 12:53:39.415440624 +0100
++++ b/setup.py	2020-03-24 12:52:05.311232522 +0100
+@@ -11,7 +11,7 @@
+ PROJ_MIN_VERSION = parse_version("6.2.0")
+ CURRENT_FILE_PATH = os.path.dirname(os.path.abspath(__file__))
+ BASE_INTERNAL_PROJ_DIR = "proj_dir"
+-INTERNAL_PROJ_DIR = os.path.join(CURRENT_FILE_PATH, "pyproj", BASE_INTERNAL_PROJ_DIR)
++INTERNAL_PROJ_DIR = "@proj@"
+ 
+ 
  def check_proj_version(proj_dir):
-     """checks that the PROJ library meets the minimum version"""
--    proj = os.path.join(proj_dir, "bin", "proj")
-+    proj = "@proj@/bin/proj"
-     proj_ver_bytes = subprocess.check_output(proj, stderr=subprocess.STDOUT)
-     proj_ver_bytes = (proj_ver_bytes.decode("ascii").split()[1]).strip(",")
-     proj_version = parse_version(proj_ver_bytes)
-@@ -33,6 +33,7 @@ def get_proj_dir():
-     """
-     This function finds the base PROJ directory.
-     """
-+    return "@proj@"
-     proj_dir = os.environ.get("PROJ_DIR")
-     if proj_dir is None and os.path.exists(INTERNAL_PROJ_DIR):
-         proj_dir = INTERNAL_PROJ_DIR
-@@ -56,6 +57,7 @@ def get_proj_libdirs(proj_dir):
-     """
-     This function finds the library directories
-     """
-+    return ["@proj@/lib"]
-     proj_libdir = os.environ.get("PROJ_LIBDIR")
-     libdirs = []
-     if proj_libdir is None:
-@@ -77,6 +79,7 @@ def get_proj_incdirs(proj_dir):
-     """
-     This function finds the include directories
-     """
-+    return ["@proj@/include"]
-     proj_incdir = os.environ.get("PROJ_INCDIR")
-     incdirs = []
-     if proj_incdir is None:
+@@ -146,7 +146,7 @@
+     # By default we'll try to get options PROJ_DIR or the local version of proj
+     proj_dir = get_proj_dir()
+     library_dirs = get_proj_libdirs(proj_dir)
+-    include_dirs = get_proj_incdirs(proj_dir)
++    include_dirs = get_proj_incdirs("@projdev@")
+ 
+     # setup extension options
+     ext_options = {
+diff -Nur a/test/conftest.py b/test/conftest.py
+--- a/test/conftest.py	2020-03-24 12:53:39.417440608 +0100
++++ b/test/conftest.py	2020-03-24 23:16:47.373972786 +0100
+@@ -1,6 +1,7 @@
+ import os
+ import shutil
+ import tempfile
++import stat
+ 
+ import pytest
+ 
+@@ -17,6 +18,15 @@
+     with tempfile.TemporaryDirectory() as tmpdir:
+         tmp_data_dir = os.path.join(tmpdir, "proj")
+         shutil.copytree(data_dir, tmp_data_dir)
++
++        # Data copied from the nix store is readonly (causes cleanup problem).
++        # Make it writable.
++        for r, d, files in os.walk(tmp_data_dir):
++            os.chmod(r, os.stat(r).st_mode | stat.S_IWUSR)
++            for f in files:
++                fpath = os.path.join(r, f)
++                os.chmod(fpath, os.stat(fpath).st_mode | stat.S_IWUSR)
++
+         try:
+             os.remove(os.path.join(str(tmp_data_dir), "ntv2_0.gsb"))
+         except OSError:

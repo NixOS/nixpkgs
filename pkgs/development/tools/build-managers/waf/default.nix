@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     python waf-light build${wafToolsArg}
   '';
   installPhase = ''
-    install waf $out
+    install -D waf $out/bin/waf
   '';
 
   meta = with stdenv.lib; {

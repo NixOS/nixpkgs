@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage {
       sha256 = "1c99d6zpjxa8xlrg0n1825am20d2pjiicfcjwv8iay9ylfdnvygl";
   };
   sourceRoot = "source/relay-rust";
-  cargoSha256 = "1l1cirhmfkpa466vksynlhwggsfiahws7cpsxydrc414l415l283";
+  cargoSha256 = "0rb5xcqg5ikgrxpmzrql5n298j50aqgkkp45znbfv2x2n40dywad";
 
   patchFlags = [ "-p2" ];
   patches = [

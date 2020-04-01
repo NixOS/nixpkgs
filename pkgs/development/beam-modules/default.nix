@@ -66,8 +66,9 @@ let
         # Remove old versions of elixir, when the supports fades out:
         # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
-        lfe = lfe_1_2;
+        lfe = lfe_1_3;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
+        lfe_1_3 = lib.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
 
         # Non hex packages. Examples how to build Rebar/Mix packages with and
         # without helper functions buildRebar3 and buildMix.

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
+    echo "hack out autoComp.dsp due to https://github.com/grame-cncm/faust/407/issues "
+    rm autoComp.dsp
     for f in *.dsp;
     do
       echo "compiling standalone from" $f

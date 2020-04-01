@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Common routines for ruamel packages";
-    homepage = https://bitbucket.org/ruamel/base;
+    homepage = "https://sourceforge.net/projects/ruamel-base/";
     license = licenses.mit;
   };
 

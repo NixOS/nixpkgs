@@ -154,7 +154,7 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
-     The <literal>99-main.network</literal> file was removed. Maching all
+     The <literal>99-main.network</literal> file was removed. Matching all
      network interfaces caused many breakages, see
      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18962">#18962</link>
        and <link xlink:href="https://github.com/NixOS/nixpkgs/pull/71106">#71106</link>.
@@ -196,10 +196,10 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
-     There is now only one Xfce package-set and module. This means attributes, <literal>xfce4-14</literal>
-     <literal>xfce4-12</literal>, and <literal>xfceUnstable</literal> all now point to the latest Xfce 4.14
-     packages. And in future NixOS releases will be the latest released version of Xfce available at the
-     time during the releases development (if viable).
+     There is now only one Xfce package-set and module. This means that attributes <literal>xfce4-14</literal>
+     and <literal>xfceUnstable</literal> all now point to the latest Xfce 4.14
+     packages. And in the future NixOS releases will be the latest released version of Xfce available at the
+     time of the release's development (if viable).
     </para>
    </listitem>
    <listitem>
@@ -235,7 +235,7 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    <listitem>
     <para>
       The <literal>buildRustCrate</literal> infrastructure now produces <literal>lib</literal> outputs in addition to the <literal>out</literal> output.
-      This has led to drastically reduced closed sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
+      This has led to drastically reduced closure sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
     </para>
     </listitem>
    <listitem>
@@ -625,6 +625,138 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      to a fairly old snapshot  from the <package>gcc7</package>-branch.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <citerefentry><refentrytitle>nixos-build-vms</refentrytitle><manvolnum>8</manvolnum>
+     </citerefentry>-script now uses the python test-driver.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <package>riot-web</package> package now accepts configuration overrides as an attribute set instead of a string.
+     A formerly used JSON configuration can be converted to an attribute set with <literal>builtins.fromJSON</literal>.
+    </para>
+    <para>
+     The new default configuration also disables automatic guest account registration and analytics to improve privacy.
+     The previous behavior can be restored by setting <literal>config.riot-web.conf = { disable_guests = false; piwik = true; }</literal>.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       Stand-alone usage of <literal>Upower</literal> now requires
+       <option>services.upower.enable</option> instead of just installing into
+       <xref linkend="opt-environment.systemPackages"/>.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     <package>nextcloud</package> has been updated to <literal>v18.0.2</literal>. This means
+     that users from NixOS 19.09 can't upgrade directly since you can only move one version
+      forward and 19.09 uses <literal>v16.0.8</literal>.
+    </para>
+    <para>
+     To provide a safe upgrade-path and to circumvent similar issues in the future, the following
+     measures were taken:
+     <itemizedlist>
+      <listitem>
+       <para>
+        The <package>pkgs.nextcloud</package>-attribute has been removed and replaced with
+        versioned attributes (currently <package>pkgs.nextcloud17</package> and
+        <package>pkgs.nextcloud18</package>). With this change major-releases can be backported
+        without breaking stuff and to make upgrade-paths easier.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Existing setups will be detected using
+        <link linkend="opt-system.stateVersion">system.stateVersion</link>: by default,
+        <package>nextcloud17</package> will be used, but will raise a warning which notes
+        that after that deploy it's recommended to update to the latest stable version
+        (<package>nextcloud18</package>) by declaring the newly introduced setting
+        <link linkend="opt-services.nextcloud.package">services.nextcloud.package</link>.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Users with an overlay (e.g. to use <package>nextcloud</package> at version
+        <literal>v18</literal> on <literal>19.09</literal>) will get an evaluation error
+        by default. This is done to ensure that our
+        <link linkend="opt-services.nextcloud.package">package</link>-option doesn't select an
+        older version by accident. It's recommended to use <package>pkgs.nextcloud18</package>
+        or to set <link linkend="opt-services.nextcloud.package">package</link> to
+        <package>pkgs.nextcloud</package> explicitly.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+    <warning>
+     <para>
+      Please note that if you're comming from <literal>19.03</literal> or older, you have
+      to manually upgrade to <literal>19.09</literal> first to upgrade your server
+      to Nextcloud v16.
+     </para>
+    </warning>
+   </listitem>
+   <listitem>
+    <para>
+     <package>Hydra</package> has gained a massive performance improvement due to
+     <link xlink:href="https://github.com/NixOS/hydra/pull/710">some database schema
+     changes</link> by adding several IDs and better indexing. However, it's necessary
+     to upgrade Hydra in multiple steps:
+     <itemizedlist>
+      <listitem>
+       <para>
+        At first, an older version of Hydra needs to be deployed which adds those
+        (nullable) columns. When having set <link linkend="opt-system.stateVersion">stateVersion
+        </link> to a value older than <literal>20.03</literal>, this package will be selected
+        by default from the module when upgrading. Otherwise, the package can be deployed using
+        the following config:
+<programlisting>{ pkgs, ... }: {
+  <link linkend="opt-services.hydra.package">services.hydra.package</link> = pkgs.hydra-migration;
+}</programlisting>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Automatically fill the newly added ID columns on the server by running the following
+        command:
+<screen>
+<prompt>$ </prompt>hydra-backfill-ids
+</screen>
+        <warning>
+         <para>Please note that this process can take a while depending on your database-size!</para>
+        </warning>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Deploy a newer version of Hydra to activate the DB optimizations. You can choose from
+        either <package>hydra-unstable</package> (latest <literal>master</literal> compiled
+        against <package>nixUnstable</package>) and <package>hydra-flakes</package> (latest
+        version with flake-support).
+        <warning>
+         <para>
+          If your <link linkend="opt-system.stateVersion">stateVersion</link> is set to
+          <literal>20.03</literal> or greater, <package>hydra-unstable</package> will be used
+          automatically! This will break your setup if you didn't run the migration.
+         </para>
+        </warning>
+        Please note that Hydra is currently not available with <package>nixStable</package>
+        as this doesn't compile anymore.
+       </para>
+      </listitem>
+     </itemizedlist>
+     <warning>
+      <para>
+       <package>pkgs.hydra</package> has been removed to ensure a graceful database-migration
+       using the dedicated package-attributes. If you still have <package>pkgs.hydra</package>
+       defined in e.g. an overlay, an assertion error will be thrown. To circumvent this,
+       you need to set <xref linkend="opt-services.hydra.package" /> to <package>pkgs.hydra</package>
+       explicitly and make sure you know what you're doing!
+      </para>
+     </warning>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -687,6 +819,86 @@ auth required pam_succeed_if.so uid >= 1000 quiet
     via <option>boot.initrd.luks.fido2Support</option>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Predicatbly named network-interfaces get renamed in stage-1. This means that it's possible
+     to use the proper interface name for e.g. dropbear-setups.
+    </para>
+    <para>
+     For further reference, please read <link xlink:href="https://github.com/NixOS/nixpkgs/pull/68953">#68953</link> or the corresponding <link xlink:href="https://discourse.nixos.org/t/predictable-network-interface-names-in-initrd/4055">discourse thread</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <package>matrix-synapse</package>-package has been updated to
+     <link xlink:href="https://github.com/matrix-org/synapse/releases/tag/v1.11.1">v1.11.1</link>.
+     Due to <link xlink:href="https://github.com/matrix-org/synapse/releases/tag/v1.10.0rc1">stricter requirements</link>
+     for database configuration when using <package>postgresql</package>, the automated database setup
+     of the module has been removed to avoid any further edge-cases.
+    </para>
+    <para>
+     <package>matrix-synapse</package> expects <literal>postgresql</literal>-databases to have the options
+     <literal>LC_COLLATE</literal> and <literal>LC_CTYPE</literal> set to
+     <link xlink:href="https://www.postgresql.org/docs/12/locale.html"><literal>'C'</literal></link> which basically
+     instructs <literal>postgresql</literal> to ignore any locale-based preferences.
+    </para>
+    <para>
+     Depending on your setup, you need to incorporate one of the following changes in your setup to
+     upgrade to 20.03:
+     <itemizedlist>
+      <listitem><para>If you use <literal>sqlite3</literal> you don't need to do anything.</para></listitem>
+      <listitem><para>If you use <literal>postgresql</literal> on a different server, you don't need
+       to change anything as well since this module was never designed to configure remote databases.
+      </para></listitem>
+      <listitem><para>If you use <literal>postgresql</literal> and configured your synapse initially on
+       <literal>19.09</literal> or older, you simply need to enable <package>postgresql</package>-support
+        explicitly:
+<programlisting>{ ... }: {
+  services.matrix-synapse = {
+    <link linkend="opt-services.matrix-synapse.enable">enable</link> = true;
+    /* and all the other config you've defined here */
+  };
+  <link linkend="opt-services.postgresql.enable">services.postgresql.enable</link> = true;
+}</programlisting>
+      </para></listitem>
+      <listitem><para>If you deploy a fresh <package>matrix-synapse</package>, you need to configure
+       the database yourself (e.g. by using the
+       <link linkend="opt-services.postgresql.initialScript">services.postgresql.initialScript</link>
+       option). An example for this can be found in the
+       <link linkend="module-services-matrix">documentation of the Matrix module</link>.
+      </para></listitem>
+      <listitem><para>If you initially deployed your <package>matrix-synapse</package> on
+       <literal>nixos-unstable</literal> <emphasis>after</emphasis> the <literal>19.09</literal>-release,
+       your database is misconfigured due to a regression in NixOS. For now, <package>matrix-synapse</package> will
+       startup with a warning, but it's recommended to reconfigure the database to set the values
+       <literal>LC_COLLATE</literal> and <literal>LC_CTYPE</literal> to
+       <link xlink:href="https://www.postgresql.org/docs/12/locale.html"><literal>'C'</literal></link>.
+      </para></listitem>
+     </itemizedlist>
+    </para>
+  </listitem>
+  <listitem>
+   <para>
+    The <link linkend="opt-systemd.network.links">systemd.network.links</link> option is now respected
+    even when <link linkend="opt-systemd.network.enable">systemd-networkd</link> is disabled.
+    This mirrors the behaviour of systemd - It's udev that parses <literal>.link</literal> files,
+    not <command>systemd-networkd</command>.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <package>mongodb</package> has been updated to version <literal>3.4.24</literal>.
+    <warning>
+     <para>
+      Please note that <package>mongodb</package> has been relicensed under their own
+      <link xlink:href="https://www.mongodb.com/licensing/server-side-public-license/faq"><literal>
+      sspl</literal></link>-license. Since it's not entirely free and not OSI-approved,
+      it's listed as non-free. This means that Hydra doesn't provide prebuilt
+      <package>mongodb</package>-packages and needs to be built locally.
+     </para>
+    </warning>
+   </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>

@@ -2,20 +2,22 @@
 
 buildGoModule rec {
   pname = "act";
-  version = "0.1.3";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "nektos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1y1bvk93dzsxwjakmgpb5qyy3lqng7cdabi64b555c1z6b42mf58";
+    sha256 = "0qx3vwsynmil1h3d2dzvqz0jzshfyy3vin14zjfmd353d915hf06";
   };
 
-  modSha256 = "00d0wjnr5y3bl95lma8sdwvqqs7fd0k43azawp1kb29kqnrlismg";
+  modSha256 = "0276dngh29kzgm95d23r8ajjrrkss0v0f0wfq1ribgsxh17v0y5n";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with lib; {
     description = "Run your GitHub Actions locally";
-    homepage = "https://circleci.com/";
+    homepage = "https://github.com/nektos/act";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
   };

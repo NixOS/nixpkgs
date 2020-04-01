@@ -45,7 +45,7 @@ let generic = { major, version, src }:
       downloadPage = http://alloytools.org/download.html;
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ aminb ];
+      maintainers = with maintainers; [ notbandali ];
     };
   };
 

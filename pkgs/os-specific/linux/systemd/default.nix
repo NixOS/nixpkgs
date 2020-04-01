@@ -30,7 +30,7 @@ let gnupg-minimal = gnupg.override {
   bzip2 = null;
 };
 in stdenv.mkDerivation {
-  version = "243.4";
+  version = "243.7";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -38,8 +38,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "systemd";
-    rev = "d8853d39a28b9884e0acd3ae5732a1e7caaf08af";
-    sha256 = "1wqm51i2czbbb3nara11mnxzqng4na1l8fvz7qnbxcrjsqm7hz18";
+    rev = "e7d881488292fc8bdf96acd12767eca1bd65adae";
+    sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -258,7 +258,7 @@ in stdenv.mkDerivation {
   passthru.interfaceVersion = 2;
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/systemd;
+    homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

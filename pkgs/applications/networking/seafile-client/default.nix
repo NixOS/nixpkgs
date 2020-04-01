@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools
 , seafile-shared, ccnet, jansson, libsearpc
 , withShibboleth ? true, qtwebengine }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "seafile-client";
   version = "7.0.5";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
   qtWrapperArgs = [
-    "--suffix PATH : ${stdenv.lib.makeBinPath [ ccnet seafile-shared ]}"
+    "--suffix PATH : ${lib.makeBinPath [ ccnet seafile-shared ]}"
   ];
 
   meta = with lib; {

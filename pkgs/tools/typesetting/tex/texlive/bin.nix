@@ -399,6 +399,27 @@ pygmentex = python2Packages.buildPythonApplication rec {
 };
 
 
+texlinks = stdenv.mkDerivation rec {
+  name = "texlinks.sh";
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
+
+  dontBuild = true;
+  doCheck = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    # Patch texlinks.sh back to 2015 version;
+    # otherwise some bin/ links break, e.g. xe(la)tex.
+    patch --verbose -R scripts/texlive-extra/texlinks.sh < '${./texlinks.diff}'
+    install -Dm555 scripts/texlive-extra/texlinks.sh "$out"
+
+    runHook postInstall
+  '';
+};
+
+
 inherit biber;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {

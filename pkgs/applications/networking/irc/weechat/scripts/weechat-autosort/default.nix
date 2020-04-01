@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "weechat-autosort";
-  version = "3.4";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "de-vri-es";
     repo = pname;
     rev = version;
-    sha256 = "1sbr6ga9krrfgqznvsxjd3hdxzkvslh41ls5xrj7l2p4ws4gwlkn";
+    sha256 = "0a2gc8nhklvlivradhqy2pkymsqyy01pvzrmwg60cln8snmcqpd5";
   };
 
   passthru.scripts = [ "autosort.py" ];
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Autosort is a weechat script to automatically or manually keep your buffers sorted";
     homepage = https://github.com/de-vri-es/weechat-autosort;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ emily ];
   };
 }

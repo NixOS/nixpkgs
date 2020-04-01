@@ -30,22 +30,23 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/powershell
     cp -r * $out/share/powershell
-    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
-                                           --set TERM xterm --set POWERSHELL_TELEMETRY_OPTOUT 1 --set DOTNET_CLI_TELEMETRY_OPTOUT 1
+    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh \
+      --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
+      --set TERM xterm --set POWERSHELL_TELEMETRY_OPTOUT 1 --set DOTNET_CLI_TELEMETRY_OPTOUT 1
   '';
 
   dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "Cross-platform (Windows, Linux, and macOS) automation and configuration tool/framework";
-    homepage = https://github.com/PowerShell/PowerShell;
+    homepage = "https://github.com/PowerShell/PowerShell";
     maintainers = [ maintainers.yrashk ];
-    platforms = platforms.unix;
+    platforms = [ "x86_64-darwin" "x86_64-linux" ];
     license = with licenses; [ mit ];
   };
 
-  passthru = { 
-    shellPath = "/bin/pwsh"; 
+  passthru = {
+    shellPath = "/bin/pwsh";
   };
 
 }

@@ -1,42 +1,60 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, djvulibre, poppler, fontconfig, libjpeg }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, gettext
+, libtool
+, pkgconfig
+, djvulibre
+, exiv2
+, fontconfig
+, graphicsmagick
+, libjpeg
+, libuuid
+, poppler
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.9.14";
+  version = "0.9.17";
   pname = "pdf2djvu";
 
-  src = fetchurl {
-    url = "https://github.com/jwilk/pdf2djvu/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "05z2bbg54pfsi668fwcjrcr5iz9llf9gprzdsrn6fw5wjv4876zi";
+  src = fetchFromGitHub {
+    owner = "jwilk";
+    repo = "pdf2djvu";
+    rev = version;
+    sha256 = "1iff5ha5ls9hni9ivj05r1vzbnjrb326ivjb8d05q2sfng3gfp3z";
   };
 
-  patches = [
-    # fix build with Poppler 0.83
-    (fetchpatch {
-      url = "https://github.com/jwilk/pdf2djvu/commit/0aa17bb79dbcdfc249e4841f5b5398e27cfdfd41.patch";
-      sha256 = "0mr14nz5w7z4ri2556bxkf3cnn2f7dhwsld7csrh6z5qqb7d5805";
-    })
-    (fetchpatch {
-      url = "https://github.com/jwilk/pdf2djvu/commit/27b9e028091a2f370367e9eaf37b4bb1cde87b62.patch";
-      sha256 = "03apsg1487jl800q8j70hicvg6xsndd593bg7babm4vgivkxb0da";
-    })
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  buildInputs = [
+    djvulibre
+    exiv2
+    fontconfig
+    graphicsmagick
+    libjpeg
+    libuuid
+    poppler
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  postPatch = ''
+    substituteInPlace private/autogen \
+      --replace /usr/share/gettext ${gettext}/share/gettext \
+      --replace /usr/share/libtool ${libtool}/share/libtool
 
-  buildInputs = [ djvulibre poppler fontconfig libjpeg ];
+    substituteInPlace configure.ac \
+      --replace '$djvulibre_bin_path' ${djvulibre.bin}/bin
+  '';
 
-  preConfigure = ''
-    sed -i 's#\$djvulibre_bin_path#${djvulibre.bin}/bin#g' configure
-
-    # Configure skips the failing check for usability of windres when it is nonempty.
-    unset WINDRES
+  preAutoreconf = ''
+    private/autogen
   '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Creates djvu files from PDF files";
-    homepage = https://jwilk.net/software/pdf2djvu;
+    homepage = "https://jwilk.net/software/pdf2djvu";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     inherit version;

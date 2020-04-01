@@ -34,26 +34,57 @@ let
   enabled = nvidia_x11 != null;
 
   cfg = config.hardware.nvidia;
-  optimusCfg = cfg.optimus_prime;
+  pCfg = cfg.prime;
+  syncCfg = pCfg.sync;
+  offloadCfg = pCfg.offload;
+  primeEnabled = syncCfg.enable || offloadCfg.enable;
 in
 
 {
+  imports =
+    [
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "enable" ] [ "hardware" "nvidia" "prime" "sync" "enable" ])
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "allowExternalGpu" ] [ "hardware" "nvidia" "prime" "sync" "allowExternalGpu" ])
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "nvidiaBusId" ] [ "hardware" "nvidia" "prime" "nvidiaBusId" ])
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "intelBusId" ] [ "hardware" "nvidia" "prime" "intelBusId" ])
+    ];
+
   options = {
-    hardware.nvidia.modesetting.enable = lib.mkOption {
-      type = lib.types.bool;
+    hardware.nvidia.modesetting.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Enable kernel modesetting when using the NVIDIA proprietary driver.
 
         Enabling this fixes screen tearing when using Optimus via PRIME (see
-        <option>hardware.nvidia.optimus_prime.enable</option>. This is not enabled
+        <option>hardware.nvidia.prime.sync.enable</option>. This is not enabled
         by default because it is not officially supported by NVIDIA and would not
         work with SLI.
       '';
     };
 
-    hardware.nvidia.optimus_prime.enable = lib.mkOption {
-      type = lib.types.bool;
+    hardware.nvidia.prime.nvidiaBusId = mkOption {
+      type = types.str;
+      default = "";
+      example = "PCI:1:0:0";
+      description = ''
+        Bus ID of the NVIDIA GPU. You can find it using lspci; for example if lspci
+        shows the NVIDIA GPU at "01:00.0", set this option to "PCI:1:0:0".
+      '';
+    };
+
+    hardware.nvidia.prime.intelBusId = mkOption {
+      type = types.str;
+      default = "";
+      example = "PCI:0:2:0";
+      description = ''
+        Bus ID of the Intel GPU. You can find it using lspci; for example if lspci
+        shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
+      '';
+    };
+
+    hardware.nvidia.prime.sync.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Enable NVIDIA Optimus support using the NVIDIA proprietary driver via PRIME.
@@ -66,8 +97,8 @@ in
         be the only driver there.
 
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
-        specified (<option>hardware.nvidia.optimus_prime.nvidiaBusId</option> and
-        <option>hardware.nvidia.optimus_prime.intelBusId</option>).
+        specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
+        <option>hardware.nvidia.prime.intelBusId</option>).
 
         If you enable this, you may want to also enable kernel modesetting for the
         NVIDIA driver (<option>hardware.nvidia.modesetting.enable</option>) in order
@@ -79,31 +110,23 @@ in
       '';
     };
 
-    hardware.nvidia.optimus_prime.allowExternalGpu = lib.mkOption {
-      type = lib.types.bool;
+    hardware.nvidia.prime.sync.allowExternalGpu = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Configure X to allow external NVIDIA GPUs when using optimus.
       '';
     };
 
-    hardware.nvidia.optimus_prime.nvidiaBusId = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      example = "PCI:1:0:0";
+    hardware.nvidia.prime.offload.enable = mkOption {
+      type = types.bool;
+      default = false;
       description = ''
-        Bus ID of the NVIDIA GPU. You can find it using lspci; for example if lspci
-        shows the NVIDIA GPU at "01:00.0", set this option to "PCI:1:0:0".
-      '';
-    };
+        Enable render offload support using the NVIDIA proprietary driver via PRIME.
 
-    hardware.nvidia.optimus_prime.intelBusId = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      example = "PCI:0:2:0";
-      description = ''
-        Bus ID of the Intel GPU. You can find it using lspci; for example if lspci
-        shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
+        If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
+        specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
+        <option>hardware.nvidia.prime.intelBusId</option>).
       '';
     };
   };
@@ -116,11 +139,18 @@ in
       }
 
       {
-        assertion = !optimusCfg.enable ||
-          (optimusCfg.nvidiaBusId != "" && optimusCfg.intelBusId != "");
+        assertion = primeEnabled -> pCfg.nvidiaBusId != "" && pCfg.intelBusId != "";
         message = ''
-          When NVIDIA Optimus via PRIME is enabled, the GPU bus IDs must configured.
+          When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
         '';
+      }
+      {
+        assertion = offloadCfg.enable -> versionAtLeast nvidia_x11.version "435.21";
+        message = "NVIDIA PRIME render offload is currently only supported on versions >= 435.21.";
+      }
+      {
+        assertion = !(syncCfg.enable && offloadCfg.enable);
+        message = "Only one NVIDIA PRIME solution may be used at a time.";
       }
     ];
 
@@ -136,36 +166,38 @@ in
     # - Configure the display manager to run specific `xrandr` commands which will
     #   configure/enable displays connected to the Intel GPU.
 
-    services.xserver.drivers = singleton {
+    services.xserver.useGlamor = mkDefault offloadCfg.enable;
+
+    services.xserver.drivers = optional primeEnabled {
+      name = "modesetting";
+      display = offloadCfg.enable;
+      deviceSection = ''
+        BusID "${pCfg.intelBusId}"
+        ${optionalString syncCfg.enable ''Option "AccelMethod" "none"''}
+      '';
+    } ++ singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
-      deviceSection = optionalString optimusCfg.enable
+      display = !offloadCfg.enable;
+      deviceSection = optionalString primeEnabled
         ''
-          BusID "${optimusCfg.nvidiaBusId}"
-          ${optionalString optimusCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
+          BusID "${pCfg.nvidiaBusId}"
+          ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
         '';
       screenSection =
         ''
           Option "RandRRotation" "on"
-          ${optionalString optimusCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
+          ${optionalString syncCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
         '';
     };
 
-    services.xserver.extraConfig = optionalString optimusCfg.enable
-      ''
-        Section "Device"
-          Identifier "nvidia-optimus-intel"
-          Driver "modesetting"
-          BusID  "${optimusCfg.intelBusId}"
-          Option "AccelMethod" "none"
-        EndSection
-      '';
-    services.xserver.serverLayoutSection = optionalString optimusCfg.enable
-      ''
-        Inactive "nvidia-optimus-intel"
-      '';
+    services.xserver.serverLayoutSection = optionalString syncCfg.enable ''
+      Inactive "Device-modesetting[0]"
+    '' + optionalString offloadCfg.enable ''
+      Option "AllowNVIDIAGPUScreens"
+    '';
 
-    services.xserver.displayManager.setupCommands = optionalString optimusCfg.enable ''
+    services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
       # Added by nvidia configuration module for Optimus/PRIME.
       ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource modesetting NVIDIA-0
       ${pkgs.xorg.xrandr}/bin/xrandr --auto
@@ -175,11 +207,13 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl.package = nvidia_x11.out;
-    hardware.opengl.package32 = nvidia_libs32;
+    hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
+    hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_libs32;
+    hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
+    hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_libs32;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
-      ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
+      ++ filter (p: p != null) [ nvidia_x11.persistenced ];
 
     systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
         "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
@@ -190,10 +224,10 @@ in
 
     # nvidia-uvm is required by CUDA applications.
     boot.kernelModules = [ "nvidia-uvm" ] ++
-      lib.optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
+      optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
 
     # If requested enable modesetting via kernel parameter.
-    boot.kernelParams = optional cfg.modesetting.enable "nvidia-drm.modeset=1";
+    boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1";
 
     # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
     services.udev.extraRules =

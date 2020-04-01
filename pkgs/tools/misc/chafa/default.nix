@@ -2,14 +2,14 @@
 
 
 stdenv.mkDerivation rec{
-  version = "1.2.1";
+  version = "1.2.2";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     rev = version;
-    sha256 = "19dck47v4hd07q9742mgb928h7y1y9638qlh2rzsvqsfqvqmxh85";
+    sha256 = "10in960wzvmb25biifi480dz87c034vwb8mcshclssl7gmzgpzdn";
   };
 
   nativeBuildInputs = [ autoconf
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     description = "Terminal graphics for the 21st century.";
-    homepage = https://hpjansson.org/chafa/;
+    homepage = "https://hpjansson.org/chafa/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.mog ];

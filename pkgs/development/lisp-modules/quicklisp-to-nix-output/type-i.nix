@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''type-i'';
-  version = ''20190521-git'';
+  version = ''20191227-git'';
 
   description = ''Type Inference Utility on Fundamentally 1-arg Predicates'';
 
   deps = [ args."alexandria" args."closer-mop" args."introspect-environment" args."lisp-namespace" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_trivial" args."trivial-cltl2" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/type-i/2019-05-21/type-i-20190521-git.tgz'';
-    sha256 = ''1d79g3vd8s387rqagrkf1nmxax6kq32j1ddjrnx7ly08ib6aca99'';
+    url = ''http://beta.quicklisp.org/archive/type-i/2019-12-27/type-i-20191227-git.tgz'';
+    sha256 = ''0f8q6klqjgz1kdyhisfkk07izvgs04jchlv2kl3srjxfr5dj5jl5'';
   };
 
   packageName = "type-i";
@@ -19,9 +19,9 @@ rec {
 }
 /* (SYSTEM type-i DESCRIPTION
     Type Inference Utility on Fundamentally 1-arg Predicates SHA256
-    1d79g3vd8s387rqagrkf1nmxax6kq32j1ddjrnx7ly08ib6aca99 URL
-    http://beta.quicklisp.org/archive/type-i/2019-05-21/type-i-20190521-git.tgz
-    MD5 9906855a0650f93186f37e162429e58b NAME type-i FILENAME type-i DEPS
+    0f8q6klqjgz1kdyhisfkk07izvgs04jchlv2kl3srjxfr5dj5jl5 URL
+    http://beta.quicklisp.org/archive/type-i/2019-12-27/type-i-20191227-git.tgz
+    MD5 af344179d3f97b836d1e3106f8d1c306 NAME type-i FILENAME type-i DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME closer-mop FILENAME closer-mop)
      (NAME introspect-environment FILENAME introspect-environment)
@@ -34,4 +34,4 @@ rec {
     DEPENDENCIES
     (alexandria closer-mop introspect-environment lisp-namespace trivia.level0
      trivia.level1 trivia.level2 trivia.trivial trivial-cltl2)
-    VERSION 20190521-git SIBLINGS (type-i.test) PARASITES NIL) */
+    VERSION 20191227-git SIBLINGS (type-i.test) PARASITES NIL) */

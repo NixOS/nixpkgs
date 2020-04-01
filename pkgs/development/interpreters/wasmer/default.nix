@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "0.13.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = version;
-    sha256 = "1k9zd2vhrbvxlpkh21m39alk5lfhd3xa25k0awis27plfpv8fqcq";
+    sha256 = "124zq772kz9a7n3qpxgmp4awqj41l8mhhwc0y3r77i1q02i1sy7z";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1yp7kandh5hh8hkzlmqpj05vwgr5v4nil8blf3scbppg865qk3rq";
+  cargoSha256 = "1qqysvcviimpm2zhzsbn8vhy91rxzaknh9hv75y38xd5ggnnh9m6";
 
   nativeBuildInputs = [ cmake pkg-config ];
 

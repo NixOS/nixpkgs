@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "3to2";
+  pname = "py3to2";
   version = "1.1.1";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "3to2";
     extension = "zip";
     sha256 = "fef50b2b881ef743f269946e1090b77567b71bb9a9ce64b7f8e699b562ff685c";
   };

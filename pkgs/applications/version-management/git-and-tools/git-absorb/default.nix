@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  cargoSha256 = "1khplyglavsidh13nnq9y5rxd5w89ail08wgzn29a5m03zir1yfd";
+  cargoSha256 = "13gikjswbb0kkpvb5zhj88qq5l667624gkfb7hd3zygh4qyhsy05";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/tummychow/git-absorb";

@@ -70,6 +70,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
     homepage = https://www.hdfgroup.org/HDF5/;
     platforms = stdenv.lib.platforms.unix;
-    broken = (gfortran != null) && stdenv.isDarwin;
   };
 }

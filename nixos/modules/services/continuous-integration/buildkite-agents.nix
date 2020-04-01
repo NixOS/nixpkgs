@@ -258,7 +258,7 @@ in
   });
 
   config.assertions = mapAgents (name: cfg: [
-      { assertion = cfg.hooksPath == hooksDir || all (v: v == null) (attrValues cfg.hooks);
+      { assertion = cfg.hooksPath == (hooksDir cfg) || all (v: v == null) (attrValues cfg.hooks);
         message = ''
           Options `services.buildkite-agents.${name}.hooksPath' and
           `services.buildkite-agents.${name}.hooks.<name>' are mutually exclusive.

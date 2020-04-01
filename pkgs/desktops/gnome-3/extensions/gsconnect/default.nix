@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     "-Dopenssl_path=${openssl}/bin/openssl"
     "-Dsshadd_path=${openssh}/bin/ssh-add"
     "-Dsshkeygen_path=${openssh}/bin/ssh-keygen"
+    "-Dsession_bus_services_dir=${placeholder "out"}/share/dbus-1/services"
     "-Dpost_install=true"
   ];
 

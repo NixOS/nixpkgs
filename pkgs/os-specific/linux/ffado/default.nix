@@ -1,20 +1,40 @@
-{ stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python3
-, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx3
+{ stdenv
+, mkDerivation
+, dbus
+, dbus_cplusplus
+, desktop-file-utils
+, fetchurl
 , glibmm
-, dbus, dbus_cplusplus
+, kernel
+, libavc1394
+, libconfig
+, libiec61883
+, libraw1394
+, libxmlxx3
+, pkgconfig
+, python3
+, scons
+, which
+, wrapQtAppsHook
 }:
 
 let
   inherit (python3.pkgs) pyqt5 dbus-python;
   python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
-in stdenv.mkDerivation rec {
+in
+mkDerivation rec {
   pname = "ffado";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "0byr3kv58d1ryy60vr69fd868zlfkvl2gq9hl94dqdn485l9pq9y";
+    sha256 = "09dxy6fkfnvzk45lpr74hkqymii8a45jzlq6054f3jz65m8qvj3d";
   };
+
+  prePatch = ''
+    substituteInPlace ./support/tools/ffado-diag.in \
+      --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
+  '';
 
   patches = [
     # fix installing metainfo file
@@ -23,13 +43,13 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" "dev" ];
 
-  nativeBuildInputs = [ scons pkgconfig which makeWrapper python pyqt5 ];
+  nativeBuildInputs = [ desktop-file-utils scons pkgconfig which python pyqt5 wrapQtAppsHook ];
 
   prefixKey = "PREFIX=";
   sconsFlags = [
     "DEBUG=False"
     "ENABLE_ALL=True"
-    "BUILD_TESTS=False"
+    "BUILD_TESTS=True"
     "WILL_DEAL_WITH_XDG_MYSELF=True"
     "BUILD_MIXER=True"
     "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
@@ -40,29 +60,41 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libraw1394
-    libconfig
-    libavc1394
-    libiec61883
     dbus
     dbus_cplusplus
+    glibmm
+    libavc1394
+    libconfig
+    libiec61883
+    libraw1394
     libxmlxx3
     python
-    glibmm
   ];
 
   enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
   postInstall = ''
+    desktop="$bin/share/applications/ffado-mixer.desktop"
+    install -DT -m 444 support/xdg/ffado.org-ffadomixer.desktop $desktop
+    substituteInPlace "$desktop" \
+      --replace Exec=ffado-mixer "Exec=$bin/bin/ffado-mixer" \
+      --replace hi64-apps-ffado ffado-mixer
+    install -DT -m 444 support/xdg/hi64-apps-ffado.png "$bin/share/icons/hicolor/64x64/apps/ffado-mixer.png"
+
     # prevent build tools from leaking into closure
     echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
   '';
 
+  preFixup = ''
+    wrapQtApp $bin/bin/ffado-mixer
+  '';
+
   meta = with stdenv.lib; {
-    homepage = http://www.ffado.org;
+    homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = with maintainers; [ goibhniu michojel ];
     platforms = platforms.linux;
   };
 }

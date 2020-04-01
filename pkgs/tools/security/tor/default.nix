@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.2.6";
+  version = "0.4.2.7";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "1i766s211nrbjvwvkd2375mjsbbc28yrg46564rbx6w46cj10005";
+    sha256 = "0v82ngwwmmcb7i9563bgsmrjy6xp83xyhqhaljygd0pkvlsxi886";
   };
 
   outputs = [ "out" "geoip" ];
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+
+  patches = [ ./disable-monotonic-timer-tests.patch ];
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -39,7 +41,6 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  enableParallelChecking = false; # 4 tests fail randomly
 
   doCheck = true;
 
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.torproject.org/;
+    homepage = "https://www.torproject.org/";
     repositories.git = https://git.torproject.org/git/tor;
     description = "Anonymizing overlay network";
 

@@ -46,6 +46,15 @@ let
     }
   ''));
 
+  commonHttpConfig = ''
+      # The mime type definitions included with nginx are very incomplete, so
+      # we use a list of mime types from the mailcap package, which is also
+      # used by most other Linux distributions by default.
+      include ${pkgs.mailcap}/etc/nginx/mime.types;
+      include ${cfg.package}/conf/fastcgi.conf;
+      include ${cfg.package}/conf/uwsgi_params;
+  '';
+
   configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
     pid /run/nginx/nginx.pid;
     error_log ${cfg.logError};
@@ -61,12 +70,7 @@ let
 
     ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
     http {
-      # The mime type definitions included with nginx are very incomplete, so
-      # we use a list of mime types from the mailcap package, which is also
-      # used by most other Linux distributions by default.
-      include ${pkgs.mailcap}/etc/nginx/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
-      include ${cfg.package}/conf/uwsgi_params;
+      ${commonHttpConfig}
 
       ${optionalString (cfg.resolver.addresses != []) ''
         resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
@@ -79,7 +83,7 @@ let
         tcp_nopush on;
         tcp_nodelay on;
         keepalive_timeout 65;
-        types_hash_max_size 2048;
+        types_hash_max_size 4096;
       ''}
 
       ssl_protocols ${cfg.sslProtocols};
@@ -87,10 +91,17 @@ let
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
       ${optionalString (cfg.recommendedTlsSettings) ''
-        ssl_session_cache shared:SSL:42m;
-        ssl_session_timeout 23m;
-        ssl_ecdh_curve secp384r1;
-        ssl_prefer_server_ciphers on;
+        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+
+        ssl_session_timeout 1d;
+        ssl_session_cache shared:SSL:10m;
+        # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
+        ssl_session_tickets off;
+        # We don't enable insecure ciphers by default, so this allows
+        # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+        ssl_prefer_server_ciphers off;
+
+        # OCSP stapling
         ssl_stapling on;
         ssl_stapling_verify on;
       ''}
@@ -165,9 +176,7 @@ let
 
     ${optionalString (cfg.httpConfig != "") ''
     http {
-      include ${cfg.package}/conf/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
-      include ${cfg.package}/conf/uwsgi_params;
+      ${commonHttpConfig}
       ${cfg.httpConfig}
     }''}
 
@@ -487,8 +496,9 @@ in
 
       sslCiphers = mkOption {
         type = types.str;
-        default = "EECDH+aRSA+AESGCM:EDH+aRSA:EECDH+aRSA:+AES256:+AES128:+SHA1:!CAMELLIA:!SEED:!3DES:!DES:!RC4:!eNULL";
-        description = "Ciphers to choose from when negotiating tls handshakes.";
+        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
+        description = "Ciphers to choose from when negotiating TLS handshakes.";
       };
 
       sslProtocols = mkOption {

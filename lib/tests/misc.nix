@@ -348,6 +348,18 @@ runTests {
     '';
   };
 
+  testToINIDuplicateKeys = {
+    expr = generators.toINI { listsAsDuplicateKeys = true; } { foo.bar = true; baz.qux = [ 1 false ]; };
+    expected = ''
+      [baz]
+      qux=1
+      qux=false
+
+      [foo]
+      bar=true
+    '';
+  };
+
   testToINIDefaultEscapes = {
     expr = generators.toINI {} {
       "no [ and ] allowed unescaped" = {

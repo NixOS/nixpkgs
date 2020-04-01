@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, runtimeShell }:
 
 let
-  version = "2.1.07";
+  version = "2020.1";
   jar = fetchurl {
     name = "burpsuite.jar";
     url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "0811pkxmwl9d58lgqbvyfi2q79ni5w8hs61jycxkvkqxrinpgki3";
+    sha256 = "12awfy0f8fyqjc0kza1gkmdx1g8bniw1xqaps2dhjimi6s0lq5jx";
   };
   launcher = ''
     #!${runtimeShell}

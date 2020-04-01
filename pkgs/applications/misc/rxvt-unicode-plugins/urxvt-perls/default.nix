@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "urxvt-perls";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "muennich";
     repo = "urxvt-perls";
     rev = version;
-    sha256 = "1cb0jbjmwfy2dlq2ny8wpc04k79jp3pz9qhbmgagsxs3sp1jg2hz";
+    sha256 = "0xvwfw7965ghhd9g6rl6y6fgpd444l46rjqmlgg0rfjypbh6c0p1";
   };
 
   installPhase = ''
     mkdir -p $out/lib/urxvt/perl
-    cp clipboard \
-       keyboard-select \
-       url-select \
+    cp keyboard-select $out/lib/urxvt/perl
+    cp deprecated/clipboard \
+       deprecated/url-select \
     $out/lib/urxvt/perl
   '';
 

@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
       sha256 = "1hnixij3jp1p6zc3bx2dr92yyf9jp1ahhl9hiiq7bkbhbrw6mbic";
     })
   ];
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    sed '1i#include <linux/sockios.h>' -i src/dhcp.c
+  '';
 
   preBuild = ''
     makeFlagsArray=("COPTS=${copts}")

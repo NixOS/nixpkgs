@@ -1,23 +1,21 @@
 { stdenv
 , rustPlatform
 , fetchFromGitHub
-, nodejs
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
-    # 1.9.0 + patches for building citeproc-db, see https://github.com/latex-lsp/texlab/pull/137
-    rev = "e38fe4bedc9d8094649a9d2753ca9855e0c18882";
-    sha256 = "0j87gmzyqrpgxrgalvlfqj5cj8j0h23hbbv8vdz2dhc847xhhfq1";
+    rev = "v${version}";
+    sha256 = "12zfcvbihirh38xxzc8fbx293m4vsrhq6kh0qnhnhlrx75m09l9i";
   };
 
-  cargoSha256 = "09d9r7aal1q00idv08zdw7dygyasyp5l6jrh96cdclf63h1p4fk9";
+  cargoSha256 = "08fi0c4s0d1p2rqxvj1y82zg6xl3n0ikgyhgrjwh6xay8f0121f0";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 

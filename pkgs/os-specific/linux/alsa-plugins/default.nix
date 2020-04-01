@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-plugins";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "mirror://alsa/plugins/${pname}-${version}.tar.bz2";
-    sha256 = "1nj8cpbi05rb62yzs01c1k7lymdn1ch229b599hbhd0psixdx52d";
+    sha256 = "0z9k3ssbfk2ky2w13avgyf202j1drsz9sv3834bp33cj1i2hc3qw";
   };
 
   # ToDo: a52, etc.?
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Various plugins for ALSA";
-    homepage = http://alsa-project.org/;
+    homepage = "http://alsa-project.org/";
     license = licenses.lgpl21;
     maintainers = [maintainers.marcweber];
     platforms = platforms.linux;

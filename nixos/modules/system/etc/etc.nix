@@ -94,7 +94,7 @@ in
               default = 0;
               type = types.int;
               description = ''
-                UID of created file. Only takes affect when the file is
+                UID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
                 '';
             };
@@ -103,7 +103,7 @@ in
               default = 0;
               type = types.int;
               description = ''
-                GID of created file. Only takes affect when the file is
+                GID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
               '';
             };
@@ -113,7 +113,7 @@ in
               type = types.str;
               description = ''
                 User name of created file.
-                Only takes affect when the file is copied (that is, the mode is not 'symlink').
+                Only takes effect when the file is copied (that is, the mode is not 'symlink').
                 Changing this option takes precedence over <literal>uid</literal>.
               '';
             };
@@ -123,7 +123,7 @@ in
               type = types.str;
               description = ''
                 Group name of created file.
-                Only takes affect when the file is copied (that is, the mode is not 'symlink').
+                Only takes effect when the file is copied (that is, the mode is not 'symlink').
                 Changing this option takes precedence over <literal>gid</literal>.
               '';
             };

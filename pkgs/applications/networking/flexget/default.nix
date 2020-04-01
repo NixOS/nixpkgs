@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
-  version = "3.1.21";
+  version = "3.1.30";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "ea2c9225bbf565215fc97eed97e718f426b4b7b3c8628bbd8edcc96e7bfe7e4e";
+    sha256 = "453992c6bf8a7b0f83abeddd0e8f989dc10fd59e407e3803b886072cff2576a7";
   };
 
   postPatch = ''
@@ -52,6 +52,8 @@ python3Packages.buildPythonApplication rec {
     sqlalchemy
     terminaltables
     zxcvbn
+    # plugins
+    transmissionrpc
   ];
 
   meta = with lib; {

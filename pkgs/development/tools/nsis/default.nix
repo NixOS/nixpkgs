@@ -2,23 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "nsis";
-  version = "3.04";
+  version = "3.05";
 
   src =
     fetchurl {
       url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}-src.tar.bz2";
-      sha256 = "1xgllk2mk36ll2509hd31mfq6blgncmdzmwxj3ymrwshdh23d5b0";
+      sha256 = "1sbwx5vzpddharkb7nj4q5z3i5fbg4lan63ng738cw4hmc4v7qdn";
     };
   srcWinDistributable =
     fetchzip {
       url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}.zip";
-      sha256 = "1g31vz73x4d3cmsw2wfk43qa06bpqp5815fb5qq9vmwms6hym6y2";
+      sha256 = "0i3pzdilyy5g0r2c92pd2jl92ji9f75vv98mndzq8vw03a34yh3q";
     };
 
   postUnpack = ''
     mkdir -p $out/share/nsis
     cp -avr ${srcWinDistributable}/{Contrib,Include,Plugins,Stubs} \
       $out/share/nsis
+    chmod -R u+w $out/share/nsis
   '';
 
   nativeBuildInputs = [ scons ];

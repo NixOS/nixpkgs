@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jwt-cli";
-  version = "2.5.2";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "mike-engel";
     repo = pname;
     rev = version;
-    sha256 = "1q6dqh8z6mhiksjrhi602cvq31jgc18pfbwf6mlm9gi1grpgm5dl";
+    sha256 = "108pwk0h6zcbfmp0k8rhjxaa9yk8rhb78aaql22x48n11fnjl27i";
   };
 
-  cargoSha256 = "0k3fla0zz2r66y5fvmbcdhjd2jq8md2sxgcjb3x8sipzqfv8bwi2";
+  cargoSha256 = "1xh2ylx5fqblhlrs8yhl3zf8kvgrqnwdwmix6yzch9bi5mv5c11w";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

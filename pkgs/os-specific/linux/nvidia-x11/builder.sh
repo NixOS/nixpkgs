@@ -75,11 +75,18 @@ installPhase() {
             fi
             install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia.json
         fi
+        if [ -e nvidia_layers.json ]; then
+            sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_layers.json > nvidia_layers.json.fixed
+            install -Dm644 nvidia_layers.json.fixed $i/share/vulkan/implicit_layer.d/nvidia_layers.json
+        fi
 
         # EGL
         if [ "$useGLVND" = "1" ]; then
             sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
+            sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
+
             install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
+            install -Dm644 10_nvidia_wayland.json.fixed $i/share/glvnd/egl_vendor.d/nvidia_wayland.json
         fi
 
     done

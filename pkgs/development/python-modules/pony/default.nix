@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pony";
-  version = "0.7.11";
+  version = "0.7.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05vyvsbcb99vjjs7qpbwy8j4m854w74z8di6zqsv8p9wbm38s06i";
+    sha256 = "02njpqwfvzxj9icabil8ycmfx8avzih3g1kcdif290qgsy57a28r";
   };
 
   doCheck = true;

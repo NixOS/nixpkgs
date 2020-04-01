@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, extra-cmake-modules, pkgconfig, mkDerivation
+{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, mkDerivation
 , gtk2, qtbase, qtsvg, qtx11extras # Toolkit dependencies
 , karchive, kconfig, kconfigwidgets, kio, frameworkintegration
 , kguiaddons, ki18n, kwindowsystem, kdelibs4support, kiconthemes
@@ -7,13 +7,15 @@
 }:
 
 let
-  version = "1.9";
+  version = "1.9.1";
 in mkDerivation {
   pname = "qtcurve";
   inherit version;
-  src = fetchurl {
-    url = "https://download.kde.org/stable/qtcurve/qtcurve-${version}.tar.xz";
-    sha256 = "169gdny1cdld0qnx3nqvx568zjzdba4pwp3gxapc1hdh2cymw7r8";
+  src = fetchFromGitHub {
+    owner = "KDE";
+    repo = "qtcurve";
+    rev = version;
+    sha256 = "0sm1fza68mwl9cvid4h2lsyxq5svia86l5v9wqk268lmx16mbzsw";
   };
 
   patches = [

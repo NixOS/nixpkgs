@@ -88,10 +88,10 @@ in {
       default = with pkgs; [
         swaylock swayidle
         xwayland alacritty dmenu
-        rxvt_unicode # For backward compatibility (old default terminal)
+        rxvt-unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
-        with pkgs; [ swaylock swayidle xwayland rxvt_unicode dmenu ];
+        with pkgs; [ swaylock swayidle xwayland rxvt-unicode dmenu ];
       '';
       example = literalExample ''
         with pkgs; [

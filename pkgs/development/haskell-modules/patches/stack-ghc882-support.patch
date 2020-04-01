@@ -1,0 +1,104 @@
+diff --git a/src/Stack/Coverage.hs b/src/Stack/Coverage.hs
+index d95fa332..f80e121a 100644
+--- a/src/Stack/Coverage.hs
++++ b/src/Stack/Coverage.hs
+@@ -235,7 +235,7 @@ generateHpcReportForTargets opts tixFiles targetNames = do
+                              case nc of
+                                  CTest testName ->
+                                      liftM (pkgPath </>) $ parseRelFile (T.unpack testName ++ "/" ++ T.unpack testName ++ ".tix")
+-                                 _ -> fail $
++                                 _ -> liftIO $ fail $
+                                      "Can't specify anything except test-suites as hpc report targets (" ++
+                                      packageNameString name ++
+                                      " is used with a non test-suite target)"
+diff --git a/src/Stack/Package.hs b/src/Stack/Package.hs
+index b69337ce..08eb9b9f 100644
+--- a/src/Stack/Package.hs
++++ b/src/Stack/Package.hs
+@@ -463,7 +463,7 @@ makeObjectFilePathFromC
+ makeObjectFilePathFromC cabalDir namedComponent distDir cFilePath = do
+     relCFilePath <- stripProperPrefix cabalDir cFilePath
+     relOFilePath <-
+-        parseRelFile (replaceExtension (toFilePath relCFilePath) "o")
++        parseRelFile (System.FilePath.replaceExtension (toFilePath relCFilePath) "o")
+     return (componentOutputDir namedComponent distDir </> relOFilePath)
+ 
+ -- | Make the global autogen dir if Cabal version is new enough.
+diff --git a/src/Stack/Script.hs b/src/Stack/Script.hs
+index c63c9f62..70257be1 100644
+--- a/src/Stack/Script.hs
++++ b/src/Stack/Script.hs
+@@ -172,8 +172,8 @@ scriptCmd opts = do
+ 
+   toExeName fp =
+     if osIsWindows
+-      then replaceExtension fp "exe"
+-      else dropExtension fp
++      then System.FilePath.replaceExtension fp "exe"
++      else System.FilePath.dropExtension fp
+ 
+ getPackagesFromImports
+   :: FilePath -- ^ script filename
+diff --git a/src/Stack/Setup.hs b/src/Stack/Setup.hs
+index 8bbfc45c..5c5b028c 100644
+--- a/src/Stack/Setup.hs
++++ b/src/Stack/Setup.hs
+@@ -876,7 +876,7 @@ buildGhcFromSource getSetupInfo' installed (CompilerRepository url) commitId fla
+          (_,files) <- listDir (cwd </> bindistPath)
+          let
+            isBindist p = "ghc-" `isPrefixOf` (toFilePath (filename p))
+-                         && fileExtension (filename p) == ".xz"
++                         && (maybe "" id (fileExtension (filename p))) == ".xz"
+            mbindist = filter isBindist files
+          case mbindist of
+            [bindist] -> do
+diff --git a/src/Stack/Storage/Project.hs b/src/Stack/Storage/Project.hs
+index dc5318d8..984e6259 100644
+--- a/src/Stack/Storage/Project.hs
++++ b/src/Stack/Storage/Project.hs
+@@ -12,6 +12,9 @@
+ {-# LANGUAGE UndecidableInstances #-}
+ {-# OPTIONS_GHC -Wno-unused-top-binds -Wno-identities #-}
+ 
++{-# LANGUAGE DerivingStrategies #-}
++{-# LANGUAGE StandaloneDeriving #-}
++
+ -- | Work with SQLite database used for caches across a single project.
+ module Stack.Storage.Project
+     ( initProjectStorage
+diff --git a/src/Stack/Storage/User.hs b/src/Stack/Storage/User.hs
+index 3845b094..09695344 100644
+--- a/src/Stack/Storage/User.hs
++++ b/src/Stack/Storage/User.hs
+@@ -12,6 +12,9 @@
+ {-# LANGUAGE UndecidableInstances #-}
+ {-# OPTIONS_GHC -Wno-unused-top-binds -Wno-identities #-}
+ 
++{-# LANGUAGE DerivingStrategies #-}
++{-# LANGUAGE StandaloneDeriving #-}
++
+ -- | Work with SQLite database used for caches across an entire user account.
+ module Stack.Storage.User
+     ( initUserStorage
+diff --git a/src/Stack/Types/Config.hs b/src/Stack/Types/Config.hs
+index a5cc22b5..a329d353 100644
+--- a/src/Stack/Types/Config.hs
++++ b/src/Stack/Types/Config.hs
+@@ -406,7 +406,7 @@ instance FromJSON CabalConfigKey where
+ instance FromJSONKey CabalConfigKey where
+   fromJSONKey = FromJSONKeyTextParser parseCabalConfigKey
+ 
+-parseCabalConfigKey :: Monad m => Text -> m CabalConfigKey
++parseCabalConfigKey :: MonadFail m => Text -> m CabalConfigKey
+ parseCabalConfigKey "$targets" = pure CCKTargets
+ parseCabalConfigKey "$locals" = pure CCKLocals
+ parseCabalConfigKey "$everything" = pure CCKEverything
+@@ -974,7 +974,7 @@ parseConfigMonoidObject rootDir obj = do
+ 
+     return ConfigMonoid {..}
+   where
+-    handleExplicitSetupDep :: Monad m => (Text, Bool) -> m (Maybe PackageName, Bool)
++    handleExplicitSetupDep :: MonadFail m => (Text, Bool) -> m (Maybe PackageName, Bool)
+     handleExplicitSetupDep (name', b) = do
+         name <-
+             if name' == "*"

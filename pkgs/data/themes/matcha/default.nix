@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "matcha";
-  version = "2020-02-06";
+  version = "2020-03-29";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "14kii4dn028yqbsd0pr195di067harh9z2h753856dlxvs8d6vkx";
+    sha256 = "17yyxlm94q8cv3zryishgs852nz74q79v3fh9c7a3f1fs6xlw8p0";
   };
 
   buildInputs = [ gdk-pixbuf librsvg ];
@@ -18,8 +18,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     patchShebangs .
     mkdir -p $out/share/themes
-    name= ./Install -d $out/share/themes
+    name= ./install.sh -d $out/share/themes
     install -D -t $out/share/gtksourceview-3.0/styles src/extra/gedit/matcha.xml
+    mkdir -p $out/share/doc/${pname}
+    cp -a src/extra/firefox $out/share/doc/${pname}
   '';
 
   meta = with stdenv.lib; {

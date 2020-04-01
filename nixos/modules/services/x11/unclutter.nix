@@ -61,7 +61,7 @@ in {
       serviceConfig.ExecStart = ''
         ${cfg.package}/bin/unclutter \
           -idle ${toString cfg.timeout} \
-          -jitter ${toString (cfg.threeshold - 1)} \
+          -jitter ${toString (cfg.threshold - 1)} \
           ${optionalString cfg.keystroke "-keystroke"} \
           ${concatMapStrings (x: " -"+x) cfg.extraOptions} \
           -not ${concatStringsSep " " cfg.excluded} \

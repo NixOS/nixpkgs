@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
-  version = "3.32.1";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-characters/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1mpg125x9k879ryg8xgbm9w1amx6b3iq9sqv7xfii7kzaanjb4js";
+    sha256 = "0mqaxsa7hcmvid3zbzvxpfkp7s01ghiq6kaibmd3169axrr8ahql";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Design/Apps/CharacterMap;
+    homepage = "https://wiki.gnome.org/Design/Apps/CharacterMap";
     description = "Simple utility application to find and insert unusual characters";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

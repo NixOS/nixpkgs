@@ -83,4 +83,7 @@ self: super: {
   # Newer versions don't compile.
   resolv = self.resolv_0_1_1_2;
 
+  # The old Haddock cannot process the newer documentation syntax.
+  fast-logger = dontHaddock super.fast-logger;
+
 }

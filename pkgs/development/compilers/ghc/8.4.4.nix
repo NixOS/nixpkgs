@@ -79,13 +79,15 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
+  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
+
 in
 stdenv.mkDerivation (rec {
   version = "8.4.4";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
     sha256 = "1ch4j2asg7pr52ai1hwzykxyj553wndg7wq93i47ql4fllspf48i";
   };
 
@@ -94,7 +96,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [(fetchpatch {
-    url = "https://git.haskell.org/hsc2hs.git/patch/738f3666c878ee9e79c3d5e819ef8b3460288edf";
+    url = "https://github.com/haskell/hsc2hs/commit/738f3666c878ee9e79c3d5e819ef8b3460288edf.diff";
     sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
     extraPrefix = "utils/hsc2hs/";
     stripLen = 1;
@@ -110,7 +112,7 @@ stdenv.mkDerivation (rec {
     })
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch
     ++ stdenv.lib.optional (targetPlatform.isAarch32 || targetPlatform.isAarch64) (fetchpatch {
-      url = "https://git.haskell.org/ghc.git/patch/d8495549ba9d194815c2d0eaee6797fc7c00756a";
+      url = "https://github.com/ghc/ghc/commit/d8495549ba9d194815c2d0eaee6797fc7c00756a.diff";
       sha256 = "1yjcma507c609bcim4rnxq0gaj2dg4d001jklmbpbqpzqzxkn5sz";
     });
 
@@ -126,7 +128,7 @@ stdenv.mkDerivation (rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString (targetPlatform.isLinux && !(targetPlatform.useLLVM or false)) ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -173,7 +175,7 @@ stdenv.mkDerivation (rec {
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
+  ] ++ stdenv.lib.optionals useLdGold [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"

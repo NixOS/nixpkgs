@@ -1,4 +1,5 @@
 { stdenv
+, pythonOlder
 , fetchPypi
 , python
 , buildPythonPackage
@@ -15,6 +16,8 @@
 buildPythonPackage rec {
   version = "0.48.0";
   pname = "numba";
+  # uses f-strings
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

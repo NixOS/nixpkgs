@@ -6,11 +6,11 @@ rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "3" "3" "";
 jruby = stdenv.mkDerivation rec {
   pname = "jruby";
 
-  version = "9.2.9.0";
+  version = "9.2.11.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "04grdf57c1dgragm17yyjk69ak8mwiwfc1vjzskzcaag3fwgplyf";
+    sha256 = "01yzpasnpqqm0vfc0ki8vkxbzijjfws135jw8k0r50b5lahjvs4a";
   };
 
   buildInputs = [ makeWrapper ];
@@ -48,7 +48,7 @@ jruby = stdenv.mkDerivation rec {
 
   meta = {
     description = "Ruby interpreter written in Java";
-    homepage = http://jruby.org/;
+    homepage = "http://jruby.org/";
     license = with stdenv.lib.licenses; [ cpl10 gpl2 lgpl21 ];
     platforms = stdenv.lib.platforms.unix;
   };

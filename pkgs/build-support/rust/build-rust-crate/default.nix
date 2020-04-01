@@ -4,7 +4,7 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc, rust }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc, rust, cargo, jq }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
@@ -29,14 +29,14 @@ let
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies;
 
-   inherit (import ./log.nix { inherit lib; }) noisily echo_build_heading;
+   inherit (import ./log.nix { inherit lib; }) noisily echo_colored;
 
    configureCrate = import ./configure-crate.nix {
-     inherit lib stdenv echo_build_heading noisily mkRustcDepArgs;
+     inherit lib stdenv echo_colored noisily mkRustcDepArgs;
    };
 
    buildCrate = import ./build-crate.nix {
-     inherit lib stdenv echo_build_heading noisily mkRustcDepArgs rust;
+     inherit lib stdenv mkRustcDepArgs rust;
    };
 
    installCrate = import ./install-crate.nix { inherit stdenv; };
@@ -61,9 +61,6 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     buildInputs_ = buildInputs;
     extraRustcOpts_ = extraRustcOpts;
     buildTests_ = buildTests;
-
-    # take a list of crates that we depend on and override them to fit our overrides, rustc, release, …
-    makeDependencies = map (dep: lib.getLib (dep.override { inherit release verbose crateOverrides; }));
 
     # crate2nix has a hack for the old bash based build script that did split
     # entries at `,`. No we have to work around that hack.
@@ -91,10 +88,10 @@ stdenv.mkDerivation (rec {
 
     src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
     name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
-    depsBuildBuild = [ rust stdenv.cc ];
+    depsBuildBuild = [ rust stdenv.cc cargo jq ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
-    dependencies = makeDependencies dependencies_;
-    buildDependencies = makeDependencies buildDependencies_;
+    dependencies = map lib.getLib dependencies_;
+    buildDependencies = map lib.getLib buildDependencies_;
 
     completeDeps = lib.unique (dependencies ++ lib.concatMap (dep: dep.completeDeps) dependencies);
     completeBuildDeps = lib.unique (
@@ -103,7 +100,7 @@ stdenv.mkDerivation (rec {
     );
 
     crateFeatures = lib.optionalString (crate ? features)
-      (lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features));
+      (lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'') (crate.features ++ features));
 
     libName = if crate ? libName then crate.libName else crate.crateName;
     libPath = if crate ? libPath then crate.libPath else "";
@@ -117,6 +114,8 @@ stdenv.mkDerivation (rec {
       in lib.substring 0 10 hashedMetadata;
 
     build = crate.build or "";
+    # Either set to a concrete sub path to the crate root
+    # or use `null` for auto-detect.
     workspace_member = crate.workspace_member or ".";
     crateVersion = crate.version;
     crateDescription = crate.description or "";
