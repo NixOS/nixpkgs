@@ -8,13 +8,13 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.18.8.2527-740d4c206";
+  version = "1.18.9.2571-e106a8a91";
   pname = "plexmediaserver";
 
   # Fetch the source
   src = fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/redhat/plexmediaserver-${version}.x86_64.rpm";
-    sha256 = "05543nkhmp6wq88vz5cnv3cfd5hbd8rqs1rylfy7njgvb0pxl107";
+    sha256 = "061q8vmvlhn1hxvxr420sd1izncqqjwmfj41dqqxhmfkq6nrwvxr";
   };
 
   outputs = [ "out" "basedb" ];
