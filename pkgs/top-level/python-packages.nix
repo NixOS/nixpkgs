@@ -6490,6 +6490,8 @@ in {
 
   graph_nets = callPackage ../development/python-modules/graph_nets { };
 
+  graspy = callPackage ../development/python-modules/graspy { };
+
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
   pyspotify = callPackage ../development/python-modules/pyspotify { };
