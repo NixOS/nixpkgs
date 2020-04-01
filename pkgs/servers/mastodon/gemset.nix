@@ -2443,10 +2443,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01ndzqzqgdig0rs32r7dpy5rrhdaqzfhpi2l4p94zik6k0lm42xq";
+      sha256 = "1smr90w434mlw8rjlfi73yfp972kwswi3i265vkf3cplhsvwbww9";
       type = "gem";
     };
-    version = "6.0.18";
+    version = "6.0.20";
   };
   simple-navigation = {
     dependencies = ["activesupport"];
