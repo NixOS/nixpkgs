@@ -1,25 +1,12 @@
 with import <nixpkgs> { };
-let
-  version = "2.6.0";
-  name = "raylib-${version}";
-  hash = "494e95eaf8daf3f086116dfd6a5fd2e9a2166fc744eabf4f3067bf887d4fb5ef";
-in
-stdenv.mkDerivation {
-  inherit name;
 
-  meta = {
-    description = "A simple and easy-to-use library to enjoy videogames programming";
-    repo = "raylib";
-    owner = "raysan5";
-    license = stdenv.lib.licenses.zlib;
-    maintainers = [ stdenv.lib.mantainers.svantepolk ];
-    rev = version;
-    sha256 = hash;
-  };
+stdenv.mkDerivation {
+  pname = "raylib";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "https://github.com/raysan5/raylib/archive/2.6.0.tar.gz";
-    sha256 = hash;
+    sha256 = "494e95eaf8daf3f086116dfd6a5fd2e9a2166fc744eabf4f3067bf887d4fb5ef";
   };
 
   buildInputs = [
@@ -33,4 +20,11 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
+
+  meta = {
+    description = "A simple and easy-to-use library to enjoy videogames programming";
+    homepage = "https://www.raylib.com";
+    license = stdenv.lib.licenses.zlib;
+    maintainers = [ stdenv.lib.mantainers.svantepolk ];
+  };
 }
