@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , curl
 , json_c
@@ -8,22 +9,20 @@
 
 stdenv.mkDerivation rec {
   pname = "google-compute-engine-oslogin";
-  version = "1.5.3";
-  # from packages/google-compute-engine-oslogin/packaging/debian/changelog
+  version = "20200325.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = "compute-image-packages";
-    rev = "20190522";
-    sha256 = "16jbbrnz49g843h813r408dbvfa2hicf8canxwbfxr2kzhv7ycmm";
+    repo = "guest-oslogin";
+    rev = version;
+    sha256 = "03hk95pgzcgy6ginp8zdy0fbk88m6n65qq22jq490z1xwbjffm8r";
   };
-  sourceRoot = "source/packages/google-compute-engine-oslogin";
 
   postPatch = ''
     # change sudoers dir from /var/google-sudoers.d to /run/google-sudoers.d (managed through systemd-tmpfiles)
-    substituteInPlace pam_module/pam_oslogin_admin.cc --replace /var/google-sudoers.d /run/google-sudoers.d
+    substituteInPlace src/pam/pam_oslogin_admin.cc --replace /var/google-sudoers.d /run/google-sudoers.d
     # fix "User foo not allowed because shell /bin/bash does not exist"
-    substituteInPlace compat.h --replace /bin/bash ${bashInteractive}/bin/bash
+    substituteInPlace src/include/compat.h --replace /bin/bash ${bashInteractive}/bin/bash
   '';
 
   buildInputs = [ curl.dev pam ];
@@ -31,15 +30,15 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE="-I${json_c.dev}/include/json-c";
   NIX_CFLAGS_LINK="-L${json_c}/lib";
 
-  installPhase = ''
-    mkdir -p $out/{bin,lib}
-
-    install -Dm755 libnss_cache_google-compute-engine-oslogin-${version}.so $out/lib/libnss_cache_oslogin.so.2
-    install -Dm755 libnss_google-compute-engine-oslogin-${version}.so $out/lib/libnss_oslogin.so.2
-
-    install -Dm755 pam_oslogin_admin.so pam_oslogin_login.so $out/lib
-    install -Dm755 google_{oslogin_nss_cache,authorized_keys} $out/bin
-  '';
+  makeFlags = [
+    "VERSION=${version}"
+    "DESTDIR=${placeholder "out"}"
+    "PREFIX=/"
+    "BINDIR=/bin"
+    "LIBDIR=/lib"
+    "PAMDIR=/lib"
+    "MANDIR=/share/man"
+  ];
 
   enableParallelBuilding = true;
 
