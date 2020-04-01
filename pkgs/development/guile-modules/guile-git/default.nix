@@ -42,6 +42,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [ guile ];
   propagatedBuildInputs = [ libgit2 bytestructures ];
 
+  passthru = {
+    inherit bytestructures;
+  };
+
   meta = with stdenv.lib; {
     description = "Bindings to Libgit2 for GNU Guile";
     homepage = "https://gitlab.com/guile-git/guile-git";

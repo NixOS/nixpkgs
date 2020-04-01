@@ -9728,6 +9728,8 @@ in
     guile = guile_2_0;
   };
 
+  guix = callPackage ../tools/package-management/guix { };
+
   inav = callPackage ../development/misc/stm32/inav {
     gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
