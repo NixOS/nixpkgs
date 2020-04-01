@@ -2761,6 +2761,17 @@ let
     };
   };
 
+  skim-vim = buildVimPluginFrom2Nix {
+    pname = "skim-vim";
+    version = "2019-07-31";
+    src = fetchFromGitHub {
+      owner = "lotabout";
+      repo = "skim.vim";
+      rev = "4e9d9a3deb2060e2e79fede1c213f13ac7866eb5";
+      sha256 = "0vpfn2zivk8cf2l841jbd78zl1vzdw1wjf9p0dm6pgr84kj9pkx4";
+    };
+  };
+
   sky-color-clock-vim = buildVimPluginFrom2Nix {
     pname = "sky-color-clock-vim";
     version = "2018-11-03";
