@@ -9699,6 +9699,7 @@ in
   guile-gcrypt = callPackage ../development/guile-modules/guile-gcrypt { };
 
   scheme-bytestructures = callPackage ../development/guile-modules/bytestructures { };
+  guile-git = callPackage ../development/guile-modules/guile-git { };
 
   guile-gnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome2.GConf;
