@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ] ;
 
   preConfigure = ''
-export QXMLEDIT_INST_DATA_DIR="$out/share/data"
-export QXMLEDIT_INST_TRANSLATIONS_DIR="$out/share/i18n"
-export QXMLEDIT_INST_INCLUDE_DIR="$out/include"
-export QXMLEDIT_INST_DIR="$out/bin"
-export QXMLEDIT_INST_LIB_DIR="$out/lib"
-export QXMLEDIT_INST_DOC_DIR="$doc"
-'';
+    export QXMLEDIT_INST_DATA_DIR="$out/share/data"
+    export QXMLEDIT_INST_TRANSLATIONS_DIR="$out/share/i18n"
+    export QXMLEDIT_INST_INCLUDE_DIR="$out/include"
+    export QXMLEDIT_INST_DIR="$out/bin"
+    export QXMLEDIT_INST_LIB_DIR="$out/lib"
+    export QXMLEDIT_INST_DOC_DIR="$doc"
+  '';
 
   meta = with stdenv.lib; {
     description = "Simple XML editor based on qt libraries" ;
