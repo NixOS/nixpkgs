@@ -182,6 +182,8 @@ in
   ###### implementation
   config = mkIf cfg.enable {
 
+    location.provider = "geoclue2";
+
     environment.systemPackages = [ package ];
 
     services.dbus.packages = [ package ];
