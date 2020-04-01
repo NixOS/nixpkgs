@@ -2,12 +2,11 @@
 
 let
   pname = "alt-ergo";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchurl {
-    url    = "https://alt-ergo.ocamlpro.com/download_manager.php?target=${pname}-${version}.tar.gz";
-    name   = "${pname}-${version}.tar.gz";
-    sha256 = "124n836alqm13245hcnxixzc6a15rip919shfflvxqnl617mkmhg";
+    url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-${version}/alt-ergo-${version}.tar.gz";
+    sha256 = "130hisjzkaslygipdaaqib92spzx9rapsd45dbh5ssczjn5qnhb9";
   };
 
   preConfigure = "patchShebangs ./configure";
@@ -20,7 +19,7 @@ let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
   inherit version src preConfigure nativeBuildInputs;
   configureFlags = pname;
-  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex zarith ];
+  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
