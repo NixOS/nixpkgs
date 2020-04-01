@@ -144,6 +144,14 @@ for o in $(cat /proc/cmdline); do
             set -- $(IFS==; echo $o)
             stage2Init=$2
             ;;
+        boot.persistence=*)
+            set -- $(IFS==; echo $o)
+            persistence=$2
+            ;;
+        boot.persistence.opt=*)
+            set -- $(IFS==; echo $o)
+            persistence_opt=$2
+            ;;
         boot.trace|debugtrace)
             # Show each command.
             set -x
@@ -532,6 +540,14 @@ while read -u 3 mountPoint; do
       umount /tmp-iso
       rmdir /tmp-iso
       continue
+    fi
+
+    if [ "$mountPoint" = / ] && [ "$device" = tmpfs ] && [ ! -z "$persistence" ]; then
+        echo persistence...
+        waitDevice "$persistence"
+        echo enabling persistence...
+        mountFS "$persistence" "$mountPoint" "$persistence_opt" "auto"
+        continue
     fi
 
     mountFS "$device" "$mountPoint" "$options" "$fsType"
