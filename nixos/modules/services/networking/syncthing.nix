@@ -431,12 +431,23 @@ in {
 
   config = mkIf cfg.enable {
 
+    environment.systemPackages = lib.optional config.xdg.menus.enable
+      (pkgs.makeDesktopItem {
+        name = "net.syncthing.syncthing-gui";
+        exec = "xdg-open http://${cfg.guiAddress}";
+        icon = "syncthing";
+        comment = "Open Syncthing GUI in a web browser";
+        desktopName = "Syncthing GUI";
+        genericName = "Continuous file synchronization";
+        categories = "System;FileTransfer;Monitor;RemoteAccess";
+      }) ++ lib.optional config.xdg.icons.enable cfg.package.icons;
+
     networking.firewall = mkIf cfg.openDefaultPorts {
       allowedTCPPorts = [ 22000 ];
       allowedUDPPorts = [ 21027 ];
     };
 
-    systemd.packages = [ pkgs.syncthing ];
+    systemd.packages = [ cfg.package ];
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       ${defaultUser} =

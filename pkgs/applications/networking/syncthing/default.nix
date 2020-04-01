@@ -5,6 +5,7 @@ let
     buildGoModule rec {
       version = "1.4.2";
       name = "${stname}-${version}";
+      outputs = [ "out" "icons" ];
 
       src = fetchFromGitHub {
         owner  = "syncthing";
@@ -30,6 +31,11 @@ let
       installPhase = ''
         runHook preInstall
         install -Dm755 ${target} $out/bin/${target}
+
+        for res in 32 64 128 256; do
+          install -Dm644 "assets/logo-$res.png" \
+            "$icons/share/icons/hicolor/"$res"x"$res"/apps/syncthing.png"
+        done
         runHook postInstall
       '';
 
