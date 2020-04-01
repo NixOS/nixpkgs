@@ -1,12 +1,12 @@
 { stdenv, llvm-tools, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation {
-  name = "wasilibc-20200227";
+  name = "wasilibc-20200319";
   src = fetchFromGitHub {
-    owner = "CraneStation";
+    owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "d9066a87c04748e7381695eaf01cc5c9a9c3003b";
-    sha256 = "0103bm6arj18sf8bm9lgj3b64aa2znflpjwca33jm83jpbf8h0ry";
+    rev = "9efc2f428358564fe64c374d762d0bfce1d92507";
+    sha256 = "1q6h9r1h7j3i3r8rj2mpjarqa69cbb7frbws3ij7y3x6nbp0znh7";
   };
 
   makeFlagsArray = stdenv.lib.optional stdenv.cc.isClang [
