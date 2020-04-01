@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   meta = {
     description = "WASI libc implementation for WebAssembly";
     homepage    = "https://wasi.dev";
-    platforms   = lib.platforms.wasi;
+    # platforms   = lib.platforms.wasi; TODO: include Darwin 64-bit
     maintainers = [ lib.maintainers.matthewbauer ];
   };
 }
