@@ -5,7 +5,6 @@
 , clutter
 , gjs
 , glib
-, gnome3
 , gobject-introspection
 , gtk3
 , meson
@@ -77,6 +76,6 @@ stdenv.mkDerivation rec {
     description = "Clipboard management system with GNOME 3 integration";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

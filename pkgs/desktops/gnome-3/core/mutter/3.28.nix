@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
   };
 }

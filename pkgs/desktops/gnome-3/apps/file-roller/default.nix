@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "Archive manager for the GNOME desktop environment";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

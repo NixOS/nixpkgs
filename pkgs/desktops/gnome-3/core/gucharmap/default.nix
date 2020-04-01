@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
     description = "GNOME Character Map, based on the Unicode Character Database";
     homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }
