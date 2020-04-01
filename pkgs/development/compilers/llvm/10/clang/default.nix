@@ -8,7 +8,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "0ap63qhz0j6m63l4njwp055xni4s71dsxqi1w5d2p93hbswaiiw2";
+    src = fetch "clang" "08fbxa2a0kr3ni35ckppj0kyvlcyaywrhpqwcdrdy0z900mhcnw8";
 
     unpackPhase = ''
       unpackFile $src
