@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kepubify";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "geek1011";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13vl8jn1kp0v84963kcl8j98gmm5a1i16ccd9i19in968875w4wl";
+    sha256 = "13d3fl53v9pqlm555ly1dm9vc58xwkyik0qmsg173q78ysy2p4q5";
   };
 
   modSha256 = "0jz8v4rnwm5zbxxp49kv96wm4lack6prwyhcrqwsrm79dr9yjcxf";
