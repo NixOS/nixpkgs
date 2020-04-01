@@ -9698,6 +9698,8 @@ in
 
   guile-gcrypt = callPackage ../development/guile-modules/guile-gcrypt { };
 
+  guile-git = callPackage ../development/guile-modules/guile-git { };
+
   guile-gnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome2.GConf;
     guile = guile_2_0;
