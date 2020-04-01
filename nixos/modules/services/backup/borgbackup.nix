@@ -93,6 +93,8 @@ let
           ++ cfg.readWritePaths
           # Borg needs write access to repo if it is not remote
           ++ optional (isLocalPath cfg.repo) cfg.repo;
+        Restart = if cfg.restartSec == null then "no" else "on-failure";
+        RestartSec = cfg.restartSec;
         PrivateTmp = cfg.privateTmp;
       };
       environment = {
@@ -315,6 +317,19 @@ in {
             '';
             default = "+%Y-%m-%dT%H:%M:%S";
             example = "-u +%s";
+          };
+
+          restartSec = mkOption {
+            type = with types; nullOr (either str (listOf str));
+            default = null;
+            description = ''
+              Whether and how soon a failed backup should be restarted.
+              Must be in the format described in
+              <citerefentry><refentrytitle>systemd.service</refentrytitle>
+              <manvolnum>7</manvolnum></citerefentry>.
+              If you do not want a failed backup to restart
+              automatically, use <literal>null</literal>.
+            '';
           };
 
           startAt = mkOption {
