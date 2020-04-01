@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
     sed -i -e '1 s!java!${jre}/bin/java!' $out/bin/clojure-lsp
   '';
 
+  # verify shebang patch
+  installCheckPhase = "PATH= clojure-lsp --version";
+
   meta = with stdenv.lib; {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/snoe/clojure-lsp";
