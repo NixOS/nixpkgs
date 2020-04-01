@@ -10,6 +10,7 @@
 , polkit
 , accountsservice
 , python3
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Use new notifications
+    (fetchpatch {
+      url = "https://github.com/elementary/default-settings/commit/0658bb75b9f49f58b35746d05fb6c4b811f125e9.patch";
+      sha256 = "0wa7iq0vfp2av5v23w94a5844ddj4g48d4wk3yrp745dyrimg739";
+    })
+
     # https://github.com/elementary/default-settings/pull/119
     ./0001-Build-with-Meson.patch
   ];
