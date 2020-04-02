@@ -35,7 +35,7 @@ in
     ./wmii.nix
     ./xmonad.nix
     ./qtile.nix
-  ];
+    ./none.nix ];
 
   options = {
 
