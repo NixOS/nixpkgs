@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1igssl6853wagi5050157bbmr9j12703fqfm8cd7gscqwjghnk14";
   };
 
-  patches = [ ./Makefile.patch ];
+  postPatch = ''
+    substituteInPlace Makefile --replace '/bin:/usr/bin' '$(PATH)'
+  '';
 
   propagatedBuildInputs = [ getopt bashInteractive ];
 
