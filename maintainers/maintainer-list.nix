@@ -5741,6 +5741,12 @@
     githubId = 5515707;
     name = "Peter Romfeld";
   };
+  petersjt014 = {
+    email = "petersjt014@gmail.com";
+    github = "petersjt014";
+    githubId = 29493551;
+    name = "Josh Peters";
+  };
   peti = {
     email = "simons@cryp.to";
     github = "peti";
