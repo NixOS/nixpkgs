@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, scdoc, wayland }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "kanshi";
     rev = "v${version}";
-    sha256 = "0v50q1s105c2rar6mi1pijm8llsnsp62gv4swd3ddjn5rwallg46";
+    sha256 = "0nbpgm8qnn7ljsg9vgs35kl8l4rrk542vdcbx8wrn9r909ld3x92";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
   buildInputs = [ wayland ];
 
   meta = with stdenv.lib; {
