@@ -4061,6 +4061,12 @@
     github = "leonardoce";
     name = "Leonardo Cecchi";
   };
+  leshainc = {
+    email = "leshainc@fomalhaut.me";
+    github = "LeshaInc";
+    githubId = 42153076;
+    name = "Alexey Nikashkin";
+  };
   lethalman = {
     email = "lucabru@src.gnome.org";
     github = "lethalman";
@@ -4499,6 +4505,12 @@
     github = "mbakke";
     githubId = 1269099;
     name = "Marius Bakke";
+  };
+  mbaillie = {
+    email = "martin@baillie.email";
+    github = "martinbaillie";
+    githubId = 613740;
+    name = "Martin Baillie";
   };
   mbbx6spp = {
     email = "me@susanpotter.net";
@@ -7124,6 +7136,12 @@
     github = "thiagokokada";
     githubId = 844343;
     name = "Thiago K. Okada";
+  };
+  thmzlt = {
+    email = "git@thomazleite.com";
+    github = "thmzlt";
+    githubId = 7709;
+    name = "Thomaz Leite";
   };
   ThomasMader = {
     email = "thomas.mader@gmail.com";

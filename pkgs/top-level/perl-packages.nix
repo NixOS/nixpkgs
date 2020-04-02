@@ -1195,6 +1195,21 @@ let
     };
   };
 
+  BytesRandomSecure = buildPerlPackage {
+    pname = "Bytes-Random-Secure";
+    version = "0.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-0.29.tar.gz";
+      sha256 = "53bbd339e6a11efca07c619a615c7c188a68bb2be849a1cb7efc3dd4d9ae85ae";
+    };
+    propagatedBuildInputs = [ CryptRandomSeed MathRandomISAAC ];
+    meta = {
+      description = "Perl extension to generate cryptographically-secure random bytes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CacheCache = buildPerlPackage {
     pname = "Cache-Cache";
     version = "1.08";
@@ -3281,9 +3296,9 @@ let
     };
     patches = [
       (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/andk/cpanpm/pull/133.diff";
+        url = "https://github.com/andk/cpanpm/commit/10da44f1757aff6971e3bc4ed38ab115e738c740.diff";
         name = "patch-YAML-modules-default-for-LoadBlessed-was-changed-to-false";
-        sha256 = "0i8648cwshzzd0b34gyfn68s1vs85d8336ggk2kl99awah1ydsfr";
+        sha256 = "0sr2nxkr1cwavpvpxsqcsryfd5fjv4fkxfihd03jzavv5awj79hp";
       })
     ];
     propagatedBuildInputs = [ ArchiveZip CPANChecksums CPANPerlReleases Expect FileHomeDir LWP LogLog4perl ModuleBuild TermReadKey YAML YAMLLibYAML YAMLSyck ];
@@ -3557,6 +3572,22 @@ let
     };
   };
 
+  CryptRandomSeed = buildPerlPackage {
+    pname = "Crypt-Random-Seed";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-Seed-0.03.tar.gz";
+      sha256 = "593da54b522c09cc26bbcc0e4e49c1c8e688a6fd33b0726af801d722a5c8d0f1";
+    };
+    propagatedBuildInputs = [ CryptRandomTESHA2 ];
+    meta = {
+      homepage = "https://github.com/danaj/Crypt-Random-Seed";
+      description = "Provide strong randomness for seeding";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptRandomSource = buildPerlModule {
     pname = "Crypt-Random-Source";
     version = "0.14";
@@ -3568,6 +3599,20 @@ let
     propagatedBuildInputs = [ CaptureTiny ModuleFind Moo SubExporter TypeTiny namespaceclean ];
     meta = {
       description = "Get weak or strong random data from pluggable sources";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CryptRandomTESHA2 = buildPerlPackage {
+    pname = "Crypt-Random-TESHA2";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-TESHA2-0.01.tar.gz";
+      sha256 = "a0912b42c52be173da528d5527e40d967324bc04ac78d9fc2ddc91ff16fe9633";
+    };
+    meta = {
+      homepage = "https://github.com/danaj/Crypt-Random-TESHA2";
+      description = "Random numbers using timer/schedule entropy, aka userspace voodoo entropy";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3764,14 +3809,15 @@ let
 
   CryptSSLeay = buildPerlPackage {
     pname = "Crypt-SSLeay";
-    version = "0.72";
+    version = "0.73_06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.72.tar.gz;
-      sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
+      url = "mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.73_06.tar.gz";
+      sha256 = "0b159lw3ia5r87qsgff3qhdnz3l09xcz04rbk4ji7fbyr12wmv7q";
     };
+
     makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
     buildInputs = [ PathClass ];
-    propagatedBuildInputs = [ LWPProtocolHttps ];
+    propagatedBuildInputs = [ LWPProtocolHttps BytesRandomSecure ];
   };
 
   CSSDOM = buildPerlPackage {
@@ -14608,6 +14654,21 @@ let
     };
   };
 
+  PerlIOgzip = buildPerlPackage {
+    pname = "PerlIO-gzip";
+    version = "0.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NW/NWCLARK/PerlIO-gzip-0.20.tar.gz";
+      sha256 = "4848679a3f201e3f3b0c5f6f9526e602af52923ffa471a2a3657db786bd3bdc5";
+    };
+    buildInputs = [ pkgs.zlib ];
+    NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
+    meta = {
+      description = "Perl extension to provide a PerlIO layer to gzip/gunzip";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PerlIOutf8_strict = buildPerlPackage {
     pname = "PerlIO-utf8_strict";
     version = "0.007";
@@ -17147,11 +17208,11 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "5.4.0";
+    version = "6.1.0";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
       rev = "v${version}";
-      sha256 = "0csg10mydcif2l0qf16nlphq6ih5378nk6dk1vznf5bspws2ch7a";
+      sha256 = "00w4fmki7ff7i9bi39w2w15mvv38b5ifwk3zib90ny536r3n63sb";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

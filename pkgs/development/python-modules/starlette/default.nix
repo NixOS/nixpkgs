@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiofiles
 , graphene
 , itsdangerous
@@ -20,12 +20,20 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.13.0";
+
+  # This is not the latest version of Starlette, however, later
+  # versions of Starlette break FastAPI due to
+  # https://github.com/tiangolo/fastapi/issues/683. Please update when
+  # possible. FastAPI is currently Starlette's only dependent.
+
+  version = "0.12.9";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6bd414152d40d000ccbf6aa40ed89718b40868366a0f69fb83034f416303acef";
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = pname;
+    rev = version;
+    sha256 = "0w44s8ynzy8w8dgm755c8jina9i4dd87vqkcv7jc1kwkg384w9i5";
   };
 
   propagatedBuildInputs = [

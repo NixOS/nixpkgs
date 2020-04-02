@@ -11,7 +11,7 @@ let
 in
 
 { stdenv, fetchurl, ncurses, buildEnv
-, libX11, xorgproto, useX11 ? safeX11 stdenv
+, libX11, xorgproto, useX11 ? safeX11 stdenv && !stdenv.lib.versionAtLeast version "4.09"
 , aflSupport ? false
 , flambdaSupport ? false
 }:

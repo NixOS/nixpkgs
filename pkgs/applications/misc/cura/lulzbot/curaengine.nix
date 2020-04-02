@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wdkvg1hmqp1gaym804lw09x4ngf5ffasd861jhflpy7djbmkfn8";
   };
 
+  patches = [ ./curaengine-openmp-compat.patch ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libarcusLulzbot stb protobuf ];
 

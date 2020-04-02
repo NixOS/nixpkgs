@@ -1,12 +1,12 @@
-{ lib, buildDunePackage, fetchzip }:
+{ lib, buildDunePackage, fetchurl }:
 
 buildDunePackage rec {
   pname = "parmap";
-  version = "1.1";
+  version = "1.1.1";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/rdicosmo/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "13ahqaga1palf0s0dll512cl7k43sllmwvw6r03y70kfmky1j114";
+    sha256 = "1pci7b1jqxkgmrbhr0p5j98i4van5nfmmb3sak8cyvxhwgna93j4";
   };
 
   doCheck = true;

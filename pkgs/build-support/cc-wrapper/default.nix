@@ -10,7 +10,7 @@
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
-, extraPackages ? [], extraBuildCommands ? ""
+, extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
@@ -212,7 +212,7 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
-  propagatedBuildInputs = [ bintools ];
+  propagatedBuildInputs = [ bintools ] ++ extraTools;
   depsTargetTargetPropagated = extraPackages;
 
   wrapperName = "CC_WRAPPER";
