@@ -1242,9 +1242,7 @@ in
 
   libquotient = libsForQt5.callPackage ../development/libraries/libquotient {};
 
-  inherit (libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { })
-    quaternion
-    quaternion-git;
+  quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
