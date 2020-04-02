@@ -4,6 +4,7 @@
 , nose
 , jinja2
 , pyyaml
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ jinja2 pyyaml ];
+  propagatedBuildInputs = [ jinja2 pyyaml setuptools ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/kolypto/j2cli";
