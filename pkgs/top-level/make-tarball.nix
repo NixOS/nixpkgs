@@ -19,7 +19,7 @@ releaseTools.sourceTarball {
   version = pkgs.lib.fileContents ../../.version;
   versionSuffix = "pre${
     if nixpkgs ? lastModified
-    then builtins.substring 0 8 nixpkgs.lastModified
+    then builtins.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified)
     else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
 
   buildInputs = [ nix.out jq lib-tests pkgs.brotli ];
