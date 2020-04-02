@@ -15,7 +15,6 @@
 , qtbase
 , zlib
 }:
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "rgp";
