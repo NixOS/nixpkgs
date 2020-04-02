@@ -77,16 +77,17 @@ services.mastodon = {
    or customized versions of Mastodon.  To run the script you will
    need the URL of a git repository, anything acceptable to
    <literal>git clone</literal>, and a commit hash or tag acceptable
-   to <literal>git checkout</literal>.  The URL defaults to Mastodon's
-   repository, so to create the dependency files for a version of
-   Mastodon use:
+   to <literal>git checkout</literal>.  You will also need a proper
+   semantic version number unless you are using a git tag which
+   qualifies as one. The URL defaults to Mastodon's repository, so to
+   create the dependency files for a version of Mastodon use:
 <screen>
- <prompt>$ </prompt>nix run -f '&lt;nixpkgs&gt;' mastodon.updateScript -c update.sh --ver v3.0.1
+ <prompt>$ </prompt>nix run -f '&lt;nixpkgs&gt;' mastodon.updateScript -c update.sh --ver v3.1.2
 </screen>
-and to create them for a recent version of the Mastodon fork Soapbox, use:
+and to create them for a recent version of the Mastodon fork glitch-soc, use:
 <screen>
  <prompt>$ </prompt>nix run -f '&lt;nixpkgs&gt;' mastodon.updateScript -c update.sh \
- --url https://gitlab.com/soapbox-pub/soapbox.git --ver v1.0.0rc1
+ --url https://github.com/glitch-soc/mastodon.git --rev a192b193bd --ver v3.1.2
 </screen>
    The <literal>update.sh</literal> script will
    create several Nix files and a patched version of Mastodon's
@@ -98,25 +99,25 @@ and to create them for a recent version of the Mastodon fork Soapbox, use:
    using the modified or forked version of Mastodon may be created.
   </para>
   <para>
-   As an example, to create a Soapbox instance, first run the above
+   As an example, to create a glitch-soc instance, first run the above
    <literal>update.sh</literal> command in a subdirectory called
-   <literal>soapbox</literal> of the directory containing your
+   <literal>glitch-soc</literal> of the directory containing your
    configuration files, and then include in your package overlays:
 <programlisting>
 self: super: {
-  soapbox = self.mastodon.override {
-    pname = "soapbox";
-    srcOverride = pkgs.callPackage ./soapbox/source.nix { };
-    dependenciesDir = ./soapbox;
-    version = "1.0.0rc1";
+  glitch-soc = self.mastodon.override {
+    pname = "glitch-soc";
+    srcOverride = pkgs.callPackage ./glitch-soc/source.nix { };
+    dependenciesDir = ./glitch-soc;
+    version = "3.1.2";
   };
 }
 </programlisting>
-   You can then make the Mastodon service use your Soapbox package
-   instead of the default Mastodon package by adding to your
-   configuration:
+   You can then make the Mastodon service use the
+   <literal>glitch-soc</literal> package instead of the default
+   Mastodon package by adding to your configuration:
 <programlisting>
-<link linkend="opt-services.mastodon.package">services.mastodon.package</link> = pkgs.soapbox;
+   <link linkend="opt-services.mastodon.package">services.mastodon.package</link> = pkgs.glitch-soc;
 </programlisting>
   </para>
  </section>
