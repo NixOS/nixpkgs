@@ -185,6 +185,8 @@ in
 
   enum4linux = callPackage ../tools/security/enum4linux {};
 
+  onesixtyone = callPackage ../tools/security/onesixtyone {};
+
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
