@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "User and system administration help for the GNOME desktop";
     homepage = "https://help.gnome.org/users/gnome-help/";
     license = licenses.cc-by-30;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

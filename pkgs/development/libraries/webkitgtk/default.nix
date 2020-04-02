@@ -50,7 +50,6 @@
 , libseccomp
 , xdg-dbus-proxy
 , substituteAll
-, gnome3
 , glib
 }:
 
@@ -180,6 +179,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux;
     hydraPlatforms = [];
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-     maintainers = gnome3.maintainers;
+     maintainers = teams.gnome.members;
      platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

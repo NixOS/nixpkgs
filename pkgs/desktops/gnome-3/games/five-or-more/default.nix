@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Apps/Five_or_more";
     description = "Remove colored balls from the board by forming lines";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
