@@ -2387,6 +2387,7 @@ extra-packages:
   - inline-c-cpp < 0.2                  # required on GHC 8.0.x
   - lens-labels == 0.1.*                # required for proto-lens-descriptors
   - mainland-pretty == 0.6.2.*          # required for tensorflow-opgen-0.1.0.0
+  - megaparsec >= 7.0.4 && < 8          # required for idris: https://github.com/idris-lang/Idris-dev/issues/4826
   - mtl < 2.2                           # newer versions require transformers > 0.4.x, which we cannot provide in GHC 7.8.x
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
   - network == 2.6.3.1                  # newer versions don't compile with GHC 7.4.x and below
@@ -6391,7 +6392,6 @@ broken-packages:
   - identifiers
   - idiii
   - idna2008
-  - idris
   - IDynamic
   - ieee-utils
   - iexcloud
