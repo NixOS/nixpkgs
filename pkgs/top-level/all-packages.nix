@@ -23972,6 +23972,8 @@ in
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
+  plume = callPackage ../servers/plume { };
+
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
