@@ -108,12 +108,10 @@ in
       serviceConfig = {
         User = "pixiecore";
         Restart = "always";
-        AmbientCapabilities = let
-          capacilities = [ "cap_net_bind_service" ] ++ optional cfg.dhcpNoBind "cap_net_raw";
-          in concatStringsSep " " capacilities;
-        ExecStart = 
+        AmbientCapabilities = [ "cap_net_bind_service" ] ++ optional cfg.dhcpNoBind "cap_net_raw";
+        ExecStart =
           let
-            argString = 
+            argString =
               if cfg.mode == "boot"
               then [ "boot" cfg.kernel ]
                    ++ optional (cfg.initrd != "") cfg.initrd
