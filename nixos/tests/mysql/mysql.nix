@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./../make-test-python.nix ({ pkgs, ...} : {
   name = "mysql";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco shlevy ];
