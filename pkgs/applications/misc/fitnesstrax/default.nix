@@ -1,17 +1,11 @@
-{ pkgs
-, atk
-, cairo
-, fetchFromGitHub
-, gdk-pixbuf
+{ fetchFromGitHub
 , glib
-, gnome2
 , gtk3
-, gtkd
 , lib
 , rustPlatform
-, stdenv
 , wrapGAppsHook
 }:
+
 rustPlatform.buildRustPackage rec {
   name = "fitnesstrax";
   version = "0.1.0";
@@ -23,16 +17,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1k6zhnbs0ggx7q0ig2abcnzprsgrychlpvsh6d36dw6mr8zpfkp7";
   };
 
-  buildInputs = [
-    atk
-    gnome2.pango
-    cairo
-    glib
-    gdk-pixbuf
-    gtk3
+  nativeBuildInputs = [
+    wrapGAppsHook
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [
+    glib
+    gtk3
+  ];
 
   cargoSha256 = "1inzpsj2329svd955axr7ja3gqs7h2kikksdffppkf600mqh4xl4";
 
@@ -42,10 +34,10 @@ rustPlatform.buildRustPackage rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Privacy-first fitness tracking";
     homepage = "https://github.com/luminescent-dreams/fitnesstrax";
     license = licenses.bsd3;
-    maintainers = with lib.maintainers; [ savannidgerinel ];
+    maintainers = with maintainers; [ savannidgerinel ];
   };
 }
