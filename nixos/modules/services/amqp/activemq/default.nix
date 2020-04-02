@@ -63,9 +63,11 @@ in {
       javaProperties = mkOption {
         type = types.attrs;
         default = { };
-        example = {
-          "java.net.preferIPv4Stack" = "true";
-        };
+        example = literalExample ''
+          {
+            "java.net.preferIPv4Stack" = "true";
+          }
+        '';
         apply = attrs: {
           "activemq.base" = "${cfg.baseDir}";
           "activemq.data" = "${cfg.baseDir}/data";
