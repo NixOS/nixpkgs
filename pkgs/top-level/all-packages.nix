@@ -28569,6 +28569,10 @@ in
 
   yaxg = callPackage ../tools/graphics/yaxg {};
 
+  yuzu = libsForQt5.callPackage ../misc/emulators/yuzu {
+    stdenv = gcc10Stdenv;
+  };
+
   zap = callPackage ../tools/networking/zap { };
 
   zigbee2mqtt = callPackage ../servers/zigbee2mqtt { };
