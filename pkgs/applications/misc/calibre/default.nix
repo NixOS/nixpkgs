@@ -122,7 +122,16 @@ mkDerivation rec {
     export PODOFO_INC_DIR=${podofo.dev}/include/podofo
     export PODOFO_LIB_DIR=${podofo.lib}/lib
     export SIP_BIN=${pypkgs.sip}/bin/sip
-    ${pypkgs.python.interpreter} setup.py install --prefix=$out
+    export XDG_DATA_HOME=$out/share
+    export XDG_UTILS_INSTALL_MODE="user"
+
+    ${pypkgs.python.interpreter} setup.py install --root=$out \
+      --prefix=$out \
+      --libdir=$out/lib \
+      --staging-root=$out \
+      --staging-libdir=$out/lib \
+      --staging-sharedir=$out/share
+
 
     PYFILES="$out/bin/* $out/lib/calibre/calibre/web/feeds/*.py
       $out/lib/calibre/calibre/ebooks/metadata/*.py
@@ -130,13 +139,6 @@ mkDerivation rec {
 
     sed -i "s/env python[0-9.]*/python/" $PYFILES
     sed -i "2i import sys; sys.argv[0] = 'calibre'" $out/bin/calibre
-
-    # Replace @out@ by the output path.
-    mkdir -p $out/share/applications/
-    cp {$calibreDesktopItem,$ebookEditDesktopItem,$ebookViewerDesktopItem}/share/applications/* $out/share/applications/
-    for entry in $out/share/applications/*.desktop; do
-      substituteAllInPlace $entry
-    done
 
     mkdir -p $out/share
     cp -a man-pages $out/share/man
@@ -164,79 +166,6 @@ mkDerivation rec {
   '';
 
   disallowedReferences = [ podofo.dev ];
-
-  calibreDesktopItem = makeDesktopItem {
-    fileValidation = false; # fails before substitution
-    name = "calibre-gui";
-    desktopName = "calibre";
-    exec = "@out@/bin/calibre --detach %F";
-    genericName = "E-book library management";
-    icon = "@out@/share/calibre/images/library.png";
-    comment = "Manage, convert, edit, and read e-books";
-    mimeType = lib.concatStringsSep ";" [
-      "application/x-mobipocket-subscription"
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      "text/html"
-      "application/x-cbc"
-      "application/ereader"
-      "application/oebps-package+xml"
-      "image/vnd.djvu"
-      "application/x-sony-bbeb"
-      "application/vnd.ms-word.document.macroenabled.12"
-      "text/rtf"
-      "text/x-markdown"
-      "application/pdf"
-      "application/x-cbz"
-      "application/x-mobipocket-ebook"
-      "application/x-cbr"
-      "application/x-mobi8-ebook"
-      "text/fb2+xml"
-      "application/vnd.oasis.opendocument.text"
-      "application/epub+zip"
-      "text/plain"
-      "application/xhtml+xml"
-    ];
-    categories = "Office";
-    extraEntries = ''
-      Actions=Edit;Viewer;
-
-      [Desktop Action Edit]
-      Name=Edit E-book
-      Icon=@out@/share/calibre/images/tweak.png
-      Exec=@out@/bin/ebook-edit --detach %F
-
-      [Desktop Action Viewer]
-      Name=E-book Viewer
-      Icon=@out@/share/calibre/images/viewer.png
-      Exec=@out@/bin/ebook-viewer --detach %F
-    '';
-  };
-
-  ebookEditDesktopItem = makeDesktopItem {
-    fileValidation = false; # fails before substitution
-    name = "calibre-edit-book";
-    desktopName = "Edit E-book";
-    genericName = "E-book Editor";
-    comment = "Edit e-books";
-    icon = "@out@/share/calibre/images/tweak.png";
-    exec = "@out@/bin/ebook-edit --detach %F";
-    categories = "Office;Publishing";
-    mimeType = "application/epub+zip";
-    extraEntries = "NoDisplay=true";
-  };
-
-  ebookViewerDesktopItem = makeDesktopItem {
-    fileValidation = false; # fails before substitution
-    name = "calibre-ebook-viewer";
-    desktopName = "E-book Viewer";
-    genericName = "E-book Viewer";
-    comment = "Read e-books in all the major formats";
-    icon = "@out@/share/calibre/images/viewer.png";
-    exec = "@out@/bin/ebook-viewer --detach %F";
-    categories = "Office;Viewer";
-    mimeType = "application/epub+zip";
-    extraEntries = "NoDisplay=true";
-  };
 
   meta = with lib; {
     description = "Comprehensive e-book software";
