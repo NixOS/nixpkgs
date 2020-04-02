@@ -7,12 +7,12 @@ let
   fpm = config.services.phpfpm.pools.nextcloud;
 
   phpPackage = pkgs.php74.buildEnv {
-    exts = pp: with pp.exts; [
+    exts = pp: with pp; [
       bcmath calendar curl exif ftp filter gd gettext gmp intl json ldap
       mysqlnd opcache openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql
       pdo_sqlite pgsql readline session soap sodium sqlite3 zip zlib mbstring
-      posix ctype dom simplexml xmlreader xmlwriter pp.apcu
-      pp.redis pp.memcached pp.imagick
+      posix ctype dom simplexml xmlreader xmlwriter
+      apcu redis memcached imagick
     ];
     extraConfig = phpOptionsStr;
   };

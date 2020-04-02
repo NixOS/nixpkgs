@@ -134,8 +134,8 @@
 
        <programlisting>
 environment.systemPackages = [
-(pkgs.php.buildEnv { exts = pp: with pp.exts; [
-    pp.imagick
+(pkgs.php.buildEnv { exts = pp: with pp; [
+    imagick
     opcache
     pdo_mysql
   ]; })
@@ -144,7 +144,7 @@ environment.systemPackages = [
        The default <literal>php</literal> attribute hasn't lost any extensions -
        the <literal>opcache</literal> extension was added there.
 
-       All upstream PHP extensions are available under <package><![CDATA[php.packages.exts.<name?>]]></package>.
+       All upstream PHP extensions are available under <package><![CDATA[php.extensions.<name?>]]></package>.
      </para>
      <para>
        The updated <literal>php</literal> attribute is now easily customizable to your liking

@@ -149,14 +149,21 @@ let
   generic' = { version, sha256, self, selfWithExtensions, ... }@args:
     let
       php = generic (builtins.removeAttrs args [ "self" "selfWithExtensions" ]);
-      packages = callPackage ../../../top-level/php-packages.nix {
+
+      packages = (callPackage ../../../top-level/php-packages.nix {
         php = self;
         phpWithExtensions = selfWithExtensions;
-      };
+      }).packages;
+
+      extensions = (callPackage ../../../top-level/php-packages.nix {
+        php = self;
+        phpWithExtensions = selfWithExtensions;
+      }).extensions;
+
       buildEnv = { exts ? (_: []), extraConfig ? "" }:
         let
           getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
-          extList = exts packages;
+          extList = exts extensions;
 
           # Generate extension load configuration snippets from
           # exts. This is an attrset suitable for use with
@@ -190,7 +197,7 @@ let
             inherit version;
             nativeBuildInputs = [ makeWrapper ];
             passthru = {
-              inherit buildEnv packages;
+              inherit buildEnv packages extensions;
             };
             paths = [ php ];
             postBuild = ''
@@ -206,7 +213,7 @@ let
     in
       php.overrideAttrs (_: {
         passthru = {
-          inherit buildEnv packages;
+          inherit buildEnv packages extensions;
         };
       });
 
@@ -238,7 +245,7 @@ let
   };
 
   defaultPhpExtensions = {
-    exts = pp: with pp.exts; ([
+    exts = pp: with pp; ([
       bcmath calendar curl ctype dom exif fileinfo filter ftp gd
       gettext gmp iconv intl json ldap mbstring mysqli mysqlnd opcache
       openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql

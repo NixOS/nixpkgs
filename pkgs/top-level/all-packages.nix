@@ -9377,6 +9377,11 @@ in
   php73Packages = recurseIntoAttrs php73.packages;
   php74Packages = recurseIntoAttrs php74.packages;
 
+  phpExtensions = php74Extensions;
+  php72Extensions = recurseIntoAttrs php72.extensions;
+  php73Extensions = recurseIntoAttrs php73.extensions;
+  php74Extensions = recurseIntoAttrs php74.extensions;
+
   inherit (callPackages ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   }) php74 php73 php72 php74base php73base php72base;
