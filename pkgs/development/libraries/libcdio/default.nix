@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libcddb ncurses help2man ]
+  nativeBuildInputs = [ pkgconfig help2man ];
+  buildInputs = [ libcddb ncurses ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 
   doCheck = !stdenv.isDarwin;
