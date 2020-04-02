@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pugixml, wayland, libGL }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, pugixml, wayland, libGL, libffi, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "waylandpp";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "16h57hzd688664qcyznzhjp3hxipdkzgv46x82yhkww24av8b55n";
   };
 
+  cmakeFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++";
+
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ pugixml wayland libGL ];
+  buildInputs = [ pugixml wayland libGL libffi ];
 
   meta = with stdenv.lib; {
     description = "Wayland C++ binding";
