@@ -142,11 +142,11 @@ server = stdenv.mkDerivation (common // {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = common.nativeBuildInputs ++ [ bison ] ++ optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
+  nativeBuildInputs = common.nativeBuildInputs ++ [ bison boost.dev ] ++ optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
   buildInputs = common.buildInputs ++ [
     bzip2 lz4 lzo snappy xz zstd
-    libxml2 boost judy libevent cracklib
+    libxml2 judy libevent cracklib
   ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
     ++ optionals withStorageMroonga [ kytea msgpack zeromq ]
     ++ optional stdenv.hostPlatform.isLinux linux-pam
