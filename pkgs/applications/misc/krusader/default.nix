@@ -1,13 +1,22 @@
-{
-  mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  karchive, kconfig, kcrash, kguiaddons, kinit, kparts, kwindowsystem
+{ mkDerivation
+, fetchurl
+, lib
+, extra-cmake-modules
+, kdoctools
+, wrapGAppsHook
+, karchive
+, kconfig
+, kcrash
+, kguiaddons
+, kinit
+, kparts
+, kwindowsystem
 }:
-
 let
   pname = "krusader";
   version = "2.7.2";
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "krusader";
   inherit version;
 

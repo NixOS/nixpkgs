@@ -1,10 +1,10 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
 
   name = "tm-0.4.1";
 
-  installPhase=''make install "PREFIX=$out"'';
+  installPhase = ''make install "PREFIX=$out"'';
 
   patchPhase = ''
     sed -i 's@/usr/bin/install@install@g ; s/gcc/cc/g' Makefile

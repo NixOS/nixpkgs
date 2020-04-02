@@ -3,19 +3,16 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.gnome3.gnome-settings-daemon;
-
 in
-
 {
 
   imports = [
     (mkRemovedOptionModule
-      ["services" "gnome3" "gnome-settings-daemon" "package"]
-      "")
+      [ "services" "gnome3" "gnome-settings-daemon" "package" ]
+      ""
+    )
   ];
 
   ###### interface

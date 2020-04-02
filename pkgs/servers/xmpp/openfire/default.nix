@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openfire";
-  version  = "3_6_3";
+  version = "3_6_3";
 
   src = fetchurl {
     url = "http://www.igniterealtime.org/downloadServlet?filename=openfire/openfire_${version}.tar.gz";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mv $out/conf $out/conf.inst
     ln -s /var/log/openfire $out/logs
     ln -s /etc/openfire $out/conf
-  ''; 
+  '';
 
   meta = {
     description = "XMPP server in Java";

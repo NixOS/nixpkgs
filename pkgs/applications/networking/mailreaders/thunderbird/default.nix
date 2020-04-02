@@ -54,18 +54,24 @@
 
 , debugBuild ? false
 
-, alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, alsaSupport ? stdenv.isLinux
+, alsaLib
+, pulseaudioSupport ? stdenv.isLinux
+, libpulseaudio
+, gtk3Support ? true
+, gtk2
+, gtk3
+, wrapGAppsHook
 , waylandSupport ? true
-, libxkbcommon, calendarSupport ? true
+, libxkbcommon
+, calendarSupport ? true
 
 , # If you want the resulting program to call itself "Thunderbird" instead
-# of "Earlybird" or whatever, enable this option.  However, those
-# binaries may not be distributed without permission from the
-# Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-enableOfficialBranding ? false
+  # of "Earlybird" or whatever, enable this option.  However, those
+  # binaries may not be distributed without permission from the
+  # Mozilla Foundation, see
+  # http://www.mozilla.org/foundation/trademarks/.
+  enableOfficialBranding ? false
 }:
 
 assert waylandSupport -> gtk3Support == true;
@@ -139,11 +145,11 @@ stdenv.mkDerivation rec {
     zip
     zlib
   ] ++ lib.optional alsaSupport alsaLib
-    ++ lib.optional gtk3Support gtk3
-    ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional waylandSupport libxkbcommon;
+  ++ lib.optional gtk3Support gtk3
+  ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional waylandSupport libxkbcommon;
 
-  NIX_CFLAGS_COMPILE =[
+  NIX_CFLAGS_COMPILE = [
     "-I${glib.dev}/include/gio-unix-2.0"
     "-I${nss.dev}/include/nss"
   ];
@@ -180,76 +186,79 @@ stdenv.mkDerivation rec {
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
       ${stdenv.cc.default_cxx_stdlib_compile} \
       ${
-        lib.optionalString stdenv.cc.isClang
-        "-idirafter ${stdenv.cc.cc}/lib/clang/${
-          lib.getVersion stdenv.cc.cc
-        }/include"
-      } \
+      lib.optionalString stdenv.cc.isClang
+          "-idirafter ${stdenv.cc.cc}/lib/clang/${
+              lib.getVersion stdenv.cc.cc
+            }/include"
+    } \
       ${
-        lib.optionalString stdenv.cc.isGNU
-        "-isystem ${stdenv.cc.cc}/include/c++/${
-          lib.getVersion stdenv.cc.cc
-        } -isystem ${stdenv.cc.cc}/include/c++/${
-          lib.getVersion stdenv.cc.cc
-        }/$(cc -dumpmachine)"
-      } \
+      lib.optionalString stdenv.cc.isGNU
+          "-isystem ${stdenv.cc.cc}/include/c++/${
+              lib.getVersion stdenv.cc.cc
+            } -isystem ${stdenv.cc.cc}/include/c++/${
+              lib.getVersion stdenv.cc.cc
+            }/$(cc -dumpmachine)"
+    } \
       $NIX_CFLAGS_COMPILE"
 
     echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
   '';
 
-  configureFlags = let
-    toolkitSlug = if gtk3Support then
-      "3${lib.optionalString waylandSupport "-wayland"}"
-    else
-      "2";
-    toolkitValue = "cairo-gtk${toolkitSlug}";
-  in [
-    "--enable-application=comm/mail"
+  configureFlags =
+    let
+      toolkitSlug =
+        if gtk3Support then
+          "3${lib.optionalString waylandSupport "-wayland"}"
+        else
+          "2";
+      toolkitValue = "cairo-gtk${toolkitSlug}";
+    in [
+      "--enable-application=comm/mail"
 
-    "--with-system-bz2"
-    "--with-system-icu"
-    "--with-system-jpeg"
-    "--with-system-libevent"
-    "--with-system-nspr"
-    "--with-system-nss"
-    "--with-system-png" # needs APNG support
-    "--with-system-icu"
-    "--with-system-zlib"
-    "--with-system-webp"
-    "--with-system-libvpx"
+      "--with-system-bz2"
+      "--with-system-icu"
+      "--with-system-jpeg"
+      "--with-system-libevent"
+      "--with-system-nspr"
+      "--with-system-nss"
+      "--with-system-png" # needs APNG support
+      "--with-system-icu"
+      "--with-system-zlib"
+      "--with-system-webp"
+      "--with-system-libvpx"
 
-    "--enable-rust-simd"
-    "--enable-crashreporter"
-    "--enable-default-toolkit=${toolkitValue}"
-    "--enable-js-shell"
-    "--enable-necko-wifi"
-    "--enable-startup-notification"
-    "--enable-system-ffi"
-    "--enable-system-pixman"
-    "--enable-system-sqlite"
+      "--enable-rust-simd"
+      "--enable-crashreporter"
+      "--enable-default-toolkit=${toolkitValue}"
+      "--enable-js-shell"
+      "--enable-necko-wifi"
+      "--enable-startup-notification"
+      "--enable-system-ffi"
+      "--enable-system-pixman"
+      "--enable-system-sqlite"
 
-    "--disable-gconf"
-    "--disable-tests"
-    "--disable-updater"
-    "--enable-jemalloc"
-  ] ++ (if debugBuild then [
-    "--enable-debug"
-    "--enable-profiling"
-  ] else [
-    "--disable-debug"
-    "--enable-release"
-    "--disable-debug-symbols"
-    "--enable-optimize"
-    "--enable-strip"
-  ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
-    # on i686-linux: --with-libclang-path is not available in this configuration
-    "--with-libclang-path=${llvmPackages.libclang}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
-  ] ++ lib.optional alsaSupport "--enable-alsa"
-  ++ lib.optional calendarSupport "--enable-calendar"
-  ++ lib.optional enableOfficialBranding "--enable-official-branding"
-  ++ lib.optional pulseaudioSupport "--enable-pulseaudio";
+      "--disable-gconf"
+      "--disable-tests"
+      "--disable-updater"
+      "--enable-jemalloc"
+    ] ++ (
+      if debugBuild then [
+        "--enable-debug"
+        "--enable-profiling"
+      ] else [
+        "--disable-debug"
+        "--enable-release"
+        "--disable-debug-symbols"
+        "--enable-optimize"
+        "--enable-strip"
+      ]) ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+      # on i686-linux: --with-libclang-path is not available in this configuration
+      "--with-libclang-path=${llvmPackages.libclang}/lib"
+      "--with-clang-path=${llvmPackages.clang}/bin/clang"
+    ] ++ lib.optional alsaSupport "--enable-alsa"
+    ++ lib.optional calendarSupport "--enable-calendar"
+    ++ lib.optional enableOfficialBranding "--enable-official-branding"
+    ++ lib.optional pulseaudioSupport "--enable-pulseaudio";
 
   enableParallelBuilding = true;
 
@@ -264,34 +273,35 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  postInstall = let
-    desktopItem = makeDesktopItem {
-      categories = lib.concatStringsSep ";" [ "Application" "Network" ];
-      desktopName = "Thunderbird";
-      genericName = "Mail Reader";
-      name = "thunderbird";
-      exec = "thunderbird %U";
-      icon = "$out/lib/thunderbird/chrome/icons/default/default256.png";
-      mimeType = lib.concatStringsSep ";" [
-        # Email
-        "x-scheme-handler/mailto"
-        "message/rfc822"
-        # Feeds
-        "x-scheme-handler/feed"
-        "application/rss+xml"
-        "application/x-extension-rss"
-        # Newsgroups
-        "x-scheme-handler/news"
-        "x-scheme-handler/snews"
-        "x-scheme-handler/nntp"
-      ];
-    };
-  in ''
-    # TODO: Move to a dev output?
-    rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
+  postInstall =
+    let
+      desktopItem = makeDesktopItem {
+        categories = lib.concatStringsSep ";" [ "Application" "Network" ];
+        desktopName = "Thunderbird";
+        genericName = "Mail Reader";
+        name = "thunderbird";
+        exec = "thunderbird %U";
+        icon = "$out/lib/thunderbird/chrome/icons/default/default256.png";
+        mimeType = lib.concatStringsSep ";" [
+          # Email
+          "x-scheme-handler/mailto"
+          "message/rfc822"
+          # Feeds
+          "x-scheme-handler/feed"
+          "application/rss+xml"
+          "application/x-extension-rss"
+          # Newsgroups
+          "x-scheme-handler/news"
+          "x-scheme-handler/snews"
+          "x-scheme-handler/nntp"
+        ];
+      };
+    in ''
+      # TODO: Move to a dev output?
+      rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
 
-    ${desktopItem.buildCommand}
-  '';
+      ${desktopItem.buildCommand}
+    '';
 
   preFixup = ''
     # Needed to find Mozilla runtime

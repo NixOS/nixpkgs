@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, six
+}:
 
 buildPythonPackage rec {
   pname = "trueskill";

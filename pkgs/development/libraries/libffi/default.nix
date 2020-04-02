@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv
+, fetchurl
+, fetchpatch
 , autoreconfHook
 
-# libffi is used in darwin and linux with glibc stdenv
-# we cannot run checks within it
-, doCheck ? stdenv.hostPlatform.isMusl, dejagnu
+  # libffi is used in darwin and linux with glibc stdenv
+  # we cannot run checks within it
+, doCheck ? stdenv.hostPlatform.isMusl
+, dejagnu
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mi0cpf8aa40ljjmzxb7im6dbj45bb0kllcd09xgmp834y9agyvj";
   };
 
-  patches = [];
+  patches = [ ];
 
   outputs = [ "out" "dev" "man" "info" ];
 

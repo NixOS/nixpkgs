@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version    = "0.9";
+  version = "0.9";
   patchLevel = "19";
 
   name = "urlview-${version}-${patchLevel}";

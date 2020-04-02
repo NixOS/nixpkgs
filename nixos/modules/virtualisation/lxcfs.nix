@@ -3,10 +3,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.virtualisation.lxc.lxcfs;
-in {
+in
+{
   meta.maintainers = [ maintainers.mic92 ];
 
   ###### interface
@@ -34,11 +34,11 @@ in {
       before = [ "lxc.service" ];
       restartIfChanged = false;
       serviceConfig = {
-        ExecStartPre="${pkgs.coreutils}/bin/mkdir -p /var/lib/lxcfs";
-        ExecStart="${pkgs.lxcfs}/bin/lxcfs /var/lib/lxcfs";
-        ExecStopPost="-${pkgs.fuse}/bin/fusermount -u /var/lib/lxcfs";
-        KillMode="process";
-        Restart="on-failure";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/lxcfs";
+        ExecStart = "${pkgs.lxcfs}/bin/lxcfs /var/lib/lxcfs";
+        ExecStopPost = "-${pkgs.fuse}/bin/fusermount -u /var/lib/lxcfs";
+        KillMode = "process";
+        Restart = "on-failure";
       };
     };
   };

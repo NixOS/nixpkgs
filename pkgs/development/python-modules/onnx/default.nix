@@ -70,9 +70,9 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   meta = {
-    homepage    = http://onnx.ai;
+    homepage = http://onnx.ai;
     description = "Open Neural Network Exchange";
-    license     = lib.licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.acairncross ];
   };
 }

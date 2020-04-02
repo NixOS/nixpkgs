@@ -1,5 +1,4 @@
 { stdenv, python3 }:
-
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi requests;
 in

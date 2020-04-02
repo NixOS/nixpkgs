@@ -9,12 +9,13 @@ with lib;
   imports = [
     (mkRenamedOptionModule
       [ "services" "gnome3" "gpaste" "enable" ]
-      [ "programs" "gpaste" "enable" ])
+      [ "programs" "gpaste" "enable" ]
+    )
   ];
 
   ###### interface
   options = {
-     programs.gpaste = {
+    programs.gpaste = {
       enable = mkOption {
         type = types.bool;
         default = false;

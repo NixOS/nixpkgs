@@ -1,4 +1,8 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, isPy27
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, isPy27
 , mpv
 }:
 

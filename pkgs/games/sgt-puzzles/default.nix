@@ -1,6 +1,13 @@
-{ stdenv, fetchurl, desktop-file-utils
-, gtk3, libX11
-, makeWrapper, pkgconfig, perl, autoreconfHook, wrapGAppsHook
+{ stdenv
+, fetchurl
+, desktop-file-utils
+, gtk3
+, libX11
+, makeWrapper
+, pkgconfig
+, perl
+, autoreconfHook
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +24,18 @@ stdenv.mkDerivation rec {
     sha256 = "088w0x9g3j8pn725ix8ny8knhdsfgjr3hpswsh9fvfkz5vlg2xkm";
   };
 
-  nativeBuildInputs = [ autoreconfHook desktop-file-utils makeWrapper
-    pkgconfig perl wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    desktop-file-utils
+    makeWrapper
+    pkgconfig
+    perl
+    wrapGAppsHook
+  ];
 
   buildInputs = [ gtk3 libX11 ];
 
-  makeFlags = [ "prefix=$(out)" "gamesdir=$(out)/bin"];
+  makeFlags = [ "prefix=$(out)" "gamesdir=$(out)/bin" ];
 
   preInstall = ''
     mkdir -p "$out"/{bin,share/doc/sgtpuzzles}

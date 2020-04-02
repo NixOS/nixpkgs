@@ -14,7 +14,7 @@ rec {
 
   packageName = "esrap-peg";
 
-  asdFilesToKeep = ["esrap-peg.asd"];
+  asdFilesToKeep = [ "esrap-peg.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM esrap-peg DESCRIPTION

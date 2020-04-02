@@ -1,4 +1,4 @@
-{stdenv, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib, nasm }:
+{ stdenv, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "mupen64plus";

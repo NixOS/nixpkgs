@@ -1,32 +1,32 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.firejail;
 
   wrappedBins = pkgs.runCommand "firejail-wrapped-binaries"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-    }
+  {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  }
     ''
       mkdir -p $out/bin
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList (command: binary: ''
-        cat <<_EOF >$out/bin/${command}
-        #! ${pkgs.runtimeShell} -e
-        exec /run/wrappers/bin/firejail ${binary} "\$@"
-        _EOF
-        chmod 0755 $out/bin/${command}
-      '') cfg.wrappedBinaries)}
+      cat <<_EOF >$out/bin/${command}
+      #! ${pkgs.runtimeShell} -e
+      exec /run/wrappers/bin/firejail ${binary} "\$@"
+      _EOF
+      chmod 0755 $out/bin/${command}
+    '') cfg.wrappedBinaries)}
     '';
-
-in {
+in
+{
   options.programs.firejail = {
     enable = mkEnableOption "firejail";
 
     wrappedBinaries = mkOption {
       type = types.attrsOf types.path;
-      default = {};
+      default = { };
       example = literalExample ''
         {
           firefox = "''${lib.getBin pkgs.firefox}/bin/firefox";

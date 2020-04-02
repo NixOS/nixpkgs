@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libotr, pidgin, intltool } :
+{ stdenv, fetchurl, libotr, pidgin, intltool }:
 
 stdenv.mkDerivation rec {
   name = "pidgin-otr-4.0.2";

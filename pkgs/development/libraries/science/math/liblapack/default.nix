@@ -1,16 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  gfortran,
-  cmake,
-  python2,
-  shared ? false
+{ stdenv
+, fetchFromGitHub
+, gfortran
+, cmake
+, python2
+, shared ? false
 }:
 let
   inherit (stdenv.lib) optional;
   version = "3.9.0";
 in
-
 stdenv.mkDerivation {
   pname = "liblapack";
   inherit version;

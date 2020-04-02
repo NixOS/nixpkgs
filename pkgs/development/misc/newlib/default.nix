@@ -1,7 +1,8 @@
 { stdenv, fetchurl, buildPackages }:
-
-let version = "3.3.0";
-in stdenv.mkDerivation {
+let
+  version = "3.3.0";
+in
+stdenv.mkDerivation {
   pname = "newlib";
   inherit version;
   src = fetchurl {

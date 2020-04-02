@@ -19,10 +19,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       The zathura-ps plugin adds PS support to zathura by using the
       libspectre library.
-      '';
+    '';
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }
-

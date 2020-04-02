@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source log management solution";
-    homepage    = "https://www.graylog.org/";
-    license     = licenses.gpl3;
-    platforms   = platforms.unix;
+    homepage = "https://www.graylog.org/";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
     maintainers = [ maintainers.fadenb ];
   };
 }

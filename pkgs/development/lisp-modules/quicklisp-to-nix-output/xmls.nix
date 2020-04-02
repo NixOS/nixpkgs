@@ -16,7 +16,7 @@ rec {
 
   packageName = "xmls";
 
-  asdFilesToKeep = ["xmls.asd"];
+  asdFilesToKeep = [ "xmls.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM xmls DESCRIPTION System lacks description SHA256

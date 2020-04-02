@@ -35,54 +35,55 @@ rec {
       Cmd = [ "/bin/redis-server" ];
       WorkingDir = "/data";
       Volumes = {
-        "/data" = {};
+        "/data" = { };
       };
     };
   };
 
   # 3. another service example
-  nginx = let
-    nginxPort = "80";
-    nginxConf = pkgs.writeText "nginx.conf" ''
-      user nginx nginx;
-      daemon off;
-      error_log /dev/stdout info;
-      pid /dev/null;
-      events {}
-      http {
-        access_log /dev/stdout;
-        server {
-          listen ${nginxPort};
-          index index.html;
-          location / {
-            root ${nginxWebRoot};
+  nginx =
+    let
+      nginxPort = "80";
+      nginxConf = pkgs.writeText "nginx.conf" ''
+        user nginx nginx;
+        daemon off;
+        error_log /dev/stdout info;
+        pid /dev/null;
+        events {}
+        http {
+          access_log /dev/stdout;
+          server {
+            listen ${nginxPort};
+            index index.html;
+            location / {
+              root ${nginxWebRoot};
+            }
           }
         }
-      }
-    '';
-    nginxWebRoot = pkgs.writeTextDir "index.html" ''
-      <html><body><h1>Hello from NGINX</h1></body></html>
-    '';
-  in
-  buildImage {
-    name = "nginx-container";
-    tag = "latest";
-    contents = pkgs.nginx;
+      '';
+      nginxWebRoot = pkgs.writeTextDir "index.html" ''
+        <html><body><h1>Hello from NGINX</h1></body></html>
+      '';
+    in
+      buildImage {
+        name = "nginx-container";
+        tag = "latest";
+        contents = pkgs.nginx;
 
-    runAsRoot = ''
-      #!${pkgs.stdenv.shell}
-      ${shadowSetup}
-      groupadd --system nginx
-      useradd --system --gid nginx nginx
-    '';
+        runAsRoot = ''
+          #!${pkgs.stdenv.shell}
+          ${shadowSetup}
+          groupadd --system nginx
+          useradd --system --gid nginx nginx
+        '';
 
-    config = {
-      Cmd = [ "nginx" "-c" nginxConf ];
-      ExposedPorts = {
-        "${nginxPort}/tcp" = {};
+        config = {
+          Cmd = [ "nginx" "-c" nginxConf ];
+          ExposedPorts = {
+            "${nginxPort}/tcp" = { };
+          };
+        };
       };
-    };
-  };
 
   # 4. example of pulling an image. could be used as a base for other images
   nixFromDockerHub = pullImage {
@@ -179,7 +180,9 @@ rec {
       Env = [ "PATH=${pkgs.coreutils}/bin/" ];
       WorkingDir = "/example-output";
       Cmd = [
-        "${pkgs.bash}/bin/bash" "-c" "echo hello > foo; cat foo"
+        "${pkgs.bash}/bin/bash"
+        "-c"
+        "echo hello > foo; cat foo"
       ];
     };
   };
@@ -199,37 +202,38 @@ rec {
   # - the layer of parent are below
   # - the order of parent layer is preserved at image build time
   #   (this is why there are 3 images)
-  layersOrder = let
-    l1 = pkgs.dockerTools.buildImage {
-      name = "l1";
+  layersOrder =
+    let
+      l1 = pkgs.dockerTools.buildImage {
+        name = "l1";
+        tag = "latest";
+        extraCommands = ''
+          mkdir -p tmp
+          echo layer1 > tmp/layer1
+          echo layer1 > tmp/layer2
+          echo layer1 > tmp/layer3
+        '';
+      };
+      l2 = pkgs.dockerTools.buildImage {
+        name = "l2";
+        fromImage = l1;
+        tag = "latest";
+        extraCommands = ''
+          mkdir -p tmp
+          echo layer2 > tmp/layer2
+          echo layer2 > tmp/layer3
+        '';
+      };
+    in pkgs.dockerTools.buildImage {
+      name = "l3";
+      fromImage = l2;
       tag = "latest";
+      contents = [ pkgs.coreutils ];
       extraCommands = ''
         mkdir -p tmp
-        echo layer1 > tmp/layer1
-        echo layer1 > tmp/layer2
-        echo layer1 > tmp/layer3
+        echo layer3 > tmp/layer3
       '';
     };
-    l2 = pkgs.dockerTools.buildImage {
-      name = "l2";
-      fromImage = l1;
-      tag = "latest";
-      extraCommands = ''
-        mkdir -p tmp
-        echo layer2 > tmp/layer2
-        echo layer2 > tmp/layer3
-      '';
-    };
-  in pkgs.dockerTools.buildImage {
-    name = "l3";
-    fromImage = l2;
-    tag = "latest";
-    contents = [ pkgs.coreutils ];
-    extraCommands = ''
-      mkdir -p tmp
-      echo layer3 > tmp/layer3
-    '';
-  };
 
   # 14. Create another layered image, for comparing layers with image 10.
   another-layered-image = pkgs.dockerTools.buildLayeredImage {
@@ -253,7 +257,8 @@ rec {
     name = "bulk-layer";
     tag = "latest";
     contents = with pkgs; [
-      coreutils hello
+      coreutils
+      hello
     ];
     maxLayers = 2;
   };
@@ -273,11 +278,10 @@ rec {
     contents = [
       # This layer has no dependencies and its symlinks will be dereferenced
       # when creating the customization layer.
-      (pkgs.runCommand "layer-to-flatten" {} ''
+      (pkgs.runCommand "layer-to-flatten" { } ''
         mkdir -p $out/bin
         ln -s /bin/true $out/bin/custom-true
-      ''
-      )
+      '')
     ];
   };
 }

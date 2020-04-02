@@ -31,4 +31,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.shou ];
   };
 }
-

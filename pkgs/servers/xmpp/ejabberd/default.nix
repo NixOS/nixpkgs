@@ -1,18 +1,40 @@
-{ stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
-, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps, gd
+{ stdenv
+, writeScriptBin
+, makeWrapper
+, lib
+, fetchurl
+, git
+, cacert
+, libpng
+, libjpeg
+, libwebp
+, erlang
+, openssl
+, expat
+, libyaml
+, bash
+, gnused
+, gnugrep
+, coreutils
+, utillinux
+, procps
+, gd
 , flock
 , withMysql ? false
 , withPgsql ? false
-, withSqlite ? false, sqlite
-, withPam ? false, pam
-, withZlib ? true, zlib
+, withSqlite ? false
+, sqlite
+, withPam ? false
+, pam
+, withZlib ? true
+, zlib
 , withRiak ? false
-, withElixir ? false, elixir
+, withElixir ? false
+, elixir
 , withIconv ? true
 , withTools ? false
 , withRedis ? false
 }:
-
 let
   fakegit = writeScriptBin "git" ''
     #! ${stdenv.shell} -e
@@ -22,8 +44,8 @@ let
   '';
 
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "20.01";
   pname = "ejabberd";
 
@@ -39,7 +61,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
     ++ lib.optional withElixir elixir
-    ;
+  ;
 
   # Apparently needed for Elixir
   LANG = "en_US.UTF-8";
@@ -80,7 +102,8 @@ in stdenv.mkDerivation rec {
   };
 
   configureFlags =
-    [ (lib.enableFeature withMysql "mysql")
+    [
+      (lib.enableFeature withMysql "mysql")
       (lib.enableFeature withPgsql "pgsql")
       (lib.enableFeature withSqlite "sqlite")
       (lib.enableFeature withPam "pam")

@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-pdf";
 
-  asdFilesToKeep = ["cl-pdf.asd"];
+  asdFilesToKeep = [ "cl-pdf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-pdf DESCRIPTION Common Lisp PDF Generation Library SHA256

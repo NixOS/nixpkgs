@@ -1,10 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
-let cfg = config.services.gogoclient;
+let
+  cfg = config.services.gogoclient;
 in
-
 {
 
   ###### interface
@@ -13,7 +12,7 @@ in
     services.gogoclient = {
       enable = mkOption {
         default = false;
-        type =  types.bool;
+        type = types.bool;
         description = ''
           Enable the gogoCLIENT IPv6 tunnel.
         '';

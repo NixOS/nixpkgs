@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "3.006";
-in fetchzip {
+in
+fetchzip {
   name = "source-sans-pro-${version}";
 
   url = "https://github.com/adobe-fonts/source-sans-pro/releases/download/${version}R/source-sans-pro-${version}R.zip";

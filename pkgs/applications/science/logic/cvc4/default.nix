@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, cln, gmp, swig, pkgconfig
-, readline, libantlr3c, boost, jdk, autoreconfHook
-, python3, antlr3_4
+{ stdenv
+, fetchurl
+, cln
+, gmp
+, swig
+, pkgconfig
+, readline
+, libantlr3c
+, boost
+, jdk
+, autoreconfHook
+, python3
+, antlr3_4
 }:
 
 stdenv.mkDerivation rec {
@@ -35,9 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";
-    homepage    = http://cvc4.cs.stanford.edu/web/;
-    license     = licenses.gpl3;
-    platforms   = platforms.unix;
+    homepage = http://cvc4.cs.stanford.edu/web/;
+    license = licenses.gpl3;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ vbgl thoughtpolice gebner ];
   };
 }

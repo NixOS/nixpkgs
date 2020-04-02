@@ -1,59 +1,58 @@
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , pkgs ? import ../.. { inherit system config; }
 }:
-
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-                     removeSuffix replaceChars singleton splitString;
+    removeSuffix replaceChars singleton splitString;
 
-/*
- * The attrset `exporterTests` contains one attribute
- * for each exporter test. Each of these attributes
- * is expected to be an attrset containing:
- *
- *  `exporterConfig`:
- *    this attribute set contains config for the exporter itself
- *
- *  `exporterTest`
- *    this attribute set contains test instructions
- *
- *  `metricProvider` (optional)
- *    this attribute contains additional machine config
- *
- *  Example:
- *    exporterTests.<exporterName> = {
- *      exporterConfig = {
- *        enable = true;
- *      };
- *      metricProvider = {
- *        services.<metricProvider>.enable = true;
- *      };
- *      exporterTest = ''
- *        wait_for_unit("prometheus-<exporterName>-exporter.service")
- *        wait_for_open_port("1234")
- *        succeed("curl -sSf 'localhost:1234/metrics'")
- *      '';
- *    };
- *
- *  # this would generate the following test config:
- *
- *    nodes.<exporterName> = {
- *      services.prometheus.<exporterName> = {
- *        enable = true;
- *      };
- *      services.<metricProvider>.enable = true;
- *    };
- *
- *    testScript = ''
- *      <exporterName>.start()
- *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
- *      <exporterName>.wait_for_open_port("1234")
- *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
- *      <exporterName>.shutdown()
- *    '';
- */
+  /*
+   * The attrset `exporterTests` contains one attribute
+   * for each exporter test. Each of these attributes
+   * is expected to be an attrset containing:
+   *
+   *  `exporterConfig`:
+   *    this attribute set contains config for the exporter itself
+   *
+   *  `exporterTest`
+   *    this attribute set contains test instructions
+   *
+   *  `metricProvider` (optional)
+   *    this attribute contains additional machine config
+   *
+   *  Example:
+   *    exporterTests.<exporterName> = {
+   *      exporterConfig = {
+   *        enable = true;
+   *      };
+   *      metricProvider = {
+   *        services.<metricProvider>.enable = true;
+   *      };
+   *      exporterTest = ''
+   *        wait_for_unit("prometheus-<exporterName>-exporter.service")
+   *        wait_for_open_port("1234")
+   *        succeed("curl -sSf 'localhost:1234/metrics'")
+   *      '';
+   *    };
+   *
+   *  # this would generate the following test config:
+   *
+   *    nodes.<exporterName> = {
+   *      services.prometheus.<exporterName> = {
+   *        enable = true;
+   *      };
+   *      services.<metricProvider>.enable = true;
+   *    };
+   *
+   *    testScript = ''
+   *      <exporterName>.start()
+   *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
+   *      <exporterName>.wait_for_open_port("1234")
+   *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
+   *      <exporterName>.shutdown()
+   *    '';
+   */
 
   exporterTests = {
 
@@ -112,7 +111,7 @@ let
           "plugin":"testplugin",
           "time":DATE
         }]
-        ''; in ''
+      ''; in ''
         wait_for_unit("prometheus-collectd-exporter.service")
         wait_for_open_port(9103)
         succeed(
@@ -162,7 +161,8 @@ let
       '';
     };
 
-    fritzbox = { # TODO add proper test case
+    fritzbox = {
+      # TODO add proper test case
       exporterConfig = {
         enable = true;
       };
@@ -179,10 +179,12 @@ let
       exporterConfig = {
         enable = true;
         url = "http://localhost";
-        configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON [{
-          name = "json_test_metric";
-          path = "$.test";
-        }]);
+        configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON [
+          {
+            name = "json_test_metric";
+            path = "$.test";
+          }
+        ]);
       };
       metricProvider = {
         systemd.services.prometheus-json-exporter.after = [ "nginx.service" ];
@@ -208,14 +210,16 @@ let
         configuration = {
           monitoringInterval = "2s";
           mailCheckTimeout = "10s";
-          servers = [ {
-            name = "testserver";
-            server = "localhost";
-            port = 25;
-            from = "mail-exporter@localhost";
-            to = "mail-exporter@localhost";
-            detectionDir = "/var/spool/mail/mail-exporter/new";
-          } ];
+          servers = [
+            {
+              name = "testserver";
+              server = "localhost";
+              port = 25;
+              from = "mail-exporter@localhost";
+              to = "mail-exporter@localhost";
+              detectionDir = "/var/spool/mail/mail-exporter/new";
+            }
+          ];
         };
       };
       metricProvider = {
@@ -292,15 +296,16 @@ let
         url = "http://localhost/negative-space.xml";
       };
       metricProvider = {
-        systemd.services.nc-pwfile = let
-          passfile = (pkgs.writeText "pwfile" "snakeoilpw");
-        in {
-          requiredBy = [ "prometheus-nextcloud-exporter.service" ];
-          before = [ "prometheus-nextcloud-exporter.service" ];
-          serviceConfig.ExecStart = ''
-            ${pkgs.coreutils}/bin/install -o nextcloud-exporter -m 0400 ${passfile} /var/nextcloud-pwfile
-          '';
-        };
+        systemd.services.nc-pwfile =
+          let
+            passfile = (pkgs.writeText "pwfile" "snakeoilpw");
+          in {
+            requiredBy = [ "prometheus-nextcloud-exporter.service" ];
+            before = [ "prometheus-nextcloud-exporter.service" ];
+            serviceConfig.ExecStart = ''
+              ${pkgs.coreutils}/bin/install -o nextcloud-exporter -m 0400 ${passfile} /var/nextcloud-pwfile
+            '';
+          };
         services.nginx = {
           enable = true;
           virtualHosts."localhost" = {
@@ -532,9 +537,11 @@ in
 mapAttrs (exporter: testConfig: (makeTest {
   name = "prometheus-${exporter}-exporter";
 
-  nodes.${exporter} = mkMerge [{
-    services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
-  } testConfig.metricProvider or {}];
+  nodes.${exporter} = mkMerge [
+    {
+      services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
+    } testConfig.metricProvider or { }
+  ];
 
   testScript = ''
     ${exporter}.start()

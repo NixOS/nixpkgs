@@ -19,7 +19,7 @@ rec {
 
   packageName = "hunchentoot";
 
-  asdFilesToKeep = ["hunchentoot.asd"];
+  asdFilesToKeep = [ "hunchentoot.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM hunchentoot DESCRIPTION

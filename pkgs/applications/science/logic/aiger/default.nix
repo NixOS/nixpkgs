@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.9.9";
 
   src = fetchurl {
-    url    = "http://fmv.jku.at/aiger/${pname}-${version}.tar.gz";
+    url = "http://fmv.jku.at/aiger/${pname}-${version}.tar.gz";
     sha256 = "1ish0dw0nf9gyghxsdhpy1jjiy5wp54c993swp85xp7m6vdx6l0y";
   };
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "And-Inverter Graph (AIG) utilities";
-    homepage    = http://fmv.jku.at/aiger/;
-    license     = stdenv.lib.licenses.mit;
+    homepage = http://fmv.jku.at/aiger/;
+    license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

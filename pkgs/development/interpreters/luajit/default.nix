@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, buildPackages
+{ stdenv
+, fetchurl
+, buildPackages
 , name ? "luajit-${version}"
 , isStable
 , sha256
 , version
-, extraMeta ? {}
+, extraMeta ? { }
 , callPackage
 , self
-, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: { })
 , enableFFI ? true
 , enableJIT ? true
 , enableJITDebugModule ? enableJIT
@@ -22,17 +24,17 @@ assert enableJITDebugModule -> enableJIT;
 assert enableGDBJITSupport -> enableJIT;
 assert enableValgrindSupport -> valgrind != null;
 let
-  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+  luaPackages = callPackage ../../lua-modules { lua = self; overrides = packageOverrides; };
 
   XCFLAGS = with stdenv.lib;
-     optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
-  ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
-  ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
-  ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
-  ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
-  ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
-  ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
-  ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
+    ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
+    ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
+    ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
+    ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
+    ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
+    ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
+    ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
   ;
 in
 stdenv.mkDerivation rec {
@@ -78,8 +80,10 @@ stdenv.mkDerivation rec {
   '';
 
   LuaPathSearchPaths = [
-    "lib/lua/${luaversion}/?.lua" "share/lua/${luaversion}/?.lua"
-    "share/lua/${luaversion}/?/init.lua" "lib/lua/${luaversion}/?/init.lua"
+    "lib/lua/${luaversion}/?.lua"
+    "share/lua/${luaversion}/?.lua"
+    "share/lua/${luaversion}/?/init.lua"
+    "lib/lua/${luaversion}/?/init.lua"
     "share/${name}/?.lua"
   ];
   LuaCPathSearchPaths = [ "lib/lua/${luaversion}/?.so" "share/lua/${luaversion}/?.so" ];
@@ -90,16 +94,16 @@ stdenv.mkDerivation rec {
       lua = self;
       inherit (luaPackages) requiredLuaModules;
     };
-    withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages;};
+    withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages; };
     pkgs = luaPackages;
     interpreter = "${self}/bin/lua";
   };
 
   meta = with stdenv.lib; {
     description = "High-performance JIT compiler for Lua 5.1";
-    homepage    = http://luajit.org;
-    license     = licenses.mit;
-    platforms   = platforms.linux ++ platforms.darwin;
+    homepage = http://luajit.org;
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice smironov vcunat andir ];
   } // extraMeta;
 }

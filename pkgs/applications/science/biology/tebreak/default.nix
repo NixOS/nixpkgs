@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, last, exonerate, minia, python3Packages, bwa
-, samtools, findutils }:
+{ stdenv
+, fetchFromGitHub
+, last
+, exonerate
+, minia
+, python3Packages
+, bwa
+, samtools
+, findutils
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "tebreak";

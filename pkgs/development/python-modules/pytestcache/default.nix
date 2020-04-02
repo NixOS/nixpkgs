@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, execnet }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, execnet
+}:
 
 buildPythonPackage rec {
   pname = "pytest-cache";

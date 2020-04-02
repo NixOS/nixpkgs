@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.prometheus.xmpp-alerts;
 
   configFile = pkgs.writeText "prometheus-xmpp-alerts.yml" (builtins.toJSON cfg.configuration);
-
 in
-
 {
   options.services.prometheus.xmpp-alerts = {
 

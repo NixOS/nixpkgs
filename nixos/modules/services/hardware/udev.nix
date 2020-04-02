@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   udev = config.systemd.package;
 
   cfg = config.services.udev;
@@ -31,10 +29,11 @@ let
 
   # Perform substitutions in all udev rules files.
   udevRules = pkgs.runCommand "udev-rules"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-      packages = unique (map toString cfg.packages);
-    }
+  {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    packages = unique (map toString cfg.packages);
+  }
     ''
       mkdir -p $out
       shopt -s nullglob
@@ -120,15 +119,16 @@ let
       # udev's 80-drivers.rules file, which contains rules for
       # automatically calling modprobe.
       ${optionalString (!config.boot.hardwareScan) ''
-        ln -s /dev/null $out/80-drivers.rules
-      ''}
+      ln -s /dev/null $out/80-drivers.rules
+    ''}
     ''; # */
 
   hwdbBin = pkgs.runCommand "hwdb.bin"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-      packages = unique (map toString ([udev] ++ cfg.packages));
-    }
+  {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    packages = unique (map toString ([ udev ] ++ cfg.packages));
+  }
     ''
       mkdir -p etc/udev/hwdb.d
       for i in $packages; do
@@ -154,9 +154,7 @@ let
     pathsToLink = [ "/bin" "/sbin" ];
     ignoreCollisions = true;
   };
-
 in
-
 {
 
   ###### interface
@@ -178,7 +176,7 @@ in
 
       packages = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           List of packages containing <command>udev</command> rules.
           All files found in
@@ -191,7 +189,7 @@ in
 
       path = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Packages added to the <envar>PATH</envar> environment variable when
           executing programs from Udev rules.
@@ -230,7 +228,7 @@ in
 
     hardware.firmware = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         List of packages containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
@@ -308,7 +306,8 @@ in
       '';
 
     systemd.services.systemd-udevd =
-      { restartTriggers = cfg.packages;
+      {
+        restartTriggers = cfg.packages;
       };
 
   };

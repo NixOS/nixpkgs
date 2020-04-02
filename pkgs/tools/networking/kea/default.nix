@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, openssl, botan2, log4cplus
-, boost, python3, postgresql, libmysqlclient, gmp, bzip2 }:
+{ stdenv
+, fetchurl
+, autoreconfHook
+, pkgconfig
+, openssl
+, botan2
+, log4cplus
+, boost
+, python3
+, postgresql
+, libmysqlclient
+, gmp
+, bzip2
+}:
 
 stdenv.mkDerivation rec {
   pname = "kea";
@@ -25,8 +37,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    openssl log4cplus boost python3 libmysqlclient
-    botan2 gmp bzip2
+    openssl
+    log4cplus
+    boost
+    python3
+    libmysqlclient
+    botan2
+    gmp
+    bzip2
   ];
 
   enableParallelBuilding = true;

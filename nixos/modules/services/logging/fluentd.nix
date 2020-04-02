@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.fluentd;
 
   pluginArgs = concatStringsSep " " (map (x: "-p ${x}") cfg.plugins);
-in {
+in
+{
   ###### interface
 
   options = {
@@ -33,7 +33,7 @@ in {
 
       plugins = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of plugin paths to pass into fluentd. It will make plugins defined in ruby files
           there available in your config.

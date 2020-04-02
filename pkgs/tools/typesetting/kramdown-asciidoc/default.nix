@@ -1,9 +1,11 @@
-{ lib, bundlerApp, makeWrapper,
-  # Optional dependencies, can be null
-  epubcheck, kindlegen,
-  bundlerUpdateScript
+{ lib
+, bundlerApp
+, makeWrapper
+, # Optional dependencies, can be null
+  epubcheck
+, kindlegen
+, bundlerUpdateScript
 }:
-
 let
   app = bundlerApp {
     pname = "kramdown-asciidoc";
@@ -34,4 +36,4 @@ let
     };
   };
 in
-  app
+app

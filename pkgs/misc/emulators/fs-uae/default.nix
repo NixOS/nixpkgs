@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, pkgconfig
-, gettext, gtk2, SDL2, zlib, glib, openal, libGLU, libGL, lua, freetype, libmpeg2, zip }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, gtk2
+, SDL2
+, zlib
+, glib
+, openal
+, libGLU
+, libGL
+, lua
+, freetype
+, libmpeg2
+, zip
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {

@@ -1,5 +1,9 @@
 { enableX11 ? true
-,  stdenv, fetchurl, pkgconfig, xorg }:
+, stdenv
+, fetchurl
+, pkgconfig
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "frame";
@@ -9,9 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "bc2a20cd3ac1e61fe0461bd3ee8cb250dbcc1fa511fad0686d267744e9c78f3a";
   };
 
-  buildInputs = [ 
-    stdenv pkgconfig
-  ] ++ stdenv.lib.optionals enableX11 [xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi];
+  buildInputs = [
+    stdenv
+    pkgconfig
+  ] ++ stdenv.lib.optionals enableX11 [ xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi ];
 
   configureFlags = stdenv.lib.optional enableX11 "--with-x11";
 

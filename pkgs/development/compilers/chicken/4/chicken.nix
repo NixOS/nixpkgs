@@ -1,5 +1,4 @@
 { stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
-
 let
   version = "4.13.0";
   platform = with stdenv;

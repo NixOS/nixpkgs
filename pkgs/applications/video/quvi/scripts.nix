@@ -1,8 +1,8 @@
-{stdenv, fetchurl, pkgconfig}:
+{ stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "quvi-scripts";
-  version="0.9.20131130";
+  version = "0.9.20131130";
 
   src = fetchurl {
     url = "mirror://sourceforge/quvi/libquvi-scripts-${version}.tar.xz";

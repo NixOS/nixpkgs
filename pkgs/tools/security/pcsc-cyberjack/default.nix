@@ -10,8 +10,7 @@ stdenv.mkDerivation rec {
     spVer = optionalString (length splittedVer >= 1) ("." + last splittedVer);
     tarballVersion = "${mainVer}final${spVer}";
   in fetchurl {
-    url = "http://support.reiner-sct.de/downloads/LINUX/V${version}"
-        + "/pcsc-cyberjack-${tarballVersion}.tar.bz2";
+    url = "http://support.reiner-sct.de/downloads/LINUX/V${version}" + "/pcsc-cyberjack-${tarballVersion}.tar.bz2";
     sha256 = "04pkmybal56s5xnjld09vl1s1h6qf8mvhm41b758d6hi240kgp1j";
   };
 

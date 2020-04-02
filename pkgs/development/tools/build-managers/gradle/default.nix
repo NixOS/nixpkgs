@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
 rec {
-  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {
+  gradleGen = { name, src, nativeVersion }: stdenv.mkDerivation {
     inherit name src nativeVersion;
 
     dontBuild = true;
@@ -17,21 +17,22 @@ rec {
         --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
     '';
 
-    fixupPhase = if (!stdenv.isLinux) then ":" else
-      let arch = if stdenv.is64bit then "amd64" else "i386"; in ''
-        mkdir patching
-        pushd patching
-        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-${nativeVersion}.jar
-        patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
-        jar cf native-platform-linux-${arch}-${nativeVersion}.jar .
-        mv native-platform-linux-${arch}-${nativeVersion}.jar $out/lib/gradle/lib/
-        popd
+    fixupPhase =
+      if (!stdenv.isLinux) then ":" else
+        let arch = if stdenv.is64bit then "amd64" else "i386"; in ''
+          mkdir patching
+          pushd patching
+          jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-${nativeVersion}.jar
+          patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
+          jar cf native-platform-linux-${arch}-${nativeVersion}.jar .
+          mv native-platform-linux-${arch}-${nativeVersion}.jar $out/lib/gradle/lib/
+          popd
 
-        # The scanner doesn't pick up the runtime dependency in the jar.
-        # Manually add a reference where it will be found.
-        mkdir $out/nix-support
-        echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
-      '';
+          # The scanner doesn't pick up the runtime dependency in the jar.
+          # Manually add a reference where it will be found.
+          mkdir $out/nix-support
+          echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
+        '';
 
     buildInputs = [ unzip java makeWrapper ];
 

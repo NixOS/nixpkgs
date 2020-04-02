@@ -1,6 +1,14 @@
-{ stdenv, fetchurl, bison, flex, autoreconfHook
-, openssl, db, attr, perl, tcsh
-} :
+{ stdenv
+, fetchurl
+, bison
+, flex
+, autoreconfHook
+, openssl
+, db
+, attr
+, perl
+, tcsh
+}:
 
 stdenv.mkDerivation rec {
   pname = "orangefs";

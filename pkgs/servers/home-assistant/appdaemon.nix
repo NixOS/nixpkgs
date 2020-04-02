@@ -1,5 +1,4 @@
 { lib, python3, fetchFromGitHub }:
-
 let
   python = python3.override {
     packageOverrides = self: super: {
@@ -36,8 +35,8 @@ let
       });
     };
   };
-
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
   version = "4.0.1";
 
@@ -49,9 +48,26 @@ in python.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    daemonize astral requests websocket_client aiohttp yarl jinja2
-    aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt setuptools
-    deepdiff dateutil bcrypt python-socketio pid
+    daemonize
+    astral
+    requests
+    websocket_client
+    aiohttp
+    yarl
+    jinja2
+    aiohttp-jinja2
+    pyyaml
+    voluptuous
+    feedparser
+    iso8601
+    bcrypt
+    paho-mqtt
+    setuptools
+    deepdiff
+    dateutil
+    bcrypt
+    python-socketio
+    pid
   ];
 
   # no tests implemented

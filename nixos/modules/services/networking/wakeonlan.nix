@@ -1,27 +1,26 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   interfaces = config.services.wakeonlan.interfaces;
 
   ethtool = "${pkgs.ethtool}/sbin/ethtool";
 
-  passwordParameter = password : if (password == "") then "" else
-    "sopass ${password}";
+  passwordParameter = password:
+    if (password == "") then "" else
+      "sopass ${password}";
 
-  methodParameter = {method, password} :
+  methodParameter = { method, password }:
     if method == "magicpacket" then "wol g"
     else if method == "password" then "wol s so ${passwordParameter password}"
     else throw "Wake-On-Lan method not supported";
 
   line = { interface, method ? "magicpacket", password ? "" }: ''
-    ${ethtool} -s ${interface} ${methodParameter {inherit method password;}}
+    ${ethtool} -s ${interface} ${methodParameter { inherit method password; }}
   '';
 
   concatStrings = fold (x: y: x + y) "";
   lines = concatStrings (map (l: line l) interfaces);
-
 in
 {
 

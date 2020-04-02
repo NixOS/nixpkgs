@@ -16,9 +16,8 @@
     a build during the evaluation phase if you use this `dhallToNix` utility
 */
 { stdenv, dhall-nix }:
-
 let
-  dhallToNix = code :
+  dhallToNix = code:
     let
       file = builtins.toFile "dhall-expression" code;
 
@@ -31,8 +30,7 @@ let
 
         buildInputs = [ dhall-nix ];
       };
-
     in
       import drv;
 in
-  dhallToNix
+dhallToNix

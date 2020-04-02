@@ -1,7 +1,13 @@
 # NOTE: this is rakshava's version of libtorrent, used mainly by rtorrent
 # This is NOT libtorrent-rasterbar, used by Deluge, qbitttorent, and others
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
-, cppunit, openssl, libsigcxx, zlib
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, autoreconfHook
+, cppunit
+, openssl
+, libsigcxx
+, zlib
 }:
 
 stdenv.mkDerivation rec {

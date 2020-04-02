@@ -20,11 +20,13 @@ stdenv.mkDerivation rec {
     makeWrapper "${mono}/bin/mono" $out/bin/duplicati-cli \
       --add-flags "$out/share/${pname}-${version}/Duplicati.CommandLine.exe" \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
-          sqlite ]}
+      sqlite
+    ]}
     makeWrapper "${mono}/bin/mono" $out/bin/duplicati-server \
       --add-flags "$out/share/${pname}-${version}/Duplicati.Server.exe" \
       --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
-          sqlite ]}
+      sqlite
+    ]}
   '';
 
   meta = with stdenv.lib; {

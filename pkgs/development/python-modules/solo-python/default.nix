@@ -1,7 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, click, ecdsa, fido2, intelhex, pyserial, pyusb, requests}:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, click
+, ecdsa
+, fido2
+, intelhex
+, pyserial
+, pyusb
+, requests
+}:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "solo-python";
   version = "0.0.23";
   format = "flit";

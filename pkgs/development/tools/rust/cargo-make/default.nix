@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
         sha256 = "1sf4hjsylk68d3wb7bs8gfkz5az41hjs7hvb8mbhyc7nryklkq4d";
       };
     in
-    runCommand "source" {} ''
+    runCommand "source" { } ''
       cp -R ${source} $out
       chmod +w $out
       cp ${./Cargo.lock} $out/Cargo.lock

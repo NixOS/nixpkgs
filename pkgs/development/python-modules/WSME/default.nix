@@ -1,7 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, pbr, six, simplegeneric, netaddr, pytz, webob
-, cornice, nose, webtest, pecan, transaction, cherrypy, sphinx
-, flask, flask-restful, suds-jurko, glibcLocales }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pbr
+, six
+, simplegeneric
+, netaddr
+, pytz
+, webob
+, cornice
+, nose
+, webtest
+, pecan
+, transaction
+, cherrypy
+, sphinx
+, flask
+, flask-restful
+, suds-jurko
+, glibcLocales
+}:
 
 buildPythonPackage rec {
   pname = "WSME";
@@ -33,12 +51,25 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pbr ];
 
   propagatedBuildInputs = [
-    six simplegeneric netaddr pytz webob
+    six
+    simplegeneric
+    netaddr
+    pytz
+    webob
   ];
 
   checkInputs = [
-    cornice nose webtest pecan transaction cherrypy sphinx
-    flask flask-restful suds-jurko glibcLocales
+    cornice
+    nose
+    webtest
+    pecan
+    transaction
+    cherrypy
+    sphinx
+    flask
+    flask-restful
+    suds-jurko
+    glibcLocales
   ];
 
   meta = with lib; {

@@ -15,7 +15,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ click ipy pyyaml requests ];
 
-  doCheck = false;    # Tests try to contact the actual remote API
+  doCheck = false; # Tests try to contact the actual remote API
 
   meta = with stdenv.lib; {
     description = "Command-line interface to the public Gandi.net API";

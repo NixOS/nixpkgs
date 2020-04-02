@@ -1,7 +1,13 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, libX11, libXext, libXi
-, freetype, fontconfig
-, libpng, libjpeg
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libX11
+, libXext
+, libXi
+, freetype
+, fontconfig
+, libpng
+, libjpeg
 , zlib
 }:
 
@@ -19,9 +25,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
-    libX11 libXext libXi
-    freetype fontconfig
-    libpng libjpeg
+    libX11
+    libXext
+    libXi
+    freetype
+    fontconfig
+    libpng
+    libjpeg
     zlib
   ];
 

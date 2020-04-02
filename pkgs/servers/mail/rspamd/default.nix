@@ -1,6 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, cmake, perl
-, glib, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu
-, hyperscan, jemalloc, openblas, lua, libsodium
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, perl
+, glib
+, luajit
+, openssl
+, pcre
+, pkgconfig
+, sqlite
+, ragel
+, icu
+, hyperscan
+, jemalloc
+, openblas
+, lua
+, libsodium
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
 , withLuaJIT ? stdenv.isx86_64

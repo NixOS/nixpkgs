@@ -1,17 +1,20 @@
-{stdenv, fetchurl, cmake, openssl, nss, pkgconfig, nspr, bash, debug ? false}:
+{ stdenv, fetchurl, cmake, openssl, nss, pkgconfig, nspr, bash, debug ? false }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="badvpn";
-    version="1.999.130";
-    name="${baseName}-${version}";
-    hash="02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
-    url="https://github.com/ambrop72/badvpn/archive/1.999.130.tar.gz";
-    sha256="02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
-  };
+    rec {
+      baseName = "badvpn";
+      version = "1.999.130";
+      name = "${baseName}-${version}";
+      hash = "02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
+      url = "https://github.com/ambrop72/badvpn/archive/1.999.130.tar.gz";
+      sha256 = "02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
+    };
 
   buildInputs = [
-    cmake openssl nss nspr
+    cmake
+    openssl
+    nss
+    nspr
   ];
   compileFlags = "-O3 ${stdenv.lib.optionalString (!debug) "-DNDEBUG"}";
 in
@@ -32,8 +35,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''A set of network-related (mostly VPN-related) tools'';
-    license = stdenv.lib.licenses.bsd3 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.bsd3;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

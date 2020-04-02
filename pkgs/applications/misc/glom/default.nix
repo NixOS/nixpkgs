@@ -33,7 +33,6 @@
 , yelp-tools
 , wrapGAppsHook
 }:
-
 let
   gda = libgdamm.override {
     mysqlSupport = true;
@@ -47,7 +46,8 @@ let
     '';
   });
   boost_python = boost.override { enablePython = true; inherit python; };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "glom";
   version = "unstable-2018-12-16";
 

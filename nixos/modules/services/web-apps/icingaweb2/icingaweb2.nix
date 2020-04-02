@@ -8,7 +8,8 @@
       module_path = "${pkgs.icingaweb2}/modules";
     };
   };
-in {
+in
+{
   meta.maintainers = with maintainers; [ das_j ];
 
   options.services.icingaweb2 = with types; {
@@ -18,8 +19,8 @@ in {
       type = str;
       default = poolName;
       description = ''
-         Name of existing PHP-FPM pool that is used to run Icingaweb2.
-         If not specified, a pool will automatically created with default values.
+        Name of existing PHP-FPM pool that is used to run Icingaweb2.
+        If not specified, a pool will automatically created with default values.
       '';
     };
 
@@ -48,7 +49,7 @@ in {
 
     modulePackages = mkOption {
       type = attrsOf package;
-      default = {};
+      default = { };
       example = literalExample ''
         {
           "snow" = icingaweb2Modules.theme-snow;
@@ -215,26 +216,27 @@ in {
     };
 
     # /etc/icingaweb2
-    environment.etc = let
-      doModule = name: optionalAttrs (cfg.modules.${name}.enable) { "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}"; };
-    in {}
-      # Module packages
-      // (mapAttrs' (k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }) cfg.modulePackages)
-      # Built-in modules
-      // doModule "doc"
-      // doModule "migrate"
-      // doModule "setup"
-      // doModule "test"
-      // doModule "translation"
-      # Configs
-      // optionalAttrs (cfg.generalConfig != null) { "icingaweb2/config.ini".text = generators.toINI {} (defaultConfig // cfg.generalConfig); }
-      // optionalAttrs (cfg.resources != null) { "icingaweb2/resources.ini".text = generators.toINI {} cfg.resources; }
-      // optionalAttrs (cfg.authentications != null) { "icingaweb2/authentication.ini".text = generators.toINI {} cfg.authentications; }
-      // optionalAttrs (cfg.groupBackends != null) { "icingaweb2/groups.ini".text = generators.toINI {} cfg.groupBackends; }
-      // optionalAttrs (cfg.roles != null) { "icingaweb2/roles.ini".text = generators.toINI {} cfg.roles; };
+    environment.etc =
+      let
+        doModule = name: optionalAttrs (cfg.modules.${name}.enable) { "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}"; };
+      in { }
+        # Module packages
+        // (mapAttrs' (k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }) cfg.modulePackages)
+        # Built-in modules
+        // doModule "doc"
+        // doModule "migrate"
+        // doModule "setup"
+        // doModule "test"
+        // doModule "translation"
+        # Configs
+        // optionalAttrs (cfg.generalConfig != null) { "icingaweb2/config.ini".text = generators.toINI { } (defaultConfig // cfg.generalConfig); }
+        // optionalAttrs (cfg.resources != null) { "icingaweb2/resources.ini".text = generators.toINI { } cfg.resources; }
+        // optionalAttrs (cfg.authentications != null) { "icingaweb2/authentication.ini".text = generators.toINI { } cfg.authentications; }
+        // optionalAttrs (cfg.groupBackends != null) { "icingaweb2/groups.ini".text = generators.toINI { } cfg.groupBackends; }
+        // optionalAttrs (cfg.roles != null) { "icingaweb2/roles.ini".text = generators.toINI { } cfg.roles; };
 
     # User and group
-    users.groups.icingaweb2 = {};
+    users.groups.icingaweb2 = { };
     users.users.icingaweb2 = {
       description = "Icingaweb2 service user";
       group = "icingaweb2";

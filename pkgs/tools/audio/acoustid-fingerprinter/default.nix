@@ -5,8 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.6";
 
   src = fetchurl {
-    url = "https://bitbucket.org/acoustid/acoustid-fingerprinter/downloads/"
-        + "${pname}-${version}.tar.gz";
+    url = "https://bitbucket.org/acoustid/acoustid-fingerprinter/downloads/" + "${pname}-${version}.tar.gz";
     sha256 = "0ckglwy95qgqvl2l6yd8ilwpd6qs7yzmj8g7lnxb50d12115s5n0";
   };
 

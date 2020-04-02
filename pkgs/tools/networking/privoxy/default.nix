@@ -15,7 +15,7 @@ stdenv.mkDerivation rec{
   nativeBuildInputs = [ autoreconfHook w3m man ];
   buildInputs = [ zlib pcre ];
 
-  makeFlags = [ "STRIP="];
+  makeFlags = [ "STRIP=" ];
 
   postInstall = ''
     rm -rf $out/var

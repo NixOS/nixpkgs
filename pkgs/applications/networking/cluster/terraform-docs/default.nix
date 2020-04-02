@@ -6,9 +6,9 @@ buildGoPackage rec {
   goPackagePath = "github.com/segmentio/${pname}";
 
   src = fetchFromGitHub {
-    owner  = "segmentio";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "segmentio";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1p6prhjf82qnhf1zwl9h92j4ds5g383a6g9pwwnqbc3wdwy5zx7d";
   };
 

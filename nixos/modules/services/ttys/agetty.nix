@@ -1,14 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   autologinArg = optionalString (config.services.mingetty.autologinUser != null) "--autologin ${config.services.mingetty.autologinUser}";
   gettyCmd = extraArgs: "@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login ${autologinArg} ${extraArgs}";
-
 in
-
 {
 
   ###### interface
@@ -49,9 +45,9 @@ in
         default = [ 115200 57600 38400 9600 ];
         example = [ 38400 9600 ];
         description = ''
-            Bitrates to allow for agetty's listening on serial ports. Listing more
-            bitrates gives more interoperability but at the cost of long delays
-            for getting a sync on the line.
+          Bitrates to allow for agetty's listening on serial ports. Listing more
+          bitrates gives more interoperability but at the cost of long delays
+          for getting a sync on the line.
         '';
       };
 
@@ -68,7 +64,8 @@ in
     services.mingetty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
 
     systemd.services."getty@" =
-      { serviceConfig.ExecStart = [
+      {
+        serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "--noclear --keep-baud %I 115200,38400,9600 $TERM")
         ];
@@ -77,7 +74,8 @@ in
 
     systemd.services."serial-getty@" =
       let speeds = concatStringsSep "," (map toString config.services.mingetty.serialSpeed); in
-      { serviceConfig.ExecStart = [
+      {
+        serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "%I ${speeds} $TERM")
         ];
@@ -85,7 +83,8 @@ in
       };
 
     systemd.services."container-getty@" =
-      { serviceConfig.ExecStart = [
+      {
+        serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "--noclear --keep-baud pts/%I 115200,38400,9600 $TERM")
         ];
@@ -93,7 +92,8 @@ in
       };
 
     systemd.services.console-getty =
-      { serviceConfig.ExecStart = [
+      {
+        serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "--noclear --keep-baud console 115200,38400,9600 $TERM")
         ];
@@ -103,7 +103,8 @@ in
       };
 
     environment.etc.issue =
-      { # Friendly greeting on the virtual consoles.
+      {
+        # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
 
           [1;32m${config.services.mingetty.greetingLine}[0m

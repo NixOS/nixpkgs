@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   inInitrd = any (fs: fs == "f2fs") config.boot.initrd.supportedFilesystems;
   fileSystems = filter (x: x.fsType == "f2fs") config.system.build.fileSystems;
@@ -16,9 +15,9 @@ in
     boot.initrd.extraUtilsCommands = mkIf inInitrd ''
       copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/fsck.f2fs
       ${optionalString (any (fs: fs.autoResize) fileSystems) ''
-        # We need f2fs-tools' tools to resize filesystems
-        copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/resize.f2fs
-      ''}
+      # We need f2fs-tools' tools to resize filesystems
+      copy_bin_and_libs ${pkgs.f2fs-tools}/sbin/resize.f2fs
+    ''}
 
     '';
   };

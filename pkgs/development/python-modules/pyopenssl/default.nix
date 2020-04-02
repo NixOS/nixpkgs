@@ -14,8 +14,6 @@
 }:
 
 with stdenv.lib;
-
-
 let
   # https://github.com/pyca/pyopenssl/issues/791
   # These tests, we disable in the case that libressl is passed in as openssl.
@@ -57,12 +55,9 @@ let
   );
 
   # Compose the final string expression, including the "-k" and the single quotes.
-  testExpression = optionalString (disabledTests != [])
+  testExpression = optionalString (disabledTests != [ ])
     "-k 'not ${concatStringsSep " and not " disabledTests}'";
-
 in
-
-
 buildPythonPackage rec {
   pname = "pyOpenSSL";
   version = "19.1.0";

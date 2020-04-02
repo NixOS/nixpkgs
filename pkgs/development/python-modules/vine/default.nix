@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, case, pytest, pythonOlder }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, case
+, pytest
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "vine";

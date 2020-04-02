@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-backtrace";
 
-  asdFilesToKeep = ["trivial-backtrace.asd"];
+  asdFilesToKeep = [ "trivial-backtrace.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-backtrace DESCRIPTION trivial-backtrace SHA256

@@ -1,7 +1,6 @@
 { config, options, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.neo4j;
   certDirOpt = options.services.neo4j.directories.certificates;
@@ -12,18 +11,20 @@ let
       dbms.ssl.policy.${name}.allow_key_generation=${boolToString conf.allowKeyGeneration}
       dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
       ${optionalString (conf.ciphers != null) ''
-        dbms.ssl.policy.${name}.ciphers=${concatStringsSep "," conf.ciphers}
-      ''}
+      dbms.ssl.policy.${name}.ciphers=${concatStringsSep "," conf.ciphers}
+    ''}
       dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
-      ${if length (splitString "/" conf.privateKey) > 1 then
-        ''dbms.ssl.policy.${name}.private_key=${conf.privateKey}''
-      else
-        ''dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}''
+      ${
+        if length (splitString "/" conf.privateKey) > 1 then
+            ''dbms.ssl.policy.${name}.private_key=${conf.privateKey}''
+        else
+            ''dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}''
       }
-      ${if length (splitString "/" conf.privateKey) > 1 then
-        ''dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}''
-      else
-        ''dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}''
+      ${
+        if length (splitString "/" conf.privateKey) > 1 then
+            ''dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}''
+        else
+            ''dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}''
       }
       dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
       dbms.ssl.policy.${name}.tls_versions=${concatStringsSep "," conf.tlsVersions}
@@ -38,8 +39,8 @@ let
     dbms.connectors.default_listen_address=${cfg.defaultListenAddress}
     dbms.read_only=${boolToString cfg.readOnly}
     ${optionalString (cfg.workerCount > 0) ''
-      dbms.threads.worker_count=${toString cfg.workerCount}
-    ''}
+    dbms.threads.worker_count=${toString cfg.workerCount}
+  ''}
 
     # Directories
     dbms.directories.certificates=${cfg.directories.certificates}
@@ -47,21 +48,21 @@ let
     dbms.directories.logs=${cfg.directories.home}/logs
     dbms.directories.plugins=${cfg.directories.plugins}
     ${optionalString (cfg.constrainLoadCsv) ''
-      dbms.directories.import=${cfg.directories.imports}
-    ''}
+    dbms.directories.import=${cfg.directories.imports}
+  ''}
 
     # HTTP Connector
     ${optionalString (cfg.http.enable) ''
-      dbms.connector.http.enabled=${boolToString cfg.http.enable}
-      dbms.connector.http.listen_address=${cfg.http.listenAddress}
-    ''}
+    dbms.connector.http.enabled=${boolToString cfg.http.enable}
+    dbms.connector.http.listen_address=${cfg.http.listenAddress}
+  ''}
     ${optionalString (!cfg.http.enable) ''
-      # It is not possible to disable the HTTP connector. To fully prevent
-      # clients from connecting to HTTP, block the HTTP port (7474 by default)
-      # via firewall. listen_address is set to the loopback interface to
-      # prevent remote clients from connecting.
-      dbms.connector.http.listen_address=127.0.0.1
-    ''}
+    # It is not possible to disable the HTTP connector. To fully prevent
+    # clients from connecting to HTTP, block the HTTP port (7474 by default)
+    # via firewall. listen_address is set to the loopback interface to
+    # prevent remote clients from connecting.
+    dbms.connector.http.listen_address=127.0.0.1
+  ''}
 
     # HTTPS Connector
     dbms.connector.https.enabled=${boolToString cfg.https.enable}
@@ -100,8 +101,8 @@ let
     # Extra Configuration
     ${cfg.extraServerConfig}
   '';
-
-in {
+in
+{
 
   imports = [
     (mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
@@ -564,7 +565,7 @@ in {
           (map (opt: opt.value) (filter isDefaultPathOption (attrValues options)));
 
       }));
-      default = {};
+      default = { };
       description = ''
         Defines the SSL policies for use with Neo4j connectors. Each attribute
         of this set defines a policy, with the attribute name defining the name
@@ -606,12 +607,18 @@ in {
 
     mkIf cfg.enable {
       assertions = [
-        { assertion = !elem "legacy" policyNameList;
-          message = "The policy 'legacy' is special to Neo4j, and its name is reserved."; }
-        { assertion = elem cfg.bolt.sslPolicy validPolicyNameList;
-          message = "Invalid policy assigned: `services.neo4j.bolt.sslPolicy = \"${cfg.bolt.sslPolicy}\"`, defined policies are: ${validPolicyNameString}"; }
-        { assertion = elem cfg.https.sslPolicy validPolicyNameList;
-          message = "Invalid policy assigned: `services.neo4j.https.sslPolicy = \"${cfg.https.sslPolicy}\"`, defined policies are: ${validPolicyNameString}"; }
+        {
+          assertion = !elem "legacy" policyNameList;
+          message = "The policy 'legacy' is special to Neo4j, and its name is reserved.";
+        }
+        {
+          assertion = elem cfg.bolt.sslPolicy validPolicyNameList;
+          message = "Invalid policy assigned: `services.neo4j.bolt.sslPolicy = \"${cfg.bolt.sslPolicy}\"`, defined policies are: ${validPolicyNameString}";
+        }
+        {
+          assertion = elem cfg.https.sslPolicy validPolicyNameList;
+          message = "Invalid policy assigned: `services.neo4j.https.sslPolicy = \"${cfg.https.sslPolicy}\"`, defined policies are: ${validPolicyNameString}";
+        }
       ];
 
       systemd.services.neo4j = {
@@ -638,7 +645,8 @@ in {
           ${concatMapStringsSep "\n" (
             dir: ''
               mkdir -m 0700 -p ${dir}
-          '') (defaultDirectoriesToCreate ++ policyDirectoriesToCreate)}
+            ''
+          ) (defaultDirectoriesToCreate ++ policyDirectoriesToCreate)}
 
           # Place the configuration where Neo4j can find it.
           ln -fs ${serverConfig} ${cfg.directories.home}/conf/neo4j.conf

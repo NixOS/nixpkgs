@@ -1,7 +1,6 @@
-{ pkgs, options, config, version, revision, extraSources ? [] }:
+{ pkgs, options, config, version, revision, extraSources ? [ ] }:
 
 with pkgs;
-
 let
   lib = pkgs.lib;
 
@@ -22,17 +21,17 @@ let
     };
   };
 
-  sources = lib.sourceFilesBySuffices ./. [".xml"];
+  sources = lib.sourceFilesBySuffices ./. [ ".xml" ];
 
   modulesDoc = builtins.toFile "modules.xml" ''
     <section xmlns:xi="http://www.w3.org/2001/XInclude" id="modules">
     ${(lib.concatMapStrings (path: ''
-      <xi:include href="${path}" />
-    '') (lib.catAttrs "value" config.meta.doc))}
+    <xi:include href="${path}" />
+  '') (lib.catAttrs "value" config.meta.doc))}
     </section>
   '';
 
-  generatedSources = runCommand "generated-docbook" {} ''
+  generatedSources = runCommand "generated-docbook" { } ''
     mkdir $out
     ln -s ${modulesDoc} $out/modules.xml
     ln -s ${optionsDoc.optionsDocBook} $out/options-db.xml
@@ -73,10 +72,11 @@ let
   ];
 
   manual-combined = runCommand "nixos-manual-combined"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
-      meta.description = "The NixOS manual as plain docbook XML";
-    }
+  {
+    inherit sources;
+    nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+    meta.description = "The NixOS manual as plain docbook XML";
+  }
     ''
       ${copySources}
 
@@ -128,9 +128,10 @@ let
     '';
 
   olinkDB = runCommand "manual-olinkdb"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
-    }
+  {
+    inherit sources;
+    nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+  }
     ''
       xsltproc \
         ${manualXsltprocOptions} \
@@ -156,19 +157,20 @@ let
       </targetset>
       EOF
     '';
-
-in rec {
+in
+rec {
   inherit generatedSources;
 
   inherit (optionsDoc) optionsJSON optionsXML optionsDocBook;
 
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
-      meta.description = "The NixOS manual in HTML format";
-      allowedReferences = ["out"];
-    }
+  {
+    inherit sources;
+    nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+    meta.description = "The NixOS manual in HTML format";
+    allowedReferences = [ "out" ];
+  }
     ''
       # Generate the HTML manual.
       dst=$out/share/doc/nixos
@@ -203,9 +205,10 @@ in rec {
   manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
 
   manualEpub = runCommand "nixos-manual-epub"
-    { inherit sources;
-      buildInputs = [ libxml2.bin libxslt.bin zip ];
-    }
+  {
+    inherit sources;
+    buildInputs = [ libxml2.bin libxslt.bin zip ];
+  }
     ''
       # Generate the epub manual.
       dst=$out/share/doc/nixos
@@ -233,10 +236,11 @@ in rec {
 
   # Generate the NixOS manpages.
   manpages = runCommand "nixos-manpages"
-    { inherit sources;
-      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
-      allowedReferences = ["out"];
-    }
+  {
+    inherit sources;
+    nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin ];
+    allowedReferences = [ "out" ];
+  }
     ''
       # Generate manpages.
       mkdir -p $out/share/man

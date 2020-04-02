@@ -1,14 +1,38 @@
-{ config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
-# use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
+{ config
+, stdenv
+, fetchurl
+, gettext
+, meson
+, ninja
+, pkgconfig
+, perl
+, python3
+, libiconv
+, zlib
+, libffi
+, pcre
+, libelf
+, gnome3
+, libselinux
+, bash
+, gnum4
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_45
+  # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
 , buildPackages
 
-# this is just for tests (not in the closure of any regular package)
+  # this is just for tests (not in the closure of any regular package)
 , doCheck ? config.doCheckByDefault or false
-, coreutils, dbus, libxml2, tzdata
-, desktop-file-utils, shared-mime-info
-, darwin, fetchpatch
+, coreutils
+, dbus
+, libxml2
+, tzdata
+, desktop-file-utils
+, shared-mime-info
+, darwin
+, fetchpatch
 }:
 
 with stdenv.lib;
@@ -45,7 +69,6 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 in
-
 stdenv.mkDerivation rec {
   pname = "glib";
   version = "2.62.5";
@@ -95,17 +118,33 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf setupHook pcre
-    bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+    libelf
+    setupHook
+    pcre
+    bash
+    gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
     utillinuxMinimal # for libmount
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
+    AppKit
+    Carbon
+    Cocoa
+    CoreFoundation
+    CoreServices
+    Foundation
   ]);
 
   nativeBuildInputs = [
-    meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45
+    meson
+    ninja
+    pkgconfig
+    perl
+    python3
+    gettext
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_45
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -197,10 +236,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C library of programming buildings blocks";
-    homepage    = https://www.gtk.org/;
-    license     = licenses.lgpl21Plus;
+    homepage = https://www.gtk.org/;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lovek323 raskin worldofpeace ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

@@ -1,12 +1,26 @@
-{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, alsaLib
-, libjack2, libsndfile, fftw, curl, gcc
-, libXt, qtbase, qttools, qtwebengine
-, readline, qtwebsockets, useSCEL ? false, emacs
+{ stdenv
+, mkDerivation
+, fetchurl
+, cmake
+, pkgconfig
+, alsaLib
+, libjack2
+, libsndfile
+, fftw
+, curl
+, gcc
+, libXt
+, qtbase
+, qttools
+, qtwebengine
+, readline
+, qtwebsockets
+, useSCEL ? false
+, emacs
 }:
-
-let optional = stdenv.lib.optional;
+let
+  optional = stdenv.lib.optional;
 in
-
 mkDerivation rec {
   pname = "supercollider";
   version = "3.10.4";
@@ -29,9 +43,19 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [
-    gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
-      ++ optional (!stdenv.isDarwin) alsaLib
-      ++ optional useSCEL emacs;
+    gcc
+    libjack2
+    libsndfile
+    fftw
+    curl
+    libXt
+    qtbase
+    qtwebengine
+    qtwebsockets
+    readline
+  ]
+  ++ optional (!stdenv.isDarwin) alsaLib
+  ++ optional useSCEL emacs;
 
   meta = with stdenv.lib; {
     description = "Programming language for real time audio synthesis";

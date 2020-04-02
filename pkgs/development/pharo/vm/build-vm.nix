@@ -5,7 +5,8 @@
 , glibc
 , openssl
 , libgit2
-, libGLU, libGL
+, libGLU
+, libGL
 , freetype
 , xorg
 , alsaLib
@@ -14,7 +15,8 @@
 , autoreconfHook
 , gcc48
 , runtimeShell
-, ... }:
+, ...
+}:
 
 { name, src, version, source-date, source-url, ... }:
 
@@ -32,9 +34,9 @@ stdenv.mkDerivation rec {
 
   # Choose target platform name in the format used by the vm.
   flavor =
-    if      stdenv.isLinux && stdenv.isi686    then "linux32x86"
-    else if stdenv.isLinux && stdenv.isx86_64  then "linux64x64"
-    else if stdenv.isDarwin && stdenv.isi686   then "macos32x86"
+    if stdenv.isLinux && stdenv.isi686 then "linux32x86"
+    else if stdenv.isLinux && stdenv.isx86_64 then "linux64x64"
+    else if stdenv.isDarwin && stdenv.isi686 then "macos32x86"
     else if stdenv.isDarwin && stdenv.isx86_64 then "macos64x64"
     else throw "Unsupported platform: only Linux/Darwin x86/x64 are supported.";
 
@@ -42,9 +44,12 @@ stdenv.mkDerivation rec {
   pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };
 
   # Note: -fPIC causes the VM to segfault.
-  hardeningDisable = [ "format" "pic"
-                       # while the VM depends on <= gcc48:
-                       "stackprotector" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+    # while the VM depends on <= gcc48:
+    "stackprotector"
+  ];
 
   # Regenerate the configure script.
   # Unnecessary? But the build breaks without this.
@@ -56,9 +61,11 @@ stdenv.mkDerivation rec {
 
   # Configure with options modeled on the 'mvm' build script from the vm.
   configureScript = "platforms/unix/config/configure";
-  configureFlags = [ "--without-npsqueak"
-                     "--with-vmversion=5.0"
-                     "--with-src=${vm}" ];
+  configureFlags = [
+    "--without-npsqueak"
+    "--with-vmversion=5.0"
+    "--with-src=${vm}"
+  ];
   CFLAGS = "-DPharoVM -DIMMUTABILITY=1 -msse2 -D_GNU_SOURCE -DCOGMTVM=0 -g -O2 -DNDEBUG -DDEBUGVM=0";
   LDFLAGS = "-Wl,-z,now";
 
@@ -81,47 +88,49 @@ stdenv.mkDerivation rec {
 
   # (No special build phase.)
 
-  installPhase = let
-    libs = [
-      cairo
-      libgit2
-      libGLU libGL
-      freetype
-      openssl
-      libuuid
-      alsaLib
-      xorg.libICE
-      xorg.libSM
-    ];
-  in ''
-    # Install in working directory and then copy
-    make install-squeak install-plugins prefix=$(pwd)/products
+  installPhase =
+    let
+      libs = [
+        cairo
+        libgit2
+        libGLU
+        libGL
+        freetype
+        openssl
+        libuuid
+        alsaLib
+        xorg.libICE
+        xorg.libSM
+      ];
+    in ''
+      # Install in working directory and then copy
+      make install-squeak install-plugins prefix=$(pwd)/products
 
-    # Copy binaries & rename from 'squeak' to 'pharo'
-    mkdir -p "$out"
-    cp products/lib/squeak/5.0-*/squeak "$out/pharo"
-    cp -r products/lib/squeak/5.0-*/*.so "$out"
-    ln -s "${pharo-share}/lib/"*.sources "$out"
+      # Copy binaries & rename from 'squeak' to 'pharo'
+      mkdir -p "$out"
+      cp products/lib/squeak/5.0-*/squeak "$out/pharo"
+      cp -r products/lib/squeak/5.0-*/*.so "$out"
+      ln -s "${pharo-share}/lib/"*.sources "$out"
 
-    # Create a shell script to run the VM in the proper environment.
-    #
-    # These wrapper puts all relevant libraries into the
-    # LD_LIBRARY_PATH. This is important because various C code in the VM
-    # and Smalltalk code in the image will search for them there.
-    mkdir -p "$out/bin"
+      # Create a shell script to run the VM in the proper environment.
+      #
+      # These wrapper puts all relevant libraries into the
+      # LD_LIBRARY_PATH. This is important because various C code in the VM
+      # and Smalltalk code in the image will search for them there.
+      mkdir -p "$out/bin"
 
-    # Note: include ELF rpath in LD_LIBRARY_PATH for finding libc.
-    libs=$out:$(patchelf --print-rpath "$out/pharo"):${stdenv.lib.makeLibraryPath libs}
+      # Note: include ELF rpath in LD_LIBRARY_PATH for finding libc.
+      libs=$out:$(patchelf --print-rpath "$out/pharo"):${stdenv.lib.makeLibraryPath libs}
 
-    # Create the script
-    cat > "$out/bin/${cmd}" <<EOF
-    #!${runtimeShell}
-    set -f
-    LD_LIBRARY_PATH="\$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$libs" exec $out/pharo "\$@"
-    EOF
-    chmod +x "$out/bin/${cmd}"
-    ln -s ${libgit2}/lib/libgit2.so* "$out/"
-  '';
+      # Create the script
+      cat > "$out/bin/${cmd}" <<EOF
+      #!${runtimeShell}
+      set -f
+      LD_LIBRARY_PATH="\$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$libs" exec $out/pharo "\$@"
+      EOF
+      chmod +x "$out/bin/${cmd}"
+      ln -s ${libgit2}/lib/libgit2.so* "$out/"
+    '';
 
   enableParallelBuilding = true;
 
@@ -139,7 +148,8 @@ stdenv.mkDerivation rec {
     glibc
     openssl
     gcc48
-    libGLU libGL
+    libGLU
+    libGL
     freetype
     xorg.libX11
     xorg.libICE

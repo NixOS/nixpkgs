@@ -38,7 +38,7 @@ rec {
   assertOneOf = name: val: xs: assertMsg
     (lib.elem val xs)
     "${name} must be one of ${
-      lib.generators.toPretty {} xs}, but is: ${
-        lib.generators.toPretty {} val}";
+        lib.generators.toPretty { } xs}, but is: ${
+        lib.generators.toPretty { } val}";
 
 }

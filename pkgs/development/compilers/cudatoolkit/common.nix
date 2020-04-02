@@ -4,7 +4,7 @@ args@
 , url ? ""
 , name ? ""
 , developerProgram ? false
-, runPatches ? []
+, runPatches ? [ ]
 , addOpenGLRunpath
 , alsaLib
 , expat
@@ -56,9 +56,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
   buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsaLib
+    ncurses5
+    expat
+    python27
+    zlib
+    glibc
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXext
+    gtk2
+    glib
+    fontconfig
+    freetype
+    unixODBC
+    alsaLib
   ];
 
   rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
@@ -67,18 +82,18 @@ stdenv.mkDerivation rec {
     sh $src --keep --noexec
 
     ${lib.optionalString (lib.versionOlder version "10.1") ''
-      cd pkg/run_files
-      sh cuda-linux*.run --keep --noexec
-      sh cuda-samples*.run --keep --noexec
-      mv pkg ../../$(basename $src)
-      cd ../..
-      rm -rf pkg
+    cd pkg/run_files
+    sh cuda-linux*.run --keep --noexec
+    sh cuda-samples*.run --keep --noexec
+    mv pkg ../../$(basename $src)
+    cd ../..
+    rm -rf pkg
 
-      for patch in $runPatches; do
-        sh $patch --keep --noexec
-        mv pkg $(basename $patch)
-      done
-    ''}
+    for patch in $runPatches; do
+      sh $patch --keep --noexec
+      mv pkg $(basename $patch)
+    done
+  ''}
   '';
 
   installPhase = ''
@@ -94,18 +109,18 @@ stdenv.mkDerivation rec {
       perl ./install_patch.pl --silent --accept-eula --installdir="$out"
       cd ..
     done
-    ''}
+  ''}
     ${lib.optionalString (lib.versionAtLeast version "10.1") ''
-      cd pkg/builds/cuda-toolkit
-      mv * $out/
-    ''}
+    cd pkg/builds/cuda-toolkit
+    mv * $out/
+  ''}
 
     rm $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
     ${lib.optionalString (lib.versionOlder version "10.1") ''
     # let's remove the 32-bit libraries, they confuse the lib64->lib mover
     rm -rf $out/lib
-    ''}
+  ''}
 
     # Remove some cruft.
     ${lib.optionalString ((lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1"))
@@ -134,8 +149,8 @@ stdenv.mkDerivation rec {
     # Remove OpenCL libraries as they are provided by ocl-icd and driver.
     rm -f $out/lib64/libOpenCL*
     ${lib.optionalString (lib.versionAtLeast version "10.1") ''
-      mv $out/lib64 $out/lib
-    ''}
+    mv $out/lib64 $out/lib
+  ''}
 
     # Set compiler for NVCC.
     wrapProgram $out/bin/nvcc \
@@ -217,4 +232,3 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
   };
 }
-

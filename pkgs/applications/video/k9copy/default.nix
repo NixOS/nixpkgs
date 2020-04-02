@@ -1,8 +1,22 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , cmake
-, dvdauthor, xineLib, libmpeg2, libav, libdvdread, libdvdnav, dvdplusrwtools
-, phonon, qtx11extras
-, extra-cmake-modules, kio, kiconthemes, ki18n, kdesu, kdoctools, solid
+, dvdauthor
+, xineLib
+, libmpeg2
+, libav
+, libdvdread
+, libdvdnav
+, dvdplusrwtools
+, phonon
+, qtx11extras
+, extra-cmake-modules
+, kio
+, kiconthemes
+, ki18n
+, kdesu
+, kdoctools
+, solid
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +39,8 @@ stdenv.mkDerivation rec {
 
   # Hack to disable documentation
   preConfigure = ''
-   substituteInPlace ./CMakeLists.txt \
-     --replace "add_subdirectory(doc)" ""
+    substituteInPlace ./CMakeLists.txt \
+      --replace "add_subdirectory(doc)" ""
   '';
 
   buildInputs = [

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = https://opam.ocaml.org/packages/curses/curses.1.0.4/;
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

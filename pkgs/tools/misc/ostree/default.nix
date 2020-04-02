@@ -30,12 +30,12 @@
 , docbook_xml_dtd_42
 , python3
 }:
-
 let
   testPython = (python3.withPackages (p: with p; [
     pyyaml
   ]));
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ostree";
   version = "2020.3";
 
@@ -113,16 +113,17 @@ in stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
 
-  postFixup = let
-    typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
-      (placeholder "out")
-      gobject-introspection
-    ];
-  in ''
-    for test in $installedTests/libexec/installed-tests/libostree/*.js; do
-      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
-    done
-  '';
+  postFixup =
+    let
+      typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
+        (placeholder "out")
+        gobject-introspection
+      ];
+    in ''
+      for test in $installedTests/libexec/installed-tests/libostree/*.js; do
+        wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
+      done
+    '';
 
   passthru = {
     tests = {

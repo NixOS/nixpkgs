@@ -1,5 +1,10 @@
-{stdenv, buildOcamlJane,
- ppx_core, ppx_driver, ppx_here, ppx_tools}:
+{ stdenv
+, buildOcamlJane
+, ppx_core
+, ppx_driver
+, ppx_here
+, ppx_tools
+}:
 
 buildOcamlJane {
   name = "ppx_fail";

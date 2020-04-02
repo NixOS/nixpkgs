@@ -1,12 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   jenkinsCfg = config.services.jenkins;
   cfg = config.services.jenkins.jobBuilder;
-
-in {
+in
+{
   options = {
     services.jenkins.jobBuilder = {
       enable = mkOption {
@@ -116,10 +115,10 @@ in {
 
   config = mkIf (jenkinsCfg.enable && cfg.enable) {
     assertions = [
-      { assertion =
+      {
+        assertion =
           if cfg.accessUser != ""
-          then (cfg.accessToken != "" && cfg.accessTokenFile == "") ||
-               (cfg.accessToken == "" && cfg.accessTokenFile != "")
+          then (cfg.accessToken != "" && cfg.accessTokenFile == "") || (cfg.accessToken == "" && cfg.accessTokenFile != "")
           else true;
         message = ''
           One of accessToken and accessTokenFile options must be non-empty
@@ -148,7 +147,7 @@ in {
           yamlJobsFile = builtins.toFile "jobs.yaml" cfg.yamlJobs;
           jsonJobsFiles =
             map (x: (builtins.toFile "jobs.json" x))
-              (cfg.jsonJobs ++ [(builtins.toJSON cfg.nixJobs)]);
+              (cfg.jsonJobs ++ [ (builtins.toJSON cfg.nixJobs) ]);
           jobBuilderOutputDir = "/run/jenkins-job-builder/output";
           # Stamp file is placed in $JENKINS_HOME/jobs/$JOB_NAME/ to indicate
           # ownership. Enables tracking and removal of stale jobs.
@@ -156,46 +155,47 @@ in {
           reloadScript = ''
             echo "Asking Jenkins to reload config"
             curl_opts="--silent --fail --show-error"
-            access_token=${if cfg.accessTokenFile != ""
-                           then "$(cat '${cfg.accessTokenFile}')"
-                           else cfg.accessToken}
+            access_token=${
+              if cfg.accessTokenFile != ""
+              then "$(cat '${cfg.accessTokenFile}')"
+              else cfg.accessToken}
             jenkins_url="http://${cfg.accessUser}:$access_token@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
             crumb=$(curl $curl_opts "$jenkins_url"'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
             curl $curl_opts -X POST -H "$crumb" "$jenkins_url"/reload
           '';
         in
-          ''
-            rm -rf ${jobBuilderOutputDir}
-            cur_decl_jobs=/run/jenkins-job-builder/declarative-jobs
-            rm -f "$cur_decl_jobs"
+        ''
+          rm -rf ${jobBuilderOutputDir}
+          cur_decl_jobs=/run/jenkins-job-builder/declarative-jobs
+          rm -f "$cur_decl_jobs"
 
-            # Create / update jobs
-            mkdir -p ${jobBuilderOutputDir}
-            for inputFile in ${yamlJobsFile} ${concatStringsSep " " jsonJobsFiles}; do
-                HOME="${jenkinsCfg.home}" "${pkgs.jenkins-job-builder}/bin/jenkins-jobs" --ignore-cache test -o "${jobBuilderOutputDir}" "$inputFile"
-            done
+          # Create / update jobs
+          mkdir -p ${jobBuilderOutputDir}
+          for inputFile in ${yamlJobsFile} ${concatStringsSep " " jsonJobsFiles}; do
+              HOME="${jenkinsCfg.home}" "${pkgs.jenkins-job-builder}/bin/jenkins-jobs" --ignore-cache test -o "${jobBuilderOutputDir}" "$inputFile"
+          done
 
-            for file in "${jobBuilderOutputDir}/"*; do
-                test -f "$file" || continue
-                jobname="$(basename $file)"
-                jobdir="${jenkinsCfg.home}/jobs/$jobname"
-                echo "Creating / updating job \"$jobname\""
-                mkdir -p "$jobdir"
-                touch "$jobdir/${ownerStamp}"
-                cp "$file" "$jobdir/config.xml"
-                echo "$jobname" >> "$cur_decl_jobs"
-            done
+          for file in "${jobBuilderOutputDir}/"*; do
+              test -f "$file" || continue
+              jobname="$(basename $file)"
+              jobdir="${jenkinsCfg.home}/jobs/$jobname"
+              echo "Creating / updating job \"$jobname\""
+              mkdir -p "$jobdir"
+              touch "$jobdir/${ownerStamp}"
+              cp "$file" "$jobdir/config.xml"
+              echo "$jobname" >> "$cur_decl_jobs"
+          done
 
-            # Remove stale jobs
-            for file in "${jenkinsCfg.home}"/jobs/*/${ownerStamp}; do
-                test -f "$file" || continue
-                jobdir="$(dirname $file)"
-                jobname="$(basename "$jobdir")"
-                grep --quiet --line-regexp "$jobname" "$cur_decl_jobs" 2>/dev/null && continue
-                echo "Deleting stale job \"$jobname\""
-                rm -rf "$jobdir"
-            done
-          '' + (if cfg.accessUser != "" then reloadScript else "");
+          # Remove stale jobs
+          for file in "${jenkinsCfg.home}"/jobs/*/${ownerStamp}; do
+              test -f "$file" || continue
+              jobdir="$(dirname $file)"
+              jobname="$(basename "$jobdir")"
+              grep --quiet --line-regexp "$jobname" "$cur_decl_jobs" 2>/dev/null && continue
+              echo "Deleting stale job \"$jobname\""
+              rm -rf "$jobdir"
+          done
+        '' + (if cfg.accessUser != "" then reloadScript else "");
       serviceConfig = {
         User = jenkinsCfg.user;
         RuntimeDirectory = "jenkins-job-builder";

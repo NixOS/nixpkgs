@@ -1,16 +1,14 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-
-  kactivities,
-  plasma-framework,
-  kwindowsystem,
-  networkmanager-qt,
-  libksysguard,
-
-  encfs,
-  cryfs,
-  fuse
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kactivities
+, plasma-framework
+, kwindowsystem
+, networkmanager-qt
+, libksysguard
+, encfs
+, cryfs
+, fuse
 }:
 
 mkDerivation {
@@ -24,7 +22,10 @@ mkDerivation {
   ];
 
   buildInputs = [
-    kactivities plasma-framework kwindowsystem libksysguard
+    kactivities
+    plasma-framework
+    kwindowsystem
+    libksysguard
     networkmanager-qt
   ];
 

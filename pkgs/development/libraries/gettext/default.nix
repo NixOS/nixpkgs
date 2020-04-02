@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     ./gettext.git-2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch
   ]
   ++ lib.optional stdenv.isDarwin
-      (fetchpatch {
-        url = "https://git.savannah.gnu.org/cgit/gettext.git/patch?id=ec0e6b307456ceab352669ae6bccca9702108753";
-        sha256 = "0xqs01c7xl7vmw6bqvsmrzxxjxk2a4spcdpmlwm3b4hi2wc2lxnf";
-      });
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/gettext.git/patch?id=ec0e6b307456ceab352669ae6bccca9702108753";
+      sha256 = "0xqs01c7xl7vmw6bqvsmrzxxjxk2a4spcdpmlwm3b4hi2wc2lxnf";
+    });
 
   outputs = [ "out" "man" "doc" "info" ];
 
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
   configureFlags = [
-     "--disable-csharp" "--with-xz"
+    "--disable-csharp"
+    "--with-xz"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # On cross building, gettext supposes that the wchar.h from libc
     # does not fulfill gettext needs, so it tries to work with its
@@ -35,10 +36,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-   substituteAllInPlace gettext-runtime/src/gettext.sh.in
-   substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+    substituteAllInPlace gettext-runtime/src/gettext.sh.in
+    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
+    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
+    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
   '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
@@ -90,6 +91,6 @@ stdenv.mkDerivation rec {
   };
 }
 
-// stdenv.lib.optionalAttrs stdenv.isDarwin {
+  // stdenv.lib.optionalAttrs stdenv.isDarwin {
   makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }

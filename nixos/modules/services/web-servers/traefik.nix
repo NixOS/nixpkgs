@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.traefik;
   configFile =
@@ -15,8 +14,8 @@ let
           > $out
       ''
     else cfg.configFile;
-
-in {
+in
+{
   options.services.traefik = {
     enable = mkEnableOption "Traefik web server";
 
@@ -36,7 +35,7 @@ in {
       '';
       type = types.attrs;
       default = {
-        defaultEntryPoints = ["http"];
+        defaultEntryPoints = [ "http" ];
         entryPoints.http.address = ":80";
       };
       example = {
@@ -44,7 +43,7 @@ in {
         web.address = ":8080";
         entryPoints.http.address = ":80";
 
-        file = {};
+        file = { };
         frontends = {
           frontend1 = {
             backend = "backend1";
@@ -61,7 +60,7 @@ in {
       default = "/var/lib/traefik";
       type = types.path;
       description = ''
-      Location for any persistent data traefik creates, ie. acme
+        Location for any persistent data traefik creates, ie. acme
       '';
     };
 
@@ -120,6 +119,6 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.traefik = {};
+    users.groups.traefik = { };
   };
 }

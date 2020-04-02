@@ -1,7 +1,10 @@
-{ stdenv, fetchurl, gfortran, openblas
-, enableCuda  ? false, cudatoolkit
+{ stdenv
+, fetchurl
+, gfortran
+, openblas
+, enableCuda ? false
+, cudatoolkit
 }:
-
 let
   version = "4.4.4";
   name = "suitesparse-${version}";
@@ -26,12 +29,10 @@ stdenv.mkDerivation {
         -e 's/METIS_PATH .*$/METIS_PATH =/' \
         -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION -DLONGBLAS=${int_t}/' \
         -e '/UMFPACK_CONFIG/ s/$/-DLONGBLAS=${int_t}/'
-  ''
-  + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
         -e 's/^[[:space:]]*\(LIB = -lm\) -lrt/\1/'
-  ''
-  + stdenv.lib.optionalString enableCuda ''
+  '' + stdenv.lib.optionalString enableCuda ''
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
         -e 's|^[[:space:]]*\(CUDA_ROOT     =\)|CUDA_ROOT = ${cudatoolkit}|' \
         -e 's|^[[:space:]]*\(GPU_BLAS_PATH =\)|GPU_BLAS_PATH = $(CUDA_ROOT)|' \

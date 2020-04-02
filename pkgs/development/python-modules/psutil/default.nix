@@ -1,4 +1,9 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, python
 , darwin
 , pytest
 , mock

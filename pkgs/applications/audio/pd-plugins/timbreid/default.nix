@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     make tIDLib.o all
- '';
+  '';
 
   installPhase = ''
     mkdir -p $out/
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     mv $out/share/doc/ $out/
     rm -rf $out/share/
-    '';
+  '';
 
   meta = {
     description = "A collection of audio feature analysis externals for puredata";

@@ -53,7 +53,7 @@ buildPythonPackage rec {
   postPatch = lib.optionalString isPy3k ''
     substituteInPlace setup.py \
       --replace "python-memcached" "python3-memcached"
-    '' + ''
+  '' + ''
 
     rm tests/test_memcached.py
   '';

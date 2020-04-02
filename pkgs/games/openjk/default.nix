@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2 }:
-
 let
   jamp = makeDesktopItem rec {
     name = "jamp";
@@ -19,7 +18,8 @@ let
     genericName = "Jedi Academy";
     categories = "Game;";
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "OpenJK";
   version = "2019-11-29";
 

@@ -1,9 +1,18 @@
-{ stdenv, fetchurl, alsaLib, gtk2, libjack2, libuuid, libxml2
-, makeWrapper, pkgconfig, readline }:
+{ stdenv
+, fetchurl
+, alsaLib
+, gtk2
+, libjack2
+, libuuid
+, libxml2
+, makeWrapper
+, pkgconfig
+, readline
+}:
 
 assert libuuid != null;
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "lash";
   version = "0.5.4";
 
@@ -15,8 +24,15 @@ stdenv.mkDerivation  rec {
   # http://permalink.gmane.org/gmane.linux.redhat.fedora.extras.cvs/822346
   patches = [ ./socket.patch ./gcc-47.patch ];
 
-  buildInputs = [ alsaLib gtk2 libjack2 libxml2 makeWrapper
-    pkgconfig readline ];
+  buildInputs = [
+    alsaLib
+    gtk2
+    libjack2
+    libxml2
+    makeWrapper
+    pkgconfig
+    readline
+  ];
   propagatedBuildInputs = [ libuuid ];
   NIX_LDFLAGS = "-lm -lpthread -luuid";
 

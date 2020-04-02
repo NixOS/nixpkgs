@@ -1,9 +1,20 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, pkgconfig, wrapGAppsHook
-, glib, gtk3, expat, gnome-doc-utils, which
-, at-spi2-core, dbus
-, libxslt, libxml2
-, speechSupport ? true, speechd ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, wrapGAppsHook
+, glib
+, gtk3
+, expat
+, gnome-doc-utils
+, which
+, at-spi2-core
+, dbus
+, libxslt
+, libxml2
+, speechSupport ? true
+, speechd ? null
 }:
 
 assert speechSupport -> speechd != null;
@@ -33,7 +44,8 @@ stdenv.mkDerivation {
     # doc generation
     gnome-doc-utils
     which
-    libxslt libxml2
+    libxslt
+    libxml2
   ];
 
   buildInputs = [
@@ -41,7 +53,8 @@ stdenv.mkDerivation {
     gtk3
     expat
     # at-spi2 needs dbus to be recognized by pkg-config
-    at-spi2-core dbus
+    at-spi2-core
+    dbus
   ] ++ lib.optional speechSupport speechd;
 
   meta = {

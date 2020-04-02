@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11}:
+{ stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation {
   name = "3dpong-0.5";

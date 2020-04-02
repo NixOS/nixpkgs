@@ -25,7 +25,7 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} test.py
   '';
-  
+
   meta = with lib; {
     description = "A Python interface to conic optimization solvers";
     homepage = https://gitlab.com/picos-api/picos;
@@ -33,4 +33,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ tobiasBora ];
   };
 }
-

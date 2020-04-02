@@ -6,7 +6,7 @@ agda.mkDerivation (self: rec {
 
   src = fetchFromGitHub {
     owner = "cedille";
-    repo  = "ial";
+    repo = "ial";
     rev = "v${version}";
     sha256 = "0dlis6v6nzbscf713cmwlx8h9n2gxghci8y21qak3hp18gkxdp0g";
   };

@@ -1,13 +1,15 @@
-{ stdenv, callPackage, lua, CoreFoundation
-, tiles ? true, Cocoa
+{ stdenv
+, callPackage
+, lua
+, CoreFoundation
+, tiles ? true
+, Cocoa
 , debug ? false
 }:
-
 let
   inherit (callPackage ./common.nix { inherit tiles CoreFoundation Cocoa debug; }) common utils;
   inherit (utils) fetchFromCleverRaven;
 in
-
 stdenv.mkDerivation (common // rec {
   version = "0.D";
   name = "cataclysm-dda-${version}";

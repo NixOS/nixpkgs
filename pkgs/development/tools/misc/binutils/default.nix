@@ -1,7 +1,15 @@
-{ stdenv, lib, buildPackages
-, fetchFromGitHub, fetchurl, zlib, autoreconfHook, gettext
-# Enabling all targets increases output size to a multiple.
-, withAllTargets ? false, libbfd, libopcodes
+{ stdenv
+, lib
+, buildPackages
+, fetchFromGitHub
+, fetchurl
+, zlib
+, autoreconfHook
+, gettext
+  # Enabling all targets increases output size to a multiple.
+, withAllTargets ? false
+, libbfd
+, libopcodes
 , enableShared ? true
 , noSysDirs
 , gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
@@ -9,7 +17,6 @@
 , flex
 , texinfo
 }:
-
 let
   reuseLibs = enableShared && withAllTargets;
 
@@ -21,7 +28,7 @@ let
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                  "${stdenv.targetPlatform.config}-";
+    "${stdenv.targetPlatform.config}-";
   vc4-binutils-src = fetchFromGitHub {
     owner = "itszor";
     repo = "binutils-vc4";
@@ -34,7 +41,6 @@ let
     sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
   });
 in
-
 stdenv.mkDerivation {
   pname = targetPrefix + basename;
   inherit version;
@@ -65,16 +71,16 @@ stdenv.mkDerivation {
     ./always-search-rpath.patch
 
   ] ++ lib.optionals (!stdenv.targetPlatform.isVc4)
-  [
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
-    ./gold-symbol-visibility.patch
+    [
+      # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
+      ./gold-symbol-visibility.patch
 
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=23428
-    # un-break features so linking against musl doesn't produce crash-only binaries
-    ./0001-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
-    ./0001-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
-    ./0001-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
-  ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
+      # https://sourceware.org/bugzilla/show_bug.cgi?id=23428
+      # un-break features so linking against musl doesn't produce crash-only binaries
+      ./0001-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
+      ./0001-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
+      ./0001-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
+    ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
 
@@ -103,7 +109,8 @@ stdenv.mkDerivation {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = if stdenv.hostPlatform.isDarwin
+  NIX_CFLAGS_COMPILE =
+    if stdenv.hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
@@ -113,22 +120,23 @@ stdenv.mkDerivation {
   configurePlatforms = [ "build" "host" ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
   configureFlags =
-    (if enableShared then [ "--enable-shared" "--disable-static" ]
-                     else [ "--disable-shared" "--enable-static" ])
-  ++ lib.optional withAllTargets "--enable-targets=all"
-  ++ [
-    "--enable-64-bit-bfd"
-    "--with-system-zlib"
+    (
+      if enableShared then [ "--enable-shared" "--disable-static" ]
+      else [ "--disable-shared" "--enable-static" ])
+    ++ lib.optional withAllTargets "--enable-targets=all"
+    ++ [
+      "--enable-64-bit-bfd"
+      "--with-system-zlib"
 
-    "--enable-deterministic-archives"
-    "--disable-werror"
-    "--enable-fix-loongson2f-nop"
+      "--enable-deterministic-archives"
+      "--disable-werror"
+      "--enable-fix-loongson2f-nop"
 
-    # Turn on --enable-new-dtags by default to make the linker set
-    # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
-    "--enable-new-dtags"
-  ] ++ lib.optionals gold [ "--enable-gold" "--enable-plugins" ];
+      # Turn on --enable-new-dtags by default to make the linker set
+      # RUNPATH instead of RPATH on binaries.  This is important because
+      # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
+      "--enable-new-dtags"
+    ] ++ lib.optionals gold [ "--enable-gold" "--enable-plugins" ];
 
   doCheck = false; # fails
 

@@ -1,24 +1,28 @@
-{ lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+{ lib
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, python3
+, protobuf3_6
 
-# Look up dependencies of specified components in component-packages.nix
+  # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
 
-# Additional packages to add to propagatedBuildInputs
-, extraPackages ? ps: []
+  # Additional packages to add to propagatedBuildInputs
+, extraPackages ? ps: [ ]
 
-# Override Python packages using
-# self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-# Applied after defaultOverrides
+  # Override Python packages using
+  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+  # Applied after defaultOverrides
 , packageOverrides ? self: super: {
-  # TODO: Remove this override after updating to cryptography 2.8:
+    # TODO: Remove this override after updating to cryptography 2.8:
 
-}
+  }
 
-# Skip pip install of required packages on startup
-, skipPip ? true }:
-
+  # Skip pip install of required packages on startup
+, skipPip ? true
+}:
 let
-
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
 
@@ -68,63 +72,90 @@ let
 
   # Don't forget to run parse-requirements.py after updating
   hassVersion = "0.106.6";
+in
+  with py.pkgs; buildPythonApplication rec {
+    pname = "homeassistant";
+    version = assert (componentPackages.version == hassVersion); hassVersion;
 
-in with py.pkgs; buildPythonApplication rec {
-  pname = "homeassistant";
-  version = assert (componentPackages.version == hassVersion); hassVersion;
+    disabled = pythonOlder "3.5";
 
-  disabled = pythonOlder "3.5";
+    patches = [ ./relax-importlib-metadata-pyaml.patch ];
 
-  patches = [ ./relax-importlib-metadata-pyaml.patch ];
+    inherit availableComponents;
 
-  inherit availableComponents;
+    # PyPI tarball is missing tests/ directory
+    src = fetchFromGitHub {
+      owner = "home-assistant";
+      repo = "home-assistant";
+      rev = version;
+      sha256 = "11kv5lmm8nxp7yv3w43mzmgzkafddy0z6wl2878p96iyil1w7qhb";
+    };
 
-  # PyPI tarball is missing tests/ directory
-  src = fetchFromGitHub {
-    owner = "home-assistant";
-    repo = "home-assistant";
-    rev = version;
-    sha256 = "11kv5lmm8nxp7yv3w43mzmgzkafddy0z6wl2878p96iyil1w7qhb";
-  };
+    propagatedBuildInputs = [
+      # From setup.py
+      aiohttp
+      astral
+      async-timeout
+      attrs
+      bcrypt
+      certifi
+      importlib-metadata
+      jinja2
+      pyjwt
+      cryptography
+      pip
+      python-slugify
+      pytz
+      pyyaml
+      requests
+      ruamel_yaml
+      setuptools
+      voluptuous
+      voluptuous-serialize
+      # From http, frontend and recorder components and auth.mfa_modules.totp
+      sqlalchemy
+      aiohttp-cors
+      hass-frontend
+      pyotp
+      pyqrcode
+    ] ++ componentBuildInputs ++ extraBuildInputs;
 
-  propagatedBuildInputs = [
-    # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi importlib-metadata jinja2
-    pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
-    setuptools voluptuous voluptuous-serialize
-    # From http, frontend and recorder components and auth.mfa_modules.totp
-    sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
-  ] ++ componentBuildInputs ++ extraBuildInputs;
+    checkInputs = [
+      asynctest
+      pytest
+      pytest-aiohttp
+      requests-mock
+      pydispatcher
+      aiohue
+      netdisco
+      hass-nabucasa
+      defusedxml
+    ];
 
-  checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue netdisco
-    hass-nabucasa defusedxml
-  ];
+    postPatch = ''
+      substituteInPlace setup.py \
+        --replace "aiohttp==3.6.1" "aiohttp" \
+        --replace "attrs==19.2.0" "attrs" \
+        --replace "ruamel.yaml==0.15.100" "ruamel.yaml"
+    '';
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp==3.6.1" "aiohttp" \
-      --replace "attrs==19.2.0" "attrs" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml"
-  '';
+    checkPhase = ''
+      # - components' dependencies are not included, so they cannot be tested
+      # - test_merge_id_schema requires pyqwikswitch
+      # - unclear why test_merge fails: assert merge_log_err.call_count != 0
+      py.test --ignore tests/components -k "not test_merge_id_schema and not test_merge"
+      # Some basic components should be tested however
+      py.test \
+        tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
+        tests/components/{homeassistant,http,logger,script,shell_command,system_log,websocket_api}
+    '';
 
-  checkPhase = ''
-    # - components' dependencies are not included, so they cannot be tested
-    # - test_merge_id_schema requires pyqwikswitch
-    # - unclear why test_merge fails: assert merge_log_err.call_count != 0
-    py.test --ignore tests/components -k "not test_merge_id_schema and not test_merge"
-    # Some basic components should be tested however
-    py.test \
-      tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
-      tests/components/{homeassistant,http,logger,script,shell_command,system_log,websocket_api}
-  '';
+    makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
-  makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
-
-  meta = with lib; {
-    homepage = https://home-assistant.io/;
-    description = "Open-source home automation platform running on Python 3";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda globin ];
-  };
-}
+    meta = with lib; {
+      homepage = https://home-assistant.io/;
+      description = "Open-source home automation platform running on Python 3";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ dotlambda globin ];
+    };
+  }

@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, lilypond }:
-
 let
-
   olpFont = { fontName, rev, sha256, version ? rev, ... }:
     stdenv.mkDerivation {
       inherit version;
@@ -36,9 +34,7 @@ let
         maintainers = with maintainers; [ yurrriq ];
       };
     };
-
 in
-
 rec {
   beethoven = olpFont {
     fontName = "beethoven";

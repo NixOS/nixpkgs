@@ -9,17 +9,17 @@
 # outside of sage anyways (as you could just directly depend on sage and use
 # it).
 buildPythonPackage rec {
-    pname = "pyBRiAl";
-    version = brial.version;
+  pname = "pyBRiAl";
+  version = brial.version;
 
-    # included with BRiAl source
-    src = brial.src;
+  # included with BRiAl source
+  src = brial.src;
 
-    sourceRoot = "source/sage-brial";
+  sourceRoot = "source/sage-brial";
 
-    meta = with stdenv.lib; {
-      description = "python implementation of BRiAl";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ timokau ];
-    };
+  meta = with stdenv.lib; {
+    description = "python implementation of BRiAl";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ timokau ];
+  };
 }

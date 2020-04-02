@@ -1,11 +1,9 @@
 { config, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.windowManager;
 in
-
 {
   imports = [
     ./2bwm.nix
@@ -35,7 +33,8 @@ in
     ./wmii.nix
     ./xmonad.nix
     ./qtile.nix
-    ./none.nix ];
+    ./none.nix
+  ];
 
   options = {
 
@@ -43,11 +42,13 @@ in
 
       session = mkOption {
         internal = true;
-        default = [];
-        example = [{
-          name = "wmii";
-          start = "...";
-        }];
+        default = [ ];
+        example = [
+          {
+            name = "wmii";
+            start = "...";
+          }
+        ];
         description = ''
           Internal option used to add some common line to window manager
           scripts before forwarding the value to the

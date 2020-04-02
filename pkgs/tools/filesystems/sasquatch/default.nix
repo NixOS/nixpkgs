@@ -10,7 +10,6 @@
 }:
 
 assert lz4Support -> (lz4 != null);
-
 let
   patch = fetchFromGitHub {
     owner = "devttys0";

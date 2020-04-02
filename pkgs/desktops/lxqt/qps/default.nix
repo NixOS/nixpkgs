@@ -1,5 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtx11extras, qttools,
-  lxqt-build-tools }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, qtx11extras
+, qttools
+, lxqt-build-tools
+}:
 
 mkDerivation rec {
   pname = "qps";
@@ -20,7 +27,7 @@ mkDerivation rec {
     description = "Qt based process manager";
     homepage = https://github.com/lxqt/qps;
     license = licenses.gpl2;
-    platforms = with platforms; linux;  # does not build on darwin
+    platforms = with platforms; linux; # does not build on darwin
     maintainers = with maintainers; [ romildo ];
   };
 }

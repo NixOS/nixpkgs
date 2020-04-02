@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, cppo, ppx_tools, ppx_deriving
-, ppxfind }:
+{ stdenv
+, fetchFromGitHub
+, buildDunePackage
+, cppo
+, ppx_tools
+, ppx_deriving
+, ppxfind
+}:
 
 buildDunePackage rec {
   pname = "ppx_deriving_protobuf";

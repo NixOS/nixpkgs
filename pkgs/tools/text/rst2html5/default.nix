@@ -10,7 +10,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages;
-  [ docutils genshi pygments beautifulsoup4 ];
+    [ docutils genshi pygments beautifulsoup4 ];
 
   meta = with stdenv.lib;{
     homepage = https://bitbucket.org/andre_felipe_dias/rst2html5;

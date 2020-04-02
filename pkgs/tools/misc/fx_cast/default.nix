@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.0.6";
 
   src = fetchurl {
-     url = "https://github.com/hensm/fx_cast/releases/download/v${version}/${pname}-${version}-x64.deb";
-     sha256 = "1mjpwd27b0cpigz4cc2mdl97d78rj5ikn2bqfdic50lqjciaqi1b";
+    url = "https://github.com/hensm/fx_cast/releases/download/v${version}/${pname}-${version}-x64.deb";
+    sha256 = "1mjpwd27b0cpigz4cc2mdl97d78rj5ikn2bqfdic50lqjciaqi1b";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -30,10 +30,11 @@ stdenv.mkDerivation rec {
 
   # See now-cli/default.nix
   dontStrip = true;
-  preFixup = let
-    libPath = stdenv.lib.makeLibraryPath [stdenv.cc.cc stdenv.cc.libc];
-    bin = "$out/bin/${pname}";
-  in ''
+  preFixup =
+    let
+      libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ];
+      bin = "$out/bin/${pname}";
+    in ''
 
     orig_size=$(stat --printf=%s ${bin})
 

@@ -6,9 +6,9 @@ pythonPackages.buildPythonApplication {
   version = "2017-12-07";
 
   src = fetchFromGitHub {
-    owner  = "0x776b7364";
-    repo   = "toggle.sg-download";
-    rev    = "e64959f99ac48920249987a644eefceee923282f";
+    owner = "0x776b7364";
+    repo = "toggle.sg-download";
+    rev = "e64959f99ac48920249987a644eefceee923282f";
     sha256 = "0j317wmyzpwfcixjkybbq2vkg52vij21bs40zg3n1bs61rgmzrn8";
   };
 

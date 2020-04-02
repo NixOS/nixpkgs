@@ -1,5 +1,15 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python2, bash, vala
-, dockbarx, gtk2, xfce, pythonPackages, wafHook }:
+{ stdenv
+, pkgconfig
+, fetchFromGitHub
+, python2
+, bash
+, vala
+, dockbarx
+, gtk2
+, xfce
+, pythonPackages
+, wafHook
+}:
 
 stdenv.mkDerivation rec {
   ver = "0.5";

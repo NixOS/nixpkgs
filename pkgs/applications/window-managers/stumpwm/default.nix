@@ -1,8 +1,19 @@
-{ stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
-, makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop
-, extraModulePaths ? []
-, version }:
-
+{ stdenv
+, fetchgit
+, autoconf
+, sbcl
+, lispPackages
+, xdpyinfo
+, texinfo4
+, makeWrapper
+, rlwrap
+, gnused
+, gnugrep
+, coreutils
+, xprop
+, extraModulePaths ? [ ]
+, version
+}:
 let
   contrib = (fetchgit {
     url = "https://github.com/stumpwm/stumpwm-contrib.git";
@@ -14,7 +25,7 @@ let
       name = "1.0.0";
       rev = "refs/tags/1.0.0";
       sha256 = "16r0lwhxl8g71masmfbjr7s7m7fah4ii4smi1g8zpbpiqjz48ryb";
-      patches = [];
+      patches = [ ];
     };
     "0.9.9" = {
       name = "0.9.9";
@@ -23,10 +34,10 @@ let
       patches = [ ./fix-module-path.patch ];
     };
     git = {
-        name = "git-20170203";
-        rev = "d20f24e58ab62afceae2afb6262ffef3cc318b97";
-        sha256 = "1gi29ds1x6dq7lz8lamnhcvcrr3cvvrg5yappfkggyhyvib1ii70";
-        patches = [];
+      name = "git-20170203";
+      rev = "d20f24e58ab62afceae2afb6262ffef3cc318b97";
+      sha256 = "1gi29ds1x6dq7lz8lamnhcvcrr3cvvrg5yappfkggyhyvib1ii70";
+      patches = [ ];
     };
   }.${version};
 in
@@ -44,7 +55,9 @@ stdenv.mkDerivation {
   patches = versionSpec.patches;
 
   buildInputs = [
-    texinfo4 makeWrapper autoconf
+    texinfo4
+    makeWrapper
+    autoconf
     sbcl
     lispPackages.clx
     lispPackages.cl-ppcre
@@ -95,10 +108,10 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A tiling window manager for X11";
-    homepage    = https://github.com/stumpwm/;
-    license     = licenses.gpl2Plus;
+    homepage = https://github.com/stumpwm/;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ the-kenny ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
     broken = true; # 2018-04-11
   };
 }

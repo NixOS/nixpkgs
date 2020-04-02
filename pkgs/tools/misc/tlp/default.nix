@@ -63,7 +63,7 @@
   ];
 
   installTargets = [ "install-tlp" "install-man" ]
-  ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
+    ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
 
   # XXX: This is disabled because it's basically just noise since upstream
   # itself does not seem to care about the zillion shellcheck errors.
@@ -71,49 +71,50 @@
   checkInputs = [ checkbashisms shellcheck ];
   checkTarget = [ "checkall" ];
 
-  postInstall = let
-    paths = lib.makeBinPath (
-      [
-        coreutils
-        ethtool
-        gawk
-        gnugrep
-        gnused
-        hdparm
-        iw
-        kmod
-        pciutils
-        perl
-        smartmontools
-        systemd
-        utillinux
-        x86_energy_perf_policy
-      ] ++ lib.optional enableRDW networkmanager
-    );
-  in
-    ''
-      fixup_perl=(
-        $out/share/tlp/tlp-pcilist
-        $out/share/tlp/tlp-readconfs
-        $out/share/tlp/tlp-usblist
-        $out/share/tlp/tpacpi-bat
-      )
-      for f in "''${fixup_perl[@]}"; do
-        wrapProgram "$f" --prefix PATH : "${paths}"
-      done
+  postInstall =
+    let
+      paths = lib.makeBinPath (
+        [
+          coreutils
+          ethtool
+          gawk
+          gnugrep
+          gnused
+          hdparm
+          iw
+          kmod
+          pciutils
+          perl
+          smartmontools
+          systemd
+          utillinux
+          x86_energy_perf_policy
+        ] ++ lib.optional enableRDW networkmanager
+      );
+    in
+      ''
+        fixup_perl=(
+          $out/share/tlp/tlp-pcilist
+          $out/share/tlp/tlp-readconfs
+          $out/share/tlp/tlp-usblist
+          $out/share/tlp/tpacpi-bat
+        )
+        for f in "''${fixup_perl[@]}"; do
+          wrapProgram "$f" --prefix PATH : "${paths}"
+        done
 
-      fixup_bash=(
-        $out/bin/*
-        $out/etc/NetworkManager/dispatcher.d/*
-        $out/lib/udev/tlp-*
-        $out/sbin/*
-        $out/share/tlp/func.d/*
-        $out/share/tlp/tlp-func-base
-      )
-      for f in "''${fixup_bash[@]}"; do
-        sed -i '2iexport PATH=${paths}:$PATH' "$f"
-      done
-    '';
+        fixup_bash=(
+          $out/bin/*
+          $out/etc/NetworkManager/dispatcher.d/*
+          $out/lib/udev/tlp-*
+          $out/sbin/*
+          $out/share/tlp/func.d/*
+          $out/share/tlp/tlp-func-base
+        )
+        for f in "''${fixup_bash[@]}"; do
+          sed -i '2iexport PATH=${paths}:$PATH' "$f"
+        done
+      '';
 
   meta = with lib; {
     description = "Advanced Power Management for Linux";

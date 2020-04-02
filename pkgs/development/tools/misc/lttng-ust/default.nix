@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs .
   '';
-  
+
   propagatedBuildInputs = [ liburcu ];
 
   meta = with stdenv.lib; {

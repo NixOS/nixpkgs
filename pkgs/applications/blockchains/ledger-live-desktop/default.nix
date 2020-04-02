@@ -1,5 +1,4 @@
 { stdenv, fetchurl, makeDesktopItem, appimageTools, imagemagick }:
-
 let
   pname = "ledger-live-desktop";
   version = "1.20.0";
@@ -13,7 +12,8 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit name src;
 
   extraInstallCommands = ''

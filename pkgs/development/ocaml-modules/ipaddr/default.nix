@@ -1,5 +1,7 @@
-{ lib, buildDunePackage
-, macaddr, ounit
+{ lib
+, buildDunePackage
+, macaddr
+, ounit
 }:
 
 buildDunePackage rec {

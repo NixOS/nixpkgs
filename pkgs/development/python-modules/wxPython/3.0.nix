@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ]);
 
   buildInputs = [ ]
-    ++ (lib.optionals (!stdenv.isDarwin) [  (wxGTK.gtk) ])
+    ++ (lib.optionals (!stdenv.isDarwin) [ (wxGTK.gtk) ])
     ++ (lib.optional openglSupport pyopengl);
 
   preConfigure = ''

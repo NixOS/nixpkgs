@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.netdata;
 
@@ -25,12 +24,12 @@ let
       "web files group" = "root";
     };
   };
-  mkConfig = generators.toINI {} (recursiveUpdate localConfig cfg.config);
+  mkConfig = generators.toINI { } (recursiveUpdate localConfig cfg.config);
   configFile = pkgs.writeText "netdata.conf" (if cfg.configText != null then cfg.configText else mkConfig);
 
   defaultUser = "netdata";
-
-in {
+in
+{
   options = {
     services.netdata = {
       enable = mkEnableOption "netdata";
@@ -68,7 +67,7 @@ in {
           '';
         };
         extraPackages = mkOption {
-          default = ps: [];
+          default = ps: [ ];
           defaultText = "ps: []";
           example = literalExample ''
             ps: [
@@ -104,7 +103,7 @@ in {
 
       config = mkOption {
         type = types.attrsOf types.attrs;
-        default = {};
+        default = { };
         description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
         example = literalExample ''
           global = {
@@ -113,13 +112,15 @@ in {
             "error log" = "syslog";
           };
         '';
-        };
       };
     };
+  };
 
   config = mkIf cfg.enable {
     assertions =
-      [ { assertion = cfg.config != {} -> cfg.configText == null ;
+      [
+        {
+          assertion = cfg.config != { } -> cfg.configText == null;
           message = "Cannot specify both config and configText";
         }
       ];
@@ -141,7 +142,7 @@ in {
       path = (with pkgs; [ curl gawk which ]) ++ lib.optional cfg.python.enable
         (pkgs.python3.withPackages cfg.python.extraPackages);
       serviceConfig = {
-        Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
+        Environment = "PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
         ExecStart = "${pkgs.netdata}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
         ExecReload = "${pkgs.utillinux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         TimeoutStopSec = 60;

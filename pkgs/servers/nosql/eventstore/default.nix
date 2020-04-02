@@ -6,13 +6,9 @@
 , mono
 , Nuget
 }:
-
 let
-
   deps = import ./deps.nix { inherit fetchurl; };
-
 in
-
 stdenv.mkDerivation rec {
 
   pname = "EventStore";

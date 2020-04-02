@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-smtp";
 
-  asdFilesToKeep = ["cl-smtp.asd"];
+  asdFilesToKeep = [ "cl-smtp.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-smtp DESCRIPTION Common Lisp smtp client. SHA256

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, libgit2, ...}:
+{ fetchFromGitHub, libgit2, ... }:
 
 libgit2.overrideAttrs (oldAttrs: {
   cmakeFlags = oldAttrs.cmakeFlags ++ [
@@ -7,7 +7,7 @@ libgit2.overrideAttrs (oldAttrs: {
     "-DREGEX_BACKEND=builtin"
     "-DUSE_BUNDLED_ZLIB=ON"
     "-DUSE_HTTPS=OFF"
-    "-DUSE_HTTP_PARSER=builtin"  # overwritten from libgit2
+    "-DUSE_HTTP_PARSER=builtin" # overwritten from libgit2
     "-DUSE_ICONV=OFF"
     "-DUSE_SSH=OFF"
     "-DZERO_NSEC=ON"

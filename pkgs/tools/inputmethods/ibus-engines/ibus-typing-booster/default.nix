@@ -1,16 +1,20 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, python3, ibus, pkgconfig, gtk3, m17n_lib
-, wrapGAppsHook, gobject-introspection
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, python3
+, ibus
+, pkgconfig
+, gtk3
+, m17n_lib
+, wrapGAppsHook
+, gobject-introspection
 }:
-
 let
-
   python = python3.withPackages (ps: with ps; [
     pygobject3
     dbus-python
   ]);
-
 in
-
 stdenv.mkDerivation rec {
   pname = "ibus-typing-booster";
   version = "2.7.5";

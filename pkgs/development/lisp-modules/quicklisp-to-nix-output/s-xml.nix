@@ -16,7 +16,7 @@ rec {
 
   packageName = "s-xml";
 
-  asdFilesToKeep = ["s-xml.asd"];
+  asdFilesToKeep = [ "s-xml.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM s-xml DESCRIPTION Simple Common Lisp XML Parser SHA256

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = ''A user interface library using OpenGL'';
-    license = licenses.zlib ;
+    license = licenses.zlib;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
   };

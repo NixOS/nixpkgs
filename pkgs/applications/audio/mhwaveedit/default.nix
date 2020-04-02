@@ -1,6 +1,20 @@
-{ stdenv, fetchFromGitHub, makeWrapper, SDL, alsaLib, autoreconfHook, gtk2, libjack2, ladspaH
-, ladspaPlugins, libsamplerate, libsndfile, pkgconfig, libpulseaudio, lame
-, vorbis-tools }:
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, SDL
+, alsaLib
+, autoreconfHook
+, gtk2
+, libjack2
+, ladspaH
+, ladspaPlugins
+, libsamplerate
+, libsndfile
+, pkgconfig
+, libpulseaudio
+, lame
+, vorbis-tools
+}:
 
 stdenv.mkDerivation rec {
   pname = "mhwaveedit";
@@ -18,7 +32,14 @@ stdenv.mkDerivation rec {
   preAutoreconf = "(cd docgen && sh gendocs.sh)";
 
   buildInputs = [
-    SDL alsaLib gtk2 libjack2 ladspaH libsamplerate libsndfile libpulseaudio
+    SDL
+    alsaLib
+    gtk2
+    libjack2
+    ladspaH
+    libsamplerate
+    libsndfile
+    libpulseaudio
   ];
 
   configureFlags = [ "--with-default-ladspa-path=${ladspaPlugins}/lib/ladspa" ];

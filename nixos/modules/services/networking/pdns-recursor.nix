@@ -1,23 +1,22 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-  dataDir  = "/var/lib/pdns-recursor";
+  dataDir = "/var/lib/pdns-recursor";
   username = "pdns-recursor";
 
   cfg = config.services.pdns-recursor;
 
-  oneOrMore  = type: with types; either type (listOf type);
-  valueType  = with types; oneOf [ int str bool path ];
+  oneOrMore = type: with types; either type (listOf type);
+  valueType = with types; oneOf [ int str bool path ];
   configType = with types; attrsOf (nullOr (oneOrMore valueType));
 
-  toBool    = val: if val then "yes" else "no";
+  toBool = val: if val then "yes" else "no";
   serialize = val: with types;
-         if str.check       val then val
-    else if int.check       val then toString val
-    else if path.check      val then toString val
-    else if bool.check      val then toBool val
+    if str.check val then val
+    else if int.check val then toString val
+    else if path.check val then toString val
+    else if bool.check val then toBool val
     else if builtins.isList val then (concatMapStringsSep "," serialize val)
     else "";
 
@@ -27,8 +26,8 @@ let
         (name: val: "${name}=${serialize val}")));
 
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
-
-in {
+in
+{
   options.services.pdns-recursor = {
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
@@ -85,13 +84,13 @@ in {
       type = types.bool;
       default = false;
       description = ''
-       Whether to export names and IP addresses defined in /etc/hosts.
+        Whether to export names and IP addresses defined in /etc/hosts.
       '';
     };
 
     forwardZones = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = ''
         DNS zones to be forwarded to other authoritative servers.
       '';
@@ -100,14 +99,14 @@ in {
     forwardZonesRecurse = mkOption {
       type = types.attrs;
       example = { eth = "127.0.0.1:5353"; };
-      default = {};
+      default = { };
       description = ''
         DNS zones to be forwarded to other recursive servers.
       '';
     };
 
     dnssecValidation = mkOption {
-      type = types.enum ["off" "process-no-validate" "process" "log-fail" "validate"];
+      type = types.enum [ "off" "process-no-validate" "process" "log-fail" "validate" ];
       default = "validate";
       description = ''
         Controls the level of DNSSEC processing done by the PowerDNS Recursor.
@@ -159,21 +158,21 @@ in {
 
     services.pdns-recursor.settings = mkDefaultAttrs {
       local-address = cfg.dns.address;
-      local-port    = cfg.dns.port;
-      allow-from    = cfg.dns.allowFrom;
+      local-port = cfg.dns.port;
+      allow-from = cfg.dns.allowFrom;
 
-      webserver-address    = cfg.api.address;
-      webserver-port       = cfg.api.port;
+      webserver-address = cfg.api.address;
+      webserver-port = cfg.api.port;
       webserver-allow-from = cfg.api.allowFrom;
 
-      forward-zones         = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
+      forward-zones = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
       forward-zones-recurse = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZonesRecurse;
       export-etc-hosts = cfg.exportHosts;
-      dnssec           = cfg.dnssecValidation;
-      serve-rfc1918    = cfg.serveRFC1918;
-      lua-config-file  = pkgs.writeText "recursor.lua" cfg.luaConfig;
+      dnssec = cfg.dnssecValidation;
+      serve-rfc1918 = cfg.serveRFC1918;
+      lua-config-file = pkgs.writeText "recursor.lua" cfg.luaConfig;
 
-      log-timestamp  = false;
+      log-timestamp = false;
       disable-syslog = true;
     };
 
@@ -188,11 +187,11 @@ in {
       unitConfig.Documentation = "man:pdns_recursor(1) man:rec_control(1)";
       description = "PowerDNS recursive server";
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         User = username;
-        Restart    ="on-failure";
+        Restart = "on-failure";
         RestartSec = "5";
         PrivateTmp = true;
         PrivateDevices = true;
@@ -215,8 +214,8 @@ in {
   };
 
   imports = [
-   (mkRemovedOptionModule [ "services" "pdns-recursor" "extraConfig" ]
-     "To change extra Recursor settings use services.pdns-recursor.settings instead.")
+    (mkRemovedOptionModule [ "services" "pdns-recursor" "extraConfig" ]
+      "To change extra Recursor settings use services.pdns-recursor.settings instead.")
   ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];

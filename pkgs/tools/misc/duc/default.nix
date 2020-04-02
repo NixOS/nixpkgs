@@ -1,6 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, tokyocabinet, ncurses
-, cairo ? null, pango ? null
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, tokyocabinet
+, ncurses
+, cairo ? null
+, pango ? null
 , enableCairo ? stdenv.isLinux
 }:
 

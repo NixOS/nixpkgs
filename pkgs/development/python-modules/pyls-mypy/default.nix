@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, future, python-language-server, mypy, configparser
-, pytest, mock, isPy3k, pytestcov, coverage
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, python-language-server
+, mypy
+, configparser
+, pytest
+, mock
+, isPy3k
+, pytestcov
+, coverage
 }:
 
 buildPythonPackage rec {
@@ -23,7 +32,10 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock pytestcov coverage ];
 
   propagatedBuildInputs = [
-    mypy python-language-server future configparser
+    mypy
+    python-language-server
+    future
+    configparser
   ];
 
   meta = with lib; {

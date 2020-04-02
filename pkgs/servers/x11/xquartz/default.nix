@@ -1,6 +1,20 @@
-{ stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, makeWrapper, ruby
-, quartz-wm, fontconfig, xlsfonts, xfontsel
-, ttf_bitstream_vera, freefont_ttf, liberation_ttf
+{ stdenv
+, buildEnv
+, makeFontsConf
+, gnused
+, writeScript
+, xorg
+, bashInteractive
+, xterm
+, makeWrapper
+, ruby
+, quartz-wm
+, fontconfig
+, xlsfonts
+, xfontsel
+, ttf_bitstream_vera
+, freefont_ttf
+, liberation_ttf
 , shell ? "${bashInteractive}/bin/bash"
 }:
 
@@ -35,7 +49,6 @@
 # xstart wants to exec Xquartz, so we must bundle all three to prevent a cycle.
 # Coincidentally, this also makes it trivial to install launch agents/daemons
 # that point into the user's profile.
-
 let
   installer = writeScript "xquartz-install" ''
     NIX_LINK=$HOME/.nix-profile
@@ -84,17 +97,63 @@ let
     pathsToLink = [ "/bin" ];
     paths = with xorg; [
       # non-xorg
-      quartz-wm xterm fontconfig
+      quartz-wm
+      xterm
+      fontconfig
       # xorg
-      xlsfonts xfontsel
-      bdftopcf fontutil iceauth libXpm lndir luit makedepend mkfontdir
-      mkfontscale sessreg setxkbmap smproxy twm x11perf xauth xbacklight xclock
-      xcmsdb xcursorgen xdm xdpyinfo xdriinfo xev xeyes xfs xgamma xhost
-      xinput xkbcomp xkbevd xkbutils xkill xlsatoms xlsclients xmessage xmodmap
-      xpr xprop xrandr xrdb xrefresh xset xsetroot xvinfo xwd xwininfo xwud
+      xlsfonts
+      xfontsel
+      bdftopcf
+      fontutil
+      iceauth
+      libXpm
+      lndir
+      luit
+      makedepend
+      mkfontdir
+      mkfontscale
+      sessreg
+      setxkbmap
+      smproxy
+      twm
+      x11perf
+      xauth
+      xbacklight
+      xclock
+      xcmsdb
+      xcursorgen
+      xdm
+      xdpyinfo
+      xdriinfo
+      xev
+      xeyes
+      xfs
+      xgamma
+      xhost
+      xinput
+      xkbcomp
+      xkbevd
+      xkbutils
+      xkill
+      xlsatoms
+      xlsclients
+      xmessage
+      xmodmap
+      xpr
+      xprop
+      xrandr
+      xrdb
+      xrefresh
+      xset
+      xsetroot
+      xvinfo
+      xwd
+      xwininfo
+      xwud
     ];
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "xquartz-${stdenv.lib.getVersion xorg.xorgserver}";
 
   nativeBuildInputs = [ ruby makeWrapper ];
@@ -136,11 +195,11 @@ in stdenv.mkDerivation {
 
     ruby ${./patch_plist.rb} \
       ${stdenv.lib.escapeShellArg (builtins.toXML {
-        XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
-        XQUARTZ_DEFAULT_SHELL  = shell;
-        XQUARTZ_DEFAULT_STARTX = "@STARTX@";
-        FONTCONFIG_FILE        = "@FONTCONFIG_FILE@";
-      })} \
+      XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
+      XQUARTZ_DEFAULT_SHELL = shell;
+      XQUARTZ_DEFAULT_STARTX = "@STARTX@";
+      FONTCONFIG_FILE = "@FONTCONFIG_FILE@";
+    })} \
       $out/Applications/XQuartz.app/Contents/Info.plist
     substituteInPlace $out/Applications/XQuartz.app/Contents/Info.plist \
       --replace "@STARTX@"          "$defaultStartX" \
@@ -185,8 +244,8 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    platforms   = platforms.darwin;
+    platforms = platforms.darwin;
     maintainers = with maintainers; [ cstrahan ];
-    license     = licenses.mit;
+    license = licenses.mit;
   };
 }

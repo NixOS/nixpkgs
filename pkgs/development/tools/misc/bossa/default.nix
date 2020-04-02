@@ -1,5 +1,4 @@
 { stdenv, fetchgit, wxGTK, libX11, readline }:
-
 let
   # BOSSA needs a "bin2c" program to embed images.
   # Source taken from:
@@ -11,7 +10,6 @@ let
     buildPhase = ''cc $src -o bin2c'';
     installPhase = ''mkdir -p $out/bin; cp bin2c $out/bin/'';
   };
-
 in
 stdenv.mkDerivation {
   name = "bossa-1.8";

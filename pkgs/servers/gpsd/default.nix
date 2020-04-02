@@ -1,7 +1,23 @@
-{ fetchurl, stdenv, scons, pkgconfig, dbus, dbus-glib
-, ncurses, libX11, libXt, libXpm, libXaw, libXext
-, libusb1, docbook_xml_dtd_412, docbook_xsl, bc
-, libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
+{ fetchurl
+, stdenv
+, scons
+, pkgconfig
+, dbus
+, dbus-glib
+, ncurses
+, libX11
+, libXt
+, libXpm
+, libXaw
+, libXext
+, libusb1
+, docbook_xml_dtd_412
+, docbook_xsl
+, bc
+, libxslt
+, xmlto
+, gpsdUser ? "gpsd"
+, gpsdGroup ? "dialout"
 , pps-tools
 , python2Packages
 }:
@@ -17,14 +33,29 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
+    scons
+    pkgconfig
+    docbook_xml_dtd_412
+    docbook_xsl
+    xmlto
+    bc
     python2Packages.python
     python2Packages.wrapPython
   ];
 
   buildInputs = [
-    python2Packages.python dbus dbus-glib ncurses libX11 libXt libXpm libXaw libXext
-    libxslt libusb1 pps-tools
+    python2Packages.python
+    dbus
+    dbus-glib
+    ncurses
+    libX11
+    libXt
+    libXpm
+    libXaw
+    libXext
+    libxslt
+    libusb1
+    pps-tools
   ];
 
   pythonPath = [

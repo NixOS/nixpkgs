@@ -1,14 +1,21 @@
-{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, liblapack
-, mklSupport ? false, mkl ? null
+{ stdenv
+, fetchurl
+, cmake
+, gfortran
+, cudatoolkit
+, libpthreadstubs
+, liblapack
+, mklSupport ? false
+, mkl ? null
 }:
 
 assert !mklSupport || mkl != null;
 
 with stdenv.lib;
-
-let version = "2.5.0";
-
-in stdenv.mkDerivation {
+let
+  version = "2.5.0";
+in
+stdenv.mkDerivation {
   pname = "magma";
   inherit version;
   src = fetchurl {
@@ -28,7 +35,7 @@ in stdenv.mkDerivation {
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '';
 
-  enableParallelBuilding=true;
+  enableParallelBuilding = true;
   buildFlags = [ "magma" "magma_sparse" ];
 
   # MAGMA's default CMake setup does not care about installation. So we copy files directly.

@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
-, libmbim, libqmi, systemd, vala, gobject-introspection, dbus }:
+{ stdenv
+, fetchurl
+, glib
+, udev
+, libgudev
+, polkit
+, ppp
+, gettext
+, pkgconfig
+, libmbim
+, libqmi
+, systemd
+, vala
+, gobject-introspection
+, dbus
+}:
 
 stdenv.mkDerivation rec {
   pname = "modem-manager";

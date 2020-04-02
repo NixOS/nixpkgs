@@ -1,7 +1,8 @@
 { efivar, fetchurl, gettext, gnu-efi, libsmbios, pkgconfig, popt, stdenv }:
 let
   version = "12";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "fwupdate";
   inherit version;
   src = fetchurl {

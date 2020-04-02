@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, cmake, SDL2, libGLU, luajit, curl, curlpp }:
-
 let
   # Newer versions of sdl-gpu don't work with Riko4 (corrupted graphics),
   # and this library does not have a proper release version, so let the
@@ -25,7 +24,6 @@ let
     };
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "riko4";
   version = "0.1.0";

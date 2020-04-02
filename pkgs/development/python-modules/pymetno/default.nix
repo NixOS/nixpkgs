@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp async-timeout pytz xmltodict ];
 
-  pythonImportsCheck = [ "metno"];
+  pythonImportsCheck = [ "metno" ];
 
   meta = with stdenv.lib; {
     description = "A library to communicate with the met.no api";

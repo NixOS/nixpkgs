@@ -1,10 +1,25 @@
-{ stdenv, fetchurl, perlPackages, wrapGAppsHook,
-  # libs
-  librsvg, sane-backends, sane-frontends,
-  # runtime dependencies
-  imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
-  # test dependencies
-  xvfb_run, liberation_ttf, file, tesseract }:
+{ stdenv
+, fetchurl
+, perlPackages
+, wrapGAppsHook
+, # libs
+  librsvg
+, sane-backends
+, sane-frontends
+, # runtime dependencies
+  imagemagick
+, libtiff
+, djvulibre
+, poppler_utils
+, ghostscript
+, unpaper
+, pdftk
+, # test dependencies
+  xvfb_run
+, liberation_ttf
+, file
+, tesseract
+}:
 
 with stdenv.lib;
 
@@ -47,16 +62,17 @@ perlPackages.buildPerlPackage rec {
       SubOverride
     ]);
 
-  postPatch = let
-    fontSubstitute = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
-  in ''
-    # Required for the program to properly load its SVG assets
-    substituteInPlace bin/gscan2pdf \
-      --replace "/usr/share" "$out/share"
+  postPatch =
+    let
+      fontSubstitute = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
+    in ''
+      # Required for the program to properly load its SVG assets
+      substituteInPlace bin/gscan2pdf \
+        --replace "/usr/share" "$out/share"
 
-    # Substitute the non-free Helvetica font in the tests
-    sed -i 's|-pointsize|-font ${fontSubstitute} -pointsize|g' t/*.t
-  '';
+      # Substitute the non-free Helvetica font in the tests
+      sed -i 's|-pointsize|-font ${fontSubstitute} -pointsize|g' t/*.t
+    '';
 
   postInstall = ''
     # Remove impurity

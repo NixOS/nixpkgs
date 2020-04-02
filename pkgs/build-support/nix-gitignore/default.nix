@@ -8,7 +8,6 @@
 # - "a/x/b", "a/x/y/b" and so on.
 
 with builtins;
-
 let
   debug = a: trace a a;
   last = l: elemAt l ((length l) - 1);
@@ -17,16 +16,17 @@ let
     if compareVersions nixVersion required == -1
     then throw "nix (v${nixVersion} =< v${required}) is too old for nix-gitignore"
     else true;
-in rec {
+in
+rec {
   # [["good/relative/source/file" true] ["bad.tmpfile" false]] -> root -> path
   filterPattern = patterns: root:
     (name: _type:
       let
         relPath = lib.removePrefix ((toString root) + "/") name;
         matches = pair: (match (head pair) relPath) != null;
-        matched = map (pair: [(matches pair) (last pair)]) patterns;
+        matched = map (pair: [ (matches pair) (last pair) ]) patterns;
       in
-        last (last ([[true true]] ++ (filter head matched)))
+        last (last ([ [ true true ] ] ++ (filter head matched)))
     );
 
   # string -> [[regex bool]]
@@ -38,8 +38,9 @@ in rec {
 
       # ignore -> [ignore bool]
       computeNegation = l:
-        let split = match "^(!?)(.*)" l;
-        in [(elemAt split 1) (head split == "!")];
+        let
+          split = match "^(!?)(.*)" l;
+        in [ (elemAt split 1) (head split == "!") ];
 
       # ignore -> regex
       substWildcards =
@@ -47,23 +48,25 @@ in rec {
           special = "^$.+{}()";
           escs = "\\*?";
           splitString =
-            let recurse = str : [(substring 0 1 str)] ++
-                                 (if str == "" then [] else (recurse (substring 1 (stringLength(str)) str) ));
-            in str : recurse str;
+            let
+              recurse = str: [ (substring 0 1 str) ] ++
+                (if str == "" then [ ] else (recurse (substring 1 (stringLength (str)) str)));
+            in str: recurse str;
           chars = s: filter (c: c != "" && !isList c) (splitString s);
           escape = s: map (c: "\\" + c) (chars s);
         in
-          replaceStrings
-            ((chars special)  ++ (escape escs) ++ ["**/"    "**" "*"     "?"])
-            ((escape special) ++ (escape escs) ++ ["(.*/)?" ".*" "[^/]*" "[^/]"]);
+        replaceStrings
+          ((chars special) ++ (escape escs) ++ [ "**/" "**" "*" "?" ])
+          ((escape special) ++ (escape escs) ++ [ "(.*/)?" ".*" "[^/]*" "[^/]" ]);
 
       # (regex -> regex) -> regex -> regex
       mapAroundCharclass = f: r: # rl = regex or list
-        let slightFix = replaceStrings ["\\]"] ["]"];
+        let
+          slightFix = replaceStrings [ "\\]" ] [ "]" ];
         in
           concatStringsSep ""
-          (map (rl: if isList rl then slightFix (elemAt rl 0) else f rl)
-          (split "(\\[([^\\\\]|\\\\.)+])" r));
+            (map (rl: if isList rl then slightFix (elemAt rl 0) else f rl)
+              (split "(\\[([^\\\\]|\\\\.)+])" r));
 
       # regex -> regex
       handleSlashPrefix = l:
@@ -72,24 +75,26 @@ in rec {
           findSlash = l: if (match ".+/.+" l) != null then "" else l;
           hasSlash = mapAroundCharclass findSlash l != l;
         in
-          (if (elemAt split 0) == "/" || hasSlash
-          then "^"
-          else "(^|.*/)"
+          (
+            if (elemAt split 0) == "/" || hasSlash
+            then "^"
+            else "(^|.*/)"
           ) + (elemAt split 1);
 
       # regex -> regex
       handleSlashSuffix = l:
-        let split = (match "^(.*)/$" l);
+        let
+          split = (match "^(.*)/$" l);
         in if split != null then (elemAt split 0) + "($|/.*)" else l;
 
       # (regex -> regex) -> [regex, bool] -> [regex, bool]
-      mapPat = f: l: [(f (head l)) (last l)];
+      mapPat = f: l: [ (f (head l)) (last l) ];
     in
       map (l: # `l' for "line"
         mapPat (l: handleSlashSuffix (handleSlashPrefix (mapAroundCharclass substWildcards l)))
-        (computeNegation l))
-      (filter (l: !isList l && !isComment l)
-      (split "\n" gitignore));
+          (computeNegation l))
+        (filter (l: !isList l && !isComment l)
+          (split "\n" gitignore));
 
   gitignoreFilter = ign: root: filterPattern (gitignoreToPatterns ign) root;
 
@@ -101,8 +106,7 @@ in rec {
     in concatStringsSep "\n" str_patterns;
 
   gitignoreFilterPure = filter: patterns: root: name: type:
-    gitignoreFilter (gitignoreCompileIgnore patterns root) root name type
-    && filter name type;
+    gitignoreFilter (gitignoreCompileIgnore patterns root) root name type && filter name type;
 
   # This is a very hacky way of programming this!
   # A better way would be to reuse existing filtering by making multiple gitignore functions per each root.
@@ -114,7 +118,7 @@ in rec {
       dirOrIgnore = file: type: baseNameOf file == ".gitignore" || type == "directory";
       ignores = builtins.filterSource dirOrIgnore root;
     in readFile (
-      runCommand "${baseNameOf root}-recursive-gitignore" {} ''
+      runCommand "${baseNameOf root}-recursive-gitignore" { } ''
         cd ${ignores}
 
         find -type f -exec sh -c '
@@ -145,13 +149,14 @@ in rec {
             END { print \"\" }
           " "$1"
         ' sh {} \; > $out
-      '');
+      ''
+    );
 
   withGitignoreFile = patterns: root:
-    lib.toList patterns ++ [(root + "/.gitignore")];
+    lib.toList patterns ++ [ (root + "/.gitignore") ];
 
   withRecursiveGitignoreFile = patterns: root:
-    lib.toList patterns ++ [(compileRecursiveGitignore root)];
+    lib.toList patterns ++ [ (compileRecursiveGitignore root) ];
 
   # filterSource derivatives
 

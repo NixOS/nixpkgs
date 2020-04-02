@@ -1,7 +1,20 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig
-, python3, gtk3, libsecret, gst_all_1, webkitgtk
-, glib-networking, gtkspell3, hunspell, desktop-file-utils
-, gobject-introspection, wrapGAppsHook }:
+{ stdenv
+, fetchgit
+, meson
+, ninja
+, pkgconfig
+, python3
+, gtk3
+, libsecret
+, gst_all_1
+, webkitgtk
+, glib-networking
+, gtkspell3
+, hunspell
+, desktop-file-utils
+, gobject-introspection
+, wrapGAppsHook
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "eolie";
@@ -60,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";
     homepage = https://wiki.gnome.org/Apps/Eolie;
-    license  = licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ samdroid-apps worldofpeace ];
     platforms = platforms.linux;
   };

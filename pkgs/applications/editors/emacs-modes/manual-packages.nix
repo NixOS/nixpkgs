@@ -89,7 +89,7 @@
        :repo "roelvandijk/emacs-haskell-unicode-input-method"
        :fetcher github)
     '';
-    packageRequires = [];
+    packageRequires = [ ];
     meta = {
       homepage = "https://melpa.org/#haskell-unicode-input-method/";
       license = lib.licenses.free;

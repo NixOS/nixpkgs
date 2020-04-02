@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, ncurses
+{ fetchurl
+, stdenv
+, ncurses
 }:
 
 stdenv.mkDerivation (rec {
@@ -9,23 +11,26 @@ stdenv.mkDerivation (rec {
     sha256 = "10ckm2bd2rkxhvdmj7nmbsylmihw0abwcsnxf8y27305183rd9kr";
   };
 
-  propagatedBuildInputs = [ncurses];
+  propagatedBuildInputs = [ ncurses ];
 
   patchFlags = [ "-p0" ];
   patches =
-    [ ./link-against-ncurses.patch
+    [
+      ./link-against-ncurses.patch
       ./no-arch_only.patch
       ./clang.patch
     ]
     ++
-    (let
-       patch = nr: sha256:
-         fetchurl {
-           url = "mirror://gnu/readline/${name}-patches/readline62-${nr}";
-           inherit sha256;
-         };
-     in
-       import ./readline-6.2-patches.nix patch);
+    (
+      let
+        patch = nr: sha256:
+          fetchurl {
+            url = "mirror://gnu/readline/${name}-patches/readline62-${nr}";
+            inherit sha256;
+          };
+      in
+        import ./readline-6.2-patches.nix patch
+    );
 
   meta = {
     description = "Library for interactive line editing";
@@ -58,6 +63,8 @@ stdenv.mkDerivation (rec {
 //
 
 # Don't run the native `strip' when cross-compiling.
-(if stdenv.hostPlatform != stdenv.buildPlatform
- then { dontStrip = true; }
- else { }))
+(
+  if stdenv.hostPlatform != stdenv.buildPlatform
+  then { dontStrip = true; }
+  else { }
+))

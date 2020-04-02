@@ -1,5 +1,4 @@
 { stdenv, fetchurl, unzip, patchelf, xorg, openal }:
-
 let
   urls = file:
     [
@@ -15,38 +14,37 @@ let
       nativeBuildInputs = [ unzip patchelf ];
 
       rtdeps = stdenv.lib.makeLibraryPath
-        [ xorg.libXxf86vm xorg.libXext openal ]
-        + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
+        [ xorg.libXxf86vm xorg.libXext openal ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
 
       buildCommand =
-      ''
-        mkdir -p "$out"
-        cd $out
-        unzip $src
+        ''
+          mkdir -p "$out"
+          cd $out
+          unzip $src
 
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-        binary=$(find . -executable -type f)
-        patchelf \
-          --set-interpreter $interpreter \
-          --set-rpath ${rtdeps} \
-          "$binary"
+          interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+          binary=$(find . -executable -type f)
+          patchelf \
+            --set-interpreter $interpreter \
+            --set-rpath ${rtdeps} \
+            "$binary"
 
-        # Workaround on
-        # LogLinuxPlatformFile:Warning: open('/nix/store/hash-ue4demos-demo/demo/demo/Saved/Config/CleanSourceConfigs/Engine.ini', Flags=0x00080241) failed: errno=2 (No such file or directory)
-        # for Vehicle, Shooter and Strategy games.
-        ls | grep ' ' && $(
-          haxname=$(ls | grep ' ' | sed 's/ //g'); \
-          haxpath=$(ls | grep ' ')/$haxname/Saved; \
-          mkdir -p "$haxpath"/Config/CleanSourceConfigs; \
-          ln -s /dev/null "$haxpath"/Config/CleanSourceConfigs/Engine.ini; \
-          mkdir -p "$haxpath"/Logs; \
-          ln -s /dev/null "$haxpath"/Logs/$haxname.log)
+          # Workaround on
+          # LogLinuxPlatformFile:Warning: open('/nix/store/hash-ue4demos-demo/demo/demo/Saved/Config/CleanSourceConfigs/Engine.ini', Flags=0x00080241) failed: errno=2 (No such file or directory)
+          # for Vehicle, Shooter and Strategy games.
+          ls | grep ' ' && $(
+            haxname=$(ls | grep ' ' | sed 's/ //g'); \
+            haxpath=$(ls | grep ' ')/$haxname/Saved; \
+            mkdir -p "$haxpath"/Config/CleanSourceConfigs; \
+            ln -s /dev/null "$haxpath"/Config/CleanSourceConfigs/Engine.ini; \
+            mkdir -p "$haxpath"/Logs; \
+            ln -s /dev/null "$haxpath"/Logs/$haxname.log)
 
-        # Executables are buried under a varied paths across demos.
-        mkdir bin
-        cd bin
-        ln -s "$out/$binary" $(basename "$out/$binary")
-      '';
+          # Executables are buried under a varied paths across demos.
+          mkdir bin
+          cd bin
+          ln -s "$out/$binary" $(basename "$out/$binary")
+        '';
 
       meta = {
         description = "Unreal Engine 4 Linux demos";
@@ -55,8 +53,8 @@ let
         license = stdenv.lib.licenses.unfree;
       };
     };
-
-in {
+in
+{
   tappy_chicken = buildDemo {
     name = "ue4demos-tappy_chicken";
     src = fetchurl {

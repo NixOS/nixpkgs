@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }: with lib;
-
 let
   cfg = config.services.dnscrypt-proxy2;
 in
-
 {
   options.services.dnscrypt-proxy2 = {
     enable = mkEnableOption "dnscrypt-proxy2";
@@ -24,7 +22,7 @@ in
         }
       '';
       type = types.attrs;
-      default = {};
+      default = { };
     };
 
     configFile = mkOption {

@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, tornado, pyyaml, funcparserlib
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, tornado
+, pyyaml
+, funcparserlib
 }:
 buildPythonPackage rec {
   pname = "graphite_beacon";

@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-jpeg";
 
-  asdFilesToKeep = ["cl-jpeg.asd"];
+  asdFilesToKeep = [ "cl-jpeg.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-jpeg DESCRIPTION

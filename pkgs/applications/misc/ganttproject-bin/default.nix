@@ -1,4 +1,7 @@
-{ stdenv, fetchzip, makeDesktopItem, makeWrapper
+{ stdenv
+, fetchzip
+, makeDesktopItem
+, makeWrapper
 , jre
 }:
 
@@ -8,8 +11,7 @@ stdenv.mkDerivation rec {
 
   src = let build = "r2364"; in fetchzip {
     sha256 = "0cclgyqv4f9pjsdlh93cqvgbzrp8ajvrpc2xszs03sknqz2kdh7r";
-    url = "https://dl.ganttproject.biz/ganttproject-${version}/"
-        + "ganttproject-${version}-${build}.zip";
+    url = "https://dl.ganttproject.biz/ganttproject-${version}/" + "ganttproject-${version}-${build}.zip";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -17,35 +19,34 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
-  installPhase = let
+  installPhase =
+    let
+      desktopItem = makeDesktopItem {
+        name = "ganttproject";
+        exec = "ganttproject";
+        icon = "ganttproject";
+        desktopName = "GanttProject";
+        genericName = "Shedule and manage projects";
+        comment = meta.description;
+        categories = "Office;Application;";
+      };
 
-    desktopItem = makeDesktopItem {
-      name = "ganttproject";
-      exec = "ganttproject";
-      icon = "ganttproject";
-      desktopName = "GanttProject";
-      genericName = "Shedule and manage projects";
-      comment = meta.description;
-      categories = "Office;Application;";
-    };
+      javaOptions = [
+        "-Dawt.useSystemAAFontSettings=on"
+      ];
+    in ''
+      mkdir -pv "$out/share/ganttproject"
+      cp -rv *  "$out/share/ganttproject"
 
-    javaOptions = [
-      "-Dawt.useSystemAAFontSettings=on"
-    ];
+      mkdir -pv "$out/bin"
+      wrapProgram "$out/share/ganttproject/ganttproject" \
+        --set JAVA_HOME "${jre}" \
+        --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
 
-  in ''
-    mkdir -pv "$out/share/ganttproject"
-    cp -rv *  "$out/share/ganttproject"
+      mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 
-    mkdir -pv "$out/bin"
-    wrapProgram "$out/share/ganttproject/ganttproject" \
-      --set JAVA_HOME "${jre}" \
-      --set _JAVA_OPTIONS "${builtins.toString javaOptions}"
-
-    mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
-
-    cp -rv "${desktopItem}/share/applications" "$out/share"
-  '';
+      cp -rv "${desktopItem}/share/applications" "$out/share"
+    '';
 
   meta = with stdenv.lib; {
     description = "Project scheduling and management";

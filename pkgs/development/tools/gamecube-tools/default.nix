@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, freeimage, libGL }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, freeimage
+, libGL
+}:
 
 stdenv.mkDerivation rec {
   version = "1.0.2";
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "devkitPro";
-    repo  = "gamecube-tools";
+    repo = "gamecube-tools";
     rev = "v${version}";
     sha256 = "0zvpkzqvl8iv4ndzhkjkmrzpampyzgb91spv0h2x2arl8zy4z7ca";
   };

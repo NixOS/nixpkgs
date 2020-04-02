@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   modSha256 = "1ll2cxhgf8hh19wzdykgc81c4yfcp8bzmfaif08nvvb63rhjdb5y";
-  subPackages = ["cmd/shfmt"];
+  subPackages = [ "cmd/shfmt" ];
 
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";

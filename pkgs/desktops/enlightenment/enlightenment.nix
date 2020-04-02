@@ -1,10 +1,31 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, alsaLib, bc,
-  bzip2, efl, gdbm, libXdmcp, libXrandr, libcap, libffi,
-  libpthreadstubs, libxcb, luajit, mesa, pam, pcre, xcbutilkeysyms,
-  xkeyboard_config,
-
-  bluetoothSupport ? true, bluez5,
-  pulseSupport ? !stdenv.isDarwin, libpulseaudio,
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, alsaLib
+, bc
+, bzip2
+, efl
+, gdbm
+, libXdmcp
+, libXrandr
+, libcap
+, libffi
+, libpthreadstubs
+, libxcb
+, luajit
+, mesa
+, pam
+, pcre
+, xcbutilkeysyms
+, xkeyboard_config
+, bluetoothSupport ? true
+, bluez5
+, pulseSupport ? !stdenv.isDarwin
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +46,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib
-    bc  # for the Everything module calculator mode
+    bc # for the Everything module calculator mode
     bzip2
     efl
     gdbm

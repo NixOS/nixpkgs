@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pyparsing, six, pytest, pretend }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pyparsing
+, six
+, pytest
+, pretend
+}:
 
 buildPythonPackage rec {
   pname = "packaging";

@@ -7,7 +7,8 @@ let
   autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
 
   configDir = pkgs.writeTextFile { name = "kmscon-config"; destination = "/kmscon.conf"; text = cfg.extraConfig; };
-in {
+in
+{
   options = {
     services.kmscon = {
       enable = mkOption {
@@ -83,10 +84,10 @@ in {
     '';
 
     systemd.units."autovt@.service".unit = pkgs.runCommand "unit" { preferLocalBuild = true; }
-        ''
-          mkdir -p $out
-          ln -s ${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service $out/autovt@.service
-        '';
+      ''
+        mkdir -p $out
+        ln -s ${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service $out/autovt@.service
+      '';
 
     systemd.services.systemd-vconsole-setup.enable = false;
 

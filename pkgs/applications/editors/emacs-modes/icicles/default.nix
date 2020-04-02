@@ -1,5 +1,4 @@
 { stdenv, fetchurl, emacs }:
-
 let
   modules = [
     { name = "icicles.el"; sha256 = "1744n5g2kmv3r261ipa0fhrgnapl0chxz57bbbls3bp30cnnfrs7"; }
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "2019-02-22";
   pname = "icicles";
 
-  srcs = forAll ({name, sha256}: fetchurl { url = "https://www.emacswiki.org/emacs/download/${name}"; inherit sha256; });
+  srcs = forAll ({ name, sha256 }: fetchurl { url = "https://www.emacswiki.org/emacs/download/${name}"; inherit sha256; });
 
   buildInputs = [ emacs ];
 
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.emacswiki.org/emacs/Icicles;
     description = "Enhance Emacs minibuffer input with cycling and powerful completion";
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms   = emacs.meta.platforms;
+    platforms = emacs.meta.platforms;
     maintainers = with stdenv.lib.maintainers; [ scolobb ];
   };
 }

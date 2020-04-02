@@ -1,12 +1,26 @@
-{ stdenv, fetchzip, fetchurl, fetchpatch, cmake, pkgconfig
-, zlib, libpng
-, enableGSL ? true, gsl
-, enableGhostScript ? true, ghostscript
-, enableMuPDF ? true, mupdf
-, enableJPEG2K ? false, jasper ? null  # disabled by default, jasper has unfixed CVE
-, enableDJVU ? true, djvulibre
-, enableGOCR ? false, gocr # Disabled by default due to crashes
-, enableTesseract ? true, leptonica, tesseract4
+{ stdenv
+, fetchzip
+, fetchurl
+, fetchpatch
+, cmake
+, pkgconfig
+, zlib
+, libpng
+, enableGSL ? true
+, gsl
+, enableGhostScript ? true
+, ghostscript
+, enableMuPDF ? true
+, mupdf
+, enableJPEG2K ? false
+, jasper ? null  # disabled by default, jasper has unfixed CVE
+, enableDJVU ? true
+, djvulibre
+, enableGOCR ? false
+, gocr # Disabled by default due to crashes
+, enableTesseract ? true
+, leptonica
+, tesseract4
 }:
 
 with stdenv.lib;
@@ -35,23 +49,23 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs =
-  let
-    #  The patches below were constructed by taking the files from k2pdfopt in
-    #  the {mupdf,leptonica,tesseract}_mod/ directories, replacing the
-    #  corresponding files in the respective source trees, resolving any errors
-    #  with more recent versions of these depencencies, and running diff.
-    mupdf_modded = mupdf.overrideAttrs (attrs: {
-      patches = attrs.patches ++ [ ./mupdf.patch ]; # Last verified with mupdf 1.16.1
-    });
-    leptonica_modded = leptonica.overrideAttrs (attrs: {
-      patches = [ ./leptonica.patch ]; # Last verified with leptonica 1.78.0
-    });
-    tesseract_modded = tesseract4.override {
-      tesseractBase = tesseract4.tesseractBase.overrideAttrs (_: {
-        patches = [ ./tesseract.patch ]; # Last verified with tesseract 1.4
+    let
+      #  The patches below were constructed by taking the files from k2pdfopt in
+      #  the {mupdf,leptonica,tesseract}_mod/ directories, replacing the
+      #  corresponding files in the respective source trees, resolving any errors
+      #  with more recent versions of these depencencies, and running diff.
+      mupdf_modded = mupdf.overrideAttrs (attrs: {
+        patches = attrs.patches ++ [ ./mupdf.patch ]; # Last verified with mupdf 1.16.1
       });
-    };
-  in
+      leptonica_modded = leptonica.overrideAttrs (attrs: {
+        patches = [ ./leptonica.patch ]; # Last verified with leptonica 1.78.0
+      });
+      tesseract_modded = tesseract4.override {
+        tesseractBase = tesseract4.tesseractBase.overrideAttrs (_: {
+          patches = [ ./tesseract.patch ]; # Last verified with tesseract 1.4
+        });
+      };
+    in
     [ zlib libpng ] ++
     optional enableGSL gsl ++
     optional enableGhostScript ghostscript ++
@@ -79,4 +93,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bosu danielfullmer ];
   };
 }
-

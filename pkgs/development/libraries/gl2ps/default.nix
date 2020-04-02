@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, cmake
-, zlib, libGL, libGLU, libpng, freeglut }:
+{ stdenv
+, fetchurl
+, cmake
+, zlib
+, libGL
+, libGLU
+, libpng
+, freeglut
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4.0";
@@ -24,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "An OpenGL to PostScript printing library";
     platforms = platforms.all;
     license = licenses.lgpl2;
-    maintainers = with maintainers; [raskin twhitehead];
+    maintainers = with maintainers; [ raskin twhitehead ];
   };
 }

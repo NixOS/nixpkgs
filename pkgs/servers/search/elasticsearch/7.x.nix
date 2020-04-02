@@ -4,7 +4,9 @@
 , fetchurl
 , makeWrapper
 , jre_headless
-, utillinux, gnugrep, coreutils
+, utillinux
+, gnugrep
+, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -17,11 +19,11 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "1s27bzx5y8vcd95qrw6av3fhyxb45219x9ahwaxa2cygmbpighrp";
+      x86_64-linux = "1s27bzx5y8vcd95qrw6av3fhyxb45219x9ahwaxa2cygmbpighrp";
       x86_64-darwin = "1ia3byir3i5qaarmcaysrg3dhnxjmxnf0m0kzyf61g9aiy87gb7q";
     }
     else {
-      x86_64-linux  = "005i7d7ag10qkn7bkx7md50iihvcvc84hay2j94wvsm7yghhbmi3";
+      x86_64-linux = "005i7d7ag10qkn7bkx7md50iihvcvc84hay2j94wvsm7yghhbmi3";
       x86_64-darwin = "01f81720rbzdqc0g1xymhz2lflldfbnb0rh7mpki99pss28vj9sh";
     };
 in
@@ -47,7 +49,7 @@ stdenv.mkDerivation (rec {
   '';
 
   buildInputs = [ makeWrapper jre_headless utillinux ]
-             ++ optional enableUnfree zlib;
+    ++ optional enableUnfree zlib;
 
   installPhase = ''
     mkdir -p $out

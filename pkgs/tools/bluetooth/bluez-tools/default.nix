@@ -1,10 +1,15 @@
-{ stdenv, autoreconfHook, readline
-, fetchFromGitHub, glib, pkgconfig }:
+{ stdenv
+, autoreconfHook
+, readline
+, fetchFromGitHub
+, glib
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
-  date    = "2016-12-12";
-  name    = "bluez-tools-${date}";
-  rev     = "97efd29";
+  date = "2016-12-12";
+  name = "bluez-tools-${date}";
+  rev = "97efd29";
 
   src = fetchFromGitHub {
     inherit rev;

@@ -14,7 +14,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--features=all" ];
   nativeBuildInputs = [
-    pkgconfig cargo rustc
+    pkgconfig
+    cargo
+    rustc
   ];
   buildInputs = [
     openssl

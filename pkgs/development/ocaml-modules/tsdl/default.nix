@@ -3,40 +3,38 @@
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "tsdl is not available for OCaml ${ocaml.version}"
 else
+  let
+    pname = "tsdl";
+    version = "0.9.4";
+    webpage = "https://erratique.ch/software/${pname}";
+  in
+  stdenv.mkDerivation {
+    name = "ocaml${ocaml.version}-${pname}-${version}";
 
-let
-  pname = "tsdl";
-  version = "0.9.4";
-  webpage = "https://erratique.ch/software/${pname}";
-in
+    src = fetchurl {
+      url = "${webpage}/releases/${pname}-${version}.tbz";
+      sha256 = "13af37w2wybx8yzgjr5zz5l50402ldl614qiwphl1q69hig5mag2";
+    };
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ocaml findlib ocamlbuild topkg result ocb-stubblr ];
+    propagatedBuildInputs = [ SDL2 ctypes ];
 
-  src = fetchurl {
-    url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "13af37w2wybx8yzgjr5zz5l50402ldl614qiwphl1q69hig5mag2";
-  };
+    preConfigure = ''
+      # The following is done to avoid an additional dependency (ncurses)
+      # due to linking in the custom bytecode runtime. Instead, just
+      # compile directly into a native binary, even if it's just a
+      # temporary build product.
+      substituteInPlace myocamlbuild.ml \
+        --replace ".byte" ".native"
+    '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib ocamlbuild topkg result ocb-stubblr ];
-  propagatedBuildInputs = [ SDL2 ctypes ];
+    inherit (topkg) buildPhase installPhase;
 
-  preConfigure = ''
-    # The following is done to avoid an additional dependency (ncurses)
-    # due to linking in the custom bytecode runtime. Instead, just
-    # compile directly into a native binary, even if it's just a
-    # temporary build product.
-    substituteInPlace myocamlbuild.ml \
-      --replace ".byte" ".native"
-  '';
-
-  inherit (topkg) buildPhase installPhase;
-
-  meta = with stdenv.lib; {
-    homepage = webpage;
-    description = "Thin bindings to the cross-platform SDL library";
-    license = licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
-  };
-}
+    meta = with stdenv.lib; {
+      homepage = webpage;
+      description = "Thin bindings to the cross-platform SDL library";
+      license = licenses.bsd3;
+      platforms = ocaml.meta.platforms or [ ];
+    };
+  }

@@ -1,36 +1,41 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
-
 let
-
   # The configuration to install.
-  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0
-               }:
-    pkgs.writeText "configuration.nix" ''
-      { config, lib, pkgs, modulesPath, ... }:
+  makeConfig =
+    { bootLoader
+    , grubVersion
+    , grubDevice
+    , grubIdentifier
+    , grubUseEfi
+    , extraConfig
+    , forceGrubReinstallCount ? 0
+    }:
+      pkgs.writeText "configuration.nix" ''
+        { config, lib, pkgs, modulesPath, ... }:
 
-      { imports =
-          [ ./hardware-configuration.nix
-            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
-          ];
+        { imports =
+            [ ./hardware-configuration.nix
+              <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+            ];
 
-        # To ensure that we can rebuild the grub configuration on the nixos-rebuild
-        system.extraDependencies = with pkgs; [ stdenvNoCC ];
+          # To ensure that we can rebuild the grub configuration on the nixos-rebuild
+          system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
-        ${optionalString (bootLoader == "grub") ''
-          boot.loader.grub.version = ${toString grubVersion};
-          ${optionalString (grubVersion == 1) ''
-            boot.loader.grub.splashImage = null;
-          ''}
+          ${optionalString (bootLoader == "grub") ''
+        boot.loader.grub.version = ${toString grubVersion};
+        ${optionalString (grubVersion == 1) ''
+        boot.loader.grub.splashImage = null;
+      ''}
 
-          boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-          ${if grubUseEfi then ''
+        boot.loader.grub.extraConfig = "serial; terminal_output.serial";
+        ${
+          if grubUseEfi then ''
             boot.loader.grub.device = "nodev";
             boot.loader.grub.efiSupport = true;
             boot.loader.grub.efiInstallAsRemovable = true; # XXX: needed for OVMF?
@@ -39,230 +44,246 @@ let
             boot.loader.grub.fsIdentifier = "${grubIdentifier}";
           ''}
 
-          boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
-        ''}
+        boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
+      ''}
 
-        ${optionalString (bootLoader == "systemd-boot") ''
-          boot.loader.systemd-boot.enable = true;
-        ''}
+          ${optionalString (bootLoader == "systemd-boot") ''
+        boot.loader.systemd-boot.enable = true;
+      ''}
 
-        users.users.alice = {
-          isNormalUser = true;
-          home = "/home/alice";
-          description = "Alice Foobar";
-        };
+          users.users.alice = {
+            isNormalUser = true;
+            home = "/home/alice";
+            description = "Alice Foobar";
+          };
 
-        hardware.enableAllFirmware = lib.mkForce false;
+          hardware.enableAllFirmware = lib.mkForce false;
 
-        ${replaceChars ["\n"] ["\n  "] extraConfig}
-      }
-    '';
+          ${replaceChars [ "\n" ] [ "\n  " ] extraConfig}
+        }
+      '';
 
 
   # The test script boots a NixOS VM, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
-                  , grubIdentifier, preBootCommands, extraConfig
-                  , testCloneConfig
-                  }:
-    let iface = if grubVersion == 1 then "ide" else "virtio";
+  testScriptFun =
+    { bootLoader
+    , createPartitions
+    , grubVersion
+    , grubDevice
+    , grubUseEfi
+    , grubIdentifier
+    , preBootCommands
+    , extraConfig
+    , testCloneConfig
+    }:
+      let
+        iface = if grubVersion == 1 then "ide" else "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
-        bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
-    in if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
-      throw "Non-EFI boot methods are only supported on i686 / x86_64"
-    else ''
-      def assemble_qemu_flags():
-          flags = "-cpu host"
-          ${if system == "x86_64-linux"
+        bios = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
+      in
+        if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
+          throw "Non-EFI boot methods are only supported on i686 / x86_64"
+        else ''
+          def assemble_qemu_flags():
+              flags = "-cpu host"
+              ${
+            if system == "x86_64-linux"
             then ''flags += " -m 768"''
             else ''flags += " -m 512 -enable-kvm -machine virt,gic-version=host"''
           }
-          return flags
+              return flags
 
 
-      qemu_flags = {"qemuFlags": assemble_qemu_flags()}
+          qemu_flags = {"qemuFlags": assemble_qemu_flags()}
 
-      hd_flags = {
-          "hdaInterface": "${iface}",
-          "hda": "vm-state-machine/machine.qcow2",
-      }
-      ${optionalString isEfi ''
-        hd_flags.update(
-            bios="${pkgs.OVMF.fd}/FV/${bios}"
-        )''
-      }
-      default_flags = {**hd_flags, **qemu_flags}
-
-
-      def create_machine_named(name):
-          return create_machine({**default_flags, "name": "boot-after-install"})
+          hd_flags = {
+              "hdaInterface": "${iface}",
+              "hda": "vm-state-machine/machine.qcow2",
+          }
+          ${optionalString isEfi ''
+          hd_flags.update(
+              bios="${pkgs.OVMF.fd}/FV/${bios}"
+          )''
+          }
+          default_flags = {**hd_flags, **qemu_flags}
 
 
-      machine.start()
+          def create_machine_named(name):
+              return create_machine({**default_flags, "name": "boot-after-install"})
 
-      with subtest("Assert readiness of login prompt"):
-          machine.succeed("echo hello")
-          machine.wait_for_unit("nixos-manual")
 
-      with subtest("Wait for hard disks to appear in /dev"):
-          machine.succeed("udevadm settle")
+          machine.start()
 
-      ${createPartitions}
+          with subtest("Assert readiness of login prompt"):
+              machine.succeed("echo hello")
+              machine.wait_for_unit("nixos-manual")
 
-      with subtest("Create the NixOS configuration"):
-          machine.succeed("nixos-generate-config --root /mnt")
-          machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
-          machine.copy_from_host(
-              "${ makeConfig {
-                    inherit bootLoader grubVersion grubDevice grubIdentifier
-                            grubUseEfi extraConfig;
-                  }
-              }",
-              "/mnt/etc/nixos/configuration.nix",
-          )
+          with subtest("Wait for hard disks to appear in /dev"):
+              machine.succeed("udevadm settle")
 
-      with subtest("Perform the installation"):
-          machine.succeed("nixos-install < /dev/null >&2")
+          ${createPartitions}
 
-      with subtest("Do it again to make sure it's idempotent"):
-          machine.succeed("nixos-install < /dev/null >&2")
+          with subtest("Create the NixOS configuration"):
+              machine.succeed("nixos-generate-config --root /mnt")
+              machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
+              machine.copy_from_host(
+                  "${ makeConfig {
+            inherit bootLoader grubVersion grubDevice grubIdentifier
+                grubUseEfi extraConfig;
+          }
+          }",
+                  "/mnt/etc/nixos/configuration.nix",
+              )
 
-      with subtest("Shutdown system after installation"):
-          machine.succeed("umount /mnt/boot || true")
-          machine.succeed("umount /mnt")
-          machine.succeed("sync")
-          machine.shutdown()
+          with subtest("Perform the installation"):
+              machine.succeed("nixos-install < /dev/null >&2")
 
-      # Now see if we can boot the installation.
-      machine = create_machine_named("boot-after-install")
+          with subtest("Do it again to make sure it's idempotent"):
+              machine.succeed("nixos-install < /dev/null >&2")
 
-      # For example to enter LUKS passphrase.
-      ${preBootCommands}
+          with subtest("Shutdown system after installation"):
+              machine.succeed("umount /mnt/boot || true")
+              machine.succeed("umount /mnt")
+              machine.succeed("sync")
+              machine.shutdown()
 
-      with subtest("Assert that /boot get mounted"):
-          machine.wait_for_unit("local-fs.target")
-          ${if bootLoader == "grub"
-              then ''machine.succeed("test -e /boot/grub")''
-              else ''machine.succeed("test -e /boot/loader/loader.conf")''
+          # Now see if we can boot the installation.
+          machine = create_machine_named("boot-after-install")
+
+          # For example to enter LUKS passphrase.
+          ${preBootCommands}
+
+          with subtest("Assert that /boot get mounted"):
+              machine.wait_for_unit("local-fs.target")
+              ${
+            if bootLoader == "grub"
+            then ''machine.succeed("test -e /boot/grub")''
+            else ''machine.succeed("test -e /boot/loader/loader.conf")''
           }
 
-      with subtest("Check whether /root has correct permissions"):
-          assert "700" in machine.succeed("stat -c '%a' /root")
+          with subtest("Check whether /root has correct permissions"):
+              assert "700" in machine.succeed("stat -c '%a' /root")
 
-      with subtest("Assert swap device got activated"):
-          # uncomment once https://bugs.freedesktop.org/show_bug.cgi?id=86930 is resolved
-          machine.wait_for_unit("swap.target")
-          machine.succeed("cat /proc/swaps | grep -q /dev")
+          with subtest("Assert swap device got activated"):
+              # uncomment once https://bugs.freedesktop.org/show_bug.cgi?id=86930 is resolved
+              machine.wait_for_unit("swap.target")
+              machine.succeed("cat /proc/swaps | grep -q /dev")
 
-      with subtest("Check that the store is in good shape"):
-          machine.succeed("nix-store --verify --check-contents >&2")
+          with subtest("Check that the store is in good shape"):
+              machine.succeed("nix-store --verify --check-contents >&2")
 
-      with subtest("Check whether the channel works"):
-          machine.succeed("nix-env -iA nixos.procps >&2")
-          assert ".nix-profile" in machine.succeed("type -tP ps | tee /dev/stderr")
+          with subtest("Check whether the channel works"):
+              machine.succeed("nix-env -iA nixos.procps >&2")
+              assert ".nix-profile" in machine.succeed("type -tP ps | tee /dev/stderr")
 
-      with subtest(
-          "Check that the daemon works, and that non-root users can run builds "
-          "(this will build a new profile generation through the daemon)"
-      ):
-          machine.succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2")
+          with subtest(
+              "Check that the daemon works, and that non-root users can run builds "
+              "(this will build a new profile generation through the daemon)"
+          ):
+              machine.succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2")
 
-      with subtest("Configure system with writable Nix store on next boot"):
+          with subtest("Configure system with writable Nix store on next boot"):
+              # we're not using copy_from_host here because the installer image
+              # doesn't know about the host-guest sharing mechanism.
+              machine.copy_from_host_via_shell(
+                  "${ makeConfig {
+            inherit bootLoader grubVersion grubDevice grubIdentifier
+                grubUseEfi extraConfig;
+            forceGrubReinstallCount = 1;
+          }
+          }",
+                  "/etc/nixos/configuration.nix",
+              )
+
+          with subtest("Check whether nixos-rebuild works"):
+              machine.succeed("nixos-rebuild switch >&2")
+
+          with subtest("Test nixos-option"):
+              kernel_modules = machine.succeed("nixos-option boot.initrd.kernelModules")
+              assert "virtio_console" in kernel_modules
+              assert "List of modules" in kernel_modules
+              assert "qemu-guest.nix" in kernel_modules
+
+          machine.shutdown()
+
+          # Check whether a writable store build works
+          machine = create_machine_named("rebuild-switch")
+          ${preBootCommands}
+          machine.wait_for_unit("multi-user.target")
+
           # we're not using copy_from_host here because the installer image
           # doesn't know about the host-guest sharing mechanism.
           machine.copy_from_host_via_shell(
               "${ makeConfig {
-                    inherit bootLoader grubVersion grubDevice grubIdentifier
-                            grubUseEfi extraConfig;
-                    forceGrubReinstallCount = 1;
-                  }
-              }",
+            inherit bootLoader grubVersion grubDevice grubIdentifier
+                grubUseEfi extraConfig;
+            forceGrubReinstallCount = 2;
+          }
+          }",
               "/etc/nixos/configuration.nix",
           )
+          machine.succeed("nixos-rebuild boot >&2")
+          machine.shutdown()
 
-      with subtest("Check whether nixos-rebuild works"):
-          machine.succeed("nixos-rebuild switch >&2")
+          # And just to be sure, check that the machine still boots after
+          # "nixos-rebuild switch".
+          machine = create_machine_named("boot-after-rebuild-switch")
+          ${preBootCommands}
+          machine.wait_for_unit("network.target")
+          machine.shutdown()
 
-      with subtest("Test nixos-option"):
-          kernel_modules = machine.succeed("nixos-option boot.initrd.kernelModules")
-          assert "virtio_console" in kernel_modules
-          assert "List of modules" in kernel_modules
-          assert "qemu-guest.nix" in kernel_modules
+          # Tests for validating clone configuration entries in grub menu
+        '' + optionalString testCloneConfig ''
+          # Reboot Machine
+          machine = create_machine_named("clone-default-config")
+          ${preBootCommands}
+          machine.wait_for_unit("multi-user.target")
 
-      machine.shutdown()
+          with subtest("Booted configuration name should be 'Home'"):
+              # This is not the name that shows in the grub menu.
+              # The default configuration is always shown as "Default"
+              machine.succeed("cat /run/booted-system/configuration-name >&2")
+              assert "Home" in machine.succeed("cat /run/booted-system/configuration-name")
 
-      # Check whether a writable store build works
-      machine = create_machine_named("rebuild-switch")
-      ${preBootCommands}
-      machine.wait_for_unit("multi-user.target")
+          with subtest("We should **not** find a file named /etc/gitconfig"):
+              machine.fail("test -e /etc/gitconfig")
 
-      # we're not using copy_from_host here because the installer image
-      # doesn't know about the host-guest sharing mechanism.
-      machine.copy_from_host_via_shell(
-          "${ makeConfig {
-                inherit bootLoader grubVersion grubDevice grubIdentifier
-                grubUseEfi extraConfig;
-                forceGrubReinstallCount = 2;
-              }
-          }",
-          "/etc/nixos/configuration.nix",
-      )
-      machine.succeed("nixos-rebuild boot >&2")
-      machine.shutdown()
+          with subtest("Set grub to boot the second configuration"):
+              machine.succeed("grub-reboot 1")
 
-      # And just to be sure, check that the machine still boots after
-      # "nixos-rebuild switch".
-      machine = create_machine_named("boot-after-rebuild-switch")
-      ${preBootCommands}
-      machine.wait_for_unit("network.target")
-      machine.shutdown()
+          machine.shutdown()
 
-      # Tests for validating clone configuration entries in grub menu
-    ''
-    + optionalString testCloneConfig ''
-      # Reboot Machine
-      machine = create_machine_named("clone-default-config")
-      ${preBootCommands}
-      machine.wait_for_unit("multi-user.target")
+          # Reboot Machine
+          machine = create_machine_named("clone-alternate-config")
+          ${preBootCommands}
 
-      with subtest("Booted configuration name should be 'Home'"):
-          # This is not the name that shows in the grub menu.
-          # The default configuration is always shown as "Default"
-          machine.succeed("cat /run/booted-system/configuration-name >&2")
-          assert "Home" in machine.succeed("cat /run/booted-system/configuration-name")
+          machine.wait_for_unit("multi-user.target")
+          with subtest("Booted configuration name should be Work"):
+              machine.succeed("cat /run/booted-system/configuration-name >&2")
+              assert "Work" in machine.succeed("cat /run/booted-system/configuration-name")
 
-      with subtest("We should **not** find a file named /etc/gitconfig"):
-          machine.fail("test -e /etc/gitconfig")
+          with subtest("We should find a file named /etc/gitconfig"):
+              machine.succeed("test -e /etc/gitconfig")
 
-      with subtest("Set grub to boot the second configuration"):
-          machine.succeed("grub-reboot 1")
-
-      machine.shutdown()
-
-      # Reboot Machine
-      machine = create_machine_named("clone-alternate-config")
-      ${preBootCommands}
-
-      machine.wait_for_unit("multi-user.target")
-      with subtest("Booted configuration name should be Work"):
-          machine.succeed("cat /run/booted-system/configuration-name >&2")
-          assert "Work" in machine.succeed("cat /run/booted-system/configuration-name")
-
-      with subtest("We should find a file named /etc/gitconfig"):
-          machine.succeed("test -e /etc/gitconfig")
-
-      machine.shutdown()
-    '';
+          machine.shutdown()
+        '';
 
 
   makeInstallerTest = name:
-    { createPartitions, preBootCommands ? "", extraConfig ? ""
-    , extraInstallerConfig ? {}
+    { createPartitions
+    , preBootCommands ? ""
+    , extraConfig ? ""
+    , extraInstallerConfig ? { }
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
-    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
-    , enableOCR ? false, meta ? {}
+    , grubVersion ? 2
+    , grubDevice ? "/dev/vda"
+    , grubIdentifier ? "uuid"
+    , grubUseEfi ? false
+    , enableOCR ? false
+    , meta ? { }
     , testCloneConfig ? false
     }:
     makeTest {
@@ -270,7 +291,7 @@ let
       name = "installer-" + name;
       meta = with pkgs.stdenv.lib.maintainers; {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
-        maintainers = (meta.maintainers or []);
+        maintainers = (meta.maintainers or [ ]);
       };
       nodes = {
 
@@ -337,41 +358,41 @@ let
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
-                testCloneConfig;
+          grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+          testCloneConfig;
       };
     };
 
-    makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name {
-      createPartitions = ''
-        machine.succeed(
-            "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-            + " mkpart primary ext2 1M 50MB"  # /boot
-            + " mkpart primary linux-swap 50M 1024M"
-            + " mkpart primary 1024M -1s",  # LUKS
-            "udevadm settle",
-            "mkswap /dev/vda2 -L swap",
-            "swapon -L swap",
-            "modprobe dm_mod dm_crypt",
-            "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
-            "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
-            "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
-            "mount LABEL=nixos /mnt",
-            "mkfs.ext3 -L boot /dev/vda1",
-            "mkdir -p /mnt/boot",
-            "mount LABEL=boot /mnt/boot",
-        )
-      '';
-      extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-      '';
-      enableOCR = true;
-      preBootCommands = ''
-        machine.start()
-        machine.wait_for_text("Passphrase for")
-        machine.send_chars("supersecret\n")
-      '';
-    };
+  makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name {
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 50MB"  # /boot
+          + " mkpart primary linux-swap 50M 1024M"
+          + " mkpart primary 1024M -1s",  # LUKS
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "modprobe dm_mod dm_crypt",
+          "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
+          "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+      )
+    '';
+    extraConfig = ''
+      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+    '';
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("Passphrase for")
+      machine.send_chars("supersecret\n")
+    '';
+  };
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
@@ -429,9 +450,8 @@ let
     '';
     testCloneConfig = true;
   };
-
-
-in {
+in
+{
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
 

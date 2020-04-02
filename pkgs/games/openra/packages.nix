@@ -1,5 +1,4 @@
 pkgs:
-
 let
   /*  Building an engine or out-of-tree mod is very similar,
       but different enough not to be able to build them with the same package definition,
@@ -37,8 +36,8 @@ let
       $out/thirdparty/fetch-thirdparty-deps.sh
     '';
   } // args));
-
-in rec {
+in
+rec {
   # The whole attribute set is destructered to ensure those (and only those) attributes are given
   # and to provide defaults for those that are optional.
   buildOpenRAEngine = { name ? null, version, description, homepage, mods, src, installExperimental ? "" }@engine:
@@ -48,7 +47,7 @@ in rec {
     }); in if name == null then builder else builder name;
 
   # See `buildOpenRAEngine`.
-  buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine }@mod: ({ version, mods ? [], src }@engine:
+  buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine }@mod: ({ version, mods ? [ ], src }@engine:
     let builder = name: pkgs.callPackage ./mod.nix (common // {
       mod = mod // { inherit name; };
       engine = engine // { inherit mods; };

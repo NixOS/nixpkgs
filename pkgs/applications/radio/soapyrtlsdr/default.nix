@@ -1,11 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, rtl-sdr, soapysdr
-} :
-
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, rtl-sdr
+, soapysdr
+}:
 let
   version = "0.3.0";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "soapyrtlsdr";
   inherit version;
 

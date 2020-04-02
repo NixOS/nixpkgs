@@ -11,7 +11,7 @@
   # This is a list of attribute sets {source, target} where `source'
   # is the file system object (regular file or directory) to be
   # grafted in the file system at path `target'.
-, contents ? []
+, contents ? [ ]
 
 , # Type of partition table to use; either "legacy", "efi", or "none".
   # For "efi" images, the GPT partition table is used and a mandatory ESP
@@ -50,23 +50,24 @@ assert partitionTableType != "none" -> fsType == "ext4";
 with lib;
 
 let format' = format; in let
-
   format = if format' == "qcow2-compressed" then "qcow2" else format';
 
   compress = optionalString (format' == "qcow2-compressed") "-c";
 
   filename = "nixos." + {
     qcow2 = "qcow2";
-    vpc   = "vhd";
-    raw   = "img";
+    vpc = "vhd";
+    raw = "img";
   }.${format};
 
-  rootPartition = { # switch-case
+  rootPartition = {
+    # switch-case
     legacy = "1";
     efi = "2";
   }.${partitionTableType};
 
-  partitionDiskScript = { # switch-case
+  partitionDiskScript = {
+    # switch-case
     legacy = ''
       parted --script $diskImage -- \
         mklabel msdos \
@@ -85,7 +86,7 @@ let format' = format; in let
   nixpkgs = cleanSource pkgs.path;
 
   # FIXME: merge with channel.nix / make-channel.nix.
-  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
+  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" { } ''
     mkdir -p $out
     cp -prd ${nixpkgs.outPath} $out/nixos
     chmod -R u+w $out/nixos
@@ -97,7 +98,8 @@ let format' = format; in let
   '';
 
   binPath = with pkgs; makeBinPath (
-    [ rsync
+    [
+      rsync
       utillinux
       parted
       e2fsprogs
@@ -105,7 +107,8 @@ let format' = format; in let
       config.system.build.nixos-install
       config.system.build.nixos-enter
       nix
-    ] ++ stdenv.initialPath);
+    ] ++ stdenv.initialPath
+  );
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
@@ -133,14 +136,15 @@ let format' = format; in let
 
     ${partitionDiskScript}
 
-    ${if partitionTableType != "none" then ''
-      # Get start & length of the root partition in sectors to $START and $SECTORS.
-      eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
+    ${
+      if partitionTableType != "none" then ''
+        # Get start & length of the root partition in sectors to $START and $SECTORS.
+        eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
-    '' else ''
-      mkfs.${fsType} -F -L ${label} $diskImage
-    ''}
+        mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      '' else ''
+        mkfs.${fsType} -F -L ${label} $diskImage
+      ''}
 
     root="$PWD/root"
     mkdir -p $root
@@ -187,21 +191,24 @@ let format' = format; in let
     echo "copying staging root to image..."
     cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* /
   '';
-in pkgs.vmTools.runInLinuxVM (
+in
+pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
-    { preVM = prepareImage;
-      buildInputs = with pkgs; [ utillinux e2fsprogs dosfstools ];
-      postVM = ''
-        ${if format == "raw" then ''
+  {
+    preVM = prepareImage;
+    buildInputs = with pkgs; [ utillinux e2fsprogs dosfstools ];
+    postVM = ''
+      ${
+        if format == "raw" then ''
           mv $diskImage $out/${filename}
         '' else ''
           ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
         ''}
-        diskImage=$out/${filename}
-        ${postVM}
-      '';
-      memSize = 1024;
-    }
+      diskImage=$out/${filename}
+      ${postVM}
+    '';
+    memSize = 1024;
+  }
     ''
       export PATH=${binPath}:$PATH
 
@@ -218,16 +225,16 @@ in pkgs.vmTools.runInLinuxVM (
       # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
       # '-E offset=X' option, so we can't do this outside the VM.
       ${optionalString (partitionTableType == "efi") ''
-        mkdir -p /mnt/boot
-        mkfs.vfat -n ESP /dev/vda1
-        mount /dev/vda1 /mnt/boot
-      ''}
+      mkdir -p /mnt/boot
+      mkfs.vfat -n ESP /dev/vda1
+      mount /dev/vda1 /mnt/boot
+    ''}
 
       # Install a configuration.nix
       mkdir -p /mnt/etc/nixos
       ${optionalString (configFile != null) ''
-        cp ${configFile} /mnt/etc/nixos/configuration.nix
-      ''}
+      cp ${configFile} /mnt/etc/nixos/configuration.nix
+    ''}
 
       # Set up core system link, GRUB, etc.
       NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
@@ -241,7 +248,7 @@ in pkgs.vmTools.runInLinuxVM (
       # mount, so the `-c 0` and `-i 0` don't affect it. Setting it to `now` doesn't produce deterministic
       # output, of course, but we can fix that when/if we start making images deterministic.
       ${optionalString (fsType == "ext4") ''
-        tune2fs -T now -c 0 -i 0 $rootDisk
-      ''}
+      tune2fs -T now -c 0 -i 0 $rootDisk
+    ''}
     ''
 )

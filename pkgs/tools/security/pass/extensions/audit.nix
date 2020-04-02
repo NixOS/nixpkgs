@@ -1,9 +1,8 @@
 { stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper }:
-
 let
   pythonEnv = pythonPackages.python.withPackages (p: [ p.requests ]);
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pass-audit";
   version = "0.1";
 

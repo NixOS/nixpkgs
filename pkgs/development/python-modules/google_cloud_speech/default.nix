@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, google_api_core, pytest, mock }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, google_api_core
+, pytest
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";

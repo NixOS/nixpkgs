@@ -25,26 +25,27 @@ rec {
     sha256 = "07axg57mqm3jbnm4lawx0h3r2h56xv9acwzjppryfklw4c27f5hh";
   };
 
-  postPatch = (if tex == null then ''
-    gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else if extraFonts then ''
-    gunzip < ${extraFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if chineseFonts then ''
-    gunzip < ${chineseFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if japaneseFonts then ''
-    gunzip < ${japaneseFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if koreanFonts then ''
-    gunzip < ${koreanFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "");
+  postPatch = (
+    if tex == null then ''
+      gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)
+    '' else if extraFonts then ''
+      gunzip < ${extraFontsSrc} | (cd TeXmacs && tar xvf -)
+    '' else "") + (
+    if chineseFonts then ''
+      gunzip < ${chineseFontsSrc} | (cd TeXmacs && tar xvf -)
+    '' else "") + (
+    if japaneseFonts then ''
+      gunzip < ${japaneseFontsSrc} | (cd TeXmacs && tar xvf -)
+    '' else "") + (
+    if koreanFonts then ''
+      gunzip < ${koreanFontsSrc} | (cd TeXmacs && tar xvf -)
+    '' else "");
 
 
   meta = {
     description = "WYSIWYW editing platform with special features for scientists";
     longDescription =
-    '' GNU TeXmacs is a free wysiwyw (what you see is what you want)
+      '' GNU TeXmacs is a free wysiwyw (what you see is what you want)
     editing platform with special features for scientists.  The software
     aims to provide a unified and user friendly framework for editing
     structured documents with different types of content (text,

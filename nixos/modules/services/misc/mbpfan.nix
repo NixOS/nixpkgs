@@ -1,12 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.mbpfan;
   verbose = if cfg.verbose then "v" else "";
-
-in {
+in
+{
   options.services.mbpfan = {
     enable = mkEnableOption "mbpfan, fan controller daemon for Apple Macs and MacBooks";
 

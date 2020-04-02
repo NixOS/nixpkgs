@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.quagga;
 
   services = [ "babel" "bgp" "isis" "ospf6" "ospf" "pim" "rip" "ripng" ];
@@ -89,9 +87,7 @@ let
         '';
       };
     };
-
 in
-
 {
 
   ###### interface
@@ -120,7 +116,7 @@ in
   config = mkIf (any isEnabled allServices) {
 
     environment.systemPackages = [
-      pkgs.quagga               # for the vtysh tool
+      pkgs.quagga # for the vtysh tool
     ];
 
     users.users.quagga = {
@@ -130,7 +126,7 @@ in
     };
 
     users.groups = {
-      quagga = {};
+      quagga = { };
       # Members of the quaggavty group can use vtysh to inspect the Quagga daemons
       quaggavty = { members = [ "quagga" ]; };
     };
@@ -149,9 +145,7 @@ in
               serviceConfig = {
                 Type = "forking";
                 PIDFile = "/run/quagga/${daemon}.pid";
-                ExecStart = "@${pkgs.quagga}/libexec/quagga/${daemon} ${daemon} -d -f ${configFile service}"
-                  + optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}"
-                  + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}";
+                ExecStart = "@${pkgs.quagga}/libexec/quagga/${daemon} ${daemon} -d -f ${configFile service}" + optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}" + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}";
                 ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
                 Restart = "on-abort";
               };
@@ -175,8 +169,8 @@ in
                   after = [ "network.target" "zebra.service" ];
                 }
             ));
-       in
-         listToAttrs (map quaggaService (filter isEnabled allServices));
+      in
+      listToAttrs (map quaggaService (filter isEnabled allServices));
 
   };
 

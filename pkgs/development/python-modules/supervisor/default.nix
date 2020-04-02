@@ -1,4 +1,8 @@
-{ stdenv, lib, buildPythonPackage, isPy3k, fetchPypi
+{ stdenv
+, lib
+, buildPythonPackage
+, isPy3k
+, fetchPypi
 , mock
 , meld3
 , pytest

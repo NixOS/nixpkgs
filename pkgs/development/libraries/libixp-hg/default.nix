@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
-   sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
+    sed -i -e "s|^PREFIX.*=.*$|PREFIX = $out|" config.mk
   '';
 
   buildInputs = [ unzip txt2tags ];

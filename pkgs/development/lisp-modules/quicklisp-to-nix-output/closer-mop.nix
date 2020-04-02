@@ -14,7 +14,7 @@ rec {
 
   packageName = "closer-mop";
 
-  asdFilesToKeep = ["closer-mop.asd"];
+  asdFilesToKeep = [ "closer-mop.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM closer-mop DESCRIPTION

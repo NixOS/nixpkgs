@@ -1,7 +1,8 @@
 { docker
 , fetchFromGitLab
 , python
-, lib }:
+, lib
+}:
 
 python.pkgs.buildPythonApplication rec {
   version = "1.1.6";

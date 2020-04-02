@@ -1,14 +1,48 @@
-{stdenv, fetchgit, luajit, openblas, imagemagick, cmake, curl, fftw, gnuplot
-  , libjpeg, zeromq3, ncurses, openssl, libpng, qt4, readline, unzip
-  , pkgconfig, zlib, libX11, which
-  }:
+{ stdenv
+, fetchgit
+, luajit
+, openblas
+, imagemagick
+, cmake
+, curl
+, fftw
+, gnuplot
+, libjpeg
+, zeromq3
+, ncurses
+, openssl
+, libpng
+, qt4
+, readline
+, unzip
+, pkgconfig
+, zlib
+, libX11
+, which
+}:
 stdenv.mkDerivation rec{
   version = "0.0pre20160820";
   pname = "torch";
   buildInputs = [
-    luajit openblas imagemagick cmake curl fftw gnuplot unzip qt4
-    libjpeg zeromq3 ncurses openssl libpng readline pkgconfig
-    zlib libX11 which
+    luajit
+    openblas
+    imagemagick
+    cmake
+    curl
+    fftw
+    gnuplot
+    unzip
+    qt4
+    libjpeg
+    zeromq3
+    ncurses
+    openssl
+    libpng
+    readline
+    pkgconfig
+    zlib
+    libX11
+    which
   ];
 
   src = fetchgit {
@@ -30,8 +64,8 @@ stdenv.mkDerivation rec{
   meta = {
     inherit version;
     description = ''A scientific computing framework with wide support for machine learning algorithms'';
-    license = stdenv.lib.licenses.bsd3 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.bsd3;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     broken = true;
   };

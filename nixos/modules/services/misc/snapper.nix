@@ -1,11 +1,9 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.snapper;
 in
-
 {
   options.services.snapper = {
 
@@ -89,64 +87,65 @@ in
     };
   };
 
-  config = mkIf (cfg.configs != {}) (let
-    documentation = [ "man:snapper(8)" "man:snapper-configs(5)" ];
-  in {
+  config = mkIf (cfg.configs != { }) (
+    let
+      documentation = [ "man:snapper(8)" "man:snapper-configs(5)" ];
+    in {
 
-    environment = {
+      environment = {
 
-      systemPackages = [ pkgs.snapper ];
+        systemPackages = [ pkgs.snapper ];
 
-      # Note: snapper/config-templates/default is only needed for create-config
-      #       which is not the NixOS way to configure.
-      etc = {
+        # Note: snapper/config-templates/default is only needed for create-config
+        #       which is not the NixOS way to configure.
+        etc = {
 
-        "sysconfig/snapper".text = ''
-          SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
-        '';
+          "sysconfig/snapper".text = ''
+            SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
+          '';
 
-      }
-      // (mapAttrs' (name: subvolume: nameValuePair "snapper/configs/${name}" ({
-        text = ''
-          ${subvolume.extraConfig}
-          FSTYPE="${subvolume.fstype}"
-          SUBVOLUME="${subvolume.subvolume}"
-        '';
-      })) cfg.configs)
-      // (lib.optionalAttrs (cfg.filters != null) {
-        "snapper/filters/default.txt".text = cfg.filters;
-      });
+        }
+        // (mapAttrs' (name: subvolume: nameValuePair "snapper/configs/${name}" ({
+          text = ''
+            ${subvolume.extraConfig}
+            FSTYPE="${subvolume.fstype}"
+            SUBVOLUME="${subvolume.subvolume}"
+          '';
+        })) cfg.configs)
+        // (lib.optionalAttrs (cfg.filters != null) {
+          "snapper/filters/default.txt".text = cfg.filters;
+        });
 
-    };
+      };
 
-    services.dbus.packages = [ pkgs.snapper ];
+      services.dbus.packages = [ pkgs.snapper ];
 
-    systemd.services.snapper-timeline = {
-      description = "Timeline of Snapper Snapshots";
-      inherit documentation;
-      serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --timeline";
-    };
+      systemd.services.snapper-timeline = {
+        description = "Timeline of Snapper Snapshots";
+        inherit documentation;
+        serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --timeline";
+      };
 
-    systemd.timers.snapper-timeline = {
-      description = "Timeline of Snapper Snapshots";
-      inherit documentation;
-      wantedBy = [ "basic.target" ];
-      timerConfig.OnCalendar = cfg.snapshotInterval;
-    };
+      systemd.timers.snapper-timeline = {
+        description = "Timeline of Snapper Snapshots";
+        inherit documentation;
+        wantedBy = [ "basic.target" ];
+        timerConfig.OnCalendar = cfg.snapshotInterval;
+      };
 
-    systemd.services.snapper-cleanup = {
-      description = "Cleanup of Snapper Snapshots";
-      inherit documentation;
-      serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --cleanup";
-    };
+      systemd.services.snapper-cleanup = {
+        description = "Cleanup of Snapper Snapshots";
+        inherit documentation;
+        serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --cleanup";
+      };
 
-    systemd.timers.snapper-cleanup = {
-      description = "Cleanup of Snapper Snapshots";
-      inherit documentation;
-      wantedBy = [ "basic.target" ];
-      timerConfig.OnBootSec = "10m";
-      timerConfig.OnUnitActiveSec = cfg.cleanupInterval;
-    };
-  });
+      systemd.timers.snapper-cleanup = {
+        description = "Cleanup of Snapper Snapshots";
+        inherit documentation;
+        wantedBy = [ "basic.target" ];
+        timerConfig.OnBootSec = "10m";
+        timerConfig.OnUnitActiveSec = cfg.cleanupInterval;
+      };
+    }
+  );
 }
-

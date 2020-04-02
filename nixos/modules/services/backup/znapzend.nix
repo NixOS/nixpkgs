@@ -2,29 +2,27 @@
 
 with lib;
 with types;
-
 let
-
   planDescription = ''
-      The znapzend backup plan to use for the source.
+    The znapzend backup plan to use for the source.
 
-      The plan specifies how often to backup and for how long to keep the
-      backups. It consists of a series of retention periodes to interval
-      associations:
+    The plan specifies how often to backup and for how long to keep the
+    backups. It consists of a series of retention periodes to interval
+    associations:
 
-      <literal>
-        retA=>intA,retB=>intB,...
-      </literal>
+    <literal>
+      retA=>intA,retB=>intB,...
+    </literal>
 
-      Both intervals and retention periods are expressed in standard units
-      of time or multiples of them. You can use both the full name or a
-      shortcut according to the following listing:
+    Both intervals and retention periods are expressed in standard units
+    of time or multiples of them. You can use both the full name or a
+    shortcut according to the following listing:
 
-      <literal>
-        second|sec|s, minute|min, hour|h, day|d, week|w, month|mon|m, year|y
-      </literal>
+    <literal>
+      second|sec|s, minute|min, hour|h, day|d, week|w, month|mon|m, year|y
+    </literal>
 
-      See <citerefentry><refentrytitle>znapzendzetup</refentrytitle><manvolnum>1</manvolnum></citerefentry> for more info.
+    See <citerefentry><refentrytitle>znapzendzetup</refentrytitle><manvolnum>1</manvolnum></citerefentry> for more info.
   '';
   planExample = "1h=>10min,1d=>1h,1w=>1d,1m=>1w,1y=>1m";
 
@@ -38,12 +36,13 @@ let
 
   # Type for a string that must contain certain other strings (the list parameter).
   # Note that these would need regex escaping.
-  stringContainingStrings = list: let
-    matching = s: map (str: builtins.match ".*${str}.*" s) list;
-  in str // {
-    check = x: str.check x && all isList (matching x);
-    description = "string containing all of the characters ${concatStringsSep ", " list}";
-  };
+  stringContainingStrings = list:
+    let
+      matching = s: map (str: builtins.match ".*${str}.*" s) list;
+    in str // {
+      check = x: str.check x && all isList (matching x);
+      description = "string containing all of the characters ${concatStringsSep ", " list}";
+    };
 
   timestampType = stringContainingStrings [ "%Y" "%m" "%d" "%H" "%M" "%S" ];
 
@@ -135,14 +134,14 @@ let
         port = mkOption {
           type = nullOr ints.u16;
           description = ''
-              Port to use for <command>mbuffer</command>.
+            Port to use for <command>mbuffer</command>.
 
-              If this is null, it will run <command>mbuffer</command> through
-              ssh.
+            If this is null, it will run <command>mbuffer</command> through
+            ssh.
 
-              If this is not null, it will run <command>mbuffer</command>
-              directly through TCP, which is not encrypted but faster. In that
-              case the given port needs to be open on the destination host.
+            If this is not null, it will run <command>mbuffer</command>
+            directly through TCP, which is not encrypted but faster. In that
+            case the given port needs to be open on the destination host.
           '';
           default = null;
         };
@@ -222,7 +221,7 @@ let
       destinations = mkOption {
         type = loaOf (destType config);
         description = "Additional destinations.";
-        default = {};
+        default = { };
         example = literalExample ''
           {
             local = {
@@ -254,7 +253,8 @@ let
   stripSlashes = replaceStrings [ "/" ] [ "." ];
 
   attrsToFile = config: concatStringsSep "\n" (builtins.attrValues (
-    mapAttrs (n: v: "${n}=${v}") config));
+    mapAttrs (n: v: "${n}=${v}") config
+  ));
 
   mkDestAttrs = dst: with dst;
     mapAttrs' (n: v: nameValuePair "dst_${label}${n}" v) ({
@@ -268,8 +268,8 @@ let
 
   mkSrcAttrs = srcCfg: with srcCfg; {
     enabled = onOff enable;
-    mbuffer = with mbuffer; if enable then "${pkgs.mbuffer}/bin/mbuffer"
-        + optionalString (port != null) ":${toString port}" else "off";
+    mbuffer = with mbuffer;
+      if enable then "${pkgs.mbuffer}/bin/mbuffer" + optionalString (port != null) ":${toString port}" else "off";
     mbuffer_size = mbuffer.size;
     post_znap_cmd = nullOff postsnap;
     pre_znap_cmd = nullOff presnap;
@@ -278,17 +278,18 @@ let
     src_plan = plan;
     tsformat = timestampFormat;
     zend_delay = toString sendDelay;
-  } // fold (a: b: a // b) {} (
+  } // fold (a: b: a // b) { } (
     map mkDestAttrs (builtins.attrValues destinations)
   );
 
-  files = mapAttrs' (n: srcCfg: let
-    fileText = attrsToFile (mkSrcAttrs srcCfg);
-  in {
-    name = srcCfg.dataset;
-    value = pkgs.writeText (stripSlashes srcCfg.dataset) fileText;
-  }) cfg.zetup;
-
+  files = mapAttrs' (n: srcCfg:
+    let
+      fileText = attrsToFile (mkSrcAttrs srcCfg);
+    in {
+      name = srcCfg.dataset;
+      value = pkgs.writeText (stripSlashes srcCfg.dataset) fileText;
+    }
+  ) cfg.zetup;
 in
 {
   options = {
@@ -298,7 +299,7 @@ in
       logLevel = mkOption {
         default = "debug";
         example = "warning";
-        type = enum ["debug" "info" "warning" "err" "alert"];
+        type = enum [ "debug" "info" "warning" "err" "alert" ];
         description = ''
           The log level when logging to file. Any of debug, info, warning, err,
           alert. Default in daemonized form is debug.
@@ -329,7 +330,7 @@ in
       zetup = mkOption {
         type = loaOf srcType;
         description = "Znapzend configuration.";
-        default = {};
+        default = { };
         example = literalExample ''
           {
             "tank/home" = {
@@ -381,8 +382,8 @@ in
     systemd.services = {
       znapzend = {
         description = "ZnapZend - ZFS Backup System";
-        wantedBy    = [ "zfs.target" ];
-        after       = [ "zfs.target" ];
+        wantedBy = [ "zfs.target" ];
+        after = [ "zfs.target" ];
 
         path = with pkgs; [ zfs mbuffer openssh ];
 
@@ -413,7 +414,7 @@ in
               "--loglevel=${cfg.logLevel}"
               (optionalString cfg.noDestroy "--nodestroy")
               (optionalString cfg.autoCreation "--autoCreation")
-              (optionalString (enabledFeatures != [])
+              (optionalString (enabledFeatures != [ ])
                 "--features=${concatStringsSep "," enabledFeatures}")
             ]; in "${pkgs.znapzend}/bin/znapzend ${args}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

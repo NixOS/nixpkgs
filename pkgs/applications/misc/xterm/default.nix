@@ -1,4 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkgconfig, makeWrapper
+{ stdenv
+, fetchurl
+, fetchpatch
+, xorg
+, ncurses
+, freetype
+, fontconfig
+, pkgconfig
+, makeWrapper
 , enableDecLocator ? true
 }:
 
@@ -7,15 +15,28 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-     "ftp://ftp.invisible-island.net/xterm/${name}.tgz"
-     "https://invisible-mirror.net/archives/xterm/${name}.tgz"
-   ];
+      "ftp://ftp.invisible-island.net/xterm/${name}.tgz"
+      "https://invisible-mirror.net/archives/xterm/${name}.tgz"
+    ];
     sha256 = "05kf586my4irrzz2bxgmwjdvynyrg9ybhvfqmx29g70w4888l2kn";
   };
 
   buildInputs =
-    [ xorg.libXaw xorg.xorgproto xorg.libXt xorg.libXext xorg.libX11 xorg.libSM xorg.libICE
-      ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit makeWrapper
+    [
+      xorg.libXaw
+      xorg.xorgproto
+      xorg.libXt
+      xorg.libXext
+      xorg.libX11
+      xorg.libSM
+      xorg.libICE
+      ncurses
+      freetype
+      fontconfig
+      pkgconfig
+      xorg.libXft
+      xorg.luit
+      makeWrapper
     ];
 
   patches = [
@@ -65,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://invisible-island.net/xterm;
     license = with stdenv.lib.licenses; [ mit ];
-    maintainers = with stdenv.lib.maintainers; [vrthra];
+    maintainers = with stdenv.lib.maintainers; [ vrthra ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

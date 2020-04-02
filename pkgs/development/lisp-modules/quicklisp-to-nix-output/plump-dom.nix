@@ -14,7 +14,7 @@ args @ { fetchurl, ... }:
 
   packageName = "plump-dom";
 
-  asdFilesToKeep = ["plump-dom.asd"];
+  asdFilesToKeep = [ "plump-dom.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM plump-dom DESCRIPTION A DOM for use with the Plump parser. SHA256

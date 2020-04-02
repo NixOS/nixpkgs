@@ -1,8 +1,8 @@
 { lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtwebengine }:
-
 let
   description = "A note-taking application that knows programmers and Markdown better";
-in mkDerivation rec {
+in
+mkDerivation rec {
   version = "2.8.2";
   pname = "vnote";
 

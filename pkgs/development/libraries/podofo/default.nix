@@ -1,5 +1,18 @@
-{ stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5, pkgconfig, libidn, expat, fetchpatch
+{ stdenv
+, fetchurl
+, cmake
+, zlib
+, freetype
+, libjpeg
+, libtiff
+, fontconfig
+, openssl
+, libpng
+, lua5
+, pkgconfig
+, libidn
+, expat
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +37,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng
-                  libidn expat lua5 ];
+  buildInputs = [
+    zlib
+    freetype
+    libjpeg
+    libtiff
+    fontconfig
+    openssl
+    libpng
+    libidn
+    expat
+    lua5
+  ];
 
   cmakeFlags = [
     "-DPODOFO_BUILD_SHARED=ON"

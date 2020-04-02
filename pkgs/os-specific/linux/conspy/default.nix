@@ -1,16 +1,18 @@
-{stdenv, fetchurl, autoconf, automake, ncurses}:
+{ stdenv, fetchurl, autoconf, automake, ncurses }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="conspy";
-    version="1.14";
-    name="${baseName}-${version}";
-    hash="069k26xpzsvrn3197ix5yd294zvz03zi2xqj4fip6rlsw74habsf";
-    url="mirror://sourceforge/project/conspy/conspy-1.14-1/conspy-1.14.tar.gz";
-    sha256="069k26xpzsvrn3197ix5yd294zvz03zi2xqj4fip6rlsw74habsf";
-  };
+    rec {
+      baseName = "conspy";
+      version = "1.14";
+      name = "${baseName}-${version}";
+      hash = "069k26xpzsvrn3197ix5yd294zvz03zi2xqj4fip6rlsw74habsf";
+      url = "mirror://sourceforge/project/conspy/conspy-1.14-1/conspy-1.14.tar.gz";
+      sha256 = "069k26xpzsvrn3197ix5yd294zvz03zi2xqj4fip6rlsw74habsf";
+    };
   buildInputs = [
-    autoconf automake ncurses
+    autoconf
+    automake
+    ncurses
   ];
 in
 stdenv.mkDerivation {
@@ -30,8 +32,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Linux text console viewer";
-    license = stdenv.lib.licenses.epl10 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.epl10;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

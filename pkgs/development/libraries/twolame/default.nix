@@ -1,6 +1,9 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
-, libsndfile }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, libsndfile
+}:
 
 stdenv.mkDerivation {
 

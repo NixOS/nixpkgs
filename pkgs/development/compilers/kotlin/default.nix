@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper, jre, unzip }:
-
 let
   version = "1.3.70";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version;
   pname = "kotlin";
 
@@ -11,8 +11,8 @@ in stdenv.mkDerivation {
     sha256 = "1iw9pjacjdhhvriaz2kzf677csq2nfx66k5cickk79h7ywppi7bh";
   };
 
-  propagatedBuildInputs = [ jre ] ;
-  buildInputs = [ makeWrapper unzip ] ;
+  propagatedBuildInputs = [ jre ];
+  buildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
     mkdir -p $out

@@ -1,26 +1,23 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.ntopng;
   redisCfg = config.services.redis;
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "ntopng.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "ntopng.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "ntopng.conf" ''
-      ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
-      --http-port=${toString cfg.http-port}
-      --redis=localhost:${toString redisCfg.port}
-      ${cfg.extraConfig}
-    '';
-
+      pkgs.writeText "ntopng.conf" ''
+        ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
+        --http-port=${toString cfg.http-port}
+        --redis=localhost:${toString redisCfg.port}
+        ${cfg.extraConfig}
+      '';
 in
-
 {
 
   options = {
@@ -36,7 +33,7 @@ in
 
           With the default configuration, ntopng monitors all network
           interfaces and displays its findings at http://localhost:${toString
-          cfg.http-port}. Default username and password is admin/admin.
+            cfg.http-port}. Default username and password is admin/admin.
 
           See the ntopng(8) manual page and http://www.ntop.org/products/ntop/
           for more info.

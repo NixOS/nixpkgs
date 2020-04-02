@@ -1,7 +1,5 @@
 { stdenv, lib, fetchurl }:
-
 let
-
   common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
     pname = "apache-tomcat";
     version = "${versionMajor}.${versionMinor}";
@@ -28,8 +26,8 @@ let
       license = [ lib.licenses.asl20 ];
     };
   });
-
-in {
+in
+{
   tomcat7 = common {
     versionMajor = "7";
     versionMinor = "0.100";

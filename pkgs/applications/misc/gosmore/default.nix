@@ -1,5 +1,4 @@
-{ stdenv, fetchsvn, libxml2, gtk2, curl, pkgconfig } :
-
+{ stdenv, fetchsvn, libxml2, gtk2, curl, pkgconfig }:
 let
   version = "31801";
 in
@@ -25,7 +24,7 @@ stdenv.mkDerivation {
 
   patches = [ ./pointer_int_comparison.patch ];
   patchFlags = [ "-p1" "--binary" ]; # patch has dos style eol
-      
+
   meta = with stdenv.lib; {
     description = "Open Street Map viewer";
     homepage = https://sourceforge.net/projects/gosmore/;

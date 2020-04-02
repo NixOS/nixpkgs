@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, libclthreads, zita-alsa-pcmi, alsaLib, libjack2
-, libclxclient, libX11, libXft, readline
+{ stdenv
+, fetchurl
+, libclthreads
+, zita-alsa-pcmi
+, alsaLib
+, libjack2
+, libclxclient
+, libX11
+, libXft
+, readline
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libclthreads zita-alsa-pcmi alsaLib libjack2 libclxclient
-    libX11 libXft readline
+    libclthreads
+    zita-alsa-pcmi
+    alsaLib
+    libjack2
+    libclxclient
+    libX11
+    libXft
+    readline
   ];
 
   patchPhase = ''sed "s@ldconfig.*@@" -i source/Makefile'';

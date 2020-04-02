@@ -1,21 +1,33 @@
-{ stdenv, fetchFromGitLab, cmake, perl, python3, boost, valgrind
-# Optional requirements
-# Lua 5.3 needed and not available now
-#, luaSupport ? false, lua5
-, fortranSupport ? false, gfortran
-, buildDocumentation ? false, transfig, ghostscript, doxygen
-, buildJavaBindings ? false, openjdk
-, modelCheckingSupport ? false, libunwind, libevent, elfutils # Inside elfutils: libelf and libdw
+{ stdenv
+, fetchFromGitLab
+, cmake
+, perl
+, python3
+, boost
+, valgrind
+  # Optional requirements
+  # Lua 5.3 needed and not available now
+  #, luaSupport ? false, lua5
+, fortranSupport ? false
+, gfortran
+, buildDocumentation ? false
+, transfig
+, ghostscript
+, doxygen
+, buildJavaBindings ? false
+, openjdk
+, modelCheckingSupport ? false
+, libunwind
+, libevent
+, elfutils # Inside elfutils: libelf and libdw
 , debug ? false
 , moreTests ? false
 }:
 
 with stdenv.lib;
-
 let
   optionOnOff = option: if option then "on" else "off";
 in
-
 stdenv.mkDerivation rec {
   pname = "simgrid";
   version = "3.25";
@@ -29,10 +41,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
-      ++ optionals fortranSupport [ gfortran ]
-      ++ optionals buildJavaBindings [ openjdk ]
-      ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
-      ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
+    ++ optionals fortranSupport [ gfortran ]
+    ++ optionals buildJavaBindings [ openjdk ]
+    ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
+    ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
   #buildInputs = optional luaSupport lua5;
 
@@ -107,6 +119,6 @@ stdenv.mkDerivation rec {
     homepage = https://simgrid.org/;
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ mickours mpoquet ];
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

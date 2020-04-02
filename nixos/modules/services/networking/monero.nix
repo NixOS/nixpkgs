@@ -1,9 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-  cfg     = config.services.monero;
+  cfg = config.services.monero;
   dataDir = "/var/lib/monero";
 
   listToConf = option: list:
@@ -16,18 +15,18 @@ let
     data-dir=${dataDir}
 
     ${optionalString mining.enable ''
-      start-mining=${mining.address}
-      mining-threads=${toString mining.threads}
-    ''}
+    start-mining=${mining.address}
+    mining-threads=${toString mining.threads}
+  ''}
 
     rpc-bind-ip=${rpc.address}
     rpc-bind-port=${toString rpc.port}
     ${optionalString login ''
-      rpc-login=${rpc.user}:${rpc.password}
-    ''}
+    rpc-login=${rpc.user}:${rpc.password}
+  ''}
     ${optionalString rpc.restricted ''
-      restrict-rpc=1
-    ''}
+    restrict-rpc=1
+  ''}
 
     limit-rate-up=${toString limits.upload}
     limit-rate-down=${toString limits.download}
@@ -40,9 +39,7 @@ let
 
     ${extraConfig}
   '';
-
 in
-
 {
 
   ###### interface
@@ -198,7 +195,7 @@ in
   config = mkIf cfg.enable {
 
     users.users.monero = {
-      uid  = config.ids.uids.monero;
+      uid = config.ids.uids.monero;
       description = "Monero daemon user";
       home = dataDir;
       createHome = true;
@@ -210,11 +207,11 @@ in
 
     systemd.services.monero = {
       description = "monero daemon";
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        User  = "monero";
+        User = "monero";
         Group = "monero";
         ExecStart = "${pkgs.monero}/bin/monerod --config-file=${configFile} --non-interactive";
         Restart = "always";
@@ -224,9 +221,9 @@ in
 
     assertions = singleton {
       assertion = cfg.mining.enable -> cfg.mining.address != "";
-      message   = ''
-       You need a Monero address to receive mining rewards:
-       specify one using option monero.mining.address.
+      message = ''
+        You need a Monero address to receive mining rewards:
+        specify one using option monero.mining.address.
       '';
     };
 
@@ -235,4 +232,3 @@ in
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
 }
-

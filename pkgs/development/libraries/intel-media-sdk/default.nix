@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, autoPatchelfHook, cmake, pkgconfig, libdrm, libpciaccess
-, libva , libX11, libXau, libXdmcp, libpthreadstubs
+{ stdenv
+, fetchurl
+, autoPatchelfHook
+, cmake
+, pkgconfig
+, libdrm
+, libpciaccess
+, libva
+, libX11
+, libXau
+, libXdmcp
+, libpthreadstubs
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +24,13 @@ stdenv.mkDerivation rec {
   # patchelf is needed for binaries in $out/share/samples
   nativeBuildInputs = [ autoPatchelfHook cmake pkgconfig ];
   buildInputs = [
-    libdrm libva libpciaccess libX11 libXau libXdmcp libpthreadstubs
+    libdrm
+    libva
+    libpciaccess
+    libX11
+    libXau
+    libXdmcp
+    libpthreadstubs
   ];
 
   enableParallelBuild = true;

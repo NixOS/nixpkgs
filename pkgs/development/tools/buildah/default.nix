@@ -1,5 +1,13 @@
-{ stdenv, buildGoPackage, fetchFromGitHub
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkg-config, libselinux, libseccomp
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, gpgme
+, libgpgerror
+, lvm2
+, btrfs-progs
+, pkg-config
+, libselinux
+, libseccomp
 }:
 
 buildGoPackage rec {
@@ -7,9 +15,9 @@ buildGoPackage rec {
   version = "1.14.3";
 
   src = fetchFromGitHub {
-    owner  = "containers";
-    repo   = "buildah";
-    rev    = "v${version}";
+    owner = "containers";
+    repo = "buildah";
+    rev = "v${version}";
     sha256 = "1qghlba8396gj9dfih8hg249gzwx0gpw9cysdw2vh8z52jhi5sx9";
   };
 

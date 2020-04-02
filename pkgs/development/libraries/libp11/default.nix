@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool, pkgconfig
-, openssl }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libtool
+, pkgconfig
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "libp11";

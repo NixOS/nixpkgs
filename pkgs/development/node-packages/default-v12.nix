@@ -1,5 +1,4 @@
 { pkgs, nodejs, stdenv }:
-
 let
   nodePackages = import ./composition-v12.nix {
     inherit pkgs nodejs;

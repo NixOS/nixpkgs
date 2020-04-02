@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -59,25 +59,27 @@ let
 
         systemd.services.cfssl-init = {
           description = "Initialize the cfssl CA";
-          wantedBy    = [ "multi-user.target" ];
+          wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            User             = "cfssl";
-            Type             = "oneshot";
+            User = "cfssl";
+            Type = "oneshot";
             WorkingDirectory = config.services.cfssl.dataDir;
           };
           script = ''
             ${pkgs.cfssl}/bin/cfssl genkey -initca ${pkgs.writeText "ca.json" (builtins.toJSON {
               hosts = [ "ca.example.com" ];
               key = {
-                algo = "rsa"; size = 4096; };
-                names = [
+                  algo = "rsa";
+                  size = 4096;
+                };
+              names = [
                   {
-                    C = "US";
-                    L = "San Francisco";
-                    O = "Internet Widgets, LLC";
-                    OU = "Certificate Authority";
-                    ST = "California";
-                  }
+                      C = "US";
+                      L = "San Francisco";
+                      O = "Internet Widgets, LLC";
+                      OU = "Certificate Authority";
+                      ST = "California";
+                    }
                 ];
             })} | ${pkgs.cfssl}/bin/cfssljson -bare ca
           '';
@@ -99,7 +101,7 @@ let
           }) [ "imp.example.org" "decl.example.org" ]);
         };
 
-        systemd.services.nginx.wantedBy = lib.mkForce [];
+        systemd.services.nginx.wantedBy = lib.mkForce [ ];
 
         systemd.services.certmgr.after = [ "cfssl.service" ];
         services.certmgr = {
@@ -117,7 +119,7 @@ in
   systemd = mkCertmgrTest {
     svcManager = "systemd";
     specs = {
-      decl = mkSpec { host = "decl.example.org"; service = "nginx"; action ="restart"; };
+      decl = mkSpec { host = "decl.example.org"; service = "nginx"; action = "restart"; };
       imp = toString (pkgs.writeText "test.json" (builtins.toJSON (
         mkSpec { host = "imp.example.org"; service = "nginx"; action = "restart"; }
       )));

@@ -14,7 +14,7 @@ rec {
 
   packageName = "clsql";
 
-  asdFilesToKeep = ["clsql.asd"];
+  asdFilesToKeep = [ "clsql.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clsql DESCRIPTION Common Lisp SQL Interface library SHA256

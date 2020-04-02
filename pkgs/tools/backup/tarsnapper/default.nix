@@ -1,4 +1,4 @@
-{ python3Packages, fetchFromGitHub , tarsnap }:
+{ python3Packages, fetchFromGitHub, tarsnap }:
 
 python3Packages.buildPythonApplication rec {
   name = "tarsnapper-${version}";
@@ -21,5 +21,5 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./remove-argparse.patch ];
 
-  makeWrapperArgs = ["--prefix PATH : ${tarsnap}/bin"];
+  makeWrapperArgs = [ "--prefix PATH : ${tarsnap}/bin" ];
 }

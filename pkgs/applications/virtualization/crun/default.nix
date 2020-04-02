@@ -10,7 +10,6 @@
 , systemd
 , yajl
 }:
-
 let
   # these tests require additional permissions
   disabledTests = [
@@ -29,7 +28,6 @@ let
     "test_update.py"
     "tests_libcrun_utils"
   ];
-
 in
 stdenv.mkDerivation rec {
   pname = "crun";

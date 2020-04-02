@@ -10,7 +10,8 @@ with lib;
   imports = [
     (mkRenamedOptionModule
       [ "services" "gnome3" "gnome-disks" "enable" ]
-      [ "programs" "gnome-disks" "enable" ])
+      [ "programs" "gnome-disks" "enable" ]
+    )
   ];
 
   ###### interface

@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.programs.zsh.autosuggestions;
 in
@@ -38,7 +37,7 @@ in
 
     extraConfig = mkOption {
       type = with types; attrsOf str;
-      default = {};
+      default = { };
       description = "Attribute set with additional configuration values";
       example = literalExample ''
         {

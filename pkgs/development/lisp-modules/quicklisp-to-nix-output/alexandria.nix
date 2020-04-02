@@ -14,7 +14,7 @@ rec {
 
   packageName = "alexandria";
 
-  asdFilesToKeep = ["alexandria.asd"];
+  asdFilesToKeep = [ "alexandria.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM alexandria DESCRIPTION

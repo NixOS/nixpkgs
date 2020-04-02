@@ -1,17 +1,15 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.hoogle;
 
   hoogleEnv = pkgs.buildEnv {
     name = "hoogle";
     paths = [ (cfg.haskellPackages.ghcWithHoogle cfg.packages) ];
   };
-
-in {
+in
+{
 
   options.services.hoogle = {
     enable = mkEnableOption "Haskell documentation server";
@@ -25,7 +23,7 @@ in {
     };
 
     packages = mkOption {
-      default = hp: [];
+      default = hp: [ ];
       defaultText = "hp: []";
       example = "hp: with hp; [ text lens ]";
       description = ''

@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig
-, alsaLib, libpulseaudio, SDL2, SDL2_image, SDL2_mixer }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, libpulseaudio
+, SDL2
+, SDL2_image
+, SDL2_mixer
+}:
 
 # - set the opendune configuration at ~/.config/opendune/opendune.ini:
 #     [opendune]

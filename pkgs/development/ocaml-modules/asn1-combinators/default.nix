@@ -1,27 +1,35 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild
-, cstruct, zarith, ounit, result, topkg, ptime
+{ stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, ocamlbuild
+, cstruct
+, zarith
+, ounit
+, result
+, topkg
+, ptime
 }:
-
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
-    version = "0.2.0";
-    sha256 = "0yfq4hnyzx6hy05m60007cfpq88wxwa8wqzib19lnk2qrgy772mx";
-    propagatedBuildInputs = [ ptime ];
-  } else {
-    version = "0.1.3";
-    sha256 = "0hpn049i46sdnv2i6m7r6m6ch0jz8argybh71wykbvcqdby08zxj";
-    propagatedBuildInputs = [ ];
-  };
+let
+  param =
+    if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
+      version = "0.2.0";
+      sha256 = "0yfq4hnyzx6hy05m60007cfpq88wxwa8wqzib19lnk2qrgy772mx";
+      propagatedBuildInputs = [ ptime ];
+    } else {
+      version = "0.1.3";
+      sha256 = "0hpn049i46sdnv2i6m7r6m6ch0jz8argybh71wykbvcqdby08zxj";
+      propagatedBuildInputs = [ ];
+    };
 in
-
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-asn1-combinators-${version}";
   inherit (param) version;
 
   src = fetchFromGitHub {
-    owner  = "mirleft";
-    repo   = "ocaml-asn1-combinators";
-    rev    = "v${version}";
+    owner = "mirleft";
+    repo = "ocaml-asn1-combinators";
+    rev = "v${version}";
     inherit (param) sha256;
   };
 

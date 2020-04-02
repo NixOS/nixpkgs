@@ -1,13 +1,23 @@
-{ stdenv, fetchFromGitLab, makeWrapper, nixosTests,
-# optional dependencies, the command(s) they provide
-coreutils,  # mktemp
-grub2,      # grub-mount and grub-probe
-cryptsetup, # cryptsetup
-libuuid,    # blkid and blockdev
-udev,    # udevadm udevinfo
-ntfs3g,     # ntfs3g
-dmraid,     # dmraid
-lvm2        # lvs
+{ stdenv
+, fetchFromGitLab
+, makeWrapper
+, nixosTests
+, # optional dependencies, the command(s) they provide
+  coreutils
+, # mktemp
+  grub2
+, # grub-mount and grub-probe
+  cryptsetup
+, # cryptsetup
+  libuuid
+, # blkid and blockdev
+  udev
+, # udevadm udevinfo
+  ntfs3g
+, # ntfs3g
+  dmraid
+, # dmraid
+  lvm2        # lvs
 }:
 
 stdenv.mkDerivation rec {

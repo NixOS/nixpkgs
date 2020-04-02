@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ scipy numpy pyqt4 pyopengl ];
 
-  doCheck = false;  # "PyQtGraph requires either PyQt4 or PySide; neither package could be imported."
+  doCheck = false; # "PyQtGraph requires either PyQt4 or PySide; neither package could be imported."
 
   meta = with stdenv.lib; {
     description = "Scientific Graphics and GUI Library for Python";

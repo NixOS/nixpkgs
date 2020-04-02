@@ -3,13 +3,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.buildbot-master;
 
   python = cfg.package.pythonModule;
 
-  escapeStr = s: escape ["'"] s;
+  escapeStr = s: escape [ "'" ] s;
 
   defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
@@ -53,15 +52,15 @@ let
     m = BuildMaster(basedir, configfile, umask)
     m.setServiceParent(application)
   '';
-
-in {
+in
+{
   options = {
     services.buildbot-master = {
 
       factorySteps = mkOption {
         type = types.listOf types.str;
         description = "Factory Steps";
-        default = [];
+        default = [ ];
         example = [
           "steps.Git(repourl='git://github.com/buildbot/pyflakes.git', mode='incremental')"
           "steps.ShellCommand(command=['trial', 'pyflakes'])"
@@ -71,7 +70,7 @@ in {
       changeSource = mkOption {
         type = types.listOf types.str;
         description = "List of Change Sources.";
-        default = [];
+        default = [ ];
         example = [
           "changes.GitPoller('git://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
         ];
@@ -120,7 +119,7 @@ in {
       };
 
       status = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = "List of status notification endpoints.";
       };
@@ -139,7 +138,7 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List of extra groups that the buildbot user should be a part of.";
       };
 

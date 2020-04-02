@@ -8,7 +8,6 @@
 #
 
 { stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
-
 let
   pythonEnv = python.withPackages (p: with p; [
     cffi
@@ -31,8 +30,8 @@ let
   }.${system};
 
   strip = if stdenv.isDarwin then "strip -x" else "strip";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
   version = "281.0.0";
 

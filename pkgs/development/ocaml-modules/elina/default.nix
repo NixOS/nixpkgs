@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--use-apron"
     "--use-opam"
-    "--apron-prefix" apron
+    "--apron-prefix"
+    apron
   ]
   ++ stdenv.lib.optional stdenv.isDarwin "--absolute-dylibs"
   ;

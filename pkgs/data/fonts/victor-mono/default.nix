@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
-
 let
   pname = "victor-mono";
   version = "1.3.1";
-in fetchFromGitHub rec {
+in
+fetchFromGitHub rec {
   name = "${pname}-${version}";
 
   owner = "rubjo";
@@ -36,4 +36,3 @@ in fetchFromGitHub rec {
     platforms = platforms.all;
   };
 }
-

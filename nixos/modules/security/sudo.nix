@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.security.sudo;
 
   inherit (pkgs) sudo;
@@ -23,9 +21,7 @@ let
           "${toCommandOptionsString command.options}${command.command}"
       ) commands
     );
-
 in
-
 {
 
   ###### interface
@@ -50,7 +46,7 @@ in
           Whether users of the <code>wheel</code> group must
           provide a password to run commands as super user via <command>sudo</command>.
         '';
-      };
+    };
 
     security.sudo.configFile = mkOption {
       type = types.lines;
@@ -70,7 +66,7 @@ in
         yield the expected behavior. You can use mkBefore/mkAfter to ensure
         this is the case when configuration options are merged.
       '';
-      default = [];
+      default = [ ];
       example = literalExample ''
         [
           # Allow execution of any command by all users in group sudo,
@@ -97,7 +93,7 @@ in
             description = ''
               The usernames / UIDs this rule should apply for.
             '';
-            default = [];
+            default = [ ];
           };
 
           groups = mkOption {
@@ -105,7 +101,7 @@ in
             description = ''
               The groups / GIDs this rule should apply for.
             '';
-            default = [];
+            default = [ ];
           };
 
           host = mkOption {
@@ -149,7 +145,7 @@ in
                   description = ''
                     Options for running the command. Refer to the <a href="https://www.sudo.ws/man/1.7.10/sudoers.man.html">sudo manual</a>.
                   '';
-                  default = [];
+                  default = [ ];
                 };
               };
 
@@ -174,7 +170,8 @@ in
   config = mkIf cfg.enable {
 
     security.sudo.extraRules = [
-      { groups = [ "wheel" ];
+      {
+        groups = [ "wheel" ];
         commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); } ];
       }
     ];
@@ -193,13 +190,14 @@ in
         # extraRules
         ${concatStringsSep "\n" (
           lists.flatten (
-            map (
-              rule: if (length rule.commands != 0) then [
-                (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
-                (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
-              ] else []
-            ) cfg.extraRules
-          )
+              map (
+                  rule:
+                      if (length rule.commands != 0) then [
+                          (map (user: "${toUserString user}  ${rule.host}=(${rule.runAs})  ${toCommandsString rule.commands}") rule.users)
+                          (map (group: "${toGroupString group}  ${rule.host}=(${rule.runAs})  ${toCommandsString rule.commands}") rule.groups)
+                        ] else [ ]
+                ) cfg.extraRules
+            )
         )}
 
         ${cfg.extraConfig}
@@ -215,15 +213,16 @@ in
     security.pam.services.sudo = { sshAgentAuth = true; };
 
     environment.etc.sudoers =
-      { source =
+      {
+        source =
           pkgs.runCommand "sudoers"
           {
             src = pkgs.writeText "sudoers-in" cfg.configFile;
             preferLocalBuild = true;
           }
-          # Make sure that the sudoers file is syntactically valid.
-          # (currently disabled - NIXOS-66)
-          "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
+            # Make sure that the sudoers file is syntactically valid.
+            # (currently disabled - NIXOS-66)
+            "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
         mode = "0440";
       };
 

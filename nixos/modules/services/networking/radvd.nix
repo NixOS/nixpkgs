@@ -3,15 +3,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.radvd;
 
   confFile = pkgs.writeText "radvd.conf" cfg.config;
-
 in
-
 {
 
   ###### interface
@@ -53,16 +49,19 @@ in
   config = mkIf cfg.enable {
 
     users.users.radvd =
-      { uid = config.ids.uids.radvd;
+      {
+        uid = config.ids.uids.radvd;
         description = "Router Advertisement Daemon User";
       };
 
     systemd.services.radvd =
-      { description = "IPv6 Router Advertisement Daemon";
+      {
+        description = "IPv6 Router Advertisement Daemon";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig =
-          { ExecStart = "@${pkgs.radvd}/bin/radvd radvd -n -u radvd -C ${confFile}";
+          {
+            ExecStart = "@${pkgs.radvd}/bin/radvd radvd -n -u radvd -C ${confFile}";
             Restart = "always";
           };
       };

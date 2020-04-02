@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub, python2 }:
-
 let
   mkOverride = attrname: version: sha256:
     self: super: {
@@ -13,9 +12,9 @@ let
 
   py = python2.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
-      (mkOverride "flask"       "0.10.1" "0wrkavjdjndknhp8ya8j850jq7a1cli4g5a93mg8nh1xz2gq50sc")
+      (mkOverride "flask" "0.10.1" "0wrkavjdjndknhp8ya8j850jq7a1cli4g5a93mg8nh1xz2gq50sc")
       (mkOverride "flask_login" "0.2.11" "1rg3rsjs1gwi2pw6vr9jmhaqm9b3vc9c4hfcsvp4y8agbh7g3mc3")
-      (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
+      (mkOverride "tornado" "4.5.3" "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
 
       # Octoprint holds back jinja2 to 2.8.1 due to breaking changes.
       # This old version does not have updated test config for pytest 4,
@@ -58,25 +57,55 @@ let
     "sentry-sdk"
     "werkzeug" # 0.16 just deprecates some stuff
   ];
-
-in py.pkgs.buildPythonApplication rec {
+in
+py.pkgs.buildPythonApplication rec {
   pname = "OctoPrint";
   version = "1.3.12";
 
   src = fetchFromGitHub {
-    owner  = "foosel";
-    repo   = "OctoPrint";
-    rev    = version;
+    owner = "foosel";
+    repo = "OctoPrint";
+    rev = version;
     sha256 = "1lmqssgwjyhknjf3x58g7cr0fqz7fs5a3rl07r69wfpch63ranyd";
   };
 
   propagatedBuildInputs = with py.pkgs; [
-    awesome-slugify flask_assets rsa requests pkginfo watchdog
-    semantic-version flask_principal werkzeug flaskbabel tornado
-    psutil pyserial flask_login netaddr markdown sockjs-tornado
-    pylru pyyaml sarge feedparser netifaces click websocket_client
-    scandir chainmap future futures wrapt monotonic emoji
-    frozendict cachelib sentry-sdk typing filetype
+    awesome-slugify
+    flask_assets
+    rsa
+    requests
+    pkginfo
+    watchdog
+    semantic-version
+    flask_principal
+    werkzeug
+    flaskbabel
+    tornado
+    psutil
+    pyserial
+    flask_login
+    netaddr
+    markdown
+    sockjs-tornado
+    pylru
+    pyyaml
+    sarge
+    feedparser
+    netifaces
+    click
+    websocket_client
+    scandir
+    chainmap
+    future
+    futures
+    wrapt
+    monotonic
+    emoji
+    frozendict
+    cachelib
+    sentry-sdk
+    typing
+    filetype
   ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
 
   checkInputs = with py.pkgs; [ nose mock ddt ];
@@ -84,8 +113,8 @@ in py.pkgs.buildPythonApplication rec {
   postPatch = ''
     sed -r -i \
       ${lib.concatStringsSep "\n" (map (e:
-        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
-      ) ignoreVersionConstraints)}
+      ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+    ) ignoreVersionConstraints)}
       setup.py
   '';
 

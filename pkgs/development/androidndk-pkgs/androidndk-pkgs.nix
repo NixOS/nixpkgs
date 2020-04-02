@@ -1,9 +1,12 @@
 { stdenv
 , makeWrapper
-, runCommand, wrapBintoolsWith, wrapCCWith
-, buildAndroidndk, androidndk, targetAndroidndkPkgs
+, runCommand
+, wrapBintoolsWith
+, wrapCCWith
+, buildAndroidndk
+, androidndk
+, targetAndroidndkPkgs
 }:
-
 let
   # Mapping from a platform to information needed to unpack NDK stuff for that
   # platform.
@@ -50,7 +53,6 @@ let
 
   prefix = stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
 in
-
 rec {
   # Misc tools
   binaries = runCommand "ndk-gcc-binutils" {
@@ -98,7 +100,7 @@ rec {
   # We use androidndk from the previous stage, else we waste time or get cycles
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
-  libraries = runCommand "bionic-prebuilt" {} ''
+  libraries = runCommand "bionic-prebuilt" { } ''
     mkdir -p $out
     cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
     chmod +w $out/include

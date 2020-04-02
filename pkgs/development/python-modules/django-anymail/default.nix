@@ -1,13 +1,13 @@
-{
-    stdenv,
-    buildPythonPackage,
-    fetchFromGitHub,
-    six,
-    requests,
-    django,
-    boto3,
-    python,
-    mock,
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, requests
+, django
+, boto3
+, python
+, mock
+,
 }:
 
 buildPythonPackage rec {

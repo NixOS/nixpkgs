@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , importlib-resources
 , jaraco_functools
 , setuptools_scm
@@ -13,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1v0hz3h74m31jlbc5bxwkvrx1h2n7887bajrg1n1c3yc4q8qn1z5";
   };
 
-  nativeBuildInputs =[ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [
     jaraco_functools
   ] ++ lib.optional (pythonOlder "3.7") [ importlib-resources ];

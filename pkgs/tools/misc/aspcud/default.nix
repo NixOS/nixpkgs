@@ -1,5 +1,10 @@
-{ stdenv, fetchzip
-, boost, clasp, cmake, gringo, re2c
+{ stdenv
+, fetchzip
+, boost
+, clasp
+, cmake
+, gringo
+, re2c
 }:
 
 stdenv.mkDerivation rec {

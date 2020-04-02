@@ -1,9 +1,9 @@
-{
-  stdenv, pythonPackages, openssl,
-
-  # Many Salt modules require various Python modules to be installed,
+{ stdenv
+, pythonPackages
+, openssl
+, # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
-  extraInputs ? []
+  extraInputs ? [ ]
 }:
 
 pythonPackages.buildPythonApplication rec {

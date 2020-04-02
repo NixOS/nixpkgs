@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? ""}:
+{ deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? "" }:
 
 deployAndroidPackage {
   name = "androidsdk";
@@ -8,14 +8,14 @@ deployAndroidPackage {
 
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
-      # Auto patch all binaries
-      addAutoPatchelfSearchPath $PWD/lib64
-      addAutoPatchelfSearchPath $PWD/lib64/libstdc++
-      addAutoPatchelfSearchPath $PWD/lib64/qt/lib
-      addAutoPatchelfSearchPath $PWD/lib
-      addAutoPatchelfSearchPath $PWD/lib/libstdc++
-      autoPatchelf .
-    ''}
+    # Auto patch all binaries
+    addAutoPatchelfSearchPath $PWD/lib64
+    addAutoPatchelfSearchPath $PWD/lib64/libstdc++
+    addAutoPatchelfSearchPath $PWD/lib64/qt/lib
+    addAutoPatchelfSearchPath $PWD/lib
+    addAutoPatchelfSearchPath $PWD/lib/libstdc++
+    autoPatchelf .
+  ''}
 
     # Wrap all scripts that require JAVA_HOME
     for i in bin
@@ -45,11 +45,11 @@ deployAndroidPackage {
     done
 
     ${lib.optionalString (os == "linux") ''
-      wrapProgram $PWD/emulator \
-        --prefix PATH : ${pkgs.file}/bin:${pkgs.glxinfo}/bin:${pkgs.pciutils}/bin \
-        --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
-        --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
-    ''}
+    wrapProgram $PWD/emulator \
+      --prefix PATH : ${pkgs.file}/bin:${pkgs.glxinfo}/bin:${pkgs.pciutils}/bin \
+      --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
+      --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
+  ''}
 
     # Patch all script shebangs
     patchShebangs .

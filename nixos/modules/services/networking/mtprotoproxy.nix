@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.mtprotoproxy;
 
   configOpts = {
@@ -11,7 +9,7 @@ let
     USERS = cfg.users;
     SECURE_ONLY = cfg.secureOnly;
   } // lib.optionalAttrs (cfg.adTag != null) { AD_TAG = cfg.adTag; }
-    // cfg.extraConfig;
+  // cfg.extraConfig;
 
   convertOption = opt:
     if isString opt || isInt opt then
@@ -26,9 +24,7 @@ let
       throw "Invalid option type";
 
   configFile = pkgs.writeText "config.py" (concatStringsSep "\n" (mapAttrsToList (name: opt: "${name} = ${convertOption opt}") configOpts));
-
 in
-
 {
 
   ###### interface
@@ -78,7 +74,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = {
           STATS_PRINT_PERIOD = 600;
         };

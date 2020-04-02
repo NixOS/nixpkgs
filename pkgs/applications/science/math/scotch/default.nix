@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, openmpi, flex, zlib}:
+{ stdenv, fetchurl, bison, openmpi, flex, zlib }:
 
 stdenv.mkDerivation rec {
   version = "6.0.4";
@@ -33,4 +33,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
-

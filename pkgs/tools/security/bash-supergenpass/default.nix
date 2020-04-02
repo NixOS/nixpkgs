@@ -36,4 +36,3 @@ stdenv.mkDerivation {
     homepage = https://github.com/lanzz/bash-supergenpass;
   };
 }
-

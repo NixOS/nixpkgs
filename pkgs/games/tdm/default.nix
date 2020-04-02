@@ -1,7 +1,19 @@
-{ stdenv, fetchurl, binutils-unwrapped, scons, gnum4, p7zip, glibc_multi, mesa
-, xorg, libGLU, libGL, openal
-, lib, makeWrapper, makeDesktopItem }:
-
+{ stdenv
+, fetchurl
+, binutils-unwrapped
+, scons
+, gnum4
+, p7zip
+, glibc_multi
+, mesa
+, xorg
+, libGLU
+, libGL
+, openal
+, lib
+, makeWrapper
+, makeDesktopItem
+}:
 let
   pname = "tdm";
   version = "2.07";
@@ -17,19 +29,28 @@ let
     categories = "Game;";
     genericName = pname;
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://www.thedarkmod.com/sources/thedarkmod.${version}.src.7z";
     sha256 = "17wdpip8zvm2njz0xrf7xcxl73hnsc6i83zj18kn8rnjkpy50dd6";
   };
   nativeBuildInputs = [
-    p7zip scons gnum4 makeWrapper
+    p7zip
+    scons
+    gnum4
+    makeWrapper
   ];
   buildInputs = [
-    glibc_multi mesa.dev xorg.libX11.dev openal
-    xorg.libXext.dev xorg.libXxf86vm.dev
-    libGL libGLU
+    glibc_multi
+    mesa.dev
+    xorg.libX11.dev
+    openal
+    xorg.libXext.dev
+    xorg.libXxf86vm.dev
+    libGL
+    libGLU
   ];
   unpackPhase = ''
     7z x $src
@@ -49,40 +70,40 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    install -Dm644 ${desktop}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop
-    substituteInPlace $out/share/applications/${pname}.desktop --subst-var out
-    install -Dm755 thedarkmod.x64 $out/share/libexec/tdm
+        install -Dm644 ${desktop}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop
+        substituteInPlace $out/share/applications/${pname}.desktop --subst-var out
+        install -Dm755 thedarkmod.x64 $out/share/libexec/tdm
 
-    # The package doesn't install assets, these get installed by running tdm_update.linux
-    # Provide a script that runs tdm_update.linux on first launch
-    install -Dm755 <(cat <<'EOF'
-#!/bin/sh
-set -e
-DIR="$HOME/.local/share/tdm"
-mkdir -p "$DIR"
-cd "$DIR"
-exec "PKGDIR/share/libexec/tdm_update.linux" --noselfupdate
-EOF
-    ) $out/bin/tdm_update
+        # The package doesn't install assets, these get installed by running tdm_update.linux
+        # Provide a script that runs tdm_update.linux on first launch
+        install -Dm755 <(cat <<'EOF'
+    #!/bin/sh
+    set -e
+    DIR="$HOME/.local/share/tdm"
+    mkdir -p "$DIR"
+    cd "$DIR"
+    exec "PKGDIR/share/libexec/tdm_update.linux" --noselfupdate
+    EOF
+        ) $out/bin/tdm_update
 
-    install -Dm755 <(cat <<'EOF'
-#!/bin/sh
-set -e
-DIR="$HOME/.local/share/tdm"
-if [ ! -d "$DIR" ]; then
-  echo "Please run tdm_update to (re)download game data"
-else
-  cd "$DIR"
-  exec "PKGDIR/share/libexec/tdm"
-fi
-EOF
-    ) $out/bin/tdm
-    sed -i "s!PKGDIR!$out!g" $out/bin/tdm_update
-    sed -i "s!PKGDIR!$out!g" $out/bin/tdm
+        install -Dm755 <(cat <<'EOF'
+    #!/bin/sh
+    set -e
+    DIR="$HOME/.local/share/tdm"
+    if [ ! -d "$DIR" ]; then
+      echo "Please run tdm_update to (re)download game data"
+    else
+      cd "$DIR"
+      exec "PKGDIR/share/libexec/tdm"
+    fi
+    EOF
+        ) $out/bin/tdm
+        sed -i "s!PKGDIR!$out!g" $out/bin/tdm_update
+        sed -i "s!PKGDIR!$out!g" $out/bin/tdm
 
-    runHook postInstall
+        runHook postInstall
   '';
 
   postInstall = ''
@@ -97,6 +118,6 @@ EOF
     homepage = "http://www.thedarkmod.com";
     license = licenses.gpl3;
     maintainers = with maintainers; [ cizra ];
-    platforms = with platforms; [ "x86_64-linux" ];  # tdm also supports x86, but I don't have a x86 install at hand to test.
+    platforms = with platforms; [ "x86_64-linux" ]; # tdm also supports x86, but I don't have a x86 install at hand to test.
   };
 }

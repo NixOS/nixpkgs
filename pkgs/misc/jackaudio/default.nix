@@ -1,14 +1,29 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, makeWrapper
-, bash, libsamplerate, libsndfile, readline, eigen, celt
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, python3Packages
+, makeWrapper
+, bash
+, libsamplerate
+, libsndfile
+, readline
+, eigen
+, celt
 , wafHook
-# Darwin Dependencies
-, aften, AudioUnit, CoreAudio, libobjc, Accelerate
+  # Darwin Dependencies
+, aften
+, AudioUnit
+, CoreAudio
+, libobjc
+, Accelerate
 
-# Optional Dependencies
-, dbus ? null, libffado ? null, alsaLib ? null
+  # Optional Dependencies
+, dbus ? null
+, libffado ? null
+, alsaLib ? null
 , libopus ? null
 
-# Extra options
+  # Extra options
 , prefix ? ""
 }:
 
@@ -37,10 +52,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
-  buildInputs = [ libsamplerate libsndfile readline eigen celt
-    optDbus optPythonDBus optLibffado optAlsaLib optLibopus
+  buildInputs = [
+    libsamplerate
+    libsndfile
+    readline
+    eigen
+    celt
+    optDbus
+    optPythonDBus
+    optLibffado
+    optAlsaLib
+    optLibopus
   ] ++ optionals stdenv.isDarwin [
-    aften AudioUnit CoreAudio Accelerate libobjc
+    aften
+    AudioUnit
+    CoreAudio
+    Accelerate
+    libobjc
   ];
 
   prePatch = ''
@@ -52,15 +80,16 @@ stdenv.mkDerivation rec {
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
   ] ++ optional (optDbus != null) "--dbus"
-    ++ optional (optLibffado != null) "--firewire"
-    ++ optional (optAlsaLib != null) "--alsa";
+  ++ optional (optLibffado != null) "--firewire"
+  ++ optional (optAlsaLib != null) "--alsa";
 
-  postInstall = (if libOnly then ''
-    rm -rf $out/{bin,share}
-    rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
-  '' else ''
-    wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
-  '');
+  postInstall = (
+    if libOnly then ''
+      rm -rf $out/{bin,share}
+      rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
+    '' else ''
+      wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
+    '');
 
   meta = {
     description = "JACK audio connection kit, version 2 with jackdbus";

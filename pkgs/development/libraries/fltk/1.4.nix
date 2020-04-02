@@ -1,12 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, xlibsWrapper, xorgproto, libXi
-, freeglut, libGLU, libGL, libjpeg, zlib, libXft, libpng
-, libtiff, freetype, Cocoa, AGL, GLUT
+{ stdenv
+, fetchurl
+, pkgconfig
+, xlibsWrapper
+, xorgproto
+, libXi
+, freeglut
+, libGLU
+, libGL
+, libjpeg
+, zlib
+, libXft
+, libpng
+, libtiff
+, freetype
+, Cocoa
+, AGL
+, GLUT
 }:
-
 let
   version = "1.4.x-r13121";
 in
-
 stdenv.mkDerivation {
   pname = "fltk";
   inherit version;
@@ -23,9 +36,11 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional stdenv.isDarwin [ AGL Cocoa GLUT ];
 
   propagatedBuildInputs = [ xorgproto ]
-    ++ (if stdenv.isDarwin
-        then [ freetype libtiff ]
-        else [ xlibsWrapper libXi freeglut ]);
+    ++ (
+    if stdenv.isDarwin
+    then [ freetype libtiff ]
+    else [ xlibsWrapper libXi freeglut ]
+  );
 
   configureFlags = [
     "--enable-gl"

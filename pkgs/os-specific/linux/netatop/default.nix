@@ -1,9 +1,7 @@
 { stdenv, fetchurl, kernel, zlib }:
-
 let
   version = "2.0";
 in
-
 stdenv.mkDerivation {
   name = "netatop-${kernel.version}-${version}";
 
@@ -37,6 +35,6 @@ stdenv.mkDerivation {
     homepage = https://www.atoptool.nl/downloadnetatop.php;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
   };
 }

@@ -14,7 +14,7 @@ rec {
 
   packageName = "lack";
 
-  asdFilesToKeep = ["lack.asd"];
+  asdFilesToKeep = [ "lack.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lack DESCRIPTION A minimal Clack SHA256

@@ -1,11 +1,7 @@
 { stdenv, fetchgit, lilypond, ghostscript, gyre-fonts }:
-
 let
-
   version = "2.19.83";
-
 in
-
 lilypond.overrideAttrs (oldAttrs: {
   inherit version;
 

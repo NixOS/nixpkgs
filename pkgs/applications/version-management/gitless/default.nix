@@ -24,4 +24,3 @@ buildPythonApplication rec {
     maintainers = [ maintainers.cransom ];
   };
 }
-

@@ -10,7 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 SDL SDL_ttf SDL_image libGLU libGL expat zlib
+    libX11
+    SDL
+    SDL_ttf
+    SDL_image
+    libGLU
+    libGL
+    expat
+    zlib
   ];
 
   NIX_LDFLAGS = "-lX11";
@@ -18,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = ''A multiplayer space combat game (client part)'';
     homepage = http://bloodspilot.sf.net/;
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

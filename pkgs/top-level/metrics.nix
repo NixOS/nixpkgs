@@ -3,9 +3,10 @@
 with pkgs;
 
 runCommand "nixpkgs-metrics"
-  { nativeBuildInputs = with pkgs.lib; map getBin [ nix time jq ];
-    requiredSystemFeatures = [ "benchmark" ];
-  }
+{
+  nativeBuildInputs = with pkgs.lib; map getBin [ nix time jq ];
+  requiredSystemFeatures = [ "benchmark" ];
+}
   ''
     export NIX_DB_DIR=$TMPDIR
     export NIX_STATE_DIR=$TMPDIR

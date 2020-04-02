@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfge = config.environment;
 
   cfg = config.programs.fish;
@@ -12,9 +10,7 @@ let
     mapAttrsFlatten (k: v: "alias ${k} ${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
-
 in
-
 {
 
   options = {
@@ -54,7 +50,7 @@ in
       };
 
       shellAliases = mkOption {
-        default = {};
+        default = { };
         description = ''
           Set of aliases for fish shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
@@ -216,14 +212,14 @@ in
             fi
           '';
       in
-        pkgs.buildEnv {
-          name = "system_fish-completions";
-          ignoreCollisions = true;
-          paths = map generateCompletions config.environment.systemPackages;
-        };
+      pkgs.buildEnv {
+        name = "system_fish-completions";
+        ignoreCollisions = true;
+        paths = map generateCompletions config.environment.systemPackages;
+      };
 
     # include programs that bring their own completions
-    environment.pathsToLink = []
+    environment.pathsToLink = [ ]
       ++ optional cfg.vendor.config.enable "/share/fish/vendor_conf.d"
       ++ optional cfg.vendor.completions.enable "/share/fish/vendor_completions.d"
       ++ optional cfg.vendor.functions.enable "/share/fish/vendor_functions.d";

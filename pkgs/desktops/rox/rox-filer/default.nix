@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info }:
-
 let
   version = "2.11";
   name = "rox-filer-${version}";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

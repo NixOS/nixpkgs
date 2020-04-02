@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-clipboard";
 
-  asdFilesToKeep = ["trivial-clipboard.asd"];
+  asdFilesToKeep = [ "trivial-clipboard.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-clipboard DESCRIPTION

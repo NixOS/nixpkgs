@@ -1,7 +1,6 @@
 { config, lib, ... }:
 
 with lib;
-
 let
   cfg = config.programs.chromium;
 
@@ -14,7 +13,6 @@ let
     ) cfg.extensions;
   };
 in
-
 {
   ###### interface
 
@@ -30,7 +28,7 @@ in
           <link xlink:href="https://chrome.google.com/webstore/category/extensions">chrome web store</link>
           page.
         '';
-        default = [];
+        default = [ ];
         example = literalExample ''
           [
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
@@ -71,7 +69,7 @@ in
           <link xlink:href="https://www.chromium.org/administrators/policy-list-3">https://www.chromium.org/administrators/policy-list-3</link>
           for a list of avalible options
         '';
-        default = {};
+        default = { };
       };
     };
   };

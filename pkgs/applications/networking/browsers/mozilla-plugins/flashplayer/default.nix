@@ -47,27 +47,26 @@
 , unzip
 , debug ? false
 
-/* you have to add ~/mm.cfg :
+  /* you have to add ~/mm.cfg :
 
-    TraceOutputFileEnable=1
-    ErrorReportingEnable=1
-    MaxWarnings=1
+      TraceOutputFileEnable=1
+      ErrorReportingEnable=1
+      MaxWarnings=1
 
-  in order to read the flash trace at ~/.macromedia/Flash_Player/Logs/flashlog.txt
-  Then FlashBug (a FireFox plugin) shows the log as well
-*/
+    in order to read the flash trace at ~/.macromedia/Flash_Player/Logs/flashlog.txt
+    Then FlashBug (a FireFox plugin) shows the log as well
+  */
 
 }:
-
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       "x86_64"
-    else if stdenv.hostPlatform.system == "i686-linux"   then
+    else if stdenv.hostPlatform.system == "i686-linux" then
       "i386"
     else throw "Flash Player is not supported on this platform";
   lib_suffix =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       "64"
     else
       "";
@@ -129,12 +128,51 @@ stdenv.mkDerivation rec {
   };
 
   rpath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
-      glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
-      libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
-      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
+    [
+      stdenv.cc.cc
+      alsaLib
+      atk
+      bzip2
+      cairo
+      curl
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      glibc
+      graphite2
+      gtk2
+      harfbuzz
+      libICE
+      libSM
+      libX11
+      libXau
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXdmcp
+      libXext
+      libXfixes
+      libXi
+      libXinerama
+      libXrandr
+      libXrender
+      libXt
+      libXxf86vm
+      libdrm
+      libffi
+      libglvnd
+      libpng
+      libvdpau
+      libxcb
+      libxshmfence
+      nspr
+      nss
+      pango
+      pcre
+      pixman
+      zlib
     ];
 
   meta = {

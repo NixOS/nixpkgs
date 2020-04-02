@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  pname   = "plplot";
+  pname = "plplot";
   version = "5.15.0";
 
   src = fetchurl {
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform scientific graphics plotting library";
-    homepage    = "https://plplot.org";
+    homepage = "https://plplot.org";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms   = platforms.unix;
-    license     = licenses.lgpl2;
+    platforms = platforms.unix;
+    license = licenses.lgpl2;
   };
 }

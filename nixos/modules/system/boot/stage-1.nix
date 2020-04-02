@@ -6,9 +6,7 @@
 { config, lib, utils, pkgs, ... }:
 
 with lib;
-
 let
-
   udev = config.systemd.package;
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
@@ -88,9 +86,10 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommandCC "extra-utils"
-    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
-      allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
-    }
+  {
+    nativeBuildInputs = [ pkgs.buildPackages.nukeReferences ];
+    allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
+  }
     ''
       set +o pipefail
 
@@ -132,20 +131,20 @@ let
 
       # Copy resize2fs if any ext* filesystems are to be resized
       ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
-        # We need mke2fs in the initrd.
-        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
-      ''}
+      # We need mke2fs in the initrd.
+      copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
+    ''}
 
       # Copy secrets if needed.
       ${optionalString (!config.boot.loader.supportsInitrdSecrets)
-          (concatStringsSep "\n" (mapAttrsToList (dest: source:
-             let source' = if source == null then dest else source; in
-               ''
+        (concatStringsSep "\n" (mapAttrsToList (dest: source:
+            let source' = if source == null then dest else source; in
+                ''
                   mkdir -p $(dirname "$out/secrets/${dest}")
                   cp -a ${source'} "$out/secrets/${dest}"
                 ''
           ) config.boot.initrd.secrets))
-       }
+      }
 
       ${config.boot.initrd.extraUtilsCommands}
 
@@ -200,55 +199,55 @@ let
 
 
   linkUnits = pkgs.runCommand "link-units" {
-      allowedReferences = [ extraUtils ];
-      preferLocalBuild = true;
-    } ''
-      mkdir -p $out
-      cp -v ${udev}/lib/systemd/network/*.link $out/
-    '';
+    allowedReferences = [ extraUtils ];
+    preferLocalBuild = true;
+  } ''
+    mkdir -p $out
+    cp -v ${udev}/lib/systemd/network/*.link $out/
+  '';
 
   udevRules = pkgs.runCommand "udev-rules" {
-      allowedReferences = [ extraUtils ];
-      preferLocalBuild = true;
-    } ''
-      mkdir -p $out
+    allowedReferences = [ extraUtils ];
+    preferLocalBuild = true;
+  } ''
+    mkdir -p $out
 
-      echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
+    echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
-      cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/80-net-setup-link.rules $out/
-      cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
-      ${config.boot.initrd.extraUdevRulesCommands}
+    cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
+    cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
+    cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
+    cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
+    cp -v ${udev}/lib/udev/rules.d/80-net-setup-link.rules $out/
+    cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
+    ${config.boot.initrd.extraUdevRulesCommands}
 
-      for i in $out/*.rules; do
-          substituteInPlace $i \
-            --replace ata_id ${extraUtils}/bin/ata_id \
-            --replace scsi_id ${extraUtils}/bin/scsi_id \
-            --replace cdrom_id ${extraUtils}/bin/cdrom_id \
-            --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
-            --replace ${pkgs.utillinux}/bin/blkid ${extraUtils}/bin/blkid \
-            --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
-            --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
-            --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
-            --replace ${udev} ${extraUtils}
-      done
+    for i in $out/*.rules; do
+        substituteInPlace $i \
+          --replace ata_id ${extraUtils}/bin/ata_id \
+          --replace scsi_id ${extraUtils}/bin/scsi_id \
+          --replace cdrom_id ${extraUtils}/bin/cdrom_id \
+          --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
+          --replace ${pkgs.utillinux}/bin/blkid ${extraUtils}/bin/blkid \
+          --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
+          --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
+          --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
+          --replace ${udev} ${extraUtils}
+    done
 
-      # Work around a bug in QEMU, which doesn't implement the "READ
-      # DISC INFORMATION" SCSI command:
-      #   https://bugzilla.redhat.com/show_bug.cgi?id=609049
-      # As a result, `cdrom_id' doesn't print
-      # ID_CDROM_MEDIA_TRACK_COUNT_DATA, which in turn prevents the
-      # /dev/disk/by-label symlinks from being created.  We need these
-      # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
-      # corresponding udev rules for now.  This was the behaviour in
-      # udev <= 154.  See also
-      #   http://www.spinics.net/lists/hotplug/msg03935.html
-      substituteInPlace $out/60-persistent-storage.rules \
-        --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
-    ''; # */
+    # Work around a bug in QEMU, which doesn't implement the "READ
+    # DISC INFORMATION" SCSI command:
+    #   https://bugzilla.redhat.com/show_bug.cgi?id=609049
+    # As a result, `cdrom_id' doesn't print
+    # ID_CDROM_MEDIA_TRACK_COUNT_DATA, which in turn prevents the
+    # /dev/disk/by-label symlinks from being created.  We need these
+    # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
+    # corresponding udev rules for now.  This was the behaviour in
+    # udev <= 154.  See also
+    #   http://www.spinics.net/lists/hotplug/msg03935.html
+    substituteInPlace $out/60-persistent-storage.rules \
+      --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
+  ''; # */
 
 
   # The init script of boot stage 1 (loading kernel modules for
@@ -278,22 +277,24 @@ let
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
-                             # Don't include zram devices
-                             && !(hasPrefix "/dev/zram" sd.device)
-                            ) config.swapDevices);
+      (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
+        # Don't include zram devices
+        && !(hasPrefix "/dev/zram" sd.device)
+      ) config.swapDevices);
 
     fsInfo =
-      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
+      let
+        f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
       in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
 
     setHostId = optionalString (config.networking.hostId != null) ''
       hi="${config.networking.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
-        echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
-      '' else ''
-        echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
-      ''}
+      ${
+        if pkgs.stdenv.isBigEndian then ''
+          echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
+        '' else ''
+          echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
+        ''}
     '';
   };
 
@@ -305,22 +306,27 @@ let
     inherit (config.boot.initrd) compressor prepend;
 
     contents =
-      [ { object = bootStage1;
+      [
+        {
+          object = bootStage1;
           symlink = "/init";
         }
-        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
+        {
+          object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
-              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-              preferLocalBuild = true;
-            } ''
-              target=$out
-              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-            '';
+        {
+          object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
+            src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+            preferLocalBuild = true;
+          } ''
+            target=$out
+            ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+          '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
-        { object = pkgs.kmod-debian-aliases;
+        {
+          object = pkgs.kmod-debian-aliases;
           symlink = "/etc/modprobe.d/debian.conf";
         }
       ];
@@ -346,8 +352,8 @@ let
           exit 0
         fi
 
-        ${lib.optionalString (config.boot.initrd.secrets == {})
-            "exit 0"}
+        ${lib.optionalString (config.boot.initrd.secrets == { })
+          "exit 0"}
 
         export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
 
@@ -361,19 +367,17 @@ let
         tmp=$(mktemp -d initrd-secrets.XXXXXXXXXX)
 
         ${lib.concatStringsSep "\n" (mapAttrsToList (dest: source:
-            let source' = if source == null then dest else toString source; in
+          let source' = if source == null then dest else toString source; in
               ''
                 mkdir -p $(dirname "$tmp/${dest}")
                 cp -a ${source'} "$tmp/${dest}"
               ''
-          ) config.boot.initrd.secrets)
-         }
+        ) config.boot.initrd.secrets)
+        }
 
         (cd "$tmp" && find . | cpio -H newc -o) | gzip >>"$1"
       '';
-
 in
-
 {
   options = {
 
@@ -512,23 +516,24 @@ in
     };
 
     boot.initrd.secrets = mkOption
-      { internal = true;
-        default = {};
-        type = types.attrsOf (types.nullOr types.path);
-        description =
-          ''
-            Secrets to append to the initrd. The attribute name is the
-            path the secret should have inside the initrd, the value
-            is the path it should be copied from (or null for the same
-            path inside and out).
-          '';
-        example = literalExample
-          ''
-            { "/etc/dropbear/dropbear_rsa_host_key" =
-                ./secret-dropbear-key;
-            }
-          '';
-      };
+    {
+      internal = true;
+      default = { };
+      type = types.attrsOf (types.nullOr types.path);
+      description =
+        ''
+          Secrets to append to the initrd. The attribute name is the
+          path the secret should have inside the initrd, the value
+          is the path it should be copied from (or null for the same
+          path inside and out).
+        '';
+      example = literalExample
+        ''
+          { "/etc/dropbear/dropbear_rsa_host_key" =
+              ./secret-dropbear-key;
+          }
+        '';
+    };
 
     boot.initrd.supportedFilesystems = mkOption {
       default = [ ];
@@ -538,16 +543,17 @@ in
     };
 
     boot.loader.supportsInitrdSecrets = mkOption
-      { internal = true;
-        default = false;
-        type = types.bool;
-        description =
-          ''
-            Whether the bootloader setup runs append-initrd-secrets.
-            If not, any needed secrets must be copied into the initrd
-            and thus added to the store.
-          '';
-      };
+    {
+      internal = true;
+      default = false;
+      type = types.bool;
+      description =
+        ''
+          Whether the bootloader setup runs append-initrd-secrets.
+          If not, any needed secrets must be copied into the initrd
+          and thus added to the store.
+        '';
+    };
 
     fileSystems = mkOption {
       type = with lib.types; loaOf (submodule {
@@ -568,13 +574,14 @@ in
 
   config = mkIf config.boot.initrd.enable {
     assertions = [
-      { assertion = any (fs: fs.mountPoint == "/") fileSystems;
+      {
+        assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
       }
-      { assertion = let inherit (config.boot) resumeDevice; in
+      {
+        assertion = let inherit (config.boot) resumeDevice; in
           resumeDevice == "" || builtins.substring 0 1 resumeDevice == "/";
-        message = "boot.resumeDevice has to be an absolute path."
-          + " Old \"x:y\" style is no longer supported.";
+        message = "boot.resumeDevice has to be an absolute path." + " Old \"x:y\" style is no longer supported.";
       }
     ];
 

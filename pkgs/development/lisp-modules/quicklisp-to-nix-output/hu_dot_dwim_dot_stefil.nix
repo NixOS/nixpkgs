@@ -16,7 +16,7 @@ rec {
 
   packageName = "hu.dwim.stefil";
 
-  asdFilesToKeep = ["hu.dwim.stefil.asd"];
+  asdFilesToKeep = [ "hu.dwim.stefil.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM hu.dwim.stefil DESCRIPTION A Simple Test Framework In Lisp. SHA256

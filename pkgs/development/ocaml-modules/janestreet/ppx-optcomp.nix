@@ -1,5 +1,8 @@
-{stdenv, buildOcamlJane,
- ppx_core, ppx_tools}:
+{ stdenv
+, buildOcamlJane
+, ppx_core
+, ppx_tools
+}:
 
 buildOcamlJane {
   name = "ppx_optcomp";

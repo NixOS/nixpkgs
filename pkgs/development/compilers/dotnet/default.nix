@@ -4,12 +4,13 @@ dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_3_1 sdk_2_2 sdk_
 */
 { callPackage }:
 let
-  buildDotnet = attrs: callPackage (import ./buildDotnet.nix attrs) {};
-  buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; } );
-  buildNetCore = attrs: buildDotnet (attrs // { type = "netcore"; } );
-  buildNetCoreSdk = attrs: buildDotnet (attrs // { type = "sdk"; } );
-in rec {
-  combinePackages = attrs: callPackage (import ./combinePackages.nix attrs) {};
+  buildDotnet = attrs: callPackage (import ./buildDotnet.nix attrs) { };
+  buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
+  buildNetCore = attrs: buildDotnet (attrs // { type = "netcore"; });
+  buildNetCoreSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
+in
+rec {
+  combinePackages = attrs: callPackage (import ./combinePackages.nix attrs) { };
 
   # v2.1.15 (LTS)
 

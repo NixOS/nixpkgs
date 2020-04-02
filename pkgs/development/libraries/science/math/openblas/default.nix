@@ -1,11 +1,14 @@
-{ stdenv, fetchFromGitHub, perl, which
-# Most packages depending on openblas expect integer width to match
-# pointer width, but some expect to use 32-bit integers always
-# (for compatibility with reference BLAS).
+{ stdenv
+, fetchFromGitHub
+, perl
+, which
+  # Most packages depending on openblas expect integer width to match
+  # pointer width, but some expect to use 32-bit integers always
+  # (for compatibility with reference BLAS).
 , blas64 ? null
 , buildPackages
-# Select a specific optimization target (other than the default)
-# See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
+  # Select a specific optimization target (other than the default)
+  # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
 , enableStatic ? false
 , enableShared ? true
@@ -14,7 +17,6 @@
 with stdenv.lib;
 
 let blas64_ = blas64; in
-
 let
   setTarget = x: if target == null then x else target;
 
@@ -65,18 +67,16 @@ let
     };
   };
 in
-
 let
   config =
     configs.${stdenv.hostPlatform.system}
-    or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
-
 let
   blas64 =
     if blas64_ != null
-      then blas64_
-      else hasPrefix "x86_64" stdenv.hostPlatform.system;
+    then blas64_
+    else hasPrefix "x86_64" stdenv.hostPlatform.system;
   # Convert flag values to format OpenBLAS's build expects.
   # `toString` is almost what we need other than bools,
   # which we need to map {true -> 1, false -> 0}
@@ -106,11 +106,13 @@ stdenv.mkDerivation rec {
   # be no objection to disabling these hardening measures.
   hardeningDisable = [
     # don't modify or move the stack
-    "stackprotector" "pic"
+    "stackprotector"
+    "pic"
     # don't alter index arithmetic
     "strictoverflow"
     # don't interfere with dynamic target detection
-    "relro" "bindnow"
+    "relro"
+    "bindnow"
   ];
 
   nativeBuildInputs = [
@@ -143,26 +145,27 @@ stdenv.mkDerivation rec {
     # This seems to be a bug in the openblas Makefile:
     # on x86_64 it expects NO_BINARY_MODE=
     # but on aarch64 it expects NO_BINARY_MODE=0
-    NO_BINARY_MODE = if stdenv.isx86_64
-        then toString (stdenv.hostPlatform != stdenv.buildPlatform)
-        else stdenv.hostPlatform != stdenv.buildPlatform;
+    NO_BINARY_MODE =
+      if stdenv.isx86_64
+      then toString (stdenv.hostPlatform != stdenv.buildPlatform)
+      else stdenv.hostPlatform != stdenv.buildPlatform;
   });
 
   doCheck = true;
   checkTarget = "tests";
 
   postInstall = ''
-    # Write pkgconfig aliases. Upstream report:
-    # https://github.com/xianyi/OpenBLAS/issues/1740
-    for alias in blas cblas lapack; do
-      cat <<EOF > $out/lib/pkgconfig/$alias.pc
-Name: $alias
-Version: ${version}
-Description: $alias provided by the OpenBLAS package.
-Cflags: -I$out/include
-Libs: -L$out/lib -lopenblas
-EOF
-    done
+        # Write pkgconfig aliases. Upstream report:
+        # https://github.com/xianyi/OpenBLAS/issues/1740
+        for alias in blas cblas lapack; do
+          cat <<EOF > $out/lib/pkgconfig/$alias.pc
+    Name: $alias
+    Version: ${version}
+    Description: $alias provided by the OpenBLAS package.
+    Cflags: -I$out/include
+    Libs: -L$out/lib -lopenblas
+    EOF
+        done
   '';
 
   meta = with stdenv.lib; {

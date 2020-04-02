@@ -1,7 +1,15 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, mypy, pyyaml, regex
-, dataclasses, typing
-, pytestrunner, pytest-mypy
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, colorama
+, mypy
+, pyyaml
+, regex
+, dataclasses
+, typing
+, pytestrunner
+, pytest-mypy
 }:
 
 buildPythonPackage rec {

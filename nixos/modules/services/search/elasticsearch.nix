@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.elasticsearch;
 
@@ -35,8 +34,8 @@ let
     paths = cfg.plugins;
     postBuild = "${pkgs.coreutils}/bin/mkdir -p $out/plugins";
   };
-
-in {
+in
+{
 
   ###### interface
 
@@ -116,20 +115,20 @@ in {
 
     extraCmdLineOptions = mkOption {
       description = "Extra command line options for the elasticsearch launcher.";
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
     };
 
     extraJavaOptions = mkOption {
       description = "Extra command line options for Java.";
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 
     plugins = mkOption {
       description = "Extra elasticsearch plugins";
-      default = [];
+      default = [ ];
       type = types.listOf types.package;
       example = lib.literalExample "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
@@ -146,8 +145,8 @@ in {
       path = [ pkgs.inetutils ];
       environment = {
         ES_HOME = cfg.dataDir;
-        ES_JAVA_OPTS = toString ( optional (!es6) [ "-Des.path.conf=${configDir}" ]
-                                  ++ cfg.extraJavaOptions);
+        ES_JAVA_OPTS = toString (optional (!es6) [ "-Des.path.conf=${configDir}" ]
+          ++ cfg.extraJavaOptions);
       } // optionalAttrs es6 {
         ES_PATH_CONF = configDir;
       };
@@ -159,12 +158,12 @@ in {
       };
       preStart = ''
         ${optionalString (!config.boot.isContainer) ''
-          # Only set vm.max_map_count if lower than ES required minimum
-          # This avoids conflict if configured via boot.kernel.sysctl
-          if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then
-            ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
-          fi
-        ''}
+        # Only set vm.max_map_count if lower than ES required minimum
+        # This avoids conflict if configured via boot.kernel.sysctl
+        if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then
+          ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
+        fi
+      ''}
 
         mkdir -m 0700 -p ${cfg.dataDir}
 

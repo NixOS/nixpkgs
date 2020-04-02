@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   #CXXFLAGS = "-Werror=return-type";
 
   preConfigure =
-  # Fix F77LD to workaround for a following build error:
-  #
-  #   gfortran: error: unrecognized command line option '-stdlib=libc++'
-  #
+    # Fix F77LD to workaround for a following build error:
+    #
+    #   gfortran: error: unrecognized command line option '-stdlib=libc++'
+    #
     stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/Makefile.in \
         --replace "F77LD = \$(F77)" "F77LD = \$(CXXLD)" \
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     [ apfel apfelgrid applgrid blas lhapdf liblapack mela root5 qcdnum ]
     # pdf2yaml requires fmemopen and open_memstream which are not readily available on Darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) libyaml
-    ;
+  ;
   propagatedBuildInputs = [ lynx ];
 
   enableParallelBuilding = true;
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The xFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
-    license     = licenses.gpl3;
-    homepage    = https://www.xfitter.org/xFitter;
-    platforms   = platforms.unix;
+    license = licenses.gpl3;
+    homepage = https://www.xfitter.org/xFitter;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

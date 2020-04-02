@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, readline }:
 
 stdenv.mkDerivation rec {
-  pname   = "mrsh";
+  pname = "mrsh";
   version = "2020-01-08";
 
   src = fetchFromGitHub {

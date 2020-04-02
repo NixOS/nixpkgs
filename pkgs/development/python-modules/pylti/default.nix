@@ -34,8 +34,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ httplib2 oauth oauth2 semantic-version ];
   checkInputs = [
-    flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
-    pytest-flakes pytestpep8 sphinx mock chalice
+    flask
+    httpretty
+    oauthlib
+    pyflakes
+    pytest
+    pytestcache
+    pytestcov
+    covCore
+    pytest-flakes
+    pytestpep8
+    sphinx
+    mock
+    chalice
   ];
 
   src = fetchPypi {

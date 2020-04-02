@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "0.7.0";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "cm-unicode-${version}";
 
   url = "mirror://sourceforge/cm-unicode/cm-unicode/${version}/${name}-otf.tar.xz";

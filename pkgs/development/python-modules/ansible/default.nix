@@ -40,8 +40,17 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pycrypto paramiko jinja2 pyyaml httplib2
-    six netaddr dnspython jmespath dopy ncclient
+    pycrypto
+    paramiko
+    jinja2
+    pyyaml
+    httplib2
+    six
+    netaddr
+    dnspython
+    jmespath
+    dopy
+    ncclient
   ] ++ lib.optional windowsSupport pywinrm;
 
   # dificult to test
@@ -50,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = http://www.ansible.com;
     description = "Radically simple IT automation";
-    license = [ licenses.gpl3 ] ;
+    license = [ licenses.gpl3 ];
     maintainers = with maintainers; [ joamaki costrouc ];
     platforms = platforms.linux ++ platforms.darwin;
   };

@@ -1,17 +1,34 @@
-{ stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+{ stdenv
+, callPackage
+, fetchurl
+, fetchpatch
+, fetchgit
 , ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
-, withSeabios ? !withInternalSeabios, seabios ? null
+, withSeabios ? !withInternalSeabios
+, seabios ? null
 , withInternalOVMF ? false # FIXME: tricky to build
-, withOVMF ? false, OVMF
+, withOVMF ? false
+, OVMF
 , withLibHVM ? true
 
-# qemu
-, udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice-protocol, usbredir
-, alsaLib, glib, python2
-, ... } @ args:
+  # qemu
+, udev
+, pciutils
+, xorg
+, SDL
+, pixman
+, acl
+, glusterfs
+, spice-protocol
+, usbredir
+, alsaLib
+, glib
+, python2
+, ...
+} @ args:
 
 assert withInternalSeabios -> !withSeabios;
 assert withInternalOVMF -> !withOVMF;
@@ -21,7 +38,6 @@ with stdenv.lib;
 # Patching XEN? Check the XSAs at
 # https://xenbits.xen.org/xsa/
 # and try applying all the ones we don't have yet.
-
 let
   xsa = import ./xsa-patches.nix { inherit fetchpatch; };
 
@@ -32,11 +48,20 @@ let
   };
 
   qemuDeps = [
-    udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
-    alsaLib glib python2
+    udev
+    pciutils
+    xorg.libX11
+    SDL
+    pixman
+    acl
+    glusterfs
+    spice-protocol
+    usbredir
+    alsaLib
+    glib
+    python2
   ];
 in
-
 callPackage (import ./generic.nix (rec {
   version = "4.10.4";
 
@@ -137,7 +162,7 @@ callPackage (import ./generic.nix (rec {
     };
   };
 
-  configureFlags = []
+  configureFlags = [ ]
     ++ optional (!withInternalQemu) "--with-system-qemu" # use qemu from PATH
     ++ optional (withInternalTraditionalQemu) "--enable-qemu-traditional"
     ++ optional (!withInternalTraditionalQemu) "--disable-qemu-traditional"
@@ -173,7 +198,8 @@ callPackage (import ./generic.nix (rec {
   '';
 
   passthru = {
-    qemu-system-i386 = if withInternalQemu
+    qemu-system-i386 =
+      if withInternalQemu
       then "lib/xen/bin/qemu-system-i386"
       else throw "this xen has no qemu builtin";
   };

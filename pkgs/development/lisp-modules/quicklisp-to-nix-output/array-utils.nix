@@ -14,7 +14,7 @@ rec {
 
   packageName = "array-utils";
 
-  asdFilesToKeep = ["array-utils.asd"];
+  asdFilesToKeep = [ "array-utils.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM array-utils DESCRIPTION A few utilities for working with arrays.

@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, fetchurl, perl, perlPackages, wget, autoconf, automake }:
-
 let
   # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/PERL_MODULES
   Mojolicious-6-46 = perlPackages.buildPerlPackage rec {
@@ -78,9 +77,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "High performance open source ZFS backup with mbuffer and ssh support";
-    homepage    = http://www.znapzend.org;
-    license     = licenses.gpl3;
+    homepage = http://www.znapzend.org;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ otwieracz ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

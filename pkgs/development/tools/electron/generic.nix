@@ -1,4 +1,4 @@
-{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core}:
+{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core }:
 
 version: hashes:
 let
@@ -74,7 +74,7 @@ let
     '';
   };
 in
-  stdenv.mkDerivation (
-    (common stdenv.hostPlatform) //
-    (if stdenv.isDarwin then darwin else linux)
-  )
+stdenv.mkDerivation (
+  (common stdenv.hostPlatform) //
+  (if stdenv.isDarwin then darwin else linux)
+)

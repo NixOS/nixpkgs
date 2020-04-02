@@ -1,8 +1,15 @@
-{ fetchurl, stdenv
-, cmake, netcdf, openjpeg, libpng, gfortran
-, enablePython ? false, pythonPackages
+{ fetchurl
+, stdenv
+, cmake
+, netcdf
+, openjpeg
+, libpng
+, gfortran
+, enablePython ? false
+, pythonPackages
 , enablePosixThreads ? false
-, enableOpenMPThreads ? false}:
+, enableOpenMPThreads ? false
+}:
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "eccodes";
@@ -19,21 +26,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ netcdf
-                  openjpeg
-                  libpng
-                  gfortran
-                ];
+  buildInputs = [
+    netcdf
+    openjpeg
+    libpng
+    gfortran
+  ];
   propagatedBuildInputs = optionals enablePython [
-                  pythonPackages.python
-                  pythonPackages.numpy
-                ];
+    pythonPackages.python
+    pythonPackages.numpy
+  ];
 
-  cmakeFlags = [ "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
-                 "-DENABLE_PNG=ON"
-                 "-DENABLE_ECCODES_THREADS=${if enablePosixThreads then "ON" else "OFF"}"
-                 "-DENABLE_ECCODES_OMP_THREADS=${if enableOpenMPThreads then "ON" else "OFF"}"
-               ];
+  cmakeFlags = [
+    "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
+    "-DENABLE_PNG=ON"
+    "-DENABLE_ECCODES_THREADS=${if enablePosixThreads then "ON" else "OFF"}"
+    "-DENABLE_ECCODES_OMP_THREADS=${if enableOpenMPThreads then "ON" else "OFF"}"
+  ];
 
   enableParallelBuilding = true;
 

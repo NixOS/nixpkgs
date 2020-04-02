@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.flexget;
   pkg = pkgs.flexget;
@@ -9,9 +8,10 @@ let
     ${cfg.config}
 
     ${optionalString cfg.systemScheduler "schedules: no"}
-'';
+  '';
   configFile = "${toString cfg.homeDir}/flexget.yml";
-in {
+in
+{
   options = {
     services.flexget = {
       enable = mkEnableOption "Run FlexGet Daemon";

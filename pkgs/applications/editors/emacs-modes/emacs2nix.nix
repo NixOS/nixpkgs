@@ -7,8 +7,8 @@ let
     rev = "752fe1bd891425cb7a4a53cd7b98c194c1fe4518";
     sha256 = "0asfdswh8sbnapbqhbz539zzxmv72f1iviha95iys34sgnd5k1nk";
   };
-
-in pkgs.mkShell {
+in
+pkgs.mkShell {
 
   buildInputs = [
     pkgs.bash

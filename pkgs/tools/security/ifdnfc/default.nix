@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub , pkgconfig
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
 , pcsclite
 , autoreconfHook
 , libnfc
@@ -23,7 +25,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "PC/SC IFD Handler based on libnfc";
     longDescription =
-    '' libnfc Interface Plugin to be used in <code>services.pcscd.plugins</code>.
+      '' libnfc Interface Plugin to be used in <code>services.pcscd.plugins</code>.
        It provides support for all readers which are not supported by ccid but by libnfc.
 
        For activating your reader you need to run
@@ -42,4 +44,3 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ makefu ];
   };
 }
-

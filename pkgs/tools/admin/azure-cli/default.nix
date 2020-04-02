@@ -1,5 +1,4 @@
 { stdenv, lib, python, fetchFromGitHub, installShellFiles }:
-
 let
   version = "2.1.0";
   src = fetchFromGitHub {
@@ -247,4 +246,3 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     maintainers = with maintainers; [ jonringer ];
   };
 })
-

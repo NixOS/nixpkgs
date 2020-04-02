@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/emacs/site-lisp
     cp emacs/ott-mode.el $out/share/emacs/site-lisp
-    '';
+  '';
 
   meta = {
     description = "Ott: tool for the working semanticist";

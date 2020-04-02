@@ -1,11 +1,11 @@
 { stdenv, fetchzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  pname   = "keycloak";
+  pname = "keycloak";
   version = "9.0.0";
 
   src = fetchzip {
-    url    = "https://downloads.jboss.org/keycloak/${version}/keycloak-${version}.zip";
+    url = "https://downloads.jboss.org/keycloak/${version}/keycloak-${version}.zip";
     sha256 = "1w2d76v1rjghvdks1w32qi08gh88cd37vbf6vx0kq9a2gnhn7hip";
   };
 
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = "https://www.keycloak.org/";
+    homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
-    license     = licenses.asl20;
+    license = licenses.asl20;
     maintainers = [ maintainers.ngerstle ];
   };
 

@@ -1,6 +1,11 @@
-{stdenv, buildOcamlJane, core_kernel,
- bin_prot, fieldslib,
- sexplib, herelib}:
+{ stdenv
+, buildOcamlJane
+, core_kernel
+, bin_prot
+, fieldslib
+, sexplib
+, herelib
+}:
 
 buildOcamlJane {
   name = "async_kernel";

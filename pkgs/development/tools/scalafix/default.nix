@@ -1,5 +1,4 @@
 { stdenv, jdk, jre, coursier, makeWrapper }:
-
 let
   baseName = "scalafix";
   version = "0.9.0";
@@ -13,7 +12,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "19j260prx7k010nxyvc1m9jj1ncxr73m2cym7if39360v5dc05c0";
+    outputHash = "19j260prx7k010nxyvc1m9jj1ncxr73m2cym7if39360v5dc05c0";
   };
 in
 stdenv.mkDerivation {

@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, cpio, xorgproto, libX11, libXmu, libXaw, libXt, tcl, tk
-, libXext, fontconfig, makeWrapper }:
+{ stdenv
+, fetchurl
+, cpio
+, xorgproto
+, libX11
+, libXmu
+, libXaw
+, libXt
+, tcl
+, tk
+, libXext
+, fontconfig
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
@@ -11,8 +23,19 @@ stdenv.mkDerivation rec {
     sha256 = "1za78yx57mgwcmmi33wx3533yz1x093dnqis8q2qmqivxav51lca";
   };
 
-  buildInputs = [ cpio xorgproto libX11 libXmu libXaw libXt tcl tk libXext
-    fontconfig makeWrapper ];
+  buildInputs = [
+    cpio
+    xorgproto
+    libX11
+    libXmu
+    libXaw
+    libXt
+    tcl
+    tk
+    libXext
+    fontconfig
+    makeWrapper
+  ];
 
   configureFlags = [
     "--enable-alternate-scoresdir=scores"
@@ -24,11 +47,11 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # Fix Makefiles
-    find . -name 'Makefile.in' -exec sed -re 's@^        ( *)(cd|[&][&])@	\1\2@' -i '{}' ';'
+    find . -name 'Makefile.in' -exec sed -re 's@^        ( *)(cd|[&][&])@  \1\2@' -i '{}' ';'
     find . -name 'Makefile.in' -exec sed -e '/chown/d; /chgrp/d' -i '{}' ';'
     # do not set sticky bit in nix store
     find . -name 'Makefile.in' -exec sed -e 's/04755/755/g' -i '{}' ';'
-    sed -e '/^			* *[$][(]tcltkdir[)]\/[*][.][*]/d' -i tcltk/Makefile.in
+    sed -e '/^      * *[$][(]tcltkdir[)]\/[*][.][*]/d' -i tcltk/Makefile.in
 
     # Fix C files
     sed -re 's@[(]int[)]color@(long)color@' -i tcltk/tkmap.c

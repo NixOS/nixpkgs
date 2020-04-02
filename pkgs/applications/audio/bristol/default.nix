@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xorg }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "bristol";
   version = "0.60.11";
 
@@ -11,7 +11,11 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib libjack2 libpulseaudio xorg.libX11 xorg.libXext
+    alsaLib
+    libjack2
+    libpulseaudio
+    xorg.libX11
+    xorg.libXext
     xorg.xorgproto
   ];
 
@@ -28,7 +32,7 @@ stdenv.mkDerivation  rec {
     description = "A range of synthesiser, electric piano and organ emulations";
     homepage = http://bristol.sourceforge.net;
     license = licenses.gpl3;
-    platforms = ["x86_64-linux" "i686-linux"];
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.goibhniu ];
   };
 }

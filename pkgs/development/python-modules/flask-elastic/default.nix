@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, flask, elasticsearch }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, flask
+, elasticsearch
+}:
 
 buildPythonPackage rec {
   pname = "Flask-Elastic";

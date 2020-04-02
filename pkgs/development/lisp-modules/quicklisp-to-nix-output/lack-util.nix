@@ -14,7 +14,7 @@ rec {
 
   packageName = "lack-util";
 
-  asdFilesToKeep = ["lack-util.asd"];
+  asdFilesToKeep = [ "lack-util.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lack-util DESCRIPTION System lacks description SHA256

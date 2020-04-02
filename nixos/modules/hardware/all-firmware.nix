@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.hardware;
-in {
+in
+{
 
   imports = [
     (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "hardware" "enableRedistributableFirmware" ])
@@ -53,19 +53,21 @@ in {
         alsa-firmware
         openelec-dvb-firmware
       ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
-        ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
+      ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
       ];
     })
     (mkIf cfg.enableAllFirmware {
-      assertions = [{
-        assertion = !cfg.enableAllFirmware || (config.nixpkgs.config.allowUnfree or false);
-        message = ''
-          the list of hardware.enableAllFirmware contains non-redistributable licensed firmware files.
-            This requires nixpkgs.config.allowUnfree to be true.
-            An alternative is to use the hardware.enableRedistributableFirmware option.
-        '';
-      }];
+      assertions = [
+        {
+          assertion = !cfg.enableAllFirmware || (config.nixpkgs.config.allowUnfree or false);
+          message = ''
+            the list of hardware.enableAllFirmware contains non-redistributable licensed firmware files.
+              This requires nixpkgs.config.allowUnfree to be true.
+              An alternative is to use the hardware.enableRedistributableFirmware option.
+          '';
+        }
+      ];
       hardware.firmware = with pkgs; [
         broadcom-bt-firmware
         b43Firmware_5_1_138

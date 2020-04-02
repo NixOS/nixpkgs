@@ -1,9 +1,8 @@
 { stdenv, fetchFromGitHub, glibcLocales, pandoc, python3 }:
-
 let
   pythonPackages = python3.pkgs;
-
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   pname = "coursera-dl";
   version = "0.11.5";
 

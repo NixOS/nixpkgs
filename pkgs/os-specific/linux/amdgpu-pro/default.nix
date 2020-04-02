@@ -1,16 +1,25 @@
-{ stdenv, fetchurl, elfutils
-, xorg, patchelf, openssl, libdrm, udev
-, libxcb, libxshmfence, epoxy, perl, zlib
+{ stdenv
+, fetchurl
+, elfutils
+, xorg
+, patchelf
+, openssl
+, libdrm
+, udev
+, libxcb
+, libxshmfence
+, epoxy
+, perl
+, zlib
 , ncurses
-, libsOnly ? false, kernel ? null
+, libsOnly ? false
+, kernel ? null
 }:
 
 assert (!libsOnly) -> kernel != null;
 
 with stdenv.lib;
-
 let
-
   kernelDir = if libsOnly then null else kernel.dev;
 
   bitness = if stdenv.is64bit then "64" else "32";
@@ -25,8 +34,8 @@ let
   libReplaceDir = "/usr/lib/${libArch}";
 
   ncurses5 = ncurses.override { abiVersion = "5"; };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   version = "17.40";
   pname = "amdgpu-pro";
@@ -38,7 +47,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url =
-    "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
+      "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
     sha256 = "1c073lp9cq1rc2mddky2r0j2dv9dd167qj02visz37vwaxbm2r5h";
     curlOpts = "--referer http://support.amd.com/en-us/kb-articles/Pages/AMD-Radeon-GPU-PRO-Linux-Beta-Driver%e2%80%93Release-Notes.aspx";
   };
@@ -100,8 +109,21 @@ in stdenv.mkDerivation rec {
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build modules";
 
   depLibPath = makeLibraryPath [
-    stdenv.cc.cc.lib xorg.libXext xorg.libX11 xorg.libXdamage xorg.libXfixes zlib
-    xorg.libXxf86vm libxcb libxshmfence epoxy openssl libdrm elfutils udev ncurses5
+    stdenv.cc.cc.lib
+    xorg.libXext
+    xorg.libX11
+    xorg.libXdamage
+    xorg.libXfixes
+    zlib
+    xorg.libXxf86vm
+    libxcb
+    libxshmfence
+    epoxy
+    openssl
+    libdrm
+    elfutils
+    udev
+    ncurses5
   ];
 
   installPhase = ''
@@ -132,8 +154,7 @@ in stdenv.mkDerivation rec {
 
   '' + optionalString (!libsOnly)
     (concatMapStrings (m:
-      "install -Dm444 usr/src/amdgpu-${build}/${m}.xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/${m}.xz\n") modules)
-  + ''
+      "install -Dm444 usr/src/amdgpu-${build}/${m}.xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/${m}.xz\n") modules) + ''
     mv $out/etc/vulkan $out/share
     interpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
     libPath="$out/lib:$out/lib/gbm:$depLibPath"
@@ -142,7 +163,7 @@ in stdenv.mkDerivation rec {
       patchelf --interpreter "$interpreter" --set-rpath "$libPath" "$out/bin/$prog"
     done
   '' + ''
-    ln -s ${makeLibraryPath [ncurses5]}/libncursesw.so.5 $out/lib/libtinfo.so.5
+    ln -s ${makeLibraryPath [ ncurses5 ]}/libncursesw.so.5 $out/lib/libtinfo.so.5
   '';
 
   # we'll just set the full rpath on everything to avoid having to track down dlopen problems
@@ -173,7 +194,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AMDGPU-PRO drivers";
-    homepage =  http://support.amd.com/en-us/kb-articles/Pages/AMDGPU-PRO-Beta-Driver-for-Vulkan-Release-Notes.aspx ;
+    homepage = http://support.amd.com/en-us/kb-articles/Pages/AMDGPU-PRO-Beta-Driver-for-Vulkan-Release-Notes.aspx;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ corngood ];

@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bash which autoconf automake ];
   buildInputs = [ coq ] ++ (with coq.ocamlPackages; [
-    ocaml camlp5
+    ocaml
+    camlp5
   ]);
 
   buildPhase = ''

@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    xorg.libX11 cairo lv2 libjack2 mesa
+    xorg.libX11
+    cairo
+    lv2
+    libjack2
+    mesa
   ];
 
   postPatch = ''

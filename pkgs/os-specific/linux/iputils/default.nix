@@ -1,17 +1,27 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, gettext, libxslt, docbook_xsl_ns
-, libcap, nettle, libidn2, systemd
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkgconfig
+, gettext
+, libxslt
+, docbook_xsl_ns
+, libcap
+, nettle
+, libidn2
+, systemd
 }:
 
 with stdenv.lib;
-
 let
   version = "20190709";
   sunAsIsLicense = {
     fullName = "AS-IS, SUN MICROSYSTEMS license";
     url = "https://github.com/iputils/iputils/blob/s${version}/rdisc.c";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "iputils";
   inherit version;
 
@@ -23,7 +33,8 @@ in stdenv.mkDerivation rec {
   };
 
   mesonFlags =
-    [ "-DUSE_CRYPTO=nettle"
+    [
+      "-DUSE_CRYPTO=nettle"
       "-DBUILD_RARPD=true"
       "-DBUILD_TRACEROUTE6=true"
       "-DNO_SETCAP_OR_SUID=true"

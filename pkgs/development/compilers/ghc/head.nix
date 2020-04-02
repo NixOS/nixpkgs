@@ -1,24 +1,38 @@
-{ stdenv, pkgsBuildTarget, targetPackages
+{ stdenv
+, pkgsBuildTarget
+, targetPackages
 
-# build-tools
+  # build-tools
 , bootPkgs
-, autoconf, autoreconfHook, automake, coreutils, fetchgit, fetchpatch, perl, python3, m4, sphinx
+, autoconf
+, autoreconfHook
+, automake
+, coreutils
+, fetchgit
+, fetchpatch
+, perl
+, python3
+, m4
+, sphinx
 , bash
 
-, libiconv ? null, ncurses
+, libiconv ? null
+, ncurses
 
-, enableDwarf ? !stdenv.targetPlatform.isDarwin &&
-                !stdenv.targetPlatform.isWindows, elfutils # for DWARF support
+, enableDwarf ? !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isWindows
+, elfutils # for DWARF support
 
 , useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildLlvmPackages, llvmPackages
+  buildLlvmPackages
+, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms)
+, gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -42,7 +56,6 @@
 }:
 
 assert !enableIntegerSimple -> gmp != null;
-
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -86,7 +99,6 @@ let
   targetCC = builtins.head toolsForTarget;
 
   useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
-
 in
 stdenv.mkDerivation (rec {
   inherit version;
@@ -139,21 +151,21 @@ stdenv.mkDerivation (rec {
   '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + stdenv.lib.optionalString targetPlatform.isMusl ''
-      echo "patching llvm-targets for musl targets..."
-      echo "Cloning these existing '*-linux-gnu*' targets:"
-      grep linux-gnu llvm-targets | sed 's/^/  /'
-      echo "(go go gadget sed)"
-      sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
-      echo "llvm-targets now contains these '*-linux-musl*' targets:"
-      grep linux-musl llvm-targets | sed 's/^/  /'
+    echo "patching llvm-targets for musl targets..."
+    echo "Cloning these existing '*-linux-gnu*' targets:"
+    grep linux-gnu llvm-targets | sed 's/^/  /'
+    echo "(go go gadget sed)"
+    sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
+    echo "llvm-targets now contains these '*-linux-musl*' targets:"
+    grep linux-musl llvm-targets | sed 's/^/  /'
 
-      echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
-      # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
-      for x in configure aclocal.m4; do
-        substituteInPlace $x \
-          --replace '*-android*|*-gnueabi*)' \
-                    '*-android*|*-gnueabi*|*-musleabi*)'
-      done
+    echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
+    # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
+    for x in configure aclocal.m4; do
+      substituteInPlace $x \
+        --replace '*-android*|*-gnueabi*)' \
+                  '*-android*|*-gnueabi*|*-musleabi*)'
+    done
   '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
@@ -162,11 +174,14 @@ stdenv.mkDerivation (rec {
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--with-curses-includes=${ncurses.dev}/include"
+    "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
-    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include"
+    "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
-    "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
+    "--with-iconv-includes=${libiconv}/include"
+    "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
   ] ++ stdenv.lib.optionals useLdGold [
@@ -185,8 +200,17 @@ stdenv.mkDerivation (rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    perl autoconf autoreconfHook automake m4 python3 sphinx
-    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    perl
+    autoconf
+    autoreconfHook
+    automake
+    m4
+    python3
+    sphinx
+    ghc
+    bootPkgs.alex
+    bootPkgs.happy
+    bootPkgs.hscolour
   ];
 
   # For building runtime libs

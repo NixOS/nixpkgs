@@ -1,6 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, talloc, finger_bsd, perl
+{ stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, talloc
+, finger_bsd
+, perl
 , openssl
-, linkOpenssl? true
+, linkOpenssl ? true
 , openldap
 , withLdap ? true
 , sqlite
@@ -107,4 +113,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-

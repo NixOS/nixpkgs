@@ -1,13 +1,34 @@
-{ stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
-, libarchive, db, pcre, libedit, libossp_uuid, libXpm
-, libSM, libXt, freetype, pkgconfig, fontconfig
-, cmake, libyaml, Security
-, libjpeg, libX11, libXext, libXft, libXinerama
+{ stdenv
+, fetchFromGitHub
+, jdk
+, gmp
+, readline
+, openssl
+, unixODBC
+, zlib
+, libarchive
+, db
+, pcre
+, libedit
+, libossp_uuid
+, libXpm
+, libSM
+, libXt
+, freetype
+, pkgconfig
+, fontconfig
+, cmake
+, libyaml
+, Security
+, libjpeg
+, libX11
+, libXext
+, libXft
+, libXinerama
 , extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
-, extraPacks     ? []
+, extraPacks ? [ ]
 , withGui ? false
 }:
-
 let
   version = "8.1.15";
   packInstall = swiplPath: pack:
@@ -28,9 +49,18 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ gmp readline openssl
-    libarchive libyaml db pcre libedit libossp_uuid
-    zlib ]
+  buildInputs = [
+    gmp
+    readline
+    openssl
+    libarchive
+    libyaml
+    db
+    pcre
+    libedit
+    libossp_uuid
+    zlib
+  ]
   ++ stdenv.lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
   ++ extraLibraries
   ++ stdenv.lib.optional stdenv.isDarwin Security;
@@ -40,8 +70,8 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DSWIPL_INSTALL_IN_LIB=ON" ];
 
   postInstall = builtins.concatStringsSep "\n"
-  ( builtins.map (packInstall "$out") extraPacks
-  );
+    (builtins.map (packInstall "$out") extraPacks
+    );
 
   meta = {
     homepage = "https://www.swi-prolog.org";

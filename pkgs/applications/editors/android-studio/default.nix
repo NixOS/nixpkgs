@@ -1,9 +1,8 @@
 { callPackage, makeFontsConf, gnome2 }:
-
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
     fontsConf = makeFontsConf {
-      fontDirectories = [];
+      fontDirectories = [ ];
     };
     inherit (gnome2) GConf gnome_vfs;
   };
@@ -17,12 +16,14 @@ let
     build = "193.6254973";
     sha256Hash = "0i4n5kxnfxnz3y44ba0x2j8nkmss4gchrzcdnb9wf6xc1jqrjwcm";
   };
-  latestVersion = { # canary & dev
+  latestVersion = {
+    # canary & dev
     version = "4.1.0.2"; # "Android Studio 4.1 Canary 2"
     build = "193.6264773";
     sha256Hash = "0m09q4jp653i9jlqsjplx3d64xkdm27c35781yz6h5rw0a1sq6kz";
   };
-in {
+in
+{
   # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {

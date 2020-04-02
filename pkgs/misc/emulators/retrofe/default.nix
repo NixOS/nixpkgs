@@ -1,5 +1,18 @@
-{ stdenv, fetchhg, cmake, glib, gst_all_1, makeWrapper, pkgconfig
-, python, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib, runtimeShell
+{ stdenv
+, fetchhg
+, cmake
+, glib
+, gst_all_1
+, makeWrapper
+, pkgconfig
+, python
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, sqlite
+, zlib
+, runtimeShell
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +28,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake makeWrapper pkgconfig python ];
 
   buildInputs = [
-    glib gst_all_1.gstreamer SDL2 SDL2_image SDL2_mixer SDL2_ttf sqlite zlib
+    glib
+    gst_all_1.gstreamer
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    sqlite
+    zlib
   ] ++ (with gst_all_1; [ gst-libav gst-plugins-base gst-plugins-good ]);
 
   patches = [ ./include-paths.patch ];

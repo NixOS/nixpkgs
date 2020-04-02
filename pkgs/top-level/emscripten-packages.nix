@@ -42,17 +42,17 @@ rec {
         echo "================= /testing json_c using node ================="
       '';
     });
-  
+
   libxml2 = (pkgs.libxml2.override {
     stdenv = emscriptenStdenv;
     pythonSupport = false;
   }).overrideDerivation
-    (old: { 
+    (old: {
       propagatedBuildInputs = [ zlib ];
       buildInputs = old.buildInputs ++ [ pkgconfig ];
 
       # just override it with nothing so it does not fail
-      autoreconfPhase = "echo autoreconfPhase not used..."; 
+      autoreconfPhase = "echo autoreconfPhase not used...";
       configurePhase = ''
         HOME=$TMPDIR
         emconfigure ./configure --prefix=$out --without-python
@@ -78,8 +78,8 @@ rec {
         fi
         echo "================= /testing libxml2 using node ================="
       '';
-    });            
-  
+    });
+
   xmlmirror = pkgs.buildEmscriptenPackage rec {
     pname = "xmlmirror";
     version = "unstable-2016-06-05";
@@ -92,7 +92,7 @@ rec {
       rev = "4fd7e86f7c9526b8f4c1733e5c8b45175860a8fd";
       sha256 = "1jasdqnbdnb83wbcnyrp32f36w3xwhwp0wq8lwwmhqagxrij1r4b";
     };
-     
+
     configurePhase = ''
       rm -f fastXmlLint.js*
       # a fix for ERROR:root:For asm.js, TOTAL_MEMORY must be a multiple of 16MB, was 234217728
@@ -104,14 +104,14 @@ rec {
       # https://gitlab.com/odfplugfest/xmlmirror/issues/11
       sed -e "s/-o fastXmlLint.js/-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' -o fastXmlLint.js/g" -i Makefile.emEnv
     '';
-    
+
     buildPhase = ''
       HOME=$TMPDIR
       make -f Makefile.emEnv
     '';
-    
+
     outputs = [ "out" "doc" ];
-    
+
     installPhase = ''
       mkdir -p $out/share
       mkdir -p $doc/share/${pname}
@@ -130,15 +130,15 @@ rec {
     checkPhase = ''
       
     '';
-  };  
+  };
 
   zlib = (pkgs.zlib.override {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideDerivation
-    (old: { 
+    (old: {
       buildInputs = old.buildInputs ++ [ pkgconfig ];
       # we need to reset this setting!
-      NIX_CFLAGS_COMPILE="";
+      NIX_CFLAGS_COMPILE = "";
       configurePhase = ''
         # FIXME: Some tests require writing at $HOME
         HOME=$TMPDIR
@@ -184,6 +184,6 @@ rec {
           --replace 'AR="libtool"' 'AR="ar"' \
           --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
       '';
-    }); 
-  
+    });
+
 }

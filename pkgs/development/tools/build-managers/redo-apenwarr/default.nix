@@ -1,8 +1,15 @@
-{ stdenv, lib, python27, fetchFromGitHub, mkdocs, which, findutils, coreutils
+{ stdenv
+, lib
+, python27
+, fetchFromGitHub
+, mkdocs
+, which
+, findutils
+, coreutils
 , perl
 , doCheck ? true
-}: let
-
+}:
+let
   # copy from 
   # pkgs/applications/networking/pyload/beautifulsoup.nix
   beautifulsoup = python27.pkgs.callPackage ./beautifulsoup.nix {
@@ -12,7 +19,8 @@
   mkdocs-exclude = python27.pkgs.callPackage ./mkdocs-exclude.nix {
     pythonPackages = python27.pkgs;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   pname = "redo-apenwarr";
   version = "0.42";

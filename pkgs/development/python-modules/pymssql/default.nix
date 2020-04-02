@@ -9,8 +9,8 @@ buildPythonPackage rec {
     sha256 = "4d0ed31c76983d723c0c979b18e2273623621e630ca4901f17a86128aca13f84";
   };
 
-  buildInputs = [cython setuptools-git];
-  propagatedBuildInputs = [freetds];
+  buildInputs = [ cython setuptools-git ];
+  propagatedBuildInputs = [ freetds ];
 
   # The tests require a running instance of SQLServer, so we skip them
   doCheck = false;

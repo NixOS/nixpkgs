@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
     license = licenses.bsd3;
-    platforms =  [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ orivej ];
   };
 }

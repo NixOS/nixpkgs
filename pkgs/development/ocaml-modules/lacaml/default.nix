@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://mmottl.github.io/lacaml;
     description = "OCaml bindings for BLAS and LAPACK";
     license = licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.rixed ];
   };
 }

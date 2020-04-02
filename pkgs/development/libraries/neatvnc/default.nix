@@ -1,6 +1,13 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja
-, pixman, libuv, gnutls, libdrm
-# libjpeg_turbo: Optional, for tight encoding (disabled because experimental)
+{ stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, pixman
+, libuv
+, gnutls
+, libdrm
+  # libjpeg_turbo: Optional, for tight encoding (disabled because experimental)
 , enableCpuAcceleration ? false # Whether to use CPU extensions (e.g. AVX)
 }:
 

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     vala
-   ];
+  ];
 
   buildInputs = [
     bamf
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     switchboard
     wingpanel
     zeitgeist
-   ];
+  ];
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"

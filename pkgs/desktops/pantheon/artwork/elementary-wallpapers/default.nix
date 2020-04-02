@@ -39,4 +39,3 @@ stdenv.mkDerivation rec {
     maintainers = pantheon.maintainers;
   };
 }
-

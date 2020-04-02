@@ -1,6 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, dbus, libgcrypt, pam, python2, glib, libxslt
-, gettext, gcr, libcap_ng, libselinux, p11-kit, openssh, wrapGAppsHook
-, docbook_xsl, docbook_xml_dtd_43, gnome3 }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, dbus
+, libgcrypt
+, pam
+, python2
+, glib
+, libxslt
+, gettext
+, gcr
+, libcap_ng
+, libselinux
+, p11-kit
+, openssh
+, wrapGAppsHook
+, docbook_xsl
+, docbook_xml_dtd_43
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
@@ -14,12 +31,23 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [
-    glib libgcrypt pam openssh libcap_ng libselinux
-    gcr p11-kit
+    glib
+    libgcrypt
+    pam
+    openssh
+    libcap_ng
+    libselinux
+    gcr
+    p11-kit
   ];
 
   nativeBuildInputs = [
-    pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_43 wrapGAppsHook
+    pkgconfig
+    gettext
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_43
+    wrapGAppsHook
   ];
 
   configureFlags = [

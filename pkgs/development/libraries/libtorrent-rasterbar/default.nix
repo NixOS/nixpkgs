@@ -1,16 +1,27 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, geoip, ncurses
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkgconfig
+, automake
+, autoconf
+, zlib
+, boost
+, openssl
+, libtool
+, python
+, libiconv
+, geoip
+, ncurses
 }:
-
 let
   version = "1.1.11";
-  formattedVersion = lib.replaceChars ["."] ["_"] version;
+  formattedVersion = lib.replaceChars [ "." ] [ "_" ] version;
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
   boostPython = boost.override { enablePython = true; inherit python; };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
   inherit version;
 

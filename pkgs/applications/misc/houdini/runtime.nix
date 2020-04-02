@@ -1,5 +1,4 @@
 { stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsaLib, dbus, xkeyboardconfig, bc, addOpenGLRunpath }:
-
 let
   ld_library_path = builtins.concatStringsSep ":" [
     "${stdenv.cc.cc.lib}/lib64"
@@ -84,4 +83,3 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.canndrew ];
   };
 }
-

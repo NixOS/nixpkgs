@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, bridge-utils, iproute, lxc, openvswitch, docker, busybox, dhcpcd, dhcp
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, bridge-utils
+, iproute
+, lxc
+, openvswitch
+, docker
+, busybox
+, dhcpcd
+, dhcp
 }:
 
 stdenv.mkDerivation {

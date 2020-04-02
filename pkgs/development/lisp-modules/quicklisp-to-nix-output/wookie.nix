@@ -14,7 +14,7 @@ rec {
 
   packageName = "wookie";
 
-  asdFilesToKeep = ["wookie.asd"];
+  asdFilesToKeep = [ "wookie.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM wookie DESCRIPTION An evented webserver for Common Lisp. SHA256

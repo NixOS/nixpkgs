@@ -1,6 +1,20 @@
-{ stdenv, lib, janePackage, ocaml, ocamlbuild, cryptokit, ctypes, magic-mime,
-  ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re, zarith, num,
-  openssl }:
+{ stdenv
+, lib
+, janePackage
+, ocaml
+, ocamlbuild
+, cryptokit
+, ctypes
+, magic-mime
+, ocaml-migrate-parsetree
+, octavius
+, ounit
+, ppx_deriving
+, re
+, zarith
+, num
+, openssl
+}:
 
 rec {
 
@@ -32,7 +46,8 @@ rec {
     pname = "ppx_ast";
     propagatedBuildInputs = [ ocaml-compiler-libs ocaml-migrate-parsetree ];
     meta.description = "OCaml AST used by Jane Street ppx rewriters";
-  } // (if lib.versionAtLeast ocaml.version "4.06"
+  } // (
+    if lib.versionAtLeast ocaml.version "4.06"
     then {
       version = "0.9.2";
       hash = "1h4qf26rg23z21rrw83fakiavw9km7174p3830pg0gg4bwakvba0";

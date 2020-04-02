@@ -1,6 +1,16 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, fetchurl
-, mpv, python-mpv-jsonipc, jellyfin-apiclient-python
-, pillow, tkinter, pystray, jinja2, pywebview }:
+{ stdenv
+, buildPythonApplication
+, fetchFromGitHub
+, fetchurl
+, mpv
+, python-mpv-jsonipc
+, jellyfin-apiclient-python
+, pillow
+, tkinter
+, pystray
+, jinja2
+, pywebview
+}:
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";

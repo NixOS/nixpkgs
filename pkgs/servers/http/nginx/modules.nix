@@ -1,7 +1,5 @@
 { fetchFromGitHub, lib, pkgs }:
-
 let
-
   http_proxy_connect_module_generic = patchName: rec {
     src = fetchFromGitHub {
       owner = "chobits";
@@ -14,9 +12,7 @@ let
       "${src}/patch/${patchName}.patch"
     ];
   };
-
 in
-
 {
   brotli = {
     src = let gitsrc = pkgs.fetchFromGitHub {
@@ -24,7 +20,7 @@ in
       repo = "ngx_brotli";
       rev = "e505dce68acc190cc5a1e780a3b0275e39f160ca";
       sha256 = "00j48lffki62y1nmjyy81iklw5nlyzvrjy3z04qch4fp3p57hwla";
-    }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
+    }; in pkgs.runCommandNoCC "ngx_brotli-src" { } ''
       cp -a ${gitsrc} $out
       substituteInPlace $out/filter/config \
         --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
@@ -34,9 +30,9 @@ in
 
   coolkit = {
     src = fetchFromGitHub {
-      owner  = "FRiCKLE";
-      repo   = "ngx_coolkit";
-      rev    = "0.2";
+      owner = "FRiCKLE";
+      repo = "ngx_coolkit";
+      rev = "0.2";
       sha256 = "1idj0cqmfsdqawjcqpr1fsq670fdki51ksqk2lslfpcs3yrfjpqh";
     };
   };
@@ -80,9 +76,9 @@ in
 
   fastcgi-cache-purge = {
     src = fetchFromGitHub {
-      owner  = "nginx-modules";
-      repo   = "ngx_cache_purge";
-      rev    = "2.5";
+      owner = "nginx-modules";
+      repo = "ngx_cache_purge";
+      rev = "2.5";
       sha256 = "1f4kxagzvz10vqbcjwi57wink6xw3s1h7wlrrlrlpkmhfbf9704y";
     };
   };
@@ -119,7 +115,7 @@ in
     };
   };
 
-  live ={
+  live = {
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-live-module";
@@ -179,7 +175,7 @@ in
     };
   };
 
-  mpeg-ts ={
+  mpeg-ts = {
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-ts-module";
@@ -188,7 +184,7 @@ in
     };
   };
 
-  naxsi ={
+  naxsi = {
     src = fetchFromGitHub {
       owner = "nbs-system";
       repo = "naxsi";
@@ -208,12 +204,13 @@ in
 
   opentracing = {
     src =
-      let src' = fetchFromGitHub {
-        owner = "opentracing-contrib";
-        repo = "nginx-opentracing";
-        rev = "v0.7.0";
-        sha256 = "16jzxhhsyfjaxb50jy5py9ppscidfx1shvc29ihldp0zs6d8khma";
-      };
+      let
+        src' = fetchFromGitHub {
+          owner = "opentracing-contrib";
+          repo = "nginx-opentracing";
+          rev = "v0.7.0";
+          sha256 = "16jzxhhsyfjaxb50jy5py9ppscidfx1shvc29ihldp0zs6d8khma";
+        };
       in "${src'}/opentracing";
     inputs = [ pkgs.opentracing-cpp ];
   };
@@ -223,21 +220,21 @@ in
       version = pkgs.psol.version;
 
       moduleSrc = fetchFromGitHub {
-        owner  = "pagespeed";
-        repo   = "ngx_pagespeed";
-        rev    = "v${version}-stable";
+        owner = "pagespeed";
+        repo = "ngx_pagespeed";
+        rev = "v${version}-stable";
         sha256 = "0ry7vmkb2bx0sspl1kgjlrzzz6lbz07313ks2lr80rrdm2zb16wp";
       };
 
       ngx_pagespeed = pkgs.runCommand
         "ngx_pagespeed"
-        {
-          meta = {
-            description = "PageSpeed module for Nginx";
-            homepage    = "https://developers.google.com/speed/pagespeed/module/";
-            license     = pkgs.stdenv.lib.licenses.asl20;
-          };
-        }
+      {
+        meta = {
+          description = "PageSpeed module for Nginx";
+          homepage = "https://developers.google.com/speed/pagespeed/module/";
+          license = pkgs.stdenv.lib.licenses.asl20;
+        };
+      }
         ''
           cp -r "${moduleSrc}" "$out"
           chmod -R +w "$out"
@@ -267,7 +264,7 @@ in
     };
   };
 
-  push-stream ={
+  push-stream = {
     src = fetchFromGitHub {
       owner = "wandenberg";
       repo = "nginx-push-stream-module";
@@ -276,7 +273,7 @@ in
     };
   };
 
-  rtmp ={
+  rtmp = {
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-rtmp-module";
@@ -314,9 +311,9 @@ in
 
   slowfs-cache = {
     src = fetchFromGitHub {
-      owner  = "FRiCKLE";
-      repo   = "ngx_slowfs_cache";
-      rev    = "1.10";
+      owner = "FRiCKLE";
+      repo = "ngx_slowfs_cache";
+      rev = "1.10";
       sha256 = "1gyza02pcws3zqm1phv3ag50db5gnapxyjwy8skjmvawz7p5bmxr";
     };
   };

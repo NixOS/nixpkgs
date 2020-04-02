@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python,
-  django, six
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, django
+, six
 }:
 
 buildPythonPackage rec {

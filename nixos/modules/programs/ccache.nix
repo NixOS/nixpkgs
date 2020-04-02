@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.programs.ccache;
-in {
+in
+{
   options.programs.ccache = {
     # host configuration
     enable = mkEnableOption "CCache";
@@ -16,7 +17,7 @@ in {
     packageNames = mkOption {
       type = types.listOf types.str;
       description = "Nix top-level packages to be compiled using CCache";
-      default = [];
+      default = [ ];
       example = [ "wxGTK30" "qt48" "ffmpeg_3_3" "libav_all" ];
     };
   };
@@ -48,7 +49,7 @@ in {
     })
 
     # target configuration
-    (mkIf (cfg.packageNames != []) {
+    (mkIf (cfg.packageNames != [ ]) {
       nixpkgs.overlays = [
         (self: super: genAttrs cfg.packageNames (pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }))
 

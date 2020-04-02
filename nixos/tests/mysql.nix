@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "mysql";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco shlevy ];
@@ -36,17 +36,20 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           FLUSH PRIVILEGES;
         '';
         services.mysql.ensureDatabases = [ "testdb" "testdb2" ];
-        services.mysql.ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        services.mysql.ensureUsers = [
+          {
+            name = "testuser";
+            ensurePermissions = {
+              "testdb.*" = "ALL PRIVILEGES";
+            };
+          }
+          {
+            name = "testuser2";
+            ensurePermissions = {
+              "testdb2.*" = "ALL PRIVILEGES";
+            };
+          }
+        ];
         services.mysql.package = pkgs.mariadb;
       };
 

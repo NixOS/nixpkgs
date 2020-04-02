@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.gale;
   # we convert the path to a string to avoid it being copied to the nix store,
@@ -65,117 +64,119 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-       assertions = [{
-         assertion = cfg.domain != "";
-         message = "A domain must be set for Gale.";
-       }];
+      assertions = [
+        {
+          assertion = cfg.domain != "";
+          message = "A domain must be set for Gale.";
+        }
+      ];
 
-       warnings = mkIf (!keysPrepared) [
-         "You must run gale-install in order to generate a domain key."
-       ];
+      warnings = mkIf (!keysPrepared) [
+        "You must run gale-install in order to generate a domain key."
+      ];
 
-       system.activationScripts.gale = mkIf cfg.enable (
-         stringAfter [ "users" "groups" ] ''
-           chmod 755 ${home}
-           mkdir -m 0777 -p ${home}/auth/cache
-           mkdir -m 1777 -p ${home}/auth/local # GALE_DOMAIN.gpub
-           mkdir -m 0700 -p ${home}/auth/private # ROOT.gpub
-           mkdir -m 0755 -p ${home}/auth/trusted # ROOT
-           mkdir -m 0700 -p ${home}/.gale
-           mkdir -m 0700 -p ${home}/.gale/auth
-           mkdir -m 0700 -p ${home}/.gale/auth/private # GALE_DOMAIN.gpri
+      system.activationScripts.gale = mkIf cfg.enable (
+        stringAfter [ "users" "groups" ] ''
+          chmod 755 ${home}
+          mkdir -m 0777 -p ${home}/auth/cache
+          mkdir -m 1777 -p ${home}/auth/local # GALE_DOMAIN.gpub
+          mkdir -m 0700 -p ${home}/auth/private # ROOT.gpub
+          mkdir -m 0755 -p ${home}/auth/trusted # ROOT
+          mkdir -m 0700 -p ${home}/.gale
+          mkdir -m 0700 -p ${home}/.gale/auth
+          mkdir -m 0700 -p ${home}/.gale/auth/private # GALE_DOMAIN.gpri
 
-           ln -sf ${pkgs.gale}/etc/gale/auth/trusted/ROOT "${home}/auth/trusted/ROOT"
-           chown ${cfg.user}:${cfg.group} ${home} ${home}/auth ${home}/auth/*
-           chown ${cfg.user}:${cfg.group} ${home}/.gale ${home}/.gale/auth ${home}/.gale/auth/private
-         ''
-       );
+          ln -sf ${pkgs.gale}/etc/gale/auth/trusted/ROOT "${home}/auth/trusted/ROOT"
+          chown ${cfg.user}:${cfg.group} ${home} ${home}/auth ${home}/auth/*
+          chown ${cfg.user}:${cfg.group} ${home}/.gale ${home}/.gale/auth ${home}/.gale/auth/private
+        ''
+      );
 
-       environment = {
-         etc = {
-           "gale/auth".source = home + "/auth"; # symlink /var/lib/gale/auth
-           "gale/conf".text = ''
-             GALE_USER ${cfg.user}
-             GALE_DOMAIN ${cfg.domain}
-             ${cfg.extraConfig}
-           '';
-         };
+      environment = {
+        etc = {
+          "gale/auth".source = home + "/auth"; # symlink /var/lib/gale/auth
+          "gale/conf".text = ''
+            GALE_USER ${cfg.user}
+            GALE_DOMAIN ${cfg.domain}
+            ${cfg.extraConfig}
+          '';
+        };
 
-         systemPackages = [ pkgs.gale ];
-       };
+        systemPackages = [ pkgs.gale ];
+      };
 
-       users.users.${cfg.user} = {
-         description = "Gale daemon";
-         uid = config.ids.uids.gale;
-         group = cfg.group;
-         home = home;
-         createHome = true;
-       };
+      users.users.${cfg.user} = {
+        description = "Gale daemon";
+        uid = config.ids.uids.gale;
+        group = cfg.group;
+        home = home;
+        createHome = true;
+      };
 
-       users.groups = [{
-         name = cfg.group;
-         gid = config.ids.gids.gale;
-       }];
+      users.groups = [
+        {
+          name = cfg.group;
+          gid = config.ids.gids.gale;
+        }
+      ];
     })
     (mkIf (cfg.enable && keysPrepared) {
-       assertions = [
-         {
-           assertion = cfg.keyPath != null
-                    && lib.pathExists (cfg.keyPath + "/${cfg.domain}.gpub");
-           message = "Couldn't find a Gale public key for ${cfg.domain}.";
-         }
-         {
-           assertion = cfg.keyPath != null
-                    && lib.pathExists (cfg.keyPath + "/${cfg.domain}.gpri");
-           message = "Couldn't find a Gale private key for ${cfg.domain}.";
-         }
-       ];
+      assertions = [
+        {
+          assertion = cfg.keyPath != null && lib.pathExists (cfg.keyPath + "/${cfg.domain}.gpub");
+          message = "Couldn't find a Gale public key for ${cfg.domain}.";
+        }
+        {
+          assertion = cfg.keyPath != null && lib.pathExists (cfg.keyPath + "/${cfg.domain}.gpri");
+          message = "Couldn't find a Gale private key for ${cfg.domain}.";
+        }
+      ];
 
-       services.gale.setuidWrapper = {
-         program = "gksign";
-         source = "${pkgs.gale}/bin/gksign";
-         owner = cfg.user;
-         group = cfg.group;
-         setuid = true;
-         setgid = false;
-       };
+      services.gale.setuidWrapper = {
+        program = "gksign";
+        source = "${pkgs.gale}/bin/gksign";
+        owner = cfg.user;
+        group = cfg.group;
+        setuid = true;
+        setgid = false;
+      };
 
-       security.wrappers.gksign = cfg.setuidWrapper;
+      security.wrappers.gksign = cfg.setuidWrapper;
 
-       systemd.services.gale-galed = {
-         description = "Gale messaging daemon";
-         wantedBy = [ "multi-user.target" ];
-         wants = [ "gale-gdomain.service" ];
-         after = [ "network.target" ];
+      systemd.services.gale-galed = {
+        description = "Gale messaging daemon";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "gale-gdomain.service" ];
+        after = [ "network.target" ];
 
-         preStart = ''
-           install -m 0640 -o ${cfg.user} -g ${cfg.group} ${keyPath}/${cfg.domain}.gpri "${home}/.gale/auth/private/"
-           install -m 0644 -o ${cfg.user} -g ${cfg.group} ${gpubFile} "${home}/.gale/auth/private/${cfg.domain}.gpub"
-           install -m 0644 -o ${cfg.user} -g ${cfg.group} ${gpubFile} "${home}/auth/local/${cfg.domain}.gpub"
-         '';
+        preStart = ''
+          install -m 0640 -o ${cfg.user} -g ${cfg.group} ${keyPath}/${cfg.domain}.gpri "${home}/.gale/auth/private/"
+          install -m 0644 -o ${cfg.user} -g ${cfg.group} ${gpubFile} "${home}/.gale/auth/private/${cfg.domain}.gpub"
+          install -m 0644 -o ${cfg.user} -g ${cfg.group} ${gpubFile} "${home}/auth/local/${cfg.domain}.gpub"
+        '';
 
-         serviceConfig = {
-           Type = "forking";
-           ExecStart = "@${pkgs.gale}/bin/galed galed";
-           User = cfg.user;
-           Group = cfg.group;
-           PermissionsStartOnly = true;
-         };
-       };
+        serviceConfig = {
+          Type = "forking";
+          ExecStart = "@${pkgs.gale}/bin/galed galed";
+          User = cfg.user;
+          Group = cfg.group;
+          PermissionsStartOnly = true;
+        };
+      };
 
-       systemd.services.gale-gdomain = {
-         description = "Gale AKD daemon";
-         wantedBy = [ "multi-user.target" ];
-         requires = [ "gale-galed.service" ];
-         after = [ "gale-galed.service" ];
+      systemd.services.gale-gdomain = {
+        description = "Gale AKD daemon";
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "gale-galed.service" ];
+        after = [ "gale-galed.service" ];
 
-         serviceConfig = {
-           Type = "forking";
-           ExecStart = "@${pkgs.gale}/bin/gdomain gdomain";
-           User = cfg.user;
-           Group = cfg.group;
-         };
-       };
+        serviceConfig = {
+          Type = "forking";
+          ExecStart = "@${pkgs.gale}/bin/gdomain gdomain";
+          User = cfg.user;
+          Group = cfg.group;
+        };
+      };
     })
   ];
 }

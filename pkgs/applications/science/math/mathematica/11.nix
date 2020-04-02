@@ -22,7 +22,6 @@
 , libGL
 , libGLU
 }:
-
 let
   l10n =
     import ./l10ns.nix {
@@ -70,9 +69,8 @@ stdenv.mkDerivation rec {
     libSM
   ]);
 
-  ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath = stdenv.lib.makeLibraryPath buildInputs + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
+    (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";
 
@@ -118,7 +116,7 @@ stdenv.mkDerivation rec {
         echo "patching $f executable <<"
         patchelf --shrink-rpath "$f"
         patchelf \
-	  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
           "$f" \
           && patchelf --shrink-rpath "$f" \

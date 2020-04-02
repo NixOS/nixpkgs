@@ -1,30 +1,81 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, perl, asciidoc
-, libjpeg, libtiff, libungif, libpng, imlib, expat
-, freetype, fontconfig, pkgconfig, gdk-pixbuf
-, mkfontdir, libX11, libXft, libXext, libXinerama
-, libXrandr, libICE, libSM, libXpm, libXdmcp, libxcb
-, libpthreadstubs, pcre, libXdamage, libXcomposite, libXfixes
-, libsndfile, fribidi }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, perl
+, asciidoc
+, libjpeg
+, libtiff
+, libungif
+, libpng
+, imlib
+, expat
+, freetype
+, fontconfig
+, pkgconfig
+, gdk-pixbuf
+, mkfontdir
+, libX11
+, libXft
+, libXext
+, libXinerama
+, libXrandr
+, libICE
+, libSM
+, libXpm
+, libXdmcp
+, libxcb
+, libpthreadstubs
+, pcre
+, libXdamage
+, libXcomposite
+, libXfixes
+, libsndfile
+, fribidi
+}:
 
 stdenv.mkDerivation rec {
   pname = "icewm";
   version = "1.6.3";
 
   src = fetchFromGitHub {
-    owner  = "bbidulock";
-    repo   = "icewm";
-    rev    = version;
+    owner = "bbidulock";
+    repo = "icewm";
+    rev = version;
     sha256 = "0h3w718x28fd4sz36ka9wpgcb98scna6qpycxzls4cjji3rjgm0l";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl asciidoc ];
 
   buildInputs = [
-    gettext libjpeg libtiff libungif libpng imlib expat
-    freetype fontconfig gdk-pixbuf mkfontdir libX11
-    libXft libXext libXinerama libXrandr libICE libSM libXpm
-    libXdmcp libxcb libpthreadstubs pcre libsndfile fribidi
-    libXdamage libXcomposite libXfixes
+    gettext
+    libjpeg
+    libtiff
+    libungif
+    libpng
+    imlib
+    expat
+    freetype
+    fontconfig
+    gdk-pixbuf
+    mkfontdir
+    libX11
+    libXft
+    libXext
+    libXinerama
+    libXrandr
+    libICE
+    libSM
+    libXpm
+    libXdmcp
+    libxcb
+    libpthreadstubs
+    pcre
+    libsndfile
+    fribidi
+    libXdamage
+    libXcomposite
+    libXfixes
   ];
 
   cmakeFlags = [ "-DPREFIX=$out" "-DCFGDIR=/etc/icewm" ];

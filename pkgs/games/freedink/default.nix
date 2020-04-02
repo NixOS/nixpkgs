@@ -1,6 +1,17 @@
-{ stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx
-, pkgconfig, intltool, fontconfig, libzip, zip, zlib }:
-
+{ stdenv
+, fetchurl
+, SDL
+, SDL_mixer
+, SDL_image
+, SDL_ttf
+, SDL_gfx
+, pkgconfig
+, intltool
+, fontconfig
+, libzip
+, zip
+, zlib
+}:
 let
   version = "1.08.20121209";
 
@@ -15,8 +26,8 @@ let
 
     prePatch = "substituteInPlace Makefile --replace /usr/local $out";
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "freedink";
   inherit version;
 
@@ -26,8 +37,17 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    SDL SDL_mixer SDL_image SDL_ttf SDL_gfx
-    pkgconfig intltool fontconfig libzip zip zlib
+    SDL
+    SDL_mixer
+    SDL_image
+    SDL_ttf
+    SDL_gfx
+    pkgconfig
+    intltool
+    fontconfig
+    libzip
+    zip
+    zlib
   ];
 
   preConfigure = ''

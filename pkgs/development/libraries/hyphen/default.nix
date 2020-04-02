@@ -1,11 +1,12 @@
 { stdenv, fetchurl, perl, ... }:
-
 let
   version = "2.8.8";
   folder = with builtins;
-    let parts = splitVersion version;
+    let
+      parts = splitVersion version;
     in concatStringsSep "." [ (elemAt parts 0) (elemAt parts 1) ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "hyphen";
   inherit version;
 

@@ -2,13 +2,14 @@
 with lib;
 let
   cfg = config.services.yggdrasil;
-  configProvided = (cfg.config != {});
-  configAsFile = (if configProvided then
-                   toString (pkgs.writeTextFile {
-                     name = "yggdrasil-conf";
-                     text = builtins.toJSON cfg.config;
-                   })
-                   else null);
+  configProvided = (cfg.config != { });
+  configAsFile = (
+    if configProvided then
+      toString (pkgs.writeTextFile {
+        name = "yggdrasil-conf";
+        text = builtins.toJSON cfg.config;
+      })
+    else null);
   configFileProvided = (cfg.configFile != null);
   generateConfig = (
     if configProvided && configFileProvided then
@@ -20,14 +21,14 @@ let
     else
       "${cfg.package}/bin/yggdrasil -genconf"
   );
-
-in {
+in
+{
   options = with types; {
     services.yggdrasil = {
       enable = mkEnableOption "the yggdrasil system service";
 
       configFile = mkOption {
-        type =  nullOr str;
+        type = nullOr str;
         default = null;
         example = "/run/keys/yggdrasil.conf";
         description = ''
@@ -52,7 +53,7 @@ in {
 
       config = mkOption {
         type = attrs;
-        default = {};
+        default = { };
         example = {
           Peers = [
             "tcp://aa.bb.cc.dd:eeeee"
@@ -100,7 +101,7 @@ in {
 
       denyDhcpcdInterfaces = mkOption {
         type = listOf str;
-        default = [];
+        default = [ ];
         example = [ "tap*" ];
         description = ''
           Disable the DHCP client for any interface whose name matches
@@ -123,7 +124,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = config.networking.enableIPv6;
+      {
+        assertion = config.networking.enableIPv6;
         message = "networking.enableIPv6 must be true for yggdrasil to work";
       }
     ];

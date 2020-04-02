@@ -16,7 +16,7 @@ rec {
 
   packageName = "trivial-utf-8";
 
-  asdFilesToKeep = ["trivial-utf-8.asd"];
+  asdFilesToKeep = [ "trivial-utf-8.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-utf-8 DESCRIPTION System lacks description SHA256

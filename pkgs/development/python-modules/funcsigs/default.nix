@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, isPyPy, isPy3k, unittest2
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, isPy3k
+, unittest2
 }:
 
 buildPythonPackage rec {

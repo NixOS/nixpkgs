@@ -1,12 +1,31 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
-, libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
+{ fetchurl
+, fetchpatch
+, stdenv
+, pkgconfig
+, libgcrypt
+, libassuan
+, libksba
+, libgpgerror
+, libiconv
+, npth
+, gettext
+, texinfo
+, buildPackages
 
-# Each of the dependencies below are optional.
-# Gnupg can be built without them at the cost of reduced functionality.
-, guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb ? null , openldap ? null
-, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
-null
+  # Each of the dependencies below are optional.
+  # Gnupg can be built without them at the cost of reduced functionality.
+, guiSupport ? true
+, enableMinimal ? false
+, adns ? null
+, bzip2 ? null
+, gnutls ? null
+, libusb ? null
+, openldap ? null
+, pcsclite ? null
+, pinentry ? null
+, readline ? null
+, sqlite ? null
+, zlib ? null
 }:
 
 with stdenv.lib;
@@ -26,8 +45,20 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [
-    libgcrypt libassuan libksba libiconv npth gettext
-    readline libusb gnutls adns openldap zlib bzip2 sqlite
+    libgcrypt
+    libassuan
+    libksba
+    libiconv
+    npth
+    gettext
+    readline
+    libusb
+    gnutls
+    adns
+    openldap
+    zlib
+    bzip2
+    sqlite
   ];
 
   patches = [
@@ -40,7 +71,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
         configure doc/dirmngr.texi doc/gnupg.info-1
-  '' + stdenv.lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
+  '' + stdenv.lib.optionalString (stdenv.isLinux && pcsclite != null) ''
     sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
@@ -53,23 +84,24 @@ stdenv.mkDerivation rec {
     "--with-npth-prefix=${npth}"
   ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
-  postInstall = if enableMinimal
-  then ''
-    rm -r $out/{libexec,sbin,share}
-    for f in `find $out/bin -type f -not -name gpg`
-    do
-      rm $f
-    done
-  '' else ''
-    mkdir -p $out/lib/systemd/user
-    for f in doc/examples/systemd-user/*.{service,socket} ; do
-      substitute $f $out/lib/systemd/user/$(basename $f) \
-        --replace /usr/bin $out/bin
-    done
+  postInstall =
+    if enableMinimal
+    then ''
+      rm -r $out/{libexec,sbin,share}
+      for f in `find $out/bin -type f -not -name gpg`
+      do
+        rm $f
+      done
+    '' else ''
+      mkdir -p $out/lib/systemd/user
+      for f in doc/examples/systemd-user/*.{service,socket} ; do
+        substitute $f $out/lib/systemd/user/$(basename $f) \
+          --replace /usr/bin $out/bin
+      done
 
-    # add gpg2 symlink to make sure git does not break when signing commits
-    ln -s $out/bin/gpg $out/bin/gpg2
-  '';
+      # add gpg2 symlink to make sure git does not break when signing commits
+      ln -s $out/bin/gpg $out/bin/gpg2
+    '';
 
   meta = with stdenv.lib; {
     homepage = https://gnupg.org;

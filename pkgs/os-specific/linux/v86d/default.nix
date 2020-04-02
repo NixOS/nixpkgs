@@ -1,5 +1,7 @@
-{ stdenv, fetchurl
-, kernel, klibc
+{ stdenv
+, fetchurl
+, kernel
+, klibc
 }:
 
 stdenv.mkDerivation rec {

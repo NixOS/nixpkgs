@@ -1,6 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, writeText, python3
-, vulkan-headers, vulkan-loader, glslang
-, pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, writeText
+, python3
+, vulkan-headers
+, vulkan-loader
+, glslang
+, pkgconfig
+, xlibsWrapper
+, libxcb
+, libXrandr
+, wayland
+}:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
@@ -13,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sz0388cr018ldx6ziplvk4v3zbg44pww77kv6kv5wxl69plwfcn";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake python3  ];
+  nativeBuildInputs = [ pkgconfig cmake python3 ];
   buildInputs = [ vulkan-headers vulkan-loader libxcb libXrandr wayland ];
   enableParallelBuilding = true;
 
@@ -32,9 +43,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";
-    homepage    = https://www.lunarg.com;
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = https://www.lunarg.com;
+    platforms = platforms.linux;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }

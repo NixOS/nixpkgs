@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, fetchurl, pythonPackages, curl }:
-
 let
   getmodel = name: sha256: {
     inherit name;
@@ -15,7 +14,6 @@ let
     (getmodel "fraktur.pyrnn.gz"
       "1wlwvxn91ilgmlri1hj81arl3mbzxc24ycdnkf5icq4hdi4c6y8b")
   ];
-
 in
 pythonPackages.buildPythonApplication rec {
   pname = "ocropus";
@@ -28,8 +26,16 @@ pythonPackages.buildPythonApplication rec {
     owner = "tmbdev";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ curl numpy scipy pillow
-    matplotlib beautifulsoup4 pygtk lxml ];
+  propagatedBuildInputs = with pythonPackages; [
+    curl
+    numpy
+    scipy
+    pillow
+    matplotlib
+    beautifulsoup4
+    pygtk
+    lxml
+  ];
 
   enableParallelBuilding = true;
 
@@ -41,7 +47,7 @@ pythonPackages.buildPythonApplication rec {
     substituteInPlace ocrolib/default.py --replace /usr/local $out
   '';
 
-  doCheck = false;  # fails
+  doCheck = false; # fails
   checkPhase = ''
     patchShebangs .
     substituteInPlace ./run-test \

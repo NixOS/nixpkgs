@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, autoPatchelfHook
-, qtbase, libvirt, cutelyst, grantlee }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, autoPatchelfHook
+, qtbase
+, libvirt
+, cutelyst
+, grantlee
+}:
 
 stdenv.mkDerivation rec {
   pname = "virtlyst";

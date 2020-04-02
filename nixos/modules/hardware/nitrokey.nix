@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.hardware.nitrokey;
-
 in
-
 {
   options.hardware.nitrokey = {
     enable = mkOption {
@@ -36,6 +32,6 @@ in
         { inherit (cfg) group; }
       ))
     ];
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
   };
 }

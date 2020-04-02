@@ -1,5 +1,15 @@
-{ stdenv, fetchFromGitHub, rustPlatform, openssl, pkgconfig, python3, xorg, cmake, libgit2, darwin
-, curl }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, pkgconfig
+, python3
+, xorg
+, cmake
+, libgit2
+, darwin
+, curl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "amp";

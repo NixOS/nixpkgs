@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, utillinux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
+{ stdenv
+, fetchurl
+, coreutils
+, bash
+, btrfs-progs
+, openssh
+, perl
+, perlPackages
+, utillinux
+, asciidoc
+, asciidoctor
+, mbuffer
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "btrbk";

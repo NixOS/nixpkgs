@@ -1,44 +1,40 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.bitlbee;
   bitlbeeUid = config.ids.uids.bitlbee;
 
   bitlbeePkg = pkgs.bitlbee.override {
-    enableLibPurple = cfg.libpurple_plugins != [];
+    enableLibPurple = cfg.libpurple_plugins != [ ];
     enablePam = cfg.authBackend == "pam";
   };
 
   bitlbeeConfig = pkgs.writeText "bitlbee.conf"
     ''
-    [settings]
-    RunMode = Daemon
-    User = bitlbee
-    ConfigDir = ${cfg.configDir}
-    DaemonInterface = ${cfg.interface}
-    DaemonPort = ${toString cfg.portNumber}
-    AuthMode = ${cfg.authMode}
-    AuthBackend = ${cfg.authBackend}
-    Plugindir = ${pkgs.bitlbee-plugins cfg.plugins}/lib/bitlbee
-    ${lib.optionalString (cfg.hostName != "") "HostName = ${cfg.hostName}"}
-    ${lib.optionalString (cfg.protocols != "") "Protocols = ${cfg.protocols}"}
-    ${cfg.extraSettings}
+      [settings]
+      RunMode = Daemon
+      User = bitlbee
+      ConfigDir = ${cfg.configDir}
+      DaemonInterface = ${cfg.interface}
+      DaemonPort = ${toString cfg.portNumber}
+      AuthMode = ${cfg.authMode}
+      AuthBackend = ${cfg.authBackend}
+      Plugindir = ${pkgs.bitlbee-plugins cfg.plugins}/lib/bitlbee
+      ${lib.optionalString (cfg.hostName != "") "HostName = ${cfg.hostName}"}
+      ${lib.optionalString (cfg.protocols != "") "Protocols = ${cfg.protocols}"}
+      ${cfg.extraSettings}
 
-    [defaults]
-    ${cfg.extraDefaults}
+      [defaults]
+      ${cfg.extraDefaults}
     '';
 
   purple_plugin_path =
     lib.concatMapStringsSep ":"
       (plugin: "${plugin}/lib/pidgin/:${plugin}/lib/purple-2/")
       cfg.libpurple_plugins
-    ;
-
+  ;
 in
-
 {
 
   ###### interface
@@ -105,7 +101,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.bitlbee-facebook ]";
         description = ''
           The list of bitlbee plugins to install.
@@ -114,7 +110,7 @@ in
 
       libpurple_plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.purple-matrix ]";
         description = ''
           The list of libpurple plugins to install.
@@ -159,7 +155,7 @@ in
 
   ###### implementation
 
-  config =  mkMerge [
+  config = mkMerge [
     (mkIf config.services.bitlbee.enable {
       users.users.bitlbee = {
         uid = bitlbeeUid;
@@ -185,7 +181,7 @@ in
 
     })
     (mkIf (config.services.bitlbee.authBackend == "pam") {
-      security.pam.services.bitlbee = {};
+      security.pam.services.bitlbee = { };
     })
   ];
 

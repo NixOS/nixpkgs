@@ -5,7 +5,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk2 ncurses glib unzip zip
+    gtk2
+    ncurses
+    glib
+    unzip
+    zip
   ];
 
   src = fetchhg {

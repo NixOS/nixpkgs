@@ -1,6 +1,24 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, python3, cmake, ninja
-, qtbase, qtimageformats, enchant, xdg_utils, ffmpeg, openalSoft, lzma
-, lz4, xxHash, zlib, minizip, openssl, libtgvoip, range-v3
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, pkg-config
+, python3
+, cmake
+, ninja
+, qtbase
+, qtimageformats
+, enchant
+, xdg_utils
+, ffmpeg
+, openalSoft
+, lzma
+, lz4
+, xxHash
+, zlib
+, minizip
+, openssl
+, libtgvoip
+, range-v3
 }:
 
 with lib;
@@ -25,8 +43,19 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config python3 cmake ninja ];
 
   buildInputs = [
-    qtbase qtimageformats ffmpeg openalSoft lzma lz4 xxHash
-    zlib minizip openssl enchant libtgvoip range-v3
+    qtbase
+    qtimageformats
+    ffmpeg
+    openalSoft
+    lzma
+    lz4
+    xxHash
+    zlib
+    minizip
+    openssl
+    enchant
+    libtgvoip
+    range-v3
   ];
 
   qtWrapperArgs = [

@@ -1,45 +1,84 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
-, ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
-, bison, lzo, snappy, libaio, gnutls, nettle, curl
+{ stdenv
+, fetchurl
+, fetchpatch
+, python
+, zlib
+, pkgconfig
+, glib
+, ncurses
+, perl
+, pixman
+, vde2
+, alsaLib
+, texinfo
+, flex
+, bison
+, lzo
+, snappy
+, libaio
+, gnutls
+, nettle
+, curl
 , makeWrapper
-, attr, libcap, libcap_ng
-, CoreServices, Cocoa, Hypervisor, rez, setfile
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
-, seccompSupport ? stdenv.isLinux, libseccomp
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte
-, vncSupport ? true, libjpeg, libpng
-, smartcardSupport ? true, libcacard
-, spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
-, usbredirSupport ? spiceSupport, usbredir
-, xenSupport ? false, xen
-, cephSupport ? false, ceph
-, openGLSupport ? sdlSupport, mesa, epoxy, libdrm
-, virglSupport ? openGLSupport, virglrenderer
-, smbdSupport ? false, samba
+, attr
+, libcap
+, libcap_ng
+, CoreServices
+, Cocoa
+, Hypervisor
+, rez
+, setfile
+, numaSupport ? stdenv.isLinux && !stdenv.isAarch32
+, numactl
+, seccompSupport ? stdenv.isLinux
+, libseccomp
+, pulseSupport ? !stdenv.isDarwin
+, libpulseaudio
+, sdlSupport ? !stdenv.isDarwin
+, SDL2
+, gtkSupport ? !stdenv.isDarwin && !xenSupport
+, gtk3
+, gettext
+, vte
+, vncSupport ? true
+, libjpeg
+, libpng
+, smartcardSupport ? true
+, libcacard
+, spiceSupport ? !stdenv.isDarwin
+, spice
+, spice-protocol
+, usbredirSupport ? spiceSupport
+, usbredir
+, xenSupport ? false
+, xen
+, cephSupport ? false
+, ceph
+, openGLSupport ? sdlSupport
+, mesa
+, epoxy
+, libdrm
+, virglSupport ? openGLSupport
+, virglrenderer
+, smbdSupport ? false
+, samba
 , hostCpuOnly ? false
-, hostCpuTargets ? (if hostCpuOnly
-                    then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
-                          ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
-                    else null)
+, hostCpuTargets ? (
+    if hostCpuOnly
+    then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
+      ++ [ "${stdenv.hostPlatform.qemuArch}-softmmu" ]
+    )
+    else null)
 , nixosTestRunner ? false
 }:
 
 with stdenv.lib;
 let
-  audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa,"
-    + optionalString pulseSupport "pa,"
-    + optionalString sdlSupport "sdl,";
-
+  audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa," + optionalString pulseSupport "pa," + optionalString sdlSupport "sdl,";
 in
-
 stdenv.mkDerivation rec {
   version = "4.2.0";
-  pname = "qemu"
-    + stdenv.lib.optionalString xenSupport "-xen"
-    + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
-    + stdenv.lib.optionalString nixosTestRunner "-for-vm-tests";
+  pname = "qemu" + stdenv.lib.optionalString xenSupport "-xen" + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only" + stdenv.lib.optionalString nixosTestRunner "-for-vm-tests";
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
@@ -48,9 +87,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ];
   buildInputs =
-    [ zlib glib ncurses perl pixman
-      vde2 texinfo makeWrapper lzo snappy
-      gnutls nettle curl
+    [
+      zlib
+      glib
+      ncurses
+      perl
+      pixman
+      vde2
+      texinfo
+      makeWrapper
+      lzo
+      snappy
+      gnutls
+      nettle
+      curl
     ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
     ++ optionals seccompSupport [ libseccomp ]
@@ -91,7 +141,7 @@ stdenv.mkDerivation rec {
       sha256 = "1jh0k3lg3553c2x1kq1kl3967jabhba5gm584wjpmr5mjqk3lnz1";
       stripLen = 1;
       extraPrefix = "slirp/";
-      excludes = ["slirp/CHANGELOG.md"];
+      excludes = [ "slirp/CHANGELOG.md" ];
     })
     (fetchpatch {
       name = "CVE-2020-7039-2.patch";
@@ -116,7 +166,7 @@ stdenv.mkDerivation rec {
       extraPrefix = "slirp/";
     })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ optionals stdenv.hostPlatform.isMusl [
+  ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/xattr_size_max.patch;
       sha256 = "1xfdjs1jlvs99hpf670yianb8c3qz2ars8syzyz8f2c2cp5y4bxb";
@@ -141,7 +191,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags =
-    [ "--audio-drv-list=${audio}"
+    [
+      "--audio-drv-list=${audio}"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
       "--enable-docs"

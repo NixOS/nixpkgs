@@ -19,10 +19,9 @@
 , SDL2
 , makeFontsConf
 }:
-
 let
   fontsConf = makeFontsConf {
-    fontDirectories = [];
+    fontDirectories = [ ];
   };
 in
 stdenv.mkDerivation rec {

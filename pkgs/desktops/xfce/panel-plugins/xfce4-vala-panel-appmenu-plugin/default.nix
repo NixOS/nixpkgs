@@ -1,6 +1,26 @@
-{ stdenv, fetchFromGitHub, substituteAll, callPackage, pkgconfig, cmake, vala, libxml2,
-  glib, pcre, gtk2, gtk3, xorg, libxkbcommon, epoxy, at-spi2-core, dbus-glib, bamf,
-  xfce, libwnck3, libdbusmenu, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, substituteAll
+, callPackage
+, pkgconfig
+, cmake
+, vala
+, libxml2
+, glib
+, pcre
+, gtk2
+, gtk3
+, xorg
+, libxkbcommon
+, epoxy
+, at-spi2-core
+, dbus-glib
+, bamf
+, xfce
+, libwnck3
+, libdbusmenu
+, gobject-introspection
+}:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-vala-panel-appmenu-plugin";
@@ -16,10 +36,26 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake vala libxml2.bin ];
-  buildInputs = [ (callPackage ./appmenu-gtk-module.nix {})
-                  glib pcre gtk2 gtk3 xorg.libpthreadstubs xorg.libXdmcp libxkbcommon epoxy
-                  at-spi2-core dbus-glib bamf xfce.xfce4panel_gtk3 xfce.libxfce4util xfce.xfconf
-                  libwnck3 libdbusmenu gobject-introspection ];
+  buildInputs = [
+    (callPackage ./appmenu-gtk-module.nix { })
+    glib
+    pcre
+    gtk2
+    gtk3
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    libxkbcommon
+    epoxy
+    at-spi2-core
+    dbus-glib
+    bamf
+    xfce.xfce4panel_gtk3
+    xfce.libxfce4util
+    xfce.xfconf
+    libwnck3
+    libdbusmenu
+    gobject-introspection
+  ];
 
   patches = [
     (substituteAll {
@@ -29,12 +65,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-      "-DENABLE_XFCE=ON"
-      "-DENABLE_BUDGIE=OFF"
-      "-DENABLE_VALAPANEL=OFF"
-      "-DENABLE_MATE=OFF"
-      "-DENABLE_JAYATANA=OFF"
-      "-DENABLE_APPMENU_GTK_MODULE=OFF"
+    "-DENABLE_XFCE=ON"
+    "-DENABLE_BUDGIE=OFF"
+    "-DENABLE_VALAPANEL=OFF"
+    "-DENABLE_MATE=OFF"
+    "-DENABLE_JAYATANA=OFF"
+    "-DENABLE_APPMENU_GTK_MODULE=OFF"
   ];
 
   preConfigure = ''

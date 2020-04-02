@@ -1,8 +1,29 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, libcap, libco-canonical, dqlite
-, raft-canonical, sqlite-replication, udev
-, writeShellScriptBin, apparmor-profiles, apparmor-parser
+{ stdenv
+, pkgconfig
+, lxc
+, buildGoPackage
+, fetchurl
+, makeWrapper
+, acl
+, rsync
+, gnutar
+, xz
+, btrfs-progs
+, gzip
+, dnsmasq
+, squashfsTools
+, iproute
+, iptables
+, ebtables
+, libcap
+, libco-canonical
+, dqlite
+, raft-canonical
+, sqlite-replication
+, udev
+, writeShellScriptBin
+, apparmor-profiles
+, apparmor-parser
 , criu
 , bash
 }:
@@ -33,7 +54,19 @@ buildGoPackage rec {
     rm $bin/bin/{deps,macaroon-identity,generate}
 
     wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash criu
+      acl
+      rsync
+      gnutar
+      xz
+      btrfs-progs
+      gzip
+      dnsmasq
+      squashfsTools
+      iproute
+      iptables
+      ebtables
+      bash
+      criu
       (writeShellScriptBin "apparmor_parser" ''
         exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
       '')
@@ -44,8 +77,16 @@ buildGoPackage rec {
   '';
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
-                  raft-canonical.dev sqlite-replication udev.dev ];
+  buildInputs = [
+    lxc
+    acl
+    libcap
+    libco-canonical.dev
+    dqlite.dev
+    raft-canonical.dev
+    sqlite-replication
+    udev.dev
+  ];
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";

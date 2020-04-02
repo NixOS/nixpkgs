@@ -16,7 +16,7 @@ rec {
 
   packageName = "css-selectors";
 
-  asdFilesToKeep = ["css-selectors.asd"];
+  asdFilesToKeep = [ "css-selectors.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM css-selectors DESCRIPTION An implementation of css selectors SHA256

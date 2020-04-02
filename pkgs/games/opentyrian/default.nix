@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchzip, SDL, SDL_net}:
+{ stdenv, fetchurl, fetchzip, SDL, SDL_net }:
 
 stdenv.mkDerivation rec {
   pname = "opentyrian";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1biz6hf6s7qrwn8ky0g6p8w7yg715w7yklpn6258bkks1s15hpdb";
   };
 
-  buildInputs = [SDL SDL_net];
+  buildInputs = [ SDL SDL_net ];
 
   patchPhase = "
     substituteInPlace src/file.c --replace /usr/share $out/share

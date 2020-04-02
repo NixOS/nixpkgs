@@ -8,19 +8,19 @@ stdenv.mkDerivation rec {
     url = "https://www.software-lab.de/${pname}-${version}.tgz";
     sha256 = "10np0mhihr47r3201617zccrvzpkhdl1jwvz7zimk8kxpriydq2j";
   };
-  buildInputs = [makeWrapper openssl] ++ optional stdenv.is64bit jdk;
+  buildInputs = [ makeWrapper openssl ] ++ optional stdenv.is64bit jdk;
   patchPhase = ''
     sed -i "s/which java/command -v java/g" mkAsm
 
     ${optionalString stdenv.isAarch32 ''
-      sed -i s/-m32//g Makefile
-      cat >>Makefile <<EOF
-      ext.o: ext.c
-        \$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
-      ht.o: ht.c
-        \$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
-      EOF
-    ''}
+    sed -i s/-m32//g Makefile
+    cat >>Makefile <<EOF
+    ext.o: ext.c
+      \$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
+    ht.o: ht.c
+      \$(CC) \$(CFLAGS) -fPIC -D_OS='"\$(OS)"' \$*.c
+    EOF
+  ''}
   '';
   sourceRoot = ''picoLisp/src${optionalString stdenv.is64bit "64"}'';
   postBuild = ''

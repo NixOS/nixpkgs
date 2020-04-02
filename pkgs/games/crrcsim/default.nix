@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGLU libGL SDL SDL_mixer plib libjpeg
+    libGLU
+    libGL
+    SDL
+    SDL_mixer
+    plib
+    libjpeg
   ];
 
   patches = [

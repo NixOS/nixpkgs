@@ -1,7 +1,6 @@
 { lib, config, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.roundcube;
   fpm = config.services.phpfpm.pools.roundcube;
@@ -79,7 +78,7 @@ in
 
     plugins = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         List of roundcube plugins to enable. Currently, only those directly shipped with Roundcube are supported.
       '';
@@ -137,12 +136,14 @@ in
     services.postgresql = mkIf localDB {
       enable = true;
       ensureDatabases = [ cfg.database.dbname ];
-      ensureUsers = [ {
-        name = cfg.database.username;
-        ensurePermissions = {
-          "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
-        };
-      } ];
+      ensureUsers = [
+        {
+          name = cfg.database.username;
+          ensurePermissions = {
+            "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
     users.users.${user} = mkIf localDB {
@@ -150,7 +151,7 @@ in
       isSystemUser = true;
       createHome = false;
     };
-    users.groups.${user} = mkIf localDB {};
+    users.groups.${user} = mkIf localDB { };
 
     services.phpfpm.pools.roundcube = {
       user = if localDB then user else "nginx";
@@ -183,24 +184,25 @@ in
       })
       {
         wantedBy = [ "multi-user.target" ];
-        script = let
-          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
-        in
-        ''
-          version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
-          if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
-            ${psql} -f ${cfg.package}/SQL/postgres.initial.sql
-          fi
+        script =
+          let
+            psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
+          in
+            ''
+              version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
+              if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
+                ${psql} -f ${cfg.package}/SQL/postgres.initial.sql
+              fi
 
-          if [ ! -f /var/lib/roundcube/des_key ]; then
-            base64 /dev/urandom | head -c 24 > /var/lib/roundcube/des_key;
-            # we need to log out everyone in case change the des_key
-            # from the default when upgrading from nixos 19.09
-            ${psql} <<< 'TRUNCATE TABLE session;'
-          fi
+              if [ ! -f /var/lib/roundcube/des_key ]; then
+                base64 /dev/urandom | head -c 24 > /var/lib/roundcube/des_key;
+                # we need to log out everyone in case change the des_key
+                # from the default when upgrading from nixos 19.09
+                ${psql} <<< 'TRUNCATE TABLE session;'
+              fi
 
-          ${pkgs.php}/bin/php ${cfg.package}/bin/update.sh
-        '';
+              ${pkgs.php}/bin/php ${cfg.package}/bin/update.sh
+            '';
         serviceConfig = {
           Type = "oneshot";
           StateDirectory = "roundcube";

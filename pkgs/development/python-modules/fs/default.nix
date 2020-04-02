@@ -35,7 +35,7 @@ buildPythonPackage rec {
     ++ lib.optionals (!pythonAtLeast "3.5") [ scandir ]
     ++ lib.optionals (!pythonAtLeast "3.5") [ enum34 ];
 
-  LC_ALL="en_US.utf-8";
+  LC_ALL = "en_US.utf-8";
 
   checkPhase = ''
     HOME=$(mktemp -d) pytest -k 'not user_data_repr' --ignore=tests/test_opener.py
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Filesystem abstraction";
-    homepage    = https://github.com/PyFilesystem/pyfilesystem2;
-    license     = licenses.bsd3;
+    homepage = https://github.com/PyFilesystem/pyfilesystem2;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

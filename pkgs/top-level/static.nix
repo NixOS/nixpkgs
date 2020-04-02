@@ -10,10 +10,11 @@
 # Basic things like pkgsStatic.hello should work out of the box. More
 # complicated things will need to be fixed with overrides.
 
-self: super: let
+self: super:
+let
   inherit (super.stdenvAdapters) makeStaticBinaries
-                                 makeStaticLibraries
-                                 propagateBuildInputs;
+    makeStaticLibraries
+    propagateBuildInputs;
   inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs;
   inherit (super) makeSetupHook;
 
@@ -21,13 +22,14 @@ self: super: let
   # but more portable than Nix store binaries.
   makeStaticDarwin = stdenv: stdenv // {
     mkDerivation = args: stdenv.mkDerivation (args // {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
-        substitutions = {
-          libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-        };
-      } ../stdenv/darwin/portable-libsystem.sh) ];
+      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static-libgcc";
+      nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+        (makeSetupHook {
+          substitutions = {
+            libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+          };
+        } ../stdenv/darwin/portable-libsystem.sh)
+      ];
     });
   };
 
@@ -54,7 +56,7 @@ self: super: let
 
   removeUnknownConfigureFlags = f: with self.lib;
     remove "--disable-shared"
-    (remove "--enable-static" f);
+      (remove "--enable-static" f);
 
   ocamlFixPackage = b:
     b.overrideAttrs (o: {
@@ -67,7 +69,7 @@ self: super: let
   ocamlStaticAdapter = _: super:
     self.lib.mapAttrs
       (_: p: if p ? overrideAttrs then ocamlFixPackage p else p)
-      super
+    super
     // {
       lablgtk = null; # Currently xlibs cause infinite recursion
       ocaml = ((super.ocaml.override { useX11 = false; }).overrideAttrs (o: {
@@ -84,8 +86,8 @@ self: super: let
         ];
       });
     };
-
-in {
+in
+{
   stdenv = foldl (flip id) super.stdenv staticAdapters;
   gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
   gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
@@ -97,8 +99,8 @@ in {
 
   haskell = super.haskell // {
     packageOverrides = composeExtensions
-      (super.haskell.packageOverrides or (_: _: {}))
-      haskellStaticAdapter;
+      (super.haskell.packageOverrides or (_: _: { }))
+    haskellStaticAdapter;
   };
 
   nghttp2 = super.nghttp2.override {

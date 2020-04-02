@@ -1,14 +1,27 @@
-{ stdenv, fetchurl, lib, vdr
-, libav, libcap, libvdpau
-, xineLib, libjpeg, libextractor, mesa, libGLU
-, libX11, libXext, libXrender, libXrandr
+{ stdenv
+, fetchurl
+, lib
+, vdr
+, libav
+, libcap
+, libvdpau
+, xineLib
+, libjpeg
+, libextractor
+, mesa
+, libGLU
+, libX11
+, libXext
+, libXrender
+, libXrandr
 , makeWrapper
-}: let
+}:
+let
   name = "vdr-xineliboutput-2.1.0";
 
   makeXinePluginPath = l: lib.concatStringsSep ":" (map (p: "${p}/lib/xine/plugins") l);
 
-  self =  stdenv.mkDerivation {
+  self = stdenv.mkDerivation {
     inherit name;
 
     src = fetchurl {
@@ -61,4 +74,5 @@
       inherit (vdr.meta) platforms;
     };
   };
-in self
+in
+self

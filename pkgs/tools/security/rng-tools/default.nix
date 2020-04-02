@@ -1,13 +1,24 @@
-{ stdenv, fetchFromGitHub, libtool, autoreconfHook, pkgconfig
+{ stdenv
+, fetchFromGitHub
+, libtool
+, autoreconfHook
+, pkgconfig
 , sysfsutils
 , argp-standalone
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
-, curl ? null, libxml2 ? null, openssl ? null, withNistBeacon ? false
+, curl ? null
+, libxml2 ? null
+, openssl ? null
+, withNistBeacon ? false
   # Systems that support RDRAND but not AES-NI require libgcrypt to use RDRAND as an entropy source
-, libgcrypt ? null, withGcrypt ? true
-, jitterentropy ? null, withJitterEntropy ? true
-, libp11 ? null, opensc ? null, withPkcs11 ? true
+, libgcrypt ? null
+, withGcrypt ? true
+, jitterentropy ? null
+, withJitterEntropy ? true
+, libp11 ? null
+, opensc ? null
+, withPkcs11 ? true
 }:
 
 with stdenv.lib;
@@ -25,27 +36,27 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     ${optionalString withPkcs11 ''
-      substituteInPlace rngd.c \
-        --replace /usr/lib64/opensc-pkcs11.so ${opensc}/lib/opensc-pkcs11.so
-    ''}
+    substituteInPlace rngd.c \
+      --replace /usr/lib64/opensc-pkcs11.so ${opensc}/lib/opensc-pkcs11.so
+  ''}
   '';
 
   nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
 
   configureFlags = [
-    (withFeature   withGcrypt        "libgcrypt")
+    (withFeature withGcrypt "libgcrypt")
     (enableFeature withJitterEntropy "jitterentropy")
-    (withFeature   withNistBeacon    "nistbeacon")
-    (withFeature   withPkcs11        "pkcs11")
+    (withFeature withNistBeacon "nistbeacon")
+    (withFeature withPkcs11 "pkcs11")
   ];
 
   # argp-standalone is only used when libc lacks argp parsing (musl)
   buildInputs = [ sysfsutils ]
     ++ optionals stdenv.hostPlatform.isx86_64 [ argp-standalone ]
-    ++ optionals withGcrypt        [ libgcrypt ]
+    ++ optionals withGcrypt [ libgcrypt ]
     ++ optionals withJitterEntropy [ jitterentropy ]
-    ++ optionals withNistBeacon    [ curl libxml2 openssl ]
-    ++ optionals withPkcs11        [ libp11 openssl ];
+    ++ optionals withNistBeacon [ curl libxml2 openssl ]
+    ++ optionals withPkcs11 [ libp11 openssl ];
 
   enableParallelBuilding = true;
 

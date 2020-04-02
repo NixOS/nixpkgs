@@ -1,4 +1,5 @@
-{ stdenv, nitrokey-app
+{ stdenv
+, nitrokey-app
 , group ? "nitrokey"
 }:
 

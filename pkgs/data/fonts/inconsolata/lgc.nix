@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fontforge}:
+{ stdenv, fetchFromGitHub, fontforge }:
 
 stdenv.mkDerivation rec {
   pname = "inconsolata-lgc";

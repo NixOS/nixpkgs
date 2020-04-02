@@ -1,13 +1,45 @@
-{ stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
+{ stdenv
+, lib
+, fetchurl
+, bash
+, pkgconfig
+, autoconf
+, cpio
+, file
+, which
+, unzip
+, zip
+, perl
+, cups
+, freetype
+, alsaLib
+, libjpeg
+, giflib
+, libpng
+, zlib
+, lcms2
+, libX11
+, libICE
+, libXrender
+, libXext
+, libXt
+, libXtst
+, libXi
+, libXinerama
+, libXcursor
+, libXrandr
+, fontconfig
+, openjdk11-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+, enableJavaFX ? openjfx.meta.available
+, openjfx
+, enableGnome2 ? true
+, gtk3
+, gnome_vfs
+, glib
+, GConf
 }:
-
 let
   major = "11";
   update = ".0.6";
@@ -24,11 +56,39 @@ let
 
     nativeBuildInputs = [ pkgconfig autoconf ];
     buildInputs = [
-      cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
-      libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11-bootstrap
+      cpio
+      file
+      which
+      unzip
+      zip
+      perl
+      zlib
+      cups
+      freetype
+      alsaLib
+      libjpeg
+      giflib
+      libpng
+      zlib
+      lcms2
+      libX11
+      libICE
+      libXrender
+      libXext
+      libXtst
+      libXt
+      libXtst
+      libXi
+      libXinerama
+      libXcursor
+      libXrandr
+      fontconfig
+      openjdk11-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
+      gtk3
+      gnome_vfs
+      GConf
+      glib
     ];
 
     patches = [
@@ -56,17 +116,24 @@ let
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
     ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
-      ++ lib.optional headless "--enable-headless-only"
-      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
+    ++ lib.optional headless "--enable-headless-only"
+    ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
     NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
+      "-lfontconfig"
+      "-lcups"
+      "-lXinerama"
+      "-lXrandr"
+      "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lgtk-3"
+      "-lgio-2.0"
+      "-lgnomevfs-2"
+      "-lgconf-2"
     ]);
 
     buildFlags = [ "all" ];
@@ -90,8 +157,8 @@ let
       # Remove crap from the installation.
       rm -rf $out/lib/openjdk/demo
       ${lib.optionalString headless ''
-        rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
-      ''}
+      rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
+    ''}
 
       ln -s $out/lib/openjdk/bin $out/bin
     '';
@@ -144,4 +211,5 @@ let
       home = "${openjdk}/lib/openjdk";
     };
   };
-in openjdk
+in
+openjdk

@@ -1,7 +1,5 @@
 { jre, stdenv, fetchurl, makeWrapper, makeDesktopItem }:
-
 let
-
   desktopItem = makeDesktopItem rec {
     name = "netlogo";
     exec = name;
@@ -10,9 +8,7 @@ let
     desktopName = "NetLogo";
     categories = "Science;";
   };
-
 in
-
 stdenv.mkDerivation rec {
   pname = "netlogo";
   version = "6.1.1";

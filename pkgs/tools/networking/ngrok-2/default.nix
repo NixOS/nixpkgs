@@ -1,19 +1,20 @@
 { stdenv, fetchurl, patchelfUnstable }:
 
 with stdenv.lib;
-
-let versions = builtins.fromJSON (builtins.readFile ./versions.json);
-    arch = if stdenv.isi686 then "386"
-           else if stdenv.isx86_64 then "amd64"
-           else if stdenv.isAarch32 then "arm"
-           else if stdenv.isAarch64 then "arm64"
-           else throw "Unsupported architecture";
-    os = if stdenv.isLinux then "linux"
-         else if stdenv.isDarwin then "darwin"
-         else throw "Unsupported os";
-    versionInfo = versions."${os}-${arch}";
-    inherit (versionInfo) version sha256 url;
-
+let
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+  arch =
+    if stdenv.isi686 then "386"
+    else if stdenv.isx86_64 then "amd64"
+    else if stdenv.isAarch32 then "arm"
+    else if stdenv.isAarch64 then "arm64"
+    else throw "Unsupported architecture";
+  os =
+    if stdenv.isLinux then "linux"
+    else if stdenv.isDarwin then "darwin"
+    else throw "Unsupported os";
+  versionInfo = versions."${os}-${arch}";
+  inherit (versionInfo) version sha256 url;
 in
 stdenv.mkDerivation {
   name = "ngrok-${version}";

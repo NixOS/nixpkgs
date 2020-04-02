@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jpr5";
     repo = "ngrep";
-    rev = "V${lib.replaceStrings ["."] ["_"] version}";
+    rev = "V${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1x2fyd7wdqlj1r76ilal06cl2wmbz0ws6i3ys204sbjh1cj6dcl7";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     # <ngrep>/doc/README.txt says that ngrep itself is licensed under a
     # 'BSD-like' license but that the 'regex' library (in the ngrep tarball) is
     # GPLv2.
-    license = "ngrep";  # Some custom BSD-style, see LICENSE.txt
+    license = "ngrep"; # Some custom BSD-style, see LICENSE.txt
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

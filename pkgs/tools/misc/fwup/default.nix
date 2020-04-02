@@ -1,6 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper, pkgconfig
-, zlib, lzma, bzip2, mtools, dosfstools, zip, unzip, libconfuse, libsodium
-, libarchive, darwin, coreutils }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, makeWrapper
+, pkgconfig
+, zlib
+, lzma
+, bzip2
+, mtools
+, dosfstools
+, zip
+, unzip
+, libconfuse
+, libsodium
+, libarchive
+, darwin
+, coreutils
+}:
 
 stdenv.mkDerivation rec {
   pname = "fwup";
@@ -19,8 +35,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper ];
   buildInputs = [ zlib lzma bzip2 libconfuse libsodium libarchive ]
     ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.DiskArbitration
-    ];
+    darwin.apple_sdk.frameworks.DiskArbitration
+  ];
   propagatedBuildInputs = [ zip unzip mtools dosfstools coreutils ];
 
   meta = with stdenv.lib; {

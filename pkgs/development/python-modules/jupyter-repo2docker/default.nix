@@ -1,4 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
 , docker
 , escapism
 , jinja2

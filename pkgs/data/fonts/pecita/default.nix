@@ -1,9 +1,7 @@
 { lib, fetchurl }:
-
 let
   version = "5.4";
 in
-
 fetchurl {
   name = "pecita-${version}";
 
@@ -24,6 +22,6 @@ fetchurl {
     description = "Handwritten font with connected glyphs";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
   };
 }

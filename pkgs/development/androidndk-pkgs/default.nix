@@ -1,4 +1,7 @@
-{ androidenv, buildPackages, pkgs, targetPackages
+{ androidenv
+, buildPackages
+, pkgs
+, targetPackages
 }:
 
 {

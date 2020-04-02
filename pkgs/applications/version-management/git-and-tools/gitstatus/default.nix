@@ -1,4 +1,4 @@
-{ callPackage, stdenv, fetchFromGitHub, ...}:
+{ callPackage, stdenv, fetchFromGitHub, ... }:
 
 stdenv.mkDerivation {
   pname = "gitstatus";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "07s8hwx3i5mnafi2xfim44z3q2nsvlcibfdxj17w8mkjhfpywi00";
   };
 
-  buildInputs = [ (callPackage ./romkatv_libgit2.nix {}) ];
+  buildInputs = [ (callPackage ./romkatv_libgit2.nix { }) ];
   patchPhase = ''
     sed -i "1i GITSTATUS_DAEMON=$out/bin/gitstatusd" gitstatus.plugin.zsh
   '';

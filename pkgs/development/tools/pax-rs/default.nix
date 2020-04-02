@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, rustPlatform, runCommand } :
+{ stdenv, fetchFromGitHub, fetchurl, rustPlatform, runCommand }:
 with rustPlatform;
 
 buildRustPackage rec {
@@ -30,7 +30,7 @@ buildRustPackage rec {
         sha256 = "0ff1b64b99cbca1cc2ceabcd2e4f7bc3411e3a2a9fbb9db2204d9240fe38ddeb";
       };
     in
-    runCommand "pax-rs-src" {} ''
+    runCommand "pax-rs-src" { } ''
       cp -R ${source} $out
       chmod +w $out
       cp ${cargo-lock} $out/Cargo.lock

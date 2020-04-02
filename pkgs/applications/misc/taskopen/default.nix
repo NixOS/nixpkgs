@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "Script for taking notes and open urls with taskwarrior";
     homepage = https://github.com/ValiValpas/taskopen;
     platforms = platforms.linux;
-    license = stdenv.lib.licenses.free ;
+    license = stdenv.lib.licenses.free;
     maintainers = [ maintainers.winpat ];
   };
 }

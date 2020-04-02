@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte, wrapGAppsHook
-, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
+{ stdenv
+, fetchurl
+, automake
+, autoconf
+, intltool
+, pkgconfig
+, gtk3
+, vte
+, wrapGAppsHook
+, libxslt
+, docbook_xml_dtd_412
+, docbook_xsl
+, libxml2
+, findXMLCatalogs
 }:
 
 let version = "0.3.2"; in
@@ -19,8 +31,16 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkgconfig wrapGAppsHook
-    libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
+    automake
+    autoconf
+    intltool
+    pkgconfig
+    wrapGAppsHook
+    libxslt
+    docbook_xml_dtd_412
+    docbook_xsl
+    libxml2
+    findXMLCatalogs
   ];
 
   buildInputs = [ gtk3 vte ];

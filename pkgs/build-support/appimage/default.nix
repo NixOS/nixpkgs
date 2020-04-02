@@ -1,7 +1,20 @@
-{ stdenv, buildFHSUserEnv, writeScript, pkgs
-, bash, radare2, jq, squashfsTools, ripgrep
-, coreutils, libarchive, file, runtimeShell, pv
-, lib, runCommand }:
+{ stdenv
+, buildFHSUserEnv
+, writeScript
+, pkgs
+, bash
+, radare2
+, jq
+, squashfsTools
+, ripgrep
+, coreutils
+, libarchive
+, file
+, runtimeShell
+, pv
+, lib
+, runCommand
+}:
 
 rec {
   appimage-exec = pkgs.substituteAll {
@@ -31,7 +44,7 @@ rec {
     runScript = "appimage-exec.sh -w ${src}";
   } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
+  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage (args // {
     inherit name extraPkgs;
     src = extract { inherit name src; };
   });

@@ -1,11 +1,22 @@
-{ buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio
+{ buildPackages
+, runCommand
+, nettools
+, bc
+, bison
+, flex
+, perl
+, rsync
+, gmp
+, libmpc
+, mpfr
+, openssl
+, libelf
+, cpio
 , utillinux
 , writeTextFile
 }:
-
 let
-  readConfig = configfile: import (runCommand "config.nix" {} ''
+  readConfig = configfile: import (runCommand "config.nix" { } ''
     echo "{" > "$out"
     while IFS='=' read key val; do
       [ "x''${key#CONFIG_}" != "x$key" ] || continue
@@ -14,33 +25,34 @@ let
     done < "${configfile}"
     echo "}" >> $out
   '').outPath;
-in {
+in
+{
   # Allow overriding stdenv on each buildLinux call
-  stdenv,
-  # The kernel version
-  version,
-  # The version of the kernel module directory
-  modDirVersion ? version,
-  # The kernel source (tarball, git checkout, etc.)
-  src,
-  # a list of { name=..., patch=..., extraConfig=...} patches
-  kernelPatches ? [],
-  # The kernel .config file
-  configfile,
-  # Manually specified nixexpr representing the config
+  stdenv
+, # The kernel version
+  version
+, # The version of the kernel module directory
+  modDirVersion ? version
+, # The kernel source (tarball, git checkout, etc.)
+  src
+, # a list of { name=..., patch=..., extraConfig=...} patches
+  kernelPatches ? [ ]
+, # The kernel .config file
+  configfile
+, # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
-  # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile)
+, # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
-  randstructSeed ? "",
-  # Use defaultMeta // extraMeta
-  extraMeta ? {},
-  # Whether to utilize the controversial import-from-derivation feature to parse the config
-  allowImportFromDerivation ? false,
-  # ignored
-  features ? null,
+  randstructSeed ? ""
+, # Use defaultMeta // extraMeta
+  extraMeta ? { }
+, # Whether to utilize the controversial import-from-derivation feature to parse the config
+  allowImportFromDerivation ? false
+, # ignored
+  features ? null
+,
 }:
-
 let
   inherit (stdenv.lib)
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
@@ -48,12 +60,16 @@ let
   # Dependencies that are required to build kernel modules
   moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf;
 
-  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
-    #!${stdenv.shell} -e
-    mkdir -p $4
-    cp -av $2 $4
-    cp -av $3 $4
-  ''; };
+  installkernel = writeTextFile {
+    name = "installkernel";
+    executable = true;
+    text = ''
+      #!${stdenv.shell} -e
+      mkdir -p $4
+      cp -av $2 $4
+      cp -av $3 $4
+    '';
+  };
 
   commonMakeFlags = [
     "O=$(buildRoot)"
@@ -80,9 +96,7 @@ let
 
       isModular = config.isYes "MODULES";
 
-      installsFirmware = (config.isEnabled "FW_LOADER") &&
-        (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
-        (stdenv.lib.versionOlder version "4.14");
+      installsFirmware = (config.isEnabled "FW_LOADER") && (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) && (stdenv.lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
@@ -93,10 +107,10 @@ let
 
       patches =
         map (p: p.patch) kernelPatches
-        # Required for deterministic builds along with some postPatch magic.
-        ++ optional (stdenv.lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch
-        # Fixes determinism by normalizing metadata for the archive of kheaders
-        ++ optional (stdenv.lib.versionAtLeast version "5.2" && stdenv.lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
+          # Required for deterministic builds along with some postPatch magic.
+          ++ optional (stdenv.lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch
+          # Fixes determinism by normalizing metadata for the archive of kheaders
+          ++ optional (stdenv.lib.versionAtLeast version "5.2" && stdenv.lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
       prePatch = ''
         for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
@@ -155,7 +169,7 @@ let
       buildFlags = [
         "KBUILD_BUILD_VERSION=1-NixOS"
         platform.kernelTarget
-        "vmlinux"  # for "perf" and things like that
+        "vmlinux" # for "perf" and things like that
       ] ++ optional isModular "modules";
 
       installFlags = [
@@ -169,105 +183,107 @@ let
       '';
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [ (
-        if platform ? kernelInstallTarget then platform.kernelInstallTarget
-        else if platform.kernelTarget == "uImage" then "uinstall"
-        else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
-        else "install"
-      ) ];
+      installTargets = [
+        (
+          if platform ? kernelInstallTarget then platform.kernelInstallTarget
+          else if platform.kernelTarget == "uImage" then "uinstall"
+          else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
+          else "install"
+        )
+      ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
-      '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
-        make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
-      '' else "") + (if isModular then ''
-        mkdir -p $dev
-        cp vmlinux $dev/
-        if [ -z "''${dontStrip-}" ]; then
-          installFlagsArray+=("INSTALL_MOD_STRIP=1")
-        fi
-        make modules_install $makeFlags "''${makeFlagsArray[@]}" \
-          $installFlags "''${installFlagsArray[@]}"
-        unlink $out/lib/modules/${modDirVersion}/build
-        unlink $out/lib/modules/${modDirVersion}/source
-
-        mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
-
-        # To save space, exclude a bunch of unneeded stuff when copying.
-        (cd .. && rsync --archive --prune-empty-dirs \
-            --exclude='/build/' \
-            * $dev/lib/modules/${modDirVersion}/source/)
-
-        cd $dev/lib/modules/${modDirVersion}/source
-
-        cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
-        make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
-
-        # For reproducibility, removes accidental leftovers from a `cc1` call
-        # from a `try-run` call from the Makefile
-        rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
-
-        # Keep some extra files on some arches (powerpc, aarch64)
-        for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
-          if [ -f "$buildRoot/$f" ]; then
-            cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
+      '') + (
+        if (platform ? kernelDTB && platform.kernelDTB) then ''
+          make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
+        '' else "") + (
+        if isModular then ''
+          mkdir -p $dev
+          cp vmlinux $dev/
+          if [ -z "''${dontStrip-}" ]; then
+            installFlagsArray+=("INSTALL_MOD_STRIP=1")
           fi
-        done
+          make modules_install $makeFlags "''${makeFlagsArray[@]}" \
+            $installFlags "''${installFlagsArray[@]}"
+          unlink $out/lib/modules/${modDirVersion}/build
+          unlink $out/lib/modules/${modDirVersion}/source
 
-        # !!! No documentation on how much of the source tree must be kept
-        # If/when kernel builds fail due to missing files, you can add
-        # them here. Note that we may see packages requiring headers
-        # from drivers/ in the future; it adds 50M to keep all of its
-        # headers on 3.10 though.
+          mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
 
-        chmod u+w -R ..
-        arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
+          # To save space, exclude a bunch of unneeded stuff when copying.
+          (cd .. && rsync --archive --prune-empty-dirs \
+              --exclude='/build/' \
+              * $dev/lib/modules/${modDirVersion}/source/)
 
-        # Remove unused arches
-        for d in $(cd arch/; ls); do
-          if [ "$d" = "$arch" ]; then continue; fi
-          if [ "$arch" = arm64 ] && [ "$d" = arm ]; then continue; fi
-          rm -rf arch/$d
-        done
+          cd $dev/lib/modules/${modDirVersion}/source
 
-        # Remove all driver-specific code (50M of which is headers)
-        rm -fR drivers
+          cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
+          make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
 
-        # Keep all headers
-        find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
+          # For reproducibility, removes accidental leftovers from a `cc1` call
+          # from a `try-run` call from the Makefile
+          rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
 
-        # Keep linker scripts (they are required for out-of-tree modules on aarch64)
-        find .  -type f -name '*.lds' -print0 | xargs -0 chmod u-w
+          # Keep some extra files on some arches (powerpc, aarch64)
+          for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
+            if [ -f "$buildRoot/$f" ]; then
+              cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
+            fi
+          done
 
-        # Keep root and arch-specific Makefiles
-        chmod u-w Makefile
-        chmod u-w arch/$arch/Makefile*
+          # !!! No documentation on how much of the source tree must be kept
+          # If/when kernel builds fail due to missing files, you can add
+          # them here. Note that we may see packages requiring headers
+          # from drivers/ in the future; it adds 50M to keep all of its
+          # headers on 3.10 though.
 
-        # Keep whole scripts dir
-        chmod u-w -R scripts
+          chmod u+w -R ..
+          arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
 
-        # Delete everything not kept
-        find . -type f -perm -u=w -print0 | xargs -0 rm
+          # Remove unused arches
+          for d in $(cd arch/; ls); do
+            if [ "$d" = "$arch" ]; then continue; fi
+            if [ "$arch" = arm64 ] && [ "$d" = arm ]; then continue; fi
+            rm -rf arch/$d
+          done
 
-        # Delete empty directories
-        find -empty -type d -delete
+          # Remove all driver-specific code (50M of which is headers)
+          rm -fR drivers
 
-        # Remove reference to kmod
-        sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
-      '' else optionalString installsFirmware ''
-        make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
-          $installFlags "''${installFlagsArray[@]}"
-      '');
+          # Keep all headers
+          find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
+
+          # Keep linker scripts (they are required for out-of-tree modules on aarch64)
+          find .  -type f -name '*.lds' -print0 | xargs -0 chmod u-w
+
+          # Keep root and arch-specific Makefiles
+          chmod u-w Makefile
+          chmod u-w arch/$arch/Makefile*
+
+          # Keep whole scripts dir
+          chmod u-w -R scripts
+
+          # Delete everything not kept
+          find . -type f -perm -u=w -print0 | xargs -0 rm
+
+          # Delete empty directories
+          find -empty -type d -delete
+
+          # Remove reference to kmod
+          sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
+        '' else optionalString installsFirmware ''
+          make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
+            $installFlags "''${installFlagsArray[@]}"
+        '');
 
       requiredSystemFeatures = [ "big-parallel" ];
 
       meta = {
         description =
-          "The Linux kernel" +
-          (if kernelPatches == [] then "" else
-            " (with patches: "
-            + stdenv.lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
-            + ")");
+          "The Linux kernel" + (
+            if kernelPatches == [ ] then "" else
+              " (with patches: " + stdenv.lib.concatStringsSep ", " (map (x: x.name) kernelPatches) + ")");
         license = stdenv.lib.licenses.gpl2;
         homepage = https://www.kernel.org/;
         repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
@@ -279,34 +295,33 @@ let
       } // extraMeta;
     };
 in
+  assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
+  assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
+  stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
+    pname = "linux";
+    inherit version;
 
-assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
-assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
-stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
-  pname = "linux";
-  inherit version;
+    enableParallelBuilding = true;
 
-  enableParallelBuilding = true;
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
-      ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
-      ++ optional  (stdenv.lib.versionAtLeast version "4.14") libelf
-      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinux
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
+      ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
+      ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
+      ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
-      ;
+      ++ optional (stdenv.lib.versionAtLeast version "5.2") cpio
+    ;
 
-  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
+    hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
-  # Absolute paths for compilers avoid any PATH-clobbering issues.
-  makeFlags = commonMakeFlags ++ [
-    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-    "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+    # Absolute paths for compilers avoid any PATH-clobbering issues.
+    makeFlags = commonMakeFlags ++ [
+      "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+      "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+      "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
+    ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ];
 
-  karch = stdenv.hostPlatform.platform.kernelArch;
-})
+    karch = stdenv.hostPlatform.platform.kernelArch;
+  })

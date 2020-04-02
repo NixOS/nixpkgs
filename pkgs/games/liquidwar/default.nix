@@ -1,9 +1,29 @@
-{ stdenv, fetchurl, xorgproto, libX11, libXrender
-, gmp, libjpeg, libpng
-, expat, gettext, perl, guile
-, SDL, SDL_image, SDL_mixer, SDL_ttf
-, curl, sqlite, libtool, readline
-, libogg, libvorbis, libcaca, csound, cunit } :
+{ stdenv
+, fetchurl
+, xorgproto
+, libX11
+, libXrender
+, gmp
+, libjpeg
+, libpng
+, expat
+, gettext
+, perl
+, guile
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_ttf
+, curl
+, sqlite
+, libtool
+, readline
+, libogg
+, libvorbis
+, libcaca
+, csound
+, cunit
+}:
 
 stdenv.mkDerivation rec {
   pname = "liquidwar6";
@@ -15,21 +35,35 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xorgproto libX11 gmp guile
-    libjpeg libpng
-    expat gettext perl
-    SDL SDL_image SDL_mixer SDL_ttf
-    curl sqlite
-    libogg libvorbis csound
-    libXrender libcaca cunit
-    libtool readline
+    xorgproto
+    libX11
+    gmp
+    guile
+    libjpeg
+    libpng
+    expat
+    gettext
+    perl
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+    curl
+    sqlite
+    libogg
+    libvorbis
+    csound
+    libXrender
+    libcaca
+    cunit
+    libtool
+    readline
   ];
 
   hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE =
-    "-Wno-error=deprecated-declarations" +
-    # Avoid GL_GLEXT_VERSION double definition
+    "-Wno-error=deprecated-declarations" + # Avoid GL_GLEXT_VERSION double definition
     " -DNO_SDL_GLEXT"
   ;
 

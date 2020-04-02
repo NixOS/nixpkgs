@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, guile }:
-
 let
   name = "guile-opengl-${version}";
   version = "0.1.0";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

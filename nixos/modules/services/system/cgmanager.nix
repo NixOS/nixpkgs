@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.cgmanager;
-in {
+in
+{
   meta.maintainers = [ maintainers.mic92 ];
 
   ###### interface

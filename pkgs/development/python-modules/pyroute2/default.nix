@@ -1,4 +1,4 @@
-{stdenv, buildPythonPackage, fetchPypi}:
+{ stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     description = "Python Netlink library";
     homepage = https://github.com/svinota/pyroute2;
     license = licenses.asl20;
-    maintainers = [maintainers.mic92];
+    maintainers = [ maintainers.mic92 ];
     platforms = platforms.unix;
   };
 }

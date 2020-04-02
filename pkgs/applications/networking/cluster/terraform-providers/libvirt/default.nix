@@ -48,4 +48,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ mic92 ];
   };
 }
-

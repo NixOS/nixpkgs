@@ -1,5 +1,4 @@
 { appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3 }:
-
 let
   pname = "notable";
   version = "1.8.4";

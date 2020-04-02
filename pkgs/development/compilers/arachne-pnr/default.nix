@@ -7,15 +7,16 @@ stdenv.mkDerivation rec {
   version = "2019.07.29";
 
   src = fetchFromGitHub {
-    owner  = "yosyshq";
-    repo   = "arachne-pnr";
-    rev    = "c40fb2289952f4f120cc10a5a4c82a6fb88442dc";
+    owner = "yosyshq";
+    repo = "arachne-pnr";
+    rev = "c40fb2289952f4f120cc10a5a4c82a6fb88442dc";
     sha256 = "0lg9rccr486cvips3jf289af2b4a2j9chc8iqnkhykgi1hw4pszc";
   };
 
   enableParallelBuilding = true;
   makeFlags =
-    [ "PREFIX=$(out)"
+    [
+      "PREFIX=$(out)"
       "ICEBOX=${icestorm}/share/icebox"
     ];
 

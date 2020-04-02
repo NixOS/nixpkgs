@@ -1,20 +1,35 @@
 # TODO: Resolve the issues with the Mono bindings.
 
-{ stdenv, fetchurl, fetchpatch, lib
-, pkgconfig, autoreconfHook
-, glib, dbus-glib, gtkVersion ? "3"
-, gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
-, gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, vala, gobject-introspection
-, monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
- }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, lib
+, pkgconfig
+, autoreconfHook
+, glib
+, dbus-glib
+, gtkVersion ? "3"
+, gtk2 ? null
+, libindicator-gtk2 ? null
+, libdbusmenu-gtk2 ? null
+, gtk3 ? null
+, libindicator-gtk3 ? null
+, libdbusmenu-gtk3 ? null
+, vala
+, gobject-introspection
+, monoSupport ? false
+, mono ? null
+, gtk-sharp-2_0 ? null
+}:
 
 with lib;
 
 
 stdenv.mkDerivation rec {
-  name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
-          in "libappindicator-${postfix}-${version}";
+  name =
+    let
+      postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
+    in "libappindicator-${postfix}-${version}";
   version = "${versionMajor}.${versionMinor}";
   versionMajor = "12.10";
   versionMinor = "0";
@@ -34,10 +49,13 @@ stdenv.mkDerivation rec {
     else [ gtk3 libdbusmenu-gtk3 ];
 
   buildInputs = [
-    glib dbus-glib
-  ] ++ (if gtkVersion == "2"
+    glib
+    dbus-glib
+  ] ++ (
+    if gtkVersion == "2"
     then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
-    else [ libindicator-gtk3 ]);
+    else [ libindicator-gtk3 ]
+  );
 
   patches = [
     # Remove python2 from libappindicator.

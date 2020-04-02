@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitHub, lzma, xar}:
+{ stdenv, lib, fetchFromGitHub, lzma, xar }:
 
 stdenv.mkDerivation rec {
   pname = "pbzx";

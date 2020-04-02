@@ -21,15 +21,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-  '' + (if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv devilutionx.app $out/Applications
-  '' else ''
-    install -Dm755 -t $out/bin devilutionx
-    install -Dt $out/share/fonts/truetype ../Packaging/resources/CharisSILB.ttf
+  '' + (
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      mv devilutionx.app $out/Applications
+    '' else ''
+      install -Dm755 -t $out/bin devilutionx
+      install -Dt $out/share/fonts/truetype ../Packaging/resources/CharisSILB.ttf
 
-    # TODO: icons and .desktop (see Packages/{debian,fedora}/*)
-  '') + ''
+      # TODO: icons and .desktop (see Packages/{debian,fedora}/*)
+    '') + ''
 
     runHook postInstall
   '';

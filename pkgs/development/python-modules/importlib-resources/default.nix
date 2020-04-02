@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
   ] ++ lib.optional (!isPy3k) pathlib2
-    ++ lib.optional (pythonOlder "3.5") typing
+  ++ lib.optional (pythonOlder "3.5") typing
   ;
 
   checkPhase = ''

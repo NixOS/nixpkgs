@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, intltool
-, audit, glib, libusb, libxml2
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, gtk-doc
+, intltool
+, audit
+, glib
+, libusb
+, libxml2
 , wrapGAppsHook
 , gstreamer ? null
 , gst-plugins-base ? null
@@ -16,7 +24,6 @@
 , enableFastHeartbeat ? false
 , enableAsan ? false
 }:
-
 let
   gstreamerAtLeastVersion1 =
     stdenv.lib.all
@@ -38,7 +45,7 @@ in
     src = fetchFromGitHub {
       owner = "AravisProject";
       repo = pname;
-      rev= "ARAVIS_${builtins.replaceStrings ["."] ["_"] version}";
+      rev = "ARAVIS_${builtins.replaceStrings [ "." ] [ "_" ] version}";
       sha256 = "18fnliks661kzc3g8v08hcaj18hjid8b180d6s9gwn0zgv4g374w";
     };
 
@@ -62,17 +69,17 @@ in
 
     configureFlags =
       stdenv.lib.optional enableUsb "--enable-usb"
-        ++ stdenv.lib.optional enablePacketSocket "--enable-packet-socket"
-        ++ stdenv.lib.optional enableViewer "--enable-viewer"
-        ++ stdenv.lib.optional enableGstPlugin
+      ++ stdenv.lib.optional enablePacketSocket "--enable-packet-socket"
+      ++ stdenv.lib.optional enableViewer "--enable-viewer"
+      ++ stdenv.lib.optional enableGstPlugin
         (if gstreamerAtLeastVersion1 then "--enable-gst-plugin" else "--enable-gst-0.10-plugin")
-        ++ stdenv.lib.optional enableCppTest "--enable-cpp-test"
-        ++ stdenv.lib.optional enableFastHeartbeat "--enable-fast-heartbeat"
-        ++ stdenv.lib.optional enableAsan "--enable-asan";
+      ++ stdenv.lib.optional enableCppTest "--enable-cpp-test"
+      ++ stdenv.lib.optional enableFastHeartbeat "--enable-fast-heartbeat"
+      ++ stdenv.lib.optional enableAsan "--enable-asan";
 
     postPatch = ''
-        ln -s ${gtk-doc}/share/gtk-doc/data/gtk-doc.make .
-      '';
+      ln -s ${gtk-doc}/share/gtk-doc/data/gtk-doc.make .
+    '';
 
     doCheck = true;
 
@@ -83,8 +90,7 @@ in
       '';
       homepage = "https://aravisproject.github.io/docs/aravis-0.5";
       license = stdenv.lib.licenses.lgpl2;
-      maintainers = [];
+      maintainers = [ ];
       platforms = stdenv.lib.platforms.unix;
     };
   }
-

@@ -1,10 +1,19 @@
-{ mkDerivation, lib, fetchurl, fetchgit, fetchpatch
-, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8
-, withDocumentation ? false, withClangPlugins ? true 
+{ mkDerivation
+, lib
+, fetchurl
+, fetchgit
+, fetchpatch
+, qtbase
+, qtquickcontrols
+, qtscript
+, qtdeclarative
+, qmake
+, llvmPackages_8
+, withDocumentation ? false
+, withClangPlugins ? true
 }:
 
 with lib;
-
 let
   # Fetch clang from qt vendor, this contains submodules like this:
   # clang<-clang-tools-extra<-clazy.
@@ -17,7 +26,6 @@ let
     unpackPhase = "";
   });
 in
-
 mkDerivation rec {
   pname = "qtcreator";
   version = "4.11.0";
@@ -28,10 +36,12 @@ mkDerivation rec {
     sha256 = "0ibn7bapw7m26nmxl26dns1hnpawfdqk1i1mgg0gjssja8famszg";
   };
 
-  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ] ++ 
-    optionals withClangPlugins [ llvmPackages_8.libclang 
-                                 clang_qt_vendor 
-                                 llvmPackages_8.llvm ];
+  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ] ++
+    optionals withClangPlugins [
+      llvmPackages_8.libclang
+      clang_qt_vendor
+      llvmPackages_8.llvm
+    ];
 
   nativeBuildInputs = [ qmake ];
 
@@ -40,8 +50,10 @@ mkDerivation rec {
   # like libc++-version, which is default name for libc++ folder in nixos.
   # ./0002-Dont-remove-clang-header-paths.patch is for forcing qtcreator to not 
   # remove system clang include paths.
-  patches = [ ./0001-Fix-clang-libcpp-regexp.patch
-              ./0002-Dont-remove-clang-header-paths.patch ];
+  patches = [
+    ./0001-Fix-clang-libcpp-regexp.patch
+    ./0002-Dont-remove-clang-header-paths.patch
+  ];
 
   doCheck = true;
 
@@ -54,7 +66,7 @@ mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/plugins/plugins.pro \
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls' 
-    '' + optionalString withClangPlugins ''
+  '' + optionalString withClangPlugins ''
     # Fix paths for llvm/clang includes directories.
     substituteInPlace src/shared/clang/clang_defines.pri \
       --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \

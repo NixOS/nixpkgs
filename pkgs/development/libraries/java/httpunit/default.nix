@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip} :
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "httpunit-1.7";

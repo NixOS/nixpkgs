@@ -1,5 +1,4 @@
 { lib, fetchFromGitHub, python, glibcLocales }:
-
 let
   py = python.override {
     packageOverrides = self: super: {
@@ -20,9 +19,9 @@ let
         version = "1.2.1";
         pname = "slackclient";
         src = fetchFromGitHub {
-          owner  = "slackapi";
-          repo   = "python-slackclient";
-          rev    = version;
+          owner = "slackapi";
+          repo = "python-slackclient";
+          rev = version;
           sha256 = "073fwf6fm2sqdp5ms3vm1v3ljh0pldi69k048404rp6iy3cfwkp0";
         };
 
@@ -36,7 +35,6 @@ let
       });
     };
   };
-
 in
 py.pkgs.buildPythonApplication rec {
   pname = "errbot";
@@ -53,10 +51,25 @@ py.pkgs.buildPythonApplication rec {
 
   buildInputs = [ glibcLocales ];
   propagatedBuildInputs = with py.pkgs; [
-    webtest requests jinja2 flask dulwich
-    pyopenssl colorlog markdown ansi pygments
-    daemonize pygments-markdown-lexer telegram irc slackclient
-    sleekxmpp pyasn1 pyasn1-modules hypchat
+    webtest
+    requests
+    jinja2
+    flask
+    dulwich
+    pyopenssl
+    colorlog
+    markdown
+    ansi
+    pygments
+    daemonize
+    pygments-markdown-lexer
+    telegram
+    irc
+    slackclient
+    sleekxmpp
+    pyasn1
+    pyasn1-modules
+    hypchat
   ];
 
   checkInputs = with py.pkgs; [ mock pytest ];

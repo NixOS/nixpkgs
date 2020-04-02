@@ -1,17 +1,32 @@
-{stdenv, lib, fetchurl, pythonPackages
-, gnutar, unzip, lhasa, rpm, binutils, cpio, gzip, p7zip, cabextract, unrar, unshield
-, bzip2, xz, lzip
-# unzip is handled by p7zip
+{ stdenv
+, lib
+, fetchurl
+, pythonPackages
+, gnutar
+, unzip
+, lhasa
+, rpm
+, binutils
+, cpio
+, gzip
+, p7zip
+, cabextract
+, unrar
+, unshield
+, bzip2
+, xz
+, lzip
+  # unzip is handled by p7zip
 , unzipSupport ? false
-, unrarSupport ? false }:
-
+, unrarSupport ? false
+}:
 let
   archivers = lib.makeBinPath ([ gnutar lhasa rpm binutils cpio gzip p7zip cabextract unshield ]
-  ++ lib.optional (unzipSupport) unzip
-  ++ lib.optional (unrarSupport) unrar
-  ++ [ bzip2 xz lzip ]);
-
-in pythonPackages.buildPythonApplication rec {
+    ++ lib.optional (unzipSupport) unzip
+    ++ lib.optional (unrarSupport) unrar
+    ++ [ bzip2 xz lzip ]);
+in
+pythonPackages.buildPythonApplication rec {
   pname = "dtrx";
   version = "7.1";
 

@@ -1,10 +1,22 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
-, w3m, gnugrep, gnused, coreutils, xset, perlPackages
-, mimiSupport ? false, gawk ? null }:
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, file
+, libxslt
+, docbook_xml_dtd_412
+, docbook_xsl
+, xmlto
+, w3m
+, gnugrep
+, gnused
+, coreutils
+, xset
+, perlPackages
+, mimiSupport ? false
+, gawk ? null
+}:
 
 assert mimiSupport -> gawk != null;
-
 let
   # A much better xdg-open
   mimisrc = fetchFromGitHub {
@@ -15,11 +27,12 @@ let
   };
 
   perlPath = with perlPackages; makePerlPath [
-    NetDBus XMLTwig XMLParser X11Protocol
+    NetDBus
+    XMLTwig
+    XMLParser
+    X11Protocol
   ];
-
 in
-
 stdenv.mkDerivation rec {
   pname = "xdg-utils";
   version = "1.1.3";

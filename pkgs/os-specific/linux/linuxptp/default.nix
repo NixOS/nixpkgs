@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, linuxHeaders } :
+{ stdenv, fetchurl, linuxHeaders }:
 
 
 stdenv.mkDerivation rec {

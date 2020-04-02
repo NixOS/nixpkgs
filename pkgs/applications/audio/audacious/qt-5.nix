@@ -1,14 +1,42 @@
-{
-  mkDerivation, lib, fetchurl, fetchpatch,
-  gettext, pkgconfig,
-  qtbase,
-  alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk-pixbuf, lame, libbs2b,
-  libcddb, libcdio, libcue, libjack2, libmad, libmms, libmodplug,
-  libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
-  libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
-  wavpack
+{ mkDerivation
+, lib
+, fetchurl
+, fetchpatch
+, gettext
+, pkgconfig
+, qtbase
+, alsaLib
+, curl
+, faad2
+, ffmpeg
+, flac
+, fluidsynth
+, gdk-pixbuf
+, lame
+, libbs2b
+, libcddb
+, libcdio
+, libcue
+, libjack2
+, libmad
+, libmms
+, libmodplug
+, libmowgli
+, libnotify
+, libogg
+, libpulseaudio
+, libsamplerate
+, libsidplayfp
+, libsndfile
+, libvorbis
+, libxml2
+, lirc
+, mpg123
+, neon
+, qtmultimedia
+, soxr
+, wavpack
 }:
-
 let
   version = "3.9";
   sources = {
@@ -28,7 +56,6 @@ let
     sha256 = "15fy37syj9ygl2ibkkz3g3b9wd22vk9bjfmvqhhkpxphry2zwb17";
   };
 in
-
 mkDerivation {
   inherit version;
   name = "audacious-qt5-${version}";
@@ -45,10 +72,37 @@ mkDerivation {
     qtbase
 
     # Plugin dependencies
-    alsaLib curl faad2 ffmpeg flac fluidsynth gdk-pixbuf lame libbs2b libcddb
-    libcdio libcue libjack2 libmad libmms libmodplug libmowgli
-    libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
-    libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
+    alsaLib
+    curl
+    faad2
+    ffmpeg
+    flac
+    fluidsynth
+    gdk-pixbuf
+    lame
+    libbs2b
+    libcddb
+    libcdio
+    libcue
+    libjack2
+    libmad
+    libmms
+    libmodplug
+    libmowgli
+    libnotify
+    libogg
+    libpulseaudio
+    libsamplerate
+    libsidplayfp
+    libsndfile
+    libvorbis
+    libxml2
+    lirc
+    mpg123
+    neon
+    qtmultimedia
+    soxr
+    wavpack
   ];
 
   configureFlags = [ "--enable-qt" "--disable-gtk" ];
@@ -85,8 +139,11 @@ mkDerivation {
     maintainers = with maintainers; [ ttuegel ];
     platforms = with platforms; linux;
     license = with licenses; [
-      bsd2 bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
-      gpl2 gpl3 lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
+      bsd2
+      bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
+      gpl2
+      gpl3
+      lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
     ];
   };
 }

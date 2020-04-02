@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl}:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation {
   name = "daemon-0.6.4";

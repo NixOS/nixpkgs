@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
-
 let
   version = "2.9.3";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "http-parser";
   inherit version;
 

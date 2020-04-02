@@ -12,7 +12,7 @@ perlPackages.buildPerlModule {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs =  [ glib SDL SDL_mixer SDL_Pango perlPackages.SDL perlPackages.FileSlurp ];
+  buildInputs = [ glib SDL SDL_mixer SDL_Pango perlPackages.SDL perlPackages.FileSlurp ];
   propagatedBuildInputs = with perlPackages; [ AlienSDL CompressBzip2 FileShareDir FileWhich IPCSystemSimple LocaleMaketextLexicon ];
 
   perlPreHook = "export LD=$CC";

@@ -1,6 +1,30 @@
-{ fetchurl, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
-, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkgconfig, zlib, zip, bzip2
-, libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
+{ fetchurl
+, stdenv
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_sound
+, libsigcxx
+, physfs
+, boost
+, expat
+, freetype
+, libjpeg
+, wxGTK
+, lua
+, perl
+, pkgconfig
+, zlib
+, zip
+, bzip2
+, libpng
+, libtiff
+, fluidsynth
+, libmikmod
+, libvorbis
+, flac
+, libogg
+}:
 
 stdenv.mkDerivation rec {
   name = "asc-2.6.0.0";
@@ -16,9 +40,30 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
-    freetype libjpeg wxGTK lua perl pkgconfig zlib zip bzip2 libpng
-    libtiff fluidsynth libmikmod flac libvorbis libogg
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_sound
+    libsigcxx
+    physfs
+    boost
+    expat
+    freetype
+    libjpeg
+    wxGTK
+    lua
+    perl
+    pkgconfig
+    zlib
+    zip
+    bzip2
+    libpng
+    libtiff
+    fluidsynth
+    libmikmod
+    flac
+    libvorbis
+    libogg
   ];
 
   meta = with stdenv.lib; {

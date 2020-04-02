@@ -1,10 +1,20 @@
-{ stdenv, writeScript, vmTools, makeInitrd
-, samba, vde2, openssh, socat, netcat-gnu, coreutils, gnugrep, gzip
+{ stdenv
+, writeScript
+, vmTools
+, makeInitrd
+, samba
+, vde2
+, openssh
+, socat
+, netcat-gnu
+, coreutils
+, gnugrep
+, gzip
 , runtimeShell
 }:
 
 { sshKey
-, qemuArgs ? []
+, qemuArgs ? [ ]
 , command ? "sync"
 , suspendTo ? null
 , resumeFrom ? null
@@ -12,7 +22,6 @@
 }:
 
 with stdenv.lib;
-
 let
   preInitScript = writeScript "preinit.sh" ''
     #!${vmTools.initrdUtils}/bin/ash -e
@@ -78,61 +87,62 @@ let
     #!${runtimeShell}
     ${coreutils}/bin/cp -L "${sshKey}" /ssh.key
     ${coreutils}/bin/chmod 600 /ssh.key
-  '' + (if installMode then ''
-    echo -n "Waiting for Windows installation to finish..."
-    while ! ${netcat-gnu}/bin/netcat -z 192.168.0.1 22; do
-      echo -n .
-      # Print a dot every 10 seconds only to shorten line length.
-      ${coreutils}/bin/sleep 10
-    done
-    ${coreutils}/bin/touch /xchg/waiting_done
-    echo " success."
-    # Loop forever, because this VM is going to be killed.
-    ${loopForever}
-  '' else ''
-    ${coreutils}/bin/mkdir -p /etc/samba /etc/samba/private \
-                              /var/lib/samba /var/log /var/run
-    ${coreutils}/bin/cat > /etc/samba/smb.conf <<CONFIG
-    [global]
-    security = user
-    map to guest = Bad User
-    guest account = root
-    workgroup = cygwin
-    netbios name = controller
-    server string = %h
-    log level = 1
-    max log size = 1000
-    log file = /var/log/samba.log
+  '' + (
+    if installMode then ''
+      echo -n "Waiting for Windows installation to finish..."
+      while ! ${netcat-gnu}/bin/netcat -z 192.168.0.1 22; do
+        echo -n .
+        # Print a dot every 10 seconds only to shorten line length.
+        ${coreutils}/bin/sleep 10
+      done
+      ${coreutils}/bin/touch /xchg/waiting_done
+      echo " success."
+      # Loop forever, because this VM is going to be killed.
+      ${loopForever}
+    '' else ''
+      ${coreutils}/bin/mkdir -p /etc/samba /etc/samba/private \
+                                /var/lib/samba /var/log /var/run
+      ${coreutils}/bin/cat > /etc/samba/smb.conf <<CONFIG
+      [global]
+      security = user
+      map to guest = Bad User
+      guest account = root
+      workgroup = cygwin
+      netbios name = controller
+      server string = %h
+      log level = 1
+      max log size = 1000
+      log file = /var/log/samba.log
 
-    [nixstore]
-    path = /nix/store
-    writable = yes
-    guest ok = yes
+      [nixstore]
+      path = /nix/store
+      writable = yes
+      guest ok = yes
 
-    [xchg]
-    path = /xchg
-    writable = yes
-    guest ok = yes
-    CONFIG
+      [xchg]
+      path = /xchg
+      writable = yes
+      guest ok = yes
+      CONFIG
 
-    ${samba}/sbin/nmbd -D
-    ${samba}/sbin/smbd -D
+      ${samba}/sbin/nmbd -D
+      ${samba}/sbin/smbd -D
 
-    echo -n "Waiting for Windows VM to become available..."
-    while ! ${netcat-gnu}/bin/netcat -z 192.168.0.1 22; do
-      echo -n .
-      ${coreutils}/bin/sleep 1
-    done
-    ${coreutils}/bin/touch /xchg/waiting_done
-    echo " success."
+      echo -n "Waiting for Windows VM to become available..."
+      while ! ${netcat-gnu}/bin/netcat -z 192.168.0.1 22; do
+        echo -n .
+        ${coreutils}/bin/sleep 1
+      done
+      ${coreutils}/bin/touch /xchg/waiting_done
+      echo " success."
 
-    ${openssh}/bin/ssh \
-      -o UserKnownHostsFile=/dev/null \
-      -o StrictHostKeyChecking=no \
-      -i /ssh.key \
-      -l Administrator \
-      192.168.0.1 -- ${lib.escapeShellArg command}
-  '') + optionalString (suspendTo != null) ''
+      ${openssh}/bin/ssh \
+        -o UserKnownHostsFile=/dev/null \
+        -o StrictHostKeyChecking=no \
+        -i /ssh.key \
+        -l Administrator \
+        192.168.0.1 -- ${lib.escapeShellArg command}
+    '') + optionalString (suspendTo != null) ''
     ${coreutils}/bin/touch /xchg/suspend_now
     ${loopForever}
   '');
@@ -218,44 +228,45 @@ let
 
   toMonitor = "${socat}/bin/socat - UNIX-CONNECT:$MONITOR_SOCKET";
 
-  postVM = if suspendTo != null then ''
-    while ! test -e "$XCHG_DIR/suspend_now"; do
-      ${checkDropOut}
-      ${coreutils}/bin/sleep 1
-    done
-    ${toMonitor} <<CMD
-    stop
-    migrate_set_speed 4095m
-    migrate "exec:${gzip}/bin/gzip -c > '${suspendTo}'"
-    CMD
-    echo -n "Waiting for memory dump to finish..."
-    while ! echo info migrate | ${toMonitor} | \
-          ${gnugrep}/bin/grep -qi '^migration *status: *complete'; do
-      ${coreutils}/bin/sleep 1
-      echo -n .
-    done
-    echo " done."
-    echo quit | ${toMonitor}
-    wait $(< "$WINVM_PIDFILE")
-    eval "$postVM"
-    exit 0
-  '' else if installMode then ''
-    wait $(< "$WINVM_PIDFILE")
-    eval "$postVM"
-    exit 0
-  '' else ''
-    while kill -0 $(< "$CTRLVM_PIDFILE"); do
-      ${checkDropOut}
-    done
-    if ! test -e "$XCHG_DIR/in-vm-exit"; then
-      echo "Virtual machine didn't produce an exit code."
-      exit 1
-    fi
-    eval "$postVM"
-    exit $(< "$XCHG_DIR/in-vm-exit")
-  '';
-
-in writeScript "run-cygwin-vm.sh" ''
+  postVM =
+    if suspendTo != null then ''
+      while ! test -e "$XCHG_DIR/suspend_now"; do
+        ${checkDropOut}
+        ${coreutils}/bin/sleep 1
+      done
+      ${toMonitor} <<CMD
+      stop
+      migrate_set_speed 4095m
+      migrate "exec:${gzip}/bin/gzip -c > '${suspendTo}'"
+      CMD
+      echo -n "Waiting for memory dump to finish..."
+      while ! echo info migrate | ${toMonitor} | \
+            ${gnugrep}/bin/grep -qi '^migration *status: *complete'; do
+        ${coreutils}/bin/sleep 1
+        echo -n .
+      done
+      echo " done."
+      echo quit | ${toMonitor}
+      wait $(< "$WINVM_PIDFILE")
+      eval "$postVM"
+      exit 0
+    '' else if installMode then ''
+      wait $(< "$WINVM_PIDFILE")
+      eval "$postVM"
+      exit 0
+    '' else ''
+      while kill -0 $(< "$CTRLVM_PIDFILE"); do
+        ${checkDropOut}
+      done
+      if ! test -e "$XCHG_DIR/in-vm-exit"; then
+        echo "Virtual machine didn't produce an exit code."
+        exit 1
+      fi
+      eval "$postVM"
+      exit $(< "$XCHG_DIR/in-vm-exit")
+    '';
+in
+writeScript "run-cygwin-vm.sh" ''
   #!${stdenv.shell} -e
   ${preVM}
   ${vmExec}

@@ -1,5 +1,4 @@
 { stdenv, requireFile }:
-
 let
   message = ''
     Register an account at https://scan.coverity.com, download the
@@ -40,9 +39,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Coverity Scan build tools";
-    homepage    = "https://scan.coverity.com";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.linux;
+    homepage = "https://scan.coverity.com";
+    license = stdenv.lib.licenses.unfreeRedistributable;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

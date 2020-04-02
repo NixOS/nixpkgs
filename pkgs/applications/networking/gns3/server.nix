@@ -1,7 +1,6 @@
 { stable, branch, version, sha256Hash, mkOverride }:
 
 { lib, stdenv, python3, fetchFromGitHub }:
-
 let
   defaultOverrides = [
     (mkOverride "psutil" "5.6.3"
@@ -13,7 +12,8 @@ let
   python = python3.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
-in python.pkgs.buildPythonPackage {
+in
+python.pkgs.buildPythonPackage {
   pname = "gns3-server";
   inherit version;
 
@@ -32,9 +32,20 @@ in python.pkgs.buildPythonPackage {
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
-    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
+    aiohttp-cors
+    yarl
+    aiohttp
+    multidict
+    setuptools
+    jinja2
+    psutil
+    zipstream
+    raven
+    jsonschema
+    distro
+    async_generator
+    aiofiles
+    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix { })
   ];
 
   # Requires network access

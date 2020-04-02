@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   desktopItem = makeDesktopItem {
-    comment =  meta.description;
+    comment = meta.description;
     name = "jabref";
     desktopName = "JabRef";
     genericName = "Bibliography manager";

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       isScript "$w" || continue
       wrapProgram "$w" --prefix PATH : "$out/bin"
     done
-    '';
+  '';
 
   meta = {
     description = "Set of tools for counting physical Source Lines of Code (SLOC)";

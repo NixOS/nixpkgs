@@ -9,7 +9,7 @@
 , proglog
 , requests
 , tqdm
-# Advanced image processing (triples size of output)
+  # Advanced image processing (triples size of output)
 , advancedProcessing ? false
 , opencv3 ? null
 , scikitimage ? null
@@ -20,8 +20,8 @@
 }:
 
 assert advancedProcessing -> (
-  opencv3 != null && scikitimage != null && scikitlearn != null
-  && scipy != null && matplotlib != null && youtube-dl != null);
+  opencv3 != null && scikitimage != null && scikitlearn != null && scipy != null && matplotlib != null && youtube-dl != null
+);
 
 buildPythonPackage rec {
   pname = "moviepy";
@@ -38,9 +38,20 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    numpy decorator imageio imageio-ffmpeg tqdm requests proglog
+    numpy
+    decorator
+    imageio
+    imageio-ffmpeg
+    tqdm
+    requests
+    proglog
   ] ++ (stdenv.lib.optionals advancedProcessing [
-    opencv3 scikitimage scikitlearn scipy matplotlib youtube-dl
+    opencv3
+    scikitimage
+    scikitlearn
+    scipy
+    matplotlib
+    youtube-dl
   ]);
 
   meta = with stdenv.lib; {

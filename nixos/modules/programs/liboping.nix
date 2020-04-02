@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.liboping;
-in {
+in
+{
   options.programs.liboping = {
     enable = mkEnableOption "liboping";
   };
@@ -17,6 +17,7 @@ in {
           capabilities = "cap_net_raw+p";
         };
       }
-    ) [ "oping" "noping" ]);
+    ) [ "oping" "noping" ]
+    );
   };
 }

@@ -1,4 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, isPy27
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, python
+, isPy27
 , dotnet-sdk
 , substituteAll
 , distro
@@ -28,11 +33,10 @@ buildPythonPackage rec {
   '';
 
   patches = [
-    ( substituteAll {
-        src = ./runtime.patch;
-        dotnet = dotnet-sdk;
-      }
-    )
+    (substituteAll {
+      src = ./runtime.patch;
+      dotnet = dotnet-sdk;
+    })
   ];
 
   # unfortunately the noraml pip install fails because the manylinux1 format check fails with NixOS

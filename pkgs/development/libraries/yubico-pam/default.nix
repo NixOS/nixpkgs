@@ -1,6 +1,15 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, asciidoc, libxslt, docbook_xsl
-, pam, yubikey-personalization, libyubikey, libykclient }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, asciidoc
+, libxslt
+, docbook_xsl
+, pam
+, yubikey-personalization
+, libyubikey
+, libykclient
+}:
 
 stdenv.mkDerivation rec {
   pname = "yubico-pam";

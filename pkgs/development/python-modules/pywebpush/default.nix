@@ -1,6 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage
-, coverage, flake8, mock, nose
-, http-ece, py-vapid, requests }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, coverage
+, flake8
+, mock
+, nose
+, http-ece
+, py-vapid
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "pywebpush";
@@ -12,11 +20,16 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    http-ece py-vapid requests
+    http-ece
+    py-vapid
+    requests
   ];
 
   checkInputs = [
-    coverage flake8 mock nose
+    coverage
+    flake8
+    mock
+    nose
   ];
 
   meta = with lib; {

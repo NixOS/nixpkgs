@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, rustPlatform
-, libiconv, Security }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";

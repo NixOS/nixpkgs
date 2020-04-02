@@ -1,7 +1,26 @@
-{ fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
-, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
-, yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb_run }:
+{ fetchurl
+, stdenv
+, which
+, pkgconfig
+, makeWrapper
+, libxcb
+, xcbutilkeysyms
+, xcbutil
+, xcbutilwm
+, xcbutilxrm
+, libstartup_notification
+, libX11
+, pcre
+, libev
+, yajl
+, xcb-util-cursor
+, perl
+, pango
+, perlPackages
+, libxkbcommon
+, xorgserver
+, xvfb_run
+}:
 
 stdenv.mkDerivation rec {
   pname = "i3";
@@ -15,11 +34,27 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which pkgconfig makeWrapper ];
 
   buildInputs = [
-    libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
-    libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
-    perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
-    perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
-    xorgserver xvfb_run
+    libxcb
+    xcbutilkeysyms
+    xcbutil
+    xcbutilwm
+    xcbutilxrm
+    libxkbcommon
+    libstartup_notification
+    libX11
+    pcre
+    libev
+    yajl
+    xcb-util-cursor
+    perl
+    pango
+    perlPackages.AnyEventI3
+    perlPackages.X11XCB
+    perlPackages.IPCRun
+    perlPackages.ExtUtilsPkgConfig
+    perlPackages.InlineC
+    xorgserver
+    xvfb_run
   ];
 
   configureFlags = [ "--disable-builddir" ];
@@ -39,10 +74,10 @@ stdenv.mkDerivation rec {
   doCheck = false; # stdenv.hostPlatform.system == "x86_64-linux";
 
   checkPhase = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-  ''
-    (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
-    ! grep -q '^not ok' testcases/latest/complete-run.log
-  '';
+    ''
+      (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
+      ! grep -q '^not ok' testcases/latest/complete-run.log
+    '';
 
   postInstall = ''
     wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
@@ -57,10 +92,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tiling window manager";
-    homepage    = "https://i3wm.org";
+    homepage = "https://i3wm.org";
     maintainers = with maintainers; [ modulistic fpletz globin ];
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
 
     longDescription = ''
       A tiling window manager primarily targeted at advanced users and

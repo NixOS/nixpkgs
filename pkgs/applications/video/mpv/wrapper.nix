@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, makeWrapper, mpv, scripts ? [] }:
+{ stdenv, symlinkJoin, makeWrapper, mpv, scripts ? [ ] }:
 
 symlinkJoin {
   name = "mpv-with-scripts-${mpv.version}";

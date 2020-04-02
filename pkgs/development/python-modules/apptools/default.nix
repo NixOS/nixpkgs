@@ -1,6 +1,12 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, traits, traitsui, configobj
-, nose, tables, pandas
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, traits
+, traitsui
+, configobj
+, nose
+, tables
+, pandas
 }:
 
 buildPythonPackage rec {

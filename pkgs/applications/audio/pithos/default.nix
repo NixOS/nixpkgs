@@ -1,6 +1,18 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, appstream-glib
-, wrapGAppsHook, pythonPackages, gtk3, gnome3, gobject-introspection
-, libnotify, libsecret, gst_all_1 }:
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkgconfig
+, appstream-glib
+, wrapGAppsHook
+, pythonPackages
+, gtk3
+, gnome3
+, gobject-introspection
+, libnotify
+, libsecret
+, gst_all_1
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
@@ -8,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = pname;
-    repo  = pname;
+    repo = pname;
     rev = version;
     sha256 = "10nnm55ql86x1qfmq6dx9a1igf7myjxibmvyhd7fyv06vdhfifgy";
   };

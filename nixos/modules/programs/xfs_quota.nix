@@ -3,18 +3,14 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.programs.xfs_quota;
 
   limitOptions = opts: concatStringsSep " " [
     (optionalString (opts.sizeSoftLimit != null) "bsoft=${opts.sizeSoftLimit}")
     (optionalString (opts.sizeHardLimit != null) "bhard=${opts.sizeHardLimit}")
   ];
-
 in
-
 {
 
   ###### interface
@@ -23,7 +19,7 @@ in
 
     programs.xfs_quota = {
       projects = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf (types.submodule {
           options = {
             id = mkOption {
@@ -75,7 +71,7 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.projects != {}) {
+  config = mkIf (cfg.projects != { }) {
 
     environment.etc.projects.source = pkgs.writeText "etc-project"
       (concatStringsSep "\n" (mapAttrsToList

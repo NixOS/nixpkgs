@@ -29,8 +29,8 @@ let
         };
 
         cmd = mkOption {
-          type =  with types; listOf str;
-          default = [];
+          type = with types; listOf str;
+          default = [ ];
           description = "Commandline arguments to pass to the image's entrypoint.";
           example = literalExample ''
             ["--port=9000"]
@@ -46,14 +46,14 @@ let
 
         environment = mkOption {
           type = with types; attrsOf str;
-          default = {};
+          default = { };
           description = "Environment variables to set for this container.";
           example = literalExample ''
             {
               DATABASE_HOST = "db.example.com";
               DATABASE_PORT = "3306";
             }
-        '';
+          '';
         };
 
         log-driver = mkOption {
@@ -75,7 +75,7 @@ let
 
         ports = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             Network ports to publish from the container to the outer host.
 
@@ -139,7 +139,7 @@ let
 
         volumes = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             List of volumes to attach to this container.
 
@@ -168,7 +168,7 @@ let
 
         dependsOn = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
@@ -186,7 +186,7 @@ let
 
         extraDockerOptions = mkOption {
           type = with types; listOf str;
-          default = [];
+          default = [ ];
           description = "Extra options for <command>docker run</command>.";
           example = literalExample ''
             ["--network=host"]
@@ -204,73 +204,73 @@ let
       };
     };
 
-  mkService = name: container: let
-    mkAfter = map (x: "docker-${x}.service") container.dependsOn;
-  in rec {
-    wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
-    after = [ "docker.service" "docker.socket" ] ++ mkAfter;
-    requires = after;
-    path = [ pkgs.docker ];
+  mkService = name: container:
+    let
+      mkAfter = map (x: "docker-${x}.service") container.dependsOn;
+    in rec {
+      wantedBy = [ ] ++ optional (container.autoStart) "multi-user.target";
+      after = [ "docker.service" "docker.socket" ] ++ mkAfter;
+      requires = after;
+      path = [ pkgs.docker ];
 
-    preStart = ''
-      docker rm -f ${name} || true
-      ${optionalString (container.imageFile != null) ''
+      preStart = ''
+        docker rm -f ${name} || true
+        ${optionalString (container.imageFile != null) ''
         docker load -i ${container.imageFile}
-        ''}
+      ''}
       '';
-    postStop = "docker rm -f ${name} || true";
-        
-    serviceConfig = {
-      ExecStart = concatStringsSep " \\\n  " ([
-        "${pkgs.docker}/bin/docker run"
-        "--rm"
-        "--name=${name}"
-        "--log-driver=${container.log-driver}"
-      ] ++ optional (container.entrypoint != null)
-        "--entrypoint=${escapeShellArg container.entrypoint}"
+      postStop = "docker rm -f ${name} || true";
+
+      serviceConfig = {
+        ExecStart = concatStringsSep " \\\n  " ([
+          "${pkgs.docker}/bin/docker run"
+          "--rm"
+          "--name=${name}"
+          "--log-driver=${container.log-driver}"
+        ] ++ optional (container.entrypoint != null)
+          "--entrypoint=${escapeShellArg container.entrypoint}"
         ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
         ++ map (p: "-p ${escapeShellArg p}") container.ports
         ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
         ++ map (v: "-v ${escapeShellArg v}") container.volumes
         ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
         ++ map escapeShellArg container.extraDockerOptions
-        ++ [container.image]
-        ++ map escapeShellArg container.cmd
-      );
+        ++ [ container.image ]
+        ++ map escapeShellArg container.cmd);
 
-      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || docker stop ${name}"'';
+        ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || docker stop ${name}"'';
 
-      ### There is no generalized way of supporting `reload` for docker
-      ### containers. Some containers may respond well to SIGHUP sent to their
-      ### init process, but it is not guaranteed; some apps have other reload
-      ### mechanisms, some don't have a reload signal at all, and some docker
-      ### images just have broken signal handling.  The best compromise in this
-      ### case is probably to leave ExecReload undefined, so `systemctl reload`
-      ### will at least result in an error instead of potentially undefined
-      ### behaviour.
-      ###
-      ### Advanced users can still override this part of the unit to implement
-      ### a custom reload handler, since the result of all this is a normal
-      ### systemd service from the perspective of the NixOS module system.
-      ###
-      # ExecReload = ...;
-      ###
+        ### There is no generalized way of supporting `reload` for docker
+        ### containers. Some containers may respond well to SIGHUP sent to their
+        ### init process, but it is not guaranteed; some apps have other reload
+        ### mechanisms, some don't have a reload signal at all, and some docker
+        ### images just have broken signal handling.  The best compromise in this
+        ### case is probably to leave ExecReload undefined, so `systemctl reload`
+        ### will at least result in an error instead of potentially undefined
+        ### behaviour.
+        ###
+        ### Advanced users can still override this part of the unit to implement
+        ### a custom reload handler, since the result of all this is a normal
+        ### systemd service from the perspective of the NixOS module system.
+        ###
+        # ExecReload = ...;
+        ###
 
-      TimeoutStartSec = 0;
-      TimeoutStopSec = 120;
-      Restart = "always";
+        TimeoutStartSec = 0;
+        TimeoutStopSec = 120;
+        Restart = "always";
+      };
     };
-  };
-
-in {
+in
+{
 
   options.docker-containers = mkOption {
-    default = {};
+    default = { };
     type = types.attrsOf (types.submodule dockerContainer);
     description = "Docker containers to run as systemd services.";
   };
 
-  config = mkIf (cfg != {}) {
+  config = mkIf (cfg != { }) {
 
     systemd.services = mapAttrs' (n: v: nameValuePair "docker-${n}" (mkService n v)) cfg;
 

@@ -2,7 +2,9 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, pythonOlder, isPy38
+, isPy3k
+, pythonOlder
+, isPy38
 , astor
 , gast
 , google-pasta
@@ -36,32 +38,30 @@
 # - the source build doesn't work on Darwin.
 # - the source build is currently brittle and not easy to maintain
 
-assert cudaSupport -> cudatoolkit != null
-                   && cudnn != null
-                   && nvidia_x11 != null;
+assert cudaSupport -> cudatoolkit != null && cudnn != null && nvidia_x11 != null;
 
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
-
 let
   packages = import ./binary-hashes.nix;
 
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
-
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit pname;
   inherit (packages) version;
   format = "wheel";
 
   disabled = isPy38;
 
-  src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
-    platform = if stdenv.isDarwin then "mac" else "linux";
-    unit = if cudaSupport then "gpu" else "cpu";
-    key = "${platform}_py_${pyVerNoDot}_${unit}";
-  in fetchurl packages.${key};
+  src =
+    let
+      pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
+      platform = if stdenv.isDarwin then "mac" else "linux";
+      unit = if cudaSupport then "gpu" else "cpu";
+      key = "${platform}_py_${pyVerNoDot}_${unit}";
+    in fetchurl packages.${key};
 
   propagatedBuildInputs = [
     protobuf
@@ -81,7 +81,7 @@ in buildPythonPackage {
     keras-applications
     keras-preprocessing
   ] ++ lib.optional (!isPy3k) mock
-    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
+  ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
   nativeBuildInputs = [ wheel ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
@@ -154,8 +154,8 @@ in buildPythonPackage {
         chmod a+rx "$lib"
         patchelf --set-rpath "$rrPath" "$lib"
         ${lib.optionalString cudaSupport ''
-          addOpenGLRunpath "$lib"
-        ''}
+      addOpenGLRunpath "$lib"
+    ''}
       done
     '';
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.glibcLocales ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   # TODO: AppIndicator
   propagatedBuildInputs = [ pkgs.gobject-introspection pygobject3 pkgs.makeWrapper pkgs.gtk3 ];
@@ -27,9 +27,9 @@ buildPythonPackage rec {
   '';
 
   preFixup = ''
-      wrapProgram $out/bin/gtimelog \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
+    wrapProgram $out/bin/gtimelog \
+      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
+      --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
   '';
 
   meta = with stdenv.lib; {

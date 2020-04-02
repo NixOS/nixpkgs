@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig }:
+{ stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "eot_utilities";

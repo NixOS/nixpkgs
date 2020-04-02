@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   top = config.services.kubernetes;
   cfg = top.flannel;
@@ -37,15 +36,17 @@ in
 
     services.kubernetes.kubelet = {
       networkPlugin = mkDefault "cni";
-      cni.config = mkDefault [{
-        name = "mynet";
-        type = "flannel";
-        cniVersion = "0.3.1";
-        delegate = {
-          isDefaultGateway = true;
-          bridge = "docker0";
-        };
-      }];
+      cni.config = mkDefault [
+        {
+          name = "mynet";
+          type = "flannel";
+          cniVersion = "0.3.1";
+          delegate = {
+            isDefaultGateway = true;
+            bridge = "docker0";
+          };
+        }
+      ];
     };
 
     systemd.services.mk-docker-opts = {
@@ -76,8 +77,8 @@ in
 
     networking = {
       firewall.allowedUDPPorts = [
-        8285  # flannel udp
-        8472  # flannel vxlan
+        8285 # flannel udp
+        8472 # flannel vxlan
       ];
       dhcpcd.denyInterfaces = [ "docker*" "flannel*" ];
     };
@@ -97,21 +98,23 @@ in
         apiVersion = "rbac.authorization.k8s.io/v1beta1";
         kind = "ClusterRole";
         metadata = { name = "flannel"; };
-        rules = [{
-          apiGroups = [ "" ];
-          resources = [ "pods" ];
-          verbs = [ "get" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes" ];
-          verbs = [ "list" "watch" ];
-        }
-        {
-          apiGroups = [ "" ];
-          resources = [ "nodes/status" ];
-          verbs = [ "patch" ];
-        }];
+        rules = [
+          {
+            apiGroups = [ "" ];
+            resources = [ "pods" ];
+            verbs = [ "get" ];
+          }
+          {
+            apiGroups = [ "" ];
+            resources = [ "nodes" ];
+            verbs = [ "list" "watch" ];
+          }
+          {
+            apiGroups = [ "" ];
+            resources = [ "nodes/status" ];
+            verbs = [ "patch" ];
+          }
+        ];
       };
 
       flannel-crb = {
@@ -123,10 +126,12 @@ in
           kind = "ClusterRole";
           name = "flannel";
         };
-        subjects = [{
-          kind = "User";
-          name = "flannel-client";
-        }];
+        subjects = [
+          {
+            kind = "User";
+            name = "flannel-client";
+          }
+        ];
       };
 
     };

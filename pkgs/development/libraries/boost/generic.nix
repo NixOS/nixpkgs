@@ -1,8 +1,16 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ stdenv
+, icu
+, expat
+, zlib
+, bzip2
+, python
+, fixDarwinDylibNames
+, libiconv
 , which
 , buildPackages
-, toolset ? /**/ if stdenv.cc.isClang  then "clang"
-            else null
+, toolset ? /**/
+  if stdenv.cc.isClang then "clang"
+  else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
@@ -12,12 +20,13 @@
 , enablePython ? false
 , enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
-, patches ? []
+, patches ? [ ]
 , mpi ? null
-, extraB2Args ? []
+, extraB2Args ? [ ]
 
-# Attributes inherit from specific versions
-, version, src
+  # Attributes inherit from specific versions
+, version
+, src
 , ...
 }:
 
@@ -30,18 +39,17 @@ assert enableNumpy -> enablePython;
 
 with stdenv.lib;
 let
-
   variant = concatStringsSep ","
     (optional enableRelease "release" ++
-     optional enableDebug "debug");
+      optional enableDebug "debug");
 
   threading = concatStringsSep ","
     (optional enableSingleThreaded "single" ++
-     optional enableMultiThreaded "multi");
+      optional enableMultiThreaded "multi");
 
   link = concatStringsSep ","
     (optional enableShared "shared" ++
-     optional enableStatic "static");
+      optional enableStatic "static");
 
   runtime-link = if enableShared then "shared" else "static";
 
@@ -82,34 +90,33 @@ let
 
     # adapted from table in boost manual
     # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
-    "abi=${if stdenv.hostPlatform.parsed.cpu.family == "arm" then "aapcs"
-           else if stdenv.hostPlatform.isWindows then "ms"
-           else if stdenv.hostPlatform.isMips then "o32"
-           else "sysv"}"
+    "abi=${
+        if stdenv.hostPlatform.parsed.cpu.family == "arm" then "aapcs"
+        else if stdenv.hostPlatform.isWindows then "ms"
+        else if stdenv.hostPlatform.isMips then "o32"
+        else "sysv"}"
   ] ++ optional (link != "static") "runtime-link=${runtime-link}"
-    ++ optional (variant == "release") "debug-symbols=off"
-    ++ optional (toolset != null) "toolset=${toolset}"
-    ++ optional (!enablePython) "--without-python"
-    ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
-    ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
+  ++ optional (variant == "release") "debug-symbols=off"
+  ++ optional (toolset != null) "toolset=${toolset}"
+  ++ optional (!enablePython) "--without-python"
+  ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
+  ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
-  ] ++ extraB2Args
-  );
-
+  ] ++ extraB2Args);
 in
-
 stdenv.mkDerivation {
   pname = "boost";
 
   inherit src version;
 
-  patchFlags = [];
+  patchFlags = [ ];
 
   patches = patches
-  ++ optional stdenv.isDarwin (
+    ++ optional stdenv.isDarwin (
     if version == "1.55.0"
     then ./darwin-1.55-no-system-python.patch
-    else ./darwin-no-system-python.patch);
+    else ./darwin-no-system-python.patch
+  );
 
   meta = {
     homepage = http://boost.org/;
@@ -117,7 +124,7 @@ stdenv.mkDerivation {
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
     badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
-                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
+      ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
     maintainers = with maintainers; [ peti ];
   };
 
@@ -137,7 +144,7 @@ stdenv.mkDerivation {
   '';
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
-                      "-headerpad_max_install_names";
+    "-headerpad_max_install_names";
 
   enableParallelBuilding = true;
 
@@ -150,13 +157,13 @@ stdenv.mkDerivation {
     ++ optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
   ] ++ optional enablePython "--with-python=${python.interpreter}"
-    ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
-    ++ optional (toolset != null) "--with-toolset=${toolset}";
+  ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
+  ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = ''
     runHook preBuild

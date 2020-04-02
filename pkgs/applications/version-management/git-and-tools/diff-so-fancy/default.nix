@@ -1,4 +1,4 @@
-{stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
+{ stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
   pname = "diff-so-fancy";

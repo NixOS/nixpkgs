@@ -1,8 +1,20 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
-, freetype, fontconfig, libX11, libXrender, zlib
-, glib, gtk3, libXtst, jdk, gsettings-desktop-schemas
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, freetype
+, fontconfig
+, libX11
+, libXrender
+, zlib
+, glib
+, gtk3
+, libXtst
+, jdk
+, gsettings-desktop-schemas
 , webkitgtk ? null  # for internal web browser
-, buildEnv, runCommand
+, buildEnv
+, runCommand
 , callPackage
 }:
 
@@ -10,19 +22,19 @@ assert stdenv ? glibc;
 
 # http://download.eclipse.org/eclipse/downloads/ is the main place to
 # find the downloads needed for new versions
-
 let
   platform_major = "4";
   platform_minor = "14";
   year = "2019";
   month = "12";
   timestamp = "201912100610";
-in rec {
+in
+rec {
 
   buildEclipse = import ./build-eclipse.nix {
     inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
-            jdk glib gtk3 libXtst gsettings-desktop-schemas webkitgtk
-            makeWrapper;
+      jdk glib gtk3 libXtst gsettings-desktop-schemas webkitgtk
+      makeWrapper;
   };
 
   ### Eclipse CPP
@@ -68,12 +80,14 @@ in rec {
     description = "Eclipse IDE for Scala Developers";
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl { # tested
+        fetchurl {
+          # tested
           url = https://downloads.typesafe.com/scalaide-pack/4.4.1-vfinal-luna-211-20160504/scala-SDK-4.4.1-vfinal-2.11-linux.gtk.x86_64.tar.gz;
-          sha256  = "4c2d1ac68384e12a11a851cf0fc7757aea087eba69329b21d539382a65340d27";
+          sha256 = "4c2d1ac68384e12a11a851cf0fc7757aea087eba69329b21d539382a65340d27";
         }
       else
-        fetchurl { # untested
+        fetchurl {
+          # untested
           url = https://downloads.typesafe.com/scalaide-pack/4.4.1-vfinal-luna-211-20160504/scala-SDK-4.4.1-vfinal-2.11-linux.gtk.x86.tar.gz;
           sha256 = "35383cb09567187e14a30c15de9fd9aa0eef99e4bbb342396ce3acd11fb5cbac";
         };
@@ -107,21 +121,21 @@ in rec {
 
   # Function that assembles a complete Eclipse environment from an
   # Eclipse package and list of Eclipse plugins.
-  eclipseWithPlugins = { eclipse, plugins ? [], jvmArgs ? [] }:
+  eclipseWithPlugins = { eclipse, plugins ? [ ], jvmArgs ? [ ] }:
     let
       # Gather up the desired plugins.
       pluginEnv = buildEnv {
         name = "eclipse-plugins";
         paths =
           with stdenv.lib;
-            filter (x: x ? isEclipsePlugin) (closePropagation plugins);
+          filter (x: x ? isEclipsePlugin) (closePropagation plugins);
       };
 
       # Prepare the JVM arguments to add to the ini file. We here also
       # add the property indicating the plugin directory.
       dropinPropName = "org.eclipse.equinox.p2.reconciler.dropins.directory";
       dropinProp = "-D${dropinPropName}=${pluginEnv}/eclipse/dropins";
-      jvmArgsText = stdenv.lib.concatStringsSep "\n" (jvmArgs ++ [dropinProp]);
+      jvmArgsText = stdenv.lib.concatStringsSep "\n" (jvmArgs ++ [ dropinProp ]);
 
       # Base the derivation name on the name of the underlying
       # Eclipse.

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "xmonad";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ nequissimus ];
@@ -21,21 +21,22 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
   };
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-  in ''
-    machine.wait_for_x()
-    machine.wait_for_file("${user.home}/.Xauthority")
-    machine.succeed("xauth merge ${user.home}/.Xauthority")
-    machine.send_key("alt-ctrl-x")
-    machine.wait_for_window("${user.name}.*machine")
-    machine.sleep(1)
-    machine.screenshot("terminal")
-    machine.wait_until_succeeds("xmonad --restart")
-    machine.sleep(3)
-    machine.send_key("alt-shift-ret")
-    machine.wait_for_window("${user.name}.*machine")
-    machine.sleep(1)
-    machine.screenshot("terminal")
-  '';
+  testScript = { nodes, ... }:
+    let
+      user = nodes.machine.config.users.users.alice;
+    in ''
+      machine.wait_for_x()
+      machine.wait_for_file("${user.home}/.Xauthority")
+      machine.succeed("xauth merge ${user.home}/.Xauthority")
+      machine.send_key("alt-ctrl-x")
+      machine.wait_for_window("${user.name}.*machine")
+      machine.sleep(1)
+      machine.screenshot("terminal")
+      machine.wait_until_succeeds("xmonad --restart")
+      machine.sleep(3)
+      machine.send_key("alt-shift-ret")
+      machine.wait_for_window("${user.name}.*machine")
+      machine.sleep(1)
+      machine.screenshot("terminal")
+    '';
 })

@@ -1,13 +1,12 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 with import common/ec2.nix { inherit makeTest pkgs; };
-
 let
   imageCfg =
     (import ../lib/eval-config.nix {
@@ -16,7 +15,8 @@ let
         ../maintainers/scripts/ec2/amazon-image.nix
         ../modules/testing/test-instrumentation.nix
         ../modules/profiles/qemu-guest.nix
-        { ec2.hvm = true;
+        {
+          ec2.hvm = true;
 
           # Hack to make the partition resizing work in QEMU.
           boot.initrd.postDeviceCommands = mkBefore
@@ -45,7 +45,10 @@ let
                 # These are used in the configure-from-userdata tests
                 # for EC2. Httpd and valgrind are requested by the
                 # configuration.
-                apacheHttpd apacheHttpd.doc apacheHttpd.man valgrind.doc
+                apacheHttpd
+                apacheHttpd.doc
+                apacheHttpd.man
+                valgrind.doc
               ]
             );
         }
@@ -56,16 +59,16 @@ let
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
-
-in {
+in
+{
   boot-ec2-nixops = makeEc2Test {
-    name         = "nixops-userdata";
+    name = "nixops-userdata";
     inherit image;
     sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
 
     userData = ''
       SSH_HOST_ED25519_KEY_PUB:${snakeOilPublicKey}
-      SSH_HOST_ED25519_KEY:${replaceStrings ["\n"] ["|"] snakeOilPrivateKey}
+      SSH_HOST_ED25519_KEY:${replaceStrings [ "\n" ] [ "|" ] snakeOilPrivateKey}
     '';
     script = ''
       $machine->start;
@@ -104,7 +107,7 @@ in {
   };
 
   boot-ec2-config = makeEc2Test {
-    name         = "config-userdata";
+    name = "config-userdata";
     inherit image;
     sshPublicKey = snakeOilPublicKey;
 

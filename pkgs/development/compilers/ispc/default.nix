@@ -1,5 +1,13 @@
-{stdenv, fetchFromGitHub, cmake, which, m4, python, bison, flex, llvmPackages,
-testedTargets ? ["sse2"] # the default test target is sse4, but that is not supported by all Hydra agents
+{ stdenv
+, fetchFromGitHub
+, cmake
+, which
+, m4
+, python
+, bison
+, flex
+, llvmPackages
+, testedTargets ? [ "sse2" ] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
 stdenv.mkDerivation rec {
@@ -55,13 +63,13 @@ stdenv.mkDerivation rec {
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
     "-DISPC_INCLUDE_UTILS=OFF"
-    ];
+  ];
 
   meta = with stdenv.lib; {
-    homepage = https://ispc.github.io/ ;
+    homepage = https://ispc.github.io/;
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license = licenses.bsd3;
-    platforms = ["x86_64-linux" "x86_64-darwin"]; # TODO: buildable on more platforms?
+    platforms = [ "x86_64-linux" "x86_64-darwin" ]; # TODO: buildable on more platforms?
     maintainers = [ maintainers.aristid ];
   };
 }

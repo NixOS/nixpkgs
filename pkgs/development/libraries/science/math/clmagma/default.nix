@@ -1,8 +1,7 @@
 { stdenv, fetchurl, gfortran, opencl-headers, clblas, ocl-icd, mkl, intel-ocl }:
 
 with stdenv.lib;
-
-let 
+let
   version = "1.3.0";
   incfile = builtins.toFile "make.inc.custom" ''
     CC        = g++
@@ -31,8 +30,9 @@ let
     
     INC       = -I$(clBLAS)/include 
                #-I$(AMDAPP)/include
-  '';  
-in stdenv.mkDerivation {
+  '';
+in
+stdenv.mkDerivation {
   name = "clmagma-${version}";
   src = fetchurl {
     url = "http://icl.cs.utk.edu/projectsfiles/magma/cl/clmagma-${version}.tar.gz";
@@ -40,23 +40,23 @@ in stdenv.mkDerivation {
     name = "clmagma-${version}.tar.gz";
   };
 
-  buildInputs = [ 
-    gfortran 
-    clblas 
-    opencl-headers 
-    ocl-icd  
+  buildInputs = [
+    gfortran
+    clblas
+    opencl-headers
+    ocl-icd
     mkl
     intel-ocl
   ];
 
-  enableParallelBuilding=true;
+  enableParallelBuilding = true;
 
-  MKLROOT   = "${mkl}";
-  clBLAS    = "${clblas}";
+  MKLROOT = "${mkl}";
+  clBLAS = "${clblas}";
 
   # Otherwise build looks for it in /run/opengl-driver/etc/OpenCL/vendors, 
   # which is not available.
-  OPENCL_VENDOR_PATH="${intel-ocl}/etc/OpenCL/vendors";
+  OPENCL_VENDOR_PATH = "${intel-ocl}/etc/OpenCL/vendors";
 
   preBuild = ''  
     # By default it tries to use GPU, and thus fails for CPUs

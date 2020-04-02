@@ -1,7 +1,29 @@
-{ stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libmad, libogg, libpng
-, libsndfile, libvorbis, lua, pkgconfig, SDL, SDL_image, SDL_net, SDL_ttf, smpeg
-, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip, alephone }:
-
+{ stdenv
+, fetchurl
+, boost
+, curl
+, ffmpeg
+, icoutils
+, libmad
+, libogg
+, libpng
+, libsndfile
+, libvorbis
+, lua
+, pkgconfig
+, SDL
+, SDL_image
+, SDL_net
+, SDL_ttf
+, smpeg
+, speex
+, zziplib
+, zlib
+, makeWrapper
+, makeDesktopItem
+, unzip
+, alephone
+}:
 let
   self = stdenv.mkDerivation rec {
     outputs = [ "out" "icons" ];
@@ -59,41 +81,48 @@ let
       platforms = platforms.linux;
     };
   };
+in
+self // {
+  makeWrapper =
+    { pname
+    , desktopName
+    , version
+    , zip
+    , meta
+    , icon ? alephone.icons + "/alephone.png"
+    , ...
+    }@extraArgs:
+      stdenv.mkDerivation ({
+        inherit pname version;
 
-in self // {
-  makeWrapper = { pname, desktopName, version, zip, meta
-    , icon ? alephone.icons + "/alephone.png", ... }@extraArgs:
-    stdenv.mkDerivation ({
-      inherit pname version;
+        desktopItem = makeDesktopItem {
+          name = desktopName;
+          exec = pname;
+          genericName = pname;
+          categories = "Game;";
+          comment = meta.description;
+          inherit desktopName icon;
+        };
 
-      desktopItem = makeDesktopItem {
-        name = desktopName;
-        exec = pname;
-        genericName = pname;
-        categories = "Game;";
-        comment = meta.description;
-        inherit desktopName icon;
-      };
+        src = zip;
 
-      src = zip;
+        nativeBuildInputs = [ makeWrapper unzip ];
 
-      nativeBuildInputs = [ makeWrapper unzip ];
+        dontConfigure = true;
+        dontBuild = true;
 
-      dontConfigure = true;
-      dontBuild = true;
+        installPhase = ''
+          mkdir -p $out/bin $out/data/$pname $out/share/applications
+          cp -a * $out/data/$pname
+          cp $desktopItem/share/applications/* $out/share/applications
+          makeWrapper ${alephone}/bin/alephone $out/bin/$pname \
+            --add-flags $out/data/$pname
+        '';
 
-      installPhase = ''
-        mkdir -p $out/bin $out/data/$pname $out/share/applications
-        cp -a * $out/data/$pname
-        cp $desktopItem/share/applications/* $out/share/applications
-        makeWrapper ${alephone}/bin/alephone $out/bin/$pname \
-          --add-flags $out/data/$pname
-      '';
-
-      meta = with stdenv.lib;
-        {
-          maintainers = with maintainers; [ ehmry ];
-          inherit (alephone.meta) platforms;
-        } // meta;
-    } // extraArgs);
+        meta = with stdenv.lib;
+          {
+            maintainers = with maintainers; [ ehmry ];
+            inherit (alephone.meta) platforms;
+          } // meta;
+      } // extraArgs);
 }

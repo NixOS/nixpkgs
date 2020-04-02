@@ -1,51 +1,51 @@
 let
-  gopherRoot  = "/tmp/gopher";
-  gopherHost  = "gopherd";
+  gopherRoot = "/tmp/gopher";
+  gopherHost = "gopherd";
   fileContent = "Hello Gopher!";
-  fileName    = "file.txt";
+  fileName = "file.txt";
 in
-  import ./make-test-python.nix ({...}: {
-    name = "spacecookie";
-    nodes = {
-      ${gopherHost} = {
-        networking.firewall.allowedTCPPorts = [ 70 ];
-        systemd.services.spacecookie = {
-          preStart = ''
-            mkdir -p ${gopherRoot}/directory
-            echo "${fileContent}" > ${gopherRoot}/${fileName}
-          '';
-        };
-
-        services.spacecookie = {
-          enable = true;
-          root = gopherRoot;
-          hostname = gopherHost;
-        };
+import ./make-test-python.nix ({ ... }: {
+  name = "spacecookie";
+  nodes = {
+    ${gopherHost} = {
+      networking.firewall.allowedTCPPorts = [ 70 ];
+      systemd.services.spacecookie = {
+        preStart = ''
+          mkdir -p ${gopherRoot}/directory
+          echo "${fileContent}" > ${gopherRoot}/${fileName}
+        '';
       };
 
-      client = {};
+      services.spacecookie = {
+        enable = true;
+        root = gopherRoot;
+        hostname = gopherHost;
+      };
     };
 
-    testScript = ''
-      start_all()
-      ${gopherHost}.wait_for_open_port(70)
-      ${gopherHost}.wait_for_unit("spacecookie.service")
-      client.wait_for_unit("network.target")
+    client = { };
+  };
 
-      fileResponse = client.succeed("curl -s gopher://${gopherHost}//${fileName}")
+  testScript = ''
+    start_all()
+    ${gopherHost}.wait_for_open_port(70)
+    ${gopherHost}.wait_for_unit("spacecookie.service")
+    client.wait_for_unit("network.target")
 
-      # the file response should return our created file exactly
-      if not (fileResponse == "${fileContent}\n"):
-          raise Exception("Unexpected file response")
+    fileResponse = client.succeed("curl -s gopher://${gopherHost}//${fileName}")
 
-      # sanity check on the directory listing: we serve a directory and a file
-      # via gopher, so the directory listing should have exactly two entries,
-      # one with gopher file type 0 (file) and one with file type 1 (directory).
-      dirResponse = client.succeed("curl -s gopher://${gopherHost}")
-      dirEntries = [l[0] for l in dirResponse.split("\n") if len(l) > 0]
-      dirEntries.sort()
+    # the file response should return our created file exactly
+    if not (fileResponse == "${fileContent}\n"):
+        raise Exception("Unexpected file response")
 
-      if not (["0", "1"] == dirEntries):
-          raise Exception("Unexpected directory response")
-    '';
-  })
+    # sanity check on the directory listing: we serve a directory and a file
+    # via gopher, so the directory listing should have exactly two entries,
+    # one with gopher file type 0 (file) and one with file type 1 (directory).
+    dirResponse = client.succeed("curl -s gopher://${gopherHost}")
+    dirEntries = [l[0] for l in dirResponse.split("\n") if len(l) > 0]
+    dirEntries.sort()
+
+    if not (["0", "1"] == dirEntries):
+        raise Exception("Unexpected directory response")
+  '';
+})

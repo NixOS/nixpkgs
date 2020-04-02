@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-      echo Building PALP optimized for ${dim} dimensions
-      sed -i "s/^#define[^a-zA-Z]*POLY_Dmax.*/#define POLY_Dmax ${dim}/" Global.h
+    echo Building PALP optimized for ${dim} dimensions
+    sed -i "s/^#define[^a-zA-Z]*POLY_Dmax.*/#define POLY_Dmax ${dim}/" Global.h
   '';
 
   # palp has no tests of its own. This test is an adapted sage test that failed

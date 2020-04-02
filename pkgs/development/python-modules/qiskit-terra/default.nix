@@ -77,10 +77,10 @@ buildPythonPackage rec {
     "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
   ];
 
-  dontUseSetuptoolsCheck = true;  # can't find setup.py, so fails. tested by pytest
+  dontUseSetuptoolsCheck = true; # can't find setup.py, so fails. tested by pytest
 
   disabledTests = [
-    "test_long_name"  # generated circuit images differ for some reason
+    "test_long_name" # generated circuit images differ for some reason
     "test_jupyter_jobs_pbars" # needs IBMQ provider package (qiskit-ibmq-provider), circular dependency
   ];
 

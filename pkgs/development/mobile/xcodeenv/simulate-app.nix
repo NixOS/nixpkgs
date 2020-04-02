@@ -1,15 +1,14 @@
-{stdenv, composeXcodeWrapper}:
-{name, app ? null, bundleId ? null, ...}@args:
+{ stdenv, composeXcodeWrapper }:
+{ name, app ? null, bundleId ? null, ... }@args:
 
 assert app != null -> bundleId != null;
-
 let
   xcodewrapperArgs = builtins.intersectAttrs (builtins.functionArgs composeXcodeWrapper) args;
 
   xcodewrapper = composeXcodeWrapper xcodewrapperArgs;
 in
 stdenv.mkDerivation {
-  name = stdenv.lib.replaceChars [" "] [""] name;
+  name = stdenv.lib.replaceChars [ " " ] [ "" ] name;
   buildCommand = ''
     mkdir -p $out/bin
     cat > $out/bin/run-test-simulator << "EOF"
@@ -31,26 +30,26 @@ stdenv.mkDerivation {
     open -a "$(readlink "${xcodewrapper}/bin/Simulator")" --args -CurrentDeviceUDID $udid
 
     ${stdenv.lib.optionalString (app != null) ''
-      # Copy the app and restore the write permissions
-      appTmpDir=$(mktemp -d -t appTmpDir)
-      cp -r "$(echo ${app}/*.app)" "$appTmpDir"
-      chmod -R 755 "$(echo $appTmpDir/*.app)"
+    # Copy the app and restore the write permissions
+    appTmpDir=$(mktemp -d -t appTmpDir)
+    cp -r "$(echo ${app}/*.app)" "$appTmpDir"
+    chmod -R 755 "$(echo $appTmpDir/*.app)"
 
-      # Wait for the simulator to start
-      echo "Press enter when the simulator is started..."
-      read
+    # Wait for the simulator to start
+    echo "Press enter when the simulator is started..."
+    read
 
-      # Install the app
-      xcrun simctl install "$udid" "$(echo $appTmpDir/*.app)"
+    # Install the app
+    xcrun simctl install "$udid" "$(echo $appTmpDir/*.app)"
 
-      # Remove the app tempdir
-      rm -Rf $appTmpDir
+    # Remove the app tempdir
+    rm -Rf $appTmpDir
 
-      # Launch the app in the simulator
-      xcrun simctl launch $udid "${bundleId}"
-      EOF
+    # Launch the app in the simulator
+    xcrun simctl launch $udid "${bundleId}"
+    EOF
 
-      chmod +x $out/bin/run-test-simulator
-    ''}
+    chmod +x $out/bin/run-test-simulator
+  ''}
   '';
 }

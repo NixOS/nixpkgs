@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     mkfontdir "$fontDir"
   '';
 
-  outputs = [ "out"  "otb" ];
+  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A Unicode font";

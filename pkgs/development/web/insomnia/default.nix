@@ -1,10 +1,45 @@
-{ stdenv, makeWrapper, fetchurl, dpkg, alsaLib, atk, cairo, cups, dbus, expat
-, fontconfig, freetype, gdk-pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2
-, at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
-, libudev0-shim, glibc, curl, openssl, autoPatchelfHook }:
-
+{ stdenv
+, makeWrapper
+, fetchurl
+, dpkg
+, alsaLib
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gnome2
+, nspr
+, nss
+, gtk3
+, gtk2
+, at-spi2-atk
+, gsettings-desktop-schemas
+, gobject-introspection
+, wrapGAppsHook
+, libX11
+, libXScrnSaver
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXtst
+, libxcb
+, nghttp2
+, libudev0-shim
+, glibc
+, curl
+, openssl
+, autoPatchelfHook
+}:
 let
   runtimeLibs = stdenv.lib.makeLibraryPath [
     curl
@@ -14,7 +49,8 @@ let
     openssl
     stdenv.cc.cc
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "insomnia";
   version = "7.1.1";
 

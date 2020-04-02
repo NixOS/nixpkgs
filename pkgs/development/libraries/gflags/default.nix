@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, enableShared ? true}:
+{ stdenv, fetchFromGitHub, cmake, enableShared ? true }:
 
 stdenv.mkDerivation rec {
   pname = "gflags";

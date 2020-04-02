@@ -5,10 +5,10 @@
 , gcc6
 , gcc7
 }:
-
 let
   common = callPackage ./common.nix;
-in rec {
+in
+rec {
   cudatoolkit_6 = common {
     version = "6.0.37";
     url = "http://developer.download.nvidia.com/compute/cuda/6_0/rel/installers/cuda_6.0.37_linux_64.run";

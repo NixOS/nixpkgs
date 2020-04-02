@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  makeFlags = ["CC=cc"];
+  makeFlags = [ "CC=cc" ];
 
   patches = [ ./bcc-warning-fix.patch ];
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     description = "Compiler for Doom/Hexen scripts (ACS, BCS)";
     homepage = https://github.com/wormt/bcc;
     license = licenses.mit;
-    maintainers = with maintainers; [ertes];
+    maintainers = with maintainers; [ ertes ];
   };
 }

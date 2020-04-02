@@ -1,8 +1,13 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, gnugrep
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, gnugrep
 , fixDarwinDylibNames
 , file
 , legacySupport ? false
-, enableShared ? true }:
+, enableShared ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "zstd";
@@ -16,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ]
-   ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   patches = [
     # From https://github.com/facebook/zstd/pull/1883
@@ -25,8 +30,8 @@ stdenv.mkDerivation rec {
       sha256 = "13z7id1qbc05cv1rmak7c8xrchp7jh1i623bq5pwcihg57wzcyr8";
     })
   ] # This I didn't upstream because if you use posix threads with MinGW it will
-    # work find, and I'm not sure how to write the condition.
-    ++ stdenv.lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
+  # work find, and I'm not sure how to write the condition.
+  ++ stdenv.lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
 
   cmakeFlags = [
     "-DZSTD_BUILD_SHARED:BOOL=${if enableShared then "ON" else "OFF"}"

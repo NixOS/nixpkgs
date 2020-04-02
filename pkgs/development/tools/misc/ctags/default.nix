@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # don't use $T(E)MP which is set to the build directory
-  configureFlags= [ "--enable-tmpdir=/tmp" ];
+  configureFlags = [ "--enable-tmpdir=/tmp" ];
 
   meta = with stdenv.lib; {
     description = "A tool for fast source code browsing (exuberant ctags)";

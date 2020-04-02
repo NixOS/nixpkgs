@@ -1,5 +1,6 @@
 import ./make-test-python.nix (
-  { pkgs, ... }: let
+  { pkgs, ... }:
+  let
     domain = "whatever.example.com";
   in
     {
@@ -8,29 +9,29 @@ import ./make-test-python.nix (
         server =
           { ... }:
 
-            {
-              networking.firewall = {
-                allowedUDPPorts = [ 53 ];
-                trustedInterfaces = [ "dns0" ];
-              };
-              boot.kernel.sysctl = {
-                "net.ipv4.ip_forward" = 1;
-                "net.ipv6.ip_forward" = 1;
-              };
-
-              services.iodine.server = {
-                enable = true;
-                ip = "10.53.53.1/24";
-                passwordFile = "${builtins.toFile "password" "foo"}";
-                inherit domain;
-              };
-
-              # test resource: accessible only via tunnel
-              services.openssh = {
-                enable = true;
-                openFirewall = false;
-              };
+          {
+            networking.firewall = {
+              allowedUDPPorts = [ 53 ];
+              trustedInterfaces = [ "dns0" ];
             };
+            boot.kernel.sysctl = {
+              "net.ipv4.ip_forward" = 1;
+              "net.ipv6.ip_forward" = 1;
+            };
+
+            services.iodine.server = {
+              enable = true;
+              ip = "10.53.53.1/24";
+              passwordFile = "${builtins.toFile "password" "foo"}";
+              inherit domain;
+            };
+
+            # test resource: accessible only via tunnel
+            services.openssh = {
+              enable = true;
+              openFirewall = false;
+            };
+          };
 
         client =
           { ... }: {

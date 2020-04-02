@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   # `ifconfig' as found in net-tools (not GNU Inetutils).
   propagatedBuildInputs = [ nettools ];
 
-  buildInputs = [libgcrypt perl makeWrapper openssl ];
+  buildInputs = [ libgcrypt perl makeWrapper openssl ];
 
   preConfigure = ''
     sed -i 's|^#OPENSSL|OPENSSL|g' Makefile

@@ -1,6 +1,16 @@
-{ stdenv, fetchpatch, python, buildPythonPackage, isPy37
-, protobuf, google_apputils, pyext, libcxx, isPy27
-, disabled, doCheck ? true }:
+{ stdenv
+, fetchpatch
+, python
+, buildPythonPackage
+, isPy37
+, protobuf
+, google_apputils
+, pyext
+, libcxx
+, isPy27
+, disabled
+, doCheck ? true
+}:
 
 with stdenv.lib;
 
@@ -16,7 +26,7 @@ buildPythonPackage {
   );
 
   propagatedBuildInputs = [ google_apputils ];
-  propagatedNativeBuildInputs = [ protobuf ];  # For protoc.
+  propagatedNativeBuildInputs = [ protobuf ]; # For protoc.
   nativeBuildInputs = [ google_apputils pyext ];
   buildInputs = [ protobuf ];
 

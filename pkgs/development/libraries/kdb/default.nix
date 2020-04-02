@@ -1,7 +1,14 @@
-{
-  mkDerivation, lib, fetchurl,
-  extra-cmake-modules,
-  qtbase, qttranslations, kcoreaddons, python2, sqlite, postgresql, libmysqlclient
+{ mkDerivation
+, lib
+, fetchurl
+, extra-cmake-modules
+, qtbase
+, qttranslations
+, kcoreaddons
+, python2
+, sqlite
+, postgresql
+, libmysqlclient
 }:
 
 mkDerivation rec {

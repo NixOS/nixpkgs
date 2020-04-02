@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   # Patches from https://sources.debian.net/src/cvsps/2.1-7/debian/patches
   patches =
-    [ (fetchpatch {
+    [
+      (fetchpatch {
         url = "https://sources.debian.net/data/main/c/cvsps/2.1-7/debian/patches/01_ignoretrunk.patch";
         sha256 = "1gzb97dw2a6bm0bmim7p7wvsn0r82y3a8n22ln6rbbkkd8vlnzcb";
       })

@@ -1,8 +1,28 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
-, curl, grantlee, libgit2, libusb, libssh2, libxml2, libxslt, libzip, zlib
-, qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, autoreconfHook
+, cmake
+, wrapQtAppsHook
+, pkgconfig
+, qmake
+, curl
+, grantlee
+, libgit2
+, libusb
+, libssh2
+, libxml2
+, libxslt
+, libzip
+, zlib
+, qtbase
+, qtconnectivity
+, qtlocation
+, qtsvg
+, qttools
+, qtwebkit
+, libXcomposite
 }:
-
 let
   version = "4.8.2";
 
@@ -65,8 +85,8 @@ let
       platforms = platforms.all;
     };
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "subsurface";
   inherit version;
 
@@ -76,9 +96,21 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libdc googlemaps
-    curl grantlee libgit2 libssh2 libusb libxml2 libxslt libzip
-    qtbase qtconnectivity qtsvg qttools qtwebkit
+    libdc
+    googlemaps
+    curl
+    grantlee
+    libgit2
+    libssh2
+    libusb
+    libxml2
+    libxslt
+    libzip
+    qtbase
+    qtconnectivity
+    qtsvg
+    qttools
+    qtwebkit
   ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook pkgconfig ];

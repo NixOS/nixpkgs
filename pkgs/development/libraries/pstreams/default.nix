@@ -8,8 +8,10 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = https://git.code.sf.net/p/pstreams/code;
-    rev = let dot2Underscore = stdenv.lib.strings.stringAsChars (c: if c == "." then "_" else c);
-          in "RELEASE_${dot2Underscore version}";
+    rev =
+      let
+        dot2Underscore = stdenv.lib.strings.stringAsChars (c: if c == "." then "_" else c);
+      in "RELEASE_${dot2Underscore version}";
     sha256 = "0r8aj0nh5mkf8cvnzl8bdy4nm7i74vs83axxfimcd74kjfn0irys";
   };
 
@@ -18,8 +20,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   preInstall = "rm INSTALL";
-    # `make install` fails on case-insensitive file systems (e.g. APFS by
-    # default) because this target exists
+  # `make install` fails on case-insensitive file systems (e.g. APFS by
+  # default) because this target exists
 
   meta = with stdenv.lib; {
     description = "POSIX Process Control in C++";

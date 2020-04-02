@@ -1,5 +1,12 @@
-{ buildPythonPackage, python, fetchurl, stdenv,
-  cmake, ninja, qt5, shiboken2 }:
+{ buildPythonPackage
+, python
+, fetchurl
+, stdenv
+, cmake
+, ninja
+, qt5
+, shiboken2
+}:
 
 stdenv.mkDerivation rec {
   pname = "pyside2";
@@ -25,8 +32,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja qt5.qmake shiboken2 python ];
   buildInputs = with qt5; [
-    qtbase qtxmlpatterns qtmultimedia qttools qtx11extras qtlocation qtscript
-    qtwebsockets qtwebengine qtwebchannel qtcharts qtsensors qtsvg
+    qtbase
+    qtxmlpatterns
+    qtmultimedia
+    qttools
+    qtx11extras
+    qtlocation
+    qtscript
+    qtwebsockets
+    qtwebengine
+    qtwebchannel
+    qtcharts
+    qtsensors
+    qtsvg
   ];
 
   meta = with stdenv.lib; {

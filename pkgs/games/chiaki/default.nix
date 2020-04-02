@@ -1,6 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub
-, cmake, ffmpeg, libopus, qtbase, qtmultimedia, qtsvg, pkgconfig, protobuf
-, python3Packages, SDL2 }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, ffmpeg
+, libopus
+, qtbase
+, qtmultimedia
+, qtsvg
+, pkgconfig
+, protobuf
+, python3Packages
+, SDL2
+}:
 
 mkDerivation rec {
   pname = "chiaki";
@@ -15,7 +26,11 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig protobuf python3Packages.python python3Packages.protobuf
+    cmake
+    pkgconfig
+    protobuf
+    python3Packages.python
+    python3Packages.protobuf
   ];
   buildInputs = [ ffmpeg libopus qtbase qtmultimedia qtsvg protobuf SDL2 ];
 

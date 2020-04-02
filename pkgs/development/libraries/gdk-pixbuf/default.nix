@@ -1,13 +1,33 @@
-{ stdenv, fetchurl, nixosTests, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
-, docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, gobject-introspection, doCheck ? false, makeWrapper
+{ stdenv
+, fetchurl
+, nixosTests
+, fixDarwinDylibNames
+, meson
+, ninja
+, pkgconfig
+, gettext
+, python3
+, libxml2
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk-doc
+, glib
+, libtiff
+, libjpeg
+, libpng
+, libX11
+, gnome3
+, gobject-introspection
+, doCheck ? false
+, makeWrapper
 , fetchpatch
 }:
-
 let
   pname = "gdk-pixbuf";
   version = "2.40.0";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -34,10 +54,20 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
-    gtk-doc gobject-introspection makeWrapper
+    meson
+    ninja
+    pkgconfig
+    gettext
+    python3
+    libxml2
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_43
+    gtk-doc
+    gobject-introspection
+    makeWrapper
   ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng ];
 

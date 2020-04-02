@@ -15,7 +15,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    fltk alsaLib freetype libXrandr libXinerama libXcursor lv2 libjack2
+    fltk
+    alsaLib
+    freetype
+    libXrandr
+    libXinerama
+    libXcursor
+    lv2
+    libjack2
   ];
 
   meta = with stdenv.lib; {

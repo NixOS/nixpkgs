@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.networking.resolvconf;
 
   resolvconfOptions = cfg.extraOptions
@@ -29,9 +27,7 @@ let
       # This hosts runs a full-blown DNS resolver.
       name_servers='127.0.0.1'
     '' + cfg.extraConfig;
-
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "networking" "dnsSingleRequest" ] [ "networking" "resolvconf" "dnsSingleRequest" ])
@@ -89,7 +85,7 @@ in
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "ndots:1" "rotate" ];
         description = ''
           Set the options in <filename>/etc/resolv.conf</filename>.

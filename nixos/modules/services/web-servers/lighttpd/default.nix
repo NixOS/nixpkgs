@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.lighttpd;
 
   # List of known lighttpd modules, ordered by how the lighttpd documentation
@@ -50,14 +48,14 @@ let
     "mod_geoip"
     "mod_magnet"
     "mod_mysql_vhost"
-    "mod_openssl"  # since v1.4.46
+    "mod_openssl" # since v1.4.46
     "mod_scgi"
     "mod_setenv"
     "mod_trigger_b4_dl"
     "mod_uploadprogress"
-    "mod_vhostdb"  # since v1.4.46
+    "mod_vhostdb" # since v1.4.46
     "mod_webdav"
-    "mod_wstunnel"  # since v1.4.46
+    "mod_wstunnel" # since v1.4.46
   ];
 
   maybeModuleString = moduleName:
@@ -66,58 +64,59 @@ let
   modulesIncludeString = concatStringsSep ",\n"
     (filter (x: x != "") (map maybeModuleString allKnownModules));
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "lighttpd.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "lighttpd.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "lighttpd.conf" ''
-      server.document-root = "${cfg.document-root}"
-      server.port = ${toString cfg.port}
-      server.username = "lighttpd"
-      server.groupname = "lighttpd"
+      pkgs.writeText "lighttpd.conf" ''
+        server.document-root = "${cfg.document-root}"
+        server.port = ${toString cfg.port}
+        server.username = "lighttpd"
+        server.groupname = "lighttpd"
 
-      # As for why all modules are loaded here, instead of having small
-      # server.modules += () entries in each sub-service extraConfig snippet,
-      # read this:
-      #
-      #   http://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
-      #   http://redmine.lighttpd.net/issues/2337
-      #
-      # Basically, lighttpd doesn't want to load (or even silently ignore) a
-      # module for a second time, and there is no way to check if a module has
-      # been loaded already. So if two services were to put the same module in
-      # server.modules += (), that would break the lighttpd configuration.
-      server.modules = (
-          ${modulesIncludeString}
-      )
+        # As for why all modules are loaded here, instead of having small
+        # server.modules += () entries in each sub-service extraConfig snippet,
+        # read this:
+        #
+        #   http://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
+        #   http://redmine.lighttpd.net/issues/2337
+        #
+        # Basically, lighttpd doesn't want to load (or even silently ignore) a
+        # module for a second time, and there is no way to check if a module has
+        # been loaded already. So if two services were to put the same module in
+        # server.modules += (), that would break the lighttpd configuration.
+        server.modules = (
+            ${modulesIncludeString}
+        )
 
-      # Logging (logs end up in systemd journal)
-      accesslog.use-syslog = "enable"
-      server.errorlog-use-syslog = "enable"
+        # Logging (logs end up in systemd journal)
+        accesslog.use-syslog = "enable"
+        server.errorlog-use-syslog = "enable"
 
-      ${lib.optionalString cfg.enableUpstreamMimeTypes ''
-      include "${pkgs.lighttpd}/share/lighttpd/doc/config/conf.d/mime.conf"
+        ${lib.optionalString cfg.enableUpstreamMimeTypes ''
+        include "${pkgs.lighttpd}/share/lighttpd/doc/config/conf.d/mime.conf"
       ''}
 
-      static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
-      index-file.names = ( "index.html" )
+        static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
+        index-file.names = ( "index.html" )
 
-      ${if cfg.mod_userdir then ''
-        userdir.path = "public_html"
-      '' else ""}
+        ${
+          if cfg.mod_userdir then ''
+            userdir.path = "public_html"
+          '' else ""}
 
-      ${if cfg.mod_status then ''
-        status.status-url = "/server-status"
-        status.statistics-url = "/server-statistics"
-        status.config-url = "/server-config"
-      '' else ""}
+        ${
+          if cfg.mod_status then ''
+            status.status-url = "/server-status"
+            status.statistics-url = "/server-statistics"
+            status.config-url = "/server-config"
+          '' else ""}
 
-      ${cfg.extraConfig}
-    '';
-
+        ${cfg.extraConfig}
+      '';
 in
-
 {
 
   options = {
@@ -217,7 +216,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = all (x: elem x allKnownModules) cfg.enableModules;
+      {
+        assertion = all (x: elem x allKnownModules) cfg.enableModules;
         message = ''
           One (or more) modules in services.lighttpd.enableModules are
           unrecognized.
@@ -230,7 +230,8 @@ in
     ];
 
     services.lighttpd.enableModules = mkMerge
-      [ (mkIf cfg.mod_status [ "mod_status" ])
+      [
+        (mkIf cfg.mod_status [ "mod_status" ])
         (mkIf cfg.mod_userdir [ "mod_userdir" ])
         # always load mod_accesslog so that we can log to the journal
         [ "mod_accesslog" ]

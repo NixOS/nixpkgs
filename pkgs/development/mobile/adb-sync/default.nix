@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     homepage = https://github.com/google/adb-sync;
     license = licenses.asl20;
     platforms = platforms.unix;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ scolobb ];
   };
 }

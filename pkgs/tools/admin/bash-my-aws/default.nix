@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ./stack-spec.sh
     popd
   '';
-  installPhase=''
+  installPhase = ''
     mkdir -p $out
     cp -r . $out
   '';

@@ -1,7 +1,5 @@
 { stdenv, fetchsvn, fetchurl, cups, cups-filters, jbigkit, zlib }:
-
 let
-
   color-profiles = stdenv.mkDerivation {
     name = "splix-color-profiles-20070625";
 
@@ -17,8 +15,8 @@ let
       cp * $out/share/cups/profiles/samsung/
     '';
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "splix-svn-${rev}";
   rev = "315";
 

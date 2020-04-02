@@ -32,18 +32,22 @@ rec {
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
     in lib.flip (extendDerivation true) newDrv (
-      { meta = drv.meta or {};
-        passthru = if drv ? passthru then drv.passthru else {};
+      {
+        meta = drv.meta or { };
+        passthru = if drv ? passthru then drv.passthru else { };
       }
       //
-      (drv.passthru or {})
+      (drv.passthru or { })
       //
-      (if (drv ? crossDrv && drv ? nativeDrv)
-       then {
-         crossDrv = overrideDerivation drv.crossDrv f;
-         nativeDrv = overrideDerivation drv.nativeDrv f;
-       }
-       else { }));
+      (
+        if (drv ? crossDrv && drv ? nativeDrv)
+        then {
+          crossDrv = overrideDerivation drv.crossDrv f;
+          nativeDrv = overrideDerivation drv.nativeDrv f;
+        }
+        else { }
+      )
+    );
 
 
   /* `makeOverridable` takes a function from attribute set to attribute set and
@@ -133,9 +137,7 @@ rec {
       mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
     in
       if lib.isDerivation pkgs then throw
-        ("function `callPackages` was called on a *single* derivation "
-          + ''"${pkgs.name or "<unknown-name>"}";''
-          + " did you mean to use `callPackage` instead?")
+        ("function `callPackages` was called on a *single* derivation " + ''"${pkgs.name or "<unknown-name>"}";'' + " did you mean to use `callPackage` instead?")
       else lib.mapAttrs mkAttrOverridable pkgs;
 
 
@@ -149,7 +151,8 @@ rec {
         ({ all = map (x: x.value) outputsList; }) // passthru;
 
       outputToAttrListElement = outputName:
-        { name = outputName;
+        {
+          name = outputName;
           value = commonAttrs // {
             inherit (drv.${outputName}) type outputName;
             drvPath = assert condition; drv.${outputName}.drvPath;
@@ -170,7 +173,7 @@ rec {
      garbage collection. */
   hydraJob = drv:
     let
-      outputs = drv.outputs or ["out"];
+      outputs = drv.outputs or [ "out" ];
 
       commonAttrs =
         { inherit (drv) name system meta; inherit outputs; }
@@ -182,14 +185,15 @@ rec {
 
       makeOutput = outputName:
         let output = drv.${outputName}; in
-        { name = outputName;
-          value = commonAttrs // {
-            outPath = output.outPath;
-            drvPath = output.drvPath;
-            type = "derivation";
-            inherit outputName;
+          {
+            name = outputName;
+            value = commonAttrs // {
+              outPath = output.outPath;
+              drvPath = output.drvPath;
+              type = "derivation";
+              inherit outputName;
+            };
           };
-        };
 
       outputsList = map makeOutput outputs;
 
@@ -206,15 +210,16 @@ rec {
      provided by `newScope' and the set provides a `newScope' attribute
      which can form the parent scope for later package sets. */
   makeScope = newScope: f:
-    let self = f self // {
-          newScope = scope: newScope (self // scope);
-          callPackage = self.newScope {};
-          overrideScope = g: lib.warn
-            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
-            (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
-          overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
-          packages = f;
-        };
+    let
+      self = f self // {
+        newScope = scope: newScope (self // scope);
+        callPackage = self.newScope { };
+        overrideScope = g: lib.warn
+          "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
+          (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
+        overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
+        packages = f;
+      };
     in self;
 
 }

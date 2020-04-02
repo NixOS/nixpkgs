@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.buildbot-worker;
 
@@ -40,8 +39,8 @@ let
                numcpus=numcpus, allow_shutdown=allow_shutdown)
     s.setServiceParent(application)
   '';
-
-in {
+in
+{
   options = {
     services.buildbot-worker = {
 
@@ -65,7 +64,7 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 
@@ -162,11 +161,11 @@ in {
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}/info"
         ${optionalString (cfg.hostMessage != null) ''
-          ln -sf "${pkgs.writeText "buildbot-worker-host" cfg.hostMessage}" "${cfg.buildbotDir}/info/host"
-        ''}
+        ln -sf "${pkgs.writeText "buildbot-worker-host" cfg.hostMessage}" "${cfg.buildbotDir}/info/host"
+      ''}
         ${optionalString (cfg.adminMessage != null) ''
-          ln -sf "${pkgs.writeText "buildbot-worker-admin" cfg.adminMessage}" "${cfg.buildbotDir}/info/admin"
-        ''}
+        ln -sf "${pkgs.writeText "buildbot-worker-admin" cfg.adminMessage}" "${cfg.buildbotDir}/info/admin"
+      ''}
       '';
 
       serviceConfig = {

@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "hddtemp-0.3_beta15";
 
-  db = fetchurl{
+  db = fetchurl {
     url = mirror://savannah/hddtemp/hddtemp.db;
     sha256 = "1fr6qgns6qv7cr40lic5yqwkkc7yjmmgx8j0z6d93csg3smzhhya";
   };

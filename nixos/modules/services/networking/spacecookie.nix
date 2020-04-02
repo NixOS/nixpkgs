@@ -1,13 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.spacecookie;
-  configFile = pkgs.writeText "spacecookie.json" (lib.generators.toJSON {} {
+  configFile = pkgs.writeText "spacecookie.json" (lib.generators.toJSON { } {
     inherit (cfg) hostname port root;
   });
-in {
+in
+{
 
   options = {
 

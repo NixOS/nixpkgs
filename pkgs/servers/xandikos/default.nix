@@ -28,4 +28,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ maintainers."0x4A6F" ];
   };
 }
-

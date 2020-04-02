@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.trilium-server;
   configIni = pkgs.writeText "trilium-config.ini" ''
@@ -57,7 +56,7 @@ in
     };
 
     nginx = mkOption {
-      default = {};
+      default = { };
       description = ''
         Configuration for nginx reverse proxy.
       '';
@@ -83,55 +82,55 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [ 
-  {
-    meta.maintainers = with lib.maintainers; [ kampka ];
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      meta.maintainers = with lib.maintainers; [ kampka ];
 
-    users.groups.trilium = {};
-    users.users.trilium = {
-      description = "Trilium User";
-      group = "trilium";
-      home = cfg.dataDir;
-      isSystemUser = true;
-    };
-
-    systemd.services.trilium-server = {
-      wantedBy = [ "multi-user.target" ];
-      environment.TRILIUM_DATA_DIR = cfg.dataDir;
-      serviceConfig = {
-        ExecStart = "${pkgs.trilium-server}/bin/trilium-server";
-        User = "trilium";
-        Group = "trilium";
-        PrivateTmp = "true";
+      users.groups.trilium = { };
+      users.users.trilium = {
+        description = "Trilium User";
+        group = "trilium";
+        home = cfg.dataDir;
+        isSystemUser = true;
       };
-    };
 
-    systemd.tmpfiles.rules = [
-      "d  ${cfg.dataDir}            0750 trilium trilium - -"
-      "L+ ${cfg.dataDir}/config.ini -    -       -       - ${configIni}"
-    ];
+      systemd.services.trilium-server = {
+        wantedBy = [ "multi-user.target" ];
+        environment.TRILIUM_DATA_DIR = cfg.dataDir;
+        serviceConfig = {
+          ExecStart = "${pkgs.trilium-server}/bin/trilium-server";
+          User = "trilium";
+          Group = "trilium";
+          PrivateTmp = "true";
+        };
+      };
 
-  }
+      systemd.tmpfiles.rules = [
+        "d  ${cfg.dataDir}            0750 trilium trilium - -"
+        "L+ ${cfg.dataDir}/config.ini -    -       -       - ${configIni}"
+      ];
 
-  (lib.mkIf cfg.nginx.enable {
-    services.nginx = {
-      enable = true;
-      virtualHosts."${cfg.nginx.hostName}" = {
-        locations."/" = {
-          proxyPass = "http://${cfg.host}:${toString cfg.port}/";
+    }
+
+    (lib.mkIf cfg.nginx.enable {
+      services.nginx = {
+        enable = true;
+        virtualHosts."${cfg.nginx.hostName}" = {
+          locations."/" = {
+            proxyPass = "http://${cfg.host}:${toString cfg.port}/";
+            extraConfig = ''
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header Host $host;
+              proxy_cache_bypass $http_upgrade;
+            '';
+          };
           extraConfig = ''
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_cache_bypass $http_upgrade;
+            client_max_body_size 0;
           '';
         };
-        extraConfig = ''
-          client_max_body_size 0;
-        '';
       };
-    };
-  })
+    })
   ]);
 }

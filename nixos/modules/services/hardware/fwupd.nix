@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.fwupd;
   originalEtc =
@@ -20,15 +19,17 @@ let
   # to install it because it would create a cyclic dependency between
   # the outputs. We also need to enable the remote,
   # which should not be done by default.
-  testRemote = if cfg.enableTestRemote then {
-    "fwupd/remotes.d/fwupd-tests.conf" = {
-      source = pkgs.runCommand "fwupd-tests-enabled.conf" {} ''
-        sed "s,^Enabled=false,Enabled=true," \
-        "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
-      '';
-    };
-  } else {};
-in {
+  testRemote =
+    if cfg.enableTestRemote then {
+      "fwupd/remotes.d/fwupd-tests.conf" = {
+        source = pkgs.runCommand "fwupd-tests-enabled.conf" { } ''
+          sed "s,^Enabled=false,Enabled=true," \
+          "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
+        '';
+      };
+    } else { };
+in
+{
 
   ###### interface
   options = {
@@ -44,7 +45,7 @@ in {
 
       blacklistDevices = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
         description = ''
           Allow blacklisting specific devices by their GUID
@@ -53,7 +54,7 @@ in {
 
       blacklistPlugins = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "udev" ];
         description = ''
           Allow blacklisting specific plugins
@@ -62,7 +63,7 @@ in {
 
       extraTrustedKeys = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = literalExample "[ /etc/nixos/fwupd/myfirmware.pem ]";
         description = ''
           Installing a public key allows firmware signed with a matching private key to be recognized as trusted, which may require less authentication to install than for untrusted files. By default trusted firmware can be upgraded (but not downgraded) without the user or administrator password. Only very few keys are installed by default.

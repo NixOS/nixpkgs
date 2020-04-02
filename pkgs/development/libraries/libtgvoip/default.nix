@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, autoreconfHook
-, openssl, libopus, alsaLib, libpulseaudio
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, openssl
+, libopus
+, alsaLib
+, libpulseaudio
 }:
 
 with lib;

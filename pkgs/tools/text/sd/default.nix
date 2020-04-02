@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {

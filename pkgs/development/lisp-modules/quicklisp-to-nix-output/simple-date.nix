@@ -16,7 +16,7 @@ rec {
 
   packageName = "simple-date";
 
-  asdFilesToKeep = ["simple-date.asd"];
+  asdFilesToKeep = [ "simple-date.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM simple-date DESCRIPTION System lacks description SHA256

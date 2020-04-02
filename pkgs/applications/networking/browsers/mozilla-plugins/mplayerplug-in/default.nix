@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, browser, libXpm, gettext}:
+{ stdenv, fetchurl, pkgconfig, browser, libXpm, gettext }:
 
 stdenv.mkDerivation rec {
   name = "mplayerplug-in-3.55";
@@ -9,17 +9,18 @@ stdenv.mkDerivation rec {
   };
 
   postConfigure =
-    (if browser ? isFirefox3Like then ''
-       # Cause a rebuild of these file from the IDL file, needed for GNU IceCat 3
-       # and Mozilla Firefox 3.
-       # See, e.g., http://article.gmane.org/gmane.comp.mozilla.mplayerplug-in/2104 .
-       rm -f Source/nsIScriptableMplayerPlugin.h
-     ''
-     else "");
+    (
+      if browser ? isFirefox3Like then ''
+        # Cause a rebuild of these file from the IDL file, needed for GNU IceCat 3
+        # and Mozilla Firefox 3.
+        # See, e.g., http://article.gmane.org/gmane.comp.mozilla.mplayerplug-in/2104 .
+        rm -f Source/nsIScriptableMplayerPlugin.h
+      ''
+      else "");
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ browser (browser.gtk) libXpm gettext ];
-  
+
   installPhase = ''
     mkdir -p $out/lib/mozilla/plugins
     cp -p mplayerplug-in*.so mplayerplug-in*.xpt $out/lib/mozilla/plugins

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, openobex, bluez, cmake }:
-   
+
 stdenv.mkDerivation rec {
   name = "obexftp-0.24.2";
-   
+
   src = fetchurl {
     url = "mirror://sourceforge/openobex/${name}-Source.tar.gz";
     sha256 = "18w9r78z78ri5qc8fjym4nk1jfbrkyr789sq7rxrkshf1a7b83yl";

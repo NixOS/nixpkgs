@@ -24,9 +24,9 @@ buildPythonPackage rec {
     rm tqdm/tests/tests_perf.py
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
-#   doCheck = !stdenv.isDarwin;
+  #   doCheck = !stdenv.isDarwin;
   # Test suite is too big and slow.
   doCheck = false;
 

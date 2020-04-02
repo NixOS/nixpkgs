@@ -1,21 +1,23 @@
 { stdenv, fetchFromGitHub, znc }:
-
 let
-  zncDerivation = a@{
-    name, src, module_name,
-    buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp",
-    installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so", ...
-  } : stdenv.mkDerivation (a // {
-    inherit buildPhase;
-    inherit installPhase;
+  zncDerivation =
+    a@{ name
+    , src
+    , module_name
+    , buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp"
+    , installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so"
+    , ...
+    }: stdenv.mkDerivation (a // {
+      inherit buildPhase;
+      inherit installPhase;
 
-    buildInputs = znc.buildInputs;
+      buildInputs = znc.buildInputs;
 
-    meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
-    passthru.module_name = module_name;
-  });
-
-in {
+      meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
+      passthru.module_name = module_name;
+    });
+in
+{
 
   backlog = zncDerivation rec {
     name = "znc-backlog-${version}";

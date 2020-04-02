@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.prometheus;
 
@@ -11,11 +10,11 @@ let
   promtoolCheck = what: name: file:
     if cfg.checkConfig then
       pkgs.runCommand
-        "${name}-${replaceStrings [" "] [""] what}-checked"
-        { buildInputs = [ cfg.package ]; } ''
-      ln -s ${file} $out
-      promtool ${what} $out
-    '' else file;
+        "${name}-${replaceStrings [ " " ] [ "" ] what}-checked"
+      { buildInputs = [ cfg.package ]; } ''
+        ln -s ${file} $out
+        promtool ${what} $out
+      '' else file;
 
   # Pretty-print JSON to a file
   writePrettyJSON = name: x:
@@ -37,10 +36,12 @@ let
     };
   };
 
-  prometheusYml = let
-    yml = if cfg.configText != null then
-      pkgs.writeText "prometheus.yml" cfg.configText
-      else generatedPrometheusYml;
+  prometheusYml =
+    let
+      yml =
+        if cfg.configText != null then
+          pkgs.writeText "prometheus.yml" cfg.configText
+        else generatedPrometheusYml;
     in promtoolCheck "check config" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
@@ -50,7 +51,7 @@ let
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
   ] ++
-  optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}";
+    optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}";
 
   filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
   filterAttrsListRecursive = pred: x:
@@ -58,22 +59,22 @@ let
       listToAttrs (
         concatMap (name:
           let v = x.${name}; in
-          if pred name v then [
-            (nameValuePair name (filterAttrsListRecursive pred v))
-          ] else []
+            if pred name v then [
+              (nameValuePair name (filterAttrsListRecursive pred v))
+            ] else [ ]
         ) (attrNames x)
       )
     else if isList x then
       map (filterAttrsListRecursive pred) x
     else x;
 
-  mkDefOpt = type : defaultStr : description : mkOpt type (description + ''
+  mkDefOpt = type: defaultStr: description: mkOpt type (description + ''
 
     Defaults to <literal>${defaultStr}</literal> in prometheus
     when set to <literal>null</literal>.
   '');
 
-  mkOpt = type : description : mkOption {
+  mkOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
     inherit description;
@@ -154,7 +155,7 @@ let
         by the target will be ignored.
       '';
 
-      scheme = mkDefOpt (types.enum ["http" "https"]) "http" ''
+      scheme = mkDefOpt (types.enum [ "http" "https" ]) "http" ''
         The URL scheme with which to fetch metrics from targets.
       '';
 
@@ -243,7 +244,7 @@ let
       };
       labels = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = ''
           Labels assigned to all metrics scraped from the targets.
         '';
@@ -273,7 +274,7 @@ let
          <literal>AWS_SECRET_ACCESS_KEY</literal> is used.
       '';
 
-      profile = mkOpt  types.str ''
+      profile = mkOpt types.str ''
         Named AWS profile used to connect to the API.
       '';
 
@@ -309,7 +310,7 @@ let
 
       value = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Value of the filter.
         '';
@@ -432,7 +433,7 @@ let
         regular expression matches.
       '';
 
-      action = mkDefOpt (types.enum ["replace" "keep" "drop"]) "replace" ''
+      action = mkDefOpt (types.enum [ "replace" "keep" "drop" ]) "replace" ''
         Action to perform based on regex matching.
       '';
 
@@ -463,8 +464,8 @@ let
       '';
     };
   };
-
-in {
+in
+{
 
   imports = [
     (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
@@ -508,7 +509,7 @@ in {
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra commandline options when launching Prometheus.
       '';
@@ -526,7 +527,7 @@ in {
 
     globalConfig = mkOption {
       type = promTypes.globalConfig;
-      default = {};
+      default = { };
       description = ''
         Parameters that are valid in all  configuration contexts. They
         also serve as defaults for other configuration sections
@@ -535,7 +536,7 @@ in {
 
     rules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Alerting and/or Recording rules to evaluate at runtime.
       '';
@@ -543,7 +544,7 @@ in {
 
     ruleFiles = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       description = ''
         Any additional rules files to include in this configuration.
       '';
@@ -551,7 +552,7 @@ in {
 
     scrapeConfigs = mkOption {
       type = types.listOf promTypes.scrape_config;
-      default = [];
+      default = [ ];
       description = ''
         A list of scrape configurations.
       '';
@@ -570,7 +571,7 @@ in {
           } ];
         } ]
       '';
-      default = [];
+      default = [ ];
       description = ''
         A list of alertmanagers to send alerts to.
         See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config">the official documentation</link> for more information.
@@ -627,13 +628,11 @@ in {
     };
     systemd.services.prometheus = {
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/prometheus" +
-          optionalString (length cmdlineArgs != 0) (" \\\n  " +
-            concatStringsSep " \\\n  " cmdlineArgs);
+        ExecStart = "${cfg.package}/bin/prometheus" + optionalString (length cmdlineArgs != 0) (" \\\n  " + concatStringsSep " \\\n  " cmdlineArgs);
         User = "prometheus";
-        Restart  = "always";
+        Restart = "always";
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
       };

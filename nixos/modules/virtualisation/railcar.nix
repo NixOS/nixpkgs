@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.railcar;
   generateUnit = name: containerConfig:
@@ -16,11 +15,11 @@ let
         enable = true;
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-            ExecStart = ''
-              ${cfg.package}/bin/railcar -r ${cfg.stateDir} run ${name} -b ${container}
-            '';
-            Type = containerConfig.runType;
-          };
+          ExecStart = ''
+            ${cfg.package}/bin/railcar -r ${cfg.stateDir} run ${name} -b ${container}
+          '';
+          Type = containerConfig.runType;
+        };
       };
   mount = with types; (submodule {
     options = {
@@ -59,7 +58,7 @@ in
     enable = mkEnableOption "railcar";
 
     containers = mkOption {
-      default = {};
+      default = { };
       description = "Declarative container configuration";
       type = with types; loaOf (submodule ({ name, config, ... }: {
         options = {
@@ -70,7 +69,7 @@ in
 
           mounts = mkOption {
             type = with types; attrsOf mount;
-            default = {};
+            default = { };
             description = ''
               A set of mounts inside the container.
 
@@ -122,4 +121,3 @@ in
     );
   };
 }
-

@@ -1,8 +1,22 @@
-{ stdenv, fetchFromGitHub,
-  SDL2, cmake, curl, fontconfig, freetype, icu, jansson, libiconv, libpng,
-  libpthreadstubs, libzip, libGLU, openssl, pkgconfig, speexdsp, zlib
+{ stdenv
+, fetchFromGitHub
+, SDL2
+, cmake
+, curl
+, fontconfig
+, freetype
+, icu
+, jansson
+, libiconv
+, libpng
+, libpthreadstubs
+, libzip
+, libGLU
+, openssl
+, pkgconfig
+, speexdsp
+, zlib
 }:
-
 let
   name = "openrct2-${version}";
   version = "0.2.4";
@@ -66,7 +80,7 @@ stdenv.mkDerivation {
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  makeFlags = ["all" "g2"];
+  makeFlags = [ "all" "g2" ];
 
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 

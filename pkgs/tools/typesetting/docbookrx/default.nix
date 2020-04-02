@@ -3,9 +3,8 @@
 , stdenv
 , ruby
 , bundlerEnv
-# , libxml2
+  # , libxml2
 }:
-
 let
   env = bundlerEnv {
     name = "docbookrx-env";
@@ -21,8 +20,8 @@ let
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
 
   pname = "docbookrx";
   version = "unstable-2018-05-02";

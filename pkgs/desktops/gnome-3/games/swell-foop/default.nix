@@ -1,10 +1,26 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, vala, glib, gtk3, gnome3, desktop-file-utils
-, clutter, clutter-gtk, gettext, itstool, libxml2, wrapGAppsHook, python3 }:
-
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, vala
+, glib
+, gtk3
+, gnome3
+, desktop-file-utils
+, clutter
+, clutter-gtk
+, gettext
+, itstool
+, libxml2
+, wrapGAppsHook
+, python3
+}:
 let
   pname = "swell-foop";
   version = "3.34.1";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -28,7 +44,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Swell%20Foop;
+    homepage = https://wiki.gnome.org/Apps/Swell%20 Foop;
     description = "Puzzle game, previously known as Same GNOME";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

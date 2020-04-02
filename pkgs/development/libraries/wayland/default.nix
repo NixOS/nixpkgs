@@ -1,16 +1,30 @@
-{ lib, stdenv, fetchurl, meson, pkgconfig, ninja
-, libffi, libxml2, wayland
+{ lib
+, stdenv
+, fetchurl
+, meson
+, pkgconfig
+, ninja
+, libffi
+, libxml2
+, wayland
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
-, withDocumentation ? false, graphviz-nox, doxygen, libxslt, xmlto, python3
-, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42
+, withDocumentation ? false
+, graphviz-nox
+, doxygen
+, libxslt
+, xmlto
+, python3
+, docbook_xsl
+, docbook_xml_dtd_45
+, docbook_xml_dtd_42
 }:
 
 # Require the optional to be enabled until upstream fixes or removes the configure flag
 assert expat != null;
-
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wayland";
   version = "1.18.0";
 
@@ -34,17 +48,28 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    meson pkgconfig ninja
+    meson
+    pkgconfig
+    ninja
   ] ++ lib.optionals isCross [
     wayland # For wayland-scanner during the build
   ] ++ lib.optionals withDocumentation [
     (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
-    doxygen libxslt xmlto python3 docbook_xml_dtd_45
+    doxygen
+    libxslt
+    xmlto
+    python3
+    docbook_xml_dtd_45
   ];
 
-  buildInputs = [ libffi expat libxml2
+  buildInputs = [
+    libffi
+    expat
+    libxml2
   ] ++ lib.optionals withDocumentation [
-    docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42
+    docbook_xsl
+    docbook_xml_dtd_45
+    docbook_xml_dtd_42
   ];
 
   meta = {
@@ -57,9 +82,9 @@ in stdenv.mkDerivation rec {
       and other interactions that must go through the compositor (but not
       rendering).
     '';
-    homepage    = https://wayland.freedesktop.org/;
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.linux;
+    homepage = https://wayland.freedesktop.org/;
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ primeos codyopel ];
   };
 

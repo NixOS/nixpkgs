@@ -10,12 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   # fix "unescaped left brace" errors when using intltool in some cases
-  patches = [(fetchpatch {
-    name = "perl5.26-regex-fixes.patch";
-    url = "https://sources.debian.org/data/main/i/intltool/0.51.0-5"
-      + "/debian/patches/perl5.26-regex-fixes.patch";
-    sha256 = "12q2140867r5d0dysly72khi7b0mm2gd7nlm1k81iyg7fxgnyz45";
-  })];
+  patches = [
+    (fetchpatch {
+      name = "perl5.26-regex-fixes.patch";
+      url = "https://sources.debian.org/data/main/i/intltool/0.51.0-5" + "/debian/patches/perl5.26-regex-fixes.patch";
+      sha256 = "12q2140867r5d0dysly72khi7b0mm2gd7nlm1k81iyg7fxgnyz45";
+    })
+  ];
 
   propagatedBuildInputs = [ gettext ] ++ (with perlPackages; [ perl XMLParser ]);
 

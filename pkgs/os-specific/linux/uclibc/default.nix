@@ -1,8 +1,10 @@
-{ stdenv, buildPackages
-, fetchurl, linuxHeaders, libiconvReal
+{ stdenv
+, buildPackages
+, fetchurl
+, linuxHeaders
+, libiconvReal
 , extraConfig ? ""
 }:
-
 let
   configParser = ''
     function parseconfig {
@@ -50,7 +52,6 @@ let
 
   version = "1.0.32";
 in
-
 stdenv.mkDerivation {
   name = "uclibc-ng-${version}";
   inherit version;

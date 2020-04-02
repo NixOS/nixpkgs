@@ -1,7 +1,15 @@
-{
-  lib, mkDerivation, fetchFromGitHub,
-  cmake, lxqt-build-tools,
-  qtbase, qtx11extras, qttools, qtsvg, libdbusmenu, libqtxdg, libfm-qt
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtbase
+, qtx11extras
+, qttools
+, qtsvg
+, libdbusmenu
+, libqtxdg
+, libfm-qt
 }:
 
 mkDerivation rec {

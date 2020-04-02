@@ -1,6 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, libxml2
-, m2crypto, ply, pyyaml, six, pbr, pythonOlder, isPy37
-, httpretty, lxml, mock, pytest, requests, decorator, unittest2
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libxml2
+, m2crypto
+, ply
+, pyyaml
+, six
+, pbr
+, pythonOlder
+, isPy37
+, httpretty
+, lxml
+, mock
+, pytest
+, requests
+, decorator
+, unittest2
 }:
 
 buildPythonPackage rec {

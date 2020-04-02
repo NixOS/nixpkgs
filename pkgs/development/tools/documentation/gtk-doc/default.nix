@@ -9,7 +9,8 @@
 , libxslt
 , gettext
 , gnome3
-, withDblatex ? false, dblatex
+, withDblatex ? false
+, dblatex
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
+    rev = "GTK_DOC_${stdenv.lib.replaceStrings [ "." ] [ "_" ] version }";
     sha256 = "14fihxj662gg4ln1ngff6s52zzkpbcc58qa0nxysxypnhp0h4ypk";
   };
 

@@ -1,4 +1,4 @@
-{stdenv, fetchgit, cmake} :
+{ stdenv, fetchgit, cmake }:
 
 stdenv.mkDerivation {
   name = "ddate-0.2.2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     homepage = https://github.com/bo0ts/ddate;
     description = "Discordian version of the date program";
     license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [kovirobi];
+    maintainers = with stdenv.lib.maintainers; [ kovirobi ];
     platforms = stdenv.lib.platforms.all;
   };
 }

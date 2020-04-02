@@ -1,6 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six, pathpy, zetup, pytest
-, decorator }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, six
+, pathpy
+, zetup
+, pytest
+, decorator
+}:
 
 buildPythonPackage rec {
   pname = "moretools";

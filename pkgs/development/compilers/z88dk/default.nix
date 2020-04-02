@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "z88dk";
-    repo  = "z88dk";
+    repo = "z88dk";
     rev = "efdd07c2e2229cac7cfef97ec01f478004846e39";
     sha256 = "0jcks5ygp256lmzmllffp4yb38cxjgdyqnnimkj4s65095cfasyb";
     fetchSubmodules = true;
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
   installTargets = [ "libs" "install" ];
 
   meta = with stdenv.lib; {
-    homepage    = "https://www.z88dk.org";
+    homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
-    license     = licenses.clArtistic;
+    license = licenses.clArtistic;
     maintainers = [ maintainers.genesis ];
     platforms = platforms.linux;
   };

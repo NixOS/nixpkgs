@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, lua, pkgconfig, rsync,
-  asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, lua
+, pkgconfig
+, rsync
+, asciidoc
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
+}:
 
 stdenv.mkDerivation rec {
   pname = "lsyncd";
@@ -29,8 +40,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     rsync
-    cmake lua pkgconfig
-    asciidoc libxml2 docbook_xml_dtd_45 docbook_xsl libxslt
+    cmake
+    lua
+    pkgconfig
+    asciidoc
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
   ];
 
   meta = with stdenv.lib; {

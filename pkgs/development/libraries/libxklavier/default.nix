@@ -1,6 +1,16 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
-, glib, isocodes, gobject-introspection }:
-
+{ stdenv
+, fetchgit
+, autoreconfHook
+, pkgconfig
+, gtk-doc
+, xkeyboard_config
+, libxml2
+, xorg
+, docbook_xsl
+, glib
+, isocodes
+, gobject-introspection
+}:
 let
   version = "5.4";
 in

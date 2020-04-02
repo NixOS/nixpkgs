@@ -1,18 +1,25 @@
-{ stdenv, fetchurl, unzip, makeWrapper, flex, bison, ncurses, buddy, tecla
-, libsigsegv, gmpxx, cln, yices
+{ stdenv
+, fetchurl
+, unzip
+, makeWrapper
+, flex
+, bison
+, ncurses
+, buddy
+, tecla
+, libsigsegv
+, gmpxx
+, cln
+, yices
 }:
-
 let
-
   version = "3.0";
 
   fullMaude = fetchurl {
     url = "http://maude.cs.illinois.edu/w/images/0/04/Full-Maude-${version}.zip";
     sha256 = "0gf36wlkkl343vlxgryqdhxmgyn8z0cc2zayccd7ac3inmj1iayw";
   };
-
 in
-
 stdenv.mkDerivation {
   pname = "maude";
   inherit version;
@@ -23,7 +30,17 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper unzip cln yices
+    flex
+    bison
+    ncurses
+    buddy
+    tecla
+    gmpxx
+    libsigsegv
+    makeWrapper
+    unzip
+    cln
+    yices
   ];
 
   hardeningDisable = [ "stackprotector" ] ++

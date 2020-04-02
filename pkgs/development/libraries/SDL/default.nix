@@ -1,18 +1,35 @@
-{ stdenv, config, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
+{ stdenv
+, config
+, fetchurl
+, fetchpatch
+, pkgconfig
+, audiofile
+, libcap
+, libiconv
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, openglSupport ? libGLSupported, libGL, libGLU
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, openglSupport ? libGLSupported
+, libGL
+, libGLU
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, alsaLib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
-, libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
-, OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
+, libXext
+, libICE
+, libXrandr
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libpulseaudio
+, OpenGL
+, CoreAudio
+, CoreServices
+, AudioUnit
+, Kernel
+, Cocoa
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
 with stdenv.lib;
-
 let
   extraPropagatedBuildInputs = [ ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
@@ -22,13 +39,12 @@ let
     ++ optional stdenv.isDarwin Cocoa;
   rpath = makeLibraryPath extraPropagatedBuildInputs;
 in
-
 stdenv.mkDerivation rec {
   pname = "SDL";
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
+    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
@@ -51,15 +67,15 @@ stdenv.mkDerivation rec {
     "--disable-oss"
     "--disable-video-x11-xme"
     "--enable-rpath"
-  # Building without this fails on Darwin with
-  #
-  #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
-  #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
-  #
-  # Please try revert the change that introduced this comment when updating SDL.
+    # Building without this fails on Darwin with
+    #
+    #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
+    #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
+    #
+    # Please try revert the change that introduced this comment when updating SDL.
   ] ++ optional stdenv.isDarwin "--disable-x11-shared"
-    ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib";
+  ++ optional (!x11Support) "--without-x"
+  ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib";
 
   patches = [
     ./find-headers.patch
@@ -126,9 +142,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";
-    homepage    = "http://www.libsdl.org/";
+    homepage = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-    license     = licenses.lgpl21;
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

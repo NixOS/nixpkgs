@@ -1,5 +1,8 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, boto3, requests
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, boto3
+, requests
 }:
 
 buildPythonPackage rec {
@@ -18,9 +21,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python API for Paperspace Cloud";
-    homepage    = https://paperspace.com;
-    license     = licenses.isc;
-    platforms   = platforms.unix;
+    homepage = https://paperspace.com;
+    license = licenses.isc;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
     broken = true;
   };

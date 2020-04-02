@@ -1,9 +1,43 @@
-{ stdenv, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
-, zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, libsoup, udev
-, ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip, bzrtp
-, mediastreamer-openh264, bctoolbox, makeWrapper, fetchFromGitHub, cmake
-, libmatroska, bcunit, doxygen, gdk-pixbuf, glib, cairo, pango, mbedtls
-, python, graphviz, belcard, bcg729
+{ stdenv
+, intltool
+, pkgconfig
+, readline
+, openldap
+, cyrus_sasl
+, libupnp
+, zlib
+, libxml2
+, gtk2
+, libnotify
+, speex
+, ffmpeg
+, libX11
+, libsoup
+, udev
+, ortp
+, mediastreamer
+, sqlite
+, belle-sip
+, libosip
+, libexosip
+, bzrtp
+, mediastreamer-openh264
+, bctoolbox
+, makeWrapper
+, fetchFromGitHub
+, cmake
+, libmatroska
+, bcunit
+, doxygen
+, gdk-pixbuf
+, glib
+, cairo
+, pango
+, mbedtls
+, python
+, graphviz
+, belcard
+, bcg729
 , withGui ? true
 }:
 
@@ -25,13 +59,45 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    readline openldap cyrus_sasl libupnp zlib libxml2 gtk2 libnotify speex ffmpeg libX11
-    mbedtls libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
-    bctoolbox libmatroska gdk-pixbuf glib cairo pango bzrtp belcard bcg729
+    readline
+    openldap
+    cyrus_sasl
+    libupnp
+    zlib
+    libxml2
+    gtk2
+    libnotify
+    speex
+    ffmpeg
+    libX11
+    mbedtls
+    libsoup
+    udev
+    ortp
+    mediastreamer
+    sqlite
+    belle-sip
+    libosip
+    libexosip
+    bctoolbox
+    libmatroska
+    gdk-pixbuf
+    glib
+    cairo
+    pango
+    bzrtp
+    belcard
+    bcg729
   ];
 
   nativeBuildInputs = [
-    intltool pkgconfig makeWrapper cmake bcunit doxygen graphviz
+    intltool
+    pkgconfig
+    makeWrapper
+    cmake
+    bcunit
+    doxygen
+    graphviz
     (python.withPackages (ps: [ ps.pystache ps.six ]))
   ];
 

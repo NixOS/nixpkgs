@@ -1,6 +1,15 @@
-{ stdenv, vim, vimPlugins, vim_configurable, neovim, buildEnv, writeText, writeScriptBin
-, nix-prefetch-hg, nix-prefetch-git
-, fetchFromGitHub, runtimeShell
+{ stdenv
+, vim
+, vimPlugins
+, vim_configurable
+, neovim
+, buildEnv
+, writeText
+, writeScriptBin
+, nix-prefetch-hg
+, nix-prefetch-git
+, fetchFromGitHub
+, runtimeShell
 }:
 
 /*
@@ -147,8 +156,6 @@ vim_with_plugins can be installed like any other application within Nix.
 [VAM]    https://github.com/MarcWeber/vim-addon-manager
 [vim-pi] https://bitbucket.org/vimcommunity/vim-pi
 */
-
-
 let
   inherit (stdenv) lib;
 
@@ -156,265 +163,266 @@ let
   # plugin already is a derivation, this is a no-op. If it is a string, it is
   # looked up in knownPlugins.
   pluginToDrv = knownPlugins: plugin:
-  let
-    drv =
-      if builtins.isString plugin then
-        # make sure `pname` is set to that we are able to convert the derivation
-        # back to a string.
-        ( knownPlugins.${plugin} // { pname = plugin; })
-      else
-        plugin;
-  in
-    # make sure all the dependencies of the plugin are also derivations
-    drv // { dependencies = map (pluginToDrv knownPlugins) (drv.dependencies or []); };
+    let
+      drv =
+        if builtins.isString plugin then
+          # make sure `pname` is set to that we are able to convert the derivation
+          # back to a string.
+          (knownPlugins.${plugin} // { pname = plugin; })
+        else
+          plugin;
+    in
+      # make sure all the dependencies of the plugin are also derivations
+      drv // { dependencies = map (pluginToDrv knownPlugins) (drv.dependencies or [ ]); };
 
   # transitive closure of plugin dependencies (plugin needs to be a derivation)
   transitiveClosure = plugin:
     [ plugin ] ++ (
-      lib.unique (builtins.concatLists (map transitiveClosure plugin.dependencies or []))
+      lib.unique (builtins.concatLists (map transitiveClosure plugin.dependencies or [ ]))
     );
 
   findDependenciesRecursively = plugins: lib.concatMap transitiveClosure plugins;
 
   vamDictToNames = x:
-      if builtins.isString x then [x]
-      else (lib.optional (x ? name) x.name)
-            ++ (x.names or []);
+    if builtins.isString x then [ x ]
+    else (lib.optional (x ? name) x.name)
+      ++ (x.names or [ ]);
 
   rtpPath = "share/vim-plugins";
 
-  vimrcFile = {
-    packages ? null,
-    vam ? null,
-    pathogen ? null,
-    plug ? null,
-    customRC ? ""
-  }:
+  vimrcFile =
+    { packages ? null
+    , vam ? null
+    , pathogen ? null
+    , plug ? null
+    , customRC ? ""
+    }:
+      let
+        /* pathogen mostly can set &rtp at startup time. Its used very commonly.
+        */
+        pathogenImpl = lib.optionalString (pathogen != null)
+          (
+            let
+              knownPlugins = pathogen.knownPlugins or vimPlugins;
 
-    let
-      /* pathogen mostly can set &rtp at startup time. Its used very commonly.
-      */
-      pathogenImpl = lib.optionalString (pathogen != null)
-      (let
-        knownPlugins = pathogen.knownPlugins or vimPlugins;
+              plugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
 
-        plugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
+              pluginsEnv = buildEnv {
+                name = "pathogen-plugin-env";
+                paths = map (x: "${x}/${rtpPath}") plugins;
+              };
+            in
+              ''
+                let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.pathogen.rtp}"
+                execute pathogen#infect('${pluginsEnv}/{}')
 
-        pluginsEnv = buildEnv {
-          name = "pathogen-plugin-env";
-          paths = map (x: "${x}/${rtpPath}") plugins;
-        };
-      in
-      ''
-        let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.pathogen.rtp}"
-        execute pathogen#infect('${pluginsEnv}/{}')
+                filetype indent plugin on | syn on
+              ''
+          );
 
-        filetype indent plugin on | syn on
-      '');
+        /* vim-plug is an extremely popular vim plugin manager.
+        */
+        plugImpl = lib.optionalString (plug != null)
+          (''
+            source ${vimPlugins.vim-plug.rtp}/plug.vim
+            call plug#begin('/dev/null')
 
-      /* vim-plug is an extremely popular vim plugin manager.
-      */
-      plugImpl = lib.optionalString (plug != null)
-      (''
-        source ${vimPlugins.vim-plug.rtp}/plug.vim
-        call plug#begin('/dev/null')
-
-        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
+          '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
 
         call plug#end()
       '');
 
-      /*
-       vim-addon-manager = VAM
+        /*
+         vim-addon-manager = VAM
 
-       * maps names to plugin location
+         * maps names to plugin location
 
-       * manipulates &rtp at startup time
-         or when Vim has been running for a while
+         * manipulates &rtp at startup time
+           or when Vim has been running for a while
 
-       * can activate plugins laziy (eg when loading a specific filetype)
+         * can activate plugins laziy (eg when loading a specific filetype)
 
-       * knows about vim plugin dependencies (addon-info.json files)
+         * knows about vim plugin dependencies (addon-info.json files)
 
-       * still is minimalistic (only loads one file), the "check out" code it also
-         has only gets loaded when a plugin is requested which is not found on disk
-         yet
+         * still is minimalistic (only loads one file), the "check out" code it also
+           has only gets loaded when a plugin is requested which is not found on disk
+           yet
 
-      */
-      vamImpl = lib.optionalString (vam != null)
-      (let
-        knownPlugins = vam.knownPlugins or vimPlugins;
+        */
+        vamImpl = lib.optionalString (vam != null)
+          (
+            let
+              knownPlugins = vam.knownPlugins or vimPlugins;
 
-        # plugins specified by the user
-        specifiedPlugins = map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries);
-        # plugins with dependencies
-        plugins = findDependenciesRecursively specifiedPlugins;
+              # plugins specified by the user
+              specifiedPlugins = map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries);
+              # plugins with dependencies
+              plugins = findDependenciesRecursively specifiedPlugins;
 
-        # Vim almost reads JSON, so eventually JSON support should be added to Nix
-        # TODO: proper quoting
-        toNix = x:
-          if (builtins.isString x) then "'${x}'"
-          else if builtins.isAttrs x && builtins ? out then toNix x # a derivation
-          else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toNix n}: ${toNix v}") x)}}"
-          else if builtins.isList x then "[${lib.concatMapStringsSep ", " toNix x}]"
-          else throw "turning ${lib.generators.toPretty {} x} into a VimL thing not implemented yet";
+              # Vim almost reads JSON, so eventually JSON support should be added to Nix
+              # TODO: proper quoting
+              toNix = x:
+                if (builtins.isString x) then "'${x}'"
+                else if builtins.isAttrs x && builtins ? out then toNix x # a derivation
+                else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toNix n}: ${toNix v}") x)}}"
+                else if builtins.isList x then "[${lib.concatMapStringsSep ", " toNix x}]"
+                else throw "turning ${lib.generators.toPretty { } x} into a VimL thing not implemented yet";
+            in assert builtins.hasAttr "vim-addon-manager" knownPlugins;
+            ''
+              filetype indent plugin on | syn on
 
-      in assert builtins.hasAttr "vim-addon-manager" knownPlugins;
-      ''
-        filetype indent plugin on | syn on
+              let g:nix_plugin_locations = {}
+              ${lib.concatMapStrings (plugin: ''
+              let g:nix_plugin_locations['${plugin.pname}'] = "${plugin.rtp}"
+            '') plugins}
+              let g:nix_plugin_locations['vim-addon-manager'] = "${knownPlugins.vim-addon-manager.rtp}"
 
-        let g:nix_plugin_locations = {}
-        ${lib.concatMapStrings (plugin: ''
-          let g:nix_plugin_locations['${plugin.pname}'] = "${plugin.rtp}"
-        '') plugins}
-        let g:nix_plugin_locations['vim-addon-manager'] = "${knownPlugins.vim-addon-manager.rtp}"
+              let g:vim_addon_manager = {}
 
-        let g:vim_addon_manager = {}
+              if exists('g:nix_plugin_locations')
+                " nix managed config
 
-        if exists('g:nix_plugin_locations')
-          " nix managed config
+                " override default function making VAM aware of plugin locations:
+                fun! NixPluginLocation(name)
+                  let path = get(g:nix_plugin_locations, a:name, "")
+                  return path == "" ? vam#DefaultPluginDirFromName(a:name) : path
+                endfun
+                let g:vim_addon_manager.plugin_dir_by_name = 'NixPluginLocation'
+                " tell Vim about VAM:
+                let &rtp.=(empty(&rtp)?"":','). g:nix_plugin_locations['vim-addon-manager']
+              else
+                " standalone config
 
-          " override default function making VAM aware of plugin locations:
-          fun! NixPluginLocation(name)
-            let path = get(g:nix_plugin_locations, a:name, "")
-            return path == "" ? vam#DefaultPluginDirFromName(a:name) : path
-          endfun
-          let g:vim_addon_manager.plugin_dir_by_name = 'NixPluginLocation'
-          " tell Vim about VAM:
-          let &rtp.=(empty(&rtp)?"":','). g:nix_plugin_locations['vim-addon-manager']
-        else
-          " standalone config
+                let &rtp.=(empty(&rtp)?"":',').c.plugin_root_dir.'/vim-addon-manager'
+                if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
+                  " checkout VAM
+                  execute '!git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager '
+                      \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
+                endif
+              endif
 
-          let &rtp.=(empty(&rtp)?"":',').c.plugin_root_dir.'/vim-addon-manager'
-          if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
-            " checkout VAM
-            execute '!git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager '
-                \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
-          endif
-        endif
+              " tell vam about which plugins to load when:
+              let l = []
+              ${lib.concatMapStrings (p: "call add(l, {'name': '${p.pname}'})\n") plugins}
+              call vam#Scripts(l, {})
+            ''
+          );
 
-        " tell vam about which plugins to load when:
-        let l = []
-        ${lib.concatMapStrings (p: "call add(l, {'name': '${p.pname}'})\n") plugins}
-        call vam#Scripts(l, {})
-      '');
+        nativeImpl = lib.optionalString (packages != null)
+          (
+            let
+              link = (packageName: dir: pluginPath: "ln -sf ${pluginPath}/share/vim-plugins/* $out/pack/${packageName}/${dir}");
+              packageLinks = (packageName: { start ? [ ], opt ? [ ] }:
+                let
+                  # `nativeImpl` expects packages to be derivations, not strings (as
+                  # opposed to older implementations that have to maintain backwards
+                  # compatibility). Therefore we don't need to deal with "knownPlugins"
+                  # and can simply pass `null`.
+                  depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively opt);
+                  startWithDeps = findDependenciesRecursively start;
+                in
+                  [ "mkdir -p $out/pack/${packageName}/start" ]
+                  # To avoid confusion, even dependencies of optional plugins are added
+                  # to `start` (except if they are explicitly listed as optional plugins).
+                  ++ (builtins.map (link packageName "start") (lib.unique (startWithDeps ++ depsOfOptionalPlugins)))
+                  ++ [ "mkdir -p $out/pack/${packageName}/opt" ]
+                  ++ (builtins.map (link packageName "opt") opt));
+              packDir = (packages:
+                stdenv.mkDerivation {
+                  name = "vim-pack-dir";
+                  src = ./.;
+                  installPhase = lib.concatStringsSep
+                    "\n"
+                    (lib.flatten (lib.mapAttrsToList packageLinks packages));
+                  preferLocalBuild = true;
+                }
+              );
+            in
+              ''
+                set packpath^=${packDir packages}
+                set runtimepath^=${packDir packages}
 
-      nativeImpl = lib.optionalString (packages != null)
-      (let
-        link = (packageName: dir: pluginPath: "ln -sf ${pluginPath}/share/vim-plugins/* $out/pack/${packageName}/${dir}");
-        packageLinks = (packageName: {start ? [], opt ? []}:
-        let
-          # `nativeImpl` expects packages to be derivations, not strings (as
-          # opposed to older implementations that have to maintain backwards
-          # compatibility). Therefore we don't need to deal with "knownPlugins"
-          # and can simply pass `null`.
-          depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively opt);
-          startWithDeps = findDependenciesRecursively start;
-        in
-          ["mkdir -p $out/pack/${packageName}/start"]
-          # To avoid confusion, even dependencies of optional plugins are added
-          # to `start` (except if they are explicitly listed as optional plugins).
-          ++ (builtins.map (link packageName "start") (lib.unique (startWithDeps ++ depsOfOptionalPlugins)))
-          ++ ["mkdir -p $out/pack/${packageName}/opt"]
-          ++ (builtins.map (link packageName "opt") opt)
-        );
-        packDir = (packages:
-          stdenv.mkDerivation {
-            name = "vim-pack-dir";
-            src = ./.;
-            installPhase = lib.concatStringsSep
-                             "\n"
-                             (lib.flatten (lib.mapAttrsToList packageLinks packages));
-            preferLocalBuild = true;
-          }
-        );
-      in
-      ''
-        set packpath^=${packDir packages}
-        set runtimepath^=${packDir packages}
+                filetype indent plugin on | syn on
+              '');
+      in writeText "vimrc" ''
+        " configuration generated by NIX
+        set nocompatible
 
-        filetype indent plugin on | syn on
-      '');
+        ${vamImpl}
+        ${pathogenImpl}
+        ${plugImpl}
+        ${nativeImpl}
 
-  in writeText "vimrc" ''
-  " configuration generated by NIX
-  set nocompatible
-
-  ${vamImpl}
-  ${pathogenImpl}
-  ${plugImpl}
-  ${nativeImpl}
-
-  ${customRC}
-  '';
-
+        ${customRC}
+      '';
 in
-
 rec {
   inherit vimrcFile;
 
   # shell script with custom name passing [-u vimrc] [-U gvimrc] to vim
-  vimWithRC = {
-    vimExecutable,
-    gvimExecutable,
-    vimManPages,
-    wrapManual,
-    wrapGui,
-    name ? "vim",
-    vimrcFile ? null,
-    gvimrcFile ? null,
-    vimExecutableName,
-    gvimExecutableName,
-  }:
-    let
-      rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
-      vimWrapperScript = writeScriptBin vimExecutableName ''
-        #!${runtimeShell}
-        exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
-      '';
-      gvimWrapperScript = writeScriptBin gvimExecutableName ''
-        #!${stdenv.shell}
-        exec ${gvimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
-      '';
-    in
-      buildEnv {
-        inherit name;
-        paths = [
-          vimWrapperScript
-        ] ++ lib.optional wrapGui gvimWrapperScript
+  vimWithRC =
+    { vimExecutable
+    , gvimExecutable
+    , vimManPages
+    , wrapManual
+    , wrapGui
+    , name ? "vim"
+    , vimrcFile ? null
+    , gvimrcFile ? null
+    , vimExecutableName
+    , gvimExecutableName
+    ,
+    }:
+      let
+        rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
+        vimWrapperScript = writeScriptBin vimExecutableName ''
+          #!${runtimeShell}
+          exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
+        '';
+        gvimWrapperScript = writeScriptBin gvimExecutableName ''
+          #!${stdenv.shell}
+          exec ${gvimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
+        '';
+      in
+        buildEnv {
+          inherit name;
+          paths = [
+            vimWrapperScript
+          ] ++ lib.optional wrapGui gvimWrapperScript
           ++ lib.optional wrapManual vimManPages
-        ;
-      };
+          ;
+        };
 
   # add a customize option to a vim derivation
   makeCustomizable = vim: vim // {
-    customize = {
-      name,
-      vimrcConfig,
-      wrapManual ? true,
-      wrapGui ? false,
-      vimExecutableName ? name,
-      gvimExecutableName ? (lib.concatStrings [ "g" name ]),
-    }: vimWithRC {
-      vimExecutable = "${vim}/bin/vim";
-      gvimExecutable = "${vim}/bin/gvim";
-      inherit name wrapManual wrapGui vimExecutableName gvimExecutableName;
-      vimrcFile = vimrcFile vimrcConfig;
-      vimManPages = buildEnv {
-        name = "vim-doc";
-        paths = [ vim ];
-        pathsToLink = [ "/share/man" ];
+    customize =
+      { name
+      , vimrcConfig
+      , wrapManual ? true
+      , wrapGui ? false
+      , vimExecutableName ? name
+      , gvimExecutableName ? (lib.concatStrings [ "g" name ])
+      ,
+      }: vimWithRC {
+        vimExecutable = "${vim}/bin/vim";
+        gvimExecutable = "${vim}/bin/gvim";
+        inherit name wrapManual wrapGui vimExecutableName gvimExecutableName;
+        vimrcFile = vimrcFile vimrcConfig;
+        vimManPages = buildEnv {
+          name = "vim-doc";
+          paths = [ vim ];
+          pathsToLink = [ "/share/man" ];
+        };
       };
-    };
 
     override = f: makeCustomizable (vim.override f);
     overrideAttrs = f: makeCustomizable (vim.overrideAttrs f);
   };
 
-  pluginnames2Nix = {name, namefiles} : vim_configurable.customize {
+  pluginnames2Nix = { name, namefiles }: vim_configurable.customize {
     inherit name;
     vimrcConfig.vam.knownPlugins = vimPlugins;
-    vimrcConfig.vam.pluginDictionaries = ["vim2nix"];
+    vimrcConfig.vam.pluginDictionaries = [ "vim2nix" ];
     vimrcConfig.customRC = ''
       " Yes - this is impure and will create the cache file and checkout vim-pi
       " into ~/.vim/vim-addons
@@ -447,34 +455,36 @@ rec {
   inherit (import ./build-vim-plugin.nix { inherit stdenv rtpPath vim; }) buildVimPlugin buildVimPluginFrom2Nix;
 
   # used to figure out which python dependencies etc. neovim needs
-  requiredPlugins = {
-    packages ? {},
-    givenKnownPlugins ? null,
-    vam ? null,
-    pathogen ? null,
-    plug ? null, ...
-  }:
-    let
-      # This is probably overcomplicated, but I don't understand this well enough to know what's necessary.
-      knownPlugins = if givenKnownPlugins != null then givenKnownPlugins else
-                     if vam != null && vam ? knownPlugins then vam.knownPlugins else
-                     if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
-                     vimPlugins;
-      pathogenPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
-      vamPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries));
-      nonNativePlugins = (lib.optionals (pathogen != null) pathogenPlugins)
-                      ++ (lib.optionals (vam != null) vamPlugins)
-                      ++ (lib.optionals (plug != null) plug.plugins);
-      nativePluginsConfigs = lib.attrsets.attrValues packages;
-      nativePlugins = lib.concatMap ({start?[], opt?[], knownPlugins?vimPlugins}: start++opt) nativePluginsConfigs;
-    in
-      nativePlugins ++ nonNativePlugins;
+  requiredPlugins =
+    { packages ? { }
+    , givenKnownPlugins ? null
+    , vam ? null
+    , pathogen ? null
+    , plug ? null
+    , ...
+    }:
+      let
+        # This is probably overcomplicated, but I don't understand this well enough to know what's necessary.
+        knownPlugins =
+          if givenKnownPlugins != null then givenKnownPlugins else
+            if vam != null && vam ? knownPlugins then vam.knownPlugins else
+              if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
+                vimPlugins;
+        pathogenPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
+        vamPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries));
+        nonNativePlugins = (lib.optionals (pathogen != null) pathogenPlugins)
+          ++ (lib.optionals (vam != null) vamPlugins)
+          ++ (lib.optionals (plug != null) plug.plugins);
+        nativePluginsConfigs = lib.attrsets.attrValues packages;
+        nativePlugins = lib.concatMap ({ start ? [ ], opt ? [ ], knownPlugins ? vimPlugins }: start ++ opt) nativePluginsConfigs;
+      in
+        nativePlugins ++ nonNativePlugins;
 
 
   # test cases:
   test_vim_with_vim_nix_using_vam = vim_configurable.customize {
-   name = "vim-with-vim-addon-nix-using-vam";
-    vimrcConfig.vam.pluginDictionaries = [{name = "vim-nix"; }];
+    name = "vim-with-vim-addon-nix-using-vam";
+    vimrcConfig.vam.pluginDictionaries = [ { name = "vim-nix"; } ];
   };
 
   test_vim_with_vim_nix_using_pathogen = vim_configurable.customize {

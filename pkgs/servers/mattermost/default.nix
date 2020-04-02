@@ -1,5 +1,4 @@
 { stdenv, fetchurl, fetchFromGitHub, buildGoPackage, buildEnv }:
-
 let
   version = "5.15.0";
 
@@ -42,17 +41,16 @@ let
         mattermost/config
     '';
   };
-
 in
-  buildEnv {
-    name = "mattermost-${version}";
-    paths = [ mattermost-server mattermost-webapp ];
+buildEnv {
+  name = "mattermost-${version}";
+  paths = [ mattermost-server mattermost-webapp ];
 
-    meta = with stdenv.lib; {
-      description = "Open-source, self-hosted Slack-alternative";
-      homepage = https://www.mattermost.org;
-      license = with licenses; [ agpl3 asl20 ];
-      maintainers = with maintainers; [ fpletz ryantm ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with stdenv.lib; {
+    description = "Open-source, self-hosted Slack-alternative";
+    homepage = https://www.mattermost.org;
+    license = with licenses; [ agpl3 asl20 ];
+    maintainers = with maintainers; [ fpletz ryantm ];
+    platforms = platforms.unix;
+  };
+}

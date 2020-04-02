@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, giblib, xlibsWrapper, autoreconfHook
-, autoconf-archive, libXfixes, libXcursor }:
+{ stdenv
+, fetchFromGitHub
+, giblib
+, xlibsWrapper
+, autoreconfHook
+, autoconf-archive
+, libXfixes
+, libXcursor
+}:
 
 stdenv.mkDerivation rec {
   pname = "scrot";

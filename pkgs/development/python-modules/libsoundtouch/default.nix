@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage {
-  pname   = "libsoundtouch";
+  pname = "libsoundtouch";
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner  = "CharlesBlonde";
-    repo   = "libsoundtouch";
-    rev    = "875074b7a23734021974345b3dc297918e453aa2";
+    owner = "CharlesBlonde";
+    repo = "libsoundtouch";
+    rev = "875074b7a23734021974345b3dc297918e453aa2";
     sha256 = "1psd556j4x77hjxahxxgdgnq2mcd769whvnf0gmwf3jy2svfkqlg";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Bose Soundtouch Python library";
-    homepage    = https://github.com/CharlesBlonde/libsoundtouch;
-    license     = licenses.asl20;
+    homepage = https://github.com/CharlesBlonde/libsoundtouch;
+    license = licenses.asl20;
   };
 }

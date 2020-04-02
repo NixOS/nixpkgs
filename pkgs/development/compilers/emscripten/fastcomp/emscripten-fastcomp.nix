@@ -1,5 +1,4 @@
 { emscriptenVersion, stdenv, fetchFromGitHub, cmake, python, gtest, ... }:
-
 let
   rev = emscriptenVersion;
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;

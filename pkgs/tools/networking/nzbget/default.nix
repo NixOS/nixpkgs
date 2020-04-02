@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, ncurses, libsigcxx, libpar2
-, gnutls, libgcrypt, zlib, openssl }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libxml2
+, ncurses
+, libsigcxx
+, libpar2
+, gnutls
+, libgcrypt
+, zlib
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "nzbget";
@@ -12,8 +22,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libxml2 ncurses libsigcxx libpar2 gnutls
-                  libgcrypt zlib openssl ];
+  buildInputs = [
+    libxml2
+    ncurses
+    libsigcxx
+    libpar2
+    gnutls
+    libgcrypt
+    zlib
+    openssl
+  ];
 
   enableParallelBuilding = true;
 

@@ -1,13 +1,54 @@
-{ stdenv, fetchurl, fetchgit
-, pkgconfig, makeWrapper, libtool, autoconf, automake, fetchpatch
-, coreutils, libxml2, gnutls, perl, python2, attr
-, iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
-, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
-, dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
-, enableXen ? false, xen ? null
-, enableIscsi ? false, openiscsi
-, enableCeph ? false, ceph
+{ stdenv
+, fetchurl
+, fetchgit
+, pkgconfig
+, makeWrapper
+, libtool
+, autoconf
+, automake
+, fetchpatch
+, coreutils
+, libxml2
+, gnutls
+, perl
+, python2
+, attr
+, iproute
+, iptables
+, readline
+, lvm2
+, utillinux
+, systemd
+, libpciaccess
+, gettext
+, libtasn1
+, ebtables
+, libgcrypt
+, yajl
+, pmutils
+, libcap_ng
+, libapparmor
+, dnsmasq
+, libnl
+, libpcap
+, libxslt
+, xhtml1
+, numad
+, numactl
+, perlPackages
+, curl
+, libiconv
+, gmp
+, zfs
+, parted
+, bridge-utils
+, dmidecode
+, enableXen ? false
+, xen ? null
+, enableIscsi ? false
+, openiscsi
+, enableCeph ? false
+, ceph
 }:
 
 with stdenv.lib;
@@ -15,7 +56,8 @@ with stdenv.lib;
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 let
   buildFromTarball = stdenv.isDarwin;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libvirt";
   version = "5.4.0";
 
@@ -59,13 +101,37 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
-    libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
+    libxml2
+    gnutls
+    perl
+    python2
+    readline
+    gettext
+    libtasn1
+    libgcrypt
+    yajl
+    libxslt
+    xhtml1
+    perlPackages.XMLXPath
+    curl
+    libpcap
   ] ++ optionals (!buildFromTarball) [
-    libtool autoconf automake
+    libtool
+    autoconf
+    automake
   ] ++ optionals stdenv.isLinux [
-    libpciaccess lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl attr parted
+    libpciaccess
+    lvm2
+    utillinux
+    systemd
+    libnl
+    numad
+    zfs
+    libapparmor
+    libcap_ng
+    numactl
+    attr
+    parted
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
   ] ++ optionals enableIscsi [
@@ -73,7 +139,8 @@ in stdenv.mkDerivation rec {
   ] ++ optionals enableCeph [
     ceph
   ] ++ optionals stdenv.isDarwin [
-    libiconv gmp
+    libiconv
+    gmp
   ];
 
   preConfigure = ''
@@ -126,24 +193,25 @@ in stdenv.mkDerivation rec {
   ];
 
 
-  postInstall = let
-    binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
-  in ''
-    substituteInPlace $out/libexec/libvirt-guests.sh \
-      --replace 'ON_BOOT=start'       'ON_BOOT=''${ON_BOOT:-start}' \
-      --replace 'ON_SHUTDOWN=suspend' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
-      --replace "$out/bin"            '${gettext}/bin' \
-      --replace 'lock/subsys'         'lock' \
-      --replace 'gettext.sh'          'gettext.sh
-  # Added in nixpkgs:
-  gettext() { "${gettext}/bin/gettext" "$@"; }
-  '
-  '' + optionalString stdenv.isLinux ''
-    substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
-    rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
-    wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath binPath}
-  '';
+  postInstall =
+    let
+      binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
+    in ''
+        substituteInPlace $out/libexec/libvirt-guests.sh \
+          --replace 'ON_BOOT=start'       'ON_BOOT=''${ON_BOOT:-start}' \
+          --replace 'ON_SHUTDOWN=suspend' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
+          --replace "$out/bin"            '${gettext}/bin' \
+          --replace 'lock/subsys'         'lock' \
+          --replace 'gettext.sh'          'gettext.sh
+      # Added in nixpkgs:
+      gettext() { "${gettext}/bin/gettext" "$@"; }
+      '
+    '' + optionalString stdenv.isLinux ''
+      substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
+      rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
+      wrapProgram $out/sbin/libvirtd \
+        --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath binPath}
+    '';
 
   enableParallelBuilding = true;
 

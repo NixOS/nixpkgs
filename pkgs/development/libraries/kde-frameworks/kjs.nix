@@ -1,7 +1,10 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  pcre, qtbase,
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, pcre
+, qtbase
+,
 }:
 
 mkDerivation {

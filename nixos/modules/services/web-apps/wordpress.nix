@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) any attrValues concatMapStringsSep flatten literalExample;
@@ -67,8 +66,8 @@ let
       umask 0177
       echo "<?php" >> "${hostStateDir}/secret-keys.php"
       ${concatMapStringsSep "\n" (var: ''
-        echo "define('${var}', '`tr -dc a-zA-Z0-9 </dev/urandom | head -c 64`');" >> "${hostStateDir}/secret-keys.php"
-      '') secretsVars}
+    echo "define('${var}', '`tr -dc a-zA-Z0-9 </dev/urandom | head -c 64`');" >> "${hostStateDir}/secret-keys.php"
+  '') secretsVars}
       echo "?>" >> "${hostStateDir}/secret-keys.php"
       chmod 440 "${hostStateDir}/secret-keys.php"
     fi
@@ -94,7 +93,7 @@ let
 
         plugins = mkOption {
           type = types.listOf types.path;
-          default = [];
+          default = [ ];
           description = ''
             List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
             <note><para>These plugins need to be packaged before use, see example.</para></note>
@@ -121,7 +120,7 @@ let
 
         themes = mkOption {
           type = types.listOf types.path;
-          default = [];
+          default = [ ];
           description = ''
             List of path(s) to respective theme(s) which are copied from the 'theme' directory.
             <note><para>These themes need to be packaged before use, see example.</para></note>
@@ -260,16 +259,17 @@ in
   options = {
     services.wordpress = mkOption {
       type = types.attrsOf (types.submodule siteOpts);
-      default = {};
+      default = { };
       description = "Specification of one or more WordPress sites to serve via Apache.";
     };
   };
 
   # implementation
-  config = mkIf (eachSite != {}) {
+  config = mkIf (eachSite != { }) {
 
     assertions = mapAttrsToList (hostName: cfg:
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.wordpress.${hostName}.database.user must be ${user} if the database is to be automatically provisioned";
       }
     ) eachSite;
@@ -279,7 +279,8 @@ in
       package = mkDefault pkgs.mariadb;
       ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
       ensureUsers = mapAttrsToList (hostName: cfg:
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ) eachSite;
@@ -298,37 +299,40 @@ in
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = mapAttrs (hostName: cfg: mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
-        extraConfig = ''
-          <Directory "${pkg hostName cfg}/share/wordpress">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
+      virtualHosts = mapAttrs (hostName: cfg: mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
+          extraConfig = ''
+            <Directory "${pkg hostName cfg}/share/wordpress">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-            # standard wordpress .htaccess contents
-            <IfModule mod_rewrite.c>
-              RewriteEngine On
-              RewriteBase /
-              RewriteRule ^index\.php$ - [L]
-              RewriteCond %{REQUEST_FILENAME} !-f
-              RewriteCond %{REQUEST_FILENAME} !-d
-              RewriteRule . /index.php [L]
-            </IfModule>
+              # standard wordpress .htaccess contents
+              <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /
+                RewriteRule ^index\.php$ - [L]
+                RewriteCond %{REQUEST_FILENAME} !-f
+                RewriteCond %{REQUEST_FILENAME} !-d
+                RewriteRule . /index.php [L]
+              </IfModule>
 
-            DirectoryIndex index.php
-            Require all granted
-            Options +FollowSymLinks
-          </Directory>
+              DirectoryIndex index.php
+              Require all granted
+              Options +FollowSymLinks
+            </Directory>
 
-          # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
-          <Files wp-config.php>
-            Require all denied
-          </Files>
-        '';
-      } ]) eachSite;
+            # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
+            <Files wp-config.php>
+              Require all denied
+            </Files>
+          '';
+        }
+      ]) eachSite;
     };
 
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
@@ -350,7 +354,8 @@ in
             User = user;
             Group = group;
           };
-      })) eachSite)
+        }
+      )) eachSite)
 
       (optionalAttrs (any (v: v.database.createLocally) (attrValues eachSite)) {
         httpd.after = [ "mysql.service" ];

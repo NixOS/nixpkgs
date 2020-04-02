@@ -1,8 +1,17 @@
-{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkgconfig
-, mkDerivation, qtbase, qttools, qtx11extras
+{ stdenv
+, fetchurl
+, alsaLib
+, fluidsynth
+, libjack2
+, autoconf
+, pkgconfig
+, mkDerivation
+, qtbase
+, qttools
+, qtx11extras
 }:
 
-mkDerivation  rec {
+mkDerivation rec {
   pname = "qsynth";
   version = "0.6.1";
 

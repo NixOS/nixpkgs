@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, bison, flex, pam, perl
+{ stdenv
+, fetchurl
+, fetchpatch
+, bison
+, flex
+, pam
+, perl
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , atWrapperPath ? "/run/wrappers/bin/at"
 }:

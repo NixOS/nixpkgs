@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, nose }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "pygeoip";

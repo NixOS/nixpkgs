@@ -1,7 +1,12 @@
-{ stdenv, fetchurl
-, pkgconfig, wxGTK
-, ffmpeg, libexif
-, cairo, pango }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, wxGTK
+, ffmpeg
+, libexif
+, cairo
+, pango
+}:
 
 stdenv.mkDerivation rec {
 
@@ -23,8 +28,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A SVG manipulation library built with wxWidgets";
     longDescription = ''
-    wxSVG is C++ library to create, manipulate and render
-    Scalable Vector Graphics (SVG) files with the wxWidgets toolkit.
+      wxSVG is C++ library to create, manipulate and render
+      Scalable Vector Graphics (SVG) files with the wxWidgets toolkit.
     '';
     homepage = http://wxsvg.sourceforge.net/;
     license = with licenses; gpl2;

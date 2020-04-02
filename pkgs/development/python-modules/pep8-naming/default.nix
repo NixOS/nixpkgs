@@ -1,5 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage
-, flake8-polyfill }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, flake8-polyfill
+}:
 
 buildPythonPackage rec {
   pname = "pep8-naming";

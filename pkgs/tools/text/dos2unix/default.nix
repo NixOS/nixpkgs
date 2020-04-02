@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, gettext }:
+{ stdenv, fetchurl, perl, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "dos2unix";

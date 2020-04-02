@@ -1,16 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.openvpn;
 
   inherit (pkgs) openvpn;
 
   makeOpenVPNJob = cfg: name:
     let
-
       path = (getAttr "openvpn-${name}" config.systemd.services).path;
 
       upScript = ''
@@ -30,14 +27,14 @@ let
 
         ${cfg.up}
         ${optionalString cfg.updateResolvConf
-           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+          "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
       '';
 
       downScript = ''
         #! /bin/sh
         export PATH=${path}
         ${optionalString cfg.updateResolvConf
-           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+          "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
         ${cfg.down}
       '';
 
@@ -47,16 +44,15 @@ let
           ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
           ${cfg.config}
           ${optionalString (cfg.up != "" || cfg.updateResolvConf)
-              "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
+            "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
           ${optionalString (cfg.down != "" || cfg.updateResolvConf)
-              "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
+            "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
           ${optionalString (cfg.authUserPass != null)
-              "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
-                ${cfg.authUserPass.username}
-                ${cfg.authUserPass.password}
-              ''}"}
+            "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+              ${cfg.authUserPass.username}
+              ${cfg.authUserPass.password}
+            ''}"}
         '';
-
     in {
       description = "OpenVPN instance ‘${name}’";
 
@@ -69,9 +65,7 @@ let
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
-
 in
-
 {
   imports = [
     (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
@@ -82,7 +76,7 @@ in
   options = {
 
     services.openvpn.servers = mkOption {
-      default = {};
+      default = { };
 
       example = literalExample ''
         {
@@ -206,7 +200,7 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.servers != {}) {
+  config = mkIf (cfg.servers != { }) {
 
     systemd.services = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
 

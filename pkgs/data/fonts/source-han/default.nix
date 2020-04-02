@@ -3,32 +3,31 @@
 , fetchzip
 , fetchurl
 }:
-
 let
-  makePackage = { family, description, rev, sha256 }: let
-    Family =
-      lib.toUpper (lib.substring 0 1 family) +
-      lib.substring 1 (lib.stringLength family) family;
+  makePackage = { family, description, rev, sha256 }:
+    let
+      Family =
+        lib.toUpper (lib.substring 0 1 family) + lib.substring 1 (lib.stringLength family) family;
 
-    ttc = fetchurl {
-      url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc";
-      inherit sha256;
+      ttc = fetchurl {
+        url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc";
+        inherit sha256;
+      };
+    in stdenvNoCC.mkDerivation {
+      pname = "source-han-${family}";
+      version = lib.removeSuffix "R" rev;
+
+      buildCommand = ''
+        install -m444 -Dt $out/share/fonts/opentype/source-han-${family} ${ttc}
+      '';
+
+      meta = {
+        description = "An open source Pan-CJK ${description} typeface";
+        homepage = "https://github.com/adobe-fonts/source-han-${family}";
+        license = lib.licenses.ofl;
+        maintainers = with lib.maintainers; [ taku0 emily ];
+      };
     };
-  in stdenvNoCC.mkDerivation {
-    pname = "source-han-${family}";
-    version = lib.removeSuffix "R" rev;
-
-    buildCommand = ''
-      install -m444 -Dt $out/share/fonts/opentype/source-han-${family} ${ttc}
-    '';
-
-    meta = {
-      description = "An open source Pan-CJK ${description} typeface";
-      homepage = "https://github.com/adobe-fonts/source-han-${family}";
-      license = lib.licenses.ofl;
-      maintainers = with lib.maintainers; [ taku0 emily ];
-    };
-  };
 in
 {
   sans = makePackage {

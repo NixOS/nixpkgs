@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, libtoxcore
-, conf ? null }:
+{ stdenv
+, fetchgit
+, libtoxcore
+, conf ? null
+}:
 
 with stdenv.lib;
-
 let
-  configFile = optionalString (conf!=null) (builtins.toFile "config.h" conf);
-
-in stdenv.mkDerivation {
+  configFile = optionalString (conf != null) (builtins.toFile "config.h" conf);
+in
+stdenv.mkDerivation {
   name = "ratox-0.4.20180303";
 
   src = fetchgit {
@@ -21,7 +23,7 @@ in stdenv.mkDerivation {
     substituteInPlace config.mk \
       --replace '-lsodium -lopus -lvpx ' ""
 
-    ${optionalString (conf!=null) "cp ${configFile} config.def.h"}
+    ${optionalString (conf != null) "cp ${configFile} config.def.h"}
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

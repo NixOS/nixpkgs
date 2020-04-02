@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   hpssacli = pkgs.stdenv.mkDerivation rec {
     pname = "hpssacli";
@@ -40,7 +39,8 @@ let
       maintainers = with maintainers; [ volth ];
     };
   };
-in {
+in
+{
   ###### interface
 
   options = {

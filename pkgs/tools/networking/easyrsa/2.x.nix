@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, autoreconfHook, makeWrapper
-, gnugrep, openssl }:
+{ stdenv
+, fetchurl
+, autoreconfHook
+, makeWrapper
+, gnugrep
+, openssl
+}:
 
 stdenv.mkDerivation {
   name = "easyrsa-2.2.0";

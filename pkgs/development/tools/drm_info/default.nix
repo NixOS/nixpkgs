@@ -1,6 +1,10 @@
-{ stdenv, fetchFromGitHub
-, libdrm, json_c
-, meson, ninja, pkgconfig
+{ stdenv
+, fetchFromGitHub
+, libdrm
+, json_c
+, meson
+, ninja
+, pkgconfig
 }:
 
 stdenv.mkDerivation rec {

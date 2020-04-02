@@ -1,34 +1,33 @@
-{
-  stdenv,
-  fetchgit,
-  python3Packages,
-  pkgconfig,
-  gcc8Stdenv,
-  boost,
-  git,
-  systemd,
-  gnutls,
-  cmake,
-  makeWrapper,
-  ninja,
-  ragel,
-  hwloc,
-  jsoncpp,
-  antlr3,
-  numactl,
-  protobuf,
-  cryptopp,
-  libxfs,
-  libyamlcpp,
-  libsystemtap,
-  lksctp-tools,
-  lz4,
-  libxml2,
-  zlib,
-  libpciaccess,
-  snappy,
-  libtool,
-  thrift
+{ stdenv
+, fetchgit
+, python3Packages
+, pkgconfig
+, gcc8Stdenv
+, boost
+, git
+, systemd
+, gnutls
+, cmake
+, makeWrapper
+, ninja
+, ragel
+, hwloc
+, jsoncpp
+, antlr3
+, numactl
+, protobuf
+, cryptopp
+, libxfs
+, libyamlcpp
+, libsystemtap
+, lksctp-tools
+, lz4
+, libxml2
+, zlib
+, libpciaccess
+, snappy
+, libtool
+, thrift
 }:
 gcc8Stdenv.mkDerivation {
   pname = "scylladb";
@@ -44,35 +43,35 @@ gcc8Stdenv.mkDerivation {
   patches = [ ./seastar-configure-script-paths.patch ./configure-etc-osrelease.patch ];
 
   nativeBuildInputs = [
-   pkgconfig
-   cmake
-   makeWrapper
-   ninja
+    pkgconfig
+    cmake
+    makeWrapper
+    ninja
   ];
 
   buildInputs = [
-   antlr3
-   python3Packages.pyparsing
-   boost
-   git
-   systemd
-   gnutls
-   ragel
-   jsoncpp
-   numactl
-   protobuf
-   cryptopp
-   libxfs
-   libyamlcpp
-   libsystemtap
-   lksctp-tools
-   lz4
-   libxml2
-   zlib
-   libpciaccess
-   snappy
-   libtool
-   thrift
+    antlr3
+    python3Packages.pyparsing
+    boost
+    git
+    systemd
+    gnutls
+    ragel
+    jsoncpp
+    numactl
+    protobuf
+    cryptopp
+    libxfs
+    libyamlcpp
+    libsystemtap
+    lksctp-tools
+    lz4
+    libxml2
+    zlib
+    libpciaccess
+    snappy
+    libtool
+    thrift
   ];
 
   postPatch = ''
@@ -96,7 +95,7 @@ gcc8Stdenv.mkDerivation {
     homepage = "https://scylladb.com";
     license = licenses.agpl3;
     platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = []; # It's huge ATM, about 18 GB.
+    hydraPlatforms = [ ]; # It's huge ATM, about 18 GB.
     maintainers = [ stdenv.lib.maintainers.farlion ];
   };
 }

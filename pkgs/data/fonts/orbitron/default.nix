@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub }:
-
 let
   version = "20110526";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "orbitron-${version}";
 
   owner = "theleagueof";
@@ -21,23 +21,23 @@ in fetchFromGitHub {
     homepage = https://www.theleagueofmoveabletype.com/orbitron;
     downloadPage = "https://www.theleagueofmoveabletype.com/orbitron/download";
     description = ''
-     Geometric sans-serif for display purposes by Matt McInerney'';
+      Geometric sans-serif for display purposes by Matt McInerney'';
     longDescription = ''
-     Orbitron is a geometric sans-serif typeface intended for display
-     purposes. It features four weights (light, medium, bold, and
-     black), a stylistic alternative, small caps, and a ton of
-     alternate glyphs.
+      Orbitron is a geometric sans-serif typeface intended for display
+      purposes. It features four weights (light, medium, bold, and
+      black), a stylistic alternative, small caps, and a ton of
+      alternate glyphs.
 
-     Orbitron was designed so that graphic designers in the future
-     will have some alternative to typefaces like Eurostile or Bank
-     Gothic. If you’ve ever seen a futuristic sci-fi movie, you have
-     may noticed that all other fonts have been lost or destroyed in
-     the apocalypse that led humans to flee earth. Only those very few
-     geometric typefaces have survived to be used on spaceship
-     exteriors, space station signage, monopolistic corporate
-     branding, uniforms featuring aerodynamic shoulder pads, etc. Of
-     course Orbitron could also be used on the posters for the movies
-     portraying this inevitable future.
+      Orbitron was designed so that graphic designers in the future
+      will have some alternative to typefaces like Eurostile or Bank
+      Gothic. If you’ve ever seen a futuristic sci-fi movie, you have
+      may noticed that all other fonts have been lost or destroyed in
+      the apocalypse that led humans to flee earth. Only those very few
+      geometric typefaces have survived to be used on spaceship
+      exteriors, space station signage, monopolistic corporate
+      branding, uniforms featuring aerodynamic shoulder pads, etc. Of
+      course Orbitron could also be used on the posters for the movies
+      portraying this inevitable future.
     '';
     license = licenses.ofl;
     platforms = platforms.all;

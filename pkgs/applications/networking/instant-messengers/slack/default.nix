@@ -1,11 +1,37 @@
-{ theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
-cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
-libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
-at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio, xdg_utils
+{ theme ? null
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, alsaLib
+, atk
+, cairo
+, cups
+, curl
+, dbus
+, expat
+, fontconfig
+, freetype
+, glib
+, gnome2
+, gtk3
+, gdk-pixbuf
+, libappindicator-gtk3
+, libnotify
+, libxcb
+, nspr
+, nss
+, pango
+, systemd
+, xorg
+, at-spi2-atk
+, at-spi2-core
+, libuuid
+, nodePackages
+, libpulseaudio
+, xdg_utils
 }:
-
 let
-
   version = "4.2.0";
 
   inherit (stdenv.hostPlatform) system;
@@ -61,7 +87,7 @@ let
       systemd
       libuuid
       libpulseaudio
-  
+
       xorg.libxkbfile
       xorg.libX11
       xorg.libXcomposite
@@ -77,15 +103,15 @@ let
     ] + ":${stdenv.cc.cc.lib}/lib64";
 
     buildInputs = [
-      gtk3  # needed for GSETTINGS_SCHEMAS_PATH
+      gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
-  
+
     nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
-  
+
     dontUnpack = true;
     dontBuild = true;
     dontPatchELF = true;
-  
+
     installPhase = ''
       # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
       dpkg --fsys-tarfile $src | tar --extract
@@ -148,6 +174,7 @@ let
       defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
     '';
   };
-in if stdenv.isDarwin
-  then darwin
-  else linux
+in
+if stdenv.isDarwin
+then darwin
+else linux

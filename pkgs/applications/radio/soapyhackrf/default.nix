@@ -1,11 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, hackrf, soapysdr
-} :
-
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, hackrf
+, soapysdr
+}:
 let
   version = "0.3.3";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "soapyhackrf";
   inherit version;
 

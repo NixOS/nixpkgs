@@ -1,5 +1,13 @@
-{ stdenv, fetchpatch, fetchFromGitHub, qmake, pkgconfig
-, qtbase, qtsvg, qtserialport, boost, libgit2
+{ stdenv
+, fetchpatch
+, fetchFromGitHub
+, qmake
+, pkgconfig
+, qtbase
+, qtsvg
+, qtserialport
+, boost
+, libgit2
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +28,13 @@ stdenv.mkDerivation rec {
     sha256 = "1d2v8k7p176j0lczx4vx9n9gbg3vw09n2c4b6w0wj5wqmifywhc1";
   };
 
-  patches = [(fetchpatch {
-    name = "0001-Squashed-commit-of-the-following.patch";
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-Squashed-commit-of-the-following.patch?h=fritzing";
-    sha256 = "1cv6myidxhy28i8m8v13ghzkvx5978p9dcd8v7885y0l1h3108mf";
-  })];
+  patches = [
+    (fetchpatch {
+      name = "0001-Squashed-commit-of-the-following.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-Squashed-commit-of-the-following.patch?h=fritzing";
+      sha256 = "1cv6myidxhy28i8m8v13ghzkvx5978p9dcd8v7885y0l1h3108mf";
+    })
+  ];
 
   buildInputs = [ qtbase qtsvg qtserialport boost libgit2 ];
 

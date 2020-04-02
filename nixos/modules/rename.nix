@@ -27,8 +27,7 @@ with lib;
     (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
-    (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
-      "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
+    (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
     (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
       services.xserver.multitouch (which uses xf86_input_mtrack) has been removed
       as the underlying package isn't being maintained. Working alternatives are
@@ -42,7 +41,7 @@ with lib;
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
-    (mkRemovedOptionModule ["hardware" "brightnessctl" ] ''
+    (mkRemovedOptionModule [ "hardware" "brightnessctl" ] ''
       The brightnessctl module was removed because newer versions of
       brightnessctl don't require the udev rules anymore (they can use the
       systemd-logind API). Instead of using the module you can now

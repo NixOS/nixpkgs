@@ -1,7 +1,27 @@
-{ stdenv, fetchurl, makeWrapper, cmake, gl2ps, gsl, libX11, libXpm, libXft
-, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre, pkgconfig, python, xxHash
+{ stdenv
+, fetchurl
+, makeWrapper
+, cmake
+, gl2ps
+, gsl
+, libX11
+, libXpm
+, libXft
+, libXext
+, libGLU
+, libGL
+, libxml2
+, lz4
+, lzma
+, pcre
+, pkgconfig
+, python
+, xxHash
 , zlib
-, Cocoa, OpenGL, noSplash ? false }:
+, Cocoa
+, OpenGL
+, noSplash ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "root";
@@ -16,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gl2ps pcre python zlib libxml2 lz4 lzma gsl xxHash ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
-    ;
+  ;
   propagatedBuildInputs = [ python.pkgs.numpy ];
 
   patches = [

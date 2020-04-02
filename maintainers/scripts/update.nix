@@ -7,21 +7,20 @@
 }:
 
 # TODO: add assert statements
-
 let
   /* Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
    */
   nubOn = f: list:
-    if list == [] then
-      []
+    if list == [ ] then
+      [ ]
     else
       let
         x = pkgs.lib.head list;
         xs = pkgs.lib.filter (p: f x != f p) (pkgs.lib.drop 1 list);
       in
-        [x] ++ nubOn f xs;
+        [ x ] ++ nubOn f xs;
 
-  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = []; });
+  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = [ ]; });
 
   packagesWith = cond: return: set:
     nubOn (pkg: pkg.updateScript)
@@ -31,16 +30,16 @@ let
             let
               result = builtins.tryEval (
                 if pkgs.lib.isDerivation pkg && cond name pkg
-                  then [(return name pkg)]
+                then [ (return name pkg) ]
                 else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
-                  then packagesWith cond return pkg
-                else []
+                then packagesWith cond return pkg
+                else [ ]
               );
             in
               if result.success then result.value
-              else []
+              else [ ]
           )
-          set
+        set
         )
       );
 
@@ -52,17 +51,18 @@ let
         else
           builtins.getAttr maintainer' pkgs.lib.maintainers;
     in
-      packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg &&
-                                 (if builtins.hasAttr "maintainers" pkg.meta
-                                   then (if builtins.isList pkg.meta.maintainers
-                                           then builtins.elem maintainer pkg.meta.maintainers
-                                           else maintainer == pkg.meta.maintainers
-                                        )
-                                   else false
-                                 )
-                   )
-                   (name: pkg: pkg)
-                   pkgs;
+      packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg && (
+        if builtins.hasAttr "maintainers" pkg.meta
+        then (
+          if builtins.isList pkg.meta.maintainers
+          then builtins.elem maintainer pkg.meta.maintainers
+          else maintainer == pkg.meta.maintainers
+        )
+        else false
+      )
+      )
+        (name: pkg: pkg)
+      pkgs;
 
   packagesWithUpdateScript = path:
     let
@@ -72,12 +72,12 @@ let
         builtins.throw "Attribute path `${path}` does not exists."
       else
         packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
-                       (name: pkg: pkg)
-                       attrSet;
+          (name: pkg: pkg)
+        attrSet;
 
   packageByName = name:
     let
-        package = pkgs.lib.attrByPath (pkgs.lib.splitString "." name) null pkgs;
+      package = pkgs.lib.attrByPath (pkgs.lib.splitString "." name) null pkgs;
     in
       if package == null then
         builtins.throw "Package with an attribute name `${name}` does not exists."
@@ -136,8 +136,8 @@ let
     ++ pkgs.lib.optional (keep-going == "true") "--keep-going";
 
   args = [ packagesJson ] ++ optionalArgs;
-
-in pkgs.stdenv.mkDerivation {
+in
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
   buildCommand = ''
     echo ""

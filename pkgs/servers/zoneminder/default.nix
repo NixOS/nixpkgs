@@ -1,7 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
-, polkit, utillinuxMinimal, x264, zlib
-, coreutils, procps, psmisc }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, substituteAll
+, cmake
+, makeWrapper
+, pkgconfig
+, curl
+, ffmpeg
+, glib
+, libjpeg
+, libselinux
+, libsepol
+, mp4v2
+, libmysqlclient
+, mysql
+, pcre
+, perl
+, perlPackages
+, polkit
+, utillinuxMinimal
+, x264
+, zlib
+, coreutils
+, procps
+, psmisc
+}:
 
 # NOTES:
 #
@@ -39,7 +63,6 @@
 #
 # 9. Parts of the web UI has a hardcoded /zm path so we create a symlink to work
 # around it.
-
 let
   modules = [
     {
@@ -72,18 +95,18 @@ let
     }
   ];
 
-  user    = "zoneminder";
+  user = "zoneminder";
   dirName = "zoneminder";
   perlBin = "${perl}/bin/perl";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zoneminder";
   version = "1.34.3";
 
   src = fetchFromGitHub {
-    owner  = "ZoneMinder";
-    repo   = "zoneminder";
-    rev    = version;
+    owner = "ZoneMinder";
+    repo = "zoneminder";
+    rev = version;
     sha256 = "0jp7950v36gxxzkwdp5i0312s26czhfsl5ixdxfzn21cx31hhlg0";
   };
 
@@ -94,15 +117,15 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     ${lib.concatStringsSep "\n" (map (e: ''
-      rm -rf ${e.path}/*
-      cp -r ${e.src}/* ${e.path}/
-    '') modules)}
+    rm -rf ${e.path}/*
+    cp -r ${e.src}/* ${e.path}/
+  '') modules)}
 
     rm -rf web/api/lib/Cake/Test
 
     ${lib.concatStringsSep "\n" (map (e: ''
-      cp ${e.src} ${e.path}
-    '') addons)}
+    cp ${e.src} ${e.path}
+  '') addons)}
 
     for d in scripts/ZoneMinder onvif/{modules,proxy} ; do
       substituteInPlace $d/CMakeLists.txt \
@@ -147,14 +170,40 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
+    curl
+    ffmpeg
+    glib
+    libjpeg
+    libselinux
+    libsepol
+    mp4v2
+    libmysqlclient
+    mysql.client
+    pcre
+    perl
+    polkit
+    x264
+    zlib
     utillinuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
-    DateManip DBI DBDmysql LWP SysMmap
+    DateManip
+    DBI
+    DBDmysql
+    LWP
+    SysMmap
     # run-time dependencies not checked at build-time
-    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
-    CryptEksblowfish DataEntropy # zmupdate.pl
+    ClassStdFast
+    DataDump
+    DeviceSerialPort
+    JSONMaybeXS
+    LWPProtocolHttps
+    NumberBytesHuman
+    SysCPU
+    SysMemInfo
+    TimeDate
+    CryptEksblowfish
+    DataEntropy # zmupdate.pl
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];

@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.windowManager.stumpwm;
 in
-
 {
   options = {
     services.xserver.windowManager.stumpwm.enable = mkEnableOption "stumpwm";

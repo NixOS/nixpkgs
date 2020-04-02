@@ -1,7 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, perl, pkgconfig, flux, zlib
-, libjpeg, freetype, libpng, giflib
-, enableX11 ? true, xorg
-, enableSDL ? true, SDL }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, perl
+, pkgconfig
+, flux
+, zlib
+, libjpeg
+, freetype
+, libpng
+, giflib
+, enableX11 ? true
+, xorg
+, enableSDL ? true
+, SDL
+}:
 
 stdenv.mkDerivation rec {
   pname = "directfb";
@@ -10,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "deniskropp";
     repo = "DirectFB";
-    rev = "DIRECTFB_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "DIRECTFB_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "0bs3yzb7hy3mgydrj8ycg7pllrd2b6j0gxj596inyr7ihssr3i0y";
   };
 
@@ -19,9 +32,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libjpeg freetype giflib libpng ]
     ++ lib.optional enableSDL SDL
     ++ lib.optionals enableX11 (with xorg; [
-      xorgproto libX11 libXext
-      libXrender
-    ]);
+    xorgproto
+    libX11
+    libXext
+    libXrender
+  ]);
 
   NIX_LDFLAGS = "-lgcc_s";
 

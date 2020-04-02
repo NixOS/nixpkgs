@@ -1,20 +1,31 @@
 /*  The reusable code, and package attributes, between OpenRA engine packages (engine.nix)
     and out-of-tree mod packages (mod.nix).
 */
-{ stdenv, makeSetupHook, curl, unzip, dos2unix, pkgconfig, makeWrapper
-, lua, mono, dotnetPackages, python
-, libGL, freetype, openal, SDL2
+{ stdenv
+, makeSetupHook
+, curl
+, unzip
+, dos2unix
+, pkgconfig
+, makeWrapper
+, lua
+, mono
+, dotnetPackages
+, python
+, libGL
+, freetype
+, openal
+, SDL2
 , zenity
 }:
 
 with stdenv.lib;
-
 let
   path = makeBinPath ([ mono python ] ++ optional (zenity != null) zenity);
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
   mkdirp = makeSetupHook { } ./mkdirp.sh;
-
-in {
+in
+{
   patchEngine = dir: version: ''
     sed -i \
       -e 's/^VERSION.*/VERSION = ${version}/g' \

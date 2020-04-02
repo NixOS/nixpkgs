@@ -1,6 +1,18 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig,
-  libtool, check, bison, git, gperf,
-  perl, texinfo, help2man, gettext, ncurses
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkgconfig
+, libtool
+, check
+, bison
+, git
+, gperf
+, perl
+, texinfo
+, help2man
+, gettext
+, ncurses
 }:
 
 stdenv.mkDerivation {
@@ -17,8 +29,20 @@ stdenv.mkDerivation {
 
   patches = [ ./glibc-2.26.patch ];
 
-  nativeBuildInputs = [ autoconf automake pkgconfig libtool check
-    bison git gettext gperf perl texinfo help2man ncurses
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkgconfig
+    libtool
+    check
+    bison
+    git
+    gettext
+    gperf
+    perl
+    texinfo
+    help2man
+    ncurses
   ];
 
   configurePhase = ''

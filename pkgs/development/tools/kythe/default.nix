@@ -1,4 +1,4 @@
-{ stdenv, binutils , fetchurl, ncurses5 }:
+{ stdenv, binutils, fetchurl, ncurses5 }:
 
 stdenv.mkDerivation rec {
   version = "0.0.30";
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A pluggable, (mostly) language-agnostic ecosystem for building tools that work with code.";
     longDescription = ''
-    The Kythe project was founded to provide and support tools and standards
-      that encourage interoperability among programs that manipulate source
-      code. At a high level, the main goal of Kythe is to provide a standard,
-      language-agnostic interchange mechanism, allowing tools that operate on
-      source code — including build systems, compilers, interpreters, static
-      analyses, editors, code-review applications, and more — to share
-      information with each other smoothly.  '';
+      The Kythe project was founded to provide and support tools and standards
+        that encourage interoperability among programs that manipulate source
+        code. At a high level, the main goal of Kythe is to provide a standard,
+        language-agnostic interchange mechanism, allowing tools that operate on
+        source code — including build systems, compilers, interpreters, static
+        analyses, editors, code-review applications, and more — to share
+        information with each other smoothly.  '';
     homepage = https://kythe.io/;
     license = licenses.asl20;
     platforms = platforms.linux;

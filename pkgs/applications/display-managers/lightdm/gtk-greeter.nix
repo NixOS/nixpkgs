@@ -17,7 +17,6 @@
 
 #ToDo: bad icons with gtk2;
 #  avatar icon is missing in standard hicolor theme, I don't know where gtk3 takes it from
-
 let
   ver_branch = "2.0";
   version = "2.0.7";
@@ -58,10 +57,12 @@ stdenv.mkDerivation rec {
       --replace "Exec=lightdm-gtk-greeter" "Exec=$out/bin/lightdm-gtk-greeter"
   '';
 
-  passthru.xgreeters = linkFarm "lightdm-gtk-greeter-xgreeters" [{
-    path = "${lightdm_gtk_greeter}/share/xgreeters/lightdm-gtk-greeter.desktop";
-    name = "lightdm-gtk-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "lightdm-gtk-greeter-xgreeters" [
+    {
+      path = "${lightdm_gtk_greeter}/share/xgreeters/lightdm-gtk-greeter.desktop";
+      name = "lightdm-gtk-greeter.desktop";
+    }
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://launchpad.net/lightdm-gtk-greeter;

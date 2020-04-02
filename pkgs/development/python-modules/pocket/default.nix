@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Wrapper for the pocket API";
-    homepage    = "https://github.com/tapanpandita/pocket";
-    license     = licenses.bsd3;
+    homepage = "https://github.com/tapanpandita/pocket";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ericsagnes ];
   };
 

@@ -1,9 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, libtool
+, bzip2
+, zlib
+, libX11
+, libXext
+, libXt
+, fontconfig
+, freetype
+, ghostscript
+, libjpeg
+, djvulibre
+, lcms2
+, openexr
+, libpng
+, librsvg
+, libtiff
+, libxml2
+, openjpeg
+, libwebp
+, fftw
+, libheif
+, libde265
 , ApplicationServices
 }:
-
 let
   arch =
     if stdenv.hostPlatform.system == "i686-linux" then "i686"
@@ -15,22 +38,22 @@ let
   cfg = {
     version = "6.9.10-71";
     sha256 = "0c69xmr8k8c4dplgzxydm30s2dr8biq71x07hc15bw196nsx3srr";
-    patches = [];
+    patches = [ ];
   }
-    # Freeze version on mingw so we don't need to port the patch too often.
-    # FIXME: This version has multiple security vulnerabilities
-    // lib.optionalAttrs (stdenv.hostPlatform.isMinGW) {
-        version = "6.9.2-0";
-        sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
-        patches = [(fetchpatch {
-          name = "mingw-build.patch";
-          url = "https://raw.githubusercontent.com/Alexpux/MINGW-packages/"
-            + "01ca03b2a4ef/mingw-w64-imagemagick/002-build-fixes.patch";
-          sha256 = "1pypszlcx2sf7wfi4p37w1y58ck2r8cd5b2wrrwr9rh87p7fy1c0";
-        })];
-      };
+  # Freeze version on mingw so we don't need to port the patch too often.
+  # FIXME: This version has multiple security vulnerabilities
+  // lib.optionalAttrs (stdenv.hostPlatform.isMinGW) {
+    version = "6.9.2-0";
+    sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
+    patches = [
+      (fetchpatch {
+        name = "mingw-build.patch";
+        url = "https://raw.githubusercontent.com/Alexpux/MINGW-packages/" + "01ca03b2a4ef/mingw-w64-imagemagick/002-build-fixes.patch";
+        sha256 = "1pypszlcx2sf7wfi4p37w1y58ck2r8cd5b2wrrwr9rh87p7fy1c0";
+      })
+    ];
+  };
 in
-
 stdenv.mkDerivation {
   pname = "imagemagick";
   inherit (cfg) version;
@@ -54,18 +77,28 @@ stdenv.mkDerivation {
     ++ [ "--with-gcc-arch=${arch}" ]
     ++ lib.optional (librsvg != null) "--with-rsvg"
     ++ lib.optionals (ghostscript != null)
-      [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
+      [
+        "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
       ]
     ++ lib.optionals (stdenv.hostPlatform.isMinGW)
       [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
-    ;
+  ;
 
   nativeBuildInputs = [ pkgconfig libtool ];
 
   buildInputs =
-    [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2 libheif libde265 djvulibre
+    [
+      zlib
+      fontconfig
+      freetype
+      ghostscript
+      libpng
+      libtiff
+      libxml2
+      libheif
+      libde265
+      djvulibre
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
@@ -75,7 +108,7 @@ stdenv.mkDerivation {
     [ bzip2 freetype libjpeg lcms2 fftw ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ libX11 libXext libXt libwebp ]
-    ;
+  ;
 
   doCheck = false; # fails 6 out of 76 tests
 

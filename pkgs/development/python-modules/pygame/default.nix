@@ -1,5 +1,17 @@
-{ lib, fetchPypi, buildPythonPackage, python, pkg-config, libX11
-, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, freetype
+{ lib
+, fetchPypi
+, buildPythonPackage
+, python
+, pkg-config
+, libX11
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_ttf
+, libpng
+, libjpeg
+, portmidi
+, freetype
 }:
 
 buildPythonPackage rec {
@@ -12,12 +24,20 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pkg-config SDL
+    pkg-config
+    SDL
   ];
 
   buildInputs = [
-    SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
-    portmidi libX11 freetype
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+    libpng
+    libjpeg
+    portmidi
+    libX11
+    freetype
   ];
 
   # Tests fail because of no audio device and display.
@@ -31,11 +51,11 @@ buildPythonPackage rec {
       -e "/\/include\/smpeg/d" \
       -i buildconfig/config_unix.py
     ${lib.concatMapStrings (dep: ''
-      sed \
-        -e "/origincdirs =/a\        origincdirs += ['${lib.getDev dep}/include']" \
-        -e "/origlibdirs =/a\        origlibdirs += ['${lib.getLib dep}/lib']" \
-        -i buildconfig/config_unix.py
-      '') buildInputs
+    sed \
+      -e "/origincdirs =/a\        origincdirs += ['${lib.getDev dep}/include']" \
+      -e "/origlibdirs =/a\        origlibdirs += ['${lib.getLib dep}/lib']" \
+      -i buildconfig/config_unix.py
+  '') buildInputs
     }
     LOCALBASE=/ ${python.interpreter} buildconfig/config.py
   '';

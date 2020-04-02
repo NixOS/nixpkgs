@@ -23,7 +23,12 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock ];
 
   propagatedBuildInputs = [
-    bleach cmarkgfm docutils future pygments six
+    bleach
+    cmarkgfm
+    docutils
+    future
+    pygments
+    six
   ];
 
   checkPhase = ''

@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-markup";
 
-  asdFilesToKeep = ["cl-markup.asd"];
+  asdFilesToKeep = [ "cl-markup.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-markup DESCRIPTION System lacks description SHA256

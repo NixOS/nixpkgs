@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  jinja2,
-  pytest,
+{ stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, jinja2
+, pytest
+,
 }:
 
 buildPythonPackage rec {

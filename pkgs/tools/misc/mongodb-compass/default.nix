@@ -1,9 +1,27 @@
-{ stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gnome3, libnotify, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
-
+{ stdenv
+, fetchurl
+, dpkg
+, alsaLib
+, atk
+, cairo
+, cups
+, curl
+, dbus
+, expat
+, fontconfig
+, freetype
+, glib
+, gnome2
+, gnome3
+, libnotify
+, libxcb
+, nspr
+, nss
+, systemd
+, xorg
+, wrapGAppsHook
+}:
 let
-
   version = "1.17.0";
 
   rpath = stdenv.lib.makeLibraryPath [
@@ -50,8 +68,8 @@ let
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mongodb-compass";
   inherit version;
 

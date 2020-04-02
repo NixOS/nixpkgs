@@ -1,5 +1,19 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPy38
-, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
+{ stdenv
+, lib
+, fetchPypi
+, python
+, buildPythonPackage
+, isPy38
+, cython
+, bzip2
+, lzo
+, numpy
+, numexpr
+, hdf5
+, six
+, c-blosc
+, mock
+}:
 
 with stdenv.lib;
 

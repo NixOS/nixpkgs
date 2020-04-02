@@ -1,29 +1,30 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.ttyd;
 
   # Command line arguments for the ttyd daemon
   args = [ "--port" (toString cfg.port) ]
-         ++ optionals (cfg.socket != null) [ "--interface" cfg.socket ]
-         ++ optionals (cfg.interface != null) [ "--interface" cfg.interface ]
-         ++ [ "--signal" (toString cfg.signal) ]
-         ++ (concatLists (mapAttrsToList (_k: _v: [ "--client-option" "${_k}=${_v}" ]) cfg.clientOptions))
-         ++ [ "--terminal-type" cfg.terminalType ]
-         ++ optionals cfg.checkOrigin [ "--check-origin" ]
-         ++ [ "--max-clients" (toString cfg.maxClients) ]
-         ++ optionals (cfg.indexFile != null) [ "--index" cfg.indexFile ]
-         ++ optionals cfg.enableIPv6 [ "--ipv6" ]
-         ++ optionals cfg.enableSSL [ "--ssl-cert" cfg.certFile
-                                      "--ssl-key" cfg.keyFile
-                                      "--ssl-ca" cfg.caFile ]
-         ++ [ "--debug" (toString cfg.logLevel) ];
-
+    ++ optionals (cfg.socket != null) [ "--interface" cfg.socket ]
+    ++ optionals (cfg.interface != null) [ "--interface" cfg.interface ]
+    ++ [ "--signal" (toString cfg.signal) ]
+    ++ (concatLists (mapAttrsToList (_k: _v: [ "--client-option" "${_k}=${_v}" ]) cfg.clientOptions))
+    ++ [ "--terminal-type" cfg.terminalType ]
+    ++ optionals cfg.checkOrigin [ "--check-origin" ]
+    ++ [ "--max-clients" (toString cfg.maxClients) ]
+    ++ optionals (cfg.indexFile != null) [ "--index" cfg.indexFile ]
+    ++ optionals cfg.enableIPv6 [ "--ipv6" ]
+    ++ optionals cfg.enableSSL [
+    "--ssl-cert"
+    cfg.certFile
+    "--ssl-key"
+    cfg.keyFile
+    "--ssl-ca"
+    cfg.caFile
+  ]
+    ++ [ "--debug" (toString cfg.logLevel) ];
 in
-
 {
 
   ###### interface
@@ -77,7 +78,7 @@ in
 
       clientOptions = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         example = literalExample ''{
           fontSize = "16";
           fontFamily = "Fira Code";
@@ -161,13 +162,19 @@ in
   config = mkIf cfg.enable {
 
     assertions =
-      [ { assertion = cfg.enableSSL
-            -> cfg.certFile != null && cfg.keyFile != null && cfg.caFile != null;
-          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specefied."; }
-        { assertion = ! (cfg.interface != null && cfg.socket != null);
-          message = "Cannot set both interface and socket for ttyd."; }
-        { assertion = (cfg.username != null) == (cfg.passwordFile != null);
-          message = "Need to set both username and passwordFile for ttyd"; }
+      [
+        {
+          assertion = cfg.enableSSL -> cfg.certFile != null && cfg.keyFile != null && cfg.caFile != null;
+          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specefied.";
+        }
+        {
+          assertion = ! (cfg.interface != null && cfg.socket != null);
+          message = "Cannot set both interface and socket for ttyd.";
+        }
+        {
+          assertion = (cfg.username != null) == (cfg.passwordFile != null);
+          message = "Need to set both username and passwordFile for ttyd";
+        }
       ];
 
     systemd.services.ttyd = {
@@ -181,16 +188,17 @@ in
         User = "root";
       };
 
-      script = if cfg.passwordFile != null then ''
-        PASSWORD=$(cat ${escapeShellArg cfg.passwordFile})
-        ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
-          --credential ${escapeShellArg cfg.username}:"$PASSWORD" \
-          ${pkgs.shadow}/bin/login
-      ''
-      else ''
-        ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
-          ${pkgs.shadow}/bin/login
-      '';
+      script =
+        if cfg.passwordFile != null then ''
+          PASSWORD=$(cat ${escapeShellArg cfg.passwordFile})
+          ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
+            --credential ${escapeShellArg cfg.username}:"$PASSWORD" \
+            ${pkgs.shadow}/bin/login
+        ''
+        else ''
+          ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
+            ${pkgs.shadow}/bin/login
+        '';
     };
   };
 }

@@ -19,21 +19,26 @@
 # Start web interface
 # ./paperless runserver --noreload localhost:8000
 
-{ config ? {}, dataDir ? null, ocrLanguages ? null
-, paperlessPkg ? paperless, extraCmds ? "" }:
+{ config ? { }
+, dataDir ? null
+, ocrLanguages ? null
+, paperlessPkg ? paperless
+, extraCmds ? ""
+}:
 with lib;
 let
-  paperless = if ocrLanguages == null then
-    paperlessPkg
-  else
-    (paperlessPkg.override {
-      tesseract = paperlessPkg.tesseract.override {
-        enableLanguages = ocrLanguages;
-      };
-    }).overrideDerivation (_: {
-      # `ocrLanguages` might be missing some languages required by the tests.
-      doCheck = false;
-    });
+  paperless =
+    if ocrLanguages == null then
+      paperlessPkg
+    else
+      (paperlessPkg.override {
+        tesseract = paperlessPkg.tesseract.override {
+          enableLanguages = ocrLanguages;
+        };
+      }).overrideDerivation (_: {
+        # `ocrLanguages` might be missing some languages required by the tests.
+        doCheck = false;
+      });
 
   envVars = (optionalAttrs (dataDir != null) {
     PAPERLESS_CONSUMPTION_DIR = "${dataDir}/consume";
@@ -49,11 +54,11 @@ let
     source ${paperless}/share/paperless/setup-env.sh
     ${setupEnvVars}
     ${optionalString (dataDir != null) ''
-      mkdir -p "$PAPERLESS_CONSUMPTION_DIR" \
-               "$PAPERLESS_MEDIADIR" \
-               "$PAPERLESS_STATICDIR" \
-               "$PAPERLESS_DBDIR"
-    ''}
+    mkdir -p "$PAPERLESS_CONSUMPTION_DIR" \
+             "$PAPERLESS_MEDIADIR" \
+             "$PAPERLESS_STATICDIR" \
+             "$PAPERLESS_DBDIR"
+  ''}
   '';
 
   runPaperless = writers.writeBash "paperless" ''
@@ -63,6 +68,6 @@ let
     exec python $paperlessSrc/manage.py "$@"
   '';
 in
-  runPaperless // {
-    inherit paperless setupEnv;
-  }
+runPaperless // {
+  inherit paperless setupEnv;
+}

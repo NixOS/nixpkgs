@@ -2,47 +2,49 @@
 let
   cfg = config.security.apparmor;
 in
-with lib;
-{
-  imports = [
-    (mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
-  ];
+  with lib;
+  {
+    imports = [
+      (mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+    ];
 
-  options.security.apparmor.confineSUIDApplications = mkOption {
-    default = true;
-    description = ''
-      Install AppArmor profiles for commonly-used SUID application
-      to mitigate potential privilege escalation attacks due to bugs
-      in such applications.
+    options.security.apparmor.confineSUIDApplications = mkOption {
+      default = true;
+      description = ''
+        Install AppArmor profiles for commonly-used SUID application
+        to mitigate potential privilege escalation attacks due to bugs
+        in such applications.
 
-      Currently available profiles: ping
-    '';
-  };
+        Currently available profiles: ping
+      '';
+    };
 
-  config = mkIf (cfg.confineSUIDApplications) {
-    security.apparmor.profiles = [ (pkgs.writeText "ping" ''
-      #include <tunables/global>
-      /run/wrappers/bin/ping {
-        #include <abstractions/base>
-        #include <abstractions/consoles>
-        #include <abstractions/nameservice>
+    config = mkIf (cfg.confineSUIDApplications) {
+      security.apparmor.profiles = [
+        (pkgs.writeText "ping" ''
+          #include <tunables/global>
+          /run/wrappers/bin/ping {
+            #include <abstractions/base>
+            #include <abstractions/consoles>
+            #include <abstractions/nameservice>
 
-        capability net_raw,
-        capability setuid,
-        network inet raw,
+            capability net_raw,
+            capability setuid,
+            network inet raw,
 
-        ${pkgs.stdenv.cc.libc.out}/lib/*.so mr,
-        ${pkgs.libcap.lib}/lib/libcap.so* mr,
-        ${pkgs.attr.out}/lib/libattr.so* mr,
+            ${pkgs.stdenv.cc.libc.out}/lib/*.so mr,
+            ${pkgs.libcap.lib}/lib/libcap.so* mr,
+            ${pkgs.attr.out}/lib/libattr.so* mr,
 
-        ${pkgs.iputils}/bin/ping mixr,
+            ${pkgs.iputils}/bin/ping mixr,
 
-        #/etc/modules.conf r,
+            #/etc/modules.conf r,
 
-        ## Site-specific additions and overrides. See local/README for details.
-        ##include <local/bin.ping>
-      }
-    '') ];
-  };
+            ## Site-specific additions and overrides. See local/README for details.
+            ##include <local/bin.ping>
+          }
+        '')
+      ];
+    };
 
-}
+  }

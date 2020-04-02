@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, xlibsWrapper, zlib, libjpeg, imake, gccmakedep, libXmu
-, libXaw, libXpm, libXp , perl, xauth, fontDirectories, openssh }:
+{ stdenv
+, fetchurl
+, xlibsWrapper
+, zlib
+, libjpeg
+, imake
+, gccmakedep
+, libXmu
+, libXaw
+, libXpm
+, libXp
+, perl
+, xauth
+, fontDirectories
+, openssh
+}:
 
 stdenv.mkDerivation {
   name = "tightvnc-1.3.10";
@@ -21,8 +35,19 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ xlibsWrapper zlib libjpeg imake gccmakedep libXmu libXaw
-                  libXpm libXp xauth openssh ];
+  buildInputs = [
+    xlibsWrapper
+    zlib
+    libjpeg
+    imake
+    gccmakedep
+    libXmu
+    libXaw
+    libXpm
+    libXp
+    xauth
+    openssh
+  ];
 
   postPatch = ''
     fontPath=
@@ -38,8 +63,8 @@ stdenv.mkDerivation {
         -e 's@unix/:7100@'$fontPath'@' \
         -i vncserver
 
-    sed -e 's@.* CppCmd .*@#define CppCmd		cpp@' -i Xvnc/config/cf/linux.cf
-    sed -e 's@.* CppCmd .*@#define CppCmd		cpp@' -i Xvnc/config/cf/Imake.tmpl
+    sed -e 's@.* CppCmd .*@#define CppCmd    cpp@' -i Xvnc/config/cf/linux.cf
+    sed -e 's@.* CppCmd .*@#define CppCmd    cpp@' -i Xvnc/config/cf/Imake.tmpl
     sed -i \
         -e 's@"uname","xauth","Xvnc","vncpasswd"@"uname","Xvnc","vncpasswd"@g' \
         -e "s@\<xauth\>@${xauth}/bin/xauth@g" \
@@ -79,7 +104,7 @@ stdenv.mkDerivation {
       GUI, many bugfixes, and more.
     '';
 
-    maintainers = [];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

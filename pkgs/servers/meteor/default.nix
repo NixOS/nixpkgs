@@ -1,9 +1,7 @@
 { stdenv, lib, fetchurl, zlib, patchelf, runtimeShell }:
-
 let
   version = "1.8.2";
 in
-
 stdenv.mkDerivation {
   inherit version;
   pname = "meteor";

@@ -1,9 +1,7 @@
 { stdenv, fetchurl, clang, which, libobjc }:
-
 let
   version = "2.7.0";
 in
-
 stdenv.mkDerivation {
   pname = "gnustep-make";
   inherit version;

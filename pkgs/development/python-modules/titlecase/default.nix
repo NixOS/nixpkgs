@@ -1,4 +1,4 @@
-{buildPythonPackage, lib, nose, fetchPypi}:
+{ buildPythonPackage, lib, nose, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "titlecase";
@@ -17,4 +17,3 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 }
-

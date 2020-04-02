@@ -70,10 +70,11 @@ buildPythonPackage rec {
     typing
   ];
 
-  configurePhase = if !(pythonOlder "3.5") then ''
-    substituteInPlace setup.py \
-      --replace "'typing'," ""
-  '' else "";
+  configurePhase =
+    if !(pythonOlder "3.5") then ''
+      substituteInPlace setup.py \
+        --replace "'typing'," ""
+    '' else "";
 
   checkPhase = ''
     pytest --ignore tests/test_cli.py \

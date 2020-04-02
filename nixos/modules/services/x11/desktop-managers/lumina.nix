@@ -1,14 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.lumina;
-
 in
-
 {
   options = {
 

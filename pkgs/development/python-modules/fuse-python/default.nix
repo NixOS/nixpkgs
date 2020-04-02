@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   buildInputs = [ fuse ];
   nativeBuildInputs = [ pkgconfig ];
-  
+
   # no tests in the Pypi archive
   doCheck = false;
 
@@ -22,4 +22,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

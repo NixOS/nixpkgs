@@ -16,7 +16,7 @@ rec {
 
   packageName = "pcall";
 
-  asdFilesToKeep = ["pcall.asd"];
+  asdFilesToKeep = [ "pcall.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM pcall DESCRIPTION System lacks description SHA256

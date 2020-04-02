@@ -35,11 +35,11 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-      libjackso=$(realpath ${lib.makeLibraryPath [libjack2]}/libjack.so.0);
-      substituteInPlace ./src/jacklib.py --replace libjack.so.0 $libjackso
-      substituteInPlace ./src/cadence.py --replace "/usr/bin/pulseaudio" \
-        "${lib.makeBinPath[pulseaudioFull]}/pulseaudio"
-      substituteInPlace ./c++/jackbridge/JackBridge.cpp --replace libjack.so.0 $libjackso
+    libjackso=$(realpath ${lib.makeLibraryPath [ libjack2 ]}/libjack.so.0);
+    substituteInPlace ./src/jacklib.py --replace libjack.so.0 $libjackso
+    substituteInPlace ./src/cadence.py --replace "/usr/bin/pulseaudio" \
+      "${lib.makeBinPath [ pulseaudioFull ]}/pulseaudio"
+    substituteInPlace ./c++/jackbridge/JackBridge.cpp --replace libjack.so.0 $libjackso
   '';
 
   nativeBuildInputs = [
@@ -51,9 +51,9 @@ mkDerivation rec {
     jack_capture
     pulseaudioFull
     ((python3.withPackages (ps: with ps; [
-          pyqt5
-          dbus-python
-        ])))
+      pyqt5
+      dbus-python
+    ])))
   ];
 
   makeFlags = [
@@ -64,31 +64,33 @@ mkDerivation rec {
   dontWrapQtApps = true;
 
   # Replace with our own wrappers. They need to be changed manually since it wouldn't work otherwise.
-  preFixup = let
-    outRef = placeholder "out";
-    prefix = "${outRef}/share/cadence/src";
-    scriptAndSource = lib.mapAttrs' (script: source:
-      lib.nameValuePair ("${outRef}/bin/" + script) ("${prefix}/" + source)
-    ) {
-      "cadence" = "cadence.py";
-      "claudia" = "claudia.py";
-      "catarina" = "catarina.py";
-      "catia" = "catia.py";
-      "cadence-jacksettings" = "jacksettings.py";
-      "cadence-aloop-daemon" = "cadence_aloop_daemon.py";
-      "cadence-logs" = "logs.py";
-      "cadence-render" = "render.py";
-      "claudia-launcher" = "claudia_launcher.py";
-      "cadence-session-start" = "cadence_session_start.py";
-    };
-  in lib.mapAttrsToList (script: source: ''
-    rm -f ${script}
-    makeQtWrapper ${source} ${script} \
-      --prefix PATH : "${lib.makeBinPath [
+  preFixup =
+    let
+      outRef = placeholder "out";
+      prefix = "${outRef}/share/cadence/src";
+      scriptAndSource = lib.mapAttrs' (script: source:
+        lib.nameValuePair ("${outRef}/bin/" + script) ("${prefix}/" + source)
+      ) {
+        "cadence" = "cadence.py";
+        "claudia" = "claudia.py";
+        "catarina" = "catarina.py";
+        "catia" = "catia.py";
+        "cadence-jacksettings" = "jacksettings.py";
+        "cadence-aloop-daemon" = "cadence_aloop_daemon.py";
+        "cadence-logs" = "logs.py";
+        "cadence-render" = "render.py";
+        "claudia-launcher" = "claudia_launcher.py";
+        "cadence-session-start" = "cadence_session_start.py";
+      };
+    in lib.mapAttrsToList (script: source: ''
+      rm -f ${script}
+      makeQtWrapper ${source} ${script} \
+        --prefix PATH : "${lib.makeBinPath [
         jack_capture # cadence-render
         pulseaudioFull # cadence, cadence-session-start
-        ]}"
-  '') scriptAndSource;
+      ]}"
+    ''
+    ) scriptAndSource;
 
   meta = {
     homepage = https://github.com/falkTX/Cadence/;

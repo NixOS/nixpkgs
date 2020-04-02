@@ -1,9 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
 with lib;
-
 let
-
   bootFs = filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 
   commonFunctions = ''
@@ -36,9 +34,7 @@ let
       ''
         tryUnlock ${name} ${firstDevice}
       '';
-
 in
-
 {
   config = mkIf (elem "bcachefs" config.boot.supportedFilesystems) (mkMerge [
     {
@@ -48,7 +44,7 @@ in
       boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
     }
 
-    (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
+    (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != { })) {
       # the cryptographic modules are required only for decryption attempts
       boot.initrd.availableKernelModules = [ "bcachefs" "chacha20" "poly1305" ];
 

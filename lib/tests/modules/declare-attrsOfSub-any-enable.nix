@@ -1,5 +1,4 @@
 { lib, ... }:
-
 let
   submod = { ... }: {
     options = {
@@ -14,12 +13,11 @@ let
     };
   };
 in
-
 {
   options = {
     attrsOfSub = lib.mkOption {
-      default = {};
-      example = {};
+      default = { };
+      example = { };
       type = lib.types.attrsOf (lib.types.submodule [ submod ]);
       description = ''
         Some descriptive text

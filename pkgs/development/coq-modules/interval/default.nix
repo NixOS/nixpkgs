@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp
-, bignums ? null }:
+{ stdenv
+, fetchurl
+, which
+, coq
+, coquelicot
+, flocq
+, mathcomp
+, bignums ? null
+}:
 
 let params =
   if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {

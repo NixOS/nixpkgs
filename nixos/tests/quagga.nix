@@ -7,7 +7,6 @@
 
 import ./make-test-python.nix ({ pkgs, ... }:
   let
-
     ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;
 
     ospfConf = ''
@@ -18,7 +17,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
       router ospf
         network 192.168.0.0/16 area 0
     '';
-
   in
     {
       name = "quagga";
@@ -93,4 +91,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
               server.wait_for_unit("httpd")
               client.succeed("curl --fail http://server/ >&2")
         '';
-    })
+    }
+)

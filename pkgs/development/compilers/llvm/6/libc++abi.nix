@@ -19,7 +19,8 @@ stdenv.mkDerivation {
     patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-0001-musl-hacks.patch}
   '';
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         # this should be done in CMake, but having trouble figuring out

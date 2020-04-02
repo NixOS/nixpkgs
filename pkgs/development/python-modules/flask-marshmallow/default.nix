@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi,
-  flask, six, marshmallow
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flask
+, six
+, marshmallow
 }:
 
 buildPythonPackage rec {
@@ -10,7 +14,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/marshmallow-code/flask-marshmallow";
     description = "Flask + marshmallow for beautiful APIs";
     license = lib.licenses.mit;
-  }; 
+  };
 
   src = fetchPypi {
     inherit pname version;

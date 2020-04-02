@@ -1,4 +1,4 @@
-{stdenv, packages}:
+{ stdenv, packages }:
 
 stdenv.mkDerivation {
   name = "xlibs-wrapper";

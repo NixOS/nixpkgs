@@ -11,7 +11,16 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ dune ] ++ (with ocamlPackages; [
-    ocaml findlib ansiterminal cairo2 cmdliner fmt logs menhir mtime yojson
+    ocaml
+    findlib
+    ansiterminal
+    cairo2
+    cmdliner
+    fmt
+    logs
+    menhir
+    mtime
+    yojson
   ]);
 
   buildPhase = "dune build";

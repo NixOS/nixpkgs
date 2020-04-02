@@ -1,37 +1,90 @@
-{ pname, ffversion, meta, updateScript ? null
-, src, unpackPhase ? null, patches ? []
-, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [] }:
+{ pname
+, ffversion
+, meta
+, updateScript ? null
+, src
+, unpackPhase ? null
+, patches ? [ ]
+, extraNativeBuildInputs ? [ ]
+, extraConfigureFlags ? [ ]
+, extraMakeFlags ? [ ]
+}:
 
-{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip, libIDL
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, libGLU, libGL, sqlite, unzip, makeWrapper
-, hunspell, libXdamage, libevent, libstartup_notification, libvpx
-, icu, libpng, jemalloc, glib
-, autoconf213, which, gnused, cargo, rustc, llvmPackages
-, rust-cbindgen, nodejs, nasm, fetchpatch
+{ lib
+, stdenv
+, pkgconfig
+, pango
+, perl
+, python2
+, python3
+, zip
+, libIDL
+, libjpeg
+, zlib
+, dbus
+, dbus-glib
+, bzip2
+, xorg
+, freetype
+, fontconfig
+, file
+, nspr
+, nss
+, libnotify
+, yasm
+, libGLU
+, libGL
+, sqlite
+, unzip
+, makeWrapper
+, hunspell
+, libXdamage
+, libevent
+, libstartup_notification
+, libvpx
+, icu
+, libpng
+, jemalloc
+, glib
+, autoconf213
+, which
+, gnused
+, cargo
+, rustc
+, llvmPackages
+, rust-cbindgen
+, nodejs
+, nasm
+, fetchpatch
 , debugBuild ? false
 
-### optionals
+  ### optionals
 
-## optional libraries
+  ## optional libraries
 
-, alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, alsaSupport ? stdenv.isLinux
+, alsaLib
+, pulseaudioSupport ? stdenv.isLinux
+, libpulseaudio
 , ffmpegSupport ? true
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
-, waylandSupport ? true, libxkbcommon
-, gssSupport ? true, kerberos
+, gtk3Support ? true
+, gtk2
+, gtk3
+, wrapGAppsHook
+, waylandSupport ? true
+, libxkbcommon
+, gssSupport ? true
+, kerberos
 
-## privacy-related options
+  ## privacy-related options
 
 , privacySupport ? false
 
-# WARNING: NEVER set any of the options below to `true` by default.
-# Set to `!privacySupport` or `false`.
+  # WARNING: NEVER set any of the options below to `true` by default.
+  # Set to `!privacySupport` or `false`.
 
-# webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
-# https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
+  # webrtcSupport breaks the aarch64 build on version >= 60, fixed in 63.
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
 , webrtcSupport ? !privacySupport
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
@@ -40,51 +93,61 @@
 , safeBrowsingSupport ? false
 , drmSupport ? false
 
-# macOS dependencies
-, xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
-, CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
+  # macOS dependencies
+, xcbuild
+, CoreMedia
+, ExceptionHandling
+, Kerberos
+, AVFoundation
+, MediaToolbox
+, CoreLocation
+, Foundation
+, AddressBook
+, libobjc
+, cups
+, rsync
 
-## other
+  ## other
 
-# As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
-# https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
-# have permission to use the official firefox branding.
-#
-# Fur purposes of documentation the statement of @sylvestre:
-# > As the person who did part of the work described in the LWN article
-# > and release manager working for Mozilla, I can confirm the statement
-# > that I made in
-# > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
-# >
-# > @garbas shared with me the list of patches applied for the Nix package.
-# > As they are just for portability and tiny modifications, they don't
-# > alter the experience of the product. In parallel, Rok also shared the
-# > build options. They seem good (even if I cannot judge the quality of the
-# > packaging of the underlying dependencies like sqlite, png, etc).
-# > Therefor, as long as you keep the patch queue sane and you don't alter
-# > the experience of Firefox users, you won't have any issues using the
-# > official branding.
+  # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
+  # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
+  # have permission to use the official firefox branding.
+  #
+  # Fur purposes of documentation the statement of @sylvestre:
+  # > As the person who did part of the work described in the LWN article
+  # > and release manager working for Mozilla, I can confirm the statement
+  # > that I made in
+  # > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
+  # >
+  # > @garbas shared with me the list of patches applied for the Nix package.
+  # > As they are just for portability and tiny modifications, they don't
+  # > alter the experience of the product. In parallel, Rok also shared the
+  # > build options. They seem good (even if I cannot judge the quality of the
+  # > packaging of the underlying dependencies like sqlite, png, etc).
+  # > Therefor, as long as you keep the patch queue sane and you don't alter
+  # > the experience of Firefox users, you won't have any issues using the
+  # > official branding.
 , enableOfficialBranding ? true
 }:
 
 assert stdenv.cc.libc or null != null;
-
 let
-  flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+  flag = tf: x: [ (if tf then "--enable-${x}" else "--disable-${x}") ];
 
-  default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
-                    else "cairo-gtk${if gtk3Support then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}";
+  default-toolkit =
+    if stdenv.isDarwin then "cairo-cocoa"
+    else "cairo-gtk${if gtk3Support then "3${lib.optionalString waylandSupport "-wayland"}" else "2"}";
 
   binaryName = "firefox";
   binaryNameCapitalized = lib.toUpper (lib.substring 0 1 binaryName) + lib.substring 1 (-1) binaryName;
 
   browserName = if stdenv.isDarwin then binaryNameCapitalized else binaryName;
 
-  execdir = if stdenv.isDarwin
-            then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
-            else "/bin";
+  execdir =
+    if stdenv.isDarwin
+    then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
+    else "/bin";
 in
-
 stdenv.mkDerivation ({
   name = "${pname}-unwrapped-${ffversion}";
   version = ffversion;
@@ -103,30 +166,69 @@ stdenv.mkDerivation ({
   patchFlags = [ "-p1" "-l" ];
 
   buildInputs = [
-    gtk2 perl zip libIDL libjpeg zlib bzip2
-    dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
-    xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    libnotify xorg.pixman yasm libGLU libGL
-    xorg.libXScrnSaver xorg.xorgproto
-    xorg.libXext sqlite unzip makeWrapper
-    libevent libstartup_notification libvpx /* cairo */
-    icu libpng jemalloc glib
+    gtk2
+    perl
+    zip
+    libIDL
+    libjpeg
+    zlib
+    bzip2
+    dbus
+    dbus-glib
+    pango
+    freetype
+    fontconfig
+    xorg.libXi
+    xorg.libXcursor
+    xorg.libX11
+    xorg.libXrender
+    xorg.libXft
+    xorg.libXt
+    file
+    libnotify
+    xorg.pixman
+    yasm
+    libGLU
+    libGL
+    xorg.libXScrnSaver
+    xorg.xorgproto
+    xorg.libXext
+    sqlite
+    unzip
+    makeWrapper
+    libevent
+    libstartup_notification
+    libvpx /* cairo */
+    icu
+    libpng
+    jemalloc
+    glib
     nasm
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss
+    nspr
+    nss
   ]
 
-  ++ lib.optional  alsaSupport alsaLib
-  ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  gtk3Support gtk3
-  ++ lib.optional  gssSupport kerberos
-  ++ lib.optional  waylandSupport libxkbcommon
-  ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
-                                     AVFoundation MediaToolbox CoreLocation
-                                     Foundation libobjc AddressBook cups ];
+  ++ lib.optional alsaSupport alsaLib
+  ++ lib.optional pulseaudioSupport libpulseaudio # only headers are needed
+  ++ lib.optional gtk3Support gtk3
+  ++ lib.optional gssSupport kerberos
+  ++ lib.optional waylandSupport libxkbcommon
+  ++ lib.optionals stdenv.isDarwin [
+    CoreMedia
+    ExceptionHandling
+    Kerberos
+    AVFoundation
+    MediaToolbox
+    CoreLocation
+    Foundation
+    libobjc
+    AddressBook
+    cups
+  ];
 
   NIX_CFLAGS_COMPILE = toString ([
     "-I${glib.dev}/include/gio-unix-2.0"
@@ -234,10 +336,14 @@ stdenv.mkDerivation ({
   ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
-  ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
-                    else [ "--disable-debug" "--enable-release"
-                           "--enable-optimize"
-                           "--enable-strip" ])
+  ++ (
+    if debugBuild then [ "--enable-debug" "--enable-profiling" ]
+    else [
+      "--disable-debug"
+      "--enable-release"
+      "--enable-optimize"
+      "--enable-strip"
+    ])
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
   ++ extraConfigureFlags;
 
@@ -254,10 +360,11 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
 
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -LR dist/${binaryNameCapitalized}.app $out/Applications
-  '' else null;
+  installPhase =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      cp -LR dist/${binaryNameCapitalized}.app $out/Applications
+    '' else null;
 
   postInstall = lib.optionalString stdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
@@ -270,7 +377,7 @@ stdenv.mkDerivation ({
   postFixup = lib.optionalString stdenv.isLinux ''
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     patchelf --set-rpath "${lib.getLib libnotify
-      }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
+    }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
         "$out"/lib/${binaryName}*/libxul.so
   '';
 

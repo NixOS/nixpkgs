@@ -1,6 +1,10 @@
-{ stdenv, callPackage, fetchpatch
-# Darwin frameworks
-, Cocoa, CoreMedia, VideoToolbox
+{ stdenv
+, callPackage
+, fetchpatch
+  # Darwin frameworks
+, Cocoa
+, CoreMedia
+, VideoToolbox
 , ...
 }@args:
 

@@ -1,7 +1,8 @@
 { haskellLib }:
-
-let inherit (haskellLib) doJailbreak dontHaddock;
-in self: super: {
+let
+  inherit (haskellLib) doJailbreak dontHaddock;
+in
+self: super: {
   ghc-api-ghcjs = super.ghc-api-ghcjs.override
   {
     happy = self.happy_1_19_5;

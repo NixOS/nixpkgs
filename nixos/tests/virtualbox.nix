@@ -1,15 +1,15 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; },
-  debug ? false,
-  enableUnfree ? false,
-  # Nested KVM virtualization (https://www.linux-kvm.org/page/Nested_Guests)
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+, debug ? false
+, enableUnfree ? false
+, # Nested KVM virtualization (https://www.linux-kvm.org/page/Nested_Guests)
   # requires a modprobe flag on the build machine: (kvm-amd for AMD CPUs)
   #   boot.extraModprobeConfig = "options kvm-intel nested=Y";
   # Without this VirtualBox will use SW virtualization and will only be able
   # to run 32-bit guests.
-  useKvmNestedVirt ? false,
-  # Whether to run 64-bit guests instead of 32-bit. Requires nested KVM.
+  useKvmNestedVirt ? false
+, # Whether to run 64-bit guests instead of 32-bit. Requires nested KVM.
   use64bitGuest ? false
 }:
 
@@ -17,286 +17,298 @@ assert use64bitGuest -> useKvmNestedVirt;
 
 with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
-
 let
-  testVMConfig = vmName: attrs: { config, pkgs, lib, ... }: let
-    guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
+  testVMConfig = vmName: attrs: { config, pkgs, lib, ... }:
+    let
+      guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
-    miniInit = ''
-      #!${pkgs.stdenv.shell} -xe
-      export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
+      miniInit = ''
+        #!${pkgs.stdenv.shell} -xe
+        export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
-      mkdir -p /run/dbus
-      cat > /etc/passwd <<EOF
-      root:x:0:0::/root:/bin/false
-      messagebus:x:1:1::/run/dbus:/bin/false
-      EOF
-      cat > /etc/group <<EOF
-      root:x:0:
-      messagebus:x:1:
-      EOF
+        mkdir -p /run/dbus
+        cat > /etc/passwd <<EOF
+        root:x:0:0::/root:/bin/false
+        messagebus:x:1:1::/run/dbus:/bin/false
+        EOF
+        cat > /etc/group <<EOF
+        root:x:0:
+        messagebus:x:1:
+        EOF
 
-      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork \
-        --config-file="${pkgs.dbus.daemon}/share/dbus-1/system.conf"
+        "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork \
+          --config-file="${pkgs.dbus.daemon}/share/dbus-1/system.conf"
 
-      ${guestAdditions}/bin/VBoxService
-      ${(attrs.vmScript or (const "")) pkgs}
+        ${guestAdditions}/bin/VBoxService
+        ${(attrs.vmScript or (const "")) pkgs}
 
-      i=0
-      while [ ! -e /mnt-root/shutdown ]; do
-        sleep 10
-        i=$(($i + 10))
-        [ $i -le 120 ] || fail
-      done
+        i=0
+        while [ ! -e /mnt-root/shutdown ]; do
+          sleep 10
+          i=$(($i + 10))
+          [ $i -le 120 ] || fail
+        done
 
-      rm -f /mnt-root/boot-done /mnt-root/shutdown
-    '';
-  in {
-    boot.kernelParams = [
-      "console=tty0" "console=ttyS0" "ignore_loglevel"
-      "boot.trace" "panic=1" "boot.panic_on_fail"
-      "init=${pkgs.writeScript "mini-init.sh" miniInit}"
-    ];
-
-    fileSystems."/" = {
-      device = "vboxshare";
-      fsType = "vboxsf";
-    };
-
-    virtualisation.virtualbox.guest.enable = true;
-
-    boot.initrd.kernelModules = [
-      "af_packet" "vboxsf"
-      "virtio" "virtio_pci" "virtio_ring" "virtio_net" "vboxguest"
-    ];
-
-    boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs "${guestAdditions}/bin/mount.vboxsf"
-      copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
-      ${(attrs.extraUtilsCommands or (const "")) pkgs}
-    '';
-
-    boot.initrd.postMountCommands = ''
-      touch /mnt-root/boot-done
-      hostname "${vmName}"
-      mkdir -p /nix/store
-      unshare -m ${escapeShellArg pkgs.stdenv.shell} -c '
-        mount -t vboxsf nixstore /nix/store
-        exec "$stage2Init"
-      '
-      poweroff -f
-    '';
-
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "SERIAL_8250_CONSOLE")
-      (isYes "SERIAL_8250")
-    ];
-  };
-
-  mkLog = logfile: tag: let
-    rotated = map (i: "${logfile}.${toString i}") (range 1 9);
-    all = concatMapStringsSep " " (f: "\"${f}\"") ([logfile] ++ rotated);
-    logcmd = "tail -F ${all} 2> /dev/null | logger -t \"${tag}\"";
-  in optionalString debug "$machine->execute(ru '${logcmd} & disown');";
-
-  testVM = vmName: vmScript: let
-    cfg = (import ../lib/eval-config.nix {
-      system = if use64bitGuest then "x86_64-linux" else "i686-linux";
-      modules = [
-        ../modules/profiles/minimal.nix
-        (testVMConfig vmName vmScript)
+        rm -f /mnt-root/boot-done /mnt-root/shutdown
+      '';
+    in {
+      boot.kernelParams = [
+        "console=tty0"
+        "console=ttyS0"
+        "ignore_loglevel"
+        "boot.trace"
+        "panic=1"
+        "boot.panic_on_fail"
+        "init=${pkgs.writeScript "mini-init.sh" miniInit}"
       ];
-    }).config;
-  in pkgs.vmTools.runInLinuxVM (pkgs.runCommand "virtualbox-image" {
-    preVM = ''
-      mkdir -p "$out"
-      diskImage="$(pwd)/qimage"
-      ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw "$diskImage" 100M
-    '';
 
-    postVM = ''
-      echo "creating VirtualBox disk image..."
-      ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vdi \
-        "$diskImage" "$out/disk.vdi"
-    '';
-
-    buildInputs = [ pkgs.utillinux pkgs.perl ];
-  } ''
-    ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
-    ${pkgs.parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
-    ${pkgs.e2fsprogs}/sbin/mkfs.ext4 /dev/vda1
-    ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
-    mkdir /mnt
-    mount /dev/vda1 /mnt
-    cp "${cfg.system.build.kernel}/bzImage" /mnt/linux
-    cp "${cfg.system.build.initialRamdisk}/initrd" /mnt/initrd
-
-    ${pkgs.grub2}/bin/grub-install --boot-directory=/mnt /dev/vda
-
-    cat > /mnt/grub/grub.cfg <<GRUB
-    set root=hd0,1
-    linux /linux ${concatStringsSep " " cfg.boot.kernelParams}
-    initrd /initrd
-    boot
-    GRUB
-    umount /mnt
-  '');
-
-  createVM = name: attrs: let
-    mkFlags = concatStringsSep " ";
-
-    sharePath = "/home/alice/vboxshare-${name}";
-
-    createFlags = mkFlags [
-      "--ostype ${if use64bitGuest then "Linux26_64" else "Linux26"}"
-      "--register"
-    ];
-
-    vmFlags = mkFlags ([
-      "--uart1 0x3F8 4"
-      "--uartmode1 client /run/virtualbox-log-${name}.sock"
-      "--memory 768"
-      "--audio none"
-    ] ++ (attrs.vmFlags or []));
-
-    controllerFlags = mkFlags [
-      "--name SATA"
-      "--add sata"
-      "--bootable on"
-      "--hostiocache on"
-    ];
-
-    diskFlags = mkFlags [
-      "--storagectl SATA"
-      "--port 0"
-      "--device 0"
-      "--type hdd"
-      "--mtype immutable"
-      "--medium ${testVM name attrs}/disk.vdi"
-    ];
-
-    sharedFlags = mkFlags [
-      "--name vboxshare"
-      "--hostpath ${sharePath}"
-    ];
-
-    nixstoreFlags = mkFlags [
-      "--name nixstore"
-      "--hostpath /nix/store"
-      "--readonly"
-    ];
-  in {
-    machine = {
-      systemd.sockets."vboxtestlog-${name}" = {
-        description = "VirtualBox Test Machine Log Socket For ${name}";
-        wantedBy = [ "sockets.target" ];
-        before = [ "multi-user.target" ];
-        socketConfig.ListenStream = "/run/virtualbox-log-${name}.sock";
-        socketConfig.Accept = true;
+      fileSystems."/" = {
+        device = "vboxshare";
+        fsType = "vboxsf";
       };
 
-      systemd.services."vboxtestlog-${name}@" = {
-        description = "VirtualBox Test Machine Log For ${name}";
-        serviceConfig.StandardInput = "socket";
-        serviceConfig.StandardOutput = "syslog";
-        serviceConfig.SyslogIdentifier = "GUEST-${name}";
-        serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
-      };
+      virtualisation.virtualbox.guest.enable = true;
+
+      boot.initrd.kernelModules = [
+        "af_packet"
+        "vboxsf"
+        "virtio"
+        "virtio_pci"
+        "virtio_ring"
+        "virtio_net"
+        "vboxguest"
+      ];
+
+      boot.initrd.extraUtilsCommands = ''
+        copy_bin_and_libs "${guestAdditions}/bin/mount.vboxsf"
+        copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
+        ${(attrs.extraUtilsCommands or (const "")) pkgs}
+      '';
+
+      boot.initrd.postMountCommands = ''
+        touch /mnt-root/boot-done
+        hostname "${vmName}"
+        mkdir -p /nix/store
+        unshare -m ${escapeShellArg pkgs.stdenv.shell} -c '
+          mount -t vboxsf nixstore /nix/store
+          exec "$stage2Init"
+        '
+        poweroff -f
+      '';
+
+      system.requiredKernelConfig = with config.lib.kernelConfig; [
+        (isYes "SERIAL_8250_CONSOLE")
+        (isYes "SERIAL_8250")
+      ];
     };
 
-    testSubs = ''
-      my ${"$" + name}_sharepath = '${sharePath}';
+  mkLog = logfile: tag:
+    let
+      rotated = map (i: "${logfile}.${toString i}") (range 1 9);
+      all = concatMapStringsSep " " (f: "\"${f}\"") ([ logfile ] ++ rotated);
+      logcmd = "tail -F ${all} 2> /dev/null | logger -t \"${tag}\"";
+    in optionalString debug "$machine->execute(ru '${logcmd} & disown');";
 
-      sub checkRunning_${name} {
-        my $cmd = 'VBoxManage list runningvms | grep -q "^\"${name}\""';
-        my ($status, $out) = $machine->execute(ru $cmd);
-        return $status == 0;
-      }
+  testVM = vmName: vmScript:
+    let
+      cfg = (import ../lib/eval-config.nix {
+        system = if use64bitGuest then "x86_64-linux" else "i686-linux";
+        modules = [
+          ../modules/profiles/minimal.nix
+          (testVMConfig vmName vmScript)
+        ];
+      }).config;
+    in pkgs.vmTools.runInLinuxVM (pkgs.runCommand "virtualbox-image" {
+      preVM = ''
+        mkdir -p "$out"
+        diskImage="$(pwd)/qimage"
+        ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw "$diskImage" 100M
+      '';
 
-      sub cleanup_${name} {
-        $machine->execute(ru "VBoxManage controlvm ${name} poweroff")
-          if checkRunning_${name};
-        $machine->succeed("rm -rf ${sharePath}");
-        $machine->succeed("mkdir -p ${sharePath}");
-        $machine->succeed("chown alice.users ${sharePath}");
-      }
+      postVM = ''
+        echo "creating VirtualBox disk image..."
+        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vdi \
+          "$diskImage" "$out/disk.vdi"
+      '';
 
-      sub createVM_${name} {
-        vbm("createvm --name ${name} ${createFlags}");
-        vbm("modifyvm ${name} ${vmFlags}");
-        vbm("setextradata ${name} VBoxInternal/PDM/HaltOnReset 1");
-        vbm("storagectl ${name} ${controllerFlags}");
-        vbm("storageattach ${name} ${diskFlags}");
-        vbm("sharedfolder add ${name} ${sharedFlags}");
-        vbm("sharedfolder add ${name} ${nixstoreFlags}");
-        cleanup_${name};
+      buildInputs = [ pkgs.utillinux pkgs.perl ];
+    } ''
+      ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
+      ${pkgs.parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
+      ${pkgs.e2fsprogs}/sbin/mkfs.ext4 /dev/vda1
+      ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
+      mkdir /mnt
+      mount /dev/vda1 /mnt
+      cp "${cfg.system.build.kernel}/bzImage" /mnt/linux
+      cp "${cfg.system.build.initialRamdisk}/initrd" /mnt/initrd
 
-        ${mkLog "$HOME/VirtualBox VMs/${name}/Logs/VBox.log" "HOST-${name}"}
-      }
+      ${pkgs.grub2}/bin/grub-install --boot-directory=/mnt /dev/vda
 
-      sub destroyVM_${name} {
-        cleanup_${name};
-        vbm("unregistervm ${name} --delete");
-      }
+      cat > /mnt/grub/grub.cfg <<GRUB
+      set root=hd0,1
+      linux /linux ${concatStringsSep " " cfg.boot.kernelParams}
+      initrd /initrd
+      boot
+      GRUB
+      umount /mnt
+    '');
 
-      sub waitForVMBoot_${name} {
-        $machine->execute(ru(
-          'set -e; i=0; '.
-          'while ! test -e ${sharePath}/boot-done; do '.
-          'sleep 10; i=$(($i + 10)); [ $i -le 3600 ]; '.
-          'VBoxManage list runningvms | grep -q "^\"${name}\""; '.
-          'done'
-        ));
-      }
+  createVM = name: attrs:
+    let
+      mkFlags = concatStringsSep " ";
 
-      sub waitForIP_${name} ($) {
-        my $property = "/VirtualBox/GuestInfo/Net/$_[0]/V4/IP";
-        my $getip = "VBoxManage guestproperty get ${name} $property | ".
-                    "sed -n -e 's/^Value: //p'";
-        my $ip = $machine->succeed(ru(
-          'for i in $(seq 1000); do '.
-          'if ipaddr="$('.$getip.')" && [ -n "$ipaddr" ]; then '.
-          'echo "$ipaddr"; exit 0; '.
-          'fi; '.
-          'sleep 1; '.
-          'done; '.
-          'echo "Could not get IPv4 address for ${name}!" >&2; '.
-          'exit 1'
-        ));
-        chomp $ip;
-        return $ip;
-      }
+      sharePath = "/home/alice/vboxshare-${name}";
 
-      sub waitForStartup_${name} {
-        for (my $i = 0; $i <= 120; $i += 10) {
-          $machine->sleep(10);
-          return if checkRunning_${name};
-          eval { $_[0]->() } if defined $_[0];
+      createFlags = mkFlags [
+        "--ostype ${if use64bitGuest then "Linux26_64" else "Linux26"}"
+        "--register"
+      ];
+
+      vmFlags = mkFlags ([
+        "--uart1 0x3F8 4"
+        "--uartmode1 client /run/virtualbox-log-${name}.sock"
+        "--memory 768"
+        "--audio none"
+      ] ++ (attrs.vmFlags or [ ]));
+
+      controllerFlags = mkFlags [
+        "--name SATA"
+        "--add sata"
+        "--bootable on"
+        "--hostiocache on"
+      ];
+
+      diskFlags = mkFlags [
+        "--storagectl SATA"
+        "--port 0"
+        "--device 0"
+        "--type hdd"
+        "--mtype immutable"
+        "--medium ${testVM name attrs}/disk.vdi"
+      ];
+
+      sharedFlags = mkFlags [
+        "--name vboxshare"
+        "--hostpath ${sharePath}"
+      ];
+
+      nixstoreFlags = mkFlags [
+        "--name nixstore"
+        "--hostpath /nix/store"
+        "--readonly"
+      ];
+    in {
+      machine = {
+        systemd.sockets."vboxtestlog-${name}" = {
+          description = "VirtualBox Test Machine Log Socket For ${name}";
+          wantedBy = [ "sockets.target" ];
+          before = [ "multi-user.target" ];
+          socketConfig.ListenStream = "/run/virtualbox-log-${name}.sock";
+          socketConfig.Accept = true;
+        };
+
+        systemd.services."vboxtestlog-${name}@" = {
+          description = "VirtualBox Test Machine Log For ${name}";
+          serviceConfig.StandardInput = "socket";
+          serviceConfig.StandardOutput = "syslog";
+          serviceConfig.SyslogIdentifier = "GUEST-${name}";
+          serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
+        };
+      };
+
+      testSubs = ''
+        my ${"$" + name}_sharepath = '${sharePath}';
+
+        sub checkRunning_${name} {
+          my $cmd = 'VBoxManage list runningvms | grep -q "^\"${name}\""';
+          my ($status, $out) = $machine->execute(ru $cmd);
+          return $status == 0;
         }
-        die "VirtualBox VM didn't start up within 2 minutes";
-      }
 
-      sub waitForShutdown_${name} {
-        for (my $i = 0; $i <= 120; $i += 10) {
-          $machine->sleep(10);
-          return unless checkRunning_${name};
+        sub cleanup_${name} {
+          $machine->execute(ru "VBoxManage controlvm ${name} poweroff")
+            if checkRunning_${name};
+          $machine->succeed("rm -rf ${sharePath}");
+          $machine->succeed("mkdir -p ${sharePath}");
+          $machine->succeed("chown alice.users ${sharePath}");
         }
-        die "VirtualBox VM didn't shut down within 2 minutes";
-      }
 
-      sub shutdownVM_${name} {
-        $machine->succeed(ru "touch ${sharePath}/shutdown");
-        $machine->execute(
-          'set -e; i=0; '.
-          'while test -e ${sharePath}/shutdown '.
-          '        -o -e ${sharePath}/boot-done; do '.
-          'sleep 1; i=$(($i + 1)); [ $i -le 3600 ]; '.
-          'done'
-        );
-        waitForShutdown_${name};
-      }
-    '';
-  };
+        sub createVM_${name} {
+          vbm("createvm --name ${name} ${createFlags}");
+          vbm("modifyvm ${name} ${vmFlags}");
+          vbm("setextradata ${name} VBoxInternal/PDM/HaltOnReset 1");
+          vbm("storagectl ${name} ${controllerFlags}");
+          vbm("storageattach ${name} ${diskFlags}");
+          vbm("sharedfolder add ${name} ${sharedFlags}");
+          vbm("sharedfolder add ${name} ${nixstoreFlags}");
+          cleanup_${name};
+
+          ${mkLog "$HOME/VirtualBox VMs/${name}/Logs/VBox.log" "HOST-${name}"}
+        }
+
+        sub destroyVM_${name} {
+          cleanup_${name};
+          vbm("unregistervm ${name} --delete");
+        }
+
+        sub waitForVMBoot_${name} {
+          $machine->execute(ru(
+            'set -e; i=0; '.
+            'while ! test -e ${sharePath}/boot-done; do '.
+            'sleep 10; i=$(($i + 10)); [ $i -le 3600 ]; '.
+            'VBoxManage list runningvms | grep -q "^\"${name}\""; '.
+            'done'
+          ));
+        }
+
+        sub waitForIP_${name} ($) {
+          my $property = "/VirtualBox/GuestInfo/Net/$_[0]/V4/IP";
+          my $getip = "VBoxManage guestproperty get ${name} $property | ".
+                      "sed -n -e 's/^Value: //p'";
+          my $ip = $machine->succeed(ru(
+            'for i in $(seq 1000); do '.
+            'if ipaddr="$('.$getip.')" && [ -n "$ipaddr" ]; then '.
+            'echo "$ipaddr"; exit 0; '.
+            'fi; '.
+            'sleep 1; '.
+            'done; '.
+            'echo "Could not get IPv4 address for ${name}!" >&2; '.
+            'exit 1'
+          ));
+          chomp $ip;
+          return $ip;
+        }
+
+        sub waitForStartup_${name} {
+          for (my $i = 0; $i <= 120; $i += 10) {
+            $machine->sleep(10);
+            return if checkRunning_${name};
+            eval { $_[0]->() } if defined $_[0];
+          }
+          die "VirtualBox VM didn't start up within 2 minutes";
+        }
+
+        sub waitForShutdown_${name} {
+          for (my $i = 0; $i <= 120; $i += 10) {
+            $machine->sleep(10);
+            return unless checkRunning_${name};
+          }
+          die "VirtualBox VM didn't shut down within 2 minutes";
+        }
+
+        sub shutdownVM_${name} {
+          $machine->succeed(ru "touch ${sharePath}/shutdown");
+          $machine->execute(
+            'set -e; i=0; '.
+            'while test -e ${sharePath}/shutdown '.
+            '        -o -e ${sharePath}/boot-done; do '.
+            'sleep 1; i=$(($i + 1)); [ $i -le 3600 ]; '.
+            'done'
+          );
+          waitForShutdown_${name};
+        }
+      '';
+    };
 
   hostonlyVMFlags = [
     "--nictype1 virtio"
@@ -326,7 +338,7 @@ let
   '';
 
   vboxVMs = mapAttrs createVM {
-    simple = {};
+    simple = { };
 
     detectvirt.vmScript = sysdDetectVirt;
 
@@ -348,18 +360,20 @@ let
     name = "virtualbox-${name}";
 
     machine = { lib, config, ... }: {
-      imports = let
-        mkVMConf = name: val: val.machine // { key = "${name}-config"; };
-        vmConfigs = mapAttrsToList mkVMConf vms;
-      in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
+      imports =
+        let
+          mkVMConf = name: val: val.machine // { key = "${name}-config"; };
+          vmConfigs = mapAttrsToList mkVMConf vms;
+        in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
       virtualisation.qemu.options =
-        if useKvmNestedVirt then ["-cpu" "kvm64,vmx=on"] else [];
+        if useKvmNestedVirt then [ "-cpu" "kvm64,vmx=on" ] else [ ];
       virtualisation.virtualbox.host.enable = true;
       test-support.displayManager.auto.user = "alice";
-      users.users.alice.extraGroups = let
-        inherit (config.virtualisation.virtualbox.host) enableHardening;
-      in lib.mkIf enableHardening (lib.singleton "vboxusers");
+      users.users.alice.extraGroups =
+        let
+          inherit (config.virtualisation.virtualbox.host) enableHardening;
+        in lib.mkIf enableHardening (lib.singleton "vboxusers");
       virtualisation.virtualbox.host.enableExtensionPack = useExtensionPack;
       nixpkgs.config.allowUnfree = useExtensionPack;
     };
@@ -411,8 +425,8 @@ let
       destroyVM_testExtensionPack;
     '';
   };
-
-in mapAttrs (mkVBoxTest false vboxVMs) {
+in
+mapAttrs (mkVBoxTest false vboxVMs) {
   simple-gui = ''
     createVM_simple;
     $machine->succeed(ru "VirtualBox &");
@@ -523,4 +537,4 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
     destroyVM_test1;
     destroyVM_test2;
   '';
-} // (if enableUnfree then unfreeTests else {})
+} // (if enableUnfree then unfreeTests else { })

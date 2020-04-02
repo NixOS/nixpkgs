@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-json";
 
-  asdFilesToKeep = ["cl-json.asd"];
+  asdFilesToKeep = [ "cl-json.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-json DESCRIPTION

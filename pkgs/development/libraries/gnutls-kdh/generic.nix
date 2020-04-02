@@ -1,12 +1,39 @@
-{ config, lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, perl, gmp, autogen, libidn, p11-kit, unbound, libiconv
-, guileBindings ? config.gnutls.guile or false, guile
-, tpmSupport ? true, trousers, nettools, gperftools, gperf, gettext, automake
-, yacc, texinfo
+{ config
+, lib
+, stdenv
+, zlib
+, lzo
+, libtasn1
+, nettle
+, pkgconfig
+, lzip
+, perl
+, gmp
+, autogen
+, libidn
+, p11-kit
+, unbound
+, libiconv
+, guileBindings ? config.gnutls.guile or false
+, guile
+, tpmSupport ? true
+, trousers
+, nettools
+, gperftools
+, gperf
+, gettext
+, automake
+, yacc
+, texinfo
 
-# Version dependent args
-, version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
-, ...}:
+  # Version dependent args
+, version
+, src
+, patches ? [ ]
+, postPatch ? ""
+, nativeBuildInputs ? [ ]
+, ...
+}:
 
 assert guileBindings -> guile != null;
 let
@@ -23,16 +50,16 @@ stdenv.mkDerivation {
   outputs = [ "bin" "dev" "out" ];
 
   patchPhase = ''
-      # rm -fR ./po
-      # substituteInPlace configure "po/Makefile.in" " "
-      substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_cipher_list.3" " "
-      substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_cipher_self_test.3" " "
-      substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_digest_self_test.3" " "
-      substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_mac_self_test.3" " "
-      substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_pk_self_test.3" " "
-      printf "all: ;\n\ninstall: ;" > "po/Makefile.in"
-      printf "all: ;\n\ninstall: ;" > "po/Makefile.in.in"
-      '';
+    # rm -fR ./po
+    # substituteInPlace configure "po/Makefile.in" " "
+    substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_cipher_list.3" " "
+    substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_cipher_self_test.3" " "
+    substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_digest_self_test.3" " "
+    substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_mac_self_test.3" " "
+    substituteInPlace doc/manpages/Makefile.in  --replace "gnutls_pk_self_test.3" " "
+    printf "all: ;\n\ninstall: ;" > "po/Makefile.in"
+    printf "all: ;\n\ninstall: ;" > "po/Makefile.in.in"
+  '';
 
   postPatch = lib.optionalString (lib.versionAtLeast version "3.4") ''
     sed '2iecho "name constraints tests skipped due to datefudge problems"\nexit 0' \
@@ -42,11 +69,11 @@ stdenv.mkDerivation {
   preConfigure = "patchShebangs .";
   configureFlags =
     lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
-  ++ [
-    "--disable-dependency-tracking"
-    "--enable-fast-install"
-  ] ++ lib.optional guileBindings
-    [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
+    ++ [
+      "--disable-dependency-tracking"
+      "--enable-fast-install"
+    ] ++ lib.optional guileBindings
+      [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
 
   # Build of the Guile bindings is not parallel-safe.  See
   # <https://github.com/arpa2/gnutls-kdh/commit/330995a920037b6030ec0282b51dde3f8b493cad>
@@ -54,13 +81,28 @@ stdenv.mkDerivation {
   # systemkey-args.h.
   enableParallelBuilding = false;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11-kit zlib gmp
-  autogen gperftools gperf gettext automake yacc texinfo ]
-    ++ lib.optional doCheck nettools
-    ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
-    ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
-    ++ [ unbound ]
-    ++ lib.optional guileBindings guile;
+  buildInputs = [
+    lzo
+    lzip
+    nettle
+    libtasn1
+    libidn
+    p11-kit
+    zlib
+    gmp
+    autogen
+    gperftools
+    gperf
+    gettext
+    automake
+    yacc
+    texinfo
+  ]
+  ++ lib.optional doCheck nettools
+  ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
+  ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
+  ++ [ unbound ]
+  ++ lib.optional guileBindings guile;
 
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
 
@@ -80,10 +122,10 @@ stdenv.mkDerivation {
     description = "GnuTLS with additional TLS-KDH ciphers: Kerberos + Diffie-Hellman";
 
     longDescription = ''
-       The ARPA2 project aims to add security. This is an enhanced
-       version of GnuTLS,  a project that aims to develop a library which
-       provides a secure layer, over a reliable transport
-       layer. It adds TLS-KDH ciphers: Kerberos + Diffie-Hellman.
+      The ARPA2 project aims to add security. This is an enhanced
+      version of GnuTLS,  a project that aims to develop a library which
+      provides a secure layer, over a reliable transport
+      layer. It adds TLS-KDH ciphers: Kerberos + Diffie-Hellman.
     '';
 
     homepage = https://github.com/arpa2/gnutls-kdh;

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.icecast;
   configFile = pkgs.writeText "icecast.xml" ''
@@ -36,7 +35,8 @@ let
       ${cfg.extraConf}
     </icecast>
   '';
-in {
+in
+{
 
   ###### interface
 
@@ -70,7 +70,7 @@ in {
         description = "Base directory used for logging.";
         default = "/var/log/icecast";
       };
-      
+
       listen = {
         port = mkOption {
           type = types.int;

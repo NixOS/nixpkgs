@@ -1,8 +1,15 @@
-{ stdenv, fetchurl, fetchFromGitHub, wrapQtAppsHook, python3, python3Packages, zbar, secp256k1
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, wrapQtAppsHook
+, python3
+, python3Packages
+, zbar
+, secp256k1
 , enableQt ? !stdenv.isDarwin
 
 
-# for updater.nix
+  # for updater.nix
 , writeScript
 , common-updater-scripts
 , bash
@@ -13,7 +20,6 @@
 , gnused
 , nix
 }:
-
 let
   version = "3.3.8";
 
@@ -39,7 +45,6 @@ let
     '';
   };
 in
-
 python3Packages.buildPythonApplication {
   pname = "electrum";
   inherit version;
@@ -87,13 +92,14 @@ python3Packages.buildPythonApplication {
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     substituteInPlace ./electrum/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' + (if enableQt then ''
-    substituteInPlace ./electrum/qrscanner.py \
-      --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-    sed -i 's/qdarkstyle<2.7/qdarkstyle<3.0/' contrib/requirements/requirements.txt
-  '' else ''
-    sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-  '');
+  '' + (
+    if enableQt then ''
+      substituteInPlace ./electrum/qrscanner.py \
+        --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+      sed -i 's/qdarkstyle<2.7/qdarkstyle<3.0/' contrib/requirements/requirements.txt
+    '' else ''
+      sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+    '');
 
   postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     # Despite setting usr_share above, these files are installed under
@@ -132,7 +138,7 @@ python3Packages.buildPythonApplication {
       gnugrep
       gnused
       nix
-    ;
+      ;
   };
 
   meta = with stdenv.lib; {

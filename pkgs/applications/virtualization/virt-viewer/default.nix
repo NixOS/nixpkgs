@@ -1,11 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, intltool, shared-mime-info, wrapGAppsHook
-, glib, gsettings-desktop-schemas, gtk-vnc, gtk3, libvirt, libvirt-glib, libxml2, vte
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, shared-mime-info
+, wrapGAppsHook
+, glib
+, gsettings-desktop-schemas
+, gtk-vnc
+, gtk3
+, libvirt
+, libvirt-glib
+, libxml2
+, vte
 , spiceSupport ? true
-, spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
+, spice-gtk ? null
+, spice-protocol ? null
+, libcap ? null
+, gdbm ? null
 }:
 
-assert spiceSupport ->
-  spice-gtk != null && spice-protocol != null && libcap != null && gdbm != null;
+assert spiceSupport -> spice-gtk != null && spice-protocol != null && libcap != null && gdbm != null;
 
 with stdenv.lib;
 
@@ -21,9 +35,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool shared-mime-info wrapGAppsHook glib ];
   buildInputs = [
-    glib gsettings-desktop-schemas gtk-vnc gtk3 libvirt libvirt-glib libxml2 vte
+    glib
+    gsettings-desktop-schemas
+    gtk-vnc
+    gtk3
+    libvirt
+    libvirt-glib
+    libxml2
+    vte
   ] ++ optionals spiceSupport [
-    spice-gtk spice-protocol libcap gdbm
+    spice-gtk
+    spice-protocol
+    libcap
+    gdbm
   ];
 
   # Required for USB redirection PolicyKit rules file

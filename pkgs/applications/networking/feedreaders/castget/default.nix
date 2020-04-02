@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , autoreconfHook
 , pkgconfig
 , glib
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "mlj";
     repo = pname;
     # Upstream uses `_` instead of `.` for the version
-    rev = "rel_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1129x64rw587q3sdpa3lrgs0gni5f0siwbvmfz8ya4zkbhgi2ik7";
   };
 

@@ -5,7 +5,6 @@
 #   and to $HOME/Library/Preferences on macOS.
 #  (The current trend appears to be to use $HOME/.config/imagej
 #    on linux systems, but we here do not attempt to fix it.)
-
 let
   imagej150 = stdenv.mkDerivation {
     pname = "imagej";
@@ -45,4 +44,4 @@ let
     };
   };
 in
-  imagej150
+imagej150

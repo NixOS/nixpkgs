@@ -1,14 +1,22 @@
-{ stdenv, buildPackages, fetchpatch, fetchgit, autoconf, automake, gettext, libtool, pkgconfig
-, icu, libuuid, readline
+{ stdenv
+, buildPackages
+, fetchpatch
+, fetchgit
+, autoconf
+, automake
+, gettext
+, libtool
+, pkgconfig
+, icu
+, libuuid
+, readline
 }:
-
 let
   gentooPatch = name: sha256: fetchpatch {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/xfsprogs/files/${name}?id=2517dd766cf84d251631f4324f7ec4bce912abb9";
     inherit sha256;
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
   version = "4.19.0";
@@ -23,7 +31,11 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    autoconf automake libtool gettext pkgconfig
+    autoconf
+    automake
+    libtool
+    gettext
+    pkgconfig
     libuuid # codegen tool uses libuuid
   ];
   buildInputs = [ readline icu ];

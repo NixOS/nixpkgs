@@ -16,7 +16,7 @@ rec {
 
   packageName = "flexi-streams";
 
-  asdFilesToKeep = ["flexi-streams.asd"];
+  asdFilesToKeep = [ "flexi-streams.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM flexi-streams DESCRIPTION Flexible bivalent streams for Common Lisp

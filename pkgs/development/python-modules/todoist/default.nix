@@ -1,5 +1,8 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, requests }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "todoist-python";

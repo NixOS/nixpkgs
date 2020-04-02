@@ -17,7 +17,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "hickle";
+  pname = "hickle";
   version = "3.4.6";
 
   src = fetchPypi {
@@ -32,7 +32,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ h5py numpy dill ];
   checkInputs = [
-    pytest pytestcov pytestrunner coveralls scipy pandas astropy twine check-manifest codecov
+    pytest
+    pytestcov
+    pytestrunner
+    coveralls
+    scipy
+    pandas
+    astropy
+    twine
+    check-manifest
+    codecov
   ];
 
   meta = {

@@ -1,9 +1,9 @@
 { stdenv, fetchurl, cmake }:
-
 let
   version = "0.1.0";
   pname = "interception-tools-caps2esc";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

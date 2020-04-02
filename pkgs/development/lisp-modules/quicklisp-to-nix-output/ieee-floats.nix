@@ -16,7 +16,7 @@ rec {
 
   packageName = "ieee-floats";
 
-  asdFilesToKeep = ["ieee-floats.asd"];
+  asdFilesToKeep = [ "ieee-floats.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM ieee-floats DESCRIPTION

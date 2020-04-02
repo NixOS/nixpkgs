@@ -23,12 +23,12 @@
 , xorg
 , libGL
 }:
-
 let
   version = "4.3.4";
 
   binpath = stdenv.lib.makeBinPath
-    [ cabextract
+    [
+      cabextract
       python2Packages.python
       gettext
       glxinfo
@@ -53,8 +53,8 @@ let
     else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "playonlinux";
   inherit version;
 
@@ -66,7 +66,8 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs =
-    [ python2Packages.python
+    [
+      python2Packages.python
       python2Packages.wxPython
       python2Packages.setuptools
       xorg.libX11
@@ -90,12 +91,13 @@ in stdenv.mkDerivation {
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
     patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
-    ${if stdenv.hostPlatform.system == "x86_64-linux" then ''
-      bunzip2 $out/share/playonlinux/bin/check_dd_amd64.bz2
-      patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${libs pkgs} $out/share/playonlinux/bin/check_dd_amd64
-    '' else ''
-      rm $out/share/playonlinux/bin/check_dd_amd64.bz2
-    ''}
+    ${
+      if stdenv.hostPlatform.system == "x86_64-linux" then ''
+        bunzip2 $out/share/playonlinux/bin/check_dd_amd64.bz2
+        patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${libs pkgs} $out/share/playonlinux/bin/check_dd_amd64
+      '' else ''
+        rm $out/share/playonlinux/bin/check_dd_amd64.bz2
+      ''}
     for f in $out/share/playonlinux/bin/*; do
       bzip2 $f
     done

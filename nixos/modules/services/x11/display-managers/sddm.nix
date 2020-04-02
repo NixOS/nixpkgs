@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   cfg = dmcfg.sddm;
@@ -34,7 +32,7 @@ let
     RebootCommand=${pkgs.systemd}/bin/systemctl reboot
     ${optionalString cfg.autoNumlock ''
     Numlock=on
-    ''}
+  ''}
 
     [Theme]
     Current=${cfg.theme}
@@ -66,13 +64,12 @@ let
     User=${cfg.autoLogin.user}
     Session=${autoLoginSessionName}.desktop
     Relogin=${boolToString cfg.autoLogin.relogin}
-    ''}
+  ''}
 
     ${cfg.extraConfig}
   '';
 
   autoLoginSessionName = dmcfg.sessionData.autologinSession;
-
 in
 {
   imports = [
@@ -154,7 +151,7 @@ in
       };
 
       autoLogin = mkOption {
-        default = {};
+        default = { };
         description = ''
           Configuration for automatic login.
         '';
@@ -196,17 +193,20 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = xcfg.enable;
+      {
+        assertion = xcfg.enable;
         message = ''
           SDDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
+      {
+        assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> autoLoginSessionName != null;
+      {
+        assertion = cfg.autoLogin.enable -> autoLoginSessionName != null;
         message = ''
           SDDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';

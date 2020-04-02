@@ -3,101 +3,95 @@
 # TODO: This is not secure, have a look at the file docs/security.txt inside
 # the project sources.
 with lib;
-
 let
   cfg = config.power.ups;
 in
-
 let
-  upsOptions = {name, config, ...}:
-  {
-    options = {
-      # This can be infered from the UPS model by looking at
-      # /nix/store/nut/share/driver.list
-      driver = mkOption {
-        type = types.str;
-        description = ''
-          Specify the program to run to talk to this UPS.  apcsmart,
-          bestups, and sec are some examples.
-        '';
+  upsOptions = { name, config, ... }:
+    {
+      options = {
+        # This can be infered from the UPS model by looking at
+        # /nix/store/nut/share/driver.list
+        driver = mkOption {
+          type = types.str;
+          description = ''
+            Specify the program to run to talk to this UPS.  apcsmart,
+            bestups, and sec are some examples.
+          '';
+        };
+
+        port = mkOption {
+          type = types.str;
+          description = ''
+            The serial port to which your UPS is connected.  /dev/ttyS0 is
+            usually the first port on Linux boxes, for example.
+          '';
+        };
+
+        shutdownOrder = mkOption {
+          default = 0;
+          type = types.int;
+          description = ''
+            When you have multiple UPSes on your system, you usually need to
+            turn them off in a certain order.  upsdrvctl shuts down all the
+            0s, then the 1s, 2s, and so on.  To exclude a UPS from the
+            shutdown sequence, set this to -1.
+          '';
+        };
+
+        maxStartDelay = mkOption {
+          default = null;
+          type = types.uniq (types.nullOr types.int);
+          description = ''
+            This can be set as a global variable above your first UPS
+            definition and it can also be set in a UPS section.  This value
+            controls how long upsdrvctl will wait for the driver to finish
+            starting.  This keeps your system from getting stuck due to a
+            broken driver or UPS.
+          '';
+        };
+
+        description = mkOption {
+          default = "";
+          type = types.str;
+          description = ''
+            Description of the UPS.
+          '';
+        };
+
+        directives = mkOption {
+          default = [ ];
+          type = types.listOf types.str;
+          description = ''
+            List of configuration directives for this UPS.
+          '';
+        };
+
+        summary = mkOption {
+          default = "";
+          type = types.lines;
+          description = ''
+            Lines which would be added inside ups.conf for handling this UPS.
+          '';
+        };
+
       };
 
-      port = mkOption {
-        type = types.str;
-        description = ''
-          The serial port to which your UPS is connected.  /dev/ttyS0 is
-          usually the first port on Linux boxes, for example.
-        '';
-      };
+      config = {
+        directives = mkOrder 10 ([
+          "driver = ${config.driver}"
+          "port = ${config.port}"
+          ''desc = "${config.description}"''
+          "sdorder = ${toString config.shutdownOrder}"
+        ] ++ (optional (config.maxStartDelay != null)
+          "maxstartdelay = ${toString config.maxStartDelay}"));
 
-      shutdownOrder = mkOption {
-        default = 0;
-        type = types.int;
-        description = ''
-          When you have multiple UPSes on your system, you usually need to
-          turn them off in a certain order.  upsdrvctl shuts down all the
-          0s, then the 1s, 2s, and so on.  To exclude a UPS from the
-          shutdown sequence, set this to -1.
-        '';
+        summary =
+          concatStringsSep "\n      "
+            ([ "[${name}]" ] ++ config.directives);
       };
-
-      maxStartDelay = mkOption {
-        default = null;
-        type = types.uniq (types.nullOr types.int);
-        description = ''
-          This can be set as a global variable above your first UPS
-          definition and it can also be set in a UPS section.  This value
-          controls how long upsdrvctl will wait for the driver to finish
-          starting.  This keeps your system from getting stuck due to a
-          broken driver or UPS.
-        '';
-      };
-
-      description = mkOption {
-        default = "";
-        type = types.str;
-        description = ''
-          Description of the UPS.
-        '';
-      };
-
-      directives = mkOption {
-        default = [];
-        type = types.listOf types.str;
-        description = ''
-          List of configuration directives for this UPS.
-        '';
-      };
-
-      summary = mkOption {
-        default = "";
-        type = types.lines;
-        description = ''
-          Lines which would be added inside ups.conf for handling this UPS.
-        '';
-      };
-
     };
-
-    config = {
-      directives = mkOrder 10 ([
-        "driver = ${config.driver}"
-        "port = ${config.port}"
-        ''desc = "${config.description}"''
-        "sdorder = ${toString config.shutdownOrder}"
-      ] ++ (optional (config.maxStartDelay != null)
-            "maxstartdelay = ${toString config.maxStartDelay}")
-      );
-
-      summary =
-        concatStringsSep "\n      "
-          (["[${name}]"] ++ config.directives);
-    };
-  };
-
 in
-
-
 {
   options = {
     # powerManagement.powerDownCommands
@@ -162,7 +156,7 @@ in
       };
 
       ups = mkOption {
-        default = {};
+        default = { };
         # see nut/etc/ups.conf.sample
         description = ''
           This is where you configure all the UPSes that this system will be
@@ -246,18 +240,18 @@ in
       '';
 
 
-/*
-    users.users.nut =
-      { uid = 84;
-        home = "/var/lib/nut";
-        createHome = true;
-        group = "nut";
-        description = "UPnP A/V Media Server user";
-      };
+    /*
+        users.users.nut =
+          { uid = 84;
+            home = "/var/lib/nut";
+            createHome = true;
+            group = "nut";
+            description = "UPnP A/V Media Server user";
+          };
 
-    users.groups."nut" =
-      { gid = 84; };
-*/
+        users.groups."nut" =
+          { gid = 84; };
+    */
 
   };
 }

@@ -3,10 +3,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
-  cfg  = config.programs.ssh;
+  cfg = config.programs.ssh;
 
   askPassword = cfg.askPassword;
 
@@ -20,11 +18,8 @@ let
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
   knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
-    (h: assert h.hostNames != [];
-      optionalString h.certAuthority "@cert-authority " + concatStringsSep "," h.hostNames + " "
-      + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
-    )) + "\n";
-
+    (h: assert h.hostNames != [ ];
+    optionalString h.certAuthority "@cert-authority " + concatStringsSep "," h.hostNames + " " + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile))) + "\n";
 in
 {
   ###### interface
@@ -135,7 +130,7 @@ in
       };
 
       knownHosts = mkOption {
-        default = {};
+        default = { };
         type = types.loaOf (types.submodule ({ name, ... }: {
           options = {
             certAuthority = mkOption {
@@ -148,7 +143,7 @@ in
             };
             hostNames = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               description = ''
                 A list of host names and/or IP numbers used for accessing
                 the host's ssh service.
@@ -209,12 +204,13 @@ in
       mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11 || config.services.openssh.forwardX11);
 
     assertions =
-      [ { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
+      [
+        {
+          assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
           message = "cannot enable X11 forwarding without setting XAuth location";
         }
       ] ++ flip mapAttrsToList cfg.knownHosts (name: data: {
-        assertion = (data.publicKey == null && data.publicKeyFile != null) ||
-                    (data.publicKey != null && data.publicKeyFile == null);
+        assertion = (data.publicKey == null && data.publicKeyFile != null) || (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
       });
 
@@ -230,40 +226,39 @@ in
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
 
         ${optionalString cfg.setXAuthLocation ''
-          XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-        ''}
+        XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
+      ''}
 
         ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
 
-        ${optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-        ${optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
+        ${optionalString (cfg.pubkeyAcceptedKeyTypes != [ ]) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
+        ${optionalString (cfg.hostKeyAlgorithms != [ ]) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
       '';
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
     systemd.user.services.ssh-agent = mkIf cfg.startAgent
-      { description = "SSH Agent";
-        wantedBy = [ "default.target" ];
-        unitConfig.ConditionUser = "!@system";
-        serviceConfig =
-          { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
-            ExecStart =
-                "${cfg.package}/bin/ssh-agent " +
-                optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
-                optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
-                "-a %t/ssh-agent";
-            StandardOutput = "null";
-            Type = "forking";
-            Restart = "on-failure";
-            SuccessExitStatus = "0 2";
-          };
-        # Allow ssh-agent to ask for confirmation. This requires the
-        # unit to know about the user's $DISPLAY (via ‘systemctl
-        # import-environment’).
-        environment.SSH_ASKPASS = optionalString config.services.xserver.enable askPasswordWrapper;
-        environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
-      };
+    {
+      description = "SSH Agent";
+      wantedBy = [ "default.target" ];
+      unitConfig.ConditionUser = "!@system";
+      serviceConfig =
+        {
+          ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
+          ExecStart =
+            "${cfg.package}/bin/ssh-agent " + optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") + optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") + "-a %t/ssh-agent";
+          StandardOutput = "null";
+          Type = "forking";
+          Restart = "on-failure";
+          SuccessExitStatus = "0 2";
+        };
+      # Allow ssh-agent to ask for confirmation. This requires the
+      # unit to know about the user's $DISPLAY (via ‘systemctl
+      # import-environment’).
+      environment.SSH_ASKPASS = optionalString config.services.xserver.enable askPasswordWrapper;
+      environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
+    };
 
     environment.extraInit = optionalString cfg.startAgent
       ''

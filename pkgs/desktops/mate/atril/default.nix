@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mate.caja
     mate.mate-desktop
     hicolor-icon-theme
-    texlive.bin.core  # for synctex, used by the pdf back-end
+    texlive.bin.core # for synctex, used by the pdf back-end
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

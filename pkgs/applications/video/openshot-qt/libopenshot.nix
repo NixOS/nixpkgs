@@ -1,9 +1,19 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, cmake, doxygen
-, libopenshot-audio, imagemagick, ffmpeg
-, swig, python3
-, unittest-cpp, cppzmq, zeromq
-, qtbase, qtmultimedia }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, doxygen
+, libopenshot-audio
+, imagemagick
+, ffmpeg
+, swig
+, python3
+, unittest-cpp
+, cppzmq
+, zeromq
+, qtbase
+, qtmultimedia
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -26,8 +36,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake doxygen ];
 
   buildInputs =
-  [ imagemagick ffmpeg swig python3 unittest-cpp
-    cppzmq zeromq qtbase qtmultimedia ];
+    [
+      imagemagick
+      ffmpeg
+      swig
+      python3
+      unittest-cpp
+      cppzmq
+      zeromq
+      qtbase
+      qtmultimedia
+    ];
 
   LIBOPENSHOT_AUDIO_DIR = libopenshot-audio;
   "UNITTEST++_INCLUDE_DIR" = "${unittest-cpp}/include/UnitTest++";

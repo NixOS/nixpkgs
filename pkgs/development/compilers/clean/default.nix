@@ -9,8 +9,8 @@ stdenv.mkDerivation {
       sha256 = "0cjxv3vqrg6pz3aicwfdz1zyhk0q650464j3qyl0wzaikh750010";
     })
     else if stdenv.hostPlatform.system == "x86_64-linux" then (fetchurl {
-        url = "https://ftp.cs.ru.nl/Clean/Clean30/linux/clean3.0_64_boot.tar.gz";
-        sha256 = "06k283y9adbi28f78k3m5ssg6py73qqkz3sm8dgxc89drv4krl2i";
+      url = "https://ftp.cs.ru.nl/Clean/Clean30/linux/clean3.0_64_boot.tar.gz";
+      sha256 = "06k283y9adbi28f78k3m5ssg6py73qqkz3sm8dgxc89drv4krl2i";
     })
     else throw "Architecture not supported";
 

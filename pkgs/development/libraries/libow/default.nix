@@ -26,18 +26,18 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   configureFlags = [
-      "--disable-owtcl"
-      "--disable-owphp"
-      "--disable-owpython"
-      "--disable-zero"
-      "--disable-owshell"
-      "--disable-owhttpd"
-      "--disable-owftpd"
-      "--disable-owserver"
-      "--disable-owperl"
-      "--disable-owtcl"
-      "--disable-owtap"
-      "--disable-owmon"
-      "--disable-owexternal"
-    ];
+    "--disable-owtcl"
+    "--disable-owphp"
+    "--disable-owpython"
+    "--disable-zero"
+    "--disable-owshell"
+    "--disable-owhttpd"
+    "--disable-owftpd"
+    "--disable-owserver"
+    "--disable-owperl"
+    "--disable-owtcl"
+    "--disable-owtap"
+    "--disable-owmon"
+    "--disable-owexternal"
+  ];
 }

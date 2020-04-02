@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 with lib;
-
 let
   cfg = config.services.moinmoin;
   python = pkgs.python27;
@@ -25,8 +24,8 @@ let
 
     class Config(multiconfig.DefaultConfig):
         ${optionalString (w.webLocation != "/") ''
-          url_prefix_static = '${w.webLocation}' + url_prefix_static
-        ''}
+    url_prefix_static = '${w.webLocation}' + url_prefix_static
+  ''}
 
         sitename = u'${w.siteName}'
         page_front_page = u'${w.frontPage}'
@@ -35,14 +34,13 @@ let
         data_underlay_dir = '${dataDir}/${wikiIdent}/underlay'
 
         language_default = u'${w.languageDefault}'
-        ${optionalString (w.superUsers != []) ''
-          superuser = [${concatMapStringsSep ", " uLit w.superUsers}]
-        ''}
+        ${optionalString (w.superUsers != [ ]) ''
+    superuser = [${concatMapStringsSep ", " uLit w.superUsers}]
+  ''}
 
     ${indentLines 4 w.extraConfig}
   '';
   wikiConfigFile = name: wiki: pkgs.writeText "${name}.py" (wikiConfig name wiki);
-
 in
 {
   options.services.moinmoin = with types; {
@@ -105,7 +103,7 @@ in
 
           superUsers = mkOption {
             type = listOf str;
-            default = [];
+            default = [ ];
             example = [ "elvis" ];
             description = ''
               List of trusted user names with wiki system administration super powers.
@@ -176,7 +174,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = forEach (attrNames cfg.wikis) (wname:
-      { assertion = builtins.match "[A-Za-z_][A-Za-z0-9_]*" wname != null;
+      {
+        assertion = builtins.match "[A-Za-z_][A-Za-z0-9_]*" wname != null;
         message = "${wname} is not valid Python identifier";
       }
     );
@@ -201,14 +200,15 @@ in
     systemd.services = mkIf usingGunicorn
       (flip mapAttrs' cfg.wikis (wikiIdent: wiki:
         nameValuePair "moin-${wikiIdent}"
-          {
-            description = "MoinMoin wiki ${wikiIdent} - gunicorn process";
-            wantedBy = [ "multi-user.target" ];
-            after = [ "network.target" ];
-            restartIfChanged = true;
-            restartTriggers = [ (wikiConfigFile wikiIdent wiki) ];
+        {
+          description = "MoinMoin wiki ${wikiIdent} - gunicorn process";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          restartIfChanged = true;
+          restartTriggers = [ (wikiConfigFile wikiIdent wiki) ];
 
-            environment = let
+          environment =
+            let
               penv = python.buildEnv.override {
                 # setuptools: https://github.com/benoitc/gunicorn/issues/1716
                 extraLibs = [ python.pkgs.gevent python.pkgs.setuptools pkg ];
@@ -217,49 +217,49 @@ in
               PYTHONPATH = "${dataDir}/${wikiIdent}/config:${penv}/${python.sitePackages}";
             };
 
-            preStart = ''
-              umask 0007
-              rm -rf ${dataDir}/${wikiIdent}/underlay
-              cp -r ${pkg}/share/moin/underlay ${dataDir}/${wikiIdent}/
-              chmod -R u+w ${dataDir}/${wikiIdent}/underlay
-            '';
+          preStart = ''
+            umask 0007
+            rm -rf ${dataDir}/${wikiIdent}/underlay
+            cp -r ${pkg}/share/moin/underlay ${dataDir}/${wikiIdent}/
+            chmod -R u+w ${dataDir}/${wikiIdent}/underlay
+          '';
 
-            serviceConfig = {
-              User = user;
-              Group = group;
-              WorkingDirectory = "${dataDir}/${wikiIdent}";
-              ExecStart = ''${python.pkgs.gunicorn}/bin/gunicorn moin_wsgi \
+          serviceConfig = {
+            User = user;
+            Group = group;
+            WorkingDirectory = "${dataDir}/${wikiIdent}";
+            ExecStart = ''${python.pkgs.gunicorn}/bin/gunicorn moin_wsgi \
                 --name gunicorn-${wikiIdent} \
                 --workers ${toString cfg.gunicorn.workers} \
                 --worker-class gevent \
                 --bind unix:/run/moin/${wikiIdent}/gunicorn.sock
               '';
 
-              Restart = "on-failure";
-              RestartSec = "2s";
-              StartLimitIntervalSec = "30s";
+            Restart = "on-failure";
+            RestartSec = "2s";
+            StartLimitIntervalSec = "30s";
 
-              StateDirectory = "moin/${wikiIdent}";
-              StateDirectoryMode = "0750";
-              RuntimeDirectory = "moin/${wikiIdent}";
-              RuntimeDirectoryMode = "0750";
+            StateDirectory = "moin/${wikiIdent}";
+            StateDirectoryMode = "0750";
+            RuntimeDirectory = "moin/${wikiIdent}";
+            RuntimeDirectoryMode = "0750";
 
-              NoNewPrivileges = true;
-              ProtectSystem = "strict";
-              ProtectHome = true;
-              PrivateTmp = true;
-              PrivateDevices = true;
-              PrivateNetwork = true;
-              ProtectKernelTunables = true;
-              ProtectKernelModules = true;
-              ProtectControlGroups = true;
-              RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-              RestrictNamespaces = true;
-              LockPersonality = true;
-              MemoryDenyWriteExecute = true;
-              RestrictRealtime = true;
-            };
-          }
+            NoNewPrivileges = true;
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            PrivateTmp = true;
+            PrivateDevices = true;
+            PrivateNetwork = true;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+            RestrictNamespaces = true;
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            RestrictRealtime = true;
+          };
+        }
       ));
 
     services.nginx = mkIf usingNginx {

@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.chronos;
-
-in {
+in
+{
 
   ###### interface
 

@@ -1,5 +1,8 @@
-{ fetchurl, stdenv, ncurses
-, emacsSupport ? true, emacs
+{ fetchurl
+, stdenv
+, ncurses
+, emacsSupport ? true
+, emacs
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://cscope.sourceforge.net/;
 
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
 
     platforms = stdenv.lib.platforms.unix;
   };

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "zdelta-2.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-	  homepage = http://cis.poly.edu/zdelta;
+    homepage = http://cis.poly.edu/zdelta;
     platforms = platforms.linux;
     license = licenses.zlib;
   };

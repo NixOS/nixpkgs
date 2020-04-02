@@ -30,7 +30,7 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  doCheck = !isPyPy;  # failures due to sqla version mismatch
+  doCheck = !isPyPy; # failures due to sqla version mismatch
 
   meta = with stdenv.lib; {
     homepage = https://github.com/dahlia/sqlalchemy-imageattach;

@@ -1,9 +1,7 @@
 { stdenv, fetchFromGitHub, kernel }:
-
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
 in
-
 stdenv.mkDerivation {
   name = "jool-${sourceAttrs.version}-${kernel.version}";
 

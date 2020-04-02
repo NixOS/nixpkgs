@@ -1,17 +1,26 @@
-{ minor_version, major_version, patch_version
+{ minor_version
+, major_version
+, patch_version
 , url ? null
-, sha256, ...}@args:
+, sha256
+, ...
+}@args:
 let
   versionNoPatch = "${toString major_version}.${toString minor_version}";
   version = "${versionNoPatch}.${toString patch_version}";
-  real_url = if url == null then
-    "http://caml.inria.fr/pub/distrib/ocaml-${versionNoPatch}/ocaml-${version}.tar.xz"
-  else url;
+  real_url =
+    if url == null then
+      "http://caml.inria.fr/pub/distrib/ocaml-${versionNoPatch}/ocaml-${version}.tar.xz"
+    else url;
   safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips);
 in
-
-{ stdenv, fetchurl, ncurses, buildEnv
-, libX11, xorgproto, useX11 ? safeX11 stdenv
+{ stdenv
+, fetchurl
+, ncurses
+, buildEnv
+, libX11
+, xorgproto
+, useX11 ? safeX11 stdenv
 , aflSupport ? false
 , flambdaSupport ? false
 }:
@@ -19,19 +28,16 @@ in
 assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
 assert aflSupport -> stdenv.lib.versionAtLeast version "4.05";
 assert flambdaSupport -> stdenv.lib.versionAtLeast version "4.03";
-
 let
-   useNativeCompilers = !stdenv.isMips;
-   inherit (stdenv.lib) optional optionals optionalString;
-   name = "ocaml${optionalString aflSupport "+afl"}${optionalString flambdaSupport "+flambda"}-${version}";
+  useNativeCompilers = !stdenv.isMips;
+  inherit (stdenv.lib) optional optionals optionalString;
+  name = "ocaml${optionalString aflSupport "+afl"}${optionalString flambdaSupport "+flambda"}-${version}";
 in
-
 let
-  x11env = buildEnv { name = "x11env"; paths = [libX11 xorgproto]; };
+  x11env = buildEnv { name = "x11env"; paths = [ libX11 xorgproto ]; };
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
 in
-
 stdenv.mkDerivation (args // {
 
   inherit name;
@@ -49,10 +55,11 @@ stdenv.mkDerivation (args // {
       then new else old
     ; in
     optionals useX11 (flags
-      [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
-      [ "-x11lib" x11lib "-x11include" x11inc ])
-  ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
-  ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
+      [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}" ]
+      [ "-x11lib" x11lib "-x11include" x11inc ]
+    )
+    ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
+    ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
   ;
 
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
@@ -105,5 +112,3 @@ stdenv.mkDerivation (args // {
   };
 
 })
-
-

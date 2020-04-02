@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.shellinabox;
 
   # If a certificate file is specified, shellinaboxd requires
@@ -13,19 +11,17 @@ let
 
   # Command line arguments for the shellinabox daemon
   args = [ "--background" ]
-   ++ optional (! cfg.enableSSL) "--disable-ssl"
-   ++ optional (cfg.certFile != null) "--cert-fd=${fd}"
-   ++ optional (cfg.certDirectory != null) "--cert=${cfg.certDirectory}"
-   ++ cfg.extraOptions;
+    ++ optional (! cfg.enableSSL) "--disable-ssl"
+    ++ optional (cfg.certFile != null) "--cert-fd=${fd}"
+    ++ optional (cfg.certDirectory != null) "--cert=${cfg.certDirectory}"
+    ++ cfg.extraOptions;
 
   # Command to start shellinaboxd
   cmd = "${pkgs.shellinabox}/bin/shellinaboxd ${concatStringsSep " " args}";
 
   # Command to start shellinaboxd if certFile is specified
   wrappedCmd = "${pkgs.bash}/bin/bash -c 'exec ${createFd} && ${cmd}'";
-
 in
-
 {
 
   ###### interface
@@ -51,7 +47,7 @@ in
           Whether or not to enable SSL (https) support.
         '';
       };
-        
+
       certDirectory = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -97,11 +93,15 @@ in
   config = mkIf cfg.enable {
 
     assertions =
-      [ { assertion = cfg.enableSSL == true
-            -> cfg.certDirectory != null || cfg.certFile != null;
-          message = "SSL is enabled for shellinabox, but no certDirectory or certFile has been specefied."; }
-        { assertion = ! (cfg.certDirectory != null && cfg.certFile != null);
-          message = "Cannot set both certDirectory and certFile for shellinabox."; }
+      [
+        {
+          assertion = cfg.enableSSL == true -> cfg.certDirectory != null || cfg.certFile != null;
+          message = "SSL is enabled for shellinabox, but no certDirectory or certFile has been specefied.";
+        }
+        {
+          assertion = ! (cfg.certDirectory != null && cfg.certFile != null);
+          message = "Cannot set both certDirectory and certFile for shellinabox.";
+        }
       ];
 
     systemd.services.shellinaboxd = {

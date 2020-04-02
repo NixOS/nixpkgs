@@ -7,7 +7,8 @@
 , libssh2
 , openssl
 , pkg-config
-, zlib }:
+, zlib
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";

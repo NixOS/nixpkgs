@@ -1,6 +1,18 @@
-{ stdenv, fetchurl, perlPackages, pkgconfig, gtk2
-, scrollkeeper, libglade, libXmu, libX11, libXext, gettext
-, lame, libXfixes, libXdamage }:
+{ stdenv
+, fetchurl
+, perlPackages
+, pkgconfig
+, gtk2
+, scrollkeeper
+, libglade
+, libXmu
+, libX11
+, libXext
+, gettext
+, lame
+, libXfixes
+, libXdamage
+}:
 
 stdenv.mkDerivation {
   name = "xvidcap-1.1.7";
@@ -14,8 +26,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk2 scrollkeeper
-    libglade libXmu gettext lame libXdamage libXfixes libXext libX11
+    gtk2
+    scrollkeeper
+    libglade
+    libXmu
+    gettext
+    lame
+    libXdamage
+    libXfixes
+    libXext
+    libX11
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   # !!! don't know why this is necessary

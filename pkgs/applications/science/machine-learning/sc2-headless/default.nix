@@ -1,4 +1,5 @@
-{ config, stdenv
+{ config
+, stdenv
 , callPackage
 , lib
 , fetchurl
@@ -7,13 +8,15 @@
 }:
 
 if !licenseAccepted then throw ''
-    You must accept the Blizzard® Starcraft® II AI and Machine Learning License at
-    https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html
-    by setting nixpkgs config option 'sc2-headless.accept_license = true;'
-  ''
+  You must accept the Blizzard® Starcraft® II AI and Machine Learning License at
+  https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html
+  by setting nixpkgs config option 'sc2-headless.accept_license = true;'
+''
 else assert licenseAccepted;
-let maps = callPackage ./maps.nix {};
-in stdenv.mkDerivation rec {
+let
+  maps = callPackage ./maps.nix { };
+in
+stdenv.mkDerivation rec {
   version = "4.7.1";
   pname = "sc2-headless";
 
@@ -43,7 +46,7 @@ in stdenv.mkDerivation rec {
       isELF "$file" || continue
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath ${lib.makeLibraryPath [stdenv.cc.cc stdenv.cc.libc]} \
+        --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ]} \
         "$file"
     done
   '';

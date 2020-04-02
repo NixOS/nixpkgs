@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk2}:
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk2 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-systemload-plugin";
+  p_name = "xfce4-systemload-plugin";
   ver_maj = "1.1";
   ver_min = "2";
 

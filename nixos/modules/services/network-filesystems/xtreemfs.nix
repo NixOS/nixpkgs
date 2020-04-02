@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xtreemfs;
 
   xtreemfs = pkgs.xtreemfs;
@@ -72,15 +70,13 @@ let
     ${cfg.osd.extraConfig}
   '';
 
-  optionalDir = optionals cfg.dir.enable ["xtreemfs-dir.service"];
+  optionalDir = optionals cfg.dir.enable [ "xtreemfs-dir.service" ];
 
   systemdOptionalDependencies = {
     after = [ "network.target" ] ++ optionalDir;
     wantedBy = [ "multi-user.target" ] ++ optionalDir;
   };
-
 in
-
 {
 
   ###### interface
@@ -433,14 +429,16 @@ in
     environment.systemPackages = [ xtreemfs ];
 
     users.users.xtreemfs =
-      { uid = config.ids.uids.xtreemfs;
+      {
+        uid = config.ids.uids.xtreemfs;
         description = "XtreemFS user";
         createHome = true;
         home = home;
       };
 
     users.groups.xtreemfs =
-      { gid = config.ids.gids.xtreemfs;
+      {
+        gid = config.ids.gids.xtreemfs;
       };
 
     systemd.services.xtreemfs-dir = mkIf cfg.dir.enable {

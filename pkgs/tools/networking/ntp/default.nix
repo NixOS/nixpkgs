@@ -2,11 +2,9 @@
 
 assert stdenv.isLinux -> libcap != null;
 assert stdenv.isLinux -> libseccomp != null;
-
 let
   withSeccomp = stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64);
 in
-
 stdenv.mkDerivation rec {
   name = "ntp-4.2.8p14";
 
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
   ] ++ stdenv.lib.optional stdenv.isLinux "--enable-linuxcaps"
-    ++ stdenv.lib.optional withSeccomp "--enable-libseccomp";
+  ++ stdenv.lib.optional withSeccomp "--enable-libseccomp";
 
   buildInputs = [ libcap openssl perl ]
     ++ lib.optional withSeccomp libseccomp

@@ -1,5 +1,4 @@
 { stdenv, fetchurl }:
-
 let
   name = "log4cplus-2.0.5";
 in

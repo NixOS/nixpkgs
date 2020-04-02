@@ -1,5 +1,4 @@
 { stdenv, lib, fetchurl, unzip }:
-
 let
   mktplcExtRefToFetchArgs = ext: {
     url = "https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage";
@@ -9,56 +8,56 @@ let
     name = "${ext.publisher}-${ext.name}.zip";
   };
 
-  buildVscodeExtension = a@{
-    name,
-    src,
-    # Same as "Unique Identifier" on the extension's web page.
-    # For the moment, only serve as unique extension dir.
-    vscodeExtUniqueId,
-    configurePhase ? ":",
-    buildPhase ? ":",
-    dontPatchELF ? true,
-    dontStrip ? true,
-    buildInputs ? [],
-    ...
-  }:
-  stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
+  buildVscodeExtension =
+    a@{ name
+    , src
+    , # Same as "Unique Identifier" on the extension's web page.
+      # For the moment, only serve as unique extension dir.
+      vscodeExtUniqueId
+    , configurePhase ? ":"
+    , buildPhase ? ":"
+    , dontPatchELF ? true
+    , dontStrip ? true
+    , buildInputs ? [ ]
+    , ...
+    }:
+      stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
 
-    name = "vscode-extension-${name}";
+        name = "vscode-extension-${name}";
 
-    inherit vscodeExtUniqueId;
-    inherit configurePhase buildPhase dontPatchELF dontStrip;
+        inherit vscodeExtUniqueId;
+        inherit configurePhase buildPhase dontPatchELF dontStrip;
 
-    installPrefix = "${vscodeExtUniqueId}";
+        installPrefix = "${vscodeExtUniqueId}";
 
-    buildInputs = [ unzip ] ++ buildInputs;
+        buildInputs = [ unzip ] ++ buildInputs;
 
-    installPhase = ''
-      runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-      mkdir -p "$out/$installPrefix"
-      find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
+          mkdir -p "$out/$installPrefix"
+          find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
 
-      runHook postInstall
-    '';
+          runHook postInstall
+        '';
 
-  });
+      });
 
 
   fetchVsixFromVscodeMarketplace = mktplcExtRef:
-    fetchurl((mktplcExtRefToFetchArgs mktplcExtRef));
+    fetchurl ((mktplcExtRefToFetchArgs mktplcExtRef));
 
-  buildVscodeMarketplaceExtension = a@{
-    name ? "",
-    src ? null,
-    mktplcRef,
-    ...
-  }: assert "" == name; assert null == src;
-  buildVscodeExtension ((removeAttrs a [ "mktplcRef" ]) // {
-    name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
-    src = fetchVsixFromVscodeMarketplace mktplcRef;
-    vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
-  });
+  buildVscodeMarketplaceExtension =
+    a@{ name ? ""
+    , src ? null
+    , mktplcRef
+    , ...
+    }: assert "" == name; assert null == src;
+    buildVscodeExtension ((removeAttrs a [ "mktplcRef" ]) // {
+      name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
+      src = fetchVsixFromVscodeMarketplace mktplcRef;
+      vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
+    });
 
   mktplcRefAttrList = [
     "name"
@@ -75,11 +74,9 @@ let
   extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;
   extensionsFromVscodeMarketplace = mktplcExtRefList:
     builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
-
 in
-
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension
-          buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
-          extensionsFromVscodeMarketplace;
+    buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
+    extensionsFromVscodeMarketplace;
 }

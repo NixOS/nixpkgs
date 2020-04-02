@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) nntp-proxy;
 
   proxyUser = "nntp-proxy";
@@ -42,18 +40,16 @@ let
       verbose = "${toUpper cfg.verbosity}";
       # Password is made with: 'mkpasswd -m sha-512 <password>'
       users = (${concatStringsSep ",\n" (mapAttrsToList (username: userConfig:
-        ''
-          {
-              username = "${username}";
-              password = "${userConfig.passwordHash}";
-              max_connections = ${toString userConfig.maxConnections};
-          }
-        '') cfg.users)});
+      ''
+        {
+            username = "${username}";
+            password = "${userConfig.passwordHash}";
+            max_connections = ${toString userConfig.maxConnections};
+        }
+      '') cfg.users)});
     };
   '';
-
 in
-
 {
 
   ###### interface
@@ -190,7 +186,7 @@ in
           NNTP-Proxy user configuration
         '';
 
-        default = {};
+        default = { };
         example = literalExample ''
           "user1" = {
             passwordHash = "$6$1l0t5Kn2Dk$appzivc./9l/kjq57eg5UCsBKlcfyCr0zNWYNerKoPsI1d7eAwiT0SVsOVx/CTgaBNT/u4fi2vN.iGlPfv1ek0";
@@ -211,7 +207,8 @@ in
   config = mkIf cfg.enable {
 
     users.users.${proxyUser} =
-      { uid = config.ids.uids.nntp-proxy;
+      {
+        uid = config.ids.uids.nntp-proxy;
         description = "NNTP-Proxy daemon user";
       };
 
@@ -219,7 +216,7 @@ in
       description = "NNTP proxy";
       after = [ "network.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = { User="${proxyUser}"; };
+      serviceConfig = { User = "${proxyUser}"; };
       serviceConfig.ExecStart = "${nntp-proxy}/bin/nntp-proxy ${confFile}";
       preStart = ''
         if [ ! \( -f ${cfg.sslCert} -a -f ${cfg.sslKey} \) ]; then

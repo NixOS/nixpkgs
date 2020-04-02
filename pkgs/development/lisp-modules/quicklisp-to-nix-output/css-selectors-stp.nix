@@ -14,7 +14,7 @@ rec {
 
   packageName = "css-selectors-stp";
 
-  asdFilesToKeep = ["css-selectors-stp.asd"];
+  asdFilesToKeep = [ "css-selectors-stp.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM css-selectors-stp DESCRIPTION

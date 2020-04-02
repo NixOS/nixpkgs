@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, libmysqlclient, libaio
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, libmysqlclient
+, libaio
 }:
 
 stdenv.mkDerivation rec {

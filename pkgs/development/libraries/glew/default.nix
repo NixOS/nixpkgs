@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+{ stdenv
+, fetchurl
+, libGLU
+, xlibsWrapper
+, libXmu
+, libXi
 }:
 
 with stdenv.lib;
@@ -20,8 +25,8 @@ stdenv.mkDerivation rec {
     sed -i 's|lib64|lib|' config/Makefile.linux
     substituteInPlace config/Makefile.darwin --replace /usr/local "$out"
     ${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
-    ''}
+    sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
+  ''}
   '';
 
   buildFlags = [ "all" ];
@@ -49,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "An OpenGL extension loading library for C(++)";
     homepage = http://glew.sourceforge.net/;
     license = licenses.free; # different files under different licenses
-      #["BSD" "GLX" "SGI-B" "GPL2"]
+    #["BSD" "GLX" "SGI-B" "GPL2"]
     platforms = platforms.mesaPlatforms;
   };
 }

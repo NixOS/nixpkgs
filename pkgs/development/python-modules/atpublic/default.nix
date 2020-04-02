@@ -1,5 +1,9 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, pytest }:
+{ lib
+, isPy3k
+, fetchPypi
+, buildPythonPackage
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "atpublic";

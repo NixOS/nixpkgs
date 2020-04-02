@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
 
-  outputs = ["out" "hook"];
+  outputs = [ "out" "hook" ];
 
   buildPhase = ''
     $CC -Wall -std=c99 -O3 -fPIC -ldl -shared \
@@ -28,12 +28,13 @@ stdenv.mkDerivation {
 
     mkdir -p "$hook/nix-support"
     cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
-    ${if stdenv.isDarwin then ''
-    export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
-    export DYLD_FORCE_FLAT_NAMESPACE=1
-    '' else ''
-    export LD_PRELOAD="$out/lib/$libName"
-    ''}
+    ${
+      if stdenv.isDarwin then ''
+        export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
+        export DYLD_FORCE_FLAT_NAMESPACE=1
+      '' else ''
+        export LD_PRELOAD="$out/lib/$libName"
+      ''}
     SETUP_HOOK
   '';
 

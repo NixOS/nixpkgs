@@ -74,70 +74,71 @@ stdenv.mkDerivation rec {
   # compatible with never dependency versions when possible. All these changes
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
-  packageUpgradePatches = let
-    # Fetch a diff between `base` and `rev` on sage's git server.
-    # Used to fetch trac tickets by setting the `base` to the last release and the
-    # `rev` to the last commit of the ticket.
-    fetchSageDiff = { base, rev, name ? "sage-diff-${base}-${rev}.patch", ...}@args: (
-      fetchpatch ({
-        inherit name;
-        url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
-        # We don't care about sage's own build system (which builds all its dependencies).
-        # Exclude build system changes to avoid conflicts.
-        excludes = [ "build/*" ];
-      } // builtins.removeAttrs args [ "rev" "base" ])
-    );
-  in [
-    # New glpk version has new warnings, filter those out until upstream sage has found a solution
-    # Should be fixed with glpk > 4.65.
-    # https://trac.sagemath.org/ticket/24824
-    ./patches/pari-stackwarn.patch # not actually necessary since the pari upgrade, but necessary for the glpk patch to apply
-    (fetchpatch {
-      url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
-      sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
-      stripLen = 1;
-    })
+  packageUpgradePatches =
+    let
+      # Fetch a diff between `base` and `rev` on sage's git server.
+      # Used to fetch trac tickets by setting the `base` to the last release and the
+      # `rev` to the last commit of the ticket.
+      fetchSageDiff = { base, rev, name ? "sage-diff-${base}-${rev}.patch", ... }@args: (
+        fetchpatch ({
+          inherit name;
+          url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
+          # We don't care about sage's own build system (which builds all its dependencies).
+          # Exclude build system changes to avoid conflicts.
+          excludes = [ "build/*" ];
+        } // builtins.removeAttrs args [ "rev" "base" ])
+      );
+    in [
+      # New glpk version has new warnings, filter those out until upstream sage has found a solution
+      # Should be fixed with glpk > 4.65.
+      # https://trac.sagemath.org/ticket/24824
+      ./patches/pari-stackwarn.patch # not actually necessary since the pari upgrade, but necessary for the glpk patch to apply
+      (fetchpatch {
+        url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
+        sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
+        stripLen = 1;
+      })
 
-    # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
-    # now set the cache dir to be withing the .sage directory. This is not
-    # strictly necessary, but keeps us from littering in the user's HOME.
-    ./patches/sympow-cache.patch
+      # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
+      # now set the cache dir to be withing the .sage directory. This is not
+      # strictly necessary, but keeps us from littering in the user's HOME.
+      ./patches/sympow-cache.patch
 
-    # https://trac.sagemath.org/ticket/28472
-    (fetchpatch {
-      name = "eclib-20190909.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id=d27dc479a5772d59e4bc85d805b6ffd595284f1d";
-      sha256 = "1nf1s9y7n30lhlbdnam7sghgaq9nasmv96415gl5jlcf7a3hlxk3";
-    })
+      # https://trac.sagemath.org/ticket/28472
+      (fetchpatch {
+        name = "eclib-20190909.patch";
+        url = "https://git.sagemath.org/sage.git/patch?id=d27dc479a5772d59e4bc85d805b6ffd595284f1d";
+        sha256 = "1nf1s9y7n30lhlbdnam7sghgaq9nasmv96415gl5jlcf7a3hlxk3";
+      })
 
-    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
-    ./patches/ignore-cmp-deprecation.patch
+      # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
+      ./patches/ignore-cmp-deprecation.patch
 
-    # Werkzeug has deprecated ImmutableDict, but it is still used in legacy
-    # sagenb. That's no big issue since sagenb will be removed soon anyways.
-    ./patches/ignore-werkzeug-immutable-dict-deprecation.patch
+      # Werkzeug has deprecated ImmutableDict, but it is still used in legacy
+      # sagenb. That's no big issue since sagenb will be removed soon anyways.
+      ./patches/ignore-werkzeug-immutable-dict-deprecation.patch
 
-    # threejs r109 (#28560)
-    (fetchpatch {
-      name = "threejs-r109.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id=fcc11d6effa39f375bc5f4ea5831fb7a2f2767da";
-      sha256 = "0hnmc8ld3bblks0hcjvjjaydkgwdr1cs3dbl2ys4gfq964pjgqwc";
-    })
+      # threejs r109 (#28560)
+      (fetchpatch {
+        name = "threejs-r109.patch";
+        url = "https://git.sagemath.org/sage.git/patch?id=fcc11d6effa39f375bc5f4ea5831fb7a2f2767da";
+        sha256 = "0hnmc8ld3bblks0hcjvjjaydkgwdr1cs3dbl2ys4gfq964pjgqwc";
+      })
 
-    # https://trac.sagemath.org/ticket/28911
-    (fetchpatch {
-      name = "sympy-1.5.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=c6d0308db15efd611211d26cfcbefbd180fc0831";
-      sha256 = "0nwai2jr22h49km4hx3kwafs3mzsc5kwsv7mqwjf6ibwfx2bbgyq";
-    })
+      # https://trac.sagemath.org/ticket/28911
+      (fetchpatch {
+        name = "sympy-1.5.patch";
+        url = "https://git.sagemath.org/sage.git/patch/?h=c6d0308db15efd611211d26cfcbefbd180fc0831";
+        sha256 = "0nwai2jr22h49km4hx3kwafs3mzsc5kwsv7mqwjf6ibwfx2bbgyq";
+      })
 
-    # https://trac.sagemath.org/ticket/29313 (patch from ArchLinux)
-    (fetchpatch {
-      name = "pari-2.11.3.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/sagemath-pari-2.11.3.patch?h=sagemath-git&id=02e1d58bd1cd70935d69a4990469d18be6bd2c43";
-      sha256 = "0z07444zvijyw96d11q7j81pvg7ysd6ycf1bbbjr6za9y74hv7d2";
-    })
-  ];
+      # https://trac.sagemath.org/ticket/29313 (patch from ArchLinux)
+      (fetchpatch {
+        name = "pari-2.11.3.patch";
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/sagemath-pari-2.11.3.patch?h=sagemath-git&id=02e1d58bd1cd70935d69a4990469d18be6bd2c43";
+        sha256 = "0z07444zvijyw96d11q7j81pvg7ysd6ycf1bbbjr6za9y74hv7d2";
+      })
+    ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
 

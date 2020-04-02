@@ -42,4 +42,3 @@ stdenv.mkDerivation {
     homepage = https://github.com/chubin/cheat.sh;
   };
 }
-

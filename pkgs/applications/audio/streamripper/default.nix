@@ -1,4 +1,4 @@
-{ stdenv, fetchurl , glib, pkgconfig, libogg, libvorbis, libmad }:
+{ stdenv, fetchurl, glib, pkgconfig, libogg, libvorbis, libmad }:
 
 stdenv.mkDerivation rec {
   pname = "streamripper";

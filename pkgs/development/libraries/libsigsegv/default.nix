@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , enableSigbusFix ? false # required by kernels < 3.18.6
 }:
 

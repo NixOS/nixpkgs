@@ -1,8 +1,13 @@
-{ stdenv, fetchurl, gfortran, openblas, cmake, fixDarwinDylibNames
+{ stdenv
+, fetchurl
+, gfortran
+, openblas
+, cmake
+, fixDarwinDylibNames
 , gnum4
-, enableCuda  ? false, cudatoolkit
+, enableCuda ? false
+, cudatoolkit
 }:
-
 let
   version = "5.4.0";
   name = "suitesparse-${version}";
@@ -28,12 +33,10 @@ stdenv.mkDerivation rec {
         -e 's/METIS .*$/METIS =/' \
         -e 's/METIS_PATH .*$/METIS_PATH =/' \
         -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION/'
-  ''
-  + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
         -e 's/^[[:space:]]*\(LIB = -lm\) -lrt/\1/'
-  ''
-  + stdenv.lib.optionalString enableCuda ''
+  '' + stdenv.lib.optionalString enableCuda ''
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
         -e 's|^[[:space:]]*\(CUDA_ROOT     =\)|CUDA_ROOT = ${cudatoolkit}|' \
         -e 's|^[[:space:]]*\(GPU_BLAS_PATH =\)|GPU_BLAS_PATH = $(CUDA_ROOT)|' \
@@ -89,8 +92,7 @@ stdenv.mkDerivation rec {
     cp -r lib $out/
     cp -r include $out/
     cp -r share $out/
-    ''
-    + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # The fixDarwinDylibNames in nixpkgs can't seem to fix all the libraries.
     # We manually fix them up here.
     fixDarwinDylibNames() {
@@ -109,17 +111,14 @@ stdenv.mkDerivation rec {
     }
 
     fixDarwinDylibNames $(find "$out" -name "*.dylib")
-    ''
-    + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     # Fix rpaths
     cd $out
     find -name \*.so\* -type f -exec \
       patchelf --set-rpath "$out/lib:${stdenv.lib.makeLibraryPath buildInputs}" {} \;
-    ''
-    +
-    ''
+  '' + ''
     runHook postInstall
-    '';
+  '';
 
   nativeBuildInputs = [
     cmake

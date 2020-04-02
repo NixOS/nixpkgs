@@ -1,6 +1,10 @@
-{ stdenv, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
-  gettext }:
-
+{ stdenv
+, fetchFromGitHub
+, buildDotnetPackage
+, dotnetPackages
+, gtksharp
+, gettext
+}:
 let
   mono-addins = dotnetPackages.MonoAddins;
 in
@@ -37,7 +41,8 @@ buildDotnetPackage rec {
       "Mono\\.Addins\\.Setup"
     ];
 
-    stripVersion = name: file: let
+    stripVersion = name: file:
+      let
         match = ''<Reference Include="${name}([ ,][^"]*)?"'';
         replace = ''<Reference Include="${name}"'';
       in "sed -i -re 's/${match}/${replace}/g' ${file}\n";
@@ -46,8 +51,7 @@ buildDotnetPackage rec {
     map2 = f: listA: listB: concatMap (a: map (f a) listB) listA;
     concatMap2Strings = f: listA: listB: concatStrings (map2 f listA listB);
   in
-    concatMap2Strings stripVersion versionedNames csprojFiles
-    + ''
+    concatMap2Strings stripVersion versionedNames csprojFiles + ''
       # For some reason there is no Microsoft.Common.tasks file
       # in ''${mono}/lib/mono/3.5 .
       substituteInPlace Pinta.Install.proj \

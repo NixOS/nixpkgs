@@ -1,8 +1,7 @@
-{
-  mkDerivation,
-  lib,
-  extra-cmake-modules,
-  libical
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, libical
 }:
 
 mkDerivation {

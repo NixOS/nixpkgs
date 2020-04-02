@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, darwin, lib
-, zlib, ghostscript, imagemagick, plotutils, gd
-, libjpeg, libwebp, libiconv
+{ stdenv
+, fetchurl
+, pkgconfig
+, darwin
+, lib
+, zlib
+, ghostscript
+, imagemagick
+, plotutils
+, gd
+, libjpeg
+, libwebp
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +24,14 @@ stdenv.mkDerivation rec {
   #
   # Turn on "-rdb" option (REALLYDELAYBIND) by default to ensure compatibility with gs-9.22
   #
-  patches = [ ./pstoedit-gs-9.22-compat.patch  ];
+  patches = [ ./pstoedit-gs-9.22-compat.patch ];
 
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    libiconv ApplicationServices
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    libiconv
+    ApplicationServices
   ]);
 
   # '@LIBPNG_LDFLAGS@' is no longer substituted by autoconf (the code is commented out)

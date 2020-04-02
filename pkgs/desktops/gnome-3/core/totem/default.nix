@@ -1,9 +1,34 @@
-{ stdenv, fetchurl, meson, ninja, gettext, gst_all_1
-, clutter-gtk, clutter-gst, python3Packages, shared-mime-info
-, pkgconfig, gtk3, glib, gobject-introspection, totem-pl-parser
-, wrapGAppsHook, itstool, libxml2, vala, gnome3, grilo, grilo-plugins
-, libpeas, adwaita-icon-theme, gnome-desktop, gsettings-desktop-schemas
-, gdk-pixbuf, tracker, nautilus, xvfb_run }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, gst_all_1
+, clutter-gtk
+, clutter-gst
+, python3Packages
+, shared-mime-info
+, pkgconfig
+, gtk3
+, glib
+, gobject-introspection
+, totem-pl-parser
+, wrapGAppsHook
+, itstool
+, libxml2
+, vala
+, gnome3
+, grilo
+, grilo-plugins
+, libpeas
+, adwaita-icon-theme
+, gnome-desktop
+, gsettings-desktop-schemas
+, gdk-pixbuf
+, tracker
+, nautilus
+, xvfb_run
+}:
 
 stdenv.mkDerivation rec {
   pname = "totem";
@@ -18,12 +43,30 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja vala pkgconfig gettext python3Packages.python itstool gobject-introspection wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib grilo clutter-gtk clutter-gst totem-pl-parser grilo-plugins
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly gst_all_1.gst-libav libpeas shared-mime-info
-    gdk-pixbuf libxml2 adwaita-icon-theme gnome-desktop
-    gsettings-desktop-schemas tracker nautilus
-    python3Packages.pygobject3 python3Packages.dbus-python # for plug-ins
+    gtk3
+    glib
+    grilo
+    clutter-gtk
+    clutter-gst
+    totem-pl-parser
+    grilo-plugins
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+    libpeas
+    shared-mime-info
+    gdk-pixbuf
+    libxml2
+    adwaita-icon-theme
+    gnome-desktop
+    gsettings-desktop-schemas
+    tracker
+    nautilus
+    python3Packages.pygobject3
+    python3Packages.dbus-python # for plug-ins
   ];
 
   postPatch = ''

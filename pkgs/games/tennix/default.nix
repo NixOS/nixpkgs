@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python } :
+{ stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_net, python }:
 
 stdenv.mkDerivation rec {
   name = "tennix-1.1";

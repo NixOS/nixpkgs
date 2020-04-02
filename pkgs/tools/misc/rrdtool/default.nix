@@ -1,5 +1,15 @@
-{ fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
-, tcl-8_5, darwin }:
+{ fetchurl
+, stdenv
+, gettext
+, perl
+, pkgconfig
+, libxml2
+, pango
+, cairo
+, groff
+, tcl-8_5
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   name = "rrdtool-1.7.2";

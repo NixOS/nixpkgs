@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.09b";
 
   src = fetchurl {
-    url    = "http://lcamtuf.coredump.cx/p0f3/releases/${pname}-${version}.tgz";
+    url = "http://lcamtuf.coredump.cx/p0f3/releases/${pname}-${version}.tgz";
     sha256 = "0zqfq3gdnha29ckvlqmyp36c0jhj7f69bhqqx31yb6vkirinhfsl";
   };
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Passive network reconnaissance and fingerprinting tool";
-    homepage    = "http://lcamtuf.coredump.cx/p0f3/";
-    license     = stdenv.lib.licenses.lgpl21;
-    platforms   = stdenv.lib.platforms.linux;
+    homepage = "http://lcamtuf.coredump.cx/p0f3/";
+    license = stdenv.lib.licenses.lgpl21;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

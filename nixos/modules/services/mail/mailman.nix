@@ -1,9 +1,7 @@
-{ config, pkgs, lib, ... }:          # mailman.nix
+{ config, pkgs, lib, ... }: # mailman.nix
 
 with lib;
-
 let
-
   cfg = config.services.mailman;
 
   # This deliberately doesn't use recursiveUpdate so users can
@@ -54,8 +52,8 @@ let
     # settings.
     api_key: @API_KEY@
   '';
-
-in {
+in
+{
 
   ###### interface
 
@@ -112,7 +110,7 @@ in {
 
       webHosts = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           The list of hostnames and/or IP addresses from which the Mailman Web
           UI will accept requests. By default, "localhost" and "127.0.0.1" are
@@ -132,7 +130,7 @@ in {
 
       webSettings = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Overrides for the default mailman-web Django settings.
         '';
@@ -158,30 +156,33 @@ in {
 
   config = mkIf cfg.enable {
 
-    assertions = let
-      inherit (config.services) postfix;
+    assertions =
+      let
+        inherit (config.services) postfix;
 
-      requirePostfixHash = optionPath: dataFile:
-        with lib;
-        let
-          expected = "hash:/var/lib/mailman/data/${dataFile}";
-          value = attrByPath optionPath [] postfix;
-        in
-          { assertion = postfix.enable -> isList value && elem expected value;
-            message = ''
-              services.postfix.${concatStringsSep "." optionPath} must contain
-              "${expected}".
-              See <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>.
-            '';
-          };
-    in [
-      { assertion = postfix.enable;
-        message = "Mailman requires Postfix";
-      }
-      (requirePostfixHash [ "relayDomains" ] "postfix_domains")
-      (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
-      (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
-    ];
+        requirePostfixHash = optionPath: dataFile:
+          with lib;
+          let
+            expected = "hash:/var/lib/mailman/data/${dataFile}";
+            value = attrByPath optionPath [ ] postfix;
+          in
+            {
+              assertion = postfix.enable -> isList value && elem expected value;
+              message = ''
+                services.postfix.${concatStringsSep "." optionPath} must contain
+                "${expected}".
+                See <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>.
+              '';
+            };
+      in [
+        {
+          assertion = postfix.enable;
+          message = "Mailman requires Postfix";
+        }
+        (requirePostfixHash [ "relayDomains" ] "postfix_domains")
+        (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
+        (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
+      ];
 
     users.users.mailman = { description = "GNU Mailman"; isSystemUser = true; };
 
@@ -208,9 +209,9 @@ in {
     environment.systemPackages = [ cfg.package ] ++ (with pkgs; [ mailman-web ]);
 
     services.postfix = {
-      recipientDelimiter = "+";         # bake recipient addresses in mail envelopes via VERP
+      recipientDelimiter = "+"; # bake recipient addresses in mail envelopes via VERP
       config = {
-        owner_request_special = "no";   # Mailman handles -owner addresses on its own
+        owner_request_special = "no"; # Mailman handles -owner addresses on its own
       };
     };
 

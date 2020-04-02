@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xorgproto, libxcb, xcbutilkeysyms
-, xorg , i3ipc-glib , glib
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, xorgproto
+, libxcb
+, xcbutilkeysyms
+, xorg
+, i3ipc-glib
+, glib
 }:
 
 stdenv.mkDerivation {
@@ -25,7 +32,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Focus and select windows in i3";
     homepage = https://github.com/cornerman/i3-easyfocus;
-    maintainers = with maintainers; [teto];
+    maintainers = with maintainers; [ teto ];
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

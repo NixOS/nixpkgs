@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, fetchzip, perl
+{ stdenv
+, fetchurl
+, fetchpatch
+, fetchzip
+, perl
 , searchNixProfiles ? true
 }:
-
 let
-
   # Source for u-deva.cmap and u-deva.cset: use the Marathi
   # dictionary like Debian does.
   devaMapsSource = fetchzip {
@@ -11,9 +13,7 @@ let
     url = "ftp://ftp.gnu.org/gnu/aspell/dict/mr/aspell6-mr-0.10-0.tar.bz2";
     sha256 = "1v8cdl8x2j1d4vbvsq1xrqys69bbccd6mi03fywrhkrrljviyri1";
   };
-
 in
-
 stdenv.mkDerivation rec {
   name = "aspell-0.60.8";
 

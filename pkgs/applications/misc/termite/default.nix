@@ -1,11 +1,9 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, vte, gtk3, ncurses, pcre2, wrapGAppsHook }:
-
 let
-
   # termite requires VTE with some internals exposed
   # https://github.com/thestinger/vte-ng
-  vte-ng =  vte.overrideAttrs (attrs: {
-    patches = attrs.patches or [] ++ [
+  vte-ng = vte.overrideAttrs (attrs: {
+    patches = attrs.patches or [ ] ++ [
       (fetchpatch {
         name = "0001-expose-functions-for-pausing-unpausing-output.patch";
         url = "https://github.com/thestinger/vte-ng/commit/342e26574f50dcd40bbeaad9e839c2a6144d0c1c.patch";
@@ -33,8 +31,8 @@ let
       })
     ];
   });
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "termite";
   version = "15";
 
@@ -47,7 +45,9 @@ in stdenv.mkDerivation rec {
   };
 
   # https://github.com/thestinger/termite/pull/516
-  patches = [ ./url_regexp_trailing.patch ./add_errno_header.patch
+  patches = [
+    ./url_regexp_trailing.patch
+    ./add_errno_header.patch
     # Fix off-by-one in select_text() on libvte >= 0.55.0
     # Expected to be included in next release (16).
     (fetchpatch {

@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, python3
-, libsepol, libselinux, checkpolicy
+{ stdenv
+, fetchFromGitHub
+, python3
+, libsepol
+, libselinux
+, checkpolicy
 , withGraphics ? false
 }:
 

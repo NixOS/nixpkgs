@@ -1,10 +1,36 @@
-{ stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
-, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
-, at-spi2-atk, libuuid, at-spi2-core }:
-
+{ stdenv
+, fetchurl
+, dpkg
+, alsaLib
+, atk
+, cairo
+, cups
+, curl
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, glibc
+, gnome2
+, gnome3
+, gtk3
+, libnotify
+, libpulseaudio
+, libsecret
+, libv4l
+, nspr
+, nss
+, pango
+, systemd
+, wrapGAppsHook
+, xorg
+, at-spi2-atk
+, libuuid
+, at-spi2-core
+}:
 let
-
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
   version = "8.56.0.103";
@@ -67,8 +93,8 @@ let
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "skypeforlinux";
   inherit version;
 

@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-      substituteInPlace "$out"/lib/cmake/precice/preciceTargets.cmake \
-      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include;' 'INTERFACE_INCLUDE_DIRECTORIES "'$out/include';'
+    substituteInPlace "$out"/lib/cmake/precice/preciceTargets.cmake \
+    --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include;' 'INTERFACE_INCLUDE_DIRECTORIES "'$out/include';'
   ''; # Check if this can be removed after upstream PR 577
 
   meta = {
@@ -39,5 +39,3 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }
-
-

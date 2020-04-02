@@ -15,10 +15,11 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib;
-  { description = "Kakoune extension to enable automatic closing of pairs";
-    homepage = "https://github.com/alexherbo2/auto-pairs.kak";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ nrdxp ];
-    platform = platforms.all;
-  };
+    {
+      description = "Kakoune extension to enable automatic closing of pairs";
+      homepage = "https://github.com/alexherbo2/auto-pairs.kak";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ nrdxp ];
+      platform = platforms.all;
+    };
 }

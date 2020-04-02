@@ -16,13 +16,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid gettext ];
 
   # Only use glibc's __GNUC_PREREQ(X,Y) (checks if compiler is gcc version >= X.Y) when using glibc
-  patches = if stdenv.hostPlatform.libc == "glibc" then null
+  patches =
+    if stdenv.hostPlatform.libc == "glibc" then null
     else [
       (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
-      excludes = [ "lib/ext2fs/hashmap.h" ];
-      extraPrefix = "";
+        url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
+        sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
+        excludes = [ "lib/ext2fs/hashmap.h" ];
+        extraPrefix = "";
       })
     ];
 

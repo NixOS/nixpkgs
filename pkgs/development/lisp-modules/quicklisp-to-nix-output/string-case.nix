@@ -14,7 +14,7 @@ rec {
 
   packageName = "string-case";
 
-  asdFilesToKeep = ["string-case.asd"];
+  asdFilesToKeep = [ "string-case.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM string-case DESCRIPTION

@@ -1,4 +1,4 @@
-{  mkDerivation, lib, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwayland, qtwebsockets, stdenv /* for isLinux */ }:
+{ mkDerivation, lib, fetchurl, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwayland, qtwebsockets, stdenv /* for isLinux */ }:
 
 mkDerivation rec {
   pname = "qownnotes";
@@ -13,7 +13,11 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [
-    qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtxmlpatterns
+    qtwebsockets
   ] ++ lib.optional stdenv.isLinux qtwayland;
 
   meta = with lib; {

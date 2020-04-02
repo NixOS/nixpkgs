@@ -21,4 +21,3 @@ fetchzip {
     platforms = platforms.all;
   };
 }
-

@@ -14,7 +14,8 @@
 , sqlite
 , discount
 , wrapGAppsHook
-, withPantheon ? false }:
+, withPantheon ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";
@@ -57,8 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "Markdown notes editor and manager designed for elementary OS"
-    + stdenv.lib.optionalString withPantheon " - built with Contractor support";
+    description = "Markdown notes editor and manager designed for elementary OS" + stdenv.lib.optionalString withPantheon " - built with Contractor support";
     homepage = https://github.com/Philip-Scott/Notes-up;
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak worldofpeace ];

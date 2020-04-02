@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, google_auth, google-auth-httplib2, google_api_core
-, httplib2, six, uritemplate, oauth2client }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google_auth
+, google-auth-httplib2
+, google_api_core
+, httplib2
+, six
+, uritemplate
+, oauth2client
+}:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
@@ -15,8 +23,13 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    google_auth google-auth-httplib2 google_api_core
-    httplib2 six uritemplate oauth2client
+    google_auth
+    google-auth-httplib2
+    google_api_core
+    httplib2
+    six
+    uritemplate
+    oauth2client
   ];
 
   meta = with lib; {

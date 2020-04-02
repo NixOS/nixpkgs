@@ -1,7 +1,16 @@
-{
-  mkDerivation, lib, propagate,
-  extra-cmake-modules, kdoctools,
-  kconfig, kcoreaddons, kcrash, kdbusaddons, kinit, kservice, qtbase,
+{ mkDerivation
+, lib
+, propagate
+, extra-cmake-modules
+, kdoctools
+, kconfig
+, kcoreaddons
+, kcrash
+, kdbusaddons
+, kinit
+, kservice
+, qtbase
+,
 }:
 
 mkDerivation {
@@ -9,7 +18,13 @@ mkDerivation {
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kconfig kcoreaddons kcrash kdbusaddons kinit kservice qtbase
+    kconfig
+    kcoreaddons
+    kcrash
+    kdbusaddons
+    kinit
+    kservice
+    qtbase
   ];
   outputs = [ "out" "dev" ];
   setupHook = propagate "out";

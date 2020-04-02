@@ -30,8 +30,7 @@ stdenv.mkDerivation (rec {
     maintainers = [ maintainers.pierron ];
     platforms = platforms.linux;
   };
-} // stdenv.lib.optionalAttrs ( ! enableShared )
+} // stdenv.lib.optionalAttrs (! enableShared)
 {
   CONFIG_PFMLIB_SHARED = "n";
-}
-)
+})

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ sndio ]
     ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD)
-    libbsd;
+  libbsd;
 
   outputs = [ "out" "man" ];
 
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("PREFIX=$out")
   '' + stdenv.lib.optionalString
     (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD) ''
-      makeFlagsArray+=(LDADD="-lsndio -lbsd")
+    makeFlagsArray+=(LDADD="-lsndio -lbsd")
 
-      # Fix warning about implicit declaration of function 'strlcpy'
-      substituteInPlace aucatctl.c \
-        --replace '#include <string.h>' '#include <bsd/string.h>'
-    '';
+    # Fix warning about implicit declaration of function 'strlcpy'
+    substituteInPlace aucatctl.c \
+      --replace '#include <string.h>' '#include <bsd/string.h>'
+  '';
 
   meta = with stdenv.lib; {
     description =

@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, libsamplerate, libsndfile, fftw
-, vampSDK, ladspaH }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libsamplerate
+, libsndfile
+, fftw
+, vampSDK
+, ladspaH
+}:
 
 stdenv.mkDerivation {
   name = "rubberband-1.8.1";

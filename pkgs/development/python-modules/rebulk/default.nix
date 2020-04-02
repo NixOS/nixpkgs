@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner, six, regex}:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner, six, regex }:
 
 buildPythonPackage rec {
   pname = "rebulk";

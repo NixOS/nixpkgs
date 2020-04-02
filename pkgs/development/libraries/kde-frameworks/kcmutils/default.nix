@@ -1,8 +1,18 @@
-{
-  mkDerivation, lib, copyPathsToStore,
-  extra-cmake-modules,
-  kconfigwidgets, kcoreaddons, kdeclarative, ki18n, kiconthemes, kitemviews,
-  kpackage, kservice, kxmlgui, qtdeclarative,
+{ mkDerivation
+, lib
+, copyPathsToStore
+, extra-cmake-modules
+, kconfigwidgets
+, kcoreaddons
+, kdeclarative
+, ki18n
+, kiconthemes
+, kitemviews
+, kpackage
+, kservice
+, kxmlgui
+, qtdeclarative
+,
 }:
 
 mkDerivation {
@@ -10,7 +20,13 @@ mkDerivation {
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    kcoreaddons kdeclarative ki18n kiconthemes kitemviews kpackage kxmlgui
+    kcoreaddons
+    kdeclarative
+    ki18n
+    kiconthemes
+    kitemviews
+    kpackage
+    kxmlgui
     qtdeclarative
   ];
   propagatedBuildInputs = [ kconfigwidgets kservice ];

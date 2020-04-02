@@ -14,7 +14,7 @@ args @ { fetchurl, ... }:
 
   packageName = "qmynd";
 
-  asdFilesToKeep = ["qmynd.asd"];
+  asdFilesToKeep = [ "qmynd.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM qmynd DESCRIPTION MySQL Native Driver SHA256

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ markupsafe nose mock ];
   propagatedBuildInputs = [ markupsafe ];
 
-  doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
+  doCheck = !isPyPy; # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
   checkPhase = ''
     ${python.interpreter} -m unittest discover
   '';

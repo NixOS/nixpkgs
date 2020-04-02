@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, zlib, python, bzip2, lzma}:
+{ stdenv, fetchFromGitHub, zlib, python, bzip2, lzma }:
 
 stdenv.mkDerivation rec {
   pname = "bedtools";

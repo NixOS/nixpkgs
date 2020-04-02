@@ -7,9 +7,9 @@ buildGoPackage rec {
   goPackagePath = "github.com/trezor/trezord-go";
 
   src = fetchFromGitHub {
-    owner  = "trezor";
-    repo   = "trezord-go";
-    rev    = "v${version}";
+    owner = "trezor";
+    repo = "trezord-go";
+    rev = "v${version}";
     sha256 = "1ks1fa0027s3xp0z6qp0dxmayvrb4dwwscfhbx7da0khp153f2cp";
   };
 

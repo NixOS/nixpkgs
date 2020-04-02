@@ -13,7 +13,6 @@ using a nix-shell shebang:
 Run the following in the nixpkgs root directory to update the ruby-packages.nix:
 ./maintainers/scripts/update-ruby-packages
 */
-
 let
   functions = import ../bundled-common/functions.nix { inherit lib gemConfig; };
 
@@ -51,7 +50,6 @@ let
           done
         '';
       };
-
     in stdenv.mkDerivation {
       name = "${ruby.name}-with-packages";
       nativeBuildInputs = [ makeWrapper ];
@@ -73,5 +71,5 @@ let
         gems = selected;
       };
     };
-
-in { inherit withPackages gems buildGems; }
+in
+{ inherit withPackages gems buildGems; }

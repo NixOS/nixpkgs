@@ -15,4 +15,3 @@ stdenv.mkDerivation {
     license = licenses.lgpl21;
   };
 }
-

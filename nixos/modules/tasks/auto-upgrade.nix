@@ -35,7 +35,7 @@ let cfg = config.system.autoUpgrade; in
 
       flags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "-I" "stuff=/home/alice/nixos-stuff" "--option" "extra-binary-caches" "http://my-cache.example.org/" ];
         description = ''
           Any additional flags passed to <command>nixos-rebuild</command>.
@@ -84,9 +84,11 @@ let cfg = config.system.autoUpgrade; in
 
     system.autoUpgrade.flags =
       [ "--no-build-output" ]
-      ++ (if cfg.channel == null
-          then [ "--upgrade" ]
-          else [ "-I" "nixpkgs=${cfg.channel}/nixexprs.tar.xz" ]);
+      ++ (
+        if cfg.channel == null
+        then [ "--upgrade" ]
+        else [ "-I" "nixpkgs=${cfg.channel}/nixexprs.tar.xz" ]
+      );
 
     systemd.services.nixos-upgrade = {
       description = "NixOS Upgrade";
@@ -97,16 +99,18 @@ let cfg = config.system.autoUpgrade; in
       serviceConfig.Type = "oneshot";
 
       environment = config.nix.envVars //
-        { inherit (config.environment.sessionVariables) NIX_PATH;
+        {
+          inherit (config.environment.sessionVariables) NIX_PATH;
           HOME = "/root";
         } // config.networking.proxy.envVars;
 
       path = with pkgs; [ coreutils gnutar xz.bin gzip gitMinimal config.nix.package.out ];
 
-      script = let
+      script =
+        let
           nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
         in
-        if cfg.allowReboot then ''
+          if cfg.allowReboot then ''
             ${nixos-rebuild} boot ${toString cfg.flags}
             booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
             built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
@@ -117,7 +121,7 @@ let cfg = config.system.autoUpgrade; in
             fi
           '' else ''
             ${nixos-rebuild} switch ${toString cfg.flags}
-        '';
+          '';
 
       startAt = cfg.dates;
     };

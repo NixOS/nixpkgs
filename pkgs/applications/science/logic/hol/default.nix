@@ -1,24 +1,26 @@
-{stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf,
- experimentalKernel ? true}:
-
+{ stdenv
+, pkgs
+, fetchurl
+, graphviz
+, fontconfig
+, liberation_ttf
+, experimentalKernel ? true
+}:
 let
   pname = "hol4";
   vnum = "10";
 in
-
 let
   version = "k.${vnum}";
   longVersion = "kananaskis-${vnum}";
   holsubdir = "hol-${longVersion}";
   kernelFlag = if experimentalKernel then "-expk" else "-stdknl";
 in
-
 let
   polymlEnableShared = with pkgs; lib.overrideDerivation polyml (attrs: {
     configureFlags = [ "--enable-shared" ];
   });
 in
-
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation {
     sha256 = "0x2wxksr305h1lrbklf6p42lp09rbhb4rsh74g0l70sgapyiac9b";
   };
 
-  buildInputs = [polymlEnableShared graphviz fontconfig liberation_ttf];
+  buildInputs = [ polymlEnableShared graphviz fontconfig liberation_ttf ];
 
   buildCommand = ''
 

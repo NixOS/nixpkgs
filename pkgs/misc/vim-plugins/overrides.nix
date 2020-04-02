@@ -1,33 +1,69 @@
-{ lib, stdenv
-, python, cmake, meson, vim, ruby
-, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
-, llvmPackages, rustPlatform
-, xkb-switch, fzf, skim, stylish-haskell
-, python3, boost, icu, ncurses
-, ycmd, rake
-, gobject-introspection, glib, wrapGAppsHook
+{ lib
+, stdenv
+, python
+, cmake
+, meson
+, vim
+, ruby
+, which
+, fetchFromGitHub
+, fetchgit
+, fetchurl
+, fetchzip
+, fetchpatch
+, llvmPackages
+, rustPlatform
+, xkb-switch
+, fzf
+, skim
+, stylish-haskell
+, python3
+, boost
+, icu
+, ncurses
+, ycmd
+, rake
+, gobject-introspection
+, glib
+, wrapGAppsHook
 , substituteAll
 , languagetool
-, Cocoa, CoreFoundation, CoreServices
+, Cocoa
+, CoreFoundation
+, CoreServices
 , buildVimPluginFrom2Nix
 , nodePackages
 
-# coc-go dependency
+  # coc-go dependency
 , go
 
-# deoplete-khard dependency
+  # deoplete-khard dependency
 , khard
 
-# vim-go dependencies
-, asmfmt, delve, errcheck, godef, golint
-, gomodifytags, gotags, gotools, go-motion
-, gnused, reftools, gogetdoc, gometalinter
-, impl, iferr, gocode, gocode-gomod, go-tools
+  # vim-go dependencies
+, asmfmt
+, delve
+, errcheck
+, godef
+, golint
+, gomodifytags
+, gotags
+, gotools
+, go-motion
+, gnused
+, reftools
+, gogetdoc
+, gometalinter
+, impl
+, iferr
+, gocode
+, gocode-gomod
+, go-tools
 
-# direnv-vim dependencies
+  # direnv-vim dependencies
 , direnv
 
-# vCoolor dependency
+  # vCoolor dependency
 , gnome3
 }:
 
@@ -55,39 +91,40 @@ self: super: {
     src = skim.vim;
   };
 
-  LanguageClient-neovim = let
-    version = "0.1.156";
-    LanguageClient-neovim-src = fetchurl {
-      url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
-      sha256 = "0bf2va6lpgw7wqpwpfidijbzphhvw48hyc2b529qv12vwgnd1shq";
-    };
-    LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
-      name = "LanguageClient-neovim-bin";
+  LanguageClient-neovim =
+    let
+      version = "0.1.156";
+      LanguageClient-neovim-src = fetchurl {
+        url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
+        sha256 = "0bf2va6lpgw7wqpwpfidijbzphhvw48hyc2b529qv12vwgnd1shq";
+      };
+      LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
+        name = "LanguageClient-neovim-bin";
+        src = LanguageClient-neovim-src;
+
+        cargoSha256 = "0w66fcrlaxf6zgkrfpgfybfbm759fzimnr3pjq6sm14frar7lhr6";
+        buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+
+        # FIXME: Use impure version of CoreFoundation because of missing symbols.
+        #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
+        preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+          export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
+        '';
+      };
+    in buildVimPluginFrom2Nix {
+      pname = "LanguageClient-neovim";
+      inherit version;
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0w66fcrlaxf6zgkrfpgfybfbm759fzimnr3pjq6sm14frar7lhr6";
-      buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+      propagatedBuildInputs = [ LanguageClient-neovim-bin ];
 
-      # FIXME: Use impure version of CoreFoundation because of missing symbols.
-      #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
-      preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-        export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
+      preFixup = ''
+        substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
+          --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
       '';
     };
-  in buildVimPluginFrom2Nix {
-    pname = "LanguageClient-neovim";
-    inherit version;
-    src = LanguageClient-neovim-src;
 
-    propagatedBuildInputs = [ LanguageClient-neovim-bin ];
-
-    preFixup = ''
-      substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
-        --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
-    '';
-  };
-
-  clang_complete = super.clang_complete.overrideAttrs(old: {
+  clang_complete = super.clang_complete.overrideAttrs (old: {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
     # These usually implicitly set by cc-wrapper around clang (pkgs/build-support/cc-wrapper).
@@ -104,7 +141,7 @@ self: super: {
     '';
   });
 
-  direnv-vim = super.direnv-vim.overrideAttrs(oa: {
+  direnv-vim = super.direnv-vim.overrideAttrs (oa: {
     preFixup = oa.preFixup or "" + ''
       substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
         --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
@@ -112,8 +149,8 @@ self: super: {
     '';
   });
 
-  vim-pandoc = super.vim-pandoc.overrideAttrs(old: {
-    patches = (super.patches or []) ++ [
+  vim-pandoc = super.vim-pandoc.overrideAttrs (old: {
+    patches = (super.patches or [ ]) ++ [
       # Fix a failure on startup, which breaks the rplugin manifest generation
       # https://github.com/vim-pandoc/vim-pandoc/pull/363#issuecomment-599080366
       (fetchpatch {
@@ -121,20 +158,20 @@ self: super: {
         url = "https://github.com/vim-pandoc/vim-pandoc/commit/da4c0b0325c1bfad20f7cfd15abb53943fe22fc4.patch";
         revert = true;
         # For some reason that part was already reverted upstream.
-        excludes = ["ftdetect/pandoc.vim"];
+        excludes = [ "ftdetect/pandoc.vim" ];
         sha256 = "10nykgsqpxx5hlagk83khjl8p58zx7z3bcryzinv5vv52wlqkq5p";
       })
     ];
   });
 
-  clighter8 = super.clighter8.overrideAttrs(old: {
+  clighter8 = super.clighter8.overrideAttrs (old: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
     '';
   });
 
-  coc-go = super.coc-go.overrideAttrs(old: {
+  coc-go = super.coc-go.overrideAttrs (old: {
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/coc-go/src/utils/tools.ts \
         --replace 'const cmd = `GOPATH=''${gopath}; go ''${args}`' 'const cmd = `GOPATH=''${gopath}; ${go}/bin/go ''${args}`'
@@ -334,7 +371,7 @@ self: super: {
     src = "${nodePackages.coc-yank}/lib/node_modules/coc-yank";
   };
 
-  command-t = super.command-t.overrideAttrs(old: {
+  command-t = super.command-t.overrideAttrs (old: {
     buildInputs = [ ruby rake ];
     buildPhase = ''
       rake make
@@ -342,7 +379,7 @@ self: super: {
     '';
   });
 
-  cpsm = super.cpsm.overrideAttrs(old: {
+  cpsm = super.cpsm.overrideAttrs (old: {
     buildInputs = [
       python3
       stdenv
@@ -358,7 +395,7 @@ self: super: {
     '';
   });
 
-  ctrlp-cmatcher = super.ctrlp-cmatcher.overrideAttrs(old: {
+  ctrlp-cmatcher = super.ctrlp-cmatcher.overrideAttrs (old: {
     buildInputs = [ python ];
     buildPhase = ''
       patchShebangs .
@@ -366,25 +403,25 @@ self: super: {
     '';
   });
 
-  defx-nvim = super.defx-nvim.overrideAttrs(old: {
+  defx-nvim = super.defx-nvim.overrideAttrs (old: {
     dependencies = with super; [ nvim-yarp ];
   });
 
-  deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
+  deoplete-fish = super.deoplete-fish.overrideAttrs (old: {
     dependencies = with super; [ deoplete-nvim vim-fish ];
   });
 
-  deoplete-go = super.deoplete-go.overrideAttrs(old: {
+  deoplete-go = super.deoplete-go.overrideAttrs (old: {
     buildInputs = [ python3 ];
     buildPhase = ''
       pushd ./rplugin/python3/deoplete/ujson
       python3 setup.py build --build-base=$PWD/build --build-lib=$PWD/build
       popd
       find ./rplugin/ -name "ujson*.so" -exec mv -v {} ./rplugin/python3/ \;
-   '';
+    '';
   });
 
-  deoplete-khard = super.deoplete-khard.overrideAttrs(old: {
+  deoplete-khard = super.deoplete-khard.overrideAttrs (old: {
     dependencies = [ self.deoplete-nvim ];
     passthru.python3Dependencies = ps: [ (ps.toPythonModule khard) ];
     meta = {
@@ -395,20 +432,20 @@ self: super: {
     };
   });
 
-  ensime-vim = super.ensime-vim.overrideAttrs(old: {
+  ensime-vim = super.ensime-vim.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ sexpdata websocket_client ];
     dependencies = with super; [ vimproc-vim vimshell-vim super.self forms ];
   });
 
-  forms = super.forms.overrideAttrs(old: {
+  forms = super.forms.overrideAttrs (old: {
     dependencies = with super; [ super.self ];
   });
 
-  ghcid = super.ghcid.overrideAttrs(old: {
+  ghcid = super.ghcid.overrideAttrs (old: {
     configurePhase = "cd plugins/nvim";
   });
 
-  gist-vim = super.gist-vim.overrideAttrs(old: {
+  gist-vim = super.gist-vim.overrideAttrs (old: {
     dependencies = with super; [ webapi-vim ];
   });
 
@@ -430,122 +467,125 @@ self: super: {
     meta.maintainers = with stdenv.lib.maintainers; [ vcunat ];
   };
 
-  ncm2 = super.ncm2.overrideAttrs(old: {
+  ncm2 = super.ncm2.overrideAttrs (old: {
     dependencies = with super; [ nvim-yarp ];
   });
 
-  ncm2-jedi = super.ncm2-jedi.overrideAttrs(old: {
+  ncm2-jedi = super.ncm2-jedi.overrideAttrs (old: {
     dependencies = with super; [ nvim-yarp ncm2 ];
     passthru.python3Dependencies = ps: with ps; [ jedi ];
   });
 
-  ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
+  ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs (old: {
     dependencies = with super; [ ultisnips ];
   });
 
-  fzf-vim = super.fzf-vim.overrideAttrs(old: {
+  fzf-vim = super.fzf-vim.overrideAttrs (old: {
     dependencies = [ self.fzfWrapper ];
   });
 
-  sved = let
-    # we put the script in its own derivation to benefit the magic of wrapGAppsHook
-    svedbackend = stdenv.mkDerivation {
-      name = "svedbackend-${super.sved.name}";
-      inherit (super.sved) src;
-      nativeBuildInputs = [ wrapGAppsHook ];
-      buildInputs = [
-        gobject-introspection
-        glib
-        (python3.withPackages(ps: with ps; [ pygobject3 pynvim dbus-python ]))
-      ];
-      preferLocalBuild = true;
-      installPhase = ''
-        install -Dt $out/bin ftplugin/evinceSync.py
-      '';
-    };
-  in
-    super.sved.overrideAttrs(old: {
-      preferLocalBuild = true;
-      postPatch = ''
-        rm ftplugin/evinceSync.py
-        ln -s ${svedbackend}/bin/evinceSync.py ftplugin/evinceSync.py
-      '';
-      meta = {
-        description = "synctex support between vim/neovim and evince";
+  sved =
+    let
+      # we put the script in its own derivation to benefit the magic of wrapGAppsHook
+      svedbackend = stdenv.mkDerivation {
+        name = "svedbackend-${super.sved.name}";
+        inherit (super.sved) src;
+        nativeBuildInputs = [ wrapGAppsHook ];
+        buildInputs = [
+          gobject-introspection
+          glib
+          (python3.withPackages (ps: with ps; [ pygobject3 pynvim dbus-python ]))
+        ];
+        preferLocalBuild = true;
+        installPhase = ''
+          install -Dt $out/bin ftplugin/evinceSync.py
+        '';
       };
-    });
+    in
+      super.sved.overrideAttrs (old: {
+        preferLocalBuild = true;
+        postPatch = ''
+          rm ftplugin/evinceSync.py
+          ln -s ${svedbackend}/bin/evinceSync.py ftplugin/evinceSync.py
+        '';
+        meta = {
+          description = "synctex support between vim/neovim and evince";
+        };
+      });
 
 
-  vimshell-vim = super.vimshell-vim.overrideAttrs(old: {
+  vimshell-vim = super.vimshell-vim.overrideAttrs (old: {
     dependencies = with super; [ vimproc-vim ];
   });
 
-  vim-addon-manager = super.vim-addon-manager.overrideAttrs(old: {
+  vim-addon-manager = super.vim-addon-manager.overrideAttrs (old: {
     buildInputs = stdenv.lib.optional stdenv.isDarwin Cocoa;
   });
 
-  vim-addon-actions = super.vim-addon-actions.overrideAttrs(old: {
+  vim-addon-actions = super.vim-addon-actions.overrideAttrs (old: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
 
-  vim-addon-async = super.vim-addon-async.overrideAttrs(old: {
+  vim-addon-async = super.vim-addon-async.overrideAttrs (old: {
     dependencies = with super; [ vim-addon-signs ];
   });
 
-  vim-addon-background-cmd = super.vim-addon-background-cmd.overrideAttrs(old: {
+  vim-addon-background-cmd = super.vim-addon-background-cmd.overrideAttrs (old: {
     dependencies = with super; [ vim-addon-mw-utils ];
   });
 
-  vim-addon-completion = super.vim-addon-completion.overrideAttrs(old: {
+  vim-addon-completion = super.vim-addon-completion.overrideAttrs (old: {
     dependencies = with super; [ tlib_vim ];
   });
 
-  vim-addon-goto-thing-at-cursor = super.vim-addon-goto-thing-at-cursor.overrideAttrs(old: {
+  vim-addon-goto-thing-at-cursor = super.vim-addon-goto-thing-at-cursor.overrideAttrs (old: {
     dependencies = with super; [ tlib_vim ];
   });
 
-  vim-addon-mru = super.vim-addon-mru.overrideAttrs(old: {
+  vim-addon-mru = super.vim-addon-mru.overrideAttrs (old: {
     dependencies = with super; [ vim-addon-other vim-addon-mw-utils ];
   });
 
-  vim-addon-nix = super.vim-addon-nix.overrideAttrs(old: {
+  vim-addon-nix = super.vim-addon-nix.overrideAttrs (old: {
     dependencies = with super; [
       vim-addon-completion
       vim-addon-goto-thing-at-cursor
       vim-addon-errorformats
       vim-addon-actions
-      vim-addon-mw-utils tlib_vim
+      vim-addon-mw-utils
+      tlib_vim
     ];
   });
 
-  vim-addon-sql = super.vim-addon-sql.overrideAttrs(old: {
+  vim-addon-sql = super.vim-addon-sql.overrideAttrs (old: {
     dependencies = with super; [ vim-addon-completion vim-addon-background-cmd tlib_vim ];
   });
 
-  vim-addon-syntax-checker = super.vim-addon-syntax-checker.overrideAttrs(old: {
+  vim-addon-syntax-checker = super.vim-addon-syntax-checker.overrideAttrs (old: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
 
-  vim-addon-toggle-buffer = super.vim-addon-toggle-buffer.overrideAttrs(old: {
+  vim-addon-toggle-buffer = super.vim-addon-toggle-buffer.overrideAttrs (old: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
 
-  vim-addon-xdebug = super.vim-addon-xdebug.overrideAttrs(old: {
+  vim-addon-xdebug = super.vim-addon-xdebug.overrideAttrs (old: {
     dependencies = with super; [ webapi-vim vim-addon-mw-utils vim-addon-signs vim-addon-async ];
   });
 
-  vim-bazel = super.vim-bazel.overrideAttrs(old: {
+  vim-bazel = super.vim-bazel.overrideAttrs (old: {
     dependencies = with super; [ vim-maktaba ];
   });
 
-  vim-codefmt = super.vim-codefmt.overrideAttrs(old: {
+  vim-codefmt = super.vim-codefmt.overrideAttrs (old: {
     dependencies = with super; [ vim-maktaba ];
   });
 
-  vim-easytags = super.vim-easytags.overrideAttrs(old: {
+  vim-easytags = super.vim-easytags.overrideAttrs (old: {
     dependencies = with super; [ vim-misc ];
     patches = [
-      (fetchpatch { # https://github.com/xolox/vim-easytags/pull/170 fix version detection for universal-ctags
+      (fetchpatch {
+        # https://github.com/xolox/vim-easytags/pull/170 fix version detection for universal-ctags
         url = https://github.com/xolox/vim-easytags/commit/46e4709500ba3b8e6cf3e90aeb95736b19e49be9.patch;
         sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
       })
@@ -555,35 +595,37 @@ self: super: {
   # change the go_bin_path to point to a path in the nix store. See the code in
   # fatih/vim-go here
   # https://github.com/fatih/vim-go/blob/155836d47052ea9c9bac81ba3e937f6f22c8e384/autoload/go/path.vim#L154-L159
-  vim-go = super.vim-go.overrideAttrs(old: let
-    binPath = lib.makeBinPath [
-      asmfmt
-      delve
-      errcheck
-      go-motion
-      go-tools
-      gocode
-      gocode-gomod
-      godef
-      gogetdoc
-      golint
-      gometalinter
-      gomodifytags
-      gotags
-      gotools
-      iferr
-      impl
-      reftools
-    ];
+  vim-go = super.vim-go.overrideAttrs (old:
+    let
+      binPath = lib.makeBinPath [
+        asmfmt
+        delve
+        errcheck
+        go-motion
+        go-tools
+        gocode
+        gocode-gomod
+        godef
+        gogetdoc
+        golint
+        gometalinter
+        gomodifytags
+        gotags
+        gotools
+        iferr
+        impl
+        reftools
+      ];
     in {
-    postPatch = ''
-      ${gnused}/bin/sed \
-        -Ee 's@"go_bin_path", ""@"go_bin_path", "${binPath}"@g' \
-        -i autoload/go/config.vim
-    '';
-  });
+      postPatch = ''
+        ${gnused}/bin/sed \
+          -Ee 's@"go_bin_path", ""@"go_bin_path", "${binPath}"@g' \
+          -i autoload/go/config.vim
+      '';
+    }
+  );
 
-  vim-grammarous = super.vim-grammarous.overrideAttrs(old: {
+  vim-grammarous = super.vim-grammarous.overrideAttrs (old: {
     # use `:GrammarousCheck` to initialize checking
     # In neovim, you also want to use set
     #   let g:grammarous#show_first_error = 1
@@ -596,35 +638,35 @@ self: super: {
     ];
   });
 
-  vim-hier = super.vim-hier.overrideAttrs(old: {
+  vim-hier = super.vim-hier.overrideAttrs (old: {
     buildInputs = [ vim ];
   });
 
-  vim-isort = super.vim-isort.overrideAttrs(old: {
+  vim-isort = super.vim-isort.overrideAttrs (old: {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
         --replace 'import vim' 'import vim; import sys; sys.path.append("${python.pkgs.isort}/${python.sitePackages}")'
     '';
   });
 
-  vim-metamath = super.vim-metamath.overrideAttrs(old: {
+  vim-metamath = super.vim-metamath.overrideAttrs (old: {
     preInstall = "cd vim";
   });
 
-  vim-snipmate = super.vim-snipmate.overrideAttrs(old: {
+  vim-snipmate = super.vim-snipmate.overrideAttrs (old: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
 
 
-  vim-wakatime = super.vim-wakatime.overrideAttrs(old: {
+  vim-wakatime = super.vim-wakatime.overrideAttrs (old: {
     buildInputs = [ python ];
   });
 
-  vim-xdebug = super.vim-xdebug.overrideAttrs(old: {
+  vim-xdebug = super.vim-xdebug.overrideAttrs (old: {
     postInstall = false;
   });
 
-  vim-xkbswitch = super.vim-xkbswitch.overrideAttrs(old: {
+  vim-xkbswitch = super.vim-xkbswitch.overrideAttrs (old: {
     patchPhase = ''
       substituteInPlace plugin/xkbswitch.vim \
         --replace /usr/local/lib/libxkbswitch.so ${xkb-switch}/lib/libxkbswitch.so
@@ -632,14 +674,14 @@ self: super: {
     buildInputs = [ xkb-switch ];
   });
 
-  vim-yapf = super.vim-yapf.overrideAttrs(old: {
+  vim-yapf = super.vim-yapf.overrideAttrs (old: {
     buildPhase = ''
       substituteInPlace ftplugin/python_yapf.vim \
         --replace '"yapf"' '"${python3.pkgs.yapf}/bin/yapf"'
     '';
   });
 
-  vimproc-vim = super.vimproc-vim.overrideAttrs(old: {
+  vimproc-vim = super.vimproc-vim.overrideAttrs (old: {
     buildInputs = [ which ];
 
     buildPhase = ''
@@ -651,11 +693,11 @@ self: super: {
     '';
   });
 
-  YankRing-vim = super.YankRing-vim.overrideAttrs(old: {
+  YankRing-vim = super.YankRing-vim.overrideAttrs (old: {
     sourceRoot = ".";
   });
 
-  youcompleteme = super.youcompleteme.overrideAttrs(old: {
+  youcompleteme = super.youcompleteme.overrideAttrs (old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
         --replace "'ycm_path_to_python_interpreter', '''" \
@@ -674,7 +716,7 @@ self: super: {
     };
   });
 
-  jedi-vim = super.jedi-vim.overrideAttrs(old: {
+  jedi-vim = super.jedi-vim.overrideAttrs (old: {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
     buildInputs = [ python3.pkgs.jedi ];
     meta = {
@@ -683,7 +725,7 @@ self: super: {
     };
   });
 
-  lf-vim = super.lf-vim.overrideAttrs(old: {
+  lf-vim = super.lf-vim.overrideAttrs (old: {
     dependencies = with super; [ bclose-vim ];
   });
 
@@ -695,7 +737,7 @@ self: super: {
     '';
   });
 
-  vCoolor-vim = super.vCoolor-vim.overrideAttrs(old: {
+  vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
     propagatedBuildInputs = [ gnome3.zenity ];
     meta = {
@@ -704,12 +746,13 @@ self: super: {
     };
   });
 
-  unicode-vim = let
-    unicode-data = fetchurl {
-      url = http://www.unicode.org/Public/UNIDATA/UnicodeData.txt;
-      sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
-    };
-  in super.unicode-vim.overrideAttrs(old: {
+  unicode-vim =
+    let
+      unicode-data = fetchurl {
+        url = http://www.unicode.org/Public/UNIDATA/UnicodeData.txt;
+        sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
+      };
+    in super.unicode-vim.overrideAttrs (old: {
 
       # redirect to /dev/null else changes terminal color
       buildPhase = ''
@@ -717,5 +760,5 @@ self: super: {
         echo "Building unicode cache"
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
-  });
+    });
 }

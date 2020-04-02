@@ -20,13 +20,13 @@ stdenv.mkDerivation {
   '';
 
   postConfigure = ''
-      # The is_validfqdn is far too restrictive, and only allows
-      # Internet-facing servers to run.  In order to run leafnode via
-      # localhost only, we need to disable this check.
-      sed -i validatefqdn.c -e 's/int is_validfqdn(const char \*f) {/int is_validfqdn(const char *f) { return 1;/;'
+    # The is_validfqdn is far too restrictive, and only allows
+    # Internet-facing servers to run.  In order to run leafnode via
+    # localhost only, we need to disable this check.
+    sed -i validatefqdn.c -e 's/int is_validfqdn(const char \*f) {/int is_validfqdn(const char *f) { return 1;/;'
   '';
 
-  buildInputs = [ pcre];
+  buildInputs = [ pcre ];
 
   meta = {
     homepage = http://leafnode.sourceforge.net/;

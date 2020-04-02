@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, libGL
-, libX11, pkgconfig, OpenGL
+{ stdenv
+, fetchurl
+, libjpeg
+, libpng
+, libmng
+, lcms1
+, libtiff
+, openexr
+, libGL
+, libX11
+, pkgconfig
+, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -32,10 +42,11 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    [ ( fetchurl {
+    [
+      (fetchurl {
         url = http://patch-tracker.debian.org/patch/series/dl/devil/1.7.8-6.1/03_CVE-2009-3994.diff;
         sha256 = "0qkx2qfv02igbrmsn6z5a3lbrbwjfh3rb0c2sj54wy0j1f775hbc";
-      } )
+      })
       ./ftbfs-libpng15.patch
       ./il_endian.h.patch
     ];

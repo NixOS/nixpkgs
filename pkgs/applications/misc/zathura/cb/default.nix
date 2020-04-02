@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkgconfig, zathura_core
-, girara, gettext, libarchive }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, zathura_core
+, girara
+, gettext
+, libarchive
+}:
 
 stdenv.mkDerivation rec {
   pname = "zathura-cb";
@@ -20,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A zathura CB plugin";
     longDescription = ''
       The zathura-cb plugin adds comic book support to zathura.
-      '';
+    '';
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jlesquembre ];

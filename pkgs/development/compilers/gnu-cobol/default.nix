@@ -1,6 +1,11 @@
-{ stdenv, fetchurl, gcc, makeWrapper
-, db, gmp, ncurses }:
-
+{ stdenv
+, fetchurl
+, gcc
+, makeWrapper
+, db
+, gmp
+, ncurses
+}:
 let
   version = "2.2";
   lib = stdenv.lib;
@@ -18,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ db gmp ncurses ];
 
-  cflags  = stdenv.lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
+  cflags = stdenv.lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
   ldflags = stdenv.lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
 
   cobolCCFlags = "-I$out/include ${ldflags} -L$out/lib ${cflags}";

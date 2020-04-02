@@ -1,10 +1,10 @@
-{lib, fetchPypi, buildPythonPackage, six}:
+{ lib, fetchPypi, buildPythonPackage, six }:
 
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
   version = "2.5.2";
 
-  propagatedBuildInputs = [six];
+  propagatedBuildInputs = [ six ];
 
   # The tarball from Pypi doesn't actually contain the unit tests
   doCheck = false;

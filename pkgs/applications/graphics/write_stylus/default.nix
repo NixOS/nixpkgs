@@ -39,19 +39,20 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      qtbase            # libQt5PrintSupport.so.5
-      qtsvg             # libQt5Svg.so.5
-      stdenv.cc.cc.lib  # libstdc++.so.6
-      libglvnd          # ibGL.so.1
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/Write/Write
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        qtbase # libQt5PrintSupport.so.5
+        qtsvg # libQt5Svg.so.5
+        stdenv.cc.cc.lib # libstdc++.so.6
+        libglvnd # ibGL.so.1
+      ];
+    in ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        $out/Write/Write
+    '';
 
   meta = with stdenv.lib; {
     homepage = http://www.styluslabs.com/;

@@ -14,7 +14,7 @@ rec {
 
   packageName = "clack";
 
-  asdFilesToKeep = ["clack.asd"];
+  asdFilesToKeep = [ "clack.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clack DESCRIPTION Web application environment for Common Lisp SHA256

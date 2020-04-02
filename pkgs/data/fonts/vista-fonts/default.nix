@@ -1,4 +1,4 @@
-{stdenv, fetchzip, cabextract}:
+{ stdenv, fetchzip, cabextract }:
 
 fetchzip {
   name = "vista-fonts-1";

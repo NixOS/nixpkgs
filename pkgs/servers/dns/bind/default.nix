@@ -1,8 +1,18 @@
-{ config, stdenv, lib, fetchurl, fetchpatch
+{ config
+, stdenv
+, lib
+, fetchurl
+, fetchpatch
 , perl
-, libcap, libtool, libxml2, openssl
-, enablePython ? config.bind.enablePython or false, python3 ? null
-, enableSeccomp ? false, libseccomp ? null, buildPackages
+, libcap
+, libtool
+, libxml2
+, openssl
+, enablePython ? config.bind.enablePython or false
+, python3 ? null
+, enableSeccomp ? false
+, libseccomp ? null
+, buildPackages
 }:
 
 assert enableSeccomp -> libseccomp != null;
@@ -54,7 +64,7 @@ stdenv.mkDerivation rec {
     "--without-eddsa"
     "--with-aes"
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
-    ++ lib.optional enableSeccomp "--enable-seccomp";
+  ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev

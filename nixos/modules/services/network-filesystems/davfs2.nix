@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.davfs2;
   cfgFile = pkgs.writeText "davfs2.conf" ''
@@ -49,7 +48,7 @@ in
       '';
       description = ''
         Extra lines appended to the configuration of davfs2.
-      ''  ;
+      '';
     };
   };
 

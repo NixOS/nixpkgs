@@ -10,7 +10,8 @@ with lib;
   imports = [
     (mkRenamedOptionModule
       [ "services" "gnome3" "file-roller" "enable" ]
-      [ "programs" "file-roller" "enable" ])
+      [ "programs" "file-roller" "enable" ]
+    )
   ];
 
   ###### interface

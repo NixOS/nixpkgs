@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl, pam ? null, libX11, libXext, libXinerama
-, libXdmcp, libXt }:
+{ stdenv
+, lib
+, fetchurl
+, pam ? null
+, libX11
+, libXext
+, libXinerama
+, libXdmcp
+, libXt
+}:
 
 stdenv.mkDerivation rec {
   name = "xlockmore-5.62";
@@ -16,12 +24,14 @@ stdenv.mkDerivation rec {
   # Don't try to install `xlock' setuid. Password authentication works
   # fine via PAM without super user privileges.
   configureFlags =
-    [ "--disable-setuid"
+    [
+      "--disable-setuid"
     ] ++ (lib.optional (pam != null) "--enable-pam");
 
   postPatch =
-    let makePath = p: lib.concatMapStringsSep " " (x: x + "/" + p) buildInputs;
-        inputs = "${makePath "lib"} ${makePath "include"}";
+    let
+      makePath = p: lib.concatMapStringsSep " " (x: x + "/" + p) buildInputs;
+      inputs = "${makePath "lib"} ${makePath "include"}";
     in ''
       sed -i 's,\(for ac_dir in\),\1 ${inputs},' configure.ac
       sed -i 's,/usr/,/no-such-dir/,g' configure.ac

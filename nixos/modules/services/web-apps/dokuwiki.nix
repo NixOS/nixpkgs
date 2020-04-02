@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
-
 let
-
   inherit (lib) mkEnableOption mkForce mkIf mkMerge mkOption optionalAttrs recursiveUpdate types;
 
   cfg = config.services.dokuwiki;
@@ -30,7 +28,6 @@ let
     <?php
     ${cfg.pluginsConfig}
   '';
-
 in
 {
   options.services.dokuwiki = {
@@ -111,7 +108,7 @@ in
         login:passwordhash:Real Name:email:groups,comma,separated 
         Create passwordHash easily by using:$ mkpasswd -5 password `pwgen 8 1`
         Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist"/>
-        '';
+      '';
     };
 
     extraConfig = mkOption {
@@ -148,13 +145,13 @@ in
       type = types.submodule (
         recursiveUpdate
           (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
-          {
-            # Enable encryption by default,
-            options.forceSSL.default = true;
-            options.enableACME.default = true;
-          }
+        {
+          # Enable encryption by default,
+          options.forceSSL.default = true;
+          options.enableACME.default = true;
+        }
       );
-      default = {forceSSL = true; enableACME = true;};
+      default = { forceSSL = true; enableACME = true; };
       example = {
         serverAliases = [
           "wiki.\${config.networking.domain}"
@@ -171,9 +168,9 @@ in
 
   config = mkIf cfg.enable {
 
-    warnings = mkIf (cfg.superUser == null) ["Not setting services.dokuwiki.superUser will impair your ability to administer DokuWiki"];
+    warnings = mkIf (cfg.superUser == null) [ "Not setting services.dokuwiki.superUser will impair your ability to administer DokuWiki" ];
 
-    assertions = [ 
+    assertions = [
       {
         assertion = cfg.aclUse -> (cfg.acl != null || cfg.aclFile != null);
         message = "Either services.dokuwiki.acl or services.dokuwiki.aclFile is mandatory when aclUse is true";
@@ -187,7 +184,7 @@ in
     services.phpfpm.pools.dokuwiki = {
       inherit user;
       inherit group;
-      phpEnv = {        
+      phpEnv = {
         DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig}";
         DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig}";
       } //optionalAttrs (cfg.usersFile != null) {
@@ -195,7 +192,7 @@ in
       } //optionalAttrs (cfg.aclUse) {
         DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig}" else "${toString cfg.aclFile}";
       };
-      
+
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = user;
@@ -205,52 +202,55 @@ in
 
     services.nginx = {
       enable = true;
-      
-       virtualHosts = {
-        ${cfg.hostName} = mkMerge [ cfg.nginx {
-          root = mkForce "${pkgs.dokuwiki}/share/dokuwiki/";
-          extraConfig = "fastcgi_param HTTPS on;";
 
-          locations."~ /(conf/|bin/|inc/|install.php)" = {
-            extraConfig = "deny all;";
-          };
+      virtualHosts = {
+        ${cfg.hostName} = mkMerge [
+          cfg.nginx
+          {
+            root = mkForce "${pkgs.dokuwiki}/share/dokuwiki/";
+            extraConfig = "fastcgi_param HTTPS on;";
 
-          locations."~ ^/data/" = {
-            root = "${cfg.stateDir}";
-            extraConfig = "internal;";
-          };
+            locations."~ /(conf/|bin/|inc/|install.php)" = {
+              extraConfig = "deny all;";
+            };
 
-          locations."~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
-            extraConfig = "expires 365d;";
-          };
+            locations."~ ^/data/" = {
+              root = "${cfg.stateDir}";
+              extraConfig = "internal;";
+            };
 
-          locations."/" = {
-            priority = 1;
-            index = "doku.php";
-            extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
-          };
+            locations."~ ^/lib.*\.(js|css|gif|png|ico|jpg|jpeg)$" = {
+              extraConfig = "expires 365d;";
+            };
 
-          locations."@dokuwiki" = {
-            extraConfig = ''
-              # rewrites "doku.php/" out of the URLs if you set the userwrite setting to .htaccess in dokuwiki config page
-              rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
-              rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
-              rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
-              rewrite ^/(.*) /doku.php?id=$1&$args last;
-            '';
-          };
+            locations."/" = {
+              priority = 1;
+              index = "doku.php";
+              extraConfig = ''try_files $uri $uri/ @dokuwiki;'';
+            };
 
-          locations."~ \.php$" = {
-            extraConfig = ''
-              try_files $uri $uri/ /doku.php;
-              include ${pkgs.nginx}/conf/fastcgi_params;
-              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param REDIRECT_STATUS 200;
-              fastcgi_pass unix:${config.services.phpfpm.pools.dokuwiki.socket};
-              fastcgi_param HTTPS on;
-            '';
-          };
-        }];
+            locations."@dokuwiki" = {
+              extraConfig = ''
+                # rewrites "doku.php/" out of the URLs if you set the userwrite setting to .htaccess in dokuwiki config page
+                rewrite ^/_media/(.*) /lib/exe/fetch.php?media=$1 last;
+                rewrite ^/_detail/(.*) /lib/exe/detail.php?media=$1 last;
+                rewrite ^/_export/([^/]+)/(.*) /doku.php?do=export_$1&id=$2 last;
+                rewrite ^/(.*) /doku.php?id=$1&$args last;
+              '';
+            };
+
+            locations."~ \.php$" = {
+              extraConfig = ''
+                try_files $uri $uri/ /doku.php;
+                include ${pkgs.nginx}/conf/fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param REDIRECT_STATUS 200;
+                fastcgi_pass unix:${config.services.phpfpm.pools.dokuwiki.socket};
+                fastcgi_param HTTPS on;
+              '';
+            };
+          }
+        ];
       };
 
     };

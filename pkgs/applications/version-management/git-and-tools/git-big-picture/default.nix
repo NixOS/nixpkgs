@@ -18,7 +18,7 @@ python2Packages.buildPythonApplication rec {
   postFixup = ''
     wrapProgram $out/bin/git-big-picture \
       --prefix PATH ":" ${ stdenv.lib.makeBinPath buildInputs  }
-    '';
+  '';
 
   meta = {
     description = "Tool for visualization of Git repositories";

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "krallin";
     repo = "tini";
     rev = "v${version}";
-    sha256 ="1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
+    sha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 
   patchPhase = "sed -i /tini-static/d CMakeLists.txt";

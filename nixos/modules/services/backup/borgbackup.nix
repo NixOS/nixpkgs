@@ -74,7 +74,8 @@ let
     in nameValuePair "borgbackup-job-${name}" {
       description = "BorgBackup job ${name}";
       path = with pkgs; [
-        borgbackup openssh
+        borgbackup
+        openssh
       ];
       script = mkBackupScript cfg;
       serviceConfig = {
@@ -99,15 +100,17 @@ let
     };
 
   # utility function around makeWrapper
-  mkWrapperDrv = {
-      original, name, set ? {}
+  mkWrapperDrv =
+    { original
+    , name
+    , set ? { }
     }:
-    pkgs.runCommandNoCC "${name}-wrapper" {
-      buildInputs = [ pkgs.makeWrapper ];
-    } (with lib; ''
-      makeWrapper "${original}" "$out/bin/${name}" \
-        ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
-    '');
+      pkgs.runCommandNoCC "${name}-wrapper" {
+        buildInputs = [ pkgs.makeWrapper ];
+      } (with lib; ''
+        makeWrapper "${original}" "$out/bin/${name}" \
+          ${concatStringsSep " \\\n " (mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)}
+      '');
 
   mkBorgWrapper = name: cfg: mkWrapperDrv {
     original = "${pkgs.borgbackup}/bin/borg";
@@ -134,8 +137,7 @@ let
     assertion = with cfg.encryption;
       mode != "none" -> passCommand != null || passphrase != null;
     message =
-      "passCommand or passphrase has to be specified because"
-      + '' borgbackup.jobs.${name}.encryption != "none"'';
+      "passCommand or passphrase has to be specified because" + '' borgbackup.jobs.${name}.encryption != "none"'';
   };
 
   mkRepoService = name: cfg:
@@ -167,7 +169,7 @@ let
     users.${cfg.user} = {
       openssh.authorizedKeys.keys =
         (map (mkAuthorizedKey cfg false) cfg.authorizedKeys
-        ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
+          ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
       useDefaultShell = true;
     };
     groups.${cfg.group} = { };
@@ -176,8 +178,7 @@ let
   mkKeysAssertion = name: cfg: {
     assertion = cfg.authorizedKeys != [ ] || cfg.authorizedKeysAppendOnly != [ ];
     message =
-      "borgbackup.repos.${name} does not make sense"
-      + " without at least one public key";
+      "borgbackup.repos.${name} does not make sense" + " without at least one public key";
   };
 
   mkRemovableDeviceAssertions = name: cfg: {
@@ -186,7 +187,6 @@ let
       borgbackup.repos.${name}: repo isn't a local path, thus it can't be a removable device!
     '';
   };
-
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
 
@@ -292,9 +292,12 @@ in {
 
           encryption.mode = mkOption {
             type = types.enum [
-              "repokey" "keyfile"
-              "repokey-blake2" "keyfile-blake2"
-              "authenticated" "authenticated-blake2"
+              "repokey"
+              "keyfile"
+              "repokey-blake2"
+              "keyfile-blake2"
+              "authenticated"
+              "authenticated-blake2"
               "none"
             ];
             description = ''

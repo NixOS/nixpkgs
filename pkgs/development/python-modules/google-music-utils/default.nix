@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, audio-metadata, multidict, wrapt
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, audio-metadata
+, multidict
+, wrapt
 , pytest
 }:
 
@@ -16,7 +21,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    audio-metadata multidict wrapt
+    audio-metadata
+    multidict
+    wrapt
   ];
 
   checkInputs = [ pytest ];

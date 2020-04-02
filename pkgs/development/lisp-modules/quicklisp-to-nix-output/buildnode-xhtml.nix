@@ -14,7 +14,7 @@ rec {
 
   packageName = "buildnode-xhtml";
 
-  asdFilesToKeep = ["buildnode-xhtml.asd"];
+  asdFilesToKeep = [ "buildnode-xhtml.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM buildnode-xhtml DESCRIPTION

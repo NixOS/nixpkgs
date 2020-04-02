@@ -10,18 +10,19 @@
 , doCoverageAnalysis ? false
 , doClangAnalysis ? false
 , doCoverityAnalysis ? false
-, lcovFilter ? []
-, lcovExtraTraceFiles ? []
-, src, stdenv
+, lcovFilter ? [ ]
+, lcovExtraTraceFiles ? [ ]
+, src
+, stdenv
 , name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
 , failureHook ? null
-, prePhases ? []
-, postPhases ? []
-, buildInputs ? []
+, prePhases ? [ ]
+, postPhases ? [ ]
+, buildInputs ? [ ]
 , preHook ? ""
 , postHook ? ""
-, ... } @ args:
-
+, ...
+} @ args:
 let
   doingAnalysis = doCoverageAnalysis || doClangAnalysis || doCoverityAnalysis;
 in
@@ -69,8 +70,7 @@ stdenv.mkDerivation (
         fi
       '';
 
-    failureHook = (stdenv.lib.optionalString (failureHook != null) failureHook) +
-    ''
+    failureHook = (stdenv.lib.optionalString (failureHook != null) failureHook) + ''
       if test -n "$succeedOnFailure"; then
           if test -n "$keepBuildDirectory"; then
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
@@ -132,7 +132,7 @@ stdenv.mkDerivation (
       fi
     '';
 
-    prePhases = ["initPhase"] ++ prePhases;
+    prePhases = [ "initPhase" ] ++ prePhases;
 
     buildInputs =
       buildInputs ++
@@ -141,13 +141,13 @@ stdenv.mkDerivation (
       (stdenv.lib.optional doCoverityAnalysis args.cov-build) ++
       (stdenv.lib.optional doCoverityAnalysis args.xz);
 
-    lcovFilter = ["/nix/store/*"] ++ lcovFilter;
+    lcovFilter = [ "/nix/store/*" ] ++ lcovFilter;
 
     inherit lcovExtraTraceFiles;
 
-    postPhases = postPhases ++ ["finalPhase"];
+    postPhases = postPhases ++ [ "finalPhase" ];
 
-    meta = (if args ? meta then args.meta else {}) // {
+    meta = (if args ? meta then args.meta else { }) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Nix package for ${stdenv.hostPlatform.system}";
     };
 
@@ -155,13 +155,14 @@ stdenv.mkDerivation (
 
   //
 
-  (if buildOutOfSourceTree
-   then {
-     preConfigure =
-       # Build out of source tree and make the source tree read-only.  This
-       # helps catch violations of the GNU Coding Standards (info
-       # "(standards) Configuration"), like `make distcheck' does.
-       '' mkdir "../build"
+  (
+    if buildOutOfSourceTree
+    then {
+      preConfigure =
+        # Build out of source tree and make the source tree read-only.  This
+        # helps catch violations of the GNU Coding Standards (info
+        # "(standards) Configuration"), like `make distcheck' does.
+        '' mkdir "../build"
           cd "../build"
           configureScript="../$sourceRoot/configure"
           chmod -R a-w "../$sourceRoot"
@@ -170,6 +171,7 @@ stdenv.mkDerivation (
 
           ${if preConfigure != null then preConfigure else ""}
        '';
-   }
-   else {})
+    }
+    else { }
+  )
 )

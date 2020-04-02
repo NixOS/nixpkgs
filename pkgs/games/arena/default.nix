@@ -4,12 +4,9 @@
 # speech". We can install it as we please, but we cannot re-distribute it in
 # any way other than the original release tarball, so we cannot include its NAR
 # into the Nixpkgs channel.
-
 let
-
   inherit (stdenv.lib) makeLibraryPath;
   libDir = "lib64";
-
 in
 stdenv.mkDerivation rec {
   name = "arena-1.1";
@@ -20,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   # stdenv.cc.cc.lib is in that list to pick up libstdc++.so. Is there a better way?
-  buildInputs = [gtk2-x11 glib pango cairo atk gdk-pixbuf libX11 stdenv.cc.cc.lib];
+  buildInputs = [ gtk2-x11 glib pango cairo atk gdk-pixbuf libX11 stdenv.cc.cc.lib ];
 
   unpackPhase = ''
     # This is is a tar bomb, i.e. it extract a dozen files and directories to
@@ -67,7 +64,7 @@ stdenv.mkDerivation rec {
       chess board & DGT clocks and much more.
     '';
     license = stdenv.lib.licenses.unfree;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     hydraPlatforms = stdenv.lib.platforms.none;
   };
 

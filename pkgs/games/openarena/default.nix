@@ -10,28 +10,29 @@ stdenv.mkDerivation {
     sha256 = "0jmc1cmdz1rcvqc9ilzib1kilpwap6v0d331l6q53wsibdzsz3ss";
   };
 
-  nativeBuildInputs = [ pkgs.unzip patchelf makeWrapper];
+  nativeBuildInputs = [ pkgs.unzip patchelf makeWrapper ];
 
-  installPhase = let
-    gameDir = "$out/openarena-$version";
-    interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
-    libPath = stdenv.lib.makeLibraryPath [ SDL libglvnd libogg libvorbis curl openal ];
-    arch = {
-      "x86_64-linux" = "x86_64";
-      "i386-linux" = "i386";
-    }.${stdenv.hostPlatform.system};
-  in ''
-    mkdir -pv $out/bin
-    cd $out
-    unzip $src
+  installPhase =
+    let
+      gameDir = "$out/openarena-$version";
+      interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
+      libPath = stdenv.lib.makeLibraryPath [ SDL libglvnd libogg libvorbis curl openal ];
+      arch = {
+        "x86_64-linux" = "x86_64";
+        "i386-linux" = "i386";
+      }.${stdenv.hostPlatform.system};
+    in ''
+      mkdir -pv $out/bin
+      cd $out
+      unzip $src
 
-    patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.${arch}"
-    patchelf --set-interpreter "${interpreter}" "${gameDir}/oa_ded.${arch}"
+      patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.${arch}"
+      patchelf --set-interpreter "${interpreter}" "${gameDir}/oa_ded.${arch}"
 
-    makeWrapper "${gameDir}/openarena.${arch}" "$out/bin/openarena" \
-      --prefix LD_LIBRARY_PATH : "${libPath}"
-    makeWrapper "${gameDir}/oa_ded.${arch}" "$out/bin/oa_ded"
-  '';
+      makeWrapper "${gameDir}/openarena.${arch}" "$out/bin/openarena" \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
+      makeWrapper "${gameDir}/oa_ded.${arch}" "$out/bin/oa_ded"
+    '';
 
   meta = {
     description = "Crossplatform openarena client";

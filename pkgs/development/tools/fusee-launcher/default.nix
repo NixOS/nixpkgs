@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , pkgsCross
 , makeWrapper
-} :
+}:
 
 stdenv.mkDerivation {
   pname = "fusee-launcher";

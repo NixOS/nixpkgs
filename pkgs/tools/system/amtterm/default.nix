@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     "wrapProgram $out/bin/amttool --prefix PERL5LIB : $PERL5LIB";
 
   meta = with stdenv.lib;
-    { description = "Intel AMT® SoL client + tools";
+    {
+      description = "Intel AMT® SoL client + tools";
       homepage = https://www.kraxel.org/cgit/amtterm/;
       license = licenses.gpl2;
       maintainers = [ maintainers.ehmry ];

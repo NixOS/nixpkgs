@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (fetchpatch { # details see https://github.com/linuxmint/xapps/pull/65
+    (fetchpatch {
+      # details see https://github.com/linuxmint/xapps/pull/65
       url = "https://github.com/linuxmint/xapps/compare/d361d9cf357fade59b4bb68df2dcb2c0c39f90e1...2dfe82ec68981ea046345b2be349bd56293579f7.diff";
       sha256 = "0sffclamvjas8ad57kxrg0vrgrd95xsk0xdl53dc3yivpxkfxrnk";
     })
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gobject-introspection
-    (python3.withPackages(ps: with ps; [
+    (python3.withPackages (ps: with ps; [
       pygobject3
       setproctitle # mate applet
     ]))

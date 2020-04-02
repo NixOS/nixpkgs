@@ -10,18 +10,18 @@ stdenv.mkDerivation rec {
     directory where you saved it.
   '';
 
-  src = if (stdenv.isi686) then
-    requireFile {
-      message = goBuyItNow;
-      name = "${name}-bin";
-      sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
-    } else throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
+  src =
+    if (stdenv.isi686) then
+      requireFile {
+        message = goBuyItNow;
+        name = "${name}-bin";
+        sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
+      } else throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
 
   phases = "installPhase";
   ld_preload = ./isatty.c;
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ]
-    + ":" + stdenv.lib.makeLibraryPath [ SDL libpulseaudio alsaLib ] ;
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ] + ":" + stdenv.lib.makeLibraryPath [ SDL libpulseaudio alsaLib ];
 
   installPhase = ''
     mkdir -p $out/libexec/strangeloop/vessel/

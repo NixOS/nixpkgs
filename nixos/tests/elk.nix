@@ -1,23 +1,22 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; },
-  enableUnfree ? false
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+, enableUnfree ? false
   # To run the test on the unfree ELK use the folllowing command:
   # NIXPKGS_ALLOW_UNFREE=1 nix-build nixos/tests/elk.nix -A ELK-6 --arg enableUnfree true
 }:
-
 let
   esUrl = "http://localhost:9200";
 
-  mkElkTest = name : elk :
+  mkElkTest = name: elk:
     import ./make-test-python.nix ({
-    inherit name;
-    meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ eelco offline basvandijk ];
-    };
-    nodes = {
-      one =
-        { pkgs, lib, ... }: {
+      inherit name;
+      meta = with pkgs.stdenv.lib.maintainers; {
+        maintainers = [ eelco offline basvandijk ];
+      };
+      nodes = {
+        one =
+          { pkgs, lib, ... }: {
             # Not giving the machine at least 2060MB results in elasticsearch failing with the following error:
             #
             #   OpenJDK 64-Bit Server VM warning:
@@ -38,7 +37,7 @@ let
             services = {
 
               journalbeat = let lt6 = builtins.compareVersions
-                                        elk.journalbeat.version "6" < 0; in {
+                elk.journalbeat.version "6" < 0; in {
                 enable = true;
                 package = elk.journalbeat;
                 extraConfig = pkgs.lib.mkOptionDefault (''
@@ -92,121 +91,122 @@ let
               elasticsearch-curator = {
                 enable = true;
                 actionYAML = ''
-                ---
-                actions:
-                  1:
-                    action: delete_indices
-                    description: >-
-                      Delete indices older than 1 second (based on index name), for logstash-
-                      prefixed indices. Ignore the error if the filter does not result in an
-                      actionable list of indices (ignore_empty_list) and exit cleanly.
-                    options:
-                      ignore_empty_list: True
-                      disable_action: False
-                    filters:
-                    - filtertype: pattern
-                      kind: prefix
-                      value: logstash-
-                    - filtertype: age
-                      source: name
-                      direction: older
-                      timestring: '%Y.%m.%d'
-                      unit: seconds
-                      unit_count: 1
+                  ---
+                  actions:
+                    1:
+                      action: delete_indices
+                      description: >-
+                        Delete indices older than 1 second (based on index name), for logstash-
+                        prefixed indices. Ignore the error if the filter does not result in an
+                        actionable list of indices (ignore_empty_list) and exit cleanly.
+                      options:
+                        ignore_empty_list: True
+                        disable_action: False
+                      filters:
+                      - filtertype: pattern
+                        kind: prefix
+                        value: logstash-
+                      - filtertype: age
+                        source: name
+                        direction: older
+                        timestring: '%Y.%m.%d'
+                        unit: seconds
+                        unit_count: 1
                 '';
               };
             };
           };
       };
 
-    testScript = ''
-      import json
+      testScript = ''
+        import json
 
 
-      def total_hits(message):
-          dictionary = {"query": {"match": {"message": message}}}
-          return (
-              "curl --silent --show-error '${esUrl}/_search' "
-              + "-H 'Content-Type: application/json' "
-              + "-d '{}' ".format(json.dumps(dictionary))
-              + "| jq .hits.total"
-          )
+        def total_hits(message):
+            dictionary = {"query": {"match": {"message": message}}}
+            return (
+                "curl --silent --show-error '${esUrl}/_search' "
+                + "-H 'Content-Type: application/json' "
+                + "-d '{}' ".format(json.dumps(dictionary))
+                + "| jq .hits.total"
+            )
 
 
-      start_all()
+        start_all()
 
-      one.wait_for_unit("elasticsearch.service")
-      one.wait_for_open_port(9200)
+        one.wait_for_unit("elasticsearch.service")
+        one.wait_for_open_port(9200)
 
-      # Continue as long as the status is not "red". The status is probably
-      # "yellow" instead of "green" because we are using a single elasticsearch
-      # node which elasticsearch considers risky.
-      #
-      # TODO: extend this test with multiple elasticsearch nodes
-      #       and see if the status turns "green".
-      one.wait_until_succeeds(
-          "curl --silent --show-error '${esUrl}/_cluster/health' | jq .status | grep -v red"
-      )
+        # Continue as long as the status is not "red". The status is probably
+        # "yellow" instead of "green" because we are using a single elasticsearch
+        # node which elasticsearch considers risky.
+        #
+        # TODO: extend this test with multiple elasticsearch nodes
+        #       and see if the status turns "green".
+        one.wait_until_succeeds(
+            "curl --silent --show-error '${esUrl}/_cluster/health' | jq .status | grep -v red"
+        )
 
-      with subtest("Perform some simple logstash tests"):
-          one.wait_for_unit("logstash.service")
-          one.wait_until_succeeds("cat /tmp/logstash.out | grep flowers")
-          one.wait_until_succeeds("cat /tmp/logstash.out | grep -v dragons")
+        with subtest("Perform some simple logstash tests"):
+            one.wait_for_unit("logstash.service")
+            one.wait_until_succeeds("cat /tmp/logstash.out | grep flowers")
+            one.wait_until_succeeds("cat /tmp/logstash.out | grep -v dragons")
 
-      with subtest("Kibana is healthy"):
-          one.wait_for_unit("kibana.service")
-          one.wait_until_succeeds(
-              "curl --silent --show-error 'http://localhost:5601/api/status' | jq .status.overall.state | grep green"
-          )
+        with subtest("Kibana is healthy"):
+            one.wait_for_unit("kibana.service")
+            one.wait_until_succeeds(
+                "curl --silent --show-error 'http://localhost:5601/api/status' | jq .status.overall.state | grep green"
+            )
 
-      with subtest("Logstash messages arive in elasticsearch"):
-          one.wait_until_succeeds(total_hits("flowers") + " | grep -v 0")
-          one.wait_until_succeeds(total_hits("dragons") + " | grep 0")
+        with subtest("Logstash messages arive in elasticsearch"):
+            one.wait_until_succeeds(total_hits("flowers") + " | grep -v 0")
+            one.wait_until_succeeds(total_hits("dragons") + " | grep 0")
 
-      with subtest(
-          "A message logged to the journal is ingested by elasticsearch via journalbeat"
-      ):
-          one.wait_for_unit("journalbeat.service")
-          one.execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat")
-          one.wait_until_succeeds(
-              total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
-          )
+        with subtest(
+            "A message logged to the journal is ingested by elasticsearch via journalbeat"
+        ):
+            one.wait_for_unit("journalbeat.service")
+            one.execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat")
+            one.wait_until_succeeds(
+                total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
+            )
 
-      with subtest("Elasticsearch-curator works"):
-          one.systemctl("stop logstash")
-          one.systemctl("start elasticsearch-curator")
-          one.wait_until_succeeds(
-              '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep -q ^'
-          )
-    '';
-  }) {};
-in pkgs.lib.mapAttrs mkElkTest {
+        with subtest("Elasticsearch-curator works"):
+            one.systemctl("stop logstash")
+            one.systemctl("start elasticsearch-curator")
+            one.wait_until_succeeds(
+                '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep -q ^'
+            )
+      '';
+    }) { };
+in
+pkgs.lib.mapAttrs mkElkTest {
   ELK-6 =
     if enableUnfree
     then {
       elasticsearch = pkgs.elasticsearch6;
-      logstash      = pkgs.logstash6;
-      kibana        = pkgs.kibana6;
-      journalbeat   = pkgs.journalbeat6;
+      logstash = pkgs.logstash6;
+      kibana = pkgs.kibana6;
+      journalbeat = pkgs.journalbeat6;
     }
     else {
       elasticsearch = pkgs.elasticsearch6-oss;
-      logstash      = pkgs.logstash6-oss;
-      kibana        = pkgs.kibana6-oss;
-      journalbeat   = pkgs.journalbeat6;
+      logstash = pkgs.logstash6-oss;
+      kibana = pkgs.kibana6-oss;
+      journalbeat = pkgs.journalbeat6;
     };
   ELK-7 =
     if enableUnfree
     then {
       elasticsearch = pkgs.elasticsearch7;
-      logstash      = pkgs.logstash7;
-      kibana        = pkgs.kibana7;
-      journalbeat   = pkgs.journalbeat7;
+      logstash = pkgs.logstash7;
+      kibana = pkgs.kibana7;
+      journalbeat = pkgs.journalbeat7;
     }
     else {
       elasticsearch = pkgs.elasticsearch7-oss;
-      logstash      = pkgs.logstash7-oss;
-      kibana        = pkgs.kibana7-oss;
-      journalbeat   = pkgs.journalbeat7;
+      logstash = pkgs.logstash7-oss;
+      kibana = pkgs.kibana7-oss;
+      journalbeat = pkgs.journalbeat7;
     };
 }

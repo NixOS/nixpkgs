@@ -1,12 +1,10 @@
 { lib, stdenv, fetchurl, linuxHeaders, perl }:
-
 let
   commonMakeFlags = [
     "prefix=$(out)"
     "SHLIBDIR=$(out)/lib"
   ];
 in
-
 stdenv.mkDerivation rec {
   pname = "klibc";
   version = "2.0.7";

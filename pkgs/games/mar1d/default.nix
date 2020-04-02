@@ -20,11 +20,7 @@
 stdenv.mkDerivation rec {
   pname = "MAR1D";
   version = "0.2.0";
-  options = "-w${toString width}"
-          + " -s${toString sensitivity}"
-          + (if mute then " -m" else "")
-          + (if effects then " -f" else "")
-          + (if reverseY then " -r" else "");
+  options = "-w${toString width}" + " -s${toString sensitivity}" + (if mute then " -m" else "") + (if effects then " -f" else "") + (if reverseY then " -r" else "");
 
   src = fetchFromGitHub {
     sha256 = "152w5dnlxzv60cl24r5cmrj2q5ar0jiimrmxnp87kf4d2dpbnaq7";

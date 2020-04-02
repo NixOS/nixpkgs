@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
-, python }:
+, python
+}:
 
 python.pkgs.buildPythonApplication rec {
   pname = "20kly";
@@ -37,4 +38,3 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ fgaz ];
   };
 }
-

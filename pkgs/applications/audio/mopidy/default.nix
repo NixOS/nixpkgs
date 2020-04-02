@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub, python3Packages, wrapGAppsHook
-, gst_all_1, glib-networking, gobject-introspection
+{ stdenv
+, fetchFromGitHub
+, python3Packages
+, wrapGAppsHook
+, gst_all_1
+, glib-networking
+, gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -16,12 +21,21 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
-    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    glib-networking gobject-introspection
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-bad
+    glib-networking
+    gobject-introspection
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    gst-python pygobject3 pykka tornado_4 requests setuptools
+    gst-python
+    pygobject3
+    pykka
+    tornado_4
+    requests
+    setuptools
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
 
   # There are no tests
@@ -39,6 +53,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

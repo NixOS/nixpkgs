@@ -1,14 +1,17 @@
-{stdenv, fetchurl, tcsh, libXaw, libXt, libX11}:
+{ stdenv, fetchurl, tcsh, libXaw, libXt, libX11 }:
 let
   s = # Generated upstream information
-  rec {
-    version = "3.3f";
-    name = "otter";
-    url = "https://www.cs.unm.edu/~mccune/otter/otter-${version}.tar.gz";
-    sha256 = "16mc1npl7sk9cmqhrf3ghfmvx29inijw76f1b1lsykllaxjqqb1r";
-  };
+    rec {
+      version = "3.3f";
+      name = "otter";
+      url = "https://www.cs.unm.edu/~mccune/otter/otter-${version}.tar.gz";
+      sha256 = "16mc1npl7sk9cmqhrf3ghfmvx29inijw76f1b1lsykllaxjqqb1r";
+    };
   buildInputs = [
-    tcsh libXaw libXt libX11
+    tcsh
+    libXaw
+    libXt
+    libX11
   ];
 in
 stdenv.mkDerivation {
@@ -45,8 +48,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "A reliable first-order theorem prover";
-    license = stdenv.lib.licenses.publicDomain ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.publicDomain;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     broken = true;
   };

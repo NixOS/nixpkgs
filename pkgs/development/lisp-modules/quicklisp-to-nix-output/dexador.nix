@@ -14,7 +14,7 @@ rec {
 
   packageName = "dexador";
 
-  asdFilesToKeep = ["dexador.asd"];
+  asdFilesToKeep = [ "dexador.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dexador DESCRIPTION Yet another HTTP client for Common Lisp SHA256

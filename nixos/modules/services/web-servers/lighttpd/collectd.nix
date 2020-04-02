@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.lighttpd.collectd;
 
@@ -10,7 +9,7 @@ let
     libdir: "${config.services.collectd.package}/lib/collectd"
   '';
 
-  defaultCollectionCgi = config.services.collectd.package.overrideDerivation(old: {
+  defaultCollectionCgi = config.services.collectd.package.overrideDerivation (old: {
     name = "collection.cgi";
     dontConfigure = true;
     buildPhase = "true";

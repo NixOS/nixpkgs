@@ -1,9 +1,7 @@
 { stdenv, fetchurl }:
-
 let
   version = "3.1.4";
 in
-
 stdenv.mkDerivation {
   pname = "clasp";
   inherit version;

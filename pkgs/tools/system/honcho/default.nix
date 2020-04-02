@@ -1,11 +1,8 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
-
 let
   inherit (pythonPackages) python;
   pname = "honcho";
-
 in
-
 pythonPackages.buildPythonApplication rec {
   name = "${pname}-${version}";
   version = "1.0.1";

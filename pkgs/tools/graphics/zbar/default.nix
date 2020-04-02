@@ -57,17 +57,19 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--without-python"
-  ] ++ (if enableDbus then [
-    "--with-dbusconfdir=${placeholder "out"}/share"
-  ] else [
-    "--without-dbus"
-  ]) ++ (if enableVideo then [
-    "--with-gtk=gtk3"
-  ] else [
-    "--disable-video"
-    "--without-gtk"
-    "--without-qt"
-  ]);
+  ] ++ (
+    if enableDbus then [
+      "--with-dbusconfdir=${placeholder "out"}/share"
+    ] else [
+      "--without-dbus"
+    ]) ++ (
+    if enableVideo then [
+      "--with-gtk=gtk3"
+    ] else [
+      "--disable-video"
+      "--without-gtk"
+      "--without-qt"
+    ]);
 
   dontWrapQtApps = true;
   dontWrapGApps = true;

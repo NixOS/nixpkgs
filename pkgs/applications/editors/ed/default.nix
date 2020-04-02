@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, lzip
+{ stdenv
+, fetchurl
+, lzip
 }:
 
 stdenv.mkDerivation (rec {

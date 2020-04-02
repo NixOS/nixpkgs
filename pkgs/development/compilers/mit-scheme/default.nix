@@ -1,13 +1,21 @@
-{ fetchurl, stdenv, makeWrapper, gnum4, texinfo, texLive, automake,
-  enableX11 ? false, xlibsWrapper ? null }:
-
+{ fetchurl
+, stdenv
+, makeWrapper
+, gnum4
+, texinfo
+, texLive
+, automake
+, enableX11 ? false
+, xlibsWrapper ? null
+}:
 let
   version = "9.2";
   bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
 
-  arch = if      stdenv.isi686   then "-i386"
-         else if stdenv.isx86_64 then "-x86-64"
-         else                         "";
+  arch =
+    if stdenv.isi686 then "-i386"
+    else if stdenv.isx86_64 then "-x86-64"
+    else "";
 in
 stdenv.mkDerivation {
   name = if enableX11 then "mit-scheme-x11-${version}" else "mit-scheme-${version}";
@@ -30,7 +38,7 @@ stdenv.mkDerivation {
       sha256 = "0w5ib5vsidihb4hb6fma3sp596ykr8izagm57axvgd6lqzwicsjg";
     };
 
-  buildInputs = if enableX11 then [xlibsWrapper] else [];
+  buildInputs = if enableX11 then [ xlibsWrapper ] else [ ];
 
   configurePhase =
     '' (cd src && ./configure)
@@ -39,9 +47,10 @@ stdenv.mkDerivation {
 
   buildPhase =
     '' cd src
-       ${if bootstrapFromC
-         then "./etc/make-liarc.sh --prefix=$out"
-         else "make compile-microcode"}
+       ${
+        if bootstrapFromC
+        then "./etc/make-liarc.sh --prefix=$out"
+        else "make compile-microcode"}
 
        cd ../doc
 

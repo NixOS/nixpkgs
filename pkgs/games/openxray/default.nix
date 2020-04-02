@@ -1,7 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, glew, freeimage,  liblockfile
-, openal, libtheora, SDL2, lzo, libjpeg, libogg, tbb
-, pcre, makeWrapper }:
-
+{ stdenv
+, fetchFromGitHub
+, cmake
+, glew
+, freeimage
+, liblockfile
+, openal
+, libtheora
+, SDL2
+, lzo
+, libjpeg
+, libogg
+, tbb
+, pcre
+, makeWrapper
+}:
 let
   version = "558";
 
@@ -34,7 +46,8 @@ let
       platforms = platforms.all;
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "OpenXRay";
   inherit version src;
 
@@ -43,8 +56,18 @@ in stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   buildInputs = [
-    glew freeimage liblockfile openal cryptopp libtheora SDL2 lzo
-    libjpeg libogg tbb pcre
+    glew
+    freeimage
+    liblockfile
+    openal
+    cryptopp
+    libtheora
+    SDL2
+    lzo
+    libjpeg
+    libogg
+    tbb
+    pcre
   ];
   nativeBuildInputs = [ cmake makeWrapper ];
 

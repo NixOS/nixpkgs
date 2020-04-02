@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, m4, perl, help2man
+{ stdenv
+, fetchurl
+, m4
+, perl
+, help2man
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libX11, libXinerama, imlib2}:
+{ stdenv, fetchurl, pkgconfig, libX11, libXinerama, imlib2 }:
 
 stdenv.mkDerivation rec {
 

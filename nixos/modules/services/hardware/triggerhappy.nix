@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.triggerhappy;
 
   socket = "/run/thd.socket";
@@ -11,8 +9,7 @@ let
   configFile = pkgs.writeText "triggerhappy.conf" ''
     ${concatMapStringsSep "\n"
       ({ keys, event, cmd, ... }:
-        ''${concatMapStringsSep "+" (x: "KEY_" + x) keys} ${toString { press = 1; hold = 2; release = 0; }.${event}} ${cmd}''
-      )
+          ''${concatMapStringsSep "+" (x: "KEY_" + x) keys} ${toString { press = 1; hold = 2; release = 0; }.${event}} ${cmd}'')
       cfg.bindings}
     ${cfg.extraConfig}
   '';
@@ -26,7 +23,7 @@ let
       };
 
       event = mkOption {
-        type = types.enum ["press" "hold" "release"];
+        type = types.enum [ "press" "hold" "release" ];
         default = "press";
         description = "Event to match.";
       };
@@ -38,9 +35,7 @@ let
 
     };
   };
-
 in
-
 {
 
   ###### interface
@@ -68,7 +63,7 @@ in
 
       bindings = mkOption {
         type = types.listOf (types.submodule bindingCfg);
-        default = [];
+        default = [ ];
         example = lib.literalExample ''
           [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc_cli}/bin/mpc -q toggle"; } ]
         '';

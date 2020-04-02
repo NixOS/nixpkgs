@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, fetchpatch, which, autoconf, automake, flex, bison
-, kernel, glibc, perl }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, which
+, autoconf
+, automake
+, flex
+, bison
+, kernel
+, glibc
+, perl
+}:
 
 with (import ./srcs.nix { inherit fetchurl; });
-
 let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
@@ -70,8 +79,7 @@ in stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
-    broken = versionOlder kernel.version "3.18" || builtins.compareVersions kernel.version "5.0" >= 0
-             || stdenv.targetPlatform.isAarch64;
+    broken = versionOlder kernel.version "3.18" || builtins.compareVersions kernel.version "5.0" >= 0 || stdenv.targetPlatform.isAarch64;
   };
 
 }

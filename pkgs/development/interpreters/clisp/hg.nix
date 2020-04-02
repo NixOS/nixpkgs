@@ -3,11 +3,25 @@
 # - base (default): contains readline and i18n, regexp and syscalls modules
 #   by default
 # - full: contains base plus modules in withModules
-{ stdenv, fetchhg, libsigsegv, gettext, ncurses, readline, libX11
-, libXau, libXt, pcre, zlib, libXpm, xorgproto, libXext
-, libffi, libffcall, automake
+{ stdenv
+, fetchhg
+, libsigsegv
+, gettext
+, ncurses
+, readline
+, libX11
+, libXau
+, libXt
+, pcre
+, zlib
+, libXpm
+, xorgproto
+, libXext
+, libffi
+, libffcall
+, automake
 , coreutils
-# build options
+  # build options
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
 , x11Support ? (stdenv.isi686 || stdenv.isx86_64)
 , dllSupport ? true
@@ -19,8 +33,7 @@
   ++ stdenv.lib.optional x11Support "clx/new-clx"
 }:
 
-assert x11Support -> (libX11 != null && libXau != null && libXt != null
-  && libXpm != null && xorgproto != null && libXext != null);
+assert x11Support -> (libX11 != null && libXau != null && libXt != null && libXpm != null && xorgproto != null && libXext != null);
 
 stdenv.mkDerivation rec {
   v = "2.50pre20171114";
@@ -37,16 +50,21 @@ stdenv.mkDerivation rec {
   ffcallAvailable = stdenv.isLinux && (libffcall != null);
 
   nativeBuildInputs = [ automake ]; # sometimes fails otherwise
-  buildInputs = [libsigsegv]
-  ++ stdenv.lib.optional (gettext != null) gettext
-  ++ stdenv.lib.optional (ncurses != null) ncurses
-  ++ stdenv.lib.optional (pcre != null) pcre
-  ++ stdenv.lib.optional (zlib != null) zlib
-  ++ stdenv.lib.optional (readline != null) readline
-  ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) libffi
-  ++ stdenv.lib.optional ffcallAvailable libffcall
-  ++ stdenv.lib.optionals x11Support [
-    libX11 libXau libXt libXpm xorgproto libXext
+  buildInputs = [ libsigsegv ]
+    ++ stdenv.lib.optional (gettext != null) gettext
+    ++ stdenv.lib.optional (ncurses != null) ncurses
+    ++ stdenv.lib.optional (pcre != null) pcre
+    ++ stdenv.lib.optional (zlib != null) zlib
+    ++ stdenv.lib.optional (readline != null) readline
+    ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) libffi
+    ++ stdenv.lib.optional ffcallAvailable libffcall
+    ++ stdenv.lib.optionals x11Support [
+    libX11
+    libXau
+    libXt
+    libXpm
+    xorgproto
+    libXext
   ];
 
   # First, replace port 9090 (rather low, can be used)
@@ -63,14 +81,14 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "builddir" ]
-  ++ stdenv.lib.optional (!dllSupport) "--without-dynamic-modules"
-  ++ stdenv.lib.optional (readline != null) "--with-readline"
-  # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
-  ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
-  ++ stdenv.lib.optional ffcallAvailable "--with-ffcall"
-  ++ stdenv.lib.optional (!ffcallAvailable) "--without-ffcall"
-  ++ builtins.map (x: " --with-module=" + x) withModules
-  ++ stdenv.lib.optional threadSupport "--with-threads=POSIX_THREADS";
+    ++ stdenv.lib.optional (!dllSupport) "--without-dynamic-modules"
+    ++ stdenv.lib.optional (readline != null) "--with-readline"
+    # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
+    ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
+    ++ stdenv.lib.optional ffcallAvailable "--with-ffcall"
+    ++ stdenv.lib.optional (!ffcallAvailable) "--without-ffcall"
+    ++ builtins.map (x: " --with-module=" + x) withModules
+    ++ stdenv.lib.optional threadSupport "--with-threads=POSIX_THREADS";
 
   preBuild = ''
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d
@@ -79,9 +97,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    stdenv.lib.optionalString (withModules != [])
-      (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
-      + stdenv.lib.concatMapStrings (x: " " + x) withModules);
+    stdenv.lib.optionalString (withModules != [ ])
+      (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full'' + stdenv.lib.concatMapStrings (x: " " + x) withModules);
 
   NIX_CFLAGS_COMPILE = "-O0 ${stdenv.lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
 
@@ -91,7 +108,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ANSI Common Lisp Implementation";
     homepage = http://clisp.cons.org;
-    maintainers = with stdenv.lib.maintainers; [raskin tohl];
+    maintainers = with stdenv.lib.maintainers; [ raskin tohl ];
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     platforms = stdenv.lib.platforms.linux;
   };

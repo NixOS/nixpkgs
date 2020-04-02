@@ -1,6 +1,12 @@
-{ stdenv, fetchurl, libxml2, pkgconfig, perl
-, compressionSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
+{ stdenv
+, fetchurl
+, libxml2
+, pkgconfig
+, perl
+, compressionSupport ? true
+, zlib ? null
+, sslSupport ? true
+, openssl ? null
 , static ? false
 , shared ? true
 }:
@@ -8,11 +14,9 @@
 assert compressionSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert static || shared;
-
 let
-   inherit (stdenv.lib) optionals;
+  inherit (stdenv.lib) optionals;
 in
-
 stdenv.mkDerivation rec {
   version = "0.30.2";
   pname = "neon";
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [libxml2 openssl]
+  buildInputs = [ libxml2 openssl ]
     ++ stdenv.lib.optional compressionSupport zlib;
 
   configureFlags = [
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
     (stdenv.lib.withFeature sslSupport "ssl")
   ];
 
-  passthru = {inherit compressionSupport sslSupport;};
+  passthru = { inherit compressionSupport sslSupport; };
 
   checkInputs = [ perl ];
   doCheck = false; # fails, needs the net

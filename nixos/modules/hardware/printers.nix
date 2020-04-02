@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.hardware.printers;
-  ppdOptionsString = options: optionalString (options != {})
+  ppdOptionsString = options: optionalString (options != { })
     (concatStringsSep " "
       (mapAttrsToList (name: value: "-o '${name}'='${value}'") options)
     );
@@ -22,9 +22,8 @@ let
   noInvalidChars = str: all (c: c != "#" && c != "/") (stringToCharacters str);
   printerName = (types.addCheck (types.strMatching "[[:graph:]]+") noInvalidChars)
     // { description = "printable string without spaces, # and /"; };
-
-
-in {
+in
+{
   options = {
     hardware.printers = {
       ensureDefaultPrinter = mkOption {
@@ -43,7 +42,7 @@ in {
           and remove printers with <command>lpadmin -x &lt;printer-name&gt;</command>.
           Printers not listed here can still be manually configured.
         '';
-        default = [];
+        default = [ ];
         type = types.listOf (types.submodule {
           options = {
             name = mkOption {
@@ -97,7 +96,7 @@ in {
                 PageSize = "A4";
                 Duplex = "DuplexNoTumble";
               };
-              default = {};
+              default = { };
               description = ''
                 Sets PPD options for the printer.
                 <command>lpoptions [-p printername] -l</command> shows suported PPD options for the given printer.
@@ -109,27 +108,26 @@ in {
     };
   };
 
-  config = mkIf (cfg.ensurePrinters != [] && config.services.printing.enable) {
-    systemd.services.ensure-printers = let
-      cupsUnit = if config.services.printing.startWhenNeeded then "cups.socket" else "cups.service";
-    in {
-      description = "Ensure NixOS-configured CUPS printers";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ cupsUnit ];
-      # in contrast to cups.socket, for cups.service, this is actually not enough,
-      # as the cups service reports its activation before clients can actually interact with it.
-      # Because of this, commands like `lpinfo -v` will report a bad file descriptor
-      # due to the missing UNIX socket without sufficient sleep time.
-      after = [ cupsUnit ];
+  config = mkIf (cfg.ensurePrinters != [ ] && config.services.printing.enable) {
+    systemd.services.ensure-printers =
+      let
+        cupsUnit = if config.services.printing.startWhenNeeded then "cups.socket" else "cups.service";
+      in {
+        description = "Ensure NixOS-configured CUPS printers";
+        wantedBy = [ "multi-user.target" ];
+        requires = [ cupsUnit ];
+        # in contrast to cups.socket, for cups.service, this is actually not enough,
+        # as the cups service reports its activation before clients can actually interact with it.
+        # Because of this, commands like `lpinfo -v` will report a bad file descriptor
+        # due to the missing UNIX socket without sufficient sleep time.
+        after = [ cupsUnit ];
 
-      serviceConfig = {
-        Type = "oneshot";
+        serviceConfig = {
+          Type = "oneshot";
+        };
+
+        # sleep 10 is required to wait until cups.service is actually initialized and has created its UNIX socket file
+        script = (optionalString (!config.services.printing.startWhenNeeded) "sleep 10\n") + (concatMapStringsSep "\n" ensurePrinter cfg.ensurePrinters) + optionalString (cfg.ensureDefaultPrinter != null) (ensureDefaultPrinter cfg.ensureDefaultPrinter);
       };
-
-       # sleep 10 is required to wait until cups.service is actually initialized and has created its UNIX socket file
-      script = (optionalString (!config.services.printing.startWhenNeeded) "sleep 10\n")
-        + (concatMapStringsSep "\n" ensurePrinter cfg.ensurePrinters)
-        + optionalString (cfg.ensureDefaultPrinter != null) (ensureDefaultPrinter cfg.ensureDefaultPrinter);
-    };
   };
 }

@@ -39,12 +39,10 @@
 , autoPatchelfHook
 , wrapGAppsHook
 }:
-
 let
-
   mirror = "https://get.geo.opera.com/pub/opera/desktop";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   pname = "opera";
   version = "67.0.3575.31";

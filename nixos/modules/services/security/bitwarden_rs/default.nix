@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.bitwarden_rs;
   user = config.users.users.bitwarden_rs.name;
@@ -23,7 +22,7 @@ let
   configEnv =
     let
       configEnv = listToAttrs (concatLists (mapAttrsToList (name: value:
-        if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
+        if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else [ ]
       ) cfg.config));
     in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${pkgs.bitwarden_rs-vault}/share/bitwarden_rs/vault";
@@ -32,8 +31,8 @@ let
   configFile = pkgs.writeText "bitwarden_rs.env" (concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
 
   bitwarden_rs = pkgs.bitwarden_rs.override { inherit (cfg) dbBackend; };
-
-in {
+in
+{
   options.services.bitwarden_rs = with types; {
     enable = mkEnableOption "bitwarden_rs";
 
@@ -55,7 +54,7 @@ in {
 
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
-      default = {};
+      default = { };
       example = literalExample ''
         {
           domain = https://bw.domain.tld:8443;
@@ -84,10 +83,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = [ {
-      assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
-      message = "Backups for database backends other than sqlite will need customization";
-    } ];
+    assertions = [
+      {
+        assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
+        message = "Backups for database backends other than sqlite will need customization";
+      }
+    ];
 
     users.users.bitwarden_rs = {
       inherit group;

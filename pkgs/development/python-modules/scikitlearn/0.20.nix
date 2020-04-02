@@ -1,6 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, gfortran, glibcLocales
-, numpy, scipy, pytest, pillow
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, gfortran
+, glibcLocales
+, numpy
+, scipy
+, pytest
+, pillow
 }:
 
 # 0.20.x is the last version that maintains python2 compatibility
@@ -9,7 +15,7 @@ buildPythonPackage rec {
   pname = "scikit-learn";
   version = "0.20.4";
   # UnboundLocalError: local variable 'message' referenced before assignment
-  disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
+  disabled = stdenv.isi686; # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy scipy numpy.blas ];
   checkInputs = [ pytest ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   doCheck = !stdenv.isAarch64;
   # Skip test_feature_importance_regression - does web fetch

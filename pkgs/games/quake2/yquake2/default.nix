@@ -1,11 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, buildEnv, cmake, makeWrapper
-, SDL2, libGL
-, oggSupport ? true, libogg, libvorbis
-, openalSupport ? true, openal
-, zipSupport ? true, zlib
-, Cocoa, OpenAL
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildEnv
+, cmake
+, makeWrapper
+, SDL2
+, libGL
+, oggSupport ? true
+, libogg
+, libvorbis
+, openalSupport ? true
+, openal
+, zipSupport ? true
+, zlib
+, Cocoa
+, OpenAL
 }:
-
 let
   mkFlag = b: if b then "ON" else "OFF";
 
@@ -20,7 +30,7 @@ let
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
-      rev = "QUAKE2_${builtins.replaceStrings ["."] ["_"] version}";
+      rev = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
       sha256 = "0xfr620k1hns70dckv6k0kc72jbiwyghcys904jpriv5x94lnrlc";
     };
 
@@ -65,8 +75,8 @@ let
       maintainers = with maintainers; [ tadfisher ];
     };
   };
-
-in {
+in
+{
   inherit yquake2;
 
   yquake2-ctf = wrapper {

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.9.8";
 
   src = fetchurl {
-    url    = "http://www.codesink.org/download/${pname}-${version}.tar.gz";
+    url = "http://www.codesink.org/download/${pname}-${version}.tar.gz";
     sha256 = "003715lvj4nx23arn1s9ss6hgc2yblkwfy5h94li6pjz2a6xc1rs";
   };
 
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MIME handling library";
-    homepage    = http://www.codesink.org/mimetic_mime_library.html;
-    license     = licenses.mit;
-    maintainers = with maintainers; [ leenaars];
+    homepage = http://www.codesink.org/mimetic_mime_library.html;
+    license = licenses.mit;
+    maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
   };
 }

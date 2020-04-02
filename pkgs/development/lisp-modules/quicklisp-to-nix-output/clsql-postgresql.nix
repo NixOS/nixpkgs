@@ -14,7 +14,7 @@ rec {
 
   packageName = "clsql-postgresql";
 
-  asdFilesToKeep = ["clsql-postgresql.asd"];
+  asdFilesToKeep = [ "clsql-postgresql.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clsql-postgresql DESCRIPTION Common Lisp PostgreSQL API Driver

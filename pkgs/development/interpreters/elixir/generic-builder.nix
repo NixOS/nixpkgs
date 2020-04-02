@@ -1,5 +1,14 @@
-{ pkgs, stdenv, fetchFromGitHub, erlang, rebar, makeWrapper,
-  coreutils, curl, bash, debugInfo ? false }:
+{ pkgs
+, stdenv
+, fetchFromGitHub
+, erlang
+, rebar
+, makeWrapper
+, coreutils
+, curl
+, bash
+, debugInfo ? false
+}:
 
 { baseName ? "elixir"
 , version
@@ -8,10 +17,8 @@
 , rev ? "v${version}"
 , src ? fetchFromGitHub { inherit rev sha256; owner = "elixir-lang"; repo = "elixir"; }
 } @ args:
-
 let
   inherit (stdenv.lib) getVersion versionAtLeast optional;
-
 in
   assert versionAtLeast (getVersion erlang) minimumOTPVersion;
 

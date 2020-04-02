@@ -1,5 +1,4 @@
 { stdenv, substituteAll, buildEnv, fetchgit, fetchFromGitHub, python3Packages, gmp }:
-
 let
   # pure-python-otr (potr) requires an older version of pycrypto, which is
   # not compatible with pycryptodome. Therefore, the latest patched version
@@ -27,7 +26,8 @@ let
   potr = python3Packages.potr.overridePythonAttrs (oldAttrs: {
     propagatedBuildInputs = [ pycrypto ];
   });
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "weechat-otr";
   version = "1.9.2";
 
@@ -42,9 +42,9 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./libpath.patch;
       env = "${buildEnv {
-        name = "weechat-otr-env";
-        paths = [ potr pycrypto ];
-      }}/${python3Packages.python.sitePackages}";
+          name = "weechat-otr-env";
+          paths = [ potr pycrypto ];
+        }}/${python3Packages.python.sitePackages}";
     })
   ];
 

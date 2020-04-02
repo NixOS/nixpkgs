@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, python3Packages }:
-
 let
-
   self = {
 
     octoprint = stdenv.mkDerivation rec {
@@ -30,5 +28,5 @@ let
     };
 
   };
-
-in self
+in
+self

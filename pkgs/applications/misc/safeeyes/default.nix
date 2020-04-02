@@ -1,9 +1,20 @@
-{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify, gtk3, gnome3, xprintidle-ng, wrapGAppsHook, gdk-pixbuf, shared-mime-info, librsvg
+{ lib
+, python3Packages
+, gobject-introspection
+, libappindicator-gtk3
+, libnotify
+, gtk3
+, gnome3
+, xprintidle-ng
+, wrapGAppsHook
+, gdk-pixbuf
+, shared-mime-info
+, librsvg
 }:
-
-let inherit (python3Packages) python buildPythonApplication fetchPypi;
-
-in buildPythonApplication rec {
+let
+  inherit (python3Packages) python buildPythonApplication fetchPypi;
+in
+buildPythonApplication rec {
   pname = "safeeyes";
   version = "2.0.9";
   namePrefix = "";

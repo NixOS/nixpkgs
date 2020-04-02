@@ -1,12 +1,30 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
-, zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg, fetchpatch
-, withData ? true, poppler_data
-, qt5Support ? false, qtbase ? null
-, introspectionSupport ? false, gobject-introspection ? null
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, ninja
+, pkgconfig
+, libiconv
+, libintl
+, zlib
+, curl
+, cairo
+, freetype
+, fontconfig
+, lcms
+, libjpeg
+, openjpeg
+, fetchpatch
+, withData ? true
+, poppler_data
+, qt5Support ? false
+, qtbase ? null
+, introspectionSupport ? false
+, gobject-introspection ? null
 , utils ? false
-, minimal ? false, suffix ? "glib"
+, minimal ? false
+, suffix ? "glib"
 }:
-
 let
   version = "0.61.1";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";

@@ -1,9 +1,7 @@
 { config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
 
 with lib;
-
 let
-
   cfg = config.documentation;
 
   manualModules = baseModules ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
@@ -30,12 +28,12 @@ let
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
             let wholeName = "${namePrefix}.${name}"; in
-            if isAttrs value then
-              scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
-            else value
+              if isAttrs value then
+                scrubDerivations wholeName value
+                // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
+              else value
           )
-          pkgSet;
+        pkgSet;
       in scrubbedEval.options;
   };
 
@@ -66,13 +64,11 @@ let
     exec = "${helpScript}/bin/nixos-help";
     categories = "System";
   };
-
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
-    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "programs" "man" "enable" ] [ "documentation" "man" "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
   ];
 
@@ -198,15 +194,13 @@ in
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
-      environment.systemPackages = []
+      environment.systemPackages = [ ]
         ++ optional cfg.man.enable manual.manpages
         ++ optionals cfg.doc.enable ([ manual.manualHTML helpScript ]
-           ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
+        ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
 
       services.mingetty.helpLine = mkIf cfg.doc.enable (
-          "\nRun `nixos-help` "
-        + optionalString config.services.nixosManual.showManual "or press <Alt-F${toString config.services.nixosManual.ttyNumber}> "
-        + "for the NixOS manual."
+        "\nRun `nixos-help` " + optionalString config.services.nixosManual.showManual "or press <Alt-F${toString config.services.nixosManual.ttyNumber}> " + "for the NixOS manual."
       );
     })
 

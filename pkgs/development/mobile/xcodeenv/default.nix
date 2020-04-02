@@ -1,4 +1,4 @@
-{stdenv}:
+{ stdenv }:
 
 rec {
   composeXcodeWrapper = import ./compose-xcodewrapper.nix {

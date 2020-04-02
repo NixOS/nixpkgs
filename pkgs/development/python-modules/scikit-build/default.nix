@@ -1,7 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi, wheel, setuptools, packaging
-, cmake, ninja, cython, codecov, coverage, six, virtualenv, pathpy
-, pytest, pytestcov, pytest-virtualenv, pytest-mock, pytestrunner
-, requests, flake8 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, wheel
+, setuptools
+, packaging
+, cmake
+, ninja
+, cython
+, codecov
+, coverage
+, six
+, virtualenv
+, pathpy
+, pytest
+, pytestcov
+, pytest-virtualenv
+, pytest-mock
+, pytestrunner
+, requests
+, flake8
+}:
 
 buildPythonPackage rec {
   pname = "scikit-build";
@@ -13,10 +31,21 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ wheel setuptools packaging ];
-  checkInputs = [ 
-    cmake ninja cython codecov coverage six pathpy
-    pytest pytestcov pytest-mock pytest-virtualenv pytestrunner
-    requests flake8
+  checkInputs = [
+    cmake
+    ninja
+    cython
+    codecov
+    coverage
+    six
+    pathpy
+    pytest
+    pytestcov
+    pytest-mock
+    pytest-virtualenv
+    pytestrunner
+    requests
+    flake8
   ];
 
   dontUseCmakeConfigure = true;

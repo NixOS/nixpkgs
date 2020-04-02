@@ -33,23 +33,23 @@
 
 haskellPackages.callPackage
   ({ mkDerivation, base, HUnit, parsec, process, QuickCheck, stdenv }:
-   mkDerivation rec {
-     pname = "zsh-git-prompt";
-     version = "0.4z";  # While we await a real 0.5 release.
-     src = fetchFromGitHub {
-       owner = "starcraftman";
-       repo = "zsh-git-prompt";
-       rev = "11b83ba3b85d14c66cf2ab79faefab6d838da28e";
-       sha256 = "04aylsjfb03ckw219plkzpyiq4j9g66bjxa5pa56h1p7df6pjssb";
-     };
-     prePatch = ''
+    mkDerivation rec {
+      pname = "zsh-git-prompt";
+      version = "0.4z"; # While we await a real 0.5 release.
+      src = fetchFromGitHub {
+        owner = "starcraftman";
+        repo = "zsh-git-prompt";
+        rev = "11b83ba3b85d14c66cf2ab79faefab6d838da28e";
+        sha256 = "04aylsjfb03ckw219plkzpyiq4j9g66bjxa5pa56h1p7df6pjssb";
+      };
+      prePatch = ''
         substituteInPlace zshrc.sh                       \
           --replace ':-"python"' ':-"haskell"'           \
           --replace 'python '    '${python.interpreter} ' \
           --replace 'git '       '${git}/bin/git '
-     '';
-     preCompileBuildDriver = "cd src";
-     postInstall = ''
+      '';
+      preCompileBuildDriver = "cd src";
+      postInstall = ''
         cd ..
         gpshare=$out/share/${pname}
         gpdoc=$out/share/doc/${pname}
@@ -57,14 +57,15 @@ haskellPackages.callPackage
         cp README.md $gpdoc
         cp zshrc.sh gitstatus.py $gpshare
         mv $out/bin $gpshare/src/.bin
-     '';
-     isLibrary = false;
-     isExecutable = true;
-     libraryHaskellDepends = [ base parsec process QuickCheck ];
-     executableHaskellDepends = libraryHaskellDepends;
-     testHaskellDepends = [HUnit] ++ libraryHaskellDepends;
-     homepage = "https://github.com/olivierverdier/zsh-git-prompt#readme";
-     description = "Informative git prompt for zsh";
-     license = stdenv.lib.licenses.mit;
-     maintainers = [lib.maintainers.league];
-   }) {}
+      '';
+      isLibrary = false;
+      isExecutable = true;
+      libraryHaskellDepends = [ base parsec process QuickCheck ];
+      executableHaskellDepends = libraryHaskellDepends;
+      testHaskellDepends = [ HUnit ] ++ libraryHaskellDepends;
+      homepage = "https://github.com/olivierverdier/zsh-git-prompt#readme";
+      description = "Informative git prompt for zsh";
+      license = stdenv.lib.licenses.mit;
+      maintainers = [ lib.maintainers.league ];
+    }
+  ) { }

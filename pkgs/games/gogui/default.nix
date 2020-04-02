@@ -1,8 +1,8 @@
 { fetchurl, stdenv, openjdk, unzip, makeWrapper }:
-
 let
   version = "1.4.9";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "gogui";
   inherit version;
   buildInputs = [ unzip makeWrapper ];

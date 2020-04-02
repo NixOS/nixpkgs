@@ -1,7 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv
+, buildPythonPackage
+, fetchPypi
 , requests
-, testfixtures, mock, requests_toolbelt
-, betamax, betamax-serializers, betamax-matchers, pytest
+, testfixtures
+, mock
+, requests_toolbelt
+, betamax
+, betamax-serializers
+, betamax-matchers
+, pytest
 }:
 
 buildPythonPackage rec {

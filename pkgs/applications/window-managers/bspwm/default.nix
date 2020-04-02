@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub, libxcb, libXinerama
-, xcbutil, xcbutilkeysyms, xcbutilwm
+{ stdenv
+, fetchFromGitHub
+, libxcb
+, libXinerama
+, xcbutil
+, xcbutilkeysyms
+, xcbutilwm
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +12,9 @@ stdenv.mkDerivation rec {
   version = "0.9.9";
 
   src = fetchFromGitHub {
-    owner  = "baskerville";
-    repo   = "bspwm";
-    rev    = version;
+    owner = "baskerville";
+    repo = "bspwm";
+    rev = version;
     sha256 = "1i7crmljk1vra1r6alxvj6lqqailjjcv0llyg7a0gm23rbv4a42g";
   };
 

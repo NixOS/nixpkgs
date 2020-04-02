@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitLab, SDL2, SDL2_image, pkgconfig
-, libvorbis, libGL, boost, cmake, zlib, curl, SDL2_mixer, python3
+{ stdenv
+, fetchFromGitLab
+, SDL2
+, SDL2_image
+, pkgconfig
+, libvorbis
+, libGL
+, boost
+, cmake
+, zlib
+, curl
+, SDL2_mixer
+, python3
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
 { stdenv, fetchPypi, python }:
 
 python.pkgs.buildPythonPackage rec {
-  pname   = "tld";
+  pname = "tld";
   version = "0.11.9";
 
   src = fetchPypi {
@@ -10,7 +10,7 @@ python.pkgs.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [ six ];
-  checkInputs = with python.pkgs; [ factory_boy faker pytestcov tox pytestCheckHook];
+  checkInputs = with python.pkgs; [ factory_boy faker pytestcov tox pytestCheckHook ];
 
   # https://github.com/barseghyanartur/tld/issues/54
   disabledTests = [

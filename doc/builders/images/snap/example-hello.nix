@@ -1,6 +1,7 @@
 let
   inherit (import <nixpkgs> { }) snapTools hello;
-in snapTools.makeSnap {
+in
+snapTools.makeSnap {
   meta = {
     name = "hello";
     summary = hello.meta.description;

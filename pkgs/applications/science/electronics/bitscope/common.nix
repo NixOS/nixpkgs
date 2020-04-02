@@ -29,7 +29,7 @@ let
       maintainers = with maintainers; [
         vidbina
       ];
-    } // (attrs.meta or {});
+    } // (attrs.meta or { });
 
     buildInputs = [
       dpkg
@@ -58,7 +58,8 @@ let
       ${(wrapBinary libs) attrs.toolName}
     '';
   });
-in buildFHSUserEnv {
+in
+buildFHSUserEnv {
   name = "${attrs.toolName}-${attrs.version}";
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";
 } // { inherit (pkg) meta name; }

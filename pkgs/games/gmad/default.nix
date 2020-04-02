@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "garrynewman";
     repo = "gmad";
     rev = "377f3458bf1ecb8a1a2217c2194773e3c2a2dea0";
-    sha256="0myi9njr100gxhxk1vrzr2sbij5kxl959sq0riiqgg01div338g0";
+    sha256 = "0myi9njr100gxhxk1vrzr2sbij5kxl959sq0riiqgg01div338g0";
   };
 
   buildInputs = [ premake4 bootil ];

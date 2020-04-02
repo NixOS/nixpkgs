@@ -1,4 +1,9 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy3k, callPackage
+{ lib
+, pkgs
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, callPackage
 , opencv3
 , pyqt5
 , pyqtgraph

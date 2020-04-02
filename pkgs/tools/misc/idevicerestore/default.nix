@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
 , curl
 , libimobiledevice
 , libirecovery

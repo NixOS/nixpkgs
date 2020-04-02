@@ -1,7 +1,16 @@
-{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux, fetchpatch
+{ stdenv
+, lib
+, fetchurl
+, buildRubyGem
+, bundlerEnv
+, ruby
+, libarchive
+, libguestfs
+, qemu
+, writeText
+, withLibvirt ? stdenv.isLinux
+, fetchpatch
 }:
-
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
@@ -40,8 +49,8 @@ let
       done
     '';
   };
-
-in buildRubyGem rec {
+in
+buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
   inherit version;
@@ -83,21 +92,20 @@ in buildRubyGem rec {
           qemu
         ]));
     in ''
-    wrapProgram "$out/bin/vagrant" \
-      --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' ${pathAdditions}
+      wrapProgram "$out/bin/vagrant" \
+        --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
+        --prefix PATH ':' ${pathAdditions}
 
-    mkdir -p "$out/vagrant-plugins/plugins.d"
-    echo '{}' > "$out/vagrant-plugins/plugins.json"
+      mkdir -p "$out/vagrant-plugins/plugins.d"
+      echo '{}' > "$out/vagrant-plugins/plugins.json"
 
-    mkdir -p $out/share/bash-completion/completions/
-    cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
-  '' +
-  lib.optionalString withLibvirt ''
-    substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
-      --subst-var-by ruby_version ${ruby.version} \
-      --subst-var-by vagrant_version ${version}
-  '';
+      mkdir -p $out/share/bash-completion/completions/
+      cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
+    '' + lib.optionalString withLibvirt ''
+      substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
+        --subst-var-by ruby_version ${ruby.version} \
+        --subst-var-by vagrant_version ${version}
+    '';
 
   installCheckPhase = ''
     HOME="$(mktemp -d)" $out/bin/vagrant init --output - > /dev/null

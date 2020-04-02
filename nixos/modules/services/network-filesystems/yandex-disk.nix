@@ -1,17 +1,13 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.yandex-disk;
 
   dir = "/var/lib/yandex-disk";
 
   u = if cfg.user != null then cfg.user else "yandexdisk";
-
 in
-
 {
 
   ###### interface
@@ -73,12 +69,14 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = mkIf (cfg.user == null) [ {
-      name = u;
-      uid = config.ids.uids.yandexdisk;
-      group = "nogroup";
-      home = dir;
-    } ];
+    users.users = mkIf (cfg.user == null) [
+      {
+        name = u;
+        uid = config.ids.uids.yandexdisk;
+        group = "nogroup";
+        home = dir;
+      }
+    ];
 
     systemd.services.yandex-disk = {
       description = "Yandex-disk server";
@@ -110,4 +108,3 @@ in
   };
 
 }
-

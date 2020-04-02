@@ -1,5 +1,13 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig
-, boost, curl, openssl, log4shib, xercesc, xml-security-c
+{ stdenv
+, fetchgit
+, autoreconfHook
+, pkgconfig
+, boost
+, curl
+, openssl
+, log4shib
+, xercesc
+, xml-security-c
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A low-level library that provides a high level interface to XML processing for OpenSAML 2";
-    platforms   = platforms.unix;
-    license     = licenses.asl20;
+    platforms = platforms.unix;
+    license = licenses.asl20;
     maintainers = [ maintainers.jammerful ];
   };
 }

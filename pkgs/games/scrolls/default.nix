@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, gcc
-, libGLU, libX11, libXext, libXcursor, libpulseaudio
+{ stdenv
+, fetchurl
+, gcc
+, libGLU
+, libX11
+, libXext
+, libXcursor
+, libpulseaudio
 }:
 stdenv.mkDerivation {
   name = "scrolls-2015-10-13";

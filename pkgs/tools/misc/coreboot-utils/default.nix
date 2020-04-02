@@ -1,5 +1,4 @@
 { stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
-
 let
   version = "4.11";
 
@@ -87,13 +86,14 @@ let
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
-      postFixup = let 
-        binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
+      postFixup =
+        let
+          binPath = [ coreutils acpica-tools iasl gnugrep gnused file ];
+        in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
     };
   };
-
-in utils // {
+in
+utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
     paths = stdenv.lib.attrValues utils;

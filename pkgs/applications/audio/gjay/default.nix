@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, mpd_clientlib, dbus-glib, audacious, gtk2, gsl
-, libaudclient }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, mpd_clientlib
+, dbus-glib
+, audacious
+, gtk2
+, gsl
+, libaudclient
+}:
 
 stdenv.mkDerivation {
   name = "gjay-0.3.2";

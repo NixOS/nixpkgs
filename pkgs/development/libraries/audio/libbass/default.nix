@@ -4,7 +4,6 @@
 # 1. Check latest version at http://www.un4seen.com/
 # 2. Update `version`s and `sha256` sums.
 # See also http://www.un4seen.com/forum/?topic=18614.0
-
 let
   allBass = {
     bass = {
@@ -46,9 +45,10 @@ let
     lpropagatedBuildInputs = [ unzip ];
     dontBuild = true;
     installPhase =
-      let so =
-            if bass.so ? ${stdenv.hostPlatform.system} then bass.so.${stdenv.hostPlatform.system}
-            else throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
+      let
+        so =
+          if bass.so ? ${stdenv.hostPlatform.system} then bass.so.${stdenv.hostPlatform.system}
+          else throw "${name} not packaged for ${stdenv.hostPlatform.system} (yet).";
       in ''
         mkdir -p $out/{lib,include}
         install -m644 -t $out/lib/ ${so}
@@ -62,5 +62,5 @@ let
       platforms = builtins.attrNames bass.so;
     };
   };
-
-in stdenv.lib.mapAttrs dropBass allBass
+in
+stdenv.lib.mapAttrs dropBass allBass

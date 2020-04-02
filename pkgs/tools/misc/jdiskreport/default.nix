@@ -1,5 +1,4 @@
 { stdenv, fetchurl, unzip, jre, makeDesktopItem }:
-
 let
   desktopItem = makeDesktopItem {
     desktopName = "JDiskReport";

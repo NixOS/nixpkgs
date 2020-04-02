@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , exampleSupport ? false # Example encoding program
 }:
 
@@ -17,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A high-quality implementation of the AAC codec from Android";
-    homepage    = https://sourceforge.net/projects/opencore-amr/;
-    license     = licenses.asl20;
+    homepage = https://sourceforge.net/projects/opencore-amr/;
+    license = licenses.asl20;
     maintainers = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

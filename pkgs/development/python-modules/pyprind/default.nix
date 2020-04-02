@@ -1,6 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ stdenv
+, fetchPypi
+, buildPythonPackage
 , psutil
-, pytest }:
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "PyPrind";

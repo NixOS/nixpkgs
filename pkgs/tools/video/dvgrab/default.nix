@@ -1,5 +1,14 @@
-{ fetchFromGitHub, stdenv, libunwind, libraw1394, libjpeg, libiec61883, libdv
-, libavc1394, pkgconfig, autoreconfHook }:
+{ fetchFromGitHub
+, stdenv
+, libunwind
+, libraw1394
+, libjpeg
+, libiec61883
+, libdv
+, libavc1394
+, pkgconfig
+, autoreconfHook
+}:
 
 stdenv.mkDerivation {
   name = "dvgrab-2016-05-16";
@@ -13,11 +22,17 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libunwind libraw1394 libjpeg libiec61883 libdv libavc1394
+    libunwind
+    libraw1394
+    libjpeg
+    libiec61883
+    libdv
+    libavc1394
   ];
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook
+    pkgconfig
   ];
 
   meta = with stdenv.lib; {

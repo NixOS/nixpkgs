@@ -1,5 +1,4 @@
-{
-  bazel
+{ bazel
 , bazelTest
 , fetchFromGitHub
 , fetchurl
@@ -12,7 +11,6 @@
 , writeText
 , distDir
 }:
-
 let
   com_google_protobuf = fetchFromGitHub {
     owner = "protocolbuffers";
@@ -120,7 +118,7 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
+  workspaceDir = runLocal "our_workspace" { } (''
     mkdir $out
     cp ${WORKSPACE} $out/WORKSPACE
     touch $out/BUILD.bazel
@@ -128,8 +126,7 @@ let
     mkdir $out/person
     cp ${personProto} $out/person/person.proto
     cp ${personBUILD} $out/person/BUILD.bazel
-  ''
-  + (lib.optionalString gccStdenv.isDarwin ''
+  '' + (lib.optionalString gccStdenv.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));
@@ -150,5 +147,5 @@ let
           //...
     '';
   };
-
-in testBazel
+in
+testBazel

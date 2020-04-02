@@ -1,50 +1,61 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.kubernetes;
 
   mkKubeConfig = name: conf: pkgs.writeText "${name}-kubeconfig" (builtins.toJSON {
     apiVersion = "v1";
     kind = "Config";
-    clusters = [{
-      name = "local";
-      cluster.certificate-authority = conf.caFile or cfg.caFile;
-      cluster.server = conf.server;
-    }];
-    users = [{
-      inherit name;
-      user = {
-        client-certificate = conf.certFile;
-        client-key = conf.keyFile;
-      };
-    }];
-    contexts = [{
-      context = {
-        cluster = "local";
-        user = name;
-      };
-      current-context = "local";
-    }];
+    clusters = [
+      {
+        name = "local";
+        cluster.certificate-authority = conf.caFile or cfg.caFile;
+        cluster.server = conf.server;
+      }
+    ];
+    users = [
+      {
+        inherit name;
+        user = {
+          client-certificate = conf.certFile;
+          client-key = conf.keyFile;
+        };
+      }
+    ];
+    contexts = [
+      {
+        context = {
+          cluster = "local";
+          user = name;
+        };
+        current-context = "local";
+      }
+    ];
   });
 
   caCert = secret "ca";
 
-  etcdEndpoints = ["https://${cfg.masterAddress}:2379"];
+  etcdEndpoints = [ "https://${cfg.masterAddress}:2379" ];
 
-  mkCert = { name, CN, hosts ? [], fields ? {}, action ? "",
-             privateKeyOwner ? "kubernetes" }: rec {
-    inherit name caCert CN hosts fields action;
-    cert = secret name;
-    key = secret "${name}-key";
-    privateKeyOptions = {
-      owner = privateKeyOwner;
-      group = "nogroup";
-      mode = "0600";
-      path = key;
+  mkCert =
+    { name
+    , CN
+    , hosts ? [ ]
+    , fields ? { }
+    , action ? ""
+    , privateKeyOwner ? "kubernetes"
+    }: rec {
+      inherit name caCert CN hosts fields action;
+      cert = secret name;
+      key = secret "${name}-key";
+      privateKeyOptions = {
+        owner = privateKeyOwner;
+        group = "nogroup";
+        mode = "0600";
+        path = key;
+      };
     };
-  };
 
   secret = name: "${cfg.secretsPath}/${name}.pem";
 
@@ -72,7 +83,8 @@ let
       default = null;
     };
   };
-in {
+in
+{
 
   imports = [
     (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
@@ -89,8 +101,8 @@ in {
         addon manager, flannel and proxy services.
         Node role will enable flannel, docker, kubelet and proxy services.
       '';
-      default = [];
-      type = types.listOf (types.enum ["master" "node"]);
+      default = [ ];
+      type = types.listOf (types.enum [ "master" "node" ]);
     };
 
     package = mkOption {
@@ -131,7 +143,7 @@ in {
 
     featureGates = mkOption {
       description = "List set of feature gates.";
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
     };
 
@@ -144,7 +156,7 @@ in {
     path = mkOption {
       description = "Packages added to the services' PATH environment variable. Both the bin and sbin subdirectories of each package are added.";
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
     };
 
     clusterCidr = mkOption {
@@ -210,7 +222,7 @@ in {
     })
 
     # Using "services.kubernetes.roles" will automatically enable easyCerts and flannel
-    (mkIf (cfg.roles != []) {
+    (mkIf (cfg.roles != [ ]) {
       services.kubernetes.flannel.enable = mkDefault true;
       services.flannel.etcd.endpoints = mkDefault etcdEndpoints;
       services.kubernetes.easyCerts = mkDefault true;
@@ -248,12 +260,7 @@ in {
     })
 
     (mkIf (
-        cfg.apiserver.enable ||
-        cfg.scheduler.enable ||
-        cfg.controllerManager.enable ||
-        cfg.kubelet.enable ||
-        cfg.proxy.enable ||
-        cfg.addonManager.enable
+      cfg.apiserver.enable || cfg.scheduler.enable || cfg.controllerManager.enable || cfg.kubelet.enable || cfg.proxy.enable || cfg.addonManager.enable
     ) {
       systemd.targets.kubernetes = {
         description = "Kubernetes";
@@ -279,9 +286,11 @@ in {
       # dns addon is enabled by default
       services.kubernetes.addons.dns.enable = mkDefault true;
 
-      services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
-                          then cfg.apiserver.advertiseAddress
-                          else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
-    })
+      services.kubernetes.apiserverAddress = mkDefault ("https://${
+          if cfg.apiserver.advertiseAddress != null
+          then cfg.apiserver.advertiseAddress
+          else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
+    }
+    )
   ];
 }

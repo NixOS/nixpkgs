@@ -18,10 +18,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
-    ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
+    ++ (if stdenv.isLinux then [ pkgs.e2fsprogs ] else [ ]);
 
   # There seems to be no way to pass that path to configure.
-  NIX_CFLAGS_COMPILE="-I${pkgs.aprutil.dev}/include/apr-1";
+  NIX_CFLAGS_COMPILE = "-I${pkgs.aprutil.dev}/include/apr-1";
 
   preConfigure = ''
     cd Source
@@ -33,9 +33,10 @@ buildPythonPackage rec {
       --svn-lib-dir=${pkgs.subversion.out}/lib \
       --svn-bin-dir=${pkgs.subversion.out}/bin \
       --svn-root-dir=${pkgs.subversion.dev}
-  '' + (if !stdenv.isDarwin then "" else ''
-    sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
-  '');
+  '' + (
+    if !stdenv.isDarwin then "" else ''
+      sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
+    '');
 
   checkPhase = "make -C ../Tests";
 

@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, python3, xmlbird,
-cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala_0_44,
-gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, python3
+, xmlbird
+, cairo
+, gdk-pixbuf
+, libgee
+, glib
+, gtk3
+, webkitgtk
+, libnotify
+, sqlite
+, vala_0_44
+, gobject-introspection
+, gsettings-desktop-schemas
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "birdfont";

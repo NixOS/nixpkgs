@@ -1,12 +1,13 @@
-{ stdenv, fetchFromGitHub
-, gcc-arm-embedded, binutils-arm-embedded, ruby
+{ stdenv
+, fetchFromGitHub
+, gcc-arm-embedded
+, binutils-arm-embedded
+, ruby
 }:
-
 let
-
   version = "2.0.0-rc2";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   pname = "inav";
   inherit version;
@@ -19,7 +20,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded binutils-arm-embedded
+    gcc-arm-embedded
+    binutils-arm-embedded
     ruby
   ];
 

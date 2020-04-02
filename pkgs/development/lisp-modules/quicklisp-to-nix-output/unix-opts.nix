@@ -14,7 +14,7 @@ rec {
 
   packageName = "unix-opts";
 
-  asdFilesToKeep = ["unix-opts.asd"];
+  asdFilesToKeep = [ "unix-opts.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM unix-opts DESCRIPTION minimalistic parser of command line arguments

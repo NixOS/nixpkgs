@@ -1,9 +1,34 @@
-{ stdenv, lib, perl, fetchurl, python2
-, pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
-, libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
-, gloox, nvidia-texture-tools
-, withEditor ? true, wxGTK ? null
+{ stdenv
+, lib
+, perl
+, fetchurl
+, python2
+, pkgconfig
+, spidermonkey_38
+, boost
+, icu
+, libxml2
+, libpng
+, libsodium
+, libjpeg
+, zlib
+, curl
+, libogg
+, libvorbis
+, enet
+, miniupnpc
+, openal
+, libGLU
+, libGL
+, xorgproto
+, libX11
+, libXcursor
+, nspr
+, SDL2
+, gloox
+, nvidia-texture-tools
+, withEditor ? true
+, wxGTK ? null
 }:
 
 assert withEditor -> wxGTK != null;
@@ -20,10 +45,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python2 perl pkgconfig ];
 
   buildInputs = [
-    spidermonkey_38 boost icu libxml2 libpng libjpeg
-    zlib curl libogg libvorbis enet miniupnpc openal
-    libGLU libGL xorgproto libX11 libXcursor nspr SDL2 gloox
-    nvidia-texture-tools libsodium
+    spidermonkey_38
+    boost
+    icu
+    libxml2
+    libpng
+    libjpeg
+    zlib
+    curl
+    libogg
+    libvorbis
+    enet
+    miniupnpc
+    openal
+    libGLU
+    libGL
+    xorgproto
+    libX11
+    libXcursor
+    nspr
+    SDL2
+    gloox
+    nvidia-texture-tools
+    libsodium
   ] ++ lib.optional withEditor wxGTK;
 
   NIX_CFLAGS_COMPILE = toString [
@@ -76,8 +120,8 @@ stdenv.mkDerivation rec {
     # Copy executables.
     install -Dm755 binaries/system/pyrogenesis "$out"/bin/0ad
     ${lib.optionalString withEditor ''
-      install -Dm755 binaries/system/ActorEditor "$out"/bin/ActorEditor
-    ''}
+    install -Dm755 binaries/system/ActorEditor "$out"/bin/ActorEditor
+  ''}
 
     # Copy l10n data.
     install -Dm755 -t $out/share/0ad/data/l10n binaries/data/l10n/*
@@ -94,7 +138,10 @@ stdenv.mkDerivation rec {
     description = "A free, open-source game of ancient warfare";
     homepage = "https://play0ad.com/";
     license = with licenses; [
-      gpl2 lgpl21 mit cc-by-sa-30
+      gpl2
+      lgpl21
+      mit
+      cc-by-sa-30
       licenses.zlib # otherwise masked by pkgs.zlib
     ];
     platforms = subtractLists platforms.i686 platforms.linux;

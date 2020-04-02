@@ -1,15 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) lsh;
 
   cfg = config.services.lshd;
-
 in
-
 {
 
   ###### interface
@@ -34,7 +30,7 @@ in
       };
 
       interfaces = mkOption {
-        default = [];
+        default = [ ];
         description = ''
           List of network interfaces where listening for connections.
           When providing the empty list, `[]', lshd listens on all
@@ -115,7 +111,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.lshd.subsystems = [ ["sftp" "${pkgs.lsh}/sbin/sftp-server"] ];
+    services.lshd.subsystems = [ [ "sftp" "${pkgs.lsh}/sbin/sftp-server" ] ];
 
     systemd.services.lshd = {
       description = "GNU lshd SSH2 daemon";
@@ -152,9 +148,10 @@ in
         ${lsh}/sbin/lshd --daemonic \
           --password-helper="${lsh}/sbin/lsh-pam-checkpw" \
           -p ${toString portNumber} \
-          ${if interfaces == [] then ""
-            else (concatStrings (map (i: "--interface=\"${i}\"")
-                                     interfaces))} \
+          ${
+          if interfaces == [ ] then ""
+          else (concatStrings (map (i: "--interface=\"${i}\"")
+              interfaces))} \
           -h "${hostKey}" \
           ${if !syslog then "--no-syslog" else ""} \
           ${if passwordAuthentication then "--password" else "--no-password" } \
@@ -165,12 +162,11 @@ in
           ${if !tcpForwarding then "--no-tcpip-forward" else "--tcpip-forward"} \
           ${if x11Forwarding then "--x11-forward" else "--no-x11-forward" } \
           --subsystems=${concatStringsSep ","
-                                          (map (pair: (head pair) + "=" +
-                                                      (head (tail pair)))
-                                               subsystems)}
+          (map (pair: (head pair) + "=" + (head (tail pair)))
+              subsystems)}
       '';
     };
 
-    security.pam.services.lshd = {};
+    security.pam.services.lshd = { };
   };
 }

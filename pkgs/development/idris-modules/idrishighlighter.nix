@@ -4,7 +4,7 @@
 , lightyear
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "idrishighlighter";
   version = "2018-02-22";
 

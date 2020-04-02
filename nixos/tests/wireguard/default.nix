@@ -1,8 +1,7 @@
 let
   wg-snakeoil-keys = import ./snakeoil-keys.nix;
 in
-
-import ../make-test-python.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "wireguard";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ma27 ];

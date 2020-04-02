@@ -1,5 +1,11 @@
-{ stdenv, pkgs, fetchgit, nix, node_webkit, makeDesktopItem
-, writeScript }:
+{ stdenv
+, pkgs
+, fetchgit
+, nix
+, node_webkit
+, makeDesktopItem
+, writeScript
+}:
 let
   version = "0.2.1";
   src = fetchgit {

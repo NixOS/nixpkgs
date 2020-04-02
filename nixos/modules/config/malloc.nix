@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 with lib;
-
 let
   cfg = config.environment.memoryAllocator;
 
@@ -37,12 +36,12 @@ let
   # An output that contains only the shared library, to avoid
   # needlessly bloating the system closure
   mallocLib = pkgs.runCommand "malloc-provider-${cfg.provider}"
-    rec {
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      origLibPath = providerConf.libPath;
-      libName = baseNameOf origLibPath;
-    }
+  rec {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    origLibPath = providerConf.libPath;
+    libName = baseNameOf origLibPath;
+  }
     ''
       mkdir -p $out/lib
       cp -L $origLibPath $out/lib/$libName
@@ -51,7 +50,6 @@ let
   # The full path to the selected provider shlib.
   providerLibPath = "${mallocLib}/lib/${mallocLib.libName}";
 in
-
 {
   meta = {
     maintainers = [ maintainers.joachifm ];
@@ -68,8 +66,8 @@ in
         <itemizedlist>
         <listitem><para><literal>libc</literal>: the standard allocator provided by libc</para></listitem>
         ${toString (mapAttrsToList
-            (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
-            providers)}
+          (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
+          providers)}
         </itemizedlist>
 
         <warning>

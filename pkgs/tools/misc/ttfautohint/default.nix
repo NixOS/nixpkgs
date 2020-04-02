@@ -1,6 +1,12 @@
-{
-  stdenv, lib, fetchurl, pkgconfig, autoreconfHook
-, freetype, harfbuzz, libiconv, qtbase
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, autoreconfHook
+, freetype
+, harfbuzz
+, libiconv
+, qtbase
 , enableGUI ? true
 }:
 

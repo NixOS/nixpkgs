@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-prevalence";
 
-  asdFilesToKeep = ["cl-prevalence.asd"];
+  asdFilesToKeep = [ "cl-prevalence.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-prevalence DESCRIPTION Common Lisp Prevalence Package SHA256

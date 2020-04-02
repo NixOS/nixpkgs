@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, docopt, netifaces }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, docopt
+, netifaces
+}:
 
 buildPythonPackage rec {
   pname = "onkyo-eiscp";

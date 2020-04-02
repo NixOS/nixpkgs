@@ -29,9 +29,9 @@ buildGoPackage rec {
   '';
 
   postFixup = ''
-		wrapProgram $bin/bin/sga-guard \
-			--prefix PATH : "$bin/bin" \
-			--prefix PATH : "${autossh}/bin"
+    wrapProgram $bin/bin/sga-guard \
+      --prefix PATH : "$bin/bin" \
+      --prefix PATH : "${autossh}/bin"
   '';
 
   meta = with lib; {

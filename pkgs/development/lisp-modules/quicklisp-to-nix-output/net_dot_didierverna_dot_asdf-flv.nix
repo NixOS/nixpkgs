@@ -14,7 +14,7 @@ rec {
 
   packageName = "net.didierverna.asdf-flv";
 
-  asdFilesToKeep = ["net.didierverna.asdf-flv.asd"];
+  asdFilesToKeep = [ "net.didierverna.asdf-flv.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM net.didierverna.asdf-flv DESCRIPTION

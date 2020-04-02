@@ -1,9 +1,38 @@
-{ stdenv, gettext, fetchurl, wrapGAppsHook, gnome-video-effects, libcanberra-gtk3
-, pkgconfig, gtk3, glib, clutter-gtk, clutter-gst, udev, gst_all_1, itstool
-, libgudev, vala, docbook_xml_dtd_43, docbook_xsl, appstream-glib
-, libxslt, yelp-tools, gnome-common, gtk-doc
-, adwaita-icon-theme, librsvg, totem, gdk-pixbuf, gnome3, gnome-desktop, libxml2
-, meson, ninja, dbus, python3 }:
+{ stdenv
+, gettext
+, fetchurl
+, wrapGAppsHook
+, gnome-video-effects
+, libcanberra-gtk3
+, pkgconfig
+, gtk3
+, glib
+, clutter-gtk
+, clutter-gst
+, udev
+, gst_all_1
+, itstool
+, libgudev
+, vala
+, docbook_xml_dtd_43
+, docbook_xsl
+, appstream-glib
+, libxslt
+, yelp-tools
+, gnome-common
+, gtk-doc
+, adwaita-icon-theme
+, librsvg
+, totem
+, gdk-pixbuf
+, gnome3
+, gnome-desktop
+, libxml2
+, meson
+, ninja
+, dbus
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
@@ -24,15 +53,42 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool vala wrapGAppsHook libxml2 appstream-glib
-    libxslt docbook_xml_dtd_43 docbook_xsl
-    gtk-doc yelp-tools gnome-common python3
+    meson
+    ninja
+    pkgconfig
+    gettext
+    itstool
+    vala
+    wrapGAppsHook
+    libxml2
+    appstream-glib
+    libxslt
+    docbook_xml_dtd_43
+    docbook_xsl
+    gtk-doc
+    yelp-tools
+    gnome-common
+    python3
   ];
-  buildInputs = [ gtk3 glib gnome-video-effects
-                  gdk-pixbuf adwaita-icon-theme librsvg udev gst_all_1.gstreamer
-                  gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gnome-desktop
-                  gst_all_1.gst-plugins-bad clutter-gtk clutter-gst
-                  libcanberra-gtk3 libgudev dbus ];
+  buildInputs = [
+    gtk3
+    glib
+    gnome-video-effects
+    gdk-pixbuf
+    adwaita-icon-theme
+    librsvg
+    udev
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gnome-desktop
+    gst_all_1.gst-plugins-bad
+    clutter-gtk
+    clutter-gst
+    libcanberra-gtk3
+    libgudev
+    dbus
+  ];
 
   outputs = [ "out" "man" "devdoc" ];
 

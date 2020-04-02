@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname    = "PyChef";
+  pname = "PyChef";
   version = "0.3.0";
 
   src = fetchPypi {

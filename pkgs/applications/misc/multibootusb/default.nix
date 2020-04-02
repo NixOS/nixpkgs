@@ -1,5 +1,16 @@
-{ fetchFromGitHub, libxcb, mtools, p7zip, parted, procps,
-  python36Packages, qt5, runtimeShell, stdenv, utillinux, wrapQtAppsHook }:
+{ fetchFromGitHub
+, libxcb
+, mtools
+, p7zip
+, parted
+, procps
+, python36Packages
+, qt5
+, runtimeShell
+, stdenv
+, utillinux
+, wrapQtAppsHook
+}:
 
 # Note: Multibootusb is tricky to maintain. It relies on the
 # $PYTHONPATH variable containing some of their code, so that
@@ -78,6 +89,6 @@ python36Packages.buildPythonApplication rec {
     description = "Multiboot USB creator for Linux live disks";
     homepage = http://multibootusb.org/;
     license = licenses.gpl2;
-    maintainers = []; # Looking for a maintainer!
+    maintainers = [ ]; # Looking for a maintainer!
   };
 }

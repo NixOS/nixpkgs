@@ -1,4 +1,7 @@
-{stdenv, fetchurl, runtimeShell, makeWrapper
+{ stdenv
+, fetchurl
+, runtimeShell
+, makeWrapper
 , oraclejre
 , antialiasFont ? true
 }:
@@ -28,7 +31,7 @@ stdenv.mkDerivation {
       --add-flags "$out/share/docear.sh"
 
     chmod 0755 $out/bin/docear
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "A unique solution to academic literature management";

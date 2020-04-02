@@ -16,14 +16,13 @@ let
       cache_directory = ${cfg.cacheDirectory}
       items_per_page = ${toString cfg.itemsPerPage}
       ${(concatStringsSep "\n\n"
-            (map ({ name, feedUrl, homepageUrl }:
+        (map ({ name, feedUrl, homepageUrl }:
             ''
               [${feedUrl}]
               name = ${name}
               link = ${homepageUrl}
             '') cfg.feeds))}
     '';
-
 in
 {
 
@@ -119,7 +118,7 @@ in
         default = "/var/cache/venus";
         type = types.path;
         description = ''
-            Where cached feeds are stored.
+          Where cached feeds are stored.
         '';
       };
 
@@ -132,11 +131,11 @@ in
       };
 
       feeds = mkOption {
-        default = [];
+        default = [ ];
         example = [
           {
             name = "Rok Garbas";
-            feedUrl= "http://url/to/rss/feed.xml";
+            feedUrl = "http://url/to/rss/feed.xml";
             homepageUrl = "http://garbas.si";
           }
         ];
@@ -161,8 +160,9 @@ in
       '';
 
     systemd.services.venus =
-      { description = "Planet Venus Feed Reader";
-        path  = [ pkgs.venus ];
+      {
+        description = "Planet Venus Feed Reader";
+        path = [ pkgs.venus ];
         script = "exec venus-planet ${configFile}";
         serviceConfig.User = "${cfg.user}";
         serviceConfig.Group = "${cfg.group}";

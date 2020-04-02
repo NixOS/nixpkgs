@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
-
 let
-
   inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExample;
   inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optional types;
 
@@ -23,7 +21,6 @@ let
     #
     ${concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
   '';
-
 in
 {
   # interface
@@ -42,7 +39,7 @@ in
 
       config = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
-        default = {};
+        default = { };
         description = ''
           automysqlbackup configuration. Refer to
           <filename>''${pkgs.automysqlbackup}/etc/automysqlbackup.conf</filename>
@@ -65,7 +62,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = !config.services.mysqlBackup.enable;
+      {
+        assertion = !config.services.mysqlBackup.enable;
         message = "Please choose one of services.mysqlBackup or services.automysqlbackup.";
       }
     ];

@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi,
-  cssselect, cssutils, lxml, mock, nose, requests, cachetools
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cssselect
+, cssutils
+, lxml
+, mock
+, nose
+, requests
+, cachetools
 }:
 
 buildPythonPackage rec {

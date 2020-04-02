@@ -46,11 +46,14 @@ rec {
   # the packages named in the input set to the corresponding versions
   packageSourceOverrides =
     overrides: self: super: pkgs.lib.mapAttrs (name: src:
-      let isPath = x: builtins.substring 0 1 (toString x) == "/";
-          generateExprs = if isPath src
-                             then self.callCabal2nix
-                             else self.callHackage;
-      in generateExprs name src {}) overrides;
+      let
+        isPath = x: builtins.substring 0 1 (toString x) == "/";
+        generateExprs =
+          if isPath src
+          then self.callCabal2nix
+          else self.callHackage;
+      in generateExprs name src { }
+    ) overrides;
 
   /* doCoverage modifies a haskell package to enable the generation
      and installation of a coverage report.
@@ -115,11 +118,11 @@ rec {
   /* doDistribute enables the distribution of binaries for the package
      via hydra.
    */
-  doDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = drv.platforms or ["i686-linux" "x86_64-linux" "x86_64-darwin"]; });
+  doDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = drv.platforms or [ "i686-linux" "x86_64-linux" "x86_64-darwin" ]; });
   /* dontDistribute disables the distribution of binaries for the package
      via hydra.
    */
-  dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = []; });
+  dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = [ ]; });
 
   /* appendConfigureFlag adds a single argument that will be passed to the
      cabal configure command, after the arguments that have been defined
@@ -129,38 +132,38 @@ rec {
 
          > haskell.lib.appendConfigureFlag haskellPackages.servant "--profiling-detail=all-functions"
    */
-  appendConfigureFlag = drv: x: appendConfigureFlags drv [x];
-  appendConfigureFlags = drv: xs: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ xs; });
+  appendConfigureFlag = drv: x: appendConfigureFlags drv [ x ];
+  appendConfigureFlags = drv: xs: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or [ ]) ++ xs; });
 
-  appendBuildFlag = drv: x: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or []) ++ [x]; });
-  appendBuildFlags = drv: xs: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or []) ++ xs; });
+  appendBuildFlag = drv: x: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or [ ]) ++ [ x ]; });
+  appendBuildFlags = drv: xs: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or [ ]) ++ xs; });
 
   /* removeConfigureFlag drv x is a Haskell package like drv, but with
      all cabal configure arguments that are equal to x removed.
 
          > haskell.lib.removeConfigureFlag haskellPackages.servant "--verbose"
    */
-  removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = lib.remove x (drv.configureFlags or []); });
+  removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = lib.remove x (drv.configureFlags or [ ]); });
 
-  addBuildTool = drv: x: addBuildTools drv [x];
-  addBuildTools = drv: xs: overrideCabal drv (drv: { buildTools = (drv.buildTools or []) ++ xs; });
+  addBuildTool = drv: x: addBuildTools drv [ x ];
+  addBuildTools = drv: xs: overrideCabal drv (drv: { buildTools = (drv.buildTools or [ ]) ++ xs; });
 
-  addExtraLibrary = drv: x: addExtraLibraries drv [x];
-  addExtraLibraries = drv: xs: overrideCabal drv (drv: { extraLibraries = (drv.extraLibraries or []) ++ xs; });
+  addExtraLibrary = drv: x: addExtraLibraries drv [ x ];
+  addExtraLibraries = drv: xs: overrideCabal drv (drv: { extraLibraries = (drv.extraLibraries or [ ]) ++ xs; });
 
-  addBuildDepend = drv: x: addBuildDepends drv [x];
-  addBuildDepends = drv: xs: overrideCabal drv (drv: { buildDepends = (drv.buildDepends or []) ++ xs; });
+  addBuildDepend = drv: x: addBuildDepends drv [ x ];
+  addBuildDepends = drv: xs: overrideCabal drv (drv: { buildDepends = (drv.buildDepends or [ ]) ++ xs; });
 
-  addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
-  addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
+  addPkgconfigDepend = drv: x: addPkgconfigDepends drv [ x ];
+  addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or [ ]) ++ xs; });
 
-  addSetupDepend = drv: x: addSetupDepends drv [x];
-  addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });
+  addSetupDepend = drv: x: addSetupDepends drv [ x ];
+  addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or [ ]) ++ xs; });
 
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
-  markBroken = drv: overrideCabal drv (drv: { broken = true; hydraPlatforms = []; });
+  markBroken = drv: overrideCabal drv (drv: { broken = true; hydraPlatforms = [ ]; });
   unmarkBroken = drv: overrideCabal drv (drv: { broken = false; });
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
   markUnbroken = drv: overrideCabal drv (drv: { broken = false; });
@@ -185,8 +188,8 @@ rec {
 
   enableSeparateBinOutput = drv: overrideCabal drv (drv: { enableSeparateBinOutput = true; });
 
-  appendPatch = drv: x: appendPatches drv [x];
-  appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or []) ++ xs; });
+  appendPatch = drv: x: appendPatches drv [ x ];
+  appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or [ ]) ++ xs; });
 
   doHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = true; });
   dontHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = false; });
@@ -207,10 +210,10 @@ rec {
    * This includes dontStrip.
    */
   enableDWARFDebugging = drv:
-   # -g: enables debugging symbols
-   # --disable-*-stripping: tell GHC not to strip resulting binaries
-   # dontStrip: see above
-   appendConfigureFlag (dontStrip drv) "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
+    # -g: enables debugging symbols
+    # --disable-*-stripping: tell GHC not to strip resulting binaries
+    # dontStrip: see above
+    appendConfigureFlag (dontStrip drv) "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
 
   /* Create a source distribution tarball like those found on hackage,
      instead of building the package.
@@ -219,7 +222,7 @@ rec {
     name = "${drv.pname}-source-${drv.version}";
     # Since we disable the haddock phase, we also need to override the
     # outputs since the separate doc output will not be produced.
-    outputs = ["out"];
+    outputs = [ "out" ];
     buildPhase = "./Setup sdist";
     haddockPhase = ":";
     checkPhase = ":";
@@ -230,7 +233,7 @@ rec {
   /* Use the gold linker. It is a linker for ELF that is designed
      "to run as fast as possible on modern systems"
    */
-  linkWithGold = drv : appendConfigureFlag drv
+  linkWithGold = drv: appendConfigureFlag drv
     "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
 
   /* link executables statically against haskell libs to reduce
@@ -279,18 +282,18 @@ rec {
    */
   checkUnusedPackages =
     { ignoreEmptyImports ? false
-    , ignoreMainModule   ? false
-    , ignorePackages     ? []
-    } : drv :
+    , ignoreMainModule ? false
+    , ignorePackages ? [ ]
+    }: drv:
       overrideCabal (appendConfigureFlag drv "--ghc-option=-ddump-minimal-imports") (_drv: {
         postBuild = with lib;
-          let args = concatStringsSep " " (
-                       optional ignoreEmptyImports "--ignore-empty-imports" ++
-                       optional ignoreMainModule   "--ignore-main-module" ++
-                       map (pkg: "--ignore-package ${pkg}") ignorePackages
-                     );
-          in "${pkgs.haskellPackages.packunused}/bin/packunused" +
-             optionalString (args != "") " ${args}";
+          let
+            args = concatStringsSep " " (
+              optional ignoreEmptyImports "--ignore-empty-imports" ++
+              optional ignoreMainModule "--ignore-main-module" ++
+              map (pkg: "--ignore-package ${pkg}") ignorePackages
+            );
+          in "${pkgs.haskellPackages.packunused}/bin/packunused" + optionalString (args != "") " ${args}";
       });
 
   buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
@@ -319,12 +322,14 @@ rec {
   shellAware = p: if lib.inNixShell then p.env else p;
 
   ghcInfo = ghc:
-    rec { isCross = (ghc.cross or null) != null;
-          isGhcjs = ghc.isGhcjs or false;
-          nativeGhc = if isCross || isGhcjs
-                        then ghc.bootPkgs.ghc
-                        else ghc;
-        };
+    rec {
+      isCross = (ghc.cross or null) != null;
+      isGhcjs = ghc.isGhcjs or false;
+      nativeGhc =
+        if isCross || isGhcjs
+        then ghc.bootPkgs.ghc
+        else ghc;
+    };
 
   ### mkDerivation helpers
   # These allow external users of a haskell package to extract
@@ -337,10 +342,10 @@ rec {
 
   # Some information about which phases should be run.
   controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
-                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
-                  , doBenchmark ? false
-                  , ...
-                  }: { inherit doCheck doBenchmark; };
+    { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
+    , doBenchmark ? false
+    , ...
+    }: { inherit doCheck doBenchmark; };
 
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set
@@ -354,17 +359,16 @@ rec {
         haskellPaths = builtins.attrNames (builtins.readDir directory);
 
         toKeyVal = file: {
-          name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;
+          name = builtins.replaceStrings [ ".nix" ] [ "" ] file;
 
           value = self.callPackage (directory + "/${file}") { };
         };
-
       in
         builtins.listToAttrs (map toKeyVal haskellPaths);
 
   addOptparseApplicativeCompletionScripts = exeName: pkg:
     builtins.trace "addOptparseApplicativeCompletionScripts is deprecated in favor of generateOptparseApplicativeCompletion. Please change ${pkg.name} to use the latter or its plural form."
-    (generateOptparseApplicativeCompletion exeName pkg);
+      (generateOptparseApplicativeCompletion exeName pkg);
 
   /*
     Modify a Haskell package to add shell completion scripts for the

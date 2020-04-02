@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-annot";
 
-  asdFilesToKeep = ["cl-annot.asd"];
+  asdFilesToKeep = [ "cl-annot.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-annot DESCRIPTION Python-like Annotation Syntax for Common Lisp

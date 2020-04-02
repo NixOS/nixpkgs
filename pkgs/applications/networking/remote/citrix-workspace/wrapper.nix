@@ -1,12 +1,8 @@
-{ citrix_workspace, extraCerts ? [], symlinkJoin }:
-
+{ citrix_workspace, extraCerts ? [ ], symlinkJoin }:
 let
-
   mkCertCopy = certPath:
     "cp ${certPath} $out/opt/citrix-icaclient/keystore/cacerts/";
-
 in
-
 if builtins.length extraCerts == 0 then citrix_workspace else symlinkJoin {
   name = "citrix-with-extra-certs-${citrix_workspace.version}";
   paths = [ citrix_workspace ];

@@ -1,19 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, makeWrapper
-, gstreamer, gtk2, gst-plugins-base, libnotify
-, keybinder, xfconf
+{ stdenv
+, fetchurl
+, pkgconfig
+, makeWrapper
+, gstreamer
+, gtk2
+, gst-plugins-base
+, libnotify
+, keybinder
+, xfconf
 }:
-
 let
   # The usual Gstreamer plugins package has a zillion dependencies
   # that we don't need for a simple mixer, so build a minimal package.
   gst_plugins_minimal = gst-plugins-base.override {
     minimalDeps = true;
   };
-
 in
-
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-volumed";
+  p_name = "xfce4-volumed";
   ver_maj = "0.1";
   ver_min = "13";
 
@@ -24,8 +28,13 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   buildInputs =
-    [ gstreamer gst_plugins_minimal gtk2
-      keybinder xfconf libnotify
+    [
+      gstreamer
+      gst_plugins_minimal
+      gtk2
+      keybinder
+      xfconf
+      libnotify
     ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

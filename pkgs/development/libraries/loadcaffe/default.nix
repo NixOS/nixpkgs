@@ -1,8 +1,8 @@
-{stdenv, fetchFromGitHub, cmake, torch, protobuf, protobufc}:
+{ stdenv, fetchFromGitHub, cmake, torch, protobuf, protobufc }:
 stdenv.mkDerivation rec {
   pname = "loadcaffe";
   version = "0.0pre2016.08.01";
-  buildInputs = [cmake torch protobuf protobufc];
+  buildInputs = [ cmake torch protobuf protobufc ];
   src = fetchFromGitHub {
     owner = "szagoruyko";
     repo = "loadcaffe";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = ''Torch7 loader for Caffe networks'';
-    license = stdenv.lib.licenses.bsd2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.bsd2;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

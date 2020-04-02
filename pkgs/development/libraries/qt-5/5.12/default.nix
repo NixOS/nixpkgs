@@ -14,23 +14,32 @@ top-level attribute to `top-level/all-packages.nix`.
 
 */
 
-{
-  newScope,
-  stdenv, fetchurl, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper,
-  bison, cups ? null, harfbuzz, libGL, perl,
-  gstreamer, gst-plugins-base, gtk3, dconf,
-  llvmPackages_5,
-
-  # options
-  developerBuild ? false,
-  decryptSslTraffic ? false,
-  debug ? false,
+{ newScope
+, stdenv
+, fetchurl
+, fetchpatch
+, fetchFromGitHub
+, makeSetupHook
+, makeWrapper
+, bison
+, cups ? null
+, harfbuzz
+, libGL
+, perl
+, gstreamer
+, gst-plugins-base
+, gtk3
+, dconf
+, llvmPackages_5
+, # options
+  developerBuild ? false
+, decryptSslTraffic ? false
+, debug ? false
+,
 }:
 
 with stdenv.lib;
-
 let
-
   qtCompatVersion = srcs.qtbase.version;
 
   stdenvActual = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
@@ -88,12 +97,12 @@ let
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
       })
     ]
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
+    ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [ ./qtwebkit.patch ]
       ++ optionals stdenv.isDarwin [
-        ./qtwebkit-darwin-no-readline.patch
-        ./qtwebkit-darwin-no-qos-classes.patch
-      ];
+      ./qtwebkit-darwin-no-readline.patch
+      ./qtwebkit-darwin-no-qos-classes.patch
+    ];
     qttools = [ ./qttools.patch ];
   };
 
@@ -107,7 +116,7 @@ let
       mkDerivation =
         import ../mkDerivation.nix
         { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
-        stdenvActual.mkDerivation;
+          stdenvActual.mkDerivation;
     }
     { inherit self srcs patches; };
 
@@ -130,48 +139,67 @@ let
         inherit developerBuild decryptSslTraffic;
       };
 
-      qtcharts = callPackage ../modules/qtcharts.nix {};
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
-      qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
-      qtdoc = callPackage ../modules/qtdoc.nix {};
-      qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
-      qtimageformats = callPackage ../modules/qtimageformats.nix {};
-      qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {};
+      qtcharts = callPackage ../modules/qtcharts.nix { };
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix { };
+      qtdeclarative = callPackage ../modules/qtdeclarative.nix { };
+      qtdoc = callPackage ../modules/qtdoc.nix { };
+      qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix { };
+      qtimageformats = callPackage ../modules/qtimageformats.nix { };
+      qtlocation = callPackage ../modules/qtlocation.nix { };
+      qtmacextras = callPackage ../modules/qtmacextras.nix { };
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
-      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
+      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix { };
       qtquick1 = null;
-      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
-      qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
-      qtscript = callPackage ../modules/qtscript.nix {};
-      qtsensors = callPackage ../modules/qtsensors.nix {};
-      qtserialport = callPackage ../modules/qtserialport.nix {};
-      qtspeech = callPackage ../modules/qtspeech.nix {};
-      qtsvg = callPackage ../modules/qtsvg.nix {};
-      qttools = callPackage ../modules/qttools.nix {};
-      qttranslations = callPackage ../modules/qttranslations.nix {};
-      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
-      qtwayland = callPackage ../modules/qtwayland.nix {};
-      qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
-      qtwebengine = callPackage ../modules/qtwebengine.nix {};
-      qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
-      qtwebkit = callPackage ../modules/qtwebkit.nix {};
-      qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
-      qtwebview = callPackage ../modules/qtwebview.nix {};
-      qtx11extras = callPackage ../modules/qtx11extras.nix {};
-      qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
+      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix { };
+      qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix { };
+      qtscript = callPackage ../modules/qtscript.nix { };
+      qtsensors = callPackage ../modules/qtsensors.nix { };
+      qtserialport = callPackage ../modules/qtserialport.nix { };
+      qtspeech = callPackage ../modules/qtspeech.nix { };
+      qtsvg = callPackage ../modules/qtsvg.nix { };
+      qttools = callPackage ../modules/qttools.nix { };
+      qttranslations = callPackage ../modules/qttranslations.nix { };
+      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix { };
+      qtwayland = callPackage ../modules/qtwayland.nix { };
+      qtwebchannel = callPackage ../modules/qtwebchannel.nix { };
+      qtwebengine = callPackage ../modules/qtwebengine.nix { };
+      qtwebglplugin = callPackage ../modules/qtwebglplugin.nix { };
+      qtwebkit = callPackage ../modules/qtwebkit.nix { };
+      qtwebsockets = callPackage ../modules/qtwebsockets.nix { };
+      qtwebview = callPackage ../modules/qtwebview.nix { };
+      qtx11extras = callPackage ../modules/qtx11extras.nix { };
+      qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix { };
 
-      env = callPackage ../qt-env.nix {};
+      env = callPackage ../qt-env.nix { };
       full = env "qt-full-${qtbase.version}" ([
-        qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
-        qtscript qtsensors qtserialport qtsvg qttools qttranslations
-        qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns
+        qtcharts
+        qtconnectivity
+        qtdeclarative
+        qtdoc
+        qtgraphicaleffects
+        qtimageformats
+        qtlocation
+        qtmultimedia
+        qtquickcontrols
+        qtquickcontrols2
+        qtscript
+        qtsensors
+        qtserialport
+        qtsvg
+        qttools
+        qttranslations
+        qtvirtualkeyboard
+        qtwebchannel
+        qtwebengine
+        qtwebkit
+        qtwebsockets
+        qtwebview
+        qtx11extras
+        qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
-        ++ optional (stdenv.isDarwin) qtmacextras);
+      ++ optional (stdenv.isDarwin) qtmacextras);
 
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
@@ -187,6 +215,6 @@ let
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-   self = makeScope newScope addPackages;
-
-in self
+  self = makeScope newScope addPackages;
+in
+self

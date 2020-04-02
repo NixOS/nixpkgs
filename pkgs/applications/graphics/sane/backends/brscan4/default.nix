@@ -1,5 +1,4 @@
 { stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb }:
-
 let
   myPatchElf = file: with stdenv.lib; ''
     patchelf --set-interpreter \
@@ -7,11 +6,11 @@ let
       ${file}
   '';
 
-  udevRules = callPackage ./udev_rules_type1.nix {};
-
-in stdenv.mkDerivation rec {
+  udevRules = callPackage ./udev_rules_type1.nix { };
+in
+stdenv.mkDerivation rec {
   name = "brscan4-0.4.8-1";
-  src = 
+  src =
     if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "http://download.brother.com/welcome/dlf006646/${name}.i386.deb";

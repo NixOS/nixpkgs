@@ -16,7 +16,7 @@ stdenv.mkDerivation {
      --replace "-o root -g root" ""
     substituteInPlace datefudge.sh \
      --replace "@LIBDIR@" "$out/lib/"
-    '';
+  '';
 
   preInstallPhase = "mkdir -P $out/lib/datefudge";
 

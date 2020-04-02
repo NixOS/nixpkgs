@@ -1,5 +1,31 @@
-{ stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk, libgee
-, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, vala
+, python3
+, python2
+, pkgconfig
+, libxml2
+, meson
+, ninja
+, gtk3
+, gnome3
+, glib
+, webkitgtk
+, libgee
+, gobject-introspection
+, sqlite
+, poppler
+, poppler_utils
+, html2text
+, curl
+, gnugrep
+, coreutils
+, bash
+, unzip
+, unar
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
@@ -55,13 +81,13 @@ stdenv.mkDerivation rec {
     patchShebangs $out/share/bookworm/scripts/tasks/*.sh
   '';
 
-   meta = with stdenv.lib; {
-     description = "A simple, focused eBook reader";
-     longDescription = ''
-       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
-     '';
-     homepage = https://babluboy.github.io/bookworm/;
-     license = licenses.gpl3Plus;
-     platforms = platforms.linux;
-   };
- }
+  meta = with stdenv.lib; {
+    description = "A simple, focused eBook reader";
+    longDescription = ''
+      Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
+    '';
+    homepage = https://babluboy.github.io/bookworm/;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+  };
+}

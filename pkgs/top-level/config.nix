@@ -3,9 +3,7 @@
 { lib, ... }:
 
 with lib;
-
 let
-
   mkMassRebuild = args: mkOption (builtins.removeAttrs args [ "feature" ] // {
     type = args.type or (types.uniq types.bool);
     default = args.default or false;
@@ -22,7 +20,7 @@ let
 
     warnings = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       internal = true;
     };
 
@@ -33,8 +31,8 @@ let
     };
 
   };
-
-in {
+in
+{
 
   inherit options;
 

@@ -1,7 +1,9 @@
 { stdenv
 
-# Version specific stuff
-, release, version, src
+  # Version specific stuff
+, release
+, version
+, src
 , ...
 }:
 
@@ -31,13 +33,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  postInstall = let
-    dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
-  in ''
-    make install-private-headers
-    ln -s $out/bin/tclsh${release} $out/bin/tclsh
-    ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
-  '';
+  postInstall =
+    let
+      dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
+    in ''
+      make install-private-headers
+      ln -s $out/bin/tclsh${release} $out/bin/tclsh
+      ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
+    '';
 
   meta = with stdenv.lib; {
     description = "The Tcl scripting language";

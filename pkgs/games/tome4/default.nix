@@ -1,6 +1,17 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
-, openal, libpng, libvorbis, libGLU, SDL2, SDL2_image, SDL2_ttf }:
-
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, premake4
+, unzip
+, openal
+, libpng
+, libvorbis
+, libGLU
+, SDL2
+, SDL2_image
+, SDL2_ttf
+}:
 let
   pname = "tome4";
 
@@ -15,8 +26,8 @@ let
     categories = "Game;RolePlaying;";
     genericName = pname;
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "1.6.7";
 
@@ -35,7 +46,13 @@ in stdenv.mkDerivation rec {
   # tome4 vendors quite a few libraries so someone might want to look
   # into avoiding that...
   buildInputs = [
-    libGLU openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
+    libGLU
+    openal
+    libpng
+    libvorbis
+    SDL2
+    SDL2_ttf
+    SDL2_image
   ];
 
   # disable parallel building as it caused sporadic build failures

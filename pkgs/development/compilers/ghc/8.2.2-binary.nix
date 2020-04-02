@@ -1,28 +1,32 @@
-{ stdenv, substituteAll
-, fetchurl, perl, gcc, llvm
-, ncurses5, gmp, glibc, libiconv
+{ stdenv
+, substituteAll
+, fetchurl
+, perl
+, gcc
+, llvm
+, ncurses5
+, gmp
+, glibc
+, libiconv
 }:
 
 # Prebuilt only does native
 assert stdenv.targetPlatform == stdenv.hostPlatform;
-
 let
   libPath = stdenv.lib.makeLibraryPath ([
-    ncurses5 gmp
+    ncurses5
+    gmp
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
 
-  libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
-    + "LD_LIBRARY_PATH";
+  libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
 
   glibcDynLinker = assert stdenv.isLinux;
     if stdenv.hostPlatform.libc == "glibc" then
-       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
-       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
+      # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
+      ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
       "${stdenv.lib.getLib glibc}/lib/ld-linux*";
-
 in
-
 stdenv.mkDerivation rec {
   version = "8.2.2";
 
@@ -70,15 +74,11 @@ stdenv.mkDerivation rec {
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
         install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
       done
-    '' +
-
-    # Some scripts used during the build need to have their shebangs patched
+    '' + # Some scripts used during the build need to have their shebangs patched
     ''
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
-    '' +
-
-    # Strip is harmful, see also below. It's important that this happens
+    '' + # Strip is harmful, see also below. It's important that this happens
     # first. The GHC Cabal build system makes use of strip by default and
     # has hardcoded paths to /usr/bin/strip in many places. We replace
     # those below, making them point to our dummy script.
@@ -89,16 +89,14 @@ stdenv.mkDerivation rec {
         chmod +x "$TMP/bin/$i"
       done
       PATH="$TMP/bin:$PATH"
-    '' +
-    # We have to patch the GMP paths for the integer-gmp package.
+    '' + # We have to patch the GMP paths for the integer-gmp package.
     ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;
     '' + stdenv.lib.optionalString stdenv.isDarwin ''
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
-    '' +
-    # Rename needed libraries and binaries, fix interpreter
+    '' + # Rename needed libraries and binaries, fix interpreter
     stdenv.lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 -exec patchelf \
           --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
@@ -107,8 +105,7 @@ stdenv.mkDerivation rec {
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
-    '' +
-    # We're kludging a glibc bindist into working with non-glibc...
+    '' + # We're kludging a glibc bindist into working with non-glibc...
     # Here we patch up the use of `__strdup` (part of glibc binary ABI)
     # to instead use `strdup` since musl doesn't provide __strdup
     # (`__strdup` is defined to be an alias of `strdup` anyway[1]).
@@ -120,16 +117,17 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ ];
   configureFlags =
-  let
-    gcc-clang-wrapper = substituteAll {
-      inherit (stdenv) shell;
-      isExecutable = true;
-      src = ./gcc-clang-wrapper.sh;
-    };
-  in
-  [ "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
-    "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin            "--with-gcc=${gcc-clang-wrapper}"
+    let
+      gcc-clang-wrapper = substituteAll {
+        inherit (stdenv) shell;
+        isExecutable = true;
+        src = ./gcc-clang-wrapper.sh;
+      };
+    in
+    [
+      "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
+      "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
+    ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${gcc-clang-wrapper}"
     ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # Stripping combined with patchelf breaks the executables (they die
@@ -184,5 +182,5 @@ stdenv.mkDerivation rec {
   };
 
   meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" "aarch64-linux"];
+  meta.platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" "aarch64-linux" ];
 }

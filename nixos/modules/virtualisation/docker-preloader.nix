@@ -2,11 +2,10 @@
 
 with lib;
 with builtins;
-
 let
   cfg = config.virtualisation;
 
-  sanitizeImageName = image: replaceStrings ["/"] ["-"] image.imageName;
+  sanitizeImageName = image: replaceStrings [ "/" ] [ "-" ] image.imageName;
   hash = drv: head (split "-" (baseNameOf drv.outPath));
   # The label of an ext4 FS is limited to 16 bytes
   labelFromImage = image: substring 0 16 (hash image);
@@ -21,72 +20,71 @@ let
         fullName = "docker-deamon-image.qcow2";
       };
     }
-    ''
-      mkfs.ext4 /dev/vda
-      e2label /dev/vda ${labelFromImage image}
-      mkdir -p /var/lib/docker
-      mount -t ext4 /dev/vda /var/lib/docker
+      ''
+        mkfs.ext4 /dev/vda
+        e2label /dev/vda ${labelFromImage image}
+        mkdir -p /var/lib/docker
+        mount -t ext4 /dev/vda /var/lib/docker
 
-      modprobe overlay
+        modprobe overlay
 
-      # from https://github.com/tianon/cgroupfs-mount/blob/master/cgroupfs-mount
-      mount -t tmpfs -o uid=0,gid=0,mode=0755 cgroup /sys/fs/cgroup
-      cd /sys/fs/cgroup
-      for sys in $(awk '!/^#/ { if ($4 == 1) print $1 }' /proc/cgroups); do
-        mkdir -p $sys
-        if ! mountpoint -q $sys; then
-          if ! mount -n -t cgroup -o $sys cgroup $sys; then
-            rmdir $sys || true
+        # from https://github.com/tianon/cgroupfs-mount/blob/master/cgroupfs-mount
+        mount -t tmpfs -o uid=0,gid=0,mode=0755 cgroup /sys/fs/cgroup
+        cd /sys/fs/cgroup
+        for sys in $(awk '!/^#/ { if ($4 == 1) print $1 }' /proc/cgroups); do
+          mkdir -p $sys
+          if ! mountpoint -q $sys; then
+            if ! mount -n -t cgroup -o $sys cgroup $sys; then
+              rmdir $sys || true
+            fi
           fi
-        fi
-      done
+        done
 
-      dockerd -H tcp://127.0.0.1:5555 -H unix:///var/run/docker.sock &
+        dockerd -H tcp://127.0.0.1:5555 -H unix:///var/run/docker.sock &
 
-      until $(curl --output /dev/null --silent --connect-timeout 2 http://127.0.0.1:5555); do
-        printf '.'
-        sleep 1
-      done
+        until $(curl --output /dev/null --silent --connect-timeout 2 http://127.0.0.1:5555); do
+          printf '.'
+          sleep 1
+        done
 
-      docker load -i ${image}
+        docker load -i ${image}
 
-      kill %1
-      find /var/lib/docker/ -maxdepth 1 -mindepth 1 -not -name "image" -not -name "overlay2" | xargs rm -rf
-    '');
+        kill %1
+        find /var/lib/docker/ -maxdepth 1 -mindepth 1 -not -name "image" -not -name "overlay2" | xargs rm -rf
+      ''
+  );
 
   preloadedImages = map preload cfg.dockerPreloader.images;
-
 in
-
 {
   options.virtualisation.dockerPreloader = {
     images = mkOption {
       default = [ ];
       type = types.listOf types.package;
       description =
-      ''
-        A list of Docker images to preload (in the /var/lib/docker directory).
-      '';
+        ''
+          A list of Docker images to preload (in the /var/lib/docker directory).
+        '';
     };
     qcowSize = mkOption {
       default = 1024;
       type = types.int;
       description =
-      ''
-        The size (MB) of qcow files.
-      '';
+        ''
+          The size (MB) of qcow files.
+        '';
     };
   };
 
-  config = mkIf (cfg.dockerPreloader.images != []) {
-    assertions = [{
-      # If docker.storageDriver is null, Docker choose the storage
-      # driver. So, in this case, we cannot be sure overlay2 is used.
-      assertion = cfg.docker.storageDriver == "overlay2"
-        || cfg.docker.storageDriver == "overlay"
-        || cfg.docker.storageDriver == null;
-      message = "The Docker image Preloader only works with overlay2 storage driver!";
-    }];
+  config = mkIf (cfg.dockerPreloader.images != [ ]) {
+    assertions = [
+      {
+        # If docker.storageDriver is null, Docker choose the storage
+        # driver. So, in this case, we cannot be sure overlay2 is used.
+        assertion = cfg.docker.storageDriver == "overlay2" || cfg.docker.storageDriver == "overlay" || cfg.docker.storageDriver == null;
+        message = "The Docker image Preloader only works with overlay2 storage driver!";
+      }
+    ];
 
     virtualisation.qemu.options =
       map (path: "-drive if=virtio,file=${path}/disk-image.qcow2,readonly,media=cdrom,format=qcow2")
@@ -97,8 +95,8 @@ in
     # to /var/lib/docker/ in order to make image available.
     systemd.services.docker-preloader = {
       description = "Preloaded Docker images";
-      wantedBy = ["docker.service"];
-      after = ["network.target"];
+      wantedBy = [ "docker.service" ];
+      after = [ "network.target" ];
       path = with pkgs; [ mount rsync jq ];
       script = ''
         mkdir -p /var/lib/docker/overlay2/l /var/lib/docker/image/overlay2

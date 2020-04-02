@@ -1,5 +1,4 @@
 { lib, clangStdenv, clang-sierraHack-stdenv, stdenvNoCC }:
-
 let
   makeBigExe = stdenv: prefix: rec {
 
@@ -68,9 +67,9 @@ let
 
   good = makeBigExe clang-sierraHack-stdenv "good";
 
-  bad  = makeBigExe clangStdenv             "bad";
-
-in stdenvNoCC.mkDerivation {
+  bad = makeBigExe clangStdenv "bad";
+in
+stdenvNoCC.mkDerivation {
   name = "macos-sierra-shared-test";
   buildInputs = [ good.finalExe bad.finalExe ];
   # TODO(@Ericson2314): Be impure or require exact MacOS version of builder?

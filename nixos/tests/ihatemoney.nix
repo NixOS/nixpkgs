@@ -49,7 +49,8 @@ let
       assert "ihatemoney" in machine.succeed("curl http://localhost:8000")
     '';
   });
-in {
+in
+{
   ihatemoney-sqlite = f "sqlite";
   ihatemoney-postgresql = f "postgresql";
 }

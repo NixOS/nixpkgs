@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, gettext, mate-icon-theme, gtk2, gtk3,
-  gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, mate-icon-theme
+, gtk2
+, gtk3
+, gtk_engines
+, gtk-engine-murrine
+, gdk-pixbuf
+, librsvg
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-themes";

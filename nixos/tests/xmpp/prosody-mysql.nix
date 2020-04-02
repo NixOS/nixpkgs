@@ -74,4 +74,3 @@ import ../make-test-python.nix {
     server.succeed("prosodyctl deluser azurediamond@example.com")
   '';
 }
-

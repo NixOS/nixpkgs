@@ -1,5 +1,10 @@
-{ buildDunePackage, sqlexpr, ounit
-, ppx_core, ppx_tools_versioned, re, lwt_ppx
+{ buildDunePackage
+, sqlexpr
+, ounit
+, ppx_core
+, ppx_tools_versioned
+, re
+, lwt_ppx
 }:
 
 buildDunePackage {

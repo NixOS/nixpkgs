@@ -31,9 +31,9 @@ buildPythonPackage rec {
   ];
 
   postConfigure = ''
-   substituteInPlace umap/tests/test_umap.py \
-     --replace "def test_umap_transform_on_iris()" "@SkipTest
-def test_umap_transform_on_iris()"
+       substituteInPlace umap/tests/test_umap.py \
+         --replace "def test_umap_transform_on_iris()" "@SkipTest
+    def test_umap_transform_on_iris()"
   '';
 
   checkPhase = ''

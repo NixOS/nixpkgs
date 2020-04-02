@@ -1,33 +1,46 @@
-{ clangStdenv, fetchFromGitHub, fetchpatch, which, ninja, python, gyp, pkgconfig
-, protobuf, ibus, gtk2, zinnia, qt5, libxcb }:
-
+{ clangStdenv
+, fetchFromGitHub
+, fetchpatch
+, which
+, ninja
+, python
+, gyp
+, pkgconfig
+, protobuf
+, ibus
+, gtk2
+, zinnia
+, qt5
+, libxcb
+}:
 let
   japanese_usage_dictionary = fetchFromGitHub {
-    owner  = "hiroyuki-komatsu";
-    repo   = "japanese-usage-dictionary";
-    rev    = "e5b3425575734c323e1d947009dd74709437b684";
+    owner = "hiroyuki-komatsu";
+    repo = "japanese-usage-dictionary";
+    rev = "e5b3425575734c323e1d947009dd74709437b684";
     sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
   };
-in clangStdenv.mkDerivation rec {
+in
+clangStdenv.mkDerivation rec {
   name = "ibus-mozc-${version}";
   version = "2.23.2815.102";
 
   meta = with clangStdenv.lib; {
     isIbusEngine = true;
-    description  = "Japanese input method from Google";
-    homepage     = https://github.com/google/mozc;
-    license      = licenses.free;
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ gebner ericsagnes ];
+    description = "Japanese input method from Google";
+    homepage = https://github.com/google/mozc;
+    license = licenses.free;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ gebner ericsagnes ];
   };
 
   nativeBuildInputs = [ which ninja python gyp pkgconfig ];
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
 
   src = fetchFromGitHub {
-    owner  = "google";
-    repo   = "mozc";
-    rev    = "afb03ddfe72dde4cf2409863a3bfea160f7a66d8";
+    owner = "google";
+    repo = "mozc";
+    rev = "afb03ddfe72dde4cf2409863a3bfea160f7a66d8";
     sha256 = "0w2dy2j9x5nc7x3g95j17r3m60vbfyn5j617h7js9xryv33yzpgx";
   };
 

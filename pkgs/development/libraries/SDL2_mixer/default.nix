@@ -1,7 +1,22 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, which
-, SDL2, libogg, libvorbis, smpeg2, flac, libmodplug, opusfile
-, CoreServices, AudioUnit, AudioToolbox
-, enableNativeMidi ? false, fluidsynth ? null }:
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, pkgconfig
+, which
+, SDL2
+, libogg
+, libvorbis
+, smpeg2
+, flac
+, libmodplug
+, opusfile
+, CoreServices
+, AudioUnit
+, AudioToolbox
+, enableNativeMidi ? false
+, fluidsynth ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "SDL2_mixer";

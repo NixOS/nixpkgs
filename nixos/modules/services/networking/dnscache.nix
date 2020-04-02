@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.dnscache;
 
@@ -9,14 +8,14 @@ let
     mkdir -p $out/{servers,ip}
 
     ${concatMapStrings (ip: ''
-      touch "$out/ip/"${lib.escapeShellArg ip}
-    '') cfg.clientIps}
+    touch "$out/ip/"${lib.escapeShellArg ip}
+  '') cfg.clientIps}
 
     ${concatStrings (mapAttrsToList (host: ips: ''
-      ${concatMapStrings (ip: ''
-        echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
-      '') ips}
-    '') cfg.domainServers)}
+    ${concatMapStrings (ip: ''
+    echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
+  '') ips}
+  '') cfg.domainServers)}
 
     # if a list of root servers was not provided in config, copy it
     # over. (this is also done by dnscache-conf, but we 'rm -rf
@@ -27,8 +26,8 @@ let
       cp ${pkgs.djbdns}/etc/dnsroots.global $out/servers/@;
     fi
   '';
-
-in {
+in
+{
 
   ###### interface
 
@@ -51,7 +50,7 @@ in {
         default = [ "127.0.0.1" ];
         type = types.listOf types.str;
         description = "Client IP addresses (or prefixes) from which to accept connections.";
-        example = ["192.168" "172.23.75.82"];
+        example = [ "192.168" "172.23.75.82" ];
       };
 
       domainServers = mkOption {
@@ -62,8 +61,8 @@ in {
           If entry for @ is not specified predefined list of root servers is used.
         '';
         example = {
-          "@" = ["8.8.8.8" "8.8.4.4"];
-          "example.com" = ["192.168.100.100"];
+          "@" = [ "8.8.8.8" "8.8.4.4" ];
+          "example.com" = [ "192.168.100.100" ];
         };
       };
 

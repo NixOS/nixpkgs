@@ -1,7 +1,7 @@
 # Verifies that the configuration suggested in deprecated example values
 # will result in the expected output.
 
-import ../make-test-python.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "krb5-with-deprecated-config";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eqyiel ];
@@ -19,32 +19,33 @@ import ../make-test-python.nix ({ pkgs, ...} : {
     };
 
   testScript =
-    let snapshot = pkgs.writeText "krb5-with-deprecated-config.conf" ''
-      [libdefaults]
-        default_realm = ATHENA.MIT.EDU
+    let
+      snapshot = pkgs.writeText "krb5-with-deprecated-config.conf" ''
+        [libdefaults]
+          default_realm = ATHENA.MIT.EDU
 
-      [realms]
-        ATHENA.MIT.EDU = {
-          admin_server = kerberos.mit.edu
-          kdc = kerberos.mit.edu
-        }
+        [realms]
+          ATHENA.MIT.EDU = {
+            admin_server = kerberos.mit.edu
+            kdc = kerberos.mit.edu
+          }
 
-      [domain_realm]
-        .athena.mit.edu = ATHENA.MIT.EDU
-        athena.mit.edu = ATHENA.MIT.EDU
+        [domain_realm]
+          .athena.mit.edu = ATHENA.MIT.EDU
+          athena.mit.edu = ATHENA.MIT.EDU
 
-      [capaths]
-
-
-      [appdefaults]
+        [capaths]
 
 
-      [plugins]
+        [appdefaults]
 
+
+        [plugins]
+
+      '';
+    in ''
+      machine.succeed(
+          "diff /etc/krb5.conf ${snapshot}"
+      )
     '';
-  in ''
-    machine.succeed(
-        "diff /etc/krb5.conf ${snapshot}"
-    )
-  '';
 })

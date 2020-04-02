@@ -28,10 +28,12 @@
 , lame
 , mpg123
 , twolame
-, gtkSupport ? false, gtk3 ? null
+, gtkSupport ? false
+, gtk3 ? null
   # As of writing, jack2 incurs a Qt dependency (big!) via `ffado`.
   # In the future we should probably split `ffado`.
-, enableJack ? false, jack2
+, enableJack ? false
+, jack2
 , libXdamage
 , libXext
 , libXfixes
@@ -42,7 +44,6 @@
 }:
 
 assert gtkSupport -> gtk3 != null;
-
 let
   inherit (stdenv.lib) optionals;
 in

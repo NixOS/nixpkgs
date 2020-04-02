@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, pkgconfig, go, gobject-introspection,
-  libgudev, deepin }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, go
+, gobject-introspection
+, libgudev
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "go-gir-generator";

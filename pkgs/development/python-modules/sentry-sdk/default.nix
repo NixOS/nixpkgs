@@ -29,7 +29,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ django flask tornado bottle rq falcon sqlalchemy ]
-  ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
+    ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
   propagatedBuildInputs = [ urllib3 certifi ];
 

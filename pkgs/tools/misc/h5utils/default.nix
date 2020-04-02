@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, lib
-, hdf5, libpng, libjpeg
+{ stdenv
+, fetchurl
+, lib
+, hdf5
+, libpng
+, libjpeg
 , hdf4 ? null
 , libmatheval ? null
 }:
@@ -17,10 +21,10 @@ stdenv.mkDerivation rec {
 
   # libdf is an alternative name for libhdf (hdf4)
   preConfigure = lib.optionalString (hdf4 != null)
-  ''
-    substituteInPlace configure \
-    --replace "-ldf" "-lhdf" \
-  '';
+    ''
+      substituteInPlace configure \
+      --replace "-ldf" "-lhdf" \
+    '';
 
   preBuild = lib.optionalString hdf5.mpiSupport "export CC=${hdf5.mpi}/bin/mpicc";
 

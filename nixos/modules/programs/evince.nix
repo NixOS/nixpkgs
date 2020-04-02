@@ -10,7 +10,8 @@ with lib;
   imports = [
     (mkRenamedOptionModule
       [ "services" "gnome3" "evince" "enable" ]
-      [ "programs" "evince" "enable" ])
+      [ "programs" "evince" "enable" ]
+    )
   ];
 
   ###### interface

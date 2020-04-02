@@ -16,7 +16,10 @@
 , gnugrep
 , gnused
 , gnutar
-, gtk2, gnome_vfs, glib, GConf
+, gtk2
+, gnome_vfs
+, glib
+, GConf
 , gzip
 , fontconfig
 , freetype
@@ -49,7 +52,6 @@
 , zlib
 , makeDesktopItem
 }:
-
 let
   drvName = "android-studio-${channel}-${version}";
   androidStudio = stdenv.mkDerivation {
@@ -70,70 +72,70 @@ let
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --prefix PATH : "${stdenv.lib.makeBinPath [
 
-          # Checked in studio.sh
-          coreutils
-          findutils
-          gnugrep
-          which
-          gnused
+      # Checked in studio.sh
+        coreutils
+        findutils
+        gnugrep
+        which
+        gnused
 
-          # For Android emulator
-          file
-          glxinfo
-          pciutils
-          setxkbmap
+      # For Android emulator
+        file
+        glxinfo
+        pciutils
+        setxkbmap
 
-          # Used during setup wizard
-          gnutar
-          gzip
+      # Used during setup wizard
+        gnutar
+        gzip
 
-          # Runtime stuff
-          git
-        ]}" \
+      # Runtime stuff
+        git
+      ]}" \
         --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
 
-          # Crash at startup without these
-          fontconfig
-          freetype
-          libXext
-          libXi
-          libXrender
-          libXtst
+      # Crash at startup without these
+        fontconfig
+        freetype
+        libXext
+        libXi
+        libXrender
+        libXtst
 
-          # Gradle wants libstdc++.so.6
-          stdenv.cc.cc.lib
-          # mksdcard wants 32 bit libstdc++.so.6
-          pkgsi686Linux.stdenv.cc.cc.lib
+      # Gradle wants libstdc++.so.6
+        stdenv.cc.cc.lib
+      # mksdcard wants 32 bit libstdc++.so.6
+        pkgsi686Linux.stdenv.cc.cc.lib
 
-          # aapt wants libz.so.1
-          zlib
-          pkgsi686Linux.zlib
-          # Support multiple monitors
-          libXrandr
+      # aapt wants libz.so.1
+        zlib
+        pkgsi686Linux.zlib
+      # Support multiple monitors
+        libXrandr
 
-          # For Android emulator
-          alsaLib
-          dbus
-          expat
-          libpulseaudio
-          libuuid
-          libX11
-          libxcb
-          libXcomposite
-          libXcursor
-          libXdamage
-          libXfixes
-          libGL
-          nspr
-          nss
-          systemd
+      # For Android emulator
+        alsaLib
+        dbus
+        expat
+        libpulseaudio
+        libuuid
+        libX11
+        libxcb
+        libXcomposite
+        libXcursor
+        libXdamage
+        libXfixes
+        libGL
+        nspr
+        nss
+        systemd
 
-          # For GTKLookAndFeel
-          gtk2
-          gnome_vfs
-          glib
-          GConf
-        ]}" \
+      # For GTKLookAndFeel
+        gtk2
+        gnome_vfs
+        glib
+        GConf
+      ]}" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set FONTCONFIG_FILE ${fontsConf}
     '';
@@ -147,7 +149,7 @@ let
     comment = "The official Android IDE";
     categories = "Development;IDE;";
     startupNotify = "true";
-    extraEntries="StartupWMClass=jetbrains-studio";
+    extraEntries = "StartupWMClass=jetbrains-studio";
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
@@ -159,39 +161,41 @@ let
       pkgs.ncurses5
 
       # Flutter can only search for certs Fedora-way.
-      (runCommand "fedoracert" {}
+      (runCommand "fedoracert" { }
         ''
-        mkdir -p $out/etc/pki/tls/
-        ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
+          mkdir -p $out/etc/pki/tls/
+          ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
         '')
     ];
   };
-in runCommand
+in
+runCommand
   drvName
-  {
-    startScript = ''
-      #!${bash}/bin/bash
-      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh
+{
+  startScript = ''
+    #!${bash}/bin/bash
+    ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh
+  '';
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+  passthru = {
+    unwrapped = androidStudio;
+  };
+  meta = with stdenv.lib; {
+    description = "The Official IDE for Android (${channel} channel)";
+    longDescription = ''
+      Android Studio is the official IDE for Android app development, based on
+      IntelliJ IDEA.
     '';
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-    passthru = {
-      unwrapped = androidStudio;
-    };
-    meta = with stdenv.lib; {
-      description = "The Official IDE for Android (${channel} channel)";
-      longDescription = ''
-        Android Studio is the official IDE for Android app development, based on
-        IntelliJ IDEA.
-      '';
-      homepage = if channel == "stable"
-        then https://developer.android.com/studio/index.html
-        else https://developer.android.com/studio/preview/index.html;
-      license = licenses.asl20;
-      platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ primeos ];
-    };
-  }
+    homepage =
+      if channel == "stable"
+      then https://developer.android.com/studio/index.html
+      else https://developer.android.com/studio/preview/index.html;
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ primeos ];
+  };
+}
   ''
     mkdir -p $out/{bin,share/pixmaps}
 

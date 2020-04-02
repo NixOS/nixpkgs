@@ -1,5 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools,
-  qtx11extras, qtsvg, xorg, lxqt-build-tools, libfm-qt, libexif }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, qtbase
+, qttools
+, qtx11extras
+, qtsvg
+, xorg
+, lxqt-build-tools
+, libfm-qt
+, libexif
+}:
 
 mkDerivation rec {
   pname = "lximage-qt";

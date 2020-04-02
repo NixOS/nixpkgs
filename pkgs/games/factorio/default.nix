@@ -1,18 +1,24 @@
-{ stdenv, fetchurl, makeWrapper
-, alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
+{ stdenv
+, fetchurl
+, makeWrapper
+, alsaLib
+, libpulseaudio
+, libX11
+, libXcursor
+, libXinerama
+, libXrandr
+, libXi
+, libGL
 , factorio-utils
 , releaseType
-, mods ? []
-, username ? "", token ? "" # get/reset token at https://factorio.com/profile
+, mods ? [ ]
+, username ? ""
+, token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
 }:
 
-assert releaseType == "alpha"
-    || releaseType == "headless"
-    || releaseType == "demo";
-
+assert releaseType == "alpha" || releaseType == "headless" || releaseType == "demo";
 let
-
   helpMsg = ''
 
     ===FETCH FAILED===
@@ -52,20 +58,20 @@ let
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
-        stable        = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
-        experimental  = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
+        stable = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
+        experimental = bdist { sha256 = "1fg2wnia6anzya4m53jf2xqwwspvwskz3awdb3j0v3fzijps94wc"; version = "0.17.79"; withAuth = true; };
       };
       headless = {
-        stable        = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
-        experimental  = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
+        stable = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
+        experimental = bdist { sha256 = "1pr39nm23fj83jy272798gbl9003rgi4vgsi33f2iw3dk3x15kls"; version = "0.17.79"; };
       };
       demo = {
-        stable        = bdist { sha256 = "07qknasaqvzl9vy1fglm7xmdi7ynhmslrb0a209fhbfs0s7qqlgi"; version = "0.17.79"; };
+        stable = bdist { sha256 = "07qknasaqvzl9vy1fglm7xmdi7ynhmslrb0a209fhbfs0s7qqlgi"; version = "0.17.79"; };
       };
     };
     i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
       alpha = {
-        stable        = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; withAuth = true; nameMut = asGz; };
+        stable = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; withAuth = true; nameMut = asGz; };
       };
     };
   };
@@ -89,27 +95,30 @@ let
               inherit name url sha256;
               curlOpts = [
                 "--get"
-                "--data-urlencode" "username@username"
-                "--data-urlencode" "token@token"
+                "--data-urlencode"
+                "username@username"
+                "--data-urlencode"
+                "token@token"
               ];
             })
-            (_: { # This preHook hides the credentials from /proc
-                  preHook = ''
-                    echo -n "${username}" >username
-                    echo -n "${token}"    >token
-                  '';
-                  failureHook = ''
-                    cat <<EOF
-                    ${helpMsg}
-                    EOF
-                  '';
+            (_: {
+              # This preHook hides the credentials from /proc
+              preHook = ''
+                echo -n "${username}" >username
+                echo -n "${token}"    >token
+              '';
+              failureHook = ''
+                cat <<EOF
+                ${helpMsg}
+                EOF
+              '';
             })
           )
         else
           fetchurl { inherit name url sha256; };
     };
 
-  asGz = builtins.replaceStrings [".xz"] [".gz"];
+  asGz = builtins.replaceStrings [ ".xz" ] [ ".gz" ];
 
   configBaseCfg = ''
     use-system-read-write-data-directories=false
@@ -194,7 +203,7 @@ let
           --run "$out/share/factorio/update-config.sh"               \
           --argv0 ""                                                 \
           --add-flags "-c \$HOME/.factorio/config.cfg"               \
-          ${if mods!=[] then "--add-flags --mod-directory=${modDir}" else ""}
+          ${if mods != [ ] then "--add-flags --mod-directory=${modDir}" else ""}
 
           # TODO Currently, every time a mod is changed/added/removed using the
           # modlist, a new derivation will take up the entire footprint of the
@@ -230,5 +239,5 @@ let
       '';
     };
   };
-
-in stdenv.mkDerivation (releases.${releaseType})
+in
+stdenv.mkDerivation (releases.${releaseType})

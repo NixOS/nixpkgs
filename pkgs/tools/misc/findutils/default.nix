@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , coreutils
 }:
 
@@ -18,11 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
-  doCheck
-    =  !stdenv.hostPlatform.isDarwin
-    && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
-    && (stdenv.hostPlatform.libc != "musl")
-    && stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = !stdenv.hostPlatform.isDarwin && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686) && (stdenv.hostPlatform.libc != "musl") && stdenv.hostPlatform == stdenv.buildPlatform;
 
   outputs = [ "out" "info" ];
 

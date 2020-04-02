@@ -4,7 +4,7 @@ mkDerivation rec {
   pname = "fstl";
   version = "0.9.3";
 
-  buildInputs = [qtbase mesa_glu];
+  buildInputs = [ qtbase mesa_glu ];
 
   prePatch = ''
     sed -i "s|/usr/bin|$out/bin|g" qt/fstl.pro
@@ -13,7 +13,7 @@ mkDerivation rec {
   preBuild = ''
     qmake qt/fstl.pro
   '';
-  
+
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv fstl.app $out/Applications

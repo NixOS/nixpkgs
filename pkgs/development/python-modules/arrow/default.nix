@@ -1,6 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, nose, chai, simplejson, backports_functools_lru_cache
-, dateutil, pytz, mock, dateparser
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, nose
+, chai
+, simplejson
+, backports_functools_lru_cache
+, dateutil
+, pytz
+, mock
+, dateparser
 }:
 
 buildPythonPackage rec {
@@ -17,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ nose chai simplejson pytz ];
-  propagatedBuildInputs = [ dateutil backports_functools_lru_cache mock dateparser];
+  propagatedBuildInputs = [ dateutil backports_functools_lru_cache mock dateparser ];
 
   postPatch = ''
     substituteInPlace setup.py --replace "==1.2.1" ""
@@ -25,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for date manipulation";
-    license     = "apache";
+    license = "apache";
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

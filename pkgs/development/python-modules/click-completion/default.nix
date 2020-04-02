@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k,
-  click, jinja2, shellingham, six
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, click
+, jinja2
+, shellingham
+, six
 }:
 
 buildPythonPackage rec {

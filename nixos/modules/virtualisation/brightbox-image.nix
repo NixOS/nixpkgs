@@ -10,27 +10,28 @@ in
   system.build.brightboxImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "brightbox-image"
-        { preVM =
-            ''
-              mkdir $out
-              diskImage=$out/$diskImageBase
-              truncate $diskImage --size ${diskSize}
-              mv closure xchg/
-            '';
+      {
+        preVM =
+          ''
+            mkdir $out
+            diskImage=$out/$diskImageBase
+            truncate $diskImage --size ${diskSize}
+            mv closure xchg/
+          '';
 
-          postVM =
-            ''
-              PATH=$PATH:${lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
-              pushd $out
-              ${pkgs.qemu_kvm}/bin/qemu-img convert -c -O qcow2 $diskImageBase nixos.qcow2
-              rm $diskImageBase
-              popd
-            '';
-          diskImageBase = "nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw";
-          buildInputs = [ pkgs.utillinux pkgs.perl ];
-          exportReferencesGraph =
-            [ "closure" config.system.build.toplevel ];
-        }
+        postVM =
+          ''
+            PATH=$PATH:${lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+            pushd $out
+            ${pkgs.qemu_kvm}/bin/qemu-img convert -c -O qcow2 $diskImageBase nixos.qcow2
+            rm $diskImageBase
+            popd
+          '';
+        diskImageBase = "nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw";
+        buildInputs = [ pkgs.utillinux pkgs.perl ];
+        exportReferencesGraph =
+          [ "closure" config.system.build.toplevel ];
+      }
         ''
           # Create partition table
           ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
@@ -112,7 +113,8 @@ in
   environment.systemPackages = [ pkgs.cryptsetup ];
 
   systemd.services.fetch-ec2-data =
-    { description = "Fetch EC2 Data";
+    {
+      description = "Fetch EC2 Data";
 
       wantedBy = [ "multi-user.target" "sshd.service" ];
       before = [ "sshd.service" ];
@@ -126,9 +128,9 @@ in
           wget="wget -q --retry-connrefused -O -"
 
           ${optionalString (config.networking.hostName == "") ''
-            echo "setting host name..."
-            ${pkgs.nettools}/bin/hostname $($wget http://169.254.169.254/latest/meta-data/hostname)
-          ''}
+          echo "setting host name..."
+          ${pkgs.nettools}/bin/hostname $($wget http://169.254.169.254/latest/meta-data/hostname)
+        ''}
 
           # Don't download the SSH key if it has already been injected
           # into the image (a Nova feature).

@@ -5,32 +5,32 @@
 , src ? null
 , srcs ? null
 , unpackPhase ? null
-, cargoPatches ? []
-, patches ? []
+, cargoPatches ? [ ]
+, patches ? [ ]
 , sourceRoot ? null
 , logLevel ? ""
-, buildInputs ? []
-, nativeBuildInputs ? []
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
-, cargoBuildFlags ? []
+, cargoBuildFlags ? [ ]
 , buildType ? "release"
-, meta ? {}
+, meta ? { }
 , target ? null
 , cargoVendorDir ? null
-, ... } @ args:
+, ...
+} @ args:
 
 assert cargoVendorDir == null -> cargoSha256 != "unset";
 assert buildType == "release" || buildType == "debug";
-
 let
-
-  cargoDeps = if cargoVendorDir == null
+  cargoDeps =
+    if cargoVendorDir == null
     then fetchCargoTarball {
-        inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
-        patches = cargoPatches;
-        sha256 = cargoSha256;
-      }
+      inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
+      patches = cargoPatches;
+      sha256 = cargoSha256;
+    }
     else null;
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
@@ -41,7 +41,8 @@ let
   # dependencies. This copies the vendor directory into the build tree and makes
   # it writable. If we're using a tarball, the unpackFile hook already handles
   # this for us automatically.
-  setupVendorDir = if cargoVendorDir == null
+  setupVendorDir =
+    if cargoVendorDir == null
     then (''
       unpackFile "$cargoDeps"
       cargoDepsCopy=$(stripHash $cargoDeps)
@@ -52,14 +53,12 @@ let
 
   rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
 
-  ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
-  cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
-  ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-  cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
+  ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+  cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
+  ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+  cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${rustTarget}/${buildType}";
-
 in
-
 stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
@@ -94,9 +93,9 @@ stdenv.mkDerivation (args // {
     "linker" = "${ccForHost}"
     ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
       stdenv.lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
-    "rustflags" = [ "-C", "target-feature=+crt-static", "-C", "link-arg=-lgcc" ]
-    ''}
-    ''}
+        "rustflags" = [ "-C", "target-feature=+crt-static", "-C", "link-arg=-lgcc" ]
+      ''}
+  ''}
     EOF
 
     export RUST_LOG=${logLevel}
@@ -200,7 +199,7 @@ stdenv.mkDerivation (args // {
     runHook postInstall
   '';
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
+  passthru = { inherit cargoDeps; } // (args.passthru or { });
 
   meta = {
     # default to Rust's platforms

@@ -1,6 +1,5 @@
 { stdenv, python3, glibcLocales }:
 let
-
   localPython = python3.override {
     packageOverrides = self: super: {
       cement = super.cement.overridePythonAttrs (oldAttrs: rec {
@@ -53,44 +52,63 @@ let
       });
     };
   };
-in with localPython.pkgs; buildPythonApplication rec {
-  pname = "awsebcli";
-  version = "3.12.4";
+in
+  with localPython.pkgs; buildPythonApplication rec {
+    pname = "awsebcli";
+    version = "3.12.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
-  };
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
+    };
 
-  buildInputs = [
-    glibcLocales
-  ];
+    buildInputs = [
+      glibcLocales
+    ];
 
-  LC_ALL = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
 
-  checkInputs = [
-    pytest mock nose pathspec colorama requests docutils
-  ];
+    checkInputs = [
+      pytest
+      mock
+      nose
+      pathspec
+      colorama
+      requests
+      docutils
+    ];
 
-  doCheck = false;
+    doCheck = false;
 
-  propagatedBuildInputs = [
-    # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
-    # Otherwise, awsebcli will try to install it using pip when using some
-    # commands (like "eb local run").
-    blessed botocore cement colorama dockerpty docopt pathspec pyyaml
-    requests semantic-version setuptools tabulate termcolor websocket_client
-  ];
+    propagatedBuildInputs = [
+      # FIXME: Add optional docker dependency, which requires requests >= 2.14.2.
+      # Otherwise, awsebcli will try to install it using pip when using some
+      # commands (like "eb local run").
+      blessed
+      botocore
+      cement
+      colorama
+      dockerpty
+      docopt
+      pathspec
+      pyyaml
+      requests
+      semantic-version
+      setuptools
+      tabulate
+      termcolor
+      websocket_client
+    ];
 
-  postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/bin/eb_completion.bash $out/etc/bash_completion.d
-  '';
+    postInstall = ''
+      mkdir -p $out/etc/bash_completion.d
+      mv $out/bin/eb_completion.bash $out/etc/bash_completion.d
+    '';
 
-  meta = with stdenv.lib; {
-    homepage = https://aws.amazon.com/elasticbeanstalk/;
-    description = "A command line interface for Elastic Beanstalk";
-    maintainers = with maintainers; [ eqyiel ];
-    license = licenses.asl20;
-  };
-}
+    meta = with stdenv.lib; {
+      homepage = https://aws.amazon.com/elasticbeanstalk/;
+      description = "A command line interface for Elastic Beanstalk";
+      maintainers = with maintainers; [ eqyiel ];
+      license = licenses.asl20;
+    };
+  }

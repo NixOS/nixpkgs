@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inInitrd = any (fs: fs == "reiserfs") config.boot.initrd.supportedFilesystems;
-
 in
-
 {
   config = mkIf (any (fs: fs == "reiserfs") config.boot.supportedFilesystems) {
 

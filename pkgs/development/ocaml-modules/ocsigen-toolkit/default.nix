@@ -1,21 +1,27 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, opaline
-, calendar, eliom, js_of_ocaml-ppx_deriving_json
+{ stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, opaline
+, calendar
+, eliom
+, js_of_ocaml-ppx_deriving_json
 }:
 
 stdenv.mkDerivation rec {
- pname = "ocsigen-toolkit";
- name = "ocaml${ocaml.version}-${pname}-${version}";
- version = "2.5.0";
+  pname = "ocsigen-toolkit";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "2.5.0";
 
- propagatedBuildInputs = [ calendar js_of_ocaml-ppx_deriving_json eliom ];
- buildInputs = [ ocaml findlib opaline ];
+  propagatedBuildInputs = [ calendar js_of_ocaml-ppx_deriving_json eliom ];
+  buildInputs = [ ocaml findlib opaline ];
 
- installPhase =
-  ''
-    export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH
-    make install
-    opaline -prefix $out
-  '';
+  installPhase =
+    ''
+      export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH
+      make install
+      opaline -prefix $out
+    '';
 
   src = fetchFromGitHub {
     owner = "ocsigen";

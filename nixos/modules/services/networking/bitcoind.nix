@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.bitcoind;
   pidFile = "${cfg.dataDir}/bitcoind.pid";
@@ -15,7 +14,7 @@ let
 
     # RPC server options
     ${optionalString (cfg.rpc.port != null) "rpcport=${toString cfg.rpc.port}"}
-    ${concatMapStringsSep  "\n"
+    ${concatMapStringsSep "\n"
       (rpcUser: "rpcauth=${rpcUser.name}:${rpcUser.passwordHMAC}")
       (attrValues cfg.rpc.users)
     }
@@ -51,7 +50,8 @@ let
       name = mkDefault name;
     };
   };
-in {
+in
+{
   options = {
 
     services.bitcoind = {
@@ -103,7 +103,7 @@ in {
           description = "Override the default port on which to listen for JSON-RPC connections.";
         };
         users = mkOption {
-          default = {};
+          default = { };
           example = literalExample ''
             {
               alice.passwordHMAC = "f7efda5c189b999524f151318c0c86$d5b51b3beffbc02b724e5d095828e0bc8b2456e9ac8757ae3211a5d9b16a22ae";

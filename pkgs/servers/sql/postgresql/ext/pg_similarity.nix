@@ -19,9 +19,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = ''
-       pg_similarity is an extension to support similarity queries on PostgreSQL. The implementation
-       is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
-       operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
+      pg_similarity is an extension to support similarity queries on PostgreSQL. The implementation
+      is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
+      operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
     platforms = postgresql.meta.platforms;
     license = stdenv.lib.licenses.gpl2;

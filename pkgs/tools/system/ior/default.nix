@@ -1,10 +1,8 @@
 { stdenv, fetchurl, openmpi, automake, autoconf, perl }:
-
 let
   version = "3.0.1";
   sha256 = "039rh4z3lsj4vqjsqgakk0b7dkrdrkkzj0p1cjikpc9gn36zpghc";
 in
-
 stdenv.mkDerivation {
   pname = "ior";
   inherit version;

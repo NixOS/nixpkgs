@@ -1,5 +1,4 @@
 { stdenv, bundlerEnv, fetchFromGitHub, ruby, nodejs }:
-
 let
   env = bundlerEnv {
     name = "frab";
@@ -8,9 +7,7 @@ let
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
   };
-
 in
-
 stdenv.mkDerivation {
   name = "frab-2016-12-28";
 

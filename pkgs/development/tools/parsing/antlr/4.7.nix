@@ -1,6 +1,13 @@
-{ stdenv, fetchurl, jre
-, fetchFromGitHub, cmake, ninja, pkgconfig, libuuid, darwin }:
-
+{ stdenv
+, fetchurl
+, jre
+, fetchFromGitHub
+, cmake
+, ninja
+, pkgconfig
+, libuuid
+, darwin
+}:
 let
   version = "4.7.2";
   source = fetchFromGitHub {
@@ -40,7 +47,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url ="https://www.antlr.org/download/antlr-${version}-complete.jar";
+      url = "https://www.antlr.org/download/antlr-${version}-complete.jar";
       sha256 = "1d40nfkq3ws8g4ksx4gj6l6m2l9j4b605q6sf68z5vvmg5nkhlk8";
     };
 
@@ -81,4 +88,5 @@ let
       platforms = platforms.unix;
     };
   };
-in antlr
+in
+antlr

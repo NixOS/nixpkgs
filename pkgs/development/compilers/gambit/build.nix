@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   inherit version;
   inherit src;
 
-  bootstrap = import ./bootstrap.nix ( pkgs );
+  bootstrap = import ./bootstrap.nix (pkgs);
 
   # TODO: if/when we can get all the library packages we depend on to have static versions,
   # we could use something like (makeStaticLibraries openssl) to enable creation
@@ -86,11 +86,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Optimizing Scheme to C compiler";
-    homepage    = "http://gambitscheme.org";
-    license     = stdenv.lib.licenses.lgpl2;
+    homepage = "http://gambitscheme.org";
+    license = stdenv.lib.licenses.lgpl2;
     # NB regarding platforms: only actually tested on Linux, *should* work everywhere,
     # but *might* need adaptation e.g. on macOS.
-    platforms   = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin fare ];
   };
 }

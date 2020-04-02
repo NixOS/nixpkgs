@@ -1,5 +1,4 @@
 { pkgs, makeScope, libsForQt5 }:
-
 let
   packages = self: with self; {
 
@@ -107,5 +106,5 @@ let
     ];
 
   };
-
-in makeScope libsForQt5.newScope packages
+in
+makeScope libsForQt5.newScope packages

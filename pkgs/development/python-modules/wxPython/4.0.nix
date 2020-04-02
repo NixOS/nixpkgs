@@ -39,13 +39,23 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig which doxygen wxGTK ];
 
-  buildInputs = [ libjpeg libtiff SDL
-      gst-plugins-base libnotify freeglut xorg.libSM ncurses
-      requests libpng gstreamer libX11
-      pathlib2
-      (wxGTK.gtk)
+  buildInputs = [
+    libjpeg
+    libtiff
+    SDL
+    gst-plugins-base
+    libnotify
+    freeglut
+    xorg.libSM
+    ncurses
+    requests
+    libpng
+    gstreamer
+    libX11
+    pathlib2
+    (wxGTK.gtk)
   ]
-    ++ lib.optional openglSupport pyopengl;
+  ++ lib.optional openglSupport pyopengl;
 
   hardeningDisable = [ "format" ];
 

@@ -1,4 +1,7 @@
-{ stdenv, lib, fetchurl, pkgconfig
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
 }:
 
 stdenv.mkDerivation rec {

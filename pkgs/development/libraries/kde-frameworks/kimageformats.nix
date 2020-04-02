@@ -1,7 +1,10 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  ilmbase, karchive, openexr, qtbase
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, ilmbase
+, karchive
+, openexr
+, qtbase
 }:
 
 let inherit (lib) getDev; in

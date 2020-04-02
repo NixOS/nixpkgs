@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "2.0";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "theano-${version}";
 
   url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";

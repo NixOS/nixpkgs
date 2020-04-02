@@ -1,6 +1,26 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
-, gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
-, python3, gss, libmysqlclient, system-sendmail }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, dejagnu
+, gettext
+, pkgconfig
+, gdbm
+, pam
+, readline
+, ncurses
+, gnutls
+, guile
+, texinfo
+, gnum4
+, sasl
+, fribidi
+, nettools
+, python3
+, gss
+, libmysqlclient
+, system-sendmail
+}:
 
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
@@ -24,12 +44,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook gettext pkgconfig
+    autoreconfHook
+    gettext
+    pkgconfig
   ];
 
   buildInputs = [
-    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
-    gss libmysqlclient python3
+    gdbm
+    pam
+    readline
+    ncurses
+    gnutls
+    guile
+    texinfo
+    gnum4
+    sasl
+    fribidi
+    nettools
+    gss
+    libmysqlclient
+    python3
   ];
 
   patches = [
@@ -47,14 +81,15 @@ stdenv.mkDerivation rec {
     "--with-path-sendmail=${system-sendmail}/bin/sendmail"
   ];
 
-  readmsg-tests = let
-    p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
-  in [
-    (fetchurl { url = "${p}/hdr.at"; sha256 = "0phpkqyhs26chn63wjns6ydx9468ng3ssbjbfhcvza8h78jlsd98"; })
-    (fetchurl { url = "${p}/nohdr.at"; sha256 = "1vkbkfkbqj6ml62s1am8i286hxwnpsmbhbnq0i2i0j1i7iwkk4b7"; })
-    (fetchurl { url = "${p}/twomsg.at"; sha256 = "15m29rg2xxa17xhx6jp4s2vwa9d4khw8092vpygqbwlhw68alk9g"; })
-    (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
-  ];
+  readmsg-tests =
+    let
+      p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
+    in [
+      (fetchurl { url = "${p}/hdr.at"; sha256 = "0phpkqyhs26chn63wjns6ydx9468ng3ssbjbfhcvza8h78jlsd98"; })
+      (fetchurl { url = "${p}/nohdr.at"; sha256 = "1vkbkfkbqj6ml62s1am8i286hxwnpsmbhbnq0i2i0j1i7iwkk4b7"; })
+      (fetchurl { url = "${p}/twomsg.at"; sha256 = "15m29rg2xxa17xhx6jp4s2vwa9d4khw8092vpygqbwlhw68alk9g"; })
+      (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
+    ];
 
   NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
 

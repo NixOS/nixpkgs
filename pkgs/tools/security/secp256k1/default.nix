@@ -1,14 +1,17 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, jdk
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, jdk
 
-# Enable ECDSA pubkey recovery module
+  # Enable ECDSA pubkey recovery module
 , enableRecovery ? true
 
-# Enable ECDH shared secret computation (disabled by default because it is
-# experimental)
+  # Enable ECDH shared secret computation (disabled by default because it is
+  # experimental)
 , enableECDH ? false
 
-# Enable libsecp256k1_jni (disabled by default because it requires a jdk,
-# which is a large dependency)
+  # Enable libsecp256k1_jni (disabled by default because it requires a jdk,
+  # which is a large dependency)
 , enableJNI ? false
 
 }:

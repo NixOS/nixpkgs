@@ -3,7 +3,7 @@
 fetchzip {
   name = "yanone-kaffeesatz-2004";
 
-  url = https://yanone.de/2015/data/UIdownloads/Yanone%20Kaffeesatz.zip;
+  url = https://yanone.de/2015/data/UIdownloads/Yanone%20 Kaffeesatz.zip;
 
   postFetch = ''
     mkdir -p $out/share/fonts

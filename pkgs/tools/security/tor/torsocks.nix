@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.3.0";
 
   src = fetchgit {
-    url    = meta.repositories.git;
-    rev    = "refs/tags/v${version}";
+    url = meta.repositories.git;
+    rev = "refs/tags/v${version}";
     sha256 = "0x0wpcigf22sjxg7bm0xzqihmsrz51hl4v8xf91qi4qnmr4ny1hb";
   };
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   installCheckTarget = "check-recursive";
 
   meta = {
-    description      = "Wrapper to safely torify applications";
-    homepage         = https://github.com/dgoulet/torsocks;
+    description = "Wrapper to safely torify applications";
+    homepage = https://github.com/dgoulet/torsocks;
     repositories.git = https://git.torproject.org/torsocks.git;
-    license          = stdenv.lib.licenses.gpl2;
-    platforms        = stdenv.lib.platforms.unix;
-    maintainers      = with stdenv.lib.maintainers; [ phreedom thoughtpolice ];
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ phreedom thoughtpolice ];
   };
 }

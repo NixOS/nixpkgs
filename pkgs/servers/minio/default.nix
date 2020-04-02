@@ -15,9 +15,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [''-ldflags=
+  buildFlagsArray = [
+    ''-ldflags=
     -X github.com/minio/minio/cmd.Version=${version}
-  ''];
+  ''
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://www.minio.io/;

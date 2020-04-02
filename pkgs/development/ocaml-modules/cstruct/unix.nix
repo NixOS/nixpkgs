@@ -4,11 +4,11 @@ if !lib.versionAtLeast (cstruct.version or "1") "3"
 then cstruct
 else
 
-buildDunePackage {
-	pname = "cstruct-unix";
-	inherit (cstruct) version src meta;
+  buildDunePackage {
+    pname = "cstruct-unix";
+    inherit (cstruct) version src meta;
 
-	minimumOCamlVersion = "4.06";
+    minimumOCamlVersion = "4.06";
 
-	propagatedBuildInputs = [ cstruct ];
-}
+    propagatedBuildInputs = [ cstruct ];
+  }

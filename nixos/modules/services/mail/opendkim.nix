@@ -1,23 +1,27 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.opendkim;
 
   defaultSock = "local:/run/opendkim/opendkim.sock";
 
   keyFile = "${cfg.keyPath}/${cfg.selector}.private";
 
-  args = [ "-f" "-l"
-           "-p" cfg.socket
-           "-d" cfg.domains
-           "-k" keyFile
-           "-s" cfg.selector
-         ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
-
-in {
+  args = [
+    "-f"
+    "-l"
+    "-p"
+    cfg.socket
+    "-d"
+    cfg.domains
+    "-k"
+    keyFile
+    "-s"
+    cfg.selector
+  ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
+in
+{
   imports = [
     (mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
   ];

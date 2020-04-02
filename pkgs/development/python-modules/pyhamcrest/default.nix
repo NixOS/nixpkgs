@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, mock, pytest
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, mock
+, pytest
 , six
 }:
 buildPythonPackage rec {
@@ -14,7 +17,7 @@ buildPythonPackage rec {
   checkInputs = [ mock pytest ];
   propagatedBuildInputs = [ six ];
 
-  doCheck = false;  # pypi tarball does not include tests
+  doCheck = false; # pypi tarball does not include tests
 
   meta = with stdenv.lib; {
     homepage = https://github.com/hamcrest/PyHamcrest;

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, git, ronn}:
+{ stdenv, fetchFromGitHub, git, ronn }:
 
 stdenv.mkDerivation rec {
   pname = "automirror";

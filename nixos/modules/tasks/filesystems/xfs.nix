@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inInitrd = any (fs: fs == "xfs") config.boot.initrd.supportedFilesystems;
-
 in
-
 {
   config = mkIf (any (fs: fs == "xfs") config.boot.supportedFilesystems) {
 

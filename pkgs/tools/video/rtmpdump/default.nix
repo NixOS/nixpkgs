@@ -1,6 +1,12 @@
-{ stdenv, fetchgit, fetchpatch, zlib
-, gnutlsSupport ? false, gnutls ? null, nettle ? null
-, opensslSupport ? true, openssl ? null
+{ stdenv
+, fetchgit
+, fetchpatch
+, zlib
+, gnutlsSupport ? false
+, gnutls ? null
+, nettle ? null
+, opensslSupport ? true
+, openssl ? null
 }:
 
 # Must have an ssl library enabled
@@ -44,9 +50,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Toolkit for RTMP streams";
-    homepage    = "http://rtmpdump.mplayerhq.hu/";
-    license     = licenses.gpl2;
-    platforms   = platforms.unix;
+    homepage = "http://rtmpdump.mplayerhq.hu/";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

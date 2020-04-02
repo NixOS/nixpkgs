@@ -27,10 +27,10 @@ buildGoPackage rec {
     '';
 
   meta = with lib; {
-    description      = "Multi pod and container log tailing for Kubernetes";
-    homepage         = "https://github.com/wercker/stern";
-    license          = licenses.asl20;
-    maintainers      = with maintainers; [ mbode ];
-    platforms        = platforms.unix;
+    description = "Multi pod and container log tailing for Kubernetes";
+    homepage = "https://github.com/wercker/stern";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mbode ];
+    platforms = platforms.unix;
   };
 }

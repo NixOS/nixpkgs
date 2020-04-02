@@ -9,10 +9,11 @@
 , odbcSupport ? true
 , libiodbc
 }:
-
-let platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
-                            else if (stdenv.isLinux or stdenv.isBSD) then "LD_LIBRARY_PATH"
-                            else throw "unsupported platform";
+let
+  platformLdLibraryPath =
+    if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
+    else if (stdenv.isLinux or stdenv.isBSD) then "LD_LIBRARY_PATH"
+    else throw "unsupported platform";
 in
 stdenv.mkDerivation rec {
   pname = "sagittarius-scheme";
@@ -22,11 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "03nvvvfd4gdlvq244zpnikxxajp6w8jj3ymw4bcq83x7zilb2imr";
   };
   preBuild = ''
-           # since we lack rpath during build, need to explicitly add build path
-           # to LD_LIBRARY_PATH so we can load libsagittarius.so as required to
-           # build extensions
-           export ${platformLdLibraryPath}="$(pwd)/build"
-           '';
+    # since we lack rpath during build, need to explicitly add build path
+    # to LD_LIBRARY_PATH so we can load libsagittarius.so as required to
+    # build extensions
+    export ${platformLdLibraryPath}="$(pwd)/build"
+  '';
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [ libffi boehmgc openssl zlib ] ++ stdenv.lib.optional odbcSupport libiodbc;

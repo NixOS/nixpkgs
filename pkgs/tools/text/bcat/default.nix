@@ -9,9 +9,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "Pipe to browser utility";
-    homepage    = http://rtomayko.github.com/bcat/;
-    license     = licenses.mit;
+    homepage = http://rtomayko.github.com/bcat/;
+    license = licenses.mit;
     maintainers = with maintainers; [ jraygauthier nicknovitski ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

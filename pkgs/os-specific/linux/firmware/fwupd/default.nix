@@ -52,7 +52,6 @@
 , tpm2-tools
 , nixosTests
 }:
-
 let
   python = python3.withPackages (p: with p; [
     pygobject3
@@ -82,9 +81,7 @@ let
   # haveFlashrom = isx86;
   # Experimental
   haveFlashrom = false;
-
 in
-
 stdenv.mkDerivation rec {
   pname = "fwupd";
   version = "1.3.9";
@@ -185,19 +182,20 @@ stdenv.mkDerivation rec {
   # /etc/os-release not available in sandbox
   # doCheck = true;
 
-  preFixup = let
-    binPath = [
-      efibootmgr
-      bubblewrap
-      tpm2-tools
-    ] ++ stdenv.lib.optional haveFlashrom flashrom;
-  in ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-      # See programs reached with fu_common_find_program_in_path in source
-      --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
-    )
-  '';
+  preFixup =
+    let
+      binPath = [
+        efibootmgr
+        bubblewrap
+        tpm2-tools
+      ] ++ stdenv.lib.optional haveFlashrom flashrom;
+    in ''
+      gappsWrapperArgs+=(
+        --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+        # See programs reached with fu_common_find_program_in_path in source
+        --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
+      )
+    '';
 
   mesonFlags = [
     "-Dgtkdoc=true"

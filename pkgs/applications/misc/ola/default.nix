@@ -1,6 +1,17 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig
-, libuuid, cppunit, protobuf3_1, zlib, avahi, libmicrohttpd
-, perl, python36 # Replace by python3 after the next update
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, pkgconfig
+, libuuid
+, cppunit
+, protobuf3_1
+, zlib
+, avahi
+, libmicrohttpd
+, perl
+, python36 # Replace by python3 after the next update
 }:
 
 stdenv.mkDerivation rec {

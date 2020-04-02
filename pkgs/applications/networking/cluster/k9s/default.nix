@@ -7,9 +7,9 @@ buildGoModule rec {
   rev = "8fedc42304ce33df314664eb0c4ac73be59065af";
 
   src = fetchFromGitHub {
-    owner  = "derailed";
-    repo   = "k9s";
-    rev    = "v${version}";
+    owner = "derailed";
+    repo = "k9s";
+    rev = "v${version}";
     sha256 = "0bqx1ckk89vzmk6fmqmv03cbdvw0agwrqzywzw35b4n0di37x0nv";
   };
 

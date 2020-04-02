@@ -1,4 +1,4 @@
-{stdenv, fetchgit, cmake, libGLU, libGL, xorg }:
+{ stdenv, fetchgit, cmake, libGLU, libGL, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "glee";

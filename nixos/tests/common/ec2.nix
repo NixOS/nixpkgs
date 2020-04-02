@@ -19,7 +19,7 @@ with pkgs.lib;
       };
     in makeTest {
       name = "ec2-" + name;
-      nodes = {};
+      nodes = { };
       testScript =
         ''
           my $imageDir = ($ENV{'TMPDIR'} // "/tmp") . "/vm-state-machine";

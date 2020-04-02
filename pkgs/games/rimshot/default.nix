@@ -1,5 +1,4 @@
 { stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
-
 let
   pname = "rimshot";
   version = "1.0";
@@ -18,9 +17,7 @@ let
     genericName = "rimshot";
     categories = "Audio;AudioVideo;Music";
   };
-
 in
-
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
@@ -36,20 +33,20 @@ stdenv.mkDerivation {
 
   unpackPhase = ''
     unzip -j $src
-  '';  
+  '';
 
   installPhase =
-  ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/games/lovegames
+    ''
+      mkdir -p $out/bin
+      mkdir -p $out/share/games/lovegames
 
-    cp -v ./*.love $out/share/games/lovegames/${pname}.love
-    makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
+      cp -v ./*.love $out/share/games/lovegames/${pname}.love
+      makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
 
-    chmod +x $out/bin/${pname}
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-  '';
+      chmod +x $out/bin/${pname}
+      mkdir -p $out/share/applications
+      ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    '';
 
   meta = with stdenv.lib; {
     description = "Create your own music";

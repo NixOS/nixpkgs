@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage    = "http://www.desy.de/~znagy/Site/NLOJet++.html";
-    license     = stdenv.lib.licenses.gpl2;
+    homepage = "http://www.desy.de/~znagy/Site/NLOJet++.html";
+    license = stdenv.lib.licenses.gpl2;
     description = "Implementation of calculation of the hadron jet cross sections";
-    platforms   = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, lablgtk ? null}:
+{ stdenv, fetchurl, ocaml, findlib, lablgtk ? null }:
 
 stdenv.mkDerivation rec {
   pname = "ocamlgraph";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = http://ocamlgraph.lri.fr/;
     description = "Graph library for Objective Caml";
     license = stdenv.lib.licenses.gpl2Oss;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [
       stdenv.lib.maintainers.kkallio
     ];

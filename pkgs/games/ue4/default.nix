@@ -1,19 +1,36 @@
-{ stdenv, writeScript, fetchurl, requireFile, unzip, clang, mono, which,
-  xorg, xdg-user-dirs }:
-
+{ stdenv
+, writeScript
+, fetchurl
+, requireFile
+, unzip
+, clang
+, mono
+, which
+, xorg
+, xdg-user-dirs
+}:
 let
   inherit (stdenv) lib;
   deps = import ./cdn-deps.nix { inherit fetchurl; };
   linkDeps = writeScript "link-deps.sh" (lib.concatMapStringsSep "\n" (hash:
-    let prefix = lib.concatStrings (lib.take 2 (lib.stringToCharacters hash));
+    let
+      prefix = lib.concatStrings (lib.take 2 (lib.stringToCharacters hash));
     in ''
       mkdir -p .git/ue4-gitdeps/${prefix}
       ln -s ${lib.getAttr hash deps} .git/ue4-gitdeps/${prefix}/${hash}
     ''
   ) (lib.attrNames deps));
   libPath = stdenv.lib.makeLibraryPath [
-    xorg.libX11 xorg.libXScrnSaver xorg.libXau xorg.libXcursor xorg.libXext
-    xorg.libXfixes xorg.libXi xorg.libXrandr xorg.libXrender xorg.libXxf86vm
+    xorg.libX11
+    xorg.libXScrnSaver
+    xorg.libXau
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXxf86vm
     xorg.libxcb
   ];
 in

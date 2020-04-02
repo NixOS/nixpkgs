@@ -1,9 +1,13 @@
-{stdenv, fetchFromGitHub
-, curl, makeWrapper, which, unzip
+{ stdenv
+, fetchFromGitHub
+, curl
+, makeWrapper
+, which
+, unzip
 , lua
-# for 'luarocks pack'
+  # for 'luarocks pack'
 , zip
-# some packages need to be compiled with cmake
+  # some packages need to be compiled with cmake
 , cmake
 }:
 
@@ -33,7 +37,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    lua curl makeWrapper which
+    lua
+    curl
+    makeWrapper
+    which
   ];
 
   postInstall = ''
@@ -65,8 +72,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit version;
     description = ''A package manager for Lua'';
-    license = licenses.mit ;
-    maintainers = with maintainers; [raskin teto];
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin teto ];
     platforms = platforms.linux ++ platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";
     updateWalker = true;

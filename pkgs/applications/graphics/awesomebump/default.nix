@@ -1,6 +1,4 @@
 { lib, stdenv, fetchgit, qtbase, qmake, makeWrapper, qtscript, flex, bison, qtdeclarative }:
-
-
 let
   version = "5.1";
 
@@ -22,7 +20,8 @@ let
       install -D bin-linux/QtnPEG $out/bin/QtnPEG
     '';
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "awesomebump";
   inherit version;
 

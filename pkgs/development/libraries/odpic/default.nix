@@ -1,10 +1,9 @@
 { stdenv, fetchFromGitHub, fixDarwinDylibNames, oracle-instantclient, libaio }:
-
 let
   version = "3.3.0";
   libPath = stdenv.lib.makeLibraryPath [ oracle-instantclient.lib ];
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version;
 
   pname = "odpic";
@@ -22,16 +21,16 @@ in stdenv.mkDerivation {
     ++ stdenv.lib.optionals stdenv.isLinux [ libaio ];
 
   dontPatchELF = true;
-  makeFlags = [ "PREFIX=$(out)" "CC=cc" "LD=cc"];
+  makeFlags = [ "PREFIX=$(out)" "CC=cc" "LD=cc" ];
 
   postFixup = ''
     ${stdenv.lib.optionalString (stdenv.isLinux) ''
-      patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary})" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
-    ''}
+    patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary})" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
+  ''}
     ${stdenv.lib.optionalString (stdenv.isDarwin) ''
-      install_name_tool -add_rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
-    ''}
-    '';
+    install_name_tool -add_rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
+  ''}
+  '';
 
   meta = with stdenv.lib; {
     description = "Oracle ODPI-C library";
@@ -39,6 +38,6 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ mkazulak flokli ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

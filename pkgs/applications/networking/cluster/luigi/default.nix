@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   # This enables accessing modules stored in cwd
-  makeWrapperArgs = ["--prefix PYTHONPATH . :"];
+  makeWrapperArgs = [ "--prefix PYTHONPATH . :" ];
 
   meta = with lib; {
     homepage = https://github.com/spotify/luigi;
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
       Luigi handles dependency resolution, workflow management, visualization,
       handling failures, command line integration, and much more.
     '';
-    license =  [ licenses.asl20 ];
+    license = [ licenses.asl20 ];
     maintainers = [ maintainers.bhipple ];
   };
 }

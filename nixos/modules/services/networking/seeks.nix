@@ -1,17 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.seeks;
 
   confDir = cfg.confDir;
 
   seeks = pkgs.seeks.override { seeks_confDir = confDir; };
-
 in
-
 {
 
   ###### interface
@@ -47,14 +43,16 @@ in
   config = mkIf config.services.seeks.enable {
 
     users.users.seeks =
-      { uid = config.ids.uids.seeks;
+      {
+        uid = config.ids.uids.seeks;
         description = "Seeks user";
         createHome = true;
         home = "/var/lib/seeks";
       };
 
     users.groups.seeks =
-      { gid = config.ids.gids.seeks;
+      {
+        gid = config.ids.gids.seeks;
       };
 
     systemd.services.seeks =

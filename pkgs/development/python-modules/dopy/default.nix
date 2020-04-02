@@ -12,7 +12,7 @@ buildPythonPackage {
     owner = "Wiredcraft";
     repo = "dopy";
     rev = "cb443214166a4e91b17c925f40009ac883336dc3";
-    sha256 ="0ams289qcgna96aak96jbz6wybs6qb95h2gn8lb4lmx2p5sq4q56";
+    sha256 = "0ams289qcgna96aak96jbz6wybs6qb95h2gn8lb4lmx2p5sq4q56";
   };
 
   propagatedBuildInputs = [ requests six ];

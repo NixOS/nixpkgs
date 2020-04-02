@@ -1,7 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
-, librsvg, gsound, libmanette
-, gettext, itstool, libxml2, clutter, clutter-gtk, wrapGAppsHook
-, meson, ninja, python3, vala, desktop-file-utils
+{ stdenv
+, fetchurl
+, pkgconfig
+, gtk3
+, gnome3
+, gdk-pixbuf
+, librsvg
+, gsound
+, libmanette
+, gettext
+, itstool
+, libxml2
+, clutter
+, clutter-gtk
+, wrapGAppsHook
+, meson
+, ninja
+, python3
+, vala
+, desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +30,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja python3 vala desktop-file-utils
-    pkgconfig gnome3.adwaita-icon-theme
-    libxml2 itstool gettext wrapGAppsHook
+    meson
+    ninja
+    python3
+    vala
+    desktop-file-utils
+    pkgconfig
+    gnome3.adwaita-icon-theme
+    libxml2
+    itstool
+    gettext
+    wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 gdk-pixbuf librsvg libmanette
-    gsound clutter libxml2 clutter-gtk
+    gtk3
+    gdk-pixbuf
+    librsvg
+    libmanette
+    gsound
+    clutter
+    libxml2
+    clutter-gtk
   ];
 
   passthru = {

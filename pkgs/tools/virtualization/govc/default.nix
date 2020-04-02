@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildGoPackage }:
-  
+
 buildGoPackage rec {
   pname = "govc";
   version = "0.21.0";

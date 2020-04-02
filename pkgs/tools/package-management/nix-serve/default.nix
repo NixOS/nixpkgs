@@ -1,14 +1,17 @@
-{ stdenv, fetchFromGitHub,
-  bzip2, nix, perl, perlPackages,
+{ stdenv
+, fetchFromGitHub
+, bzip2
+, nix
+, perl
+, perlPackages
+,
 }:
 
 with stdenv.lib;
-
 let
   rev = "e4675e38ab54942e351c7686e40fabec822120b9";
   sha256 = "1wm24p6pkxl1d7hrvf4ph6mwzawvqi22c60z9xzndn5xfyr4v0yr";
 in
-
 stdenv.mkDerivation {
   name = "nix-serve-0.2-${substring 0 7 rev}";
 

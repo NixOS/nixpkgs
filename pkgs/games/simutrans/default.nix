@@ -1,21 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
-, buildEnv, config, runtimeShell
+{ stdenv
+, fetchurl
+, pkgconfig
+, unzip
+, zlib
+, libpng
+, bzip2
+, SDL
+, SDL_mixer
+, buildEnv
+, config
+, runtimeShell
 }:
-
 let
   # Choose your "paksets" of objects, images, text, music, etc.
   paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
 
   result = with stdenv.lib; withPaks (
     if paksets == "*" then attrValues pakSpec # taking all
-      else map (name: pakSpec.${name}) (splitString " " paksets)
+    else map (name: pakSpec.${name}) (splitString " " paksets)
   );
 
   ver1 = "120";
   ver2 = "2";
   ver3 = "2";
-  version =   "${ver1}.${ver2}.${ver3}";
-  ver_dash =  "${ver1}-${ver2}-${ver3}";
+  version = "${ver1}.${ver2}.${ver3}";
+  ver_dash = "${ver1}-${ver2}-${ver3}";
 
   binary_src = fetchurl {
     url = "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
@@ -25,7 +34,7 @@ let
 
   # As of 2015/03, many packsets still didn't have a release for version 120.
   pakSpec = stdenv.lib.mapAttrs
-    (pakName: attrs: mkPak (attrs // {inherit pakName;}))
+    (pakName: attrs: mkPak (attrs // { inherit pakName; }))
   {
     pak64 = {
       srcPath = "120-2/simupak64-120-2";
@@ -45,13 +54,13 @@ let
       srcPath = "pak128.Britain%20for%20120-1/pak128.Britain.1.17-120-1";
       sha256 = "1nviwqizvch9n3n826nmmi7c707dxv0727m7lhc1n2zsrrxcxlr5";
     };
-    "pak128.cs" = { # note: it needs pak128 to work
+    "pak128.cs" = {
+      # note: it needs pak128 to work
       url = "mirror://sourceforge/simutrans/Pak128.CS/pak128.cz_v.0.2.1.zip";
       sha256 = "008d8x1s0vxsq78rkczlnf57pv1n5hi1v5nbd1l5w3yls7lk11sc";
     };
     "pak128.german" = {
-      url = "mirror://sourceforge/simutrans/PAK128.german/"
-        + "PAK128.german_0.10.x_for_ST_120.x/PAK128.german_0.10.3_for_ST_120.x.zip";
+      url = "mirror://sourceforge/simutrans/PAK128.german/" + "PAK128.german_0.10.x_for_ST_120.x/PAK128.german_0.10.3_for_ST_120.x.zip";
       sha256 = "1379zcviyf3v0wsli33sqa509k6zlw6fkk57vahc44mrnhka5fpb";
     };
 
@@ -64,34 +73,38 @@ let
   };
 
 
-  mkPak = {
-    sha256, pakName, srcPath ? null
+  mkPak =
+    { sha256
+    , pakName
+    , srcPath ? null
     , url ? "mirror://sourceforge/simutrans/${pakName}/${srcPath}.zip"
-  }:
-    stdenv.mkDerivation {
-      name = "simutrans-${pakName}";
-      dontUnpack = true;
-      preferLocalBuild = true;
-      installPhase = let src = fetchurl { inherit url sha256; };
-      in ''
-        mkdir -p "$out/share/simutrans/${pakName}"
-        cd "$out/share/simutrans/${pakName}"
-        "${unzip}/bin/unzip" "${src}"
-        chmod -R +w . # some zipfiles need that
+    }:
+      stdenv.mkDerivation {
+        name = "simutrans-${pakName}";
+        dontUnpack = true;
+        preferLocalBuild = true;
+        installPhase =
+          let
+            src = fetchurl { inherit url sha256; };
+          in ''
+            mkdir -p "$out/share/simutrans/${pakName}"
+            cd "$out/share/simutrans/${pakName}"
+            "${unzip}/bin/unzip" "${src}"
+            chmod -R +w . # some zipfiles need that
 
-        set +o pipefail # no idea why it's needed
-        toStrip=`find . -iname '*.pak' | head -n 1 | sed 's|\./\(.*\)/[^/]*$|\1|'`
-        echo "Detected path '$toStrip' to strip"
-        mv ./"$toStrip"/* .
-        rmdir -p "$toStrip"
-      '';
-    };
+            set +o pipefail # no idea why it's needed
+            toStrip=`find . -iname '*.pak' | head -n 1 | sed 's|\./\(.*\)/[^/]*$|\1|'`
+            echo "Detected path '$toStrip' to strip"
+            mv ./"$toStrip"/* .
+            rmdir -p "$toStrip"
+          '';
+      };
 
   /* The binaries need all data in one directory; the default is directory
       of the executable, and another option is the current directory :-/ */
   withPaks = paks: buildEnv {
     inherit (binaries) name;
-    paths = [binaries] ++ paks;
+    paths = [ binaries ] ++ paks;
     postBuild = ''
       rm "$out/bin" && mkdir "$out/bin"
       cat > "$out/bin/simutrans" <<EOF
@@ -102,7 +115,7 @@ let
       chmod +x "$out/bin/simutrans"
     '';
 
-    passthru.meta = binaries.meta // { hydraPlatforms = []; };
+    passthru.meta = binaries.meta // { hydraPlatforms = [ ]; };
     passthru.binaries = binaries;
   };
 
@@ -114,32 +127,33 @@ let
 
     sourceRoot = ".";
 
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
 
-    configurePhase = let
-      # Configuration as per the readme.txt and config.template
-      platform =
-        if stdenv.isLinux then "linux" else
-        if stdenv.isDarwin then "mac" else throw "add your platform";
-      config = ''
-        BACKEND = mixer_sdl
-        COLOUR_DEPTH = 16
-        OSTYPE = ${platform}
-        VERBOSE = 1
+    configurePhase =
+      let
+        # Configuration as per the readme.txt and config.template
+        platform =
+          if stdenv.isLinux then "linux" else
+            if stdenv.isDarwin then "mac" else throw "add your platform";
+        config = ''
+          BACKEND = mixer_sdl
+          COLOUR_DEPTH = 16
+          OSTYPE = ${platform}
+          VERBOSE = 1
+        '';
+        #TODO: MULTI_THREAD = 1 is "highly recommended",
+        # but it's roughly doubling CPU usage for me
+      in ''
+        echo "${config}" > config.default
+
+        # Use ~/.simutrans instead of ~/simutrans
+        substituteInPlace simsys.cc --replace '%s/simutrans' '%s/.simutrans'
+
+        # use -O2 optimization (defaults are -O or -O3)
+        sed -i -e '/CFLAGS += -O/d' Makefile
+        export CFLAGS+=-O2
       '';
-      #TODO: MULTI_THREAD = 1 is "highly recommended",
-      # but it's roughly doubling CPU usage for me
-    in ''
-      echo "${config}" > config.default
-
-      # Use ~/.simutrans instead of ~/simutrans
-      substituteInPlace simsys.cc --replace '%s/simutrans' '%s/.simutrans'
-
-      # use -O2 optimization (defaults are -O or -O3)
-      sed -i -e '/CFLAGS += -O/d' Makefile
-      export CFLAGS+=-O2
-    '';
 
     enableParallelBuilding = true;
 
@@ -167,5 +181,5 @@ let
       broken = true;
     };
   };
-
-in result
+in
+result

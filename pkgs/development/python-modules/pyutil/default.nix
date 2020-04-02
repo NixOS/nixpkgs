@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "8c4d4bf668c559186389bb9bce99e4b1b871c09ba252a756ccaacd2b8f401848";
   };
 
-  buildInputs = [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
+  buildInputs = [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else [ ]);
   propagatedBuildInputs = [ twisted ];
 
   # Tests fail because they try to write new code into the twisted

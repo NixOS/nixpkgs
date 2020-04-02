@@ -32,18 +32,25 @@
 #   `meta` with `platforms` and `homepage` set to something you are
 #   unlikely to want to override for most packages
 
-{ lib, newScope, stdenv, fetchurl, fetchFromGitHub, runCommand, writeText
+{ lib
+, newScope
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, runCommand
+, writeText
 
-, emacs, texinfo, lndir, makeWrapper
+, emacs
+, texinfo
+, lndir
+, makeWrapper
 , trivialBuild
 , melpaBuild
 
 , external
 , pkgs
 }:
-
 let
-
   mkElpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
     inherit lib stdenv texinfo;
   };
@@ -66,21 +73,20 @@ let
   mkManualPackages = import ../applications/editors/emacs-modes/manual-packages.nix {
     inherit external lib pkgs;
   };
-
-in lib.makeScope newScope (self: lib.makeOverridable ({
-  elpaPackages ? mkElpaPackages self
-  , melpaStablePackages ? mkMelpaStablePackages self
-  , melpaPackages ? mkMelpaPackages self
-  , orgPackages ? mkOrgPackages self
-  , manualPackages ? mkManualPackages self
-}: ({}
+in
+lib.makeScope newScope (self: lib.makeOverridable ({ elpaPackages ? mkElpaPackages self
+                                                   , melpaStablePackages ? mkMelpaStablePackages self
+                                                   , melpaPackages ? mkMelpaPackages self
+                                                   , orgPackages ? mkOrgPackages self
+                                                   , manualPackages ? mkManualPackages self
+                                                   }: ({ }
   // elpaPackages // { inherit elpaPackages; }
   // melpaStablePackages // { inherit melpaStablePackages; }
   // melpaPackages // { inherit melpaPackages; }
   // orgPackages // { inherit orgPackages; }
   // manualPackages
   // {
-    inherit emacs melpaBuild trivialBuild;
-    emacsWithPackages = emacsWithPackages self;
-  })
-) {})
+  inherit emacs melpaBuild trivialBuild;
+  emacsWithPackages = emacsWithPackages self;
+})
+) { })

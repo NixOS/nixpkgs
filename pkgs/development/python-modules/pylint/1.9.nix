@@ -1,6 +1,19 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, astroid, six, isort,
-  mccabe, configparser, backports_functools_lru_cache, singledispatch,
-  pytest, pytestrunner, pyenchant, setuptools }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, astroid
+, six
+, isort
+, mccabe
+, configparser
+, backports_functools_lru_cache
+, singledispatch
+, pytest
+, pytestrunner
+, pyenchant
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "pylint";
@@ -22,17 +35,19 @@ buildPythonPackage rec {
 
   checkPhase = ''
     pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
-      [ # Broken test
-        "test_good_comprehension_checks"
+      [
+        # Broken test
+          "test_good_comprehension_checks"
         # requires setuptools
-        "test_pkginfo"
+          "test_pkginfo"
         # See PyCQA/pylint#2535
-        "test_libmodule" ] ++
-      # Disable broken darwin tests
-      lib.optionals stdenv.isDarwin [
-        "test_parallel_execution"
-        "test_py3k_jobs_option"
-      ]
+          "test_libmodule"
+        ] ++
+        # Disable broken darwin tests
+          lib.optionals stdenv.isDarwin [
+              "test_parallel_execution"
+              "test_py3k_jobs_option"
+            ]
     )}"
   '';
 

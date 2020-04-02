@@ -1,4 +1,4 @@
-{ config, pkgs ,lib ,... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -15,7 +15,7 @@ with lib;
 
     extraPortals = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         List of additional portals to add to path. Portals allow interaction
         with system, like choosing files or taking screenshots. At minimum,
@@ -46,16 +46,16 @@ with lib;
         name = "xdg-portals";
         paths = cfg.extraPortals;
       };
-
     in mkIf cfg.enable {
 
       assertions = [
-        { assertion = (cfg.gtkUsePortal -> cfg.extraPortals != []);
+        {
+          assertion = (cfg.gtkUsePortal -> cfg.extraPortals != [ ]);
           message = "Setting xdg.portal.gtkUsePortal to true requires a portal implementation in xdg.portal.extraPortals such as xdg-desktop-portal-gtk or xdg-desktop-portal-kde.";
         }
       ];
 
-      services.dbus.packages  = packages;
+      services.dbus.packages = packages;
       systemd.packages = packages;
 
       environment.variables = {

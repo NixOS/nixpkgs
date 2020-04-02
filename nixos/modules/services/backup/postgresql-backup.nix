@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.postgresqlBackup;
 
   postgresqlBackupService = db: dumpCmd:
@@ -32,13 +30,13 @@ let
 
       startAt = cfg.startAt;
     };
-
-in {
+in
+{
 
   imports = [
     (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
-       A systemd timer is now used instead of cron.
-       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+      A systemd timer is now used instead of cron.
+      The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
   ];
 
@@ -61,7 +59,7 @@ in {
       };
 
       backupAll = mkOption {
-        default = cfg.databases == [];
+        default = cfg.databases == [ ];
         defaultText = "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
         description = ''
@@ -74,7 +72,7 @@ in {
       };
 
       databases = mkOption {
-        default = [];
+        default = [ ];
         description = ''
           List of database names to dump.
         '';
@@ -103,10 +101,12 @@ in {
 
   config = mkMerge [
     {
-      assertions = [{
-        assertion = cfg.backupAll -> cfg.databases == [];
-        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
-      }];
+      assertions = [
+        {
+          assertion = cfg.backupAll -> cfg.databases == [ ];
+          message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+        }
+      ];
     }
     (mkIf cfg.enable {
       systemd.tmpfiles.rules = [
@@ -124,7 +124,8 @@ in {
         in {
           name = "postgresqlBackup-${db}";
           value = postgresqlBackupService db cmd;
-        }) cfg.databases);
+        }
+      ) cfg.databases);
     })
   ];
 

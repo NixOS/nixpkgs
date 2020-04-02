@@ -1,10 +1,20 @@
-{ stdenv, fetchurl, rpmextract, autoPatchelfHook
-, xorg, gtk3, gnome2, nss, alsaLib, udev, libnotify
-, wrapGAppsHook }:
-
+{ stdenv
+, fetchurl
+, rpmextract
+, autoPatchelfHook
+, xorg
+, gtk3
+, gnome2
+, nss
+, alsaLib
+, udev
+, libnotify
+, wrapGAppsHook
+}:
 let
   version = "4.5.2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "vk-messenger";
   inherit version;
   src = {
@@ -20,9 +30,14 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ rpmextract autoPatchelfHook wrapGAppsHook ];
   buildInputs = (with xorg; [
-    libXdamage libXtst libXScrnSaver libxkbfile
+    libXdamage
+    libXtst
+    libXScrnSaver
+    libxkbfile
   ]) ++ [
-    gtk3 nss alsaLib
+    gtk3
+    nss
+    alsaLib
   ];
   runtimeDependencies = [ udev.lib libnotify ];
 
@@ -49,6 +64,6 @@ in stdenv.mkDerivation {
     homepage = https://vk.com/messenger;
     license = licenses.unfree;
     maintainers = [ maintainers.gnidorah ];
-    platforms = ["i686-linux" "x86_64-linux"];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

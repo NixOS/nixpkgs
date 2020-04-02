@@ -18,7 +18,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Cowsay reborn, written in Go";
     homepage = "https://github.com/Code-Hex/Neo-cowsay";
-    license = with licenses; [artistic1 /* or */ gpl3];
+    license = with licenses; [ artistic1 /* or */ gpl3 ];
     maintainers = with maintainers; [ filalex77 ];
   };
 }

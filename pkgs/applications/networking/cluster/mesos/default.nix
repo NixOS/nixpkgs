@@ -1,13 +1,40 @@
-{ stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh
-, unzip, gnutar, jdk, python, wrapPython
-, setuptools, boto, pythonProtobuf, apr, subversion, gzip
-, leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
-, ethtool, coreutils, which, iptables, maven
-, bash, autoreconfHook
-, utf8proc, lz4
+{ stdenv
+, lib
+, makeWrapper
+, fetchurl
+, curl
+, sasl
+, openssh
+, unzip
+, gnutar
+, jdk
+, python
+, wrapPython
+, setuptools
+, boto
+, pythonProtobuf
+, apr
+, subversion
+, gzip
+, leveldb
+, glog
+, perf
+, utillinux
+, libnl
+, iproute
+, openssl
+, libevent
+, ethtool
+, coreutils
+, which
+, iptables
+, maven
+, bash
+, autoreconfHook
+, utf8proc
+, lz4
 , withJava ? !stdenv.isDarwin
 }:
-
 let
   mavenRepo = import ./mesos-deps.nix { inherit stdenv curl; };
   # `tar -z` requires gzip on $PATH, so wrap tar.
@@ -18,13 +45,13 @@ let
   tarWithGzip = lib.overrideDerivation gnutar (oldAttrs: {
     # Original builder is bash 4.3.42 from bootstrap tools, too old for makeWrapper.
     builder = "${bash}/bin/bash";
-    buildInputs = (oldAttrs.buildInputs or []) ++ [ makeWrapper ];
+    buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ makeWrapper ];
     postInstall = (oldAttrs.postInstall or "") + ''
       wrapProgram $out/bin/tar --prefix PATH ":" "${gzip}/bin"
     '';
   });
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "1.4.1";
   pname = "mesos";
 
@@ -48,14 +75,26 @@ in stdenv.mkDerivation rec {
     autoreconfHook
   ];
   buildInputs = [
-    makeWrapper curl sasl
-    python wrapPython boto setuptools leveldb
-    subversion apr glog openssl libevent
-    utf8proc lz4
+    makeWrapper
+    curl
+    sasl
+    python
+    wrapPython
+    boto
+    setuptools
+    leveldb
+    subversion
+    apr
+    glog
+    openssl
+    libevent
+    utf8proc
+    lz4
   ] ++ lib.optionals stdenv.isLinux [
     libnl
   ] ++ lib.optionals withJava [
-    jdk maven
+    jdk
+    maven
   ];
 
   propagatedBuildInputs = [
@@ -253,10 +292,10 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "http://mesos.apache.org";
-    license     = licenses.asl20;
+    homepage = "http://mesos.apache.org";
+    license = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
     maintainers = with maintainers; [ cstrahan offline ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig
-, wayland, wayland-protocols }:
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkgconfig
+, wayland
+, wayland-protocols
+}:
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard";

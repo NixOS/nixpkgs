@@ -12,18 +12,22 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenvNoCC, perl, cpio, contents, ubootTools
+{ stdenvNoCC
+, perl
+, cpio
+, contents
+, ubootTools
 , name ? "initrd"
 , compressor ? "gzip -9n"
-, prepend ? []
+, prepend ? [ ]
 , lib
 }:
 let
   # !!! Move this into a public lib function, it is probably useful for others
   toValidStoreName = x: with builtins;
     lib.concatStringsSep "-" (filter (x: !(isList x)) (split "[^a-zA-Z0-9_=.?-]+" x));
-
-in stdenvNoCC.mkDerivation rec {
+in
+stdenvNoCC.mkDerivation rec {
   inherit name;
 
   builder = ./make-initrd.sh;
@@ -43,8 +47,8 @@ in stdenvNoCC.mkDerivation rec {
   # See #36268.
   exportReferencesGraph =
     lib.zipListsWith
-      (x: i: [("closure-${toValidStoreName (baseNameOf x.symlink)}-${toString i}") x.object])
-      contents
+      (x: i: [ ("closure-${toValidStoreName (baseNameOf x.symlink)}-${toString i}") x.object ])
+    contents
       (lib.range 0 (lib.length contents - 1));
   pathsFromGraph = ./paths-from-graph.pl;
 

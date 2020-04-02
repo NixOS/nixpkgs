@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "--enable-tcp"
     "--enable-http-proxy"
     "--enable-dns"
-    ];
+  ];
 
   preBuild = ''
     sed -e 's@"/sbin/ifconfig.*"@"${iproute}/sbin/ip link set $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C

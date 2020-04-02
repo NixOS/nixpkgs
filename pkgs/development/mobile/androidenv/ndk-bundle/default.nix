@@ -1,5 +1,4 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, platform-tools}:
-
+{ deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, platform-tools }:
 let
   runtime_paths = lib.makeBinPath [ pkgs.coreutils pkgs.file pkgs.findutils pkgs.gawk pkgs.gnugrep pkgs.gnused pkgs.jdk pkgs.python3 pkgs.which ] + ":${platform-tools}/platform-tools";
 in

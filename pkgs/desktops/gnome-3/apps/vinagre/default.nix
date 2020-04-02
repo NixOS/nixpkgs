@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, vte, libxml2, gtk-vnc, intltool
-, libsecret, itstool, wrapGAppsHook, librsvg }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gtk3
+, gnome3
+, vte
+, libxml2
+, gtk-vnc
+, intltool
+, libsecret
+, itstool
+, wrapGAppsHook
+, librsvg
+}:
 
 stdenv.mkDerivation rec {
   pname = "vinagre";
@@ -12,7 +24,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
   buildInputs = [
-    gtk3 vte libxml2 gtk-vnc libsecret gnome3.adwaita-icon-theme librsvg
+    gtk3
+    vte
+    libxml2
+    gtk-vnc
+    libsecret
+    gnome3.adwaita-icon-theme
+    librsvg
   ];
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";

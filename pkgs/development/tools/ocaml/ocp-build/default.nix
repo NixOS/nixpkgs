@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ ncurses ];
   preInstall = "mkdir -p $out/bin";
   preConfigure = ''
-  export configureFlags="$configureFlags --with-metadir=$OCAMLFIND_DESTDIR"
+    export configureFlags="$configureFlags --with-metadir=$OCAMLFIND_DESTDIR"
   '';
 
   meta = with stdenv.lib; {
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       between source files.
     '';
     license = licenses.gpl3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

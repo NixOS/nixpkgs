@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql freetds ];
 
   src = fetchFromGitHub {
-    owner  = "tds-fdw";
-    repo   =  pname;
-    rev    = "refs/tags/v${version}";
+    owner = "tds-fdw";
+    repo = pname;
+    rev = "refs/tags/v${version}";
     sha256 = "1zpcrx30bvaf72782hgz2s19i5ndwvi7z87fanl1lnymznrk9lzg";
   };
 
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A PostgreSQL foreign data wrapper to connect to TDS databases (Sybase and Microsoft SQL Server)";
-    homepage    = https://github.com/tds-fdw/tds_fdw;
+    homepage = https://github.com/tds-fdw/tds_fdw;
     maintainers = [ maintainers.steve-chavez ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.postgresql;
+    platforms = postgresql.meta.platforms;
+    license = licenses.postgresql;
     broken = versionAtLeast postgresql.version "11.0";
   };
 }

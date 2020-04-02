@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, guileSupport ? false, pkgconfig ? null , guile ? null }:
+{ stdenv, fetchurl, guileSupport ? false, pkgconfig ? null, guile ? null }:
 
-assert guileSupport -> ( pkgconfig != null && guile != null );
-
+assert guileSupport -> (pkgconfig != null && guile != null);
 let
   version = "4.2.1";
 in

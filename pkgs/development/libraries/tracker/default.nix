@@ -1,8 +1,34 @@
-{ stdenv, fetchurl, gettext, meson, ninja, pkgconfig, gobject-introspection, python3
-, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
-, libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
-, gnome3, icu, libuuid, networkmanager, libsoup, json-glib, systemd, dbus
-, substituteAll }:
+{ stdenv
+, fetchurl
+, gettext
+, meson
+, ninja
+, pkgconfig
+, gobject-introspection
+, python3
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, docbook_xml_dtd_43
+, glibcLocales
+, libxml2
+, upower
+, glib
+, wrapGAppsHook
+, vala
+, sqlite
+, libxslt
+, libstemmer
+, gnome3
+, icu
+, libuuid
+, networkmanager
+, libsoup
+, json-glib
+, systemd
+, dbus
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
@@ -16,15 +42,35 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext libxslt wrapGAppsHook gobject-introspection
-    gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
+    meson
+    ninja
+    vala
+    pkgconfig
+    gettext
+    libxslt
+    wrapGAppsHook
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+    docbook_xml_dtd_43
+    glibcLocales
     python3 # for data-generators
     systemd # used for checks to install systemd user service
     dbus # used for checks and pkgconfig to install dbus service/s
   ];
 
   buildInputs = [
-    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib libstemmer
+    glib
+    libxml2
+    sqlite
+    upower
+    icu
+    networkmanager
+    libsoup
+    libuuid
+    json-glib
+    libstemmer
   ];
 
   mesonFlags = [

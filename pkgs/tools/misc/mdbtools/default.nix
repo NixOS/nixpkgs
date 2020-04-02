@@ -1,9 +1,18 @@
-{ stdenv, fetchFromGitHub, glib, readline
-, bison, flex, pkgconfig, autoreconfHook
-, txt2man, which }:
-
-let version = "0.7.1";
-in stdenv.mkDerivation {
+{ stdenv
+, fetchFromGitHub
+, glib
+, readline
+, bison
+, flex
+, pkgconfig
+, autoreconfHook
+, txt2man
+, which
+}:
+let
+  version = "0.7.1";
+in
+stdenv.mkDerivation {
   pname = "mdbtools";
   inherit version;
 

@@ -1,6 +1,6 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test-python.nix ({ pkgs, ...} : rec {
+import ./make-test-python.nix ({ pkgs, ... }: rec {
   name = "misc";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];
@@ -11,20 +11,24 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
   machine =
     { lib, ... }:
     with lib;
-    { swapDevices = mkOverride 0
+    {
+      swapDevices = mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
       environment.variables.EDITOR = mkOverride 0 "emacs";
       documentation.nixos.enable = mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
-      fileSystems = mkVMOverride { "/tmp2" =
-        { fsType = "tmpfs";
-          options = [ "mode=1777" "noauto" ];
-        };
+      fileSystems = mkVMOverride {
+        "/tmp2" =
+          {
+            fsType = "tmpfs";
+            options = [ "mode=1777" "noauto" ];
+          };
       };
       systemd.automounts = singleton
-        { wantedBy = [ "multi-user.target" ];
-          where = "/tmp2";
-        };
+      {
+        wantedBy = [ "multi-user.target" ];
+        where = "/tmp2";
+      };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       security.sudo = { enable = true; wheelNeedsPassword = false; };
       boot.kernel.sysctl."vm.swappiness" = 1;

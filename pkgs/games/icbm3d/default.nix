@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11}:
+{ stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation {
   name = "icbm3d-0.4";

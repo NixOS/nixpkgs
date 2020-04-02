@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, google_api_python_client, simplejson, oauth2client, setuptools
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, google_api_python_client
+, simplejson
+, oauth2client
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -13,14 +19,17 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    google_api_python_client simplejson oauth2client setuptools
+    google_api_python_client
+    simplejson
+    oauth2client
+    setuptools
   ];
 
   meta = with stdenv.lib; {
     description = "Search your google contacts from the command-line or mutt";
-    homepage    = https://pypi.python.org/pypi/goobook;
-    license     = licenses.gpl3;
+    homepage = https://pypi.python.org/pypi/goobook;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ primeos ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

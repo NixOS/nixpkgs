@@ -1,5 +1,4 @@
 { pkgs, nodejs, stdenv }:
-
 let
   nodePackages = import ./composition-v10.nix {
     inherit pkgs nodejs;
@@ -41,7 +40,7 @@ nodePackages // {
   });
 
   ios-deploy = nodePackages.ios-deploy.override (drv: {
-    nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];
+    nativeBuildInputs = drv.nativeBuildInputs or [ ] ++ [ pkgs.buildPackages.rsync ];
     preRebuild = ''
       LD=$CC
       tmp=$(mktemp -d)
@@ -63,14 +62,14 @@ nodePackages // {
   };
 
   insect = nodePackages.insect.override (drv: {
-    nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package pkgs.purescript nodePackages.pulp ];
+    nativeBuildInputs = drv.nativeBuildInputs or [ ] ++ [ pkgs.psc-package pkgs.purescript nodePackages.pulp ];
   });
 
   node-inspector = nodePackages.node-inspector.override {
     buildInputs = [ nodePackages.node-pre-gyp ];
   };
 
-  node2nix =  nodePackages.node2nix.override {
+  node2nix = nodePackages.node2nix.override {
     buildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
@@ -84,16 +83,17 @@ nodePackages // {
       sed 's/"link:/"file:/g' --in-place package.json
     '';
 
-    postInstall = let
-      pnpmLibPath = stdenv.lib.makeBinPath [
-        nodejs.passthru.python
-        nodejs
-      ];
-    in ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
-      done
-    '';
+    postInstall =
+      let
+        pnpmLibPath = stdenv.lib.makeBinPath [
+          nodejs.passthru.python
+          nodejs
+        ];
+      in ''
+        for prog in $out/bin/*; do
+          wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
+        done
+      '';
   };
 
   ssb-server = nodePackages.ssb-server.override {

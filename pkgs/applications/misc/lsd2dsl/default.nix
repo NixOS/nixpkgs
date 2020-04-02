@@ -1,5 +1,15 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, cmake
-, boost, libvorbis, libsndfile, minizip, gtest, qtwebkit }:
+{ stdenv
+, mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, boost
+, libvorbis
+, libsndfile
+, minizip
+, gtest
+, qtwebkit
+}:
 
 mkDerivation rec {
   pname = "lsd2dsl";

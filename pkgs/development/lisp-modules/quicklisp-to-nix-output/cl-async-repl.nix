@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-async-repl";
 
-  asdFilesToKeep = ["cl-async-repl.asd"];
+  asdFilesToKeep = [ "cl-async-repl.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-async-repl DESCRIPTION REPL integration for CL-ASYNC. SHA256

@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.gpm;
-
 in
-
 {
 
   ###### interface
@@ -41,7 +37,8 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.gpm =
-      { description = "Console Mouse Daemon";
+      {
+        description = "Console Mouse Daemon";
 
         wantedBy = [ "multi-user.target" ];
         requires = [ "dev-input-mice.device" ];

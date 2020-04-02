@@ -1,16 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
-, gstreamer, gst-plugins-base, GConf, setfile
+{ stdenv
+, fetchurl
+, pkgconfig
+, gtk2
+, libXinerama
+, libSM
+, libXxf86vm
+, xorgproto
+, gstreamer
+, gst-plugins-base
+, GConf
+, setfile
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, libGLU ? null, libGL ? null
-, compat24 ? false, compat26 ? true, unicode ? true
-, Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
+, libGLU ? null
+, libGL ? null
+, compat24 ? false
+, compat26 ? true
+, unicode ? true
+, Carbon ? null
+, Cocoa ? null
+, Kernel ? null
+, QuickTime ? null
+, AGL ? null
 }:
 
 assert withMesa -> libGLU != null && libGL != null;
 
 with stdenv.lib;
-
 let
   version = "2.9.4";
 in
@@ -24,16 +40,24 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    (fetchurl { # https://trac.wxwidgets.org/ticket/17942
-      url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/"
-          + "fix_assertion_using_hide_in_destroy.diff";
+    (fetchurl {
+      # https://trac.wxwidgets.org/ticket/17942
+      url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/" + "fix_assertion_using_hide_in_destroy.diff";
       sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
     })
   ];
 
   buildInputs =
-    [ gtk2 libXinerama libSM libXxf86vm xorgproto gstreamer
-      gst-plugins-base GConf ]
+    [
+      gtk2
+      libXinerama
+      libSM
+      libXxf86vm
+      xorgproto
+      gstreamer
+      gst-plugins-base
+      GConf
+    ]
     ++ optional withMesa libGLU
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
 
@@ -42,9 +66,13 @@ stdenv.mkDerivation {
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
   configureFlags =
-    [ "--enable-gtk2" "--disable-precomp-headers" "--enable-mediactrl"
+    [
+      "--enable-gtk2"
+      "--disable-precomp-headers"
+      "--enable-mediactrl"
       (if compat24 then "--enable-compat24" else "--disable-compat24")
-      (if compat26 then "--enable-compat26" else "--disable-compat26") ]
+      (if compat26 then "--enable-compat26" else "--disable-compat26")
+    ]
     ++ optional unicode "--enable-unicode"
     ++ optional withMesa "--with-opengl"
     ++ optionals stdenv.isDarwin

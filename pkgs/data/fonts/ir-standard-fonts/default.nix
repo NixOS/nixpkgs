@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
-
 let
   pname = "ir-standard-fonts";
   version = "unstable-2017-01-21";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "morealaz";
   repo = pname;

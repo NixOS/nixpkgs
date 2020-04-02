@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "A network monitoring system";
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

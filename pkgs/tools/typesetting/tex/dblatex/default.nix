@@ -1,7 +1,17 @@
-{ stdenv, fetchurl, python2, libxslt, texlive
-, enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
+{ stdenv
+, fetchurl
+, python2
+, libxslt
+, texlive
+, enableAllFeatures ? false
+, imagemagick ? null
+, transfig ? null
+, inkscape ? null
+, fontconfig ? null
+, ghostscript ? null
 
-, tex ? texlive.combine { # satisfy all packages that ./configure mentions
+, tex ? texlive.combine {
+    # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar
       fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
       multirow overpic pdfpages graphics stmaryrd subfigure titlesec wasysym
@@ -13,12 +23,7 @@
 # NOTE: enableAllFeatures just purifies the expression, it doesn't actually
 # enable any extra features.
 
-assert enableAllFeatures ->
-  imagemagick != null &&
-  transfig != null &&
-  inkscape != null &&
-  fontconfig != null &&
-  ghostscript != null;
+assert enableAllFeatures -> imagemagick != null && transfig != null && inkscape != null && fontconfig != null && ghostscript != null;
 
 stdenv.mkDerivation rec {
   name = "dblatex-0.3.11";

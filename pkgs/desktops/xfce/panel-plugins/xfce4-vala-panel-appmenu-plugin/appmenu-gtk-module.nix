@@ -4,13 +4,13 @@ stdenv.mkDerivation rec {
   version = "0.6.94";
 
   src = "${fetchFromGitHub {
-    owner = "rilian-la-te";
-    repo = "vala-panel-appmenu";
-    rev = version;
-    fetchSubmodules = true;
+      owner = "rilian-la-te";
+      repo = "vala-panel-appmenu";
+      rev = version;
+      fetchSubmodules = true;
 
-    sha256 = "0xxn3zs60a9nfix8wrdp056wviq281cm1031hznzf1l38lp3wr5p";
-  }}/subprojects/appmenu-gtk-module";
+      sha256 = "0xxn3zs60a9nfix8wrdp056wviq281cm1031hznzf1l38lp3wr5p";
+    }}/subprojects/appmenu-gtk-module";
 
   nativeBuildInputs = [ cmake vala ];
   buildInputs = [ glib gtk2 gtk3 ];

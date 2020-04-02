@@ -13,7 +13,6 @@
 , tensorflow-probability
 , tensorflow-estimator
 }:
-
 let
   version = "1.33";
 
@@ -59,8 +58,9 @@ let
     };
   };
 
-# now use pip to install the package prepared by bazel
-in buildPythonPackage {
+  # now use pip to install the package prepared by bazel
+in
+buildPythonPackage {
   pname = "dm-sonnet";
   inherit version;
 

@@ -1,13 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus, avahi
-, makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
+{ stdenv
+, fetchurl
+, pkgconfig
+, cups
+, poppler
+, poppler_utils
+, fontconfig
+, libjpeg
+, libpng
+, perl
+, ijs
+, qpdf
+, dbus
+, avahi
+, makeWrapper
+, coreutils
+, gnused
+, bc
+, gawk
+, gnugrep
+, which
+, ghostscript
 , mupdf
 }:
-
 let
   binPath = stdenv.lib.makeBinPath [ coreutils gnused bc gawk gnugrep which ];
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cups-filters";
   version = "1.25.12";
 
@@ -19,8 +37,19 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   buildInputs = [
-    cups poppler poppler_utils fontconfig libjpeg libpng perl
-    ijs qpdf dbus avahi ghostscript mupdf
+    cups
+    poppler
+    poppler_utils
+    fontconfig
+    libjpeg
+    libpng
+    perl
+    ijs
+    qpdf
+    dbus
+    avahi
+    ghostscript
+    mupdf
   ];
 
   configureFlags = [

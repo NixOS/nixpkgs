@@ -1,5 +1,4 @@
 { pkgs, makeScope, libsForQt5 }:
-
 let
   packages = self: with self; {
     setupHook = ./setup-hook.sh;
@@ -54,6 +53,5 @@ let
     udisks2-qt5 = callPackage ./udisks2-qt5 { };
 
   };
-
 in
-  makeScope libsForQt5.newScope packages
+makeScope libsForQt5.newScope packages

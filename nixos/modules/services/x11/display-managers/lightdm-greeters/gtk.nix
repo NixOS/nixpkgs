@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
   xcfg = config.services.xserver;
@@ -17,18 +15,17 @@ let
 
   gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
     ''
-    [greeter]
-    theme-name = ${cfg.theme.name}
-    icon-theme-name = ${cfg.iconTheme.name}
-    cursor-theme-name = ${cfg.cursorTheme.name}
-    cursor-theme-size = ${toString cfg.cursorTheme.size}
-    background = ${ldmcfg.background}
-    ${optionalString (cfg.clock-format != null) "clock-format = ${cfg.clock-format}"}
-    ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
-    ${optionalString (xcfg.dpi != null) "xft-dpi=${toString xcfg.dpi}"}
-    ${cfg.extraConfig}
+      [greeter]
+      theme-name = ${cfg.theme.name}
+      icon-theme-name = ${cfg.iconTheme.name}
+      cursor-theme-name = ${cfg.cursorTheme.name}
+      cursor-theme-size = ${toString cfg.cursorTheme.size}
+      background = ${ldmcfg.background}
+      ${optionalString (cfg.clock-format != null) "clock-format = ${cfg.clock-format}"}
+      ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
+      ${optionalString (xcfg.dpi != null) "xft-dpi=${toString xcfg.dpi}"}
+      ${cfg.extraConfig}
     '';
-
 in
 {
   options = {

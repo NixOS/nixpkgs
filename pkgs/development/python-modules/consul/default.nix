@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, requests, six, pytest }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, requests
+, six
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "python-consul";

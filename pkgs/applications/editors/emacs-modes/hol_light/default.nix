@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A HOL Light mode for Emacs";
-    homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
-    license     = stdenv.lib.licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.all;
+    homepage = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
 
     # Fails trying to fetch dependencies in build

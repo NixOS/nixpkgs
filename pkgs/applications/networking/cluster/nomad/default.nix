@@ -21,15 +21,16 @@ buildGoPackage rec {
   # nonvidia:
   #  We disable Nvidia GPU scheduling on Linux, as it doesn't work there:
   #  Ref: https://github.com/hashicorp/nomad/issues/5535
-  preBuild = let
-    tags = ["ui"]
-      ++ stdenv.lib.optional stdenv.isLinux "nonvidia";
-    tagsString = stdenv.lib.concatStringsSep " " tags;
-  in ''
-    export buildFlagsArray=(
-      -tags="${tagsString}"
-    )
- '';
+  preBuild =
+    let
+      tags = [ "ui" ]
+        ++ stdenv.lib.optional stdenv.isLinux "nonvidia";
+      tagsString = stdenv.lib.concatStringsSep " " tags;
+    in ''
+      export buildFlagsArray=(
+        -tags="${tagsString}"
+      )
+    '';
 
   meta = with stdenv.lib; {
     homepage = https://www.nomadproject.io/;

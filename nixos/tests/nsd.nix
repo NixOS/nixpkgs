@@ -5,7 +5,8 @@ let
     # for a host utility with IPv6 support
     environment.systemPackages = [ pkgs.bind ];
   };
-in import ./make-test-python.nix ({ pkgs, ...} : {
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "nsd";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig ];
@@ -42,7 +43,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
       ];
       services.nsd.enable = true;
       services.nsd.rootServer = true;
-      services.nsd.interfaces = lib.mkForce [];
+      services.nsd.interfaces = lib.mkForce [ ];
       services.nsd.zones."example.com.".data = ''
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
         ipv4 A 1.2.3.4

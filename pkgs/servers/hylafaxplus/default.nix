@@ -4,7 +4,7 @@
 , fetchurl
 , libfaketime
 , substituteAll
-## runtime dependencies
+  ## runtime dependencies
 , coreutils
 , file
 , findutils
@@ -17,18 +17,16 @@
 , sharutils
 , utillinux
 , zlib
-## optional packages (using `null` disables some functionality)
+  ## optional packages (using `null` disables some functionality)
 , jbigkit ? null
 , lcms2 ? null  # for colored faxes
 , openldap ? null
 , pam ? null
-## system-dependent settings that have to be hardcoded
+  ## system-dependent settings that have to be hardcoded
 , maxgid ? 65534  # null -> try to auto-detect (bad on linux)
 , maxuid ? 65534  # null -> hardcoded value 60002
 }:
-
 let
-
   name = "hylafaxplus-${version}";
   version = "7.0.2";
   sha256 = "17vym1gz5ppy3q6zbw2y4nkq1dspn31k12zcmva44fnw9diwvsfb";
@@ -36,9 +34,9 @@ let
   configSite = substituteAll {
     name = "hylafaxplus-config.site";
     src = ./config.site;
-    config_maxgid = lib.optionalString (maxgid!=null) ''CONFIG_MAXGID=${builtins.toString maxgid}'';
+    config_maxgid = lib.optionalString (maxgid != null) ''CONFIG_MAXGID=${builtins.toString maxgid}'';
     ghostscript_version = ghostscript.version;
-    out_ = "@out@";  # "out" will be resolved in post-install.sh
+    out_ = "@out@"; # "out" will be resolved in post-install.sh
     inherit coreutils ghostscript libtiff;
   };
 
@@ -46,11 +44,11 @@ let
     name = "hylafaxplus-post-patch.sh";
     src = ./post-patch.sh;
     inherit configSite;
-    maxuid = lib.optionalString (maxuid!=null) (builtins.toString maxuid);
+    maxuid = lib.optionalString (maxuid != null) (builtins.toString maxuid);
     faxcover_binpath = lib.makeBinPath
-      [stdenv.shellPackage coreutils];
+      [ stdenv.shellPackage coreutils ];
     faxsetup_binpath = lib.makeBinPath
-      [stdenv.shellPackage coreutils findutils gnused gnugrep gawk];
+      [ stdenv.shellPackage coreutils findutils gnused gnugrep gawk ];
   };
 
   postInstall = substituteAll {
@@ -58,9 +56,7 @@ let
     src = ./post-install.sh;
     inherit fakeroot libfaketime;
   };
-
 in
-
 stdenv.mkDerivation {
   inherit name version;
   src = fetchurl {
@@ -71,17 +67,17 @@ stdenv.mkDerivation {
   # for a couple of standard binaries in the `PATH` and
   # hardcode their absolute paths in the new package.
   buildInputs = [
-    file  # for `file` command
+    file # for `file` command
     ghostscript
     libtiff
-    psmisc  # for `fuser` command
-    sharutils  # for `uuencode` command
-    utillinux  # for `agetty` command
+    psmisc # for `fuser` command
+    sharutils # for `uuencode` command
+    utillinux # for `agetty` command
     zlib
-    jbigkit  # optional
-    lcms2  # optional
-    openldap  # optional
-    pam  # optional
+    jbigkit # optional
+    lcms2 # optional
+    openldap # optional
+    pam # optional
   ];
   postPatch = ''. ${postPatch}'';
   dontAddPrefix = true;

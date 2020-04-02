@@ -1,4 +1,4 @@
-{stdenv, fetchgit, mercurial, makeWrapper}:
+{ stdenv, fetchgit, mercurial, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "fast-export";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "14azfps9jd5anivcvfwflgsvqdyy6gm9jy284kzx2ng9f7871d14";
   };
 
-  buildInputs = [mercurial.python mercurial makeWrapper];
+  buildInputs = [ mercurial.python mercurial makeWrapper ];
 
   installPhase = ''
     binPath=$out/bin

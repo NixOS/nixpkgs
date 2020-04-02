@@ -1,14 +1,19 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, openssl, openwsman }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, openssl
+, openwsman
+}:
 
 stdenv.mkDerivation rec {
   pname = "wsmancli";
   version = "2.6.0";
 
   src = fetchFromGitHub {
-    owner  = "Openwsman";
-    repo   = "wsmancli";
-    rev    = "v${version}";
+    owner = "Openwsman";
+    repo = "wsmancli";
+    rev = "v${version}";
     sha256 = "0a67fz9lj7xkyfqim6ai9kj7v6hzx94r1bg0g0l5dymgng648b9j";
   };
 

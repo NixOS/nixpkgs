@@ -1,5 +1,11 @@
-{ stdenv, fetchPypi, buildPythonPackage,
-  mock, django, redis, msgpack }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, mock
+, django
+, redis
+, msgpack
+}:
 buildPythonPackage rec {
   pname = "django-redis";
   version = "4.11.0";

@@ -1,7 +1,6 @@
 { config, lib, pkgs, options }:
 
 with lib;
-
 let
   cfg = config.services.prometheus.exporters.mail;
 
@@ -99,7 +98,7 @@ let
     };
     servers = mkOption {
       type = types.listOf (types.submodule serverOptions);
-      default = [];
+      default = [ ];
       example = literalExample ''
         [ {
           name = "testserver";
@@ -149,8 +148,8 @@ in
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --config.file ${
-            if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile)
-          } \
+          if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile)
+        } \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

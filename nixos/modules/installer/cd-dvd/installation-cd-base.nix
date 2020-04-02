@@ -7,7 +7,8 @@ with lib;
 
 {
   imports =
-    [ ./iso-image.nix
+    [
+      ./iso-image.nix
 
       # Profiles of this basic installation CD.
       ../../profiles/all-hardware.nix

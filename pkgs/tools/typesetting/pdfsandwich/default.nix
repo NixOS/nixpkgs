@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1420c33divch087xrr61lvyf975bapqkgjqaighl581i69nlzsm6";
   };
 
-  buildInputs = [ ocaml perl makeWrapper];
+  buildInputs = [ ocaml perl makeWrapper ];
   installPhase = ''
     mkdir -p $out/bin
     cp -p pdfsandwich $out/bin
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     cp -p pdfsandwich.1.gz $out/man/man1
   '';
 
-meta = with stdenv.lib; {
+  meta = with stdenv.lib; {
     description = "OCR tool for scanned PDFs";
     homepage = http://www.tobias-elze.de/pdfsandwich/;
     license = licenses.gpl2;

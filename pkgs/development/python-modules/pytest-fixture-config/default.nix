@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, setuptools-git, pytest }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools-git
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "pytest-fixture-config";

@@ -11,8 +11,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A formatter for Python code.";
-    homepage    = "https://github.com/google/yapf";
-    license     = licenses.asl20;
+    homepage = "https://github.com/google/yapf";
+    license = licenses.asl20;
     maintainers = with maintainers; [ siddharthist ];
   };
 

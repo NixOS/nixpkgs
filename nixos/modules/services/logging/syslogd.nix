@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.syslogd;
 
   syslogConf = pkgs.writeText "syslog.conf" ''
@@ -26,9 +24,7 @@ let
 
     *.*;mail.none;local1.none    -/var/log/messages
   '';
-
 in
-
 {
   ###### interface
 
@@ -101,7 +97,9 @@ in
   config = mkIf cfg.enable {
 
     assertions =
-      [ { assertion = !config.services.rsyslogd.enable;
+      [
+        {
+          assertion = !config.services.rsyslogd.enable;
           message = "rsyslogd conflicts with syslogd";
         }
       ];
@@ -112,14 +110,16 @@ in
 
     # FIXME: restarting syslog seems to break journal logging.
     systemd.services.syslog =
-      { description = "Syslog Daemon";
+      {
+        description = "Syslog Daemon";
 
         requires = [ "syslog.socket" ];
 
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig =
-          { ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+          {
+            ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
             # Prevent syslogd output looping back through journald.
             StandardOutput = "null";
           };

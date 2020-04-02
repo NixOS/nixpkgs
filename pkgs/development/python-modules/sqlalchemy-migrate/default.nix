@@ -1,7 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
-, unittest2, scripttest, pytz, mock
-, testtools, pbr, tempita, decorator, sqlalchemy
-, six, sqlparse, testrepository
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, python
+, unittest2
+, scripttest
+, pytz
+, mock
+, testtools
+, pbr
+, tempita
+, decorator
+, sqlalchemy
+, six
+, sqlparse
+, testrepository
 }:
 buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
@@ -13,10 +26,12 @@ buildPythonPackage rec {
   };
 
   # See: https://review.openstack.org/#/c/608382/
-  patches = [ (fetchpatch {
-    url = https://github.com/openstack/sqlalchemy-migrate/pull/18.patch;
-    sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = https://github.com/openstack/sqlalchemy-migrate/pull/18.patch;
+      sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
+    })
+  ];
 
   checkInputs = [ unittest2 scripttest pytz mock testtools testrepository ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];

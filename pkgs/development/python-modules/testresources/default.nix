@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, pbr, fixtures, testtools }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, pbr
+, fixtures
+, testtools
+}:
 
 buildPythonPackage rec {
   pname = "testresources";

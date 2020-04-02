@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
-     url = "https://git.kernel.org/pub/scm/libs/${pname}/${pname}.git";
-     rev = version;
-     sha256 = "1am3ghji271364vmf2w5sxskvlhh4r2mwakza7vjjph16cvsv6a7";
+    url = "https://git.kernel.org/pub/scm/libs/${pname}/${pname}.git";
+    rev = version;
+    sha256 = "1am3ghji271364vmf2w5sxskvlhh4r2mwakza7vjjph16cvsv6a7";
   };
 
   patches = [

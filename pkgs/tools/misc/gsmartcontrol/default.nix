@@ -1,7 +1,7 @@
 { fetchurl, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkgconfig, wrapGAppsHook, pcre-cpp, gnome3 }:
 
 stdenv.mkDerivation rec {
-  version="1.1.3";
+  version = "1.1.3";
   pname = "gsmartcontrol";
 
   src = fetchurl {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://gsmartcontrol.sourceforge.io/;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [qknight];
+    maintainers = with stdenv.lib.maintainers; [ qknight ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

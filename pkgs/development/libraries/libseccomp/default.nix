@@ -25,13 +25,15 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High level library for the Linux Kernel seccomp filter";
-    homepage    = "https://github.com/seccomp/libseccomp";
-    license     = licenses.lgpl21;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/seccomp/libseccomp";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
     badPlatforms = [
       "alpha-linux"
-      "riscv64-linux" "riscv32-linux"
-      "sparc-linux" "sparc64-linux"
+      "riscv64-linux"
+      "riscv32-linux"
+      "sparc-linux"
+      "sparc64-linux"
     ];
     maintainers = with maintainers; [ thoughtpolice ];
   };

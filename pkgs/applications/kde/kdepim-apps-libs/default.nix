@@ -1,8 +1,23 @@
-{
-  mkDerivation, copyPathsToStore, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  akonadi, akonadi-contacts, grantlee, grantleetheme, kconfig, kconfigwidgets,
-  kcontacts, ki18n, kiconthemes, kio, libkleo, pimcommon, prison,
+{ mkDerivation
+, copyPathsToStore
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, akonadi
+, akonadi-contacts
+, grantlee
+, grantleetheme
+, kconfig
+, kconfigwidgets
+, kcontacts
+, ki18n
+, kiconthemes
+, kio
+, libkleo
+, pimcommon
+, prison
+,
 }:
 
 mkDerivation {
@@ -14,8 +29,19 @@ mkDerivation {
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    akonadi akonadi-contacts grantlee grantleetheme kconfig kconfigwidgets
-    kcontacts ki18n kiconthemes kio libkleo pimcommon prison
+    akonadi
+    akonadi-contacts
+    grantlee
+    grantleetheme
+    kconfig
+    kconfigwidgets
+    kcontacts
+    ki18n
+    kiconthemes
+    kio
+    libkleo
+    pimcommon
+    prison
   ];
   outputs = [ "out" "dev" ];
 }

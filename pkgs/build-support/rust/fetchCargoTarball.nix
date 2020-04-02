@@ -1,26 +1,27 @@
 { stdenv, cacert, git, cargo, python3 }:
-let cargo-vendor-normalise = stdenv.mkDerivation {
-  name = "cargo-vendor-normalise";
-  src = ./cargo-vendor-normalise.py;
-  nativeBuildInputs = [ python3.pkgs.wrapPython ];
-  dontUnpack = true;
-  installPhase = "install -D $src $out/bin/cargo-vendor-normalise";
-  pythonPath = [ python3.pkgs.toml ];
-  postFixup = "wrapPythonPrograms";
-  doInstallCheck = true;
-  installCheckPhase = ''
-    # check that ./fetchcargo-default-config.toml is a fix point
-    reference=${./fetchcargo-default-config.toml}
-    < $reference $out/bin/cargo-vendor-normalise > test;
-    cmp test $reference
-  '';
-  preferLocalBuild = true;
-};
+let
+  cargo-vendor-normalise = stdenv.mkDerivation {
+    name = "cargo-vendor-normalise";
+    src = ./cargo-vendor-normalise.py;
+    nativeBuildInputs = [ python3.pkgs.wrapPython ];
+    dontUnpack = true;
+    installPhase = "install -D $src $out/bin/cargo-vendor-normalise";
+    pythonPath = [ python3.pkgs.toml ];
+    postFixup = "wrapPythonPrograms";
+    doInstallCheck = true;
+    installCheckPhase = ''
+      # check that ./fetchcargo-default-config.toml is a fix point
+      reference=${./fetchcargo-default-config.toml}
+      < $reference $out/bin/cargo-vendor-normalise > test;
+      cmp test $reference
+    '';
+    preferLocalBuild = true;
+  };
 in
 { name ? "cargo-deps"
 , src ? null
-, srcs ? []
-, patches ? []
+, srcs ? [ ]
+, patches ? [ ]
 , sourceRoot
 , sha256
 , cargoUpdateHook ? ""
@@ -77,5 +78,7 @@ stdenv.mkDerivation ({
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
 } // (builtins.removeAttrs args [
-  "name" "sha256" "cargoUpdateHook"
+  "name"
+  "sha256"
+  "cargoUpdateHook"
 ]))

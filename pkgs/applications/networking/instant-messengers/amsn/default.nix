@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, tcl, tk, xlibsWrapper, libpng, libjpeg, makeWrapper}:
+{ stdenv, fetchurl, which, tcl, tk, xlibsWrapper, libpng, libjpeg, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "amsn-0.98.9";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     "--enable-static"
   ];
 
-  buildInputs = [which tcl tk xlibsWrapper libpng libjpeg makeWrapper];
+  buildInputs = [ which tcl tk xlibsWrapper libpng libjpeg makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/amsn --prefix PATH : ${tk}/bin

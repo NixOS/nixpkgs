@@ -1,7 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 # SHA of ${version} for the tool's help output
-let rev = "c9c2a461cd3397909fe6e45ff71836347ef89fd8";
+let
+  rev = "c9c2a461cd3397909fe6e45ff71836347ef89fd8";
 in
 buildGoPackage rec {
   pname = "sonobuoy";
@@ -10,7 +11,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/heptio/sonobuoy";
 
   buildFlagsArray =
-    let t = goPackagePath;
+    let
+      t = goPackagePath;
     in ''
       -ldflags=
         -s -X ${t}/pkg/buildinfo.Version=${version}

@@ -1,8 +1,8 @@
-{ stdenv, ghcWithPackages, makeWrapper, packages ? (x: []) }:
-
+{ stdenv, ghcWithPackages, makeWrapper, packages ? (x: [ ]) }:
 let
-taffybarEnv = ghcWithPackages (self: [ self.taffybar ] ++ packages self);
-in stdenv.mkDerivation {
+  taffybarEnv = ghcWithPackages (self: [ self.taffybar ] ++ packages self);
+in
+stdenv.mkDerivation {
   name = "taffybar-with-packages-${taffybarEnv.version}";
 
   nativeBuildInputs = [ makeWrapper ];

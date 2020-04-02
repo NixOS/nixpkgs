@@ -1,6 +1,5 @@
 { stdenv, lib, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages }:
 let
-
   media = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
@@ -16,8 +15,8 @@ let
     rev = "a0d62eba4d429e0e9d2c2f910fb203e817cac84b";
     sha256 = "1329s7w9xlqjqwkpaqsd6b5dmzhm97jw0c7c7zzmmbdkl289i4i4";
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "tbs-2018.04.18-${kernel.version}";
 
   srcs = [ media build ];
@@ -46,9 +45,9 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "all" ];
 
   nativeBuildInputs = [ patchutils kmod perl perlPackages.ProcProcessTable ]
-  ++ kernel.moduleBuildDependencies;
+    ++ kernel.moduleBuildDependencies;
 
-   postInstall = ''
+  postInstall = ''
     find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
   '';
 

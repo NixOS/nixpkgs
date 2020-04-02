@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, linuxHeaders
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, linuxHeaders
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +9,9 @@ stdenv.mkDerivation rec {
   version = "0.1.0pre54_${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
-    owner  = "compudj";
-    repo   = "librseq";
-    rev    = "152600188dd214a0b2c6a8c66380e50c6ad27154";
+    owner = "compudj";
+    repo = "librseq";
+    rev = "152600188dd214a0b2c6a8c66380e50c6ad27154";
     sha256 = "0mivjmgdkgrr6z2gz3k6q6wgnvyvw9xzy65f6ipvqva68sxhk0mx";
   };
 
@@ -29,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Userspace library for the Linux Restartable Sequence API";
-    homepage    = "https://github.com/compudj/librseq";
-    license     = licenses.lgpl21;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/compudj/librseq";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -23,8 +23,7 @@ stdenv.mkDerivation {
   '';
 
   meta = gnupg.meta // {
-    description = gnupg.meta.description +
-      " with symbolic links for gpg and gpgv";
+    description = gnupg.meta.description + " with symbolic links for gpg and gpgv";
     priority = -1;
   };
 }

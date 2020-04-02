@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   version = "0.8.12";
-  pname    = "eyeD3";
+  pname = "eyeD3";
   disabled = isPyPy;
 
   src = fetchPypi {
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python module and command line program for processing ID3 tags";
-    homepage    = https://eyed3.nicfit.net/;
-    license     = licenses.gpl2;
+    homepage = https://eyed3.nicfit.net/;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     longDescription = ''
       eyeD3 is a Python module and command line program for processing ID3
       tags. Information about mp3 files (i.e bit rate, sample frequency, play

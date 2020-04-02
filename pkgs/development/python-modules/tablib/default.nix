@@ -1,4 +1,7 @@
-{ buildPythonPackage, lib, fetchPypi, isPy27
+{ buildPythonPackage
+, lib
+, fetchPypi
+, isPy27
 , odfpy
 , openpyxl
 , pandas

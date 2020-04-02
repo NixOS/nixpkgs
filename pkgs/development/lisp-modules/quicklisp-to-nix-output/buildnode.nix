@@ -16,7 +16,7 @@ rec {
 
   packageName = "buildnode";
 
-  asdFilesToKeep = ["buildnode.asd"];
+  asdFilesToKeep = [ "buildnode.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM buildnode DESCRIPTION Tool for building up an xml dom nicely. SHA256

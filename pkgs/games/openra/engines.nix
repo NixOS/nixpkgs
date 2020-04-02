@@ -1,5 +1,4 @@
 { buildOpenRAEngine, fetchFromGitHub, extraPostFetch }:
-
 let
   buildUpstreamOpenRAEngine = { version, rev, sha256 }: name: (buildOpenRAEngine {
     inherit version;
@@ -8,7 +7,7 @@ let
     mods = [ "cnc" "d2k" "ra" "ts" ];
     src = fetchFromGitHub {
       owner = "OpenRA";
-      repo = "OpenRA" ;
+      repo = "OpenRA";
       inherit rev sha256 extraPostFetch;
     };
   } name).overrideAttrs (origAttrs: {
@@ -19,8 +18,8 @@ let
       ( cd $out/share/applications; sed -e 's/Dawn/Sun/g' -e 's/cnc/ts/g' openra-cnc.desktop > openra-ts.desktop )
     '';
   });
-
-in {
+in
+{
   release = name: (buildUpstreamOpenRAEngine rec {
     version = "20190314";
     rev = "${name}-${version}";

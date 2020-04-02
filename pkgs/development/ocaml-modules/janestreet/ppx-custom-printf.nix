@@ -1,5 +1,10 @@
-{stdenv, buildOcamlJane,
- ppx_core, ppx_driver, ppx_sexp_conv, ppx_tools}:
+{ stdenv
+, buildOcamlJane
+, ppx_core
+, ppx_driver
+, ppx_sexp_conv
+, ppx_tools
+}:
 
 buildOcamlJane {
   name = "ppx_custom_printf";

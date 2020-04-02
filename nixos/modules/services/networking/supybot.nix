@@ -1,9 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-  cfg  = config.services.supybot;
+  cfg = config.services.supybot;
   isStateDirHome = hasPrefix "/home/" cfg.stateDir;
   isStateDirVar = cfg.stateDir == "/var/lib/supybot";
   pyEnv = pkgs.python3.withPackages (p: [ p.limnoria ] ++ (cfg.extraPackages p));
@@ -21,7 +20,8 @@ in
 
       stateDir = mkOption {
         type = types.path;
-        default = if versionAtLeast config.system.stateVersion "20.09"
+        default =
+          if versionAtLeast config.system.stateVersion "20.09"
           then "/var/lib/supybot"
           else "/home/supybot";
         defaultText = "/var/lib/supybot";
@@ -41,7 +41,7 @@ in
 
       plugins = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = ''
           Attribute set of additional plugins that will be symlinked to the
           <filename>plugin</filename> subdirectory.
@@ -64,7 +64,7 @@ in
       };
 
       extraPackages = mkOption {
-        default = p: [];
+        default = p: [ ];
         description = ''
           Extra Python packages available to supybot plugins. The
           value must be a function which receives the attrset defined

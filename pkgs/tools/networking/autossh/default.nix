@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssh}:
+{ stdenv, fetchurl, openssh }:
 
 stdenv.mkDerivation rec {
   name = "autossh-1.4g";

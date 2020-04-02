@@ -1,15 +1,44 @@
-{ stdenv, lib, fetchurl, pkgconfig, lndir, bash, cpio, file, which, unzip, zip
-, cups, freetype, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
-, libjpeg, giflib
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, lndir
+, bash
+, cpio
+, file
+, which
+, unzip
+, zip
+, cups
+, freetype
+, alsaLib
+, cacert
+, perl
+, liberation_ttf
+, fontconfig
+, zlib
+, libX11
+, libICE
+, libXrender
+, libXext
+, libXt
+, libXtst
+, libXi
+, libXinerama
+, libXcursor
+, libXrandr
+, libjpeg
+, giflib
 , openjdk8-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
+, enableGnome2 ? true
+, gtk2
+, gnome_vfs
+, glib
+, GConf
 }:
-
 let
-
   /**
    * The JRE libraries are in directories that depend on the CPU.
    */
@@ -21,59 +50,67 @@ let
 
   update = "242";
   build = "b08";
-  baseurl = if stdenv.isAarch64 then "https://hg.openjdk.java.net/aarch64-port/jdk8u-shenandoah"
-            else "https://hg.openjdk.java.net/jdk8u/jdk8u";
-  repover = lib.optionalString stdenv.isAarch64 "aarch64-shenandoah-"
-            + "jdk8u${update}-${build}";
+  baseurl =
+    if stdenv.isAarch64 then "https://hg.openjdk.java.net/aarch64-port/jdk8u-shenandoah"
+    else "https://hg.openjdk.java.net/jdk8u/jdk8u";
+  repover = lib.optionalString stdenv.isAarch64 "aarch64-shenandoah-" + "jdk8u${update}-${build}";
 
   jdk8 = fetchurl {
-             name = "jdk8-${repover}.tar.gz";
-             url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0qpmr267qcxhmw398zbl1axd161yxn4k4hfz1jlxlmdvg70p7h90"
-                      else "1crs4hmzmgm6fkwfq0d3xz9lph0nd33fngrqv2rz1mkkqcrjx18z";
-          };
+    name = "jdk8-${repover}.tar.gz";
+    url = "${baseurl}/archive/${repover}.tar.gz";
+    sha256 =
+      if stdenv.isAarch64 then "0qpmr267qcxhmw398zbl1axd161yxn4k4hfz1jlxlmdvg70p7h90"
+      else "1crs4hmzmgm6fkwfq0d3xz9lph0nd33fngrqv2rz1mkkqcrjx18z";
+  };
   langtools = fetchurl {
-             name = "langtools-${repover}.tar.gz";
-             url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "1rhhi4kgmxvnyl3ic5p008p1n7zyji5nw99blm1lr5fw7ry7df24"
-                      else "1aaxd1rl7dlk4kxdivvqvripsbn0d5vny0jvjksycsm97vrfiry4";
-          };
+    name = "langtools-${repover}.tar.gz";
+    url = "${baseurl}/langtools/archive/${repover}.tar.gz";
+    sha256 =
+      if stdenv.isAarch64 then "1rhhi4kgmxvnyl3ic5p008p1n7zyji5nw99blm1lr5fw7ry7df24"
+      else "1aaxd1rl7dlk4kxdivvqvripsbn0d5vny0jvjksycsm97vrfiry4";
+  };
   hotspot = fetchurl {
-             name = "hotspot-${repover}.tar.gz";
-             url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0lphrhjqlavd6qlkh7h4sd2bqf5gd0cchkcnvy87703fbd7gy5ii"
-                      else "18i4if16zikgda9k5bgqyx0p2104db23zlnclq512178z0p9yycb";
-          };
+    name = "hotspot-${repover}.tar.gz";
+    url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
+    sha256 =
+      if stdenv.isAarch64 then "0lphrhjqlavd6qlkh7h4sd2bqf5gd0cchkcnvy87703fbd7gy5ii"
+      else "18i4if16zikgda9k5bgqyx0p2104db23zlnclq512178z0p9yycb";
+  };
   corba = fetchurl {
-             name = "corba-${repover}.tar.gz";
-             url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "18h0v566v420d00na6x4jrs41v4aa39byk15fi8k6dcn0dmirhvg"
-                      else "1298k8p2dsj7xc4h2ayk5nl4ssrcgncn06ysyqrmnwrb8gj8s1w4";
-          };
+    name = "corba-${repover}.tar.gz";
+    url = "${baseurl}/corba/archive/${repover}.tar.gz";
+    sha256 =
+      if stdenv.isAarch64 then "18h0v566v420d00na6x4jrs41v4aa39byk15fi8k6dcn0dmirhvg"
+      else "1298k8p2dsj7xc4h2ayk5nl4ssrcgncn06ysyqrmnwrb8gj8s1w4";
+  };
   jdk = fetchurl {
-             name = "jdk-${repover}.tar.gz";
-             url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0xxy7rkj8ah263nnzkd4mg9dai5qix3l9cyilm47dig5hv7g8aq0"
-                      else "0vqlbks3cy3cnmnrnhbjkqinvp8bcy2h96xvx81cvlza4s2hszvz";
-          };
+    name = "jdk-${repover}.tar.gz";
+    url = "${baseurl}/jdk/archive/${repover}.tar.gz";
+    sha256 =
+      if stdenv.isAarch64 then "0xxy7rkj8ah263nnzkd4mg9dai5qix3l9cyilm47dig5hv7g8aq0"
+      else "0vqlbks3cy3cnmnrnhbjkqinvp8bcy2h96xvx81cvlza4s2hszvz";
+  };
   jaxws = fetchurl {
-             name = "jaxws-${repover}.tar.gz";
-             url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0ajqm2l9g5w5ag5s4vl4ldpbm99pqa6d342hrzvv7psqn3zf6ar5"
-                      else "1wg9fbiz09arj0llavnzrmbhw8nx0dw8dcjkrzxw78rj1cadflzc";
-          };
+    name = "jaxws-${repover}.tar.gz";
+    url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
+    sha256 =
+      if stdenv.isAarch64 then "0ajqm2l9g5w5ag5s4vl4ldpbm99pqa6d342hrzvv7psqn3zf6ar5"
+      else "1wg9fbiz09arj0llavnzrmbhw8nx0dw8dcjkrzxw78rj1cadflzc";
+  };
   jaxp = fetchurl {
-             name = "jaxp-${repover}.tar.gz";
-             url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "03zjh6xvza05abxz9d9j2w9xndw9n07f8lrn6dymj7f4imals831"
-                      else "1i5xrk8r8pcgnc68zrgp3hd1a1nzcm99swpmdnlb424qlg5nnrcf";
-          };
+    name = "jaxp-${repover}.tar.gz";
+    url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
+    sha256 =
+      if stdenv.isAarch64 then "03zjh6xvza05abxz9d9j2w9xndw9n07f8lrn6dymj7f4imals831"
+      else "1i5xrk8r8pcgnc68zrgp3hd1a1nzcm99swpmdnlb424qlg5nnrcf";
+  };
   nashorn = fetchurl {
-             name = "nashorn-${repover}.tar.gz";
-             url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0n809w264ndxksva9c81x0m1fsyg8c627w571f72xxxl9c1bnrmp"
-                      else "0qlxaz7sriy709vcyzz48s2v4p5h4d31my33whip018c4j5gkfqq";
-          };
+    name = "nashorn-${repover}.tar.gz";
+    url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
+    sha256 =
+      if stdenv.isAarch64 then "0n809w264ndxksva9c81x0m1fsyg8c627w571f72xxxl9c1bnrmp"
+      else "0qlxaz7sriy709vcyzz48s2v4p5h4d31my33whip018c4j5gkfqq";
+  };
   openjdk8 = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
     version = "8u${update}-${build}";
@@ -85,11 +122,36 @@ let
 
     nativeBuildInputs = [ pkgconfig lndir ];
     buildInputs = [
-      cpio file which unzip zip perl openjdk8-bootstrap zlib cups freetype alsaLib
-      libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig
+      cpio
+      file
+      which
+      unzip
+      zip
+      perl
+      openjdk8-bootstrap
+      zlib
+      cups
+      freetype
+      alsaLib
+      libjpeg
+      giflib
+      libX11
+      libICE
+      libXext
+      libXrender
+      libXtst
+      libXt
+      libXtst
+      libXi
+      libXinerama
+      libXcursor
+      libXrandr
+      fontconfig
     ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk2 gnome_vfs GConf glib
+      gtk2
+      gnome_vfs
+      GConf
+      glib
     ];
 
     # move the seven other source dirs under the main jdk8u directory,
@@ -148,10 +210,17 @@ let
       "-Wno-error"
     ]);
 
-    NIX_LDFLAGS= toString (lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
+    NIX_LDFLAGS = toString (lib.optionals (!headless) [
+      "-lfontconfig"
+      "-lcups"
+      "-lXinerama"
+      "-lXrandr"
+      "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lgtk-x11-2.0"
+      "-lgio-2.0"
+      "-lgnomevfs-2"
+      "-lgconf-2"
     ]);
 
     buildFlags = [ "all" ];
@@ -177,10 +246,10 @@ let
       # Remove crap from the installation.
       rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
       ${lib.optionalString headless ''
-        rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
-        rm $out/lib/openjdk/jre/bin/policytool
-        rm $out/lib/openjdk/bin/{policytool,appletviewer}
-      ''}
+      rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
+      rm $out/lib/openjdk/jre/bin/policytool
+      rm $out/lib/openjdk/bin/{policytool,appletviewer}
+    ''}
 
       # Move the JRE to a separate output
       mkdir -p $jre/lib/openjdk
@@ -195,9 +264,9 @@ let
 
       # Setup fallback fonts
       ${lib.optionalString (!headless) ''
-        mkdir -p $jre/lib/openjdk/jre/lib/fonts
-        ln -s ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
-      ''}
+      mkdir -p $jre/lib/openjdk/jre/lib/fonts
+      ln -s ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
+    ''}
 
       # Remove duplicate binaries.
       for i in $(cd $out/lib/openjdk/bin && echo *); do
@@ -269,4 +338,5 @@ let
       home = "${openjdk8}/lib/openjdk";
     };
   };
-in openjdk8
+in
+openjdk8

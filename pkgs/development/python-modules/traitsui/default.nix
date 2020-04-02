@@ -1,5 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, traits, pyface, wxPython
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, traits
+, pyface
+, wxPython
 }:
 
 buildPythonPackage rec {

@@ -14,8 +14,13 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    pytz six tzlocal keyring dateutil
-    parsedatetime pycrypto
+    pytz
+    six
+    tzlocal
+    keyring
+    dateutil
+    parsedatetime
+    pycrypto
   ];
 
   # No tests in archive

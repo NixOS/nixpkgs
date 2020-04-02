@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, cstruct, sexplib0, rresult, nocrypto, astring
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, cstruct
+, sexplib0
+, rresult
+, nocrypto
+, astring
 }:
 
 buildDunePackage rec {
@@ -7,9 +13,9 @@ buildDunePackage rec {
   version = "0.3.6";
 
   src = fetchFromGitHub {
-    owner  = "hannesm";
-    repo   = "ocaml-otr";
-    rev    = version;
+    owner = "hannesm";
+    repo = "ocaml-otr";
+    rev = version;
     sha256 = "0iz6p85a0jxng9aq9blqsky173zaqfr6wlc5j48ad55lgwzlbih5";
   };
 

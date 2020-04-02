@@ -1,27 +1,46 @@
-{ stdenv, fetchFromGitHub, writeText, makeWrapper
-# Dependencies documented @ https://gnuradio.org/doc/doxygen/build_guide.html
-# => core dependencies
-, cmake, pkgconfig, git, boost, cppunit, fftw
-# => python wrappers
-# May be able to upgrade to swig3
-, python, swig2, numpy, scipy, matplotlib
-# => grc - the gnu radio companion
-, Mako, cheetah, pygtk # Note: GR is migrating to Mako. Cheetah should be removed for GR3.8
-# => gr-wavelet: collection of wavelet blocks
+{ stdenv
+, fetchFromGitHub
+, writeText
+, makeWrapper
+  # Dependencies documented @ https://gnuradio.org/doc/doxygen/build_guide.html
+  # => core dependencies
+, cmake
+, pkgconfig
+, git
+, boost
+, cppunit
+, fftw
+  # => python wrappers
+  # May be able to upgrade to swig3
+, python
+, swig2
+, numpy
+, scipy
+, matplotlib
+  # => grc - the gnu radio companion
+, Mako
+, cheetah
+, pygtk # Note: GR is migrating to Mako. Cheetah should be removed for GR3.8
+  # => gr-wavelet: collection of wavelet blocks
 , gsl
-# => gr-qtgui: the Qt-based GUI
-, qt4, qwt, pyqt4
-# => gr-wxgui: the Wx-based GUI
-, wxPython, lxml
-# => gr-audio: audio subsystems (system/OS dependent)
+  # => gr-qtgui: the Qt-based GUI
+, qt4
+, qwt
+, pyqt4
+  # => gr-wxgui: the Wx-based GUI
+, wxPython
+, lxml
+  # => gr-audio: audio subsystems (system/OS dependent)
 , alsaLib   # linux   'audio-alsa'
 , CoreAudio # darwin  'audio-osx'
-# => uhd: the Ettus USRP Hardware Driver Interface
+  # => uhd: the Ettus USRP Hardware Driver Interface
 , uhd
-# => gr-video-sdl: PAL and NTSC display
+  # => gr-video-sdl: PAL and NTSC display
 , SDL
-# Other
-, libusb1, orc, pyopengl
+  # Other
+, libusb1
+, orc
+, pyopengl
 }:
 
 stdenv.mkDerivation rec {
@@ -37,17 +56,39 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig git makeWrapper cppunit orc
+    cmake
+    pkgconfig
+    git
+    makeWrapper
+    cppunit
+    orc
   ];
 
   buildInputs = [
-    boost fftw python swig2 lxml qt4
-    qwt SDL libusb1 uhd gsl
-  ] ++ stdenv.lib.optionals stdenv.isLinux  [ alsaLib   ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreAudio ];
+    boost
+    fftw
+    python
+    swig2
+    lxml
+    qt4
+    qwt
+    SDL
+    libusb1
+    uhd
+    gsl
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ alsaLib ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ CoreAudio ];
 
   propagatedBuildInputs = [
-    Mako cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
+    Mako
+    cheetah
+    numpy
+    scipy
+    matplotlib
+    pyqt4
+    pygtk
+    wxPython
+    pyopengl
   ];
 
   NIX_LDFLAGS = "-lpthread";

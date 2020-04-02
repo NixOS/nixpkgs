@@ -1,18 +1,16 @@
 { stdenv, fetchFromGitHub, python2Packages, help2man, installShellFiles }:
-
 let
   # py3 is supposedly working in version 0.9.3 but the tests fail so stick to py2
   pypkgs = python2Packages;
-
 in
 pypkgs.buildPythonApplication rec {
   pname = "crudini";
   version = "0.9.3";
 
   src = fetchFromGitHub {
-    owner  = "pixelb";
-    repo   = "crudini";
-    rev    = version;
+    owner = "pixelb";
+    repo = "crudini";
+    rev = version;
     sha256 = "0298hvg0fpk0m0bjpwryj3icksbckwqqsr9w1ain55wf5s0v24k3";
   };
 

@@ -16,7 +16,7 @@
 , jsonschema
 , psutil
 , cmake
-, llvmPackages 
+, llvmPackages
 }:
 
 buildPythonPackage rec {
@@ -54,8 +54,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Quantum Software Development Kit for writing quantum computing experiments, programs, and applications";
-    homepage    = https://github.com/QISKit/qiskit-terra;
-    license     = stdenv.lib.licenses.asl20;
+    homepage = https://github.com/QISKit/qiskit-terra;
+    license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [
       pandaman
     ];

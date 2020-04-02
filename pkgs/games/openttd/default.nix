@@ -1,9 +1,25 @@
-{ stdenv, fetchurl, fetchzip, pkgconfig, SDL, libpng, zlib, xz, freetype, fontconfig
-, withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
-, withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
-, writeScriptBin, makeWrapper, runtimeShell
+{ stdenv
+, fetchurl
+, fetchzip
+, pkgconfig
+, SDL
+, libpng
+, zlib
+, xz
+, freetype
+, fontconfig
+, withOpenGFX ? true
+, withOpenSFX ? true
+, withOpenMSX ? true
+, withFluidSynth ? true
+, audioDriver ? "alsa"
+, fluidsynth
+, soundfont-fluid
+, procps
+, writeScriptBin
+, makeWrapper
+, runtimeShell
 }:
-
 let
   opengfx = fetchzip {
     url = "https://binaries.openttd.org/extra/opengfx/0.5.5/opengfx-0.5.5-all.zip";
@@ -25,7 +41,6 @@ let
     trap "${procps}/bin/pkill fluidsynth" EXIT
     ${fluidsynth}/bin/fluidsynth -a ${audioDriver} -i ${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 $*
   '';
-
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
@@ -52,26 +67,26 @@ stdenv.mkDerivation rec {
     mv $out/games/ $out/bin
 
     ${stdenv.lib.optionalString withOpenGFX ''
-      cp ${opengfx}/* $out/share/games/openttd/baseset
-    ''}
+    cp ${opengfx}/* $out/share/games/openttd/baseset
+  ''}
 
     mkdir -p $out/share/games/openttd/data
 
     ${stdenv.lib.optionalString withOpenSFX ''
-      cp ${opensfx}/*.{obs,cat} $out/share/games/openttd/data
-    ''}
+    cp ${opensfx}/*.{obs,cat} $out/share/games/openttd/data
+  ''}
 
     mkdir $out/share/games/openttd/baseset/openmsx
 
     ${stdenv.lib.optionalString withOpenMSX ''
-      cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/baseset/openmsx
-    ''}
+    cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/baseset/openmsx
+  ''}
 
     ${stdenv.lib.optionalString withFluidSynth ''
-      wrapProgram $out/bin/openttd \
-        --add-flags -m \
-        --add-flags extmidi:cmd=${playmidi}/bin/playmidi
-    ''}
+    wrapProgram $out/bin/openttd \
+      --add-flags -m \
+      --add-flags extmidi:cmd=${playmidi}/bin/playmidi
+  ''}
   '';
 
   meta = {

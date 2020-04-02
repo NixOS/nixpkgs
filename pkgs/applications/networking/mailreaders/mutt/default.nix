@@ -1,27 +1,32 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, which, perl
+{ stdenv
+, fetchurl
+, fetchpatch
+, ncurses
+, which
+, perl
 , gdbm ? null
 , openssl ? null
 , cyrus_sasl ? null
 , gnupg ? null
 , gpgme ? null
 , kerberos ? null
-, headerCache  ? true
-, sslSupport   ? true
-, saslSupport  ? true
+, headerCache ? true
+, sslSupport ? true
+, saslSupport ? true
 , smimeSupport ? false
-, gpgSupport   ? false
+, gpgSupport ? false
 , gpgmeSupport ? true
-, imapSupport  ? true
-, withSidebar  ? true
-, gssSupport   ? true
+, imapSupport ? true
+, withSidebar ? true
+, gssSupport ? true
 }:
 
-assert headerCache  -> gdbm       != null;
-assert sslSupport   -> openssl    != null;
-assert saslSupport  -> cyrus_sasl != null;
-assert smimeSupport -> openssl    != null;
-assert gpgSupport   -> gnupg      != null;
-assert gpgmeSupport -> gpgme      != null && openssl != null;
+assert headerCache -> gdbm != null;
+assert sslSupport -> openssl != null;
+assert saslSupport -> cyrus_sasl != null;
+assert smimeSupport -> openssl != null;
+assert gpgSupport -> gnupg != null;
+assert gpgmeSupport -> gpgme != null && openssl != null;
 
 with stdenv.lib;
 
@@ -41,17 +46,17 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ ncurses which perl ]
-    ++ optional headerCache  gdbm
-    ++ optional sslSupport   openssl
-    ++ optional gssSupport   kerberos
-    ++ optional saslSupport  cyrus_sasl
+    ++ optional headerCache gdbm
+    ++ optional sslSupport openssl
+    ++ optional gssSupport kerberos
+    ++ optional saslSupport cyrus_sasl
     ++ optional gpgmeSupport gpgme;
 
   configureFlags = [
-    (enableFeature headerCache  "hcache")
+    (enableFeature headerCache "hcache")
     (enableFeature gpgmeSupport "gpgme")
-    (enableFeature imapSupport  "imap")
-    (enableFeature withSidebar  "sidebar")
+    (enableFeature imapSupport "imap")
+    (enableFeature withSidebar "sidebar")
     "--enable-smtp"
     "--enable-pop"
     "--with-mailpath="
@@ -66,9 +71,9 @@ stdenv.mkDerivation rec {
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
-  ] ++ optional sslSupport  "--with-ssl"
-    ++ optional gssSupport  "--with-gss"
-    ++ optional saslSupport "--with-sasl";
+  ] ++ optional sslSupport "--with-ssl"
+  ++ optional gssSupport "--with-gss"
+  ++ optional saslSupport "--with-sasl";
 
   postPatch = optionalString (smimeSupport || gpgmeSupport) ''
     sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl

@@ -1,5 +1,4 @@
 { stdenv, fetchpatch, fetchurl, SDL, SDL_mixer, bulletml }:
-
 let
   version = "0.23a";
   debianRevision = "12";
@@ -8,8 +7,8 @@ let
     url = "https://sources.debian.org/data/main/r/rrootage/${version}-${debianRevision}/debian/patches/${patchname}.patch";
     sha256 = hash;
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "rrootage";
   inherit version;
   src = fetchurl {

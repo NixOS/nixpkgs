@@ -2,11 +2,11 @@
 , fetchFromGitHub
 , lib
 }:
-
 let
   version = "v2.2.2";
   pname = "pebble";
-in buildGoPackage {
+in
+buildGoPackage {
   inherit pname version;
   goPackagePath = "github.com/letsencrypt/${pname}";
 

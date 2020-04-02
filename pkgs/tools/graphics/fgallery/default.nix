@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, unzip, makeWrapper, perlPackages
-, coreutils, zip, imagemagick, pngcrush, lcms2
-, facedetect, fbida }:
+{ stdenv
+, fetchurl
+, unzip
+, makeWrapper
+, perlPackages
+, coreutils
+, zip
+, imagemagick
+, pngcrush
+, lcms2
+, facedetect
+, fbida
+}:
 
 # TODO: add optional dependencies (snippet from fgallery source):
 #
@@ -33,7 +43,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/share/fgallery/fgallery" \
         --set PERL5LIB "$PERL5LIB" \
         --set PATH "${stdenv.lib.makeBinPath
-                     [ coreutils zip imagemagick pngcrush lcms2 facedetect fbida ]}"
+      [ coreutils zip imagemagick pngcrush lcms2 facedetect fbida ]}"
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, ... }: {
   name = "hardened";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ joachifm ];
@@ -7,7 +7,8 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine =
     { lib, pkgs, config, ... }:
     with lib;
-    { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
+    {
+      users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
       environment.memoryAllocator.provider = "graphene-hardened";

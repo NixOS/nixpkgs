@@ -1,8 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
-, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
-, pcre, harfbuzz
+{ stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, pkgconfig
+, doxygen
+, qt48Full
+, libharu
+, pango
+, fcgi
+, firebird
+, libmysqlclient
+, postgresql
+, graphicsmagick
+, glew
+, openssl
+, pcre
+, harfbuzz
 }:
-
 let
   generic =
     { version, sha256 }:
@@ -21,9 +35,20 @@ let
 
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        cmake boost doxygen qt48Full libharu
-        pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
-        openssl pcre
+        cmake
+        boost
+        doxygen
+        qt48Full
+        libharu
+        pango
+        fcgi
+        firebird
+        libmysqlclient
+        postgresql
+        graphicsmagick
+        glew
+        openssl
+        pcre
       ];
 
       cmakeFlags = [
@@ -47,7 +72,8 @@ let
         maintainers = with maintainers; [ juliendehos willibutz ];
       };
     };
-in {
+in
+{
   wt3 = generic {
     version = "3.5.0";
     sha256 = "1xcwzldbval5zrf7f3n2gkpscagg51cw2jp6p3q1yh6bi59haida";

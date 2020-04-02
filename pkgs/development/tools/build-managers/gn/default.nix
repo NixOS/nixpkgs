@@ -1,6 +1,12 @@
-{ stdenv, lib, fetchgit, darwin, writeText
-, git, ninja, python3 }:
-
+{ stdenv
+, lib
+, fetchgit
+, darwin
+, writeText
+, git
+, ninja
+, python3
+}:
 let
   rev = "64b846c96daeb3eaf08e26d8a84d8451c6cb712b";
   sha256 = "1v2kzsshhxn0ck6gd5w16gi2m3higwd9vkyylmsczxfxnw8skgpy";
@@ -14,7 +20,6 @@ let
 
     #endif  // OUT_LAST_COMMIT_POSITION_H_
   '';
-
 in
 stdenv.mkDerivation {
   pname = "gn";

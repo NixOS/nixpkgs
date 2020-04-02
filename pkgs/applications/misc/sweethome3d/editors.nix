@@ -1,64 +1,69 @@
-{ stdenv, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings-desktop-schemas, sweethome3dApp }:
-
+{ stdenv
+, fetchcvs
+, makeWrapper
+, makeDesktopItem
+, jdk
+, jre
+, ant
+, gtk3
+, gsettings-desktop-schemas
+, sweethome3dApp
+}:
 let
-
   sweetExec = with stdenv.lib;
-    m: "sweethome3d-"
-    + removeSuffix "libraryeditor" (toLower m)
-    + "-editor";
+    m: "sweethome3d-" + removeSuffix "libraryeditor" (toLower m) + "-editor";
 
   mkEditorProject =
-  { pname, module, version, src, license, description, desktopName }:
+    { pname, module, version, src, license, description, desktopName }:
 
-  stdenv.mkDerivation rec {
-    application = sweethome3dApp;
-    inherit pname module version src description;
-    exec = sweetExec module;
-    editorItem = makeDesktopItem {
-      inherit exec desktopName;
-      name = pname;
-      comment =  description;
-      genericName = "Computer Aided (Interior) Design";
-      categories = "Application;Graphics;2DGraphics;3DGraphics;";
+    stdenv.mkDerivation rec {
+      application = sweethome3dApp;
+      inherit pname module version src description;
+      exec = sweetExec module;
+      editorItem = makeDesktopItem {
+        inherit exec desktopName;
+        name = pname;
+        comment = description;
+        genericName = "Computer Aided (Interior) Design";
+        categories = "Application;Graphics;2DGraphics;3DGraphics;";
+      };
+
+      buildInputs = [ ant jre jdk makeWrapper gtk3 gsettings-desktop-schemas ];
+
+      patchPhase = ''
+        sed -i -e 's,../SweetHome3D,${application.src},g' build.xml
+        sed -i -e 's,lib/macosx/java3d-1.6/jogl-all.jar,lib/java3d-1.6/jogl-all.jar,g' build.xml
+      '';
+
+      buildPhase = ''
+        ant -lib ${application.src}/libtest -lib ${application.src}/lib -lib ${jdk}/lib
+      '';
+
+      installPhase = ''
+        mkdir -p $out/bin
+        mkdir -p $out/share/{java,applications}
+        cp ${module}-${version}.jar $out/share/java/.
+        cp "${editorItem}/share/applications/"* $out/share/applications
+        makeWrapper ${jre}/bin/java $out/bin/$exec \
+          --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
+          --add-flags "-jar $out/share/java/${module}-${version}.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
+      '';
+
+      dontStrip = true;
+
+      meta = {
+        homepage = http://www.sweethome3d.com/index.jsp;
+        inherit description;
+        inherit license;
+        maintainers = [ stdenv.lib.maintainers.edwtjo ];
+        platforms = stdenv.lib.platforms.linux;
+      };
+
     };
 
-    buildInputs = [ ant jre jdk makeWrapper gtk3 gsettings-desktop-schemas ];
-
-    patchPhase = ''
-      sed -i -e 's,../SweetHome3D,${application.src},g' build.xml
-      sed -i -e 's,lib/macosx/java3d-1.6/jogl-all.jar,lib/java3d-1.6/jogl-all.jar,g' build.xml
-    '';
-
-    buildPhase = ''
-      ant -lib ${application.src}/libtest -lib ${application.src}/lib -lib ${jdk}/lib
-    '';
-
-    installPhase = ''
-      mkdir -p $out/bin
-      mkdir -p $out/share/{java,applications}
-      cp ${module}-${version}.jar $out/share/java/.
-      cp "${editorItem}/share/applications/"* $out/share/applications
-      makeWrapper ${jre}/bin/java $out/bin/$exec \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
-        --add-flags "-jar $out/share/java/${module}-${version}.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    '';
-
-    dontStrip = true;
-
-    meta = {
-      homepage = http://www.sweethome3d.com/index.jsp;
-      inherit description;
-      inherit license;
-      maintainers = [ stdenv.lib.maintainers.edwtjo ];
-      platforms = stdenv.lib.platforms.linux;
-    };
-
-  };
-
-  d2u = stdenv.lib.replaceChars ["."] ["_"];
-
-in {
+  d2u = stdenv.lib.replaceChars [ "." ] [ "_" ];
+in
+{
 
   textures-editor = mkEditorProject rec {
     version = "1.5";

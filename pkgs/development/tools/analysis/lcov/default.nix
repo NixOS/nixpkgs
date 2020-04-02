@@ -1,4 +1,4 @@
- {stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "lcov-1.14";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ (fetchpatch {
+    [
+      (fetchpatch {
         url = https://github.com/linux-test-project/lcov/commit/ebfeb3e179e450c69c3532f98cd5ea1fbf6ccba7.patch;
         sha256 = "0dalkqbjb6a4vp1lcsxd39dpn5fzdf7ihsjbiviq285s15nxdj1j";
       })

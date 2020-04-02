@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.rsyncd;
 
   motdFile = builtins.toFile "rsyncd-motd" cfg.motd;
@@ -17,14 +15,13 @@ let
     ${optionalString (cfg.port != 873) "port = ${toString cfg.port}"}
     ${cfg.extraConfig}
     ${foreach cfg.modules (name: module: ''
-      [${name}]
-      ${foreach module (k: v:
-        "${k} = ${v}"
-      )}
-    '')}
+    [${name}]
+    ${foreach module (k: v:
+      "${k} = ${v}"
+    )}
+  '')}
   '';
 in
-
 {
   options = {
     services.rsyncd = {
@@ -62,24 +59,26 @@ in
         type = types.lines;
         default = "";
         description = ''
-            Lines of configuration to add to rsyncd globally.
-            See <command>man rsyncd.conf</command> for options.
-          '';
+          Lines of configuration to add to rsyncd globally.
+          See <command>man rsyncd.conf</command> for options.
+        '';
       };
 
       modules = mkOption {
-        default = {};
+        default = { };
         description = ''
-            A set describing exported directories.
-            See <command>man rsyncd.conf</command> for options.
-          '';
+          A set describing exported directories.
+          See <command>man rsyncd.conf</command> for options.
+        '';
         type = types.attrsOf (types.attrsOf types.str);
         example =
-          { srv =
-             { path = "/srv";
-               "read only" = "yes";
-               comment = "Public rsync share.";
-             };
+          {
+            srv =
+              {
+                path = "/srv";
+                "read only" = "yes";
+                comment = "Public rsync share.";
+              };
           };
       };
 

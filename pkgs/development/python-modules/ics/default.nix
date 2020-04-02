@@ -1,6 +1,13 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, tatsu, arrow
-, pytest-sugar, pytestpep8, pytest-flakes, pytestcov
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, tatsu
+, arrow
+, pytest-sugar
+, pytestpep8
+, pytest-flakes
+, pytestcov
 }:
 
 buildPythonPackage rec {

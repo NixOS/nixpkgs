@@ -1,4 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
 , execnet
 , glob2
 , Mako
@@ -29,7 +31,7 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest
   '';
-  
+
   meta = with stdenv.lib; {
     description = "BDD library for the py.test runner";
     homepage = https://github.com/pytest-dev/pytest-bdd;

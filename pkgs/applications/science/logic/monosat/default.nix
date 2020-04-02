@@ -1,22 +1,29 @@
-{ stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
-  # The JDK we use on Darwin currenly makes extensive use of rpaths which are
+{ stdenv
+, fetchpatch
+, fetchFromGitHub
+, cmake
+, zlib
+, gmp
+, jdk8
+, # The JDK we use on Darwin currenly makes extensive use of rpaths which are
   # annoying and break the python library, so let's not bother for now
-  includeJava ? !stdenv.hostPlatform.isDarwin, includeGplCode ? true }:
+  includeJava ? !stdenv.hostPlatform.isDarwin
+, includeGplCode ? true
+}:
 
 with stdenv.lib;
-
 let
   boolToCmake = x: if x then "ON" else "OFF";
 
-  rev    = "1.8.0";
+  rev = "1.8.0";
   sha256 = "0q3a8x3iih25xkp2bm842sm2hxlb8hxlls4qmvj7vzwrh4lvsl7b";
 
-  pname   = "monosat";
+  pname = "monosat";
   version = rev;
 
   src = fetchFromGitHub {
     owner = "sambayless";
-    repo  = pname;
+    repo = pname;
     inherit rev sha256;
   };
 
@@ -48,9 +55,9 @@ let
 
     meta = {
       description = "SMT solver for Monotonic Theories";
-      platforms   = platforms.unix;
-      license     = if includeGplCode then licenses.gpl2 else licenses.mit;
-      homepage    = https://github.com/sambayless/monosat;
+      platforms = platforms.unix;
+      license = if includeGplCode then licenses.gpl2 else licenses.mit;
+      homepage = https://github.com/sambayless/monosat;
       maintainers = [ maintainers.acairncross ];
     };
   };
@@ -67,8 +74,7 @@ let
     # the sourceRoot if it weren't for the patch.
     postPatch = ''
       cd src/monosat/api/python
-    '' +
-    # The relative paths here don't make sense for our Nix build
+    '' + # The relative paths here don't make sense for our Nix build
     # TODO: do we want to just reference the core monosat library rather than copying the
     # shared lib? The current setup.py copies the .dylib/.so...
     ''
@@ -76,4 +82,5 @@ let
         --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
     '';
   };
-in core
+in
+core

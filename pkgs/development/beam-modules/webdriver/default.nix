@@ -1,5 +1,4 @@
-{stdenv, fetchFromGitHub, writeText, erlang }:
-
+{ stdenv, fetchFromGitHub, writeText, erlang }:
 let
   shell = drv: stdenv.mkDerivation {
     name = "interactive-shell-${drv.name}";
@@ -11,14 +10,14 @@ let
     version = "0.0.0+build.18.7ceaf1f";
 
     src = fetchFromGitHub {
-        owner = "Quviq";
-        repo = "webdrv";
-        rev = "7ceaf1f67d834e841ca0133b4bf899a9fa2db6bb";
-        sha256 = "1pq6pmlr6xb4hv2fvmlrvzd8c70kdcidlgjv4p8n9pwvkif0cb87";
+      owner = "Quviq";
+      repo = "webdrv";
+      rev = "7ceaf1f67d834e841ca0133b4bf899a9fa2db6bb";
+      sha256 = "1pq6pmlr6xb4hv2fvmlrvzd8c70kdcidlgjv4p8n9pwvkif0cb87";
     };
 
     setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
     '';
 
     buildInputs = [ erlang ];
@@ -36,5 +35,6 @@ let
       env = shell self;
     };
 
-};
-in stdenv.lib.fix pkg
+  };
+in
+stdenv.lib.fix pkg

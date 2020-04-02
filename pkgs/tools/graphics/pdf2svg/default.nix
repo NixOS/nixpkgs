@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, cairo, gtk2, poppler }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, cairo
+, gtk2
+, poppler
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdf2svg";

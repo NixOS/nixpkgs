@@ -14,12 +14,13 @@ let
           isPosInt = num:
             0 == stringLength
               (replaceStrings
-              ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9"]
-              [""  ""  ""  ""  ""  ""  ""  ""  ""  "" ]
-              num);
+                [ "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" ]
+                [ "" "" "" "" "" "" "" "" "" "" ]
+              num
+              );
         in
-          if hasPrefix "p" tail && isPosInt p then p
-          else null;
+        if hasPrefix "p" tail && isPosInt p then p
+        else null;
 
       # Shortcuts
       majMin = "${major}.${minor}";
@@ -42,13 +43,13 @@ let
         let
           base = "v${major}_${minor}_${tiny}";
         in
-          if patchLevel != null then
-            "${base}_${patchLevel}"
+        if patchLevel != null then
+          "${base}_${patchLevel}"
+        else
+          if tail != "" then
+            "${base}_${tail}"
           else
-            if tail != "" then
-              "${base}_${tail}"
-            else
-              base;
+            base;
 
       # Implements the builtins.toString interface.
       __toString = self:
@@ -57,7 +58,8 @@ let
             "-p${self.patchLevel}"
           else if self.tail != "" then
             "-${self.tail}"
-          else "");
+          else ""
+        );
     };
 in
-  rubyVersion
+rubyVersion

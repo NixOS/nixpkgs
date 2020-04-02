@@ -1,7 +1,6 @@
 { system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
 with import ./base.nix { inherit system; };
 let
-
   roServiceAccount = pkgs.writeText "ro-service-account.json" (builtins.toJSON {
     kind = "ServiceAccount";
     apiVersion = "v1";
@@ -23,11 +22,13 @@ let
       kind = "Role";
       name = "pod-reader";
     };
-    subjects = [{
-      kind = "ServiceAccount";
-      name = "read-only";
-      namespace = "default";
-    }];
+    subjects = [
+      {
+        kind = "ServiceAccount";
+        name = "read-only";
+        namespace = "default";
+      }
+    ];
   });
 
   roRole = pkgs.writeText "ro-role.json" (builtins.toJSON {
@@ -37,11 +38,13 @@ let
       name = "pod-reader";
       namespace = "default";
     };
-    rules = [{
-      apiGroups = [""];
-      resources = ["pods"];
-      verbs = ["get" "list" "watch"];
-    }];
+    rules = [
+      {
+        apiGroups = [ "" ];
+        resources = [ "pods" ];
+        verbs = [ "get" "list" "watch" ];
+      }
+    ];
   });
 
   kubectlPod = pkgs.writeText "kubectl-pod.json" (builtins.toJSON {
@@ -51,13 +54,15 @@ let
     metadata.namespace = "default";
     metadata.labels.name = "kubectl";
     spec.serviceAccountName = "read-only";
-    spec.containers = [{
-      name = "kubectl";
-      image = "kubectl:latest";
-      command = ["/bin/tail" "-f"];
-      imagePullPolicy = "Never";
-      tty = true;
-    }];
+    spec.containers = [
+      {
+        name = "kubectl";
+        image = "kubectl:latest";
+        command = [ "/bin/tail" "-f" ];
+        imagePullPolicy = "Never";
+        tty = true;
+      }
+    ];
   });
 
   kubectlPod2 = pkgs.writeTextDir "kubectl-pod-2.json" (builtins.toJSON {
@@ -67,13 +72,15 @@ let
     metadata.namespace = "default";
     metadata.labels.name = "kubectl-2";
     spec.serviceAccountName = "read-only";
-    spec.containers = [{
-      name = "kubectl-2";
-      image = "kubectl:latest";
-      command = ["/bin/tail" "-f"];
-      imagePullPolicy = "Never";
-      tty = true;
-    }];
+    spec.containers = [
+      {
+        name = "kubectl-2";
+        image = "kubectl:latest";
+        command = [ "/bin/tail" "-f" ];
+        imagePullPolicy = "Never";
+        tty = true;
+      }
+    ];
   });
 
   kubectl = pkgs.runCommand "copy-kubectl" { buildInputs = [ pkgs.kubernetes ]; } ''
@@ -133,8 +140,8 @@ let
       $machine1->fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl");
     '';
   };
-
-in {
+in
+{
   singlenode = mkKubernetesSingleNodeTest singlenode;
   multinode = mkKubernetesMultiNodeTest multinode;
 }

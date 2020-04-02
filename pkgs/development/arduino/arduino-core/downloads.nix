@@ -1,4 +1,4 @@
-{fetchurl, optionalAttrs, system}:
+{ fetchurl, optionalAttrs, system }:
 # This file preloads all the archives which Arduino's build/build.xml
 # would otherwise try to download itself. When updating this for a new
 # version of Arduino, check build.xml for version numbers and new
@@ -163,7 +163,7 @@
     sha256 = "1vz0g98ancfqdf7yx5m3zrxmzb3fwp18zh5lkh2nyl5xlr9m368z";
   };
 }
-// optionalAttrs (system == "armv6l-linux") {
+  // optionalAttrs (system == "armv6l-linux") {
   "build/arduino-builder-linuxarm-1.4.4.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-linuxarm-1.4.4.tar.bz2";
     sha256 = "03bhlhdkg1jx0d3lh9194xgaqsbank9njhlnwy8braa7pw4p58gn";

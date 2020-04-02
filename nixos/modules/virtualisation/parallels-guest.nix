@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   prl-tools = config.hardware.parallels.package;
 in
-
 {
 
   options = {
@@ -47,7 +45,7 @@ in
   config = mkIf config.hardware.parallels.enable {
     services.xserver = {
       drivers = singleton
-        { name = "prlvideo"; modules = [ prl-tools ]; };
+      { name = "prlvideo"; modules = [ prl-tools ]; };
 
       screenSection = ''
         Option "NoMTRR"
@@ -122,7 +120,7 @@ in
           ExecStart = "${prl-tools}/bin/prldnd";
         };
       };
-      prl_wmouse_d  = {
+      prl_wmouse_d = {
         description = "Parallels Walking Mouse Daemon";
         wantedBy = [ "graphical-session.target" ];
         serviceConfig = {

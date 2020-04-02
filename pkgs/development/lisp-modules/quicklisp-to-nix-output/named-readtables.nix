@@ -17,7 +17,7 @@ rec {
 
   packageName = "named-readtables";
 
-  asdFilesToKeep = ["named-readtables.asd"];
+  asdFilesToKeep = [ "named-readtables.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM named-readtables DESCRIPTION

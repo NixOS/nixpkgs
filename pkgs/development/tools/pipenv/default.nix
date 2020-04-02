@@ -3,9 +3,7 @@
 }:
 
 with python3.pkgs;
-
 let
-
   runtimeDeps = [
     certifi
     setuptools
@@ -14,9 +12,9 @@ let
     virtualenv-clone
   ];
 
-  pythonEnv = python3.withPackages(ps: with ps; [ virtualenv ]);
-
-in buildPythonApplication rec {
+  pythonEnv = python3.withPackages (ps: with ps; [ virtualenv ]);
+in
+buildPythonApplication rec {
   pname = "pipenv";
   version = "2018.11.26";
 

@@ -1,8 +1,23 @@
-{
-  mkDerivation, copyPathsToStore, lib, kdepimTeam,
-  extra-cmake-modules, shared-mime-info,
-  boost, kcompletion, kconfigwidgets, kcrash, kdbusaddons, kdesignerplugin,
-  ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mysql, qttools,
+{ mkDerivation
+, copyPathsToStore
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, shared-mime-info
+, boost
+, kcompletion
+, kconfigwidgets
+, kcrash
+, kdbusaddons
+, kdesignerplugin
+, ki18n
+, kiconthemes
+, kio
+, kitemmodels
+, kwindowsystem
+, mysql
+, qttools
+,
 }:
 
 mkDerivation {
@@ -14,8 +29,16 @@ mkDerivation {
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
-    kcompletion kconfigwidgets kcrash kdbusaddons kdesignerplugin ki18n
-    kiconthemes kio kwindowsystem qttools
+    kcompletion
+    kconfigwidgets
+    kcrash
+    kdbusaddons
+    kdesignerplugin
+    ki18n
+    kiconthemes
+    kio
+    kwindowsystem
+    qttools
   ];
   propagatedBuildInputs = [ boost kitemmodels ];
   outputs = [ "out" "dev" ];

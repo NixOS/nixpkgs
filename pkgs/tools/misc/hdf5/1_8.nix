@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   pname = "hdf5";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "0f3jfbqpaaq21ighi40qzs52nb52kc2d2yjk541rjmsx20b3ih2r" ;
- };
+    sha256 = "0f3jfbqpaaq21ighi40qzs52nb52kc2d2yjk541rjmsx20b3ih2r";
+  };
 
   passthru = {
     mpiSupport = (mpi != null);
@@ -37,23 +37,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ removeReferencesTo ];
 
-  buildInputs = []
+  buildInputs = [ ]
     ++ optional (gfortran != null) gfortran
     ++ optional (szip != null) szip;
 
-  propagatedBuildInputs = []
+  propagatedBuildInputs = [ ]
     ++ optional (zlib != null) zlib
     ++ optional (mpi != null) mpi;
 
-  configureFlags = []
+  configureFlags = [ ]
     ++ optional cpp "--enable-cxx"
     ++ optional (gfortran != null) "--enable-fortran"
     ++ optional fortran2003 "--enable-fortran2003"
     ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
+    ++ optionals (mpi != null) [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
     ++ optional enableShared "--enable-shared";
 
-  patches = [./bin-mv.patch];
+  patches = [ ./bin-mv.patch ];
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +

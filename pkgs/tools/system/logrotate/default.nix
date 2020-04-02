@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
+{ stdenv
+, fetchFromGitHub
+, gzip
+, popt
+, autoreconfHook
 , mailutils ? null
 }:
 
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
 
     ${stdenv.lib.optionalString (mailutils != null) ''
     sed -i -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
-    ''}
+  ''}
   '';
 
   autoreconfPhase = ''

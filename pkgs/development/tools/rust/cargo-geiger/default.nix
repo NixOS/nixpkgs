@@ -1,7 +1,13 @@
-{ stdenv, lib, fetchFromGitHub
-, rustPlatform, pkgconfig, openssl
-# darwin dependencies
-, Security, CoreFoundation, libiconv
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkgconfig
+, openssl
+  # darwin dependencies
+, Security
+, CoreFoundation
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {

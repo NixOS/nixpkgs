@@ -1,5 +1,12 @@
-{ stdenv, appleDerivation, xcbuildHook
-, openssl_1_0_2, Librpcsvc, xnu, libpcap, developer_cmds }:
+{ stdenv
+, appleDerivation
+, xcbuildHook
+, openssl_1_0_2
+, Librpcsvc
+, xnu
+, libpcap
+, developer_cmds
+}:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
@@ -41,7 +48,7 @@ appleDerivation {
 
     # mkdir -p $out/System/Library/LaunchDaemons
     # install kdumpd.tproj/com.apple.kdumpd.plist $out/System/Library/LaunchDaemons
- '';
+  '';
 
   meta = {
     platforms = stdenv.lib.platforms.darwin;

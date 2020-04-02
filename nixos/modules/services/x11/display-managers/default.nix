@@ -10,9 +10,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
 
@@ -38,29 +36,29 @@ let
       cd "$HOME"
 
       ${optionalString cfg.startDbusSession ''
-        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$@"
-        fi
-      ''}
+      if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+        exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$@"
+      fi
+    ''}
 
       ${optionalString cfg.displayManager.job.logToJournal ''
-        if [ -z "$_DID_SYSTEMD_CAT" ]; then
-          export _DID_SYSTEMD_CAT=1
-          exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$@"
-        fi
-      ''}
+      if [ -z "$_DID_SYSTEMD_CAT" ]; then
+        export _DID_SYSTEMD_CAT=1
+        exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$@"
+      fi
+    ''}
 
       ${optionalString cfg.displayManager.job.logToFile ''
-        exec &> >(tee ~/.xsession-errors)
-      ''}
+      exec &> >(tee ~/.xsession-errors)
+    ''}
 
       # Start PulseAudio if enabled.
       ${optionalString (config.hardware.pulseaudio.enable) ''
-        # Publish access credentials in the root window.
-        if ${config.hardware.pulseaudio.package.out}/bin/pulseaudio --dump-modules | grep module-x11-publish &> /dev/null; then
-          ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
-        fi
-      ''}
+      # Publish access credentials in the root window.
+      if ${config.hardware.pulseaudio.package.out}/bin/pulseaudio --dump-modules | grep module-x11-publish &> /dev/null; then
+        ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
+      fi
+    ''}
 
       # Tell systemd about our $DISPLAY and $XAUTHORITY.
       # This is needed by the ssh-agent unit.
@@ -114,30 +112,31 @@ let
     '';
 
   installedSessions = pkgs.runCommand "desktops"
-    { # trivial derivation
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-    }
+  {
+    # trivial derivation
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  }
     ''
       mkdir -p "$out/share/"{xsessions,wayland-sessions}
 
       ${concatMapStrings (pkg: ''
-        for n in ${concatStringsSep " " pkg.providedSessions}; do
-          if ! test -f ${pkg}/share/wayland-sessions/$n.desktop -o \
-                    -f ${pkg}/share/xsessions/$n.desktop; then
-            echo "Couldn't find provided session name, $n.desktop, in session package ${pkg.name}:"
-            echo "  ${pkg}"
-            return 1
-          fi
-        done
+      for n in ${concatStringsSep " " pkg.providedSessions}; do
+        if ! test -f ${pkg}/share/wayland-sessions/$n.desktop -o \
+                  -f ${pkg}/share/xsessions/$n.desktop; then
+          echo "Couldn't find provided session name, $n.desktop, in session package ${pkg.name}:"
+          echo "  ${pkg}"
+          return 1
+        fi
+      done
 
-        if test -d ${pkg}/share/xsessions; then
-          ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
-        fi
-        if test -d ${pkg}/share/wayland-sessions; then
-          ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
-        fi
-      '') cfg.displayManager.sessionPackages}
+      if test -d ${pkg}/share/xsessions; then
+        ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+      fi
+      if test -d ${pkg}/share/wayland-sessions; then
+        ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+      fi
+    '') cfg.displayManager.sessionPackages}
     '';
 
   dmDefault = cfg.desktopManager.default;
@@ -146,9 +145,7 @@ let
   wmDefault = cfg.windowManager.default;
 
   defaultSessionFromLegacyOptions = dmFallbackDefault + optionalString (wmDefault != null && wmDefault != "none") "+${wmDefault}";
-
 in
-
 {
   options = {
 
@@ -167,7 +164,7 @@ in
 
       xserverArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
       };
@@ -208,8 +205,8 @@ in
         type = with types; listOf (package // {
           description = "package with provided sessions";
           check = p: assertMsg
-            (package.check p && p ? providedSessions
-            && p.providedSessions != [] && all isString p.providedSessions)
+            (package.check p && p ? providedSessions && p.providedSessions != [ ] && all isString p.providedSessions
+            )
             ''
               Package, '${p.name}', did not specify any session names, as strings, in
               'passthru.providedSessions'. This is required when used as a session package.
@@ -217,16 +214,16 @@ in
               The session names can be looked up in:
                 ${p}/share/xsessions
                 ${p}/share/wayland-sessions
-           '';
+            '';
         });
-        default = [];
+        default = [ ];
         description = ''
           A list of packages containing x11 or wayland session files to be passed to the display manager.
         '';
       };
 
       session = mkOption {
-        default = [];
+        default = [ ];
         example = literalExample
           ''
             [ { manage = "desktop";
@@ -257,7 +254,7 @@ in
       sessionData = mkOption {
         description = "Data exported for display managers’ convenience";
         internal = true;
-        default = {};
+        default = { };
         apply = val: {
           wrapper = xsessionWrapper;
           desktops = installedSessions;
@@ -266,7 +263,7 @@ in
           autologinSession =
             if cfg.displayManager.defaultSession != null then
               cfg.displayManager.defaultSession
-            else if cfg.displayManager.sessionData.sessionNames != [] then
+            else if cfg.displayManager.sessionData.sessionNames != [ ] then
               head cfg.displayManager.sessionData.sessionNames
             else
               null;
@@ -278,10 +275,10 @@ in
           description = "session name";
           check = d:
             assertMsg (d != null -> (str.check d && elem d cfg.displayManager.sessionData.sessionNames)) ''
-                Default graphical session, '${d}', not found.
-                Valid names for 'services.xserver.displayManager.defaultSession' are:
-                  ${concatStringsSep "\n  " cfg.displayManager.sessionData.sessionNames}
-              '';
+              Default graphical session, '${d}', not found.
+              Valid names for 'services.xserver.displayManager.defaultSession' are:
+                ${concatStringsSep "\n  " cfg.displayManager.sessionData.sessionNames}
+            '';
         };
         default =
           if dmDefault != null || wmDefault != null then
@@ -315,7 +312,7 @@ in
 
         environment = mkOption {
           type = types.attrsOf types.unspecified;
-          default = {};
+          default = { };
           description = "Additional environment variables needed by the display manager.";
         };
 
@@ -355,10 +352,10 @@ in
       mkIf (dmDefault != null || wmDefault != null) [
         ''
           The following options are deprecated:
-            ${concatStringsSep "\n  " (map ({c, t}: t) (filter ({c, t}: c != null) [
+            ${concatStringsSep "\n  " (map ({ c, t }: t) (filter ({ c, t }: c != null) [
             { c = dmDefault; t = "- services.xserver.desktopManager.default"; }
             { c = wmDefault; t = "- services.xserver.windowManager.default"; }
-            ]))}
+          ]))}
           Please use
             services.xserver.displayManager.defaultSession = "${defaultSessionFromLegacyOptions}";
           instead.
@@ -396,8 +393,8 @@ in
           ${dm.start}
 
           ${optionalString cfg.updateDbusEnvironment ''
-            ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
-          ''}
+          ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
+        ''}
 
           test -n "$waitPID" && wait "$waitPID"
 
@@ -407,9 +404,10 @@ in
         '';
       in
         # We will generate every possible pair of WM and DM.
-        concatLists (
-          crossLists
-            (dm: wm: let
+      concatLists (
+        crossLists
+          (dm: wm:
+            let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
               script = xsession dm wm;
             in
@@ -432,14 +430,14 @@ in
                 } // {
                   providedSessions = [ sessionName ];
                 })
-            )
-            [dms wms]
-          );
+          )
+          [ dms wms ]
+      );
   };
 
   imports = [
     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
-     "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
+      "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "logsXsession" ] [ "services" "xserver" "displayManager" "job" "logToFile" ])
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "logToJournal" ] [ "services" "xserver" "displayManager" "job" "logToJournal" ])
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "extraSessionFilesPackages" ] [ "services" "xserver" "displayManager" "sessionPackages" ])

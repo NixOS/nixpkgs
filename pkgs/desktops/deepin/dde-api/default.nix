@@ -1,25 +1,28 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig,
-  alsaLib,
-  bc,
-  blur-effect,
-  coreutils,
-  dbus-factory,
-  deepin,
-  deepin-gettext-tools,
-  fontconfig,
-  go,
-  go-dbus-factory,
-  go-gir-generator,
-  go-lib,
-  grub2,
-  gtk3,
-  libcanberra,
-  libgudev,
-  librsvg,
-  poppler,
-  pulseaudio,
-  rfkill,
-  xcur2png
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, bc
+, blur-effect
+, coreutils
+, dbus-factory
+, deepin
+, deepin-gettext-tools
+, fontconfig
+, go
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, grub2
+, gtk3
+, libcanberra
+, libgudev
+, librsvg
+, poppler
+, pulseaudio
+, rfkill
+, xcur2png
 }:
 
 buildGoPackage rec {
@@ -42,29 +45,29 @@ buildGoPackage rec {
   nativeBuildInputs = [
     pkgconfig
     deepin-gettext-tools # build
-    dbus-factory         # build
-    go-dbus-factory      # needed
-    go-gir-generator     # needed
-    go-lib               # build
+    dbus-factory # build
+    go-dbus-factory # needed
+    go-gir-generator # needed
+    go-lib # build
     deepin.setupHook
   ];
 
   buildInputs = [
-    alsaLib     # needed
-    bc          # run (to adjust grub theme?)
+    alsaLib # needed
+    bc # run (to adjust grub theme?)
     blur-effect # run (is it really needed?)
-    coreutils   # run (is it really needed?)
-    fontconfig  # run (is it really needed?)
+    coreutils # run (is it really needed?)
+    fontconfig # run (is it really needed?)
     #glib        # ? arch
-    grub2       # run (is it really needed?)
-    gtk3        # build run
+    grub2 # run (is it really needed?)
+    gtk3 # build run
     libcanberra # build run
-    libgudev    # needed
-    librsvg     # build run
-    poppler     # build run
-    pulseaudio  # needed
-    rfkill      # run
-    xcur2png    # run
+    libgudev # needed
+    librsvg # build run
+    poppler # build run
+    pulseaudio # needed
+    rfkill # run
+    xcur2png # run
     #locales     # run (locale-helper needs locale-gen, which is unavailable on NixOS?)
   ];
 

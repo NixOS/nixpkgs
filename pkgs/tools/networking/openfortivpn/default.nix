@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, autoreconfHook, openssl, ppp, pkgconfig }:
 
 with stdenv.lib;
-
-let repo = "openfortivpn";
-    version = "1.12.0";
-
-in stdenv.mkDerivation {
+let
+  repo = "openfortivpn";
+  version = "1.12.0";
+in
+stdenv.mkDerivation {
   name = "${repo}-${version}";
 
   src = fetchFromGitHub {

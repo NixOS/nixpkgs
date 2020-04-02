@@ -1,6 +1,11 @@
 { fetchurl
 , stdenv
-, ocaml, isabelle, cvc3, perl, wget, which
+, ocaml
+, isabelle
+, cvc3
+, perl
+, wget
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -45,9 +50,9 @@ stdenv.mkDerivation rec {
       and scalable to large system specifications. It provides a
       consistent abstraction over the various “backend” verifiers.
     '';
-    homepage    = https://tla.msr-inria.inria.fr/tlaps/content/Home.html;
-    license     = stdenv.lib.licenses.bsd2;
-    platforms   = stdenv.lib.platforms.unix;
+    homepage = https://tla.msr-inria.inria.fr/tlaps/content/Home.html;
+    license = stdenv.lib.licenses.bsd2;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.badi ];
   };
 

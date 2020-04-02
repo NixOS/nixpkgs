@@ -47,7 +47,7 @@ mkDerivation rec {
     Exec=$out/bin/diffpdf
     Terminal=false
     EOF
-    '';
+  '';
 
   meta = {
     homepage = http://www.qtrac.eu/diffpdfc.html;

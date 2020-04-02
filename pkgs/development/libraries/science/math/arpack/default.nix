@@ -1,8 +1,12 @@
-{ stdenv, fetchFromGitHub, cmake
-, gfortran, openblas, eigen }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, gfortran
+, openblas
+, eigen
+}:
 
 with stdenv.lib;
-
 let
   version = "3.7.0";
 in
@@ -29,14 +33,15 @@ stdenv.mkDerivation {
     "-DINTERFACE64=${optionalString openblas.blas64 "1"}"
   ];
 
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib
-  '' else ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
-  '' + ''
-    # Prevent tests from using all cores
-    export OMP_NUM_THREADS=2
-  '';
+  preCheck =
+    if stdenv.isDarwin then ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib
+    '' else ''
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
+    '' + ''
+      # Prevent tests from using all cores
+      export OMP_NUM_THREADS=2
+    '';
 
   postInstall = ''
     mkdir -p $out/lib/pkgconfig

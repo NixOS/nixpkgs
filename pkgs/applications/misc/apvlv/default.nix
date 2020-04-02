@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, pcre, libxkbcommon, epoxy
-, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, pcre
+, libxkbcommon
+, epoxy
+, gtk3
+, poppler
+, freetype
+, libpthreadstubs
+, libXdmcp
+, libxshmfence
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +35,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake
-    poppler pcre libxkbcommon epoxy
-    freetype gtk3
-    libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
+    poppler
+    pcre
+    libxkbcommon
+    epoxy
+    freetype
+    gtk3
+    libpthreadstubs
+    libXdmcp
+    libxshmfence # otherwise warnings in compilation
   ];
 
   patches = [
@@ -53,8 +72,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/apvlv/
     cp ../Startup.pdf $out/share/doc/apvlv/Startup.pdf
     cp ../main_menubar.glade $out/share/doc/apvlv/main_menubar.glade
-  ''
-  + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     install -D ../apvlv.desktop $out/share/applications/apvlv.desktop
   '';
 

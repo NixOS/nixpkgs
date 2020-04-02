@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, libX11, makeWrapper, tcl, tk }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "vkeybd";
   version = "0.1.18d";
 

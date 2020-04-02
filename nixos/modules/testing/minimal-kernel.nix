@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-
 let
   configfile = builtins.storePath (builtins.toFile "config" (lib.concatStringsSep "\n"
     (map (builtins.getAttr "configLine") config.system.requiredKernelConfig))
@@ -22,7 +21,8 @@ let
     '';
   }));
 
-   kernelPackages = pkgs.linuxPackagesFor kernel;
-in {
+  kernelPackages = pkgs.linuxPackagesFor kernel;
+in
+{
   boot.kernelPackages = kernelPackages;
 }

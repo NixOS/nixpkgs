@@ -1,13 +1,50 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, pkgconfig, cmake
-, wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
-, libXrandr, libusb, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
-, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsaLib
-, miniupnpc, enet, mbedtls, soundtouch, sfml
-, vulkan-loader ? null, libpulseaudio ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, pkgconfig
+, cmake
+, wrapQtAppsHook
+, qtbase
+, bluez
+, ffmpeg
+, libao
+, libGLU
+, libGL
+, pcre
+, gettext
+, libXrandr
+, libusb
+, lzo
+, libpthreadstubs
+, libXext
+, libXxf86vm
+, libXinerama
+, libSM
+, libXdmcp
+, readline
+, openal
+, udev
+, libevdev
+, portaudio
+, curl
+, alsaLib
+, miniupnpc
+, enet
+, mbedtls
+, soundtouch
+, sfml
+, vulkan-loader ? null
+, libpulseaudio ? null
 
-# - Inputs used for Darwin
-, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
-
+  # - Inputs used for Darwin
+, CoreBluetooth
+, ForceFeedback
+, IOKit
+, OpenGL
+, libpng
+, hidapi
+}:
 let
   desktopItem = makeDesktopItem {
     name = "dolphin-emu-master";
@@ -19,7 +56,8 @@ let
     categories = "Game;Emulator;";
     startupNotify = "false";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dolphin-emu";
   version = "5.0-11608";
 
@@ -32,17 +70,48 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig ]
-  ++ lib.optional stdenv.isLinux wrapQtAppsHook;
+    ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [
-    curl ffmpeg libao libGLU libGL pcre gettext libpthreadstubs libpulseaudio
-    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
-    portaudio libusb libpng hidapi miniupnpc enet mbedtls soundtouch sfml
+    curl
+    ffmpeg
+    libao
+    libGLU
+    libGL
+    pcre
+    gettext
+    libpthreadstubs
+    libpulseaudio
+    libXrandr
+    libXext
+    libXxf86vm
+    libXinerama
+    libSM
+    readline
+    openal
+    libXdmcp
+    lzo
+    portaudio
+    libusb
+    libpng
+    hidapi
+    miniupnpc
+    enet
+    mbedtls
+    soundtouch
+    sfml
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
-    bluez udev libevdev alsaLib vulkan-loader
+    bluez
+    udev
+    libevdev
+    alsaLib
+    vulkan-loader
   ] ++ lib.optionals stdenv.isDarwin [
-    CoreBluetooth OpenGL ForceFeedback IOKit
+    CoreBluetooth
+    OpenGL
+    ForceFeedback
+    IOKit
   ];
 
   cmakeFlags = [

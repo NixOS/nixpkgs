@@ -4,7 +4,8 @@
 , fetchFromGitHub
 , ffmpeg
 , gettext
-, libGLU, libGL
+, libGLU
+, libGL
 , openal
 , pkgconfig
 , SDL2
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
     cairo
     ffmpeg
     gettext
-    libGLU libGL
+    libGLU
+    libGL
     openal
     SDL2
     sfml
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_SDL='true'"
   ];
 
-  meta =  with stdenv.lib; {
+  meta = with stdenv.lib; {
     description = "A merge of the original Visual Boy Advance forks";
     license = licenses.gpl2;
     maintainers = with maintainers; [ lassulus ];

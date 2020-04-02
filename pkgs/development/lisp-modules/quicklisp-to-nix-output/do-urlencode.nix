@@ -14,7 +14,7 @@ rec {
 
   packageName = "do-urlencode";
 
-  asdFilesToKeep = ["do-urlencode.asd"];
+  asdFilesToKeep = [ "do-urlencode.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM do-urlencode DESCRIPTION Percent Encoding (aka URL Encoding) library

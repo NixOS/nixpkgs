@@ -1,9 +1,15 @@
-{ stdenv, lib, fetchurl, unzip
-, qt4 ? null, qmake4Hook ? null
-, withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, qt4 ? null
+, qmake4Hook ? null
+, withQt5 ? false
+, qtbase ? null
+, qtmacextras ? null
+, qmake ? null
 , fixDarwinDylibNames
 }:
-
 let
   # Fix Xcode 8 compilation problem
   xcodePatch = fetchurl {
@@ -13,8 +19,8 @@ let
 
   pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
   version = "2.11.2";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
@@ -33,7 +39,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   patches = (lib.optional (stdenv.isDarwin && withQt5) xcodePatch) ++
-            (lib.optional (!withQt5) ./fix-qt4-build.patch );
+    (lib.optional (!withQt5) ./fix-qt4-build.patch);
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser

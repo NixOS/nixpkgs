@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.metabase;
 
@@ -7,8 +6,8 @@ let
   inherit (lib) optional optionalAttrs types;
 
   dataDir = "/var/lib/metabase";
-
-in {
+in
+{
 
   options = {
 

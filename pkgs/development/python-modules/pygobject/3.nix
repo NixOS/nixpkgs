@@ -1,5 +1,18 @@
-{ stdenv, fetchurl, buildPythonPackage, pkgconfig, glib, gobject-introspection,
-pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome3 }:
+{ stdenv
+, fetchurl
+, buildPythonPackage
+, pkgconfig
+, glib
+, gobject-introspection
+, pycairo
+, cairo
+, which
+, ncurses
+, meson
+, ninja
+, isPy3k
+, gnome3
+}:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -20,7 +33,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection ];
   buildInputs = [ glib gobject-introspection ]
-                 ++ stdenv.lib.optionals stdenv.isDarwin [ which ncurses ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ which ncurses ];
   propagatedBuildInputs = [ pycairo cairo ];
 
   passthru = {

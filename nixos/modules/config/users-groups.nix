@@ -1,7 +1,6 @@
 { config, lib, utils, pkgs, ... }:
 
 with lib;
-
 let
   ids = config.ids;
   cfg = config.users;
@@ -99,7 +98,7 @@ let
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "The user's auxiliary groups.";
       };
 
@@ -134,7 +133,7 @@ let
 
       subUidRanges = mkOption {
         type = with types; listOf (submodule subordinateUidRange);
-        default = [];
+        default = [ ];
         example = [
           { startUid = 1000; count = 1; }
           { startUid = 100001; count = 65534; }
@@ -148,7 +147,7 @@ let
 
       subGidRanges = mkOption {
         type = with types; listOf (submodule subordinateGidRange);
-        default = [];
+        default = [ ];
         example = [
           { startGid = 100; count = 1; }
           { startGid = 1001; count = 999; }
@@ -248,7 +247,7 @@ let
 
       packages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that should be made available to the user.
@@ -260,7 +259,9 @@ let
     };
 
     config = mkMerge
-      [ { name = mkDefault name;
+      [
+        {
+          name = mkDefault name;
           shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
         }
         (mkIf config.isNormalUser {
@@ -305,7 +306,7 @@ let
 
       members = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           The user names of the group members, added to the
           <literal>/etc/group</literal> file.
@@ -356,13 +357,15 @@ let
 
   mkSubuidEntry = user: concatStrings (
     map (range: "${user.name}:${toString range.startUid}:${toString range.count}\n")
-      user.subUidRanges);
+      user.subUidRanges
+  );
 
   subuidFile = concatStrings (map mkSubuidEntry (attrValues cfg.users));
 
   mkSubgidEntry = user: concatStrings (
     map (range: "${user.name}:${toString range.startGid}:${toString range.count}\n")
-        user.subGidRanges);
+      user.subGidRanges
+  );
 
   subgidFile = concatStrings (map mkSubgidEntry (attrValues cfg.users));
 
@@ -371,10 +374,11 @@ let
       id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
       exists = builtins.hasAttr id acc;
       newAcc = acc // (builtins.listToAttrs [ { name = id; value = true; } ]);
-    in if dup then args else if exists
+    in
+      if dup then args else if exists
       then builtins.trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
       else { dup = false; acc = newAcc; }
-    ) { dup = false; acc = {}; } (builtins.attrNames set)).dup;
+  ) { dup = false; acc = { }; } (builtins.attrNames set)).dup;
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
@@ -382,27 +386,31 @@ let
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
-      { inherit (u)
+      {
+        inherit (u)
           name uid group description home createHome isSystemUser
           password passwordFile hashedPassword
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
-      }) cfg.users;
+      }
+    ) cfg.users;
     groups = mapAttrsToList (n: g:
-      { inherit (g) name gid;
+      {
+        inherit (g) name gid;
         members = g.members ++ (mapAttrsToList (n: u: u.name) (
           filterAttrs (n: u: elem g.name u.extraGroups) cfg.users
         ));
-      }) cfg.groups;
+      }
+    ) cfg.groups;
   });
 
   systemShells =
     let
       shells = mapAttrsToList (_: u: u.shell) cfg.users;
     in
-      filter types.shellPackage.check shells;
-
-in {
+    filter types.shellPackage.check shells;
+in
+{
   imports = [
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
@@ -446,7 +454,7 @@ in {
     };
 
     users.users = mkOption {
-      default = {};
+      default = { };
       type = with types; loaOf (submodule userOpts);
       example = {
         alice = {
@@ -455,7 +463,7 @@ in {
           home = "/home/alice";
           createHome = true;
           group = "users";
-          extraGroups = ["wheel"];
+          extraGroups = [ "wheel" ];
           shell = "/bin/sh";
         };
       };
@@ -466,9 +474,10 @@ in {
     };
 
     users.groups = mkOption {
-      default = {};
+      default = { };
       example =
-        { students.gid = 1001;
+        {
+          students.gid = 1001;
           hackers = { };
         };
       type = with types; loaOf (submodule groupOpts);
@@ -566,7 +575,7 @@ in {
         inherit (config.environment) pathsToLink extraOutputsToInstall;
         inherit (config.system.path) ignoreCollisions postBuild;
       };
-    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+    }) (filterAttrs (_: u: u.packages != [ ]) cfg.users));
 
     environment.profiles = [
       "$HOME/.nix-profile"
@@ -574,26 +583,20 @@ in {
     ];
 
     assertions = [
-      { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
+      {
+        assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
       }
-      { # If mutableUsers is false, to prevent users creating a
+      {
+        # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        assertion = !cfg.mutableUsers ->
-          any id (mapAttrsToList (name: cfg:
-            (name == "root"
-             || cfg.group == "wheel"
-             || elem "wheel" cfg.extraGroups)
-            &&
-            ((cfg.hashedPassword != null && cfg.hashedPassword != "!")
-             || cfg.password != null
-             || cfg.passwordFile != null
-             || cfg.openssh.authorizedKeys.keys != []
-             || cfg.openssh.authorizedKeys.keyFiles != [])
-          ) cfg.users);
+        assertion = !cfg.mutableUsers -> any id (mapAttrsToList (name: cfg:
+          (name == "root" || cfg.group == "wheel" || elem "wheel" cfg.extraGroups) && ((cfg.hashedPassword != null && cfg.hashedPassword != "!") || cfg.password != null || cfg.passwordFile != null || cfg.openssh.authorizedKeys.keys != [ ] || cfg.openssh.authorizedKeys.keyFiles != [ ]
+          )
+        ) cfg.users);
         message = ''
           Neither the root account nor any wheel user has a password or SSH authorized key.
           You must set one to prevent being locked out of your system.'';

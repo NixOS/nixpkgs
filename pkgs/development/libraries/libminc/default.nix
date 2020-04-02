@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, cmake, zlib, netcdf, nifticlib, hdf5 }:
 
 stdenv.mkDerivation rec {
-  pname   = "libminc";
+  pname = "libminc";
   version = "2.4.03";
 
   owner = "BIC-MNI";
 
   src = fetchFromGitHub {
     inherit owner;
-    repo   = pname;
-    rev    = "release-${version}";
+    repo = pname;
+    rev = "release-${version}";
     sha256 = "0kpmqs9df836ywsqj749qbsfavf5bnldblxrmnmxqq9pywc8yfrm";
   };
 
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "Medical imaging library based on HDF5";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license = licenses.free;
   };
 }

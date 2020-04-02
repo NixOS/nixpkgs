@@ -1,14 +1,26 @@
-{ stdenv, lib, fetchurl, cmake, libogg, libvorbis, libtheora, curl, freetype
-, libjpeg, libpng, SDL2, libGL, openal, zlib
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, libogg
+, libvorbis
+, libtheora
+, curl
+, freetype
+, libjpeg
+, libpng
+, SDL2
+, libGL
+, openal
+, zlib
 }:
-
 let
   # The game loads all those via dlopen().
   libs = lib.mapAttrs (name: x: lib.getLib x) {
     inherit zlib curl libpng libjpeg libogg libvorbis libtheora freetype;
   };
-
-in stdenv.mkDerivation (libs // rec {
+in
+stdenv.mkDerivation (libs // rec {
   name = "warsow-engine-${version}";
   version = "2.1.0";
 
@@ -20,7 +32,16 @@ in stdenv.mkDerivation (libs // rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    libogg libvorbis libtheora curl freetype libjpeg SDL2 libGL openal zlib
+    libogg
+    libvorbis
+    libtheora
+    curl
+    freetype
+    libjpeg
+    SDL2
+    libGL
+    openal
+    zlib
     libpng
   ];
 

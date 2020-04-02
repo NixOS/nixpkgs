@@ -1,16 +1,23 @@
-{ stdenv, darwin, fetchurl, makeWrapper, pkgconfig, autoconf, automake
-, harfbuzz, icu
-, fontconfig, lua, libiconv
-, makeFontsConf, gentium
+{ stdenv
+, darwin
+, fetchurl
+, makeWrapper
+, pkgconfig
+, autoconf
+, automake
+, harfbuzz
+, icu
+, fontconfig
+, lua
+, libiconv
+, makeFontsConf
+, gentium
 }:
 
 with stdenv.lib;
-
 let
-  luaEnv = lua.withPackages(ps: with ps;[cassowary cosmo compat53 linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct]);
-
+  luaEnv = lua.withPackages (ps: with ps;[ cassowary cosmo compat53 linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct ]);
 in
-
 stdenv.mkDerivation rec {
   pname = "sile";
   version = "0.10.3";
@@ -24,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
   buildInputs = [ harfbuzz icu fontconfig libiconv luaEnv ]
-  ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
+    ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
 
   preConfigure = optionalString stdenv.isDarwin ''

@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gnused_422, perl, python2, zip, libffi, readline, icu, zlib, buildPackages
-, libobjc }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gnused_422
+, perl
+, python2
+, zip
+, libffi
+, readline
+, icu
+, zlib
+, buildPackages
+, libobjc
+}:
 
 with stdenv.lib;
 
@@ -13,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libffi readline icu zlib ]
-               ++ stdenv.lib.optional stdenv.isDarwin libobjc;
+    ++ stdenv.lib.optional stdenv.isDarwin libobjc;
   nativeBuildInputs = [ pkgconfig perl python2 zip gnused_422 ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
@@ -43,7 +55,7 @@ stdenv.mkDerivation rec {
     "--target=${stdenv.hostPlatform.config}"
   ];
 
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

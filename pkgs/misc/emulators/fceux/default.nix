@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, scons, zlib, SDL, lua5_1, pkgconfig}:
+{ stdenv, fetchFromGitHub, scons, zlib, SDL, lua5_1, pkgconfig }:
 
 stdenv.mkDerivation {
   pname = "fceux-unstable";
@@ -13,7 +13,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig scons ];
   buildInputs = [
-    zlib SDL lua5_1
+    zlib
+    SDL
+    lua5_1
   ];
 
   sconsFlags = "OPENGL=false GTK=false CREATE_AVI=false LOGO=false";

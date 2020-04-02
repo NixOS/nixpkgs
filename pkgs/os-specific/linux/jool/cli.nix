@@ -1,9 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libnl, iptables }:
-
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
 in
-
 stdenv.mkDerivation {
   name = "jool-cli-${sourceAttrs.version}";
 

@@ -1,9 +1,15 @@
-{ lib, linkFarm, buildGoModule, runCommand, makeWrapper
+{ lib
+, linkFarm
+, buildGoModule
+, runCommand
+, makeWrapper
 
-# Version specific args
-, version, src, assets
-, ... }:
-
+  # Version specific args
+, version
+, src
+, assets
+, ...
+}:
 let
   assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList (name: path: {
     inherit name path;
@@ -28,8 +34,8 @@ let
       install -Dm755 v2ray v2ctl -t $out/bin
     '';
   };
-
-in runCommand "v2ray-${version}" {
+in
+runCommand "v2ray-${version}" {
   inherit version;
 
   buildInputs = [ assetsDrv core ];

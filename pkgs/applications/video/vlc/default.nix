@@ -1,18 +1,76 @@
-{ stdenv, fetchurl, autoreconfHook
-, libarchive, perl, xorg, libdvdnav, libbluray
-, zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
-, pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
-, libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
-, libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
-, mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
-, libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
-, libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
-, libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
+{ stdenv
+, fetchurl
+, autoreconfHook
+, libarchive
+, perl
+, xorg
+, libdvdnav
+, libbluray
+, zlib
+, a52dec
+, libmad
+, faad2
+, ffmpeg
+, alsaLib
+, pkgconfig
+, dbus
+, fribidi
+, freefont_ttf
+, libebml
+, libmatroska
+, libvorbis
+, libtheora
+, speex
+, lua5
+, libgcrypt
+, libgpgerror
+, libupnp
+, libcaca
+, libpulseaudio
+, flac
+, schroedinger
+, libxml2
+, librsvg
+, mpeg2dec
+, systemd
+, gnutls
+, avahi
+, libcddb
+, libjack2
+, SDL
+, SDL_image
+, libmtp
+, unzip
+, taglib
+, libkate
+, libtiger
+, libv4l
+, samba
+, libssh2
+, liboggz
+, libass
+, libva
+, libdvbpsi
+, libdc1394
+, libraw1394
+, libopus
+, libvdpau
+, libsamplerate
+, live555
+, fluidsynth
+, wayland
+, wayland-protocols
 , onlyLibVLC ? false
-, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null, wrapQtAppsHook ? null
+, withQt5 ? true
+, qtbase ? null
+, qtsvg ? null
+, qtx11extras ? null
+, wrapQtAppsHook ? null
 , jackSupport ? false
 , removeReferencesTo
-, chromecastSupport ? true, protobuf, libmicrodns
+, chromecastSupport ? true
+, protobuf
+, libmicrodns
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
@@ -36,18 +94,69 @@ stdenv.mkDerivation rec {
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
-    zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
-    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
-    libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
-    systemd gnutls avahi libcddb SDL SDL_image libmtp unzip taglib libarchive
-    libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
-    xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
-    libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
-    fluidsynth wayland wayland-protocols
+    zlib
+    a52dec
+    libmad
+    faad2
+    ffmpeg
+    alsaLib
+    libdvdnav
+    libdvdnav.libdvdread
+    libbluray
+    dbus
+    fribidi
+    libvorbis
+    libtheora
+    speex
+    lua5
+    libgcrypt
+    libgpgerror
+    libupnp
+    libcaca
+    libpulseaudio
+    flac
+    schroedinger
+    libxml2
+    librsvg
+    mpeg2dec
+    systemd
+    gnutls
+    avahi
+    libcddb
+    SDL
+    SDL_image
+    libmtp
+    unzip
+    taglib
+    libarchive
+    libkate
+    libtiger
+    libv4l
+    samba
+    libssh2
+    liboggz
+    libass
+    libdvbpsi
+    libva
+    xorg.xlibsWrapper
+    xorg.libXv
+    xorg.libXvMC
+    xorg.libXpm
+    xorg.xcbutilkeysyms
+    libdc1394
+    libraw1394
+    libopus
+    libebml
+    libmatroska
+    libvdpau
+    libsamplerate
+    fluidsynth
+    wayland
+    wayland-protocols
   ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
-    ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
-    ++ optional jackSupport libjack2
-    ++ optionals chromecastSupport [ protobuf libmicrodns ];
+  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ]
+  ++ optional jackSupport libjack2
+  ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
   nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ]
     ++ optionals withQt5 [ wrapQtAppsHook ];
@@ -83,7 +192,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-kde-solid=$out/share/apps/solid/actions"
   ] ++ optional onlyLibVLC "--disable-vlc"
-    ++ optionals chromecastSupport [
+  ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"
     "--enable-microdns"

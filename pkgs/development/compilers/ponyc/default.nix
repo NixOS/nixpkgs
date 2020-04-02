@@ -1,7 +1,17 @@
-{ stdenv, fetchFromGitHub, llvm, makeWrapper, pcre2, coreutils, which, libressl, libxml2,
-  cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
+{ stdenv
+, fetchFromGitHub
+, llvm
+, makeWrapper
+, pcre2
+, coreutils
+, which
+, libressl
+, libxml2
+, cc ? stdenv.cc
+, lto ? !stdenv.isDarwin
+}:
 
-stdenv.mkDerivation ( rec {
+stdenv.mkDerivation (rec {
   pname = "ponyc";
   version = "0.33.2";
 
@@ -46,7 +56,7 @@ stdenv.mkDerivation ( rec {
   '';
 
   makeFlags = [ "config=release" ] ++ stdenv.lib.optionals stdenv.isDarwin [ "bits=64" ]
-              ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
+    ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
   enableParallelBuilding = true;
 
@@ -61,10 +71,7 @@ stdenv.mkDerivation ( rec {
   '';
 
   installPhase = ''
-    make config=release prefix=$out ''
-    + stdenv.lib.optionalString stdenv.isDarwin '' bits=64 ''
-    + stdenv.lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
-    + '' install
+    make config=release prefix=$out '' + stdenv.lib.optionalString stdenv.isDarwin '' bits=64 '' + stdenv.lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no '' + '' install
 
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \

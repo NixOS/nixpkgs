@@ -9,8 +9,8 @@ let
   # copied from release-lib.nix
   assertTrue = bool:
     if bool
-    then pkgs.runCommand "evaluated-to-true" {} "touch $out"
-    else pkgs.runCommand "evaluated-to-false" {} "false";
+    then pkgs.runCommand "evaluated-to-true" { } "touch $out"
+    else pkgs.runCommand "evaluated-to-false" { } "false";
 
   lts_kernel = pkgs.linuxPackages.kernel;
 
@@ -19,8 +19,8 @@ let
   }).configfile.structuredConfig;
 
   mandatoryVsOptionalConfig = mkMerge [
-    { USB_DEBUG = option yes;}
-    { USB_DEBUG = yes;}
+    { USB_DEBUG = option yes; }
+    { USB_DEBUG = yes; }
   ];
 
   freeformConfig = mkMerge [
@@ -30,8 +30,8 @@ let
 
   yesWinsOverNoConfig = mkMerge [
     # default for "8139TOO_PIO" is no
-    { "8139TOO_PIO"  = yes; } # yes wins over no by default
-    { "8139TOO_PIO"  = no; }
+    { "8139TOO_PIO" = yes; } # yes wins over no by default
+    { "8139TOO_PIO" = no; }
   ];
 in
 {
@@ -41,13 +41,15 @@ in
   # check that freeform options are unique
   # Should trigger
   # > The option `settings.MMC_BLOCK_MINORS.freeform' has conflicting definitions, in `<unknown-file>' and `<unknown-file>'
-  freeformCheck = let
-    res = builtins.tryEval ( (kernelTestConfig freeformConfig).MMC_BLOCK_MINORS.freeform);
-  in
-    assertTrue (res.success == false);
+  freeformCheck =
+    let
+      res = builtins.tryEval ((kernelTestConfig freeformConfig).MMC_BLOCK_MINORS.freeform);
+    in
+      assertTrue (res.success == false);
 
-  yesVsNoCheck = let
-    res = kernelTestConfig yesWinsOverNoConfig;
-  in
-    assertTrue (res."8139TOO_PIO".tristate == "y");
+  yesVsNoCheck =
+    let
+      res = kernelTestConfig yesWinsOverNoConfig;
+    in
+      assertTrue (res."8139TOO_PIO".tristate == "y");
 }

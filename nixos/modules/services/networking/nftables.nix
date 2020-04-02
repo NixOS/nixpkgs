@@ -97,10 +97,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = config.networking.firewall.enable == false;
-      message = "You can not use nftables with services.networking.firewall.";
-    }];
+    assertions = [
+      {
+        assertion = config.networking.firewall.enable == false;
+        message = "You can not use nftables with services.networking.firewall.";
+      }
+    ];
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
     systemd.services.nftables = {
@@ -109,28 +111,29 @@ in
       wants = [ "network-pre.target" ];
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
-      serviceConfig = let
-        rulesScript = pkgs.writeScript "nftables-rules" ''
-          #! ${pkgs.nftables}/bin/nft -f
-          flush ruleset
-          include "${cfg.rulesetFile}"
-        '';
-        checkScript = pkgs.writeScript "nftables-check" ''
-          #! ${pkgs.runtimeShell} -e
-          if $(${pkgs.kmod}/bin/lsmod | grep -q ip_tables); then
-            echo "Unload ip_tables before using nftables!" 1>&2
-            exit 1
-          else
-            ${rulesScript}
-          fi
-        '';
-      in {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = checkScript;
-        ExecReload = checkScript;
-        ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
-      };
+      serviceConfig =
+        let
+          rulesScript = pkgs.writeScript "nftables-rules" ''
+            #! ${pkgs.nftables}/bin/nft -f
+            flush ruleset
+            include "${cfg.rulesetFile}"
+          '';
+          checkScript = pkgs.writeScript "nftables-check" ''
+            #! ${pkgs.runtimeShell} -e
+            if $(${pkgs.kmod}/bin/lsmod | grep -q ip_tables); then
+              echo "Unload ip_tables before using nftables!" 1>&2
+              exit 1
+            else
+              ${rulesScript}
+            fi
+          '';
+        in {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = checkScript;
+          ExecReload = checkScript;
+          ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
+        };
     };
   };
 }

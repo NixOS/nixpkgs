@@ -10,7 +10,6 @@
 , futures
 , version ? "5.1"
 }:
-
 let
   versionMap = {
     "4.5.3" = {
@@ -21,32 +20,31 @@ let
     };
   };
 in
+  with versionMap.${version};
 
-with versionMap.${version};
+  buildPythonPackage rec {
+    pname = "tornado";
+    inherit version;
 
-buildPythonPackage rec {
-  pname = "tornado";
-  inherit version;
+    propagatedBuildInputs = [ backports_abc certifi singledispatch ]
+      ++ lib.optional (pythonOlder "3.5") backports_ssl_match_hostname
+      ++ lib.optional (pythonOlder "3.2") futures;
 
-  propagatedBuildInputs = [ backports_abc  certifi singledispatch ]
-    ++ lib.optional (pythonOlder "3.5") backports_ssl_match_hostname
-    ++ lib.optional (pythonOlder "3.2") futures;
+    # We specify the name of the test files to prevent
+    # https://github.com/NixOS/nixpkgs/issues/14634
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover *_test.py
+    '';
 
-  # We specify the name of the test files to prevent
-  # https://github.com/NixOS/nixpkgs/issues/14634
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover *_test.py
-  '';
+    src = fetchPypi {
+      inherit pname sha256 version;
+    };
 
-  src = fetchPypi {
-    inherit pname sha256 version;
-  };
+    __darwinAllowLocalNetworking = true;
 
-  __darwinAllowLocalNetworking = true;
-
-  meta = {
-    description = "A web framework and asynchronous networking library";
-    homepage = http://www.tornadoweb.org/;
-    license = lib.licenses.asl20;
-  };
-}
+    meta = {
+      description = "A web framework and asynchronous networking library";
+      homepage = http://www.tornadoweb.org/;
+      license = lib.licenses.asl20;
+    };
+  }

@@ -1,7 +1,15 @@
-{ llvmPackages, stdenv, fetchFromGitHub
-, python36Packages, which, pkgconfig, curl, git, gettext, jansson
+{ llvmPackages
+, stdenv
+, fetchFromGitHub
+, python36Packages
+, which
+, pkgconfig
+, curl
+, git
+, gettext
+, jansson
 
-# Optional overrides
+  # Optional overrides
 , maxFileSize ? 64 # in MB
 , provider ? "https://ptpb.pw/"
 }:

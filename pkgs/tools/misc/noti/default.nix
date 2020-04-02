@@ -1,5 +1,9 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub
-, Cocoa ? null }:
+{ stdenv
+, lib
+, buildGoPackage
+, fetchFromGitHub
+, Cocoa ? null
+}:
 
 buildGoPackage rec {
   pname = "noti";

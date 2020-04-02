@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, cmake
+{ stdenv
+, fetchurl
+, cmake
 , parallel ? true
 }:
-
 let
   mkFlag = optset: flag: if optset then "-D${flag}=ON" else "-D${flag}=OFF";
 in
-
 stdenv.mkDerivation rec {
   pname = "stxxl";
   version = "1.4.1";

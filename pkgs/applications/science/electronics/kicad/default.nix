@@ -1,14 +1,29 @@
-{ lib, stdenv, gnome3, pkgs, wxGTK30, wxGTK31
-, gsettings-desktop-schemas, hicolor-icon-theme
-, callPackage, callPackages
-, librsvg, cups
+{ lib
+, stdenv
+, gnome3
+, pkgs
+, wxGTK30
+, wxGTK31
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+, callPackage
+, callPackages
+, librsvg
+, cups
 
 , pname ? "kicad"
-, oceSupport ? false, opencascade
-, withOCCT ? true, opencascade-occt
-, ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python3, python3Packages
-, debug ? false, valgrind
+, oceSupport ? false
+, opencascade
+, withOCCT ? true
+, opencascade-occt
+, ngspiceSupport ? true
+, libngspice
+, scriptingSupport ? true
+, swig
+, python3
+, python3Packages
+, debug ? false
+, valgrind
 , with3d ? true
 , withI18n ? true
 }:
@@ -17,18 +32,18 @@ assert ngspiceSupport -> libngspice != null;
 
 with lib;
 let
-
   stable = pname != "kicad-unstable";
   baseName = if (stable) then "kicad" else "kicad-unstable";
 
-  versions =  import ./versions.nix;
+  versions = import ./versions.nix;
   versionConfig = versions.${baseName};
 
-  wxGTK = if (stable)
-    # wxGTK3x may default to withGtk2 = false, see #73145
+  wxGTK =
+    if (stable)
+      # wxGTK3x may default to withGtk2 = false, see #73145
     then wxGTK30.override { withGtk2 = false; }
-    # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
-    # but brings high DPI support?
+      # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
+      # but brings high DPI support?
     else wxGTK31.override { withGtk2 = false; };
 
   pythonPackages = python3Packages;
@@ -42,7 +57,6 @@ let
     inherit wxGTK python wxPython;
     inherit debug withI18n withOCCT oceSupport ngspiceSupport scriptingSupport;
   };
-
 in
 stdenv.mkDerivation rec {
 
@@ -92,27 +106,13 @@ stdenv.mkDerivation rec {
   # dxf2idf, idf2vrml, idfcyl, idfrect, kicad2step, kicad-ogltest
   installPhase =
     optionalString (scriptingSupport) '' buildPythonPath "${base} $pythonPath"
-    '' +
-    '' makeWrapper ${base}/bin/kicad $out/bin/kicad $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/pcbnew $out/bin/pcbnew $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/eeschema $out/bin/eeschema $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/gerbview $out/bin/gerbview $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/pcb_calculator $out/bin/pcb_calculator $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/pl_editor $out/bin/pl_editor $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/bitmap2component $out/bin/bitmap2component $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' + '' makeWrapper ${base}/bin/kicad $out/bin/kicad $makeWrapperArgs '' + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' + '' makeWrapper ${base}/bin/pcbnew $out/bin/pcbnew $makeWrapperArgs '' + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' + '' makeWrapper ${base}/bin/eeschema $out/bin/eeschema $makeWrapperArgs '' + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' + '' makeWrapper ${base}/bin/gerbview $out/bin/gerbview $makeWrapperArgs '' + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' + '' makeWrapper ${base}/bin/pcb_calculator $out/bin/pcb_calculator $makeWrapperArgs '' + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' + '' makeWrapper ${base}/bin/pl_editor $out/bin/pl_editor $makeWrapperArgs '' + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' + '' makeWrapper ${base}/bin/bitmap2component $out/bin/bitmap2component $makeWrapperArgs '' + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
     ''
   ;
 
@@ -124,7 +124,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = [ ./update.sh "all" ];
 
   meta = {
-    description = if (stable)
+    description =
+      if (stable)
       then "Open Source Electronics Design Automation Suite"
       else "Open Source EDA Suite, Development Build";
     homepage = "https://www.kicad-pcb.org/";
@@ -140,6 +141,6 @@ stdenv.mkDerivation rec {
   } // optionalAttrs with3d {
     # We can't download the 3d models on Hydra - they are a ~1 GiB download and
     # they occupy ~5 GiB in store.
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

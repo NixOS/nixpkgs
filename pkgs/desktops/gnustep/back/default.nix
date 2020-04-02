@@ -1,7 +1,8 @@
 { gsmakeDerivation
 , cairo
 , fetchurl
-, base, gui
+, base
+, gui
 , xlibsWrapper
 , freetype
 , pkgconfig

@@ -1,5 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig, cmake, libeb, lzo
-, qtbase, qtmultimedia, qttools, qtwebengine }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, libeb
+, lzo
+, qtbase
+, qtmultimedia
+, qttools
+, qtwebengine
+}:
 
 mkDerivation {
   pname = "qolibri";
@@ -14,7 +24,12 @@ mkDerivation {
 
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [
-    libeb lzo qtbase qtmultimedia qttools qtwebengine
+    libeb
+    lzo
+    qtbase
+    qtmultimedia
+    qttools
+    qtwebengine
   ];
 
   enableParallelBuilding = true;

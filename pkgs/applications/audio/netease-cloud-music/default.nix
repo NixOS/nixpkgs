@@ -1,8 +1,34 @@
-{ stdenv, lib, fontconfig, zlib, libGL, glib, pango
-, gdk-pixbuf, freetype, atk, cairo, libsForQt5, xorg
-, sqlite, taglib, nss, nspr, cups, dbus, alsaLib
-, libpulseaudio, deepin, qt5, harfbuzz, p11-kit
-, libgpgerror, libudev0-shim, makeWrapper, dpkg, fetchurl }:
+{ stdenv
+, lib
+, fontconfig
+, zlib
+, libGL
+, glib
+, pango
+, gdk-pixbuf
+, freetype
+, atk
+, cairo
+, libsForQt5
+, xorg
+, sqlite
+, taglib
+, nss
+, nspr
+, cups
+, dbus
+, alsaLib
+, libpulseaudio
+, deepin
+, qt5
+, harfbuzz
+, p11-kit
+, libgpgerror
+, libudev0-shim
+, makeWrapper
+, dpkg
+, fetchurl
+}:
 let
   rpath = lib.makeLibraryPath [
     fontconfig.lib
@@ -39,15 +65,15 @@ let
     harfbuzz
     p11-kit
     libgpgerror
-  ];   
+  ];
 
   runtimeLibs = lib.makeLibraryPath [ libudev0-shim ];
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "netease-cloud-music";
   version = "1.2.0";
   src = fetchurl {
-    url    = "http://d1.music.126.net/dmusic/netease-cloud-music_1.2.0_amd64_deepin_stable_20190424.deb";
+    url = "http://d1.music.126.net/dmusic/netease-cloud-music_1.2.0_amd64_deepin_stable_20190424.deb";
     sha256 = "0hg8jqim77vd0fmk8gfbz2fmlj99byxcm9jn70xf7vk1sy7wp6h1";
     curlOpts = "-A 'Mozilla/5.0'";
   };

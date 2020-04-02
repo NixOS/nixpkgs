@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib}:
+{ stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation {
   name = "cramfsswap-1.4.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0c6lbx1inkbcvvhh3y6fvfaq3w7d1zv7psgpjs5f3zjk1jysi9qd";
   };
 
-  buildInputs = [zlib];
+  buildInputs = [ zlib ];
 
   meta = with stdenv.lib; {
     description = "swap endianess of a cram filesystem (cramfs)";

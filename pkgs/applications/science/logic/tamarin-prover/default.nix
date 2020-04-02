@@ -1,14 +1,20 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib
-# the following are non-haskell dependencies
-, makeWrapper, which, maude, graphviz, ocaml
+{ haskellPackages
+, mkDerivation
+, fetchFromGitHub
+, lib
+  # the following are non-haskell dependencies
+, makeWrapper
+, which
+, maude
+, graphviz
+, ocaml
 }:
-
 let
   version = "1.4.1";
   src = fetchFromGitHub {
-    owner  = "tamarin-prover";
-    repo   = "tamarin-prover";
-    rev    = "d2e1c57311ce4ed0ef46d0372c4995b8fdc25323";
+    owner = "tamarin-prover";
+    repo = "tamarin-prover";
+    rev = "d2e1c57311ce4ed0ef46d0372c4995b8fdc25323";
     sha256 = "1bf2qvb646jg3qxd6jgp9ja3wlr888wchxi9mfr3kg7hfn63vxbq";
   };
 
@@ -17,8 +23,8 @@ let
   common = pname: src: {
     inherit pname version src;
 
-    license     = lib.licenses.gpl3;
-    homepage    = https://tamarin-prover.github.io;
+    license = lib.licenses.gpl3;
+    homepage = https://tamarin-prover.github.io;
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
@@ -33,16 +39,39 @@ let
   tamarin-prover-utils = mkDerivation (common "tamarin-prover-utils" (src + "/lib/utils") // {
     postPatch = replaceSymlinks;
     libraryHaskellDepends = with haskellPackages; [
-      base base64-bytestring binary blaze-builder bytestring containers
-      deepseq dlist fclabels mtl pretty safe SHA syb time transformers
+      base
+      base64-bytestring
+      binary
+      blaze-builder
+      bytestring
+      containers
+      deepseq
+      dlist
+      fclabels
+      mtl
+      pretty
+      safe
+      SHA
+      syb
+      time
+      transformers
     ];
   });
 
   tamarin-prover-term = mkDerivation (common "tamarin-prover-term" (src + "/lib/term") // {
     postPatch = replaceSymlinks;
     libraryHaskellDepends = (with haskellPackages; [
-      attoparsec base binary bytestring containers deepseq dlist HUnit
-      mtl process safe
+      attoparsec
+      base
+      binary
+      bytestring
+      containers
+      deepseq
+      dlist
+      HUnit
+      mtl
+      process
+      safe
     ]) ++ [ tamarin-prover-utils ];
   });
 
@@ -50,11 +79,25 @@ let
     postPatch = replaceSymlinks;
     doHaddock = false; # broken
     libraryHaskellDepends = (with haskellPackages; [
-      aeson aeson-pretty base binary bytestring containers deepseq dlist
-      fclabels mtl parallel parsec process safe text transformers uniplate
+      aeson
+      aeson-pretty
+      base
+      binary
+      bytestring
+      containers
+      deepseq
+      dlist
+      fclabels
+      mtl
+      parallel
+      parsec
+      process
+      safe
+      text
+      transformers
+      uniplate
     ]) ++ [ tamarin-prover-utils tamarin-prover-term ];
   });
-
 in
 mkDerivation (common "tamarin-prover" src // {
   isLibrary = false;
@@ -95,15 +138,46 @@ mkDerivation (common "tamarin-prover" src // {
 
   executableSystemDepends = [ ocaml ];
   executableHaskellDepends = (with haskellPackages; [
-    base binary binary-orphans blaze-builder blaze-html bytestring
-    cmdargs conduit containers monad-control deepseq directory fclabels file-embed
-    filepath gitrev http-types HUnit lifted-base mtl monad-unlift parsec process
-    resourcet safe shakespeare tamarin-prover-term
-    template-haskell text threads time wai warp yesod-core yesod-static
-  ]) ++ [ tamarin-prover-utils
-          tamarin-prover-term
-          tamarin-prover-theory
-        ];
+    base
+    binary
+    binary-orphans
+    blaze-builder
+    blaze-html
+    bytestring
+    cmdargs
+    conduit
+    containers
+    monad-control
+    deepseq
+    directory
+    fclabels
+    file-embed
+    filepath
+    gitrev
+    http-types
+    HUnit
+    lifted-base
+    mtl
+    monad-unlift
+    parsec
+    process
+    resourcet
+    safe
+    shakespeare
+    tamarin-prover-term
+    template-haskell
+    text
+    threads
+    time
+    wai
+    warp
+    yesod-core
+    yesod-static
+  ]) ++ [
+    tamarin-prover-utils
+    tamarin-prover-term
+    tamarin-prover-theory
+  ];
 
   broken = true;
 })

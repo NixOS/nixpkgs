@@ -1,5 +1,16 @@
-{ fetchurl, stdenv, runtimeShell
-, SDL2, freealut, SDL2_image, openal, physfs, zlib, libGLU, libGL, glew }:
+{ fetchurl
+, stdenv
+, runtimeShell
+, SDL2
+, freealut
+, SDL2_image
+, openal
+, physfs
+, zlib
+, libGLU
+, libGL
+, glew
+}:
 
 stdenv.mkDerivation rec {
   name = "trigger-rally-0.6.6";
@@ -34,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Rally";
     homepage = http://trigger-rally.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -1,17 +1,21 @@
-{ buildPackages, pkgs, targetPackages
-, darwin, stdenv, callPackage, callPackages, newScope
+{ buildPackages
+, pkgs
+, targetPackages
+, darwin
+, stdenv
+, callPackage
+, callPackages
+, newScope
 }:
-
 let
   apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
 in
-
 (apple-source-releases // {
 
   callPackage = newScope (darwin.apple_sdk.frameworks // darwin);
 
   stdenvNoCF = stdenv.override {
-    extraBuildInputs = [];
+    extraBuildInputs = [ ];
   };
 
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
@@ -84,6 +88,6 @@ in
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
-  libtapi = callPackage ../os-specific/darwin/libtapi {};
+  libtapi = callPackage ../os-specific/darwin/libtapi { };
 
 })

@@ -1,35 +1,33 @@
 { stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
+let
+  wrapper = stdenv.mkDerivation rec {
+    pname = "wrapper";
+    version = "3.5.35";
 
-let wrapper = stdenv.mkDerivation rec {
-  pname = "wrapper";
-  version = "3.5.35";
+    src = fetchurl {
+      url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
+      sha256 = "0mjyw9ays9v6lnj21pmfd3qdvd9b6rwxfmw3pg6z0kyf2jadixw2";
+    };
 
-  src = fetchurl {
-    url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "0mjyw9ays9v6lnj21pmfd3qdvd9b6rwxfmw3pg6z0kyf2jadixw2";
+    buildInputs = [ jdk ];
+
+    buildPhase = ''
+      export ANT_HOME=${ant}
+      export JAVA_HOME=${jdk}/lib/openjdk/jre/
+      export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
+      export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
+      sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
+      ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
+    '';
+
+    installPhase = ''
+      mkdir -p $out/{bin,lib}
+      cp bin/wrapper $out/bin/wrapper
+      cp lib/wrapper.jar $out/lib/wrapper.jar
+      cp lib/libwrapper.so $out/lib/libwrapper.so
+    '';
   };
-
-  buildInputs = [ jdk ];
-
-  buildPhase = ''
-    export ANT_HOME=${ant}
-    export JAVA_HOME=${jdk}/lib/openjdk/jre/
-    export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
-    export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
-    sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
-    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
-  '';
-
-  installPhase = ''
-    mkdir -p $out/{bin,lib}
-    cp bin/wrapper $out/bin/wrapper
-    cp lib/wrapper.jar $out/lib/wrapper.jar
-    cp lib/libwrapper.so $out/lib/libwrapper.so
-  '';
-};
-
 in
-
 stdenv.mkDerivation rec {
   pname = "i2p";
   version = "0.9.42";

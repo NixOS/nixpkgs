@@ -17,17 +17,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-     glib
-     itstool
-     libxml2
-     libcanberra-gtk3
-     gtk3
-     gnome3.libgnome-keyring
-     libnotify
-     dbus-glib
-     upower
-     polkit
-     mate.mate-panel
+    glib
+    itstool
+    libxml2
+    libcanberra-gtk3
+    gtk3
+    gnome3.libgnome-keyring
+    libnotify
+    dbus-glib
+    upower
+    polkit
+    mate.mate-panel
   ];
 
   configureFlags = [ "--enable-applets" ];

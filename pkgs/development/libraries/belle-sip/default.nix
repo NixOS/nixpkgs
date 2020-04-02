@@ -1,5 +1,12 @@
-{ stdenv, antlr3_4, libantlr3c, jre, mbedtls, fetchFromGitHub
-  , cmake, zlib, bctoolbox
+{ stdenv
+, antlr3_4
+, libantlr3c
+, jre
+, mbedtls
+, fetchFromGitHub
+, cmake
+, zlib
+, bctoolbox
 }:
 
 stdenv.mkDerivation rec {

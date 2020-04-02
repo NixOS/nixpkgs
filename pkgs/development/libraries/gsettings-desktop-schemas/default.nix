@@ -1,9 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, glib, gobject-introspection
+{ stdenv
+, fetchurl
+, pkgconfig
+, glib
+, gobject-introspection
 , meson
 , ninja
 , python3
   # just for passthru
-, gnome3 }:
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";

@@ -14,7 +14,7 @@ rec {
 
   packageName = "css-lite";
 
-  asdFilesToKeep = ["css-lite.asd"];
+  asdFilesToKeep = [ "css-lite.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM css-lite DESCRIPTION System lacks description SHA256

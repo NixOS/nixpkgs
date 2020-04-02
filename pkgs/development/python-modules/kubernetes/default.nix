@@ -1,6 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast,
-  ipaddress, websocket_client, urllib3, pyyaml, requests_oauthlib, python-dateutil, google_auth, adal,
-  isort, pytest, coverage, mock, sphinx, autopep8, pep8, codecov, recommonmark, nose }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, ipaddress
+, websocket_client
+, urllib3
+, pyyaml
+, requests_oauthlib
+, python-dateutil
+, google_auth
+, adal
+, isort
+, pytest
+, coverage
+, mock
+, sphinx
+, autopep8
+, pep8
+, codecov
+, recommonmark
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "kubernetes";
@@ -13,9 +33,10 @@ buildPythonPackage rec {
     sed -e '/randomize/d' -i test-requirements.txt
   ''
   # This is a python2 and python3.2 only requiremet since it is a backport of a python-3.3 api.
-  + (if (pythonAtLeast "3.3")  then ''
-    sed -e '/ipaddress/d' -i requirements.txt
-  '' else "");
+  + (
+    if (pythonAtLeast "3.3") then ''
+      sed -e '/ipaddress/d' -i requirements.txt
+    '' else "");
 
   checkPhase = ''
     py.test

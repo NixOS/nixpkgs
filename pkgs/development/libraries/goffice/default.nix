@@ -1,5 +1,18 @@
-{ fetchurl, stdenv, pkgconfig, intltool, glib, gtk3, lasem
-, libgsf, libxml2, libxslt, cairo, pango, librsvg, gnome3 }:
+{ fetchurl
+, stdenv
+, pkgconfig
+, intltool
+, glib
+, gtk3
+, lasem
+, libgsf
+, libxml2
+, libxslt
+, cairo
+, pango
+, librsvg
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
   pname = "goffice";
@@ -15,7 +28,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool ];
 
   propagatedBuildInputs = [
-    glib gtk3 libxml2 cairo pango libgsf lasem
+    glib
+    gtk3
+    libxml2
+    cairo
+    pango
+    libgsf
+    lasem
   ];
 
   buildInputs = [ libxslt librsvg ];

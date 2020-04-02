@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPy3k
 , numpy
 , wheel
 , werkzeug
@@ -23,13 +26,14 @@ buildPythonPackage rec {
     pname = "tensorboard";
     inherit version;
     format = "wheel";
-  } // (if isPy3k then {
-    python = "py3";
-    sha256 = "1wpjdzhjpcdkyaahzd4bl71k4l30z5c55280ndiwj32hw70lxrp6";
-  } else {
-    python = "py2";
-    sha256 = "1f805839xa36wxb7xac9fyxzaww92vw4d50vs6g61wnlr4byp00w";
-  }));
+  } // (
+    if isPy3k then {
+      python = "py3";
+      sha256 = "1wpjdzhjpcdkyaahzd4bl71k4l30z5c55280ndiwj32hw70lxrp6";
+    } else {
+      python = "py2";
+      sha256 = "1f805839xa36wxb7xac9fyxzaww92vw4d50vs6g61wnlr4byp00w";
+    }));
 
   propagatedBuildInputs = [
     numpy

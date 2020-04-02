@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.spotifyd;
   spotifydConf = pkgs.writeText "spotifyd.conf" cfg.config;
@@ -33,7 +32,7 @@ in
         RestartSec = 12;
         DynamicUser = true;
         CacheDirectory = "spotifyd";
-        SupplementaryGroups = ["audio"];
+        SupplementaryGroups = [ "audio" ];
       };
     };
   };

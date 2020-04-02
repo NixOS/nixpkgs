@@ -1,7 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, pytestpep8, pytest_xdist
-, six, numpy, scipy, pyyaml, h5py
-, keras-applications, keras-preprocessing
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, pytestcov
+, pytestpep8
+, pytest_xdist
+, six
+, numpy
+, scipy
+, pyyaml
+, h5py
+, keras-applications
+, keras-preprocessing
 }:
 
 buildPythonPackage rec {
@@ -21,8 +31,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six pyyaml numpy scipy h5py
-    keras-applications keras-preprocessing
+    six
+    pyyaml
+    numpy
+    scipy
+    h5py
+    keras-applications
+    keras-preprocessing
   ];
 
   # Couldn't get tests working

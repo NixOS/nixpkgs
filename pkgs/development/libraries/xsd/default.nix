@@ -1,5 +1,4 @@
 { stdenv, fetchurl, xercesc }:
-
 let
   fixed_paths = ''LDFLAGS="-L${xercesc}/lib" CPPFLAGS="-I${xercesc}/include"'';
 in

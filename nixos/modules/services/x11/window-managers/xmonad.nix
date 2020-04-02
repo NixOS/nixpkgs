@@ -1,4 +1,4 @@
-{pkgs, lib, config, ...}:
+{ pkgs, lib, config, ... }:
 
 with lib;
 let
@@ -7,17 +7,16 @@ let
   xmonad = pkgs.xmonad-with-packages.override {
     ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
     packages = self: cfg.extraPackages self ++
-                     optionals cfg.enableContribAndExtras
-                     [ self.xmonad-contrib self.xmonad-extras ];
+      optionals cfg.enableContribAndExtras
+        [ self.xmonad-contrib self.xmonad-extras ];
   };
   xmonadBin = pkgs.writers.writeHaskell "xmonad" {
     ghc = cfg.haskellPackages.ghc;
     libraries = [ cfg.haskellPackages.xmonad ] ++
-                cfg.extraPackages cfg.haskellPackages ++
-                optionals cfg.enableContribAndExtras
-                (with cfg.haskellPackages; [ xmonad-contrib xmonad-extras ]);
+      cfg.extraPackages cfg.haskellPackages ++
+      optionals cfg.enableContribAndExtras
+        (with cfg.haskellPackages; [ xmonad-contrib xmonad-extras ]);
   } cfg.config;
-
 in
 {
   options = {
@@ -36,7 +35,7 @@ in
       };
 
       extraPackages = mkOption {
-        default = self: [];
+        default = self: [ ];
         defaultText = "self: []";
         example = literalExample ''
           haskellPackages: [
@@ -80,16 +79,19 @@ in
   };
   config = mkIf cfg.enable {
     services.xserver.windowManager = {
-      session = [{
-        name = "xmonad";
-        start = if (cfg.config != null) then ''
-          ${xmonadBin}
-          waitPID=$!
-        '' else ''
-          systemd-cat -t xmonad ${xmonad}/bin/xmonad &
-          waitPID=$!
-        '';
-      }];
+      session = [
+        {
+          name = "xmonad";
+          start =
+            if (cfg.config != null) then ''
+              ${xmonadBin}
+              waitPID=$!
+            '' else ''
+              systemd-cat -t xmonad ${xmonad}/bin/xmonad &
+              waitPID=$!
+            '';
+        }
+      ];
     };
 
     environment.systemPackages = [ xmonad ];

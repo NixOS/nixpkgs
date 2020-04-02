@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  mistune, docutils } :
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, mistune
+, docutils
+}:
 buildPythonPackage rec {
   pname = "m2r";
   version = "0.2.1";

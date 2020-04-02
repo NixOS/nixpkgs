@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.transmission;
   apparmor = config.security.apparmor.enable;
@@ -189,8 +188,8 @@ in
 
           ${fullSettings.download-dir}/** rw,
           ${optionalString fullSettings.incomplete-dir-enabled ''
-            ${fullSettings.incomplete-dir}/** rw,
-          ''}
+        ${fullSettings.incomplete-dir}/** rw,
+      ''}
         }
       '')
     ];

@@ -1,20 +1,19 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.rsnapshot;
   cfgfile = pkgs.writeText "rsnapshot.conf" ''
-    config_version	1.2
-    cmd_cp	${pkgs.coreutils}/bin/cp
-    cmd_rm	${pkgs.coreutils}/bin/rm
-    cmd_rsync	${pkgs.rsync}/bin/rsync
-    cmd_ssh	${pkgs.openssh}/bin/ssh
-    cmd_logger	${pkgs.inetutils}/bin/logger
-    cmd_du	${pkgs.coreutils}/bin/du
-    cmd_rsnapshot_diff	${pkgs.rsnapshot}/bin/rsnapshot-diff
-    lockfile	/run/rsnapshot.pid
-    link_dest	1
+    config_version  1.2
+    cmd_cp  ${pkgs.coreutils}/bin/cp
+    cmd_rm  ${pkgs.coreutils}/bin/rm
+    cmd_rsync  ${pkgs.rsync}/bin/rsync
+    cmd_ssh  ${pkgs.openssh}/bin/ssh
+    cmd_logger  ${pkgs.inetutils}/bin/logger
+    cmd_du  ${pkgs.coreutils}/bin/du
+    cmd_rsnapshot_diff  ${pkgs.rsnapshot}/bin/rsnapshot-diff
+    lockfile  /run/rsnapshot.pid
+    link_dest  1
 
     ${cfg.extraConfig}
   '';
@@ -32,9 +31,9 @@ in
       extraConfig = mkOption {
         default = "";
         example = ''
-          retains	hourly	24
-          retain	daily	365
-          backup	/home/	localhost/
+          retains  hourly  24
+          retain  daily  365
+          backup  /home/  localhost/
         '';
         type = types.lines;
         description = ''
@@ -50,7 +49,7 @@ in
       };
 
       cronIntervals = mkOption {
-        default = {};
+        default = { };
         example = { hourly = "0 * * * *"; daily = "50 21 * * *"; };
         type = types.attrsOf types.str;
         description = ''

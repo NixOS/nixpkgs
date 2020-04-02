@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, pyserial }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pyserial
+}:
 
 buildPythonPackage rec {
   pname = "pyserial-asyncio";

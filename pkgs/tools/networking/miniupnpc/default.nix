@@ -1,5 +1,4 @@
 { stdenv, fetchurl, which, cctools }:
-
 let
   generic = { version, sha256 }:
     stdenv.mkDerivation rec {
@@ -26,7 +25,8 @@ let
         license = licenses.bsd3;
       };
     };
-in {
+in
+{
   miniupnpc_2 = generic {
     version = "2.1.20190625";
     sha256 = "1yqp0d8x5ldjfma5x2vhpg1aaafdg0470ismccixww3rzpbza8w7";

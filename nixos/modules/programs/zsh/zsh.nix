@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfge = config.environment;
 
   cfg = config.programs.zsh;
@@ -32,9 +30,7 @@ let
     #
     # See "STARTUP/SHUTDOWN FILES" section of zsh(1) for more info.
   '';
-
 in
-
 {
 
   options = {
@@ -53,7 +49,7 @@ in
       };
 
       shellAliases = mkOption {
-        default = {};
+        default = { };
         description = ''
           Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
@@ -118,7 +114,9 @@ in
       setOptions = mkOption {
         type = types.listOf types.str;
         default = [
-          "HIST_IGNORE_DUPS" "SHARE_HISTORY" "HIST_FCNTL_LOCK"
+          "HIST_IGNORE_DUPS"
+          "SHARE_HISTORY"
+          "HIST_FCNTL_LOCK"
         ];
         example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
         description = ''
@@ -220,10 +218,10 @@ in
         if [ -n "$__ETC_ZSHRC_SOURCED" -o -n "$NOSYSZSHRC" ]; then return; fi
         __ETC_ZSHRC_SOURCED=1
 
-        ${optionalString (cfg.setOptions != []) ''
-          # Set zsh options.
-          setopt ${concatStringsSep " " cfg.setOptions}
-        ''}
+        ${optionalString (cfg.setOptions != [ ]) ''
+        # Set zsh options.
+        setopt ${concatStringsSep " " cfg.setOptions}
+      ''}
 
         # Setup command line history.
         # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
@@ -235,9 +233,9 @@ in
         . /etc/zinputrc
 
         ${optionalString cfg.enableGlobalCompInit ''
-          # Enable autocompletion.
-          autoload -U compinit && compinit
-        ''}
+        # Enable autocompletion.
+        autoload -U compinit && compinit
+      ''}
 
         # Setup custom interactive shell init stuff.
         ${cfge.interactiveShellInit}
@@ -274,7 +272,8 @@ in
     #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =
-      [ "/run/current-system/sw/bin/zsh"
+      [
+        "/run/current-system/sw/bin/zsh"
         "${pkgs.zsh}/bin/zsh"
       ];
 

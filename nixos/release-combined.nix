@@ -12,11 +12,13 @@ let
 
   nixpkgsSrc = nixpkgs; # urgh
 
-  pkgs = import ./.. {};
+  pkgs = import ./.. { };
 
-  removeMaintainers = set: if builtins.isAttrs set
-    then if (set.type or "") == "derivation"
-      then set // { meta = builtins.removeAttrs (set.meta or {}) [ "maintainers" ]; }
+  removeMaintainers = set:
+    if builtins.isAttrs set
+    then
+      if (set.type or "") == "derivation"
+      then set // { meta = builtins.removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
@@ -24,7 +26,6 @@ let
     supportedSystems = supportedSystems ++ limitedSupportedSystems;
     nixpkgs = nixpkgsSrc;
   })) [ "unstable" ];
-
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {

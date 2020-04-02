@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, numpy, scipy, matplotlib, pandas, tabulate, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, numpy
+, scipy
+, matplotlib
+, pandas
+, tabulate
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "acoustics";

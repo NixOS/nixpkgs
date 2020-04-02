@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ makeWrapper ] ++ (with perlPackages; [
-    perl AlgorithmDiff ParallelForkManager RegexpCommon
+    perl
+    AlgorithmDiff
+    ParallelForkManager
+    RegexpCommon
   ]);
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" "INSTALL=install" ];

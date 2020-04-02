@@ -1,7 +1,5 @@
 { stdenv, fetchurl, cpio, xz, pkgs }:
-
 let
-
   version = "1.43_5";
 
 
@@ -30,9 +28,7 @@ let
     xzcat -Q $src | cpio --format odc -i -d ${firmwareIn}
     exit 0
   '';
-
 in
-
 stdenv.mkDerivation {
 
   pname = "facetimehd-firmware";

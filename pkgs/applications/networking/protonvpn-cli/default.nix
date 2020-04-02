@@ -1,11 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils
-, openvpn, python, dialog, wget, update-resolv-conf }:
-
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, openvpn
+, python
+, dialog
+, wget
+, update-resolv-conf
+}:
 let
   expectedUpdateResolvPath = "/etc/openvpn/update-resolv-conf";
   actualUpdateResolvePath = "${update-resolv-conf}/libexec/openvpn/update-resolv-conf";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "protonvpn-cli";
   version = "1.1.2";
 

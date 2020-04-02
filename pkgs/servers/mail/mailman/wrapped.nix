@@ -1,11 +1,12 @@
-{ runCommand, lib, makeWrapper, python3
+{ runCommand
+, lib
+, makeWrapper
+, python3
 , archivers ? [ python3.pkgs.mailman-hyperkitty ]
 }:
-
 let
   inherit (python3.pkgs) makePythonPath mailman;
 in
-
 runCommand "${mailman.name}-wrapped" {
   inherit (mailman) meta;
   buildInputs = [ makeWrapper ];

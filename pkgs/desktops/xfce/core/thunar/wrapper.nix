@@ -24,7 +24,7 @@ symlinkJoin {
     done
   '';
 
-   meta = with lib; {
+  meta = with lib; {
     inherit (thunar.meta) homepage license platforms maintainers;
 
     description = thunar.meta.description + optionalString

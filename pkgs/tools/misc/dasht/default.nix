@@ -13,13 +13,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "dasht";
+  pname = "dasht";
   version = "2.3.0";
 
   src = fetchFromGitHub {
-    owner  = "sunaku";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "sunaku";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0d0pcjalba58nvxdgn39m4b6n9ifajf3ygyjaqgvzwxzgpzw0a60";
   };
 
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Search API docs offline, in terminal or browser";
-    homepage    = "https://sunaku.github.io/dasht/man";
-    license     = stdenv.lib.licenses.isc;
-    platforms   = stdenv.lib.platforms.unix; #cannot test other
+    homepage = "https://sunaku.github.io/dasht/man";
+    license = stdenv.lib.licenses.isc;
+    platforms = stdenv.lib.platforms.unix; #cannot test other
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
   };
 }

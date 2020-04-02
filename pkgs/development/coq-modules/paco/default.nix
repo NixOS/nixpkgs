@@ -1,5 +1,4 @@
-{stdenv, fetchFromGitHub, coq, unzip}:
-
+{ stdenv, fetchFromGitHub, coq, unzip }:
 let
   versions = {
     pre_8_6 = rec {
@@ -24,7 +23,6 @@ let
   };
   param = params.${coq.coq-version};
 in
-
 stdenv.mkDerivation rec {
   inherit (param) version;
   name = "coq${coq.coq-version}-paco-${version}";

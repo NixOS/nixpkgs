@@ -109,6 +109,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/Folks;
     license = licenses.lgpl2Plus;
     maintainers = gnome3.maintainers;
-    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

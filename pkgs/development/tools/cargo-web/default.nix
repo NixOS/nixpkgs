@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, openssl, perl, pkgconfig, rustPlatform
-, CoreServices, Security
+{ stdenv
+, fetchFromGitHub
+, openssl
+, perl
+, pkgconfig
+, rustPlatform
+, CoreServices
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {

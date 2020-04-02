@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zq1ax0pdxfn0nw0vm7s23ik47w8nwh1n83a7yka8dnknxjf5nng";
   };
 
-  phases = ["unpackPhase" "installPhase"];
+  phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
     mkdir -p $out

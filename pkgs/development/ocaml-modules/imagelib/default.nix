@@ -11,10 +11,12 @@ buildDunePackage rec {
     sha256 = "0h7vgyss42nhlfqpbdnb54nxq86rskqi2ilx8b87r0hi19hqx463";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/rlepigre/ocaml-imagelib/pull/24/commits/4704fd44adcda62e0d96ea5b1927071326aa6111.patch";
-    sha256 = "0ipjab1hfa2v2pnd8g1k3q2ia0plgiw7crm3fa4w2aqpzdyabkb9";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/rlepigre/ocaml-imagelib/pull/24/commits/4704fd44adcda62e0d96ea5b1927071326aa6111.patch";
+      sha256 = "0ipjab1hfa2v2pnd8g1k3q2ia0plgiw7crm3fa4w2aqpzdyabkb9";
+    })
+  ];
 
   propagatedBuildInputs = [ decompress ];
 

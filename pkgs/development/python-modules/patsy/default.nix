@@ -33,4 +33,3 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
   };
 }
-

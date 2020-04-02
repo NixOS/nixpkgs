@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, python3Packages, makeWrapper, unzip
-, guiSupport ? false, tk ? null
+{ stdenv
+, fetchurl
+, python3Packages
+, makeWrapper
+, unzip
+, guiSupport ? false
+, tk ? null
 , ApplicationServices
 }:
-
 let
   inherit (python3Packages) docutils dulwich python;
-
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   pname = "mercurial";
   version = "5.3";
 

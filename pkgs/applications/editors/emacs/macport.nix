@@ -1,6 +1,24 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake
-, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
-, ImageCaptureCore, GSS, ImageIO # These may be optional
+{ stdenv
+, fetchurl
+, ncurses
+, pkgconfig
+, texinfo
+, libxml2
+, gnutls
+, gettext
+, autoconf
+, automake
+, AppKit
+, Carbon
+, Cocoa
+, IOKit
+, OSAKit
+, Quartz
+, QuartzCore
+, WebKit
+, ImageCaptureCore
+, GSS
+, ImageIO # These may be optional
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +50,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf automake ];
 
-  buildInputs = [ ncurses libxml2 gnutls texinfo gettext
-    AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
-    ImageCaptureCore GSS ImageIO   # may be optional
+  buildInputs = [
+    ncurses
+    libxml2
+    gnutls
+    texinfo
+    gettext
+    AppKit
+    Carbon
+    Cocoa
+    IOKit
+    OSAKit
+    Quartz
+    QuartzCore
+    WebKit
+    ImageCaptureCore
+    GSS
+    ImageIO # may be optional
   ];
 
   postUnpack = ''
@@ -80,10 +112,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable text editor";
-    homepage    = https://www.gnu.org/software/emacs/;
-    license     = licenses.gpl3Plus;
+    homepage = https://www.gnu.org/software/emacs/;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jwiegley matthewbauer ];
-    platforms   = platforms.darwin;
+    platforms = platforms.darwin;
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its

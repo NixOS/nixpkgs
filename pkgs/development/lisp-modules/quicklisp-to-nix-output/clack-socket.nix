@@ -14,7 +14,7 @@ rec {
 
   packageName = "clack-socket";
 
-  asdFilesToKeep = ["clack-socket.asd"];
+  asdFilesToKeep = [ "clack-socket.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clack-socket DESCRIPTION System lacks description SHA256

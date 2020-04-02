@@ -1,13 +1,28 @@
-{ stdenv, fetchurl, makeDesktopItem
-, ghostscript, atk, gtk2, glib, fontconfig, freetype
-, libgnomecanvas, libgnomeprint, libgnomeprintui
-, pango, libX11, xorgproto, zlib, poppler
-, autoconf, automake, libtool, pkgconfig}:
-
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, ghostscript
+, atk
+, gtk2
+, glib
+, fontconfig
+, freetype
+, libgnomecanvas
+, libgnomeprint
+, libgnomeprintui
+, pango
+, libX11
+, xorgproto
+, zlib
+, poppler
+, autoconf
+, automake
+, libtool
+, pkgconfig
+}:
 let
   isGdkQuartzBackend = (gtk2.gdktarget == "quartz");
 in
-
 stdenv.mkDerivation rec {
   version = "0.4.8.2016";
   name = "xournal-" + version;
@@ -17,17 +32,26 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ghostscript atk gtk2 glib fontconfig freetype
+    ghostscript
+    atk
+    gtk2
+    glib
+    fontconfig
+    freetype
     libgnomecanvas
-    pango libX11 xorgproto zlib poppler
+    pango
+    libX11
+    xorgproto
+    zlib
+    poppler
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
-    libgnomeprint libgnomeprintui
+    libgnomeprint
+    libgnomeprintui
   ];
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  NIX_LDFLAGS = "-lz"
-    + stdenv.lib.optionalString (!isGdkQuartzBackend) " -lX11";
+  NIX_LDFLAGS = "-lz" + stdenv.lib.optionalString (!isGdkQuartzBackend) " -lX11";
 
   desktopItem = makeDesktopItem {
     name = name;
@@ -40,19 +64,19 @@ stdenv.mkDerivation rec {
     genericName = "PDF Editor";
   };
 
-  postInstall=''
-      mkdir --parents $out/share/mime/packages
-      cat << EOF > $out/share/mime/packages/xournal.xml
-      <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-         <mime-type type="application/x-xoj">
-          <comment>Xournal Document</comment>
-          <glob pattern="*.xoj"/>
-         </mime-type>
-      </mime-info>
-      EOF
-      cp --recursive ${desktopItem}/share/applications $out/share
-      mkdir --parents $out/share/icons
-      cp $out/share/xournal/pixmaps/xournal.png $out/share/icons
+  postInstall = ''
+    mkdir --parents $out/share/mime/packages
+    cat << EOF > $out/share/mime/packages/xournal.xml
+    <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+       <mime-type type="application/x-xoj">
+        <comment>Xournal Document</comment>
+        <glob pattern="*.xoj"/>
+       </mime-type>
+    </mime-info>
+    EOF
+    cp --recursive ${desktopItem}/share/applications $out/share
+    mkdir --parents $out/share/icons
+    cp $out/share/xournal/pixmaps/xournal.png $out/share/icons
   '';
 
   meta = with stdenv.lib; {

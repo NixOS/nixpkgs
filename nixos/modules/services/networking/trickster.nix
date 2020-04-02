@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.trickster;
 in
@@ -107,6 +106,5 @@ in
       };
     };
 
-  };  
+  };
 }
-

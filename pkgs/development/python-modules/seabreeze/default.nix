@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/ap--/python-seabreeze";
     description = "A python library to access Ocean Optics spectrometers";
-    maintainers = [];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

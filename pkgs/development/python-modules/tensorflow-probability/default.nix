@@ -16,7 +16,6 @@
 , mock
 , pytest
 }:
-
 let
   version = "0.7";
   pname = "tensorflow_probability";
@@ -63,7 +62,8 @@ let
       '';
     };
   };
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit version pname;
   format = "wheel";
 

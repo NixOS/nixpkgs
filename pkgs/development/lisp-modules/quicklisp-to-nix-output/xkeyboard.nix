@@ -16,7 +16,7 @@ rec {
 
   packageName = "xkeyboard";
 
-  asdFilesToKeep = ["xkeyboard.asd"];
+  asdFilesToKeep = [ "xkeyboard.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM xkeyboard DESCRIPTION

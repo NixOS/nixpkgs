@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
 , cssselect
 , dateutil
 , feedparser
@@ -44,7 +47,7 @@ buildPythonPackage rec {
     }; p' weboob/browser/browsers.py weboob/browser/pages.py
   '';
 
-  setupPyBuildFlags = ["--qt" "--xdg"];
+  setupPyBuildFlags = [ "--qt" "--xdg" ];
 
   checkInputs = [ nose ];
 

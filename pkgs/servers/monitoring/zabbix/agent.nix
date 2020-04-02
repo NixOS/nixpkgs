@@ -35,4 +35,5 @@ import ./versions.nix ({ version, sha256 }:
       maintainers = with maintainers; [ mmahut psyanticy ];
       platforms = platforms.linux;
     };
-  })
+  }
+)

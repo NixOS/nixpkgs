@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "DendroPy";
+  pname = "DendroPy";
   version = "4.4.0";
 
   # tests are incorrectly packaged in pypi version

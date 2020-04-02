@@ -1,18 +1,17 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xserver.displayManager;
   gdm = pkgs.gnome3.gdm;
 
-  xSessionWrapper = if (cfg.setupCommands == "") then null else
-    pkgs.writeScript "gdm-x-session-wrapper" ''
-      #!${pkgs.bash}/bin/bash
-      ${cfg.setupCommands}
-      exec "$@"
-    '';
+  xSessionWrapper =
+    if (cfg.setupCommands == "") then null else
+      pkgs.writeScript "gdm-x-session-wrapper" ''
+        #!${pkgs.bash}/bin/bash
+        ${cfg.setupCommands}
+        exec "$@"
+      '';
 
   # Solves problems like:
   # https://wiki.archlinux.org/index.php/Talk:Bluetooth_headset#GDMs_pulseaudio_instance_captures_bluetooth_headset
@@ -35,7 +34,6 @@ let
 
   setSessionScript = pkgs.callPackage ./account-service-util.nix { };
 in
-
 {
 
   ###### interface
@@ -53,7 +51,7 @@ in
       '';
 
       autoLogin = mkOption {
-        default = {};
+        default = { };
         description = ''
           Auto login configuration attrset.
         '';
@@ -124,7 +122,8 @@ in
   config = mkIf cfg.gdm.enable {
 
     assertions = [
-      { assertion = cfg.gdm.autoLogin.enable -> cfg.gdm.autoLogin.user != null;
+      {
+        assertion = cfg.gdm.autoLogin.enable -> cfg.gdm.autoLogin.user != null;
         message = "GDM auto-login requires services.xserver.displayManager.gdm.autoLogin.user to be set";
       }
     ];
@@ -132,7 +131,8 @@ in
     services.xserver.displayManager.lightdm.enable = false;
 
     users.users.gdm =
-      { name = "gdm";
+      {
+        name = "gdm";
         uid = config.ids.uids.gdm;
         group = "gdm";
         home = "/run/gdm";
@@ -195,9 +195,9 @@ in
       "plymouth-start.service"
     ];
     systemd.services.display-manager.conflicts = [
-       "getty@tty${gdm.initialVT}.service"
-       # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
-       # Currently this breaks switching configurations while using plymouth.
+      "getty@tty${gdm.initialVT}.service"
+      # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
+      # Currently this breaks switching configurations while using plymouth.
     ];
     systemd.services.display-manager.onFailure = [
       "plymouth-quit.service"
@@ -229,8 +229,8 @@ in
       # disable Wayland on Hi1710 chipsets
       ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-disable-wayland"
       ${optionalString (!cfg.gdm.nvidiaWayland) ''
-        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-disable-wayland"
-      ''}
+      DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-disable-wayland"
+    ''}
       # disable Wayland when modesetting is disabled
       IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-disable-wayland"
     '';
@@ -238,39 +238,39 @@ in
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
     programs.dconf.profiles.gdm =
-    let
-      customDconf = pkgs.writeTextFile {
-        name = "gdm-dconf";
-        destination = "/dconf/gdm-custom";
-        text = ''
-          ${optionalString (!cfg.gdm.autoSuspend) ''
+      let
+        customDconf = pkgs.writeTextFile {
+          name = "gdm-dconf";
+          destination = "/dconf/gdm-custom";
+          text = ''
+            ${optionalString (!cfg.gdm.autoSuspend) ''
             [org/gnome/settings-daemon/plugins/power]
             sleep-inactive-ac-type='nothing'
             sleep-inactive-battery-type='nothing'
             sleep-inactive-ac-timeout=0
             sleep-inactive-battery-timeout=0
           ''}
-        '';
-      };
+          '';
+        };
 
-      customDconfDb = pkgs.stdenv.mkDerivation {
-        name = "gdm-dconf-db";
+        customDconfDb = pkgs.stdenv.mkDerivation {
+          name = "gdm-dconf-db";
+          buildCommand = ''
+            ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          '';
+        };
+      in pkgs.stdenv.mkDerivation {
+        name = "dconf-gdm-profile";
         buildCommand = ''
-          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          # Check that the GDM profile starts with what we expect.
+          if [ $(head -n 1 ${gdm}/share/dconf/profile/gdm) != "user-db:user" ]; then
+            echo "GDM dconf profile changed, please update gdm.nix"
+            exit 1
+          fi
+          # Insert our custom DB behind it.
+          sed '2ifile-db:${customDconfDb}' ${gdm}/share/dconf/profile/gdm > $out
         '';
       };
-    in pkgs.stdenv.mkDerivation {
-      name = "dconf-gdm-profile";
-      buildCommand = ''
-        # Check that the GDM profile starts with what we expect.
-        if [ $(head -n 1 ${gdm}/share/dconf/profile/gdm) != "user-db:user" ]; then
-          echo "GDM dconf profile changed, please update gdm.nix"
-          exit 1
-        fi
-        # Insert our custom DB behind it.
-        sed '2ifile-db:${customDconfDb}' ${gdm}/share/dconf/profile/gdm > $out
-      '';
-    };
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
@@ -286,7 +286,8 @@ in
         '' else ''
           AutomaticLoginEnable=true
           AutomaticLogin=${cfg.gdm.autoLogin.user}
-        '')
+        ''
+      )
       }
 
       [security]

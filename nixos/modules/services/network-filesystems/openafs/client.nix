@@ -2,7 +2,6 @@
 
 # openafsMod, openafsBin, mkCellServDB
 with import ./lib.nix { inherit config lib pkgs; };
-
 let
   inherit (lib) getBin mkOption mkIf optionalString singleton types;
 
@@ -21,7 +20,6 @@ let
     cat ${cellServDB} ${clientServDB} > $out/CellServDB
     echo "${cfg.mountPoint}:${cfg.cache.directory}:${toString cfg.cache.blocks}" > $out/cacheinfo
   '';
-
 in
 {
   ###### interface
@@ -50,7 +48,7 @@ in
       };
 
       cellServDB = mkOption {
-        default = [];
+        default = [ ];
         type = with types; listOf (submodule { options = cellServDBConfig; });
         description = ''
           This cell's database server records, added to the global
@@ -186,10 +184,12 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.afsdb || cfg.cellServDB != [];
+      {
+        assertion = cfg.afsdb || cfg.cellServDB != [ ];
         message = "You should specify all cell-local database servers in config.services.openafsClient.cellServDB or set config.services.openafsClient.afsdb.";
       }
-      { assertion = cfg.cellName != "";
+      {
+        assertion = cfg.cellName != "";
         message = "You must specify the local cell name in config.services.openafsClient.cellName.";
       }
     ];
@@ -216,7 +216,7 @@ in
     systemd.services.afsd = {
       description = "AFS client";
       wantedBy = [ "multi-user.target" ];
-      after = singleton (if cfg.startDisconnected then  "network.target" else "network-online.target");
+      after = singleton (if cfg.startDisconnected then "network.target" else "network-online.target");
       serviceConfig = { RemainAfterExit = true; };
       restartIfChanged = false;
 

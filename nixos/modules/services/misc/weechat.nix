@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.weechat;
 in
-
 {
   options.services.weechat = {
     enable = mkEnableOption "weechat";
@@ -30,7 +28,7 @@ in
 
   config = mkIf cfg.enable {
     users = {
-      groups.weechat = {};
+      groups.weechat = { };
       users.weechat = {
         createHome = true;
         group = "weechat";

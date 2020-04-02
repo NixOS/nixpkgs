@@ -14,7 +14,7 @@
 
   packageName = "cl-log";
 
-  asdFilesToKeep = ["cl-log.asd"];
+  asdFilesToKeep = [ "cl-log.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-log DESCRIPTION CL-LOG - a general purpose logging utility SHA256

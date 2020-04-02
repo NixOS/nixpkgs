@@ -1,6 +1,19 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gobject-introspection
-, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44
-, glib, systemd, libusb1, vala, hwdata
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, docbook_xml_dtd_44
+, glib
+, systemd
+, libusb1
+, vala
+, hwdata
 }:
 stdenv.mkDerivation rec {
   pname = "gusb";
@@ -14,9 +27,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext
-    gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_44
-    gobject-introspection vala
+    meson
+    ninja
+    pkgconfig
+    gettext
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+    docbook_xml_dtd_44
+    gobject-introspection
+    vala
   ];
   buildInputs = [ systemd glib ];
 

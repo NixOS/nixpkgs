@@ -1,18 +1,28 @@
-{ stdenv, fetchurl, fetchgit, curl, scrot, imagemagick, xawtv, inetutils, makeWrapper, coreutils
+{ stdenv
+, fetchurl
+, fetchgit
+, curl
+, scrot
+, imagemagick
+, xawtv
+, inetutils
+, makeWrapper
+, coreutils
 , apiKey ? ""
-, deviceKey ? "" }:
+, deviceKey ? ""
+}:
 
 # TODO: this should assert keys are set, somehow if set through .override assertion fails
 #assert apiKey != "";
 #assert deviceKey != "";
-
 let
   modulesSrc = fetchgit {
     url = "git://github.com/prey/prey-bash-client-modules.git";
     rev = "aba260ef110834cb2e92923a31f50c15970639ee";
     sha256 = "9cb1ad813d052a0a3e3bbdd329a8711ae3272e340379489511f7dd578d911e30";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "prey-bash-client";
   version = "0.6.0";
 

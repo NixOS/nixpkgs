@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "coreos";
     repo = "container-linux-config-transpiler";
     rev = "v${version}";
-    sha256="058zjk9yqgdli55gc6y48455il6wjpslyz2r2ckk2ki9c5qc8b7c";
+    sha256 = "058zjk9yqgdli55gc6y48455il6wjpslyz2r2ckk2ki9c5qc8b7c";
   };
 
   buildFlagsArray = ''
@@ -28,8 +28,7 @@ buildGoPackage rec {
     description = "Convert a Container Linux Config into Ignition";
     license = licenses.asl20;
     homepage = https://github.com/coreos/container-linux-config-transpiler;
-    maintainers = with maintainers; [elijahcaine];
+    maintainers = with maintainers; [ elijahcaine ];
     platforms = with platforms; unix;
   };
 }
-

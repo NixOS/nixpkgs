@@ -14,7 +14,7 @@ rec {
 
   packageName = "clsql-uffi";
 
-  asdFilesToKeep = ["clsql-uffi.asd"];
+  asdFilesToKeep = [ "clsql-uffi.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clsql-uffi DESCRIPTION

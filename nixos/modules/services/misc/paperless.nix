@@ -74,7 +74,7 @@ in
 
     extraConfig = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = ''
         Extra paperless config options.
 

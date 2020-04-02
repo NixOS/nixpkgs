@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
 , colorama
 , coverage
 , termstyle
@@ -18,7 +21,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    colorama coverage termstyle unidecode lxml
+    colorama
+    coverage
+    termstyle
+    unidecode
+    lxml
   ] ++ lib.optionals (!isPy3k) [ mock backports_shutil_get_terminal_size ];
 
   # let green run it's own test suite

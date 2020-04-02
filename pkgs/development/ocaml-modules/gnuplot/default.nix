@@ -5,9 +5,9 @@ buildDunePackage rec {
   version = "0.5.3";
 
   src = fetchFromBitbucket {
-    owner  = "ogu";
-    repo   = "${pname}-ocaml";
-    rev    = "release-${version}";
+    owner = "ogu";
+    repo = "${pname}-ocaml";
+    rev = "release-${version}";
     sha256 = "00sn9g46pj8pfh7faiyxg3pfhq7w9knafyabjr464bh6qz5kiin3";
   };
 

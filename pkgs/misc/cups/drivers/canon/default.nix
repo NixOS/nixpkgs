@@ -1,23 +1,18 @@
-{stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, pkgsi686Linux, zlib }:
-
+{ stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, pkgsi686Linux, zlib }:
 let
-
-  i686_NIX_GCC = pkgsi686Linux.callPackage ({gcc}: gcc) {};
-  i686_libxml2 = pkgsi686Linux.callPackage ({libxml2}: libxml2) {};
+  i686_NIX_GCC = pkgsi686Linux.callPackage ({ gcc }: gcc) { };
+  i686_libxml2 = pkgsi686Linux.callPackage ({ libxml2 }: libxml2) { };
 
   commonVer = "4.10";
   version = "3.70";
   dl = "8/0100007658/08";
 
-  versionNoDots = builtins.replaceStrings ["."] [""] version;
+  versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
     url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-uken-05.tar.gz";
     sha256 = "0424lvyrsvsb94qga4p4ldis7f714c5yw5ydv3f84mdl2a7papg0";
   };
-
 in
-
-
 stdenv.mkDerivation {
   pname = "canon-cups-ufr2";
   version = version;
@@ -212,7 +207,7 @@ stdenv.mkDerivation {
     makeWrapper "${ghostscript}/bin/gs" "$out/bin/gs" \
       --prefix LD_LIBRARY_PATH ":" "$out/lib" \
       --prefix PATH ":" "$out/bin"
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "CUPS Linux drivers for Canon printers";

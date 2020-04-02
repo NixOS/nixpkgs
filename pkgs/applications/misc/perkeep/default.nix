@@ -1,5 +1,4 @@
 { buildGoPackage, fetchurl, fetchFromGitHub, lib }:
-
 let
   gouiJS = fetchurl {
     url = "https://storage.googleapis.com/perkeep-release/gopherjs/goui.js";
@@ -10,8 +9,8 @@ let
     url = "https://storage.googleapis.com/perkeep-release/gopherjs/publisher.js";
     sha256 = "09hd7p0xscqnh612jbrjvh3njmlm4292zd5sbqx2lg0aw688q8p2";
   };
-
-in buildGoPackage rec {
+in
+buildGoPackage rec {
   name = "perkeep-${version}";
   version = "unstable-2019-07-29";
 

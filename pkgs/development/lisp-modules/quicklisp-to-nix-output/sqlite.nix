@@ -14,7 +14,7 @@ rec {
 
   packageName = "sqlite";
 
-  asdFilesToKeep = ["sqlite.asd"];
+  asdFilesToKeep = [ "sqlite.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM sqlite DESCRIPTION

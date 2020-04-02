@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, intltool, pkgconfig, networkmanager, strongswanNM
-, gtk3, gnome3, libsecret, networkmanagerapplet }:
+{ stdenv
+, fetchurl
+, intltool
+, pkgconfig
+, networkmanager
+, strongswanNM
+, gtk3
+, gnome3
+, libsecret
+, networkmanagerapplet
+}:
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-strongswan";

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1777hgl10imk0l2sgnqgbkfchv1mpxrd82ninzwp7f1rgwchz36v";
   };
 
-  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  configFile = optionalString (conf != null) (writeText "config.def.h" conf);
+  preBuild = optionalString (conf != null) "cp ${configFile} config.def.h";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 ];

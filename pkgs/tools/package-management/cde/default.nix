@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patchBuild = ''
     sed '/install/d' $src/Makefile > $src/Makefile
   '';
-  
+
   installPhase = ''
     mkdir -p $out/bin
     cp cde $out/bin

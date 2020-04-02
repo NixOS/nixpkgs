@@ -1,33 +1,63 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv
+, mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, pkgconfig
 , libtoxcore
-, libpthreadstubs, libXdmcp, libXScrnSaver
-, qtbase, qtsvg, qttools, qttranslations
-, ffmpeg, filter-audio, libexif, libsodium, libopus
-, libvpx, openal, pcre, qrencode, sqlcipher
-, AVFoundation ? null }:
-
+, libpthreadstubs
+, libXdmcp
+, libXScrnSaver
+, qtbase
+, qtsvg
+, qttools
+, qttranslations
+, ffmpeg
+, filter-audio
+, libexif
+, libsodium
+, libopus
+, libvpx
+, openal
+, pcre
+, qrencode
+, sqlcipher
+, AVFoundation ? null
+}:
 let
   version = "1.16.3";
   rev = "v${version}";
-
-in mkDerivation {
+in
+mkDerivation {
   pname = "qtox";
   inherit version;
 
   src = fetchFromGitHub {
-    owner  = "qTox";
-    repo   = "qTox";
+    owner = "qTox";
+    repo = "qTox";
     sha256 = "0qd4nvbrjnnfnk8ghsxq3cd1n1qf1ck5zg6ib11ij2pg03s146pa";
     inherit rev;
   };
 
   buildInputs = [
     libtoxcore
-    libpthreadstubs libXdmcp libXScrnSaver
-    qtbase qtsvg qttranslations
-    ffmpeg filter-audio libexif libopus libsodium
-    libvpx openal pcre qrencode sqlcipher
-  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation] ;
+    libpthreadstubs
+    libXdmcp
+    libXScrnSaver
+    qtbase
+    qtsvg
+    qttranslations
+    ffmpeg
+    filter-audio
+    libexif
+    libopus
+    libsodium
+    libvpx
+    openal
+    pcre
+    qrencode
+    sqlcipher
+  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation ];
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
@@ -43,9 +73,9 @@ in mkDerivation {
 
   meta = with lib; {
     description = "Qt Tox client";
-    homepage    = https://tox.chat;
-    license     = licenses.gpl3;
+    homepage = https://tox.chat;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ akaWolf peterhoeg ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

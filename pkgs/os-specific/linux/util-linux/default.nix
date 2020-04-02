@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
-, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
+{ lib
+, stdenv
+, fetchurl
+, pkgconfig
+, zlib
+, shadow
+, ncurses ? null
+, perl ? null
+, pam
+, systemd ? null
+, minimal ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
@@ -35,14 +45,15 @@ stdenv.mkDerivation rec {
     "--enable-mesg"
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
-    "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
+    "--disable-makeinstall-setuid"
+    "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
     (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
-       "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+      "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       "scanf_cv_type_modifier=ms"
+    "scanf_cv_type_modifier=ms"
   ;
 
   makeFlags = [

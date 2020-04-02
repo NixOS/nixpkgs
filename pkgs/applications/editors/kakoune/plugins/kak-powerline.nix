@@ -20,10 +20,11 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib;
-  { description = "Kakoune modeline, but with passion";
-    homepage = "https://github.com/andreyorst/powerline.kak";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nrdxp ];
-    platform = platforms.all;
-  };
+    {
+      description = "Kakoune modeline, but with passion";
+      homepage = "https://github.com/andreyorst/powerline.kak";
+      license = licenses.mit;
+      maintainers = with maintainers; [ nrdxp ];
+      platform = platforms.all;
+    };
 }

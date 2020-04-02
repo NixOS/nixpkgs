@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.trac;
 
   inherit (lib) mkEnableOption mkIf mkOption types;
-
-in {
+in
+{
 
   options = {
 
@@ -34,7 +33,7 @@ in {
         default = "/var/lib/trac";
         type = types.path;
         description = ''
-            The directory for storing the Trac data.
+          The directory for storing the Trac data.
         '';
       };
 

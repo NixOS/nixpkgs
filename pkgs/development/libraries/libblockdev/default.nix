@@ -1,8 +1,31 @@
-{ stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkgconfig, gtk-doc
-, docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted
-, cryptsetup, lvm2, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
-, libxslt, docbook_xsl, gptfdisk, libyaml, autoconf-archive
-, thin-provisioning-tools, makeWrapper
+{ stdenv
+, fetchFromGitHub
+, substituteAll
+, autoreconfHook
+, pkgconfig
+, gtk-doc
+, docbook_xml_dtd_43
+, python3
+, gobject-introspection
+, glib
+, udev
+, kmod
+, parted
+, cryptsetup
+, lvm2
+, dmraid
+, utillinux
+, libbytesize
+, libndctl
+, nss
+, volume_key
+, libxslt
+, docbook_xsl
+, gptfdisk
+, libyaml
+, autoconf-archive
+, thin-provisioning-tools
+, makeWrapper
 }:
 stdenv.mkDerivation rec {
   pname = "libblockdev";
@@ -29,13 +52,33 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig gtk-doc libxslt docbook_xsl docbook_xml_dtd_43
-    python3 gobject-introspection autoconf-archive makeWrapper
+    autoreconfHook
+    pkgconfig
+    gtk-doc
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_43
+    python3
+    gobject-introspection
+    autoconf-archive
+    makeWrapper
   ];
 
   buildInputs = [
-    glib udev kmod parted gptfdisk cryptsetup lvm2 dmraid utillinux libbytesize
-    libndctl nss volume_key libyaml
+    glib
+    udev
+    kmod
+    parted
+    gptfdisk
+    cryptsetup
+    lvm2
+    dmraid
+    utillinux
+    libbytesize
+    libndctl
+    nss
+    volume_key
+    libyaml
   ];
 
   postInstall = ''

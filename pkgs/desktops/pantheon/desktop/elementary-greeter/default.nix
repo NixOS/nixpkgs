@@ -44,10 +44,12 @@ stdenv.mkDerivation rec {
       attrPath = "pantheon.${pname}";
     };
 
-    xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
-      path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
-      name = "io.elementary.greeter.desktop";
-    }];
+    xgreeters = linkFarm "pantheon-greeter-xgreeters" [
+      {
+        path = "${elementary-greeter}/share/xgreeters/io.elementary.greeter.desktop";
+        name = "io.elementary.greeter.desktop";
+      }
+    ];
   };
 
   nativeBuildInputs = [

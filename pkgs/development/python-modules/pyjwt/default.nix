@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, cryptography, ecdsa
-, pytestrunner, pytestcov, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cryptography
+, ecdsa
+, pytestrunner
+, pytestcov
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "PyJWT";

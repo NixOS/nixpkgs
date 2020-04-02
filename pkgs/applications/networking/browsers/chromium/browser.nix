@@ -7,7 +7,7 @@ mkChromiumDerivation (base: rec {
   packageName = "chromium";
   buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
 
-  outputs = ["out" "sandbox"];
+  outputs = [ "out" "sandbox" ];
 
   sandboxExecutableName = "__chromium-suid-sandbox";
 
@@ -78,7 +78,7 @@ mkChromiumDerivation (base: rec {
     # [0]: https://github.com/NixOS/nixpkgs/issues/78450
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
-    hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
+    hydraPlatforms = if channel == "stable" then [ "aarch64-linux" "x86_64-linux" ] else [ ];
     timeout = 172800; # 48 hours
   };
 })

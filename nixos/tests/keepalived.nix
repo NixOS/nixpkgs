@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         interface = "eth1";
         state = "MASTER";
         priority = 50;
-        virtualIps = [{ addr = "192.168.1.200"; }];
+        virtualIps = [ { addr = "192.168.1.200"; } ];
         virtualRouterId = 1;
       };
       environment.systemPackages = [ pkgs.tcpdump ];
@@ -21,7 +21,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         interface = "eth1";
         state = "MASTER";
         priority = 100;
-        virtualIps = [{ addr = "192.168.1.200"; }];
+        virtualIps = [ { addr = "192.168.1.200"; } ];
         virtualRouterId = 1;
       };
       environment.systemPackages = [ pkgs.tcpdump ];

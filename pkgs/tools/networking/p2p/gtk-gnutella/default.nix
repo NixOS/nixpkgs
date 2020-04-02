@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, bison, pkgconfig, gettext, desktop-file-utils
-, glib, gtk2, libxml2, libbfd, zlib, binutils, gnutls
+{ stdenv
+, fetchurl
+, fetchpatch
+, bison
+, pkgconfig
+, gettext
+, desktop-file-utils
+, glib
+, gtk2
+, libxml2
+, libbfd
+, zlib
+, binutils
+, gnutls
 }:
 
 stdenv.mkDerivation rec {

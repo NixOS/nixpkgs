@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   package = pkgs.gsignond.override { plugins = config.services.gsignond.plugins; };
 in
@@ -28,7 +27,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = ''
           What plugins to use with the gSignOn daemon.
         '';

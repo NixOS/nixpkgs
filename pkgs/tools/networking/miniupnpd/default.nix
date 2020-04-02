@@ -1,7 +1,16 @@
-{ stdenv, lib, fetchurl, iptables, libuuid, pkgconfig
-, which, iproute, gnused, coreutils, gawk, makeWrapper
+{ stdenv
+, lib
+, fetchurl
+, iptables
+, libuuid
+, pkgconfig
+, which
+, iproute
+, gnused
+, coreutils
+, gawk
+, makeWrapper
 }:
-
 let
   scriptBinEnv = lib.makeBinPath [ which iproute iptables gnused coreutils gawk ];
 in
@@ -15,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ iptables libuuid ];
-  nativeBuildInputs= [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   makefile = "Makefile.linux";
 

@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, python2Packages  }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "amazon-glacier-cmd-interface";
-  version  = "2016-09-01";
+  version = "2016-09-01";
 
   src = fetchFromGitHub {
-    owner  = "uskudnik";
-    repo   = "amazon-glacier-cmd-interface";
-    rev    = "9f28132f9872e1aad9e956e5613b976504e930c8";
+    owner = "uskudnik";
+    repo = "amazon-glacier-cmd-interface";
+    rev = "9f28132f9872e1aad9e956e5613b976504e930c8";
     sha256 = "1k5z8kda9v6klr4536pf5qbq9zklxvyysv7nc48gllschl09jywc";
   };
 
@@ -25,8 +25,8 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     description = "Command line interface for Amazon Glacier";
-    homepage    = https://github.com/uskudnik/amazon-glacier-cmd-interface;
-    license     = stdenv.lib.licenses.gpl2;
+    homepage = https://github.com/uskudnik/amazon-glacier-cmd-interface;
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.lovek323 ];
   };
 

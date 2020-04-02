@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
-                ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
   nativeBuildInputs = [ perl pkgconfig ];
   dontDisableStatic = true;
 

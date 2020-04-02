@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.mesos.master;
-
-in {
+in
+{
 
   options.services.mesos = {
 
@@ -108,10 +107,11 @@ in {
             --ip=${cfg.ip} \
             --port=${toString cfg.port} \
             ${optionalString (cfg.advertiseIp != null) "--advertise_ip=${cfg.advertiseIp}"} \
-            ${optionalString (cfg.advertisePort  != null) "--advertise_port=${toString cfg.advertisePort}"} \
-            ${if cfg.quorum == 0
-              then "--registry=in_memory"
-              else "--zk=${cfg.zk} --registry=replicated_log --quorum=${toString cfg.quorum}"} \
+            ${optionalString (cfg.advertisePort != null) "--advertise_port=${toString cfg.advertisePort}"} \
+            ${
+            if cfg.quorum == 0
+            then "--registry=in_memory"
+            else "--zk=${cfg.zk} --registry=replicated_log --quorum=${toString cfg.quorum}"} \
             --work_dir=${cfg.workDir} \
             --logging_level=${cfg.logLevel} \
             ${toString cfg.extraCmdLineOptions}
@@ -122,4 +122,3 @@ in {
   };
 
 }
-

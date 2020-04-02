@@ -33,7 +33,6 @@
 # desired options instead.
 
 with lib;
-
 let
   callPackage = pkgs.newScope self;
 
@@ -43,7 +42,7 @@ let
   latestVersion = "0.47.04";
 
   # Converts a version to a package name.
-  versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
+  versionToName = version: "dwarf-fortress_${lib.replaceStrings [ "." ] [ "_" ] version}";
 
   dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
     texlive = pkgs.texlive.combine {
@@ -63,8 +62,9 @@ let
         };
 
         # unfuck is linux-only right now, we will only use it there.
-        dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
-                                else null;
+        dwarf-fortress-unfuck =
+          if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
+          else null;
 
         twbt = callPackage ./twbt { inherit dfVersion; };
 
@@ -104,7 +104,7 @@ let
 
     soundSense = callPackage ./soundsense.nix { };
 
-    legends-browser = callPackage ./legends-browser {};
+    legends-browser = callPackage ./legends-browser { };
 
     themes = recurseIntoAttrs (callPackage ./themes {
       stdenv = stdenvNoCC;
@@ -114,5 +114,5 @@ let
     phoebus-theme = themes.phoebus;
     cla-theme = themes.cla;
   };
-
-in self // df-games
+in
+self // df-games

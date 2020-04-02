@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.peerflix;
 
@@ -11,8 +10,8 @@ let
       "tmp": "${cfg.downloadDir}"
     }
   '';
-
-in {
+in
+{
 
   ###### interface
 

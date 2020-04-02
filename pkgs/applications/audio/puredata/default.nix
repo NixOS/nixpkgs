@@ -1,8 +1,15 @@
-{ stdenv, fetchurl, autoreconfHook, gettext, makeWrapper
-, alsaLib, libjack2, tk, fftw
+{ stdenv
+, fetchurl
+, autoreconfHook
+, gettext
+, makeWrapper
+, alsaLib
+, libjack2
+, tk
+, fftw
 }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "puredata";
   version = "0.49-0";
 

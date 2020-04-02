@@ -38,9 +38,9 @@ python2Packages.buildPythonApplication rec {
     # the mime test fails for me...
     rm tests/test_mimeutil.py
     ${lib.optionalString stdenv.isDarwin ''
-      # network tests fails on darwin
-      rm tests/test_network.py
-    ''}
+    # network tests fails on darwin
+    rm tests/test_network.py
+  ''}
     make test PYTESTOPTS="--tb=short" TESTS="tests/test_*.py tests/logger/test_*.py"
 
     runHook postCheck

@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, imageio, imageio-ffmpeg }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, imageio
+, imageio-ffmpeg
+}:
 
 buildPythonPackage rec {
   pname = "handout";

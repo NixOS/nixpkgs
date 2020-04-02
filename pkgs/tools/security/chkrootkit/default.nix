@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   # TODO: a lazy work-around for linux build failure ...
   makeFlags = [ "STATIC=" ];
 
-   postPatch = ''
+  postPatch = ''
     substituteInPlace chkrootkit \
       --replace " ./" " $out/bin/"
-   '';
+  '';
 
   installPhase = ''
     mkdir -p $out/sbin

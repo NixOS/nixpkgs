@@ -11,19 +11,19 @@
    * the addition or removal of a plugin.
    */
   diffPlugins = expectedPlugins: foundPluginsFilePath: ''
-     # sort both lists first
-     plugins_expected=$(mktemp)
-     (${stdenv.lib.concatMapStrings (s: "echo \"${s}\";") expectedPlugins}) \
-       | sort -u > "$plugins_expected"
-     plugins_found=$(mktemp)
-     sort -u "${foundPluginsFilePath}" > "$plugins_found"
+    # sort both lists first
+    plugins_expected=$(mktemp)
+    (${stdenv.lib.concatMapStrings (s: "echo \"${s}\";") expectedPlugins}) \
+      | sort -u > "$plugins_expected"
+    plugins_found=$(mktemp)
+    sort -u "${foundPluginsFilePath}" > "$plugins_found"
 
-     if ! mismatches="$(diff -y "$plugins_expected" "$plugins_found")"; then
-       echo "The the list of expected plugins (left side) doesn't match" \
-           "the list of plugins we found (right side):" >&2
-       echo "$mismatches" >&2
-       exit 1
-     fi
-   '';
+    if ! mismatches="$(diff -y "$plugins_expected" "$plugins_found")"; then
+      echo "The the list of expected plugins (left side) doesn't match" \
+          "the list of plugins we found (right side):" >&2
+      echo "$mismatches" >&2
+      exit 1
+    fi
+  '';
 
 }

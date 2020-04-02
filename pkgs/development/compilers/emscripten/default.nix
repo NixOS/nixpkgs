@@ -1,13 +1,20 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
-, jre, binaryen, enableWasm ? true ,  cmake
+{ emscriptenVersion
+, stdenv
+, fetchFromGitHub
+, emscriptenfastcomp
+, python
+, nodejs
+, closurecompiler
+, jre
+, binaryen
+, enableWasm ? true
+, cmake
 }:
-
 let
   rev = emscriptenVersion;
   appdir = "share/emscripten";
   binaryenVersioned = binaryen.override { emscriptenRev = rev; };
 in
-
 stdenv.mkDerivation {
   name = "emscripten-${rev}";
 
@@ -43,12 +50,9 @@ stdenv.mkDerivation {
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
     # to make the test(s) below work
     echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
-  ''
-  + stdenv.lib.optionalString enableWasm ''
+  '' + stdenv.lib.optionalString enableWasm ''
     echo "BINARYEN_ROOT = '${binaryenVersioned}'" >> $out/share/emscripten/config
-  ''
-  +
-  ''
+  '' + ''
     echo "--------------- running test -----------------"
     # quick hack to get the test working
     HOME=$TMPDIR

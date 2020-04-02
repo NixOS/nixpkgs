@@ -5,9 +5,9 @@ buildGoPackage rec {
   version = "0.2.14";
 
   src = fetchFromGitHub {
-    owner  = "wal-g";
-    repo   = "wal-g";
-    rev    = "v${version}";
+    owner = "wal-g";
+    repo = "wal-g";
+    rev = "v${version}";
     sha256 = "0rrn9kzcg3nw9qvzy58m4qacghv0pj7iyjh4yspc71n5nkamkfgm";
   };
 

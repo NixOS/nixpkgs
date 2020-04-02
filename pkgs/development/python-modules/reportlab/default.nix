@@ -6,10 +6,10 @@
 , python
 , isPyPy
 }:
-
 let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "reportlab";
   version = "3.5.34";
 

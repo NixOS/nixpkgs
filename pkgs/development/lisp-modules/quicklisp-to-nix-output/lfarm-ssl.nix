@@ -14,7 +14,7 @@ rec {
 
   packageName = "lfarm-ssl";
 
-  asdFilesToKeep = ["lfarm-ssl.asd"];
+  asdFilesToKeep = [ "lfarm-ssl.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lfarm-ssl DESCRIPTION SSL support for lfarm SHA256

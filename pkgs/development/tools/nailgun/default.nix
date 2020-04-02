@@ -1,5 +1,4 @@
 { stdenv, fetchMavenArtifact, fetchFromGitHub, jre, makeWrapper }:
-
 let
   version = "1.0.0";
   nailgun-server = fetchMavenArtifact {

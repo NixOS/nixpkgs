@@ -1,11 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, uhd, boost, soapysdr
-} :
-
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, uhd
+, boost
+, soapysdr
+}:
 let
   version = "0.3.6";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "soapyuhd";
   inherit version;
 

@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv
+, fetchurl
+, pkgconfig
 
-# Optional Dependencies
-, openssl ? null, zlib ? null
-, enableLibEv ? !stdenv.hostPlatform.isWindows, libev ? null
-, enableCAres ? !stdenv.hostPlatform.isWindows, c-ares ? null
-, enableHpack ? false, jansson ? null
-, enableAsioLib ? false, boost ? null
-, enableGetAssets ? false, libxml2 ? null
-, enableJemalloc ? false, jemalloc ? null
+  # Optional Dependencies
+, openssl ? null
+, zlib ? null
+, enableLibEv ? !stdenv.hostPlatform.isWindows
+, libev ? null
+, enableCAres ? !stdenv.hostPlatform.isWindows
+, c-ares ? null
+, enableHpack ? false
+, jansson ? null
+, enableAsioLib ? false
+, boost ? null
+, enableGetAssets ? false
+, libxml2 ? null
+, enableJemalloc ? false
+, jemalloc ? null
 , enableApp ? !stdenv.hostPlatform.isWindows
 }:
 

@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-macroexpand-all";
 
-  asdFilesToKeep = ["trivial-macroexpand-all.asd"];
+  asdFilesToKeep = [ "trivial-macroexpand-all.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-macroexpand-all DESCRIPTION

@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
-, gobject-introspection, glib, systemd, libgudev, vala
-, usbutils, which, python3 }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, gobject-introspection
+, glib
+, systemd
+, libgudev
+, vala
+, usbutils
+, which
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "umockdev";
@@ -46,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

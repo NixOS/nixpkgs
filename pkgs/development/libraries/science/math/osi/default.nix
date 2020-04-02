@@ -1,7 +1,16 @@
-{ stdenv, lib, fetchurl, gfortran, pkgconfig
-, blas, zlib, bzip2
-, withGurobi ? false, gurobi
-, withCplex ? false, cplex }:
+{ stdenv
+, lib
+, fetchurl
+, gfortran
+, pkgconfig
+, blas
+, zlib
+, bzip2
+, withGurobi ? false
+, gurobi
+, withCplex ? false
+, cplex
+}:
 
 stdenv.mkDerivation rec {
   pname = "osi";

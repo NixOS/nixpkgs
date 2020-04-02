@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.nsd;
 
@@ -76,19 +75,19 @@ let
       # interfaces
     ${forEach "  ip-address: " cfg.interfaces}
 
-      ip-freebind:         ${yesOrNo  cfg.ipFreebind}
-      hide-version:        ${yesOrNo  cfg.hideVersion}
+      ip-freebind:         ${yesOrNo cfg.ipFreebind}
+      hide-version:        ${yesOrNo cfg.hideVersion}
       identity:            "${cfg.identity}"
-      ip-transparent:      ${yesOrNo  cfg.ipTransparent}
-      do-ip4:              ${yesOrNo  cfg.ipv4}
+      ip-transparent:      ${yesOrNo cfg.ipTransparent}
+      do-ip4:              ${yesOrNo cfg.ipv4}
       ipv4-edns-size:      ${toString cfg.ipv4EDNSSize}
-      do-ip6:              ${yesOrNo  cfg.ipv6}
+      do-ip6:              ${yesOrNo cfg.ipv6}
       ipv6-edns-size:      ${toString cfg.ipv6EDNSSize}
-      log-time-ascii:      ${yesOrNo  cfg.logTimeAscii}
+      log-time-ascii:      ${yesOrNo cfg.logTimeAscii}
       ${maybeString "nsid: " cfg.nsid}
       port:                ${toString cfg.port}
-      reuseport:           ${yesOrNo  cfg.reuseport}
-      round-robin:         ${yesOrNo  cfg.roundRobin}
+      reuseport:           ${yesOrNo cfg.reuseport}
+      round-robin:         ${yesOrNo cfg.roundRobin}
       server-count:        ${toString cfg.serverCount}
       ${maybeToString "statistics: " cfg.statistics}
       tcp-count:           ${toString cfg.tcpCount}
@@ -97,19 +96,19 @@ let
       verbosity:           ${toString cfg.verbosity}
       ${maybeString "version: " cfg.version}
       xfrd-reload-timeout: ${toString cfg.xfrdReloadTimeout}
-      zonefiles-check:     ${yesOrNo  cfg.zonefilesCheck}
+      zonefiles-check:     ${yesOrNo cfg.zonefilesCheck}
 
       ${maybeString "rrl-ipv4-prefix-length: " cfg.ratelimit.ipv4PrefixLength}
       ${maybeString "rrl-ipv6-prefix-length: " cfg.ratelimit.ipv6PrefixLength}
       rrl-ratelimit:           ${toString cfg.ratelimit.ratelimit}
-      ${maybeString "rrl-slip: "               cfg.ratelimit.slip}
+      ${maybeString "rrl-slip: " cfg.ratelimit.slip}
       rrl-size:                ${toString cfg.ratelimit.size}
       rrl-whitelist-ratelimit: ${toString cfg.ratelimit.whitelistRatelimit}
 
     ${keyConfigFile}
 
     remote-control:
-      control-enable:    ${yesOrNo  cfg.remoteControl.enable}
+      control-enable:    ${yesOrNo cfg.remoteControl.enable}
       control-key-file:  "${cfg.remoteControl.controlKeyFile}"
       control-cert-file: "${cfg.remoteControl.controlCertFile}"
     ${forEach "  control-interface: " cfg.remoteControl.interfaces}
@@ -150,35 +149,35 @@ let
       name:         "${name}"
       zonefile:     "${stateDir}/zones/${mkZoneFileName name}"
       ${maybeString "outgoing-interface: " zone.outgoingInterface}
-    ${forEach     "  rrl-whitelist: "      zone.rrlWhitelist}
-      ${maybeString "zonestats: "          zone.zoneStats}
+    ${forEach "  rrl-whitelist: " zone.rrlWhitelist}
+      ${maybeString "zonestats: " zone.zoneStats}
 
       ${maybeToString "max-refresh-time: " zone.maxRefreshSecs}
       ${maybeToString "min-refresh-time: " zone.minRefreshSecs}
       ${maybeToString "max-retry-time:   " zone.maxRetrySecs}
       ${maybeToString "min-retry-time:   " zone.minRetrySecs}
 
-      allow-axfr-fallback: ${yesOrNo       zone.allowAXFRFallback}
-    ${forEach     "  allow-notify: "       zone.allowNotify}
-    ${forEach     "  request-xfr: "        zone.requestXFR}
+      allow-axfr-fallback: ${yesOrNo zone.allowAXFRFallback}
+    ${forEach "  allow-notify: " zone.allowNotify}
+    ${forEach "  request-xfr: " zone.requestXFR}
 
-    ${forEach     "  notify: "             zone.notify}
+    ${forEach "  notify: " zone.notify}
       notify-retry:                        ${toString zone.notifyRetry}
-    ${forEach     "  provide-xfr: "        zone.provideXFR}
+    ${forEach "  provide-xfr: " zone.provideXFR}
   '';
 
-  zoneConfigs = zoneConfigs' {} "" { children = cfg.zones; };
+  zoneConfigs = zoneConfigs' { } "" { children = cfg.zones; };
 
   zoneConfigs' = parent: name: zone:
     if !(zone ? children) || zone.children == null || zone.children == { }
       # leaf -> actual zone
-      then listToAttrs [ (nameValuePair name (parent // zone)) ]
+    then listToAttrs [ (nameValuePair name (parent // zone)) ]
 
       # fork -> pattern
-      else zipAttrsWith (name: head) (
-        mapAttrsToList (name: child: zoneConfigs' (parent // zone // { children = {}; }) name child)
-                       zone.children
-      );
+    else zipAttrsWith (name: head) (
+      mapAttrsToList (name: child: zoneConfigs' (parent // zone // { children = { }; }) name child)
+        zone.children
+    );
 
   # fighting infinite recursion
   zoneOptions = zoneOptionsRaw // childConfig zoneOptions1 true;
@@ -187,7 +186,7 @@ let
   zoneOptions3 = zoneOptionsRaw // childConfig zoneOptions4 false;
   zoneOptions4 = zoneOptionsRaw // childConfig zoneOptions5 false;
   zoneOptions5 = zoneOptionsRaw // childConfig zoneOptions6 false;
-  zoneOptions6 = zoneOptionsRaw // childConfig null         false;
+  zoneOptions6 = zoneOptionsRaw // childConfig null false;
 
   childConfig = x: v: { options.children = { type = types.attrsOf x; visible = v; }; };
 
@@ -207,9 +206,11 @@ let
       allowNotify = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "192.0.2.0/24 NOKEY" "10.0.0.1-10.0.0.5 my_tsig_key_name"
-                    "10.0.3.4&255.255.0.0 BLOCKED"
-                  ];
+        example = [
+          "192.0.2.0/24 NOKEY"
+          "10.0.0.1-10.0.0.5 my_tsig_key_name"
+          "10.0.3.4&255.255.0.0 BLOCKED"
+        ];
         description = ''
           Listed primary servers are allowed to notify this secondary server.
           <screen><![CDATA[
@@ -232,7 +233,7 @@ let
       };
 
       children = mkOption {
-        default = {};
+        default = { };
         description = ''
           Children zones inherit all options of their parents. Attributes
           defined in a child will overwrite the ones of its parent. Only
@@ -252,7 +253,7 @@ let
           Use imports or pkgs.lib.readFile if you don't want this data in your config file.
         '';
       };
-      
+
       dnssec = mkEnableOption "DNSSEC";
 
       dnssecPolicy = {
@@ -275,20 +276,22 @@ let
         };
         zsk = mkOption {
           type = keyPolicy;
-          default = { keySize = 2048;
-                      prePublish = "1w";
-                      postPublish = "1w";
-                      rollPeriod = "1mo";
-                    };
+          default = {
+            keySize = 2048;
+            prePublish = "1w";
+            postPublish = "1w";
+            rollPeriod = "1mo";
+          };
           description = "Key policy for zone signing keys";
         };
         ksk = mkOption {
           type = keyPolicy;
-          default = { keySize = 4096;
-                      prePublish = "1mo";
-                      postPublish = "1mo";
-                      rollPeriod = "0";
-                    };
+          default = {
+            keySize = 4096;
+            prePublish = "1mo";
+            postPublish = "1mo";
+            rollPeriod = "0";
+          };
           description = "Key policy for key signing keys";
         };
       };
@@ -333,7 +336,7 @@ let
 
       notify = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "10.0.0.1@3721 my_key" "::5 NOKEY" ];
         description = ''
           This primary server will notify all given secondary servers about
@@ -372,7 +375,7 @@ let
 
       provideXFR = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "192.0.2.0/24 NOKEY" "192.0.2.0/24 my_tsig_key_name" ];
         description = ''
           Allow these IPs and TSIG to transfer zones, addr TSIG|NOKEY|BLOCKED
@@ -382,8 +385,8 @@ let
 
       requestXFR = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [];
+        default = [ ];
+        example = [ ];
         description = ''
           Format: <code>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</code>
         '';
@@ -391,7 +394,7 @@ let
 
       rrlWhitelist = mkOption {
         type = with types; listOf (enum [ "nxdomain" "error" "referral" "any" "rrsig" "wildcard" "nodata" "dnskey" "positive" "all" ]);
-        default = [];
+        default = [ ];
         description = ''
           Whitelists the given rrl-types.
         '';
@@ -435,7 +438,7 @@ let
 
   dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
 
-  dnssec = dnssecZones != {};
+  dnssec = dnssecZones != { };
 
   dnssecTools = pkgs.bind.override { enablePython = true; };
 
@@ -711,7 +714,7 @@ in
 
         };
       });
-      default = {};
+      default = { };
       example = literalExample ''
         { "tsig.example.org" = {
             algorithm = "hmac-md5";
@@ -846,7 +849,7 @@ in
 
     zones = mkOption {
       type = types.attrsOf zoneOptions;
-      default = {};
+      default = { };
       example = literalExample ''
         { "serverGroup1" = {
             provideXFR = [ "10.1.2.3 NOKEY" ];
@@ -893,8 +896,7 @@ in
 
     assertions = singleton {
       assertion = zoneConfigs ? "." -> cfg.rootServer;
-      message = "You have a root zone configured. If this is really what you "
-              + "want, please enable 'services.nsd.rootServer'.";
+      message = "You have a root zone configured. If this is really what you " + "want, please enable 'services.nsd.rootServer'.";
     };
 
     environment.systemPackages = [ nsdPkg ];
@@ -904,7 +906,7 @@ in
     users.users.${username} = {
       description = "NSD service user";
       home = stateDir;
-      createHome  = true;
+      createHome = true;
       uid = config.ids.uids.nsd;
       group = username;
     };

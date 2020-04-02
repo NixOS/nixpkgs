@@ -1,17 +1,25 @@
-{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
-, pkgconfig, which
-, flex, bison
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, makeWrapper
+, autoreconfHook
+, pkgconfig
+, which
+, flex
+, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) perl.meta.platforms, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) python.meta.platforms, python
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) perl.meta.platforms
+, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) python.meta.platforms
+, python
 , swig
 , ncurses
 , pam
 , libnotify
 , buildPackages
 }:
-
 let
   apparmor-series = "2.13";
   apparmor-patchver = "3";
@@ -49,14 +57,14 @@ let
       sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
     })
     # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
-    ] ++ [
-      ./cross.patch
-      # Support Python 3.8
-      (fetchpatch {
-        url = https://gitlab.com/apparmor/apparmor/commit/ccbf1e0bf1bf5c3bbab47029fbbc5415ef73bac1.patch;
-        sha256 = "0kfzc0wyjybj38n10yvwakaaqvglalzigd3kk7gcrbp1xdn70pq2";
-      })
-    ];
+  ] ++ [
+    ./cross.patch
+    # Support Python 3.8
+    (fetchpatch {
+      url = https://gitlab.com/apparmor/apparmor/commit/ccbf1e0bf1bf5c3bbab47029fbbc5415ef73bac1.patch;
+      sha256 = "0kfzc0wyjybj38n10yvwakaaqvglalzigd3kk7gcrbp1xdn70pq2";
+    })
+  ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -79,7 +87,7 @@ let
       perl
     ];
 
-    buildInputs = []
+    buildInputs = [ ]
       ++ stdenv.lib.optional withPerl perl
       ++ stdenv.lib.optional withPython python;
 
@@ -193,7 +201,9 @@ let
     inherit patches;
     postPatch = "cd ./parser";
     makeFlags = [
-      "LANGS=" "USE_SYSTEM=1" "INCLUDEDIR=${libapparmor}/include"
+      "LANGS="
+      "USE_SYSTEM=1"
+      "INCLUDEDIR=${libapparmor}/include"
       "AR=${stdenv.cc.bintools.targetPrefix}ar"
     ];
     installFlags = [ "DESTDIR=$(out)" "DISTRO=unknown" ];
@@ -249,9 +259,7 @@ let
 
     meta = apparmor-meta "kernel patches";
   };
-
 in
-
 {
   inherit
     libapparmor

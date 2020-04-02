@@ -2,15 +2,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) alsaUtils;
 
   pulseaudioEnabled = config.hardware.pulseaudio.enable;
-
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
@@ -91,7 +87,7 @@ in
     environment.systemPackages = [ alsaUtils ];
 
     environment.etc = mkIf (!pulseaudioEnabled && config.sound.extraConfig != "")
-      { "asound.conf".text = config.sound.extraConfig; };
+    { "asound.conf".text = config.sound.extraConfig; };
 
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsaUtils ];
@@ -99,7 +95,8 @@ in
     boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
 
     systemd.services.alsa-store =
-      { description = "Store Sound Card State";
+      {
+        description = "Store Sound Card State";
         wantedBy = [ "multi-user.target" ];
         unitConfig.RequiresMountsFor = "/var/lib/alsa";
         unitConfig.ConditionVirtualization = "!systemd-nspawn";
@@ -115,7 +112,7 @@ in
       enable = true;
       bindings = [
         # "Mute" media key
-        { keys = [ 113 ]; events = [ "key" ];       command = "${alsaUtils}/bin/amixer -q set Master toggle"; }
+        { keys = [ 113 ]; events = [ "key" ]; command = "${alsaUtils}/bin/amixer -q set Master toggle"; }
 
         # "Lower Volume" media key
         { keys = [ 114 ]; events = [ "key" "rep" ]; command = "${alsaUtils}/bin/amixer -q set Master ${config.sound.mediaKeys.volumeStep}- unmute"; }
@@ -124,7 +121,7 @@ in
         { keys = [ 115 ]; events = [ "key" "rep" ]; command = "${alsaUtils}/bin/amixer -q set Master ${config.sound.mediaKeys.volumeStep}+ unmute"; }
 
         # "Mic Mute" media key
-        { keys = [ 190 ]; events = [ "key" ];       command = "${alsaUtils}/bin/amixer -q set Capture toggle"; }
+        { keys = [ 190 ]; events = [ "key" ]; command = "${alsaUtils}/bin/amixer -q set Capture toggle"; }
       ];
     };
 

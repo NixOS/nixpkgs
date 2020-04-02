@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   layouts = config.services.xserver.extraLayouts;
 
@@ -15,10 +14,10 @@ let
       languages = mkOption {
         type = types.listOf types.str;
         description =
-        ''
-          A list of languages provided by the layout.
-          (Use ISO 639-2 codes, for example: "eng" for english)
-        '';
+          ''
+            A list of languages provided by the layout.
+            (Use ISO 639-2 codes, for example: "eng" for english)
+          '';
       };
 
       compatFile = mkOption {
@@ -78,9 +77,7 @@ let
 
     };
   };
-
 in
-
 {
 
   ###### interface
@@ -88,17 +85,17 @@ in
   options.services.xserver = {
     extraLayouts = mkOption {
       type = types.attrsOf (types.submodule layoutOpts);
-      default = {};
+      default = { };
       example = literalExample
-      ''
-        {
-          mine = {
-            description = "My custom xkb layout.";
-            languages = [ "eng" ];
-            symbolsFile = /path/to/my/layout;
-          };
-        }
-      '';
+        ''
+          {
+            mine = {
+              description = "My custom xkb layout.";
+              languages = [ "eng" ];
+              symbolsFile = /path/to/my/layout;
+            };
+          }
+        '';
       description = ''
         Extra custom layouts that will be included in the xkb configuration.
         Information on how to create a new layout can be found here:

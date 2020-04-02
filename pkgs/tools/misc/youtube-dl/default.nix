@@ -1,16 +1,25 @@
-{ lib, fetchurl, buildPythonPackage
-, zip, ffmpeg_4, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
-# Pandoc is required to build the package's man page. Release tarballs contain a
-# formatted man page already, though, it will still be installed. We keep the
-# manpage argument in place in case someone wants to use this derivation to
-# build a Git version of the tool that doesn't have the formatted man page
-# included.
+{ lib
+, fetchurl
+, buildPythonPackage
+, zip
+, ffmpeg_4
+, rtmpdump
+, phantomjs2
+, atomicparsley
+, pycryptodome
+, pandoc
+  # Pandoc is required to build the package's man page. Release tarballs contain a
+  # formatted man page already, though, it will still be installed. We keep the
+  # manpage argument in place in case someone wants to use this derivation to
+  # build a Git version of the tool that doesn't have the formatted man page
+  # included.
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , phantomjsSupport ? false
 , hlsEncryptedSupport ? true
-, makeWrapper }:
+, makeWrapper
+}:
 
 buildPythonPackage rec {
 
@@ -33,7 +42,8 @@ buildPythonPackage rec {
   # - ffmpeg: post-processing & transcoding support
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
-  makeWrapperArgs = let
+  makeWrapperArgs =
+    let
       packagesToBinPath =
         [ atomicparsley ]
         ++ lib.optional ffmpegSupport ffmpeg_4

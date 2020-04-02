@@ -1,7 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
-, libXext, libdrm, libXfixes, wayland, libffi, libX11
-, libGL, mesa
-, minimal ? false, libva-minimal
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, libXext
+, libdrm
+, libXfixes
+, wayland
+, libffi
+, libX11
+, libGL
+, mesa
+, minimal ? false
+, libva-minimal
 }:
 
 stdenv.mkDerivation rec {
@@ -10,9 +21,9 @@ stdenv.mkDerivation rec {
 
   # update libva-utils and vaapiIntel as well
   src = fetchFromGitHub {
-    owner  = "01org";
-    repo   = "libva";
-    rev    = version;
+    owner = "01org";
+    repo = "libva";
+    rev = version;
     sha256 = "1x34kf38p5rf52bf54ljr9f7knnbilm7kbszqnfk3lzsqrfc7r2g";
   };
 

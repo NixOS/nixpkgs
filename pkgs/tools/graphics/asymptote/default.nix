@@ -1,10 +1,28 @@
-{ stdenv, fetchFromGitHub, fetchurl
-, autoreconfHook, bison, glm, yacc, flex
-, freeglut, ghostscriptX, imagemagick, fftw
-, boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
+{ stdenv
+, fetchFromGitHub
+, fetchurl
+, autoreconfHook
+, bison
+, glm
+, yacc
+, flex
+, freeglut
+, ghostscriptX
+, imagemagick
+, fftw
+, boehmgc
+, libGLU
+, libGL
+, mesa
+, ncurses
+, readline
+, gsl
+, libsigsegv
 , python3Packages
-, zlib, perl
-, texLive, texinfo
+, zlib
+, perl
+, texLive
+, texinfo
 , darwin
 }:
 
@@ -28,9 +46,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ghostscriptX imagemagick fftw
-    boehmgc ncurses readline gsl libsigsegv
-    zlib perl
+    ghostscriptX
+    imagemagick
+    fftw
+    boehmgc
+    ncurses
+    readline
+    gsl
+    libsigsegv
+    zlib
+    perl
     texLive
   ] ++ (with python3Packages; [
     python
@@ -40,9 +65,14 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     glm
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    freeglut libGLU libGL mesa.osmesa
+    freeglut
+    libGLU
+    libGL
+    mesa.osmesa
   ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    OpenGL GLUT Cocoa
+    OpenGL
+    GLUT
+    Cocoa
   ]);
 
   preConfigure = ''
@@ -69,10 +99,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description =  "A tool for programming graphics intended to replace Metapost";
+    description = "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin maintainers.peti ];
-    broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
+    broken = stdenv.isDarwin; # https://github.com/vectorgraphics/asymptote/issues/69
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

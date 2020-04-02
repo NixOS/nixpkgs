@@ -1,15 +1,13 @@
-{ config, lib, ...}:
-
+{ config, lib, ... }:
 let
   inherit (lib) concatStringsSep mkOption types;
-
-in {
+in
+{
 
   mkCellServDB = cellName: db: ''
     >${cellName}
   '' + (concatStringsSep "\n" (map (dbm: if (dbm.ip != "" && dbm.dnsname != "") then dbm.ip + " #" + dbm.dnsname else "")
-                                   db))
-     + "\n";
+  db)) + "\n";
 
   # CellServDB configuration type
   cellServDBConfig = {

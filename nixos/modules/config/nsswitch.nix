@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   # only with nscd up and running we can load NSS modules that are not integrated in NSS
   canLoadExternalModules = config.services.nscd.enable;
   myhostname = canLoadExternalModules;
@@ -39,8 +37,8 @@ let
 
   servicesArray = [ "files" ]
     ++ optional sssd "sss";
-
-in {
+in
+{
   options = {
 
     # NSS modules.  Hacky!
@@ -48,7 +46,7 @@ in {
     system.nssModules = mkOption {
       type = types.listOf types.path;
       internal = true;
-      default = [];
+      default = [ ];
       description = ''
         Search path for NSS (Name Service Switch) modules.  This allows
         several DNS resolution methods to be specified via
@@ -63,7 +61,7 @@ in {
 
     system.nssHosts = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "mdns" ];
       description = ''
         List of host entries to configure in <filename>/etc/nsswitch.conf</filename>.

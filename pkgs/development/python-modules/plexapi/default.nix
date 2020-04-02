@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests
-, tqdm, websocket_client, pytest, pillow, mock, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, tqdm
+, websocket_client
+, pytest
+, pillow
+, mock
+, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "PlexAPI";

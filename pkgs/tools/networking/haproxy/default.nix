@@ -1,9 +1,14 @@
 { useLua ? !stdenv.isDarwin
 , usePcre ? true
 , withPrometheusExporter ? true
-, stdenv, lib, fetchurl
-, openssl, zlib
-, lua5_3 ? null, pcre ? null, systemd ? null
+, stdenv
+, lib
+, fetchurl
+, openssl
+, zlib
+, lua5_3 ? null
+, pcre ? null
+, systemd ? null
 }:
 
 assert useLua -> lua5_3 != null;
@@ -26,10 +31,11 @@ stdenv.mkDerivation rec {
   # TODO: make it work on bsd as well
   makeFlags = [
     "PREFIX=\${out}"
-    ("TARGET=" + (if stdenv.isSunOS  then "solaris"
-             else if stdenv.isLinux  then "linux-glibc"
-             else if stdenv.isDarwin then "osx"
-             else "generic"))
+    ("TARGET=" + (
+      if stdenv.isSunOS then "solaris"
+      else if stdenv.isLinux then "linux-glibc"
+      else if stdenv.isDarwin then "osx"
+      else "generic"))
   ];
 
   buildFlags = [

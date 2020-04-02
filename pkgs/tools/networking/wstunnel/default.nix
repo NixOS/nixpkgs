@@ -1,8 +1,24 @@
-{ mkDerivation, async, base, base64-bytestring, binary, bytestring
-, classy-prelude, cmdargs, connection, hslogger, mtl, network
-, network-conduit-tls, stdenv, streaming-commons, text
-, unordered-containers, websockets
-, lib, fetchFromGitHub, fetchpatch
+{ mkDerivation
+, async
+, base
+, base64-bytestring
+, binary
+, bytestring
+, classy-prelude
+, cmdargs
+, connection
+, hslogger
+, mtl
+, network
+, network-conduit-tls
+, stdenv
+, streaming-commons
+, text
+, unordered-containers
+, websockets
+, lib
+, fetchFromGitHub
+, fetchpatch
 }:
 
 mkDerivation rec {
@@ -28,13 +44,30 @@ mkDerivation rec {
   isExecutable = true;
 
   libraryHaskellDepends = [
-    async base base64-bytestring binary bytestring classy-prelude
-    connection hslogger mtl network network-conduit-tls
-    streaming-commons text unordered-containers websockets
+    async
+    base
+    base64-bytestring
+    binary
+    bytestring
+    classy-prelude
+    connection
+    hslogger
+    mtl
+    network
+    network-conduit-tls
+    streaming-commons
+    text
+    unordered-containers
+    websockets
   ];
 
   executableHaskellDepends = [
-    base bytestring classy-prelude cmdargs hslogger text
+    base
+    bytestring
+    classy-prelude
+    cmdargs
+    hslogger
+    text
   ];
 
   testHaskellDepends = [ base text ];

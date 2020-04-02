@@ -14,7 +14,7 @@ with lib;
       # TODO: find another name for it.
       fonts = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.dejavu_fonts ]";
         description = "List of primary font paths.";
       };

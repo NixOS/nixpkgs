@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, ladspaH
+{ stdenv
+, fetchurl
+, ladspaH
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
     sed -i 's@/usr/lib/ladspa@$(out)/lib/ladspa@g' Makefile
   '';
 
-  preInstall="mkdir -p $out/lib/ladspa";
+  preInstall = "mkdir -p $out/lib/ladspa";
 
   meta = {
     description = ''A set of ambisonics ladspa plugins'';

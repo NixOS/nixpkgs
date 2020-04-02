@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.gocd-server;
-in {
+in
+{
   options = {
     services.gocd-server = {
       enable = mkEnableOption "gocd-server";
@@ -170,10 +170,11 @@ in {
             lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
               config.environment.sessionVariables;
         in
-          selectedSessionVars //
-            { NIX_REMOTE = "daemon";
-            } //
-            cfg.environment;
+        selectedSessionVars //
+        {
+          NIX_REMOTE = "daemon";
+        } //
+        cfg.environment;
 
       path = cfg.packages;
 

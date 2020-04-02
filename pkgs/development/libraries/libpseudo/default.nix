@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, ncurses}:
+{ stdenv, fetchurl, pkgconfig, glib, ncurses }:
 stdenv.mkDerivation rec {
   name = "libpseudo-1.2.0";
 

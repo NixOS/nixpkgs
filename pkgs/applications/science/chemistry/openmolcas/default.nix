@@ -1,16 +1,26 @@
-{ stdenv, fetchFromGitLab, cmake, gfortran, perl
-, openblas, hdf5-cpp, python3, texlive
-, armadillo, openmpi, globalarrays, openssh
-, makeWrapper, fetchpatch
-} :
-
+{ stdenv
+, fetchFromGitLab
+, cmake
+, gfortran
+, perl
+, openblas
+, hdf5-cpp
+, python3
+, texlive
+, armadillo
+, openmpi
+, globalarrays
+, openssh
+, makeWrapper
+, fetchpatch
+}:
 let
   version = "19.11";
   gitLabRev = "v${version}";
 
-  python = python3.withPackages (ps : with ps; [ six pyparsing ]);
-
-in stdenv.mkDerivation {
+  python = python3.withPackages (ps: with ps; [ six pyparsing ]);
+in
+stdenv.mkDerivation {
   pname = "openmolcas";
   inherit version;
 
@@ -21,15 +31,18 @@ in stdenv.mkDerivation {
     sha256 = "1wwqhkyyi7pw5x1ghnp83ir17zl5jsj7phhqxapybyi3bmg0i00q";
   };
 
-  patches = [ (fetchpatch {
-    name = "Fix-MPI-INT-size"; # upstream patch, fixes a Fortran compiler error
-    url = "https://gitlab.com/Molcas/OpenMolcas/commit/860e3350523f05ab18e49a428febac8a4297b6e4.patch";
-    sha256 = "0h96h5ikbi5l6ky41nkxmxfhjiykkiifq7vc2s3fdy1r1siv09sb";
-  }) (fetchpatch {
-    name = "fix-cisandbox"; # upstream patch, fixes a Fortran compiler error
-    url = "https://gitlab.com/Molcas/OpenMolcas/commit/d871590c8ce4689cd94cdbbc618954c65589393d.patch";
-    sha256 = "0dgz1w2rkglnis76spai3m51qa72j4bz6ppnk5zmzrr6ql7gwpgg";
-  })];
+  patches = [
+    (fetchpatch {
+      name = "Fix-MPI-INT-size"; # upstream patch, fixes a Fortran compiler error
+      url = "https://gitlab.com/Molcas/OpenMolcas/commit/860e3350523f05ab18e49a428febac8a4297b6e4.patch";
+      sha256 = "0h96h5ikbi5l6ky41nkxmxfhjiykkiifq7vc2s3fdy1r1siv09sb";
+    })
+    (fetchpatch {
+      name = "fix-cisandbox"; # upstream patch, fixes a Fortran compiler error
+      url = "https://gitlab.com/Molcas/OpenMolcas/commit/d871590c8ce4689cd94cdbbc618954c65589393d.patch";
+      sha256 = "0dgz1w2rkglnis76spai3m51qa72j4bz6ppnk5zmzrr6ql7gwpgg";
+    })
+  ];
 
   nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];
   buildInputs = [
@@ -56,7 +69,7 @@ in stdenv.mkDerivation {
     "-DOPENBLASROOT=${openblas}"
   ];
 
-  GAROOT=globalarrays;
+  GAROOT = globalarrays;
 
   postConfigure = ''
     # The Makefile will install pymolcas during the build grrr.
@@ -80,4 +93,3 @@ in stdenv.mkDerivation {
     platforms = platforms.linux;
   };
 }
-

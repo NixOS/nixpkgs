@@ -1,9 +1,18 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, zlib, xz, python, ncurses, findXMLCatalogs
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, zlib
+, xz
+, python
+, ncurses
+, findXMLCatalogs
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
-, icuSupport ? false, icu ? null
+, icuSupport ? false
+, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
-, enableStatic ? !enableShared,
+, enableStatic ? !enableShared
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,8 +72,7 @@ stdenv.mkDerivation rec {
     echo "" > python/tests/tstLastError.py
   '';
 
-  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
-    stdenv.hostPlatform.libc != "musl";
+  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin && stdenv.hostPlatform.libc != "musl";
 
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';

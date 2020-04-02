@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, fetchpatch, clang,
-  pkg-config, curl, mpv, yajl }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, clang
+, pkg-config
+, curl
+, mpv
+, yajl
+}:
 
 stdenv.mkDerivation rec {
   pname = "jftui";

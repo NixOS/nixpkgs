@@ -1,24 +1,21 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.freeradius;
 
   freeradiusService = cfg:
-  {
-    description = "FreeRadius server";
-    wantedBy = ["multi-user.target"];
-    after = ["network.target"];
-    wants = ["network.target"];
-    preStart = ''
-      ${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout
-    '';
+    {
+      description = "FreeRadius server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      wants = [ "network.target" ];
+      preStart = ''
+        ${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout
+      '';
 
-    serviceConfig = {
-        ExecStart = "${pkgs.freeradius}/bin/radiusd -f -d ${cfg.configDir} -l stdout" +
-                    optionalString cfg.debug " -xx";
+      serviceConfig = {
+        ExecStart = "${pkgs.freeradius}/bin/radiusd -f -d ${cfg.configDir} -l stdout" + optionalString cfg.debug " -xx";
         ExecReload = [
           "${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout"
           "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
@@ -28,8 +25,8 @@ let
         ProtectHome = "on";
         Restart = "on-failure";
         RestartSec = 2;
+      };
     };
-  };
 
   freeradiusConfig = {
     enable = mkEnableOption "the freeradius server";
@@ -53,9 +50,7 @@ let
     };
 
   };
-
 in
-
 {
 
   ###### interface

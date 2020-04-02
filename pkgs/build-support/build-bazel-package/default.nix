@@ -3,49 +3,45 @@
 , cacert
 , lib
 }:
-
 let
   bazelPkg = bazel;
 in
-
-args@{
-  name
+args@{ name
 , bazel ? bazelPkg
-, bazelFlags ? []
-, bazelBuildFlags ? []
-, bazelFetchFlags ? []
+, bazelFlags ? [ ]
+, bazelBuildFlags ? [ ]
+, bazelFetchFlags ? [ ]
 , bazelTarget
 , buildAttrs
 , fetchAttrs
 
-# Newer versions of Bazel are moving away from built-in rules_cc and instead
-# allow fetching it as an external dependency in a WORKSPACE file[1]. If
-# removed in the fixed-output fetch phase, building will fail to download it.
-# This can be seen e.g. in #73097
-#
-# This option allows configuring the removal of rules_cc in cases where a
-# project depends on it via an external dependency.
-#
-# [1]: https://github.com/bazelbuild/rules_cc
+  # Newer versions of Bazel are moving away from built-in rules_cc and instead
+  # allow fetching it as an external dependency in a WORKSPACE file[1]. If
+  # removed in the fixed-output fetch phase, building will fail to download it.
+  # This can be seen e.g. in #73097
+  #
+  # This option allows configuring the removal of rules_cc in cases where a
+  # project depends on it via an external dependency.
+  #
+  # [1]: https://github.com/bazelbuild/rules_cc
 , removeRulesCC ? true
 , removeLocalConfigCc ? true
 , removeLocal ? true
 , ...
 }:
-
 let
   fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ];
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
-
-in stdenv.mkDerivation (fBuildAttrs // {
+in
+stdenv.mkDerivation (fBuildAttrs // {
   inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps";
     inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
-    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
+    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [ ] ++ [ bazel ];
 
     preHook = fFetchAttrs.preHook or "" + ''
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
@@ -128,14 +124,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
     '';
 
     dontFixup = true;
-    allowedRequisites = [];
+    allowedRequisites = [ ];
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = fetchAttrs.sha256;
   });
 
-  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];
+  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [ ] ++ [ (bazel.override { enableNixHacks = true; }) ];
 
   preHook = fBuildAttrs.preHook or "" + ''
     export bazelOut="$NIX_BUILD_TOP/output"

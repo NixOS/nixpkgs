@@ -1,19 +1,49 @@
-{ stdenv, lib, fetchurl, fetchsvn,
-  jansson, libedit, libxml2, libxslt, ncurses, openssl, sqlite,
-  utillinux, dmidecode, libuuid, newt,
-  lua, speex,
-  srtp, wget, curl, iksemel, pkgconfig
+{ stdenv
+, lib
+, fetchurl
+, fetchsvn
+, jansson
+, libedit
+, libxml2
+, libxslt
+, ncurses
+, openssl
+, sqlite
+, utillinux
+, dmidecode
+, libuuid
+, newt
+, lua
+, speex
+, srtp
+, wget
+, curl
+, iksemel
+, pkgconfig
 }:
-
 let
-  common = {version, sha256, externals}: stdenv.mkDerivation {
+  common = { version, sha256, externals }: stdenv.mkDerivation {
     inherit version;
     pname = "asterisk";
 
-    buildInputs = [ jansson libedit libxml2 libxslt ncurses openssl sqlite
-                    dmidecode libuuid newt
-                    lua speex
-                    srtp wget curl iksemel ];
+    buildInputs = [
+      jansson
+      libedit
+      libxml2
+      libxslt
+      ncurses
+      openssl
+      sqlite
+      dmidecode
+      libuuid
+      newt
+      lua
+      speex
+      srtp
+      wget
+      curl
+      iksemel
+    ];
     nativeBuildInputs = [ utillinux pkgconfig ];
 
     patches = [
@@ -61,8 +91,8 @@ let
     preBuild = ''
       make menuselect.makeopts
       ${lib.optionalString (externals ? "addons/mp3") ''
-        substituteInPlace menuselect.makeopts --replace 'format_mp3 ' ""
-      ''}
+      substituteInPlace menuselect.makeopts --replace 'format_mp3 ' ""
+    ''}
     '';
 
     postInstall = ''
@@ -93,8 +123,8 @@ let
     rev = "202";
     sha256 = "1s9idx2miwk178sa731ig9r4fzx4gy1q8xazfqyd7q4lfd70s1cy";
   };
-
-in rec {
+in
+rec {
   # Supported releases (as of 2018-11-20).
   #
   # Series  Type       Rel. Date   Sec. Fixes  EOL

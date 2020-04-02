@@ -1,10 +1,12 @@
 { stdenv, fetchFromGitHub, gfortran, suitesparse, openblas }:
 let
   suitesparse_ = suitesparse;
-in let
+in
+let
   # SuiteSparse must use the same openblas
   suitesparse = suitesparse_.override { inherit openblas; };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cholmod-extra";
   version = "1.2.0";
 

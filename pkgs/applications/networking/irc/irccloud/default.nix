@@ -1,5 +1,4 @@
 { appimageTools, fetchurl, lib }:
-
 let
   pname = "irccloud";
   version = "0.13.0";
@@ -13,8 +12,8 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   extraPkgs = pkgs: with pkgs; [ at-spi2-core ];

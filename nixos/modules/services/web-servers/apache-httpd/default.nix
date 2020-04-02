@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.httpd;
 
   runtimeDir = "/run/httpd";
@@ -21,7 +19,7 @@ let
   vhosts = attrValues cfg.virtualHosts;
 
   mkListenInfo = hostOpts:
-    if hostOpts.listen != [] then hostOpts.listen
+    if hostOpts.listen != [ ] then hostOpts.listen
     else (
       optional (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) { ip = "*"; port = 443; ssl = true; } ++
       optional (!hostOpts.onlySSL) { ip = "*"; port = 80; ssl = false; }
@@ -35,12 +33,20 @@ let
 
   # NOTE: generally speaking order of modules is very important
   modules =
-    [ # required apache modules our httpd service cannot run without
-      "authn_core" "authz_core"
+    [
+      # required apache modules our httpd service cannot run without
+      "authn_core"
+      "authz_core"
       "log_config"
-      "mime" "autoindex" "negotiation" "dir"
-      "alias" "rewrite"
-      "unixd" "slotmem_shm" "socache_shmcb"
+      "mime"
+      "autoindex"
+      "negotiation"
+      "dir"
+      "alias"
+      "rewrite"
+      "unixd"
+      "slotmem_shm"
+      "socache_shmcb"
       "mpm_${cfg.multiProcessingModule}"
     ]
     ++ (if cfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
@@ -52,20 +58,21 @@ let
     ++ optional cfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
     ++ cfg.extraModules;
 
-  loggingConf = (if cfg.logFormat != "none" then ''
-    ErrorLog ${cfg.logDir}/error.log
+  loggingConf = (
+    if cfg.logFormat != "none" then ''
+      ErrorLog ${cfg.logDir}/error.log
 
-    LogLevel notice
+      LogLevel notice
 
-    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-    LogFormat "%h %l %u %t \"%r\" %>s %b" common
-    LogFormat "%{Referer}i -> %U" referer
-    LogFormat "%{User-agent}i" agent
+      LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+      LogFormat "%h %l %u %t \"%r\" %>s %b" common
+      LogFormat "%{Referer}i -> %U" referer
+      LogFormat "%{User-agent}i" agent
 
-    CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
-  '' else ''
-    ErrorLog /dev/null
-  '');
+      CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
+    '' else ''
+      ErrorLog /dev/null
+    '');
 
 
   browserHacks = ''
@@ -137,7 +144,7 @@ let
         </Directory>
       '';
     in
-      optionalString (listen != []) ''
+      optionalString (listen != [ ]) ''
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
@@ -146,17 +153,17 @@ let
                 SSLEngine off
             </IfModule>
             ${acmeChallenge}
-            ${if hostOpts.forceSSL then ''
-              <IfModule mod_rewrite.c>
-                  RewriteEngine on
-                  RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge [NC]
-                  RewriteCond %{HTTPS} off
-                  RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
-              </IfModule>
-            '' else mkVHostCommonConf hostOpts}
+            ${
+          if hostOpts.forceSSL then ''
+            <IfModule mod_rewrite.c>
+                RewriteEngine on
+                RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge [NC]
+                RewriteCond %{HTTPS} off
+                RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+            </IfModule>
+          '' else mkVHostCommonConf hostOpts}
         </VirtualHost>
-      '' +
-      optionalString (listenSSL != []) ''
+      '' + optionalString (listenSSL != [ ]) ''
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
@@ -174,7 +181,8 @@ let
 
   mkVHostCommonConf = hostOpts:
     let
-      documentRoot = if hostOpts.documentRoot != null
+      documentRoot =
+        if hostOpts.documentRoot != null
         then hostOpts.documentRoot
         else pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out"
       ;
@@ -182,34 +190,34 @@ let
       mkLocations = locations: concatStringsSep "\n" (map (config: ''
         <Location ${config.location}>
           ${optionalString (config.proxyPass != null) ''
-            <IfModule mod_proxy.c>
-                ProxyPass ${config.proxyPass}
-                ProxyPassReverse ${config.proxyPass}
-            </IfModule>
-          ''}
+        <IfModule mod_proxy.c>
+            ProxyPass ${config.proxyPass}
+            ProxyPassReverse ${config.proxyPass}
+        </IfModule>
+      ''}
           ${optionalString (config.index != null) ''
-            <IfModule mod_dir.c>
-                DirectoryIndex ${config.index}
-            </IfModule>
-          ''}
+        <IfModule mod_dir.c>
+            DirectoryIndex ${config.index}
+        </IfModule>
+      ''}
           ${optionalString (config.alias != null) ''
-            <IfModule mod_alias.c>
-                Alias "${config.alias}"
-            </IfModule>
-          ''}
+        <IfModule mod_alias.c>
+            Alias "${config.alias}"
+        </IfModule>
+      ''}
           ${config.extraConfig}
         </Location>
       '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
     in
       ''
         ${optionalString cfg.logPerVirtualHost ''
-          ErrorLog ${cfg.logDir}/error-${hostOpts.hostName}.log
-          CustomLog ${cfg.logDir}/access-${hostOpts.hostName}.log ${hostOpts.logFormat}
-        ''}
+        ErrorLog ${cfg.logDir}/error-${hostOpts.hostName}.log
+        CustomLog ${cfg.logDir}/access-${hostOpts.hostName}.log ${hostOpts.logFormat}
+      ''}
 
         ${optionalString (hostOpts.robotsEntries != "") ''
-          Alias /robots.txt ${pkgs.writeText "robots.txt" hostOpts.robotsEntries}
-        ''}
+        Alias /robots.txt ${pkgs.writeText "robots.txt" hostOpts.robotsEntries}
+      ''}
 
         DocumentRoot "${documentRoot}"
 
@@ -220,26 +228,27 @@ let
         </Directory>
 
         ${optionalString hostOpts.enableUserDir ''
-          UserDir public_html
-          UserDir disabled root
-          <Directory "/home/*/public_html">
-              AllowOverride FileInfo AuthConfig Limit Indexes
-              Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
-              <Limit GET POST OPTIONS>
-                  Require all granted
-              </Limit>
-              <LimitExcept GET POST OPTIONS>
-                  Require all denied
-              </LimitExcept>
-          </Directory>
-        ''}
+        UserDir public_html
+        UserDir disabled root
+        <Directory "/home/*/public_html">
+            AllowOverride FileInfo AuthConfig Limit Indexes
+            Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+            <Limit GET POST OPTIONS>
+                Require all granted
+            </Limit>
+            <LimitExcept GET POST OPTIONS>
+                Require all denied
+            </LimitExcept>
+        </Directory>
+      ''}
 
         ${optionalString (hostOpts.globalRedirect != null && hostOpts.globalRedirect != "") ''
-          RedirectPermanent / ${hostOpts.globalRedirect}
-        ''}
+        RedirectPermanent / ${hostOpts.globalRedirect}
+      ''}
 
         ${
-          let makeDirConf = elem: ''
+          let
+              makeDirConf = elem: ''
                 Alias ${elem.urlPath} ${elem.dir}/
                 <Directory ${elem.dir}>
                     Options +Indexes
@@ -247,7 +256,7 @@ let
                     AllowOverride All
                 </Directory>
               '';
-          in concatMapStrings makeDirConf hostOpts.servedDirs
+            in concatMapStrings makeDirConf hostOpts.servedDirs
         }
 
         ${mkLocations hostOpts.locations}
@@ -265,9 +274,9 @@ let
     PidFile ${runtimeDir}/httpd.pid
 
     ${optionalString (cfg.multiProcessingModule != "prefork") ''
-      # mod_cgid requires this.
-      ScriptSock ${runtimeDir}/cgisock
-    ''}
+    # mod_cgid requires this.
+    ScriptSock ${runtimeDir}/cgisock
+  ''}
 
     <IfModule prefork.c>
         MaxClients           ${toString cfg.maxClients}
@@ -275,21 +284,21 @@ let
     </IfModule>
 
     ${let
-        toStr = listen: "Listen ${listen.ip}:${toString listen.port} ${if listen.ssl then "https" else "http"}";
-        uniqueListen = uniqList {inputList = map toStr listenInfo;};
-      in concatStringsSep "\n" uniqueListen
+      toStr = listen: "Listen ${listen.ip}:${toString listen.port} ${if listen.ssl then "https" else "http"}";
+      uniqueListen = uniqList { inputList = map toStr listenInfo; };
+    in concatStringsSep "\n" uniqueListen
     }
 
     User ${cfg.user}
     Group ${cfg.group}
 
     ${let
-        mkModule = module:
+      mkModule = module:
           if isString module then { name = module; path = "${pkg}/modules/mod_${module}.so"; }
           else if isAttrs module then { inherit (module) name path; }
           else throw "Expecting either a string or attribute set including a name and path.";
-      in
-        concatMapStringsSep "\n" (module: "LoadModule ${module.name}_module ${module.path}") (unique (map mkModule modules))
+    in
+      concatMapStringsSep "\n" (module: "LoadModule ${module.name}_module ${module.path}") (unique (map mkModule modules))
     }
 
     AddHandler type-map var
@@ -333,17 +342,15 @@ let
   # Generate the PHP configuration file.  Should probably be factored
   # out into a separate module.
   phpIni = pkgs.runCommand "php.ini"
-    { options = cfg.phpOptions;
-      preferLocalBuild = true;
-    }
+  {
+    options = cfg.phpOptions;
+    preferLocalBuild = true;
+  }
     ''
       cat ${php}/etc/php.ini > $out
       echo "$options" >> $out
     '';
-
 in
-
-
 {
 
   imports = [
@@ -406,7 +413,7 @@ in
 
       extraModules = mkOption {
         type = types.listOf types.unspecified;
-        default = [];
+        default = [ ];
         example = literalExample ''
           [
             "proxy_connect"
@@ -620,7 +627,7 @@ in
     warnings =
       mapAttrsToList (name: hostOpts: ''
         Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
-      '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != []) cfg.virtualHosts);
+      '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != [ ]) cfg.virtualHosts);
 
     users.users = optionalAttrs (cfg.user == "wwwrun") {
       wwwrun = {
@@ -663,21 +670,42 @@ in
 
     services.httpd.extraModules = mkBefore [
       # HTTP authentication mechanisms: basic and digest.
-      "auth_basic" "auth_digest"
+      "auth_basic"
+      "auth_digest"
 
       # Authentication: is the user who he claims to be?
-      "authn_file" "authn_dbm" "authn_anon"
+      "authn_file"
+      "authn_dbm"
+      "authn_anon"
 
       # Authorization: is the user allowed access?
-      "authz_user" "authz_groupfile" "authz_host"
+      "authz_user"
+      "authz_groupfile"
+      "authz_host"
 
       # Other modules.
-      "ext_filter" "include" "env" "mime_magic"
-      "cern_meta" "expires" "headers" "usertrack" "setenvif"
-      "dav" "status" "asis" "info" "dav_fs"
-      "vhost_alias" "imagemap" "actions" "speling"
-      "proxy" "proxy_http"
-      "cache" "cache_disk"
+      "ext_filter"
+      "include"
+      "env"
+      "mime_magic"
+      "cern_meta"
+      "expires"
+      "headers"
+      "usertrack"
+      "setenvif"
+      "dav"
+      "status"
+      "asis"
+      "info"
+      "dav_fs"
+      "vhost_alias"
+      "imagemap"
+      "actions"
+      "speling"
+      "proxy"
+      "proxy_http"
+      "cache"
+      "cache_disk"
 
       # For compatibility with old configurations, the new module mod_access_compat is provided.
       "access_compat"
@@ -687,16 +715,17 @@ in
       let
         svc = config.systemd.services.httpd.serviceConfig;
       in
-        [
-          "d '${cfg.logDir}' 0700 ${svc.User} ${svc.Group}"
-          "Z '${cfg.logDir}' - ${svc.User} ${svc.Group}"
-        ];
+      [
+        "d '${cfg.logDir}' 0700 ${svc.User} ${svc.Group}"
+        "Z '${cfg.logDir}' - ${svc.User} ${svc.Group}"
+      ];
 
     systemd.services.httpd =
       let
         vhostsACME = filter (hostOpts: hostOpts.enableACME) vhosts;
       in
-      { description = "Apache HTTPD";
+      {
+        description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
         wants = concatLists (map (hostOpts: [ "acme-${hostOpts.hostName}.service" "acme-selfsigned-${hostOpts.hostName}.service" ]) vhostsACME);
@@ -708,7 +737,7 @@ in
 
         environment =
           optionalAttrs cfg.enablePHP { PHPRC = phpIni; }
-          // optionalAttrs cfg.enableMellon { LD_LIBRARY_PATH  = "${pkgs.xmlsec}/lib"; };
+          // optionalAttrs cfg.enableMellon { LD_LIBRARY_PATH = "${pkgs.xmlsec}/lib"; };
 
         preStart =
           ''

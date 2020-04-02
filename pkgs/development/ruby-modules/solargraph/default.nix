@@ -2,7 +2,7 @@
 
 bundlerApp {
   pname = "solargraph";
-  exes = ["solargraph"  "solargraph-runtime"];
+  exes = [ "solargraph" "solargraph-runtime" ];
   gemdir = ./.;
 
   passthru.updateScript = bundlerUpdateScript "solargraph";

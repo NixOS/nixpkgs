@@ -1,13 +1,11 @@
 { lib }:
 # Operations on attribute sets.
-
 let
   inherit (builtins) head tail length;
   inherit (lib.trivial) and;
   inherit (lib.strings) concatStringsSep;
   inherit (lib.lists) fold concatMap concatLists;
 in
-
 rec {
   inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr;
 
@@ -22,9 +20,10 @@ rec {
        => 6
   */
   attrByPath = attrPath: default: e:
-    let attr = head attrPath;
+    let
+      attr = head attrPath;
     in
-      if attrPath == [] then e
+      if attrPath == [ ] then e
       else if e ? ${attr}
       then attrByPath (tail attrPath) default e.${attr}
       else default;
@@ -40,9 +39,10 @@ rec {
 
   */
   hasAttrByPath = attrPath: e:
-    let attr = head attrPath;
+    let
+      attr = head attrPath;
     in
-      if attrPath == [] then true
+      if attrPath == [ ] then true
       else if e ? ${attr}
       then hasAttrByPath (tail attrPath) e.${attr}
       else false;
@@ -55,7 +55,7 @@ rec {
        => { a = { b = 3; }; }
   */
   setAttrByPath = attrPath: value:
-    if attrPath == [] then value
+    if attrPath == [ ] then value
     else listToAttrs
       [ { name = head attrPath; value = setAttrByPath (tail attrPath) value; } ];
 
@@ -71,7 +71,8 @@ rec {
        => error: cannot find attribute `z.z'
   */
   getAttrFromPath = attrPath: set:
-    let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
+    let
+      errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
     in attrByPath attrPath (abort errorMsg) set;
 
 
@@ -111,7 +112,7 @@ rec {
        => [1 2]
   */
   catAttrs = builtins.catAttrs or
-    (attr: l: concatLists (map (s: if s ? ${attr} then [s.${attr}] else []) l));
+    (attr: l: concatLists (map (s: if s ? ${attr} then [ s.${attr} ] else [ ]) l));
 
 
   /* Filter an attribute set by removing all attributes for which the
@@ -122,7 +123,7 @@ rec {
        => { foo = 1; }
   */
   filterAttrs = pred: set:
-    listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
+    listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [ (nameValuePair name v) ] else [ ]) (attrNames set));
 
 
   /* Filter an attribute set recursively by removing all attributes for
@@ -136,12 +137,12 @@ rec {
     listToAttrs (
       concatMap (name:
         let v = set.${name}; in
-        if pred name v then [
-          (nameValuePair name (
-            if isAttrs v then filterAttrsRecursive pred v
-            else v
-          ))
-        ] else []
+          if pred name v then [
+            (nameValuePair name (
+              if isAttrs v then filterAttrsRecursive pred v
+              else v
+            ))
+          ] else [ ]
       ) (attrNames set)
     );
 
@@ -153,10 +154,10 @@ rec {
   */
   foldAttrs = op: nul: list_of_attrs:
     fold (n: a:
-        fold (name: o:
-          o // { ${name} = op n.${name} (a.${name} or nul); }
-        ) a (attrNames n)
-    ) {} list_of_attrs;
+      fold (name: o:
+        o // { ${name} = op n.${name} (a.${name} or nul); }
+      ) a (attrNames n)
+    ) { } list_of_attrs;
 
 
   /* Recursively collect sets that verify a given predicate named `pred'
@@ -181,7 +182,7 @@ rec {
     else if isAttrs attrs then
       concatMap (collect pred) (attrValues attrs)
     else
-      [];
+      [ ];
 
 
   /* Utility function that creates a {name, value} pair as expected by
@@ -274,11 +275,11 @@ rec {
         let
           g =
             name: value:
-            if isAttrs value && cond value
-              then recurse (path ++ [name]) value
-              else f (path ++ [name]) value;
+              if isAttrs value && cond value
+              then recurse (path ++ [ name ]) value
+              else f (path ++ [ name ]) value;
         in mapAttrs g set;
-    in recurse [] set;
+    in recurse [ ] set;
 
 
   /* Generate an attribute set by mapping a function over a list of
@@ -309,7 +310,8 @@ rec {
     let
       path' = builtins.storePath path;
       res =
-        { type = "derivation";
+        {
+          type = "derivation";
           name = builtins.unsafeDiscardStringContext (builtins.substring 33 (-1) (baseNameOf path'));
           outPath = path';
           outputs = [ "out" ];
@@ -328,7 +330,7 @@ rec {
        optionalAttrs (false) { my = "set"; }
        => { }
   */
-  optionalAttrs = cond: as: if cond then as else {};
+  optionalAttrs = cond: as: if cond then as else { };
 
 
   /* Merge sets of attributes and use the function f to merge attributes
@@ -391,16 +393,16 @@ rec {
 
      */
   recursiveUpdateUntil = pred: lhs: rhs:
-    let f = attrPath:
-      zipAttrsWith (n: values:
-        let here = attrPath ++ [n]; in
-        if tail values == []
-        || pred here (head (tail values)) (head values) then
-          head values
-        else
-          f here values
-      );
-    in f [] [rhs lhs];
+    let
+      f = attrPath:
+        zipAttrsWith (n: values:
+          let here = attrPath ++ [ n ]; in
+            if tail values == [ ] || pred here (head (tail values)) (head values) then
+              head values
+            else
+              f here values
+        );
+    in f [ ] [ rhs lhs ];
 
   /* A recursive variant of the update operator ‘//’.  The recursion
      stops when one of the attribute values is not an attribute set,
@@ -435,10 +437,11 @@ rec {
   matchAttrs = pattern: attrs: assert isAttrs pattern;
     fold and true (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
       let pat = head values; val = head (tail values); in
-      if length values == 1 then false
-      else if isAttrs pat then isAttrs val && matchAttrs pat val
-      else pat == val
-    ) [pattern attrs]));
+        if length values == 1 then false
+        else if isAttrs pat then isAttrs val && matchAttrs pat val
+        else pat == val
+    ) [ pattern attrs ]
+    ));
 
   /* Override only the attributes that are already present in the old set
     useful for deep-overriding.
@@ -463,8 +466,8 @@ rec {
   */
   getOutput = output: pkg:
     if pkg.outputUnspecified or false
-      then pkg.${output} or pkg.out or pkg
-      else pkg;
+    then pkg.${output} or pkg.out or pkg
+    else pkg;
 
   getBin = getOutput "bin";
   getLib = getOutput "lib";

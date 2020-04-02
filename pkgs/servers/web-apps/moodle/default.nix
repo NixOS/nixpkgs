@@ -1,10 +1,8 @@
 { stdenv, fetchurl, writeText }:
-
 let
   version = "3.8.2";
-  stableVersion = builtins.substring 0 2 (builtins.replaceStrings ["."] [""] version);
+  stableVersion = builtins.substring 0 2 (builtins.replaceStrings [ "." ] [ "" ] version);
 in
-
 stdenv.mkDerivation rec {
   pname = "moodle";
   inherit version;
@@ -15,9 +13,9 @@ stdenv.mkDerivation rec {
   };
 
   phpConfig = writeText "config.php" ''
-  <?php
-    return require(getenv('MOODLE_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('MOODLE_CONFIG'));
+    ?>
   '';
 
   installPhase = ''

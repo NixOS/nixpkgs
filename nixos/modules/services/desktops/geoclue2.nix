@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   # the demo agent isn't built by default, but we need it here
   package = pkgs.geoclue2.override { withDemoAgent = config.services.geoclue2.enableDemoAgent; };
@@ -37,7 +36,7 @@ let
 
       users = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of UIDs of all users for which this application is allowed location
           info access, Defaults to an empty string to allow it for all users.
@@ -56,7 +55,6 @@ let
       users = concatStringsSep ";" users;
     };
   };
-
 in
 {
 
@@ -161,7 +159,7 @@ in
 
       appConfig = mkOption {
         type = types.loaOf appConfigModule;
-        default = {};
+        default = { };
         example = literalExample ''
           "com.github.app" = {
             isAllowed = true;
@@ -197,7 +195,7 @@ in
         description = "Geoinformation service";
       };
 
-      groups.geoclue = {};
+      groups.geoclue = { };
     };
 
     systemd.services.geoclue = {
@@ -237,7 +235,7 @@ in
     };
 
     environment.etc."geoclue/geoclue.conf".text =
-      generators.toINI {} ({
+      generators.toINI { } ({
         agent = {
           whitelist = concatStringsSep ";"
             (optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);

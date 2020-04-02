@@ -5,7 +5,7 @@
 if disabled then
   throw "${attrs.name} not supported by interpreter lua-${lua.luaversion}"
 else
-  toLuaModule( lua.stdenv.mkDerivation (
+  toLuaModule (lua.stdenv.mkDerivation (
     {
       makeFlags = [
         "PREFIX=$(out)"
@@ -22,4 +22,4 @@ else
         lua # propagate it for its setup-hook
       ];
     }
-  ) )
+  ))

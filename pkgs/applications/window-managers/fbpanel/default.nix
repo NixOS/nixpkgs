@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, pkgconfig
-, libX11, libXmu, libXpm, gtk2, libpng, libjpeg, libtiff, librsvg
+{ stdenv
+, fetchurl
+, pkgconfig
+, libX11
+, libXmu
+, libXpm
+, gtk2
+, libpng
+, libjpeg
+, libtiff
+, librsvg
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +23,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  NIX_LDFLAGS="-lX11";
+  NIX_LDFLAGS = "-lX11";
 
   meta = with stdenv.lib; {
     description = "A stand-alone panel";

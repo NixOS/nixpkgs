@@ -14,7 +14,7 @@ rec {
 
   packageName = "dissect";
 
-  asdFilesToKeep = ["dissect.asd"];
+  asdFilesToKeep = [ "dissect.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dissect DESCRIPTION

@@ -1,6 +1,8 @@
 { stdenv, fetchurl, ncurses, autoreconfHook, flex }:
-let rev = "431604647f89d5aac7b199a7883e98e56e4ccf9e";
-in stdenv.mkDerivation rec {
+let
+  rev = "431604647f89d5aac7b199a7883e98e56e4ccf9e";
+in
+stdenv.mkDerivation rec {
   pname = "mmh-unstable";
   version = "2019-09-08";
 

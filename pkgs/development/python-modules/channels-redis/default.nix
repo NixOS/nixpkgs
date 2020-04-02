@@ -1,6 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, redis, channels, msgpack, aioredis, hiredis, asgiref
-# , fetchFromGitHub, async_generator, async-timeout, cryptography, pytest, pytest-asyncio
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, redis
+, channels
+, msgpack
+, aioredis
+, hiredis
+, asgiref
+  # , fetchFromGitHub, async_generator, async-timeout, cryptography, pytest, pytest-asyncio
 }:
 
 buildPythonPackage rec {

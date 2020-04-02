@@ -1,11 +1,21 @@
-{ stdenv, fetchurl, gtk2-x11 , pkgconfig , python3 , gfortran , lesstif
-, cfitsio , getopt , perl , groff , which, darwin, ncurses
+{ stdenv
+, fetchurl
+, gtk2-x11
+, pkgconfig
+, python3
+, gfortran
+, lesstif
+, cfitsio
+, getopt
+, perl
+, groff
+, which
+, darwin
+, ncurses
 }:
-
 let
-  python3Env = python3.withPackages(ps: with ps; [ numpy ]);
+  python3Env = python3.withPackages (ps: with ps; [ numpy ]);
 in
-
 stdenv.mkDerivation rec {
   srcVersion = "feb20a";
   version = "20200201_a";
@@ -14,8 +24,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     # For each new release, the upstream developers of Gildas move the
     # source code of the previous release to a different directory
-    urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
-      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
+    urls = [
+      "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
+      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
+    ];
     sha256 = "05f34kpi3pfgf4dsyka7mkcln26yzb2mixnnc306krq0isjm7m26";
   };
 
@@ -30,7 +42,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
 
-  configurePhase=''
+  configurePhase = ''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
     substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python3Env}
     substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
@@ -38,7 +50,7 @@ stdenv.mkDerivation rec {
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
 
-  postInstall=''
+  postInstall = ''
     mkdir -p $out/bin
     cp -a ../gildas-exe-${srcVersion}/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec

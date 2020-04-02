@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, isocodes, intltool, gobject-introspection, vala}:
+{ stdenv, fetchurl, gtk3, aspell, pkgconfig, enchant, isocodes, intltool, gobject-introspection, vala }:
 
 stdenv.mkDerivation rec {
   pname = "gtkspell";

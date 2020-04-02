@@ -1,7 +1,24 @@
-{ stdenv, fetchurl, glib, git,
-  rlwrap, curl, pkgconfig, perl, makeWrapper, tzdata, ncurses,
-  pango, cairo, gtk2, gdk-pixbuf, gtkglext,
-  mesa, xorg, openssl, unzip }:
+{ stdenv
+, fetchurl
+, glib
+, git
+, rlwrap
+, curl
+, pkgconfig
+, perl
+, makeWrapper
+, tzdata
+, ncurses
+, pango
+, cairo
+, gtk2
+, gdk-pixbuf
+, gtkglext
+, mesa
+, xorg
+, openssl
+, unzip
+}:
 
 stdenv.mkDerivation rec {
   pname = "factor-lang";
@@ -19,9 +36,27 @@ stdenv.mkDerivation rec {
     ./fuel-dir.patch
   ];
 
-  buildInputs = with xorg; [ git rlwrap curl pkgconfig perl makeWrapper
-    libX11 pango cairo gtk2 gdk-pixbuf gtkglext
-    mesa libXmu libXt libICE libSM openssl unzip ];
+  buildInputs = with xorg; [
+    git
+    rlwrap
+    curl
+    pkgconfig
+    perl
+    makeWrapper
+    libX11
+    pango
+    cairo
+    gtk2
+    gdk-pixbuf
+    gtkglext
+    mesa
+    libXmu
+    libXt
+    libICE
+    libSM
+    openssl
+    unzip
+  ];
 
   buildPhase = ''
     sed -ie '4i GIT_LABEL = heads/master-${rev}' GNUmakefile
@@ -48,13 +83,24 @@ stdenv.mkDerivation rec {
     # will work only on the known libraries. There does not seem
     # to be a generic solution here.
     find $(echo ${stdenv.lib.makeLibraryPath (with xorg; [
-        glib libX11 pango cairo gtk2 gdk-pixbuf gtkglext
-        mesa libXmu libXt libICE libSM ])} | sed -e 's#:# #g') -name \*.so.\* > $TMPDIR/so.lst
+      glib
+      libX11
+      pango
+      cairo
+      gtk2
+      gdk-pixbuf
+      gtkglext
+      mesa
+      libXmu
+      libXt
+      libICE
+      libSM
+    ])} | sed -e 's#:# #g') -name \*.so.\* > $TMPDIR/so.lst
 
     (echo $(cat $TMPDIR/so.lst | wc -l) "libs found in cache \`/etc/ld.so.cache'";
     for l in $(<$TMPDIR/so.lst);
     do
-      echo "	$(basename $l) (libc6,x86-64) => $l";
+      echo "  $(basename $l) (libc6,x86-64) => $l";
     done)> $out/lib/factor/ld.so.cache
 
     sed -ie "s#/sbin/ldconfig -p#cat $out/lib/factor/ld.so.cache#g" \
@@ -68,9 +114,21 @@ stdenv.mkDerivation rec {
 
     cp ./factor $out/bin
     wrapProgram $out/bin/factor --prefix LD_LIBRARY_PATH : \
-      "${stdenv.lib.makeLibraryPath (with xorg; [ glib
-        libX11 pango cairo gtk2 gdk-pixbuf gtkglext
-        mesa libXmu libXt libICE libSM openssl])}"
+      "${stdenv.lib.makeLibraryPath (with xorg; [
+      glib
+      libX11
+      pango
+      cairo
+      gtk2
+      gdk-pixbuf
+      gtkglext
+      mesa
+      libXmu
+      libXt
+      libICE
+      libSM
+      openssl
+    ])}"
 
     sed -ie 's#/bin/.factor-wrapped#/lib/factor/factor#g' $out/bin/factor
     mv $out/bin/.factor-wrapped $out/lib/factor/factor

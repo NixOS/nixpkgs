@@ -1,6 +1,11 @@
-{ lib, fetchurl, buildDunePackage
-, bigarray-compat, optint
-, cmdliner, fmt, rresult
+{ lib
+, fetchurl
+, buildDunePackage
+, bigarray-compat
+, optint
+, cmdliner
+, fmt
+, rresult
 , alcotest
 }:
 

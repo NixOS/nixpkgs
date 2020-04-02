@@ -1,7 +1,11 @@
-{ stdenv,
-fetchFromGitHub, fetchpatch,
-webos, cmake, pkgconfig,
-libusb }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, webos
+, cmake
+, pkgconfig
+, libusb
+}:
 
 stdenv.mkDerivation rec {
   pname = "novacomd";

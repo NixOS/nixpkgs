@@ -1,16 +1,19 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, libX11, libGL, mesa
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, libX11
+, libGL
+, mesa
 , nvidia_x11 ? null
 , libglvnd
 }:
-
 let
   aPackage =
     if nvidia_x11 == null then libGL
     else if nvidia_x11.useGLVND then libglvnd
     else nvidia_x11;
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "primus-lib-2015-04-28";
 
   src = fetchFromGitHub {
@@ -30,11 +33,12 @@ in stdenv.mkDerivation {
 
   buildInputs = [ libX11 libGL ];
 
-  makeFlags = [ "LIBDIR=$(out)/lib"
-                "PRIMUS_libGLa=${aPackage}/lib/libGL.so"
-                "PRIMUS_libGLd=${libGL}/lib/libGL.so"
-                "PRIMUS_LOAD_GLOBAL=${mesa}/lib/libglapi.so"
-              ];
+  makeFlags = [
+    "LIBDIR=$(out)/lib"
+    "PRIMUS_libGLa=${aPackage}/lib/libGL.so"
+    "PRIMUS_libGLd=${libGL}/lib/libGL.so"
+    "PRIMUS_LOAD_GLOBAL=${mesa}/lib/libglapi.so"
+  ];
 
   installPhase = ''
     ln -s $out/lib/libGL.so.1 $out/lib/libGL.so

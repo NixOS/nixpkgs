@@ -1,46 +1,46 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   pkg = pkgs.cjdns;
 
   cfg = config.services.cjdns;
 
   connectToSubmodule =
-  { ... }:
-  { options =
-    { password = mkOption {
-      type = types.str;
-      description = "Authorized password to the opposite end of the tunnel.";
-      };
-      publicKey = mkOption {
-        type = types.str;
-        description = "Public key at the opposite end of the tunnel.";
-      };
-      hostname = mkOption {
-        default = "";
-        example = "foobar.hype";
-        type = types.str;
-        description = "Optional hostname to add to /etc/hosts; prevents reverse lookup failures.";
-      };
+    { ... }:
+    {
+      options =
+        {
+          password = mkOption {
+            type = types.str;
+            description = "Authorized password to the opposite end of the tunnel.";
+          };
+          publicKey = mkOption {
+            type = types.str;
+            description = "Public key at the opposite end of the tunnel.";
+          };
+          hostname = mkOption {
+            default = "";
+            example = "foobar.hype";
+            type = types.str;
+            description = "Optional hostname to add to /etc/hosts; prevents reverse lookup failures.";
+          };
+        };
     };
-  };
 
   # Additional /etc/hosts entries for peers with an associated hostname
-  cjdnsExtraHosts = pkgs.runCommandNoCC "cjdns-hosts" {} ''
+  cjdnsExtraHosts = pkgs.runCommandNoCC "cjdns-hosts" { } ''
     exec >$out
     ${concatStringsSep "\n" (mapAttrsToList (k: v:
-        optionalString (v.hostname != "")
+      optionalString (v.hostname != "")
           "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}")
-        (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
+      (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
   '';
 
   parseModules = x:
     x // { connectTo = mapAttrs (name: value: { inherit (value) password publicKey; }) x.connectTo; };
 
-  cjdrouteConf = builtins.toJSON ( recursiveUpdate {
+  cjdrouteConf = builtins.toJSON (recursiveUpdate {
     admin = {
       bind = cfg.admin.bind;
       password = "@CJDNS_ADMIN_PASSWORD@";
@@ -58,17 +58,15 @@ let
     router = {
       interface = { type = "TUNInterface"; };
       ipTunnel = {
-        allowedConnections = [];
-        outgoingConnections = [];
+        allowedConnections = [ ];
+        outgoingConnections = [ ];
       };
     };
 
     security = [ { exemptAngel = 1; setuser = "nobody"; } ];
 
   } cfg.extraConfig);
-
 in
-
 {
   options = {
 
@@ -87,7 +85,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = { router.interface.tunDevice = "tun10"; };
         description = ''
           Extra configuration, given as attrs, that will be merged recursively
@@ -136,9 +134,9 @@ in
           description = ''
             Address and port to bind UDP tunnels to.
           '';
-         };
+        };
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+          type = types.attrsOf (types.submodule (connectToSubmodule));
           default = { };
           example = literalExample ''
             {
@@ -185,7 +183,7 @@ in
         };
 
         connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+          type = types.attrsOf (types.submodule (connectToSubmodule));
           default = { };
           example = literalExample ''
             {
@@ -225,30 +223,31 @@ in
 
     systemd.services.cjdns = {
       description = "cjdns: routing engine designed for security, scalability, speed and ease of use";
-      wantedBy = [ "multi-user.target" "sleep.target"];
+      wantedBy = [ "multi-user.target" "sleep.target" ];
       after = [ "network-online.target" ];
       bindsTo = [ "network-online.target" ];
 
-      preStart = if cfg.confFile != null then "" else ''
-        [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
+      preStart =
+        if cfg.confFile != null then "" else ''
+          [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
 
-        if [ -z "$CJDNS_PRIVATE_KEY" ]; then
-            shopt -s lastpipe
-            ${pkg}/bin/makekeys | { read private ipv6 public; }
+          if [ -z "$CJDNS_PRIVATE_KEY" ]; then
+              shopt -s lastpipe
+              ${pkg}/bin/makekeys | { read private ipv6 public; }
 
-            umask 0077
-            echo "CJDNS_PRIVATE_KEY=$private" >> /etc/cjdns.keys
-            echo -e "CJDNS_IPV6=$ipv6\nCJDNS_PUBLIC_KEY=$public" > /etc/cjdns.public
+              umask 0077
+              echo "CJDNS_PRIVATE_KEY=$private" >> /etc/cjdns.keys
+              echo -e "CJDNS_IPV6=$ipv6\nCJDNS_PUBLIC_KEY=$public" > /etc/cjdns.public
 
-            chmod 600 /etc/cjdns.keys
-            chmod 444 /etc/cjdns.public
-        fi
+              chmod 600 /etc/cjdns.keys
+              chmod 444 /etc/cjdns.public
+          fi
 
-        if [ -z "$CJDNS_ADMIN_PASSWORD" ]; then
-            echo "CJDNS_ADMIN_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 96)" \
-                >> /etc/cjdns.keys
-        fi
-      '';
+          if [ -z "$CJDNS_ADMIN_PASSWORD" ]; then
+              echo "CJDNS_ADMIN_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 96)" \
+                  >> /etc/cjdns.keys
+          fi
+        '';
 
       script = (
         if cfg.confFile != null then "${pkg}/bin/cjdroute < ${cfg.confFile}" else
@@ -261,7 +260,7 @@ in
                 -e "s/@CJDNS_ADMIN_PASSWORD@/$CJDNS_ADMIN_PASSWORD/g" \
                 -e "s/@CJDNS_PRIVATE_KEY@/$CJDNS_PRIVATE_KEY/g" \
                 | ${pkg}/bin/cjdroute
-         ''
+          ''
       );
 
       serviceConfig = {
@@ -281,10 +280,12 @@ in
     networking.hostFiles = mkIf cfg.addExtraHosts [ cjdnsExtraHosts ];
 
     assertions = [
-      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );
+      {
+        assertion = (cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null);
         message = "Neither cjdns.ETHInterface.bind nor cjdns.UDPInterface.bind defined.";
       }
-      { assertion = config.networking.enableIPv6;
+      {
+        assertion = config.networking.enableIPv6;
         message = "networking.enableIPv6 must be enabled for CJDNS to work";
       }
     ];

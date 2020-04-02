@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
-, glib, libwnck3, procps }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, pkgconfig
+, glib
+, libwnck3
+, procps
+}:
 
 with lib;
 

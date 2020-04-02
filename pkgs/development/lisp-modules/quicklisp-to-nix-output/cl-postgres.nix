@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-postgres";
 
-  asdFilesToKeep = ["cl-postgres.asd"];
+  asdFilesToKeep = [ "cl-postgres.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-postgres DESCRIPTION Low-level client library for PostgreSQL

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 let
   srcs = [
     (fetchurl {
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = ''Tempora font'';
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
   };
 }

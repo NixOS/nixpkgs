@@ -14,7 +14,7 @@ rec {
 
   packageName = "stumpwm";
 
-  asdFilesToKeep = ["stumpwm.asd"];
+  asdFilesToKeep = [ "stumpwm.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM stumpwm DESCRIPTION A tiling, keyboard driven window manager SHA256

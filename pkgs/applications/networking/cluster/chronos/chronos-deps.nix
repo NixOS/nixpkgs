@@ -1,4 +1,4 @@
-{stdenv, curl}:
+{ stdenv, curl }:
 
 stdenv.mkDerivation {
   name = "chronos-maven-deps";

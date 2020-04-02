@@ -85,12 +85,51 @@ stdenv.mkDerivation {
   '';
 
   rpath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
-      glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
-      libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
-      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
+    [
+      stdenv.cc.cc
+      alsaLib
+      atk
+      bzip2
+      cairo
+      curl
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      glibc
+      graphite2
+      gtk2
+      harfbuzz
+      libICE
+      libSM
+      libX11
+      libXau
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXdmcp
+      libXext
+      libXfixes
+      libXi
+      libXinerama
+      libXrandr
+      libXrender
+      libXt
+      libXxf86vm
+      libdrm
+      libffi
+      libglvnd
+      libpng
+      libvdpau
+      libxcb
+      libxshmfence
+      nspr
+      nss
+      pango
+      pcre
+      pixman
+      zlib
     ];
 
   meta = {

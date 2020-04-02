@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, curl, fuse, libxml2, pkgconfig }:
-
 let
   srcs = {
     boxfs2 = fetchFromGitHub {
@@ -21,7 +20,8 @@ let
       owner = "vincenthz";
     };
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "boxfs";
   version = "2-20150109";
 

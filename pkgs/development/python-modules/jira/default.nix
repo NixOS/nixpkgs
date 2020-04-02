@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, pytest, pytestrunner, pbr, glibcLocales , pytestcov
-, requests, requests_oauthlib, requests_toolbelt, defusedxml
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pytest
+, pytestrunner
+, pbr
+, glibcLocales
+, pytestcov
+, requests
+, requests_oauthlib
+, requests_toolbelt
+, defusedxml
 , ipython
 }:
 

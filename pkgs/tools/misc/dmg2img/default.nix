@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "066hqhg7k90xcw5aq86pgr4l7apzvnb4559vj5s010avbk8adbh2";
   };
 
-  buildInputs = [zlib bzip2 openssl];
+  buildInputs = [ zlib bzip2 openssl ];
 
   installPhase = ''
     mkdir -p $out/bin

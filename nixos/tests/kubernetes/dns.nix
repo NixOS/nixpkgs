@@ -8,16 +8,20 @@ let
     apiVersion = "v1";
     metadata.name = "redis";
     metadata.labels.name = "redis";
-    spec.containers = [{
-      name = "redis";
-      image = "redis";
-      args = ["--bind" "0.0.0.0"];
-      imagePullPolicy = "Never";
-      ports = [{
-        name = "redis-server";
-        containerPort = 6379;
-      }];
-    }];
+    spec.containers = [
+      {
+        name = "redis";
+        image = "redis";
+        args = [ "--bind" "0.0.0.0" ];
+        imagePullPolicy = "Never";
+        ports = [
+          {
+            name = "redis-server";
+            containerPort = 6379;
+          }
+        ];
+      }
+    ];
   });
 
   redisService = pkgs.writeText "redis-service.json" (builtins.toJSON {
@@ -25,8 +29,8 @@ let
     apiVersion = "v1";
     metadata.name = "redis";
     spec = {
-      ports = [{port = 6379; targetPort = 6379;}];
-      selector = {name = "redis";};
+      ports = [ { port = 6379; targetPort = 6379; } ];
+      selector = { name = "redis"; };
     };
   });
 
@@ -42,13 +46,15 @@ let
     apiVersion = "v1";
     metadata.name = "probe";
     metadata.labels.name = "probe";
-    spec.containers = [{
-      name = "probe";
-      image = "probe";
-      args = [ "-f" ];
-      tty = true;
-      imagePullPolicy = "Never";
-    }];
+    spec.containers = [
+      {
+        name = "probe";
+        image = "probe";
+        args = [ "-f" ];
+        tty = true;
+        imagePullPolicy = "Never";
+      }
+    ];
   });
 
   probeImage = pkgs.dockerTools.buildImage {
@@ -122,7 +128,8 @@ let
       $machine1->succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local");
     '';
   };
-in {
+in
+{
   singlenode = mkKubernetesSingleNodeTest (base // singleNodeTest);
   multinode = mkKubernetesMultiNodeTest (base // multiNodeTest);
 }

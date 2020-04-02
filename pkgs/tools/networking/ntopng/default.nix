@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
-, geoip, geolite-legacy, sqlite, which, autoreconfHook, git
-, pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool
+{ stdenv
+, fetchurl
+, libpcap
+, /* gnutls, libgcrypt,*/ libxml2
+, glib
+, geoip
+, geolite-legacy
+, sqlite
+, which
+, autoreconfHook
+, git
+, pkgconfig
+, groff
+, curl
+, json_c
+, luajit
+, zeromq
+, rrdtool
 }:
 
 # ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
@@ -23,9 +38,24 @@ stdenv.mkDerivation rec {
     ./0003-New-libpcap-defines-SOCKET.patch
   ];
 
-  buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy
-    sqlite which autoreconfHook git pkgconfig groff curl json_c luajit zeromq
-    rrdtool ];
+  buildInputs = [
+    libpcap /* gnutls libgcrypt*/
+    libxml2
+    glib
+    geoip
+    geolite-legacy
+    sqlite
+    which
+    autoreconfHook
+    git
+    pkgconfig
+    groff
+    curl
+    json_c
+    luajit
+    zeromq
+    rrdtool
+  ];
 
 
   autoreconfPhase = ''
@@ -54,8 +84,7 @@ stdenv.mkDerivation rec {
     sed 's|LIBS += -lstdc++.6||' -i Makefile
   '';
 
-  NIX_CFLAGS_COMPILE = "-fpermissive"
-    + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
+  NIX_CFLAGS_COMPILE = "-fpermissive" + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
 
   meta = with stdenv.lib; {
     description = "High-speed web-based traffic analysis and flow collection tool";

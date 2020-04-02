@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.zabbixProxy;
   pgsql = config.services.postgresql;
@@ -33,16 +32,14 @@ let
     ${optionalString (mysqlLocal && cfg.database.socket != null) "DBSocket = ${cfg.database.socket}"}
     SocketDir = ${runtimeDir}
     FpingLocation = /run/wrappers/bin/fping
-    ${optionalString (cfg.modules != {}) "LoadModulePath = ${moduleEnv}/lib"}
+    ${optionalString (cfg.modules != { }) "LoadModulePath = ${moduleEnv}/lib"}
     ${concatMapStringsSep "\n" (name: "LoadModule = ${name}") (builtins.attrNames cfg.modules)}
     ${cfg.extraConfig}
   '';
 
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
-
 in
-
 {
   # interface
 
@@ -55,8 +52,8 @@ in
         type = types.str;
         description = ''
           The IP address or hostname of the Zabbix server to connect to.
-          '';
-        };
+        '';
+      };
 
       package = mkOption {
         type = types.package;
@@ -81,7 +78,7 @@ in
       modules = mkOption {
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
-        default = {};
+        default = { };
         example = literalExample ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
@@ -202,13 +199,16 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = !config.services.zabbixServer.enable;
+      {
+        assertion = !config.services.zabbixServer.enable;
         message = "Please choose one of services.zabbixServer or services.zabbixProxy.";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.zabbixProxy.database.user must be set to ${user} if services.zabbixProxy.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.zabbixProxy.database.createLocally is set to true";
       }
     ];
@@ -222,7 +222,8 @@ in
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -232,7 +233,8 @@ in
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
         }
       ];

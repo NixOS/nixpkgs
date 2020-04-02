@@ -1,10 +1,10 @@
 { stdenv, pythonPackages }:
 
 with pythonPackages;
-
 let
   cerberus_1_1 = callPackage ./cerberus.nix { };
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "pyditz";
   version = "0.10.3";
 

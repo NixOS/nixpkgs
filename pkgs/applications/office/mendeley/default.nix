@@ -1,4 +1,8 @@
-{ fetchurl, stdenv, mkDerivation, dpkg, which
+{ fetchurl
+, stdenv
+, mkDerivation
+, dpkg
+, which
 , makeWrapper
 , alsaLib
 , desktop-file-utils
@@ -25,20 +29,20 @@
 , sqlite
 , xorg
 , zlib
-# The provided wrapper does this, but since we don't use it
-# we emulate the behavior.  The downside is that this
-# will leave entries on your system after uninstalling mendeley.
-# (they can be removed by running '$out/bin/install-mendeley-link-handler.sh -u')
+  # The provided wrapper does this, but since we don't use it
+  # we emulate the behavior.  The downside is that this
+  # will leave entries on your system after uninstalling mendeley.
+  # (they can be removed by running '$out/bin/install-mendeley-link-handler.sh -u')
 , autorunLinkHandler ? true
-# Update script
+  # Update script
 , writeScript
 , runtimeShell
 }:
-
 let
   arch32 = "i686-linux";
 
-  arch = if stdenv.hostPlatform.system == arch32
+  arch =
+    if stdenv.hostPlatform.system == arch32
     then "i386"
     else "amd64";
 
@@ -47,7 +51,8 @@ let
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
-  sha256 = if stdenv.hostPlatform.system == arch32
+  sha256 =
+    if stdenv.hostPlatform.system == arch32
     then "01x83a44qlxi937b128y8y0px0q4w37g72z652lc42kv50dhyy3f"
     else "1cagqq0xziznaj97z30bqfhrwjv3a4h83ckhwigq35nhk1ggq1ry";
 
@@ -87,9 +92,7 @@ let
     xorg.xcbutilimage
     zlib
   ];
-
 in
-
 mkDerivation {
   pname = "mendeley";
   inherit version;
@@ -141,7 +144,7 @@ mkDerivation {
     description = "A reference manager and academic social network";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers  = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill ];
   };
 
 }

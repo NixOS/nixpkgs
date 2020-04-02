@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, libcap, libnl, readline, net-snmp, less, perl, texinfo,
-  pkgconfig, c-ares }:
+{ stdenv
+, fetchurl
+, libcap
+, libnl
+, readline
+, net-snmp
+, less
+, perl
+, texinfo
+, pkgconfig
+, c-ares
+}:
 
 stdenv.mkDerivation rec {
   pname = "quagga";

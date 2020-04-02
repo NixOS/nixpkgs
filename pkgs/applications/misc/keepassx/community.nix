@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools, darwin
+{ stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, qttools
+, darwin
 
 , curl
 , glibcLocales

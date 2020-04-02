@@ -1,6 +1,14 @@
-{ stdenv, fetchurl
-, bundlerEnv, ruby
-, alsaUtils, libnotify, which, wrapGAppsHook, gtk2, atk, gobject-introspection
+{ stdenv
+, fetchurl
+, bundlerEnv
+, ruby
+, alsaUtils
+, libnotify
+, which
+, wrapGAppsHook
+, gtk2
+, atk
+, gobject-introspection
 }:
 
 # how to update:
@@ -37,34 +45,35 @@ stdenv.mkDerivation rec {
     rm -rf vendor
   '';
 
-  installPhase = let
-    env = bundlerEnv {
-      name = "mikutter-${version}-gems";
-      gemdir = ./.;
+  installPhase =
+    let
+      env = bundlerEnv {
+        name = "mikutter-${version}-gems";
+        gemdir = ./.;
 
-      inherit ruby;
-    };
-  in ''
-    install -v -D -m644 README $out/share/doc/mikutter/README
-    install -v -D -m644 LICENSE $out/share/doc/mikutter/LICENSE
-    rm -v README LICENSE
+        inherit ruby;
+      };
+    in ''
+      install -v -D -m644 README $out/share/doc/mikutter/README
+      install -v -D -m644 LICENSE $out/share/doc/mikutter/LICENSE
+      rm -v README LICENSE
 
-    cp -rv . $out
-    mkdir $out/bin/
-    # hack wrapGAppsHook wants a file not a symlink
-    mv $out/mikutter.rb $out/bin/mikutter
+      cp -rv . $out
+      mkdir $out/bin/
+      # hack wrapGAppsHook wants a file not a symlink
+      mv $out/mikutter.rb $out/bin/mikutter
 
-    gappsWrapperArgs+=(
-      --prefix PATH : "${ruby}/bin:${alsaUtils}/bin:${libnotify}/bin"
-      --prefix GEM_HOME : "${env}/${env.ruby.gemPath}"
-      --set DISABLE_BUNDLER_SETUP 1
-    )
-      # --prefix GIO_EXTRA_MODULES : "$prefix/lib/gio/modules"
+      gappsWrapperArgs+=(
+        --prefix PATH : "${ruby}/bin:${alsaUtils}/bin:${libnotify}/bin"
+        --prefix GEM_HOME : "${env}/${env.ruby.gemPath}"
+        --set DISABLE_BUNDLER_SETUP 1
+      )
+        # --prefix GIO_EXTRA_MODULES : "$prefix/lib/gio/modules"
 
-    mkdir -p $out/share/mikutter $out/share/applications
-    ln -sv $out/core/skin $out/share/mikutter/skin
-    substituteAll ${./mikutter.desktop} $out/share/applications/mikutter.desktop
-  '';
+      mkdir -p $out/share/mikutter $out/share/applications
+      ln -sv $out/core/skin $out/share/mikutter/skin
+      substituteAll ${./mikutter.desktop} $out/share/applications/mikutter.desktop
+    '';
 
   postFixup = ''
     mv $out/bin/.mikutter-wrapped $out/mikutter.rb

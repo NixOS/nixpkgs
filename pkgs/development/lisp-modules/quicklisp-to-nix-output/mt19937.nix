@@ -14,7 +14,7 @@ rec {
 
   packageName = "mt19937";
 
-  asdFilesToKeep = ["mt19937.asd"];
+  asdFilesToKeep = [ "mt19937.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM mt19937 DESCRIPTION

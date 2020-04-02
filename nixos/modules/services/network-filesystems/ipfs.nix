@@ -6,17 +6,18 @@ let
   cfg = config.services.ipfs;
 
   ipfsFlags = toString ([
-    (optionalString  cfg.autoMount                   "--mount")
+    (optionalString cfg.autoMount "--mount")
     #(optionalString  cfg.autoMigrate                 "--migrate")
-    (optionalString  cfg.enableGC                    "--enable-gc")
-    (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
-    (optionalString (cfg.defaultMode == "offline")   "--offline")
+    (optionalString cfg.enableGC "--enable-gc")
+    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=false")
+    (optionalString (cfg.defaultMode == "offline") "--offline")
     (optionalString (cfg.defaultMode == "norouting") "--routing=none")
   ] ++ cfg.extraFlags);
 
-  defaultDataDir = if versionAtLeast config.system.stateVersion "17.09" then
-    "/var/lib/ipfs" else
-    "/var/lib/ipfs/.ipfs";
+  defaultDataDir =
+    if versionAtLeast config.system.stateVersion "17.09" then
+      "/var/lib/ipfs" else
+      "/var/lib/ipfs/.ipfs";
 
   # Wrapping the ipfs binary with the environment variable IPFS_PATH set to dataDir because we can't set it in the user environment
   wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; preferLocalBuild = true; } ''
@@ -44,29 +45,31 @@ let
       ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
       ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
     '' + concatStringsSep "\n" (collect
-          isString
-          (mapAttrsRecursive
-            (path: value:
-            # Using heredoc below so that the value is never improperly quoted
-            ''
-              read value <<EOF
-              ${builtins.toJSON value}
-              EOF
-              ipfs --local config --json "${concatStringsSep "." path}" "$value"
-            '')
-            ({ Addresses.API = cfg.apiAddress;
-               Addresses.Gateway = cfg.gatewayAddress;
-               Addresses.Swarm = cfg.swarmAddress;
-            } //
-            cfg.extraConfig))
-        );
+    isString
+      (mapAttrsRecursive
+        (path: value:
+          # Using heredoc below so that the value is never improperly quoted
+          ''
+            read value <<EOF
+            ${builtins.toJSON value}
+            EOF
+            ipfs --local config --json "${concatStringsSep "." path}" "$value"
+          '')
+        ({
+          Addresses.API = cfg.apiAddress;
+          Addresses.Gateway = cfg.gatewayAddress;
+          Addresses.Swarm = cfg.swarmAddress;
+        } //
+        cfg.extraConfig))
+    );
     serviceConfig = {
       ExecStart = "${wrapped}/bin/ipfs daemon ${ipfsFlags}";
       Restart = "on-failure";
       RestartSec = 1;
     } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
   };
-in {
+in
+{
 
   ###### interface
 
@@ -167,7 +170,7 @@ in {
           These are applied last, so may override configuration set by other options in this module.
           Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!
         '';
-        default = {};
+        default = { };
         example = {
           Datastore.StorageMax = "100GB";
           Discovery.MDNS.Enabled = false;
@@ -183,7 +186,7 @@ in {
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the IPFS daemon";
-        default = [];
+        default = [ ];
       };
 
       localDiscovery = mkOption {
@@ -198,7 +201,7 @@ in {
         type = types.nullOr types.int;
         default = null;
         description = "The fdlimit for the IPFS systemd unit or <literal>null</literal> to have the daemon attempt to manage it";
-        example = 64*1024;
+        example = 64 * 1024;
       };
 
     };
@@ -243,10 +246,11 @@ in {
           ipfs init ${optionalString cfg.emptyRepo "-e"} \
             ${optionalString (! cfg.localDiscovery) "--profile=server"}
         else
-          ${if cfg.localDiscovery
-            then "ipfs config profile apply local-discovery"
-            else "ipfs config profile apply server"
-          }
+          ${
+          if cfg.localDiscovery
+          then "ipfs config profile apply local-discovery"
+          else "ipfs config profile apply server"
+        }
         fi
       '';
 
@@ -263,21 +267,21 @@ in {
       description = "IPFS Daemon";
       wantedBy = mkIf (cfg.defaultMode == "online") [ "multi-user.target" ];
       after = [ "network.target" "ipfs-init.service" ];
-      conflicts = [ "ipfs-offline.service" "ipfs-norouting.service"];
+      conflicts = [ "ipfs-offline.service" "ipfs-norouting.service" ];
     };
 
     systemd.services.ipfs-offline = recursiveUpdate baseService {
       description = "IPFS Daemon (offline mode)";
       wantedBy = mkIf (cfg.defaultMode == "offline") [ "multi-user.target" ];
       after = [ "ipfs-init.service" ];
-      conflicts = [ "ipfs.service" "ipfs-norouting.service"];
+      conflicts = [ "ipfs.service" "ipfs-norouting.service" ];
     };
 
     systemd.services.ipfs-norouting = recursiveUpdate baseService {
       description = "IPFS Daemon (no routing mode)";
       wantedBy = mkIf (cfg.defaultMode == "norouting") [ "multi-user.target" ];
       after = [ "ipfs-init.service" ];
-      conflicts = [ "ipfs.service" "ipfs-offline.service"];
+      conflicts = [ "ipfs.service" "ipfs-offline.service" ];
     };
 
   };

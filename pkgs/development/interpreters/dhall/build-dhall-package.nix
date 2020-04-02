@@ -3,7 +3,7 @@
 { name
 
   # Expressions to add to the cache before interpreting the code
-, dependencies ? []
+, dependencies ? [ ]
 
   # A Dhall expression
   #
@@ -32,7 +32,6 @@
   # `true` then the package will also include `source.dhall`.
 , source ? false
 }:
-
 let
   # `buildDhallPackage` requires version 1.25.0 or newer of the Haskell
   # interpreter for Dhall.  Given that the default version is 1.24.0 we choose
@@ -54,30 +53,29 @@ let
   cacheDhall = "${cache}/dhall";
 
   sourceFile = "source.dhall";
-
 in
-  runCommand name { inherit dependencies; } ''
-    set -eu
+runCommand name { inherit dependencies; } ''
+  set -eu
 
-    mkdir -p ${cacheDhall}
+  mkdir -p ${cacheDhall}
 
-    for dependency in $dependencies; do
-      ${lndir}/bin/lndir -silent $dependency/${cacheDhall} ${cacheDhall}
-    done
+  for dependency in $dependencies; do
+    ${lndir}/bin/lndir -silent $dependency/${cacheDhall} ${cacheDhall}
+  done
 
-    export XDG_CACHE_HOME=$PWD/${cache}
+  export XDG_CACHE_HOME=$PWD/${cache}
 
-    mkdir -p $out/${cacheDhall}
+  mkdir -p $out/${cacheDhall}
 
-    ${dhall}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
+  ${dhall}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
 
-    SHA_HASH=$(${dhall}/bin/dhall hash <<< $out/${sourceFile})
+  SHA_HASH=$(${dhall}/bin/dhall hash <<< $out/${sourceFile})
 
-    HASH_FILE="''${SHA_HASH/sha256:/1220}"
+  HASH_FILE="''${SHA_HASH/sha256:/1220}"
 
-    ${dhall}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
+  ${dhall}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
 
-    echo "missing $SHA_HASH" > $out/binary.dhall
+  echo "missing $SHA_HASH" > $out/binary.dhall
 
-    ${lib.optionalString (!source) "rm $out/${sourceFile}"}
-  ''
+  ${lib.optionalString (!source) "rm $out/${sourceFile}"}
+''

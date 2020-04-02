@@ -1,9 +1,19 @@
-{ stdenv, fetchFromGitLab, meson, ninja, gettext, pkgconfig, libxml2, gtk3, hicolor-icon-theme, wrapGAppsHook
-, fetchpatch }:
-
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, gettext
+, pkgconfig
+, libxml2
+, gtk3
+, hicolor-icon-theme
+, wrapGAppsHook
+, fetchpatch
+}:
 let
   version = "2.3.1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "gcolor3";
   inherit version;
 

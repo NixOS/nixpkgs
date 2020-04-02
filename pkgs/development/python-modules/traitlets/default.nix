@@ -27,7 +27,7 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" py.test
   '';
 
-#   doCheck = false;
+  #   doCheck = false;
 
   meta = {
     description = "Traitlets Python config system";

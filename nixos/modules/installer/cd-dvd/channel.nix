@@ -4,7 +4,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   nixpkgs = lib.cleanSource pkgs.path;
 
@@ -13,7 +12,7 @@ let
   # user, as expected by nixos-rebuild/nixos-install. FIXME: merge
   # with make-channel.nix.
   channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}"
-    { preferLocalBuild = true; }
+  { preferLocalBuild = true; }
     ''
       mkdir -p $out
       cp -prd ${nixpkgs.outPath} $out/nixos
@@ -22,14 +21,12 @@ let
         ln -s . $out/nixos/nixpkgs
       fi
       ${optionalString (config.system.nixos.revision != null) ''
-        echo -n ${config.system.nixos.revision} > $out/nixos/.git-revision
-      ''}
+      echo -n ${config.system.nixos.revision} > $out/nixos/.git-revision
+    ''}
       echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
       echo ${config.system.nixos.versionSuffix} | sed -e s/pre// > $out/nixos/svn-revision
     '';
-
 in
-
 {
   # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
   # for nixos-install.

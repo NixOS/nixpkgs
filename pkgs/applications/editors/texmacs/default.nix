@@ -1,19 +1,26 @@
-{ stdenv, callPackage,
-  fetchurl, guile_1_8, qt4, xmodmap, which, makeWrapper, freetype,
-  libjpeg,
-  sqlite,
-  tex ? null,
-  aspell ? null,
-  git ? null,
-  python3 ? null,
-  cmake,
-  pkgconfig,
-  ghostscriptX ? null,
-  extraFonts ? false,
-  chineseFonts ? false,
-  japaneseFonts ? false,
-  koreanFonts ? false }:
-
+{ stdenv
+, callPackage
+, fetchurl
+, guile_1_8
+, qt4
+, xmodmap
+, which
+, makeWrapper
+, freetype
+, libjpeg
+, sqlite
+, tex ? null
+, aspell ? null
+, git ? null
+, python3 ? null
+, cmake
+, pkgconfig
+, ghostscriptX ? null
+, extraFonts ? false
+, chineseFonts ? false
+, japaneseFonts ? false
+, koreanFonts ? false
+}:
 let
   pname = "TeXmacs";
   version = "1.99.11";
@@ -51,18 +58,12 @@ stdenv.mkDerivation {
   ];
   NIX_LDFLAGS = "-lz";
 
-  postInstall = "wrapProgram $out/bin/texmacs --suffix PATH : " +
-        (if ghostscriptX == null then "" else "${ghostscriptX}/bin:") +
-        (if aspell == null then "" else "${aspell}/bin:") +
-        (if tex == null then "" else "${tex}/bin:") +
-        (if git == null then "" else "${git}/bin:") +
-        (if python3 == null then "" else "${python3}/bin:") +
-        "${xmodmap}/bin:${which}/bin";
+  postInstall = "wrapProgram $out/bin/texmacs --suffix PATH : " + (if ghostscriptX == null then "" else "${ghostscriptX}/bin:") + (if aspell == null then "" else "${aspell}/bin:") + (if tex == null then "" else "${tex}/bin:") + (if git == null then "" else "${git}/bin:") + (if python3 == null then "" else "${python3}/bin:") + "${xmodmap}/bin:${which}/bin";
 
   inherit (common) postPatch;
 
   meta = common.meta // {
     maintainers = [ stdenv.lib.maintainers.roconnor ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # arbitrary choice
   };
 }

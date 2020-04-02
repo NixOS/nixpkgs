@@ -14,7 +14,7 @@ rec {
 
   packageName = "iolib.base";
 
-  asdFilesToKeep = ["iolib.base.asd"];
+  asdFilesToKeep = [ "iolib.base.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib.base DESCRIPTION Base IOlib package, used instead of CL.

@@ -19,14 +19,10 @@
 , readline
 , networkmanagerapplet
 }:
-
 let
-
   # https://github.com/linuxmint/cjs/issues/80
-  spidermonkey_52 = callPackage ./spidermonkey_52.nix {};
-
+  spidermonkey_52 = callPackage ./spidermonkey_52.nix { };
 in
-
 stdenv.mkDerivation rec {
   pname = "cjs";
   version = "4.4.0";
@@ -79,11 +75,11 @@ stdenv.mkDerivation rec {
     '';
 
     license = with licenses; [
-     gpl2Plus
-     lgpl2Plus
-     mit
-     mpl11
-   ];
+      gpl2Plus
+      lgpl2Plus
+      mit
+      mpl11
+    ];
     platforms = platforms.linux;
     maintainers = [ maintainers.mkg20001 ];
   };

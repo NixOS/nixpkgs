@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, cmake, orcania, systemd, check, subunit
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, orcania
+, systemd
+, check
+, subunit
 , withSystemd ? stdenv.isLinux
 }:
 assert withSystemd -> systemd != null;

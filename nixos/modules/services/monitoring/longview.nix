@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.longview;
 
   runDir = "/run/longview";
   configsDir = "${runDir}/longview.d";
-
-in {
+in
+{
   options = {
 
     services.longview = {
@@ -105,7 +104,8 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.longview =
-      { description = "Longview Metrics Collection";
+      {
+        description = "Longview Metrics Collection";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig.Type = "forking";
@@ -134,12 +134,15 @@ in {
         '');
       };
 
-    warnings = let warn = k: optional (cfg.${k} != "")
-                 "config.services.longview.${k} is insecure. Use ${k}File instead.";
-               in concatMap warn [ "apiKey" "mysqlPassword" ];
+    warnings =
+      let
+        warn = k: optional (cfg.${k} != "")
+          "config.services.longview.${k} is insecure. Use ${k}File instead.";
+      in concatMap warn [ "apiKey" "mysqlPassword" ];
 
     assertions = [
-      { assertion = cfg.apiKeyFile != null;
+      {
+        assertion = cfg.apiKeyFile != null;
         message = "Longview needs an API key configured";
       }
     ];

@@ -1,6 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgconfig, pidgin, glib, json-glib, nss, nspr
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, pidgin
+, glib
+, json-glib
+, nss
+, nspr
 , libsecret
-} :
+}:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-opensteamworks";
@@ -24,7 +31,12 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
   buildInputs = [
-    pidgin glib json-glib nss nspr libsecret
+    pidgin
+    glib
+    json-glib
+    nss
+    nspr
+    libsecret
   ];
 
   meta = with stdenv.lib; {

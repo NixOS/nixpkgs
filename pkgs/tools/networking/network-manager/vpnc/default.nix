@@ -1,9 +1,24 @@
-{ stdenv, fetchurl, substituteAll, vpnc, intltool, pkgconfig, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome3, kmod, file, fetchpatch, networkmanagerapplet }:
+{ stdenv
+, fetchurl
+, substituteAll
+, vpnc
+, intltool
+, pkgconfig
+, networkmanager
+, libsecret
+, gtk3
+, withGnome ? true
+, gnome3
+, kmod
+, file
+, fetchpatch
+, networkmanagerapplet
+}:
 let
   pname = "NetworkManager-vpnc";
   version = "1.2.6";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {

@@ -14,7 +14,7 @@ rec {
 
   packageName = "3bmd";
 
-  asdFilesToKeep = ["3bmd.asd"];
+  asdFilesToKeep = [ "3bmd.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM 3bmd DESCRIPTION markdown processor in CL using esrap parser. SHA256

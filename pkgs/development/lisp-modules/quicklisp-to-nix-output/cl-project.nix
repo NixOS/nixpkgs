@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-project";
 
-  asdFilesToKeep = ["cl-project.asd"];
+  asdFilesToKeep = [ "cl-project.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-project DESCRIPTION Generate a skeleton for modern project SHA256

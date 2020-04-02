@@ -1,13 +1,29 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  qtbase, qttools,
-  phonon,
-  knewstuff,
-  akonadi-calendar, akonadi-contacts, akonadi-notes, akonadi-search,
-  calendarsupport, eventviews, incidenceeditor, kcalutils, kdepim-apps-libs,
-  kholidays, kidentitymanagement, kldap, kmailtransport, kontactinterface,
-  kpimtextedit, pimcommon,
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, qtbase
+, qttools
+, phonon
+, knewstuff
+, akonadi-calendar
+, akonadi-contacts
+, akonadi-notes
+, akonadi-search
+, calendarsupport
+, eventviews
+, incidenceeditor
+, kcalutils
+, kdepim-apps-libs
+, kholidays
+, kidentitymanagement
+, kldap
+, kmailtransport
+, kontactinterface
+, kpimtextedit
+, pimcommon
+,
 }:
 
 mkDerivation {
@@ -18,12 +34,25 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
-    qtbase qttools
+    qtbase
+    qttools
     phonon
     knewstuff
-    akonadi-calendar akonadi-contacts akonadi-notes akonadi-search
-    calendarsupport eventviews incidenceeditor kcalutils kdepim-apps-libs
-    kholidays kidentitymanagement kldap kmailtransport kontactinterface
-    kpimtextedit pimcommon
+    akonadi-calendar
+    akonadi-contacts
+    akonadi-notes
+    akonadi-search
+    calendarsupport
+    eventviews
+    incidenceeditor
+    kcalutils
+    kdepim-apps-libs
+    kholidays
+    kidentitymanagement
+    kldap
+    kmailtransport
+    kontactinterface
+    kpimtextedit
+    pimcommon
   ];
 }

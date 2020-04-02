@@ -1,14 +1,31 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
-, pandas, requests, Rtree, shapely, pytest, coverage, coveralls, folium, scikitlearn, scipy}:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, geopandas
+, descartes
+, matplotlib
+, networkx
+, numpy
+, pandas
+, requests
+, Rtree
+, shapely
+, pytest
+, coverage
+, coveralls
+, folium
+, scikitlearn
+, scipy
+}:
 
 buildPythonPackage rec {
   pname = "osmnx";
   version = "0.9";
 
   src = fetchFromGitHub {
-    owner  = "gboeing";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "gboeing";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1k3y5kl4k93vxaxyanc040x44s2fyyc3m1ndy2j3kg0037z8ad4z";
   };
 
@@ -30,4 +47,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

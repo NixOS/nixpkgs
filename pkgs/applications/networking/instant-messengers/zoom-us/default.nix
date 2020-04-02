@@ -1,17 +1,41 @@
-{ stdenv, fetchurl, mkDerivation, autoPatchelfHook, bash
+{ stdenv
+, fetchurl
+, mkDerivation
+, autoPatchelfHook
+, bash
 , fetchFromGitHub
-# Dynamic libraries
-, dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
-, qtgraphicaleffects, qtimageformats, qtlocation, qtquickcontrols
-, qtquickcontrols2, qtscript, qtsvg , qttools, qtwayland, qtwebchannel
+  # Dynamic libraries
+, dbus
+, glib
+, libGL
+, libX11
+, libXfixes
+, libuuid
+, libxcb
+, qtbase
+, qtdeclarative
+, qtgraphicaleffects
+, qtimageformats
+, qtlocation
+, qtquickcontrols
+, qtquickcontrols2
+, qtscript
+, qtsvg
+, qttools
+, qtwayland
+, qtwebchannel
 , qtwebengine
-# Runtime
-, coreutils, libjpeg_turbo, pciutils, procps, utillinux
-, pulseaudioSupport ? true, libpulseaudio ? null
+  # Runtime
+, coreutils
+, libjpeg_turbo
+, pciutils
+, procps
+, utillinux
+, pulseaudioSupport ? true
+, libpulseaudio ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
-
 let
   inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
@@ -30,8 +54,8 @@ let
     rev = "0d294e1fdd2a4ef4e05d414bc680511f24d835d7";
     sha256 = "0rm188844a10v8d6zgl2pnwsliwknawj09b02iabrvjw5w1lp6wl";
   };
-
-in mkDerivation {
+in
+mkDerivation {
   pname = "zoom-us";
   inherit version;
 
@@ -40,9 +64,27 @@ in mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo qtbase
-    qtdeclarative qtgraphicaleffects qtlocation qtquickcontrols qtquickcontrols2
-    qtscript qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
+    dbus
+    glib
+    libGL
+    libX11
+    libXfixes
+    libuuid
+    libxcb
+    libjpeg_turbo
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtlocation
+    qtquickcontrols
+    qtquickcontrols2
+    qtscript
+    qtwebchannel
+    qtwebengine
+    qtimageformats
+    qtsvg
+    qttools
+    qtwayland
   ];
 
   runtimeDependencies = optional pulseaudioSupport libpulseaudio;

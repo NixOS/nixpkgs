@@ -1,6 +1,12 @@
-{ mkDerivation, fetchFromGitHub, lib
-, pkgconfig, cmake
-, exiv2, qtbase, qtimageformats, qtsvg
+{ mkDerivation
+, fetchFromGitHub
+, lib
+, pkgconfig
+, cmake
+, exiv2
+, qtbase
+, qtimageformats
+, qtsvg
 }:
 
 mkDerivation rec {

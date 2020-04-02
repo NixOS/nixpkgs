@@ -31,11 +31,10 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A 2D puzzle-platformer game about a scientist with telekinetic abilities";
-    homepage    = http://kiwisauce.com/beret/;
-    license     = licenses.lgpl2;
+    homepage = http://kiwisauce.com/beret/;
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
     broken = true; # source won't download, and no replacement is visible
   };
 }
-

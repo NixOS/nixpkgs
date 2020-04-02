@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, click, pytest, glibcLocales
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, click
+, pytest
+, glibcLocales
 }:
 
 buildPythonPackage rec {

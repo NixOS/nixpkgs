@@ -23,7 +23,7 @@ python.pkgs.buildPythonApplication rec {
   checkPhase = ''
     ${python.interpreter} -m unittest brotab/tests/test_{brotab,utils}.py
   '';
-  
+
   meta = with lib; {
     homepage = "https://github.com/balta2ar/brotab";
     description = "Control your browser's tabs from the command line";

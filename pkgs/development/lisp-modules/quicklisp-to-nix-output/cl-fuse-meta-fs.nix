@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-fuse-meta-fs";
 
-  asdFilesToKeep = ["cl-fuse-meta-fs.asd"];
+  asdFilesToKeep = [ "cl-fuse-meta-fs.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-fuse-meta-fs DESCRIPTION

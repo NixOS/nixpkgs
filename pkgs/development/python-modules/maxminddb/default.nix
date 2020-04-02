@@ -1,4 +1,6 @@
-{ buildPythonPackage, lib, fetchPypi
+{ buildPythonPackage
+, lib
+, fetchPypi
 , ipaddress
 , mock
 , nose

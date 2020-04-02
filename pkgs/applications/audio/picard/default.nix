@@ -1,8 +1,8 @@
 { stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5 }:
-
 let
   pythonPackages = python3Packages;
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   pname = "picard";
   version = "2.3.1";
 

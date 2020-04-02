@@ -1,11 +1,11 @@
-{ callPackage, plugins ? [] }:
-
-let 
+{ callPackage, plugins ? [ ] }:
+let
   unwrapped = callPackage ./unwrapped.nix { };
-  wrapped   = callPackage ./wrapper.nix {
+  wrapped = callPackage ./wrapper.nix {
     plugins = plugins;
-    fcitx   = unwrapped;
+    fcitx = unwrapped;
   };
-in if plugins == [] 
-   then unwrapped
-   else wrapped
+in
+if plugins == [ ]
+then unwrapped
+else wrapped

@@ -1,9 +1,23 @@
-{ stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
+{ stdenv
+, lib
+, fetchurl
+, coreutils
+, ncurses
+, gzip
+, flex
+, bison
 , less
 , buildPackages
-, x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkgconfig, qt5
+, x11Mode ? false
+, qtMode ? false
+, libXaw
+, libXext
+, libXpm
+, bdftopcf
+, mkfontdir
+, pkgconfig
+, qt5
 }:
-
 let
   platform =
     if stdenv.hostPlatform.isUnix then "unix"
@@ -11,18 +25,19 @@ let
   unixHint =
     if x11Mode then "linux-x11"
     else if qtMode then "linux-qt4"
-    else if stdenv.hostPlatform.isLinux  then "linux"
+    else if stdenv.hostPlatform.isLinux then "linux"
     else if stdenv.hostPlatform.isDarwin then "macosx10.10"
-    # We probably want something different for Darwin
+      # We probably want something different for Darwin
     else "unix";
   userDir = "~/.config/nethack";
   binPath = lib.makeBinPath [ coreutils less ];
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "3.6.5";
-  name = if x11Mode then "nethack-x11-${version}"
-         else if qtMode then "nethack-qt-${version}"
-         else "nethack-${version}";
+  name =
+    if x11Mode then "nethack-x11-${version}"
+    else if qtMode then "nethack-qt-${version}"
+    else "nethack-${version}";
 
   src = fetchurl {
     url = "https://nethack.org/download/3.6.5/nethack-365-src.tgz";
@@ -30,16 +45,19 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ]
-                ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
-                ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
+    ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
+    ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
   nativeBuildInputs = [ flex bison ]
-                      ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
-                      ++ lib.optionals qtMode [
-                           pkgconfig mkfontdir qt5.qtbase.dev
-                           qt5.qtmultimedia.dev qt5.wrapQtAppsHook
-                           bdftopcf
-                         ];
+    ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
+    ++ lib.optionals qtMode [
+    pkgconfig
+    mkfontdir
+    qt5.qtbase.dev
+    qt5.qtmultimedia.dev
+    qt5.wrapQtAppsHook
+    bdftopcf
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -74,24 +92,24 @@ in stdenv.mkDerivation rec {
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
       -e 's,moc-qt4,moc,' \
       -i sys/unix/hints/linux-qt4
-    ''}
+  ''}
     ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
     # If we're cross-compiling, replace the paths to the data generation tools
     # with the ones from the build platform's nethack package, since we can't
     # run the ones we've built here.
-    ''
-    ${buildPackages.perl}/bin/perl -p \
-      -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
-      -i sys/unix/Makefile.*
-    ''}
+      ''
+        ${buildPackages.perl}/bin/perl -p \
+          -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
+          -i sys/unix/Makefile.*
+      ''}
     sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
   '';
 
   configurePhase = ''
     pushd sys/${platform}
     ${lib.optionalString (platform == "unix") ''
-      sh setup.sh hints/${unixHint}
-    ''}
+    sh setup.sh hints/${unixHint}
+  ''}
     popd
   '';
 

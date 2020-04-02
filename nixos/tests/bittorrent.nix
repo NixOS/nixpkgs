@@ -7,158 +7,157 @@
 # protocol to poke a hole in the NAT.
 
 import ./make-test-python.nix ({ pkgs, ... }:
+  let
+    # Some random file to serve.
+    file = pkgs.hello.src;
 
-let
+    internalRouterAddress = "192.168.3.1";
+    internalClient1Address = "192.168.3.2";
+    externalRouterAddress = "80.100.100.1";
+    externalClient2Address = "80.100.100.2";
+    externalTrackerAddress = "80.100.100.3";
 
-  # Some random file to serve.
-  file = pkgs.hello.src;
-
-  internalRouterAddress = "192.168.3.1";
-  internalClient1Address = "192.168.3.2";
-  externalRouterAddress = "80.100.100.1";
-  externalClient2Address = "80.100.100.2";
-  externalTrackerAddress = "80.100.100.3";
-
-  transmissionConfig = { ... }: {
-    environment.systemPackages = [ pkgs.transmission ];
-    services.transmission = {
-      enable = true;
-      settings = {
-        dht-enabled = false;
-        message-level = 3;
-      };
-    };
-  };
-in
-
-{
-  name = "bittorrent";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ domenkozar eelco rob bobvanderlinden ];
-  };
-
-  nodes = {
-    tracker = { pkgs, ... }: {
-      imports = [ transmissionConfig ];
-
-      virtualisation.vlans = [ 1 ];
-      networking.firewall.enable = false;
-      networking.interfaces.eth1.ipv4.addresses = [
-        { address = externalTrackerAddress; prefixLength = 24; }
-      ];
-
-      # We need Apache on the tracker to serve the torrents.
-      services.httpd = {
+    transmissionConfig = { ... }: {
+      environment.systemPackages = [ pkgs.transmission ];
+      services.transmission = {
         enable = true;
-        virtualHosts = {
-          "torrentserver.org" = {
-            adminAddr = "foo@example.org";
-            documentRoot = "/tmp";
-          };
+        settings = {
+          dht-enabled = false;
+          message-level = 3;
         };
       };
-      services.opentracker.enable = true;
     };
+  in
 
-    router = { pkgs, nodes, ... }: {
-      virtualisation.vlans = [ 1 2 ];
-      networking.nat.enable = true;
-      networking.nat.internalInterfaces = [ "eth2" ];
-      networking.nat.externalInterface = "eth1";
-      networking.firewall.enable = true;
-      networking.firewall.trustedInterfaces = [ "eth2" ];
-      networking.interfaces.eth0.ipv4.addresses = [];
-      networking.interfaces.eth1.ipv4.addresses = [
-        { address = externalRouterAddress; prefixLength = 24; }
-      ];
-      networking.interfaces.eth2.ipv4.addresses = [
-        { address = internalRouterAddress; prefixLength = 24; }
-      ];
-      services.miniupnpd = {
-        enable = true;
-        externalInterface = "eth1";
-        internalIPs = [ "eth2" ];
-        appendConfig = ''
-          ext_ip=${externalRouterAddress}
-        '';
+    {
+      name = "bittorrent";
+      meta = with pkgs.stdenv.lib.maintainers; {
+        maintainers = [ domenkozar eelco rob bobvanderlinden ];
       };
-    };
 
-    client1 = { pkgs, nodes, ... }: {
-      imports = [ transmissionConfig ];
-      environment.systemPackages = [ pkgs.miniupnpc ];
+      nodes = {
+        tracker = { pkgs, ... }: {
+          imports = [ transmissionConfig ];
 
-      virtualisation.vlans = [ 2 ];
-      networking.interfaces.eth0.ipv4.addresses = [];
-      networking.interfaces.eth1.ipv4.addresses = [
-        { address = internalClient1Address; prefixLength = 24; }
-      ];
-      networking.defaultGateway = internalRouterAddress;
-      networking.firewall.enable = false;
-    };
+          virtualisation.vlans = [ 1 ];
+          networking.firewall.enable = false;
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = externalTrackerAddress; prefixLength = 24; }
+          ];
 
-    client2 = { pkgs, ... }: {
-      imports = [ transmissionConfig ];
+          # We need Apache on the tracker to serve the torrents.
+          services.httpd = {
+            enable = true;
+            virtualHosts = {
+              "torrentserver.org" = {
+                adminAddr = "foo@example.org";
+                documentRoot = "/tmp";
+              };
+            };
+          };
+          services.opentracker.enable = true;
+        };
 
-      virtualisation.vlans = [ 1 ];
-      networking.interfaces.eth0.ipv4.addresses = [];
-      networking.interfaces.eth1.ipv4.addresses = [
-        { address = externalClient2Address; prefixLength = 24; }
-      ];
-      networking.firewall.enable = false;
-    };
-  };
+        router = { pkgs, nodes, ... }: {
+          virtualisation.vlans = [ 1 2 ];
+          networking.nat.enable = true;
+          networking.nat.internalInterfaces = [ "eth2" ];
+          networking.nat.externalInterface = "eth1";
+          networking.firewall.enable = true;
+          networking.firewall.trustedInterfaces = [ "eth2" ];
+          networking.interfaces.eth0.ipv4.addresses = [ ];
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = externalRouterAddress; prefixLength = 24; }
+          ];
+          networking.interfaces.eth2.ipv4.addresses = [
+            { address = internalRouterAddress; prefixLength = 24; }
+          ];
+          services.miniupnpd = {
+            enable = true;
+            externalInterface = "eth1";
+            internalIPs = [ "eth2" ];
+            appendConfig = ''
+              ext_ip=${externalRouterAddress}
+            '';
+          };
+        };
 
-  testScript = { nodes, ... }: ''
-      start_all()
+        client1 = { pkgs, nodes, ... }: {
+          imports = [ transmissionConfig ];
+          environment.systemPackages = [ pkgs.miniupnpc ];
 
-      # Wait for network and miniupnpd.
-      router.wait_for_unit("network-online.target")
-      router.wait_for_unit("miniupnpd")
+          virtualisation.vlans = [ 2 ];
+          networking.interfaces.eth0.ipv4.addresses = [ ];
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = internalClient1Address; prefixLength = 24; }
+          ];
+          networking.defaultGateway = internalRouterAddress;
+          networking.firewall.enable = false;
+        };
 
-      # Create the torrent.
-      tracker.succeed("mkdir /tmp/data")
-      tracker.succeed(
-          "cp ${file} /tmp/data/test.tar.bz2"
-      )
-      tracker.succeed(
-          "transmission-create /tmp/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent"
-      )
-      tracker.succeed("chmod 644 /tmp/test.torrent")
+        client2 = { pkgs, ... }: {
+          imports = [ transmissionConfig ];
 
-      # Start the tracker.  !!! use a less crappy tracker
-      tracker.wait_for_unit("network-online.target")
-      tracker.wait_for_unit("opentracker.service")
-      tracker.wait_for_open_port(6969)
+          virtualisation.vlans = [ 1 ];
+          networking.interfaces.eth0.ipv4.addresses = [ ];
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = externalClient2Address; prefixLength = 24; }
+          ];
+          networking.firewall.enable = false;
+        };
+      };
 
-      # Start the initial seeder.
-      tracker.succeed(
-          "transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir /tmp/data"
-      )
+      testScript = { nodes, ... }: ''
+        start_all()
 
-      # Now we should be able to download from the client behind the NAT.
-      tracker.wait_for_unit("httpd")
-      client1.wait_for_unit("network-online.target")
-      client1.succeed(
-          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --download-dir /tmp >&2 &"
-      )
-      client1.wait_for_file("/tmp/test.tar.bz2")
-      client1.succeed(
-          "cmp /tmp/test.tar.bz2 ${file}"
-      )
+        # Wait for network and miniupnpd.
+        router.wait_for_unit("network-online.target")
+        router.wait_for_unit("miniupnpd")
 
-      # Bring down the initial seeder.
-      # tracker.stop_job("transmission")
+        # Create the torrent.
+        tracker.succeed("mkdir /tmp/data")
+        tracker.succeed(
+            "cp ${file} /tmp/data/test.tar.bz2"
+        )
+        tracker.succeed(
+            "transmission-create /tmp/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent"
+        )
+        tracker.succeed("chmod 644 /tmp/test.torrent")
 
-      # Now download from the second client.  This can only succeed if
-      # the first client created a NAT hole in the router.
-      client2.wait_for_unit("network-online.target")
-      client2.succeed(
-          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht --download-dir /tmp >&2 &"
-      )
-      client2.wait_for_file("/tmp/test.tar.bz2")
-      client2.succeed(
-          "cmp /tmp/test.tar.bz2 ${file}"
-      )
-    '';
-})
+        # Start the tracker.  !!! use a less crappy tracker
+        tracker.wait_for_unit("network-online.target")
+        tracker.wait_for_unit("opentracker.service")
+        tracker.wait_for_open_port(6969)
+
+        # Start the initial seeder.
+        tracker.succeed(
+            "transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir /tmp/data"
+        )
+
+        # Now we should be able to download from the client behind the NAT.
+        tracker.wait_for_unit("httpd")
+        client1.wait_for_unit("network-online.target")
+        client1.succeed(
+            "transmission-remote --add http://${externalTrackerAddress}/test.torrent --download-dir /tmp >&2 &"
+        )
+        client1.wait_for_file("/tmp/test.tar.bz2")
+        client1.succeed(
+            "cmp /tmp/test.tar.bz2 ${file}"
+        )
+
+        # Bring down the initial seeder.
+        # tracker.stop_job("transmission")
+
+        # Now download from the second client.  This can only succeed if
+        # the first client created a NAT hole in the router.
+        client2.wait_for_unit("network-online.target")
+        client2.succeed(
+            "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht --download-dir /tmp >&2 &"
+        )
+        client2.wait_for_file("/tmp/test.tar.bz2")
+        client2.succeed(
+            "cmp /tmp/test.tar.bz2 ${file}"
+        )
+      '';
+    }
+)

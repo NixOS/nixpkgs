@@ -1,5 +1,4 @@
 { stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkgconfig, libiconv }:
-
 let
   name = "gv-3.7.4";
 in

@@ -95,10 +95,10 @@
 
       security.pam.services.deepin-auth-keyboard.text = ''
         # original at ${pkgs.deepin.dde-daemon}/etc/pam.d/deepin-auth-keyboard
-        auth	[success=2 default=ignore]	pam_lsass.so
-        auth	[success=1 default=ignore]	pam_unix.so nullok_secure try_first_pass
-        auth	requisite	pam_deny.so
-        auth	required	pam_permit.so
+        auth  [success=2 default=ignore]  pam_lsass.so
+        auth  [success=1 default=ignore]  pam_unix.so nullok_secure try_first_pass
+        auth  requisite  pam_deny.so
+        auth  required  pam_permit.so
       '';
 
       environment.etc = {

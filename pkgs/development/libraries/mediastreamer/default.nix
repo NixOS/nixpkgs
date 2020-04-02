@@ -1,7 +1,33 @@
-{ stdenv, pkgconfig, intltool, alsaLib, libpulseaudio, speex, gsm
-, libopus, ffmpeg, libX11, libXv, libGLU, libGL, glew, libtheora, libvpx, SDL, libupnp
-, ortp, libv4l, libpcap, srtp, fetchFromGitHub, cmake, bctoolbox, doxygen
-, python, libXext, libmatroska, fetchpatch
+{ stdenv
+, pkgconfig
+, intltool
+, alsaLib
+, libpulseaudio
+, speex
+, gsm
+, libopus
+, ffmpeg
+, libX11
+, libXv
+, libGLU
+, libGL
+, glew
+, libtheora
+, libvpx
+, SDL
+, libupnp
+, ortp
+, libv4l
+, libpcap
+, srtp
+, fetchFromGitHub
+, cmake
+, bctoolbox
+, doxygen
+, python
+, libXext
+, libmatroska
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -27,9 +53,28 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool cmake doxygen python ];
 
   propagatedBuildInputs = [
-    alsaLib libpulseaudio speex gsm libopus
-    ffmpeg libX11 libXv libGLU libGL glew libtheora libvpx SDL libupnp
-    ortp libv4l libpcap srtp bctoolbox libXext libmatroska
+    alsaLib
+    libpulseaudio
+    speex
+    gsm
+    libopus
+    ffmpeg
+    libX11
+    libXv
+    libGLU
+    libGL
+    glew
+    libtheora
+    libvpx
+    SDL
+    libupnp
+    ortp
+    libv4l
+    libpcap
+    srtp
+    bctoolbox
+    libXext
+    libmatroska
   ];
 
   NIX_CFLAGS_COMPILE = toString [

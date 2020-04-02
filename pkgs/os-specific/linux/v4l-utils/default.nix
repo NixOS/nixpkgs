@@ -1,16 +1,26 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
-, libjpeg, udev
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, perl
+, libjpeg
+, udev
 , withUtils ? true
-, withGUI ? true, alsaLib, libX11, qtbase, libGLU, wrapQtAppsHook
+, withGUI ? true
+, alsaLib
+, libX11
+, qtbase
+, libGLU
+, wrapQtAppsHook
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
-
 let
   withQt = withUtils && withGUI;
 
-# we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
-in stdenv.mkDerivation rec {
+  # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
+in
+stdenv.mkDerivation rec {
   pname = "v4l-utils";
   version = "1.18.0";
 
@@ -21,12 +31,13 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
 
-  configureFlags = (if withUtils then [
-    "--with-localedir=${placeholder "lib"}/share/locale"
-    "--with-udevdir=${placeholder "out"}/lib/udev"
-  ] else [
-    "--disable-v4l-utils"
-  ]);
+  configureFlags = (
+    if withUtils then [
+      "--with-localedir=${placeholder "lib"}/share/locale"
+      "--with-udevdir=${placeholder "out"}/lib/udev"
+    ] else [
+      "--disable-v4l-utils"
+    ]);
 
   postFixup = ''
     # Create symlink for V4l1 compatibility

@@ -1,6 +1,15 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, scdoc
-, wayland, wayland-protocols, libxkbcommon, cairo, gdk-pixbuf, pam
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkgconfig
+, scdoc
+, wayland
+, wayland-protocols
+, libxkbcommon
+, cairo
+, gdk-pixbuf
+, pam
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +32,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [
-    "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
+    "-Dpam=enabled"
+    "-Dgdk-pixbuf=enabled"
+    "-Dman-pages=enabled"
   ];
 
   meta = with stdenv.lib; {

@@ -88,7 +88,8 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
 
   buildInputs = [
@@ -107,7 +108,7 @@ stdenv.mkDerivation rec {
     spice-protocol
     usbredir
     zlib
-  ] ++ stdenv.lib.optionals withPolkit [ polkit acl usbutils ] ;
+  ] ++ stdenv.lib.optionals withPolkit [ polkit acl usbutils ];
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 

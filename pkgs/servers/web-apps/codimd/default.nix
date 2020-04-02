@@ -1,14 +1,21 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper
-, which, nodejs, mkYarnPackage, python2 }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, which
+, nodejs
+, mkYarnPackage
+, python2
+}:
 
 mkYarnPackage rec {
   name = "codimd";
   version = "1.6.0";
 
   src = fetchFromGitHub {
-    owner  = "codimd";
-    repo   = "server";
-    rev    = version;
+    owner = "codimd";
+    repo = "server";
+    rev = version;
     sha256 = "1208a24v664ha9qzr7ky6i3ynphkaj0xi5l3rsw743i22nv5aj33";
   };
 

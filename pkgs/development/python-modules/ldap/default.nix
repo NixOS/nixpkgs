@@ -1,6 +1,12 @@
-{ buildPythonPackage, fetchPypi
-, pyasn1, pyasn1-modules, pytest
-, openldap, cyrus_sasl, stdenv }:
+{ buildPythonPackage
+, fetchPypi
+, pyasn1
+, pyasn1-modules
+, pytest
+, openldap
+, cyrus_sasl
+, stdenv
+}:
 
 buildPythonPackage rec {
   pname = "python-ldap";

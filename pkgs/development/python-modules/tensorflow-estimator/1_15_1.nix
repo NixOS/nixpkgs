@@ -1,4 +1,6 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ stdenv
+, fetchPypi
+, buildPythonPackage
 , numpy
 , absl-py
 , mock
@@ -24,4 +26,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ jyp ];
   };
 }
-

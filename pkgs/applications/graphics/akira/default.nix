@@ -19,7 +19,8 @@
 , json-glib
 , libarchive
 , libgee
-, libxml2 }:
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "akira";

@@ -4,7 +4,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
@@ -62,9 +61,7 @@ let
     name = "nixos-enter";
     src = ./nixos-enter.sh;
   };
-
 in
-
 {
 
   options.system.nixos-generate-config.configuration = mkOption {
@@ -180,7 +177,8 @@ in
     '';
 
     environment.systemPackages =
-      [ nixos-build-vms
+      [
+        nixos-build-vms
         nixos-install
         nixos-rebuild
         nixos-generate-config

@@ -17,17 +17,84 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
-, pkgconfig , ncurses, xapian, gpgme, utillinux, tzdata, icu, libffi
-, cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
-, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
-, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libselinux ? null, libsepol ? null
+{ lib
+, fetchurl
+, writeScript
+, ruby
+, kerberos
+, libxml2
+, libxslt
+, python
+, stdenv
+, which
+, libiconv
+, postgresql
+, v8
+, clang
+, sqlite
+, zlib
+, imagemagick
+, pkgconfig
+, ncurses
+, xapian
+, gpgme
+, utillinux
+, tzdata
+, icu
+, libffi
+, cmake
+, libssh2
+, openssl
+, libmysqlclient
+, darwin
+, git
+, perl
+, pcre
+, gecode_3
+, curl
+, msgpack
+, libsodium
+, snappy
+, libossp_uuid
+, lxc
+, libpcap
+, xorg
+, gtk2
+, buildRubyGem
+, cairo
+, re2
+, rake
+, gobject-introspection
+, gdk-pixbuf
+, zeromq
+, czmq
+, graphicsmagick
+, libcxx
+, file
+, libvirt
+, glib
+, vips
+, taglib
+, libopus
+, linux-pam
+, libidn
+, protobuf
+, fribidi
+, harfbuzz
+, bison
+, flex
+, pango
+, python3
+, patchelf
+, binutils
+, freetds
+, wrapGAppsHook
+, atk
+, bundler
+, libsass
+, libselinux ? null
+, libsepol ? null
 }@args:
-
 let
   rainbow_rake = buildRubyGem {
     pname = "rake";
@@ -37,7 +104,6 @@ let
     version = "12.0.0";
   };
 in
-
 {
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
@@ -51,7 +117,7 @@ in
     in {
       # patching shebangs would fail on the templates/Executable file, so we
       # temporarily remove the executable flag.
-      preFixup  = "chmod -x $out/${templates}/Executable";
+      preFixup = "chmod -x $out/${templates}/Executable";
       postFixup = ''
         chmod +x $out/${templates}/Executable
 
@@ -62,7 +128,7 @@ in
 
   cairo = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   cairo-gobject = attrs: {
@@ -208,9 +274,12 @@ in
 
   gtk2 = attrs: {
     nativeBuildInputs = [
-      binutils pkgconfig
+      binutils
+      pkgconfig
     ] ++ lib.optionals stdenv.isLinux [
-      utillinux libselinux libsepol
+      utillinux
+      libselinux
+      libsepol
     ];
     propagatedBuildInputs = [
       atk
@@ -582,14 +651,15 @@ in
     dontBuild = false;
     postPatch =
       let
-        path = if lib.versionAtLeast attrs.version "2.0"
-               then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
-               else "lib/tzinfo/zoneinfo_data_source.rb";
+        path =
+          if lib.versionAtLeast attrs.version "2.0"
+          then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
+          else "lib/tzinfo/zoneinfo_data_source.rb";
       in
-        ''
-          substituteInPlace ${path} \
-            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-        '';
+      ''
+        substituteInPlace ${path} \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+      '';
   };
 
   uuid4r = attrs: {

@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, fontforge, python3 }:
-
 let
   inherit (python3.pkgs) fonttools;
 
@@ -48,8 +47,8 @@ let
         ];
       };
     };
-
-in {
+in
+{
   liberation_ttf_v1 = common {
     repo = "liberation-1.7-fonts";
     version = "1.07.5";

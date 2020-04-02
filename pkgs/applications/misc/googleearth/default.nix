@@ -1,7 +1,30 @@
-{ stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
-, libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11
-, zlib, fontconfig, dpkg, libproxy, libxml2, gstreamer, gst_all_1, dbus }:
-
+{ stdenv
+, fetchurl
+, glibc
+, libGLU
+, libGL
+, freetype
+, glib
+, libSM
+, libICE
+, libXi
+, libXv
+, libXrender
+, libXrandr
+, libXfixes
+, libXcursor
+, libXinerama
+, libXext
+, libX11
+, zlib
+, fontconfig
+, dpkg
+, libproxy
+, libxml2
+, gstreamer
+, gst_all_1
+, dbus
+}:
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
@@ -20,7 +43,8 @@ let
     libICE
     libXi
     libXv
-    libGLU libGL
+    libGLU
+    libGL
     libXrender
     libXrandr
     libXfixes
@@ -57,7 +81,7 @@ stdenv.mkDerivation rec {
     dpkg-deb -x ${src} ./
   '';
 
-  installPhase =''
+  installPhase = ''
     mkdir $out
     mv usr/* $out/
     rmdir usr

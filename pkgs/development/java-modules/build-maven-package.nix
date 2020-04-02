@@ -3,10 +3,10 @@
 
 with builtins;
 with stdenv.lib;
-
 let
   mavenMinimal = import ./maven-minimal.nix { inherit pkgs stdenv; };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit mavenDeps src name meta m2Path;
 
   flatDeps = unique (flatten (mavenDeps ++ mavenMinimal.mavenMinimal));

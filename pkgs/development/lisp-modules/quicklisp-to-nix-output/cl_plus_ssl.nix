@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl+ssl";
 
-  asdFilesToKeep = ["cl+ssl.asd"];
+  asdFilesToKeep = [ "cl+ssl.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl+ssl DESCRIPTION Common Lisp interface to OpenSSL. SHA256

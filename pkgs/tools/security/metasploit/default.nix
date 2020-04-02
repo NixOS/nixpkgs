@@ -8,14 +8,14 @@
 # 4. run $ nix-build -A metasploit ../../../../
 # 5. update sha256sum in expression
 # 6. run step 3 again
-
 let
   env = bundlerEnv {
     inherit ruby;
     name = "metasploit-bundler-env";
     gemdir = ./.;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "metasploit-framework";
   version = "5.0.74";
 

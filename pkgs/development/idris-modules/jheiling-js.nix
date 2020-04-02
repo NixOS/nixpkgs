@@ -4,7 +4,7 @@
 , jheiling-extras
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "jheiling-js";
   version = "2016-03-09";
 

@@ -4,7 +4,7 @@
 , effects
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "hamt";
   version = "2016-11-15";
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perlPackages, librsvg}:
+{ stdenv, fetchurl, perlPackages, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "icon-naming-utils-0.8.90";

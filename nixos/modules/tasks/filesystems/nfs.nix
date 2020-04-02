@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inInitrd = any (fs: fs == "nfs") config.boot.initrd.supportedFilesystems;
 
   nfsStateDir = "/var/lib/nfs";
@@ -30,9 +28,7 @@ let
   '';
 
   cfg = config.services.nfs;
-
 in
-
 {
   ###### interface
 
@@ -69,24 +65,29 @@ in
     };
 
     systemd.services.nfs-blkmap =
-      { restartTriggers = [ nfsConfFile ];
+      {
+        restartTriggers = [ nfsConfFile ];
       };
 
     systemd.targets.nfs-client =
-      { wantedBy = [ "multi-user.target" "remote-fs.target" ];
+      {
+        wantedBy = [ "multi-user.target" "remote-fs.target" ];
       };
 
     systemd.services.nfs-idmapd =
-      { restartTriggers = [ idmapdConfFile ];
+      {
+        restartTriggers = [ idmapdConfFile ];
       };
 
     systemd.services.nfs-mountd =
-      { restartTriggers = [ nfsConfFile ];
+      {
+        restartTriggers = [ nfsConfFile ];
         enable = mkDefault false;
       };
 
     systemd.services.nfs-server =
-      { restartTriggers = [ nfsConfFile ];
+      {
+        restartTriggers = [ nfsConfFile ];
         enable = mkDefault false;
       };
 
@@ -96,12 +97,14 @@ in
       };
 
     systemd.services.rpc-gssd =
-      { restartTriggers = [ nfsConfFile ];
+      {
+        restartTriggers = [ nfsConfFile ];
         unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
       };
 
     systemd.services.rpc-statd =
-      { restartTriggers = [ nfsConfFile ];
+      {
+        restartTriggers = [ nfsConfFile ];
 
         preStart =
           ''

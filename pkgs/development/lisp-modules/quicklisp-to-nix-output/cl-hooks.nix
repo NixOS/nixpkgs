@@ -17,7 +17,7 @@ mechanism (as known, e.g., from GNU Emacs).'';
 
   packageName = "cl-hooks";
 
-  asdFilesToKeep = ["cl-hooks.asd"];
+  asdFilesToKeep = [ "cl-hooks.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-hooks DESCRIPTION This system provides the hooks extension point

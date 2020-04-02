@@ -1,8 +1,18 @@
-{ stdenv, fetchFromGitHub
-, freeimage, fontconfig, pkgconfig
-, asciidoc, docbook_xsl, libxslt, cmocka
-, librsvg, pango, libxkbcommon, wayland
-, libGLU, icu
+{ stdenv
+, fetchFromGitHub
+, freeimage
+, fontconfig
+, pkgconfig
+, asciidoc
+, docbook_xsl
+, libxslt
+, cmocka
+, librsvg
+, pango
+, libxkbcommon
+, wayland
+, libGLU
+, icu
 }:
 
 stdenv.mkDerivation rec {
@@ -10,9 +20,9 @@ stdenv.mkDerivation rec {
   version = "4.1.0";
 
   src = fetchFromGitHub {
-    owner  = "eXeC64";
-    repo   = "imv";
-    rev    = "v${version}";
+    owner = "eXeC64";
+    repo = "imv";
+    rev = "v${version}";
     sha256 = "sha256:0gk8g178i961nn3bls75a8qpv6wvfvav6hd9lxca1skaikd33zdx";
   };
 
@@ -53,9 +63,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line image viewer for tiling window managers";
-    homepage    = https://github.com/eXeC64/imv;
-    license     = licenses.gpl2;
+    homepage = https://github.com/eXeC64/imv;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

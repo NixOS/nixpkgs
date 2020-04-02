@@ -1,12 +1,34 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools,
-  qtwebchannel, qtx11extras,
-  gnome2, nss, nspr, alsaLib, atk, cairo, cups, dbus,
-  expat, fontconfig, gdk-pixbuf, glib, gtk2,
-  libxcb, pango, pulseaudio, xorg, deepin }:
-
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, qtbase
+, qttools
+, qtwebchannel
+, qtx11extras
+, gnome2
+, nss
+, nspr
+, alsaLib
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, gdk-pixbuf
+, glib
+, gtk2
+, libxcb
+, pango
+, pulseaudio
+, xorg
+, deepin
+}:
 let
   rpahtLibraries = [
-    stdenv.cc.cc.lib  # libstdc++.so.6
+    stdenv.cc.cc.lib # libstdc++.so.6
     alsaLib
     atk
     cairo
@@ -37,7 +59,6 @@ let
   ];
   libPath = stdenv.lib.makeLibraryPath rpahtLibraries;
 in
-
 mkDerivation rec {
   pname = "qcef";
   version = "1.1.7";
@@ -97,7 +118,7 @@ mkDerivation rec {
     homepage = https://github.com/linuxdeepin/qcef;
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];  # the cef-binary is not available
+    badPlatforms = [ "aarch64-linux" ]; # the cef-binary is not available
     maintainers = with maintainers; [ romildo ];
   };
 }

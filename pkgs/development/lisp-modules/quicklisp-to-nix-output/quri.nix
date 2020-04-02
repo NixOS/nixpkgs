@@ -14,7 +14,7 @@ rec {
 
   packageName = "quri";
 
-  asdFilesToKeep = ["quri.asd"];
+  asdFilesToKeep = [ "quri.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM quri DESCRIPTION Yet another URI library for Common Lisp SHA256

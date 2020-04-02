@@ -1,5 +1,7 @@
-{ stdenv, fetchPypi
-, buildPythonPackage, python
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, python
 }:
 buildPythonPackage rec {
   pname = "parse";

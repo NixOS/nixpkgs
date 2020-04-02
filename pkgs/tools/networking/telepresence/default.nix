@@ -1,7 +1,18 @@
-{ lib, pythonPackages, fetchgit, fetchFromGitHub, makeWrapper, git
-, sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
-, iptables, bash }:
-
+{ lib
+, pythonPackages
+, fetchgit
+, fetchFromGitHub
+, makeWrapper
+, git
+, sshfs-fuse
+, torsocks
+, sshuttle
+, conntrack-tools
+, openssh
+, coreutils
+, iptables
+, bash
+}:
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
     src = fetchgit {
@@ -15,7 +26,8 @@ let
     postPatch = "rm sshuttle/tests/client/test_methods_nat.py";
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
-in pythonPackages.buildPythonPackage rec {
+in
+pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
   version = "0.104";
 
@@ -31,15 +43,15 @@ in pythonPackages.buildPythonPackage rec {
   postInstall = ''
     wrapProgram $out/bin/telepresence \
       --prefix PATH : ${lib.makeBinPath [
-        sshfs-fuse
-        torsocks
-        conntrack-tools
-        sshuttle-telepresence
-        openssh
-        coreutils
-        iptables
-        bash
-      ]}
+      sshfs-fuse
+      torsocks
+      conntrack-tools
+      sshuttle-telepresence
+      openssh
+      coreutils
+      iptables
+      bash
+    ]}
   '';
 
   doCheck = false;

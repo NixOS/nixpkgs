@@ -1,5 +1,13 @@
-{ lib, fetchzip, buildDunePackage
-, cppo, ppxfind, ppx_tools, ppx_derivers, result, ounit, ocaml-migrate-parsetree
+{ lib
+, fetchzip
+, buildDunePackage
+, cppo
+, ppxfind
+, ppx_tools
+, ppx_derivers
+, result
+, ounit
+, ocaml-migrate-parsetree
 }:
 
 buildDunePackage rec {

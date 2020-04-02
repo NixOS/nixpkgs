@@ -1,5 +1,4 @@
 { stdenv, fetchurl, ruby, makeWrapper, git }:
-
 let
   version = "2.4.0";
 in

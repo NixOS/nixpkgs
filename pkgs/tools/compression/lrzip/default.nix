@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, lzo, bzip2, nasm, perl}:
+{ stdenv, fetchurl, zlib, lzo, bzip2, nasm, perl }:
 
 stdenv.mkDerivation rec {
   version = "0.631";

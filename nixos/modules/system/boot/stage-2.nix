@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   useHostResolvConf = config.networking.resolvconf.enable && config.networking.useHostResolvConf;
 
   bootStage2 = pkgs.substituteAll {
@@ -25,9 +23,7 @@ let
         ${config.powerManagement.powerUpCommands}
       '';
   };
-
 in
-
 {
   options = {
 

@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
-, decorator, requests, simplejson, pillow
-, nose, mock, pytest, freezegun }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, decorator
+, requests
+, simplejson
+, pillow
+, nose
+, mock
+, pytest
+, freezegun
+}:
 
 buildPythonPackage rec {
   pname = "datadog";

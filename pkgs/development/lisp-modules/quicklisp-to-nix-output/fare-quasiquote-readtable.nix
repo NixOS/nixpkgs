@@ -14,7 +14,7 @@ rec {
 
   packageName = "fare-quasiquote-readtable";
 
-  asdFilesToKeep = ["fare-quasiquote-readtable.asd"];
+  asdFilesToKeep = [ "fare-quasiquote-readtable.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fare-quasiquote-readtable DESCRIPTION

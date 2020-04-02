@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-async-ssl";
 
-  asdFilesToKeep = ["cl-async-ssl.asd"];
+  asdFilesToKeep = [ "cl-async-ssl.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-async-ssl DESCRIPTION

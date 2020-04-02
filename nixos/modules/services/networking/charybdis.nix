@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   inherit (lib) mkEnableOption mkIf mkOption singleton types;
   inherit (pkgs) coreutils charybdis;
@@ -9,7 +8,6 @@ let
     ${cfg.config}
   '';
 in
-
 {
 
   ###### interface
@@ -92,7 +90,7 @@ in
           BANDB_DBPATH = "${cfg.statedir}/ban.db";
         };
         serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
+          ExecStart = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
           Group = cfg.group;
           User = cfg.user;
         };

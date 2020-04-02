@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       docker-containers.nginx = {
         image = "nginx-container";
         imageFile = pkgs.dockerTools.examples.nginx;
-        ports = ["8181:80"];
+        ports = [ "8181:80" ];
       };
     };
   };

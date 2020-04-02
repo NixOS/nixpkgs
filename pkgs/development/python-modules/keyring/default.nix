@@ -1,4 +1,9 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonOlder
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pythonOlder
 , dbus-python
 , entrypoints
 , importlib-metadata
@@ -23,17 +28,17 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytest-flake8 ];
 
   propagatedBuildInputs = [ dbus-python entrypoints ]
-  ++ lib.optional stdenv.isLinux secretstorage
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+    ++ lib.optional stdenv.isLinux secretstorage
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # checks try to access a darwin path on linux
   doCheck = false;
 
   meta = with lib; {
     description = "Store and access your passwords safely";
-    homepage    = "https://pypi.python.org/pypi/keyring";
-    license     = licenses.psfl;
+    homepage = "https://pypi.python.org/pypi/keyring";
+    license = licenses.psfl;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

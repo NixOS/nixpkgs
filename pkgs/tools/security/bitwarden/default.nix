@@ -9,7 +9,6 @@
 , udev
 , wrapGAppsHook
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
 
@@ -35,8 +34,7 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://github.com/bitwarden/desktop/releases/download/"
-      + "v${version}/Bitwarden-${version}-amd64.deb";
+      url = "https://github.com/bitwarden/desktop/releases/download/" + "v${version}/Bitwarden-${version}-amd64.deb";
       inherit sha256;
     };
 
@@ -81,7 +79,7 @@ let
         "''${gappsWrapperArgs[@]}"
     '';
   };
-
-in if stdenv.isDarwin
+in
+if stdenv.isDarwin
 then throw "Bitwarden has not been packaged for macOS yet"
 else linux

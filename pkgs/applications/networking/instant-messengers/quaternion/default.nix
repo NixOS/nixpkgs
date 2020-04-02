@@ -1,9 +1,16 @@
-{ mkDerivation, stdenv, lib, fetchFromGitHub, cmake
-, qtbase, qtquickcontrols, qtkeychain, qtmultimedia, qttools
+{ mkDerivation
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, qtquickcontrols
+, qtkeychain
+, qtmultimedia
+, qttools
 , libqmatrixclient_0_5
 , gnome3
 }:
-
 let
   generic = version: sha256: prefix: library: mkDerivation {
     pname = "quaternion";
@@ -11,8 +18,8 @@ let
 
     src = fetchFromGitHub {
       owner = "QMatrixClient";
-      repo  = "Quaternion";
-      rev   = "${prefix}${version}";
+      repo = "Quaternion";
+      rev = "${prefix}${version}";
       inherit sha256;
     };
 
@@ -20,27 +27,28 @@ let
 
     nativeBuildInputs = [ cmake qttools ];
 
-    postInstall = if stdenv.isDarwin then ''
-      mkdir -p $out/Applications
-      mv $out/bin/quaternion.app $out/Applications
-      rmdir $out/bin || :
-    '' else ''
-      substituteInPlace $out/share/applications/quaternion.desktop \
-        --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
-    '';
+    postInstall =
+      if stdenv.isDarwin then ''
+        mkdir -p $out/Applications
+        mv $out/bin/quaternion.app $out/Applications
+        rmdir $out/bin || :
+      '' else ''
+        substituteInPlace $out/share/applications/quaternion.desktop \
+          --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+      '';
 
     meta = with lib; {
       description = "Cross-platform desktop IM client for the Matrix protocol";
-      homepage    = "https://matrix.org/docs/projects/client/quaternion.html";
-      license     = licenses.gpl3;
+      homepage = "https://matrix.org/docs/projects/client/quaternion.html";
+      license = licenses.gpl3;
       maintainers = with maintainers; [ peterhoeg ];
       inherit (qtbase.meta) platforms;
       inherit version;
     };
   };
-
-in rec {
-  quaternion     = generic "0.0.9.4c"     "12mkwiqqbi4774kwl7gha72jyf0jf547acy6rw8ry249zl4lja54" "" libqmatrixclient_0_5;
+in
+rec {
+  quaternion = generic "0.0.9.4c" "12mkwiqqbi4774kwl7gha72jyf0jf547acy6rw8ry249zl4lja54" "" libqmatrixclient_0_5;
 
   quaternion-git = quaternion;
 }

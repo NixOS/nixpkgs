@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, liblo, libxml2, libjack2, libsndfile, wxGTK, libsigcxx
-, libsamplerate, rubberband, pkgconfig, libtool, gettext, ncurses, which
+{ stdenv
+, fetchFromGitHub
+, liblo
+, libxml2
+, libjack2
+, libsndfile
+, wxGTK
+, libsigcxx
+, libsamplerate
+, rubberband
+, pkgconfig
+, libtool
+, gettext
+, ncurses
+, which
 , autoreconfHook
 }:
 
@@ -22,8 +35,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig which libtool ];
 
   buildInputs = [
-    liblo libxml2 libjack2 libsndfile wxGTK libsigcxx
-    libsamplerate rubberband gettext ncurses
+    liblo
+    libxml2
+    libjack2
+    libsndfile
+    wxGTK
+    libsigcxx
+    libsamplerate
+    rubberband
+    gettext
+    ncurses
   ];
 
   meta = {

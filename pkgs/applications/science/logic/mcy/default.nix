@@ -1,7 +1,9 @@
-{ stdenv, fetchFromGitHub
-, yosys, symbiyosys, python3
+{ stdenv
+, fetchFromGitHub
+, yosys
+, symbiyosys
+, python3
 }:
-
 let
   python = python3.withPackages (p: with p; [ flask ]);
 in
@@ -10,9 +12,9 @@ stdenv.mkDerivation {
   version = "2020.03.16";
 
   src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "mcy";
-    rev    = "562c02375067428bb657f57faa5131ee1ab44051";
+    owner = "YosysHQ";
+    repo = "mcy";
+    rev = "562c02375067428bb657f57faa5131ee1ab44051";
     sha256 = "0q77v2hxnmv61zx5bl4lrqiavgvsiyb5qxdp9hnihimj1m30bc5h";
   };
 
@@ -36,9 +38,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Mutation-based coverage testing for hardware designs, with Yosys";
-    homepage    = "https://github.com/YosysHQ/mcy";
-    license     = stdenv.lib.licenses.isc;
+    homepage = "https://github.com/YosysHQ/mcy";
+    license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
   };
 }

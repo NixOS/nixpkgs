@@ -1,7 +1,5 @@
 { stdenv, fetchurl }:
-
 let
-
   srcs = {
     lemon = fetchurl {
       sha256 = "1c5pk2hz7j9hix5mpc38rwnm8dnlr2jqswf4lan6v78ccbyqzkjx";
@@ -14,8 +12,8 @@ let
       name = "lempar.c";
     };
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "lemon";
   version = "1.69";
 

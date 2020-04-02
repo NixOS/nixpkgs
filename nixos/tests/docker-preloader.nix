@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test.nix ({ pkgs, ... }: {
   name = "docker-preloader";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lewo ];
@@ -7,16 +7,16 @@ import ./make-test.nix ({ pkgs, ...} : {
   nodes = {
     docker =
       { pkgs, ... }:
-        {
-          virtualisation.docker.enable = true;
-          virtualisation.dockerPreloader.images = [ pkgs.dockerTools.examples.nix pkgs.dockerTools.examples.bash ];
+      {
+        virtualisation.docker.enable = true;
+        virtualisation.dockerPreloader.images = [ pkgs.dockerTools.examples.nix pkgs.dockerTools.examples.bash ];
 
-          services.openssh.enable = true;
-          services.openssh.permitRootLogin = "yes";
-          services.openssh.extraConfig = "PermitEmptyPasswords yes";
-          users.extraUsers.root.password = "";
-        };
-  };    
+        services.openssh.enable = true;
+        services.openssh.permitRootLogin = "yes";
+        services.openssh.extraConfig = "PermitEmptyPasswords yes";
+        users.extraUsers.root.password = "";
+      };
+  };
   testScript = ''
     startAll;
     

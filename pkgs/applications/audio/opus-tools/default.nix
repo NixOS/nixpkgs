@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libogg, libao, pkgconfig, flac, opusfile, libopusenc}:
+{ stdenv, fetchurl, libogg, libao, pkgconfig, flac, opusfile, libopusenc }:
 
 stdenv.mkDerivation rec {
   name = "opus-tools-0.2";

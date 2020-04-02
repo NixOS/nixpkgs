@@ -22,16 +22,17 @@ stdenv.mkDerivation rec {
     cp now-linux $out/bin/now
   '';
 
-    # now is a node program packaged using zeit/pkg.
-    # thus, it contains hardcoded offsets.
-    # patchelf shifts these locations when it expands headers.
+  # now is a node program packaged using zeit/pkg.
+  # thus, it contains hardcoded offsets.
+  # patchelf shifts these locations when it expands headers.
 
-    # this could probably be generalised into allowing any program packaged
-    # with zeit/pkg to be run on nixos.
+  # this could probably be generalised into allowing any program packaged
+  # with zeit/pkg to be run on nixos.
 
-  preFixup = let
-    libPath = lib.makeLibraryPath [stdenv.cc.cc];
-  in ''
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
+    in ''
 
     orig_size=$(stat --printf=%s $out/bin/now)
 

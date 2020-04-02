@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl
+{ stdenv
+, lib
+, fetchurl
 , enableSSO ? false
 , crowdProperties ? null
 }:

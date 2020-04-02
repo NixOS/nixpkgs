@@ -1,12 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.pykms;
   libDir = "/var/lib/pykms";
-
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
   imports = [
@@ -53,7 +52,7 @@ in {
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Additional arguments";
       };
     };

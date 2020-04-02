@@ -1,4 +1,4 @@
-{stdenv, fetchurl, sqlite}:
+{ stdenv, fetchurl, sqlite }:
 
 stdenv.mkDerivation rec
 {
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec
   buildInputs = [ sqlite ];
 
   meta =
-  {
-    homepage = "http://www.tildeslash.com/libzdb/";
-    description = "A small, easy to use Open Source Database Connection Pool Library";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ ];
-  };
+    {
+      homepage = "http://www.tildeslash.com/libzdb/";
+      description = "A small, easy to use Open Source Database Connection Pool Library";
+      license = stdenv.lib.licenses.gpl3;
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ ];
+    };
 }

@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.bsd3;
     maintainers = [ maintainers.gnidorah ];
-    platforms = ["i686-linux" "x86_64-linux"];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

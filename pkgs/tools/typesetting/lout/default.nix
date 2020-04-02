@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ghostscript}:
+{ stdenv, fetchurl, ghostscript }:
 
 stdenv.mkDerivation rec {
   name = "lout-3.40";
@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     urls = [
       "ftp://ftp.cs.usyd.edu.au/jeff/lout/${name}.tar.gz"
-      "mirror://savannah/lout/${name}.tar.gz"      # new!
-      "mirror://sourceforge/lout/${name}.tar.gz"   # to be phased out
+      "mirror://savannah/lout/${name}.tar.gz" # new!
+      "mirror://sourceforge/lout/${name}.tar.gz" # to be phased out
       # XXX: We could add the CTAN mirrors
       # (see https://www.ctan.org/tex-archive/support/lout/).
     ];

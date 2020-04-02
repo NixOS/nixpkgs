@@ -1,11 +1,11 @@
-{ fetchurl }: let
-
+{ fetchurl }:
+let
   fetchNuGet = { name, version, sha256 }: fetchurl {
     inherit sha256;
     url = "https://www.nuget.org/api/v2/package/${name}/${version}";
   };
-
-in [
+in
+[
 
   (fetchNuGet {
     name = "YamlDotNet";

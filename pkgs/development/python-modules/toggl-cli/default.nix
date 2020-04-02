@@ -1,6 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, twine, pbr, click, click-completion, validate-email,
-pendulum, ptable, requests, inquirer, pythonOlder, pytest, pytestcov, pytest-mock, faker, factory_boy,
-setuptools }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, twine
+, pbr
+, click
+, click-completion
+, validate-email
+, pendulum
+, ptable
+, requests
+, inquirer
+, pythonOlder
+, pytest
+, pytestcov
+, pytest-mock
+, faker
+, factory_boy
+, setuptools
+}:
 
 
 buildPythonPackage rec {
@@ -16,11 +33,11 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-   substituteInPlace requirements.txt \
-     --replace "pendulum==2.0.4" "pendulum>=2.0.4" \
-     --replace "click-completion==0.5.0" "click-completion>=0.5.0" \
-     --replace "pbr==5.1.2" "pbr>=5.1.2" \
-     --replace "inquirer==2.5.1" "inquirer>=2.5.1"
+    substituteInPlace requirements.txt \
+      --replace "pendulum==2.0.4" "pendulum>=2.0.4" \
+      --replace "click-completion==0.5.0" "click-completion>=0.5.0" \
+      --replace "pbr==5.1.2" "pbr>=5.1.2" \
+      --replace "inquirer==2.5.1" "inquirer>=2.5.1"
   '';
 
   nativeBuildInputs = [ pbr twine ];
@@ -30,12 +47,12 @@ buildPythonPackage rec {
     export TOGGL_API_TOKEN=your_api_token
     export TOGGL_PASSWORD=toggl_password
     export TOGGL_USERNAME=user@example.com
-    '';
+  '';
 
   checkPhase = ''
-   runHook preCheck
-   pytest -k "not premium and not TestDateTimeType and not TestDateTimeField" tests/unit --maxfail=20
-   runHook postCheck
+    runHook preCheck
+    pytest -k "not premium and not TestDateTimeType and not TestDateTimeField" tests/unit --maxfail=20
+    runHook postCheck
   '';
 
   propagatedBuildInputs = [
@@ -57,4 +74,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.mmahut ];
   };
 }
-

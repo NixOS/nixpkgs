@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.syncthing;
   defaultUser = "syncthing";
@@ -11,7 +10,7 @@ let
     inherit (device) name addresses introducer;
   }) cfg.declarative.devices;
 
-  folders = mapAttrsToList ( _: folder: {
+  folders = mapAttrsToList (_: folder: {
     inherit (folder) path id label type;
     devices = map (device: { deviceId = cfg.declarative.devices.${device}.id; }) folder.devices;
     rescanIntervalS = folder.rescanInterval;
@@ -21,7 +20,7 @@ let
     versioning = folder.versioning;
   }) (filterAttrs (
     _: folder:
-    folder.enable
+      folder.enable
   ) cfg.declarative.folders);
 
   # get the api key by parsing the config.xml
@@ -60,7 +59,8 @@ let
       -X POST \
       ${cfg.guiAddress}/rest/system/restart
   '';
-in {
+in
+{
   ###### interface
   options = {
     services.syncthing = {
@@ -102,7 +102,7 @@ in {
         };
 
         devices = mkOption {
-          default = {};
+          default = { };
           description = ''
             Peers/devices which syncthing should communicate with.
           '';
@@ -125,7 +125,7 @@ in {
 
               addresses = mkOption {
                 type = types.listOf types.str;
-                default = [];
+                default = [ ];
                 description = ''
                   The addresses used to connect to the device.
                   If this is let empty, dynamic configuration is attempted
@@ -165,7 +165,7 @@ in {
         };
 
         folders = mkOption {
-          default = {};
+          default = { };
           description = ''
             folders which should be shared by syncthing.
           '';
@@ -214,7 +214,7 @@ in {
 
               devices = mkOption {
                 type = types.listOf types.str;
-                default = [];
+                default = [ ];
                 description = ''
                   The devices this folder should be shared with. Must be defined
                   in the <literal>declarative.devices</literal> attribute.
@@ -389,7 +389,7 @@ in {
         default =
           let
             nixos = config.system.stateVersion;
-            cond  = versionAtLeast nixos "19.03";
+            cond = versionAtLeast nixos "19.03";
           in cfg.dataDir + (optionalString cond "/.config/syncthing");
       };
 
@@ -419,7 +419,7 @@ in {
   };
 
   imports = [
-    (mkRemovedOptionModule ["services" "syncthing" "useInotify"] ''
+    (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
       This option was removed because syncthing now has the inotify functionality included under the name "fswatcher".
       It can be enabled on a per-folder basis through the webinterface.
     '')
@@ -438,8 +438,9 @@ in {
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       ${defaultUser} =
-        { group = cfg.group;
-          home  = cfg.dataDir;
+        {
+          group = cfg.group;
+          home = cfg.dataDir;
           createHome = true;
           uid = config.ids.uids.syncthing;
           description = "Syncthing daemon user";
@@ -464,18 +465,18 @@ in {
         serviceConfig = {
           Restart = "on-failure";
           SuccessExitStatus = "2 3 4";
-          RestartForceExitStatus="3 4";
+          RestartForceExitStatus = "3 4";
           User = cfg.user;
           Group = cfg.group;
           ExecStartPre = mkIf (cfg.declarative.cert != null || cfg.declarative.key != null)
             "+${pkgs.writers.writeBash "syncthing-copy-keys" ''
               install -dm700 -o ${cfg.user} -g ${cfg.group} ${cfg.configDir}
               ${optionalString (cfg.declarative.cert != null) ''
-                install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.declarative.cert} ${cfg.configDir}/cert.pem
-              ''}
+              install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.declarative.cert} ${cfg.configDir}/cert.pem
+            ''}
               ${optionalString (cfg.declarative.key != null) ''
-                install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.declarative.key} ${cfg.configDir}/key.pem
-              ''}
+              install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.declarative.key} ${cfg.configDir}/key.pem
+            ''}
             ''}"
           ;
           ExecStart = ''
@@ -498,14 +499,18 @@ in {
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           CapabilityBoundingSet = [
-            "~CAP_SYS_PTRACE" "~CAP_SYS_ADMIN"
-            "~CAP_SETGID" "~CAP_SETUID" "~CAP_SETPCAP"
-            "~CAP_SYS_TIME" "~CAP_KILL"
+            "~CAP_SYS_PTRACE"
+            "~CAP_SYS_ADMIN"
+            "~CAP_SETGID"
+            "~CAP_SETUID"
+            "~CAP_SETPCAP"
+            "~CAP_SYS_TIME"
+            "~CAP_KILL"
           ];
         };
       };
       syncthing-init = mkIf (
-        cfg.declarative.devices != {} || cfg.declarative.folders != {}
+        cfg.declarative.devices != { } || cfg.declarative.folders != { }
       ) {
         after = [ "syncthing.service" ];
         wantedBy = [ "multi-user.target" ];

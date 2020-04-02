@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, capstone}:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, capstone
+}:
 
 buildPythonPackage rec {
   pname = "ROPGadget";

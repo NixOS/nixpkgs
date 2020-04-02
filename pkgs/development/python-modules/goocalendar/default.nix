@@ -8,7 +8,7 @@
 , pygobject3
 , goocanvas2
 , isPy3k
- }:
+}:
 
 with stdenv.lib;
 

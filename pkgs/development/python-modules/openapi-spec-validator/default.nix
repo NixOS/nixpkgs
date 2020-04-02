@@ -1,6 +1,18 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
-, jsonschema, pyyaml, six, pathlib
-, mock, pytest, pytestcov, pytest-flake8, tox, setuptools }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, jsonschema
+, pyyaml
+, six
+, pathlib
+, mock
+, pytest
+, pytestcov
+, pytest-flake8
+, tox
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";

@@ -3,8 +3,8 @@
 stdenv.mkDerivation {
   name = "wmsm.app-0.2.1";
   src = fetchurl {
-     url = http://linux-bsd-unix.strefa.pl/wmsm.app-0.2.1.tar.bz2;
-     sha256 = "369a8f2e5673c6b7ab0cf85166f38fbf553dd966c3c1cfeec0e32837defd32c7";
+    url = http://linux-bsd-unix.strefa.pl/wmsm.app-0.2.1.tar.bz2;
+    sha256 = "369a8f2e5673c6b7ab0cf85166f38fbf553dd966c3c1cfeec0e32837defd32c7";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -15,10 +15,10 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   installPhase = ''
-    substituteInPlace Makefile --replace "PREFIX	= /usr/X11R6/bin" "" --replace "/usr/bin/install" "install"
+    substituteInPlace Makefile --replace "PREFIX  = /usr/X11R6/bin" "" --replace "/usr/bin/install" "install"
     mkdir -pv $out/bin;
     make PREFIX=$out/bin install;
-    '';
+  '';
 
   meta = {
     description = "System monitor for Windowmaker";

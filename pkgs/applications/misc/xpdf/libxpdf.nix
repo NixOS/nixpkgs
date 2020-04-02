@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 }:
 
 stdenv.mkDerivation {
@@ -8,7 +9,7 @@ stdenv.mkDerivation {
     url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02.tar.gz;
     sha256 = "000zq4ddbwyxiki4vdwpmxbnw5n9hsg9hvwra2p33hslyib7sfmk";
   };
-  
+
   patches = [
     (fetchurl {
       url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl1.patch;
@@ -45,7 +46,7 @@ stdenv.mkDerivation {
     cp -v fofi/*.h $out/include
     cp -v xpdf/*.h $out/include
   '';
-    
+
   meta = {
     platforms = stdenv.lib.platforms.unix;
   };

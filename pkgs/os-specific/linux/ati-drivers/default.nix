@@ -1,6 +1,17 @@
-{ stdenv, lib, fetchurl, kernel ? null, which
-, xorg, makeWrapper, glibc, patchelf, unzip
-, fontconfig, freetype, libGLU, libGL # for fgl_glxgears
+{ stdenv
+, lib
+, fetchurl
+, kernel ? null
+, which
+, xorg
+, makeWrapper
+, glibc
+, patchelf
+, unzip
+, fontconfig
+, freetype
+, libGLU
+, libGL # for fgl_glxgears
 , # Whether to build the libraries only (i.e. not the kernel module or
   # driver utils). Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -60,7 +71,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url =
-    "https://www2.ati.com/drivers/linux/radeon-crimson-15.12-15.302-151217a-297685e.zip";
+      "https://www2.ati.com/drivers/linux/radeon-crimson-15.12-15.302-151217a-297685e.zip";
     sha256 = "704f2dfc14681f76dae3b4120c87b1ded33cf43d5a1d800b6de5ca292bb61e58";
     curlOpts = "--referer https://www.amd.com/en/support";
   };
@@ -73,24 +84,34 @@ stdenv.mkDerivation rec {
     ./patches/15.9-kcl_str.patch
     ./patches/15.9-mtrr.patch
     ./patches/15.9-preempt.patch
-    ./patches/15.9-sep_printf.patch ]
-  ++ optionals ( kernel != null &&
-                 (lib.versionAtLeast kernel.version "4.6") )
-               [ ./patches/kernel-4.6-get_user_pages.patch
-                 ./patches/kernel-4.6-page_cache_release-put_page.patch ]
-  ++ optionals ( kernel != null &&
-                 (lib.versionAtLeast kernel.version "4.7") )
-               [ ./patches/4.7-arch-cpu_has_pge-v2.patch ]
-  ++ optionals ( kernel != null &&
-                 (lib.versionAtLeast kernel.version "4.9") )
-               [ ./patches/4.9-get_user_pages.patch ];
+    ./patches/15.9-sep_printf.patch
+  ]
+  ++ optionals (kernel != null && (lib.versionAtLeast kernel.version "4.6"))
+    [
+      ./patches/kernel-4.6-get_user_pages.patch
+      ./patches/kernel-4.6-page_cache_release-put_page.patch
+    ]
+  ++ optionals (kernel != null && (lib.versionAtLeast kernel.version "4.7"))
+    [ ./patches/4.7-arch-cpu_has_pge-v2.patch ]
+  ++ optionals (kernel != null && (lib.versionAtLeast kernel.version "4.9"))
+    [ ./patches/4.9-get_user_pages.patch ];
 
   buildInputs =
-    [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
-      xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
+    [
+      xorg.libXrender
+      xorg.libXext
+      xorg.libX11
+      xorg.libXinerama
+      xorg.libSM
+      xorg.libXrandr
+      xorg.libXxf86vm
+      xorg.xorgproto
+      xorg.imake
+      xorg.libICE
       patchelf
       unzip
-      libGLU libGL
+      libGLU
+      libGL
       fontconfig
       freetype
       makeWrapper
@@ -106,9 +127,19 @@ stdenv.mkDerivation rec {
 
   # outputs TODO: probably many fixes are needed;
   LD_LIBRARY_PATH = makeLibraryPath
-    [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
-      xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
-      libGLU libGL
+    [
+      xorg.libXrender
+      xorg.libXext
+      xorg.libX11
+      xorg.libXinerama
+      xorg.libSM
+      xorg.libXrandr
+      xorg.libXxf86vm
+      xorg.xorgproto
+      xorg.imake
+      xorg.libICE
+      libGLU
+      libGL
       fontconfig
       freetype
       stdenv.cc.cc
@@ -118,9 +149,15 @@ stdenv.mkDerivation rec {
   # with nvidia. This causes them to be symlinked to $out/lib so that they
   # appear in /run/opengl-driver/lib which get's added to LD_LIBRARY_PATH
 
-  extraDRIlibs = [ xorg.libXrandr.out xorg.libXrender.out xorg.libXext.out
-                   xorg.libX11.out xorg.libXinerama.out xorg.libSM.out
-                   xorg.libICE.out ];
+  extraDRIlibs = [
+    xorg.libXrandr.out
+    xorg.libXrender.out
+    xorg.libXext.out
+    xorg.libX11.out
+    xorg.libXinerama.out
+    xorg.libSM.out
+    xorg.libICE.out
+  ];
 
   inherit libGLU libGL; # only required to build the examples
 
@@ -132,7 +169,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ marcweber offline jerith666 ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     # Copied from the nvidia default.nix to prevent a store collision.
     priority = 4;
   };

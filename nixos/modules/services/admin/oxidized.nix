@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.oxidized;
 in
@@ -108,7 +107,7 @@ in
         Group = cfg.group;
         UMask = "0077";
         NoNewPrivileges = true;
-        Restart  = "always";
+        Restart = "always";
         WorkingDirectory = cfg.dataDir;
         KillSignal = "SIGKILL";
         PIDFile = "${cfg.dataDir}/.config/oxidized/pid";

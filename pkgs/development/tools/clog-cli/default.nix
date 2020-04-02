@@ -20,6 +20,6 @@ buildRustPackage rec {
     homepage = https://github.com/clog-tool/clog-cli;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [stdenv.lib.maintainers.nthorne];
+    maintainers = [ stdenv.lib.maintainers.nthorne ];
   };
 }

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv
+, fetchurl
+, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -8,15 +10,21 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
+, tcl ? null
+, tk ? null
+, tix ? null
+, xlibsWrapper ? null
+, libX11 ? null
+, x11Support ? false
 , zlib
 , self
-, configd, coreutils
+, configd
+, coreutils
 , python-setup-hook
-# Some proprietary libs assume UCS2 unicode, especially on darwin :(
+  # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
-# For the Python package set
-, packageOverrides ? (self: super: {})
+  # For the Python package set
+, packageOverrides ? (self: super: { })
 , buildPackages
 , sourceVersion
 , sha256
@@ -24,15 +32,10 @@
 , static ? false
 }:
 
-assert x11Support -> tcl != null
-                  && tk != null
-                  && xlibsWrapper != null
-                  && libX11 != null;
+assert x11Support -> tcl != null && tk != null && xlibsWrapper != null && libX11 != null;
 
 with stdenv.lib;
-
 let
-
   pythonForBuild = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
 
   passthru = passthruFun rec {
@@ -56,7 +59,8 @@ let
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
   patches =
-    [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
+    [
+      # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
       ./search-path.patch
 
       # Python recompiles a Python if the mtime stored *in* the
@@ -120,19 +124,19 @@ let
     ];
 
   preConfigure = ''
-      # Purity.
-      for i in /usr /sw /opt /pkg; do
-        substituteInPlace ./setup.py --replace $i /no-such-path
-      done
-    '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
-      for i in Lib/plat-*/regen; do
-        substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
-      done
-    '' + optionalString stdenv.isDarwin ''
-      substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
-      substituteInPlace Lib/multiprocessing/__init__.py \
-        --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
-    '';
+    # Purity.
+    for i in /usr /sw /opt /pkg; do
+      substituteInPlace ./setup.py --replace $i /no-such-path
+    done
+  '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
+    for i in Lib/plat-*/regen; do
+      substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
+    done
+  '' + optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
+    substituteInPlace Lib/multiprocessing/__init__.py \
+      --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
+  '';
 
   configureFlags = [
     "--enable-shared"
@@ -168,8 +172,8 @@ let
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
   ]
-    # Never even try to use lchmod on linux,
-    # don't rely on detecting glibc-isms.
+  # Never even try to use lchmod on linux,
+  # don't rely on detecting glibc-isms.
   ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
   ++ optional static "LDFLAGS=-static";
 
@@ -183,7 +187,7 @@ let
     ++ optional (stdenv.isDarwin && configd != null) configd;
   nativeBuildInputs =
     optionals (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ buildPackages.stdenv.cc buildPackages.python ];
+      [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
@@ -192,12 +196,12 @@ let
 
   # Python 2.7 needs this
   crossCompileEnv = stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform)
-                      { _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config; };
+  { _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config; };
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
-
-in with passthru; stdenv.mkDerivation ({
+in
+  with passthru; stdenv.mkDerivation ({
     pname = "python";
     inherit version;
 
@@ -206,14 +210,13 @@ in with passthru; stdenv.mkDerivation ({
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
-      + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
+    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2" + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
     setupHook = python-setup-hook sitePackages;
 
     postPatch = optionalString (x11Support && (tix != null)) ''
-          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+      substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
     postInstall =
@@ -240,14 +243,14 @@ in with passthru; stdenv.mkDerivation ({
         # We're also not interested in building Windows installers.
         find "$out" -name 'wininst*.exe' | xargs -r rm -f
       '' + optionalString (stdenv.hostPlatform == stdenv.buildPlatform)
-      ''
-        # Determinism: rebuild all bytecode
-        # We exclude lib2to3 because that's Python 2 code which fails
-        # We rebuild three times, once for each optimization level
-        find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
-      '' + optionalString stdenv.hostPlatform.isCygwin ''
+        ''
+          # Determinism: rebuild all bytecode
+          # We exclude lib2to3 because that's Python 2 code which fails
+          # We rebuild three times, once for each optimization level
+          find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
+          find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
+          find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
+        '' + optionalString stdenv.hostPlatform.isCygwin ''
         cp libpython2.7.dll.a $out/lib
       '';
 

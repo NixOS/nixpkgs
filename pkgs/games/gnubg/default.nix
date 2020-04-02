@@ -2,7 +2,7 @@
 
 let version = "1.06.002"; in
 stdenv.mkDerivation {
-  name = "gnubg-"+version;
+  name = "gnubg-" + version;
 
   src = fetchurl {
     url = "http://gnubg.org/media/sources/gnubg-release-${version}-sources.tar.gz";
@@ -15,7 +15,8 @@ stdenv.mkDerivation {
   configureFlags = [ "--with-gtk" "--with--board3d" ];
 
   meta = with stdenv.lib;
-    { description = "World class backgammon application";
+    {
+      description = "World class backgammon application";
       homepage = http://www.gnubg.org/;
       license = licenses.gpl3;
       maintainers = [ maintainers.ehmry ];

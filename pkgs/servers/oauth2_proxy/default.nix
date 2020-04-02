@@ -3,7 +3,7 @@
 buildGoPackage rec {
   pname = "oauth2_proxy";
   version = "3.2.0";
-  
+
   goPackagePath = "github.com/pusher/${pname}";
 
   src = fetchFromGitHub {

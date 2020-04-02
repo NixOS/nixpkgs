@@ -14,7 +14,7 @@ args @ { fetchurl, ... }:
 
   packageName = "list-of";
 
-  asdFilesToKeep = ["list-of.asd"];
+  asdFilesToKeep = [ "list-of.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM list-of DESCRIPTION magic list-of deftype SHA256

@@ -1,8 +1,8 @@
 { lib, fetchurl, p7zip }:
-
 let
   version = "0.8.2";
-in fetchurl {
+in
+fetchurl {
   name = "sarasa-gothic-${version}";
 
   url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttc-${version}.7z";

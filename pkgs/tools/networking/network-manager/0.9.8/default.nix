@@ -1,6 +1,20 @@
-{ stdenv, fetchurl, intltool, pkgconfig, dbus-glib
-, udev, libnl, libuuid, gnutls, dhcp
-, libgcrypt, perl, libgudev, avahi, ppp, kmod }:
+{ stdenv
+, fetchurl
+, intltool
+, pkgconfig
+, dbus-glib
+, udev
+, libnl
+, libuuid
+, gnutls
+, dhcp
+, libgcrypt
+, perl
+, libgudev
+, avahi
+, ppp
+, kmod
+}:
 
 stdenv.mkDerivation rec {
   pname = "network-manager";
@@ -31,9 +45,11 @@ stdenv.mkDerivation rec {
     "--with-iptables=no"
     "--with-udev-dir=\${out}/lib/udev"
     "--with-resolvconf=no"
-    "--sysconfdir=/etc" "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
-    "--with-crypto=gnutls" "--disable-more-warnings"
+    "--with-crypto=gnutls"
+    "--disable-more-warnings"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-kernel-firmware-dir=/run/current-system/firmware"
     "--disable-ppp"
@@ -46,7 +62,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ intltool pkgconfig ];
 
   patches =
-    [ ./libnl-3.2.25.patch
+    [
+      ./libnl-3.2.25.patch
       ./nixos-purity.patch
     ];
 

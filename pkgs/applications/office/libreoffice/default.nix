@@ -1,18 +1,105 @@
-{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
-, IOCompress, zlib, libjpeg, expat, freetype, libwpd
-, libxml2, db, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
-, openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
-, librsvg, gnome_vfs, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
-, autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
-, unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkgconfig, bluez5, libtool, carlito
-, libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
-, librevenge, libe-book, libmwaw, glm, glew, gst_all_1
-, gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome3, glib, ncurses, epoxy, gpgme
+{ stdenv
+, fetchurl
+, fetchpatch
+, pam
+, python3
+, libxslt
+, perl
+, ArchiveZip
+, gettext
+, IOCompress
+, zlib
+, libjpeg
+, expat
+, freetype
+, libwpd
+, libxml2
+, db
+, curl
+, fontconfig
+, libsndfile
+, neon
+, bison
+, flex
+, zip
+, unzip
+, gtk3
+, gtk2
+, libmspack
+, getopt
+, file
+, cairo
+, which
+, icu
+, boost
+, jdk
+, ant
+, cups
+, xorg
+, libcmis
+, fontforge
+, openssl
+, gperf
+, cppunit
+, GConf
+, ORBit2
+, poppler
+, utillinux
+, librsvg
+, gnome_vfs
+, libGLU
+, libGL
+, bsh
+, CoinMP
+, libwps
+, libabw
+, libmysqlclient
+, autoconf
+, automake
+, openldap
+, bash
+, hunspell
+, librdf_redland
+, nss
+, nspr
+, libwpg
+, dbus-glib
+, qt4
+, clucene_core
+, libcdr
+, lcms
+, vigra
+, unixODBC
+, mdds
+, sane-backends
+, mythes
+, libexttextcat
+, libvisio
+, fontsConf
+, pkgconfig
+, bluez5
+, libtool
+, carlito
+, libatomic_ops
+, graphite2
+, harfbuzz
+, libodfgen
+, libzmf
+, librevenge
+, libe-book
+, libmwaw
+, glm
+, glew
+, gst_all_1
+, gdb
+, commonsLogging
+, librdf_rasqal
+, wrapGAppsHook
+, gnome3
+, glib
+, ncurses
+, epoxy
+, gpgme
 , langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
@@ -20,7 +107,6 @@
 } @ args:
 
 assert builtins.elem variant [ "fresh" "still" ];
-
 let
   importVariant = f: import (./. + "/src-${variant}/${f}");
 
@@ -33,21 +119,22 @@ let
 
   srcs = {
     third_party =
-      map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;}))
-      (importVariant "download.nix" ++ [
-        (rec {
-          name = "unowinreg.dll";
-          url = "https://dev-www.libreoffice.org/extern/${md5name}";
-          sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-          md5 = "185d60944ea767075d27247c3162b3bc";
-          md5name = "${md5}-${name}";
-        })
-      ]);
+      map (x: ((fetchurl { inherit (x) url sha256 name; }) // { inherit (x) md5name md5; }))
+        (importVariant "download.nix" ++ [
+          (rec {
+            name = "unowinreg.dll";
+            url = "https://dev-www.libreoffice.org/extern/${md5name}";
+            sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
+            md5 = "185d60944ea767075d27247c3162b3bc";
+            md5name = "${md5}-${name}";
+          })
+        ]);
 
     translations = primary-src.translations;
     help = primary-src.help;
   };
-in (stdenv.mkDerivation rec {
+in
+(stdenv.mkDerivation rec {
   pname = "libreoffice";
   inherit version;
 
@@ -57,8 +144,7 @@ in (stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal"
-    + stdenv.lib.optionalString stdenv.isx86_64 " -mno-fma";
+  NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal" + stdenv.lib.optionalString stdenv.isx86_64 " -mno-fma";
 
   patches = [
     ./xdg-open-brief.patch
@@ -69,10 +155,9 @@ in (stdenv.mkDerivation rec {
   postUnpack = ''
     mkdir -v $sourceRoot/${tarballPath}
   '' + (lib.flip lib.concatMapStrings srcs.third_party (f: ''
-      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
-      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
-    ''))
-  + ''
+    ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
+    ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
+  '')) + ''
     ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
     tar -xf ${srcs.help}
@@ -230,9 +315,9 @@ in (stdenv.mkDerivation rec {
     ''
     # This to avoid using /lib:/usr/lib at linking
     + ''
-    sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
+      sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
 
-    find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
+      find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
     '';
 
   makeFlags = [ "SHELL=${bash}/bin/bash" ];
@@ -345,20 +430,102 @@ in (stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook gdb fontforge autoconf automake bison pkgconfig libtool ];
 
   buildInputs = with xorg;
-    [ ant ArchiveZip boost cairo clucene_core
-      IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gtk3 gtk2
-      hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
-      libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
-      libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs libGLU libGL mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base glib libmysqlclient
-      neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
-      python3 sane-backends unzip vigra which zip zlib
-      mdds bluez5 libcmis libwps libabw libzmf
-      libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
-      librevenge libe-book libmwaw glm glew ncurses epoxy
-      libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
+    [
+      ant
+      ArchiveZip
+      boost
+      cairo
+      clucene_core
+      IOCompress
+      cppunit
+      cups
+      curl
+      db
+      dbus-glib
+      expat
+      file
+      flex
+      fontconfig
+      freetype
+      GConf
+      getopt
+      gnome_vfs
+      gperf
+      gtk3
+      gtk2
+      hunspell
+      icu
+      jdk
+      lcms
+      libcdr
+      libexttextcat
+      unixODBC
+      libjpeg
+      libmspack
+      librdf_redland
+      librsvg
+      libsndfile
+      libvisio
+      libwpd
+      libwpg
+      libX11
+      libXaw
+      libXext
+      libXi
+      libXinerama
+      libxml2
+      libxslt
+      libXtst
+      libXdmcp
+      libpthreadstubs
+      libGLU
+      libGL
+      mythes
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      glib
+      libmysqlclient
+      neon
+      nspr
+      nss
+      openldap
+      openssl
+      ORBit2
+      pam
+      perl
+      pkgconfig
+      poppler
+      python3
+      sane-backends
+      unzip
+      vigra
+      which
+      zip
+      zlib
+      mdds
+      bluez5
+      libcmis
+      libwps
+      libabw
+      libzmf
+      libxshmfence
+      libatomic_ops
+      graphite2
+      harfbuzz
+      gpgme
+      utillinux
+      librevenge
+      libe-book
+      libmwaw
+      glm
+      glew
+      ncurses
+      epoxy
+      libodfgen
+      CoinMP
+      librdf_rasqal
+      gnome3.adwaita-icon-theme
+      gettext
     ]
     ++ lib.optional kdeIntegration kdelibs4;
 

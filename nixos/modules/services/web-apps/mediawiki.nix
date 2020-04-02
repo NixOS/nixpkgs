@@ -1,7 +1,5 @@
 { config, pkgs, lib, ... }:
-
 let
-
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
   inherit (lib) concatStringsSep literalExample mapAttrsToList optional optionals optionalString types;
 
@@ -25,12 +23,12 @@ let
       rm -rf $out/share/mediawiki/extensions/*
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
-        ln -s ${v} $out/share/mediawiki/skins/${k}
-      '') cfg.skins)}
+      ln -s ${v} $out/share/mediawiki/skins/${k}
+    '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
-        ln -s ${v} $out/share/mediawiki/extensions/${k}
-      '') cfg.extensions)}
+      ln -s ${v} $out/share/mediawiki/extensions/${k}
+    '') cfg.extensions)}
     '';
   };
 
@@ -93,23 +91,23 @@ let
       ${optionalString (cfg.database.passwordFile != null) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
 
       ${optionalString (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
-        # MySQL specific settings
-        $wgDBprefix = "${cfg.database.tablePrefix}";
-      ''}
+    # MySQL specific settings
+    $wgDBprefix = "${cfg.database.tablePrefix}";
+  ''}
 
       ${optionalString (cfg.database.type == "mysql") ''
-        # MySQL table options to use during installation or update
-        $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
-      ''}
+    # MySQL table options to use during installation or update
+    $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
+  ''}
 
       ## Shared memory settings
       $wgMainCacheType = CACHE_NONE;
       $wgMemCachedServers = [];
 
       ${optionalString (cfg.uploadsDir != null) ''
-        $wgEnableUploads = true;
-        $wgUploadDirectory = "${cfg.uploadsDir}";
-      ''}
+    $wgEnableUploads = true;
+    $wgUploadDirectory = "${cfg.uploadsDir}";
+  ''}
 
       $wgUseImageMagick = true;
       $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
@@ -164,7 +162,6 @@ let
 
       ${cfg.extraConfig}
   '';
-
 in
 {
   # interface
@@ -201,7 +198,7 @@ in
       };
 
       skins = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf types.path;
         description = ''
           List of paths whose content is copied to the 'skins'
@@ -210,7 +207,7 @@ in
       };
 
       extensions = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf types.path;
         description = ''
           List of paths whose content is copied to the 'extensions'
@@ -341,16 +338,20 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
         message = "services.mediawiki.createLocally is currently only supported for database type 'mysql'";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.mediawiki.database.user must be set to ${user} if services.mediawiki.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.socket != null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.socket != null;
         message = "services.mediawiki.database.socket must be set if services.mediawiki.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.mediawiki.database.createLocally is set to true";
       }
     ];
@@ -366,7 +367,8 @@ in
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -384,27 +386,30 @@ in
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg}/share/mediawiki";
-        extraConfig = ''
-          <Directory "${pkg}/share/mediawiki">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${pkg}/share/mediawiki";
+          extraConfig = ''
+            <Directory "${pkg}/share/mediawiki">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-            Require all granted
-            DirectoryIndex index.php
-            AllowOverride All
-          </Directory>
-        '' + optionalString (cfg.uploadsDir != null) ''
-          Alias "/images" "${cfg.uploadsDir}"
-          <Directory "${cfg.uploadsDir}">
-            Require all granted
-          </Directory>
-        '';
-      } ];
+              Require all granted
+              DirectoryIndex index.php
+              AllowOverride All
+            </Directory>
+          '' + optionalString (cfg.uploadsDir != null) ''
+            Alias "/images" "${cfg.uploadsDir}"
+            <Directory "${cfg.uploadsDir}">
+              Require all granted
+            </Directory>
+          '';
+        }
+      ];
     };
 
     systemd.tmpfiles.rules = [

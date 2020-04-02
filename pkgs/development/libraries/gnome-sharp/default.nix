@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf automake libtool which ];
   buildInputs = [ gtk2 mono gtk-sharp-2_0 ]
-  ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui ]);
+    ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui ]);
 
   patches = [ ./fix-mono-path.patch ];
 

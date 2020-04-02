@@ -1,6 +1,27 @@
-{ stdenv, fetchFromGitHub, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
-, libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv, qmake, ffmpeg
-, qtmultimedia, qtx11extras, qttools }:
+{ stdenv
+, fetchFromGitHub
+, libupnp
+, gpgme
+, gnome3
+, glib
+, libssh
+, pkgconfig
+, protobuf
+, bzip2
+, libXScrnSaver
+, speex
+, curl
+, libxml2
+, libxslt
+, sqlcipher
+, libmicrohttpd
+, opencv
+, qmake
+, ffmpeg
+, qtmultimedia
+, qtx11extras
+, qttools
+}:
 
 stdenv.mkDerivation rec {
   pname = "retroshare";
@@ -23,8 +44,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    speex libupnp gpgme gnome3.libgnome-keyring glib libssh qtmultimedia qtx11extras qttools
-    protobuf bzip2 libXScrnSaver curl libxml2 libxslt sqlcipher libmicrohttpd opencv ffmpeg
+    speex
+    libupnp
+    gpgme
+    gnome3.libgnome-keyring
+    glib
+    libssh
+    qtmultimedia
+    qtx11extras
+    qttools
+    protobuf
+    bzip2
+    libXScrnSaver
+    curl
+    libxml2
+    libxslt
+    sqlcipher
+    libmicrohttpd
+    opencv
+    ffmpeg
   ];
 
   preConfigure = ''

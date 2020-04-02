@@ -1,6 +1,12 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland # wayland-scanner
-, wayland-protocols, libseccomp
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland # wayland-scanner
+, wayland-protocols
+, libseccomp
 }:
 
 stdenv.mkDerivation rec {

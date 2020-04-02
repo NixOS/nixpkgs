@@ -1,13 +1,29 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, cmake, autoconf, automake, libtool, makeWrapper
-, wget, xxd, desktop-file-utils, file
-, gnupg, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, autoconf
+, automake
+, libtool
+, makeWrapper
+, wget
+, xxd
+, desktop-file-utils
+, file
+, gnupg
+, glib
+, zlib
+, cairo
+, openssl
+, fuse
+, xz
+, squashfuse
+, inotify-tools
+, libarchive
 , squashfsTools
 , gtest
 }:
-
 let
-
   appimagekit_src = fetchFromGitHub {
     owner = "AppImage";
     repo = "AppImageKit";
@@ -22,8 +38,8 @@ let
 
     src = fetchFromGitHub {
       owner = "vasi";
-      repo  = "squashfuse";
-      rev   = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
+      repo = "squashfuse";
+      rev = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
       sha256 = "0lrw9ff8k15l34wjwyllw3i35hl0cms97jj2hpnr2q8ipgxpb5q5";
     };
 
@@ -42,7 +58,10 @@ let
     '';
 
     configureFlags = [
-      "--disable-demo" "--disable-high-level" "--without-lzo" "--without-lz4"
+      "--disable-demo"
+      "--disable-high-level"
+      "--without-lzo"
+      "--without-lz4"
     ];
 
     postConfigure = ''
@@ -56,8 +75,8 @@ let
       cp -v ./*.h $out/include
     '';
   });
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "appimagekit-20180727";
 
   src = appimagekit_src;
@@ -65,14 +84,27 @@ in stdenv.mkDerivation rec {
   patches = [ ./nix.patch ];
 
   nativeBuildInputs = [
-    pkgconfig cmake autoconf automake libtool wget xxd
+    pkgconfig
+    cmake
+    autoconf
+    automake
+    libtool
+    wget
+    xxd
     desktop-file-utils
   ];
 
   buildInputs = [
-    glib zlib cairo openssl fuse
-    xz inotify-tools libarchive
-    squashfsTools makeWrapper
+    glib
+    zlib
+    cairo
+    openssl
+    fuse
+    xz
+    inotify-tools
+    libarchive
+    squashfsTools
+    makeWrapper
   ];
 
   postPatch = ''

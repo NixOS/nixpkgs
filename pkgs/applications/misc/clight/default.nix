@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkgconfig, bash-completion
-, gsl, popt, clightd, systemd, libconfig, libmodule
-, withGeoclue ? true, geoclue2
-, withUpower ? true, upower }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, dbus
+, cmake
+, pkgconfig
+, bash-completion
+, gsl
+, popt
+, clightd
+, systemd
+, libconfig
+, libmodule
+, withGeoclue ? true
+, geoclue2
+, withUpower ? true
+, upower
+}:
 
 stdenv.mkDerivation rec {
   pname = "clight";
@@ -44,7 +57,7 @@ stdenv.mkDerivation rec {
     libconfig
     libmodule
   ] ++ optional withGeoclue geoclue2
-    ++ optional withUpower upower;
+  ++ optional withUpower upower;
 
   meta = with lib; {
     description = "A C daemon that turns your webcam into a light sensor";

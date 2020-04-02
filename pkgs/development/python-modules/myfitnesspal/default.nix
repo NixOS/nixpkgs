@@ -1,6 +1,17 @@
-{ lib, fetchPypi, buildPythonPackage
-, blessed, keyring, keyrings-alt, lxml, measurement, python-dateutil, requests, six
-, mock, nose }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, blessed
+, keyring
+, keyrings-alt
+, lxml
+, measurement
+, python-dateutil
+, requests
+, six
+, mock
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "myfitnesspal";

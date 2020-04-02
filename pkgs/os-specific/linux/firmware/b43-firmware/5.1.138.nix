@@ -26,4 +26,3 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.unfree;
   };
 }
-

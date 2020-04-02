@@ -1,18 +1,14 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.cachefilesd;
 
   cfgFile = pkgs.writeText "cachefilesd.conf" ''
     dir ${cfg.cacheDir}
     ${cfg.extraConfig}
   '';
-
 in
-
 {
   options = {
     services.cachefilesd = {

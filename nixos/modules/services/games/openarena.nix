@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.openarena;
 in
@@ -18,7 +17,7 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''Extra flags to pass to <command>oa_ded</command>'';
         example = [
           "+set dedicated 2"

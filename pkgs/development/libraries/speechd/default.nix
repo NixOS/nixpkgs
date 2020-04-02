@@ -12,17 +12,24 @@
 , glib
 , dotconf
 , libsndfile
-, withLibao ? true, libao
-, withPulse ? false, libpulseaudio
-, withAlsa ? false, alsaLib
+, withLibao ? true
+, libao
+, withPulse ? false
+, libpulseaudio
+, withAlsa ? false
+, alsaLib
 , withOss ? false
-, withFlite ? true, flite
-# , withFestival ? false, festival-freebsoft-utils
-, withEspeak ? true, espeak, sonic, pcaudiolib
-, withPico ? true, svox
-# , withIvona ? false, libdumbtts
+, withFlite ? true
+, flite
+  # , withFestival ? false, festival-freebsoft-utils
+, withEspeak ? true
+, espeak
+, sonic
+, pcaudiolib
+, withPico ? true
+, svox
+  # , withIvona ? false, libdumbtts
 }:
-
 let
   inherit (stdenv.lib) optional optionals;
   inherit (python3Packages) python pyxdg wrapPython;
@@ -37,7 +44,8 @@ let
       "flite"
     else
       throw "You need to enable at least one output module.";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
   version = "0.9.1";
 
@@ -76,7 +84,7 @@ in stdenv.mkDerivation rec {
     sonic
     pcaudiolib
   ] ++ optional withFlite flite
-    ++ optional withPico svox
+  ++ optional withPico svox
     # TODO: add flint/festival support with festival-freebsoft-utils package
     # ++ optional withFestival festival-freebsoft-utils
     # TODO: add Ivona support with libdumbtts package
@@ -90,11 +98,11 @@ in stdenv.mkDerivation rec {
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder ''out''}/lib/systemd/system"
   ] ++ optional withPulse "--with-pulse"
-    ++ optional withAlsa "--with-alsa"
-    ++ optional withLibao "--with-libao"
-    ++ optional withOss "--with-oss"
-    ++ optional withEspeak "--with-espeak-ng"
-    ++ optional withPico "--with-pico"
+  ++ optional withAlsa "--with-alsa"
+  ++ optional withLibao "--with-libao"
+  ++ optional withOss "--with-oss"
+  ++ optional withEspeak "--with-espeak-ng"
+  ++ optional withPico "--with-pico"
     # ++ optional withFestival "--with-flint"
     # ++ optional withIvona "--with-ivona"
   ;

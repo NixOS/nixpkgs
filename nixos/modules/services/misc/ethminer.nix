@@ -1,12 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.ethminer;
   poolUrl = escapeShellArg "stratum1+tcp://${cfg.wallet}@${cfg.pool}:${toString cfg.stratumPort}/${cfg.rig}/${cfg.registerMail}";
 in
-
 {
 
   ###### interface

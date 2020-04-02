@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.flashpolicyd;
 
   flashpolicyd = pkgs.stdenv.mkDerivation {
@@ -27,9 +25,7 @@ let
         --file=${pkgs.writeText "flashpolixy.xml" cfg.policy} \
         2> /dev/null
     '';
-
 in
-
 {
 
   ###### interface
@@ -73,11 +69,12 @@ in
     services.xinetd.enable = true;
 
     services.xinetd.services = singleton
-      { name = "flashpolicy";
-        port = 843;
-        unlisted = true;
-        server = "${flashpolicydWrapper}/bin/flashpolicyd";
-      };
+    {
+      name = "flashpolicy";
+      port = 843;
+      unlisted = true;
+      server = "${flashpolicydWrapper}/bin/flashpolicyd";
+    };
 
   };
 

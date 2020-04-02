@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
-
 let
-
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) literalExample mapAttrs optionalString;
 
@@ -29,7 +27,6 @@ let
     $ZBX_SERVER_NAME = ''';
     $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
   '';
-
 in
 {
   # interface
@@ -186,21 +183,24 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${cfg.package}/share/zabbix";
-        extraConfig = ''
-          <Directory "${cfg.package}/share/zabbix">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
-            AllowOverride all
-            Options -Indexes
-            DirectoryIndex index.php
-          </Directory>
-        '';
-      } ];
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${cfg.package}/share/zabbix";
+          extraConfig = ''
+            <Directory "${cfg.package}/share/zabbix">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
+              AllowOverride all
+              Options -Indexes
+              DirectoryIndex index.php
+            </Directory>
+          '';
+        }
+      ];
     };
 
     users.users.${user} = mapAttrs (name: mkDefault) {

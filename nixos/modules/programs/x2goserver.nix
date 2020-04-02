@@ -1,22 +1,21 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.x2goserver;
 
   defaults = {
     superenicer = { enable = cfg.superenicer.enable; };
   };
-  confText = generators.toINI {} (recursiveUpdate defaults cfg.settings);
+  confText = generators.toINI { } (recursiveUpdate defaults cfg.settings);
   x2goServerConf = pkgs.writeText "x2goserver.conf" confText;
 
   x2goAgentOptions = pkgs.writeText "x2goagent.options" ''
     X2GO_NXOPTIONS=""
     X2GO_NXAGENT_DEFAULT_OPTIONS="${concatStringsSep " " cfg.nxagentDefaultOptions}"
   '';
-
-in {
+in
+{
   options.programs.x2goserver = {
     enable = mkEnableOption "x2goserver" // {
       description = ''
@@ -46,7 +45,7 @@ in {
 
     settings = mkOption {
       type = types.attrsOf types.attrs;
-      default = {};
+      default = { };
       description = ''
         x2goserver.conf ini configuration as nix attributes. See
         `x2goserver.conf(5)` for details
@@ -65,7 +64,7 @@ in {
 
     environment.systemPackages = [ pkgs.x2goserver ];
 
-    users.groups.x2go = {};
+    users.groups.x2go = { };
     users.users.x2go = {
       home = "/var/lib/x2go/db";
       group = "x2go";
@@ -95,16 +94,38 @@ in {
     # "/usr/local/bin;/usr/bin;/bin". Since we cannot filter arbitrary ssh
     # commands, we have to make the following executables available.
     map (f: "L+ /usr/local/bin/${f} - - - - ${x2goserver}/bin/${f}") [
-      "x2goagent" "x2gobasepath" "x2gocleansessions" "x2gocmdexitmessage"
-      "x2godbadmin" "x2gofeature" "x2gofeaturelist" "x2gofm" "x2gogetapps"
-      "x2gogetservers" "x2golistdesktops" "x2golistmounts" "x2golistsessions"
-      "x2golistsessions_root" "x2golistshadowsessions" "x2gomountdirs"
-      "x2gopath" "x2goprint" "x2goresume-desktopsharing" "x2goresume-session"
-      "x2goruncommand" "x2goserver-run-extensions" "x2gosessionlimit"
-      "x2gosetkeyboard" "x2goshowblocks" "x2gostartagent"
-      "x2gosuspend-desktopsharing" "x2gosuspend-session"
-      "x2goterminate-desktopsharing" "x2goterminate-session"
-      "x2goumount-session" "x2goversion"
+      "x2goagent"
+      "x2gobasepath"
+      "x2gocleansessions"
+      "x2gocmdexitmessage"
+      "x2godbadmin"
+      "x2gofeature"
+      "x2gofeaturelist"
+      "x2gofm"
+      "x2gogetapps"
+      "x2gogetservers"
+      "x2golistdesktops"
+      "x2golistmounts"
+      "x2golistsessions"
+      "x2golistsessions_root"
+      "x2golistshadowsessions"
+      "x2gomountdirs"
+      "x2gopath"
+      "x2goprint"
+      "x2goresume-desktopsharing"
+      "x2goresume-session"
+      "x2goruncommand"
+      "x2goserver-run-extensions"
+      "x2gosessionlimit"
+      "x2gosetkeyboard"
+      "x2goshowblocks"
+      "x2gostartagent"
+      "x2gosuspend-desktopsharing"
+      "x2gosuspend-session"
+      "x2goterminate-desktopsharing"
+      "x2goterminate-session"
+      "x2goumount-session"
+      "x2goversion"
     ] ++ [
       "L+ /usr/local/bin/awk - - - - ${gawk}/bin/awk"
       "L+ /usr/local/bin/chmod - - - - ${coreutils}/bin/chmod"

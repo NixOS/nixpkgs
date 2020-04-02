@@ -3,18 +3,18 @@
   # Use a minimal kernel?
 , minimal ? false
   # Ignored
-, config ? {}
+, config ? { }
   # Modules to add to each VM
-, extraConfigurations ? [] }:
+, extraConfigurations ? [ ]
+}:
 
 with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
-
 let
   jquery-ui = callPackage ./testing/jquery-ui.nix { };
   jquery = callPackage ./testing/jquery.nix { };
-
-in rec {
+in
+rec {
 
   inherit pkgs;
 
@@ -91,7 +91,6 @@ in rec {
     , name ? "unnamed"
     , ...
     } @ t:
-
     let
       # A standard store path to the vm monitor is built like this:
       #   /tmp/nix-build-vm-test-run-$name.drv-0/vm-state-machine/monitor
@@ -102,13 +101,13 @@ in rec {
 
       testDriverName = with builtins;
         if testNameLen > maxTestNameLen then
-          abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " +
-            "it's currently ${toString testNameLen} characters long.")
+          abort ("The name of the test '${name}' must not be longer than ${toString maxTestNameLen} " + "it's currently ${toString testNameLen} characters long.")
         else
           "nixos-test-driver-${name}";
 
       nodes = buildVirtualNetwork (
-        t.nodes or (if t ? machine then { machine = t.machine; } else { }));
+        t.nodes or (if t ? machine then { machine = t.machine; } else { })
+      );
 
       testScript' =
         # Call the test script with the computed nodes.
@@ -128,11 +127,12 @@ in rec {
       # interactively with the specified network, and for starting the
       # VMs from the command line.
       driver = runCommand testDriverName
-        { buildInputs = [ makeWrapper];
-          testScript = testScript';
-          preferLocalBuild = true;
-          testName = name;
-        }
+      {
+        buildInputs = [ makeWrapper ];
+        testScript = testScript';
+        preferLocalBuild = true;
+        testName = name;
+      }
         ''
           mkdir -p $out/bin
           echo "$testScript" > $out/test-script
@@ -141,7 +141,7 @@ in rec {
           wrapProgram $out/bin/nixos-test-driver \
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR
-              "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
+            "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
             --run "export testScript=\"\$(cat $out/test-script)\"" \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
@@ -154,7 +154,7 @@ in rec {
         ''; # "
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
-        meta = (drv.meta or {}) // t.meta;
+        meta = (drv.meta or { }) // t.meta;
       };
 
       test = passMeta (runTests driver);
@@ -163,7 +163,6 @@ in rec {
       nodeNames = builtins.attrNames nodes;
       invalidNodeNames = lib.filter
         (node: builtins.match "^[A-z_][A-z0-9_]+$" node == null) nodeNames;
-
     in
       if lib.length invalidNodeNames > 0 then
         throw ''
@@ -187,8 +186,10 @@ in rec {
     }:
     let
       vm = buildVM { }
-        [ machine
-          { key = "run-in-machine";
+        [
+          machine
+          {
+            key = "run-in-machine";
             networking.hostName = "client";
             nix.readOnlyStore = false;
             virtualisation.writableStore = false;
@@ -233,18 +234,17 @@ in rec {
         export tests='${testScript}'
         ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
-
     in
       lib.overrideDerivation drv (attrs: {
         requiredSystemFeatures = [ "kvm" ];
         builder = "${bash}/bin/sh";
-        args = ["-e" vmRunCommand];
+        args = [ "-e" vmRunCommand ];
         origArgs = attrs.args;
         origBuilder = attrs.builder;
       });
 
 
-  runInMachineWithX = { require ? [], ... } @ args:
+  runInMachineWithX = { require ? [ ], ... } @ args:
     let
       client =
         { ... }:

@@ -1,7 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
-, texinfo, perlPackages
-, openldap, libcap_ng, sqlite, openssl, db, libedit, pam
-, CoreFoundation, Security, SystemConfiguration
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, python2
+, perl
+, yacc
+, flex
+, texinfo
+, perlPackages
+, openldap
+, libcap_ng
+, sqlite
+, openssl
+, db
+, libedit
+, pam
+, CoreFoundation
+, Security
+, SystemConfiguration
 }:
 
 with stdenv.lib;
@@ -23,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex texinfo ]
     ++ (with perlPackages; [ JSON ]);
   buildInputs = optionals (stdenv.isLinux) [ libcap_ng ]
-    ++ [ db sqlite openssl libedit openldap pam]
+    ++ [ db sqlite openssl libedit openldap pam ]
     ++ optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ];
 
   ## ugly, X should be made an option
@@ -34,7 +50,7 @@ stdenv.mkDerivation rec {
     "--enable-hdb-openldap-module"
     "--with-sqlite3=${sqlite.dev}"
 
-  # ugly, --with-libedit is not enought, it fall back to bundled libedit
+    # ugly, --with-libedit is not enought, it fall back to bundled libedit
     "--with-libedit-include=${libedit.dev}/include"
     "--with-libedit-lib=${libedit}/lib"
     "--with-openssl=${openssl.dev}"

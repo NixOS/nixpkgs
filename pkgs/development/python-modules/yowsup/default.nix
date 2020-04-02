@@ -1,5 +1,12 @@
-{ buildPythonPackage, stdenv, fetchFromGitHub, six, python-axolotl, pytest
-, isPy3k, consonance, appdirs
+{ buildPythonPackage
+, stdenv
+, fetchFromGitHub
+, six
+, python-axolotl
+, pytest
+, isPy3k
+, consonance
+, appdirs
 }:
 
 buildPythonPackage rec {

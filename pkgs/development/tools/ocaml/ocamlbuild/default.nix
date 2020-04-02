@@ -18,11 +18,11 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ];
 
   configurePhase = ''
-  make -f configure.make Makefile.config \
-    "OCAMLBUILD_PREFIX=$out" \
-    "OCAMLBUILD_BINDIR=$out/bin" \
-    "OCAMLBUILD_MANDIR=$out/share/man" \
-    "OCAMLBUILD_LIBDIR=$OCAMLFIND_DESTDIR"
+    make -f configure.make Makefile.config \
+      "OCAMLBUILD_PREFIX=$out" \
+      "OCAMLBUILD_BINDIR=$out/bin" \
+      "OCAMLBUILD_MANDIR=$out/share/man" \
+      "OCAMLBUILD_LIBDIR=$OCAMLFIND_DESTDIR"
   '';
 
   meta = with stdenv.lib; {

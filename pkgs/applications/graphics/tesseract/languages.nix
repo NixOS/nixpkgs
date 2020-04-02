@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchFromGitHub }:
 
 rec {
-  makeLanguages = { tessdataRev, tessdata ? null, all ? null, languages ? {} }:
+  makeLanguages = { tessdataRev, tessdata ? null, all ? null, languages ? { } }:
     let
       tessdataSrc = fetchFromGitHub {
         owner = "tesseract-ocr";

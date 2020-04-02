@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six, nose, mock, dill, pycodestyle }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, six
+, nose
+, mock
+, dill
+, pycodestyle
+}:
 
 buildPythonPackage rec {
   pname = "transitions";

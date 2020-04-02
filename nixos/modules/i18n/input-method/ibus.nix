@@ -1,13 +1,12 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.i18n.inputMethod.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
   ibusEngine = types.package // {
-    name  = "ibus-engine";
-    check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
+    name = "ibus-engine";
+    check = x: (lib.types.package.check x) && (attrByPath [ "meta" "isIbusEngine" ] false x);
   };
 
   impanel =
@@ -34,8 +33,8 @@ in
   options = {
     i18n.inputMethod.ibus = {
       engines = mkOption {
-        type    = with types; listOf ibusEngine;
-        default = [];
+        type = with types; listOf ibusEngine;
+        default = [ ];
         example = literalExample "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
@@ -43,7 +42,7 @@ in
             engines = concatStringsSep ", "
               (map (name: "<literal>${name}</literal>") (attrNames enginesDrv));
           in
-            "Enabled IBus engines. Available engines are: ${engines}.";
+          "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = mkOption {
         type = with types; nullOr path;

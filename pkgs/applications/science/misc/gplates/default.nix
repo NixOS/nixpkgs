@@ -1,5 +1,20 @@
-{ stdenv, fetchurl, qt4, qwt6_qt4, libGLU, libGL, glew, gdal_1_11, cgal
-, proj, boost, cmake, python2, doxygen, graphviz, gmp }:
+{ stdenv
+, fetchurl
+, qt4
+, qwt6_qt4
+, libGLU
+, libGL
+, glew
+, gdal_1_11
+, cgal
+, proj
+, boost
+, cmake
+, python2
+, doxygen
+, graphviz
+, gmp
+}:
 
 stdenv.mkDerivation rec {
   pname = "gplates";
@@ -15,8 +30,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qt4 qwt6_qt4 libGLU libGL glew gdal_1_11 cgal proj boost cmake python2
-    doxygen graphviz gmp
+    qt4
+    qwt6_qt4
+    libGLU
+    libGL
+    glew
+    gdal_1_11
+    cgal
+    proj
+    boost
+    cmake
+    python2
+    doxygen
+    graphviz
+    gmp
   ];
 
   meta = with stdenv.lib; {

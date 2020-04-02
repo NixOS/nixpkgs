@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, automake, gettext}:
+{ stdenv, fetchurl, pkgconfig, perlPackages, libxml2, libxslt, docbook_xml_dtd_42, automake, gettext }:
 
 stdenv.mkDerivation {
   name = "scrollkeeper-0.3.14";

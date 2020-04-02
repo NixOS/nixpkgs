@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "8c69a6cbfa94da29a34f6b16193e7c15f5d3220cb772d6d17425ff3faa063a6d";
   };
 
-  checkInputs = [  pytest tornado ];
+  checkInputs = [ pytest tornado ];
   buildInputs = [ zeromq ];
   propagatedBuildInputs = [ py ];
 

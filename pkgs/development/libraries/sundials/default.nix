@@ -4,11 +4,12 @@
 , python
 , openblas
 , gfortran
-, lapackSupport ? true }:
-
-let openblas32 = openblas.override { blas64 = false; };
-
-in stdenv.mkDerivation rec {
+, lapackSupport ? true
+}:
+let
+  openblas32 = openblas.override { blas64 = false; };
+in
+stdenv.mkDerivation rec {
   pname = "sundials";
   version = "5.1.0";
 
@@ -41,9 +42,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Suite of nonlinear differential/algebraic equation solvers";
-    homepage    = https://computation.llnl.gov/projects/sundials;
-    platforms   = platforms.all;
+    homepage = https://computation.llnl.gov/projects/sundials;
+    platforms = platforms.all;
     maintainers = with maintainers; [ flokli idontgetoutmuch ];
-    license     = licenses.bsd3;
+    license = licenses.bsd3;
   };
 }

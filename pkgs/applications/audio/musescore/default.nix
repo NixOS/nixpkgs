@@ -1,7 +1,26 @@
-{ stdenv, mkDerivation, lib, fetchzip, cmake, pkgconfig
-, alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
-, portaudio, portmidi, qtbase, qtdeclarative, qtscript, qtsvg, qttools
-, qtwebengine, qtxmlpatterns
+{ stdenv
+, mkDerivation
+, lib
+, fetchzip
+, cmake
+, pkgconfig
+, alsaLib
+, freetype
+, libjack2
+, lame
+, libogg
+, libpulseaudio
+, libsndfile
+, libvorbis
+, portaudio
+, portmidi
+, qtbase
+, qtdeclarative
+, qtscript
+, qtsvg
+, qttools
+, qtwebengine
+, qtxmlpatterns
 }:
 
 mkDerivation rec {
@@ -24,9 +43,23 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
-    portaudio portmidi # tesseract
-    qtbase qtdeclarative qtscript qtsvg qttools qtwebengine qtxmlpatterns
+    alsaLib
+    libjack2
+    freetype
+    lame
+    libogg
+    libpulseaudio
+    libsndfile
+    libvorbis
+    portaudio
+    portmidi # tesseract
+    qtbase
+    qtdeclarative
+    qtscript
+    qtsvg
+    qttools
+    qtwebengine
+    qtxmlpatterns
   ];
 
   meta = with stdenv.lib; {

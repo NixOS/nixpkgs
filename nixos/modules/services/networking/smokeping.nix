@@ -2,42 +2,41 @@
 
 with lib;
 let
-
   cfg = config.services.smokeping;
   smokepingHome = "/var/lib/smokeping";
   smokepingPidDir = "/run";
   configFile =
     if cfg.config == null
-      then
-        ''
-          *** General ***
-          cgiurl   = ${cfg.cgiUrl}
-          contact = ${cfg.ownerEmail}
-          datadir  = ${smokepingHome}/data
-          imgcache = ${smokepingHome}/cache
-          imgurl   = ${cfg.imgUrl}
-          linkstyle = ${cfg.linkStyle}
-          ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
-          owner = ${cfg.owner}
-          pagedir = ${smokepingHome}/cache
-          piddir  = ${smokepingPidDir}
-          ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
-          smokemail = ${cfg.smokeMailTemplate}
-          *** Presentation ***
-          template = ${cfg.presentationTemplate}
-          ${cfg.presentationConfig}
-          *** Alerts ***
-          ${cfg.alertConfig}
-          *** Database ***
-          ${cfg.databaseConfig}
-          *** Probes ***
-          ${cfg.probeConfig}
-          *** Targets ***
-          ${cfg.targetConfig}
-          ${cfg.extraConfig}
-        ''
-      else
-        cfg.config;
+    then
+      ''
+        *** General ***
+        cgiurl   = ${cfg.cgiUrl}
+        contact = ${cfg.ownerEmail}
+        datadir  = ${smokepingHome}/data
+        imgcache = ${smokepingHome}/cache
+        imgurl   = ${cfg.imgUrl}
+        linkstyle = ${cfg.linkStyle}
+        ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
+        owner = ${cfg.owner}
+        pagedir = ${smokepingHome}/cache
+        piddir  = ${smokepingPidDir}
+        ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
+        smokemail = ${cfg.smokeMailTemplate}
+        *** Presentation ***
+        template = ${cfg.presentationTemplate}
+        ${cfg.presentationConfig}
+        *** Alerts ***
+        ${cfg.alertConfig}
+        *** Database ***
+        ${cfg.databaseConfig}
+        *** Probes ***
+        ${cfg.probeConfig}
+        *** Targets ***
+        ${cfg.targetConfig}
+        ${cfg.extraConfig}
+      ''
+    else
+      cfg.config;
 
   configPath = pkgs.writeText "smokeping.conf" configFile;
   cgiHome = pkgs.writeScript "smokeping.fcgi" ''
@@ -45,7 +44,6 @@ let
     ${cfg.package}/bin/smokeping_cgi ${configPath}
   '';
 in
-
 {
   options = {
     services.smokeping = {
@@ -82,8 +80,7 @@ in
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = "Full smokeping config supplied by the user. Overrides " +
-          "and replaces any other configuration supplied.";
+        description = "Full smokeping config supplied by the user. Overrides " + "and replaces any other configuration supplied.";
       };
       databaseConfig = mkOption {
         type = types.lines;
@@ -136,7 +133,7 @@ in
         description = "Base url for images generated in the cgi.";
       };
       linkStyle = mkOption {
-        type = types.enum ["original" "absolute" "relative"];
+        type = types.enum [ "original" "absolute" "relative" ];
         default = "relative";
         example = "absolute";
         description = "DNS name for the urls generated in the cgi.";
@@ -239,18 +236,18 @@ in
       targetConfig = mkOption {
         type = types.lines;
         default = ''
-					probe = FPing
-					menu = Top
-					title = Network Latency Grapher
-					remark = Welcome to the SmokePing website of xxx Company. \
-									 Here you will learn all about the latency of our network.
-					+ Local
-					menu = Local
-					title = Local Network
-					++ LocalMachine
-					menu = Local Machine
-					title = This host
-					host = localhost
+          probe = FPing
+          menu = Top
+          title = Network Latency Grapher
+          remark = Welcome to the SmokePing website of xxx Company. \
+                   Here you will learn all about the latency of our network.
+          + Local
+          menu = Local
+          title = Local Network
+          ++ LocalMachine
+          menu = Local Machine
+          title = This host
+          host = localhost
         '';
         description = "Target configuration";
       };
@@ -289,7 +286,7 @@ in
       createHome = true;
     };
     systemd.services.smokeping = {
-      wantedBy = [ "multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
@@ -306,9 +303,9 @@ in
       script = ''${cfg.package}/bin/smokeping --config=${configPath} --nodaemon'';
     };
     systemd.services.thttpd = mkIf cfg.webService {
-      wantedBy = [ "multi-user.target"];
-      requires = [ "smokeping.service"];
-      partOf = [ "smokeping.service"];
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "smokeping.service" ];
+      partOf = [ "smokeping.service" ];
       path = with pkgs; [ bash rrdtool smokeping thttpd ];
       script = ''thttpd -u ${cfg.user} -c "**.fcgi" -d ${smokepingHome} -p ${builtins.toString cfg.port} -D -nos'';
       serviceConfig.Restart = "always";
@@ -317,4 +314,3 @@ in
 
   meta.maintainers = with lib.maintainers; [ erictapen ];
 }
-

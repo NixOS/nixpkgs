@@ -1,17 +1,40 @@
-{ stdenv, callPackage, lib, fetchurl, fetchpatch, runCommand, makeWrapper
-, zip, unzip, bash, writeCBin, coreutils
-, which, python, perl, gawk, gnused, gnutar, gnugrep, gzip, findutils
-# Apple dependencies
-, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
-# Allow to independently override the jdks used to build and run respectively
-, buildJdk, runJdk
+{ stdenv
+, callPackage
+, lib
+, fetchurl
+, fetchpatch
+, runCommand
+, makeWrapper
+, zip
+, unzip
+, bash
+, writeCBin
+, coreutils
+, which
+, python
+, perl
+, gawk
+, gnused
+, gnutar
+, gnugrep
+, gzip
+, findutils
+  # Apple dependencies
+, cctools
+, clang
+, libcxx
+, CoreFoundation
+, CoreServices
+, Foundation
+  # Allow to independently override the jdks used to build and run respectively
+, buildJdk
+, runJdk
 , buildJdkName
 , runtimeShell
-# Always assume all markers valid (don't redownload dependencies).
-# Also, don't clean up environment variables.
+  # Always assume all markers valid (don't redownload dependencies).
+  # Also, don't clean up environment variables.
 , enableNixHacks ? false
 }:
-
 let
   srcDeps = [
     # From: $REPO_ROOT/WORKSPACE
@@ -20,40 +43,40 @@ let
       sha256 = "0b926df7yxyyyiwm9cmdijy6kplf0sghm23sf163zh8wrk87wfi7";
     })
     (fetchurl {
-        url = "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz";
-        sha256 = "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f";
+      url = "https://mirror.bazel.build/github.com/bazelbuild/skydoc/archive/2d9566b21fbe405acf5f7bf77eda30df72a4744c.tar.gz";
+      sha256 = "4a1318fed4831697b83ce879b3ab70ae09592b167e5bda8edaff45132d1c3b3f";
     })
     (fetchurl {
-        url = "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/f83cb8dd6f5658bc574ccd873e25197055265d1c.tar.gz";
-        sha256 = "ba5d15ca230efca96320085d8e4d58da826d1f81b444ef8afccd8b23e0799b52";
+      url = "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/f83cb8dd6f5658bc574ccd873e25197055265d1c.tar.gz";
+      sha256 = "ba5d15ca230efca96320085d8e4d58da826d1f81b444ef8afccd8b23e0799b52";
     })
     (fetchurl {
       url = "https://mirror.bazel.build/github.com/bazelbuild/rules_sass/archive/8ccf4f1c351928b55d5dddf3672e3667f6978d60.tar.gz";
       sha256 = "d868ce50d592ef4aad7dec4dd32ae68d2151261913450fac8390b3fd474bb898";
     })
-     (fetchurl {
-         url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_linux-v3.1.zip";
-         sha256 = "a0cd51f9db1bf05a722ff7f5c60a07fa1c7d27428fff0815c342d32aa6c53576";
-     })
     (fetchurl {
-        url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_darwin-v3.1.zip";
-        sha256 = "c646aad8808b8ec5844d6a80a1287fc8e13203375fe40d6af4819eff48b9bbaf";
+      url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_linux-v3.1.zip";
+      sha256 = "a0cd51f9db1bf05a722ff7f5c60a07fa1c7d27428fff0815c342d32aa6c53576";
     })
     (fetchurl {
-        url = "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip";
-        sha256 = "cc470e529fafb6165b5be3929ff2d99b38429b386ac100878687416603a67889";
+      url = "https://mirror.bazel.build/bazel_java_tools/releases/javac10/v3.1/java_tools_javac10_darwin-v3.1.zip";
+      sha256 = "c646aad8808b8ec5844d6a80a1287fc8e13203375fe40d6af4819eff48b9bbaf";
     })
     (fetchurl {
-        url = "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip";
-        sha256 = "9b72bb0aea72d7cbcfc82a01b1e25bf3d85f791e790ddec16c65e2d906382ee0";
+      url = "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v1.0.zip";
+      sha256 = "cc470e529fafb6165b5be3929ff2d99b38429b386ac100878687416603a67889";
     })
     (fetchurl {
-        url = "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.2.tar.gz";
-        sha256 = "04f85f2dd049e87805511e3babc5cea3f5e72332b1627e34f3a5461cc38e815f";
+      url = "https://github.com/bazelbuild/rules_nodejs/archive/0.16.2.zip";
+      sha256 = "9b72bb0aea72d7cbcfc82a01b1e25bf3d85f791e790ddec16c65e2d906382ee0";
+    })
+    (fetchurl {
+      url = "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.2.tar.gz";
+      sha256 = "04f85f2dd049e87805511e3babc5cea3f5e72332b1627e34f3a5461cc38e815f";
     })
   ];
 
-  distDir = runCommand "bazel-deps" {} ''
+  distDir = runCommand "bazel-deps" { } ''
     mkdir -p $out
     for i in ${builtins.toString srcDeps}; do cp $i $out/$(stripHash $i); done
   '';
@@ -90,7 +113,6 @@ let
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
-
 in
 stdenv.mkDerivation rec {
 
@@ -109,8 +131,8 @@ stdenv.mkDerivation rec {
   #
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests = {
-    pythonBinPath = callPackage ./python-bin-path-test.nix {};
-    bashTools = callPackage ./bash-tools-test.nix {};
+    pythonBinPath = callPackage ./python-bin-path-test.nix { };
+    bashTools = callPackage ./bash-tools-test.nix { };
   };
 
   name = "bazel-${version}";
@@ -158,117 +180,116 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  postPatch = let
+  postPatch =
+    let
+      darwinPatches = ''
+        # Disable Bazel's Xcode toolchain detection which would configure compilers
+        # and linkers from Xcode instead of from PATH
+        export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
 
-    darwinPatches = ''
-      # Disable Bazel's Xcode toolchain detection which would configure compilers
-      # and linkers from Xcode instead of from PATH
-      export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
+        # Explicitly configure gcov since we don't have it on Darwin, so autodetection fails
+        export GCOV=${coreutils}/bin/false
 
-      # Explicitly configure gcov since we don't have it on Darwin, so autodetection fails
-      export GCOV=${coreutils}/bin/false
+        # Framework search paths aren't added by bintools hook
+        # https://github.com/NixOS/nixpkgs/pull/41914
+        export NIX_LDFLAGS="$NIX_LDFLAGS -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
 
-      # Framework search paths aren't added by bintools hook
-      # https://github.com/NixOS/nixpkgs/pull/41914
-      export NIX_LDFLAGS="$NIX_LDFLAGS -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
+        # libcxx includes aren't added by libcxx hook
+        # https://github.com/NixOS/nixpkgs/pull/41589
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
 
-      # libcxx includes aren't added by libcxx hook
-      # https://github.com/NixOS/nixpkgs/pull/41589
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
+        # don't use system installed Xcode to run clang, use Nix clang instead
+        sed -i -e "s;/usr/bin/xcrun clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
+          scripts/bootstrap/compile.sh \
+          src/tools/xcode/realpath/BUILD \
+          src/tools/xcode/stdredirect/BUILD \
+          tools/osx/BUILD
 
-      # don't use system installed Xcode to run clang, use Nix clang instead
-      sed -i -e "s;/usr/bin/xcrun clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
-        scripts/bootstrap/compile.sh \
-        src/tools/xcode/realpath/BUILD \
-        src/tools/xcode/stdredirect/BUILD \
-        tools/osx/BUILD
+        # nixpkgs's libSystem cannot use pthread headers directly, must import GCD headers instead
+        sed -i -e "/#include <pthread\/spawn.h>/i #include <dispatch/dispatch.h>" src/main/cpp/blaze_util_darwin.cc
 
-      # nixpkgs's libSystem cannot use pthread headers directly, must import GCD headers instead
-      sed -i -e "/#include <pthread\/spawn.h>/i #include <dispatch/dispatch.h>" src/main/cpp/blaze_util_darwin.cc
+        # clang installed from Xcode has a compatibility wrapper that forwards
+        # invocations of gcc to clang, but vanilla clang doesn't
+        sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
 
-      # clang installed from Xcode has a compatibility wrapper that forwards
-      # invocations of gcc to clang, but vanilla clang doesn't
-      sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
+        sed -i -e 's;/usr/bin/libtool;${cctools}/bin/libtool;g' tools/cpp/unix_cc_configure.bzl
+        wrappers=( tools/cpp/osx_cc_wrapper.sh tools/cpp/osx_cc_wrapper.sh.tpl )
+        for wrapper in "''${wrappers[@]}"; do
+          sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
+        done
+      '';
 
-      sed -i -e 's;/usr/bin/libtool;${cctools}/bin/libtool;g' tools/cpp/unix_cc_configure.bzl
-      wrappers=( tools/cpp/osx_cc_wrapper.sh tools/cpp/osx_cc_wrapper.sh.tpl )
-      for wrapper in "''${wrappers[@]}"; do
-        sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
-      done
-    '';
+      genericPatches = ''
+        # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
+        # See also `postFixup` where python is added to $out/nix-support
+        substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
+            --replace "/usr/bin/env python" "${python}/bin/python" \
+            --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
 
-    genericPatches = ''
-      # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
-      # See also `postFixup` where python is added to $out/nix-support
-      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
-          --replace "/usr/bin/env python" "${python}/bin/python" \
-          --replace "NIX_STORE_PYTHON_PATH" "${python}/bin/python" \
+        # md5sum is part of coreutils
+        sed -i 's|/sbin/md5|md5sum|' \
+          src/BUILD
 
-      # md5sum is part of coreutils
-      sed -i 's|/sbin/md5|md5sum|' \
-        src/BUILD
+        # substituteInPlace is rather slow, so prefilter the files with grep
+        grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
+          # If you add more replacements here, you must change the grep above!
+          # Only files containing /bin are taken into account.
+          substituteInPlace "$path" \
+            --replace /bin/bash ${customBash}/bin/bash \
+            --replace /usr/bin/env ${coreutils}/bin/env \
+            --replace /bin/true ${coreutils}/bin/true
+        done
 
-      # substituteInPlace is rather slow, so prefilter the files with grep
-      grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
-        # If you add more replacements here, you must change the grep above!
-        # Only files containing /bin are taken into account.
-        substituteInPlace "$path" \
-          --replace /bin/bash ${customBash}/bin/bash \
-          --replace /usr/bin/env ${coreutils}/bin/env \
-          --replace /bin/true ${coreutils}/bin/true
-      done
+        # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
+        substituteInPlace scripts/bootstrap/compile.sh \
+            --replace /bin/bash ${customBash}/bin/bash
 
-      # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
-      substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/bash ${customBash}/bin/bash
+        # add nix environment vars to .bazelrc
+        cat >> .bazelrc <<EOF
+        build --experimental_distdir=${distDir}
+        fetch --experimental_distdir=${distDir}
+        build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
+        build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
+        build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
+        build --host_linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt="-Wl,/g')"
+        build --host_javabase='@local_jdk//:jdk'
+        build --host_java_toolchain='${javaToolchain}'
+        EOF
 
-      # add nix environment vars to .bazelrc
-      cat >> .bazelrc <<EOF
-      build --experimental_distdir=${distDir}
-      fetch --experimental_distdir=${distDir}
-      build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
-      build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
-      build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
-      build --host_linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt="-Wl,/g')"
-      build --host_javabase='@local_jdk//:jdk'
-      build --host_java_toolchain='${javaToolchain}'
-      EOF
+        # add the same environment vars to compile.sh
+        sed -e "/\$command \\\\$/a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
+            -e "/\$command \\\\$/a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
+            -e "/\$command \\\\$/a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" \
+            -e "/\$command \\\\$/a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
+            -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
+            -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
+            -i scripts/bootstrap/compile.sh
 
-      # add the same environment vars to compile.sh
-      sed -e "/\$command \\\\$/a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
-          -e "/\$command \\\\$/a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
-          -e "/\$command \\\\$/a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" \
-          -e "/\$command \\\\$/a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
-          -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
-          -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
-          -i scripts/bootstrap/compile.sh
+        # --experimental_strict_action_env (which will soon become the
+        # default, see bazelbuild/bazel#2574) hardcodes the default
+        # action environment to a value that on NixOS at least is bogus.
+        # So we hardcode it to something useful.
+        substituteInPlace \
+          src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java \
+          --replace /bin:/usr/bin ${defaultShellPath}
 
-      # --experimental_strict_action_env (which will soon become the
-      # default, see bazelbuild/bazel#2574) hardcodes the default
-      # action environment to a value that on NixOS at least is bogus.
-      # So we hardcode it to something useful.
-      substituteInPlace \
-        src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java \
-        --replace /bin:/usr/bin ${defaultShellPath}
+        # This is necessary to avoid:
+        # "error: no visible @interface for 'NSDictionary' declares the selector
+        # 'initWithContentsOfURL:error:'"
+        # This can be removed when the apple_sdk is upgraded beyond 10.13+
+        sed -i '/initWithContentsOfURL:versionPlistUrl/ {
+          N
+          s/error:nil\];/\];/
+        }' tools/osx/xcode_locator.m
 
-      # This is necessary to avoid:
-      # "error: no visible @interface for 'NSDictionary' declares the selector
-      # 'initWithContentsOfURL:error:'"
-      # This can be removed when the apple_sdk is upgraded beyond 10.13+
-      sed -i '/initWithContentsOfURL:versionPlistUrl/ {
-        N
-        s/error:nil\];/\];/
-      }' tools/osx/xcode_locator.m
+        # append the PATH with defaultShellPath in tools/bash/runfiles/runfiles.bash
+        echo "PATH=\$PATH:${defaultShellPath}" >> runfiles.bash.tmp
+        cat tools/bash/runfiles/runfiles.bash >> runfiles.bash.tmp
+        mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
-      # append the PATH with defaultShellPath in tools/bash/runfiles/runfiles.bash
-      echo "PATH=\$PATH:${defaultShellPath}" >> runfiles.bash.tmp
-      cat tools/bash/runfiles/runfiles.bash >> runfiles.bash.tmp
-      mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
-
-      patchShebangs .
-    '';
-    in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
-     + genericPatches;
+        patchShebangs .
+      '';
+    in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches + genericPatches;
 
   buildInputs = [
     buildJdk
@@ -290,7 +311,7 @@ stdenv.mkDerivation rec {
   # Bazel WORKSPACE. This is why before executing the build, the source code is moved into a
   # subdirectory.
   # Failing to do this causes "infinite symlink expansion detected"
-  preBuildPhases = ["preBuildPhase"];
+  preBuildPhases = [ "preBuildPhase" ];
   preBuildPhase = ''
     mkdir bazel_src
     shopt -s dotglob extglob

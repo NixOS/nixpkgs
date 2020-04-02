@@ -1,7 +1,14 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkgconfig
+, openssl
+, withALSA ? true
+, alsaLib ? null
+, withPulseAudio ? false
+, libpulseaudio ? null
+, withPortAudio ? false
+, portaudio ? null
 }:
 
 rustPlatform.buildRustPackage rec {

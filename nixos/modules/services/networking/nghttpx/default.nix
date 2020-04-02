@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 let
   cfg = config.services.nghttpx;
 
@@ -43,7 +43,7 @@ let
         builtins.filter (e: "" != e) ([
           host
           patterns
-        ]++params);
+        ] ++ params);
       formattedSections = lib.concatStringsSep ";" sections;
     in
       "backend=${formattedSections}";
@@ -51,7 +51,7 @@ let
   # renderFrontend :: FrontendSubmodule -> String
   renderFrontend = frontend:
     let
-      host   = renderHost frontend.server;
+      host = renderHost frontend.server;
       params0 =
         lib.mapAttrsToList
           (n: v: if builtins.isBool v then n else v)
@@ -60,20 +60,20 @@ let
       # NB: nghttpx doesn't accept "tls", you must omit "no-tls" for
       # the default behavior of turning on TLS.
       params1 = lib.remove "tls" params0;
-          
-      sections          = [ host] ++ params1;
+
+      sections = [ host ] ++ params1;
       formattedSections = lib.concatStringsSep ";" sections;
     in
       "frontend=${formattedSections}";
 
   configurationFile = pkgs.writeText "nghttpx.conf" ''
-    ${lib.optionalString (null != cfg.tls) ("private-key-file="+cfg.tls.key)}
-    ${lib.optionalString (null != cfg.tls) ("certificate-file="+cfg.tls.crt)}
+    ${lib.optionalString (null != cfg.tls) ("private-key-file=" + cfg.tls.key)}
+    ${lib.optionalString (null != cfg.tls) ("certificate-file=" + cfg.tls.crt)}
 
     user=nghttpx
 
     ${lib.concatMapStringsSep "\n" renderFrontend cfg.frontends}
-    ${lib.concatMapStringsSep "\n" renderBackend  cfg.backends}
+    ${lib.concatMapStringsSep "\n" renderBackend cfg.backends}
 
     backlog=${builtins.toString cfg.backlog}
     backend-address-family=${cfg.backend-address-family}
@@ -87,10 +87,11 @@ let
     ${cfg.extraConfig}
   '';
 in
-{ imports = [
+{
+  imports = [
     ./nghttpx-options.nix
   ];
-  
+
   config = lib.mkIf cfg.enable {
 
     users.groups.nghttpx = { };
@@ -98,18 +99,18 @@ in
       group = config.users.groups.nghttpx.name;
       isSystemUser = true;
     };
-      
+
 
     systemd.services = {
       nghttpx = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
-        script   = ''
+        after = [ "network.target" ];
+        script = ''
           ${pkgs.nghttp2}/bin/nghttpx --conf=${configurationFile}
         '';
 
         serviceConfig = {
-          Restart    = "on-failure";
+          Restart = "on-failure";
           RestartSec = 60;
         };
       };

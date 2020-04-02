@@ -1,5 +1,4 @@
 { stdenv, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv, gtk2, at-spi2-atk }:
-
 let
   version = "3.1.13";
   name = "electron-${version}";
@@ -73,5 +72,4 @@ let
     '';
   };
 in
-
-  stdenv.mkDerivation (if stdenv.isDarwin then darwin else linux)
+stdenv.mkDerivation (if stdenv.isDarwin then darwin else linux)

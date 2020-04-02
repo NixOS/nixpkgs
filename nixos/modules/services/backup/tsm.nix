@@ -1,7 +1,5 @@
 { config, lib, ... }:
-
 let
-
   inherit (lib.attrsets) hasAttr;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) mkEnableOption mkOption;
@@ -68,9 +66,7 @@ let
       message = "TSM service requires automatic password generation";
     }
   ];
-
 in
-
 {
 
   inherit options;
@@ -97,7 +93,7 @@ in
       serviceConfig.LogsDirectory = "tsm-backup";
       serviceConfig.StateDirectory = "tsm-backup";
       serviceConfig.StateDirectoryMode = "0750";
-      startAt = mkIf (cfg.autoTime!=null) cfg.autoTime;
+      startAt = mkIf (cfg.autoTime != null) cfg.autoTime;
     };
   };
 

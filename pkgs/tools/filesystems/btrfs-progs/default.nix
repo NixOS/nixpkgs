@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
+{ stdenv
+, fetchurl
+, pkgconfig
+, attr
+, acl
+, zlib
+, libuuid
+, e2fsprogs
+, lzo
+, asciidoc
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
+, zstd
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +26,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
-    python3 python3.pkgs.setuptools
+    pkgconfig
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
+    python3
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd python3 ];

@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.nzbget;
   pkg = pkgs.nzbget;
@@ -24,7 +23,6 @@ let
     # nixos handles package updates
     UpdateCheck = "none";
   };
-
 in
 {
   imports = [

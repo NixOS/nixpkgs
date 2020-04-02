@@ -1,5 +1,11 @@
-{ config, stdenv, fetchurl, pkgconfig, gtk2, Carbon
-, useGTK ? config.libiodbc.gtk or false }:
+{ config
+, stdenv
+, fetchurl
+, pkgconfig
+, gtk2
+, Carbon
+, useGTK ? config.libiodbc.gtk or false
+}:
 
 stdenv.mkDerivation rec {
   name = "libiodbc-3.52.12";
@@ -11,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = stdenv.lib.optionals useGTK [ gtk2 ]
-                ++ stdenv.lib.optional stdenv.isDarwin Carbon;
+    ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 
   preBuild =
     ''

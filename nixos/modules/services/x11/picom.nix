@@ -2,9 +2,7 @@
 
 with lib;
 with builtins;
-
 let
-
   cfg = config.services.picom;
 
   pairOf = x: with types; addCheck (listOf x) (y: length y == 2);
@@ -14,30 +12,28 @@ let
 
   toConf = attrs: concatStringsSep "\n"
     (mapAttrsToList
-      (k: v: let
-        sep = if isAttrs v then ":" else "=";
-        # Basically a tinkered lib.generators.mkKeyValueDefault
-        mkValueString = v:
-          if isBool v        then boolToString v
-          else if isInt v    then toString v
-          else if isFloat v  then toString v
-          else if isString v then ''"${escape [ ''"'' ] v}"''
-          else if isList v   then "[ "
-            + concatMapStringsSep " , " mkValueString v
-            + " ]"
-          else if isAttrs v  then "{ "
-            + concatStringsSep " "
+      (k: v:
+        let
+          sep = if isAttrs v then ":" else "=";
+          # Basically a tinkered lib.generators.mkKeyValueDefault
+          mkValueString = v:
+            if isBool v then boolToString v
+            else if isInt v then toString v
+            else if isFloat v then toString v
+            else if isString v then ''"${escape [ ''"'' ] v}"''
+            else if isList v then "[ " + concatMapStringsSep " , " mkValueString v + " ]"
+            else if isAttrs v then "{ " + concatStringsSep " "
               (mapAttrsToList
                 (key: value: "${toString key}=${mkValueString value};")
-                v)
-            + " }"
-          else abort "picom.mkValueString: unexpected type (v = ${v})";
-      in "${escape [ sep ] k}${sep}${mkValueString v};")
-      attrs);
+              v) + " }"
+            else abort "picom.mkValueString: unexpected type (v = ${v})";
+        in "${escape [ sep ] k}${sep}${mkValueString v};"
+      )
+    attrs);
 
   configFile = pkgs.writeText "picom.conf" (toConf cfg.settings);
-
-in {
+in
+{
 
   imports = [
     (mkAliasOptionModule [ "services" "compton" ] [ "services" "picom" ])
@@ -81,7 +77,7 @@ in {
 
     fadeExclude = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
@@ -121,7 +117,7 @@ in {
 
     shadowExclude = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
@@ -163,7 +159,7 @@ in {
     wintypes = mkOption {
       type = types.attrs;
       default = { popup_menu = { opacity = cfg.menuOpacity; }; dropdown_menu = { opacity = cfg.menuOpacity; }; };
-      example = {};
+      example = { };
       description = ''
         Rules for specific window types.
       '';
@@ -171,7 +167,7 @@ in {
 
     opacityRules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "95:class_g = 'URxvt' && !_NET_WM_STATE@:32a"
         "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"
@@ -196,8 +192,7 @@ in {
       apply = x:
         let
           res = x != "none";
-          msg = "The type of services.picom.vSync has changed to bool:"
-                + " interpreting ${x} as ${boolToString res}";
+          msg = "The type of services.picom.vSync has changed to bool:" + " interpreting ${x} as ${boolToString res}";
         in
           if isBool x then x
           else warn msg res;
@@ -214,59 +209,63 @@ in {
       default = 0;
       example = 60;
       description = ''
-       Screen refresh rate (0 = automatically detect).
+        Screen refresh rate (0 = automatically detect).
       '';
     };
 
-    settings = let
-      configTypes = with types; oneOf [ bool int float str ];
-      # types.loaOf converts lists to sets
-      loaOf = t: with types; either (listOf t) (attrsOf t);
-    in mkOption {
-      type = loaOf (types.either configTypes (loaOf (types.either configTypes (loaOf configTypes))));
-      default = {};
-      description = ''
-        Additional Picom configuration.
-      '';
-    };
+    settings =
+      let
+        configTypes = with types; oneOf [ bool int float str ];
+        # types.loaOf converts lists to sets
+        loaOf = t: with types; either (listOf t) (attrsOf t);
+      in mkOption {
+        type = loaOf (types.either configTypes (loaOf (types.either configTypes (loaOf configTypes))));
+        default = { };
+        description = ''
+          Additional Picom configuration.
+        '';
+      };
   };
 
   config = mkIf cfg.enable {
-    services.picom.settings = let
-      # Hard conversion to float, literally lib.toInt but toFloat
-      toFloat = str: let
-        may_be_float = builtins.fromJSON str;
-      in if builtins.isFloat may_be_float
-        then may_be_float
-        else throw "Could not convert ${str} to float.";
-    in {
-      # fading
-      fading           = mkDefault cfg.fade;
-      fade-delta       = mkDefault cfg.fadeDelta;
-      fade-in-step     = mkDefault (toFloat (elemAt cfg.fadeSteps 0));
-      fade-out-step    = mkDefault (toFloat (elemAt cfg.fadeSteps 1));
-      fade-exclude     = mkDefault cfg.fadeExclude;
+    services.picom.settings =
+      let
+        # Hard conversion to float, literally lib.toInt but toFloat
+        toFloat = str:
+          let
+            may_be_float = builtins.fromJSON str;
+          in
+            if builtins.isFloat may_be_float
+            then may_be_float
+            else throw "Could not convert ${str} to float.";
+      in {
+        # fading
+        fading = mkDefault cfg.fade;
+        fade-delta = mkDefault cfg.fadeDelta;
+        fade-in-step = mkDefault (toFloat (elemAt cfg.fadeSteps 0));
+        fade-out-step = mkDefault (toFloat (elemAt cfg.fadeSteps 1));
+        fade-exclude = mkDefault cfg.fadeExclude;
 
-      # shadows
-      shadow           = mkDefault cfg.shadow;
-      shadow-offset-x  = mkDefault (elemAt cfg.shadowOffsets 0);
-      shadow-offset-y  = mkDefault (elemAt cfg.shadowOffsets 1);
-      shadow-opacity   = mkDefault (toFloat cfg.shadowOpacity);
-      shadow-exclude   = mkDefault cfg.shadowExclude;
+        # shadows
+        shadow = mkDefault cfg.shadow;
+        shadow-offset-x = mkDefault (elemAt cfg.shadowOffsets 0);
+        shadow-offset-y = mkDefault (elemAt cfg.shadowOffsets 1);
+        shadow-opacity = mkDefault (toFloat cfg.shadowOpacity);
+        shadow-exclude = mkDefault cfg.shadowExclude;
 
-      # opacity
-      active-opacity   = mkDefault (toFloat cfg.activeOpacity);
-      inactive-opacity = mkDefault (toFloat cfg.inactiveOpacity);
+        # opacity
+        active-opacity = mkDefault (toFloat cfg.activeOpacity);
+        inactive-opacity = mkDefault (toFloat cfg.inactiveOpacity);
 
-      wintypes         = mkDefault cfg.wintypes;
+        wintypes = mkDefault cfg.wintypes;
 
-      opacity-rule     = mkDefault cfg.opacityRules;
+        opacity-rule = mkDefault cfg.opacityRules;
 
-      # other options
-      backend          = mkDefault cfg.backend;
-      vsync            = mkDefault cfg.vSync;
-      refresh-rate     = mkDefault cfg.refreshRate;
-    };
+        # other options
+        backend = mkDefault cfg.backend;
+        vsync = mkDefault cfg.vSync;
+        refresh-rate = mkDefault cfg.refreshRate;
+      };
 
     systemd.user.services.picom = {
       description = "Picom composite manager";

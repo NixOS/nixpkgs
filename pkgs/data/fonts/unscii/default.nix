@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, perl, bdftopcf
-, fontforge, SDL, SDL_image, mkfontscale
+{ stdenv
+, fetchurl
+, perl
+, bdftopcf
+, fontforge
+, SDL
+, SDL_image
+, mkfontscale
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +18,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ (perl.withPackages (p: [ p.TextCharWidth ]))
-      bdftopcf fontforge SDL SDL_image
+    [
+      (perl.withPackages (p: [ p.TextCharWidth ]))
+      bdftopcf
+      fontforge
+      SDL
+      SDL_image
       mkfontscale
     ];
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six numpy traitlets];
+  propagatedBuildInputs = [ six numpy traitlets ];
 
   checkPhase = ''
     py.test

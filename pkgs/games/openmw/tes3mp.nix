@@ -1,7 +1,6 @@
 { stdenv, cmake, openmw, fetchFromGitHub, luajit, makeWrapper }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
-
 let
   # TES3MP_STABLE_VERSION_FILE
   compatHash = "292536439eeda58becdb7e441fe2e61ebb74529e";
@@ -28,7 +27,8 @@ let
     rev = "24aae91d9ddad38cdb3b0e0a13af59f142803e94";
     sha256 = "1rfmxxr9ircfagdpbdrzl26msdhx1i3g974cblbv69078cradfh3";
   };
-in openmw.overrideAttrs (oldAttrs: rec {
+in
+openmw.overrideAttrs (oldAttrs: rec {
   version = "2019-11-19";
   name = "openmw-tes3mp-${version}";
 

@@ -1,9 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, payload ? null }: let
+{ stdenv, fetchFromGitHub, autoreconfHook, payload ? null }:
+let
   rev = "e5846a2bc707eaa58dc8ab6a8d20a090c6ee8570";
   sha256 = "1clynpp70fnbgsjgxx7xi0vrdrj1v0h8zpv0x26i324kp2gwylf4";
   revCount = "438";
   shortRev = "e5846a2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "riscv-pk-0.1pre${revCount}_${shortRev}";
 
   src = fetchFromGitHub {

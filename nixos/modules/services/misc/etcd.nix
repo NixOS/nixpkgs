@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.etcd;
-
-in {
+in
+{
 
   options.services.etcd = {
     enable = mkOption {
@@ -28,13 +27,13 @@ in {
 
     listenClientUrls = mkOption {
       description = "Etcd list of URLs to listen on for client traffic.";
-      default = ["http://127.0.0.1:2379"];
+      default = [ "http://127.0.0.1:2379" ];
       type = types.listOf types.str;
     };
 
     listenPeerUrls = mkOption {
       description = "Etcd list of URLs to listen on for peer traffic.";
-      default = ["http://127.0.0.1:2380"];
+      default = [ "http://127.0.0.1:2380" ];
       type = types.listOf types.str;
     };
 
@@ -46,14 +45,14 @@ in {
 
     initialCluster = mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
-      default = ["${cfg.name}=http://127.0.0.1:2380"];
+      default = [ "${cfg.name}=http://127.0.0.1:2380" ];
       type = types.listOf types.str;
     };
 
     initialClusterState = mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
       default = "new";
-      type = types.enum ["new" "existing"];
+      type = types.enum [ "new" "existing" ];
     };
 
     initialClusterToken = mkOption {
@@ -122,7 +121,7 @@ in {
         <link xlink:href='https://github.com/coreos/etcd/blob/master/Documentation/op-guide/configuration.md#configuration-flags' />
       '';
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = literalExample ''
         {
           "CORS" = "*";
@@ -166,7 +165,7 @@ in {
         ETCD_TRUSTED_CA_FILE = cfg.trustedCaFile;
         ETCD_CERT_FILE = cfg.certFile;
         ETCD_KEY_FILE = cfg.keyFile;
-      }) // (optionalAttrs (cfg.discovery == ""){
+      }) // (optionalAttrs (cfg.discovery == "") {
         ETCD_INITIAL_CLUSTER = concatStringsSep "," cfg.initialCluster;
         ETCD_INITIAL_CLUSTER_STATE = cfg.initialClusterState;
         ETCD_INITIAL_CLUSTER_TOKEN = cfg.initialClusterToken;

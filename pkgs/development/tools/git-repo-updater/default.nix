@@ -1,5 +1,9 @@
-{ lib, buildPythonApplication, fetchPypi
-, colorama, GitPython }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, colorama
+, GitPython
+}:
 
 buildPythonApplication rec {
   pname = "gitup";

@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, mkDerivation
-, cmake, extra-cmake-modules, qtquickcontrols, kconfigwidgets, kdeclarative, kdecoration }:
+{ stdenv
+, fetchFromGitHub
+, mkDerivation
+, cmake
+, extra-cmake-modules
+, qtquickcontrols
+, kconfigwidgets
+, kdeclarative
+, kdecoration
+}:
 
 mkDerivation {
   name = "kdecoration-viewer-2018-07-24";

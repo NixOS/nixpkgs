@@ -14,7 +14,7 @@ rec {
 
   packageName = "lisp-namespace";
 
-  asdFilesToKeep = ["lisp-namespace.asd"];
+  asdFilesToKeep = [ "lisp-namespace.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lisp-namespace DESCRIPTION

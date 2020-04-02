@@ -1,7 +1,12 @@
-{ stdenv, rustPlatform, fetchFromGitHub, makeWrapper
-, cmake, pkg-config
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, pkg-config
 , xorg ? null
-, libGL ? null }:
+, libGL ? null
+}:
 
 with stdenv.lib;
 
@@ -21,10 +26,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = optionals stdenv.isLinux
-  (with xorg; [
-    # glfw-sys dependencies:
-    libX11 libXrandr libXinerama libXcursor libXi libXext
-  ]);
+    (with xorg; [
+      # glfw-sys dependencies:
+      libX11
+      libXrandr
+      libXinerama
+      libXcursor
+      libXi
+      libXext
+    ]);
 
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests
   doCheck = false;

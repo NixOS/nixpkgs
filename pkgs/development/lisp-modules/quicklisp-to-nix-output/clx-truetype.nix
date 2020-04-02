@@ -16,7 +16,7 @@ rec {
 
   packageName = "clx-truetype";
 
-  asdFilesToKeep = ["clx-truetype.asd"];
+  asdFilesToKeep = [ "clx-truetype.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clx-truetype DESCRIPTION

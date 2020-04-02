@@ -17,7 +17,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    keepkey libagent setuptools wheel
+    keepkey
+    libagent
+    setuptools
+    wheel
   ];
 
   meta = with stdenv.lib; {

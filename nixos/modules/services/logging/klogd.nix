@@ -30,8 +30,7 @@ with lib;
       path = [ pkgs.sysklogd ];
       unitConfig.ConditionVirtualization = "!systemd-nspawn";
       script =
-        "klogd -c 1 -2 -n " +
-        "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";
+        "klogd -c 1 -2 -n " + "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";
     };
   };
 }

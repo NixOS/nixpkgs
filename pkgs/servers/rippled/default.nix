@@ -1,6 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkgconfig
-, openssl, boost, zlib }:
-
+{ stdenv
+, fetchFromGitHub
+, fetchgit
+, fetchurl
+, runCommand
+, git
+, cmake
+, pkgconfig
+, openssl
+, boost
+, zlib
+}:
 let
   sqlite3 = fetchurl rec {
     url = "https://www.sqlite.org/2018/sqlite-amalgamation-3260000.zip";
@@ -104,7 +113,8 @@ let
     git fetch ${nudb}/extras/rocksdb $commit
     git checkout $commit
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "rippled";
   version = "1.4.0";
 
@@ -115,7 +125,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1z04378bg8lcyrnn7sl3j2zfxbwwy2biasg1d4fbaq4snxg5d1pq";
   };
 
-  hardeningDisable = ["format"];
+  hardeningDisable = [ "format" ];
   cmakeFlags = [
     "-Dstatic=OFF"
     "-DBOOST_LIBRARYDIR=${boost.out}/lib"

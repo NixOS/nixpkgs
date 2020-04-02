@@ -1,4 +1,4 @@
-{deployAndroidPackage, requireFile, lib, packages, toolsVersion, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? ""}:
+{ deployAndroidPackage, requireFile, lib, packages, toolsVersion, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? "" }:
 
 if toolsVersion == "26.0.1" then import ./tools/26.nix {
   inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;

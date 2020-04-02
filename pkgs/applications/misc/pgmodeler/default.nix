@@ -1,6 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, qmake, mkDerivation,
-  qtsvg,
-  libxml2, postgresql }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, mkDerivation
+, qtsvg
+, libxml2
+, postgresql
+}:
 
 mkDerivation rec {
   pname = "pgmodeler";

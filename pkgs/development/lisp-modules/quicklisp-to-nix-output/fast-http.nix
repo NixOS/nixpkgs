@@ -14,7 +14,7 @@ rec {
 
   packageName = "fast-http";
 
-  asdFilesToKeep = ["fast-http.asd"];
+  asdFilesToKeep = [ "fast-http.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fast-http DESCRIPTION A fast HTTP protocol parser in Common Lisp

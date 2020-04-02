@@ -2,10 +2,10 @@
 , fetchurl
 , makeDesktopItem
 
-# Common run-time dependencies
+  # Common run-time dependencies
 , zlib
 
-# libxul run-time dependencies
+  # libxul run-time dependencies
 , atk
 , cairo
 , dbus
@@ -27,16 +27,16 @@
 , libpulseaudio
 , apulse
 
-# Media support (implies audio support)
+  # Media support (implies audio support)
 , mediaSupport ? false
 , ffmpeg
 
 , gmp
 
-# Pluggable transport dependencies
+  # Pluggable transport dependencies
 , python27
 
-# Wrapper runtime
+  # Wrapper runtime
 , coreutils
 , glibcLocales
 , gnome3
@@ -44,20 +44,19 @@
 , shared-mime-info
 , gsettings-desktop-schemas
 
-# Hardening
+  # Hardening
 , graphene-hardened-malloc
 , useHardenedMalloc ? graphene-hardened-malloc != null && builtins.elem stdenv.system graphene-hardened-malloc.meta.platforms
 
-# Whether to disable multiprocess support to work around crashing tabs
-# TODO: fix the underlying problem instead of this terrible work-around
+  # Whether to disable multiprocess support to work around crashing tabs
+  # TODO: fix the underlying problem instead of this terrible work-around
 , disableContentSandbox ? true
 
-# Extra preferences
+  # Extra preferences
 , extraPrefs ? ""
 }:
 
 with stdenv.lib;
-
 let
   libPath = makeLibraryPath libPkgs;
 
@@ -106,7 +105,6 @@ let
     };
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
   inherit version;
@@ -151,8 +149,8 @@ stdenv.mkDerivation rec {
 
     # apulse uses a non-standard library path.  For now special-case it.
     ${optionalString (audioSupport && !pulseaudioSupport) ''
-      libPath=${apulse}/lib/apulse:$libPath
-    ''}
+    libPath=${apulse}/lib/apulse:$libPath
+  ''}
 
     # Fixup paths to pluggable transports.
     sed -i TorBrowser/Data/Tor/torrc-defaults \
@@ -212,15 +210,16 @@ stdenv.mkDerivation rec {
     lockPref("browser.tabs.remote.autostart.2", ${if disableContentSandbox then "false" else "true"});
 
     // Allow sandbox access to sound devices if using ALSA directly
-    ${if (audioSupport && !pulseaudioSupport) then ''
-      pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
-    '' else ''
-      clearPref("security.sandbox.content.write_path_whitelist");
-    ''}
+    ${
+      if (audioSupport && !pulseaudioSupport) then ''
+        pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
+      '' else ''
+        clearPref("security.sandbox.content.write_path_whitelist");
+      ''}
 
     ${optionalString (extraPrefs != "") ''
-      ${extraPrefs}
-    ''}
+    ${extraPrefs}
+  ''}
     EOF
 
     # Hard-code path to TBB fonts; see also FONTCONFIG_FILE in
@@ -304,10 +303,10 @@ stdenv.mkDerivation rec {
     : "\''${XDG_CONFIG_HOME:=\$REAL_HOME/.config}"
 
     ${optionalString pulseaudioSupport ''
-      # Figure out some envvars for pulseaudio
-      : "\''${PULSE_SERVER:=\$XDG_RUNTIME_DIR/pulse/native}"
-      : "\''${PULSE_COOKIE:=\$XDG_CONFIG_HOME/pulse/cookie}"
-    ''}
+    # Figure out some envvars for pulseaudio
+    : "\''${PULSE_SERVER:=\$XDG_RUNTIME_DIR/pulse/native}"
+    : "\''${PULSE_COOKIE:=\$XDG_CONFIG_HOME/pulse/cookie}"
+  ''}
 
     # Font cache files capture store paths; clear them out on the off
     # chance that TBB would continue using old font files.
@@ -403,7 +402,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.torproject.org/";
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pidgin, intltool, python } :
+{ stdenv, fetchurl, pidgin, intltool, python }:
 
 stdenv.mkDerivation rec {
   name = "purple-plugin-pack-2.7.0";

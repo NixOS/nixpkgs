@@ -1,9 +1,7 @@
 { stdenv, fetchFromGitHub }:
-
 let
   version = "0.4.3";
 in
-
 stdenv.mkDerivation {
   pname = "nix-zsh-completions";
   inherit version;

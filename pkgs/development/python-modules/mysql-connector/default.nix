@@ -1,5 +1,4 @@
 { lib, buildPythonPackage, fetchFromGitHub, python, protobuf3_6 }:
-
 let
   py = python.override {
     packageOverrides = self: super: {
@@ -8,7 +7,8 @@ let
       };
     };
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "mysql-connector";
   version = "8.0.19";
 

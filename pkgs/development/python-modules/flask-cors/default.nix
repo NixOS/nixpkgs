@@ -1,5 +1,10 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, nose, flask, six }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, nose
+, flask
+, six
+}:
 
 buildPythonPackage rec {
   pname = "Flask-Cors";

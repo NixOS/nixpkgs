@@ -1,7 +1,6 @@
 { config, lib, pkgs, utils, ... }:
 
 with lib;
-
 let
   gcfg = config.services.tarsnap;
 
@@ -11,7 +10,7 @@ let
     ${optionalString cfg.nodump "nodump"}
     ${optionalString cfg.printStats "print-stats"}
     ${optionalString cfg.printStats "humanize-numbers"}
-    ${optionalString (cfg.checkpointBytes != null) ("checkpoint-bytes "+cfg.checkpointBytes)}
+    ${optionalString (cfg.checkpointBytes != null) ("checkpoint-bytes " + cfg.checkpointBytes)}
     ${optionalString cfg.aggressiveNetworking "aggressive-networking"}
     ${concatStringsSep "\n" (map (v: "exclude ${v}") cfg.excludes)}
     ${concatStringsSep "\n" (map (v: "include ${v}") cfg.includes)}
@@ -164,13 +163,13 @@ in
 
               directories = mkOption {
                 type = types.listOf types.path;
-                default = [];
+                default = [ ];
                 description = "List of filesystem paths to archive.";
               };
 
               excludes = mkOption {
                 type = types.listOf types.str;
-                default = [];
+                default = [ ];
                 description = ''
                   Exclude files and directories matching these patterns.
                 '';
@@ -178,7 +177,7 @@ in
 
               includes = mkOption {
                 type = types.listOf types.str;
-                default = [];
+                default = [ ];
                 description = ''
                   Include only files and directories matching these
                   patterns (the empty list includes everything).
@@ -260,7 +259,7 @@ in
           }
         ));
 
-        default = {};
+        default = { };
 
         example = literalExample ''
           {
@@ -294,19 +293,23 @@ in
   config = mkIf gcfg.enable {
     assertions =
       (mapAttrsToList (name: cfg:
-        { assertion = cfg.directories != [];
+        {
+          assertion = cfg.directories != [ ];
           message = "Must specify paths for tarsnap to back up";
-        }) gcfg.archives) ++
+        }
+      ) gcfg.archives) ++
       (mapAttrsToList (name: cfg:
-        { assertion = !(cfg.lowmem && cfg.verylowmem);
+        {
+          assertion = !(cfg.lowmem && cfg.verylowmem);
           message = "You cannot set both lowmem and verylowmem";
-        }) gcfg.archives);
+        }
+      ) gcfg.archives);
 
     systemd.services =
       (mapAttrs' (name: cfg: nameValuePair "tarsnap-${name}" {
         description = "Tarsnap archive '${name}'";
-        requires    = [ "network-online.target" ];
-        after       = [ "network-online.target" ];
+        requires = [ "network-online.target" ];
+        after = [ "network-online.target" ];
 
         path = with pkgs; [ iputils tarsnap utillinux ];
 
@@ -318,29 +321,31 @@ in
           while ! ping -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
         '';
 
-        script = let
-          tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
-          run = ''${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
+        script =
+          let
+            tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
+            run = ''${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
                         ${optionalString cfg.verbose "-v"} \
                         ${optionalString cfg.explicitSymlinks "-H"} \
                         ${optionalString cfg.followSymlinks "-L"} \
                         ${concatStringsSep " " cfg.directories}'';
-          in if (cfg.cachedir != null) then ''
-            mkdir -p ${cfg.cachedir}
-            chmod 0700 ${cfg.cachedir}
+          in
+            if (cfg.cachedir != null) then ''
+              mkdir -p ${cfg.cachedir}
+              chmod 0700 ${cfg.cachedir}
 
-            ( flock 9
-              if [ ! -e ${cfg.cachedir}/firstrun ]; then
-                ( flock 10
-                  flock -u 9
-                  ${tarsnap} --fsck
-                  flock 9
-                ) 10>${cfg.cachedir}/firstrun
-              fi
-            ) 9>${cfg.cachedir}/lockf
+              ( flock 9
+                if [ ! -e ${cfg.cachedir}/firstrun ]; then
+                  ( flock 10
+                    flock -u 9
+                    ${tarsnap} --fsck
+                    flock 9
+                  ) 10>${cfg.cachedir}/firstrun
+                fi
+              ) 9>${cfg.cachedir}/lockf
 
-             exec flock ${cfg.cachedir}/firstrun ${run}
-          '' else "exec ${run}";
+               exec flock ${cfg.cachedir}/firstrun ${run}
+            '' else "exec ${run}";
 
         serviceConfig = {
           Type = "oneshot";
@@ -351,33 +356,34 @@ in
         };
       }) gcfg.archives) //
 
-      (mapAttrs' (name: cfg: nameValuePair "tarsnap-restore-${name}"{
+      (mapAttrs' (name: cfg: nameValuePair "tarsnap-restore-${name}" {
         description = "Tarsnap restore '${name}'";
-        requires    = [ "network-online.target" ];
+        requires = [ "network-online.target" ];
 
         path = with pkgs; [ iputils tarsnap utillinux ];
 
-        script = let
-          tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
-          lastArchive = ''$(${tarsnap} --list-archives | sort | tail -1)'';
-          run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
+        script =
+          let
+            tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
+            lastArchive = ''$(${tarsnap} --list-archives | sort | tail -1)'';
+            run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
+          in
+            if (cfg.cachedir != null) then ''
+              mkdir -p ${cfg.cachedir}
+              chmod 0700 ${cfg.cachedir}
 
-        in if (cfg.cachedir != null) then ''
-          mkdir -p ${cfg.cachedir}
-          chmod 0700 ${cfg.cachedir}
+              ( flock 9
+                if [ ! -e ${cfg.cachedir}/firstrun ]; then
+                  ( flock 10
+                    flock -u 9
+                    ${tarsnap} --fsck
+                    flock 9
+                  ) 10>${cfg.cachedir}/firstrun
+                fi
+              ) 9>${cfg.cachedir}/lockf
 
-          ( flock 9
-            if [ ! -e ${cfg.cachedir}/firstrun ]; then
-              ( flock 10
-                flock -u 9
-                ${tarsnap} --fsck
-                flock 9
-              ) 10>${cfg.cachedir}/firstrun
-            fi
-          ) 9>${cfg.cachedir}/lockf
-
-           exec flock ${cfg.cachedir}/firstrun ${run}
-        '' else "exec ${run}";
+               exec flock ${cfg.cachedir}/firstrun ${run}
+            '' else "exec ${run}";
 
         serviceConfig = {
           Type = "oneshot";
@@ -391,15 +397,19 @@ in
     # Note: the timer must be Persistent=true, so that systemd will start it even
     # if e.g. your laptop was asleep while the latest interval occurred.
     systemd.timers = mapAttrs' (name: cfg: nameValuePair "tarsnap-${name}"
-      { timerConfig.OnCalendar = cfg.period;
-        timerConfig.Persistent = "true";
-        wantedBy = [ "timers.target" ];
-      }) gcfg.archives;
+    {
+      timerConfig.OnCalendar = cfg.period;
+      timerConfig.Persistent = "true";
+      wantedBy = [ "timers.target" ];
+    }
+    ) gcfg.archives;
 
     environment.etc =
       mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.conf"
-        { text = configFile name cfg;
-        }) gcfg.archives;
+      {
+        text = configFile name cfg;
+      }
+      ) gcfg.archives;
 
     environment.systemPackages = [ pkgs.tarsnap ];
   };

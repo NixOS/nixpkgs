@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   };
   configureScript = ./configure-3.08.0;
   dontAddPrefix = "True";
-  configureFlags = ["-no-tk" "-x11lib" xlibsWrapper];
-  buildFlags = ["world" "bootstrap" "opt"];
-  checkTarget = ["opt.opt"];
+  configureFlags = [ "-no-tk" "-x11lib" xlibsWrapper ];
+  buildFlags = [ "world" "bootstrap" "opt" ];
+  checkTarget = [ "opt.opt" ];
 
   meta = {
     platforms = stdenv.lib.platforms.linux;

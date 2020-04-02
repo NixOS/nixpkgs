@@ -1,10 +1,18 @@
-{ fetchFromGitHub, stdenv, pythonPackages
-, mp3Support ? true, lame ? null
-, opusSupport ? true, opusTools ? null
-, faacSupport ? false, faac ? null
-, flacSupport ? true, flac ? null
-, soxSupport ? true, sox ? null
-, vorbisSupport ? true, vorbisTools ? null
+{ fetchFromGitHub
+, stdenv
+, pythonPackages
+, mp3Support ? true
+, lame ? null
+, opusSupport ? true
+, opusTools ? null
+, faacSupport ? false
+, faac ? null
+, flacSupport ? true
+, flac ? null
+, soxSupport ? true
+, sox ? null
+, vorbisSupport ? true
+, vorbisTools ? null
 }:
 
 assert mp3Support -> lame != null;
@@ -13,7 +21,6 @@ assert faacSupport -> faac != null;
 assert flacSupport -> flac != null;
 assert soxSupport -> sox != null;
 assert vorbisSupport -> vorbisTools != null;
-
 let
   zeroconf = pythonPackages.callPackage ./zeroconf.nix { };
 in
@@ -29,15 +36,28 @@ pythonPackages.buildPythonApplication {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    dbus-python docopt requests setproctitle protobuf psutil futures
-    chardet notify2 netifaces pyroute2 pygobject2 lxml setuptools ]
-    ++ [ zeroconf ]
-    ++ stdenv.lib.optional mp3Support lame
-    ++ stdenv.lib.optional opusSupport opusTools
-    ++ stdenv.lib.optional faacSupport faac
-    ++ stdenv.lib.optional flacSupport flac
-    ++ stdenv.lib.optional soxSupport sox
-    ++ stdenv.lib.optional vorbisSupport vorbisTools;
+    dbus-python
+    docopt
+    requests
+    setproctitle
+    protobuf
+    psutil
+    futures
+    chardet
+    notify2
+    netifaces
+    pyroute2
+    pygobject2
+    lxml
+    setuptools
+  ]
+  ++ [ zeroconf ]
+  ++ stdenv.lib.optional mp3Support lame
+  ++ stdenv.lib.optional opusSupport opusTools
+  ++ stdenv.lib.optional faacSupport faac
+  ++ stdenv.lib.optional flacSupport flac
+  ++ stdenv.lib.optional soxSupport sox
+  ++ stdenv.lib.optional vorbisSupport vorbisTools;
 
   # upstream has no tests
   checkPhase = ''

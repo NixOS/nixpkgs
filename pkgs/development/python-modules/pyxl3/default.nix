@@ -19,7 +19,7 @@ buildPythonPackage rec {
   checkInputs = [ unittest2 ];
 
   checkPhase = ''
-     ${python.interpreter} tests/test_basic.py
+    ${python.interpreter} tests/test_basic.py
   '';
 
   # tests require weird codec installation

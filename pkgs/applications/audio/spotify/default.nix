@@ -1,9 +1,35 @@
-{ fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk, at-spi2-core, libpulseaudio
+{ fetchurl
+, stdenv
+, squashfsTools
+, xorg
+, alsaLib
+, makeWrapper
+, openssl
+, freetype
+, glib
+, pango
+, cairo
+, atk
+, gdk-pixbuf
+, gtk2
+, cups
+, nspr
+, nss
+, libpng
+, libnotify
+, libgcrypt
+, systemd
+, fontconfig
+, dbus
+, expat
+, ffmpeg_3
+, curl
+, zlib
+, gnome3
+, at-spi2-atk
+, at-spi2-core
+, libpulseaudio
 }:
-
 let
   # TO UPDATE: just execute the ./update.sh script (won't do anything if there is no update)
   # "rev" decides what is actually being downloaded
@@ -60,9 +86,7 @@ let
     xorg.libICE
     zlib
   ];
-
 in
-
 stdenv.mkDerivation {
   pname = "spotify";
   inherit version;

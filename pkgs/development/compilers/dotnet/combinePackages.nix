@@ -1,8 +1,9 @@
 packages:
 { buildEnv, lib }:
-let cli = builtins.head packages;
+let
+  cli = builtins.head packages;
 in
-assert lib.assertMsg ((builtins.length packages) != 0)
+  assert lib.assertMsg ((builtins.length packages) != 0)
     ''You must include at least one package, e.g
       `with dotnetCorePackages; combinePackages {
           packages = [ sdk_3_0 aspnetcore_2_1 ];

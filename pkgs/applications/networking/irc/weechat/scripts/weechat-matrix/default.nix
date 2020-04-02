@@ -13,14 +13,14 @@
 , aiohttp
 , requests
 }:
-
 let
   scriptPython = python.withPackages (ps: with ps; [
     aiohttp
     requests
     python_magic
   ]);
-in buildPythonPackage {
+in
+buildPythonPackage {
   pname = "weechat-matrix";
   version = "unstable-2020-01-21";
 

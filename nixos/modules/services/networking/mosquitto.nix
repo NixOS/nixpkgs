@@ -1,7 +1,6 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.mosquitto;
 
@@ -35,9 +34,7 @@ let
     ${cfg.aclExtraConf}
     ${userAcl}
   '';
-
 in
-
 {
 
   ###### Interface
@@ -214,7 +211,8 @@ in
             "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
           else optionalString (c.password != null)
             "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"
-        ) cfg.users);
+        ) cfg.users
+      );
     };
 
     users.users.mosquitto = {

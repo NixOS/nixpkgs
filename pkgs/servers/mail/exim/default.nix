@@ -1,9 +1,22 @@
-{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
-, enableLDAP ? false, openldap
-, enableMySQL ? false, libmysqlclient, zlib
-, enableAuthDovecot ? false, dovecot
-, enablePAM ? false, pam
-, enableSPF ? true, libspf2
+{ coreutils
+, db
+, fetchurl
+, openssl
+, pcre
+, perl
+, pkgconfig
+, stdenv
+, enableLDAP ? false
+, openldap
+, enableMySQL ? false
+, libmysqlclient
+, zlib
+, enableAuthDovecot ? false
+, dovecot
+, enablePAM ? false
+, pam
+, enableSPF ? true
+, libspf2
 }:
 
 stdenv.mkDerivation rec {
@@ -46,30 +59,30 @@ stdenv.mkDerivation rec {
       s:^# \(TOUCH_COMMAND\)=.*:\1=${coreutils}/bin/touch:
       s:^# \(PERL_COMMAND\)=.*:\1=${perl}/bin/perl:
       ${stdenv.lib.optionalString enableLDAP ''
-        s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
-        s:^# \(LOOKUP_LDAP=yes\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap -llber:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap -llber:
-      ''}
+    s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
+    s:^# \(LOOKUP_LDAP=yes\)$:\1:
+    s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap -llber:
+    s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap -llber:
+  ''}
       ${stdenv.lib.optionalString enableMySQL ''
-        s:^# \(LOOKUP_MYSQL=yes\)$:\1:
-        s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient}/include/mysql/:
-      ''}
+    s:^# \(LOOKUP_MYSQL=yes\)$:\1:
+    s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
+    s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+    s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+    s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient}/include/mysql/:
+  ''}
       ${stdenv.lib.optionalString enableAuthDovecot ''
-        s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
-      ''}
+    s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
+  ''}
       ${stdenv.lib.optionalString enablePAM ''
-        s:^# \(SUPPORT_PAM\)=.*:\1=yes:
-        s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
-        s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
-      ''}
+    s:^# \(SUPPORT_PAM\)=.*:\1=yes:
+    s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
+    s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
+  ''}
       ${stdenv.lib.optionalString enableSPF ''
-        s:^# \(SUPPORT_SPF\)=.*:\1=yes:
-        s:^# \(LDFLAGS += -lspf2\):\1:
-      ''}
+    s:^# \(SUPPORT_SPF\)=.*:\1=yes:
+    s:^# \(LDFLAGS += -lspf2\):\1:
+  ''}
       #/^\s*#.*/d
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile

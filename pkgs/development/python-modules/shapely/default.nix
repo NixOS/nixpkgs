@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll
-, geos, pytest, cython
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, substituteAll
+, geos
+, pytest
+, cython
 , numpy
 }:
 
@@ -28,8 +33,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./library-paths.patch;
       libgeos_c = GEOS_LIBRARY_PATH;
-      libc = "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}"
-               + stdenv.lib.optionalString (!stdenv.isDarwin) ".6";
+      libc = "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}" + stdenv.lib.optionalString (!stdenv.isDarwin) ".6";
     })
   ];
 

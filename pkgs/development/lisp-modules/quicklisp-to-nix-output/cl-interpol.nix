@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-interpol";
 
-  asdFilesToKeep = ["cl-interpol.asd"];
+  asdFilesToKeep = [ "cl-interpol.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-interpol DESCRIPTION System lacks description SHA256

@@ -1,12 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cpupower = config.boot.kernelPackages.cpupower;
   cfg = config.powerManagement;
 in
-
 {
   ###### interface
 
@@ -60,8 +58,7 @@ in
       maxEnable = cfg.cpufreq.max != null;
       minEnable = cfg.cpufreq.min != null;
       enable =
-        !config.boot.isContainer &&
-        (governorEnable || maxEnable || minEnable);
+        !config.boot.isContainer && (governorEnable || maxEnable || minEnable);
     in
     mkIf enable {
 
@@ -78,13 +75,10 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = "yes";
-          ExecStart = "${cpupower}/bin/cpupower frequency-set " +
-            optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} " +
-            optionalString maxEnable "--max ${toString cfg.cpufreq.max} " +
-            optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
+          ExecStart = "${cpupower}/bin/cpupower frequency-set " + optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} " + optionalString maxEnable "--max ${toString cfg.cpufreq.max} " + optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
           SuccessExitStatus = "0 237";
         };
       };
 
-  };
+    };
 }

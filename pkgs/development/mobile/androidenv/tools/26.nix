@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? ""}:
+{ deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgs_i686, postInstall ? "" }:
 
 deployAndroidPackage {
   name = "androidsdk";
@@ -8,9 +8,9 @@ deployAndroidPackage {
 
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
-      # Auto patch all binaries
-      autoPatchelf .
-    ''}
+    # Auto patch all binaries
+    autoPatchelf .
+  ''}
 
     # Wrap all scripts that require JAVA_HOME
     for i in bin

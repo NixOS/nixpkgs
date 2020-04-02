@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, ncurses, which, graphviz, coq,
-  recurseIntoAttrs, withDoc ? false
+{ stdenv
+, fetchFromGitHub
+, ncurses
+, which
+, graphviz
+, coq
+, recurseIntoAttrs
+, withDoc ? false
 }:
 with builtins // stdenv.lib;
 let
@@ -17,10 +23,10 @@ let
   # versions of coq compatible with released mathcomp versions
   mathcomp-coq-versions = {
     "1.10.0" = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
-    "1.9.0" = flip elem ["8.7" "8.8" "8.9" "8.10"];
-    "1.8.0" = flip elem ["8.7" "8.8" "8.9"];
-    "1.7.0" = flip elem ["8.6" "8.7" "8.8" "8.9"];
-    "1.6.1" = flip elem ["8.5"];
+    "1.9.0" = flip elem [ "8.7" "8.8" "8.9" "8.10" ];
+    "1.8.0" = flip elem [ "8.7" "8.8" "8.9" ];
+    "1.7.0" = flip elem [ "8.6" "8.7" "8.8" "8.9" ];
+    "1.6.1" = flip elem [ "8.5" ];
   };
   # computes the default version of mathcomp given a version of Coq
   max-mathcomp-version = last (naturalSort (attrNames mathcomp-coq-versions));
@@ -31,45 +37,51 @@ let
   ##############################################################
   # COMPUTED using the configuration above (edit with caution) #
   ##############################################################
-  default-mathcomp-version = let v = head (
-    filter (mc: mathcomp-coq-versions.${mc} coq.coq-version)
-            mathcomp-version-preference ++ ["0.0.0"]);
-     in if v == "0.0.0" then max-mathcomp-version else v;
+  default-mathcomp-version =
+    let
+      v = head (
+        filter (mc: mathcomp-coq-versions.${mc} coq.coq-version)
+        mathcomp-version-preference ++ [ "0.0.0" ]
+      );
+    in if v == "0.0.0" then max-mathcomp-version else v;
 
   # list of core mathcomp packages sorted by dependency order
   mathcomp-packages =
     [ "ssreflect" "fingroup" "algebra" "solvable" "field" "character" "all" ];
   # compute the dependencies of the core package pkg
   # (assuming the total ordering above, rewrite if necessary)
-  mathcomp-deps = pkg: if pkg == "single" then [] else
-    (split (x: x == pkg) mathcomp-packages).left;
+  mathcomp-deps = pkg:
+    if pkg == "single" then [ ] else
+      (split (x: x == pkg) mathcomp-packages).left;
 
   # generic split function (TODO: move to lib?)
   split = pred: l:
-    let loop = v: l: if l == [] then {left = v; right = [];}
-      else let hd = builtins.head l; tl = builtins.tail l; in
-      if pred hd then {left = v; right = tl;} else loop (v ++ [hd]) tl;
-    in loop [] l;
+    let
+      loop = v: l:
+        if l == [ ] then { left = v; right = [ ]; }
+        else let hd = builtins.head l; tl = builtins.tail l; in
+          if pred hd then { left = v; right = tl; } else loop (v ++ [ hd ]) tl;
+    in loop [ ] l;
 
   # exported, documented at the end.
-  mathcompGen = mkMathcompGenFrom (_: {}) mathcomp-packages;
+  mathcompGen = mkMathcompGenFrom (_: { }) mathcomp-packages;
 
   # exported, documented at the end.
-  mathcompGenSingle = mkMathcompGen (_: {}) "single";
+  mathcompGenSingle = mkMathcompGen (_: { }) "single";
 
   # mkMathcompGen: internal mathcomp package generator
   # returns {error = ...} if impossible to generate
   # returns {${mathcomp-pkg} = <derivation>} otherwise
-  mkMathcompGenFrom = o: l: mcv: fold (pkg: pkgs: pkgs // mkMathcompGen o pkg mcv) {} l;
+  mkMathcompGenFrom = o: l: mcv: fold (pkg: pkgs: pkgs // mkMathcompGen o pkg mcv) { } l;
   mkMathcompGen = overrides: mathcomp-pkg: mathcomp-version:
     let
       coq-version-check = mathcomp-coq-versions.${mathcomp-version} or (_: false);
-      pkgpath = {single = "mathcomp";}.${mathcomp-pkg} or "mathcomp/${mathcomp-pkg}";
-      pkgname = {single = "mathcomp";}.${mathcomp-pkg} or "mathcomp-${mathcomp-pkg}";
+      pkgpath = { single = "mathcomp"; }.${mathcomp-pkg} or "mathcomp/${mathcomp-pkg}";
+      pkgname = { single = "mathcomp"; }.${mathcomp-pkg} or "mathcomp-${mathcomp-pkg}";
       pkgallMake = ''
-      echo "all.v" > Make
-      echo "-I ." >> Make
-      echo "-R . mathcomp.all" >> Make
+        echo "all.v" > Make
+        echo "-I ." >> Make
+        echo "-R . mathcomp.all" >> Make
       '';
       is-released = builtins.isString mathcomp-version;
       custom-version = if is-released then mathcomp-version else "custom";
@@ -81,17 +93,18 @@ let
         # used in ssreflect
         version = custom-version;
 
-        src = if is-released then fetchFromGitHub {
-          owner = "math-comp";
-          repo = "math-comp";
-          rev = "mathcomp-${mathcomp-version}";
-          sha256 = mathcomp-sha256.${mathcomp-version};
-        } else mathcomp-version;
+        src =
+          if is-released then fetchFromGitHub {
+            owner = "math-comp";
+            repo = "math-comp";
+            rev = "mathcomp-${mathcomp-version}";
+            sha256 = mathcomp-sha256.${mathcomp-version};
+          } else mathcomp-version;
 
         nativeBuildInputs = optionals withDoc [ graphviz ];
         buildInputs = [ ncurses which ] ++ (with coq.ocamlPackages; [ ocaml findlib camlp5 ]);
         propagatedBuildInputs = [ coq ] ++
-           attrValues (mkMathcompGenFrom overrides (mathcomp-deps mathcomp-pkg) mathcomp-version);
+          attrValues (mkMathcompGenFrom overrides (mathcomp-deps mathcomp-pkg) mathcomp-version);
         enableParallelBuilding = true;
 
         buildFlags = optional withDoc "doc";
@@ -121,56 +134,56 @@ let
           currentOverrides = overrides;
           overrideMathcomp = moreOverrides:
             (mkMathcompGen (old: let new = overrides old; in new // moreOverrides new)
-                          mathcomp-pkg mathcomp-version).${mathcomp-pkg};
+            mathcomp-pkg mathcomp-version).${mathcomp-pkg};
           mathcompGen = moreOverrides:
             (mkMathcompGenFrom (old: let new = overrides old; in new // moreOverrides new)
-                          mathcomp-packages mathcomp-version);
+            mathcomp-packages mathcomp-version);
         };
       };
     in
-    {${mathcomp-pkg} = stdenv.mkDerivation (attrs // overrides attrs);};
+      { ${mathcomp-pkg} = stdenv.mkDerivation (attrs // overrides attrs); };
 
-getAttrOr = a: n: a.${n} or (throw a.error);
+  getAttrOr = a: n: a.${n} or (throw a.error);
 
-mathcompCorePkgs_1_7 = mathcompGen "1.7.0";
-mathcompCorePkgs_1_8 = mathcompGen "1.8.0";
-mathcompCorePkgs_1_9 = mathcompGen "1.9.0";
-mathcompCorePkgs_1_10 = mathcompGen "1.10.0";
-mathcompCorePkgs     = recurseIntoAttrs
-  (mapDerivationAttrset dontDistribute (mathcompGen default-mathcomp-version));
+  mathcompCorePkgs_1_7 = mathcompGen "1.7.0";
+  mathcompCorePkgs_1_8 = mathcompGen "1.8.0";
+  mathcompCorePkgs_1_9 = mathcompGen "1.9.0";
+  mathcompCorePkgs_1_10 = mathcompGen "1.10.0";
+  mathcompCorePkgs = recurseIntoAttrs
+    (mapDerivationAttrset dontDistribute (mathcompGen default-mathcomp-version));
+in
+{
+  # mathcompGenSingle: given a version of mathcomp
+  # generates an attribute set {single = <drv>;} with the single mathcomp derivation
+  inherit mathcompGenSingle;
+  mathcomp_1_7_single = getAttrOr (mathcompGenSingle "1.7.0") "single";
+  mathcomp_1_8_single = getAttrOr (mathcompGenSingle "1.8.0") "single";
+  mathcomp_1_9_single = getAttrOr (mathcompGenSingle "1.9.0") "single";
+  mathcomp_1_10_single = getAttrOr (mathcompGenSingle "1.10.0") "single";
+  mathcomp_single = dontDistribute
+    (getAttrOr (mathcompGenSingle default-mathcomp-version) "single");
 
-in {
-# mathcompGenSingle: given a version of mathcomp
-# generates an attribute set {single = <drv>;} with the single mathcomp derivation
-inherit mathcompGenSingle;
-mathcomp_1_7_single = getAttrOr (mathcompGenSingle "1.7.0") "single";
-mathcomp_1_8_single = getAttrOr (mathcompGenSingle "1.8.0") "single";
-mathcomp_1_9_single = getAttrOr (mathcompGenSingle "1.9.0") "single";
-mathcomp_1_10_single = getAttrOr (mathcompGenSingle "1.10.0") "single";
-mathcomp_single     = dontDistribute
- (getAttrOr (mathcompGenSingle default-mathcomp-version) "single");
-
-# mathcompGen: given a version of mathcomp
-# generates an attribute set {ssreflect = <drv>; ... character = <drv>; all = <drv>;}.
-# each of these have a special attribute overrideMathcomp which
-# must be used instead of overrideAttrs in order to also fix the dependencies
-inherit mathcompGen mathcompCorePkgs
-        mathcompCorePkgs_1_7 mathcompCorePkgs_1_8 mathcompCorePkgs_1_9
-	mathcompCorePkgs_1_10
-	;
+  # mathcompGen: given a version of mathcomp
+  # generates an attribute set {ssreflect = <drv>; ... character = <drv>; all = <drv>;}.
+  # each of these have a special attribute overrideMathcomp which
+  # must be used instead of overrideAttrs in order to also fix the dependencies
+  inherit mathcompGen mathcompCorePkgs
+    mathcompCorePkgs_1_7 mathcompCorePkgs_1_8 mathcompCorePkgs_1_9
+    mathcompCorePkgs_1_10
+    ;
 
 
-mathcomp     = getAttrOr mathcompCorePkgs     "all";
-mathcomp_1_7 = getAttrOr mathcompCorePkgs_1_7 "all";
-mathcomp_1_8 = getAttrOr mathcompCorePkgs_1_8 "all";
-mathcomp_1_9 = getAttrOr mathcompCorePkgs_1_9 "all";
-mathcomp_1_10 = getAttrOr mathcompCorePkgs_1_10 "all";
+  mathcomp = getAttrOr mathcompCorePkgs "all";
+  mathcomp_1_7 = getAttrOr mathcompCorePkgs_1_7 "all";
+  mathcomp_1_8 = getAttrOr mathcompCorePkgs_1_8 "all";
+  mathcomp_1_9 = getAttrOr mathcompCorePkgs_1_9 "all";
+  mathcomp_1_10 = getAttrOr mathcompCorePkgs_1_10 "all";
 
-ssreflect     = getAttrOr mathcompCorePkgs    "ssreflect";
+  ssreflect = getAttrOr mathcompCorePkgs "ssreflect";
 
 } //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}"; value = pkg;}) mathcompCorePkgs) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_7"; value = pkg;}) mathcompCorePkgs_1_7) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_8"; value = pkg;}) mathcompCorePkgs_1_8) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_9"; value = pkg;}) mathcompCorePkgs_1_9) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_10"; value = pkg;}) mathcompCorePkgs_1_10)
+(mapAttrs' (n: pkg: { name = "mathcomp-${n}"; value = pkg; }) mathcompCorePkgs) //
+(mapAttrs' (n: pkg: { name = "mathcomp-${n}_1_7"; value = pkg; }) mathcompCorePkgs_1_7) //
+(mapAttrs' (n: pkg: { name = "mathcomp-${n}_1_8"; value = pkg; }) mathcompCorePkgs_1_8) //
+(mapAttrs' (n: pkg: { name = "mathcomp-${n}_1_9"; value = pkg; }) mathcompCorePkgs_1_9) //
+(mapAttrs' (n: pkg: { name = "mathcomp-${n}_1_10"; value = pkg; }) mathcompCorePkgs_1_10)

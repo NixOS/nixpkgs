@@ -19,23 +19,25 @@ with lib;
 
     serverAliases = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = ["www.example.org" "example.org"];
+      default = [ ];
+      example = [ "www.example.org" "example.org" ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule { options = {
-        addr = mkOption { type = str;  description = "IP address.";  };
-        port = mkOption { type = int;  description = "Port number."; default = 80; };
-        ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
-        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "reuseport" "deferred" ]; };
-      }; });
-      default = [];
+      type = with types; listOf (submodule {
+        options = {
+          addr = mkOption { type = str; description = "IP address."; };
+          port = mkOption { type = int; description = "Port number."; default = 80; };
+          ssl = mkOption { type = bool; description = "Enable SSL."; default = false; };
+          extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = [ ]; example = [ "reuseport" "deferred" ]; };
+        };
+      });
+      default = [ ];
       example = [
-        { addr = "195.154.1.1"; port = 443; ssl = true;}
+        { addr = "195.154.1.1"; port = 443; ssl = true; }
         { addr = "192.154.1.1"; port = 80; }
       ];
       description = ''
@@ -188,7 +190,7 @@ with lib;
 
     basicAuth = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = literalExample ''
         {
           user = "password";
@@ -215,7 +217,7 @@ with lib;
       type = types.attrsOf (types.submodule (import ./location-options.nix {
         inherit lib;
       }));
-      default = {};
+      default = { };
       example = literalExample ''
         {
           "/" = {

@@ -1,7 +1,7 @@
 { lib, fetchPypi, buildPythonPackage, requests, six }:
 
 buildPythonPackage rec {
-  pname   = "requests-file";
+  pname = "requests-file";
   version = "1.4.3";
 
   src = fetchPypi {

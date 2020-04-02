@@ -1,6 +1,14 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium
-, llvmPackages, clang, lzma
-, Security }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkgconfig
+, openssl
+, libsodium
+, llvmPackages
+, clang
+, lzma
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rdedup";

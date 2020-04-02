@@ -17,12 +17,13 @@
 , json-glib
 , gnome-autoar
 , gspell
-, libcanberra }:
-
+, libcanberra
+}:
 let
   pname = "gnome-recipes";
   version = "2.0.2";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

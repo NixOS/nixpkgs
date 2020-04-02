@@ -4,45 +4,50 @@
 # compiler and linker that do not search in default locations,
 # ensuring purity of components produced by it.
 { lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem
+, crossSystem
+, config
+, overlays
+, crossOverlays ? [ ]
 
 , bootstrapFiles ?
-  let table = {
-    glibc = {
-      i686-linux = import ./bootstrap-files/i686.nix;
-      x86_64-linux = import ./bootstrap-files/x86_64.nix;
-      armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
-      armv6l-linux = import ./bootstrap-files/armv6l.nix;
-      armv7l-linux = import ./bootstrap-files/armv7l.nix;
-      aarch64-linux = import ./bootstrap-files/aarch64.nix;
-      mipsel-linux = import ./bootstrap-files/loongson2f.nix;
-      powerpc64le-linux = import ./bootstrap-files/ppc64le.nix;
+  let
+    table = {
+      glibc = {
+        i686-linux = import ./bootstrap-files/i686.nix;
+        x86_64-linux = import ./bootstrap-files/x86_64.nix;
+        armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
+        armv6l-linux = import ./bootstrap-files/armv6l.nix;
+        armv7l-linux = import ./bootstrap-files/armv7l.nix;
+        aarch64-linux = import ./bootstrap-files/aarch64.nix;
+        mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+        powerpc64le-linux = import ./bootstrap-files/ppc64le.nix;
+      };
+      musl = {
+        aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
+        armv6l-linux = import ./bootstrap-files/armv6l-musl.nix;
+        x86_64-linux = import ./bootstrap-files/x86_64-musl.nix;
+        powerpc64le-linux = import ./bootstrap-files/ppc64le-musl.nix;
+      };
     };
-    musl = {
-      aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
-      armv6l-linux  = import ./bootstrap-files/armv6l-musl.nix;
-      x86_64-linux  = import ./bootstrap-files/x86_64-musl.nix;
-      powerpc64le-linux = import ./bootstrap-files/ppc64le-musl.nix;
-    };
-  };
 
-  # Try to find an architecture compatible with our current system. We
-  # just try every bootstrap we’ve got and test to see if it is
-  # compatible with or current architecture.
-  getCompatibleTools = lib.foldl (v: system:
-    if v != null then v
-    else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
-    else null) null (lib.attrNames archLookupTable);
+    # Try to find an architecture compatible with our current system. We
+    # just try every bootstrap we’ve got and test to see if it is
+    # compatible with or current architecture.
+    getCompatibleTools = lib.foldl (v: system:
+      if v != null then v
+      else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
+      else null) null (lib.attrNames archLookupTable);
 
-  archLookupTable = table.${localSystem.libc}
-    or (abort "unsupported libc for the pure Linux stdenv");
-  files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
-    else (abort "unsupported platform for the pure Linux stdenv"));
+    archLookupTable = table.${localSystem.libc}
+      or (abort "unsupported libc for the pure Linux stdenv");
+    files = archLookupTable.${localSystem.system} or (
+      if getCompatibleTools != null then getCompatibleTools
+      else (abort "unsupported platform for the pure Linux stdenv"));
   in files
 }:
 
 assert crossSystem == localSystem;
-
 let
   inherit (localSystem) system platform;
 
@@ -72,10 +77,8 @@ let
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun = prevStage:
-    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [] }:
-
+    { name, overrides ? (self: super: { }), extraNativeBuildInputs ? [ ] }:
     let
-
       thisStdenv = import ../generic {
         name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
@@ -90,28 +93,29 @@ let
             ${commonPreHook}
           '';
         shell = "${bootstrapTools}/bin/bash";
-        initialPath = [bootstrapTools];
+        initialPath = [ bootstrapTools ];
 
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
         };
 
-        cc = if prevStage.gcc-unwrapped == null
-             then null
-             else lib.makeOverridable (import ../../build-support/cc-wrapper) {
-          name = "${name}-gcc-wrapper";
-          nativeTools = false;
-          nativeLibc = false;
-          buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
-            inherit (prevStage) stdenv;
+        cc =
+          if prevStage.gcc-unwrapped == null
+          then null
+          else lib.makeOverridable (import ../../build-support/cc-wrapper) {
+            name = "${name}-gcc-wrapper";
+            nativeTools = false;
+            nativeLibc = false;
+            buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
+              inherit (prevStage) stdenv;
+            };
+            cc = prevStage.gcc-unwrapped;
+            bintools = prevStage.binutils;
+            isGNU = true;
+            libc = getLibc prevStage;
+            inherit (prevStage) coreutils gnugrep;
+            stdenvNoCC = prevStage.ccWrapperStdenv;
           };
-          cc = prevStage.gcc-unwrapped;
-          bintools = prevStage.binutils;
-          isGNU = true;
-          libc = getLibc prevStage;
-          inherit (prevStage) coreutils gnugrep;
-          stdenvNoCC = prevStage.ccWrapperStdenv;
-        };
 
         extraAttrs = {
           # Having the proper 'platform' in all the stdenvs allows getting proper
@@ -120,14 +124,11 @@ let
         };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
-
     in {
       inherit config overlays;
       stdenv = thisStdenv;
     };
-
 in
-
 [
 
   ({}: {
@@ -226,7 +227,7 @@ in
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep
         perl gnum4 bison;
-      dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; } );
+      dejagnu = super.dejagnu.overrideAttrs (a: { doCheck = false; });
 
       # We need libidn2 and its dependency libunistring as glibc dependency.
       # To avoid the cycle, we build against bootstrap libc, nuke references,
@@ -284,7 +285,7 @@ in
     extraNativeBuildInputs = [ prevStage.patchelf ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
-                   prevStage.updateAutotoolsGnuConfigScriptsHook;
+        prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
@@ -326,7 +327,7 @@ in
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
-                   prevStage.updateAutotoolsGnuConfigScriptsHook;
+        prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
@@ -354,12 +355,12 @@ in
       '';
 
       initialPath =
-        ((import ../common-path.nix) {pkgs = prevStage;});
+        ((import ../common-path.nix) { pkgs = prevStage; });
 
       extraNativeBuildInputs = [ prevStage.patchelf ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
         lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
-        prevStage.updateAutotoolsGnuConfigScriptsHook;
+          prevStage.updateAutotoolsGnuConfigScriptsHook;
 
       cc = prevStage.gcc;
 
@@ -379,21 +380,41 @@ in
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
-            gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
-          ]
+          gzip
+          bzip2
+          xz
+          bash
+          binutils.bintools
+          coreutils
+          diffutils
+          findutils
+          gawk
+          gnumake
+          gnused
+          gnutar
+          gnugrep
+          gnupatch
+          patchelf
+          ed
+        ]
         # Library dependencies
         ++ map getLib (
-            [ attr acl zlib pcre libidn2 libunistring ]
-            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
-          )
+          [ attr acl zlib pcre libidn2 libunistring ]
+          ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
+        )
         # More complicated cases
-        ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
-        ++  [ /*propagated from .dev*/ linuxHeaders
-            binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
-          ]
-          ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
-            [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
+        ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ])
+        ++ [
+          /*propagated from .dev*/
+          linuxHeaders
+          binutils
+          gcc
+          gcc.cc
+          gcc.cc.lib
+          gcc.expand-response-params
+        ]
+        ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
+          [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
       overrides = self: super: {
         inherit (prevStage)

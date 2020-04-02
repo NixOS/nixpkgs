@@ -1,10 +1,18 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
-, pam ? null, glibcCross ? null
+{ stdenv
+, fetchpatch
+, fetchFromGitHub
+, autoreconfHook
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, itstool
+, flex
+, bison
+, pam ? null
+, glibcCross ? null
 }:
-
 let
-
   glibc =
     if stdenv.hostPlatform != stdenv.buildPlatform
     then glibcCross
@@ -14,9 +22,7 @@ let
     url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch;
     sha256 = "1fj3rg6x3jppm5jvi9y7fhd2djbi4nc5pgwisw00xlh4qapgz692";
   };
-
 in
-
 stdenv.mkDerivation rec {
   pname = "shadow";
   version = "4.8";
@@ -29,12 +35,20 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
-  nativeBuildInputs = [autoreconfHook libxslt libxml2
-    docbook_xml_dtd_45 docbook_xsl flex bison itstool
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libxslt
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    flex
+    bison
+    itstool
+  ];
 
   patches =
-    [ ./keep-path.patch
+    [
+      ./keep-path.patch
       # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
       ./respect-xml-catalog-files-var.patch
       dots_in_usernames

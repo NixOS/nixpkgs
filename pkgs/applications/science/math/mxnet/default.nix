@@ -1,7 +1,19 @@
-{ config, stdenv, lib, fetchurl, bash, cmake
-, opencv3, gtest, openblas, liblapack, perl
-, cudaSupport ? config.cudaSupport or false, cudatoolkit, nvidia_x11
-, cudnnSupport ? cudaSupport, cudnn
+{ config
+, stdenv
+, lib
+, fetchurl
+, bash
+, cmake
+, opencv3
+, gtest
+, openblas
+, liblapack
+, perl
+, cudaSupport ? config.cudaSupport or false
+, cudatoolkit
+, nvidia_x11
+, cudnnSupport ? cudaSupport
+, cudnn
 }:
 
 assert cudnnSupport -> cudaSupport;
@@ -18,16 +30,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [ opencv3 gtest openblas liblapack ]
-              ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
-              ++ lib.optional cudnnSupport cudnn;
+    ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
+    ++ lib.optional cudnnSupport cudnn;
 
   cmakeFlags =
     [ "-DUSE_MKL_IF_AVAILABLE=OFF" ]
-    ++ (if cudaSupport then [
-      "-DUSE_OLDCMAKECUDA=ON"  # see https://github.com/apache/incubator-mxnet/issues/10743
-      "-DCUDA_ARCH_NAME=All"
-      "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
-    ] else [ "-DUSE_CUDA=OFF" ])
+    ++ (
+      if cudaSupport then [
+        "-DUSE_OLDCMAKECUDA=ON" # see https://github.com/apache/incubator-mxnet/issues/10743
+        "-DCUDA_ARCH_NAME=All"
+        "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+      ] else [ "-DUSE_CUDA=OFF" ])
     ++ lib.optional (!cudnnSupport) "-DUSE_CUDNN=OFF";
 
   postPatch = ''

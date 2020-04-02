@@ -1,35 +1,75 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
-, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
-, glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, libmicrohttpd, pcre2
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, intltool
+, gperf
+, libcap
+, curl
+, kmod
+, gnupg
+, gnutar
+, xz
+, pam
+, acl
+, libuuid
+, m4
+, utillinux
+, libffi
+, glib
+, kbd
+, libxslt
+, coreutils
+, libgcrypt
+, libgpgerror
+, libidn2
+, libapparmor
+, audit
+, lz4
+, bzip2
+, libmicrohttpd
+, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, iptables, gnu-efi, bashInteractive
-, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, ninja, meson, python3Packages, glibcLocales
+, iptables
+, gnu-efi
+, bashInteractive
+, gettext
+, docbook_xsl
+, docbook_xml_dtd_42
+, docbook_xml_dtd_45
+, ninja
+, meson
+, python3Packages
+, glibcLocales
 , patchelf
 , getent
 , buildPackages
 , perl
-, withSelinux ? false, libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
+, withSelinux ? false
+, libselinux
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
+, kexectools
 }:
-
-let gnupg-minimal = gnupg.override {
-  enableMinimal = true;
-  guiSupport = false;
-  pcsclite = null;
-  sqlite = null;
-  pinentry = null;
-  adns = null;
-  gnutls = null;
-  libusb = null;
-  openldap = null;
-  readline = null;
-  zlib = null;
-  bzip2 = null;
-};
-in stdenv.mkDerivation {
+let
+  gnupg-minimal = gnupg.override {
+    enableMinimal = true;
+    guiSupport = false;
+    pcsclite = null;
+    sqlite = null;
+    pinentry = null;
+    adns = null;
+    gnutls = null;
+    libusb = null;
+    openldap = null;
+    readline = null;
+    zlib = null;
+    bzip2 = null;
+  };
+in
+stdenv.mkDerivation {
   version = "243.7";
   pname = "systemd";
 
@@ -45,23 +85,54 @@ in stdenv.mkDerivation {
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
-    [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
-      ninja meson
+    [
+      pkgconfig
+      intltool
+      gperf
+      libxslt
+      gettext
+      docbook_xsl
+      docbook_xml_dtd_42
+      docbook_xml_dtd_45
+      ninja
+      meson
       coreutils # meson calls date, stat etc.
       glibcLocales
-      patchelf getent m4
+      patchelf
+      getent
+      m4
       perl # to patch the libsystemd.so and remove dependencies on aarch64
 
-      (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
     ];
   buildInputs =
-    [ linuxHeaders libcap curl.dev kmod xz pam acl
-      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd pcre2 ] ++
-      stdenv.lib.optional withKexectools kexectools ++
-      stdenv.lib.optional withLibseccomp libseccomp ++
-    [ libffi audit lz4 bzip2 libapparmor
-      iptables gnu-efi
+    [
+      linuxHeaders
+      libcap
+      curl.dev
+      kmod
+      xz
+      pam
+      acl
+      /* cryptsetup */
+      libuuid
+      glib
+      libgcrypt
+      libgpgerror
+      libidn2
+      libmicrohttpd
+      pcre2
+    ] ++
+    stdenv.lib.optional withKexectools kexectools ++
+    stdenv.lib.optional withLibseccomp libseccomp ++
+    [
+      libffi
+      audit
+      lz4
+      bzip2
+      libapparmor
+      iptables
+      gnu-efi
     ] ++ stdenv.lib.optional withSelinux libselinux;
 
   #dontAddPrefix = true;
@@ -183,14 +254,17 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = toString [
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
     # lead to a cyclic dependency.
-    "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+    "-UPOLKIT_AGENT_BINARY_PATH"
+    "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
     # Set the release_agent on /sys/fs/cgroup/systemd to the
     # currently running systemd (/run/current-system/systemd) so
     # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    "-USYSTEMD_CGROUP_AGENT_PATH"
+    "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-    "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
   ];
 
   doCheck = false; # fails a bunch of tests

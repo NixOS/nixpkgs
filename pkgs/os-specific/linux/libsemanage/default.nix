@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, bison, flex, libsepol, libselinux, bzip2, audit
-, enablePython ? true, swig ? null, python ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, bison
+, flex
+, libsepol
+, libselinux
+, bzip2
+, audit
+, enablePython ? true
+, swig ? null
+, python ? null
 }:
 
 with stdenv.lib;
@@ -12,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
     sha256 = "075w6y3l9hiy5hicgwrmijyxmhfyd1r7cnc08qxyg4j46jfk8xi5";
-   };
+  };
 
   outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
 
@@ -32,7 +42,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
 
-  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
+  meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
     description = "Policy management tools for SELinux";
     license = stdenv.lib.licenses.lgpl21;
   };

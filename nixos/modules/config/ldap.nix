@@ -2,9 +2,7 @@
 
 with pkgs;
 with lib;
-
 let
-
   cfg = config.users.ldap;
 
   # Careful: OpenLDAP seems to be very picky about the indentation of
@@ -18,11 +16,11 @@ let
       bind_timelimit ${toString config.users.ldap.bind.timeLimit}
       bind_policy ${config.users.ldap.bind.policy}
       ${optionalString config.users.ldap.useTLS ''
-        ssl start_tls
-      ''}
+      ssl start_tls
+    ''}
       ${optionalString (config.users.ldap.bind.distinguishedName != "") ''
-        binddn ${config.users.ldap.bind.distinguishedName}
-      ''}
+      binddn ${config.users.ldap.bind.distinguishedName}
+    ''}
       ${optionalString (cfg.extraConfig != "") cfg.extraConfig }
     '';
   };
@@ -48,9 +46,7 @@ let
       --set LD_PRELOAD    "${pkgs.libredirect}/lib/libredirect.so" \
       --set NIX_REDIRECTS "/etc/nslcd.conf=/run/nslcd/nslcd.conf"
   '';
-
 in
-
 {
 
   ###### interface
@@ -123,13 +119,13 @@ in
         };
 
         extraConfig = mkOption {
-          default =  "";
+          default = "";
           type = types.lines;
           description = ''
             Extra configuration options that will be added verbatim at
             the end of the nslcd configuration file (nslcd.conf).
-          '' ;
-        } ;
+          '';
+        };
 
         rootpwmoddn = mkOption {
           default = "";
@@ -211,7 +207,7 @@ in
           If <literal>users.ldap.daemon</literal> is enabled, this
           configuration will not be used. In that case, use
           <literal>users.ldap.daemon.extraConfig</literal> instead.
-        '' ;
+        '';
       };
 
     };
@@ -289,6 +285,7 @@ in
   };
 
   imports =
-    [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
+    [
+      (mkRenamedOptionModule [ "users" "ldap" "bind" "password" ] [ "users" "ldap" "bind" "passwordFile" ])
     ];
 }

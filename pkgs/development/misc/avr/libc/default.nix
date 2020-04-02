@@ -1,5 +1,4 @@
 { stdenv, fetchurl, automake, autoconf }:
-
 let
   version = "2.0.0";
 in

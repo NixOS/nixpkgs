@@ -1,6 +1,8 @@
 {
   services.xserver.desktopManager.session =
-    [ { name = "none";
+    [
+      {
+        name = "none";
         start = "";
       }
     ];

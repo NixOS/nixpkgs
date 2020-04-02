@@ -14,7 +14,7 @@ rec {
 
   packageName = "yason";
 
-  asdFilesToKeep = ["yason.asd"];
+  asdFilesToKeep = [ "yason.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM yason DESCRIPTION JSON parser/encoder SHA256

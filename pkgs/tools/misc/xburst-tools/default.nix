@@ -1,7 +1,13 @@
-{ stdenv, fetchgit, libusb, libusb1, autoconf, automake, libconfuse, pkgconfig
+{ stdenv
+, fetchgit
+, libusb
+, libusb1
+, autoconf
+, automake
+, libconfuse
+, pkgconfig
 , gccCross ? null
 }:
-
 let
   version = "2011-12-26";
 in
@@ -37,7 +43,7 @@ stdenv.mkDerivation {
     description = "Qi tools to access the Ben Nanonote USB_BOOT mode";
     license = stdenv.lib.licenses.gpl3;
     homepage = http://www.linux-mtd.infradead.org/;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.x86_64;
   };
 }

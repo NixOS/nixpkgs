@@ -22,9 +22,11 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook
+    intltool
     # For setup hook
-    gobject-introspection wafHook
+    gobject-introspection
+    wafHook
   ];
   buildInputs = [ docutils libwnck3 keybinder3 ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
@@ -33,24 +35,25 @@ buildPythonApplication rec {
   # see https://github.com/NixOS/nixpkgs/issues/56943 for details
   strictDeps = false;
 
-  postInstall = let
-    pythonPath = (stdenv.lib.concatMapStringsSep ":"
-      (m: "${m}/lib/${python.libPrefix}/site-packages")
+  postInstall =
+    let
+      pythonPath = (stdenv.lib.concatMapStringsSep ":"
+        (m: "${m}/lib/${python.libPrefix}/site-packages")
       propagatedBuildInputs);
-  in ''
-    gappsWrapperArgs+=(
-      "--prefix" "PYTHONPATH" : "${pythonPath}"
-      "--set" "PYTHONNOUSERSITE" "1"
-    )
-  '';
+    in ''
+      gappsWrapperArgs+=(
+        "--prefix" "PYTHONPATH" : "${pythonPath}"
+        "--set" "PYTHONNOUSERSITE" "1"
+      )
+    '';
 
   doCheck = false; # no tests
 
   meta = with stdenv.lib; {
     description = "A smart, quick launcher";
-    homepage    = "https://kupferlauncher.github.io/";
-    license     = licenses.gpl3;
+    homepage = "https://kupferlauncher.github.io/";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ cobbal ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

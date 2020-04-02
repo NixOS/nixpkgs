@@ -18,12 +18,13 @@ let
 
   # Intel openmp uses its own versioning, but shares the spot release patch.
   openmp-ver = "19.0.${spot}-${rel}-19.0.${spot}-${rel}";
-
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   pname = "mkl";
   inherit version;
 
-  src = if stdenvNoCC.isDarwin
+  src =
+    if stdenvNoCC.isDarwin
     then
       (fetchurl {
         url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15235/m_mkl_${version}.dmg";
@@ -35,39 +36,42 @@ in stdenvNoCC.mkDerivation {
         sha256 = "0zkk4rrq7g44acxaxhpd2053r66w169mww6917an0lxhd52fm5cr";
       });
 
-  nativeBuildInputs = if stdenvNoCC.isDarwin
+  nativeBuildInputs =
+    if stdenvNoCC.isDarwin
     then
       [ undmg darwin.cctools ]
     else
       [ rpmextract ];
 
-  buildPhase = if stdenvNoCC.isDarwin then ''
-    for f in Contents/Resources/pkg/*.tgz; do
-      tar xzvf $f
-    done
-  '' else ''
-    # Common stuff
-    rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
-    rpmextract rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm
+  buildPhase =
+    if stdenvNoCC.isDarwin then ''
+      for f in Contents/Resources/pkg/*.tgz; do
+        tar xzvf $f
+      done
+    '' else ''
+      # Common stuff
+      rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
+      rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
+      rpmextract rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm
 
-    # Dynamic libraries
-    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm
+      # Dynamic libraries
+      rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
+      rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
+      rpmextract rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm
+      rpmextract rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm
 
-    # Intel OpenMP runtime
-    rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
-  '' + (if enableStatic then ''
-    # Static libraries
-    rpmextract rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm
-  '' else ''
-    # Take care of installing dynamic-only PkgConfig files during the installPhase
-  ''
-  );
+      # Intel OpenMP runtime
+      rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
+    '' + (
+      if enableStatic then ''
+        # Static libraries
+        rpmextract rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm
+        rpmextract rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm
+        rpmextract rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm
+      '' else ''
+        # Take care of installing dynamic-only PkgConfig files during the installPhase
+      ''
+    );
 
   installPhase = ''
     for f in $(find . -name 'mkl*.pc') ; do
@@ -81,8 +85,8 @@ in stdenvNoCC.mkDerivation {
       substituteInPlace $f \
         --replace "../compiler/lib" "lib"
     done
-  '' +
-    (if stdenvNoCC.isDarwin then ''
+  '' + (
+    if stdenvNoCC.isDarwin then ''
       mkdir -p $out/lib
 
       cp -r compilers_and_libraries_${version}/mac/mkl/include $out/
@@ -94,15 +98,15 @@ in stdenvNoCC.mkDerivation {
 
       mkdir -p $out/lib/pkgconfig
       cp -r compilers_and_libraries_${version}/mac/mkl/bin/pkgconfig/* $out/lib/pkgconfig
-  '' else ''
+    '' else ''
       mkdir -p $out/lib
       cp license.txt $out/lib/
 
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/include $out/
 
       mkdir -p $out/lib/pkgconfig
-  '') +
-    (if enableStatic then ''
+    '') + (
+    if enableStatic then ''
       cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/* $out/lib/pkgconfig

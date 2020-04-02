@@ -14,7 +14,7 @@ rec {
 
   packageName = "lparallel";
 
-  asdFilesToKeep = ["lparallel.asd"];
+  asdFilesToKeep = [ "lparallel.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lparallel DESCRIPTION Parallelism for Common Lisp SHA256

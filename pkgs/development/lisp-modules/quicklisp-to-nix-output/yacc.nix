@@ -14,7 +14,7 @@ rec {
 
   packageName = "yacc";
 
-  asdFilesToKeep = ["yacc.asd"];
+  asdFilesToKeep = [ "yacc.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM yacc DESCRIPTION A LALR(1) parser generator for Common Lisp SHA256

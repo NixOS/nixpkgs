@@ -2,7 +2,7 @@
 
 
 # Upstream build for kernel 4.1 is broken, 3.12 and below seems to be working
-assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.version "4.0";
+assert lib.versionAtLeast kernel.version "4.2" || lib.versionOlder kernel.version "4.0";
 
 stdenv.mkDerivation rec {
   name = "exfat-nofuse-${version}-${kernel.version}";

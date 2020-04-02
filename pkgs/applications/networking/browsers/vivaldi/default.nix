@@ -1,21 +1,59 @@
-{ stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
-, libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsaLib, dbus, cups, libexif, ffmpeg, systemd
-, freetype, fontconfig, libXft, libXrender, libxcb, expat
+{ stdenv
+, fetchurl
+, zlib
+, libX11
+, libXext
+, libSM
+, libICE
+, libXfixes
+, libXt
+, libXi
+, libXcursor
+, libXScrnSaver
+, libXcomposite
+, libXdamage
+, libXtst
+, libXrandr
+, alsaLib
+, dbus
+, cups
+, libexif
+, ffmpeg
+, systemd
+, freetype
+, fontconfig
+, libXft
+, libXrender
+, libxcb
+, expat
 , libuuid
-, gstreamer, gst-plugins-base, libxml2
-, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
-, nss, nspr
-, patchelf, makeWrapper
+, gstreamer
+, gst-plugins-base
+, libxml2
+, glib
+, gtk3
+, pango
+, gdk-pixbuf
+, cairo
+, atk
+, at-spi2-atk
+, at-spi2-core
+, gnome2
+, nss
+, nspr
+, patchelf
+, makeWrapper
 , isSnapshot ? false
-, proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
-, enableWidevine ? false, vivaldi-widevine ? null
+, proprietaryCodecs ? false
+, vivaldi-ffmpeg-codecs ? null
+, enableWidevine ? false
+, vivaldi-widevine ? null
 }:
-
 let
   branch = if isSnapshot then "snapshot" else "stable";
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "vivaldi";
   version = "2.11.1811.47-1";
 
@@ -32,17 +70,53 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ patchelf makeWrapper ];
 
   buildInputs = [
-    stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
-    libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
-    freetype fontconfig libXrender libuuid expat glib nss nspr
-    gstreamer libxml2 gst-plugins-base pango cairo gnome2.GConf
+    stdenv.cc.cc
+    stdenv.cc.libc
+    zlib
+    libX11
+    libXt
+    libXext
+    libSM
+    libICE
+    libxcb
+    libXi
+    libXft
+    libXcursor
+    libXfixes
+    libXScrnSaver
+    libXcomposite
+    libXdamage
+    libXtst
+    libXrandr
+    atk
+    at-spi2-atk
+    at-spi2-core
+    alsaLib
+    dbus
+    cups
+    gtk3
+    gdk-pixbuf
+    libexif
+    ffmpeg
+    systemd
+    freetype
+    fontconfig
+    libXrender
+    libuuid
+    expat
+    glib
+    nss
+    nspr
+    gstreamer
+    libxml2
+    gst-plugins-base
+    pango
+    cairo
+    gnome2.GConf
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
-  libPath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.is64bit)
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs)
-    + ":$out/opt/${vivaldiName}/lib";
+  libPath = stdenv.lib.makeLibraryPath buildInputs + stdenv.lib.optionalString (stdenv.is64bit)
+    (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs) + ":$out/opt/${vivaldiName}/lib";
 
   buildPhase = ''
     echo "Patching Vivaldi binaries"
@@ -57,7 +131,7 @@ in stdenv.mkDerivation rec {
   '';
 
   dontPatchELF = true;
-  dontStrip    = true;
+  dontStrip = true;
 
   installPhase = ''
     mkdir -p "$out"
@@ -86,9 +160,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Browser for our Friends, powerful and personal";
-    homepage    = "https://vivaldi.com";
-    license     = licenses.unfree;
+    homepage = "https://vivaldi.com";
+    license = licenses.unfree;
     maintainers = with maintainers; [ otwieracz nequissimus ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   # Cross-compiling fixes
   configurePhase = ''
     ${stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      # This fixes hiredis, which has the AR awkwardly coded.
-      # Probably a good candidate for a patch upstream.
-      makeFlagsArray+=('STLIB_MAKE_CMD=${stdenv.cc.targetPrefix}ar rcs $(STLIBNAME)')
-    ''}
+    # This fixes hiredis, which has the AR awkwardly coded.
+    # Probably a good candidate for a patch upstream.
+    makeFlagsArray+=('STLIB_MAKE_CMD=${stdenv.cc.targetPrefix}ar rcs $(STLIBNAME)')
+  ''}
   '';
 
   buildInputs = [ lua ];

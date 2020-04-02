@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgconfig
-, libX11, libxcb, cairo, gtk2, pango, python27, python3
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, libX11
+, libxcb
+, cairo
+, gtk2
+, pango
+, python27
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -11,11 +19,17 @@ stdenv.mkDerivation rec {
     repo = "lighthouse";
     rev = "d1813ef8e2aca9f6b3609b1e0c6d1d5ee683281a";
     sha256 = "0v6ylm49f1b44zwq1y1gqxp2csyqblplr24ajllc2q3r0sc9m1ys";
-   };
+  };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libX11 libxcb cairo gtk2 pango python27 python3
+    libX11
+    libxcb
+    cairo
+    gtk2
+    pango
+    python27
+    python3
   ];
 
   makeFlags = [ "PREFIX=\${out}" ];

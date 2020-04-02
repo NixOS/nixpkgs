@@ -12,7 +12,6 @@
 , primusLib_i686 ? null
 , useNvidia ? true
 }:
-
 let
   # We override stdenv in case we need different ABI for libGL
   primusLib_ = primusLib.override { inherit stdenv; };
@@ -24,8 +23,8 @@ let
     [ primus primus.glvnd ]
     ++ lib.optionals (primusLib_i686 != null) [ primus_i686 primus_i686.glvnd ]
   ));
-
-in writeScriptBin "primusrun" ''
+in
+writeScriptBin "primusrun" ''
   #!${runtimeShell}
   export LD_LIBRARY_PATH=${ldPath}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   # https://bugs.launchpad.net/ubuntu/+source/bumblebee/+bug/1758243

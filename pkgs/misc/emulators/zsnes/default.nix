@@ -1,6 +1,14 @@
-{stdenv, fetchFromGitHub, nasm, SDL, zlib, libpng, ncurses, libGLU, libGL
-, makeDesktopItem }:
-
+{ stdenv
+, fetchFromGitHub
+, nasm
+, SDL
+, zlib
+, libpng
+, ncurses
+, libGLU
+, libGL
+, makeDesktopItem
+}:
 let
   desktopItem = makeDesktopItem {
     name = "zsnes";
@@ -11,8 +19,8 @@ let
     genericName = "zsnes";
     categories = "Game;";
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "zsnes-1.51";
 
   src = fetchFromGitHub {

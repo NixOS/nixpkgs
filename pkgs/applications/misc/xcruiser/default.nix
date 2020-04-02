@@ -4,9 +4,9 @@ stdenv.mkDerivation {
   name = "xcruiser-0.30";
 
   src = fetchurl {
-      url = mirror://sourceforge/xcruiser/xcruiser/xcruiser-0.30/xcruiser-0.30.tar.gz;
-      sha256 = "1r8whva38xizqdh7jmn6wcmfmsndc67pkw22wzfzr6rq0vf6hywi";
-    };
+    url = mirror://sourceforge/xcruiser/xcruiser/xcruiser-0.30/xcruiser-0.30.tar.gz;
+    sha256 = "1r8whva38xizqdh7jmn6wcmfmsndc67pkw22wzfzr6rq0vf6hywi";
+  };
 
   nativeBuildInputs = [ gccmakedep imake ];
   buildInputs = [ libXt libXaw libXpm libXext ];

@@ -1,38 +1,77 @@
-{ stdenv, lib, fetchurl, fetchpatch, substituteAll
-, libXrender, libXinerama, libXcursor, libXv, libXext
-, libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, libGLU, openssl, dbus, cups, pkgconfig
-, libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
-, buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, substituteAll
+, libXrender
+, libXinerama
+, libXcursor
+, libXv
+, libXext
+, libXfixes
+, libXrandr
+, libSM
+, freetype
+, fontconfig
+, zlib
+, libjpeg
+, libpng
+, libmng
+, which
+, libGLU
+, openssl
+, dbus
+, cups
+, pkgconfig
+, libtiff
+, glib
+, icu
+, libmysqlclient
+, postgresql
+, sqlite
+, perl
+, coreutils
+, libXi
+, buildMultimedia ? stdenv.isLinux
+, alsaLib
+, gstreamer
+, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, flashplayerFix ? false, gdk-pixbuf
-, gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
-, gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
+, flashplayerFix ? false
+, gdk-pixbuf
+, gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform
+, gtk2
+, gnomeStyle ? false
+, libgnomeui
+, GConf
+, gnome_vfs
 , developerBuild ? false
 , docs ? false
 , examples ? false
 , demos ? false
-# darwin support
-, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
+  # darwin support
+, libobjc
+, ApplicationServices
+, OpenGL
+, Cocoa
+, AGL
+, libcxx
 }:
-
 let
   v_maj = "4.8";
   v_min = "7";
   vers = "${v_maj}.${v_min}";
 in
-
 # TODO:
-#  * move some plugins (e.g., SQL plugins) to dedicated derivations to avoid
-#    false build-time dependencies
+  #  * move some plugins (e.g., SQL plugins) to dedicated derivations to avoid
+  #    false build-time dependencies
 
 stdenv.mkDerivation rec {
   name = "qt-${vers}";
 
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/qt/"
-      + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
+    url = "http://download.qt-project.org/official_releases/qt/" + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
     sha256 = "183fca7n7439nlhxyg1z7aky0izgbyll3iwakw4gwivy16aj5272";
   };
 
@@ -81,8 +120,7 @@ stdenv.mkDerivation rec {
       })
       (fetchpatch {
         name = "fix-medium-font.patch";
-        url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/"
-          + "21b342d71c19e6d68b649947f913410fe6129ea4/debian/patches/kubuntu_39_fix_medium_font.diff";
+        url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/" + "21b342d71c19e6d68b649947f913410fe6129ea4/debian/patches/kubuntu_39_fix_medium_font.diff";
         sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
       })
       # Patches are no longer available from here, so vendoring it for now.
@@ -95,34 +133,33 @@ stdenv.mkDerivation rec {
       ./qt4-openssl-1.1.patch
       (fetchpatch {
         name = "gcc9-foreach.patch";
-        url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/"
-          + "0d4a3dd61ccb156dee556c214dbe91c04d44a717/debian/patches/gcc9-qforeach.patch";
+        url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/" + "0d4a3dd61ccb156dee556c214dbe91c04d44a717/debian/patches/gcc9-qforeach.patch";
         sha256 = "0dzn6qxrgxb75rvck9kmy5gspawdn970wsjw56026dhkih8cp3pg";
       })
     ]
     ++ lib.optional gtkStyle (substituteAll ({
-        src = ./dlopen-gtkstyle.diff;
-        # substituteAll ignores env vars starting with capital letter
-        gtk = gtk2.out;
-      } // lib.optionalAttrs gnomeStyle {
-        gconf = GConf.out;
-        libgnomeui = libgnomeui.out;
-        gnome_vfs = gnome_vfs.out;
-      }))
+      src = ./dlopen-gtkstyle.diff;
+      # substituteAll ignores env vars starting with capital letter
+      gtk = gtk2.out;
+    } // lib.optionalAttrs gnomeStyle {
+      gconf = GConf.out;
+      libgnomeui = libgnomeui.out;
+      gnome_vfs = gnome_vfs.out;
+    }))
     ++ lib.optional flashplayerFix (substituteAll {
-        src = ./dlopen-webkit-nsplugin.diff;
-        gtk = gtk2.out;
-      })
+      src = ./dlopen-webkit-nsplugin.diff;
+      gtk = gtk2.out;
+    })
     ++ lib.optional stdenv.isAarch64 (fetchpatch {
-        url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
-        sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
-      })
+      url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
+      sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
+    })
     ++ lib.optionals stdenv.hostPlatform.isMusl [
-        ./qt-musl.patch
-        ./qt-musl-iconv-no-bom.patch
-        ./patch-qthread-stacksize.diff
-        ./qsettings-recursive-global-mutex.patch
-      ];
+      ./qt-musl.patch
+      ./qt-musl-iconv-no-bom.patch
+      ./patch-qthread-stacksize.diff
+      ./qsettings-recursive-global-mutex.patch
+    ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -151,53 +188,116 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  configurePlatforms = [];
-  configureFlags = let
-    mk = cond: name: "-${lib.optionalString (!cond) "no-"}${name}";
-    platformFlag =
-      if stdenv.hostPlatform != stdenv.buildPlatform
-      then "-xplatform"
-      else "-platform";
-  in (if stdenv.hostPlatform != stdenv.buildPlatform then [
-    # I've not tried any case other than i686-pc-mingw32.
-    # -nomake tools: it fails linking some asian language symbols
-    # -no-svg: it fails to build on mingw64
-    "-static" "-release" "-confirm-license" "-opensource"
-    "-no-opengl" "-no-phonon"
-    "-no-svg"
-    "-make" "qmake" "-make" "libs" "-nomake" "tools"
-  ] else [
-    "-v" "-no-separate-debug-info" "-release" "-fast" "-confirm-license" "-opensource"
+  configurePlatforms = [ ];
+  configureFlags =
+    let
+      mk = cond: name: "-${lib.optionalString (!cond) "no-"}${name}";
+      platformFlag =
+        if stdenv.hostPlatform != stdenv.buildPlatform
+        then "-xplatform"
+        else "-platform";
+    in (
+      if stdenv.hostPlatform != stdenv.buildPlatform then [
+        # I've not tried any case other than i686-pc-mingw32.
+        # -nomake tools: it fails linking some asian language symbols
+        # -no-svg: it fails to build on mingw64
+        "-static"
+        "-release"
+        "-confirm-license"
+        "-opensource"
+        "-no-opengl"
+        "-no-phonon"
+        "-no-svg"
+        "-make"
+        "qmake"
+        "-make"
+        "libs"
+        "-nomake"
+        "tools"
+      ] else [
+        "-v"
+        "-no-separate-debug-info"
+        "-release"
+        "-fast"
+        "-confirm-license"
+        "-opensource"
 
-    (mk (!stdenv.isFreeBSD) "opengl") "-xrender" "-xrandr" "-xinerama" "-xcursor" "-xinput" "-xfixes" "-fontconfig"
-    "-qdbus" (mk (cups != null) "cups") "-glib" "-dbus-linked" "-openssl-linked"
+        (mk (!stdenv.isFreeBSD) "opengl")
+        "-xrender"
+        "-xrandr"
+        "-xinerama"
+        "-xcursor"
+        "-xinput"
+        "-xfixes"
+        "-fontconfig"
+        "-qdbus"
+        (mk (cups != null) "cups")
+        "-glib"
+        "-dbus-linked"
+        "-openssl-linked"
 
-    "-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql" "-system-sqlite"
+        "-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql"
+        "-system-sqlite"
 
-    "-exceptions" "-xmlpatterns"
+        "-exceptions"
+        "-xmlpatterns"
 
-    "-make" "libs" "-make" "tools" "-make" "translations"
-    "-no-phonon" (mk buildWebkit "webkit") (mk buildMultimedia "multimedia") "-audio-backend"
-  ]) ++ [
-    "-${if demos then "" else "no"}make" "demos"
-    "-${if examples then "" else "no"}make" "examples"
-    "-${if docs then "" else "no"}make" "docs"
-  ] ++ lib.optional developerBuild "-developer-build"
+        "-make"
+        "libs"
+        "-make"
+        "tools"
+        "-make"
+        "translations"
+        "-no-phonon"
+        (mk buildWebkit "webkit")
+        (mk buildMultimedia "multimedia")
+        "-audio-backend"
+      ]) ++ [
+      "-${if demos then "" else "no"}make"
+      "demos"
+      "-${if examples then "" else "no"}make"
+      "examples"
+      "-${if docs then "" else "no"}make"
+      "docs"
+    ] ++ lib.optional developerBuild "-developer-build"
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ platformFlag "unsupported/macx-clang-libc++" ]
     ++ lib.optionals stdenv.hostPlatform.isWindows [ platformFlag "win32-g++-4.6" ];
 
   propagatedBuildInputs =
-    [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
-      libSM zlib libpng openssl dbus freetype fontconfig glib ]
-        # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
+    [
+      libXrender
+      libXrandr
+      libXinerama
+      libXcursor
+      libXext
+      libXfixes
+      libXv
+      libXi
+      libSM
+      zlib
+      libpng
+      openssl
+      dbus
+      freetype
+      fontconfig
+      glib
+    ]
+    # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
     ++ lib.optional libGLSupported libGLU
-    ++ lib.optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
+    ++ lib.optional ((buildWebkit || buildMultimedia) && stdenv.isLinux) alsaLib
     ++ lib.optionals (buildWebkit || buildMultimedia) [ gstreamer gst-plugins-base ];
 
   # The following libraries are only used in plugins
   buildInputs =
-    [ cups # Qt dlopen's libcups instead of linking to it
-      postgresql sqlite libjpeg libmng libtiff icu ]
+    [
+      cups # Qt dlopen's libcups instead of linking to it
+      postgresql
+      sqlite
+      libjpeg
+      libmng
+      libtiff
+      icu
+    ]
     ++ lib.optionals (libmysqlclient != null) [ libmysqlclient ]
     ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
@@ -212,7 +312,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
     ++ lib.optionals (stdenv.isFreeBSD || stdenv.isDarwin)
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
-    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1");
+    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
+  );
 
   NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
@@ -237,11 +338,11 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
-    homepage    = http://qt-project.org/;
+    homepage = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
-    license     = lib.licenses.lgpl21Plus; # or gpl3
+    license = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
     badPlatforms = [ "x86_64-darwin" ];
   };
 }

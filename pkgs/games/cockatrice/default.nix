@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, mkDerivation, cmake, protobuf
-, qtbase, qtmultimedia, qttools, qtwebsockets, wrapQtAppsHook
+{ stdenv
+, fetchFromGitHub
+, mkDerivation
+, cmake
+, protobuf
+, qtbase
+, qtmultimedia
+, qttools
+, qtwebsockets
+, wrapQtAppsHook
 }:
 
 mkDerivation rec {
@@ -14,7 +22,12 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    cmake qtbase qtmultimedia protobuf qttools qtwebsockets
+    cmake
+    qtbase
+    qtmultimedia
+    protobuf
+    qttools
+    qtwebsockets
   ];
 
   nativeBuildInputs = [ wrapQtAppsHook ];

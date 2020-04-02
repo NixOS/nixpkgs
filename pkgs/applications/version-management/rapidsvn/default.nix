@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ wxGTK subversion apr aprutil python ];
 
-  configureFlags = [ "--with-svn-include=${subversion.dev}/include"
-    "--with-svn-lib=${subversion.out}/lib" ];
+  configureFlags = [
+    "--with-svn-include=${subversion.dev}/include"
+    "--with-svn-lib=${subversion.out}/lib"
+  ];
 
   patches = [
     ./fix-build.patch

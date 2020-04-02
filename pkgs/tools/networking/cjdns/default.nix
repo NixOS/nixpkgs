@@ -2,7 +2,7 @@
 
 let version = "20.5"; in
 stdenv.mkDerivation {
-  name = "cjdns-"+version;
+  name = "cjdns-" + version;
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
@@ -17,8 +17,7 @@ stdenv.mkDerivation {
 
   CFLAGS = "-O2 -Wno-error=stringop-truncation";
   buildPhase =
-    stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
-    + "bash do";
+    stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 " + "bash do";
   installPhase = ''
     install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
     sed -i 's,/usr/bin/env node,'$(type -P node), \

@@ -1,7 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python, requests, gnugrep }:
-
 let
-
   json-ld = fetchFromGitHub {
     owner = "json-ld";
     repo = "json-ld.org";
@@ -15,9 +13,7 @@ let
     rev = "aceeaf224b64d6880189d795bd99c3ffadb5d79e";
     sha256 = "125q5rllfm8vg9mz8hn7bhvhv2vqpd86kx2kxlk84smh33l8kbyl";
   };
-
 in
-
 buildPythonPackage rec {
   pname = "pyld";
   version = "1.0.5";

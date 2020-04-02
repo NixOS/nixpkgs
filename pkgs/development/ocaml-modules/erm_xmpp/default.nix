@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlp4, ocamlbuild
-, erm_xml, nocrypto
+{ stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, camlp4
+, ocamlbuild
+, erm_xml
+, nocrypto
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +13,9 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-erm_xmpp-${version}";
 
   src = fetchFromGitHub {
-    owner  = "hannesm";
-    repo   = "xmpp";
-    rev    = "184dc70fab7d46d09b9148ca4448f07f1e0a2df2";
+    owner = "hannesm";
+    repo = "xmpp";
+    rev = "184dc70fab7d46d09b9148ca4448f07f1e0a2df2";
     sha256 = "1dsqsfacvd9xqsqjzh6xwbnf2mv1dvhy210riyvjd260q085ch6n";
   };
 

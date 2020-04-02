@@ -68,18 +68,18 @@ buildPythonPackage rec {
   };
 
   patches = [
-       # Not yet accepted: https://github.com/apache/airflow/pull/6562
-     (fetchpatch {
-       name = "avoid-warning-from-abc.collections";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch;
-       sha256 = "0swpay1qlb7f9kgc56631s1qd9k82w4nw2ggvkm7jvxwf056k61z";
-     })
-       # Not yet accepted: https://github.com/apache/airflow/pull/6561
-     (fetchpatch {
-       name = "pendulum2-compatibility";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch;
-       sha256 = "17hw8qyd4zxvib9zwpbn32p99vmrdz294r31gnsbkkcl2y6h9knk";
-     })
+    # Not yet accepted: https://github.com/apache/airflow/pull/6562
+    (fetchpatch {
+      name = "avoid-warning-from-abc.collections";
+      url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch;
+      sha256 = "0swpay1qlb7f9kgc56631s1qd9k82w4nw2ggvkm7jvxwf056k61z";
+    })
+    # Not yet accepted: https://github.com/apache/airflow/pull/6561
+    (fetchpatch {
+      name = "pendulum2-compatibility";
+      url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch;
+      sha256 = "17hw8qyd4zxvib9zwpbn32p99vmrdz294r31gnsbkkcl2y6h9knk";
+    })
   ];
 
   propagatedBuildInputs = [
@@ -168,18 +168,18 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-   export HOME=$(mktemp -d)
-   export AIRFLOW_HOME=$HOME
-   export AIRFLOW__CORE__UNIT_TEST_MODE=True
-   export AIRFLOW_DB="$HOME/airflow.db"
-   export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+    export AIRFLOW_HOME=$HOME
+    export AIRFLOW__CORE__UNIT_TEST_MODE=True
+    export AIRFLOW_DB="$HOME/airflow.db"
+    export PATH=$PATH:$out/bin
 
-   airflow version
-   airflow initdb
-   airflow resetdb -y
-   nosetests tests.core.CoreTest
-   ## all tests
-   # nosetests --cover-package=airflow
+    airflow version
+    airflow initdb
+    airflow resetdb -y
+    nosetests tests.core.CoreTest
+    ## all tests
+    # nosetests --cover-package=airflow
   '';
 
   meta = with lib; {

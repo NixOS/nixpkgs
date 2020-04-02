@@ -1,7 +1,5 @@
 { stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, pythonPackages, utillinux }:
-
 let
-
   version = "0.6.2";
   sha256 = "05niv9rivd3j3cwcx3n3vjr85wr0l5i76giq9n54d2vdwmn8qjib";
 
@@ -17,12 +15,12 @@ let
     };
 
     buildInputs = [
-      btrfs-progs               # for btrfs/ioctl.h
-      utillinux                 # for uuid.h
+      btrfs-progs # for btrfs/ioctl.h
+      utillinux # for uuid.h
     ];
 
     nativeBuildInputs = [
-      pythonPackages.markdown   # documentation build
+      pythonPackages.markdown # documentation build
     ];
 
     preBuild = ''
@@ -55,9 +53,7 @@ let
       longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
     };
   };
-
 in
-
 runCommand "bees-service-${version}" {
   inherit bash bees coreutils utillinux;
   btrfsProgs = btrfs-progs; # needs to be a valid shell variable name

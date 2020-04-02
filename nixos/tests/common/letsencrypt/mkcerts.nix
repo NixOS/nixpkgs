@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
 
 , domains ? [ "acme-v02.api.letsencrypt.org" "letsencrypt.org" ]
@@ -42,28 +42,29 @@ pkgs.runCommand "letsencrypt-snakeoil-ca" {
   addpem ca.key ca key
   addpem ca.pem ca cert
 
-  ${lib.concatMapStrings (fqdn: let
-    opensslConfig = pkgs.writeText "snakeoil.cnf" ''
-      [req]
-      default_bits = 4096
-      prompt = no
-      default_md = sha256
-      req_extensions = req_ext
-      distinguished_name = dn
-      [dn]
-      CN = ${fqdn}
-      [req_ext]
-      subjectAltName = DNS:${fqdn}
-    '';
-  in ''
-    export OPENSSL_CONF=${lib.escapeShellArg opensslConfig}
-    openssl genrsa -out snakeoil.key 4096
-    openssl req -new -key snakeoil.key -out snakeoil.csr
-    openssl x509 -req -in snakeoil.csr -sha256 -set_serial 666 \
-      -CA ca.pem -CAkey ca.key -out snakeoil.pem -days 36500
-    addpem snakeoil.key ${lib.escapeShellArg fqdn} key
-    addpem snakeoil.pem ${lib.escapeShellArg fqdn} cert
-  '') domains}
+  ${lib.concatMapStrings (fqdn:
+    let
+        opensslConfig = pkgs.writeText "snakeoil.cnf" ''
+          [req]
+          default_bits = 4096
+          prompt = no
+          default_md = sha256
+          req_extensions = req_ext
+          distinguished_name = dn
+          [dn]
+          CN = ${fqdn}
+          [req_ext]
+          subjectAltName = DNS:${fqdn}
+        '';
+      in ''
+      export OPENSSL_CONF=${lib.escapeShellArg opensslConfig}
+      openssl genrsa -out snakeoil.key 4096
+      openssl req -new -key snakeoil.key -out snakeoil.csr
+      openssl x509 -req -in snakeoil.csr -sha256 -set_serial 666 \
+        -CA ca.pem -CAkey ca.key -out snakeoil.pem -days 36500
+      addpem snakeoil.key ${lib.escapeShellArg fqdn} key
+      addpem snakeoil.pem ${lib.escapeShellArg fqdn} cert
+    '') domains}
 
   echo '}' >> "$out"
 ''

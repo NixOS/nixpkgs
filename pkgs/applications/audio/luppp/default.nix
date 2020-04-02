@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub
+{ stdenv
+, fetchFromGitHub
 , meson
 , ninja
 , pkgconfig
@@ -23,11 +24,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
+    meson
+    ninja
+    pkgconfig
   ];
 
   buildInputs = [
-    jack2 cairo liblo libsndfile libsamplerate ntk
+    jack2
+    cairo
+    liblo
+    libsndfile
+    libsamplerate
+    ntk
   ];
 
   meta = with stdenv.lib; {

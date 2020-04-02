@@ -1,20 +1,40 @@
-{ stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
-  harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
-  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
-  libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  installShellFiles,
-  which, dbus,
-  Cocoa,
-  CoreGraphics,
-  Foundation,
-  IOKit,
-  Kernel,
-  OpenGL,
-  libcanberra,
-  libicns,
-  libpng,
-  python3,
-  zlib,
+{ stdenv
+, substituteAll
+, fetchFromGitHub
+, python3Packages
+, libunistring
+, harfbuzz
+, fontconfig
+, pkgconfig
+, ncurses
+, imagemagick
+, xsel
+, libstartup_notification
+, libGL
+, libX11
+, libXrandr
+, libXinerama
+, libXcursor
+, libxkbcommon
+, libXi
+, libXext
+, wayland-protocols
+, wayland
+, installShellFiles
+, which
+, dbus
+, Cocoa
+, CoreGraphics
+, Foundation
+, IOKit
+, Kernel
+, OpenGL
+, libcanberra
+, libicns
+, libpng
+, python3
+, zlib
+,
 }:
 
 with python3Packages;
@@ -44,16 +64,29 @@ buildPythonApplication rec {
     python3
     zlib
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    fontconfig libunistring libcanberra libX11
-    libXrandr libXinerama libXcursor libxkbcommon libXi libXext
-    wayland-protocols wayland dbus
+    fontconfig
+    libunistring
+    libcanberra
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libxkbcommon
+    libXi
+    libXext
+    wayland-protocols
+    wayland
+    dbus
   ];
 
   nativeBuildInputs = [
-    pkgconfig which sphinx ncurses
+    pkgconfig
+    which
+    sphinx
+    ncurses
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     imagemagick
-    libicns  # For the png2icns tool.
+    libicns # For the png2icns tool.
     installShellFiles
   ];
 
@@ -78,26 +111,28 @@ buildPythonApplication rec {
   # Causes build failure due to warning
   hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
 
-  buildPhase = if stdenv.isDarwin then ''
-    ${python.interpreter} setup.py kitty.app --update-check-interval=0
-    make man
-  '' else ''
-    ${python.interpreter} setup.py linux-package --update-check-interval=0
-  '';
+  buildPhase =
+    if stdenv.isDarwin then ''
+      ${python.interpreter} setup.py kitty.app --update-check-interval=0
+      make man
+    '' else ''
+      ${python.interpreter} setup.py linux-package --update-check-interval=0
+    '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out
-    ${if stdenv.isDarwin then ''
-    mkdir "$out/bin"
-    ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
-    mkdir "$out/Applications"
-    cp -r kitty.app "$out/Applications/kitty.app"
+    ${
+      if stdenv.isDarwin then ''
+        mkdir "$out/bin"
+        ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
+        mkdir "$out/Applications"
+        cp -r kitty.app "$out/Applications/kitty.app"
 
-    installManPage 'docs/_build/man/kitty.1'
-    '' else ''
-    cp -r linux-package/{bin,share,lib} $out
-    ''}
+        installManPage 'docs/_build/man/kitty.1'
+      '' else ''
+        cp -r linux-package/{bin,share,lib} $out
+      ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
     runHook postInstall
 
@@ -109,10 +144,11 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    terminfo_src=${if stdenv.isDarwin then
-      ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
+    terminfo_src=${
+      if stdenv.isDarwin then
+          ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
       else
-      "$out/share/terminfo"}
+          "$out/share/terminfo"}
 
     mkdir -p $terminfo/share
     mv "$terminfo_src" $terminfo/share/terminfo

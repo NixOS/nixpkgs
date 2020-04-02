@@ -1,7 +1,6 @@
 { config, options, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
@@ -19,27 +18,28 @@ let
       lhs = optCall lhs_ { inherit pkgs; };
       rhs = optCall rhs_ { inherit pkgs; };
     in
-    recursiveUpdate lhs rhs //
-    optionalAttrs (lhs ? packageOverrides) {
-      packageOverrides = pkgs:
-        optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
-    } //
-    optionalAttrs (lhs ? perlPackageOverrides) {
-      perlPackageOverrides = pkgs:
-        optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
-    };
+      recursiveUpdate lhs rhs //
+      optionalAttrs (lhs ? packageOverrides) {
+        packageOverrides = pkgs:
+          optCall lhs.packageOverrides pkgs //
+          optCall (attrByPath [ "packageOverrides" ] ({ }) rhs) pkgs;
+      } //
+      optionalAttrs (lhs ? perlPackageOverrides) {
+        perlPackageOverrides = pkgs:
+          optCall lhs.perlPackageOverrides pkgs //
+          optCall (attrByPath [ "perlPackageOverrides" ] ({ }) rhs) pkgs;
+      };
 
   configType = mkOptionType {
     name = "nixpkgs-config";
     description = "nixpkgs config";
     check = x:
-      let traceXIfNot = c:
-            if c x then true
-            else lib.traceSeqN 1 x false;
+      let
+        traceXIfNot = c:
+          if c x then true
+          else lib.traceSeqN 1 x false;
       in traceXIfNot isConfig;
-    merge = args: fold (def: mergeConfig def.value) {};
+    merge = args: fold (def: mergeConfig def.value) { };
   };
 
   overlayType = mkOptionType {
@@ -60,9 +60,7 @@ let
   };
 
   finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
-
 in
-
 {
   options.nixpkgs = {
 
@@ -108,7 +106,7 @@ in
     };
 
     config = mkOption {
-      default = {};
+      default = { };
       example = literalExample
         ''
           { allowBroken = true; allowUnfree = true; }
@@ -124,7 +122,7 @@ in
     };
 
     overlays = mkOption {
-      default = [];
+      default = [ ];
       example = literalExample
         ''
           [

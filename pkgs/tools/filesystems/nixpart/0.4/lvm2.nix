@@ -1,9 +1,7 @@
 { stdenv, fetchurl, pkgconfig, systemd, utillinux, coreutils }:
-
 let
   v = "2.02.106";
 in
-
 stdenv.mkDerivation {
   name = "lvm2-${v}";
 

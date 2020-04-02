@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   name = "snapserver";
 
   cfg = config.services.snapserver;
@@ -36,22 +34,22 @@ let
       flatten = key: value:
         "&${key}=${value}";
     in
-      "-s ${opt.type}://" + os opt.location + "?" + os' "name=" name
-        + concatStrings (mapAttrsToList flatten opt.query);
+      "-s ${opt.type}://" + os opt.location + "?" + os' "name=" name + concatStrings (mapAttrsToList flatten opt.query);
 
   optionalNull = val: ret:
     optional (val != null) ret;
 
   optionString = concatStringsSep " " (mapAttrsToList streamToOption cfg.streams
-             ++ ["-p ${toString cfg.port}"]
-             ++ ["--controlPort ${toString cfg.controlPort}"]
-             ++ optionalNull cfg.sampleFormat "--sampleFormat ${cfg.sampleFormat}"
-             ++ optionalNull cfg.codec "-c ${cfg.codec}"
-             ++ optionalNull cfg.streamBuffer "--streamBuffer ${cfg.streamBuffer}"
-             ++ optionalNull cfg.buffer "-b ${cfg.buffer}"
-             ++ optional cfg.sendToMuted "--sendToMuted");
-
-in {
+    ++ [ "-p ${toString cfg.port}" ]
+    ++ [ "--controlPort ${toString cfg.controlPort}" ]
+    ++ optionalNull cfg.sampleFormat "--sampleFormat ${cfg.sampleFormat}"
+    ++ optionalNull cfg.codec "-c ${cfg.codec}"
+    ++ optionalNull cfg.streamBuffer "--streamBuffer ${cfg.streamBuffer}"
+    ++ optionalNull cfg.buffer "-b ${cfg.buffer}"
+    ++ optional cfg.sendToMuted "--sendToMuted"
+  );
+in
+{
 
   ###### interface
 
@@ -112,7 +110,7 @@ in {
             };
             query = mkOption {
               type = attrsOf str;
-              default = {};
+              default = { };
               description = ''
                 Key-value pairs that convey additional parameters about a stream.
               '';
@@ -132,7 +130,7 @@ in {
             inherit codec;
           };
         });
-        default = { default = {}; };
+        default = { default = { }; };
         description = ''
           The definition for an input source.
         '';

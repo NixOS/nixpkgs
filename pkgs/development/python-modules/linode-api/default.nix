@@ -1,12 +1,13 @@
-{ stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  lib,
-  requests,
-  future,
-  enum34,
-  mock }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, lib
+, requests
+, future
+, enum34
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "linode-api";
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   disabled = (pythonOlder "2.7");
 
   propagatedBuildInputs = [ requests future ]
-                             ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
+    ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
 
   postPatch = (stdenv.lib.optionalString (!pythonOlder "3.4") ''
     sed -i -e '/"enum34",/d' setup.py

@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.hardware.u2f;
-in {
+in
+{
   options = {
     hardware.u2f = {
       enable = mkOption {
@@ -20,4 +21,3 @@ in {
     services.udev.packages = [ pkgs.libu2f-host ];
   };
 }
-

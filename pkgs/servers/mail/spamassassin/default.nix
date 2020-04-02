@@ -10,9 +10,23 @@ perlPackages.buildPerlPackage rec {
   };
 
   buildInputs = [ makeWrapper ] ++ (with perlPackages; [
-    HTMLParser NetCIDRLite NetDNS NetAddrIP DBFile HTTPDate MailDKIM LWP
-    IOSocketSSL DBI EncodeDetect IPCountry NetIdent Razor2ClientAgent MailSPF
-    NetDNSResolverProgrammable Socket6
+    HTMLParser
+    NetCIDRLite
+    NetDNS
+    NetAddrIP
+    DBFile
+    HTTPDate
+    MailDKIM
+    LWP
+    IOSocketSSL
+    DBI
+    EncodeDetect
+    IPCountry
+    NetIdent
+    Razor2ClientAgent
+    MailSPF
+    NetDNSResolverProgrammable
+    Socket6
   ]);
 
   # Enabling 'taint' mode is desirable, but that flag disables support

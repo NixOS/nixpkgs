@@ -11,9 +11,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  phases = [ "unpackPhase"
-             "patchPhase"
-             "installPhase" ];
+  phases = [
+    "unpackPhase"
+    "patchPhase"
+    "installPhase"
+  ];
 
   patchPhase = ''
     patchShebangs lib/

@@ -6,7 +6,8 @@
 , gevent
 , mock
 , pytest
-, tornado }:
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "opentracing";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = lib.optional isPy27 futures;
 
   checkInputs = [ gevent mock pytest tornado ];
-  
+
   checkPhase = ''
     pytest
   '';

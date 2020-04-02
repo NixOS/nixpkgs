@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.dspam;
 
   dspam = pkgs.dspam;
@@ -20,14 +18,14 @@ let
     UserLog on
 
     ${optionalString (cfg.domainSocket != null) ''
-      ServerDomainSocketPath "${cfg.domainSocket}"
-      ClientHost "${cfg.domainSocket}"
-    ''}
+    ServerDomainSocketPath "${cfg.domainSocket}"
+    ClientHost "${cfg.domainSocket}"
+  ''}
 
     ${cfg.extraConfig}
   '';
-
-in {
+in
+{
 
   ###### interface
 
@@ -56,7 +54,7 @@ in {
       storageDriver = mkOption {
         type = types.str;
         default = "hash";
-        description =  "Storage driver backend to use for dspam.";
+        description = "Storage driver backend to use for dspam.";
       };
 
       domainSocket = mkOption {

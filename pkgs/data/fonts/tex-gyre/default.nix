@@ -1,5 +1,4 @@
 { stdenv, fetchzip }:
-
 let
   mkVariant = variant: { version, abbreviation, sha256, outputHash }: stdenv.mkDerivation {
     name = "tex-gyre-${variant}-${version}";
@@ -32,7 +31,8 @@ let
       platforms = platforms.all;
     };
   };
-in stdenv.lib.mapAttrs mkVariant {
+in
+stdenv.lib.mapAttrs mkVariant {
   adventor = {
     version = "2_501";
     sha256 = "0qjg3x0adfppyx3x33cm07ww9i9sl88xaq07m7wfip8rmyp567fn";
@@ -64,7 +64,7 @@ in stdenv.lib.mapAttrs mkVariant {
     abbreviation = "qhv";
   };
   pagella = {
-    version ="2_501";
+    version = "2_501";
     sha256 = "1kccaxs3vk93la2pz4nv05hx1x3diyla49cz4l33zifdcp2zgg9d";
     outputHash = "1nnjsgplimh29502pkd19rvfg93x31svxxmx4x7h51njrx1j8qa8";
     abbreviation = "qpl";

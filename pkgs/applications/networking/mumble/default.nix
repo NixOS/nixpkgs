@@ -1,11 +1,27 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
-, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib, python
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qt5
+, avahi
+, boost
+, libopus
+, libsndfile
+, protobuf
+, speex
+, libcap
+, alsaLib
+, python
 , rnnoise
-, jackSupport ? false, libjack2 ? null
-, speechdSupport ? false, speechd ? null
-, pulseSupport ? false, libpulseaudio ? null
-, iceSupport ? false, zeroc-ice ? null
+, jackSupport ? false
+, libjack2 ? null
+, speechdSupport ? false
+, speechd ? null
+, pulseSupport ? false
+, libpulseaudio ? null
+, iceSupport ? false
+, zeroc-ice ? null
 }:
 
 assert jackSupport -> libjack2 != null;
@@ -19,7 +35,7 @@ let
     pname = overrides.type;
     version = source.version;
 
-    patches = (source.patches or [])
+    patches = (source.patches or [ ])
       ++ [ ./fix-rnnoise-argument.patch ];
 
     nativeBuildInputs = [ pkgconfig python qt5.qmake ]
@@ -40,11 +56,11 @@ let
       "CONFIG+=no-bundled-speex"
       "DEFINES+=PLUGIN_PATH=${placeholder "out"}/lib/mumble"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
-      ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
-      ++ (overrides.configureFlags or [ ]);
+    ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
+    ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
-       patchShebangs scripts
+      patchShebangs scripts
     '';
 
     makeFlags = [ "release" ];
@@ -136,7 +152,8 @@ let
       fetchSubmodules = true;
     };
   };
-in {
-  mumble  = client source;
-  murmur  = server source;
+in
+{
+  mumble = client source;
+  murmur = server source;
 }

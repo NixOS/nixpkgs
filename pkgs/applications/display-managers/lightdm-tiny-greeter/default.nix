@@ -1,5 +1,14 @@
-{ stdenv, linkFarm, lightdm-tiny-greeter, fetchFromGitHub
-, pkgconfig, lightdm, gtk3, glib, wrapGAppsHook, conf ? "" }:
+{ stdenv
+, linkFarm
+, lightdm-tiny-greeter
+, fetchFromGitHub
+, pkgconfig
+, lightdm
+, gtk3
+, glib
+, wrapGAppsHook
+, conf ? ""
+}:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-tiny-greeter";
@@ -15,9 +24,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [ lightdm gtk3 glib ];
 
-  postUnpack = if conf != "" then ''
-    cp ${builtins.toFile "config.h" conf} source/config.h
-  '' else "";
+  postUnpack =
+    if conf != "" then ''
+      cp ${builtins.toFile "config.h" conf} source/config.h
+    '' else "";
 
   buildPhase = ''
     mkdir -p $out/bin $out/share/xgreeters
@@ -31,10 +41,12 @@ stdenv.mkDerivation rec {
       --replace "Exec=lightdm-tiny-greeter" "Exec=$out/bin/lightdm-tiny-greeter"
   '';
 
-  passthru.xgreeters = linkFarm "lightdm-tiny-greeter-xgreeters" [{
-    path = "${lightdm-tiny-greeter}/share/xgreeters/lightdm-tiny-greeter.desktop";
-    name = "lightdm-tiny-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "lightdm-tiny-greeter-xgreeters" [
+    {
+      path = "${lightdm-tiny-greeter}/share/xgreeters/lightdm-tiny-greeter.desktop";
+      name = "lightdm-tiny-greeter.desktop";
+    }
+  ];
 
   meta = with stdenv.lib; {
     description = "A tiny multi user lightdm greeter";

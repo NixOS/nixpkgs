@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
@@ -15,18 +13,18 @@ let
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemuOvmf ''
-      nvram = ["/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd"]
-    ''}
+    nvram = ["/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd"]
+  ''}
     ${optionalString (!cfg.qemuRunAsRoot) ''
-      user = "qemu-libvirtd"
-      group = "qemu-libvirtd"
-    ''}
+    user = "qemu-libvirtd"
+    group = "qemu-libvirtd"
+  ''}
     ${cfg.qemuVerbatimConfig}
   '';
   dirName = "libvirt";
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
-
-in {
+in
+{
 
   imports = [
     (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
@@ -110,7 +108,7 @@ in {
     };
 
     onBoot = mkOption {
-      type = types.enum ["start" "ignore" ];
+      type = types.enum [ "start" "ignore" ];
       default = "start";
       description = ''
         Specifies the action to be done to / on the guests when the host boots.
@@ -122,7 +120,7 @@ in {
     };
 
     onShutdown = mkOption {
-      type = types.enum ["shutdown" "suspend" ];
+      type = types.enum [ "shutdown" "suspend" ];
       default = "suspend";
       description = ''
         When shutting down / restarting the host what method should
@@ -199,9 +197,9 @@ in {
         done
 
         ${optionalString cfg.qemuOvmf ''
-          ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
-        ''}
+        ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
+        ln -s --force ${pkgs.OVMF.fd}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
+      ''}
       '';
 
       serviceConfig = {
@@ -219,12 +217,12 @@ in {
       wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
       after = [ "systemd-udev-settle.service" "libvirtd-config.service" ]
-              ++ optional vswitch.enable "ovs-vswitchd.service";
+        ++ optional vswitch.enable "ovs-vswitchd.service";
 
       environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
 
       path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
-             ++ optional vswitch.enable vswitch.package;
+        ++ optional vswitch.enable vswitch.package;
 
       serviceConfig = {
         Type = "notify";

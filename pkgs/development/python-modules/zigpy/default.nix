@@ -1,6 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, aiohttp, crccheck, pycryptodome, pycrypto
-, pytest, pytest-asyncio, asynctest }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, crccheck
+, pycryptodome
+, pycrypto
+, pytest
+, pytest-asyncio
+, asynctest
+}:
 
 buildPythonPackage rec {
   pname = "zigpy-homeassistant";

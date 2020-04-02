@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, nose, pyyaml, pathspec }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, nose
+, pyyaml
+, pathspec
+}:
 
 buildPythonPackage rec {
   pname = "yamllint";
@@ -12,7 +17,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  propagatedBuildInputs = [  pyyaml pathspec ];
+  propagatedBuildInputs = [ pyyaml pathspec ];
 
   # Two test failures
   doCheck = false;

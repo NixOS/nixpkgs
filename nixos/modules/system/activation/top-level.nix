@@ -1,10 +1,7 @@
 { config, lib, pkgs, modules, baseModules, ... }:
 
 with lib;
-
 let
-
-
   # This attribute is responsible for creating boot entries for
   # child configuration. They are only (directly) accessible
   # when the parent configuration is boot default. For example,
@@ -17,48 +14,46 @@ let
         inherit baseModules;
         system = config.nixpkgs.initialSystem;
         modules =
-           (optionals inheritParent modules)
-        ++ [ ./no-clone.nix ]
-        ++ [ childConfig ];
+          (optionals inheritParent modules)
+          ++ [ ./no-clone.nix ]
+          ++ [ childConfig ];
       }).config.system.build.toplevel
     ) list;
 
   children =
-     cloner false config.nesting.children
-  ++ cloner true config.nesting.clone;
+    cloner false config.nesting.children
+    ++ cloner true config.nesting.clone;
 
   systemBuilder =
     let
-      kernelPath = "${config.boot.kernelPackages.kernel}/" +
-        "${config.system.boot.loader.kernelFile}";
-      initrdPath = "${config.system.build.initialRamdisk}/" +
-        "${config.system.boot.loader.initrdFile}";
+      kernelPath = "${config.boot.kernelPackages.kernel}/" + "${config.system.boot.loader.kernelFile}";
+      initrdPath = "${config.system.build.initialRamdisk}/" + "${config.system.boot.loader.initrdFile}";
     in ''
       mkdir $out
 
       # Containers don't have their own kernel or initrd.  They boot
       # directly into stage 2.
       ${optionalString (!config.boot.isContainer) ''
-        if [ ! -f ${kernelPath} ]; then
-          echo "The bootloader cannot find the proper kernel image."
-          echo "(Expecting ${kernelPath})"
-          false
-        fi
+      if [ ! -f ${kernelPath} ]; then
+        echo "The bootloader cannot find the proper kernel image."
+        echo "(Expecting ${kernelPath})"
+        false
+      fi
 
-        ln -s ${kernelPath} $out/kernel
-        ln -s ${config.system.modulesTree} $out/kernel-modules
-        ${optionalString (config.hardware.deviceTree.package != null) ''
-          ln -s ${config.hardware.deviceTree.package} $out/dtbs
-        ''}
+      ln -s ${kernelPath} $out/kernel
+      ln -s ${config.system.modulesTree} $out/kernel-modules
+      ${optionalString (config.hardware.deviceTree.package != null) ''
+      ln -s ${config.hardware.deviceTree.package} $out/dtbs
+    ''}
 
-        echo -n "$kernelParams" > $out/kernel-params
+      echo -n "$kernelParams" > $out/kernel-params
 
-        ln -s ${initrdPath} $out/initrd
+      ln -s ${initrdPath} $out/initrd
 
-        ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+      ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
 
-        ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
-      ''}
+      ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
+    ''}
 
       echo "$activationScript" > $out/activate
       substituteInPlace $out/activate --subst-var out
@@ -100,9 +95,11 @@ let
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
   baseSystem = pkgs.stdenvNoCC.mkDerivation {
-    name = let hn = config.networking.hostName;
-               nn = if (hn != "") then hn else "unnamed";
-        in "nixos-system-${nn}-${config.system.nixos.label}";
+    name =
+      let
+        hn = config.networking.hostName;
+        nn = if (hn != "") then hn else "unnamed";
+      in "nixos-system-${nn}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
     buildCommand = systemBuilder;
@@ -116,7 +113,7 @@ let
     kernelParams = config.boot.kernelParams;
     installBootLoader =
       config.system.build.installBootLoader
-      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+        or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
     activationScript = config.system.activationScripts.script;
     nixosLabel = config.system.nixos.label;
 
@@ -131,23 +128,21 @@ let
 
   failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
 
-  baseSystemAssertWarn = if failedAssertions != []
+  baseSystemAssertWarn =
+    if failedAssertions != [ ]
     then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
   system = fold ({ oldDependency, newDependency }: drv:
-      pkgs.replaceDependency { inherit oldDependency newDependency drv; }
-    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
-
+    pkgs.replaceDependency { inherit oldDependency newDependency drv; }) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 in
-
 {
   options = {
 
     system.build = mkOption {
       internal = true;
-      default = {};
+      default = { };
       type = types.attrs;
       description = ''
         Attribute set of derivations used to setup the system.
@@ -155,14 +150,14 @@ in
     };
 
     nesting.children = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Additional configurations to build.
       '';
     };
 
     nesting.clone = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         Additional configurations to build based on the current
         configuration which then has a lower priority.
@@ -225,7 +220,7 @@ in
 
     system.extraDependencies = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         A list of packages that should be included in the system
         closure but not otherwise made available to users. This is
@@ -234,7 +229,7 @@ in
     };
 
     system.replaceRuntimeDependencies = mkOption {
-      default = [];
+      default = [ ];
       example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
       type = types.listOf (types.submodule (
         { ... }: {
@@ -247,7 +242,8 @@ in
             type = types.package;
             description = "The replacement package.";
           };
-        })
+        }
+      )
       );
       apply = map ({ original, replacement, ... }: {
         oldDependency = original;

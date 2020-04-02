@@ -1,9 +1,16 @@
-{ stdenv, buildPackages
-, fetchurl, binutils ? null, bison, autoconf, utillinux
+{ stdenv
+, buildPackages
+, fetchurl
+, binutils ? null
+, bison
+, autoconf
+, utillinux
 
-# patch for cygwin requires readline support
-, interactive ? stdenv.isCygwin, readline70 ? null
-, withDocs ? false, texinfo ? null
+  # patch for cygwin requires readline support
+, interactive ? stdenv.isCygwin
+, readline70 ? null
+, withDocs ? false
+, texinfo ? null
 }:
 
 with stdenv.lib;
@@ -11,14 +18,12 @@ with stdenv.lib;
 assert interactive -> readline70 != null;
 assert withDocs -> texinfo != null;
 assert stdenv.hostPlatform.isDarwin -> binutils != null;
-
 let
   upstreamPatches = import ./bash-4.4-patches.nix (nr: sha256: fetchurl {
     url = "mirror://gnu/bash/bash-4.4-patches/bash44-${nr}";
     inherit sha256;
   });
 in
-
 stdenv.mkDerivation rec {
   name = "bash-${optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
   version = "4.4";
@@ -48,9 +53,9 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch
     # https://lists.gnu.org/archive/html/bug-bash/2016-10/msg00006.html
     ++ optional stdenv.hostPlatform.isMusl (fetchurl {
-      url = "https://lists.gnu.org/archive/html/bug-bash/2016-10/patchJxugOXrY2y.patch";
-      sha256 = "1m4v9imidb1cc1h91f2na0b8y9kc5c5fgmpvy9apcyv2kbdcghg1";
-    });
+    url = "https://lists.gnu.org/archive/html/bug-bash/2016-10/patchJxugOXrY2y.patch";
+    sha256 = "1m4v9imidb1cc1h91f2na0b8y9kc5c5fgmpvy9apcyv2kbdcghg1";
+  });
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
@@ -96,12 +101,13 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/bash/Makefile.inc
   '';
 
-  postFixup = if interactive
+  postFixup =
+    if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
         --replace '${stdenv.shell}' "$out/bin/bash"
     ''
-    # most space is taken by locale data
+      # most space is taken by locale data
     else ''
       rm -rf "$out/share" "$out/bin/bashbug"
     '';
@@ -109,8 +115,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://www.gnu.org/software/bash/;
     description =
-      "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
-        (if interactive then " (for interactive use)" else "");
+      "GNU Bourne-Again Shell, the de facto standard shell on Linux" + (if interactive then " (for interactive use)" else "");
 
     longDescription = ''
       Bash is the shell, or command language interpreter, that will

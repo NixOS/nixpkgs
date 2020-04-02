@@ -1,10 +1,21 @@
-{
-  stdenv, fetchurl, lib,
-  pkgconfig, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, asciidoc,
-  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf,
-  audit,
-  libgcrypt ? null,
-  libsodium ? null
+{ stdenv
+, fetchurl
+, lib
+, pkgconfig
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, asciidoc
+, dbus-glib
+, libcap_ng
+, libqb
+, libseccomp
+, polkit
+, protobuf
+, audit
+, libgcrypt ? null
+, libsodium ? null
 }:
 
 with stdenv.lib;

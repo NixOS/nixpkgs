@@ -1,4 +1,4 @@
-{stdenv, fetchurl, curl, libnxml, pkgconfig}:
+{ stdenv, fetchurl, curl, libnxml, pkgconfig }:
 
 stdenv.mkDerivation {
   name = "libmrss-0.19.2";

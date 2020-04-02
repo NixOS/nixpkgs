@@ -8,36 +8,34 @@ let
   inherit (pkgs) stdenv fetchurl pkgconfig intltool glib fetchFromGitHub;
   inherit (gimp) targetPluginDir targetScriptDir;
 
-  pluginDerivation = a: let
-    name = a.name or "${a.pname}-${a.version}";
-  in stdenv.mkDerivation ({
-    prePhases = "extraLib";
-    extraLib = ''
-      installScripts(){
-        mkdir -p $out/${targetScriptDir}/${name};
-        for p in "$@"; do cp "$p" -r $out/${targetScriptDir}/${name}; done
-      }
-      installPlugins(){
-        mkdir -p $out/${targetPluginDir}/${name};
-        for p in "$@"; do cp "$p" -r $out/${targetPluginDir}/${name}; done
-      }
-    '';
-  }
-  // a
-  // {
-      name = "gimp-plugin-${name}";
-      buildInputs = [ gimp gimp.gtk glib ] ++ (a.buildInputs or []);
-      nativeBuildInputs = [ pkgconfig intltool ] ++ (a.nativeBuildInputs or []);
+  pluginDerivation = a:
+    let
+      name = a.name or "${a.pname}-${a.version}";
+    in stdenv.mkDerivation ({
+      prePhases = "extraLib";
+      extraLib = ''
+        installScripts(){
+          mkdir -p $out/${targetScriptDir}/${name};
+          for p in "$@"; do cp "$p" -r $out/${targetScriptDir}/${name}; done
+        }
+        installPlugins(){
+          mkdir -p $out/${targetPluginDir}/${name};
+          for p in "$@"; do cp "$p" -r $out/${targetPluginDir}/${name}; done
+        }
+      '';
     }
-  );
+    // a
+    // {
+      name = "gimp-plugin-${name}";
+      buildInputs = [ gimp gimp.gtk glib ] ++ (a.buildInputs or [ ]);
+      nativeBuildInputs = [ pkgconfig intltool ] ++ (a.nativeBuildInputs or [ ]);
+    });
 
-  scriptDerivation = {src, ...}@attrs : pluginDerivation ({
+  scriptDerivation = { src, ... }@attrs: pluginDerivation ({
     phases = [ "extraLib" "installPhase" ];
     installPhase = "installScripts ${src}";
   } // attrs);
-
 in
-
 stdenv.lib.makeScope pkgs.newScope (self: with self; {
   gap = pluginDerivation {
     /* menu:

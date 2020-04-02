@@ -1,11 +1,21 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkg-config, boost, gtkmm2
-, imagemagick, sane-backends, tesseract4, udev, libusb}:
+{ stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, boost
+, gtkmm2
+, imagemagick
+, sane-backends
+, tesseract4
+, udev
+, libusb
+}:
 
 stdenv.mkDerivation rec {
   pname = "utsushi";
   version = "3.59.2";
 
-  src = fetchFromGitLab{
+  src = fetchFromGitLab {
     owner = pname;
     repo = "imagescan";
     rev = version;

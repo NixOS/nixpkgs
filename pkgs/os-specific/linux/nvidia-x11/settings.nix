@@ -1,10 +1,24 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchFromGitHub, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
-, librsvg, wrapGAppsHook
-, withGtk2 ? false, withGtk3 ? true
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkgconfig
+, m4
+, jansson
+, gtk2
+, dbus
+, gtk3
+, libXv
+, libXrandr
+, libXext
+, libXxf86vm
+, libvdpau
+, librsvg
+, wrapGAppsHook
+, withGtk2 ? false
+, withGtk3 ? true
 }:
-
 let
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -37,9 +51,7 @@ let
       cp NVCtrlLib.h  $out/include/NVCtrl
     '';
   };
-
 in
-
 stdenv.mkDerivation {
   pname = "nvidia-settings";
   inherit (nvidia_x11) version;
@@ -48,7 +60,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig m4 ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
-             ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
+    ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
 
   enableParallelBuilding = true;
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
@@ -68,11 +80,11 @@ stdenv.mkDerivation {
 
   postInstall = ''
     ${lib.optionalString (!withGtk2) ''
-      rm -f $out/lib/libnvidia-gtk2.so.*
-    ''}
+    rm -f $out/lib/libnvidia-gtk2.so.*
+  ''}
     ${lib.optionalString (!withGtk3) ''
-      rm -f $out/lib/libnvidia-gtk3.so.*
-    ''}
+    rm -f $out/lib/libnvidia-gtk3.so.*
+  ''}
 
     # Install the desktop file and icon.
     # The template has substitution variables intended to be replaced resulting

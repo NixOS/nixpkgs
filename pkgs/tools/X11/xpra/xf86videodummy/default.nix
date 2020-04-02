@@ -1,6 +1,10 @@
-{ stdenv, lib, fetchurl
-, xorgproto, xorgserver
-, pkgconfig }:
+{ stdenv
+, lib
+, fetchurl
+, xorgproto
+, xorgserver
+, pkgconfig
+}:
 
 with lib;
 

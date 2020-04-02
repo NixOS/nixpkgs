@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     # some printer like for instance "WF-7210" to get to the most recent
     # version.  
     # NOTE: Don't forget to update the webarchive link too!
-    urls = [ 
+    urls = [
       "https://download3.ebz.epson.net/dsc/f/03/00/09/72/04/c6d928e83e558c4ba1e7e8bcb5c1fe080b8095eb/epson-inkjet-printer-escpr2-1.1.1-1lsb3.2.src.rpm"
       "https://web.archive.org/web/https://download3.ebz.epson.net/dsc/f/03/00/09/72/04/c6d928e83e558c4ba1e7e8bcb5c1fe080b8095eb/epson-inkjet-printer-escpr2-1.1.1-1lsb3.2.src.rpm"
     ];

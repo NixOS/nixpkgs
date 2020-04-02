@@ -17,9 +17,7 @@
 }:
 
 with stdenv.lib.strings;
-
 let
-
   version = "2.20.2";
 
   src = fetchFromGitHub {
@@ -202,11 +200,8 @@ let
     , runtimeInputs ? [ ]
     , ...
     }@args:
-
     let
-
       runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
-
     in stdenv.mkDerivation ((faust2ApplBase args) // {
 
       buildInputs = [ makeWrapper ];
@@ -218,5 +213,5 @@ let
       '';
 
     });
-
-in faust
+in
+faust

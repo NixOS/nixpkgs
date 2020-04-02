@@ -14,7 +14,7 @@ rec {
 
   packageName = "clack-handler-hunchentoot";
 
-  asdFilesToKeep = ["clack-handler-hunchentoot.asd"];
+  asdFilesToKeep = [ "clack-handler-hunchentoot.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clack-handler-hunchentoot DESCRIPTION Clack handler for Hunchentoot.

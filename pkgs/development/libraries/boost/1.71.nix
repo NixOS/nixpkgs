@@ -5,7 +5,7 @@ callPackage ./generic.nix (args // rec {
 
   src = fetchurl {
     #url = "mirror://sourceforge/boost/boost_1_71_0.tar.bz2";
-    urls = [ 
+    urls = [
       "mirror://sourceforge/boost/boost_1_71_0.tar.bz2"
       "https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.bz2"
     ];

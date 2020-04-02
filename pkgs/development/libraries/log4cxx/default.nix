@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, libtool, libxml2, cppunit, boost
-, apr, aprutil, db, expat
+{ stdenv
+, fetchurl
+, libtool
+, libxml2
+, cppunit
+, boost
+, apr
+, aprutil
+, db
+, expat
 }:
 
 stdenv.mkDerivation rec {

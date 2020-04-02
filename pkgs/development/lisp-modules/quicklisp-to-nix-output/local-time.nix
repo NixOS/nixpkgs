@@ -16,7 +16,7 @@ rec {
 
   packageName = "local-time";
 
-  asdFilesToKeep = ["local-time.asd"];
+  asdFilesToKeep = [ "local-time.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM local-time DESCRIPTION

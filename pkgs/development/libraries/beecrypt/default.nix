@@ -1,4 +1,4 @@
-{stdenv, fetchurl, m4}:
+{ stdenv, fetchurl, m4 }:
 
 stdenv.mkDerivation {
   name = "beecrypt-4.2.1";

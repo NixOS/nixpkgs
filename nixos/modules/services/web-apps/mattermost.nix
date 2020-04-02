@@ -1,19 +1,18 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.mattermost;
 
   defaultConfig = builtins.fromJSON (builtins.replaceStrings [ "\\u0026" ] [ "&" ]
-    (readFile "${pkgs.mattermost}/config/config.json")
-  );
+    (readFile "${pkgs.mattermost}/config/config.json"));
 
   database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
 
   mattermostConf = foldl recursiveUpdate defaultConfig
-    [ { ServiceSettings.SiteURL = cfg.siteUrl;
+    [
+      {
+        ServiceSettings.SiteURL = cfg.siteUrl;
         ServiceSettings.ListenAddress = cfg.listenAddress;
         TeamSettings.SiteName = cfg.siteName;
         SqlSettings.DriverName = "postgres";
@@ -23,9 +22,7 @@ let
     ];
 
   mattermostConfJSON = pkgs.writeText "mattermost-config-raw.json" (builtins.toJSON mattermostConf);
-
 in
-
 {
   options = {
     services.mattermost = {
@@ -207,8 +204,7 @@ in
           PermissionsStartOnly = true;
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${pkgs.mattermost}/bin/mattermost" +
-            (lib.optionalString (!cfg.mutableConfig) " -c ${database}");
+          ExecStart = "${pkgs.mattermost}/bin/mattermost" + (lib.optionalString (!cfg.mutableConfig) " -c ${database}");
           WorkingDirectory = "${cfg.statePath}";
           Restart = "always";
           RestartSec = "10";

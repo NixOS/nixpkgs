@@ -10,9 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib menhir
-    ocaml_pcre pycaml
-    python ncurses pkgconfig
+    ocaml
+    findlib
+    menhir
+    ocaml_pcre
+    pycaml
+    python
+    ncurses
+    pkgconfig
   ];
 
   doCheck = !stdenv.isDarwin;

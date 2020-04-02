@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   name = "roon-server";
   cfg = config.services.roon-server;
-in {
+in
+{
   options = {
     services.roon-server = {
       enable = mkEnableOption "Roon Server";
@@ -52,7 +52,7 @@ in {
         StateDirectory = name;
       };
     };
-    
+
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPortRanges = [
         { from = 9100; to = 9200; }
@@ -60,8 +60,8 @@ in {
       allowedUDPPorts = [ 9003 ];
     };
 
-    
-    users.groups.${cfg.group} = {};
+
+    users.groups.${cfg.group} = { };
     users.users.${cfg.user} =
       if cfg.user == "roon-server" then {
         isSystemUser = true;
@@ -69,6 +69,6 @@ in {
         group = cfg.group;
         extraGroups = [ "audio" ];
       }
-      else {};
+      else { };
   };
 }

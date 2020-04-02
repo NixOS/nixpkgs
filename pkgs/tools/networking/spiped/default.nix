@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.5.0";
 
   src = fetchurl {
-    url    = "https://www.tarsnap.com/spiped/${pname}-${version}.tgz";
+    url = "https://www.tarsnap.com/spiped/${pname}-${version}.tgz";
     sha256 = "1mxcbxifr3bnj6ga8lz88y4bhff016i6kjdzwbb3gzb2zcs4pxxj";
   };
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Utility for secure encrypted channels between sockets";
-    homepage    = "https://www.tarsnap.com/spiped.html";
-    license     = stdenv.lib.licenses.bsd2;
-    platforms   = stdenv.lib.platforms.unix;
+    homepage = "https://www.tarsnap.com/spiped.html";
+    license = stdenv.lib.licenses.bsd2;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

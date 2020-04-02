@@ -1,5 +1,4 @@
 { stdenv, python, lib, src, version }:
-
 let
   buildAzureCliPackage = with py.pkgs; attrs: buildPythonPackage (attrs // {
     # Remove overly restrictive version contraints and obsolete namespace setup
@@ -16,7 +15,7 @@ let
          $out/${python.sitePackages}/azure/cli/{,__pycache__/}__init__.*
     '';
 
-    checkInputs = [ mock pytest ] ++ (attrs.checkInputs or []);
+    checkInputs = [ mock pytest ] ++ (attrs.checkInputs or [ ]);
     checkPhase = attrs.checkPhase or ''
       cd azure
       HOME=$TMPDIR pytest
@@ -24,7 +23,7 @@ let
   });
 
   overrideAzureMgmtPackage = package: version: extension: sha256:
-    package.overrideAttrs(oldAttrs: rec {
+    package.overrideAttrs (oldAttrs: rec {
       inherit version;
 
       src = py.pkgs.fetchPypi {
@@ -215,7 +214,7 @@ let
       azure-mgmt-monitor = overrideAzureMgmtPackage super.azure-mgmt-monitor "0.7.0" "zip"
         "1pprvk5255b6brbw73g0g13zygwa7a2px5x08wy3153rqlzan5l2";
 
-      azure-mgmt-advisor =  overrideAzureMgmtPackage super.azure-mgmt-advisor "2.0.1" "zip"
+      azure-mgmt-advisor = overrideAzureMgmtPackage super.azure-mgmt-advisor "2.0.1" "zip"
         "1wsfkprdrn22mwm24y2zlcms8ppp7jwq3s86r3ymbl29pbaxca8r";
 
       azure-mgmt-applicationinsights = overrideAzureMgmtPackage super.azure-mgmt-applicationinsights "0.1.1" "zip"
@@ -233,7 +232,7 @@ let
       azure-mgmt-hdinsight = overrideAzureMgmtPackage super.azure-mgmt-hdinsight "1.3.0" "zip"
         "1r7isr7hzq2dv1idwwa9xxxgk8wh0ncka45r4rdcsl1p7kd2kqam";
 
-      azure-graphrbac = super.azure-graphrbac.overrideAttrs(oldAttrs: rec {
+      azure-graphrbac = super.azure-graphrbac.overrideAttrs (oldAttrs: rec {
         version = "0.60.0";
 
         src = super.fetchPypi {
@@ -244,7 +243,7 @@ let
         };
       });
 
-      azure-storage-blob = super.azure-storage-blob.overrideAttrs(oldAttrs: rec {
+      azure-storage-blob = super.azure-storage-blob.overrideAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = super.fetchPypi {
           inherit (oldAttrs) pname;
@@ -253,7 +252,7 @@ let
         };
       });
 
-      azure-storage-common = super.azure-storage-common.overrideAttrs(oldAttrs: rec {
+      azure-storage-common = super.azure-storage-common.overrideAttrs (oldAttrs: rec {
         version = "1.4.2";
         src = super.fetchPypi {
           inherit (oldAttrs) pname;
@@ -262,7 +261,7 @@ let
         };
       });
 
-      azure-keyvault = super.azure-keyvault.overrideAttrs(oldAttrs: rec {
+      azure-keyvault = super.azure-keyvault.overrideAttrs (oldAttrs: rec {
         version = "1.1.0";
         src = super.fetchPypi {
           inherit (oldAttrs) pname;
@@ -272,7 +271,11 @@ let
         };
 
         propagatedBuildInputs = with self; [
-          azure-common azure-nspkg msrest msrestazure cryptography
+          azure-common
+          azure-nspkg
+          msrest
+          msrestazure
+          cryptography
         ];
         postInstall = ''
           rm -f $out/${self.python.sitePackages}/azure/__init__.py
@@ -281,7 +284,7 @@ let
       });
 
       # part of azure.mgmt.datalake namespace
-      azure-mgmt-datalake-analytics = super.azure-mgmt-datalake-analytics.overrideAttrs(oldAttrs: rec {
+      azure-mgmt-datalake-analytics = super.azure-mgmt-datalake-analytics.overrideAttrs (oldAttrs: rec {
         version = "0.2.1";
 
         src = super.fetchPypi {
@@ -301,4 +304,4 @@ let
     };
   };
 in
-  py
+py

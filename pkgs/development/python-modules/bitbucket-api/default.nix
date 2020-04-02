@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, requests_oauthlib, nose, sh }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, requests_oauthlib
+, nose
+, sh
+}:
 
 buildPythonPackage rec {
   pname = "bitbucket-api";

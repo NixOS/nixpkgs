@@ -1,5 +1,22 @@
-{ stdenv, fetchurl, meson, ninja, vala, gobject-introspection, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee, desktop-file-utils }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, vala
+, gobject-introspection
+, pkgconfig
+, gnome3
+, gtk3
+, wrapGAppsHook
+, librsvg
+, gettext
+, itstool
+, python3
+, libxml2
+, libgnome-games-support
+, libgee
+, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-mines";
@@ -12,8 +29,17 @@ stdenv.mkDerivation rec {
 
   # gobject-introspection for finding vapi files
   nativeBuildInputs = [
-    meson ninja vala gobject-introspection pkgconfig gettext itstool python3
-    libxml2 wrapGAppsHook desktop-file-utils
+    meson
+    ninja
+    vala
+    gobject-introspection
+    pkgconfig
+    gettext
+    itstool
+    python3
+    libxml2
+    wrapGAppsHook
+    desktop-file-utils
   ];
   buildInputs = [ gtk3 librsvg gnome3.adwaita-icon-theme libgnome-games-support libgee ];
 

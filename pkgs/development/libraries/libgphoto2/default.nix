@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1sc2ycx11khf0qzp1cqxxx1qymv6bjfbkx3vvbwz6wnbyvsigxz2";
   };
 
-  patches = [];
+  patches = [ ];
 
   nativeBuildInputs = [ pkgconfig gettext autoreconfHook ];
-  buildInputs = [ libtool libjpeg libusb1  ];
+  buildInputs = [ libtool libjpeg libusb1 ];
 
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];

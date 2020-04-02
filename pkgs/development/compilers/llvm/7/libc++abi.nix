@@ -1,6 +1,12 @@
-{ stdenv, cmake, fetch, libcxx, llvm, version
+{ stdenv
+, cmake
+, fetch
+, libcxx
+, llvm
+, version
   # on musl the shared objects don't build
-, enableShared ? ! stdenv.hostPlatform.isMusl }:
+, enableShared ? ! stdenv.hostPlatform.isMusl
+}:
 
 stdenv.mkDerivation {
   pname = "libc++abi";
@@ -22,7 +28,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = stdenv.lib.optional (!enableShared) "-DLIBCXXABI_ENABLE_SHARED=OFF";
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         # this should be done in CMake, but having trouble figuring out

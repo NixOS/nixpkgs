@@ -1,4 +1,4 @@
-{stdenv, fetchurl, emacs}:
+{ stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation {
   name = "rect-mark-1.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0pyyg53z9irh5jdfvh2qp4pm8qrml9r7lh42wfmdw6c7f56qryh8";
   };
 
-  phases = [ "buildPhase" "installPhase"];
+  phases = [ "buildPhase" "installPhase" ];
 
   buildInputs = [ emacs ];
 

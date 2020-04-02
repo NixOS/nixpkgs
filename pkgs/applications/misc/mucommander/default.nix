@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, gradle_4_10, perl, makeWrapper, jre, gsettings-desktop-schemas }:
-
 let
   version = "0.9.3-3";
   name = "mucommander-${version}";
@@ -51,8 +50,8 @@ let
     outputHashMode = "recursive";
     outputHash = "1v5a76pvk7llbyv2rg50wlxc2wf468l2cslz1vi20aihycbyky7j";
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name src postPatch;
   nativeBuildInputs = [ gradle_4_10 perl makeWrapper ];
 

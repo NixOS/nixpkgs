@@ -1,9 +1,9 @@
-{stdenv, fetchFromGitHub, cmake}:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   version = "1.3.1";
   pname = "nanoflann";
-  
+
   src = fetchFromGitHub {
     owner = "jlblancoc";
     repo = "nanoflann";

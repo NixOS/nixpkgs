@@ -4,7 +4,9 @@
 , fetchurl
 , makeWrapper
 , jre_headless
-, utillinux, gnugrep, coreutils
+, utillinux
+, gnugrep
+, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -36,7 +38,7 @@ stdenv.mkDerivation (rec {
   '';
 
   buildInputs = [ makeWrapper jre_headless utillinux ]
-             ++ optional enableUnfree zlib;
+    ++ optional enableUnfree zlib;
 
   installPhase = ''
     mkdir -p $out

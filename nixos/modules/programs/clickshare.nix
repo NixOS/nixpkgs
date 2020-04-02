@@ -13,7 +13,7 @@
   config = lib.modules.mkIf config.programs.clickshare-csc1.enable {
     environment.systemPackages = [ pkgs.clickshare-csc1 ];
     services.udev.packages = [ pkgs.clickshare-csc1 ];
-    users.groups.clickshare = {};
+    users.groups.clickshare = { };
   };
 
   meta.maintainers = [ lib.maintainers.yarny ];

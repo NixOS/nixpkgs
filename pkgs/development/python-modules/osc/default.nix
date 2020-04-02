@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage , fetchFromGitHub , bashInteractive , urlgrabber, m2crypto, rpm }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber, m2crypto, rpm }:
 
 buildPythonPackage rec {
   pname = "osc";

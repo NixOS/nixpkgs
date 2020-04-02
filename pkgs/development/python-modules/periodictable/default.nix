@@ -1,10 +1,10 @@
-{lib, fetchPypi, buildPythonPackage, numpy, pyparsing}:
+{ lib, fetchPypi, buildPythonPackage, numpy, pyparsing }:
 
 buildPythonPackage rec{
   pname = "periodictable";
   version = "1.5.2";
 
-  propagatedBuildInputs = [numpy pyparsing];
+  propagatedBuildInputs = [ numpy pyparsing ];
 
   src = fetchPypi {
     inherit pname version;

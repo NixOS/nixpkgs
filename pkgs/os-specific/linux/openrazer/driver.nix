@@ -4,7 +4,6 @@
 , stdenv
 , utillinux
 }:
-
 let
   common = import ../../../development/python-modules/openrazer/common.nix { inherit stdenv fetchFromGitHub; };
 in

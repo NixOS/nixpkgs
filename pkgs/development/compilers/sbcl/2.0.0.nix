@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, writeText, sbclBootstrap
+{ stdenv
+, fetchurl
+, writeText
+, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
@@ -13,11 +16,11 @@ stdenv.mkDerivation rec {
   version = "2.0.0";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${pname}-${version}-source.tar.bz2";
+    url = "mirror://sourceforge/project/sbcl/sbcl/${version}/${pname}-${version}-source.tar.bz2";
     sha256 = "1krgd69cirp4ili2pfsh1a0mfvq722jbknlvmf17qhsxh1b94dlh";
   };
 
-  buildInputs = [texinfo];
+  buildInputs = [ texinfo ];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -27,10 +30,7 @@ stdenv.mkDerivation rec {
                (pushnew x features))
              (disable (x)
                (setf features (remove x features))))
-    ''
-    + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
-    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
-    + ''
+  '' + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)") + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)" + ''
       )) " > customize-target-features.lisp
 
     pwd
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/runtime/Config.x86-64-darwin \
       --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
-  ''
-  + (if purgeNixReferences
+  '' + (
+    if purgeNixReferences
     then
       # This is the default location to look for the core; by default in $out/lib/sbcl
       ''
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
         sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
           src/code/run-program.lisp
       ''
-    );
+  );
 
 
   preBuild = ''
@@ -87,8 +87,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
-  ''
-  + stdenv.lib.optionalString (!purgeNixReferences) ''
+  '' + stdenv.lib.optionalString (!purgeNixReferences) ''
     cp -r src $out/lib/sbcl
     cp -r contrib $out/lib/sbcl
     cat >$out/lib/sbcl/sbclrc <<EOF

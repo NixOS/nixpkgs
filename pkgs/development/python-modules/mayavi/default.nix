@@ -1,6 +1,15 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, wxPython, pygments, numpy, vtk, traitsui, envisage, apptools
-, nose, mock
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, wxPython
+, pygments
+, numpy
+, vtk
+, traitsui
+, envisage
+, apptools
+, nose
+, mock
 , isPy3k
 }:
 

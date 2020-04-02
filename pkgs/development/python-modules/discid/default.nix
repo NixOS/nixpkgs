@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python binding of libdiscid";
-    homepage    = "https://python-discid.readthedocs.org/";
-    license     = licenses.lgpl3Plus;
+    homepage = "https://python-discid.readthedocs.org/";
+    license = licenses.lgpl3Plus;
   };
 }

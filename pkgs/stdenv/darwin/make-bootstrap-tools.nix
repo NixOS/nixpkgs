@@ -1,10 +1,10 @@
 { pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem }:
 
 with import pkgspath { inherit system; };
-
 let
   llvmPackages = llvmPackages_7;
-in rec {
+in
+rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
@@ -23,7 +23,7 @@ in rec {
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
-    buildInputs = [nukeReferences cpio];
+    buildInputs = [ nukeReferences cpio ];
 
     buildCommand = ''
       mkdir -p $out/bin $out/lib $out/lib/system
@@ -150,7 +150,7 @@ in rec {
       (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
     '';
 
-    allowedReferences = [];
+    allowedReferences = [ ];
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.copumpkin ];
@@ -171,10 +171,10 @@ in rec {
   };
 
   bootstrapFiles = {
-    sh      = "${build}/on-server/sh";
-    bzip2   = "${build}/on-server/bzip2";
-    mkdir   = "${build}/on-server/mkdir";
-    cpio    = "${build}/on-server/cpio";
+    sh = "${build}/on-server/sh";
+    bzip2 = "${build}/on-server/bzip2";
+    mkdir = "${build}/on-server/mkdir";
+    cpio = "${build}/on-server/cpio";
     tarball = "${build}/on-server/bootstrap-tools.cpio.bz2";
   };
 
@@ -343,7 +343,8 @@ in rec {
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   test-pkgs = import test-pkgspath {
     inherit system;
-    stdenvStages = args: let
+    stdenvStages = args:
+      let
         args' = args // { inherit bootstrapFiles; };
       in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
   };

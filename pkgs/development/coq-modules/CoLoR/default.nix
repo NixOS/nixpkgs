@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, coq, bignums }:
-
 let
   coqVersions = {
     "8.6" = "1.4.0";
@@ -27,7 +26,6 @@ let
   };
   param = params.${coqVersions.${coq.coq-version}};
 in
-
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-CoLoR-${param.version}";
 

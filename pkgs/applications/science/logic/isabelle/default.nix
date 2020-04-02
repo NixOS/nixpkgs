@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
 
   dirname = "Isabelle${version}";
 
-  src = if stdenv.isDarwin
+  src =
+    if stdenv.isDarwin
     then fetchurl {
       url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}.dmg";
       sha256 = "0jwnvsf5whklq14ihaxs7b9nbic94mm56nvxljrdbvl6y628j9r5";
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     };
 
   buildInputs = [ perl polyml z3 ]
-             ++ stdenv.lib.optionals (!stdenv.isDarwin) [ nettools java ];
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 
@@ -52,11 +53,12 @@ stdenv.mkDerivation rec {
     for comp in contrib/jdk contrib/polyml-* contrib/z3-*; do
       rm -rf $comp/x86*
     done
-    '' + (if ! stdenv.isLinux then "" else ''
-    arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
-    for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
-    done
+  '' + (
+    if ! stdenv.isLinux then "" else ''
+      arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
+      for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do
+        patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
+      done
     '');
 
   installPhase = ''

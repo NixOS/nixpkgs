@@ -16,7 +16,7 @@ rec {
 
   packageName = "external-program";
 
-  asdFilesToKeep = ["external-program.asd"];
+  asdFilesToKeep = [ "external-program.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM external-program DESCRIPTION System lacks description SHA256

@@ -1,9 +1,12 @@
-{ lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux, nixosTests
+{ lib
+, stdenv
+, python3
+, openssl
+, enableSystemd ? stdenv.isLinux
+, nixosTests
 }:
 
 with python3.pkgs;
-
 let
   matrix-synapse-ldap3 = buildPythonPackage rec {
     pname = "matrix-synapse-ldap3";
@@ -20,8 +23,8 @@ let
     doCheck = !isPy3k;
     checkInputs = [ ldaptor mock ];
   };
-
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "matrix-synapse";
   version = "1.11.1";
 

@@ -3,7 +3,8 @@
 { crateName
 , version
 , sha256
-, ... } @ args:
+, ...
+} @ args:
 
 lib.overrideDerivation (fetchurl ({
 
@@ -31,5 +32,5 @@ lib.overrideDerivation (fetchurl ({
       mv "$unpackDir/$fn" "$out"
     '';
 } // removeAttrs args [ "crateName" "version" ]))
-# Hackety-hack: we actually need unzip hooks, too
-(x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
+  # Hackety-hack: we actually need unzip hooks, too
+  (x: { nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ]; })

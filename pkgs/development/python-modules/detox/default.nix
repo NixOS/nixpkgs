@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, tox, py, eventlet }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, tox
+, py
+, eventlet
+}:
 
 buildPythonPackage rec {
   pname = "detox";

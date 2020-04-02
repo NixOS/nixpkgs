@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, curl  }:
+{ stdenv, fetchFromGitHub, curl }:
 
 stdenv.mkDerivation rec {
   version = "1.11.2";
   pname = "clib";
 
   src = fetchFromGitHub {
-    rev    = version;
-    owner  = "clibs";
-    repo   = "clib";
+    rev = version;
+    owner = "clibs";
+    repo = "clib";
     sha256 = "03q5l873zc1dm478f35ibqandypakf47hzqb5gjpnpbcyb2m2jxz";
   };
 

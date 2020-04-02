@@ -15,7 +15,17 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
-    requests netdisco click click-log tabulate jsonpath_rw jinja2 dateparser regex ruamel_yaml aiohttp
+    requests
+    netdisco
+    click
+    click-log
+    tabulate
+    jsonpath_rw
+    jinja2
+    dateparser
+    regex
+    ruamel_yaml
+    aiohttp
   ];
 
   postInstall = ''
@@ -25,7 +35,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   checkInputs = with python3.pkgs; [
-    pytest requests-mock
+    pytest
+    requests-mock
   ];
 
   checkPhase = ''

@@ -11,32 +11,33 @@ stdenv.mkDerivation ({
     inherit (ocaml.meta) platforms;
   };
 
-} // (if stdenv.lib.versionOlder ocaml.version "4.07" then {
+} // (
+  if stdenv.lib.versionOlder ocaml.version "4.07" then {
 
-  src = fetchFromGitHub {
-    owner = "c-cube";
-    repo = "seq";
-    rev = "0.1";
-    sha256 = "1cjpsc7q76yfgq9iyvswxgic4kfq2vcqdlmxjdjgd4lx87zvcwrv";
-  };
+    src = fetchFromGitHub {
+      owner = "c-cube";
+      repo = "seq";
+      rev = "0.1";
+      sha256 = "1cjpsc7q76yfgq9iyvswxgic4kfq2vcqdlmxjdjgd4lx87zvcwrv";
+    };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+    buildInputs = [ ocaml findlib ocamlbuild ];
 
-  createFindlibDestdir = true;
+    createFindlibDestdir = true;
 
-  meta.description = "Compatibility package for OCaml’s standard iterator type starting from 4.07";
+    meta.description = "Compatibility package for OCaml’s standard iterator type starting from 4.07";
 
-} else {
+  } else {
 
-  src = ./src-base;
+    src = ./src-base;
 
-  dontBuild = true;
+    dontBuild = true;
 
-  installPhase = ''
-    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/seq
-    cp META $out/lib/ocaml/${ocaml.version}/site-lib/seq
-  '';
+    installPhase = ''
+      mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/seq
+      cp META $out/lib/ocaml/${ocaml.version}/site-lib/seq
+    '';
 
-  meta.description = "dummy backward-compatibility package for iterators";
+    meta.description = "dummy backward-compatibility package for iterators";
 
-}))
+  }))

@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests, websocket_client, python_magic
-, pytest, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, websocket_client
+, python_magic
+, pytest
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "pushbullet.py";

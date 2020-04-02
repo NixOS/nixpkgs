@@ -1,8 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, CoreFoundation
-, tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
-, debug, runtimeShell
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, gettext
+, ncurses
+, CoreFoundation
+, tiles
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, freetype
+, Cocoa
+, debug
+, runtimeShell
 }:
-
 let
   inherit (stdenv.lib) optionals optionalString;
 
@@ -22,20 +33,25 @@ let
     '';
 
     makeFlags = [
-      "PREFIX=$(out)" "USE_HOME_DIR=1" "LANGUAGES=all"
+      "PREFIX=$(out)"
+      "USE_HOME_DIR=1"
+      "LANGUAGES=all"
     ] ++ optionals (!debug) [
       "RELEASE=1"
     ] ++ optionals tiles [
-      "TILES=1" "SOUND=1"
+      "TILES=1"
+      "SOUND=1"
     ] ++ optionals stdenv.isDarwin [
-      "NATIVE=osx" "CLANG=1"
+      "NATIVE=osx"
+      "CLANG=1"
     ];
 
     postInstall = optionalString tiles
-    ( if !stdenv.isDarwin
-      then utils.installXDGAppLauncher
-      else utils.installMacOSAppLauncher
-    );
+      (
+        if !stdenv.isDarwin
+        then utils.installXDGAppLauncher
+        else utils.installMacOSAppLauncher
+      );
 
     dontStrip = debug;
 
@@ -78,11 +94,11 @@ let
 
   utils = {
     fetchFromCleverRaven = { rev, sha256 }:
-    fetchFromGitHub {
-      owner = "CleverRaven";
-      repo = "Cataclysm-DDA";
-      inherit rev sha256;
-    };
+      fetchFromGitHub {
+        owner = "CleverRaven";
+        repo = "Cataclysm-DDA";
+        inherit rev sha256;
+      };
 
     installXDGAppLauncher = ''
       launcher="$out/share/applications/cataclysm-dda.desktop"
@@ -105,5 +121,4 @@ let
     '';
   };
 in
-
 { inherit common utils; }

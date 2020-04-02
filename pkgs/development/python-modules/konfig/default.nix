@@ -18,21 +18,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ configparser six ];
 
-  patches = [ (writeText "konfig.patch" ''
-    diff --git a/setup.py b/setup.py
-    index 96fd858..bb4db06 100644
-    --- a/setup.py
-    +++ b/setup.py
-    @@ -20,7 +20,7 @@ setup(name='konfig',
-           author_email="tarek@mozilla.com",
-           include_package_data=True,
-           install_requires = [
-    -        'configparser', 'argparse', 'six'
-    +        'configparser', 'six'
-           ],
-           zip_safe=False,
-           classifiers=classifiers,
-  '') ];
+  patches = [
+    (writeText "konfig.patch" ''
+      diff --git a/setup.py b/setup.py
+      index 96fd858..bb4db06 100644
+      --- a/setup.py
+      +++ b/setup.py
+      @@ -20,7 +20,7 @@ setup(name='konfig',
+             author_email="tarek@mozilla.com",
+             include_package_data=True,
+             install_requires = [
+      -        'configparser', 'argparse', 'six'
+      +        'configparser', 'six'
+             ],
+             zip_safe=False,
+             classifiers=classifiers,
+    '')
+  ];
 
   checkInputs = [ pytest glibcLocales ];
 
@@ -42,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Yet Another Config Parser";
-    homepage    = "https://github.com/mozilla-services/konfig";
-    license     = licenses.mpl20;
+    homepage = "https://github.com/mozilla-services/konfig";
+    license = licenses.mpl20;
   };
 }

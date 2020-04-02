@@ -16,7 +16,7 @@ rec {
 
   packageName = "nibbles";
 
-  asdFilesToKeep = ["nibbles.asd"];
+  asdFilesToKeep = [ "nibbles.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM nibbles DESCRIPTION

@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
-let cfg = config.services.xbanish;
-
-in {
+let
+  cfg = config.services.xbanish;
+in
+{
   options.services.xbanish = {
 
     enable = mkEnableOption "xbanish";

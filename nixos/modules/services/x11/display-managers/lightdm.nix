@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   xEnv = config.systemd.services.display-manager.environment;
@@ -41,9 +39,9 @@ let
     ''
       [LightDM]
       ${optionalString cfg.greeter.enable ''
-        greeter-user = ${config.users.users.lightdm.name}
-        greeters-directory = ${cfg.greeter.package}
-      ''}
+      greeter-user = ${config.users.users.lightdm.name}
+      greeters-directory = ${cfg.greeter.package}
+    ''}
       sessions-directory = ${dmcfg.sessionData.desktops}/share/xsessions:${dmcfg.sessionData.desktops}/share/wayland-sessions
       ${cfg.extraConfig}
 
@@ -51,22 +49,21 @@ let
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.sessionData.wrapper}
       ${optionalString cfg.greeter.enable ''
-        greeter-session = ${cfg.greeter.name}
-      ''}
+      greeter-session = ${cfg.greeter.name}
+    ''}
       ${optionalString cfg.autoLogin.enable ''
-        autologin-user = ${cfg.autoLogin.user}
-        autologin-user-timeout = ${toString cfg.autoLogin.timeout}
-        autologin-session = ${sessionData.autologinSession}
-      ''}
+      autologin-user = ${cfg.autoLogin.user}
+      autologin-user-timeout = ${toString cfg.autoLogin.timeout}
+      autologin-session = ${sessionData.autologinSession}
+    ''}
       ${optionalString (dmcfg.setupCommands != "") ''
-        display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
-          #!${pkgs.bash}/bin/bash
-          ${dmcfg.setupCommands}
-        ''}
-      ''}
+      display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
+      #!${pkgs.bash}/bin/bash
+      ${dmcfg.setupCommands}
+    ''}
+    ''}
       ${cfg.extraSeatDefaults}
     '';
-
 in
 {
   # Note: the order in which lightdm greeter modules are imported
@@ -92,7 +89,7 @@ in
         '';
       };
 
-      greeter =  {
+      greeter = {
         enable = mkOption {
           type = types.bool;
           default = true;
@@ -145,7 +142,7 @@ in
       };
 
       autoLogin = mkOption {
-        default = {};
+        default = { };
         description = ''
           Configuration for automatic login.
         '';
@@ -185,22 +182,26 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = xcfg.enable;
+      {
+        assertion = xcfg.enable;
         message = ''
           LightDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
+      {
+        assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> sessionData.autologinSession != null;
+      {
+        assertion = cfg.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
           LightDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';
       }
-      { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
+      {
+        assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
         message = ''
           LightDM can only run without greeter if automatic login is enabled and the timeout for it
           is set to zero.
@@ -233,7 +234,7 @@ in
       "getty@tty7.service"
       # TODO: Add "plymouth-quit.service" so LightDM can control when plymouth
       # quits. Currently this breaks switching to configurations with plymouth.
-     ];
+    ];
 
     # Pull in dependencies of services we replace.
     systemd.services.display-manager.after = [
@@ -278,40 +279,40 @@ in
     environment.systemPackages = [ lightdm ];
 
     security.pam.services.lightdm.text = ''
-        auth      substack      login
-        account   include       login
-        password  substack      login
-        session   include       login
+      auth      substack      login
+      account   include       login
+      password  substack      login
+      session   include       login
     '';
 
     security.pam.services.lightdm-greeter.text = ''
-        auth     required       pam_succeed_if.so audit quiet_success user = lightdm
-        auth     optional       pam_permit.so
+      auth     required       pam_succeed_if.so audit quiet_success user = lightdm
+      auth     optional       pam_permit.so
 
-        account  required       pam_succeed_if.so audit quiet_success user = lightdm
-        account  sufficient     pam_unix.so
+      account  required       pam_succeed_if.so audit quiet_success user = lightdm
+      account  sufficient     pam_unix.so
 
-        password required       pam_deny.so
+      password required       pam_deny.so
 
-        session  required       pam_succeed_if.so audit quiet_success user = lightdm
-        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       pam_keyinit.so force revoke
-        session  optional       pam_permit.so
+      session  required       pam_succeed_if.so audit quiet_success user = lightdm
+      session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+      session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+      session  optional       pam_keyinit.so force revoke
+      session  optional       pam_permit.so
     '';
 
     security.pam.services.lightdm-autologin.text = ''
-        auth      requisite     pam_nologin.so
+      auth      requisite     pam_nologin.so
 
-        auth      required      pam_succeed_if.so uid >= 1000 quiet
-        auth      required      pam_permit.so
+      auth      required      pam_succeed_if.so uid >= 1000 quiet
+      auth      required      pam_permit.so
 
-        account   sufficient    pam_unix.so
+      account   sufficient    pam_unix.so
 
-        password  requisite     pam_unix.so nullok sha512
+      password  requisite     pam_unix.so nullok sha512
 
-        session   optional      pam_keyinit.so revoke
-        session   include       login
+      session   optional      pam_keyinit.so revoke
+      session   include       login
     '';
 
     users.users.lightdm = {
@@ -329,7 +330,7 @@ in
     ];
 
     users.groups.lightdm.gid = config.ids.gids.lightdm;
-    services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..
+    services.xserver.tty = null; # We might start multiple X servers so let the tty increment themselves..
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };
 }

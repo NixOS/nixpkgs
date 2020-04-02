@@ -1,6 +1,9 @@
-{ lib, buildDunePackage, fetchurl
+{ lib
+, buildDunePackage
+, fetchurl
 , alcotest
-, astring, fmt
+, astring
+, fmt
 }:
 
 buildDunePackage rec {

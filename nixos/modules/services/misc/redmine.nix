@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   inherit (lib) mkDefault mkEnableOption mkIf mkOption types;
   inherit (lib) concatStringsSep literalExample mapAttrsToList;
@@ -50,13 +49,12 @@ let
         cd $out
         unpackFile ${source}
       '';
-  });
+    }
+  );
 
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql2";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "postgresql";
-
 in
-
 {
   options = {
     services.redmine = {
@@ -127,7 +125,7 @@ in
 
       themes = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = "Set of themes.";
         example = literalExample ''
           {
@@ -141,7 +139,7 @@ in
 
       plugins = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = "Set of plugins.";
         example = literalExample ''
           {
@@ -229,16 +227,20 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.passwordFile != null || cfg.database.password != "" || cfg.database.socket != null;
+      {
+        assertion = cfg.database.passwordFile != null || cfg.database.password != "" || cfg.database.socket != null;
         message = "one of services.redmine.database.socket, services.redmine.database.passwordFile, or services.redmine.database.password must be set";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
         message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.socket != null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.socket != null;
         message = "services.redmine.database.socket must be set if services.redmine.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
         message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
       }
     ];
@@ -248,7 +250,8 @@ in
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -258,7 +261,8 @@ in
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
         }
       ];
@@ -362,7 +366,7 @@ in
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
-        ExecStart="${bundle} exec rails server webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+        ExecStart = "${bundle} exec rails server webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
       };
 
     };

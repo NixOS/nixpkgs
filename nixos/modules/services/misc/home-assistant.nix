@@ -1,14 +1,14 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.home-assistant;
 
   # cfg.config != null can be assumed here
   configJSON = pkgs.writeText "configuration.json"
-    (builtins.toJSON (if cfg.applyDefaultConfig then
-    (recursiveUpdate defaultConfig cfg.config) else cfg.config));
+    (builtins.toJSON (
+      if cfg.applyDefaultConfig then
+        (recursiveUpdate defaultConfig cfg.config) else cfg.config));
   configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
     # Hack to support secrets, that are encoded as custom yaml objects,
@@ -44,13 +44,13 @@ let
 
   # Returns whether component is used in config
   useComponent = component:
-    hasAttrByPath (splitString "." component) cfg.config
-    || useComponentPlatform component;
+    hasAttrByPath (splitString "." component) cfg.config || useComponentPlatform component;
 
   # List of components used in config
   extraComponents = filter useComponent availableComponents;
 
-  package = if (cfg.autoExtraComponents && cfg.config != null)
+  package =
+    if (cfg.autoExtraComponents && cfg.config != null)
     then (cfg.package.override { inherit extraComponents; })
     else cfg.package;
 
@@ -61,8 +61,8 @@ let
   } // optionalAttrs (cfg.lovelaceConfig != null) {
     lovelace.mode = "yaml";
   };
-
-in {
+in
+{
   meta.maintainers = with maintainers; [ dotlambda ];
 
   options.services.home-assistant = {
@@ -97,19 +97,19 @@ in {
     config = mkOption {
       default = null;
       # Migrate to new option types later: https://github.com/NixOS/nixpkgs/pull/75584
-      type =  with lib.types; let
-          valueType = nullOr (oneOf [
-            bool
-            int
-            float
-            str
-            (lazyAttrsOf valueType)
-            (listOf valueType)
-          ]) // {
-            description = "Yaml value";
-            emptyValue.value = {};
-          };
-        in valueType;
+      type = with lib.types; let
+        valueType = nullOr (oneOf [
+          bool
+          int
+          float
+          str
+          (lazyAttrsOf valueType)
+          (listOf valueType)
+        ]) // {
+          description = "Yaml value";
+          emptyValue.value = { };
+        };
+      in valueType;
       example = literalExample ''
         {
           homeassistant = {
@@ -225,17 +225,19 @@ in {
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];
-      preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
-        cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
-      '' else ''
-        rm -f "${cfg.configDir}/configuration.yaml"
-        ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
-      '') + optionalString (cfg.lovelaceConfig != null) (if cfg.lovelaceConfigWritable then ''
-        cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
-      '' else ''
-        rm -f "${cfg.configDir}/ui-lovelace.yaml"
-        ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
-      '');
+      preStart = optionalString (cfg.config != null) (
+        if cfg.configWritable then ''
+          cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
+        '' else ''
+          rm -f "${cfg.configDir}/configuration.yaml"
+          ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
+        '') + optionalString (cfg.lovelaceConfig != null) (
+        if cfg.lovelaceConfigWritable then ''
+          cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+        '' else ''
+          rm -f "${cfg.configDir}/ui-lovelace.yaml"
+          ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+        '');
       serviceConfig = {
         ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
         User = "hass";

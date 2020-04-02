@@ -1,19 +1,17 @@
-{stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU, libGL, freeglut, camlp4 } :
-
+{ stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU, libGL, freeglut, camlp4 }:
 let
   pname = "lablgl";
 in
-
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "1.05";
 
-  src = fetchurl { 
+  src = fetchurl {
     url = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/dist/lablgl-${version}.tar.gz";
     sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };
 
-  buildInputs = [ocaml findlib lablgtk freeglut camlp4];
+  buildInputs = [ ocaml findlib lablgtk freeglut camlp4 ];
   propagatedBuildInputs = [ libGLU libGL ];
 
   patches = [ ./Makefile.config.patch ./META.patch ];

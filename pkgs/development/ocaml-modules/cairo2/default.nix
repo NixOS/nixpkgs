@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchurl, buildDunePackage
-, pkgconfig, cairo
+{ stdenv
+, lib
+, fetchurl
+, buildDunePackage
+, pkgconfig
+, cairo
 }:
 
 buildDunePackage rec {

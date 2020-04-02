@@ -12,7 +12,9 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    click click-log click-threading
+    click
+    click-log
+    click-threading
     requests_toolbelt
     requests
     requests_oauthlib # required for google oauth sync

@@ -1,5 +1,4 @@
-{ stdenv, fetchhg, pidgin, cmake, libxml2 } :
-
+{ stdenv, fetchhg, pidgin, cmake, libxml2 }:
 let
   version = "40ddb6d";
 in

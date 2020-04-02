@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, fusepy, fuse
-, openssl }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools_scm
+, fusepy
+, fuse
+, openssl
+}:
 
 buildPythonPackage rec {
   pname = "acme-tiny";

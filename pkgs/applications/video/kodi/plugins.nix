@@ -1,8 +1,30 @@
-{ stdenv, callPackage, fetchFromGitHub
-, cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
-, python2Packages, expat, glib, nspr, nss, openssl
-, libssh, libarchive, lzma, bzip2, lz4, lzo }:
+{ stdenv
+, callPackage
+, fetchFromGitHub
+, cmake
+, kodiPlain
+, libcec_platform
+, tinyxml
+, rapidxml
+, steam
+, libusb
+, pcre-cpp
+, jsoncpp
+, libhdhomerun
+, zlib
+, python2Packages
+, expat
+, glib
+, nspr
+, nss
+, openssl
+, libssh
+, libarchive
+, lzma
+, bzip2
+, lz4
+, lzo
+}:
 
 with stdenv.lib;
 
@@ -14,9 +36,9 @@ let self = rec {
   kodi = kodiPlain;
 
   # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
-  toKodiPlugin = drv: drv.overrideAttrs(oldAttrs: {
+  toKodiPlugin = drv: drv.overrideAttrs (oldAttrs: {
     # Use passthru in order to prevent rebuilds when possible.
-    passthru = (oldAttrs.passthru or {})// {
+    passthru = (oldAttrs.passthru or { })// {
       kodiPluginFor = kodi;
       requiredKodiPlugins = requiredKodiPlugins drv.propagatedBuildInputs;
     };
@@ -26,7 +48,8 @@ let self = rec {
   hasKodiPlugin = drv: drv ? kodiPluginFor && drv.kodiPluginFor == kodi;
 
   # Get list of required Kodi plugins given a list of derivations.
-  requiredKodiPlugins = drvs: let
+  requiredKodiPlugins = drvs:
+    let
       modules = filter hasKodiPlugin drvs;
     in unique (modules ++ concatLists (catAttrs "requiredKodiPlugins" modules));
 
@@ -51,49 +74,56 @@ let self = rec {
   };
 
   mkKodiPlugin = { plugin, namespace, version, sourceDir ? null, ... }@args:
-  toKodiPlugin (stdenv.mkDerivation ({
-    name = "kodi-plugin-${plugin}-${version}";
+    toKodiPlugin (stdenv.mkDerivation ({
+      name = "kodi-plugin-${plugin}-${version}";
 
-    dontStrip = true;
+      dontStrip = true;
 
-    extraRuntimeDependencies = [ ];
+      extraRuntimeDependencies = [ ];
 
-    installPhase = ''
-      ${if sourceDir == null then "" else "cd $src/$sourceDir"}
-      d=$out${pluginDir}/${namespace}
-      mkdir -p $d
-      sauce="."
-      [ -d ${namespace} ] && sauce=${namespace}
-      cp -R "$sauce/"* $d
-    '';
-  } // args));
+      installPhase = ''
+        ${if sourceDir == null then "" else "cd $src/$sourceDir"}
+        d=$out${pluginDir}/${namespace}
+        mkdir -p $d
+        sauce="."
+        [ -d ${namespace} ] && sauce=${namespace}
+        cp -R "$sauce/"* $d
+      '';
+    } // args));
 
-  mkKodiABIPlugin = { plugin, namespace, version, extraBuildInputs ? [],
-    extraRuntimeDependencies ? [], extraInstallPhase ? "", ... }@args:
-  toKodiPlugin (stdenv.mkDerivation ({
-    name = "kodi-plugin-${plugin}-${version}";
+  mkKodiABIPlugin =
+    { plugin
+    , namespace
+    , version
+    , extraBuildInputs ? [ ]
+    , extraRuntimeDependencies ? [ ]
+    , extraInstallPhase ? ""
+    , ...
+    }@args:
+      toKodiPlugin (stdenv.mkDerivation ({
+        name = "kodi-plugin-${plugin}-${version}";
 
-    dontStrip = true;
+        dontStrip = true;
 
-    buildInputs = [ cmake kodiPlain kodi-platform libcec_platform ]
-               ++ extraBuildInputs;
+        buildInputs = [ cmake kodiPlain kodi-platform libcec_platform ]
+          ++ extraBuildInputs;
 
-    inherit extraRuntimeDependencies;
+        inherit extraRuntimeDependencies;
 
-    # disables check ensuring install prefix is that of kodi
-    cmakeFlags = [
-      "-DOVERRIDE_PATHS=1"
-    ];
+        # disables check ensuring install prefix is that of kodi
+        cmakeFlags = [
+          "-DOVERRIDE_PATHS=1"
+        ];
 
-    # kodi checks for plugin .so libs existance in the addon folder (share/...)
-    # and the non-wrapped kodi lib/... folder before even trying to dlopen
-    # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
-    installPhase = let n = namespace; in ''
-      make install
-      ln -s $out/lib/addons/${n}/${n}.so.${version} $out${pluginDir}/${n}/${n}.so.${version}
-      ${extraInstallPhase}
-    '';
-  } // args));
+        # kodi checks for plugin .so libs existance in the addon folder (share/...)
+        # and the non-wrapped kodi lib/... folder before even trying to dlopen
+        # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
+        installPhase = let n = namespace; in ''
+          make install
+          ln -s $out/lib/addons/${n}/${n}.so.${version} $out${pluginDir}/${n}/${n}.so.${version}
+          ${extraInstallPhase}
+        '';
+      } // args));
 
   advanced-launcher = mkKodiPlugin rec {
 
@@ -154,24 +184,25 @@ let self = rec {
 
   };
 
-  controllers = let
-    pname = "game-controller";
-    version = "1.0.3";
+  controllers =
+    let
+      pname = "game-controller";
+      version = "1.0.3";
 
-    src = fetchFromGitHub {
-      owner = "kodi-game";
-      repo = "kodi-game-controllers";
-      rev = "01acb5b6e8b85392b3cb298b034aadb1b24ccf18";
-      sha256 = "0sbc0w0fwbp7rbmbgb6a1kglhnn5g85hijcbbvf5x6jdq9v3f1qb";
-    };
+      src = fetchFromGitHub {
+        owner = "kodi-game";
+        repo = "kodi-game-controllers";
+        rev = "01acb5b6e8b85392b3cb298b034aadb1b24ccf18";
+        sha256 = "0sbc0w0fwbp7rbmbgb6a1kglhnn5g85hijcbbvf5x6jdq9v3f1qb";
+      };
 
-    meta = {
-      description = "Add support for different gaming controllers.";
-      platforms = platforms.all;
-      maintainers = with maintainers; [ edwtjo ];
-    };
+      meta = {
+        description = "Add support for different gaming controllers.";
+        platforms = platforms.all;
+        maintainers = with maintainers; [ edwtjo ];
+      };
 
-    mkController = controller: {
+      mkController = controller: {
         ${controller} = mkKodiPlugin rec {
           plugin = pname + "-" + controller;
           namespace = "game.controller." + controller;
@@ -180,43 +211,44 @@ let self = rec {
         };
       };
     in (mkController "default")
-    // (mkController "dreamcast")
-    // (mkController "gba")
-    // (mkController "genesis")
-    // (mkController "mouse")
-    // (mkController "n64")
-    // (mkController "nes")
-    // (mkController "ps")
-    // (mkController "snes");
+      // (mkController "dreamcast")
+      // (mkController "gba")
+      // (mkController "genesis")
+      // (mkController "mouse")
+      // (mkController "n64")
+      // (mkController "nes")
+      // (mkController "ps")
+      // (mkController "snes");
 
-  hyper-launcher = let
-    pname = "hyper-launcher";
-    version = "1.5.2";
-    src = fetchFromGitHub rec {
-      name = pname + "-" + version + ".tar.gz";
-      owner = "teeedubb";
-      repo = owner + "-xbmc-repo";
-      rev = "f958ba93fe85b9c9025b1745d89c2db2e7dd9bf6";
-      sha256 = "1dvff24fbas25k5kvca4ssks9l1g5rfa3hl8lqxczkaqi3pp41j5";
+  hyper-launcher =
+    let
+      pname = "hyper-launcher";
+      version = "1.5.2";
+      src = fetchFromGitHub rec {
+        name = pname + "-" + version + ".tar.gz";
+        owner = "teeedubb";
+        repo = owner + "-xbmc-repo";
+        rev = "f958ba93fe85b9c9025b1745d89c2db2e7dd9bf6";
+        sha256 = "1dvff24fbas25k5kvca4ssks9l1g5rfa3hl8lqxczkaqi3pp41j5";
+      };
+      meta = {
+        homepage = https://forum.kodi.tv/showthread.php?tid=258159;
+        description = "A ROM launcher for Kodi that uses HyperSpin assets.";
+        maintainers = with maintainers; [ edwtjo ];
+      };
+    in {
+      service = mkKodiPlugin {
+        plugin = pname + "-service";
+        version = "1.2.1";
+        namespace = "service.hyper.launcher";
+        inherit src meta;
+      };
+      plugin = mkKodiPlugin {
+        plugin = pname;
+        namespace = "plugin.hyper.launcher";
+        inherit version src meta;
+      };
     };
-    meta = {
-      homepage = https://forum.kodi.tv/showthread.php?tid=258159;
-      description = "A ROM launcher for Kodi that uses HyperSpin assets.";
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  in {
-    service = mkKodiPlugin {
-      plugin = pname + "-service";
-      version = "1.2.1";
-      namespace = "service.hyper.launcher";
-      inherit src meta;
-    };
-    plugin = mkKodiPlugin {
-      plugin = pname;
-      namespace = "plugin.hyper.launcher";
-      inherit version src meta;
-    };
-  };
 
   joystick = mkKodiABIPlugin rec {
     namespace = "peripheral.joystick";

@@ -18,7 +18,7 @@ let
     rootPaths = [ tools ];
   };
 
-  closureToNix = runCommand "closure.nix" {}
+  closureToNix = runCommand "closure.nix" { }
     ''
       (
         echo '{ dep, ... }: ['

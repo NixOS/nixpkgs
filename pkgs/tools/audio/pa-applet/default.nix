@@ -11,7 +11,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk3 libpulseaudio glibc automake autoconf libnotify libX11 xf86inputevdev
+    gtk3
+    libpulseaudio
+    glibc
+    automake
+    autoconf
+    libnotify
+    libX11
+    xf86inputevdev
   ];
 
   preConfigure = ''

@@ -1,5 +1,14 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, cairocffi, nose, fontconfig
-, cssselect2, defusedxml, pillow, tinycss2 }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, cairocffi
+, nose
+, fontconfig
+, cssselect2
+, defusedxml
+, pillow
+, tinycss2
+}:
 
 # CairoSVG 2.x dropped support for Python 2 so offer CairoSVG 1.x as an
 # alternative

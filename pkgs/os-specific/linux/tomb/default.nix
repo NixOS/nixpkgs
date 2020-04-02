@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, gettext, zsh, pinentry, cryptsetup, gnupg, utillinux, e2fsprogs, sudo
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, gettext
+, zsh
+, pinentry
+, cryptsetup
+, gnupg
+, utillinux
+, e2fsprogs
+, sudo
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +17,9 @@ stdenv.mkDerivation rec {
   version = "2.7";
 
   src = fetchFromGitHub {
-    owner  = "dyne";
-    repo   = "Tomb";
-    rev    = "v${version}";
+    owner = "dyne";
+    repo = "Tomb";
+    rev = "v${version}";
     sha256 = "1vzkpzci6cp1r1q2n34pcgcns78i726k8d89dd6pibyj0vfnkl57";
   };
 
@@ -36,9 +46,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File encryption on GNU/Linux";
-    homepage    = https://www.dyne.org/software/tomb/;
-    license     = licenses.gpl3;
+    homepage = https://www.dyne.org/software/tomb/;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

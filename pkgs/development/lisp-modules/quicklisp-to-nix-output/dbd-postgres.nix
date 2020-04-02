@@ -14,7 +14,7 @@ rec {
 
   packageName = "dbd-postgres";
 
-  asdFilesToKeep = ["dbd-postgres.asd"];
+  asdFilesToKeep = [ "dbd-postgres.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dbd-postgres DESCRIPTION Database driver for PostgreSQL. SHA256

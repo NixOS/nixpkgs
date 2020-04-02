@@ -1,10 +1,11 @@
 { stdenv, fetchurl, xercesc, getopt }:
-
 let
-  platform = if stdenv.isLinux then "linux" else
-             if stdenv.isDarwin then "macosx" else
-             throw "Unsupported platform";
-in stdenv.mkDerivation rec {
+  platform =
+    if stdenv.isLinux then "linux" else
+      if stdenv.isDarwin then "macosx" else
+        throw "Unsupported platform";
+in
+stdenv.mkDerivation rec {
   pname = "xalan-c";
   version = "1.11";
 

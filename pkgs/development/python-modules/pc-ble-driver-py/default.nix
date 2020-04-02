@@ -1,6 +1,18 @@
-{ stdenv, buildPythonPackage, fetchpatch, fetchFromGitHub,
-  python, cmake, git, swig, boost, udev,
-  setuptools, enum34, wrapt, future }:
+{ stdenv
+, buildPythonPackage
+, fetchpatch
+, fetchFromGitHub
+, python
+, cmake
+, git
+, swig
+, boost
+, udev
+, setuptools
+, enum34
+, wrapt
+, future
+}:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";

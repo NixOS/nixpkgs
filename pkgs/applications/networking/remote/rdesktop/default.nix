@@ -1,6 +1,12 @@
-{stdenv, fetchFromGitHub, openssl, libX11, libgssglue, pkgconfig, autoreconfHook
+{ stdenv
+, fetchFromGitHub
+, openssl
+, libX11
+, libgssglue
+, pkgconfig
+, autoreconfHook
 , enableCredssp ? (!stdenv.isDarwin)
-} :
+}:
 
 stdenv.mkDerivation (rec {
   pname = "rdesktop";
@@ -13,8 +19,8 @@ stdenv.mkDerivation (rec {
     sha256 = "02sbhnqbasa54c75c86qw9w9h9sxxbnldj7bjv2gvn18lmq5rm20";
   };
 
-  nativeBuildInputs = [pkgconfig autoreconfHook];
-  buildInputs = [openssl libX11]
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ openssl libX11 ]
     ++ stdenv.lib.optional enableCredssp libgssglue;
 
   configureFlags = [

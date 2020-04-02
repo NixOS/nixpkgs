@@ -1,7 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig
-, boost, libtorrentRasterbar, qtbase, qttools, qtsvg
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, pkgconfig
+, boost
+, libtorrentRasterbar
+, qtbase
+, qttools
+, qtsvg
 , debugSupport ? false # Debugging
-, guiSupport ? true, dbus ? null # GUI (disable to run headless)
+, guiSupport ? true
+, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
 }:
 
@@ -30,18 +38,19 @@ mkDerivation rec {
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}" ]
-    ++ optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
-    ++ optional (!webuiSupport) "--disable-webui"
-    ++ optional debugSupport "--enable-debug";
+    "--with-boost=${boost.dev}"
+  ]
+  ++ optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
+  ++ optional (!webuiSupport) "--disable-webui"
+  ++ optional debugSupport "--enable-debug";
 
   enableParallelBuilding = true;
 
   meta = {
     description = "Featureful free software BitTorrent client";
-    homepage    = https://www.qbittorrent.org/;
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = https://www.qbittorrent.org/;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ Anton-Latukha ];
   };
 }

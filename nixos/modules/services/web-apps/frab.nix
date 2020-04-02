@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.frab;
 
@@ -32,11 +31,9 @@ let
           --run 'cd ${package}/share/frab'
       makeWrapper $out/bin/frab-bundle $out/bin/frab-rake \
           --add-flags "exec rake"
-     '';
+    '';
   };
-
 in
-
 {
   options = {
     services.frab = {
@@ -149,7 +146,7 @@ in
 
       extraEnvironment = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = {
           FRAB_CURRENCY_UNIT = "€";
           FRAB_CURRENCY_FORMAT = "%n%u";
@@ -174,7 +171,8 @@ in
     environment.systemPackages = [ frab-rake ];
 
     users.users.${cfg.user} =
-      { group = cfg.group;
+      {
+        group = cfg.group;
         home = "${cfg.statePath}";
         isSystemUser = true;
       };
@@ -213,8 +211,7 @@ in
         RestartSec = "10s";
         RuntimeDirectory = "frab";
         WorkingDirectory = "${package}/share/frab";
-        ExecStart = "${frab-rake}/bin/frab-bundle exec rails server " +
-          "--binding=${cfg.listenAddress} --port=${toString cfg.listenPort}";
+        ExecStart = "${frab-rake}/bin/frab-bundle exec rails server " + "--binding=${cfg.listenAddress} --port=${toString cfg.listenPort}";
       };
     };
 

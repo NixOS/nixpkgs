@@ -1,6 +1,20 @@
-{ stdenv, fetchFromGitHub, pkgconfig, SDL2, alsaLib, gtk3
-, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg_utils
-, epoxy, gdk-pixbuf, gnome3, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, SDL2
+, alsaLib
+, gtk3
+, makeWrapper
+, libGLU
+, libGL
+, libarchive
+, libao
+, unzip
+, xdg_utils
+, epoxy
+, gdk-pixbuf
+, gnome3
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +39,8 @@ stdenv.mkDerivation rec {
     epoxy
     gtk3
     gdk-pixbuf
-    libGLU libGL
+    libGLU
+    libGL
     libarchive
     libao
     unzip
@@ -45,10 +60,10 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-     for f in $out/bin/*; do
-       wrapProgram $f \
-         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
-     done
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
+    done
   '';
 
   patches = [
@@ -69,4 +84,3 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
   };
 }
-

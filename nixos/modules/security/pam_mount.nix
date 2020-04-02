@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.security.pam.mount;
 
-  anyPamMount = any (attrByPath ["pamMount"] false) (attrValues config.security.pam.services);
+  anyPamMount = any (attrByPath [ "pamMount" ] false) (attrValues config.security.pam.services);
 in
-
 {
   options = {
 
@@ -22,7 +20,7 @@ in
 
       extraVolumes = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of volume definitions for pam_mount.
           For more information, visit <link
@@ -42,7 +40,7 @@ in
           extraUserVolumes = filterAttrs (n: u: u.cryptHomeLuks != null) config.users.users;
           userVolumeEntry = user: "<volume user=\"${user.name}\" path=\"${user.cryptHomeLuks}\" mountpoint=\"${user.home}\" />\n";
         in
-         pkgs.writeText "pam_mount.conf.xml" ''
+        pkgs.writeText "pam_mount.conf.xml" ''
           <?xml version="1.0" encoding="utf-8" ?>
           <!DOCTYPE pam_mount SYSTEM "pam_mount.conf.xml.dtd">
           <!-- auto generated from Nixos: modules/config/users-groups.nix -->
@@ -64,7 +62,7 @@ in
           ${concatStrings (map userVolumeEntry (attrValues extraUserVolumes))}
           ${concatStringsSep "\n" cfg.extraVolumes}
           </pam_mount>
-          '';
+        '';
     };
 
   };

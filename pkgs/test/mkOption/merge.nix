@@ -1,5 +1,5 @@
 let
-  pkgs = import ../../.. {};
+  pkgs = import ../../.. { };
   config = import ./declare.nix;
 
   # Define the handler of unbound options.

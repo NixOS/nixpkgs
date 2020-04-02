@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ jinja2 requests pillow rasterio shapely ];
 
   # Test cases are not running on pypi or GitHub
-  doCheck = false;   
+  doCheck = false;
 
   meta = with lib; {
     homepage = https://github.com/Labelbox/Labelbox;

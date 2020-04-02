@@ -1,7 +1,6 @@
 { stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme, wrapGAppsHook }:
 
 { category, pname, version, rev ? "${pname}-${version}", sha256, ... } @ args:
-
 let
   inherit (builtins) filter getAttr head isList;
   inherit (stdenv.lib) attrNames concatLists recursiveUpdate zipAttrsWithNames;
@@ -36,5 +35,4 @@ let
 
   publicArgs = removeAttrs args [ "category" "pname" "sha256" ];
 in
-
 stdenv.mkDerivation (recursiveUpdate template publicArgs // concatAttrLists [ template args ])

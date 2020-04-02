@@ -1,6 +1,18 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxcb,
-  xcbutilkeysyms , xcbutilimage, pam, libX11, libev, cairo, libxkbcommon,
-  libxkbfile, libjpeg_turbo, xcbutilxrm
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, libxcb
+, xcbutilkeysyms
+, xcbutilimage
+, pam
+, libX11
+, libev
+, cairo
+, libxkbcommon
+, libxkbfile
+, libjpeg_turbo
+, xcbutilxrm
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +27,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libxcb xcbutilkeysyms xcbutilimage pam libX11
-    libev cairo libxkbcommon libxkbfile libjpeg_turbo xcbutilxrm ];
+  buildInputs = [
+    libxcb
+    xcbutilkeysyms
+    xcbutilimage
+    pam
+    libX11
+    libev
+    cairo
+    libxkbcommon
+    libxkbfile
+    libjpeg_turbo
+    xcbutilxrm
+  ];
 
   makeFlags = [ "all" ];
   preInstall = ''

@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inInitrd = any (fs: fs == "cifs") config.boot.initrd.supportedFilesystems;
-
 in
-
 {
   config = {
 

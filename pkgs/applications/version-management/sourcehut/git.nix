@@ -1,8 +1,12 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ stdenv
+, fetchgit
+, buildPythonPackage
 , python
 , buildGoModule
-, srht, pygit2, scmsrht }:
-
+, srht
+, pygit2
+, scmsrht
+}:
 let
   version = "0.43.3";
 
@@ -37,7 +41,8 @@ let
 
     modSha256 = "0p8qd6hpgmnlfqk5vw6l41dqs7qjhf6xijzj5iv6wv1cf362b4wp";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   inherit version;
   pname = "gitsrht";
 

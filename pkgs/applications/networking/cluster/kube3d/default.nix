@@ -8,9 +8,9 @@ buildGoModule rec {
   goPackagePath = "github.com/rancher/k3d";
 
   src = fetchFromGitHub {
-    owner  = "rancher";
-    repo   = "k3d";
-    rev    = "v${version}";
+    owner = "rancher";
+    repo = "k3d";
+    rev = "v${version}";
     sha256 = "0qjwqqynvgzainq66fpzczgynwk3hv7wzgfy5271fc6mj2k0zz5x";
   };
 

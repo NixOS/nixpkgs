@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
-
 let
   pname = "shabnam-fonts";
   version = "4.0.0";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "rastikerdar";

@@ -1,5 +1,4 @@
 { stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
-
 let
   pname = "vapor";
   version = "0.2.3";
@@ -14,20 +13,18 @@ let
     name = "Vapor";
     exec = pname;
     icon = icon;
-    comment = "LÖVE Distribution Client"; 
+    comment = "LÖVE Distribution Client";
     desktopName = "Vapor";
     genericName = "vapor";
     categories = "Game;";
   };
-
-in 
-
+in
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url =
-    "https://github.com/josefnpat/${pname}/releases/download/${version}/${pname}_${commitid}.love";
+      "https://github.com/josefnpat/${pname}/releases/download/${version}/${pname}_${commitid}.love";
     sha256 = "0w2qkrrkzfy4h4jld18apypmbi8a8r89y2l11axlv808i2rg68fk";
   };
 
@@ -37,18 +34,18 @@ stdenv.mkDerivation {
   phases = "installPhase";
 
   installPhase =
-  ''
-    mkdir -p $out/bin
-    mkdir -p $out/share
+    ''
+      mkdir -p $out/bin
+      mkdir -p $out/share
 
-    cp -v $src $out/share/${pname}.love
+      cp -v $src $out/share/${pname}.love
 
-    makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/${pname}.love
+      makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/${pname}.love
 
-    chmod +x $out/bin/${pname}
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-  '';
+      chmod +x $out/bin/${pname}
+      mkdir -p $out/share/applications
+      ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    '';
 
   meta = with stdenv.lib; {
     description = "LÖVE Distribution Client allowing access to many games";

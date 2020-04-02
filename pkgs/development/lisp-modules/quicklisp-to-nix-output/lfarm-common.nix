@@ -15,7 +15,7 @@ work across machines.'';
 
   packageName = "lfarm-common";
 
-  asdFilesToKeep = ["lfarm-common.asd"];
+  asdFilesToKeep = [ "lfarm-common.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lfarm-common DESCRIPTION

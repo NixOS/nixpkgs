@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, qmake, qtbase, qttools, subversion, apr }:
-
 let
   version = "1.0.17";
 in

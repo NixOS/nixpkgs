@@ -1,6 +1,23 @@
-{ stdenv, fetchFromGitHub, fetchpatch, mkDerivation, SDL2, frei0r, gettext, mlt
-, jack1, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
-, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, mkDerivation
+, SDL2
+, frei0r
+, gettext
+, mlt
+, jack1
+, pkgconfig
+, qtbase
+, qtmultimedia
+, qtwebkit
+, qtx11extras
+, qtwebsockets
+, qtquickcontrols
+, qtgraphicaleffects
+, libmlt
+, qmake
+, qttools
 }:
 
 assert stdenv.lib.versionAtLeast libmlt.version "6.18.0";
@@ -22,8 +39,17 @@ mkDerivation rec {
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    SDL2 frei0r gettext mlt libmlt
-    qtbase qtmultimedia qtwebkit qtx11extras qtwebsockets qtquickcontrols
+    SDL2
+    frei0r
+    gettext
+    mlt
+    libmlt
+    qtbase
+    qtmultimedia
+    qtwebkit
+    qtx11extras
+    qtwebsockets
+    qtquickcontrols
     qtgraphicaleffects
   ];
 
@@ -40,9 +66,9 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2]}"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]}"
     "--prefix PATH : ${mlt}/bin"
-    ];
+  ];
 
   postInstall = ''
     mkdir -p $out/share/shotcut

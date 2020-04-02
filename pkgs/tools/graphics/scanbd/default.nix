@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, pkgconfig
-, dbus, libconfuse, libjpeg, sane-backends, systemd }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, dbus
+, libconfuse
+, libjpeg
+, sane-backends
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "scanbd";

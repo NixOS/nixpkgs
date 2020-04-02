@@ -1,38 +1,40 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-
-{
-  name = "signal-desktop";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ flokli ];
-  };
-
-  machine = { ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
   {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
+    name = "signal-desktop";
+    meta = with pkgs.stdenv.lib.maintainers; {
+      maintainers = [ flokli ];
+    };
 
-    services.xserver.enable = true;
-    test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = [ pkgs.signal-desktop ];
-    virtualisation.memorySize = 1024;
-  };
+    machine = { ... }:
 
-  enableOCR = true;
+      {
+        imports = [
+          ./common/user-account.nix
+          ./common/x11.nix
+        ];
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-  in ''
-    start_all()
-    machine.wait_for_x()
+        services.xserver.enable = true;
+        test-support.displayManager.auto.user = "alice";
+        environment.systemPackages = [ pkgs.signal-desktop ];
+        virtualisation.memorySize = 1024;
+      };
 
-    # start signal desktop
-    machine.execute("su - alice -c signal-desktop &")
+    enableOCR = true;
 
-    # wait for the "Link your phone to Signal Desktop" message
-    machine.wait_for_text("Link your phone to Signal Desktop")
-    machine.screenshot("signal_desktop")
-  '';
-})
+    testScript = { nodes, ... }:
+      let
+        user = nodes.machine.config.users.users.alice;
+      in ''
+        start_all()
+        machine.wait_for_x()
+
+        # start signal desktop
+        machine.execute("su - alice -c signal-desktop &")
+
+        # wait for the "Link your phone to Signal Desktop" message
+        machine.wait_for_text("Link your phone to Signal Desktop")
+        machine.screenshot("signal_desktop")
+      '';
+  }
+)

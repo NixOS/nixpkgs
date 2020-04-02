@@ -1,5 +1,4 @@
-{stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk, perl, gnugrep, which}:
-
+{ stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk, perl, gnugrep, which }:
 let
   version = "3.2.0-1";
   lprdeb = fetchurl {
@@ -11,7 +10,6 @@ let
     url = "https://download.brother.com/welcome/dlf101913/hll2340dcupswrapper-${version}.i386.deb";
     sha256 = "8aa24a6a825e3a4d5b51778cb46fe63032ec5a731ace22f9ef2b0ffcc2033cc9";
   };
-
 in
 stdenv.mkDerivation {
   name = "cups-brother-hll2340dw";
@@ -43,8 +41,11 @@ stdenv.mkDerivation {
     ; do
       wrapProgram $f \
         --prefix PATH : ${stdenv.lib.makeBinPath [
-          coreutils ghostscript gnugrep gnused
-        ]}
+      coreutils
+      ghostscript
+      gnugrep
+      gnused
+    ]}
     done
 
     mkdir -p $out/lib/cups/filter/
@@ -55,7 +56,7 @@ stdenv.mkDerivation {
 
     wrapProgram $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
       --prefix PATH ":" ${ stdenv.lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
-    '';
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.brother.com/;

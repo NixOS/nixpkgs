@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [] }:
+{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [ ] }:
 
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:

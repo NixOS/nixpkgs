@@ -12,7 +12,7 @@ agda.mkDerivation (self: rec {
 
   buildDepends = [ AgdaStdlib ];
   everythingFile = "Pretty.agda";
-  sourceDirectories = [];
+  sourceDirectories = [ ];
   topSourceDirectories = [ "../$sourceRoot" ];
 
   meta = with stdenv.lib; {

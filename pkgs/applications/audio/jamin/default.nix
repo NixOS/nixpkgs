@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, fftwFloat, gtk2, ladspaPlugins, libjack2, liblo, libxml2
-, makeWrapper, pkgconfig, perlPackages
+{ stdenv
+, fetchurl
+, fftwFloat
+, gtk2
+, ladspaPlugins
+, libjack2
+, liblo
+, libxml2
+, makeWrapper
+, pkgconfig
+, perlPackages
 }:
 
 stdenv.mkDerivation {

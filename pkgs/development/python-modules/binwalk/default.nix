@@ -12,8 +12,8 @@
 , lzma
 , nose
 , pycrypto
-, pyqtgraph ? null }:
-
+, pyqtgraph ? null
+}:
 let
   visualizationSupport = (pyqtgraph != null);
   version = "2.2.0";
@@ -30,7 +30,7 @@ buildPythonPackage {
   };
 
   propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma pycrypto ]
-  ++ stdenv.lib.optional visualizationSupport pyqtgraph;
+    ++ stdenv.lib.optional visualizationSupport pyqtgraph;
 
   # setup.py only installs version.py during install, not test
   postPatch = ''

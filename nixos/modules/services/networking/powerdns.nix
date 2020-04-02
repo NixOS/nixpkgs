@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.powerdns;
   configDir = pkgs.writeTextDir "pdns.conf" "${cfg.extraConfig}";
-in {
+in
+{
   options = {
     services.powerdns = {
       enable = mkEnableOption "Powerdns domain name server";
@@ -29,20 +29,20 @@ in {
       unitConfig.Documentation = "man:pdns_server(1) man:pdns_control(1)";
       description = "Powerdns name server";
       wantedBy = [ "multi-user.target" ];
-      after = ["network.target" "mysql.service" "postgresql.service" "openldap.service"];
+      after = [ "network.target" "mysql.service" "postgresql.service" "openldap.service" ];
 
       serviceConfig = {
-        Restart="on-failure";
-        RestartSec="1";
-        StartLimitInterval="0";
-        PrivateDevices=true;
-        CapabilityBoundingSet="CAP_CHOWN CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT";
-        NoNewPrivileges=true;
+        Restart = "on-failure";
+        RestartSec = "1";
+        StartLimitInterval = "0";
+        PrivateDevices = true;
+        CapabilityBoundingSet = "CAP_CHOWN CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT";
+        NoNewPrivileges = true;
         ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/powerdns";
         ExecStart = "${pkgs.powerdns}/bin/pdns_server --setuid=nobody --setgid=nogroup --chroot=/var/lib/powerdns --socket-dir=/ --daemon=no --guardian=no --disable-syslog --write-pid=no --config-dir=${configDir}";
-        ProtectSystem="full";
-        ProtectHome=true;
-        RestrictAddressFamilies="AF_UNIX AF_INET AF_INET6";
+        ProtectSystem = "full";
+        ProtectHome = true;
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
       };
     };
   };

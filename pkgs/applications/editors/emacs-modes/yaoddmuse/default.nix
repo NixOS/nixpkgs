@@ -1,4 +1,4 @@
-{stdenv, fetchurl, emacs}:
+{ stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation {
   name = "yaoddmuse-0.1.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0vlllq3xmnlni0ws226pqxj68nshclbl5rgqv6y11i3yvzgiazr6";
   };
 
-  phases = [ "buildPhase" "installPhase"];
+  phases = [ "buildPhase" "installPhase" ];
 
   buildInputs = [ emacs ];
 

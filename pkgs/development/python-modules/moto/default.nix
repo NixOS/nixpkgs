@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, fetchpatch
 , aws-xray-sdk
 , backports_tempfile
 , boto

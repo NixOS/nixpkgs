@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    substituteInPlace "src/cflow.h"					\
-      --replace "/usr/bin/cpp"						\
+    substituteInPlace "src/cflow.h"          \
+      --replace "/usr/bin/cpp"            \
                 "$(cat ${stdenv.cc}/nix-support/orig-cc)/bin/cpp"
   '';
 
@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
     # We don't have Emacs/GTK/etc. on {Dar,Cyg}win.
     stdenv.lib.optional
       (! (stdenv.lib.lists.any (x: stdenv.hostPlatform.system == x)
-              [ "i686-cygwin" ]))
-      emacs;
+        [ "i686-cygwin" ]
+      ))
+    emacs;
 
   doCheck = true;
 

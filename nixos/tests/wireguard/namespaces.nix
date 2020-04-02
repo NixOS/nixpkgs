@@ -10,10 +10,8 @@ let
       generatePrivateKeyFile = true;
     };
   };
-
 in
-
-import ../make-test-python.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "wireguard-with-namespaces";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ asymmetric ];

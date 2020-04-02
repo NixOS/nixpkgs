@@ -14,7 +14,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
     inherit (config.sdImage) storePaths;
@@ -129,8 +128,15 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
-    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
-    mtools, libfaketime, utillinux, bzip2, zstd }: stdenv.mkDerivation {
+    system.build.sdImage = pkgs.callPackage ({ stdenv
+                                             , dosfstools
+                                             , e2fsprogs
+                                             , mtools
+                                             , libfaketime
+                                             , utillinux
+                                             , bzip2
+                                             , zstd
+                                             }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
       nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux bzip2 zstd ];
@@ -193,7 +199,8 @@ in
             bzip2 $img
         fi
       '';
-    }) {};
+    }
+    ) { };
 
     boot.postBootCommands = ''
       # On the first boot do some maintenance tasks

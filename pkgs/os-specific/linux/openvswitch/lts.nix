@@ -1,12 +1,26 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python2, iproute , perl
-, automake, autoconf, libtool, kernel ? null }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, pkgconfig
+, utillinux
+, which
+, procps
+, libcap_ng
+, openssl
+, python2
+, iproute
+, perl
+, automake
+, autoconf
+, libtool
+, kernel ? null
+}:
 
 with stdenv.lib;
-
 let
   _kernel = kernel;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "2.5.9";
   pname = "openvswitch";
 
@@ -19,9 +33,17 @@ in stdenv.mkDerivation rec {
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ autoconf libtool automake pkgconfig  ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng python2
-                  perl procps which ];
+  nativeBuildInputs = [ autoconf libtool automake pkgconfig ];
+  buildInputs = [
+    makeWrapper
+    utillinux
+    openssl
+    libcap_ng
+    python2
+    perl
+    procps
+    which
+  ];
 
   preConfigure = "./boot.sh";
 
@@ -29,7 +51,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sharedstatedir=/var"
     "--sbindir=$(out)/bin"
-  ] ++ (optionals (_kernel != null) ["--with-linux"]);
+  ] ++ (optionals (_kernel != null) [ "--with-linux" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -66,14 +88,14 @@ in stdenv.mkDerivation rec {
     description = "A multilayer virtual switch";
     longDescription =
       ''
-      Open vSwitch is a production quality, multilayer virtual switch
-      licensed under the open source Apache 2.0 license. It is
-      designed to enable massive network automation through
-      programmatic extension, while still supporting standard
-      management interfaces and protocols (e.g. NetFlow, sFlow, SPAN,
-      RSPAN, CLI, LACP, 802.1ag). In addition, it is designed to
-      support distribution across multiple physical servers similar
-      to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
+        Open vSwitch is a production quality, multilayer virtual switch
+        licensed under the open source Apache 2.0 license. It is
+        designed to enable massive network automation through
+        programmatic extension, while still supporting standard
+        management interfaces and protocols (e.g. NetFlow, sFlow, SPAN,
+        RSPAN, CLI, LACP, 802.1ag). In addition, it is designed to
+        support distribution across multiple physical servers similar
+        to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
     homepage = https://www.openvswitch.org/;
     license = licenses.asl20;

@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-aa";
 
-  asdFilesToKeep = ["cl-aa.asd"];
+  asdFilesToKeep = [ "cl-aa.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-aa DESCRIPTION cl-aa: polygon rasterizer SHA256

@@ -7,7 +7,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/prometheus/collectd_exporter";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "collectd_exporter";

@@ -1,6 +1,18 @@
-{ stdenv, buildGoPackage, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep
-, src, version, hasBootstrapScript, postPatch ? ""
-, ... }:
+{ stdenv
+, buildGoPackage
+, makeWrapper
+, coreutils
+, git
+, openssh
+, bash
+, gnused
+, gnugrep
+, src
+, version
+, hasBootstrapScript
+, postPatch ? ""
+, ...
+}:
 let
   goPackagePath = "github.com/buildkite/agent";
 in
@@ -18,7 +30,7 @@ buildGoPackage {
     mkdir -p $bin/libexec/buildkite-agent
     cp $NIX_BUILD_TOP/go/src/${goPackagePath}/templates/bootstrap.sh $bin/libexec/buildkite-agent
     sed -e "s|#!/bin/bash|#!${bash}/bin/bash|g" -i $bin/libexec/buildkite-agent/bootstrap.sh
-    ''}
+  ''}
 
     # Fix binary name
     mv $bin/bin/{agent,buildkite-agent}

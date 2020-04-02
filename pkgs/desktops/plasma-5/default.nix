@@ -24,44 +24,45 @@ existing packages here and modify it as necessary.
 
 */
 
-{
-  libsForQt5, lib, fetchurl,
-  gconf, gsettings-desktop-schemas
+{ libsForQt5
+, lib
+, fetchurl
+, gconf
+, gsettings-desktop-schemas
 }:
-
 let
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://kde";
   };
 
-  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) { };
 
   packages = self: with self;
     let
-
       propagate = out:
-        let setupHook = { writeScript }:
-              writeScript "setup-hook" ''
-                if [[ "''${hookName-}" != postHook ]]; then
-                    postHooks+=("source @dev@/nix-support/setup-hook")
-                else
-                    # Propagate $${out} output
-                    propagatedUserEnvPkgs+=" @${out}@"
+        let
+          setupHook = { writeScript }:
+            writeScript "setup-hook" ''
+              if [[ "''${hookName-}" != postHook ]]; then
+                  postHooks+=("source @dev@/nix-support/setup-hook")
+              else
+                  # Propagate $${out} output
+                  propagatedUserEnvPkgs+=" @${out}@"
 
-                    if [ -z "$outputDev" ]; then
-                        echo "error: \$outputDev is unset!" >&2
-                        exit 1
-                    fi
+                  if [ -z "$outputDev" ]; then
+                      echo "error: \$outputDev is unset!" >&2
+                      exit 1
+                  fi
 
-                    # Propagate $dev so that this setup hook is propagated
-                    # But only if there is a separate $dev output
-                    if [ "$outputDev" != out ]; then
-                        propagatedBuildInputs+=" @dev@"
-                    fi
-                fi
-              '';
-        in callPackage setupHook {};
+                  # Propagate $dev so that this setup hook is propagated
+                  # But only if there is a separate $dev output
+                  if [ "$outputDev" != out ]; then
+                      propagatedBuildInputs+=" @dev@"
+                  fi
+              fi
+            '';
+        in callPackage setupHook { };
 
       propagateBin = propagate "bin";
 
@@ -83,61 +84,66 @@ let
 
             meta = {
               license = with lib.licenses; [
-                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+                lgpl21Plus
+                lgpl3Plus
+                bsd2
+                mit
+                gpl2Plus
+                gpl3Plus
+                fdl12
               ];
               platforms = lib.platforms.linux;
               maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
               homepage = http://www.kde.org;
-            } // (args.meta or {});
+            } // (args.meta or { });
           in
-          mkDerivation (args // {
-            name = "${name}-${version}";
-            inherit meta outputs setupHook src;
-          });
+            mkDerivation (args // {
+              name = "${name}-${version}";
+              inherit meta outputs setupHook src;
+            });
       };
-
     in {
-      bluedevil = callPackage ./bluedevil.nix {};
-      breeze-gtk = callPackage ./breeze-gtk.nix {};
-      breeze-qt5 = callPackage ./breeze-qt5.nix {};
-      breeze-grub = callPackage ./breeze-grub.nix {};
-      breeze-plymouth = callPackage ./breeze-plymouth {};
-      discover = callPackage ./discover.nix {};
-      kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
-      kde-cli-tools = callPackage ./kde-cli-tools.nix {};
+      bluedevil = callPackage ./bluedevil.nix { };
+      breeze-gtk = callPackage ./breeze-gtk.nix { };
+      breeze-qt5 = callPackage ./breeze-qt5.nix { };
+      breeze-grub = callPackage ./breeze-grub.nix { };
+      breeze-plymouth = callPackage ./breeze-plymouth { };
+      discover = callPackage ./discover.nix { };
+      kactivitymanagerd = callPackage ./kactivitymanagerd.nix { };
+      kde-cli-tools = callPackage ./kde-cli-tools.nix { };
       kde-gtk-config = callPackage ./kde-gtk-config { inherit gsettings-desktop-schemas; };
-      kdecoration = callPackage ./kdecoration.nix {};
-      kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
-      kgamma5 = callPackage ./kgamma5.nix {};
-      khotkeys = callPackage ./khotkeys.nix {};
-      kinfocenter = callPackage ./kinfocenter.nix {};
-      kmenuedit = callPackage ./kmenuedit.nix {};
-      kscreen = callPackage ./kscreen.nix {};
-      kscreenlocker = callPackage ./kscreenlocker.nix {};
-      ksshaskpass = callPackage ./ksshaskpass.nix {};
-      ksysguard = callPackage ./ksysguard.nix {};
-      kwallet-pam = callPackage ./kwallet-pam.nix {};
-      kwayland-integration = callPackage ./kwayland-integration.nix {};
-      kwin = callPackage ./kwin {};
-      kwrited = callPackage ./kwrited.nix {};
-      libkscreen = callPackage ./libkscreen {};
-      libksysguard = callPackage ./libksysguard {};
-      milou = callPackage ./milou.nix {};
-      oxygen = callPackage ./oxygen.nix {};
-      plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
-      plasma-desktop = callPackage ./plasma-desktop {};
-      plasma-integration = callPackage ./plasma-integration {};
-      plasma-nm = callPackage ./plasma-nm {};
+      kdecoration = callPackage ./kdecoration.nix { };
+      kdeplasma-addons = callPackage ./kdeplasma-addons.nix { };
+      kgamma5 = callPackage ./kgamma5.nix { };
+      khotkeys = callPackage ./khotkeys.nix { };
+      kinfocenter = callPackage ./kinfocenter.nix { };
+      kmenuedit = callPackage ./kmenuedit.nix { };
+      kscreen = callPackage ./kscreen.nix { };
+      kscreenlocker = callPackage ./kscreenlocker.nix { };
+      ksshaskpass = callPackage ./ksshaskpass.nix { };
+      ksysguard = callPackage ./ksysguard.nix { };
+      kwallet-pam = callPackage ./kwallet-pam.nix { };
+      kwayland-integration = callPackage ./kwayland-integration.nix { };
+      kwin = callPackage ./kwin { };
+      kwrited = callPackage ./kwrited.nix { };
+      libkscreen = callPackage ./libkscreen { };
+      libksysguard = callPackage ./libksysguard { };
+      milou = callPackage ./milou.nix { };
+      oxygen = callPackage ./oxygen.nix { };
+      plasma-browser-integration = callPackage ./plasma-browser-integration.nix { };
+      plasma-desktop = callPackage ./plasma-desktop { };
+      plasma-integration = callPackage ./plasma-integration { };
+      plasma-nm = callPackage ./plasma-nm { };
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
-      plasma-vault = callPackage ./plasma-vault {};
-      plasma-workspace = callPackage ./plasma-workspace {};
-      plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
-      polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
-      powerdevil = callPackage ./powerdevil.nix {};
-      sddm-kcm = callPackage ./sddm-kcm.nix {};
-      systemsettings = callPackage ./systemsettings.nix {};
-      user-manager = callPackage ./user-manager.nix {};
-      xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
+      plasma-vault = callPackage ./plasma-vault { };
+      plasma-workspace = callPackage ./plasma-workspace { };
+      plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix { };
+      polkit-kde-agent = callPackage ./polkit-kde-agent.nix { };
+      powerdevil = callPackage ./powerdevil.nix { };
+      sddm-kcm = callPackage ./sddm-kcm.nix { };
+      systemsettings = callPackage ./systemsettings.nix { };
+      user-manager = callPackage ./user-manager.nix { };
+      xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix { };
     };
 in
 lib.makeScope libsForQt5.newScope packages

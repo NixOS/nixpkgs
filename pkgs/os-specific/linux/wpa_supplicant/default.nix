@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, openssl, pkgconfig, libnl
-, dbus, readline ? null, pcsclite ? null
+{ stdenv
+, fetchurl
+, openssl
+, pkgconfig
+, libnl
+, dbus
+, readline ? null
+, pcsclite ? null
 }:
 
 with stdenv.lib;
@@ -65,11 +71,12 @@ stdenv.mkDerivation rec {
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
-  '' + (if readline != null then ''
-    CONFIG_READLINE=y
-  '' else ''
-    CONFIG_WPA_CLI_EDIT=y
-  '');
+  '' + (
+    if readline != null then ''
+      CONFIG_READLINE=y
+    '' else ''
+      CONFIG_WPA_CLI_EDIT=y
+    '');
 
   preBuild = ''
     for manpage in wpa_supplicant/doc/docbook/wpa_supplicant.conf* ; do

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.geoip-updater;
 
@@ -174,9 +173,7 @@ let
     sleep 2
     exit $all_ret
   '';
-
 in
-
 {
   options = {
     services.geoip-updater = {
@@ -237,8 +234,9 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = (builtins.filter
-          (x: builtins.match ".*\\.(gz|xz)$" x == null) cfg.databases) == [];
+      {
+        assertion = (builtins.filter
+          (x: builtins.match ".*\\.(gz|xz)$" x == null) cfg.databases) == [ ];
         message = ''
           services.geoip-updater.databases supports only .gz and .xz databases.
 
@@ -258,7 +256,8 @@ in
     };
 
     systemd.timers.geoip-updater =
-      { description = "GeoIP Updater Timer";
+      {
+        description = "GeoIP Updater Timer";
         partOf = [ "geoip-updater.service" ];
         wantedBy = [ "timers.target" ];
         timerConfig.OnCalendar = cfg.interval;

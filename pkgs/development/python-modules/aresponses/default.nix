@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-# propagatedBuildInputs
+  # propagatedBuildInputs
 , aiohttp
-# buildInputs
+  # buildInputs
 , pytest
 , pytest-asyncio
 }:

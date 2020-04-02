@@ -2,7 +2,6 @@
 
 with pkgs;
 with lib;
-
 let
   cfg = config.services.connman;
   configFile = pkgs.writeText "connman.conf" ''
@@ -12,7 +11,8 @@ let
     ${cfg.extraConfig}
   '';
   enableIwd = cfg.wifi.backend == "iwd";
-in {
+in
+{
 
   imports = [
     (mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
@@ -85,13 +85,16 @@ in {
 
   config = mkIf cfg.enable {
 
-    assertions = [{
-      assertion = !config.networking.useDHCP;
-      message = "You can not use services.connman with networking.useDHCP";
-    }{
-      assertion = !config.networking.networkmanager.enable;
-      message = "You can not use services.connman with networking.networkmanager";
-    }];
+    assertions = [
+      {
+        assertion = !config.networking.useDHCP;
+        message = "You can not use services.connman with networking.useDHCP";
+      }
+      {
+        assertion = !config.networking.networkmanager.enable;
+        message = "You can not use services.connman with networking.networkmanager";
+      }
+    ];
 
     environment.systemPackages = [ connman ];
 
@@ -109,7 +112,7 @@ in {
           "--config=${configFile}"
           "--nodaemon"
         ] ++ optional enableIwd "--wifi=iwd_agent"
-          ++ cfg.extraFlags);
+        ++ cfg.extraFlags);
         StandardOutput = "null";
       };
     };

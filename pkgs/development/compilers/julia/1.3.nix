@@ -1,15 +1,37 @@
-{ stdenv, fetchurl, fetchzip, fetchFromGitHub
-# build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
+{ stdenv
+, fetchurl
+, fetchzip
+, fetchFromGitHub
+  # build tools
+, gfortran
+, m4
+, makeWrapper
+, patchelf
+, perl
+, which
+, python2
 , cmake
-# libjulia dependencies
-, libunwind, readline, utf8proc, zlib
-# standard library dependencies
-, curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
-# linear algebra
-, openblas, arpack
-# Darwin frameworks
-, CoreServices, ApplicationServices
+  # libjulia dependencies
+, libunwind
+, readline
+, utf8proc
+, zlib
+  # standard library dependencies
+, curl
+, fftwSinglePrec
+, fftw
+, gmp
+, libgit2
+, mpfr
+, openlibm
+, openspecfun
+, pcre2
+  # linear algebra
+, openblas
+, arpack
+  # Darwin frameworks
+, CoreServices
+, ApplicationServices
 }:
 
 with stdenv.lib;
@@ -21,27 +43,25 @@ in
 let
   arpack = arpack_.override { inherit openblas; };
 in
-
-let 
+let
   majorVersion = "1";
   minorVersion = "3";
   maintenanceVersion = "1";
   src_sha256 = "0q9a7yc3b235psrwl5ghyxgwly25lf8n818l8h6bkf2ymdbsv5p6";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
-in 
-
+in
 stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
 
-   src = fetchzip {
-     url = "https://github.com/JuliaLang/julia/releases/download/v${majorVersion}.${minorVersion}.${maintenanceVersion}/julia-${majorVersion}.${minorVersion}.${maintenanceVersion}-full.tar.gz";
-     sha256 = src_sha256;
-   };
+  src = fetchzip {
+    url = "https://github.com/JuliaLang/julia/releases/download/v${majorVersion}.${minorVersion}.${maintenanceVersion}/julia-${majorVersion}.${minorVersion}.${maintenanceVersion}-full.tar.gz";
+    sha256 = src_sha256;
+  };
 
   prePatch = ''
     export PATH=$PATH:${cmake}/bin
-    '';
+  '';
 
   patches = [
     ./use-system-utf8proc-julia-1.3.patch
@@ -66,11 +86,22 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
-    pcre2.dev openblas openlibm openspecfun readline utf8proc
+    arpack
+    fftw
+    fftwSinglePrec
+    gmp
+    libgit2
+    libunwind
+    mpfr
+    pcre2.dev
+    openblas
+    openlibm
+    openspecfun
+    readline
+    utf8proc
     zlib
   ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
   ;
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
@@ -79,10 +110,10 @@ stdenv.mkDerivation rec {
     let
       arch = head (splitString "-" stdenv.system);
       march = { x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64"; i686 = "pentium4"; }.${arch}
-              or (throw "unsupported architecture: ${arch}");
+        or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
       cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; }.${arch}
-                  or (throw "unsupported architecture: ${arch}");
+        or (throw "unsupported architecture: ${arch}");
       # Julia applies a lot of patches to its dependencies, so for now do not use the system LLVM
       # https://github.com/JuliaLang/julia/tree/master/deps/patches
     in [
@@ -123,8 +154,16 @@ stdenv.mkDerivation rec {
     ];
 
   LD_LIBRARY_PATH = makeLibraryPath [
-    arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
-    openspecfun pcre2
+    arpack
+    fftw
+    fftwSinglePrec
+    gmp
+    libgit2
+    mpfr
+    openblas
+    openlibm
+    openspecfun
+    pcre2
   ];
 
   enableParallelBuilding = true;

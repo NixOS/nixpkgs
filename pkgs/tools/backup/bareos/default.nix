@@ -1,7 +1,24 @@
-{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, flex
-, readline ? null, openssl ? null, python2 ? null, ncurses ? null, rocksdb
-, sqlite ? null, postgresql ? null, libmysqlclient ? null, zlib ? null, lzo ? null
-, jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, nettools
+, gettext
+, flex
+, readline ? null
+, openssl ? null
+, python2 ? null
+, ncurses ? null
+, rocksdb
+, sqlite ? null
+, postgresql ? null
+, libmysqlclient ? null
+, zlib ? null
+, lzo ? null
+, jansson ? null
+, acl ? null
+, glusterfs ? null
+, libceph ? null
+, libcap ? null
 }:
 
 assert sqlite != null || postgresql != null || libmysqlclient != null;
@@ -24,8 +41,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    nettools gettext readline openssl python2 flex ncurses sqlite postgresql
-    libmysqlclient zlib lzo jansson acl glusterfs libceph libcap rocksdb
+    nettools
+    gettext
+    readline
+    openssl
+    python2
+    flex
+    ncurses
+    sqlite
+    postgresql
+    libmysqlclient
+    zlib
+    lzo
+    jansson
+    acl
+    glusterfs
+    libceph
+    libcap
+    rocksdb
   ];
 
   postPatch = ''
@@ -51,17 +84,17 @@ stdenv.mkDerivation rec {
     "--enable-sql-pooling"
     "--enable-scsi-crypto"
   ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline.dev}" ]
-    ++ optional (python2 != null) "--with-python=${python2}"
-    ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
-    ++ optional (sqlite != null) "--with-sqlite3=${sqlite.dev}"
-    ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
-    ++ optional (libmysqlclient != null) "--with-mysql=${libmysqlclient}"
-    ++ optional (zlib != null) "--with-zlib=${zlib.dev}"
-    ++ optional (lzo != null) "--with-lzo=${lzo}"
-    ++ optional (jansson != null) "--with-jansson=${jansson}"
-    ++ optional (acl != null) "--enable-acl"
-    ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
-    ++ optional (libceph != null) "--with-cephfs=${libceph}";
+  ++ optional (python2 != null) "--with-python=${python2}"
+  ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
+  ++ optional (sqlite != null) "--with-sqlite3=${sqlite.dev}"
+  ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
+  ++ optional (libmysqlclient != null) "--with-mysql=${libmysqlclient}"
+  ++ optional (zlib != null) "--with-zlib=${zlib.dev}"
+  ++ optional (lzo != null) "--with-lzo=${lzo}"
+  ++ optional (jansson != null) "--with-jansson=${jansson}"
+  ++ optional (acl != null) "--enable-acl"
+  ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
+  ++ optional (libceph != null) "--with-cephfs=${libceph}";
 
   installFlags = [
     "sysconfdir=\${out}/etc"

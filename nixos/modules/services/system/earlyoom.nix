@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   ecfg = config.services.earlyoom;
 in
@@ -39,7 +38,7 @@ in
         '';
       };
 
-      useKernelOOMKiller= mkOption {
+      useKernelOOMKiller = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -79,12 +78,18 @@ in
 
   config = mkIf ecfg.enable {
     assertions = [
-      { assertion = ecfg.freeMemThreshold > 0 && ecfg.freeMemThreshold <= 100;
-        message = "Needs to be a positive percentage"; }
-      { assertion = ecfg.freeSwapThreshold > 0 && ecfg.freeSwapThreshold <= 100;
-        message = "Needs to be a positive percentage"; }
-      { assertion = !ecfg.useKernelOOMKiller || !ecfg.ignoreOOMScoreAdjust;
-        message = "Both options in conjunction do not make sense"; }
+      {
+        assertion = ecfg.freeMemThreshold > 0 && ecfg.freeMemThreshold <= 100;
+        message = "Needs to be a positive percentage";
+      }
+      {
+        assertion = ecfg.freeSwapThreshold > 0 && ecfg.freeSwapThreshold <= 100;
+        message = "Needs to be a positive percentage";
+      }
+      {
+        assertion = !ecfg.useKernelOOMKiller || !ecfg.ignoreOOMScoreAdjust;
+        message = "Both options in conjunction do not make sense";
+      }
     ];
 
     systemd.services.earlyoom = {

@@ -1,6 +1,17 @@
-{ stdenv, lib, fetchurl, libX11, pkgconfig, libXext, libdrm, libXfixes, wayland, libffi
-, libGL, mesa
-, minimal ? false, libva1-minimal
+{ stdenv
+, lib
+, fetchurl
+, libX11
+, pkgconfig
+, libXext
+, libdrm
+, libXfixes
+, wayland
+, libffi
+, libGL
+, mesa
+, minimal ? false
+, libva1-minimal
 }:
 
 stdenv.mkDerivation rec {

@@ -25,9 +25,9 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-     unzip
-     pkgconfig
-     ncurses
+    unzip
+    pkgconfig
+    ncurses
   ];
 
   meta = {

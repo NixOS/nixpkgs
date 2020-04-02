@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-typesetting";
 
-  asdFilesToKeep = ["cl-typesetting.asd"];
+  asdFilesToKeep = [ "cl-typesetting.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-typesetting DESCRIPTION Common Lisp Typesetting system SHA256

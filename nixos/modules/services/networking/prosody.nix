@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.prosody;
 
   sslOpts = { ... }: {
@@ -23,7 +21,7 @@ let
 
       extraOptions = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra SSL configuration options.";
       };
 
@@ -266,9 +264,7 @@ let
     };
 
   };
-
 in
-
 {
 
   ###### interface
@@ -352,7 +348,7 @@ in
 
       s2sInsecureDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "insecure.example.com" ];
         description = ''
           Some servers have invalid or self-signed certificates. You can list
@@ -364,7 +360,7 @@ in
 
       s2sSecureDomains = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "jabber.org" ];
         description = ''
           Even if you leave s2s_secure_auth disabled, you can still require valid
@@ -377,13 +373,13 @@ in
 
       extraModules = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Enable custom modules";
       };
 
       extraPluginPaths = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = "Addtional path in which to look find plugins/modules";
       };
 
@@ -417,7 +413,7 @@ in
 
       admins = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "admin1@example.com" "admin2@example.com" ];
         description = "List of administrators of the current host";
       };
@@ -456,7 +452,7 @@ in
         ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
       }
 
-      ${ optionalString  (cfg.ssl != null) (createSSLOptsStr cfg.ssl) }
+      ${ optionalString (cfg.ssl != null) (createSSLOptsStr cfg.ssl) }
 
       admins = ${toLua cfg.admins}
 
@@ -466,7 +462,7 @@ in
       modules_enabled = {
 
         ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
-          (name: val: optionalString val "${toLua name};")
+        (name: val: optionalString val "${toLua name};")
         cfg.modules) }
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
@@ -489,11 +485,11 @@ in
       ${ cfg.extraConfig }
 
       ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
-        VirtualHost "${v.domain}"
-          enabled = ${boolToString v.enabled};
-          ${ optionalString (v.ssl != null) (createSSLOptsStr v.ssl) }
-          ${ v.extraConfig }
-        '') cfg.virtualHosts) }
+      VirtualHost "${v.domain}"
+        enabled = ${boolToString v.enabled};
+        ${ optionalString (v.ssl != null) (createSSLOptsStr v.ssl) }
+        ${ v.extraConfig }
+    '') cfg.virtualHosts) }
     '';
 
     users.users.prosody = mkIf (cfg.user == "prosody") {

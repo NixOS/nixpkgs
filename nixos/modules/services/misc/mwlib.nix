@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.mwlib;
   pypkgs = pkgs.python27Packages;
@@ -13,7 +12,6 @@ let
     type = types.str;
     description = "User to run as.";
   };
-
 in
 {
 
@@ -121,12 +119,12 @@ in
       }; # nslave.numprocs
 
       http = mkOption {
-        default = {};
+        default = { };
         description = ''
           Internal http server serving the content of the cache directory.
           You have to enable it, or use your own way for serving files
           and set the http.url option accordingly.
-          '';
+        '';
         type = types.submodule ({
           options = {
             enable = mkOption {
@@ -154,7 +152,7 @@ in
                 Specify URL for accessing generated files from cache.
                 The Collection extension of Mediawiki won't be able to
                 download files without it.
-                '';
+              '';
             }; # nslave.http.url
           };
         }); # types.submodule
@@ -241,14 +239,15 @@ in
             "--url ${cfg.nslave.http.url}"
           ] ++ (
             if cfg.nslave.http.enable then
-            [
-              "--serve-files-port ${toString cfg.nslave.http.port}"
-              "--serve-files-address ${cfg.nslave.http.address}"
-            ] else
-            [
-              "--no-serve-files"
-            ]
-          ));
+              [
+                "--serve-files-port ${toString cfg.nslave.http.port}"
+                "--serve-files-address ${cfg.nslave.http.address}"
+              ] else
+              [
+                "--no-serve-files"
+              ]
+          )
+        );
         User = cfg.nslave.user;
         PermissionsStartOnly = true;
       };

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     mv transupp.h jpeg-9b/transupp.h
   '';
 
-  configureFlags = []
+  configureFlags = [ ]
     ++ optionals static [ "--enable-static" "--disable-shared" ];
 
   outputs = [ "bin" "dev" "out" "man" ];

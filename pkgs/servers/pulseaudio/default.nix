@@ -1,9 +1,30 @@
-{ lib, stdenv, fetchurl, pkgconfig, autoreconfHook
-, libsndfile, libtool, makeWrapper, perlPackages
-, xorg, libcap, alsaLib, glib, dconf
-, avahi, libjack2, libasyncns, lirc, dbus
-, sbc, bluez5, udev, openssl, fftwFloat
-, speexdsp, systemd, webrtc-audio-processing
+{ lib
+, stdenv
+, fetchurl
+, pkgconfig
+, autoreconfHook
+, libsndfile
+, libtool
+, makeWrapper
+, perlPackages
+, xorg
+, libcap
+, alsaLib
+, glib
+, dconf
+, avahi
+, libjack2
+, libasyncns
+, lirc
+, dbus
+, sbc
+, bluez5
+, udev
+, openssl
+, fftwFloat
+, speexdsp
+, systemd
+, webrtc-audio-processing
 
 , x11Support ? false
 
@@ -26,7 +47,9 @@
 , # Whether to build only the library.
   libOnly ? false
 
-, CoreServices, AudioUnit, Cocoa
+, CoreServices
+, AudioUnit
+, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -58,8 +81,8 @@ stdenv.mkDerivation rec {
       ++ lib.optional airtunesSupport openssl
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
       ++ lib.optional remoteControlSupport lirc
-      ++ lib.optional zeroconfSupport  avahi
-  );
+      ++ lib.optional zeroconfSupport avahi
+    );
 
   autoreconfPhase = ''
     # Performs an autoreconf
@@ -77,11 +100,13 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags =
-    [ "--disable-solaris"
+    [
+      "--disable-solaris"
       "--disable-jack"
       "--disable-oss-output"
     ] ++ lib.optional (!ossWrapper) "--disable-oss-wrapper" ++
-    [ "--localstatedir=/var"
+    [
+      "--localstatedir=/var"
       "--sysconfdir=/etc"
       "--with-access-group=audio"
       "--with-bash-completion-dir=${placeholder "out"}/share/bash-completions/completions"
@@ -100,15 +125,15 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I/usr/include";
 
   installFlags =
-    [ "sysconfdir=${placeholder "out"}/etc"
+    [
+      "sysconfdir=${placeholder "out"}/etc"
       "pulseconfdir=${placeholder "out"}/etc/pulse"
     ];
 
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
     sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
-  ''
-    + ''
+  '' + ''
     moveToOutput lib/cmake "$dev"
     rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
   '';
@@ -121,10 +146,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
-    homepage    = http://www.pulseaudio.org/;
-    license     = lib.licenses.lgpl2Plus;
+    homepage = http://www.pulseaudio.org/;
+    license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       PulseAudio is a sound server for POSIX and Win32 systems.  A

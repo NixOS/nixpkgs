@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.fonts.fontconfig;
 
@@ -10,13 +9,13 @@ let
   # back-supported fontconfig version and package
   # version is used for font cache generation
   supportVersion = "210";
-  supportPkg     = pkgs."fontconfig_${supportVersion}";
+  supportPkg = pkgs."fontconfig_${supportVersion}";
 
   # latest fontconfig version and package
   # version is used for configuration folder name, /etc/fonts/VERSION/
   # note: format differs from supportVersion and can not be used with makeCacheConf
-  latestVersion  = pkgs.fontconfig.configVersion;
-  latestPkg      = pkgs.fontconfig;
+  latestVersion = pkgs.fontconfig.configVersion;
+  latestPkg = pkgs.fontconfig;
 
   # supported version fonts.conf
   supportFontsConf = pkgs.makeFontsConf { fontconfig = supportPkg; fontDirectories = config.fonts.fonts; };
@@ -25,32 +24,33 @@ let
   # version dependent
   # priority 0
   cacheConfSupport = makeCacheConf { version = supportVersion; };
-  cacheConfLatest  = makeCacheConf {};
+  cacheConfLatest = makeCacheConf { };
 
   # generate the font cache setting file for a fontconfig version
   # use latest when no version is passed
   makeCacheConf = { version ? null }:
     let
-      fcPackage = if version == null
-                  then "fontconfig"
-                  else "fontconfig_${version}";
+      fcPackage =
+        if version == null
+        then "fontconfig"
+        else "fontconfig_${version}";
       makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
-      cache     = makeCache pkgs.${fcPackage};
-      cache32   = makeCache pkgs.pkgsi686Linux.${fcPackage};
+      cache = makeCache pkgs.${fcPackage};
+      cache32 = makeCache pkgs.pkgsi686Linux.${fcPackage};
     in
-    pkgs.writeText "fc-00-nixos-cache.conf" ''
-      <?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-      <fontconfig>
-        <!-- Font directories -->
-        ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
-        <!-- Pre-generated font caches -->
-        <cachedir>${cache}</cachedir>
-        ${optionalString (pkgs.stdenv.isx86_64 && cfg.cache32Bit) ''
-          <cachedir>${cache32}</cachedir>
-        ''}
-      </fontconfig>
-    '';
+      pkgs.writeText "fc-00-nixos-cache.conf" ''
+        <?xml version='1.0'?>
+        <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+        <fontconfig>
+          <!-- Font directories -->
+          ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
+          <!-- Pre-generated font caches -->
+          <cachedir>${cache}</cachedir>
+          ${optionalString (pkgs.stdenv.isx86_64 && cfg.cache32Bit) ''
+        <cachedir>${cache32}</cachedir>
+      ''}
+        </fontconfig>
+      '';
 
   # local configuration file
   localConf = pkgs.writeText "fc-local.conf" cfg.localConf;
@@ -128,33 +128,34 @@ let
   # default fonts configuration file
   # priority 52
   defaultFontsConf =
-    let genDefault = fonts: name:
-      optionalString (fonts != []) ''
-        <alias>
-          <family>${name}</family>
-          <prefer>
-          ${concatStringsSep ""
-          (map (font: ''
-            <family>${font}</family>
-          '') fonts)}
-          </prefer>
-        </alias>
-      '';
+    let
+      genDefault = fonts: name:
+        optionalString (fonts != [ ]) ''
+          <alias>
+            <family>${name}</family>
+            <prefer>
+            ${concatStringsSep ""
+            (map (font: ''
+              <family>${font}</family>
+            '') fonts)}
+            </prefer>
+          </alias>
+        '';
     in
     pkgs.writeText "fc-52-nixos-default-fonts.conf" ''
-    <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-    <fontconfig>
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <fontconfig>
 
-      <!-- Default fonts -->
-      ${genDefault cfg.defaultFonts.sansSerif "sans-serif"}
+        <!-- Default fonts -->
+        ${genDefault cfg.defaultFonts.sansSerif "sans-serif"}
 
-      ${genDefault cfg.defaultFonts.serif     "serif"}
+        ${genDefault cfg.defaultFonts.serif "serif"}
 
-      ${genDefault cfg.defaultFonts.monospace "monospace"}
+        ${genDefault cfg.defaultFonts.monospace "monospace"}
 
-    </fontconfig>
-  '';
+      </fontconfig>
+    '';
 
   # reject Type 1 fonts
   # priority 53
@@ -210,7 +211,7 @@ let
     ${optionalString cfg.useEmbeddedBitmaps ''
     rm $support_folder/10-no-embedded-bitmaps.conf
     rm $latest_folder/10-no-embedded-bitmaps.conf
-    ''}
+  ''}
 
     rm $support_folder/10-subpixel.conf $latest_folder/10-subpixel.conf
     ln -s ${subpixelConf} $support_folder/10-subpixel.conf
@@ -219,13 +220,13 @@ let
     ${optionalString (cfg.dpi != 0) ''
     ln -s ${dpiConf} $support_folder/11-dpi.conf
     ln -s ${dpiConf} $latest_folder/11-dpi.conf
-    ''}
+  ''}
 
     # 50-user.conf
     ${optionalString (!cfg.includeUserConf) ''
     rm $support_folder/50-user.conf
     rm $latest_folder/50-user.conf
-    ''}
+  ''}
 
     # 51-local.conf
     rm $latest_folder/51-local.conf
@@ -238,7 +239,7 @@ let
     ${optionalString (cfg.localConf != "") ''
     ln -s ${localConf}        $support_folder/../local.conf
     ln -s ${localConf}        $latest_folder/../local.conf
-    ''}
+  ''}
 
     # 52-nixos-default-fonts.conf
     ln -s ${defaultFontsConf} $support_folder/52-nixos-default-fonts.conf
@@ -248,15 +249,14 @@ let
     ${optionalString cfg.allowBitmaps ''
     rm $support_folder/53-no-bitmaps.conf
     rm $latest_folder/53-no-bitmaps.conf
-    ''}
+  ''}
 
     ${optionalString (!cfg.allowType1) ''
     # 53-nixos-reject-type1.conf
     ln -s ${rejectType1} $support_folder/53-nixos-reject-type1.conf
     ln -s ${rejectType1} $latest_folder/53-nixos-reject-type1.conf
-    ''}
+  ''}
   '';
-
 in
 {
 

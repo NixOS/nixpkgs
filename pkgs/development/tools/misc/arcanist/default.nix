@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, php, flex, makeWrapper }:
-
 let
   libphutil = fetchFromGitHub {
     owner = "phacility";
@@ -50,9 +49,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Command line interface to Phabricator";
-    homepage    = "http://phabricator.org";
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.unix;
+    homepage = "http://phabricator.org";
+    license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

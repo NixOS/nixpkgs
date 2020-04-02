@@ -8,7 +8,6 @@
 , udev
 , wrapGAppsHook
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
 
@@ -39,8 +38,7 @@ let
 
     src = fetchurl {
       url =
-        "https://github.com/Automattic/simplenote-electron/releases/download/"
-        + "v${version}/Simplenote-linux-${version}-amd64.deb";
+        "https://github.com/Automattic/simplenote-electron/releases/download/" + "v${version}/Simplenote-linux-${version}-amd64.deb";
       inherit sha256;
     };
 
@@ -91,6 +89,5 @@ let
         "''${gappsWrapperArgs[@]}"
     '';
   };
-
 in
 linux

@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, libuuid, openssl
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libuv
+, libmicrohttpd
+, libuuid
+, openssl
 , donateLevel ? 0
 }:
 

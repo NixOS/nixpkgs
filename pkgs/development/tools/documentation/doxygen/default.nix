@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-       stdenv.lib.optional (qt4 != null) qt4
+    stdenv.lib.optional (qt4 != null) qt4
     ++ stdenv.lib.optional stdenv.isSunOS libiconv
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 

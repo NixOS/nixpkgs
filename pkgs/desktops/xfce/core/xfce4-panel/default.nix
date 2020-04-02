@@ -23,7 +23,7 @@ mkXfceDerivation {
 
   configureFlags = [ "--enable-gtk3" ];
 
-  meta =  {
+  meta = {
     description = "Xfce's panel";
   };
 }

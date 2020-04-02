@@ -1,15 +1,15 @@
 { stdenv, lib, bundlerEnv, ruby, bundlerUpdateScript }:
-
 let
   env = bundlerEnv {
     name = "maphosts-gems";
     inherit ruby;
     gemdir = ./.;
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "maphosts-${env.gems.maphosts.version}";
 
-  phases = ["installPhase"];
+  phases = [ "installPhase" ];
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -20,9 +20,9 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Small command line application for keeping your project hostnames in sync with /etc/hosts";
-    homepage    = https://github.com/mpscholten/maphosts;
-    license     = licenses.mit;
+    homepage = https://github.com/mpscholten/maphosts;
+    license = licenses.mit;
     maintainers = with maintainers; [ mpscholten nicknovitski ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

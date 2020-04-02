@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.graphite;
   writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
@@ -10,25 +9,23 @@ let
   staticDir = cfg.dataDir + "/static";
 
   graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings" {
-      inherit graphiteLocalSettings;
-      preferLocalBuild = true;
-    } ''
+    inherit graphiteLocalSettings;
+    preferLocalBuild = true;
+  } ''
     mkdir -p $out
     ln -s $graphiteLocalSettings $out/graphite_local_settings.py
   '';
 
   graphiteLocalSettings = pkgs.writeText "graphite_local_settings.py" (
-    "STATIC_ROOT = '${staticDir}'\n" +
-    optionalString (config.time.timeZone != null) "TIME_ZONE = '${config.time.timeZone}'\n"
-    + cfg.web.extraConfig
+    "STATIC_ROOT = '${staticDir}'\n" + optionalString (config.time.timeZone != null) "TIME_ZONE = '${config.time.timeZone}'\n" + cfg.web.extraConfig
   );
 
   graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
     search_index: ${dataDir}/index
     ${optionalString (config.time.timeZone != null) ''time_zone: ${config.time.timeZone}''}
-    ${optionalString (cfg.api.finders != []) ''finders:''}
+    ${optionalString (cfg.api.finders != [ ]) ''finders:''}
     ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
-    ${optionalString (cfg.api.functions != []) ''functions:''}
+    ${optionalString (cfg.api.functions != [ ]) ''functions:''}
     ${concatMapStringsSep "\n" (f: "  - " + f) cfg.api.functions}
     ${cfg.api.extraConfig}
   '';
@@ -60,19 +57,20 @@ let
   '';
 
   carbonEnv = {
-    PYTHONPATH = let
-      cenv = pkgs.python.buildEnv.override {
-        extraLibs = [ pkgs.python27Packages.carbon ];
-      };
-      cenvPack =  "${cenv}/${pkgs.python.sitePackages}";
-    # opt/graphite/lib contains twisted.plugins.carbon-cache
-    in "${cenvPack}/opt/graphite/lib:${cenvPack}";
+    PYTHONPATH =
+      let
+        cenv = pkgs.python.buildEnv.override {
+          extraLibs = [ pkgs.python27Packages.carbon ];
+        };
+        cenvPack = "${cenv}/${pkgs.python.sitePackages}";
+        # opt/graphite/lib contains twisted.plugins.carbon-cache
+      in "${cenvPack}/opt/graphite/lib:${cenvPack}";
     GRAPHITE_ROOT = dataDir;
     GRAPHITE_CONF_DIR = configDir;
     GRAPHITE_STORAGE_DIR = dataDir;
   };
-
-in {
+in
+{
 
   ###### interface
 
@@ -131,7 +129,7 @@ in {
 
       finders = mkOption {
         description = "List of finder plugins to load.";
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.python27Packages.influxgraph ]";
         type = types.listOf types.package;
       };
@@ -329,7 +327,7 @@ in {
       };
 
       extraConfig = mkOption {
-        default = {};
+        default = { };
         description = ''
           Extra seyren configuration. See
           <link xlink:href='https://github.com/scobal/seyren#config' />
@@ -392,7 +390,7 @@ in {
 
       config = mkOption {
         description = "Graphite beacon configuration.";
-        default = {};
+        default = { };
         type = types.attrs;
       };
     };
@@ -413,7 +411,7 @@ in {
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
         preStart = ''
           install -dm0700 -o graphite -g graphite ${cfg.dataDir}
@@ -434,7 +432,7 @@ in {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
       };
     })
@@ -450,7 +448,7 @@ in {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
       };
     })
@@ -461,74 +459,77 @@ in {
       ];
     })
 
-    (mkIf cfg.web.enable (let
-      python27' = pkgs.python27.override {
-        packageOverrides = self: super: {
-          django = self.django_1_8;
-          django_tagging = self.django_tagging_0_4_3;
+    (mkIf cfg.web.enable (
+      let
+        python27' = pkgs.python27.override {
+          packageOverrides = self: super: {
+            django = self.django_1_8;
+            django_tagging = self.django_tagging_0_4_3;
+          };
         };
-      };
-      pythonPackages = python27'.pkgs;
-    in {
-      systemd.services.graphiteWeb = {
-        description = "Graphite Web Interface";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        path = [ pkgs.perl ];
-        environment = {
-          PYTHONPATH = let
-              penv = pkgs.python.buildEnv.override {
-                extraLibs = [
-                  pythonPackages.graphite-web
-                  pythonPackages.pysqlite
-                ];
-              };
-              penvPack = "${penv}/${pkgs.python.sitePackages}";
-            in concatStringsSep ":" [
-                 "${graphiteLocalSettingsDir}"
-                 "${penvPack}/opt/graphite/webapp"
-                 "${penvPack}"
-                 # explicitly adding pycairo in path because it cannot be imported via buildEnv
-                 "${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}"
-               ];
-          DJANGO_SETTINGS_MODULE = "graphite.settings";
-          GRAPHITE_CONF_DIR = configDir;
-          GRAPHITE_STORAGE_DIR = dataDir;
-          LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
-        };
-        serviceConfig = {
-          ExecStart = ''
-            ${pkgs.python27Packages.waitress-django}/bin/waitress-serve-django \
-              --host=${cfg.web.listenAddress} --port=${toString cfg.web.port}
+        pythonPackages = python27'.pkgs;
+      in {
+        systemd.services.graphiteWeb = {
+          description = "Graphite Web Interface";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          path = [ pkgs.perl ];
+          environment = {
+            PYTHONPATH =
+              let
+                penv = pkgs.python.buildEnv.override {
+                  extraLibs = [
+                    pythonPackages.graphite-web
+                    pythonPackages.pysqlite
+                  ];
+                };
+                penvPack = "${penv}/${pkgs.python.sitePackages}";
+              in concatStringsSep ":" [
+                "${graphiteLocalSettingsDir}"
+                "${penvPack}/opt/graphite/webapp"
+                "${penvPack}"
+                # explicitly adding pycairo in path because it cannot be imported via buildEnv
+                "${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}"
+              ];
+            DJANGO_SETTINGS_MODULE = "graphite.settings";
+            GRAPHITE_CONF_DIR = configDir;
+            GRAPHITE_STORAGE_DIR = dataDir;
+            LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
+          };
+          serviceConfig = {
+            ExecStart = ''
+              ${pkgs.python27Packages.waitress-django}/bin/waitress-serve-django \
+                --host=${cfg.web.listenAddress} --port=${toString cfg.web.port}
+            '';
+            User = "graphite";
+            Group = "graphite";
+            PermissionsStartOnly = true;
+          };
+          preStart = ''
+            if ! test -e ${dataDir}/db-created; then
+              mkdir -p ${dataDir}/{whisper/,log/webapp/}
+              chmod 0700 ${dataDir}/{whisper/,log/webapp/}
+
+              ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py migrate --noinput
+
+              chown -R graphite:graphite ${dataDir}
+
+              touch ${dataDir}/db-created
+            fi
+
+            # Only collect static files when graphite_web changes.
+            if ! [ "${dataDir}/current_graphite_web" -ef "${pythonPackages.graphite-web}" ]; then
+              mkdir -p ${staticDir}
+              ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py collectstatic  --noinput --clear
+              chown -R graphite:graphite ${staticDir}
+              ln -sfT "${pythonPackages.graphite-web}" "${dataDir}/current_graphite_web"
+            fi
           '';
-          User = "graphite";
-          Group = "graphite";
-          PermissionsStartOnly = true;
         };
-        preStart = ''
-          if ! test -e ${dataDir}/db-created; then
-            mkdir -p ${dataDir}/{whisper/,log/webapp/}
-            chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
-            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py migrate --noinput
-
-            chown -R graphite:graphite ${dataDir}
-
-            touch ${dataDir}/db-created
-          fi
-
-          # Only collect static files when graphite_web changes.
-          if ! [ "${dataDir}/current_graphite_web" -ef "${pythonPackages.graphite-web}" ]; then
-            mkdir -p ${staticDir}
-            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py collectstatic  --noinput --clear
-            chown -R graphite:graphite ${staticDir}
-            ln -sfT "${pythonPackages.graphite-web}" "${dataDir}/current_graphite_web"
-          fi
-        '';
-      };
-
-      environment.systemPackages = [ pythonPackages.graphite-web ];
-    }))
+        environment.systemPackages = [ pythonPackages.graphite-web ];
+      }
+    ))
 
     (mkIf cfg.api.enable {
       systemd.services.graphiteApi = {
@@ -536,7 +537,8 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         environment = {
-          PYTHONPATH = let
+          PYTHONPATH =
+            let
               aenv = pkgs.python.buildEnv.override {
                 extraLibs = [ cfg.api.package pkgs.cairo pkgs.pythonPackages.cffi ] ++ cfg.api.finders;
               };
@@ -628,16 +630,15 @@ in {
     })
 
     (mkIf (
-      cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
-      cfg.web.enable || cfg.api.enable ||
-      cfg.seyren.enable || cfg.pager.enable || cfg.beacon.enable
-     ) {
+      cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay || cfg.web.enable || cfg.api.enable || cfg.seyren.enable || cfg.pager.enable || cfg.beacon.enable
+    ) {
       users.users.graphite = {
         uid = config.ids.uids.graphite;
         description = "Graphite daemon user";
         home = dataDir;
       };
       users.groups.graphite.gid = config.ids.gids.graphite;
-    })
+    }
+    )
   ];
 }

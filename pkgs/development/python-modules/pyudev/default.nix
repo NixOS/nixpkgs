@@ -1,5 +1,12 @@
-{ lib, fetchPypi, buildPythonPackage
-, six, systemd, pytest, mock, hypothesis, docutils
+{ lib
+, fetchPypi
+, buildPythonPackage
+, six
+, systemd
+, pytest
+, mock
+, hypothesis
+, docutils
 }:
 
 buildPythonPackage rec {
@@ -14,7 +21,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace src/pyudev/_ctypeslib/utils.py \
       --replace "find_library(name)" "'${systemd.lib}/lib/libudev.so'"
-    '';
+  '';
 
   checkInputs = [ pytest mock hypothesis docutils ];
   propagatedBuildInputs = [ systemd six ];

@@ -1,6 +1,11 @@
-{ stdenv, fetchurl
-, vala, intltool, pkgconfig
-, libkkc, ibus, skk-dicts
+{ stdenv
+, fetchurl
+, vala
+, intltool
+, pkgconfig
+, libkkc
+, ibus
+, skk-dicts
 , gtk3
 }:
 
@@ -14,7 +19,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    vala intltool pkgconfig
+    vala
+    intltool
+    pkgconfig
   ];
 
   buildInputs = [ libkkc ibus skk-dicts gtk3 ];
@@ -25,10 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
-    description  = "libkkc (Japanese Kana Kanji input method) engine for ibus";
-    homepage     = https://github.com/ueno/ibus-kkc;
-    license      = licenses.gpl2;
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ vanzef ];
+    description = "libkkc (Japanese Kana Kanji input method) engine for ibus";
+    homepage = https://github.com/ueno/ibus-kkc;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ vanzef ];
   };
 }

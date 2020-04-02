@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xinetd;
 
   configFile = pkgs.writeText "xinetd.conf"
@@ -35,9 +33,7 @@ let
         ${srv.extraConfig}
       }
     '';
-
 in
-
 {
 
   ###### interface
@@ -60,7 +56,7 @@ in
     };
 
     services.xinetd.services = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         A list of services provided by xinetd.
       '';

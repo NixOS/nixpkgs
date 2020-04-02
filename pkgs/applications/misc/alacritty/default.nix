@@ -1,40 +1,37 @@
-{ stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-
-  cmake,
-  gzip,
-  installShellFiles,
-  makeWrapper,
-  ncurses,
-  pkgconfig,
-  python3,
-
-  expat,
-  fontconfig,
-  freetype,
-  libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  libxcb,
-  libxkbcommon,
-  wayland,
-  xdg_utils,
-
-  # Darwin Frameworks
-  AppKit,
-  CoreGraphics,
-  CoreServices,
-  CoreText,
-  Foundation,
-  OpenGL }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, gzip
+, installShellFiles
+, makeWrapper
+, ncurses
+, pkgconfig
+, python3
+, expat
+, fontconfig
+, freetype
+, libGL
+, libX11
+, libXcursor
+, libXi
+, libXrandr
+, libXxf86vm
+, libxcb
+, libxkbcommon
+, wayland
+, xdg_utils
+, # Darwin Frameworks
+  AppKit
+, CoreGraphics
+, CoreServices
+, CoreText
+, Foundation
+, OpenGL
+}:
 
 with rustPlatform;
-
 let
   rpathLibs = [
     expat
@@ -51,7 +48,8 @@ let
     libxkbcommon
     wayland
   ];
-in buildRustPackage rec {
+in
+buildRustPackage rec {
   pname = "alacritty";
   version = "0.4.1";
 
@@ -90,14 +88,15 @@ in buildRustPackage rec {
 
     install -D target/release/alacritty $out/bin/alacritty
 
-  '' + (if stdenv.isDarwin then ''
-    mkdir $out/Applications
-    cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
-  '' else ''
-    install -D extra/linux/alacritty.desktop -t $out/share/applications/
-    install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
-  '') + ''
+  '' + (
+    if stdenv.isDarwin then ''
+      mkdir $out/Applications
+      cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
+    '' else ''
+      install -D extra/linux/alacritty.desktop -t $out/share/applications/
+      install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
+      patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+    '') + ''
 
     installShellCompletion --zsh extra/completions/_alacritty
     installShellCompletion --bash extra/completions/alacritty.bash

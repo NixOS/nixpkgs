@@ -1,23 +1,65 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, addOpenGLRunpath, perl, texinfo, yasm
-, alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
-, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
-, openglSupport ? false, libGLU ? null, libGL ? null
-, libmfxSupport ? false, intel-media-sdk ? null
-, libaomSupport ? false, libaom ? null
-# Build options
+{ stdenv
+, buildPackages
+, fetchurl
+, pkgconfig
+, addOpenGLRunpath
+, perl
+, texinfo
+, yasm
+, alsaLib
+, bzip2
+, fontconfig
+, freetype
+, gnutls
+, libiconv
+, lame
+, libass
+, libogg
+, libssh
+, libtheora
+, libva
+, libdrm
+, libvorbis
+, libvpx
+, lzma
+, libpulseaudio
+, soxr
+, x264
+, x265
+, xvidcore
+, zlib
+, libopus
+, speex
+, nv-codec-headers
+, dav1d
+, openglSupport ? false
+, libGLU ? null
+, libGL ? null
+, libmfxSupport ? false
+, intel-media-sdk ? null
+, libaomSupport ? false
+, libaom ? null
+  # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
-, sdlSupport ? !stdenv.isAarch32, SDL ? null, SDL2 ? null
-, vdpauSupport ? !stdenv.isAarch32, libvdpau ? null
-# Developer options
+, sdlSupport ? !stdenv.isAarch32
+, SDL ? null
+, SDL2 ? null
+, vdpauSupport ? !stdenv.isAarch32
+, libvdpau ? null
+  # Developer options
 , debugDeveloper ? false
 , optimizationsDeveloper ? true
 , extraWarningsDeveloper ? false
-# Darwin frameworks
-, Cocoa, darwinFrameworks ? [ Cocoa ]
-# Inherit generics
-, branch, sha256, version, patches ? [], ...
+  # Darwin frameworks
+, Cocoa
+, darwinFrameworks ? [ Cocoa ]
+  # Inherit generics
+, branch
+, sha256
+, version
+, patches ? [ ]
+, ...
 }:
 
 /* Maintainer notes:
@@ -41,7 +83,6 @@
  *           compiled on Cygwin)
  *
  */
-
 let
   inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
   inherit (stdenv.lib) optional optionals optionalString enableFeature filter;
@@ -62,58 +103,59 @@ let
 
   vpxSupport = reqMin "0.6" && !isAarch32;
 in
+  assert openglSupport -> libGL != null && libGLU != null;
+  assert libmfxSupport -> intel-media-sdk != null;
+  assert libaomSupport -> libaom != null;
 
-assert openglSupport -> libGL != null && libGLU != null;
-assert libmfxSupport -> intel-media-sdk != null;
-assert libaomSupport -> libaom != null;
+  stdenv.mkDerivation rec {
 
-stdenv.mkDerivation rec {
+    pname = "ffmpeg";
+    inherit version;
 
-  pname = "ffmpeg";
-  inherit version;
+    src = fetchurl {
+      url = "https://www.ffmpeg.org/releases/${pname}-${version}.tar.bz2";
+      inherit sha256;
+    };
 
-  src = fetchurl {
-    url = "https://www.ffmpeg.org/releases/${pname}-${version}.tar.bz2";
-    inherit sha256;
-  };
+    postPatch = ''patchShebangs .'';
+    inherit patches;
 
-  postPatch = ''patchShebangs .'';
-  inherit patches;
+    outputs = [ "bin" "dev" "out" "man" ]
+      ++ optional (reqMin "1.0") "doc"; # just dev-doc
+    setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
 
-  outputs = [ "bin" "dev" "out" "man" ]
-    ++ optional (reqMin "1.0") "doc" ; # just dev-doc
-  setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
-
-  configurePlatforms = [];
-  configureFlags = filter (v: v != null) ([
+    configurePlatforms = [ ];
+    configureFlags = filter (v: v != null) ([
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
       "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
-    # License
+      # License
       "--enable-gpl"
       "--enable-version3"
-    # Build flags
+      # Build flags
       "--enable-shared"
       (ifMinVer "0.6" "--enable-pic")
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
     ] ++
-      (if multithreadBuild then (
-         if stdenv.isCygwin then
-           ["--disable-pthreads" "--enable-w32threads"]
-         else # Use POSIX threads by default
-           ["--enable-pthreads" "--disable-w32threads"])
-       else
-         ["--disable-pthreads" "--disable-w32threads"])
+    (
+      if multithreadBuild then (
+        if stdenv.isCygwin then
+          [ "--disable-pthreads" "--enable-w32threads" ]
+        else # Use POSIX threads by default
+          [ "--enable-pthreads" "--disable-w32threads" ]
+      )
+      else
+        [ "--disable-pthreads" "--disable-w32threads" ])
     ++ [
       (ifMinVer "0.9" "--disable-os2threads") # We don't support OS/2
       "--enable-network"
       (ifMinVer "2.4" "--enable-pixelutils")
-    # Executables
+      # Executables
       "--enable-ffmpeg"
       "--disable-ffplay"
       (ifMinVer "0.6" "--enable-ffprobe")
       (if reqMin "4" then null else "--disable-ffserver")
-    # Libraries
+      # Libraries
       (ifMinVer "0.6" "--enable-avcodec")
       (ifMinVer "0.6" "--enable-avdevice")
       "--enable-avfilter"
@@ -123,9 +165,9 @@ stdenv.mkDerivation rec {
       "--enable-postproc"
       (ifMinVer "0.9" "--enable-swresample")
       "--enable-swscale"
-    # Docs
+      # Docs
       (ifMinVer "0.6" "--disable-doc")
-    # External Libraries
+      # External Libraries
       "--enable-bzlib"
       "--enable-gnutls"
       (ifMinVer "1.0" "--enable-fontconfig")
@@ -153,26 +195,44 @@ stdenv.mkDerivation rec {
       "--enable-libspeex"
       (ifMinVer "2.8" "--enable-libx265")
       (ifMinVer "4.2" (enableFeature (dav1d != null) "libdav1d"))
-    # Developer flags
+      # Developer flags
       (enableFeature debugDeveloper "debug")
       (enableFeature optimizationsDeveloper "optimizations")
       (enableFeature extraWarningsDeveloper "extra-warnings")
       "--disable-stripping"
-    # Disable mmx support for 0.6.90
+      # Disable mmx support for 0.6.90
       (verFix null "0.6.90" "--disable-mmx")
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
       "--pkg-config=pkg-config" # Override ffmpeg's ./configure assumption that pkg-config is prefixed by the architecture. (e.g. aarch64-unknown-linux-gnu-pkg-config)
-  ] ++ optional stdenv.cc.isClang "--cc=clang");
+    ] ++ optional stdenv.cc.isClang "--cc=clang");
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
 
-  buildInputs = [
-    bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
-  ] ++ optionals openglSupport [ libGL libGLU ]
+    buildInputs = [
+      bzip2
+      fontconfig
+      freetype
+      gnutls
+      libiconv
+      lame
+      libass
+      libogg
+      libssh
+      libtheora
+      libvorbis
+      lzma
+      soxr
+      x264
+      x265
+      xvidcore
+      zlib
+      libopus
+      speex
+      nv-codec-headers
+    ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional vpxSupport libaom
     ++ optional vpxSupport libvpx
@@ -185,44 +245,44 @@ stdenv.mkDerivation rec {
     ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
     ++ optional (reqMin "4.2") dav1d;
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
-  doCheck = false; # fails
+    doCheck = false; # fails
 
-  # ffmpeg 3+ generates pkg-config (.pc) files that don't have the
-  # form automatically handled by the multiple-outputs hooks.
-  postFixup = ''
-    moveToOutput bin "$bin"
-    moveToOutput share/ffmpeg/examples "$doc"
-    for pc in ''${!outputDev}/lib/pkgconfig/*.pc; do
-      substituteInPlace $pc \
-        --replace "includedir=$out" "includedir=''${!outputInclude}"
-    done
-  '' + optionalString stdenv.isLinux ''
-    # Set RUNPATH so that libnvcuvid in /run/opengl-driver(-32)/lib can be found.
-    # See the explanation in addOpenGLRunpath.
-    addOpenGLRunpath $out/lib/libavcodec.so*
-  '';
-
-  installFlags = [ "install-man" ];
-
-  passthru = {
-    inherit vaapiSupport vdpauSupport;
-  };
-
-  meta = with stdenv.lib; {
-    description = "A complete, cross-platform solution to record, convert and stream audio and video";
-    homepage = http://www.ffmpeg.org/;
-    longDescription = ''
-      FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
-      mux, demux, stream, filter and play pretty much anything that humans and machines
-      have created. It supports the most obscure ancient formats up to the cutting edge.
-      No matter if they were designed by some standards committee, the community or
-      a corporation.
+    # ffmpeg 3+ generates pkg-config (.pc) files that don't have the
+    # form automatically handled by the multiple-outputs hooks.
+    postFixup = ''
+      moveToOutput bin "$bin"
+      moveToOutput share/ffmpeg/examples "$doc"
+      for pc in ''${!outputDev}/lib/pkgconfig/*.pc; do
+        substituteInPlace $pc \
+          --replace "includedir=$out" "includedir=''${!outputInclude}"
+      done
+    '' + optionalString stdenv.isLinux ''
+      # Set RUNPATH so that libnvcuvid in /run/opengl-driver(-32)/lib can be found.
+      # See the explanation in addOpenGLRunpath.
+      addOpenGLRunpath $out/lib/libavcodec.so*
     '';
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel ];
-    inherit branch;
-  };
-}
+
+    installFlags = [ "install-man" ];
+
+    passthru = {
+      inherit vaapiSupport vdpauSupport;
+    };
+
+    meta = with stdenv.lib; {
+      description = "A complete, cross-platform solution to record, convert and stream audio and video";
+      homepage = http://www.ffmpeg.org/;
+      longDescription = ''
+        FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
+        mux, demux, stream, filter and play pretty much anything that humans and machines
+        have created. It supports the most obscure ancient formats up to the cutting edge.
+        No matter if they were designed by some standards committee, the community or
+        a corporation.
+      '';
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ codyopel ];
+      inherit branch;
+    };
+  }

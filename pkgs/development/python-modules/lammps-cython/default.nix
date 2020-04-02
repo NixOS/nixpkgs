@@ -21,8 +21,8 @@ buildPythonPackage rec {
   disabled = (!isPy3k);
 
   src = fetchurl {
-     url = "https://gitlab.com/costrouc/${pname}/-/archive/v${version}/${pname}-v${version}.tar.gz";
-     sha256 = "1wj9scmjdl00af13b5ihfccrjpikrdgkzd88ialam1nkxvxi42bl";
+    url = "https://gitlab.com/costrouc/${pname}/-/archive/v${version}/${pname}-v${version}.tar.gz";
+    sha256 = "1wj9scmjdl00af13b5ihfccrjpikrdgkzd88ialam1nkxvxi42bl";
   };
 
   buildInputs = [ cython pytestrunner ];

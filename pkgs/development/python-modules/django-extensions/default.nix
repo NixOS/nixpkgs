@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, python
 , django
 , factory_boy
 , glibcLocales

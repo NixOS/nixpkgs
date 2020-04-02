@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, python2
+{ fetchurl
+, stdenv
+, python2
 
 , enableStandardFeatures ? false
 , sourceHighlight ? null
@@ -17,52 +19,45 @@
 , docbook_xsl_ns ? null
 , docbook_xsl ? null
 , fop ? null
-# TODO: Package this:
-#, epubcheck ? null
+  # TODO: Package this:
+  #, epubcheck ? null
 , gnused ? null
 , coreutils ? null
 
-# if true, enable all the below filters and backends
+  # if true, enable all the below filters and backends
 , enableExtraPlugins ? false
 
-# unzip is needed to extract filter and backend plugins
+  # unzip is needed to extract filter and backend plugins
 , unzip ? null
-# filters
-, enableDitaaFilter ? false, jre ? null
-, enableMscgenFilter ? false, mscgen ? null
-, enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
-, enableQrcodeFilter ? false, qrencode ? null
-, enableMatplotlibFilter ? false, matplotlib ? null, numpy ? null
-, enableAafigureFilter ? false, aafigure ? null, recursivePthLoader ? null
-# backends
+  # filters
+, enableDitaaFilter ? false
+, jre ? null
+, enableMscgenFilter ? false
+, mscgen ? null
+, enableDiagFilter ? false
+, blockdiag ? null
+, seqdiag ? null
+, actdiag ? null
+, nwdiag ? null
+, enableQrcodeFilter ? false
+, qrencode ? null
+, enableMatplotlibFilter ? false
+, matplotlib ? null
+, numpy ? null
+, enableAafigureFilter ? false
+, aafigure ? null
+, recursivePthLoader ? null
+  # backends
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false
 
-# java is problematic on some platforms, where it is unfree
+  # java is problematic on some platforms, where it is unfree
 , enableJava ? true
 }:
 
-assert enableStandardFeatures ->
-  sourceHighlight != null &&
-  highlight != null &&
-  pygments != null &&
-  graphviz != null &&
-  texlive != null &&
-  dblatexFull != null &&
-  libxslt != null &&
-  w3m != null &&
-  lynx != null &&
-  imagemagick != null &&
-  lilypond != null &&
-  libxml2 != null &&
-  docbook_xml_dtd_45 != null &&
-  docbook_xsl_ns != null &&
-  docbook_xsl != null &&
-  (fop != null || !enableJava) &&
-# TODO: Package this:
-#  epubcheck != null &&
-  gnused != null &&
-  coreutils != null;
+assert enableStandardFeatures -> sourceHighlight != null && highlight != null && pygments != null && graphviz != null && texlive != null && dblatexFull != null && libxslt != null && w3m != null && lynx != null && imagemagick != null && lilypond != null && libxml2 != null && docbook_xml_dtd_45 != null && docbook_xsl_ns != null && docbook_xsl != null && (fop != null || !enableJava) && # TODO: Package this:
+  #  epubcheck != null &&
+  gnused != null && coreutils != null;
 
 # filters
 assert enableExtraPlugins || enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter -> unzip != null;
@@ -73,9 +68,7 @@ assert enableExtraPlugins || enableMatplotlibFilter -> matplotlib != null && num
 assert enableExtraPlugins || enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
 # backends
 assert enableExtraPlugins || enableDeckjsBackend || enableOdfBackend -> unzip != null;
-
 let
-
   _enableDitaaFilter = (enableExtraPlugins && enableJava) || enableDitaaFilter;
   _enableMscgenFilter = enableExtraPlugins || enableMscgenFilter;
   _enableDiagFilter = enableExtraPlugins || enableDiagFilter;
@@ -140,9 +133,7 @@ let
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odp-backend-0.1.zip";
     sha256 = "08ya4bskygzqkfqwjllpg31qc5k08xp2k78z9b2480g8y57bfy10";
   };
-
 in
-
 stdenv.mkDerivation rec {
   name = "asciidoc-8.6.9";
 

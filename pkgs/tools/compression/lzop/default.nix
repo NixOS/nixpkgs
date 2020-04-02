@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lzo}:
+{ stdenv, fetchurl, lzo }:
 
 stdenv.mkDerivation rec {
   name = "lzop-1.04";

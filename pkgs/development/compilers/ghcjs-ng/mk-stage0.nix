@@ -5,7 +5,7 @@
 }:
 
 runCommand "stage0.nix" {
-  buildInputs = [cabal2nix yq];
+  buildInputs = [ cabal2nix yq ];
 } ''
   (
     printf '{ callPackage, configuredSrc }:\n\n{\n\n'

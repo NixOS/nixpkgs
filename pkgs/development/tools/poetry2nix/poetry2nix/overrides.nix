@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
 , stdenv ? pkgs.stdenv
 }:
@@ -55,8 +55,8 @@ self: super:
   django = (
     super.django.overrideAttrs (
       old: {
-        propagatedNativeBuildInputs = (old.propagatedNativeBuildInputs or [])
-        ++ [ pkgs.gettext ];
+        propagatedNativeBuildInputs = (old.propagatedNativeBuildInputs or [ ])
+          ++ [ pkgs.gettext ];
       }
     )
   );
@@ -195,14 +195,14 @@ self: super:
   );
 
   matplotlib = super.matplotlib.overrideAttrs (
-    old: let
+    old:
+    let
       enableGhostscript = old.passthru.enableGhostscript or false;
       enableGtk3 = old.passthru.enableTk or false;
       enableQt = old.passthru.enableQt or false;
       enableTk = old.passthru.enableTk or false;
 
       inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-
     in
       {
         NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
@@ -210,8 +210,8 @@ self: super:
         XDG_RUNTIME_DIR = "/tmp";
 
         buildInputs = old.buildInputs
-        ++ lib.optional enableGhostscript pkgs.ghostscript
-        ++ lib.optional stdenv.isDarwin [ Cocoa ];
+          ++ lib.optional enableGhostscript pkgs.ghostscript
+          ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
         nativeBuildInputs = old.nativeBuildInputs ++ [
           pkgs.pkgconfig
@@ -221,9 +221,9 @@ self: super:
           pkgs.libpng
           pkgs.freetype
         ]
-        ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
-        ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
-        ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
+          ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
+          ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
+          ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
         ;
 
         inherit (super.matplotlib) patches;
@@ -266,13 +266,14 @@ self: super:
   );
 
   numpy = super.numpy.overrideAttrs (
-    old: let
+    old:
+    let
       blas = old.passthru.args.blas or pkgs.openblasCompat;
       blasImplementation = lib.nameFromURL blas.name "-";
       cfg = pkgs.writeTextFile {
         name = "site.cfg";
         text = (
-          lib.generators.toINI {} {
+          lib.generators.toINI { } {
             ${blasImplementation} = {
               include_dirs = "${blas}/include";
               library_dirs = "${blas}/lib";
@@ -306,15 +307,16 @@ self: super:
   );
 
   peewee = super.peewee.overridePythonAttrs (
-    old: let
+    old:
+    let
       withPostgres = old.passthru.withPostgres or false;
       withMysql = old.passthru.withMysql or false;
     in
       {
         buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
         propagatedBuildInputs = old.propagatedBuildInputs
-        ++ lib.optional withPostgres self.psycopg2
-        ++ lib.optional withMysql self.mysql-connector;
+          ++ lib.optional withPostgres self.psycopg2
+          ++ lib.optional withMysql self.mysql-connector;
       }
   );
 
@@ -400,106 +402,108 @@ self: super:
     }
   );
 
-  pyqt5 = let
-    drv = super.pyqt5;
-    withConnectivity = drv.passthru.args.withConnectivity or false;
-    withMultimedia = drv.passthru.args.withMultimedia or false;
-    withWebKit = drv.passthru.args.withWebKit or false;
-    withWebSockets = drv.passthru.args.withWebSockets or false;
-  in
-    super.pyqt5.overridePythonAttrs (
-      old: {
-        format = "other";
+  pyqt5 =
+    let
+      drv = super.pyqt5;
+      withConnectivity = drv.passthru.args.withConnectivity or false;
+      withMultimedia = drv.passthru.args.withMultimedia or false;
+      withWebKit = drv.passthru.args.withWebKit or false;
+      withWebSockets = drv.passthru.args.withWebSockets or false;
+    in
+      super.pyqt5.overridePythonAttrs (
+        old: {
+          format = "other";
 
-        nativeBuildInputs = old.nativeBuildInputs ++ [
-          pkgs.pkgconfig
-          pkgs.qt5.qmake
-          pkgs.xorg.lndir
-          pkgs.qt5.qtbase
-          pkgs.qt5.qtsvg
-          pkgs.qt5.qtdeclarative
-          pkgs.qt5.qtwebchannel
-          # self.pyqt5-sip
-          self.sip
-        ]
-        ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
-        ++ lib.optional withMultimedia pkgs.qt5.qtmultimedia
-        ++ lib.optional withWebKit pkgs.qt5.qtwebkit
-        ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
-        ;
-
-        buildInputs = old.buildInputs ++ [
-          pkgs.dbus
-          pkgs.qt5.qtbase
-          pkgs.qt5.qtsvg
-          pkgs.qt5.qtdeclarative
-          self.sip
-        ]
-        ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
-        ++ lib.optional withWebKit pkgs.qt5.qtwebkit
-        ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
-        ;
-
-        # Fix dbus mainloop
-        patches = pkgs.python3.pkgs.pyqt5.patches or [];
-
-        configurePhase = ''
-          runHook preConfigure
-
-          export PYTHONPATH=$PYTHONPATH:$out/${self.python.sitePackages}
-
-          mkdir -p $out/${self.python.sitePackages}/dbus/mainloop
-          ${self.python.executable} configure.py  -w \
-            --confirm-license \
-            --no-qml-plugin \
-            --bindir=$out/bin \
-            --destdir=$out/${self.python.sitePackages} \
-            --stubsdir=$out/${self.python.sitePackages}/PyQt5 \
-            --sipdir=$out/share/sip/PyQt5 \
-            --designer-plugindir=$out/plugins/designer
-
-          runHook postConfigure
-        '';
-
-        postInstall = ''
-          ln -s ${self.pyqt5-sip}/${self.python.sitePackages}/PyQt5/sip.* $out/${self.python.sitePackages}/PyQt5/
-          for i in $out/bin/*; do
-            wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-          done
-
-          # Let's make it a namespace package
-          cat << EOF > $out/${self.python.sitePackages}/PyQt5/__init__.py
-          from pkgutil import extend_path
-          __path__ = extend_path(__path__, __name__)
-          EOF
-        '';
-
-        installCheckPhase = let
-          modules = [
-            "PyQt5"
-            "PyQt5.QtCore"
-            "PyQt5.QtQml"
-            "PyQt5.QtWidgets"
-            "PyQt5.QtGui"
+          nativeBuildInputs = old.nativeBuildInputs ++ [
+            pkgs.pkgconfig
+            pkgs.qt5.qmake
+            pkgs.xorg.lndir
+            pkgs.qt5.qtbase
+            pkgs.qt5.qtsvg
+            pkgs.qt5.qtdeclarative
+            pkgs.qt5.qtwebchannel
+            # self.pyqt5-sip
+            self.sip
           ]
-          ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-          ++ lib.optional withWebKit "PyQt5.QtWebKit"
-          ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-          ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+            ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
+            ++ lib.optional withMultimedia pkgs.qt5.qtmultimedia
+            ++ lib.optional withWebKit pkgs.qt5.qtwebkit
+            ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
           ;
 
-          imports = lib.concatMapStrings (module: "import ${module};") modules;
-        in
-          ''
-            echo "Checking whether modules can be imported..."
-            ${self.python.interpreter} -c "${imports}"
+          buildInputs = old.buildInputs ++ [
+            pkgs.dbus
+            pkgs.qt5.qtbase
+            pkgs.qt5.qtsvg
+            pkgs.qt5.qtdeclarative
+            self.sip
+          ]
+            ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
+            ++ lib.optional withWebKit pkgs.qt5.qtwebkit
+            ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
+          ;
+
+          # Fix dbus mainloop
+          patches = pkgs.python3.pkgs.pyqt5.patches or [ ];
+
+          configurePhase = ''
+            runHook preConfigure
+
+            export PYTHONPATH=$PYTHONPATH:$out/${self.python.sitePackages}
+
+            mkdir -p $out/${self.python.sitePackages}/dbus/mainloop
+            ${self.python.executable} configure.py  -w \
+              --confirm-license \
+              --no-qml-plugin \
+              --bindir=$out/bin \
+              --destdir=$out/${self.python.sitePackages} \
+              --stubsdir=$out/${self.python.sitePackages}/PyQt5 \
+              --sipdir=$out/share/sip/PyQt5 \
+              --designer-plugindir=$out/plugins/designer
+
+            runHook postConfigure
           '';
 
-        doCheck = true;
+          postInstall = ''
+            ln -s ${self.pyqt5-sip}/${self.python.sitePackages}/PyQt5/sip.* $out/${self.python.sitePackages}/PyQt5/
+            for i in $out/bin/*; do
+              wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
+            done
 
-        enableParallelBuilding = true;
-      }
-    );
+            # Let's make it a namespace package
+            cat << EOF > $out/${self.python.sitePackages}/PyQt5/__init__.py
+            from pkgutil import extend_path
+            __path__ = extend_path(__path__, __name__)
+            EOF
+          '';
+
+          installCheckPhase =
+            let
+              modules = [
+                "PyQt5"
+                "PyQt5.QtCore"
+                "PyQt5.QtQml"
+                "PyQt5.QtWidgets"
+                "PyQt5.QtGui"
+              ]
+              ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
+              ++ lib.optional withWebKit "PyQt5.QtWebKit"
+              ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
+              ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+              ;
+
+              imports = lib.concatMapStrings (module: "import ${module};") modules;
+            in
+              ''
+                echo "Checking whether modules can be imported..."
+                ${self.python.interpreter} -c "${imports}"
+              '';
+
+          doCheck = true;
+
+          enableParallelBuilding = true;
+        }
+      );
 
   pytest-datadir = super.pytest-datadir.overrideAttrs (
     old: {
@@ -558,7 +562,7 @@ self: super:
   # Make it not fail with infinite recursion
   pybind11 = super.pybind11.overridePythonAttrs (
     old: {
-      cmakeFlags = (old.cmakeFlags or []) ++ [
+      cmakeFlags = (old.cmakeFlags or [ ]) ++ [
         "-DPYBIND11_TEST=off"
       ];
       doCheck = false; # Circular test dependency
@@ -606,13 +610,14 @@ self: super:
     }
   );
 
-  shellingham = if lib.versionAtLeast super.shellingham.version "1.3.2" then (
-    super.shellingham.overridePythonAttrs (
-      old: {
-        format = "pyproject";
-      }
-    )
-  ) else super.shellingham;
+  shellingham =
+    if lib.versionAtLeast super.shellingham.version "1.3.2" then (
+      super.shellingham.overridePythonAttrs (
+        old: {
+          format = "pyproject";
+        }
+      )
+    ) else super.shellingham;
 
   tables = super.tables.overrideAttrs (
     old: {

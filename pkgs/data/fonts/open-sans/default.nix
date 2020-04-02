@@ -1,9 +1,9 @@
 { lib, fetchFromGitLab }:
-
 let
   pname = "open-sans";
   version = "1.11";
-in fetchFromGitLab {
+in
+fetchFromGitLab {
   name = "${pname}-${version}";
 
   domain = "salsa.debian.org";

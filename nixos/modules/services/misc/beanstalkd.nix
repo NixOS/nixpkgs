@@ -1,12 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.beanstalkd;
   pkg = pkgs.beanstalkd;
 in
-
 {
   # interface
 

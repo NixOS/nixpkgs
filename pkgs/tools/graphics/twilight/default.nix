@@ -1,9 +1,14 @@
-{ stdenv, fetchFromGitHub
-, libGL, libGLU, freeglut, libX11 }:
-
+{ stdenv
+, fetchFromGitHub
+, libGL
+, libGLU
+, freeglut
+, libX11
+}:
 let
   version = "2018-04-19";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "twilight";
   inherit version;
 

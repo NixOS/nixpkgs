@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = [stdenv.lib.maintainers.orbekk];
+    maintainers = [ stdenv.lib.maintainers.orbekk ];
     platforms = stdenv.lib.platforms.linux;
     description = "Tool to set battery charging thesholds on Lenovo Thinkpad";
     license = stdenv.lib.licenses.gpl3Plus;

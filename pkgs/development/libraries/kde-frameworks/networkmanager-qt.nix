@@ -1,7 +1,9 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  networkmanager, qtbase,
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, networkmanager
+, qtbase
+,
 }:
 
 mkDerivation {

@@ -1,15 +1,29 @@
-{ stdenv, fetchurl
-, xftSupport ? true, libXft ? null
-, xrenderSupport ? true, libXrender ? null
-, xrandrSupport ? true, libXrandr ? null
-, xineramaSupport ? true, libXinerama ? null
-, cursorSupport ? true, libXcursor ? null
+{ stdenv
+, fetchurl
+, xftSupport ? true
+, libXft ? null
+, xrenderSupport ? true
+, libXrender ? null
+, xrandrSupport ? true
+, libXrandr ? null
+, xineramaSupport ? true
+, libXinerama ? null
+, cursorSupport ? true
+, libXcursor ? null
 , threadSupport ? true
-, mysqlSupport ? false, libmysqlclient ? null
+, mysqlSupport ? false
+, libmysqlclient ? null
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, libGL ? null, libGLU ? null, libXmu ? null
-, xlibsWrapper, xorgproto, zlib, libjpeg, libpng, which
+, libGL ? null
+, libGLU ? null
+, libXmu ? null
+, xlibsWrapper
+, xorgproto
+, zlib
+, libjpeg
+, libpng
+, which
 }:
 
 assert xftSupport -> libXft != null;
@@ -32,42 +46,55 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ which ];
-  propagatedBuildInputs = [libpng xlibsWrapper libXft libXrender zlib libjpeg];
+  propagatedBuildInputs = [ libpng xlibsWrapper libXft libXrender zlib libjpeg ];
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = let
-    mk = cond: name: "-${stdenv.lib.optionalString (!cond) "no-"}${name}";
-  in [
-    "-v"
-    "-system-zlib" "-system-libpng" "-system-libjpeg"
-    "-qt-gif"
-    "-I${xorgproto}/include"
-    (mk threadSupport "thread")
-    (mk xrenderSupport "xrender")
-    (mk xrandrSupport "xrandr")
-    (mk xineramaSupport "xinerama")
-    (mk xrandrSupport "xrandr")
-    (mk xftSupport "xft")
-  ] ++ stdenv.lib.optionals openglSupport [
-    "-dlopen-opengl"
-    "-L${libGL}/lib" "-I${libGLU}/include"
-    "-L${libXmu.out}/lib" "-I${libXmu.dev}/include"
-  ] ++ stdenv.lib.optionals xrenderSupport [
-    "-L${libXrender.out}/lib" "-I${libXrender.dev}/include"
-  ] ++ stdenv.lib.optionals xrandrSupport [
-    "-L${libXrandr.out}/lib" "-I${libXrandr.dev}/include"
-  ] ++ stdenv.lib.optionals xineramaSupport [
-    "-L${libXinerama.out}/lib" "-I${libXinerama.dev}/include"
-  ] ++ stdenv.lib.optionals cursorSupport [
-    "-L${libXcursor.out}/lib -I${libXcursor.dev}/include"
-  ] ++ stdenv.lib.optionals mysqlSupport [
-    "-qt-sql-mysql" "-L${libmysqlclient}/lib/mysql" "-I${libmysqlclient}/include/mysql"
-  ] ++ stdenv.lib.optionals xftSupport [
-    "-L${libXft.out}/lib" "-I${libXft.dev}/include"
-    "-L${libXft.freetype.out}/lib" "-I${libXft.freetype.dev}/include"
-    "-L${libXft.fontconfig.lib}/lib" "-I${libXft.fontconfig.dev}/include"
-  ];
+  configureFlags =
+    let
+      mk = cond: name: "-${stdenv.lib.optionalString (!cond) "no-"}${name}";
+    in [
+      "-v"
+      "-system-zlib"
+      "-system-libpng"
+      "-system-libjpeg"
+      "-qt-gif"
+      "-I${xorgproto}/include"
+      (mk threadSupport "thread")
+      (mk xrenderSupport "xrender")
+      (mk xrandrSupport "xrandr")
+      (mk xineramaSupport "xinerama")
+      (mk xrandrSupport "xrandr")
+      (mk xftSupport "xft")
+    ] ++ stdenv.lib.optionals openglSupport [
+      "-dlopen-opengl"
+      "-L${libGL}/lib"
+      "-I${libGLU}/include"
+      "-L${libXmu.out}/lib"
+      "-I${libXmu.dev}/include"
+    ] ++ stdenv.lib.optionals xrenderSupport [
+      "-L${libXrender.out}/lib"
+      "-I${libXrender.dev}/include"
+    ] ++ stdenv.lib.optionals xrandrSupport [
+      "-L${libXrandr.out}/lib"
+      "-I${libXrandr.dev}/include"
+    ] ++ stdenv.lib.optionals xineramaSupport [
+      "-L${libXinerama.out}/lib"
+      "-I${libXinerama.dev}/include"
+    ] ++ stdenv.lib.optionals cursorSupport [
+      "-L${libXcursor.out}/lib -I${libXcursor.dev}/include"
+    ] ++ stdenv.lib.optionals mysqlSupport [
+      "-qt-sql-mysql"
+      "-L${libmysqlclient}/lib/mysql"
+      "-I${libmysqlclient}/include/mysql"
+    ] ++ stdenv.lib.optionals xftSupport [
+      "-L${libXft.out}/lib"
+      "-I${libXft.dev}/include"
+      "-L${libXft.freetype.out}/lib"
+      "-I${libXft.freetype.dev}/include"
+      "-L${libXft.fontconfig.lib}/lib"
+      "-I${libXft.fontconfig.dev}/include"
+    ];
 
   patches = [
     # Don't strip everything so we can get useful backtraces.
@@ -83,7 +110,7 @@ stdenv.mkDerivation {
     ./qt3-gcc4.6.0.patch
   ];
 
-  passthru = {inherit mysqlSupport;};
+  passthru = { inherit mysqlSupport; };
 
   meta = with stdenv.lib; {
     license = with licenses; [ gpl2 qpl ];

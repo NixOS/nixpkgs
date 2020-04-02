@@ -1,9 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
-let cfg = config.programs.cdemu;
-in {
+let
+  cfg = config.programs.cdemu;
+in
+{
 
   options = {
     programs.cdemu = {

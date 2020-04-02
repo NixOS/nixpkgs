@@ -1,12 +1,27 @@
-{ stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which
-, gitSupport ? false, git ? null
-, docutilsSupport ? false, python ? null, docutils ? null
-, monotoneSupport ? false, monotone ? null
-, bazaarSupport ? false, bazaar ? null
-, cvsSupport ? false, cvs ? null, cvsps ? null
-, subversionSupport ? false, subversion ? null
-, mercurialSupport ? false, mercurial ? null
-, extraUtils ? []
+{ stdenv
+, fetchurl
+, perlPackages
+, gettext
+, makeWrapper
+, PerlMagick
+, which
+, gitSupport ? false
+, git ? null
+, docutilsSupport ? false
+, python ? null
+, docutils ? null
+, monotoneSupport ? false
+, monotone ? null
+, bazaarSupport ? false
+, bazaar ? null
+, cvsSupport ? false
+, cvs ? null
+, cvsps ? null
+, subversionSupport ? false
+, subversion ? null
+, mercurialSupport ? false
+, mercurial ? null
+, extraUtils ? [ ]
 }:
 
 assert docutilsSupport -> (python != null && docutils != null);
@@ -16,7 +31,6 @@ assert bazaarSupport -> (bazaar != null);
 assert cvsSupport -> (cvs != null && cvsps != null && perlPackages.Filechdir != null);
 assert subversionSupport -> (subversion != null);
 assert mercurialSupport -> (mercurial != null);
-
 let
   name = "ikiwiki";
   version = "3.20190228";
@@ -32,17 +46,38 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ which ]
-    ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-          TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-          RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
-          NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
-    ++ lib.optionals docutilsSupport [python docutils]
-    ++ lib.optionals gitSupport [git]
-    ++ lib.optionals monotoneSupport [monotone]
-    ++ lib.optionals bazaarSupport [bazaar]
-    ++ lib.optionals cvsSupport [cvs cvsps perlPackages.Filechdir]
-    ++ lib.optionals subversionSupport [subversion]
-    ++ lib.optionals mercurialSupport [mercurial];
+    ++ (with perlPackages; [
+    perl
+    TextMarkdown
+    URI
+    HTMLParser
+    HTMLScrubber
+    HTMLTemplate
+    TimeDate
+    gettext
+    makeWrapper
+    DBFile
+    CGISession
+    CGIFormBuilder
+    LocaleGettext
+    RpcXML
+    XMLSimple
+    PerlMagick
+    YAML
+    YAMLLibYAML
+    HTMLTree
+    AuthenPassphrase
+    NetOpenIDConsumer
+    LWPxParanoidAgent
+    CryptSSLeay
+  ])
+    ++ lib.optionals docutilsSupport [ python docutils ]
+    ++ lib.optionals gitSupport [ git ]
+    ++ lib.optionals monotoneSupport [ monotone ]
+    ++ lib.optionals bazaarSupport [ bazaar ]
+    ++ lib.optionals cvsSupport [ cvs cvsps perlPackages.Filechdir ]
+    ++ lib.optionals subversionSupport [ subversion ]
+    ++ lib.optionals mercurialSupport [ mercurial ];
 
   # A few markdown tests fail, but this is expected when using Text::Markdown
   # instead of Text::Markdown::Discount.

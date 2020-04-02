@@ -1,11 +1,18 @@
-{ stdenv, fetchgit, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
-, thin-provisioning-tools, libaio
-, enable_dmeventd ? false }:
-
+{ stdenv
+, fetchgit
+, fetchpatch
+, pkgconfig
+, systemd
+, udev
+, utillinux
+, libuuid
+, thin-provisioning-tools
+, libaio
+, enable_dmeventd ? false
+}:
 let
   version = "2.03.01";
 in
-
 stdenv.mkDerivation {
   pname = "lvm2";
   inherit version;
@@ -86,7 +93,7 @@ stdenv.mkDerivation {
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 bsd2 lgpl21 ];
-    maintainers = with maintainers; [raskin];
+    maintainers = with maintainers; [ raskin ];
     inherit version;
     downloadPage = "ftp://sources.redhat.com/pub/lvm2/";
   };

@@ -40,16 +40,17 @@ stdenv.mkDerivation rec {
     pcre
     python3
     zlib
-  ] ++ (if stdenv.hostPlatform.isDarwin then [
-    SystemConfiguration
-    CoreFoundation
-    JavaScriptCore
-  ] else [
-    glib
-    spidermonkey_60
-    dbus
-    networkmanager
-  ]);
+  ] ++ (
+    if stdenv.hostPlatform.isDarwin then [
+      SystemConfiguration
+      CoreFoundation
+      JavaScriptCore
+    ] else [
+      glib
+      spidermonkey_60
+      dbus
+      networkmanager
+    ]);
 
   cmakeFlags = [
     "-DWITH_MOZJS=ON"

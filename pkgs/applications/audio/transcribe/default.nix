@@ -1,32 +1,63 @@
-{ stdenv, fetchzip, wrapGAppsHook, alsaLib, atk, cairo, gdk-pixbuf
-, glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
+{ stdenv
+, fetchzip
+, wrapGAppsHook
+, alsaLib
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gst_all_1
+, gtk3
+, libSM
+, libX11
+, libpng12
+, pango
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
   version = "8.72";
 
-  src = if stdenv.hostPlatform.system == "i686-linux" then
-    fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlinux32/xscsetup.tar.gz";
-      sha256 = "1h5l7ry9c9awpxfnd29b0wm973ifrhj17xl5d2fdsclw2swsickb";
-    }
-  else if stdenv.hostPlatform.system == "x86_64-linux" then
-    fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlinux64/xsc64setup.tar.gz";
-      sha256 = "1rpd3ppnx5i5yrnfbjrx7h7dk48kwl99i9lnpa75ap7nxvbiznm0";
-    }
-  else throw "Platform not supported";
+  src =
+    if stdenv.hostPlatform.system == "i686-linux" then
+      fetchzip {
+        url = "https://www.seventhstring.com/xscribe/downlinux32/xscsetup.tar.gz";
+        sha256 = "1h5l7ry9c9awpxfnd29b0wm973ifrhj17xl5d2fdsclw2swsickb";
+      }
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchzip {
+        url = "https://www.seventhstring.com/xscribe/downlinux64/xsc64setup.tar.gz";
+        sha256 = "1rpd3ppnx5i5yrnfbjrx7h7dk48kwl99i9lnpa75ap7nxvbiznm0";
+      }
+    else throw "Platform not supported";
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = with gst_all_1; [ gst-plugins-base gst-plugins-good
-    gst-plugins-bad gst-plugins-ugly ];
+  buildInputs = with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ];
 
   dontPatchELF = true;
 
   libPath = with gst_all_1; stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc glib gtk3 atk pango cairo gdk-pixbuf alsaLib
-    libX11 libSM libpng12 gstreamer gst-plugins-base zlib
+    stdenv.cc.cc
+    glib
+    gtk3
+    atk
+    pango
+    cairo
+    gdk-pixbuf
+    alsaLib
+    libX11
+    libSM
+    libpng12
+    gstreamer
+    gst-plugins-base
+    zlib
   ];
 
   installPhase = ''

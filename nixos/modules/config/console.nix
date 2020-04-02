@@ -1,12 +1,10 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.console;
 
-  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
+  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2 * i) 2 x);
 
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
@@ -37,11 +35,10 @@ let
 
   setVconsole = !config.boot.isContainer;
 in
-
 {
   ###### interface
 
-  options.console  = {
+  options.console = {
     font = mkOption {
       type = types.str;
       default = "Lat2-Terminus16";
@@ -64,12 +61,24 @@ in
 
     colors = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
-        "002b36" "dc322f" "859900" "b58900"
-        "268bd2" "d33682" "2aa198" "eee8d5"
-        "002b36" "cb4b16" "586e75" "657b83"
-        "839496" "6c71c4" "93a1a1" "fdf6e3"
+        "002b36"
+        "dc322f"
+        "859900"
+        "b58900"
+        "268bd2"
+        "d33682"
+        "2aa198"
+        "eee8d5"
+        "002b36"
+        "cb4b16"
+        "586e75"
+        "657b83"
+        "839496"
+        "6c71c4"
+        "93a1a1"
+        "fdf6e3"
       ];
       description = ''
         The 16 colors palette used by the virtual consoles.
@@ -91,9 +100,9 @@ in
     };
 
     extraTTYs = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
-      example = ["tty8" "tty9"];
+      example = [ "tty8" "tty9" ];
       description = ''
         TTY (virtual console) devices, in addition to the consoles on
         which mingetty and syslogd run, that must be initialised.
@@ -127,7 +136,8 @@ in
   ###### implementation
 
   config = mkMerge [
-    { console.keyMap = with config.services.xserver;
+    {
+      console.keyMap = with config.services.xserver;
         mkIf cfg.useXkbConfig
           (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
             '${pkgs.ckbcomp}/bin/ckbcomp' -model '${xkbModel}' -layout '${layout}' \
@@ -140,7 +150,8 @@ in
     })
 
     (mkIf setVconsole (mkMerge [
-      { environment.systemPackages = [ pkgs.kbd ];
+      {
+        environment.systemPackages = [ pkgs.kbd ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
@@ -154,18 +165,19 @@ in
           loadkmap < ${optimizedKeymap}
 
           ${optionalString cfg.earlySetup ''
-            setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
-          ''}
+          setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
+        ''}
         '';
 
         systemd.services.systemd-vconsole-setup =
-          { before = [ "display-manager.service" ];
+          {
+            before = [ "display-manager.service" ];
             after = [ "systemd-udev-settle.service" ];
             restartTriggers = [ vconsoleConf consoleEnv ];
           };
       }
 
-      (mkIf (cfg.colors != []) {
+      (mkIf (cfg.colors != [ ]) {
         boot.kernelParams = [
           "vt.default_red=${makeColor 0 cfg.colors}"
           "vt.default_grn=${makeColor 1 cfg.colors}"
@@ -176,11 +188,12 @@ in
       (mkIf cfg.earlySetup {
         boot.initrd.extraUtilsCommands = ''
           mkdir -p $out/share/consolefonts
-          ${if substring 0 1 cfg.font == "/" then ''
-            font="${cfg.font}"
-          '' else ''
-            font="$(echo ${consoleEnv}/share/consolefonts/${cfg.font}.*)"
-          ''}
+          ${
+            if substring 0 1 cfg.font == "/" then ''
+              font="${cfg.font}"
+            '' else ''
+              font="$(echo ${consoleEnv}/share/consolefonts/${cfg.font}.*)"
+            ''}
           if [[ $font == *.gz ]]; then
             gzip -cd $font > $out/share/consolefonts/font.psf
           else

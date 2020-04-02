@@ -1,7 +1,9 @@
 { pkgName, version, pkgSha256 }:
-{ stdenv, fetchurl, cmake, pkgconfig, buildInputs, drvParams ? {} }:
-let name = "${pkgName}-${version}";
-in stdenv.mkDerivation ({
+{ stdenv, fetchurl, cmake, pkgconfig, buildInputs, drvParams ? { } }:
+let
+  name = "${pkgName}-${version}";
+in
+stdenv.mkDerivation ({
   inherit name buildInputs;
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/${name}.tar.bz2";

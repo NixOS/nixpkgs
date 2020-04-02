@@ -1,5 +1,9 @@
-{ stdenv, buildPackages
-, newScope, overrideCC, crossLibcStdenv, libcCross
+{ stdenv
+, buildPackages
+, newScope
+, overrideCC
+, crossLibcStdenv
+, libcCross
 }:
 
 stdenv.lib.makeScope newScope (self: with self; {
@@ -18,14 +22,15 @@ stdenv.lib.makeScope newScope (self: with self; {
   };
 
   crossThreadsStdenv = overrideCC crossLibcStdenv
-    (if stdenv.hostPlatform.useLLVM or false
-     then buildPackages.llvmPackages_8.lldClangNoLibcxx
-     else buildPackages.gccCrossStageStatic.override (old: {
-       bintools = old.bintools.override {
-         libc = libcCross;
-       };
-       libc = libcCross;
-     }));
+    (
+      if stdenv.hostPlatform.useLLVM or false
+      then buildPackages.llvmPackages_8.lldClangNoLibcxx
+      else buildPackages.gccCrossStageStatic.override (old: {
+        bintools = old.bintools.override {
+          libc = libcCross;
+        };
+        libc = libcCross;
+      }));
 
   mingw_w64_headers = callPackage ./mingw-w64/headers.nix { };
 

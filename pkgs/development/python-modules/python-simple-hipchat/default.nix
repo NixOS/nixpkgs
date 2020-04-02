@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, unzip }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, unzip
+}:
 
 buildPythonPackage rec {
   pname = "python-simple-hipchat";

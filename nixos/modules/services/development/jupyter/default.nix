@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.jupyter;
 
   # NOTE: We don't use top-level jupyter because we don't
@@ -11,10 +9,11 @@ let
   # saving a rebuild.
   package = pkgs.python3.pkgs.notebook;
 
-  kernels = (pkgs.jupyter-kernel.create  {
-    definitions = if cfg.kernels != null
+  kernels = (pkgs.jupyter-kernel.create {
+    definitions =
+      if cfg.kernels != null
       then cfg.kernels
-      else  pkgs.jupyter-kernel.default;
+      else pkgs.jupyter-kernel.default;
   });
 
   notebookConfig = pkgs.writeText "jupyter_config.py" ''
@@ -22,8 +21,8 @@ let
 
     c.NotebookApp.password = ${cfg.password}
   '';
-
-in {
+in
+{
   meta.maintainers = with maintainers; [ aborsu ];
 
   options.services.jupyter = {
@@ -102,7 +101,7 @@ in {
     };
 
     kernels = mkOption {
-      type = types.nullOr (types.attrsOf(types.submodule (import ./kernel-options.nix {
+      type = types.nullOr (types.attrsOf (types.submodule (import ./kernel-options.nix {
         inherit lib;
       })));
 
@@ -141,7 +140,7 @@ in {
   };
 
   config = mkMerge [
-    (mkIf cfg.enable  {
+    (mkIf cfg.enable {
       systemd.services.jupyter = {
         description = "Jupyter development server";
 
@@ -171,7 +170,7 @@ in {
       };
     })
     (mkIf (cfg.enable && (cfg.group == "jupyter")) {
-      users.groups.jupyter = {};
+      users.groups.jupyter = { };
     })
     (mkIf (cfg.enable && (cfg.user == "jupyter")) {
       users.extraUsers.jupyter = {

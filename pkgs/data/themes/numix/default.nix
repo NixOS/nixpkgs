@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, sass, glib, libxml2, gdk-pixbuf
+{ stdenv
+, fetchFromGitHub
+, sass
+, glib
+, libxml2
+, gdk-pixbuf
 , gtk-engine-murrine
 }:
 

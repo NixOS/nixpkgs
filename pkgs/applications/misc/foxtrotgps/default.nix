@@ -1,5 +1,16 @@
-{ fetchurl, stdenv, pkg-config, wrapGAppsHook, curl, gnome2, gpsd, gtk2
-, intltool, libexif, python3Packages, sqlite }:
+{ fetchurl
+, stdenv
+, pkg-config
+, wrapGAppsHook
+, curl
+, gnome2
+, gpsd
+, gtk2
+, intltool
+, libexif
+, python3Packages
+, sqlite
+}:
 
 stdenv.mkDerivation rec {
   pname = "foxtrotgps";
@@ -21,8 +32,9 @@ stdenv.mkDerivation rec {
     libexif
     sqlite.dev
     (python3Packages.python.withPackages (pythonPackages: with python3Packages;
-    [ beautifulsoup4 feedparser sqlalchemy ]))
-    ];
+    [ beautifulsoup4 feedparser sqlalchemy ]
+    ))
+  ];
 
   meta = with stdenv.lib; {
     description = "GPS/GIS application optimized for small screens";

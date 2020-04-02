@@ -14,7 +14,7 @@ rec {
 
   packageName = "iolib.conf";
 
-  asdFilesToKeep = ["iolib.conf.asd"];
+  asdFilesToKeep = [ "iolib.conf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM iolib.conf DESCRIPTION Compile-time configuration for IOLib. SHA256

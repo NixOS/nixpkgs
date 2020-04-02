@@ -1,8 +1,21 @@
-{ stdenv, fetchFromGitLab, lib, darwin
-, git, nettle, llvmPackages, cargo, rustc
-, rustPlatform, pkgconfig, glib
-, openssl, sqlite, capnproto
-, ensureNewerSourcesForZipFilesHook, pythonSupport ? true, pythonPackages ? null
+{ stdenv
+, fetchFromGitLab
+, lib
+, darwin
+, git
+, nettle
+, llvmPackages
+, cargo
+, rustc
+, rustPlatform
+, pkgconfig
+, glib
+, openssl
+, sqlite
+, capnproto
+, ensureNewerSourcesForZipFilesHook
+, pythonSupport ? true
+, pythonPackages ? null
 }:
 
 assert pythonSupport -> pythonPackages != null;
@@ -29,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.clang
     ensureNewerSourcesForZipFilesHook
   ] ++
-    lib.optionals pythonSupport [ pythonPackages.setuptools ]
+  lib.optionals pythonSupport [ pythonPackages.setuptools ]
   ;
 
   checkInputs = lib.optionals pythonSupport [
@@ -43,8 +56,8 @@ rustPlatform.buildRustPackage rec {
     nettle
     capnproto
   ]
-    ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
+  ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
+  ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
   ;
 
   makeFlags = [

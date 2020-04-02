@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.physlock;
 in
-
 {
 
   ###### interface
@@ -72,7 +70,7 @@ in
 
         extraTargets = mkOption {
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
           example = [ "display-manager.service" ];
           description = ''
             Other targets to lock the screen just before.
@@ -102,19 +100,19 @@ in
       systemd.services.physlock = {
         enable = true;
         description = "Physlock";
-        wantedBy = optional cfg.lockOn.suspend   "suspend.target"
-                ++ optional cfg.lockOn.hibernate "hibernate.target"
-                ++ cfg.lockOn.extraTargets;
-        before   = optional cfg.lockOn.suspend   "systemd-suspend.service"
-                ++ optional cfg.lockOn.hibernate "systemd-hibernate.service"
-                ++ cfg.lockOn.extraTargets;
+        wantedBy = optional cfg.lockOn.suspend "suspend.target"
+          ++ optional cfg.lockOn.hibernate "hibernate.target"
+          ++ cfg.lockOn.extraTargets;
+        before = optional cfg.lockOn.suspend "systemd-suspend.service"
+          ++ optional cfg.lockOn.hibernate "systemd-hibernate.service"
+          ++ cfg.lockOn.extraTargets;
         serviceConfig = {
           Type = "forking";
           ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}";
         };
       };
 
-      security.pam.services.physlock = {};
+      security.pam.services.physlock = { };
 
     }
 

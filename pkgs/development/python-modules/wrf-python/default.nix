@@ -1,4 +1,4 @@
-{lib, fetchFromGitHub, pythonOlder, buildPythonPackage, gfortran, mock, xarray, wrapt, numpy, netcdf4, setuptools}:
+{ lib, fetchFromGitHub, pythonOlder, buildPythonPackage, gfortran, mock, xarray, wrapt, numpy, netcdf4, setuptools }:
 
 buildPythonPackage rec {
   pname = "wrf-python";
@@ -39,5 +39,5 @@ buildPythonPackage rec {
     homepage = http://wrf-python.rtfd.org;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mhaselsteiner ];
-	};
+  };
 }

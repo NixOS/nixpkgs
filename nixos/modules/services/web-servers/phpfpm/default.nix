@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.phpfpm;
 
@@ -38,114 +37,114 @@ let
     let
       poolOpts = cfg.pools.${name};
     in
-    {
-      options = {
-        socket = mkOption {
-          type = types.str;
-          readOnly = true;
-          description = ''
-            Path to the unix socket file on which to accept FastCGI requests.
-            <note><para>This option is read-only and managed by NixOS.</para></note>
-          '';
+      {
+        options = {
+          socket = mkOption {
+            type = types.str;
+            readOnly = true;
+            description = ''
+              Path to the unix socket file on which to accept FastCGI requests.
+              <note><para>This option is read-only and managed by NixOS.</para></note>
+            '';
+          };
+
+          listen = mkOption {
+            type = types.str;
+            default = "";
+            example = "/path/to/unix/socket";
+            description = ''
+              The address on which to accept FastCGI requests.
+            '';
+          };
+
+          phpPackage = mkOption {
+            type = types.package;
+            default = cfg.phpPackage;
+            defaultText = "config.services.phpfpm.phpPackage";
+            description = ''
+              The PHP package to use for running this PHP-FPM pool.
+            '';
+          };
+
+          phpOptions = mkOption {
+            type = types.lines;
+            description = ''
+              "Options appended to the PHP configuration file <filename>php.ini</filename> used for this PHP-FPM pool."
+            '';
+          };
+
+          phpEnv = lib.mkOption {
+            type = with types; attrsOf str;
+            default = { };
+            description = ''
+              Environment variables used for this PHP-FPM pool.
+            '';
+            example = literalExample ''
+              {
+                HOSTNAME = "$HOSTNAME";
+                TMP = "/tmp";
+                TMPDIR = "/tmp";
+                TEMP = "/tmp";
+              }
+            '';
+          };
+
+          user = mkOption {
+            type = types.str;
+            description = "User account under which this pool runs.";
+          };
+
+          group = mkOption {
+            type = types.str;
+            description = "Group account under which this pool runs.";
+          };
+
+          settings = mkOption {
+            type = with types; attrsOf (oneOf [ str int bool ]);
+            default = { };
+            description = ''
+              PHP-FPM pool directives. Refer to the "List of pool directives" section of
+              <link xlink:href="https://www.php.net/manual/en/install.fpm.configuration.php"/>
+              for details. Note that settings names must be enclosed in quotes (e.g.
+              <literal>"pm.max_children"</literal> instead of <literal>pm.max_children</literal>).
+            '';
+            example = literalExample ''
+              {
+                "pm" = "dynamic";
+                "pm.max_children" = 75;
+                "pm.start_servers" = 10;
+                "pm.min_spare_servers" = 5;
+                "pm.max_spare_servers" = 20;
+                "pm.max_requests" = 500;
+              }
+            '';
+          };
+
+          extraConfig = mkOption {
+            type = with types; nullOr lines;
+            default = null;
+            description = ''
+              Extra lines that go into the pool configuration.
+              See the documentation on <literal>php-fpm.conf</literal> for
+              details on configuration directives.
+            '';
+          };
         };
 
-        listen = mkOption {
-          type = types.str;
-          default = "";
-          example = "/path/to/unix/socket";
-          description = ''
-            The address on which to accept FastCGI requests.
-          '';
-        };
+        config = {
+          socket = if poolOpts.listen == "" then "${runtimeDir}/${name}.sock" else poolOpts.listen;
+          group = mkDefault poolOpts.user;
+          phpOptions = mkBefore cfg.phpOptions;
 
-        phpPackage = mkOption {
-          type = types.package;
-          default = cfg.phpPackage;
-          defaultText = "config.services.phpfpm.phpPackage";
-          description = ''
-            The PHP package to use for running this PHP-FPM pool.
-          '';
-        };
-
-        phpOptions = mkOption {
-          type = types.lines;
-          description = ''
-            "Options appended to the PHP configuration file <filename>php.ini</filename> used for this PHP-FPM pool."
-          '';
-        };
-
-        phpEnv = lib.mkOption {
-          type = with types; attrsOf str;
-          default = {};
-          description = ''
-            Environment variables used for this PHP-FPM pool.
-          '';
-          example = literalExample ''
-            {
-              HOSTNAME = "$HOSTNAME";
-              TMP = "/tmp";
-              TMPDIR = "/tmp";
-              TEMP = "/tmp";
-            }
-          '';
-        };
-
-        user = mkOption {
-          type = types.str;
-          description = "User account under which this pool runs.";
-        };
-
-        group = mkOption {
-          type = types.str;
-          description = "Group account under which this pool runs.";
-        };
-
-        settings = mkOption {
-          type = with types; attrsOf (oneOf [ str int bool ]);
-          default = {};
-          description = ''
-            PHP-FPM pool directives. Refer to the "List of pool directives" section of
-            <link xlink:href="https://www.php.net/manual/en/install.fpm.configuration.php"/>
-            for details. Note that settings names must be enclosed in quotes (e.g.
-            <literal>"pm.max_children"</literal> instead of <literal>pm.max_children</literal>).
-          '';
-          example = literalExample ''
-            {
-              "pm" = "dynamic";
-              "pm.max_children" = 75;
-              "pm.start_servers" = 10;
-              "pm.min_spare_servers" = 5;
-              "pm.max_spare_servers" = 20;
-              "pm.max_requests" = 500;
-            }
-          '';
-        };
-
-        extraConfig = mkOption {
-          type = with types; nullOr lines;
-          default = null;
-          description = ''
-            Extra lines that go into the pool configuration.
-            See the documentation on <literal>php-fpm.conf</literal> for
-            details on configuration directives.
-          '';
+          settings = mapAttrs (name: mkDefault) {
+            listen = poolOpts.socket;
+            user = poolOpts.user;
+            group = poolOpts.group;
+          };
         };
       };
-
-      config = {
-        socket = if poolOpts.listen == "" then "${runtimeDir}/${name}.sock" else poolOpts.listen;
-        group = mkDefault poolOpts.user;
-        phpOptions = mkBefore cfg.phpOptions;
-
-        settings = mapAttrs (name: mkDefault){
-          listen = poolOpts.socket;
-          user = poolOpts.user;
-          group = poolOpts.group;
-        };
-      };
-    };
-
-in {
+in
+{
   imports = [
     (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
     (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
@@ -155,7 +154,7 @@ in {
     services.phpfpm = {
       settings = mkOption {
         type = with types; attrsOf (oneOf [ str int bool ]);
-        default = {};
+        default = { };
         description = ''
           PHP-FPM global directives. Refer to the "List of global php-fpm.conf directives" section of
           <link xlink:href="https://www.php.net/manual/en/install.fpm.configuration.php"/>
@@ -201,23 +200,23 @@ in {
 
       pools = mkOption {
         type = types.attrsOf (types.submodule poolOpts);
-        default = {};
+        default = { };
         example = literalExample ''
-         {
-           mypool = {
-             user = "php";
-             group = "php";
-             phpPackage = pkgs.php;
-             settings = '''
-               "pm" = "dynamic";
-               "pm.max_children" = 75;
-               "pm.start_servers" = 10;
-               "pm.min_spare_servers" = 5;
-               "pm.max_spare_servers" = 20;
-               "pm.max_requests" = 500;
-             ''';
-           }
-         }'';
+          {
+            mypool = {
+              user = "php";
+              group = "php";
+              phpPackage = pkgs.php;
+              settings = '''
+                "pm" = "dynamic";
+                "pm.max_children" = 75;
+                "pm.start_servers" = 10;
+                "pm.min_spare_servers" = 5;
+                "pm.max_spare_servers" = 20;
+                "pm.max_requests" = 500;
+              ''';
+            }
+          }'';
         description = ''
           PHP-FPM pools. If no pools are defined, the PHP-FPM
           service is disabled.
@@ -226,7 +225,7 @@ in {
     };
   };
 
-  config = mkIf (cfg.pools != {}) {
+  config = mkIf (cfg.pools != { }) {
 
     warnings =
       mapAttrsToList (pool: poolOpts: ''
@@ -260,23 +259,24 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "phpfpm.target" ];
         partOf = [ "phpfpm.target" ];
-        serviceConfig = let
-          cfgFile = fpmCfgFile pool poolOpts;
-          iniFile = phpIni poolOpts;
-        in {
-          Slice = "phpfpm.slice";
-          PrivateDevices = true;
-          PrivateTmp = true;
-          ProtectSystem = "full";
-          ProtectHome = true;
-          # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
-          Type = "notify";
-          ExecStart = "${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
-          ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
-          RuntimeDirectory = "phpfpm";
-          RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
-        };
+        serviceConfig =
+          let
+            cfgFile = fpmCfgFile pool poolOpts;
+            iniFile = phpIni poolOpts;
+          in {
+            Slice = "phpfpm.slice";
+            PrivateDevices = true;
+            PrivateTmp = true;
+            ProtectSystem = "full";
+            ProtectHome = true;
+            # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work
+            RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+            Type = "notify";
+            ExecStart = "${poolOpts.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${iniFile}";
+            ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+            RuntimeDirectory = "phpfpm";
+            RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
+          };
       }
     ) cfg.pools;
   };

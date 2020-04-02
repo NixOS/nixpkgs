@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, pkgs, pythonOlder, substituteAll
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, pkgs
+, pythonOlder
+, substituteAll
 , aenum
 , cython
 , pytest

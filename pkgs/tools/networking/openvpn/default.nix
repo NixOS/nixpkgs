@@ -1,14 +1,23 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
-, iproute, lzo, openssl, pam
-, useSystemd ? stdenv.isLinux, systemd ? null, utillinux ? null
-, pkcs11Support ? false, pkcs11helper ? null,
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, iproute
+, lzo
+, openssl
+, pam
+, useSystemd ? stdenv.isLinux
+, systemd ? null
+, utillinux ? null
+, pkcs11Support ? false
+, pkcs11helper ? null
+,
 }:
 
 assert useSystemd -> (systemd != null);
 assert pkcs11Support -> (pkcs11helper != null);
 
 with stdenv.lib;
-
 let
   # There is some fairly brittle string substitutions going on to replace paths,
   # so please verify this script in case you are upgrading it
@@ -16,8 +25,8 @@ let
     url = "https://raw.githubusercontent.com/jonathanio/update-systemd-resolved/v1.2.7/update-systemd-resolved";
     sha256 = "12zfzh42apwbj7ks5kfxf3far7kaghlby4yapbhn00q8pbdlw7pq";
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "openvpn";
   version = "2.4.7";
 
@@ -29,12 +38,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ lzo openssl ]
-                  ++ optionals stdenv.isLinux [ pam iproute ]
-                  ++ optional useSystemd systemd
-                  ++ optional pkcs11Support pkcs11helper;
+    ++ optionals stdenv.isLinux [ pam iproute ]
+    ++ optional useSystemd systemd
+    ++ optional pkcs11Support pkcs11helper;
 
   patches = [
-    ( fetchpatch {
+    (fetchpatch {
       url = "https://sources.debian.org/data/main/o/openvpn/2.4.7-1/debian/patches/fix-pkcs11-helper-hang.patch";
       sha256 = "0c8jzbfsmb0mm9f7kkjxac1hk8q6igm267s687vx3mdqs1wys6bm";
     })
@@ -42,10 +51,11 @@ in stdenv.mkDerivation rec {
 
   configureFlags = optionals stdenv.isLinux [
     "--enable-iproute2"
-    "IPROUTE=${iproute}/sbin/ip" ]
-    ++ optional useSystemd "--enable-systemd"
-    ++ optional pkcs11Support "--enable-pkcs11"
-    ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
+    "IPROUTE=${iproute}/sbin/ip"
+  ]
+  ++ optional useSystemd "--enable-systemd"
+  ++ optional pkcs11Support "--enable-pkcs11"
+  ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
 
   postInstall = ''
     mkdir -p $out/share/doc/openvpn/examples
@@ -54,14 +64,14 @@ in stdenv.mkDerivation rec {
     cp -r sample/sample-scripts/ $out/share/doc/openvpn/examples
 
     ${optionalString useSystemd ''
-      install -Dm755 ${update-resolved} $out/libexec/update-systemd-resolved
+    install -Dm755 ${update-resolved} $out/libexec/update-systemd-resolved
 
-      substituteInPlace $out/libexec/update-systemd-resolved \
-        --replace '/usr/bin/env bash' '${stdenv.shell} -e' \
-        --replace 'busctl call'       '${getBin systemd}/bin/busctl call' \
-        --replace '(ip '              '(${getBin iproute}/bin/ip ' \
-        --replace 'logger '           '${getBin utillinux}/bin/logger '
-    ''}
+    substituteInPlace $out/libexec/update-systemd-resolved \
+      --replace '/usr/bin/env bash' '${stdenv.shell} -e' \
+      --replace 'busctl call'       '${getBin systemd}/bin/busctl call' \
+      --replace '(ip '              '(${getBin iproute}/bin/ip ' \
+      --replace 'logger '           '${getBin utillinux}/bin/logger '
+  ''}
   '';
 
   enableParallelBuilding = true;

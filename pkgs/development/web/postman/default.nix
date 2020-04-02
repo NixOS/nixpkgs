@@ -1,8 +1,35 @@
-{ stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, atk, at-spi2-atk, alsaLib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
-, freetype, fontconfig, nss, nspr, pango, udev, libX11, libxcb, libXi
-, libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, wrapGAppsHook
+, atk
+, at-spi2-atk
+, alsaLib
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, freetype
+, fontconfig
+, nss
+, nspr
+, pango
+, udev
+, libX11
+, libxcb
+, libXi
+, libXcursor
+, libXdamage
+, libXrandr
+, libXcomposite
+, libXext
+, libXfixes
+, libXrender
+, libXtst
+, libXScrnSaver
 }:
 
 stdenv.mkDerivation rec {

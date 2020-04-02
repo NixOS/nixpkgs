@@ -1,13 +1,12 @@
 { stdenv, fetchFromGitHub, coq }:
-
-let param =
-  {
+let
+  param =
+    {
       version = "20180918";
       rev = "243d6be45666da73a9da6c37d451327165275798";
       sha256 = "1nh2psb4pcppy1akk24ilb4p08m35cba357i4xyymmarmbwqpxmn";
-  };
+    };
 in
-
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-InfSeqExt-${param.version}";
 
@@ -27,5 +26,5 @@ stdenv.mkDerivation {
 
   passthru = {
     compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" ];
- };
+  };
 }

@@ -1,7 +1,18 @@
-{ stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
-# darwin only attributes
-, derez, rez, setfile
-, AGL, Cocoa, Kernel
+{ stdenv
+, fetchzip
+, expat
+, libiconv
+, libjpeg
+, libpng
+, libtiff
+, zlib
+  # darwin only attributes
+, derez
+, rez
+, setfile
+, AGL
+, Cocoa
+, Kernel
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +25,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    expat libiconv libjpeg libpng libtiff zlib
-    derez rez setfile
-    AGL Cocoa Kernel
+    expat
+    libiconv
+    libjpeg
+    libpng
+    libtiff
+    zlib
+    derez
+    rez
+    setfile
+    AGL
+    Cocoa
+    Kernel
   ];
 
   postPatch = ''

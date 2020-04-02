@@ -1,15 +1,25 @@
-{ stdenv, lib, fetchurl, pkgconfig, libGLU, libGL
-, SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, libGLU
+, libGL
+, SDL
+, SDL_image
+, libpng
+, libvorbis
+, libogg
+, libmikmod
 
-, use3DOVideos ? false, requireFile ? null, writeText ? null
+, use3DOVideos ? false
+, requireFile ? null
+, writeText ? null
 , haskellPackages ? null
 
 , useRemixPacks ? false
 }:
 
-assert use3DOVideos -> requireFile != null && writeText != null
-                    && haskellPackages != null;
-
+assert use3DOVideos -> requireFile != null && writeText != null && haskellPackages != null;
 let
   videos = import ./3dovideo.nix {
     inherit stdenv requireFile writeText fetchurl haskellPackages;
@@ -25,8 +35,8 @@ let
     "07g966ylvw9k5q9jdzqdczp7c5qv4s91xjlg4z5z27fgcs7rzn76"
     "1l46k9aqlcp7d3fjkjb3n05cjfkxx8rjlypgqy0jmdx529vikj54"
   ];
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "uqm";
   version = "0.7.0";
 

@@ -1,11 +1,31 @@
-{ fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
-, boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
-, webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
-, libdbiDrivers, guile, perl, perlPackages
+{ fetchurl
+, stdenv
+, pkgconfig
+, makeWrapper
+, cmake
+, gtest
+, boost
+, icu
+, libxml2
+, libxslt
+, gettext
+, swig
+, isocodes
+, gtk3
+, glibcLocales
+, webkitgtk
+, dconf
+, hicolor-icon-theme
+, libofx
+, aqbanking
+, gwenhywfar
+, libdbi
+, libdbiDrivers
+, guile
+, perl
+, perlPackages
 }:
-
 let
-
   # Enable gnc-fq-* to run in command line.
   perlWrapper = stdenv.mkDerivation {
     name = perl.name + "-wrapper-for-gnucash";
@@ -20,9 +40,7 @@ let
       done
     '';
   };
-
 in
-
 stdenv.mkDerivation rec {
   pname = "gnucash";
   version = "3.8b";
@@ -35,10 +53,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
 
   buildInputs = [
-    boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
-    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
-    libdbiDrivers guile
-    perlWrapper perl
+    boost
+    icu
+    libxml2
+    libxslt
+    gettext
+    swig
+    isocodes
+    gtk3
+    glibcLocales
+    webkitgtk
+    dconf
+    libofx
+    aqbanking
+    gwenhywfar
+    libdbi
+    libdbiDrivers
+    guile
+    perlWrapper
+    perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
 
   propagatedUserEnvPkgs = [ dconf ];

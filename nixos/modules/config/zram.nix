@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.zramSwap;
 
   # don't set swapDevices as mkDefault, so we can detect user had read our warning
@@ -15,20 +13,18 @@ let
   modprobe = "${pkgs.kmod}/bin/modprobe";
 
   warnings =
-  assert cfg.swapDevices != null -> cfg.numDevices >= cfg.swapDevices;
-  flatten [
-    (optional (cfg.numDevices > 1 && cfg.swapDevices == null) ''
-      Using several small zram devices as swap is no better than using one large.
-      Set either zramSwap.numDevices = 1 or explicitly set zramSwap.swapDevices.
+    assert cfg.swapDevices != null -> cfg.numDevices >= cfg.swapDevices;
+    flatten [
+      (optional (cfg.numDevices > 1 && cfg.swapDevices == null) ''
+        Using several small zram devices as swap is no better than using one large.
+        Set either zramSwap.numDevices = 1 or explicitly set zramSwap.swapDevices.
 
-      Previously multiple zram devices were used to enable multithreaded
-      compression. Linux supports multithreaded compression for 1 device
-      since 3.15. See https://lkml.org/lkml/2014/2/28/404 for details.
-    '')
-  ];
-
+        Previously multiple zram devices were used to enable multithreaded
+        compression. Linux supports multithreaded compression for 1 device
+        since 3.15. See https://lkml.org/lkml/2014/2/28/404 for details.
+      '')
+    ];
 in
-
 {
 
   ###### interface
@@ -154,7 +150,8 @@ in
             '';
             restartIfChanged = false;
           };
-      in listToAttrs ((map createZramInitService devices) ++ [(nameValuePair "zram-reloader"
+      in listToAttrs ((map createZramInitService devices) ++ [
+        (nameValuePair "zram-reloader"
         {
           description = "Reload zram kernel module when number of devices changes";
           wants = [ "systemd-udevd.service" ];
@@ -173,7 +170,9 @@ in
             cfg.memoryPercent
           ];
           restartIfChanged = true;
-        })]);
+        }
+        )
+      ]);
 
     swapDevices =
       let

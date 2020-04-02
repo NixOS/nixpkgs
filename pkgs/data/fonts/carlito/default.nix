@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "20130920";
-in fetchzip {
+in
+fetchzip {
   name = "carlito-${version}";
 
   url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";
@@ -29,7 +29,7 @@ in fetchzip {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
 
     # Reduce the priority of this package. The intent is that if you
     # also install the `vista-fonts` package, then you probably will

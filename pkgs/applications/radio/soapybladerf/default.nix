@@ -1,11 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, libbladeRF, soapysdr
-} :
-
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, libbladeRF
+, soapysdr
+}:
 let
   version = "0.4.1";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "soapybladerf";
   inherit version;
 

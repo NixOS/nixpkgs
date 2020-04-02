@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     marshmallow
   ];
-  
+
   # setuptools check can run, but won't find tests
   checkInputs = [ pytestCheckHook pytestcov ];
 

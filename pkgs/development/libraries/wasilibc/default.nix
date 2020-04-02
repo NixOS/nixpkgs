@@ -22,8 +22,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "WASI libc implementation for WebAssembly";
-    homepage    = "https://wasi.dev";
-    platforms   = lib.platforms.wasi;
+    homepage = "https://wasi.dev";
+    platforms = lib.platforms.wasi;
     maintainers = [ lib.maintainers.matthewbauer ];
   };
 }

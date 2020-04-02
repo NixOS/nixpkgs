@@ -1,13 +1,16 @@
-{ stdenv, fetchFromGitHub, makeWrapper, gawk
-, makeFontsConf, freefont_ttf, gnuplot, perl, perlPackages
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, gawk
+, makeFontsConf
+, freefont_ttf
+, gnuplot
+, perl
+, perlPackages
 }:
-
 let
-
   fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
-
 in
-
 perlPackages.buildPerlPackage rec {
   pname = "feedgnuplot";
   version = "1.51";

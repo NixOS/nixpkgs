@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, doxygen, alsaLib , libX11, libXft, libXrandr, libXinerama, libXext, libXcursor }:
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, doxygen, alsaLib, libX11, libXft, libXrandr, libXinerama, libXext, libXcursor }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-  [ pkgconfig cmake doxygen ];
+    [ pkgconfig cmake doxygen ];
 
   buildInputs =
-  [ alsaLib libX11 libXft libXrandr libXinerama libXext libXcursor ];
+    [ alsaLib libX11 libXft libXrandr libXinerama libXext libXcursor ];
 
   doCheck = false;
 

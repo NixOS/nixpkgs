@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.errbot;
   pluginEnv = plugins: pkgs.buildEnv {
@@ -23,10 +22,11 @@ let
 
     ${instanceCfg.extraConfig}
   '';
-in {
+in
+{
   options = {
     services.errbot.instances = mkOption {
-      default = {};
+      default = { };
       description = "Errbot instance configs";
       type = types.attrsOf (types.submodule {
         options = {
@@ -38,7 +38,7 @@ in {
 
           plugins = mkOption {
             type = types.listOf types.package;
-            default = [];
+            default = [ ];
             description = "List of errbot plugin derivations.";
           };
 
@@ -50,7 +50,7 @@ in {
 
           admins = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             description = "List of identifiers of errbot admins.";
           };
 
@@ -75,30 +75,32 @@ in {
     };
   };
 
-  config = mkIf (cfg.instances != {}) {
+  config = mkIf (cfg.instances != { }) {
     users.users.errbot = {
       group = "errbot";
       isSystemUser = true;
     };
-    users.groups.errbot = {};
+    users.groups.errbot = { };
 
     systemd.services = mapAttrs' (name: instanceCfg: nameValuePair "errbot-${name}" (
-    let
-      dataDir = if instanceCfg.dataDir != null then instanceCfg.dataDir else
-        "/var/lib/errbot/${name}";
-    in {
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        mkdir -p ${dataDir}
-        chown -R errbot:errbot ${dataDir}
-      '';
-      serviceConfig = {
-        User = "errbot";
-        Restart = "on-failure";
-        ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
-        PermissionsStartOnly = true;
-      };
-    })) cfg.instances;
+      let
+        dataDir =
+          if instanceCfg.dataDir != null then instanceCfg.dataDir else
+            "/var/lib/errbot/${name}";
+      in {
+        after = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        preStart = ''
+          mkdir -p ${dataDir}
+          chown -R errbot:errbot ${dataDir}
+        '';
+        serviceConfig = {
+          User = "errbot";
+          Restart = "on-failure";
+          ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
+          PermissionsStartOnly = true;
+        };
+      }
+    )) cfg.instances;
   };
 }

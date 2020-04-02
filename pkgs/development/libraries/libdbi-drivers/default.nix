@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, libdbi
+{ stdenv
+, fetchurl
+, libdbi
 , libmysqlclient ? null
 , sqlite ? null
 , postgresql ? null

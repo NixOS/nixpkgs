@@ -1,9 +1,7 @@
 { config, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.powerManagement.scsiLinkPolicy;
 
   kernel = config.boot.kernelPackages.kernel;
@@ -14,9 +12,7 @@ let
     "medium_power"
     "med_power_with_dipm"
   ];
-
 in
-
 {
   ###### interface
 

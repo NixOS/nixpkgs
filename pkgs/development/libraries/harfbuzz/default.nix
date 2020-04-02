@@ -1,17 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintl
-, icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
-, ApplicationServices, CoreText
+{ stdenv
+, fetchurl
+, pkgconfig
+, glib
+, freetype
+, cairo
+, libintl
+, icu
+, graphite2
+, harfbuzz # The icu variant uses and propagates the non-icu one.
+, ApplicationServices
+, CoreText
 , withCoreText ? false
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
 , withGraphite2 ? true # it is small and major distros do include it
 , python
 }:
-
 let
   version = "2.6.4";
   inherit (stdenv.lib) optional optionals optionalString;
 in
-
 stdenv.mkDerivation {
   name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
 
@@ -37,14 +44,14 @@ stdenv.mkDerivation {
     "--with-graphite2=${if withGraphite2 then "yes" else "no"}"
     "--with-icu=${if withIcu then "yes" else "no"}"
   ]
-    ++ stdenv.lib.optional withCoreText "--with-coretext=yes";
+  ++ stdenv.lib.optional withCoreText "--with-coretext=yes";
 
   nativeBuildInputs = [ pkgconfig libintl ];
 
   buildInputs = [ glib freetype cairo ] # recommended by upstream
     ++ stdenv.lib.optionals withCoreText [ ApplicationServices CoreText ];
 
-  propagatedBuildInputs = []
+  propagatedBuildInputs = [ ]
     ++ optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];
 
@@ -57,9 +64,9 @@ stdenv.mkDerivation {
     ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.la
     ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
     ${optionalString stdenv.isDarwin ''
-      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
-      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
-    ''}
+    ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
+    ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
+  ''}
   '';
 
   meta = with stdenv.lib; {

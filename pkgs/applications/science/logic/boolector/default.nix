@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, lingeling, btor2tools
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, lingeling
+, btor2tools
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +11,9 @@ stdenv.mkDerivation rec {
   version = "3.0.0";
 
   src = fetchFromGitHub {
-    owner  = "boolector";
-    repo   = "boolector";
-    rev    = "refs/tags/${version}";
+    owner = "boolector";
+    repo = "boolector";
+    rev = "refs/tags/${version}";
     sha256 = "15i3ni5klss423m57wcy1gx0m5wfrjmglapwg85pm7fb3jj1y7sz";
   };
 
@@ -25,7 +29,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ lingeling btor2tools ];
 
   cmakeFlags =
-    [ "-DSHARED=ON"
+    [
+      "-DSHARED=ON"
       "-DUSE_LINGELING=YES"
       "-DBTOR2_INCLUDE_DIR=${btor2tools.dev}/include"
       "-DBTOR2_LIBRARIES=${btor2tools.lib}/lib/libbtor2parser.so"
@@ -50,9 +55,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An extremely fast SMT solver for bit-vectors and arrays";
-    homepage    = https://boolector.github.io;
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = https://boolector.github.io;
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

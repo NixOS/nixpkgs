@@ -1,6 +1,20 @@
-{ stdenv, fetchurl
-, boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libGLU, libGL, vigra
-, help2man, pkgconfig, perl, texlive }:
+{ stdenv
+, fetchurl
+, boost
+, freeglut
+, glew
+, gsl
+, lcms2
+, libpng
+, libtiff
+, libGLU
+, libGL
+, vigra
+, help2man
+, pkgconfig
+, perl
+, texlive
+}:
 
 stdenv.mkDerivation rec {
   pname = "enblend-enfuse";

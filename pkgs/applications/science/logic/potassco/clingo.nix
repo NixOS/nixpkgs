@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "ASP system to ground and solve logic programs";
     license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.unix;
     homepage = "https://potassco.org/";
     downloadPage = "https://github.com/potassco/clingo/releases/";

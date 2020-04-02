@@ -1,13 +1,47 @@
-{ abiCompat ? null,
-  stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, gettext, libiconv, libtool, intltool,
-  freetype, tradcpp, fontconfig, meson, ninja, ed,
-  libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
-  mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig, llvm_6, python3,
-  ApplicationServices, Carbon, Cocoa, Xplugin
+{ abiCompat ? null
+, stdenv
+, makeWrapper
+, fetchurl
+, fetchpatch
+, fetchFromGitLab
+, buildPackages
+, automake
+, autoconf
+, gettext
+, libiconv
+, libtool
+, intltool
+, freetype
+, tradcpp
+, fontconfig
+, meson
+, ninja
+, ed
+, libGL
+, spice-protocol
+, zlib
+, libGLU
+, dbus
+, libunwind
+, libdrm
+, mesa
+, udev
+, bootstrap_cmds
+, bison
+, flex
+, clangStdenv
+, autoreconfHook
+, mcpp
+, epoxy
+, openssl
+, pkgconfig
+, llvm_6
+, python3
+, ApplicationServices
+, Carbon
+, Cocoa
+, Xplugin
 }:
-
 let
   inherit (stdenv) lib isDarwin;
   inherit (lib) overrideDerivation;
@@ -66,11 +100,12 @@ self: super:
   imake = super.imake.overrideAttrs (attrs: {
     inherit (self) xorgcffiles;
     x11BuildHook = ./imake.sh;
-    patches = [./imake.patch ./imake-cc-wrapper-uberhack.patch];
+    patches = [ ./imake.patch ./imake-cc-wrapper-uberhack.patch ];
     setupHook = ./imake-setup-hook.sh;
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.isDarwin
-      then "${tradcpp}/bin/cpp"
-      else "gcc"}\"'";
+    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${
+        if stdenv.isDarwin
+        then "${tradcpp}/bin/cpp"
+        else "gcc"}\"'";
 
     inherit tradcpp;
   });
@@ -93,7 +128,7 @@ self: super:
         sha256 = "11k2mx56hjgw886zf1cdf2nhv7052d5rggimfshg6lq20i38vpza";
       })
     ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     preConfigure = ''
@@ -133,7 +168,7 @@ self: super:
 
   libXxf86vm = super.libXxf86vm.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
   });
 
@@ -144,7 +179,7 @@ self: super:
     preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [ self.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -157,7 +192,7 @@ self: super:
     # Once the bug is fixed upstream, this can be removed.
     configureFlags = [ "--disable-selective-werror" ];
 
-    buildInputs = attrs.buildInputs ++ [libiconv];
+    buildInputs = attrs.buildInputs ++ [ libiconv ];
   });
 
   libICE = super.libICE.overrideAttrs (attrs: {
@@ -185,7 +220,7 @@ self: super:
   libXft = super.libXft.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     propagatedBuildInputs = [ self.libXrender freetype fontconfig ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
 
     patches = [
@@ -209,7 +244,7 @@ self: super:
   libXext = super.libXext.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = [ self.xorgproto self.libXau ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
   });
 
@@ -226,7 +261,7 @@ self: super:
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
   });
 
@@ -237,9 +272,9 @@ self: super:
 
   libXrandr = super.libXrandr.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = [self.libXrender];
+    propagatedBuildInputs = [ self.libXrender ];
   });
 
   libSM = super.libSM.overrideAttrs (attrs: {
@@ -249,7 +284,7 @@ self: super:
 
   libXrender = super.libXrender.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
     propagatedBuildInputs = [ self.xorgproto ];
   });
@@ -260,15 +295,15 @@ self: super:
 
   libXv = super.libXv.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "devdoc" ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
   });
 
   libXvMC = super.libXvMC.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
-    configureFlags = attrs.configureFlags or []
+    configureFlags = attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag;
-    buildInputs = attrs.buildInputs ++ [self.xorgproto];
+    buildInputs = attrs.buildInputs ++ [ self.xorgproto ];
   });
 
   libXp = super.libXp.overrideAttrs (attrs: {
@@ -309,7 +344,8 @@ self: super:
       '';
   });
 
-  utilmacros = super.utilmacros.overrideAttrs (attrs: { # not needed for releases, we propagate the needed tools
+  utilmacros = super.utilmacros.overrideAttrs (attrs: {
+    # not needed for releases, we propagate the needed tools
     propagatedBuildInputs = [ automake autoconf libtool ];
   });
 
@@ -389,24 +425,24 @@ self: super:
     ];
 
     meta = attrs.meta // {
-      platforms = ["i686-linux" "x86_64-linux"];
+      platforms = [ "i686-linux" "x86_64-linux" ];
     };
   });
 
   # Obsolete drivers that don't compile anymore.
-  xf86videoark     = super.xf86videoark.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videogeode   = super.xf86videogeode.overrideAttrs   (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videoglide   = super.xf86videoglide.overrideAttrs   (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videoi128    = super.xf86videoi128.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videoark = super.xf86videoark.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videogeode = super.xf86videogeode.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videoglide = super.xf86videoglide.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videoi128 = super.xf86videoi128.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videosavage  = super.xf86videosavage.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videotga     = super.xf86videotga.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videov4l     = super.xf86videov4l.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videowsfb    = super.xf86videowsfb.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videosavage = super.xf86videosavage.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videotga = super.xf86videotga.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videov4l = super.xf86videov4l.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videovoodoo = super.xf86videovoodoo.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
+  xf86videowsfb = super.xf86videowsfb.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
 
-  xf86videoomap    = super.xf86videoomap.overrideAttrs (attrs: {
+  xf86videoomap = super.xf86videoomap.overrideAttrs (attrs: {
     NIX_CFLAGS_COMPILE = [ "-Wno-error=format-overflow" ];
   });
 
@@ -419,28 +455,28 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa llvm_6 ]; # for libxatracker
+    buildInputs = attrs.buildInputs ++ [ mesa llvm_6 ]; # for libxatracker
     meta = attrs.meta // {
-      platforms = ["i686-linux" "x86_64-linux"];
+      platforms = [ "i686-linux" "x86_64-linux" ];
     };
   });
 
   xf86videoqxl = super.xf86videoqxl.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ spice-protocol ];
+    buildInputs = attrs.buildInputs ++ [ spice-protocol ];
   });
 
   xf86videosiliconmotion = super.xf86videosiliconmotion.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      platforms = ["i686-linux" "x86_64-linux"];
+      platforms = [ "i686-linux" "x86_64-linux" ];
     };
   });
 
   xdriinfo = super.xdriinfo.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [libGL];
+    buildInputs = attrs.buildInputs ++ [ libGL ];
   });
 
   xvinfo = super.xvinfo.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [self.libXext];
+    buildInputs = attrs.buildInputs ++ [ self.libXext ];
   });
 
   xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
@@ -448,7 +484,7 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [intltool];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ intltool ];
 
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 
@@ -463,81 +499,81 @@ self: super:
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom = { layouts ? { } }:
-  let
-    patchIn = name: layout:
-    with layout;
-    with lib;
-    ''
-        # install layout files
-        ${optionalString (compatFile   != null) "cp '${compatFile}'   'compat/${name}'"}
-        ${optionalString (geometryFile != null) "cp '${geometryFile}' 'geometry/${name}'"}
-        ${optionalString (keycodesFile != null) "cp '${keycodesFile}' 'keycodes/${name}'"}
-        ${optionalString (symbolsFile  != null) "cp '${symbolsFile}'  'symbols/${name}'"}
-        ${optionalString (typesFile    != null) "cp '${typesFile}'    'types/${name}'"}
+    let
+      patchIn = name: layout:
+        with layout;
+        with lib;
+        ''
+          # install layout files
+          ${optionalString (compatFile != null) "cp '${compatFile}'   'compat/${name}'"}
+          ${optionalString (geometryFile != null) "cp '${geometryFile}' 'geometry/${name}'"}
+          ${optionalString (keycodesFile != null) "cp '${keycodesFile}' 'keycodes/${name}'"}
+          ${optionalString (symbolsFile != null) "cp '${symbolsFile}'  'symbols/${name}'"}
+          ${optionalString (typesFile != null) "cp '${typesFile}'    'types/${name}'"}
 
-        # patch makefiles
-        for type in compat geometry keycodes symbols types; do
-          if ! test -f "$type/${name}"; then
-            continue
-          fi
-          test "$type" = geometry && type_name=geom || type_name=$type
-          ${ed}/bin/ed -v $type/Makefile.am <<EOF
-        /''${type_name}_DATA =
-        a
-        ${name} \\
-        .
-        w
-        EOF
-          ${ed}/bin/ed -v $type/Makefile.in <<EOF
-        /''${type_name}_DATA =
-        a
-        ${name} \\
-        .
-        w
-        EOF
-        done
+          # patch makefiles
+          for type in compat geometry keycodes symbols types; do
+            if ! test -f "$type/${name}"; then
+              continue
+            fi
+            test "$type" = geometry && type_name=geom || type_name=$type
+            ${ed}/bin/ed -v $type/Makefile.am <<EOF
+          /''${type_name}_DATA =
+          a
+          ${name} \\
+          .
+          w
+          EOF
+            ${ed}/bin/ed -v $type/Makefile.in <<EOF
+          /''${type_name}_DATA =
+          a
+          ${name} \\
+          .
+          w
+          EOF
+          done
 
-        # add model description
-        ${ed}/bin/ed -v rules/base.xml <<EOF
-        /<\/modelList>
-        -
-        a
-        <model>
-          <configItem>
-            <name>${name}</name>
-            <description>${layout.description}</description>
-            <vendor>${layout.description}</vendor>
-          </configItem>
-        </model>
-        .
-        w
-        EOF
+          # add model description
+          ${ed}/bin/ed -v rules/base.xml <<EOF
+          /<\/modelList>
+          -
+          a
+          <model>
+            <configItem>
+              <name>${name}</name>
+              <description>${layout.description}</description>
+              <vendor>${layout.description}</vendor>
+            </configItem>
+          </model>
+          .
+          w
+          EOF
 
-        # add layout description
-        ${ed}/bin/ed -v rules/base.xml <<EOF
-        /<\/layoutList>
-        -
-        a
-        <layout>
-          <configItem>
-            <name>${name}</name>
-            <shortDescription>${name}</shortDescription>
-            <description>${layout.description}</description>
-            <languageList>
-              ${concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
-            </languageList>
-          </configItem>
-          <variantList/>
-        </layout>
-        .
-        w
-        EOF
-    '';
-  in
-    self.xkeyboardconfig.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ automake ];
-      postPatch   = with lib; concatStrings (mapAttrsToList patchIn layouts);
-    });
+          # add layout description
+          ${ed}/bin/ed -v rules/base.xml <<EOF
+          /<\/layoutList>
+          -
+          a
+          <layout>
+            <configItem>
+              <name>${name}</name>
+              <shortDescription>${name}</shortDescription>
+              <description>${layout.description}</description>
+              <languageList>
+                ${concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
+              </languageList>
+            </configItem>
+            <variantList/>
+          </layout>
+          .
+          w
+          EOF
+        '';
+    in
+      self.xkeyboardconfig.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ [ automake ];
+        postPatch = with lib; concatStrings (mapAttrsToList patchIn layouts);
+      });
 
   xload = super.xload.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ gettext ];
@@ -548,7 +584,7 @@ self: super:
   });
 
   xorgproto = super.xorgproto.overrideAttrs (attrs: {
-    buildInputs = [];
+    buildInputs = [ ];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
     # adds support for printproto needed for libXp
     mesonFlags = [ "-Dlegacy=true" ];
@@ -561,12 +597,14 @@ self: super:
       attrs =
         if (abiCompat == null || lib.hasPrefix abiCompat version) then
           attrs_passed // {
-            buildInputs = attrs_passed.buildInputs ++ [ libdrm.dev ]; patchPhase = ''
-            for i in dri3/*.c
-            do
-              sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
-            done
-          '';}
+            buildInputs = attrs_passed.buildInputs ++ [ libdrm.dev ];
+            patchPhase = ''
+              for i in dri3/*.c
+              do
+                sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
+              done
+            '';
+          }
         else if (abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
@@ -578,137 +616,151 @@ self: super:
           buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
           meta.platforms = stdenv.lib.platforms.unix;
         } else if (abiCompat == "1.18") then {
-            name = "xorg-server-1.18.4";
-            builder = ./builder.sh;
-            src = fetchurl {
-              url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
-              sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
-            };
-            nativeBuildInputs = [ pkgconfig ];
-            buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
-            postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
-            meta.platforms = stdenv.lib.platforms.unix;
+          name = "xorg-server-1.18.4";
+          builder = ./builder.sh;
+          src = fetchurl {
+            url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
+            sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
+          };
+          nativeBuildInputs = [ pkgconfig ];
+          buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+          postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
+          meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
-
     in attrs //
-    (let
-      version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
-      commonPropagatedBuildInputs = [
-        zlib libGL libGLU dbus
-        xorgproto
-        libXext pixman libXfont libxshmfence libunwind
-        libXfont2
-      ];
-      # XQuartz requires two compilations: the first to get X / XQuartz,
-      # and the second to get Xvfb, Xnest, etc.
-      darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
-        configureFlags = oldAttrs.configureFlags ++ [
-          "--disable-xquartz"
-          "--enable-xorg"
-          "--enable-xvfb"
-          "--enable-xnest"
-          "--enable-kdrive"
-        ];
-        postInstall = ":"; # prevent infinite recursion
-      });
-    in
-      if (!isDarwin)
-      then {
-        outputs = [ "out" "dev" ];
-        buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
-          udev
-        ];
-        prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
-          export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
-        '';
-        configureFlags = [
-          "--enable-kdrive"             # not built by default
-          "--enable-xephyr"
-          "--enable-xcsecurity"         # enable SECURITY extension
-          "--with-default-font-path="   # there were only paths containing "${prefix}",
-                                        # and there are no fonts in this package anyway
-          "--with-xkb-bin-directory=${self.xkbcomp}/bin"
-          "--with-xkb-path=${self.xkeyboardconfig}/share/X11/xkb"
-          "--with-xkb-output=$out/share/X11/xkb/compiled"
-          "--enable-glamor"
-        ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-          "--disable-tls"
-        ];
+      (
+        let
+          version = lib.getVersion attrs;
+          commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
+          commonPropagatedBuildInputs = [
+            zlib
+            libGL
+            libGLU
+            dbus
+            xorgproto
+            libXext
+            pixman
+            libXfont
+            libxshmfence
+            libunwind
+            libXfont2
+          ];
+          # XQuartz requires two compilations: the first to get X / XQuartz,
+          # and the second to get Xvfb, Xnest, etc.
+          darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
+            configureFlags = oldAttrs.configureFlags ++ [
+              "--disable-xquartz"
+              "--enable-xorg"
+              "--enable-xvfb"
+              "--enable-xnest"
+              "--enable-kdrive"
+            ];
+            postInstall = ":"; # prevent infinite recursion
+          });
+        in
+          if (!isDarwin)
+          then {
+            outputs = [ "out" "dev" ];
+            buildInputs = commonBuildInputs ++ [ libdrm mesa ];
+            propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+              udev
+            ];
+            prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+              export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
+            '';
+            configureFlags = [
+              "--enable-kdrive" # not built by default
+              "--enable-xephyr"
+              "--enable-xcsecurity" # enable SECURITY extension
+              "--with-default-font-path=" # there were only paths containing "${prefix}",
+              # and there are no fonts in this package anyway
+              "--with-xkb-bin-directory=${self.xkbcomp}/bin"
+              "--with-xkb-path=${self.xkeyboardconfig}/share/X11/xkb"
+              "--with-xkb-output=$out/share/X11/xkb/compiled"
+              "--enable-glamor"
+            ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+              "--disable-tls"
+            ];
 
-        postInstall = ''
-          rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
-          ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
-            cd "$dev"
-            for f in include/xorg/*.h; do
-              sed "1i#line 1 \"${attrs.name}/$f\"" -i "$f"
-            done
-          )
-        '';
-        passthru.version = version; # needed by virtualbox guest additions
-      } else {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook self.utilmacros self.fontutil ];
-        buildInputs = commonBuildInputs ++ [
-          bootstrap_cmds automake autoconf
-          Xplugin Carbon Cocoa
-        ];
-        propagatedBuildInputs = commonPropagatedBuildInputs ++ [
-          libAppleWM xorgproto
-        ];
+            postInstall = ''
+              rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
+              ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
+                cd "$dev"
+                for f in include/xorg/*.h; do
+                  sed "1i#line 1 \"${attrs.name}/$f\"" -i "$f"
+                done
+              )
+            '';
+            passthru.version = version; # needed by virtualbox guest additions
+          } else {
+            nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook self.utilmacros self.fontutil ];
+            buildInputs = commonBuildInputs ++ [
+              bootstrap_cmds
+              automake
+              autoconf
+              Xplugin
+              Carbon
+              Cocoa
+            ];
+            propagatedBuildInputs = commonPropagatedBuildInputs ++ [
+              libAppleWM
+              xorgproto
+            ];
 
-        patches = [
-          # XQuartz patchset
-          (fetchpatch {
-            url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
-            sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";
-            name = "use-cppflags-not-cflags.patch";
-          })
-          (fetchpatch {
-            url = "https://github.com/XQuartz/xorg-server/commit/75ee9649bcfe937ac08e03e82fd45d9e18110ef4.patch";
-            sha256 = "1vlfylm011y00j8mig9zy6gk9bw2b4ilw2qlsc6la49zi3k0i9fg";
-            name = "use-old-mitrapezoids-and-mitriangles-routines.patch";
-          })
-          (fetchpatch {
-            url = "https://github.com/XQuartz/xorg-server/commit/c58f47415be79a6564a9b1b2a62c2bf866141e73.patch";
-            sha256 = "19sisqzw8x2ml4lfrwfvavc2jfyq2bj5xcf83z89jdxg8g1gdd1i";
-            name = "revert-fb-changes-1.patch";
-          })
-          (fetchpatch {
-            url = "https://github.com/XQuartz/xorg-server/commit/56e6f1f099d2821e5002b9b05b715e7b251c0c97.patch";
-            sha256 = "0zm9g0g1jvy79sgkvy0rjm6ywrdba2xjd1nsnjbxjccckbr6i396";
-            name = "revert-fb-changes-2.patch";
-          })
-        ];
+            patches = [
+              # XQuartz patchset
+              (fetchpatch {
+                url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
+                sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";
+                name = "use-cppflags-not-cflags.patch";
+              })
+              (fetchpatch {
+                url = "https://github.com/XQuartz/xorg-server/commit/75ee9649bcfe937ac08e03e82fd45d9e18110ef4.patch";
+                sha256 = "1vlfylm011y00j8mig9zy6gk9bw2b4ilw2qlsc6la49zi3k0i9fg";
+                name = "use-old-mitrapezoids-and-mitriangles-routines.patch";
+              })
+              (fetchpatch {
+                url = "https://github.com/XQuartz/xorg-server/commit/c58f47415be79a6564a9b1b2a62c2bf866141e73.patch";
+                sha256 = "19sisqzw8x2ml4lfrwfvavc2jfyq2bj5xcf83z89jdxg8g1gdd1i";
+                name = "revert-fb-changes-1.patch";
+              })
+              (fetchpatch {
+                url = "https://github.com/XQuartz/xorg-server/commit/56e6f1f099d2821e5002b9b05b715e7b251c0c97.patch";
+                sha256 = "0zm9g0g1jvy79sgkvy0rjm6ywrdba2xjd1nsnjbxjccckbr6i396";
+                name = "revert-fb-changes-2.patch";
+              })
+            ];
 
-        configureFlags = [
-          # note: --enable-xquartz is auto
-          "CPPFLAGS=-I${./darwin/dri}"
-          "--with-default-font-path="
-          "--with-apple-application-name=XQuartz"
-          "--with-apple-applications-dir=\${out}/Applications"
-          "--with-bundle-id-prefix=org.nixos.xquartz"
-          "--with-sha1=CommonCrypto"
-        ];
-        preConfigure = ''
-          mkdir -p $out/Applications
-          export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
-          substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${ApplicationServices}
-        '';
-        postInstall = ''
-          rm -fr $out/share/X11/xkb/compiled
+            configureFlags = [
+              # note: --enable-xquartz is auto
+              "CPPFLAGS=-I${./darwin/dri}"
+              "--with-default-font-path="
+              "--with-apple-application-name=XQuartz"
+              "--with-apple-applications-dir=\${out}/Applications"
+              "--with-bundle-id-prefix=org.nixos.xquartz"
+              "--with-sha1=CommonCrypto"
+            ];
+            preConfigure = ''
+              mkdir -p $out/Applications
+              export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
+              substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${ApplicationServices}
+            '';
+            postInstall = ''
+              rm -fr $out/share/X11/xkb/compiled
 
-          cp -rT ${darwinOtherX}/bin $out/bin
-          rm -f $out/bin/X
-          ln -s Xquartz $out/bin/X
+              cp -rT ${darwinOtherX}/bin $out/bin
+              rm -f $out/bin/X
+              ln -s Xquartz $out/bin/X
 
-          cp ${darwinOtherX}/share/man -rT $out/share/man
-        '' ;
-        passthru.version = version;
-      }));
+              cp ${darwinOtherX}/share/man -rT $out/share/man
+            '';
+            passthru.version = version;
+          }
+      )
+  );
 
   lndir = super.lndir.overrideAttrs (attrs: {
-    buildInputs = [];
+    buildInputs = [ ];
     preConfigure = ''
       export XPROTO_CFLAGS=" "
       export XPROTO_LIBS=" "
@@ -723,7 +775,7 @@ self: super:
   });
 
   twm = super.twm.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [bison flex];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ bison flex ];
   });
 
   xauth = super.xauth.overrideAttrs (attrs: {
@@ -747,7 +799,7 @@ self: super:
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
     propagatedBuildInputs = [ self.xauth ]
-                         ++ lib.optionals isDarwin [ self.libX11 self.xorgproto ];
+      ++ lib.optionals isDarwin [ self.libX11 self.xorgproto ];
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
     '';
@@ -764,12 +816,12 @@ self: super:
       rev = "f66d39544bb8339130c96d282a80f87ca1606caf";
       sha256 = "14rwbbn06l8qpx7s5crxghn80vgcx8jmfc7qvivh72d81r0kvywl";
     };
-    buildInputs = attrs.buildInputs ++ [self.libXfixes self.libXScrnSaver self.pixman];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook self.utilmacros];
+    buildInputs = attrs.buildInputs ++ [ self.libXfixes self.libXScrnSaver self.pixman ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook self.utilmacros ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
 
     meta = attrs.meta // {
-      platforms = ["i686-linux" "x86_64-linux"];
+      platforms = [ "i686-linux" "x86_64-linux" ];
     };
   });
 
@@ -795,7 +847,7 @@ self: super:
   });
 
   xwd = super.xwd.overrideAttrs (attrs: {
-    buildInputs = with self; attrs.buildInputs ++ [libXt];
+    buildInputs = with self; attrs.buildInputs ++ [ libXt ];
   });
 
   xrdb = super.xrdb.overrideAttrs (attrs: {
@@ -813,10 +865,10 @@ self: super:
   });
 
   xcalc = super.xcalc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [] ++ [
+    configureFlags = attrs.configureFlags or [ ] ++ [
       "--with-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
     ];
-    nativeBuildInputs = attrs.nativeBuildInputs or [] ++ [ makeWrapper ];
+    nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/xcalc \
         --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults

@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk2, libpng, exiv2, lcms
-, intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl}:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, gtk2
+, libpng
+, exiv2
+, lcms
+, intltool
+, gettext
+, shared-mime-info
+, glib
+, gdk-pixbuf
+, perl
+}:
 
 stdenv.mkDerivation rec {
   pname = "viewnior";
@@ -14,8 +27,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
-    [ pkgconfig gtk2 libpng exiv2 lcms intltool gettext
-      shared-mime-info glib gdk-pixbuf perl
+    [
+      pkgconfig
+      gtk2
+      libpng
+      exiv2
+      lcms
+      intltool
+      gettext
+      shared-mime-info
+      glib
+      gdk-pixbuf
+      perl
     ];
 
   meta = {

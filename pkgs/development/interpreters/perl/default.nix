@@ -1,11 +1,17 @@
-{ config, lib, stdenv, fetchurl, pkgs, buildPackages, callPackage
-, enableThreading ? true, coreutils, makeWrapper
+{ config
+, lib
+, stdenv
+, fetchurl
+, pkgs
+, buildPackages
+, callPackage
+, enableThreading ? true
+, coreutils
+, makeWrapper
 }:
 
 with lib;
-
 let
-
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
@@ -31,9 +37,10 @@ let
     patches =
       [
         # Do not look in /usr etc. for dependencies.
-        (if (versionOlder version "5.29.6") then ./no-sys-dirs-5.26.patch
-         else if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
-         else ./no-sys-dirs-5.31.patch)
+        (
+          if (versionOlder version "5.29.6") then ./no-sys-dirs-5.26.patch
+          else if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
+          else ./no-sys-dirs-5.31.patch)
       ]
       ++ optional (versionOlder version "5.29.6")
         # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
@@ -47,15 +54,15 @@ let
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
-    postPatch = (if crossCompiling then ''
-      substituteInPlace dist/PathTools/Cwd.pm \
-        --replace "/bin/pwd" '${coreutils}/bin/pwd'
-      substituteInPlace cnf/configure_tool.sh --replace "cc -E -P" "cc -E"
-    '' else ''
-      substituteInPlace dist/PathTools/Cwd.pm \
-        --replace "/bin/pwd" "$(type -P pwd)"
-    '') +
-    # Perl's build system uses the src variable, and its value may end up in
+    postPatch = (
+      if crossCompiling then ''
+        substituteInPlace dist/PathTools/Cwd.pm \
+          --replace "/bin/pwd" '${coreutils}/bin/pwd'
+        substituteInPlace cnf/configure_tool.sh --replace "cc -E -P" "cc -E"
+      '' else ''
+        substituteInPlace dist/PathTools/Cwd.pm \
+          --replace "/bin/pwd" "$(type -P pwd)"
+      '') + # Perl's build system uses the src variable, and its value may end up in
     # the output in some cases (when cross-compiling)
     ''
       unset src
@@ -67,9 +74,11 @@ let
     # contains the string "perl", Configure would select $out/lib.
     # Miniperl needs -lm. perl needs -lrt.
     configureFlags =
-      (if crossCompiling
-       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
-       else [ "-de" "-Dcc=cc" ])
+      (
+        if crossCompiling
+        then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
+        else [ "-de" "-Dcc=cc" ]
+      )
       ++ [
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
@@ -93,14 +102,14 @@ let
     enableParallelBuilding = !crossCompiling;
 
     preConfigure = ''
-        substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
-        substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
-      '' + optionalString stdenv.isDarwin ''
-        substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
-      '' + optionalString (!enableThreading) ''
-        # We need to do this because the bootstrap doesn't have a static libpthread
-        sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
-      '';
+      substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
+      substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
+    '' + optionalString stdenv.isDarwin ''
+      substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
+    '' + optionalString (!enableThreading) ''
+      # We need to do this because the bootstrap doesn't have a static libpthread
+      sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
+    '';
 
     setupHook = ./setup-hook.sh;
 
@@ -109,7 +118,7 @@ let
       libPrefix = "lib/perl5/site_perl";
       pkgs = callPackage ../../../top-level/perl-packages.nix {
         inherit perl buildPerl;
-        overrides = config.perlPackageOverrides or (p: {}); # TODO: (self: super: {}) like in python
+        overrides = config.perlPackageOverrides or (p: { }); # TODO: (self: super: {}) like in python
       };
       buildEnv = callPackage ./wrapper.nix {
         inherit perl;
@@ -133,33 +142,33 @@ let
         substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
           --replace "${libcInc}" /no-such-path \
           --replace "${
-              if stdenv.hasCC then stdenv.cc.cc else "/no-such-path"
-            }" /no-such-path \
+          if stdenv.hasCC then stdenv.cc.cc else "/no-such-path"
+        }" /no-such-path \
           --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
       '' + optionalString crossCompiling
-      ''
-        mkdir -p $dev/lib/perl5/cross_perl/${version}
-        for dir in cnf/{stub,cpan}; do
-          cp -r $dir/* $dev/lib/perl5/cross_perl/${version}
-        done
+        ''
+          mkdir -p $dev/lib/perl5/cross_perl/${version}
+          for dir in cnf/{stub,cpan}; do
+            cp -r $dir/* $dev/lib/perl5/cross_perl/${version}
+          done
 
-        mkdir -p $dev/bin
-        install -m755 miniperl $dev/bin/perl
+          mkdir -p $dev/bin
+          install -m755 miniperl $dev/bin/perl
 
-        export runtimeArch="$(ls $out/lib/perl5/site_perl/${version})"
-        # wrapProgram should use a runtime-native SHELL by default, but
-        # it actually uses a buildtime-native one. If we ever fix that,
-        # we'll need to fix this to use a buildtime-native one.
-        #
-        # Adding the arch-specific directory is morally incorrect, as
-        # miniperl can't load the native modules there. However, it can
-        # (and sometimes needs to) load and run some of the pure perl
-        # code there, so we add it anyway. When needed, stubs can be put
-        # into $dev/lib/perl5/cross_perl/${version}.
-        wrapProgram $dev/bin/perl --prefix PERL5LIB : \
-          "$dev/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
-      ''; # */
+          export runtimeArch="$(ls $out/lib/perl5/site_perl/${version})"
+          # wrapProgram should use a runtime-native SHELL by default, but
+          # it actually uses a buildtime-native one. If we ever fix that,
+          # we'll need to fix this to use a buildtime-native one.
+          #
+          # Adding the arch-specific directory is morally incorrect, as
+          # miniperl can't load the native modules there. However, it can
+          # (and sometimes needs to) load and run some of the pure perl
+          # code there, so we add it anyway. When needed, stubs can be put
+          # into $dev/lib/perl5/cross_perl/${version}.
+          wrapProgram $dev/bin/perl --prefix PERL5LIB : \
+            "$dev/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
+        ''; # */
 
     meta = {
       homepage = https://www.perl.org/;
@@ -189,7 +198,8 @@ let
     # TODO merge setup hooks
     setupHook = ./setup-hook-cross.sh;
   });
-in {
+in
+{
   # Maint version
   perl528 = common {
     perl = pkgs.perl528;

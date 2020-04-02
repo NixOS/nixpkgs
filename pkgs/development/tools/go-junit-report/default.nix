@@ -16,9 +16,9 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Converts go test output to an xml report, suitable for applications that expect junit xml reports (e.g. Jenkins)";
-    homepage    = "https://${goPackagePath}";
+    homepage = "https://${goPackagePath}";
     maintainers = with maintainers; [ cryptix ];
-    license     = licenses.mit;
-    platforms   = platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 }

@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Khronos OpenXR loader";
-    homepage    = https://www.khronos.org/openxr;
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = https://www.khronos.org/openxr;
+    platforms = platforms.linux;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }

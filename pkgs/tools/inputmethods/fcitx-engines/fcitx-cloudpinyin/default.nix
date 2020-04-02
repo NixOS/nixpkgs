@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     isFcitxEngine = true;
-    description  = "A standalone module for fcitx that uses web API to provide better pinyin result";
-    homepage     = https://github.com/fcitx/fcitx-cloudpinyin;
-    license      = licenses.gpl3Plus;
-    platforms    = platforms.linux;
+    description = "A standalone module for fcitx that uses web API to provide better pinyin result";
+    homepage = https://github.com/fcitx/fcitx-cloudpinyin;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

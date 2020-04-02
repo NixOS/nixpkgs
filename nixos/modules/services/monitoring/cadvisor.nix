@@ -1,11 +1,10 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.cadvisor;
-
-in {
+in
+{
   options = {
     services.cadvisor = {
       enable = mkOption {
@@ -87,7 +86,7 @@ in {
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional cadvisor options.
           
@@ -98,7 +97,8 @@ in {
   };
 
   config = mkMerge [
-    { services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
+    {
+      services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
         mkDefault (toString (pkgs.writeTextFile {
           name = "cadvisor-storage-driver-password";
           text = cfg.storageDriverPassword;
@@ -124,16 +124,16 @@ in {
             -port="${toString cfg.port}" \
             ${escapeShellArgs cfg.extraOptions} \
             ${optionalString (cfg.storageDriver != null) ''
-              -storage_driver "${cfg.storageDriver}" \
-              -storage_driver_user "${cfg.storageDriverHost}" \
-              -storage_driver_db "${cfg.storageDriverDb}" \
-              -storage_driver_user "${cfg.storageDriverUser}" \
-              -storage_driver_password "$(cat "${cfg.storageDriverPasswordFile}")" \
-              ${optionalString cfg.storageDriverSecure "-storage_driver_secure"}
-            ''}
+          -storage_driver "${cfg.storageDriver}" \
+          -storage_driver_user "${cfg.storageDriverHost}" \
+          -storage_driver_db "${cfg.storageDriverDb}" \
+          -storage_driver_user "${cfg.storageDriverUser}" \
+          -storage_driver_password "$(cat "${cfg.storageDriverPasswordFile}")" \
+          ${optionalString cfg.storageDriverSecure "-storage_driver_secure"}
+        ''}
         '';
 
-        serviceConfig.TimeoutStartSec=300;
+        serviceConfig.TimeoutStartSec = 300;
       };
     })
   ];

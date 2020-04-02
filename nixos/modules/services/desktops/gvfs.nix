@@ -3,20 +3,17 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.gvfs;
-
 in
-
 {
 
   # Added 2019-08-19
   imports = [
     (mkRenamedOptionModule
       [ "services" "gnome3" "gvfs" "enable" ]
-      [ "services" "gvfs" "enable" ])
+      [ "services" "gvfs" "enable" ]
+    )
   ];
 
   ###### interface

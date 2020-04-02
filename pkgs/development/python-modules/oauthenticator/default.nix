@@ -29,17 +29,26 @@ buildPythonPackage rec {
 
   # No tests in archive
   doCheck = false;
-   
-  checkInputs = [  globus-sdk mwoauth codecov flake8 pytest
-    pytestcov pytest-tornado requests-mock pyjwt ];
-  
+
+  checkInputs = [
+    globus-sdk
+    mwoauth
+    codecov
+    flake8
+    pytest
+    pytestcov
+    pytest-tornado
+    requests-mock
+    pyjwt
+  ];
+
   propagatedBuildInputs = [ jupyterhub ];
 
   disabled = pythonOlder "3.4";
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";
-    homepage =  https://github.com/jupyterhub/oauthenticator;
+    homepage = https://github.com/jupyterhub/oauthenticator;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie ];
   };

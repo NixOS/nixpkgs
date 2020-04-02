@@ -1,6 +1,25 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
+{ stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, attrs
+, hypothesis
+, py
+, setuptools_scm
+, setuptools
+, six
+, pluggy
+, funcsigs
+, isPy3k
+, more-itertools
+, atomicwrites
+, mock
+, writeText
+, pathlib2
+, wcwidth
+, packaging
+, isPyPy
+, python
 }:
 buildPythonPackage rec {
   version = "5.3.5";

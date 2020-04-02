@@ -20,8 +20,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    zope-deferredimport zope_deprecation zope_event zope-hookable zope_interface
-    zope_configuration zope_i18nmessageid
+    zope-deferredimport
+    zope_deprecation
+    zope_event
+    zope-hookable
+    zope_interface
+    zope_configuration
+    zope_i18nmessageid
   ];
 
   # ignore tests because of a circular dependency on zope_security

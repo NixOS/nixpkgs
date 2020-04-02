@@ -1,5 +1,13 @@
-{ lib, buildPythonApplication, fetchPypi, matplotlib, numpy, pymavlink, pyserial
-, setuptools, wxPython_4_0 }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, matplotlib
+, numpy
+, pymavlink
+, pyserial
+, setuptools
+, wxPython_4_0
+}:
 
 buildPythonApplication rec {
   pname = "MAVProxy";

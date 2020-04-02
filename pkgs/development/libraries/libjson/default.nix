@@ -1,7 +1,8 @@
 { stdenv, fetchurl, unzip }:
 let
   version = "7.6.1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libjson";
   inherit version;
   src = fetchurl {

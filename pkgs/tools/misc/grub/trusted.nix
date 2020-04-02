@@ -1,5 +1,18 @@
-{ stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, lvm2
+{ stdenv
+, fetchurl
+, fetchgit
+, autogen
+, flex
+, bison
+, python
+, autoconf
+, automake
+, gettext
+, ncurses
+, libusb
+, freetype
+, qemu
+, lvm2
 , for_HP_laptop ? false
 }:
 
@@ -25,24 +38,23 @@ let
     sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
 
   };
-
 in
-
 stdenv.mkDerivation rec {
   pname = "trustedGRUB2";
   inherit version;
 
-  src = if for_HP_laptop
-        then fetchgit {
-          url = "https://github.com/Sirrix-AG/TrustedGRUB2";
-          rev = "ab483d389bda3115ca0ae4202fd71f2e4a31ad41";
-          sha256 = "1760d9hsnqkdvlag9nn8f613mqhnsxmidgvdkpmb37b0yi7p6lhz";
-        }
-        else fetchgit {
-          url = "https://github.com/Sirrix-AG/TrustedGRUB2";
-          rev = "1ff54a5fbe02ea01df5a7de59b1e0201e08d4f76";
-          sha256 = "0yrfwx67gpg9gij5raq0cfbx3jj769lkg3diqgb7i9n86hgcdh4k";
-        };
+  src =
+    if for_HP_laptop
+    then fetchgit {
+      url = "https://github.com/Sirrix-AG/TrustedGRUB2";
+      rev = "ab483d389bda3115ca0ae4202fd71f2e4a31ad41";
+      sha256 = "1760d9hsnqkdvlag9nn8f613mqhnsxmidgvdkpmb37b0yi7p6lhz";
+    }
+    else fetchgit {
+      url = "https://github.com/Sirrix-AG/TrustedGRUB2";
+      rev = "1ff54a5fbe02ea01df5a7de59b1e0201e08d4f76";
+      sha256 = "0yrfwx67gpg9gij5raq0cfbx3jj769lkg3diqgb7i9n86hgcdh4k";
+    };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext lvm2 ]
@@ -84,9 +96,10 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-bash-completion.patch ];
 
   # save target that grub is compiled for
-  grubTarget = if inPCSystems
-               then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
-               else "";
+  grubTarget =
+    if inPCSystems
+    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
+    else "";
 
   doCheck = false;
   enableParallelBuilding = true;

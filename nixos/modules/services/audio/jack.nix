@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.jack;
 
@@ -12,7 +11,8 @@ let
 
   umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
   bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
-in {
+in
+{
   options = {
     services.jack = {
       jackd = {
@@ -230,7 +230,7 @@ in {
         { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
         { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }
       ];
-      users.groups.jackaudio = {};
+      users.groups.jackaudio = { };
 
       environment = {
         systemPackages = [ cfg.jackd.package ];

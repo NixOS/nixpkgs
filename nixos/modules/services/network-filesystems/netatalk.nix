@@ -1,24 +1,23 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.netatalk;
 
   extmapFile = pkgs.writeText "extmap.conf" cfg.extmap;
 
-  afpToString = x: if builtins.typeOf x == "bool"
-                   then boolToString x
-                   else toString x;
+  afpToString = x:
+    if builtins.typeOf x == "bool"
+    then boolToString x
+    else toString x;
 
   volumeConfig = name:
     let vol = getAttr name cfg.volumes; in
-    "[${name}]\n " + (toString (
-       map
-         (key: "${key} = ${afpToString (getAttr key vol)}\n")
-         (attrNames vol)
-    ));
+      "[${name}]\n " + (toString (
+        map
+          (key: "${key} = ${afpToString (getAttr key vol)}\n")
+          (attrNames vol)
+      ));
 
   afpConf = ''[Global]
     extmap file = ${extmapFile}
@@ -26,7 +25,8 @@ let
 
     ${cfg.extraConfig}
 
-    ${if cfg.homes.enable then ''[Homes]
+    ${
+      if cfg.homes.enable then ''[Homes]
     ${optionalString (cfg.homes.path != "") "path = ${cfg.homes.path}"}
     basedir regex = ${cfg.homes.basedirRegex}
     ${cfg.homes.extraConfig}
@@ -36,17 +36,15 @@ let
   '';
 
   afpConfFile = pkgs.writeText "afp.conf" afpConf;
-
 in
-
 {
   options = {
     services.netatalk = {
 
       enable = mkOption {
-          default = false;
-          description = "Whether to enable the Netatalk AFP fileserver.";
-        };
+        default = false;
+        description = "Whether to enable the Netatalk AFP fileserver.";
+      };
 
       port = mkOption {
         default = 548;
@@ -87,7 +85,7 @@ in
             Lines of configuration to add to the <literal>[Homes]</literal> section.
             See <literal>man apf.conf</literal> for more information.
           '';
-         };
+        };
       };
 
       volumes = mkOption {
@@ -99,20 +97,22 @@ in
             See <literal>man apf.conf</literal> for more information.
           '';
         example =
-          { srv =
-             { path = "/srv";
-               "read only" = true;
-               "hosts allow" = "10.1.0.0/16 10.2.1.100 2001:0db8:1234::/48";
-             };
+          {
+            srv =
+              {
+                path = "/srv";
+                "read only" = true;
+                "hosts allow" = "10.1.0.0/16 10.2.1.100 2001:0db8:1234::/48";
+              };
           };
       };
 
       extmap = mkOption {
         type = types.lines;
-	default = "";
-	description = ''
-	  File name extension mappings.
-	  See <literal>man extmap.conf</literal> for more information.
+        default = "";
+        description = ''
+          File name extension mappings.
+          See <literal>man extmap.conf</literal> for more information.
         '';
       };
 
@@ -133,10 +133,10 @@ in
         Type = "forking";
         GuessMainPID = "no";
         PIDFile = "/run/lock/netatalk";
-	ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 0755 -p /var/lib/netatalk/CNID";
-        ExecStart  = "${pkgs.netatalk}/sbin/netatalk -F ${afpConfFile}";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 0755 -p /var/lib/netatalk/CNID";
+        ExecStart = "${pkgs.netatalk}/sbin/netatalk -F ${afpConfFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP  $MAINPID";
-	ExecStop   = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
+        ExecStop = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         Restart = "always";
         RestartSec = 1;
       };

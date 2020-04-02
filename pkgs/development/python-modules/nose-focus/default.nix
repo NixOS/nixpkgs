@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, nose, nose-of-yeti
-, nose-pattern-exclude, which }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, nose
+, nose-of-yeti
+, nose-pattern-exclude
+, which
+}:
 
 buildPythonPackage rec {
   pname = "nose-focus";

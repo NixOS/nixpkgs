@@ -1,11 +1,20 @@
-{stdenv
-, coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
-, lighttpd, iproute }:
+{ stdenv
+, coreutils
+, findutils
+, nix
+, xz
+, bzip2
+, gnused
+, gnugrep
+, openssl
+, lighttpd
+, iproute
+}:
 stdenv.mkDerivation rec {
   version = "2014-06-29-1";
   pname = "nix-binary-cache";
 
-  phases = ["installPhase"];
+  phases = [ "installPhase" ];
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -52,10 +61,10 @@ stdenv.mkDerivation rec {
       nix-binary-cache-start that can be run without any setup to launch
       a binary cache and get the example arguments for its usage.
     '';
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     license = stdenv.lib.licenses.gpl2Plus;
     inherit version;
     platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

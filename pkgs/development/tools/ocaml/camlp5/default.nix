@@ -13,8 +13,7 @@ stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  preConfigure = "configureFlagsArray=(--strict" +
-                  " --libdir $out/lib/ocaml/${ocaml.version}/site-lib)";
+  preConfigure = "configureFlagsArray=(--strict" + " --libdir $out/lib/ocaml/${ocaml.version}/site-lib)";
 
   buildFlags = [ "world.opt" ];
 
@@ -28,9 +27,10 @@ stdenv.mkDerivation {
     '';
     homepage = https://camlp5.github.io/;
     license = licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with maintainers; [
-      maggesi vbgl
+      maggesi
+      vbgl
     ];
   };
 }

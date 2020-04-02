@@ -1,5 +1,10 @@
-{ stdenv, fetchgit, lib
-, yad, mkvtoolnix-cli, libnotify }:
+{ stdenv
+, fetchgit
+, lib
+, yad
+, mkvtoolnix-cli
+, libnotify
+}:
 
 stdenv.mkDerivation {
   name = "mpv-convert-script-2016-03-18.lua";
@@ -20,7 +25,7 @@ stdenv.mkDerivation {
         ${subs "NOTIFY_CMD" "notify-send" "${libnotify}/bin/notify-send"} \
         ${subs "YAD_CMD" "yad" "${yad}/bin/yad"} \
         ${subs "MKVMERGE_CMD" "mkvmerge" "${mkvtoolnix-cli}/bin/mkvmerge"}
-  '';
+    '';
 
   dontBuild = true;
   installPhase = ''
@@ -37,4 +42,3 @@ stdenv.mkDerivation {
     '';
   };
 }
-

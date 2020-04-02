@@ -16,12 +16,12 @@ in
     enable = mkEnableOption "Bepasty servers";
 
     servers = mkOption {
-      default = {};
+      default = { };
       description = ''
         configure a number of bepasty servers which will be started with
         gunicorn.
-        '';
-      type = with types ; attrsOf (submodule ({ config, ... } : {
+      '';
+      type = with types ; attrsOf (submodule ({ config, ... }: {
 
         options = {
 
@@ -29,7 +29,7 @@ in
             type = types.str;
             description = ''
               Bind address to be used for this server.
-              '';
+            '';
             example = "0.0.0.0:8000";
             default = "127.0.0.1:8000";
           };
@@ -38,15 +38,15 @@ in
             type = types.str;
             description = ''
               Path to the directory where the pastes will be saved to
-              '';
-            default = default_home+"/data";
+            '';
+            default = default_home + "/data";
           };
 
           defaultPermissions = mkOption {
             type = types.str;
             description = ''
               default permissions for all unauthenticated accesses.
-              '';
+            '';
             example = "read,create,delete";
             default = "read";
           };
@@ -58,14 +58,14 @@ in
               configuration.
               see https://bepasty-server.readthedocs.org/en/latest/quickstart.html#configuring-bepasty
               for all options.
-              '';
+            '';
             default = "";
             example = ''
               PERMISSIONS = {
                 'myadminsecret': 'admin,list,create,read,delete',
               }
               MAX_ALLOWED_FILE_SIZE = 5 * 1000 * 1000
-              '';
+            '';
           };
 
           secretKey = mkOption {
@@ -77,7 +77,7 @@ in
 
               It's recommended to use <option>secretKeyFile</option>
               which takes precedence over <option>secretKey</option>.
-              '';
+            '';
             default = "";
           };
 
@@ -91,7 +91,7 @@ in
 
               Warning: when <option>secretKey</option> is non-empty <option>secretKeyFile</option>
               defaults to a file in the WORLD-READABLE Nix store containing that secret.
-              '';
+            '';
           };
 
           workDir = mkOption {
@@ -99,7 +99,7 @@ in
             description = ''
               Path to the working directory (used for config and pidfile).
               Defaults to the users home directory.
-              '';
+            '';
             default = default_home;
           };
 
@@ -131,14 +131,15 @@ in
           after = [ "network.target" ];
           restartIfChanged = true;
 
-          environment = let
-            penv = python.buildEnv.override {
-              extraLibs = [ bepasty gevent ];
+          environment =
+            let
+              penv = python.buildEnv.override {
+                extraLibs = [ bepasty gevent ];
+              };
+            in {
+              BEPASTY_CONFIG = "${server.workDir}/bepasty-${name}.conf";
+              PYTHONPATH = "${penv}/${python.sitePackages}/";
             };
-          in {
-            BEPASTY_CONFIG = "${server.workDir}/bepasty-${name}.conf";
-            PYTHONPATH= "${penv}/${python.sitePackages}/";
-          };
 
           serviceConfig = {
             Type = "simple";
@@ -169,7 +170,8 @@ in
     ) cfg.servers;
 
     users.users.${user} =
-      { uid = config.ids.uids.bepasty;
+      {
+        uid = config.ids.uids.bepasty;
         group = group;
         home = default_home;
       };

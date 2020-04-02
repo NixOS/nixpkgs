@@ -1,34 +1,77 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv
+, llvmPackages
+, gn
+, ninja
+, which
+, nodejs
+, fetchpatch
+, gnutar
 
-# default dependencies
-, bzip2, flac, speex, libopus
-, libevent, expat, libjpeg, snappy
-, libpng, libcap
-, xdg_utils, yasm, minizip, libwebp
-, libusb1, pciutils, nss, re2, zlib
+  # default dependencies
+, bzip2
+, flac
+, speex
+, libopus
+, libevent
+, expat
+, libjpeg
+, snappy
+, libpng
+, libcap
+, xdg_utils
+, yasm
+, minizip
+, libwebp
+, libusb1
+, pciutils
+, nss
+, re2
+, zlib
 
-, python2Packages, perl, pkgconfig, clang-tools
-, nspr, systemd, kerberos
-, utillinux, alsaLib
-, bison, gperf
-, glib, gtk3, dbus-glib
+, python2Packages
+, perl
+, pkgconfig
+, clang-tools
+, nspr
+, systemd
+, kerberos
+, utillinux
+, alsaLib
+, bison
+, gperf
+, glib
+, gtk3
+, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libGLU, libGL
-, protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
+, libXScrnSaver
+, libXcursor
+, libXtst
+, libGLU
+, libGL
+, protobuf
+, speechd
+, libXdamage
+, cups
+, ffmpeg
+, libxslt
+, libxml2
+, at-spi2-core
 , jre
 
-# optional dependencies
+  # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
 
-# package customization
+  # package customization
 , useVaapi ? false
-, gnomeSupport ? false, gnome ? null
-, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
+, gnomeSupport ? false
+, gnome ? null
+, gnomeKeyringSupport ? false
+, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
-, pulseSupport ? false, libpulseaudio ? null
+, pulseSupport ? false
+, libpulseaudio ? null
 
 , upstream-info
 }:
@@ -38,7 +81,6 @@ buildFun:
 with stdenv.lib;
 
 # see http://www.linuxfromscratch.org/blfs/view/cvs/xsoft/chromium.html
-
 let
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -53,7 +95,7 @@ let
     let
       # Serialize Nix types into GN types according to this document:
       # https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/language.md
-      mkGnString = value: "\"${escape ["\"" "$" "\\"] value}\"";
+      mkGnString = value: "\"${escape [ "\"" "$" "\\" ] value}\"";
       sanitize = value:
         if value == true then "true"
         else if value == false then "false"
@@ -65,13 +107,19 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    "flac"
+    "libwebp"
+    "libxslt"
+    "yasm"
+    "opus"
+    "snappy"
+    "libpng"
     # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
-                    # so we can't build with one from system and other from source
+    # so we can't build with one from system and other from source
   ];
 
   opusWithCustomModes = libopus.override {
@@ -79,14 +127,28 @@ let
   };
 
   defaultDependencies = [
-    bzip2 flac speex opusWithCustomModes
-    libevent expat libjpeg snappy
-    libpng libcap
-    xdg_utils yasm minizip libwebp
-    libusb1 re2 zlib
-    ffmpeg libxslt libxml2
+    bzip2
+    flac
+    speex
+    opusWithCustomModes
+    libevent
+    expat
+    libjpeg
+    snappy
+    libpng
+    libcap
+    xdg_utils
+    yasm
+    minizip
+    libwebp
+    libusb1
+    re2
+    zlib
+    ffmpeg
+    libxslt
+    libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
-               # so we can't build with one from system and other from source
+    # so we can't build with one from system and other from source
   ];
 
   # build paths and release info
@@ -96,13 +158,15 @@ let
   libExecPath = "$out/libexec/${packageName}";
 
   versionRange = min-version: upto-version:
-    let inherit (upstream-info) version;
-        result = versionAtLeast version min-version && versionOlder version upto-version;
-        stable-version = (import ./upstream-info.nix).stable.version;
-    in if versionAtLeast stable-version upto-version
-       then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
-            result
-       else result;
+    let
+      inherit (upstream-info) version;
+      result = versionAtLeast version min-version && versionOlder version upto-version;
+      stable-version = (import ./upstream-info.nix).stable.version;
+    in
+      if versionAtLeast stable-version upto-version
+      then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
+      result
+      else result;
 
   llvm-clang-tools = clang-tools.override { inherit llvmPackages; };
 
@@ -114,18 +178,39 @@ let
     src = upstream-info.main;
 
     nativeBuildInputs = [
-      ninja which python2Packages.python perl pkgconfig
-      python2Packages.ply python2Packages.jinja2 nodejs
+      ninja
+      which
+      python2Packages.python
+      perl
+      pkgconfig
+      python2Packages.ply
+      python2Packages.jinja2
+      nodejs
       gnutar
     ];
 
     buildInputs = defaultDependencies ++ [
-      nspr nss systemd
-      utillinux alsaLib
-      bison gperf kerberos
-      glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libGLU libGL
-      pciutils protobuf speechd libXdamage at-spi2-core
+      nspr
+      nss
+      systemd
+      utillinux
+      alsaLib
+      bison
+      gperf
+      kerberos
+      glib
+      gtk3
+      dbus-glib
+      libXScrnSaver
+      libXcursor
+      libXtst
+      libGLU
+      libGL
+      pciutils
+      protobuf
+      speechd
+      libXdamage
+      at-spi2-core
       jre
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
@@ -264,7 +349,7 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-    } // (extraAttrs.gnFlags or {}));
+    } // (extraAttrs.gnFlags or { }));
 
     configurePhase = ''
       runHook preConfigure
@@ -281,26 +366,27 @@ let
       runHook postConfigure
     '';
 
-    buildPhase = let
-      # Build paralelism: on Hydra the build was frequently running into memory
-      # exhaustion, and even other users might be running into similar issues.
-      # -j is halved to avoid memory problems, and -l is slightly increased
-      # so that the build gets slight preference before others
-      # (it will often be on "critical path" and at risk of timing out)
-      buildCommand = target: ''
-        ninja -C "${buildPath}"  \
-          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
-          "${target}"
-        (
-          source chrome/installer/linux/common/installer.include
-          PACKAGE=$packageName
-          MENUNAME="Chromium"
-          process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-        )
-      '';
-      targets = extraAttrs.buildTargets or [];
-      commands = map buildCommand targets;
-    in concatStringsSep "\n" commands;
+    buildPhase =
+      let
+        # Build paralelism: on Hydra the build was frequently running into memory
+        # exhaustion, and even other users might be running into similar issues.
+        # -j is halved to avoid memory problems, and -l is slightly increased
+        # so that the build gets slight preference before others
+        # (it will often be on "critical path" and at risk of timing out)
+        buildCommand = target: ''
+          ninja -C "${buildPath}"  \
+            -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
+            "${target}"
+          (
+            source chrome/installer/linux/common/installer.include
+            PACKAGE=$packageName
+            MENUNAME="Chromium"
+            process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
+          )
+        '';
+        targets = extraAttrs.buildTargets or [ ];
+        commands = map buildCommand targets;
+      in concatStringsSep "\n" commands;
 
     postFixup = ''
       # Make sure that libGLESv2 is found by dlopen (if using EGL).
@@ -310,7 +396,10 @@ let
     '';
   };
 
-# Remove some extraAttrs we supplied to the base attributes already.
-in stdenv.mkDerivation (base // removeAttrs extraAttrs [
-  "name" "gnFlags" "buildTargets"
+  # Remove some extraAttrs we supplied to the base attributes already.
+in
+stdenv.mkDerivation (base // removeAttrs extraAttrs [
+  "name"
+  "gnFlags"
+  "buildTargets"
 ])

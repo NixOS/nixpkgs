@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pidgin } :
+{ stdenv, fetchurl, pidgin }:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-window-merge";

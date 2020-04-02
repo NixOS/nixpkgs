@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.gitlab-runner;
   configFile =
@@ -49,20 +48,22 @@ in
       type = types.attrs;
       example = {
         concurrent = 2;
-        runners = [{
-          name = "docker-nix-1.11";
-          url = "https://CI/";
-          token = "TOKEN";
-          executor = "docker";
-          builds_dir = "";
-          docker = {
-            host = "";
-            image = "nixos/nix:1.11";
-            privileged = true;
-            disable_cache = true;
-            cache_dir = "";
-          };
-        }];
+        runners = [
+          {
+            name = "docker-nix-1.11";
+            url = "https://CI/";
+            token = "TOKEN";
+            executor = "docker";
+            builds_dir = "";
+            docker = {
+              host = "";
+              image = "nixos/nix:1.11";
+              privileged = true;
+              disable_cache = true;
+              cache_dir = "";
+            };
+          }
+        ];
       };
     };
 

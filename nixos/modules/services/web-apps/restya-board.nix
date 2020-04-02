@@ -6,7 +6,6 @@ with lib;
 #imagick
 #php-geoip -> php.ini: extension = geoip.so
 #expat
-
 let
   cfg = config.services.restya-board;
   fpm = config.services.phpfpm.pools.${poolName};
@@ -14,9 +13,7 @@ let
   runDir = "/run/restya-board";
 
   poolName = "restya-board";
-
 in
-
 {
 
   ###### interface
@@ -186,11 +183,11 @@ in
           date.timezone = "CET"
 
           ${optionalString (cfg.email.server != null) ''
-            SMTP = ${cfg.email.server}
-            smtp_port = ${toString cfg.email.port}
-            auth_username = ${cfg.email.login}
-            auth_password = ${cfg.email.password}
-          ''}
+          SMTP = ${cfg.email.server}
+          smtp_port = ${toString cfg.email.port}
+          auth_username = ${cfg.email.login}
+          auth_password = ${cfg.email.password}
+        ''}
         '';
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
@@ -280,13 +277,14 @@ in
 
         sed -i "s@^php@${config.services.phpfpm.phpPackage}/bin/php@" "${runDir}/server/php/shell/"*.sh
 
-        ${if (cfg.database.host == null) then ''
-          sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', 'localhost');/g" "${runDir}/server/php/config.inc.php"
-          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', 'restya');/g" "${runDir}/server/php/config.inc.php"
-        '' else ''
-          sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', '${cfg.database.host}');/g" "${runDir}/server/php/config.inc.php"
-          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'file_get_contents(${cfg.database.passwordFile})'"});/g" "${runDir}/server/php/config.inc.php
-        ''}
+        ${
+          if (cfg.database.host == null) then ''
+            sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', 'localhost');/g" "${runDir}/server/php/config.inc.php"
+            sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', 'restya');/g" "${runDir}/server/php/config.inc.php"
+          '' else ''
+            sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', '${cfg.database.host}');/g" "${runDir}/server/php/config.inc.php"
+            sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'file_get_contents(${cfg.database.passwordFile})'"});/g" "${runDir}/server/php/config.inc.php
+          ''}
         sed -i "s/^.*'R_DB_PORT'.*$/define('R_DB_PORT', '${toString cfg.database.port}');/g" "${runDir}/server/php/config.inc.php"
         sed -i "s/^.*'R_DB_NAME'.*$/define('R_DB_NAME', '${cfg.database.name}');/g" "${runDir}/server/php/config.inc.php"
         sed -i "s/^.*'R_DB_USER'.*$/define('R_DB_USER', '${cfg.database.user}');/g" "${runDir}/server/php/config.inc.php"
@@ -310,22 +308,22 @@ in
         chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/client/img"
 
         ${optionalString (cfg.database.host == null) ''
-          if ! [ -e "${cfg.dataDir}/.db-initialized" ]; then
-            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
-              ${config.services.postgresql.package}/bin/psql -U ${config.services.postgresql.superUser} \
-              -c "CREATE USER ${cfg.database.user} WITH ENCRYPTED PASSWORD 'restya'"
+        if ! [ -e "${cfg.dataDir}/.db-initialized" ]; then
+          ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
+            ${config.services.postgresql.package}/bin/psql -U ${config.services.postgresql.superUser} \
+            -c "CREATE USER ${cfg.database.user} WITH ENCRYPTED PASSWORD 'restya'"
 
-            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
-              ${config.services.postgresql.package}/bin/psql -U ${config.services.postgresql.superUser} \
-              -c "CREATE DATABASE ${cfg.database.name} OWNER ${cfg.database.user} ENCODING 'UTF8' TEMPLATE template0"
+          ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
+            ${config.services.postgresql.package}/bin/psql -U ${config.services.postgresql.superUser} \
+            -c "CREATE DATABASE ${cfg.database.name} OWNER ${cfg.database.user} ENCODING 'UTF8' TEMPLATE template0"
 
-            ${pkgs.sudo}/bin/sudo -u ${cfg.user} \
-              ${config.services.postgresql.package}/bin/psql -U ${cfg.database.user} \
-              -d ${cfg.database.name} -f "${runDir}/sql/restyaboard_with_empty_data.sql"
+          ${pkgs.sudo}/bin/sudo -u ${cfg.user} \
+            ${config.services.postgresql.package}/bin/psql -U ${cfg.database.user} \
+            -d ${cfg.database.name} -f "${runDir}/sql/restyaboard_with_empty_data.sql"
 
-            touch "${cfg.dataDir}/.db-initialized"
-          fi
-        ''}
+          touch "${cfg.dataDir}/.db-initialized"
+        fi
+      ''}
       '';
     };
 
@@ -361,9 +359,9 @@ in
       isSystemUser = true;
       createHome = false;
       home = runDir;
-      group  = "restya-board";
+      group = "restya-board";
     };
-    users.groups.restya-board = {};
+    users.groups.restya-board = { };
 
     services.postgresql.enable = mkIf (cfg.database.host == null) true;
 
@@ -380,4 +378,3 @@ in
   };
 
 }
-

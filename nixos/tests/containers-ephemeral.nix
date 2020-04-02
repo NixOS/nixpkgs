@@ -1,6 +1,6 @@
 # Test for NixOS' container support.
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "containers-ephemeral";
 
   machine = { pkgs, ... }: {
@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         services.nginx = {
           enable = true;
           virtualHosts.localhost = {
-            root = pkgs.runCommand "localhost" {} ''
+            root = pkgs.runCommand "localhost" { } ''
               mkdir "$out"
               echo hello world > "$out/index.html"
             '';

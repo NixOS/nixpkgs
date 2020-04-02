@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, libX11, libXcomposite, libXft, libXmu, libXrandr, libXext, libXScrnSaver
-, pam, apacheHttpd, imagemagick, pamtester, xscreensaver, xset }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, libX11
+, libXcomposite
+, libXft
+, libXmu
+, libXrandr
+, libXext
+, libXScrnSaver
+, pam
+, apacheHttpd
+, imagemagick
+, pamtester
+, xscreensaver
+, xset
+}:
 
 stdenv.mkDerivation rec {
   pname = "xsecurelock";
@@ -14,11 +30,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook
+    pkgconfig
   ];
   buildInputs = [
-    libX11 libXcomposite libXft libXmu libXrandr libXext libXScrnSaver
-    pam apacheHttpd imagemagick pamtester
+    libX11
+    libXcomposite
+    libXft
+    libXmu
+    libXrandr
+    libXext
+    libXScrnSaver
+    pam
+    apacheHttpd
+    imagemagick
+    pamtester
   ];
 
   configureFlags = [

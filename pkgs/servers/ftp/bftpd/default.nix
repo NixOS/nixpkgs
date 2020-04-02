@@ -1,9 +1,8 @@
 { stdenv, fetchurl }:
-
 let
   pname = "bftpd";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "5.4";
 

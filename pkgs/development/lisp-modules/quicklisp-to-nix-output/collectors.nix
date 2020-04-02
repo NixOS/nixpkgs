@@ -17,7 +17,7 @@ rec {
 
   packageName = "collectors";
 
-  asdFilesToKeep = ["collectors.asd"];
+  asdFilesToKeep = [ "collectors.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM collectors DESCRIPTION

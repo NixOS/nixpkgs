@@ -1,9 +1,8 @@
 { stdenv, fetchurl, gfortran, perl }:
-
 let
   version = "4.3.4";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libxc";
   inherit version;
   src = fetchurl {

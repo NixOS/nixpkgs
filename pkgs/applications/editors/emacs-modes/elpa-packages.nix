@@ -12,11 +12,11 @@ To update the list of packages from MELPA,
 
 { lib, stdenv, texinfo }:
 
-self: let
-
+self:
+let
   markBroken = pkg: pkg.override {
     elpaBuild = args: self.elpaBuild (args // {
-      meta = (args.meta or {}) // { broken = true; };
+      meta = (args.meta or { }) // { broken = true; };
     });
   };
 
@@ -25,28 +25,28 @@ self: let
     inherit (self) emacs;
   };
 
-  generateElpa = lib.makeOverridable ({
-    generated ? ./elpa-generated.nix
-  }: let
+  generateElpa = lib.makeOverridable ({ generated ? ./elpa-generated.nix
+                                      }:
+    let
+      imported = import generated {
+        inherit (self) callPackage;
+      };
 
-    imported = import generated {
-      inherit (self) callPackage;
-    };
+      super = removeAttrs imported [ "dash" ];
 
-    super = removeAttrs imported [ "dash" ];
+      overrides = {
+        rcirc-menu = markBroken super.rcirc-menu; # Missing file header
+        cl-lib = null; # builtin
+        tle = null; # builtin
+        advice = null; # builtin
+        seq =
+          if lib.versionAtLeast self.emacs.version "27"
+          then null
+          else super.seq;
+      };
 
-    overrides = {
-      rcirc-menu = markBroken super.rcirc-menu; # Missing file header
-      cl-lib = null; # builtin
-      tle = null; # builtin
-      advice = null; # builtin
-      seq = if lib.versionAtLeast self.emacs.version "27"
-            then null
-            else super.seq;
-    };
-
-    elpaPackages = super // overrides;
-
-  in elpaPackages // { inherit elpaBuild; });
-
-in generateElpa { }
+      elpaPackages = super // overrides;
+    in elpaPackages // { inherit elpaBuild; }
+  );
+in
+generateElpa { }

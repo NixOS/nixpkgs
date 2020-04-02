@@ -1,12 +1,18 @@
-{ stdenv, rustPlatform, fetchFromGitHub
-, pkgconfig, openssl
-, Security, CoreServices
-, dbBackend ? "sqlite", libmysqlclient, postgresql }:
-
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkgconfig
+, openssl
+, Security
+, CoreServices
+, dbBackend ? "sqlite"
+, libmysqlclient
+, postgresql
+}:
 let
   featuresFlag = "--features ${dbBackend}";
-
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "bitwarden_rs";
   version = "1.14";
 

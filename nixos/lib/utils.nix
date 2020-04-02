@@ -3,18 +3,16 @@ pkgs: with pkgs.lib;
 rec {
 
   # Check whenever fileSystem is needed for boot
-  fsNeededForBoot = fs: fs.neededForBoot
-                     || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
+  fsNeededForBoot = fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
 
   # Check whenever `b` depends on `a` as a fileSystem
-  fsBefore = a: b: a.mountPoint == b.device
-                || hasPrefix "${a.mountPoint}${optionalString (!(hasSuffix "/" a.mountPoint)) "/"}" b.mountPoint;
+  fsBefore = a: b: a.mountPoint == b.device || hasPrefix "${a.mountPoint}${optionalString (!(hasSuffix "/" a.mountPoint)) "/"}" b.mountPoint;
 
   # Escape a path according to the systemd rules, e.g. /dev/xyzzy
   # becomes dev-xyzzy.  FIXME: slow.
   escapeSystemdPath = s:
-   replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-   (removePrefix "/" s);
+    replaceChars [ "/" "-" " " ] [ "-" "\\x2d" "\\x20" ]
+      (removePrefix "/" s);
 
   # Returns a system path for a given shell package
   toShellPath = shell:
@@ -57,7 +55,7 @@ rec {
         else if isList item then
           imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
         else
-          [];
+          [ ];
     in listToAttrs (flatten (recurse "" item));
 
   /* Takes an attrset and a file path and generates a bash snippet that
@@ -120,18 +118,13 @@ rec {
       if [[ -h '${output}' ]]; then
         rm '${output}'
       fi
-    ''
-    + concatStringsSep
-        "\n"
-        (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
-               (attrNames secrets))
-    + "\n"
-    + "${pkgs.jq}/bin/jq >'${output}' '"
-    + concatStringsSep
+    '' + concatStringsSep
+      "\n"
+      (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
+        (attrNames secrets)) + "\n" + "${pkgs.jq}/bin/jq >'${output}' '" + concatStringsSep
       " | "
       (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets))
-    + ''
+        (attrNames secrets)) + ''
       ' <<'EOF'
       ${builtins.toJSON set}
       EOF

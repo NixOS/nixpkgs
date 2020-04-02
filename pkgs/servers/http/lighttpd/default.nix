@@ -1,9 +1,25 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
-, openssl, enableMagnet ? false, lua5_1 ? null
-, enableMysql ? false, libmysqlclient ? null
-, enableLdap ? false, openldap ? null
-, enableWebDAV ? false, sqlite ? null, libuuid ? null
-, enableExtendedAttrs ? false, attr ? null
+{ stdenv
+, buildPackages
+, fetchurl
+, pkgconfig
+, pcre
+, libxml2
+, zlib
+, bzip2
+, which
+, file
+, openssl
+, enableMagnet ? false
+, lua5_1 ? null
+, enableMysql ? false
+, libmysqlclient ? null
+, enableLdap ? false
+, openldap ? null
+, enableWebDAV ? false
+, sqlite ? null
+, libuuid ? null
+, enableExtendedAttrs ? false
+, attr ? null
 , perl
 }:
 
@@ -32,19 +48,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
-             ++ stdenv.lib.optional enableMagnet lua5_1
-             ++ stdenv.lib.optional enableMysql libmysqlclient
-             ++ stdenv.lib.optional enableLdap openldap
-             ++ stdenv.lib.optional enableWebDAV sqlite
-             ++ stdenv.lib.optional enableWebDAV libuuid;
+    ++ stdenv.lib.optional enableMagnet lua5_1
+    ++ stdenv.lib.optional enableMysql libmysqlclient
+    ++ stdenv.lib.optional enableLdap openldap
+    ++ stdenv.lib.optional enableWebDAV sqlite
+    ++ stdenv.lib.optional enableWebDAV libuuid;
 
   configureFlags = [ "--with-openssl" ]
-                ++ stdenv.lib.optional enableMagnet "--with-lua"
-                ++ stdenv.lib.optional enableMysql "--with-mysql"
-                ++ stdenv.lib.optional enableLdap "--with-ldap"
-                ++ stdenv.lib.optional enableWebDAV "--with-webdav-props"
-                ++ stdenv.lib.optional enableWebDAV "--with-webdav-locks"
-                ++ stdenv.lib.optional enableExtendedAttrs "--with-attr";
+    ++ stdenv.lib.optional enableMagnet "--with-lua"
+    ++ stdenv.lib.optional enableMysql "--with-mysql"
+    ++ stdenv.lib.optional enableLdap "--with-ldap"
+    ++ stdenv.lib.optional enableWebDAV "--with-webdav-props"
+    ++ stdenv.lib.optional enableWebDAV "--with-webdav-locks"
+    ++ stdenv.lib.optional enableExtendedAttrs "--with-attr";
 
   preConfigure = ''
     export PATH=$PATH:${pcre.dev}/bin

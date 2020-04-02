@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi,
-  marshmallow, sqlalchemy
+{ lib
+, buildPythonPackage
+, fetchPypi
+, marshmallow
+, sqlalchemy
 }:
 
 buildPythonPackage rec {

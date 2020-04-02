@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   bits = if stdenv.is64bit then "64" else "32";
   platform =
     if (stdenv.isAarch32 || stdenv.isAarch64) then "raspberry" else
-    if stdenv.isLinux then "linux" else
-    if stdenv.isDarwin then "darwin" else
-    "unknown";
+      if stdenv.isLinux then "linux" else
+        if stdenv.isDarwin then "darwin" else
+          "unknown";
 
   doCheck = true;
 

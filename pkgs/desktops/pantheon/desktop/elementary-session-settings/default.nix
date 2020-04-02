@@ -17,9 +17,7 @@
 , ninja
 , git
 }:
-
 let
-
   #
   # ─── ENSURES PLANK GETS ELEMENTARY'S DEFAULT DOCKITEMS ────────────────────────────
   #
@@ -64,9 +62,7 @@ let
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
     exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
   '';
-
 in
-
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
   version = "5.0.3";

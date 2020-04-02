@@ -1,10 +1,15 @@
-{ stdenv, fetchFromGitHub
-, SDL2, libpng, libjpeg, glew, openal, scons, libmad
+{ stdenv
+, fetchFromGitHub
+, SDL2
+, libpng
+, libjpeg
+, glew
+, openal
+, scons
+, libmad
 }:
-
 let
   version = "0.9.10";
-
 in
 stdenv.mkDerivation {
   pname = "endless-sky";
@@ -20,7 +25,13 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildInputs = [
-    SDL2 libpng libjpeg glew openal scons libmad
+    SDL2
+    libpng
+    libjpeg
+    glew
+    openal
+    scons
+    libmad
   ];
 
   prefixKey = "PREFIX=";
@@ -33,7 +44,10 @@ stdenv.mkDerivation {
     description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
     homepage = https://endless-sky.github.io/;
     license = with licenses; [
-      gpl3Plus cc-by-sa-30 cc-by-sa-40 publicDomain
+      gpl3Plus
+      cc-by-sa-30
+      cc-by-sa-40
+      publicDomain
     ];
     maintainers = with maintainers; [ lheckemann ];
     platforms = platforms.linux; # Maybe other non-darwin Unix

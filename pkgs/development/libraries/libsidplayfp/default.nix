@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, pkgconfig
-, docSupport ? true, doxygen ? null, graphviz ? null }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, docSupport ? true
+, doxygen ? null
+, graphviz ? null
+}:
 
 assert docSupport -> doxygen != null && graphviz != null;
 

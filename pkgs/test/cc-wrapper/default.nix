@@ -4,9 +4,9 @@ let
   # Sanitizers are not supported on Darwin.
   # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
   sanitizersWorking =
-       (stdenv.cc.isClang && versionAtLeast (getVersion stdenv.cc.name) "5.0.0")
-    || (stdenv.cc.isGNU && stdenv.isLinux);
-in stdenv.mkDerivation {
+    (stdenv.cc.isClang && versionAtLeast (getVersion stdenv.cc.name) "5.0.0") || (stdenv.cc.isGNU && stdenv.isLinux);
+in
+stdenv.mkDerivation {
   name = "cc-wrapper-test";
 
   buildCommand = ''
@@ -22,11 +22,11 @@ in stdenv.mkDerivation {
     ./cxx-check
 
     ${optionalString (stdenv.isDarwin && stdenv.cc.isClang) ''
-      printf "checking whether compiler can build with CoreFoundation.framework... " >&2
-      mkdir -p foo/lib
-      $CC -framework CoreFoundation -o core-foundation-check ${./core-foundation-main.c}
-      ./core-foundation-check
-    ''}
+    printf "checking whether compiler can build with CoreFoundation.framework... " >&2
+    mkdir -p foo/lib
+    $CC -framework CoreFoundation -o core-foundation-check ${./core-foundation-main.c}
+    ./core-foundation-check
+  ''}
 
     printf "checking whether compiler uses NIX_CFLAGS_COMPILE... " >&2
     mkdir -p foo/include
@@ -46,10 +46,10 @@ in stdenv.mkDerivation {
     ./ldflags-check
 
     ${optionalString sanitizersWorking ''
-      printf "checking whether sanitizers are fully functional... ">&2
-      $CC -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
-      ./sanitizers
-    ''}
+    printf "checking whether sanitizers are fully functional... ">&2
+    $CC -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
+    ./sanitizers
+  ''}
 
     touch $out
   '';

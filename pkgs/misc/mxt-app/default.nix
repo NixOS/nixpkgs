@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libtool }:
 
 stdenv.mkDerivation rec{
-  version="1.28";
+  version = "1.28";
   pname = "mxt-app";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec{
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libtool ];
- 
+
   hardeningDisable = [ "fortify" ];
 
   meta = with stdenv.lib; {

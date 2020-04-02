@@ -11,8 +11,16 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = with python2Packages;
-    [ python2 makeWrapper tornado requests dateutil
-      vobject gdata caldavclientlibrary-asynk ];
+    [
+      python2
+      makeWrapper
+      tornado
+      requests
+      dateutil
+      vobject
+      gdata
+      caldavclientlibrary-asynk
+    ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib

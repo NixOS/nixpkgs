@@ -1,10 +1,28 @@
-{ stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
-, libjack2, libsndfile, libXdmcp, readline, lv2, libGLU, libGL, minixml, pkgconfig, zlib, xorg
+{ stdenv
+, fetchurl
+, alsaLib
+, boost
+, cairo
+, cmake
+, fftwSinglePrec
+, fltk
+, pcre
+, libjack2
+, libsndfile
+, libXdmcp
+, readline
+, lv2
+, libGLU
+, libGL
+, minixml
+, pkgconfig
+, zlib
+, xorg
 }:
 
 assert stdenv ? glibc;
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "yoshimi";
   version = "1.7.0.1";
 
@@ -14,8 +32,22 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 libGLU libGL
-    minixml zlib xorg.libpthreadstubs pcre
+    alsaLib
+    boost
+    cairo
+    fftwSinglePrec
+    fltk
+    libjack2
+    libsndfile
+    libXdmcp
+    readline
+    lv2
+    libGLU
+    libGL
+    minixml
+    zlib
+    xorg.libpthreadstubs
+    pcre
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];

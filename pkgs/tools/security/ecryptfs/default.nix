@@ -1,5 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, perl, utillinux, keyutils, nss, nspr, python2, pam
-, intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, perl
+, utillinux
+, keyutils
+, nss
+, nspr
+, python2
+, pam
+, intltool
+, makeWrapper
+, coreutils
+, bash
+, gettext
+, cryptsetup
+, lvm2
+, rsync
+, which
+, lsof
+}:
 
 stdenv.mkDerivation rec {
   pname = "ecryptfs";
@@ -53,8 +72,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Enterprise-class stacked cryptographic filesystem";
-    license     = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ obadz ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

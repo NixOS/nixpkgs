@@ -1,6 +1,8 @@
 { stdenv, cleanPackaging, fetchurl }:
-let lib = stdenv.lib;
-in {
+let
+  lib = stdenv.lib;
+in
+{
   # : string
   pname
   # : string
@@ -22,14 +24,12 @@ in {
   # : lines
 , postFixup ? ""
   # : list Maintainer
-, maintainers ? []
+, maintainers ? [ ]
   # : attrs
-, meta ? {}
+, meta ? { }
 , ...
 } @ args:
-
 let
-
   # File globs that can always be deleted
   commonNoiseFiles = [
     ".gitignore"
@@ -52,8 +52,8 @@ let
     "README"
     "README.*"
   ];
-
-in stdenv.mkDerivation ({
+in
+stdenv.mkDerivation ({
   src = fetchurl {
     url = "https://skarnet.org/software/${pname}/${pname}-${version}.tar.gz";
     inherit sha256;
@@ -64,7 +64,8 @@ in stdenv.mkDerivation ({
 
   configureFlags = configureFlags ++ [
     "--enable-absolute-paths"
-    (if stdenv.isDarwin
+    (
+      if stdenv.isDarwin
       then "--disable-shared"
       else "--enable-shared")
   ]
@@ -74,15 +75,15 @@ in stdenv.mkDerivation ({
     # binary built on a different version of darwin.
     # http://www.skarnet.org/cgi-bin/archive.cgi?1:mss:623:heiodchokfjdkonfhdph
     ++ (lib.optional stdenv.isDarwin
-         "--build=${stdenv.hostPlatform.system}");
+    "--build=${stdenv.hostPlatform.system}");
 
   # TODO(Profpatsch): ensure that there is always a $doc output!
   postInstall = ''
     echo "Cleaning & moving common files"
     ${cleanPackaging.commonFileActions {
-       noiseFiles = commonNoiseFiles;
-       docFiles = commonMetaFiles;
-     }} $doc/share/doc/${pname}
+      noiseFiles = commonNoiseFiles;
+      docFiles = commonMetaFiles;
+    }} $doc/share/doc/${pname}
   '' + postInstall;
 
   postFixup = ''
@@ -98,6 +99,12 @@ in stdenv.mkDerivation ({
   } // meta;
 
 } // builtins.removeAttrs args [
-  "sha256" "configureFlags" "postInstall" "postFixup"
-  "meta" "description" "platforms"  "maintainers"
+  "sha256"
+  "configureFlags"
+  "postInstall"
+  "postFixup"
+  "meta"
+  "description"
+  "platforms"
+  "maintainers"
 ])

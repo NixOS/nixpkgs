@@ -3,14 +3,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.virtualisation.docker;
   proxy_env = config.networking.proxy.envVars;
-
 in
-
 {
   ###### interface
 
@@ -31,7 +27,7 @@ in
     listenOptions =
       mkOption {
         type = types.listOf types.str;
-        default = ["/run/docker.sock"];
+        default = [ "/run/docker.sock" ];
         description =
           ''
             A list of unix and tcp docker should listen to. The format follows
@@ -74,7 +70,7 @@ in
 
     storageDriver =
       mkOption {
-        type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs"]);
+        type = types.nullOr (types.enum [ "aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs" ]);
         default = null;
         description =
           ''
@@ -85,7 +81,7 @@ in
 
     logDriver =
       mkOption {
-        type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs"];
+        type = types.enum [ "none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs" ];
         default = "journald";
         description =
           ''
@@ -117,7 +113,7 @@ in
 
       flags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "--all" ];
         description = ''
           Any additional flags passed to <command>docker system prune</command>.
@@ -148,7 +144,8 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [{
+  config = mkIf cfg.enable (mkMerge [
+    {
       environment.systemPackages = [ cfg.package ]
         ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       users.groups.docker.gid = config.ids.gids.docker;
@@ -169,8 +166,9 @@ in
                 ${optionalString cfg.liveRestore "--live-restore" } \
                 ${optionalString cfg.enableNvidia "--add-runtime nvidia=${pkgs.nvidia-docker}/bin/nvidia-container-runtime" } \
                 ${cfg.extraOptions}
-            ''];
-          ExecReload=[
+            ''
+          ];
+          ExecReload = [
             ""
             "${pkgs.procps}/bin/kill -s HUP $MAINPID"
           ];
@@ -207,9 +205,11 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
+        {
+          assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
           message = "Option enableNvidia requires 32bit support libraries";
-        }];
+        }
+      ];
     }
     (mkIf cfg.enableNvidia {
       environment.etc."nvidia-container-runtime/config.toml".source = "${pkgs.nvidia-docker}/etc/config.toml";
@@ -217,7 +217,7 @@ in
   ]);
 
   imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed in favor of starting docker at boot")
+    (mkRemovedOptionModule [ "virtualisation" "docker" "socketActivation" ] "This option was removed in favor of starting docker at boot")
   ];
 
 }

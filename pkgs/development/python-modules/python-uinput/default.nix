@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, udev }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, udev
+}:
 
 buildPythonPackage rec {
   pname = "python-uinput";

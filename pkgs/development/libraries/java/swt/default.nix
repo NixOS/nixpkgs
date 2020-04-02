@@ -1,24 +1,44 @@
-{ stdenv, lib, fetchurl, unzip, jdk, pkgconfig, gtk2
-, libXt, libXtst, libXi, libGLU, libGL, webkitgtk, libsoup, xorg
-, pango, gdk-pixbuf, glib
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, jdk
+, pkgconfig
+, gtk2
+, libXt
+, libXtst
+, libXi
+, libGLU
+, libGL
+, webkitgtk
+, libsoup
+, xorg
+, pango
+, gdk-pixbuf
+, glib
 }:
-
 let
   platformMap = {
     x86_64-linux =
-      { platform = "gtk-linux-x86_64";
-        sha256 = "1qq0pjll6030v4ml0hifcaaik7sx3fl7ghybfdw95vsvxafwp2ff"; };
+      {
+        platform = "gtk-linux-x86_64";
+        sha256 = "1qq0pjll6030v4ml0hifcaaik7sx3fl7ghybfdw95vsvxafwp2ff";
+      };
     i686-linux =
-      { platform = "gtk-linux-x86";
-        sha256 = "03mhzraikcs4fsz7d3h5af9pw1bbcfd6dglsvbk2ciwimy9zj30q"; };
+      {
+        platform = "gtk-linux-x86";
+        sha256 = "03mhzraikcs4fsz7d3h5af9pw1bbcfd6dglsvbk2ciwimy9zj30q";
+      };
     x86_64-darwin =
-      { platform = "cocoa-macosx-x86_64";
-        sha256 = "00k1mfbncvyh8klgmk0891w8jwnd5niqb16j1j8yacrm2smmlb05"; };
+      {
+        platform = "cocoa-macosx-x86_64";
+        sha256 = "00k1mfbncvyh8klgmk0891w8jwnd5niqb16j1j8yacrm2smmlb05";
+      };
   };
 
   metadata = assert platformMap ? ${stdenv.hostPlatform.system}; platformMap.${stdenv.hostPlatform.system};
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "4.5";
   fullVersion = "${version}-201506032000";
   pname = "swt";
@@ -38,8 +58,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip pkgconfig ];
   buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU libGL webkitgtk libsoup ];
 
-  NIX_LFLAGS = toString (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) +
-    " -lX11 -lpango-1.0 -lgdk_pixbuf-2.0 -lglib-2.0";
+  NIX_LFLAGS = toString (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) + " -lX11 -lpango-1.0 -lgdk_pixbuf-2.0 -lglib-2.0";
 
   buildPhase = ''
     unzip src.zip -d src

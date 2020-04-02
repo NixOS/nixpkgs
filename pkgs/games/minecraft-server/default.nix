@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   version = "1.15.2";
 
   src = fetchurl {
-    url    = "https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar";
+    url = "https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar";
     sha256 = "12kynrpxgcdg8x12wcvwkxka0fxgm5siqg8qq0nnmv0443f8dkw0";
   };
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Minecraft Server";
-    homepage    = "https://minecraft.net";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice tomberek costrouc];
+    homepage = "https://minecraft.net";
+    license = stdenv.lib.licenses.unfreeRedistributable;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice tomberek costrouc ];
   };
 }

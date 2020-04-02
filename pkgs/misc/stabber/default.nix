@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, expat
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, glib
+, expat
 , libmicrohttpd
 }:
 

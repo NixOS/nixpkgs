@@ -1,6 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, libusb1, rtl-sdr, fftw
-} :
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, libusb1
+, rtl-sdr
+, fftw
+}:
 
 stdenv.mkDerivation {
   pname = "dabtools";
@@ -24,4 +29,3 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.markuskowa ];
   };
 }
-

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake4Hook , qt4, libX11, libXext }:
+{ stdenv, fetchFromGitHub, qmake4Hook, qt4, libX11, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum-qt4";

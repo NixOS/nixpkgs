@@ -1,5 +1,4 @@
-{stdenv, fetchurl, unzip, makeWrapper}:
-
+{ stdenv, fetchurl, unzip, makeWrapper }:
 let
   # Gradle is a build system that bootstraps itself. This is what it actually
   # downloads in the bootstrap phase.
@@ -54,15 +53,16 @@ let
 in
 stdenv.mkDerivation {
   name = "mobilesdk-7.5.1.GA";
-  src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = https://builds.appcelerator.com/mobile/7_5_X/mobilesdk-7.5.1.v20190124152315-linux.zip;
-    sha256 = "1ihyh6szl9a2gbdgv13msd3g7i3xi9ifmgsh6v562hqlfi4lixng";
-  }
-  else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = https://builds.appcelerator.com/mobile/7_5_X/mobilesdk-7.5.1.v20190124152315-osx.zip;
-    sha256 = "1whs1j7fkk2hxr4nxq50d7ic5wj83b1i1jl0p722sqbvkmgxssa2";
-  }
-  else throw "Platform: ${stdenv.system} not supported!";
+  src =
+    if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
+      url = https://builds.appcelerator.com/mobile/7_5_X/mobilesdk-7.5.1.v20190124152315-linux.zip;
+      sha256 = "1ihyh6szl9a2gbdgv13msd3g7i3xi9ifmgsh6v562hqlfi4lixng";
+    }
+    else if stdenv.system == "x86_64-darwin" then fetchurl {
+      url = https://builds.appcelerator.com/mobile/7_5_X/mobilesdk-7.5.1.v20190124152315-osx.zip;
+      sha256 = "1whs1j7fkk2hxr4nxq50d7ic5wj83b1i1jl0p722sqbvkmgxssa2";
+    }
+    else throw "Platform: ${stdenv.system} not supported!";
 
   buildInputs = [ unzip makeWrapper ];
 
@@ -94,14 +94,15 @@ stdenv.mkDerivation {
 
     # Patch some executables
 
-    ${if stdenv.system == "i686-linux" then
-      ''
-        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 android/titanium_prep.linux32
-      ''
+    ${
+      if stdenv.system == "i686-linux" then
+          ''
+            patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 android/titanium_prep.linux32
+          ''
       else if stdenv.system == "x86_64-linux" then
-      ''
-        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 android/titanium_prep.linux64
-      ''
+          ''
+            patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 android/titanium_prep.linux64
+          ''
       else ""}
   '';
 }

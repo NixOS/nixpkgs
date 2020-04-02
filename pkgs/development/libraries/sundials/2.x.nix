@@ -2,17 +2,18 @@
 , cmake
 , fetchurl
 , python
-# GNU Octave needs KLU for ODE solvers
+  # GNU Octave needs KLU for ODE solvers
 , suitesparse
 , liblapack
 , gfortran
-, lapackSupport ? true }:
-
-let liblapackShared = liblapack.override {
-  shared = true;
-};
-
-in stdenv.mkDerivation rec {
+, lapackSupport ? true
+}:
+let
+  liblapackShared = liblapack.override {
+    shared = true;
+  };
+in
+stdenv.mkDerivation rec {
   pname = "sundials";
   version = "2.7.0";
 
@@ -53,9 +54,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Suite of nonlinear differential/algebraic equation solvers";
-    homepage    = https://computation.llnl.gov/projects/sundials;
-    platforms   = platforms.all;
+    homepage = https://computation.llnl.gov/projects/sundials;
+    platforms = platforms.all;
     maintainers = with maintainers; [ flokli idontgetoutmuch ];
-    license     = licenses.bsd3;
+    license = licenses.bsd3;
   };
 }

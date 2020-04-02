@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, autoPatchelfHook
-, zlib, expat, dbus, openssl, python3 }:
+{ stdenv
+, fetchurl
+, autoPatchelfHook
+, zlib
+, expat
+, dbus
+, openssl
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "sourcetrail";

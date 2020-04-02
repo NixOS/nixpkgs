@@ -1,9 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "2.1.48";
-
-in fetchzip {
+in
+fetchzip {
   name = "mailcap-${version}";
 
   url = "https://releases.pagure.org/mailcap/mailcap-${version}.tar.xz";

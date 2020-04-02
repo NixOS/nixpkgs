@@ -1,7 +1,6 @@
 { config, lib, pkgs, options }:
 
 with lib;
-
 let
   cfg = config.services.prometheus.exporters.json;
 in
@@ -20,7 +19,7 @@ in
         Path to configuration file.
       '';
     };
-    listenAddress = {}; # not used
+    listenAddress = { }; # not used
   };
   serviceOpts = {
     serviceConfig = {

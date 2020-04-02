@@ -22,11 +22,12 @@ stdenv.mkDerivation rec {
 
   # Hack to be able to run the test, broken because we use
   # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preBuild = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="`pwd`/src/lib_json''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-  '' else ''
-    export LD_LIBRARY_PATH="`pwd`/src/lib_json''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
+  preBuild =
+    if stdenv.isDarwin then ''
+      export DYLD_LIBRARY_PATH="`pwd`/src/lib_json''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+    '' else ''
+      export LD_LIBRARY_PATH="`pwd`/src/lib_json''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    '';
 
   nativeBuildInputs = [ cmake python ];
 
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/open-source-parsers/jsoncpp/commit/9093358efae9e5981aa60013487fc7215f040a59.patch";
       sha256 = "1wiqp70sck2md14sfc0zdkblqk9750cl55ykf9d6b9vs1ifzzzq5";
-     })
+    })
   ];
 
   cmakeFlags = [

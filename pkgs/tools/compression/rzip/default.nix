@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, bzip2}:
+{ stdenv, fetchurl, fetchpatch, bzip2 }:
 
 stdenv.mkDerivation {
   name = "rzip-2.1";

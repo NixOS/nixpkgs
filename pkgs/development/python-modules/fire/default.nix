@@ -1,5 +1,16 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
-, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, six
+, hypothesis
+, mock
+, python-Levenshtein
+, pytest
+, termcolor
+, isPy27
+, enum34
+}:
 
 buildPythonPackage rec {
   pname = "fire";

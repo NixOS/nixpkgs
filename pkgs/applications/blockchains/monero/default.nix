@@ -1,9 +1,23 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig
-, boost, miniupnpc, openssl, unbound, cppzmq
-, zeromq, pcsclite, readline, libsodium, hidapi
-, python3Packages, randomx, rapidjson
-, CoreData, IOKit, PCSC
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, boost
+, miniupnpc
+, openssl
+, unbound
+, cppzmq
+, zeromq
+, pcsclite
+, readline
+, libsodium
+, hidapi
+, python3Packages
+, randomx
+, rapidjson
+, CoreData
+, IOKit
+, PCSC
 }:
 
 assert stdenv.isDarwin -> IOKit != null;
@@ -23,9 +37,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    boost miniupnpc openssl unbound
-    cppzmq zeromq pcsclite readline
-    libsodium hidapi randomx rapidjson
+    boost
+    miniupnpc
+    openssl
+    unbound
+    cppzmq
+    zeromq
+    pcsclite
+    readline
+    libsodium
+    hidapi
+    randomx
+    rapidjson
     python3Packages.protobuf
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
@@ -37,9 +60,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Private, secure, untraceable currency";
-    homepage    = https://getmonero.org/;
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = https://getmonero.org/;
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ ehmry rnhmjoj ];
   };
 }

@@ -1,6 +1,17 @@
-{ stdenv, fetchurl, callPackage, libpng12, imagemagick
-, autoreconfHook, glib, pstoedit, pkgconfig, gettext, gd, darwin
-, runtimeShell }:
+{ stdenv
+, fetchurl
+, callPackage
+, libpng12
+, imagemagick
+, autoreconfHook
+, glib
+, pstoedit
+, pkgconfig
+, gettext
+, gd
+, darwin
+, runtimeShell
+}:
 
 # TODO: Figure out why the resultant binary is somehow linked against
 # libpng16.so.16 rather than libpng12.
@@ -33,11 +44,11 @@ stdenv.mkDerivation rec {
   #  sed -i -e "s/AT_BITMAP_BITS(bitmap)/AT_BITMAP_BITS(\&bitmap)/g" input-magick.c
   #'';
 
-  autofig = callPackage ./autofig.nix {};
+  autofig = callPackage ./autofig.nix { };
   nativeBuildInputs = [ autoreconfHook glib autofig pkgconfig gettext ];
   buildInputs = [ libpng12 imagemagick pstoedit ]
     ++ stdenv.lib.optionals stdenv.isDarwin
-       (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
+    (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
 
   postUnpack = ''
     pushd $sourceRoot

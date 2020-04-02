@@ -7,9 +7,9 @@ buildGoPackage rec {
   rev = "bb324609b4254ceb9f76d35eb03642a6a1807867";
 
   goPackagePath = "github.com/GoogleContainerTools/skaffold";
-  subPackages = ["cmd/skaffold"];
+  subPackages = [ "cmd/skaffold" ];
 
-  buildFlagsArray = let t = "${goPackagePath}/pkg/skaffold"; in  ''
+  buildFlagsArray = let t = "${goPackagePath}/pkg/skaffold"; in ''
     -ldflags=
       -X ${t}/version.version=v${version}
       -X ${t}/version.gitCommit=${rev}

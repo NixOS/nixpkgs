@@ -1,9 +1,18 @@
-{ stdenv, fetchurl
-, amtk, gnome3, gtk3, gtksourceview4, libuchardet, libxml2, pkgconfig }:
+{ stdenv
+, fetchurl
+, amtk
+, gnome3
+, gtk3
+, gtksourceview4
+, libuchardet
+, libxml2
+, pkgconfig
+}:
 let
   version = "4.3.1";
   pname = "tepl";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

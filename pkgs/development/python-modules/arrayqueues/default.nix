@@ -1,4 +1,8 @@
-{ lib, pkgs, buildPythonPackage, fetchPypi, isPy3k
+{ lib
+, pkgs
+, buildPythonPackage
+, fetchPypi
+, isPy3k
 , numpy
 }:
 

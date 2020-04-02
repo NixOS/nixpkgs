@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "196c229ckib3xvafkk4n3n3jk9rpksfcjsbbwka6a9k2f34qrjj6";
   };
 
-  nativeBuildInputs = [ pkgconfig  ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ fcitx-qt5 qtbase qtwebengine.dev cmake fcitx gettext libpinyin glib pcre dbus ];
 
   # With a typical installation via NixOS option i18n.inputMethod.fcitx.engines,
@@ -31,23 +31,24 @@ stdenv.mkDerivation rec {
       --replace ${fcitx} $out
   '';
 
-  preBuild = let
-    ZHUYIN_DATA_FILE_NAME = "model.text.20161206.tar.gz";
-    store_path = fetchurl {
-      url = "https://download.fcitx-im.org/data/${ZHUYIN_DATA_FILE_NAME}";
-      sha256 = "017p11si1b7bkwx36xaybq5a9icq1pd7x1jbymqw92akfgjj8w2w";
-    };
-  in
-    ''
-      cp -rv ${store_path} $NIX_BUILD_TOP/$name/data/${ZHUYIN_DATA_FILE_NAME}
-    '';
+  preBuild =
+    let
+      ZHUYIN_DATA_FILE_NAME = "model.text.20161206.tar.gz";
+      store_path = fetchurl {
+        url = "https://download.fcitx-im.org/data/${ZHUYIN_DATA_FILE_NAME}";
+        sha256 = "017p11si1b7bkwx36xaybq5a9icq1pd7x1jbymqw92akfgjj8w2w";
+      };
+    in
+      ''
+        cp -rv ${store_path} $NIX_BUILD_TOP/$name/data/${ZHUYIN_DATA_FILE_NAME}
+      '';
 
   meta = with stdenv.lib; {
     isFcitxEngine = true;
-    description  = "Fcitx Wrapper for libpinyin, Library to deal with pinyin";
-    homepage     = https://github.com/fcitx/fcitx-libpinyin;
-    license      = licenses.gpl3Plus;
+    description = "Fcitx Wrapper for libpinyin, Library to deal with pinyin";
+    homepage = https://github.com/fcitx/fcitx-libpinyin;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes ];
-    platforms    = platforms.linux;
+    platforms = platforms.linux;
   };
 }

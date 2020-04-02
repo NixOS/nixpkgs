@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, zlib, libpng, libxml2, libjpeg }:
+{ stdenv, fetchFromGitHub, zlib, libpng, libxml2, libjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "flam3";

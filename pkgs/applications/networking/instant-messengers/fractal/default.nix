@@ -84,4 +84,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dtzWill worldofpeace ];
   };
 }
-

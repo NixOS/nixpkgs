@@ -8,16 +8,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  installPhase = let
-    env = bundlerEnv {
-      name = "${pname}-${version}-gems";
+  installPhase =
+    let
+      env = bundlerEnv {
+        name = "${pname}-${version}-gems";
 
-      gemdir = ./.;
-    };
-  in ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/reckon $out/bin/reckon
-  '';
+        gemdir = ./.;
+      };
+    in ''
+      mkdir -p $out/bin
+      makeWrapper ${env}/bin/reckon $out/bin/reckon
+    '';
 
   passthru.updateScript = bundlerUpdateScript "reckon";
 

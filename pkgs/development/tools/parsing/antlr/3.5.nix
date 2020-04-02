@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchFromGitHub, jre}:
+{ stdenv, fetchurl, fetchFromGitHub, jre }:
 
 stdenv.mkDerivation rec {
   pname = "antlr";

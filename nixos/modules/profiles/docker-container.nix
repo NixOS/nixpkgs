@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
- pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
-
-in {
+  pkgs2storeContents = l: map (x: { object = x; symlink = "none"; }) l;
+in
+{
   # Docker image config.
   imports = [
     ../installer/cd-dvd/channel.nix

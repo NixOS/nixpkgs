@@ -14,7 +14,7 @@ rec {
 
   packageName = "optima";
 
-  asdFilesToKeep = ["optima.asd"];
+  asdFilesToKeep = [ "optima.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM optima DESCRIPTION Optimized Pattern Matching Library SHA256

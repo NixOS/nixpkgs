@@ -1,5 +1,4 @@
 { stdenv, cmake, python3, fetchFromGitHub, emscriptenRev ? null, substituteAll }:
-
 let
   defaultVersion = "91";
 
@@ -9,14 +8,15 @@ let
     "1.39.1" = "0ygm9m5322h4vfpf3j63q32qxk2l26yk62hh7dkb49j51zwl1y3y";
   };
 in
-
 stdenv.mkDerivation rec {
-  version = if emscriptenRev == null
-            then defaultVersion
-            else "emscripten-${emscriptenRev}";
-  rev = if emscriptenRev == null
-        then "version_${version}"
-        else emscriptenRev;
+  version =
+    if emscriptenRev == null
+    then defaultVersion
+    else "emscripten-${emscriptenRev}";
+  rev =
+    if emscriptenRev == null
+    then "version_${version}"
+    else emscriptenRev;
   pname = "binaryen";
 
   src = fetchFromGitHub {

@@ -2,9 +2,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   addAttributeName = mapAttrs (a: v: v // {
     text = ''
       #### Activation script snippet ${a}:
@@ -18,7 +16,8 @@ let
   });
 
   path = with pkgs; map getBin
-    [ coreutils
+    [
+      coreutils
       gnugrep
       findutils
       getent
@@ -27,9 +26,7 @@ let
       nettools # needed for hostname
       utillinux # needed for mount and mountpoint
     ];
-
 in
-
 {
 
   ###### interface
@@ -37,7 +34,7 @@ in
   options = {
 
     system.activationScripts = mkOption {
-      default = {};
+      default = { };
 
       example = literalExample ''
         { stdio = {
@@ -84,9 +81,9 @@ in
 
             ${
               let
-                set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
-                withHeadlines = addAttributeName set';
-              in textClosureMap id (withHeadlines) (attrNames withHeadlines)
+                  set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
+                  withHeadlines = addAttributeName set';
+                in textClosureMap id (withHeadlines) (attrNames withHeadlines)
             }
 
             # Make this configuration the current configuration.
@@ -104,7 +101,7 @@ in
     };
 
     system.userActivationScripts = mkOption {
-      default = {};
+      default = { };
 
       example = literalExample ''
         { plasmaSetup = {
@@ -139,9 +136,9 @@ in
 
           ${
             let
-              set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
-              withHeadlines = addAttributeName set';
-            in textClosureMap id (withHeadlines) (attrNames withHeadlines)
+                set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
+                withHeadlines = addAttributeName set';
+              in textClosureMap id (withHeadlines) (attrNames withHeadlines)
           }
 
           exit $_status
@@ -187,7 +184,8 @@ in
         ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
       '';
 
-    system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
+    system.activationScripts.usrbinenv =
+      if config.environment.usrbinenv != null
       then ''
         mkdir -m 0755 -p /usr/bin
         ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp

@@ -1,20 +1,18 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.windowManager.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
     (require 'exwm)
     ${optionalString cfg.enableDefaultConfig ''
-      (require 'exwm-config)
-      (exwm-config-default)
-    ''}
+    (require 'exwm-config)
+    (exwm-config-default)
+  ''}
   '';
   packages = epkgs: cfg.extraPackages epkgs ++ [ epkgs.exwm ];
   exwm-emacs = pkgs.emacsWithPackages packages;
 in
-
 {
   options = {
     services.xserver.windowManager.exwm = {
@@ -25,7 +23,7 @@ in
         description = "Enable an uncustomised exwm configuration.";
       };
       extraPackages = mkOption {
-        default = self: [];
+        default = self: [ ];
         example = literalExample ''
           epkgs: [
             epkgs.emms

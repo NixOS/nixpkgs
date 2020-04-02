@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, emacs }:
-
 let
   version = "3.6-4-gb659bf8";
 in

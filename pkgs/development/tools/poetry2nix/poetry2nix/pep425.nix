@@ -1,5 +1,4 @@
 { lib, stdenv, python, isLinux ? stdenv.isLinux }:
-
 let
   inherit (lib.strings) hasSuffix hasInfix splitString removeSuffix;
 
@@ -13,7 +12,7 @@ let
       major = builtins.elemAt ver 0;
       minor = builtins.elemAt ver 1;
     in
-      "cp${major}${minor}";
+    "cp${major}${minor}";
 
   abiTag = "${pythonTag}m";
 
@@ -44,7 +43,7 @@ let
       vs = lib.lists.tail versions;
     in
       if (builtins.length versions == 0)
-      then []
+      then [ ]
       else (builtins.filter (x: hasInfix v x.file) candidates) ++ (findBestMatches vs candidates);
 
   # pyver = "cpXX"
@@ -67,14 +66,12 @@ let
 
       withPython = ver: abi: x: (isPyVersionCompatible ver x.pyVer) && (isPyAbiCompatible abi x.abi);
 
-      withPlatform = if isLinux
-      then (
-        x: x.platform == "manylinux1_${stdenv.platform.kernelArch}"
-        || x.platform == "manylinux2010_${stdenv.platform.kernelArch}"
-        || x.platform == "manylinux2014_${stdenv.platform.kernelArch}"
-        || x.platform == "any"
-      )
-      else (x: hasInfix "macosx" x.platform || x.platform == "any");
+      withPlatform =
+        if isLinux
+        then (
+          x: x.platform == "manylinux1_${stdenv.platform.kernelArch}" || x.platform == "manylinux2010_${stdenv.platform.kernelArch}" || x.platform == "manylinux2014_${stdenv.platform.kernelArch}" || x.platform == "any"
+        )
+        else (x: hasInfix "macosx" x.platform || x.platform == "any");
 
       filterWheel = x:
         let
@@ -94,12 +91,10 @@ let
           if isLinux
           then chooseLinux files
           else chooseOSX files;
-
     in
       if (builtins.length filtered == 0)
-      then []
+      then [ ]
       else choose (filtered);
-
 in
 {
   inherit selectWheel toWheelAttrs isPyVersionCompatible;

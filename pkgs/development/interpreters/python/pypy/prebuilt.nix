@@ -3,7 +3,7 @@
 , python-setup-hook
 , self
 , which
-# Dependencies
+  # Dependencies
 , bzip2
 , zlib
 , openssl_1_0_2
@@ -12,8 +12,8 @@
 , ncurses
 , tcl
 , tk
-# For the Python package set
-, packageOverrides ? (self: super: {})
+  # For the Python package set
+, packageOverrides ? (self: super: { })
 , sourceVersion
 , pythonVersion
 , sha256
@@ -24,7 +24,6 @@
 # our PyPy source build when developing that expression.
 
 with stdenv.lib;
-
 let
   isPy3k = majorVersion == "3";
   passthru = passthruFun {
@@ -51,76 +50,77 @@ let
     tcl
     tk
   ];
+in
+  with passthru; stdenv.mkDerivation {
+    inherit pname version;
 
-in with passthru; stdenv.mkDerivation {
-  inherit pname version;
+    src = fetchurl {
+      url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+      inherit sha256;
+    };
 
-  src = fetchurl {
-    url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
-    inherit sha256;
-  };
+    buildInputs = [ which ];
 
-  buildInputs = [ which ];
+    installPhase = ''
+      mkdir -p $out/lib
+      echo "Moving files to $out"
+      mv -t $out bin include lib-python lib_pypy site-packages
 
-  installPhase = ''
-    mkdir -p $out/lib
-    echo "Moving files to $out"
-    mv -t $out bin include lib-python lib_pypy site-packages
+      mv $out/bin/libpypy*-c.so $out/lib/
 
-    mv $out/bin/libpypy*-c.so $out/lib/
+      rm $out/bin/*.debug
 
-    rm $out/bin/*.debug
+      echo "Patching binaries"
+      interpreter=$(patchelf --print-interpreter $(readlink -f $(which patchelf)))
+      patchelf --set-interpreter $interpreter \
+               --set-rpath $out/lib \
+               $out/bin/pypy*
 
-    echo "Patching binaries"
-    interpreter=$(patchelf --print-interpreter $(readlink -f $(which patchelf)))
-    patchelf --set-interpreter $interpreter \
-             --set-rpath $out/lib \
-             $out/bin/pypy*
+      pushd $out
+      find {lib,lib_pypy*} -name "*.so" -exec patchelf --replace-needed "libbz2.so.1.0" "libbz2.so.1" {} \;
+      find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${stdenv.lib.makeLibraryPath deps} {} \;
 
-    pushd $out
-    find {lib,lib_pypy*} -name "*.so" -exec patchelf --replace-needed "libbz2.so.1.0" "libbz2.so.1" {} \;
-    find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${stdenv.lib.makeLibraryPath deps} {} \;
+      echo "Removing bytecode"
+      find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
+      popd
 
-    echo "Removing bytecode"
-    find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
-    popd
+      # Include a sitecustomize.py file
+      cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
 
-    # Include a sitecustomize.py file
-    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+    '';
 
-  '';
+    doInstallCheck = true;
 
-  doInstallCheck = true;
+    # Check whether importing of (extension) modules functions
+    installCheckPhase =
+      let
+        modules = [
+          "ssl"
+          "sys"
+          "curses"
+        ] ++ optionals (!isPy3k) [
+          "Tkinter"
+        ] ++ optionals isPy3k [
+          "tkinter"
+        ];
+        imports = concatMapStringsSep "; " (x: "import ${x}") modules;
+      in ''
+        echo "Testing whether we can import modules"
+        $out/bin/${executable} -c '${imports}'
+      '';
 
-  # Check whether importing of (extension) modules functions
-  installCheckPhase = let
-    modules = [
-      "ssl"
-      "sys"
-      "curses"
-    ] ++ optionals (!isPy3k) [
-      "Tkinter"
-    ] ++ optionals isPy3k [
-      "tkinter"
-    ];
-    imports = concatMapStringsSep "; " (x: "import ${x}") modules;
-  in ''
-    echo "Testing whether we can import modules"
-    $out/bin/${executable} -c '${imports}'
-  '';
+    setupHook = python-setup-hook sitePackages;
 
-  setupHook = python-setup-hook sitePackages;
+    donPatchElf = true;
+    dontStrip = true;
 
-  donPatchElf = true;
-  dontStrip = true;
+    inherit passthru;
 
-  inherit passthru;
+    meta = with stdenv.lib; {
+      homepage = http://pypy.org/;
+      description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
+      license = licenses.mit;
+      platforms = [ "x86_64-linux" ];
+    };
 
-  meta = with stdenv.lib; {
-    homepage = http://pypy.org/;
-    description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-  };
-
-}
+  }

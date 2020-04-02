@@ -78,12 +78,13 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'aiohttp>=2.3.10,<3.5.2'" "'aiohttp>=2.3.10'"
   '';
 
-  checkPhase = if isPy3k then ''
-    pytest -k "not test_app_get_root_path and \
-               not test_verify_oauth_scopes_remote and \
-               not test_verify_oauth_scopes_local and \
-               not test_run_with_aiohttp_not_installed"''
-  else "pytest --ignore=tests/aiohttp";
+  checkPhase =
+    if isPy3k then ''
+      pytest -k "not test_app_get_root_path and \
+                 not test_verify_oauth_scopes_remote and \
+                 not test_verify_oauth_scopes_local and \
+                 not test_run_with_aiohttp_not_installed"''
+    else "pytest --ignore=tests/aiohttp";
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";

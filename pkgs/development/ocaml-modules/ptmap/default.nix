@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://www.lri.fr/~filliatr/software.en.html;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     description = "Maps over integers implemented as Patricia trees";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ volth ];

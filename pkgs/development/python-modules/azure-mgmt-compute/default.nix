@@ -16,10 +16,11 @@ buildPythonPackage rec {
     sha256 = "00ygppmlx21dxvb0swfdyhqf5xhi0zxy26abcgql02w0lklw91nj";
   };
 
-  postInstall = if isPy3k then "" else ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-  '';
+  postInstall =
+    if isPy3k then "" else ''
+      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
+      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
+    '';
 
   propagatedBuildInputs = [
     azure-mgmt-common

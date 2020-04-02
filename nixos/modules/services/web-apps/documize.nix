@@ -1,16 +1,16 @@
 { pkgs, lib, config, ... }:
 
 with lib;
-
 let
   cfg = config.services.documize;
 
-  mkParams = optional: concatMapStrings (name: let
-    predicate = optional -> cfg.${name} != null;
-    template = " -${name} '${toString cfg.${name}}'";
-  in optionalString predicate template);
-
-in {
+  mkParams = optional: concatMapStrings (name:
+    let
+      predicate = optional -> cfg.${name} != null;
+      template = " -${name} '${toString cfg.${name}}'";
+    in optionalString predicate template);
+in
+{
   options.services.documize = {
     enable = mkEnableOption "Documize Wiki";
 

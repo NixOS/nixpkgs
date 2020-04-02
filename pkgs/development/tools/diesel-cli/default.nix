@@ -1,12 +1,22 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, openssl, pkgconfig, Security
-, sqliteSupport ? true, sqlite
-, postgresqlSupport ? true, postgresql
-, mysqlSupport ? true, mysql, zlib, libiconv
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, openssl
+, pkgconfig
+, Security
+, sqliteSupport ? true
+, sqlite
+, postgresqlSupport ? true
+, postgresql
+, mysqlSupport ? true
+, mysql
+, zlib
+, libiconv
 }:
 
 assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true)
   "support for at least one database must be enabled";
-
 let
   inherit (stdenv.lib) optional optionals optionalString;
   features = ''
@@ -15,7 +25,6 @@ let
     ${optionalString mysqlSupport "mysql"} \
   '';
 in
-
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
   version = "1.4.0";

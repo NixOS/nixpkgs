@@ -1,5 +1,4 @@
 { stdenv, fetchurl, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
-
 let
   options = rec {
     /* TODO: there are also FreeBSD and Windows versions */
@@ -31,10 +30,9 @@ let
   };
   cfg = options.${stdenv.hostPlatform.system} or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
 in
-
 stdenv.mkDerivation rec {
   pname = "ccl";
-  version  = "1.11.5";
+  version = "1.11.5";
 
   src = fetchurl {
     url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
@@ -46,23 +44,24 @@ stdenv.mkDerivation rec {
   CCL_RUNTIME = cfg.runtime;
   CCL_KERNEL = cfg.kernel;
 
-  postPatch = if stdenv.isDarwin then ''
-    substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "M4 = gm4"   "M4 = m4" \
-      --replace "dtrace"     "/usr/sbin/dtrace" \
-      --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+  postPatch =
+    if stdenv.isDarwin then ''
+      substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+        --replace "M4 = gm4"   "M4 = m4" \
+        --replace "dtrace"     "/usr/sbin/dtrace" \
+        --replace "/bin/rm"    "${coreutils}/bin/rm" \
+        --replace "/bin/echo"  "${coreutils}/bin/echo"
 
-    substituteInPlace lisp-kernel/m4macros.m4 \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
-  '' else ''
-    substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+      substituteInPlace lisp-kernel/m4macros.m4 \
+        --replace "/bin/pwd" "${coreutils}/bin/pwd"
+    '' else ''
+      substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+        --replace "/bin/rm"    "${coreutils}/bin/rm" \
+        --replace "/bin/echo"  "${coreutils}/bin/echo"
 
-    substituteInPlace lisp-kernel/m4macros.m4 \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
-  '';
+      substituteInPlace lisp-kernel/m4macros.m4 \
+        --replace "/bin/pwd" "${coreutils}/bin/pwd"
+    '';
 
   buildPhase = ''
     make -C lisp-kernel/${CCL_KERNEL} clean
@@ -85,9 +84,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Clozure Common Lisp";
-    homepage    = https://ccl.clozure.com/;
+    homepage = https://ccl.clozure.com/;
     maintainers = with maintainers; [ raskin muflax tohl ];
-    platforms   = attrNames options;
-    license     = licenses.lgpl21;
+    platforms = attrNames options;
+    license = licenses.lgpl21;
   };
 }

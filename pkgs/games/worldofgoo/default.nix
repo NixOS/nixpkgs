@@ -1,16 +1,29 @@
-{ stdenv, requireFile
-, libX11, libXext, libXau, libxcb, libXdmcp , SDL, SDL_mixer, libvorbis, libGLU, libGL
+{ stdenv
+, requireFile
+, libX11
+, libXext
+, libXau
+, libxcb
+, libXdmcp
+, SDL
+, SDL_mixer
+, libvorbis
+, libGLU
+, libGL
 , runtimeShell
-, demo ? false }:
+, demo ? false
+}:
 
 # TODO: add i686 support
 
 stdenv.mkDerivation rec {
-  name = if demo
+  name =
+    if demo
     then "WorldOfGooDemo-1.41"
     else "WorldofGoo-1.41";
 
-  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "supported"
+  arch =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "supported"
     else throw "Sorry. World of Goo only is only supported on x86_64 now.";
 
   goBuyItNow = ''
@@ -29,13 +42,14 @@ stdenv.mkDerivation rec {
     directory where you saved it.
   '';
 
-  src = if demo
+  src =
+    if demo
     then
       requireFile {
-         message = getTheDemo;
-         name = "WorldOfGooDemo.1.41.tar.gz";
-         sha256 = "0ndcix1ckvcj47sgndncr3hxjcg402cbd8r16rhq4cc43ibbaxri";
-       }
+        message = getTheDemo;
+        name = "WorldOfGooDemo.1.41.tar.gz";
+        sha256 = "0ndcix1ckvcj47sgndncr3hxjcg402cbd8r16rhq4cc43ibbaxri";
+      }
     else
       requireFile {
         message = goBuyItNow;
@@ -46,9 +60,7 @@ stdenv.mkDerivation rec {
   phases = "unpackPhase installPhase";
 
   # XXX: stdenv.lib.makeLibraryPath doesn't pick up /lib64
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ]
-    + ":" + stdenv.lib.makeLibraryPath [libX11 libXext libXau libxcb libXdmcp SDL SDL_mixer libvorbis libGLU libGL ]
-    + ":" + stdenv.cc.cc + "/lib64";
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ] + ":" + stdenv.lib.makeLibraryPath [ libX11 libXext libXau libxcb libXdmcp SDL SDL_mixer libvorbis libGLU libGL ] + ":" + stdenv.cc.cc + "/lib64";
 
   installPhase = ''
     mkdir -p $out/libexec/2dboy/WorldOfGoo/

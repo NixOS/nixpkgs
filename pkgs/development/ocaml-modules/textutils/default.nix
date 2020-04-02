@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, core_p4, pa_ounit, pa_test, sexplib_p4}:
+{ stdenv, buildOcaml, fetchurl, core_p4, pa_ounit, pa_test, sexplib_p4 }:
 
 buildOcaml rec {
   name = "textutils";

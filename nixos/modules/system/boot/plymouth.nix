@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) plymouth;
   inherit (pkgs) nixos-icons;
 
@@ -27,9 +25,7 @@ let
     Theme=${cfg.theme}
     ${cfg.extraConfig}
   '';
-
 in
-
 {
 
   options = {

@@ -11,9 +11,11 @@ buildGoPackage rec {
     sha256 = "07abzhmsgj7krmhf7jis50a4fc4w29h48nyzgvrll5lz3cax979q";
   };
 
-  buildFlagsArray = [ ''-ldflags=
+  buildFlagsArray = [
+    ''-ldflags=
     -X main.version=${version}
-  '' ];
+  ''
+  ];
 
   goPackagePath = "github.com/influxdata/influxdb";
 

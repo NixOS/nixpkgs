@@ -14,7 +14,7 @@ rec {
 
   packageName = "ptester";
 
-  asdFilesToKeep = ["ptester.asd"];
+  asdFilesToKeep = [ "ptester.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM ptester DESCRIPTION Portable test harness package SHA256

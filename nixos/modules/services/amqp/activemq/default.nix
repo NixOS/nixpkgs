@@ -2,9 +2,7 @@
 
 with pkgs;
 with lib;
-
 let
-
   cfg = config.services.activemq;
 
   activemqBroker = stdenv.mkDerivation {
@@ -19,8 +17,8 @@ let
       javac -d $out/lib ActiveMQBroker.java
     '';
   };
-
-in {
+in
+{
 
   options = {
     services.activemq = {

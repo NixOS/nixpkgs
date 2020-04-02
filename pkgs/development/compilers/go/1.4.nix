@@ -1,12 +1,17 @@
-{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, tzdata
+, iana-etc
+, libcCross
 , pkgconfig
 , pcre
-, Security }:
-
+, Security
+}:
 let
   libc = if stdenv ? cross then libcCross else stdenv.cc.libc;
 in
-
 stdenv.mkDerivation rec {
   pname = "go";
   version = "1.4-bootstrap-20161024";
@@ -123,17 +128,18 @@ stdenv.mkDerivation rec {
     # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
     # actually works on old versions too.
     (fetchpatch {
-      url    = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
+      url = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
       sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
     })
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
-  GOARCH = if stdenv.isDarwin then "amd64"
-           else if stdenv.hostPlatform.system == "i686-linux" then "386"
-           else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-           else if stdenv.isAarch32 then "arm"
-           else throw "Unsupported system";
+  GOARCH =
+    if stdenv.isDarwin then "amd64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "386"
+    else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
+    else if stdenv.isAarch32 then "arm"
+    else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 0;

@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
-
 let
   version = "6.6.7-build-529";
   name = "frostwire-desktop-${version}";
@@ -42,8 +41,8 @@ let
     outputHashMode = "recursive";
     outputHash = "11zd98g0d0fdgls4lsskkagwfxyh26spfd6c6g9cahl89czvlg3c";
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name src;
 
   nativeBuildInputs = [ makeWrapper ];
@@ -72,11 +71,12 @@ in stdenv.mkDerivation {
 
     cp desktop/build/libs/frostwire.jar $out/share/java/frostwire.jar
 
-    cp ${ { x86_64-darwin = "desktop/lib/native/*.dylib";
-            x86_64-linux  = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
-            i686-linux    = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
-          }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
-        } $out/lib
+    cp ${ {
+      x86_64-darwin = "desktop/lib/native/*.dylib";
+      x86_64-linux = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
+      i686-linux = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
+    }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
+    } $out/lib
 
     cp -dpR ${desktopItem}/share $out
 

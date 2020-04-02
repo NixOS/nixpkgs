@@ -1,6 +1,13 @@
-{ stdenv, fetchurl
-, autoreconfHook, pkgconfig, wrapGAppsHook
-, glib, intltool, gtk3, gtksourceview }:
+{ stdenv
+, fetchurl
+, autoreconfHook
+, pkgconfig
+, wrapGAppsHook
+, glib
+, intltool
+, gtk3
+, gtksourceview
+}:
 
 stdenv.mkDerivation rec {
   pname = "xpad";

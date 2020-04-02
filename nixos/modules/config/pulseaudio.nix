@@ -2,9 +2,7 @@
 
 with pkgs;
 with lib;
-
 let
-
   cfg = config.hardware.pulseaudio;
   alsaCfg = config.sound;
 
@@ -26,16 +24,18 @@ let
     let
       addModuleIf = cond: mod: optionalString cond "load-module ${mod}";
       allAnon = optional cfg.tcp.anonymousClients.allowAll "auth-anonymous=1";
-      ipAnon =  let a = cfg.tcp.anonymousClients.allowedIpRanges;
-                in optional (a != []) ''auth-ip-acl=${concatStringsSep ";" a}'';
+      ipAnon =
+        let
+          a = cfg.tcp.anonymousClients.allowedIpRanges;
+        in optional (a != [ ]) ''auth-ip-acl=${concatStringsSep ";" a}'';
     in writeTextFile {
       name = "default.pa";
-        text = ''
+      text = ''
         .include ${cfg.configFile}
         ${addModuleIf cfg.zeroconf.publish.enable "module-zeroconf-publish"}
         ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
         ${addModuleIf cfg.tcp.enable (concatStringsSep " "
-           ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
+          ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
         ${cfg.extraConfig}
       '';
     };
@@ -62,7 +62,7 @@ let
     pcm_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
+      "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
     }
     pcm.!default {
       type pulse
@@ -71,15 +71,15 @@ let
     ctl_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
+      "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
     }
     ctl.!default {
       type pulse
     }
     ${alsaCfg.extraConfig}
   '');
-
-in {
+in
+{
 
   options = {
 
@@ -156,7 +156,7 @@ in {
 
       extraModules = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.pulseaudio-modules-bt ]";
         description = ''
           Extra pulseaudio modules to use. This is intended for out-of-tree
@@ -178,7 +178,7 @@ in {
 
         config = mkOption {
           type = types.attrsOf types.unspecified;
-          default = {};
+          default = { };
           description = ''Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.'';
           example = literalExample ''{ realtime-scheduling = "yes"; }'';
         };
@@ -199,7 +199,7 @@ in {
           allowAll = mkEnableOption "all anonymous clients to stream to the server";
           allowedIpRanges = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             example = literalExample ''[ "127.0.0.1" "192.168.1.0/24" ]'';
             description = ''
               A list of IP subnets that are allowed to stream to the server.
@@ -231,7 +231,7 @@ in {
         "asound.conf".source = alsaConf;
 
         "pulse/daemon.conf".source = writeText "daemon.conf"
-          (lib.generators.toKeyValue {} cfg.daemon.config);
+          (lib.generators.toKeyValue { } cfg.daemon.config);
 
         "openal/alsoft.conf".source = writeText "alsoft.conf" "drivers=pulse";
 
@@ -253,16 +253,17 @@ in {
       services.udev.packages = [ overriddenPackage ];
     })
 
-    (mkIf (cfg.extraModules != []) {
-      hardware.pulseaudio.daemon.config.dl-search-path = let
-        overriddenModules = builtins.map
-          (drv: drv.override { pulseaudio = overriddenPackage; })
-          cfg.extraModules;
-        modulePaths = builtins.map
-          (drv: "${drv}/lib/pulse-${overriddenPackage.version}/modules")
-          # User-provided extra modules take precedence
-          (overriddenModules ++ [ overriddenPackage ]);
-      in lib.concatStringsSep ":" modulePaths;
+    (mkIf (cfg.extraModules != [ ]) {
+      hardware.pulseaudio.daemon.config.dl-search-path =
+        let
+          overriddenModules = builtins.map
+            (drv: drv.override { pulseaudio = overriddenPackage; })
+            cfg.extraModules;
+          modulePaths = builtins.map
+            (drv: "${drv}/lib/pulse-${overriddenPackage.version}/modules")
+            # User-provided extra modules take precedence
+            (overriddenModules ++ [ overriddenPackage ]);
+        in lib.concatStringsSep ":" modulePaths;
     })
 
     (mkIf hasZeroconf {

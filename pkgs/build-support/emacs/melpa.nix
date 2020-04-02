@@ -5,7 +5,8 @@
 
 with lib;
 
-{ /*
+{
+  /*
     pname: Nix package name without special symbols and without version or
     "emacs-" prefix.
   */
@@ -16,18 +17,14 @@ with lib;
 , ename ? null
 , version
 , recipe
-, meta ? {}
+, meta ? { }
 , ...
 }@args:
-
 let
-
   defaultMeta = {
     homepage = args.src.meta.homepage or "http://melpa.org/#/${pname}";
   };
-
 in
-
 import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
 
   ename =
@@ -73,7 +70,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
         $ename $version
 
     runHook postBuild
-    '';
+  '';
 
   installPhase = ''
     runHook preInstall

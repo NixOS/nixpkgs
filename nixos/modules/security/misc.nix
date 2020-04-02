@@ -109,7 +109,8 @@ with lib;
       boot.kernel.sysctl."user.max_user_namespaces" = 0;
 
       assertions = [
-        { assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
+        {
+          assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
           message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
         }
       ];

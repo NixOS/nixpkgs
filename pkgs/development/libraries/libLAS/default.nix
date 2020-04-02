@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ boost cmake gdal libgeotiff libtiff LASzip ]
-                ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   cmakeFlags = [
     "-DGDAL_CONFIG=${gdal}/bin/gdal-config"

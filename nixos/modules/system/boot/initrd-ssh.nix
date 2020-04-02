@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.boot.initrd.network.ssh;
-
 in
-
 {
 
   options = {
@@ -90,7 +86,8 @@ in
 
   config = mkIf (config.boot.initrd.network.enable && cfg.enable) {
     assertions = [
-      { assertion = cfg.authorizedKeys != [];
+      {
+        assertion = cfg.authorizedKeys != [ ];
         message = "You should specify at least one authorized key for initrd SSH";
       }
     ];
@@ -116,16 +113,16 @@ in
 
       mkdir -p /root/.ssh
       ${concatStrings (map (key: ''
-        echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
-      '') cfg.authorizedKeys)}
+      echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
+    '') cfg.authorizedKeys)}
 
       dropbear -s -j -k -E -p ${toString cfg.port} ${optionalString (cfg.hostRSAKey == null && cfg.hostDSSKey == null && cfg.hostECDSAKey == null) "-R"}
     '';
 
     boot.initrd.secrets =
-     (optionalAttrs (cfg.hostRSAKey != null) { "/etc/dropbear/dropbear_rsa_host_key" = cfg.hostRSAKey; }) //
-     (optionalAttrs (cfg.hostDSSKey != null) { "/etc/dropbear/dropbear_dss_host_key" = cfg.hostDSSKey; }) //
-     (optionalAttrs (cfg.hostECDSAKey != null) { "/etc/dropbear/dropbear_ecdsa_host_key" = cfg.hostECDSAKey; });
+      (optionalAttrs (cfg.hostRSAKey != null) { "/etc/dropbear/dropbear_rsa_host_key" = cfg.hostRSAKey; }) //
+      (optionalAttrs (cfg.hostDSSKey != null) { "/etc/dropbear/dropbear_dss_host_key" = cfg.hostDSSKey; }) //
+      (optionalAttrs (cfg.hostECDSAKey != null) { "/etc/dropbear/dropbear_ecdsa_host_key" = cfg.hostECDSAKey; });
 
   };
 

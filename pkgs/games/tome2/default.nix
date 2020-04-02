@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, makeDesktopItem, ncurses, libX11, boost, cmake }:
-
 let
   pname = "tome2";
   description = "A dungeon crawler similar to Angband, based on the works of Tolkien";
@@ -15,8 +14,8 @@ let
     categories = "Game;RolePlaying;";
     genericName = pname;
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname;
   version = "2.4";
 

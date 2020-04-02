@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkgconfig
-, makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
-, libutempter ? null, withUtempter ? stdenv.isLinux }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, zlib
+, protobuf
+, ncurses
+, pkgconfig
+, makeWrapper
+, perlPackages
+, openssl
+, autoreconfHook
+, openssh
+, bash-completion
+, libutempter ? null
+, withUtempter ? stdenv.isLinux
+}:
 
 stdenv.mkDerivation rec {
   name = "mosh-1.3.2";
@@ -32,7 +46,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";
 
   postInstall = ''
-      wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
@@ -49,7 +63,7 @@ stdenv.mkDerivation rec {
       especially over Wi-Fi, cellular, and long-distance links.
     '';
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

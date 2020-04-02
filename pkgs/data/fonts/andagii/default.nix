@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "1.0.2";
-in fetchzip {
+in
+fetchzip {
   name = "andagii-${version}";
 
   url = http://www.i18nguy.com/unicode/andagii.zip;

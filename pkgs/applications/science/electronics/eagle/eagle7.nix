@@ -1,17 +1,39 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
-, openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
-, libxcb, cups, xkeyboardconfig, runtimeShell
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, patchelf
+, zlib
+, freetype
+, fontconfig
+, openssl
+, libXrender
+, libXrandr
+, libXcursor
+, libX11
+, libXext
+, libXi
+, libxcb
+, cups
+, xkeyboardconfig
+, runtimeShell
 }:
-
 let
-
   libPath = stdenv.lib.makeLibraryPath
-    [ zlib freetype fontconfig openssl libXrender libXrandr libXcursor libX11
-      libXext libXi libxcb cups
+    [
+      zlib
+      freetype
+      fontconfig
+      openssl
+      libXrender
+      libXrandr
+      libXcursor
+      libX11
+      libXext
+      libXi
+      libxcb
+      cups
     ];
-
 in
-
 stdenv.mkDerivation rec {
   pname = "eagle";
   version = "7.7.0";
@@ -41,8 +63,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ patchelf zlib freetype fontconfig openssl libXrender libXrandr libXcursor
-      libX11 libXext libXi
+    [
+      patchelf
+      zlib
+      freetype
+      fontconfig
+      openssl
+      libXrender
+      libXrandr
+      libXcursor
+      libX11
+      libXext
+      libXi
     ];
 
   phases = [ "installPhase" ];

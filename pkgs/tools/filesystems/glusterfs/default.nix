@@ -1,30 +1,77 @@
-{stdenv, fetchurl, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
- autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite,
- liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which,
- openssh, gawk, findutils, utillinux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc
+{ stdenv
+, fetchurl
+, fuse
+, bison
+, flex_2_5_35
+, openssl
+, python3
+, ncurses
+, readline
+, autoconf
+, automake
+, libtool
+, pkgconfig
+, zlib
+, libaio
+, libxml2
+, acl
+, sqlite
+, liburcu
+, attr
+, makeWrapper
+, coreutils
+, gnused
+, gnugrep
+, which
+, openssh
+, gawk
+, findutils
+, utillinux
+, lvm2
+, btrfs-progs
+, e2fsprogs
+, xfsprogs
+, systemd
+, rsync
+, glibc
 }:
 let
   s =
-  rec {
-    baseName="glusterfs";
-    # NOTE: On each glusterfs release, it should be checked if gluster added
-    #       new, or changed, Python scripts whose PYTHONPATH has to be set in
-    #       `postFixup` below, and whose runtime deps need to go into
-    #       `nativeBuildInputs`.
-    #       The command
-    #         find /nix/store/...-glusterfs-.../ -name '*.py' -executable
-    #       can help with finding new Python scripts.
-    version = "7.3";
-    name="${baseName}-${version}";
-    url="https://github.com/gluster/glusterfs/archive/v${version}.tar.gz";
-    sha256 = "08g8394vk88cb71z4k5sknld1nsd20f4mk2yyjvdp1hwm97z12pq";
-  };
+    rec {
+      baseName = "glusterfs";
+      # NOTE: On each glusterfs release, it should be checked if gluster added
+      #       new, or changed, Python scripts whose PYTHONPATH has to be set in
+      #       `postFixup` below, and whose runtime deps need to go into
+      #       `nativeBuildInputs`.
+      #       The command
+      #         find /nix/store/...-glusterfs-.../ -name '*.py' -executable
+      #       can help with finding new Python scripts.
+      version = "7.3";
+      name = "${baseName}-${version}";
+      url = "https://github.com/gluster/glusterfs/archive/v${version}.tar.gz";
+      sha256 = "08g8394vk88cb71z4k5sknld1nsd20f4mk2yyjvdp1hwm97z12pq";
+    };
 
   buildInputs = [
-    fuse bison flex_2_5_35 openssl ncurses readline
-    autoconf automake libtool pkgconfig zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper utillinux
+    fuse
+    bison
+    flex_2_5_35
+    openssl
+    ncurses
+    readline
+    autoconf
+    automake
+    libtool
+    pkgconfig
+    zlib
+    libaio
+    libxml2
+    acl
+    sqlite
+    liburcu
+    attr
+    makeWrapper
+    utillinux
     (python3.withPackages (pkgs: [
       pkgs.flask
       pkgs.prettytable
@@ -75,24 +122,24 @@ stdenv.mkDerivation
     sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
   '';
 
-   # Note that the VERSION file is something that is present in release tarballs
-   # but not in git tags (at least not as of writing in v3.10.1).
-   # That's why we have to create it.
-   # Without this, gluster (at least 3.10.1) will fail very late and cryptically,
-   # for example when setting up geo-replication, with a message like
-   #   Staging of operation 'Volume Geo-replication Create' failed on localhost : Unable to fetch master volume details. Please check the master cluster and master volume.
-   # What happens here is that the gverify.sh script tries to compare the versions,
-   # but fails when the version is empty.
-   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
-   preConfigure = ''
+  # Note that the VERSION file is something that is present in release tarballs
+  # but not in git tags (at least not as of writing in v3.10.1).
+  # That's why we have to create it.
+  # Without this, gluster (at least 3.10.1) will fail very late and cryptically,
+  # for example when setting up geo-replication, with a message like
+  #   Staging of operation 'Volume Geo-replication Create' failed on localhost : Unable to fetch master volume details. Please check the master cluster and master volume.
+  # What happens here is that the gverify.sh script tries to compare the versions,
+  # but fails when the version is empty.
+  # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
+  preConfigure = ''
      echo "v${s.version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
-    '';
+  '';
 
   configureFlags = [
     ''--localstatedir=/var''
-    ];
+  ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -101,7 +148,7 @@ stdenv.mkDerivation
   postInstall = ''
     cp -r $out/$out/* $out
     rm -r $out/nix
-    '';
+  '';
 
   postFixup = ''
     # glusterd invokes `gluster` and other utilities when telling other glusterd nodes to run commands.
@@ -145,7 +192,7 @@ stdenv.mkDerivation
     wrapProgram $out/share/glusterfs/scripts/eventsdash.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
     wrapProgram $out/libexec/glusterfs/glusterfind/brickfind.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
     wrapProgram $out/libexec/glusterfs/glusterfind/changelog.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
-    '';
+  '';
 
   doInstallCheck = true;
 
@@ -177,7 +224,7 @@ stdenv.mkDerivation
 
     # this gets falsely loaded as module by glusterfind
     rm -r $out/bin/conf.py
-    '';
+  '';
 
   src = fetchurl {
     inherit (s) url sha256;

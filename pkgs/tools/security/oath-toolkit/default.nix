@@ -1,11 +1,10 @@
 { stdenv, fetchFromGitLab, fetchpatch, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtk-doc, perl, gengetopt, bison, help2man }:
-
 let
   securityDependency =
     if stdenv.isDarwin then xmlsec
     else pam;
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "oath-toolkit-2.6.2";
 
   src = fetchFromGitLab {
@@ -18,8 +17,8 @@ in stdenv.mkDerivation {
   patches = [
     # fix for glibc>=2.28
     (fetchpatch {
-      name   = "new_glibc_check.patch";
-      url    = "https://sources.debian.org/data/main/o/oath-toolkit/2.6.1-1.3/debian/patches/new-glibc-check.patch";
+      name = "new_glibc_check.patch";
+      url = "https://sources.debian.org/data/main/o/oath-toolkit/2.6.1-1.3/debian/patches/new-glibc-check.patch";
       sha256 = "0h75xyy3xsl485v7w27yqkks6z9sgsjmrv6wiswy15fdj5wyciv3";
     })
   ];

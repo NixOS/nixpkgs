@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "commons-bsf-1.2";
@@ -20,4 +20,3 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.unix;
   };
 }
-

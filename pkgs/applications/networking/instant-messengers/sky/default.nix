@@ -1,15 +1,39 @@
-{ stdenv, fetchurl, file, libX11, libXScrnSaver
-, libGL, qt5, SDL, libpulseaudio
-, libXrandr, libXext, libXcursor, libXinerama, libXi
-, curl, sqlite, openssl
-, libuuid, openh264, libv4l, libxkbfile, libXv, zlib, libXmu
-, libXtst, libXdamage, pam, libXfixes, libXrender, libjpeg_original
+{ stdenv
+, fetchurl
+, file
+, libX11
+, libXScrnSaver
+, libGL
+, qt5
+, SDL
+, libpulseaudio
+, libXrandr
+, libXext
+, libXcursor
+, libXinerama
+, libXi
+, curl
+, sqlite
+, openssl
+, libuuid
+, openh264
+, libv4l
+, libxkbfile
+, libXv
+, zlib
+, libXmu
+, libXtst
+, libXdamage
+, pam
+, libXfixes
+, libXrender
+, libjpeg_original
 , ffmpeg
 }:
- let
-   # Sky is linked to the libjpeg 8 version and checks for the version number in the code.
-   libjpeg_original_fix = libjpeg_original.overrideAttrs (oldAttrs: {
-    src = fetchurl{
+let
+  # Sky is linked to the libjpeg 8 version and checks for the version number in the code.
+  libjpeg_original_fix = libjpeg_original.overrideAttrs (oldAttrs: {
+    src = fetchurl {
       url = https://www.ijg.org/files/jpegsrc.v8d.tar.gz;
       sha256 = "1cz0dy05mgxqdgjf52p54yxpyy95rgl30cnazdrfmw7hfca9n0h0";
     };
@@ -25,7 +49,7 @@ stdenv.mkDerivation rec {
     url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+xenial_amd64.deb";
     sha256 = "0b3j90km3rp5bgaklxw881g0gcy09mqzbhjdfrq4s2np026ql3d9";
   };
-  buildInputs = [ 
+  buildInputs = [
     file
     qt5.qtbase
     SDL
@@ -35,10 +59,25 @@ stdenv.mkDerivation rec {
     openh264
     pam
     curl
-    libX11 libXScrnSaver libGL libpulseaudio libXrandr
-    libXext libXcursor libXinerama libXi libuuid libv4l
-    libxkbfile libXv zlib libXmu libXtst libXdamage
-    libXfixes libXrender
+    libX11
+    libXScrnSaver
+    libGL
+    libpulseaudio
+    libXrandr
+    libXext
+    libXcursor
+    libXinerama
+    libXi
+    libuuid
+    libv4l
+    libxkbfile
+    libXv
+    zlib
+    libXmu
+    libXtst
+    libXdamage
+    libXfixes
+    libXrender
     libjpeg_original_fix
   ];
   dontBuild = true;
@@ -83,4 +122,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

@@ -1,8 +1,19 @@
-{ lib, mkDerivation, fetchgit, SDL2
-, qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
-, qtgraphicaleffects, qtspeech, qmake
+{ lib
+, mkDerivation
+, fetchgit
+, SDL2
+, qtbase
+, qtcharts
+, qtlocation
+, qtserialport
+, qtsvg
+, qtquickcontrols2
+, qtgraphicaleffects
+, qtspeech
+, qmake
 , makeWrapper
-, gst_all_1, pkgconfig
+, gst_all_1
+, pkgconfig
 }:
 
 mkDerivation rec {
@@ -10,12 +21,19 @@ mkDerivation rec {
   version = "3.5.5";
 
   qtInputs = [
-    qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
-    qtgraphicaleffects qtspeech
+    qtbase
+    qtcharts
+    qtlocation
+    qtserialport
+    qtsvg
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtspeech
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base
+    gstreamer
+    gst-plugins-base
   ];
 
   enableParallelBuilding = true;

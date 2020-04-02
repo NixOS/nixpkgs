@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   phpConfig = writeText "config.php" ''
-  <?php
-    return require(getenv('LIMESURVEY_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('LIMESURVEY_CONFIG'));
+    ?>
   '';
 
   installPhase = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Open source survey application";
     license = licenses.gpl2;
     homepage = "https://www.limesurvey.org";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = with platforms; unix;
   };
 }

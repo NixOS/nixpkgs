@@ -1,4 +1,11 @@
-{ buildPythonPackage, stdenv, glibcLocales, mock, nose, isPy3k, jinja2, six
+{ buildPythonPackage
+, stdenv
+, glibcLocales
+, mock
+, nose
+, isPy3k
+, jinja2
+, six
 , fetchPypi
 }:
 

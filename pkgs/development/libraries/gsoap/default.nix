@@ -1,9 +1,8 @@
 { stdenv, fetchurl, autoreconfHook, unzip, m4, bison, flex, openssl, zlib }:
-
 let
   majorVersion = "2.8";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gsoap";
   version = "${majorVersion}.53";
 

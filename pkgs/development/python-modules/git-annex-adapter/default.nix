@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, substituteAll
-, python, utillinux, pygit2, gitMinimal, git-annex
+{ stdenv
+, buildPythonPackage
+, isPy3k
+, fetchFromGitHub
+, substituteAll
+, python
+, utillinux
+, pygit2
+, gitMinimal
+, git-annex
 }:
 
 buildPythonPackage rec {

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... }: {
 
   name = "mxisd";
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -6,12 +6,12 @@ import ./make-test-python.nix ({ pkgs, ... } : {
   };
 
   nodes = {
-    server_mxisd = args : {
+    server_mxisd = args: {
       services.mxisd.enable = true;
       services.mxisd.matrix.domain = "example.org";
     };
 
-    server_ma1sd = args : {
+    server_ma1sd = args: {
       services.mxisd.enable = true;
       services.mxisd.matrix.domain = "example.org";
       services.mxisd.package = pkgs.ma1sd;

@@ -1,10 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
-, systemd, nettle, libedit, zlib, libiconv, libintl
+{ stdenv
+, fetchurl
+, pkgconfig
+, gnutls
+, liburcu
+, lmdb
+, libcap_ng
+, libidn2
+, libunistring
+, systemd
+, nettle
+, libedit
+, zlib
+, libiconv
+, libintl
 , autoreconfHook
 }:
 
 let inherit (stdenv.lib) optional optionals; in
-
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   pname = "knot-dns";
@@ -31,13 +43,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    gnutls liburcu libidn2 libunistring
-    nettle libedit
-    libiconv lmdb libintl
+    gnutls
+    liburcu
+    libidn2
+    libunistring
+    nettle
+    libedit
+    libiconv
+    lmdb
+    libintl
     # without sphinx &al. for developer documentation
   ]
-    ++ optionals stdenv.isLinux [ libcap_ng systemd ]
-    ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
+  ++ optionals stdenv.isLinux [ libcap_ng systemd ]
+  ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
 

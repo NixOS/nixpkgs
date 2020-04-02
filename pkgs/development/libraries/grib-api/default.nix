@@ -1,6 +1,14 @@
-{ fetchurl, fetchpatch, stdenv,
-  cmake, netcdf, gfortran, libpng, openjpeg,
-  enablePython ? false, pythonPackages }:
+{ fetchurl
+, fetchpatch
+, stdenv
+, cmake
+, netcdf
+, gfortran
+, libpng
+, openjpeg
+, enablePython ? false
+, pythonPackages
+}:
 
 stdenv.mkDerivation rec{
   pname = "grib-api";
@@ -23,24 +31,26 @@ stdenv.mkDerivation rec{
     substituteInPlace "src/grib_jasper_encoding.c" --replace "image.inmem_    = 1;" ""
   '';
 
-  buildInputs = [ cmake
-                  netcdf
-                  gfortran
-                  libpng
-                  openjpeg
-                ] ++ stdenv.lib.optionals enablePython [
-                  pythonPackages.python
-                ];
+  buildInputs = [
+    cmake
+    netcdf
+    gfortran
+    libpng
+    openjpeg
+  ] ++ stdenv.lib.optionals enablePython [
+    pythonPackages.python
+  ];
 
   propagatedBuildInputs = stdenv.lib.optionals enablePython [
-                  pythonPackages.numpy
-                ];
+    pythonPackages.numpy
+  ];
 
-  cmakeFlags = [ "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
-                 "-DENABLE_PNG=ON"
-                 "-DENABLE_FORTRAN=ON"
-                 "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/${openjpeg.incDir}"
-               ];
+  cmakeFlags = [
+    "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
+    "-DENABLE_PNG=ON"
+    "-DENABLE_FORTRAN=ON"
+    "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/${openjpeg.incDir}"
+  ];
 
   enableParallelBuilding = true;
 

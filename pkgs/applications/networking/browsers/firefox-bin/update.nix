@@ -12,12 +12,11 @@
 , basePath ? "pkgs/applications/networking/browsers/firefox-bin"
 , baseUrl
 }:
-
 let
   isBeta =
     channel != "release";
-
-in writeScript "update-${name}" ''
+in
+writeScript "update-${name}" ''
   #!${runtimeShell}
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux

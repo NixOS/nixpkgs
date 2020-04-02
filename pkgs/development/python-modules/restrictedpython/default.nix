@@ -2,8 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 
-# Test dependencies
-, pytest, pytest-mock
+  # Test dependencies
+, pytest
+, pytest-mock
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,8 @@ buildPythonPackage rec {
   #propagatedBuildInputs = [ xmltodict requests ifaddr ];
 
   checkInputs = [
-    pytest pytest-mock
+    pytest
+    pytest-mock
   ];
 
   checkPhase = ''

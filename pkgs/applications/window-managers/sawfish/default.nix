@@ -1,8 +1,19 @@
-{ stdenv, fetchurl
-, pkgconfig, which, autoreconfHook
-, rep-gtk, pango, gdk-pixbuf
-, imlib, gettext, texinfo
-, libXinerama, libXrandr, libXtst, libICE, libSM
+{ stdenv
+, fetchurl
+, pkgconfig
+, which
+, autoreconfHook
+, rep-gtk
+, pango
+, gdk-pixbuf
+, imlib
+, gettext
+, texinfo
+, libXinerama
+, libXrandr
+, libXtst
+, libICE
+, libSM
 , makeWrapper
 }:
 
@@ -20,10 +31,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ which
-    rep-gtk pango gdk-pixbuf imlib gettext texinfo
-    libXinerama libXrandr libXtst libICE libSM
-    makeWrapper ];
+  buildInputs = [
+    which
+    rep-gtk
+    pango
+    gdk-pixbuf
+    imlib
+    gettext
+    texinfo
+    libXinerama
+    libXrandr
+    libXtst
+    libICE
+    libSM
+    makeWrapper
+  ];
 
   patchPhase = ''
     sed -e 's|REP_DL_LOAD_PATH=|REP_DL_LOAD_PATH=$(REP_DL_LOAD_PATH):|g' -i Makedefs.in

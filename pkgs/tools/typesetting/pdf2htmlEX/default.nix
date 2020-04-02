@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, poppler, xorg, pcre, python, glib, fontforge, cairo, pango, openjdk8
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, poppler
+, xorg
+, pcre
+, python
+, glib
+, fontforge
+, cairo
+, pango
+, openjdk8
 
 }:
 
@@ -7,9 +18,9 @@ stdenv.mkDerivation {
   name = "pdf2htmlEX-0.14.6";
 
   src = fetchFromGitHub {
-    repo   = "pdf2htmlEX";
-    owner  = "coolwanglu";
-    rev    = "v0.14.6";
+    repo = "pdf2htmlEX";
+    owner = "coolwanglu";
+    rev = "v0.14.6";
     sha256 = "1nh0ab8f11fsyi4ldknlkmdzcfvm1dfh8b9bmprjgq6q0vjj7f78";
   };
 
@@ -39,10 +50,10 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Render PDF files to beautiful HTML";
-    homepage    = "https://github.com/coolwanglu/pdf2htmlEX";
-    license     = licenses.gpl3Plus;
+    homepage = "https://github.com/coolwanglu/pdf2htmlEX";
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.taktoa ];
-    platforms   = with platforms; linux;
-    broken      = true; # 2018-09-08
+    platforms = with platforms; linux;
+    broken = true; # 2018-09-08
   };
 }

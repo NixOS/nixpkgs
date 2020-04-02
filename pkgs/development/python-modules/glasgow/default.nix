@@ -61,9 +61,15 @@ buildPythonPackage rec {
   '';
 
   makeWrapperArgs = [
-    "--set" "YOSYS" "${yosys}/bin/yosys"
-    "--set" "ICEPACK" "${icestorm}/bin/icepack"
-    "--set" "NEXTPNR_ICE40" "${nextpnr}/bin/nextpnr-ice40"
+    "--set"
+    "YOSYS"
+    "${yosys}/bin/yosys"
+    "--set"
+    "ICEPACK"
+    "${icestorm}/bin/icepack"
+    "--set"
+    "NEXTPNR_ICE40"
+    "${nextpnr}/bin/nextpnr-ice40"
   ];
 
   meta = with lib; {

@@ -1,11 +1,25 @@
-{ stdenv, gettext, libxml2, fetchurl, pkgconfig, libcanberra-gtk3
-, gtk3, glib, meson, ninja, python3, wrapGAppsHook, appstream-glib, desktop-file-utils
-, gnome3, gsettings-desktop-schemas }:
-
+{ stdenv
+, gettext
+, libxml2
+, fetchurl
+, pkgconfig
+, libcanberra-gtk3
+, gtk3
+, glib
+, meson
+, ninja
+, python3
+, wrapGAppsHook
+, appstream-glib
+, desktop-file-utils
+, gnome3
+, gsettings-desktop-schemas
+}:
 let
   pname = "gnome-screenshot";
   version = "3.34.0";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -22,7 +36,10 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 desktop-file-utils python3 wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib libcanberra-gtk3 gnome3.adwaita-icon-theme
+    gtk3
+    glib
+    libcanberra-gtk3
+    gnome3.adwaita-icon-theme
     gsettings-desktop-schemas
   ];
 

@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, makeWrapper, cups, perl, coreutils, gnused, gnugrep
-, brgenml1lpr, debugLvl ? "0"}:
+{ stdenv
+, fetchurl
+, makeWrapper
+, cups
+, perl
+, coreutils
+, gnused
+, gnugrep
+, brgenml1lpr
+, debugLvl ? "0"
+}:
 
 /*
     [Setup instructions](http://support.brother.com/g/s/id/linux/en/instruction_prn1a.html).

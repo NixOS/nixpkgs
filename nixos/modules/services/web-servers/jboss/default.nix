@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.jboss;
 
   jbossService = pkgs.stdenv.mkDerivation {
@@ -12,9 +10,7 @@ let
     inherit (pkgs) jboss su;
     inherit (cfg) tempDir logDir libUrl deployDir serverDir user useJK;
   };
-
 in
-
 {
 
   ###### interface

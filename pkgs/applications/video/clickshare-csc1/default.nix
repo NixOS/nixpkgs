@@ -63,20 +63,20 @@ stdenv.mkDerivation rec {
     let
       rpmArch =
         if stdenv.hostPlatform.isx86_32 then "i386" else
-        if stdenv.hostPlatform.isx86_64 then "x86_64" else
-        throw "unsupported system: ${stdenv.hostPlatform.system}";
+          if stdenv.hostPlatform.isx86_64 then "x86_64" else
+            throw "unsupported system: ${stdenv.hostPlatform.system}";
     in
-      ''
-        ls clickshare_baseunit_*.*_all.signed_release.ipk | wc --lines | xargs test 1 =
-        tar --verbose --extract --one-top-level=dir1 < clickshare_baseunit_*.*_all.signed_release.ipk
-        mkdir dir2
-        ( cd dir2 ; ar xv ../dir1/firmware.ipk )
-        tar --verbose --gzip --extract --one-top-level=dir3 --exclude='dev/*' < dir2/data.tar.gz
-        ls dir3/clickshare/clickshare-*-*.${rpmArch}.rpm | wc --lines | xargs test 1 =
-        mkdir dir4
-        cd dir4
-        rpmextract ../dir3/clickshare/clickshare-*-*.${rpmArch}.rpm
-      '';
+    ''
+      ls clickshare_baseunit_*.*_all.signed_release.ipk | wc --lines | xargs test 1 =
+      tar --verbose --extract --one-top-level=dir1 < clickshare_baseunit_*.*_all.signed_release.ipk
+      mkdir dir2
+      ( cd dir2 ; ar xv ../dir1/firmware.ipk )
+      tar --verbose --gzip --extract --one-top-level=dir3 --exclude='dev/*' < dir2/data.tar.gz
+      ls dir3/clickshare/clickshare-*-*.${rpmArch}.rpm | wc --lines | xargs test 1 =
+      mkdir dir4
+      cd dir4
+      rpmextract ../dir3/clickshare/clickshare-*-*.${rpmArch}.rpm
+    '';
 
   installPhase = ''
     runHook preInstall

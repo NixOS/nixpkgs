@@ -14,7 +14,7 @@ rec {
 
   packageName = "circular-streams";
 
-  asdFilesToKeep = ["circular-streams.asd"];
+  asdFilesToKeep = [ "circular-streams.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM circular-streams DESCRIPTION

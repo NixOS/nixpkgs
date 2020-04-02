@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitHub, libX11, autoreconfHook }:
+{ stdenv, lib, fetchFromGitHub, libX11, autoreconfHook }:
 
 stdenv.mkDerivation {
   pname = "xsel-unstable";

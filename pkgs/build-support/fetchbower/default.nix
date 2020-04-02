@@ -7,7 +7,7 @@ let
       ver = if builtins.length components == 1 then (cleanName version) else hash;
     in ver;
 
-  cleanName = name: lib.replaceStrings ["/" ":"] ["-" "-"] name;
+  cleanName = name: lib.replaceStrings [ "/" ":" ] [ "-" "-" ] name;
 
   fetchbower = name: version: target: outputHash: stdenvNoCC.mkDerivation {
     name = "${cleanName name}-${bowerVersion version}";
@@ -24,5 +24,5 @@ let
     inherit outputHash;
     nativeBuildInputs = [ bower2nix cacert ];
   };
-
-in fetchbower
+in
+fetchbower

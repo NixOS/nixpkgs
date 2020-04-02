@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  installTargets =  [
+  installTargets = [
     "install-gtk-webkit"
   ];
 

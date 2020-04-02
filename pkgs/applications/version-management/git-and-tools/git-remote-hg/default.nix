@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, mercurial, makeWrapper
-, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
+{ stdenv
+, lib
+, fetchFromGitHub
+, mercurial
+, makeWrapper
+, asciidoc
+, xmlto
+, docbook_xsl
+, docbook_xml_dtd_45
+, libxslt
+, libxml2
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +22,16 @@ stdenv.mkDerivation rec {
     sha256 = "1by5ygqvq9ww990kdrjndaqsssyf2jc4n380f9pfh2avsr7871wc";
   };
 
-  buildInputs = [ mercurial.python mercurial makeWrapper
-    asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt libxml2
+  buildInputs = [
+    mercurial.python
+    mercurial
+    makeWrapper
+    asciidoc
+    xmlto
+    docbook_xsl
+    docbook_xml_dtd_45
+    libxslt
+    libxml2
   ];
 
   doCheck = false;
@@ -23,7 +40,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/git-remote-hg \
-      --prefix PYTHONPATH : "$(echo ${mercurial}/lib/python*/site-packages):$(echo ${mercurial.python}/lib/python*/site-packages)${stdenv.lib.concatMapStrings (x: ":$(echo ${x}/lib/python*/site-packages)") mercurial.pythonPackages or []}"
+      --prefix PYTHONPATH : "$(echo ${mercurial}/lib/python*/site-packages):$(echo ${mercurial.python}/lib/python*/site-packages)${stdenv.lib.concatMapStrings (x: ":$(echo ${x}/lib/python*/site-packages)") mercurial.pythonPackages or [ ]}"
   '';
 
   meta = with lib; {

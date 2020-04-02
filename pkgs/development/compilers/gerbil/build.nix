@@ -1,7 +1,22 @@
-{ stdenv, makeStaticLibraries,
-  coreutils, rsync, bash,
-  openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
-  version, git-version, gambit, src }:
+{ stdenv
+, makeStaticLibraries
+, coreutils
+, rsync
+, bash
+, openssl
+, zlib
+, sqlite
+, libxml2
+, libyaml
+, libmysqlclient
+, lmdb
+, leveldb
+, postgresql
+, version
+, git-version
+, gambit
+, src
+}:
 
 stdenv.mkDerivation rec {
   pname = "gerbil";
@@ -29,23 +44,23 @@ stdenv.mkDerivation rec {
       substituteInPlace "$f" --replace '"gsc"' '"${gambit}/bin/gsc"'
     done
     substituteInPlace "etc/gerbil.el" --replace '"gxc"' "\"$out/bin/gxc\""
-'';
+  '';
 
-## TODO: make static compilation work.
-## For that, get all the packages below to somehow expose static libraries,
-## so we can offer users the option to statically link them into Gambit and/or Gerbil.
-## Then add the following to the postPatch script above:
-#     cat > etc/gerbil_static_libraries.sh <<EOF
-# OPENSSL_LIBCRYPTO=${makeStaticLibraries openssl}/lib/libcrypto.a # MISSING!
-# OPENSSL_LIBSSL=${makeStaticLibraries openssl}/lib/libssl.a # MISSING!
-# ZLIB=${makeStaticLibraries zlib}/lib/libz.a
-# SQLITE=${makeStaticLibraries sqlite}/lib/sqlite.a # MISSING!
-# LIBXML2=${makeStaticLibraries libxml2}/lib/libxml2.a # MISSING!
-# YAML=${makeStaticLibraries libyaml}/lib/libyaml.a # MISSING!
-# MYSQL=${makeStaticLibraries libmysqlclient}/lib/mariadb/libmariadb.a
-# LMDB=${makeStaticLibraries lmdb}/lib/mysql/libmysqlclient_r.a # MISSING!
-# LEVELDB=${makeStaticLibraries leveldb}/lib/libleveldb.a
-# EOF
+  ## TODO: make static compilation work.
+  ## For that, get all the packages below to somehow expose static libraries,
+  ## so we can offer users the option to statically link them into Gambit and/or Gerbil.
+  ## Then add the following to the postPatch script above:
+  #     cat > etc/gerbil_static_libraries.sh <<EOF
+  # OPENSSL_LIBCRYPTO=${makeStaticLibraries openssl}/lib/libcrypto.a # MISSING!
+  # OPENSSL_LIBSSL=${makeStaticLibraries openssl}/lib/libssl.a # MISSING!
+  # ZLIB=${makeStaticLibraries zlib}/lib/libz.a
+  # SQLITE=${makeStaticLibraries sqlite}/lib/sqlite.a # MISSING!
+  # LIBXML2=${makeStaticLibraries libxml2}/lib/libxml2.a # MISSING!
+  # YAML=${makeStaticLibraries libyaml}/lib/libyaml.a # MISSING!
+  # MYSQL=${makeStaticLibraries libmysqlclient}/lib/mariadb/libmariadb.a
+  # LMDB=${makeStaticLibraries lmdb}/lib/mysql/libmysqlclient_r.a # MISSING!
+  # LEVELDB=${makeStaticLibraries leveldb}/lib/libleveldb.a
+  # EOF
 
   buildPhase = ''
     runHook preBuild
@@ -71,32 +86,32 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    runHook preInstall
-    mkdir -p $out/
-    cp -fa bin lib etc doc $out/
+        runHook preInstall
+        mkdir -p $out/
+        cp -fa bin lib etc doc $out/
 
-    cat > $out/bin/gxi <<EOF
-#!${bash}/bin/bash -e
-export GERBIL_HOME=$out
-case "\$1" in -:*) GSIOPTIONS=\$1 ; shift ;; esac
-if [[ \$# = 0 ]] ; then
-  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive -
-else
-  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
-fi
-EOF
-    runHook postInstall
+        cat > $out/bin/gxi <<EOF
+    #!${bash}/bin/bash -e
+    export GERBIL_HOME=$out
+    case "\$1" in -:*) GSIOPTIONS=\$1 ; shift ;; esac
+    if [[ \$# = 0 ]] ; then
+      exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive -
+    else
+      exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
+    fi
+    EOF
+        runHook postInstall
   '';
 
   dontStrip = true;
 
   meta = {
     description = "Gerbil Scheme";
-    homepage    = "https://github.com/vyzo/gerbil";
-    license     = stdenv.lib.licenses.lgpl2;
+    homepage = "https://github.com/vyzo/gerbil";
+    license = stdenv.lib.licenses.lgpl2;
     # NB regarding platforms: regularly tested on Linux, only occasionally on macOS.
     # Please report success and/or failure to fare.
-    platforms   = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fare ];
   };
 }

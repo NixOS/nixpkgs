@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, coreutils, gnugrep, gnused, makeWrapper, git
+{ stdenv
+, fetchFromGitHub
+, coreutils
+, gnugrep
+, gnused
+, makeWrapper
+, git
 }:
 
 stdenv.mkDerivation rec {

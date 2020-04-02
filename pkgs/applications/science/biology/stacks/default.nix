@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib }:
-    
+
 stdenv.mkDerivation rec {
   pname = "stacks";
   version = "2.41";

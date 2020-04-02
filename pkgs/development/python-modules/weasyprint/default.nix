@@ -1,24 +1,24 @@
-{ buildPythonPackage,
-  fetchPypi,
-  cairosvg,
-  pyphen,
-  cffi,
-  cssselect,
-  lxml,
-  html5lib,
-  tinycss,
-  pygobject2,
-  glib,
-  pango,
-  fontconfig,
-  stdenv,
-  pytest,
-  pytestrunner,
-  pytest-isort,
-  pytest-flake8,
-  pytestcov,
-  isPy3k,
-  substituteAll
+{ buildPythonPackage
+, fetchPypi
+, cairosvg
+, pyphen
+, cffi
+, cssselect
+, lxml
+, html5lib
+, tinycss
+, pygobject2
+, glib
+, pango
+, fontconfig
+, stdenv
+, pytest
+, pytestrunner
+, pytest-isort
+, pytest-flake8
+, pytestcov
+, isPy3k
+, substituteAll
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
-  host = config.networking.hostName or "unknown"
-       + optionalString (config.networking.domain != null) ".${config.networking.domain}";
+  host = config.networking.hostName or "unknown" + optionalString (config.networking.domain != null) ".${config.networking.domain}";
 
   cfg = config.services.smartd;
 
@@ -16,39 +13,39 @@ let
   smartdNotify = pkgs.writeScript "smartd-notify.sh" ''
     #! ${pkgs.runtimeShell}
     ${optionalString nm.enable ''
-      {
-      ${pkgs.coreutils}/bin/cat << EOF
-      From: smartd on ${host} <root>
-      To: undisclosed-recipients:;
-      Subject: SMART error on $SMARTD_DEVICESTRING: $SMARTD_FAILTYPE
+    {
+    ${pkgs.coreutils}/bin/cat << EOF
+    From: smartd on ${host} <root>
+    To: undisclosed-recipients:;
+    Subject: SMART error on $SMARTD_DEVICESTRING: $SMARTD_FAILTYPE
 
-      $SMARTD_FULLMESSAGE
-      EOF
+    $SMARTD_FULLMESSAGE
+    EOF
 
-      ${pkgs.smartmontools}/sbin/smartctl -a -d "$SMARTD_DEVICETYPE" "$SMARTD_DEVICE"
-      } | ${nm.mailer} -i "${nm.recipient}"
-    ''}
+    ${pkgs.smartmontools}/sbin/smartctl -a -d "$SMARTD_DEVICETYPE" "$SMARTD_DEVICE"
+    } | ${nm.mailer} -i "${nm.recipient}"
+  ''}
     ${optionalString nw.enable ''
-      {
-      ${pkgs.coreutils}/bin/cat << EOF
-      Problem detected with disk: $SMARTD_DEVICESTRING
-      Warning message from smartd is:
+    {
+    ${pkgs.coreutils}/bin/cat << EOF
+    Problem detected with disk: $SMARTD_DEVICESTRING
+    Warning message from smartd is:
 
-      $SMARTD_MESSAGE
-      EOF
-      } | ${pkgs.utillinux}/bin/wall 2>/dev/null
-    ''}
+    $SMARTD_MESSAGE
+    EOF
+    } | ${pkgs.utillinux}/bin/wall 2>/dev/null
+  ''}
     ${optionalString nx.enable ''
-      export DISPLAY=${nx.display}
-      {
-      ${pkgs.coreutils}/bin/cat << EOF
-      Problem detected with disk: $SMARTD_DEVICESTRING
-      Warning message from smartd is:
+    export DISPLAY=${nx.display}
+    {
+    ${pkgs.coreutils}/bin/cat << EOF
+    Problem detected with disk: $SMARTD_DEVICESTRING
+    Warning message from smartd is:
 
-      $SMARTD_FULLMESSAGE
-      EOF
-      } | ${pkgs.xorg.xmessage}/bin/xmessage -file - 2>/dev/null &
-    ''}
+    $SMARTD_FULLMESSAGE
+    EOF
+    } | ${pkgs.xorg.xmessage}/bin/xmessage -file - 2>/dev/null &
+  ''}
   '';
 
   notifyOpts = optionalString (nm.enable || nw.enable || nx.enable)
@@ -61,7 +58,7 @@ let
     ${concatMapStringsSep "\n" (d: "${d.device} ${d.options}") cfg.devices}
 
     ${optionalString cfg.autodetect
-       "DEVICESCAN ${notifyOpts}${cfg.defaults.autodetected}"}
+      "DEVICESCAN ${notifyOpts}${cfg.defaults.autodetected}"}
   '';
 
   smartdDeviceOpts = { ... }: {
@@ -84,9 +81,7 @@ let
     };
 
   };
-
 in
-
 {
   ###### interface
 
@@ -109,9 +104,9 @@ in
       };
 
       extraOptions = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
-        example = ["-A /var/log/smartd/" "--interval=3600"];
+        example = [ "-A /var/log/smartd/" "--interval=3600" ];
         description = ''
           Extra command-line options passed to the <literal>smartd</literal>
           daemon on startup.
@@ -207,7 +202,7 @@ in
       };
 
       devices = mkOption {
-        default = [];
+        default = [ ];
         example = [ { device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; } ];
         type = with types; listOf (submodule smartdDeviceOpts);
         description = "List of devices to monitor.";
@@ -222,10 +217,12 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [ {
-      assertion = cfg.autodetect || cfg.devices != [];
-      message = "smartd can't run with both disabled autodetect and an empty list of devices to monitor.";
-    } ];
+    assertions = [
+      {
+        assertion = cfg.autodetect || cfg.devices != [ ];
+        message = "smartd can't run with both disabled autodetect and an empty list of devices to monitor.";
+      }
+    ];
 
     systemd.services.smartd = {
       description = "S.M.A.R.T. Daemon";

@@ -1,16 +1,57 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk2, fontconfig, freetype, imlib2
-, SDL_image, libGLU, libGL, libXmu, freeglut, pcre, dbus, dbus-glib, glib
-, librsvg, freeimage, libxslt, cairo, gdk-pixbuf, pango
-, atk, patchelf, fetchurl, bzip2, python, gettext, quesoglc
-, gd, cmake, shapelib, SDL_ttf, fribidi, makeWrapper
-, qtquickcontrols, qtmultimedia, qtspeech, qtsensors
-, qtlocation, qtdeclarative, qtsvg
-, qtSupport ? false, qtbase #need to fix qt_qpainter
-, sdlSupport ? true, SDL
-, xkbdSupport ? true, xkbd
-, espeakSupport ? true, espeak
-, postgresqlSupport ? false, postgresql
-, speechdSupport ? false, speechd ? null
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, gtk2
+, fontconfig
+, freetype
+, imlib2
+, SDL_image
+, libGLU
+, libGL
+, libXmu
+, freeglut
+, pcre
+, dbus
+, dbus-glib
+, glib
+, librsvg
+, freeimage
+, libxslt
+, cairo
+, gdk-pixbuf
+, pango
+, atk
+, patchelf
+, fetchurl
+, bzip2
+, python
+, gettext
+, quesoglc
+, gd
+, cmake
+, shapelib
+, SDL_ttf
+, fribidi
+, makeWrapper
+, qtquickcontrols
+, qtmultimedia
+, qtspeech
+, qtsensors
+, qtlocation
+, qtdeclarative
+, qtsvg
+, qtSupport ? false
+, qtbase #need to fix qt_qpainter
+, sdlSupport ? true
+, SDL
+, xkbdSupport ? true
+, xkbd
+, espeakSupport ? true
+, espeak
+, postgresqlSupport ? false
+, postgresql
+, speechdSupport ? false
+, speechd ? null
 }:
 
 assert speechdSupport -> speechd != null;
@@ -41,21 +82,50 @@ stdenv.mkDerivation rec {
   # we choose only cmdline and speech-dispatcher speech options.
   # espeak builtins is made for non-cmdline OS as winCE
   cmakeFlags = [
-    "-DSAMPLE_MAP=n " "-DCMAKE_BUILD_TYPE=Release"
-    "-Dspeech/qt5_espeak=FALSE" "-Dsupport/espeak=FALSE"
+    "-DSAMPLE_MAP=n "
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-Dspeech/qt5_espeak=FALSE"
+    "-Dsupport/espeak=FALSE"
   ];
 
   buildInputs = [
-    gtk2 fontconfig freetype imlib2 libGLU libGL freeimage
-    libxslt libXmu freeglut python gettext quesoglc gd
-    fribidi pcre  dbus dbus-glib librsvg shapelib glib
-    cairo gdk-pixbuf pango atk
+    gtk2
+    fontconfig
+    freetype
+    imlib2
+    libGLU
+    libGL
+    freeimage
+    libxslt
+    libXmu
+    freeglut
+    python
+    gettext
+    quesoglc
+    gd
+    fribidi
+    pcre
+    dbus
+    dbus-glib
+    librsvg
+    shapelib
+    glib
+    cairo
+    gdk-pixbuf
+    pango
+    atk
   ] ++ optionals sdlSupport [ SDL SDL_ttf SDL_image ]
-    ++ optional postgresqlSupport postgresql
-    ++ optional speechdSupport speechd
-    ++ optionals qtSupport [
-      qtquickcontrols qtmultimedia qtspeech qtsensors
-      qtbase qtlocation qtdeclarative qtsvg
+  ++ optional postgresqlSupport postgresql
+  ++ optional speechdSupport speechd
+  ++ optionals qtSupport [
+    qtquickcontrols
+    qtmultimedia
+    qtspeech
+    qtsensors
+    qtbase
+    qtlocation
+    qtdeclarative
+    qtsvg
   ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig cmake patchelf bzip2 ];
@@ -68,17 +138,18 @@ stdenv.mkDerivation rec {
   '';
 
   # TODO: fix upstream?
-  libPath = stdenv.lib.makeLibraryPath ([ stdenv.cc.libc ] ++ buildInputs );
+  libPath = stdenv.lib.makeLibraryPath ([ stdenv.cc.libc ] ++ buildInputs);
   postFixup =
-  ''
-    find "$out/lib" -type f -name "*.so" -exec patchelf --set-rpath $libPath {} \;
+    ''
+      find "$out/lib" -type f -name "*.so" -exec patchelf --set-rpath $libPath {} \;
 
-    wrapProgram $out/bin/navit \
-      --prefix PATH : ${makeBinPath (
+      wrapProgram $out/bin/navit \
+        --prefix PATH : ${makeBinPath (
         optional xkbdSupport xkbd
-        ++ optional espeakSupport espeak
-        ++ optional speechdSupport speechd ) }
-  '';
+          ++ optional espeakSupport espeak
+          ++ optional speechdSupport speechd
+      ) }
+    '';
 
   meta = {
     homepage = https://www.navit-project.org;

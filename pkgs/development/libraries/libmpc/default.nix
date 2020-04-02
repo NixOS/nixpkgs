@@ -1,7 +1,8 @@
-{ stdenv, fetchurl
-, gmp, mpfr
+{ stdenv
+, fetchurl
+, gmp
+, mpfr
 }:
-
 let
   version = "1.1.0";
 in

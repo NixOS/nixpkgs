@@ -1,13 +1,15 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , cxxSupport ? true
 , compat185 ? true
 , dbmSupport ? false
 
-# Options from inherited versions
-, version, sha256
+  # Options from inherited versions
+, version
+, sha256
 , extraPatches ? [ ]
 , license ? stdenv.lib.licenses.sleepycat
-, drvArgs ? {}
+, drvArgs ? { }
 }:
 
 stdenv.mkDerivation (rec {

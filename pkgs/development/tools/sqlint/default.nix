@@ -1,5 +1,4 @@
 { lib, bundlerApp, fetchurl, bundlerUpdateScript }:
-
 let
   LIB_PG_QUERY_TAG = "10-1.0.1";
   libpgQuerySrc = fetchurl {
@@ -7,7 +6,8 @@ let
     url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/${LIB_PG_QUERY_TAG}";
     sha256 = "0m5jv134hgw2vcfkqlnw80fr3wmrdvgrvk1ndcx9s44bzi5nsp47";
   };
-in bundlerApp {
+in
+bundlerApp {
   pname = "sqlint";
   gemdir = ./.;
 
@@ -27,9 +27,9 @@ in bundlerApp {
 
   meta = with lib; {
     description = "Simple SQL linter";
-    homepage    = https://github.com/purcell/sqlint;
-    license     = licenses.mit;
+    homepage = https://github.com/purcell/sqlint;
+    license = licenses.mit;
     maintainers = with maintainers; [ ariutta nicknovitski ];
-    platforms   = with platforms; [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = with platforms; [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

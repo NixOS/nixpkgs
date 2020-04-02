@@ -1,10 +1,9 @@
-{lib, python3, writeText}:
-
+{ lib, python3, writeText }:
 let
   py = python3.pkgs;
 in
-py.toPythonApplication 
-  (py.mlflow.overridePythonAttrs(old: rec {
+py.toPythonApplication
+  (py.mlflow.overridePythonAttrs (old: rec {
     pname = "mlflow-server";
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
@@ -19,7 +18,7 @@ py.toPythonApplication
     '';
 
     gunicornScript = writeText "gunicornMlflow"
-    ''
+      ''
         #!/usr/bin/env python
         import re
         import sys
@@ -34,4 +33,4 @@ py.toPythonApplication
       cp ${gunicornScript} $gpath
       chmod 555 $gpath
     '';
-}))
+  }))

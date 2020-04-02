@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, intltool
-, GConf, enchant, isocodes, gnome_icon_theme, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gtk3
+, intltool
+, GConf
+, enchant
+, isocodes
+, gnome_icon_theme
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   version = "4.10.0";

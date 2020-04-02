@@ -14,14 +14,12 @@
 , enableManpages ? false
 , enableSharedLibraries ? !enableManpages
 }:
-
 let
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with stdenv.lib;
     let parts = splitVersion release_version; in
-    imap (i: _: concatStringsSep "." (take i parts)) parts;
+      imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
-
 stdenv.mkDerivation ({
   pname = "llvm";
   inherit version;
@@ -89,7 +87,7 @@ stdenv.mkDerivation ({
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
@@ -125,21 +123,19 @@ stdenv.mkDerivation ({
   postInstall = ''
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
-  ''
-  + stdenv.lib.optionalString enableSharedLibraries ''
+  '' + stdenv.lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     moveToOutput "lib/libLTO${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
-  ''
-  + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  '' + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLTO.dylib" "$lib/lib/libLTO.dylib"
     ${stdenv.lib.concatMapStringsSep "\n" (v: ''
-      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
-    '') versionSuffixes}
+    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
+  '') versionSuffixes}
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isi686);
@@ -151,10 +147,10 @@ stdenv.mkDerivation ({
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.ncsa;
+    homepage = http://llvm.org/;
+    license = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
@@ -163,7 +159,7 @@ stdenv.mkDerivation ({
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install

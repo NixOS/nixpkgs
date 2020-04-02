@@ -1,15 +1,58 @@
-{ stdenv, cmake, pkgconfig, git, curl, SDL2, xercesc, openal, lua, vlc
-, libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
-, fontconfig, freetype, xorg, makeWrapper, bash, which, gnome3, libGLU, glib
+{ stdenv
+, cmake
+, pkgconfig
+, git
+, curl
+, SDL2
+, xercesc
+, openal
+, lua
+, vlc
+, libjpeg
+, wxGTK
+, cppunit
+, ftgl
+, glew
+, libogg
+, libvorbis
+, buildEnv
+, libpng
+, fontconfig
+, freetype
+, xorg
+, makeWrapper
+, bash
+, which
+, gnome3
+, libGLU
+, glib
 , fetchFromGitHub
 }:
 let
   version = "3.13.0";
   lib-env = buildEnv {
     name = "megaglest-lib-env";
-    paths = [ SDL2 xorg.libSM xorg.libICE xorg.libX11 xorg.libXext
-      xercesc openal libvorbis lua libjpeg libpng curl fontconfig ftgl freetype
-      stdenv.cc.cc glew libGLU wxGTK ];
+    paths = [
+      SDL2
+      xorg.libSM
+      xorg.libICE
+      xorg.libX11
+      xorg.libXext
+      xercesc
+      openal
+      libvorbis
+      lua
+      libjpeg
+      libpng
+      curl
+      fontconfig
+      ftgl
+      freetype
+      stdenv.cc.cc
+      glew
+      libGLU
+      wxGTK
+    ];
   };
   path-env = buildEnv {
     name = "megaglest-path-env";
@@ -29,8 +72,29 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake git curl SDL2 xercesc openal lua libpng libjpeg vlc wxGTK
-    glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper libGLU ];
+  buildInputs = [
+    cmake
+    git
+    curl
+    SDL2
+    xercesc
+    openal
+    lua
+    libpng
+    libjpeg
+    vlc
+    wxGTK
+    glib
+    cppunit
+    fontconfig
+    freetype
+    ftgl
+    glew
+    libogg
+    libvorbis
+    makeWrapper
+    libGLU
+  ];
 
   configurePhase = ''
     cmake -DCMAKE_INSTALL_PREFIX=$out \
@@ -40,7 +104,7 @@ stdenv.mkDerivation {
           -DBUILD_MEGAGLEST_MODEL_VIEWER=On
   '';
 
-  postInstall =  ''
+  postInstall = ''
     for i in $out/bin/*; do
       wrapProgram $i \
         --prefix LD_LIBRARY_PATH ":" "${lib-env}/lib" \

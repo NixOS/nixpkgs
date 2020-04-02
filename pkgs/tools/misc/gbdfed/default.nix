@@ -1,4 +1,4 @@
- { stdenv, fetchurl, pkgconfig, freetype, gtk }:
+{ stdenv, fetchurl, pkgconfig, freetype, gtk }:
 
 stdenv.mkDerivation rec {
   version = "1.6";

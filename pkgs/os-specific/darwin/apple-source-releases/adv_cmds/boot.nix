@@ -1,4 +1,10 @@
-{ stdenv, appleDerivation, fetchzip, bsdmake, perl, flex, yacc
+{ stdenv
+, appleDerivation
+, fetchzip
+, bsdmake
+, perl
+, flex
+, yacc
 }:
 
 # this derivation sucks
@@ -9,13 +15,13 @@
 # longer understand
 #
 # the more recent adv_cmds release is used for everything else in this package
-
-let recentAdvCmds = fetchzip {
-  url = "https://opensource.apple.com/tarballs/adv_cmds/adv_cmds-158.tar.gz";
-  sha256 = "0z081kcprzg5jcvqivfnwvvv6wfxzkjg2jc2lagsf8c7j7vgm8nn";
-};
-
-in appleDerivation {
+let
+  recentAdvCmds = fetchzip {
+    url = "https://opensource.apple.com/tarballs/adv_cmds/adv_cmds-158.tar.gz";
+    sha256 = "0z081kcprzg5jcvqivfnwvvv6wfxzkjg2jc2lagsf8c7j7vgm8nn";
+  };
+in
+appleDerivation {
   nativeBuildInputs = [ bsdmake perl yacc flex ];
   buildInputs = [ flex ];
 

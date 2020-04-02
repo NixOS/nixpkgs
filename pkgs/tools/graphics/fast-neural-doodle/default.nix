@@ -1,11 +1,29 @@
-{stdenv, fetchFromGitHub, fetchurl, torch, torch-hdf5, loadcaffe, bash
-  , python, numpy, scipy, h5py, scikitlearn, pillow
-  }:
+{ stdenv
+, fetchFromGitHub
+, fetchurl
+, torch
+, torch-hdf5
+, loadcaffe
+, bash
+, python
+, numpy
+, scipy
+, h5py
+, scikitlearn
+, pillow
+}:
 stdenv.mkDerivation rec {
   pname = "fast-neural-doodle";
   version = "0.0pre2016-07-01";
   buildInputs = [
-    torch torch-hdf5 python numpy h5py scikitlearn scipy pillow
+    torch
+    torch-hdf5
+    python
+    numpy
+    h5py
+    scikitlearn
+    scipy
+    pillow
   ];
 
   inherit torch loadcaffe bash python;
@@ -56,7 +74,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = ''Faster neural doodle'';
     license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     broken = true;
   };

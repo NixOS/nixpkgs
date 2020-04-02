@@ -15,10 +15,10 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-   description = "Light weight cross-platform test automation";
-   homepage    = https://gauge.org;
-   license     = licenses.gpl3;
-   maintainers = [ maintainers.vdemeester ];
-   platforms   = platforms.unix;
+    description = "Light weight cross-platform test automation";
+    homepage = https://gauge.org;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.vdemeester ];
+    platforms = platforms.unix;
   };
 }

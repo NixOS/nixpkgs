@@ -14,7 +14,7 @@ rec {
 
   packageName = "command-line-arguments";
 
-  asdFilesToKeep = ["command-line-arguments.asd"];
+  asdFilesToKeep = [ "command-line-arguments.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM command-line-arguments DESCRIPTION

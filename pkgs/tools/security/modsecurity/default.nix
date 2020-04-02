@@ -1,14 +1,22 @@
-{ stdenv, lib, fetchurl, pkgconfig
-, curl, apacheHttpd, pcre, apr, aprutil, libxml2
-, luaSupport ? false, lua5
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, curl
+, apacheHttpd
+, pcre
+, apr
+, aprutil
+, libxml2
+, luaSupport ? false
+, lua5
 }:
 
 with lib;
-
-let luaValue = if luaSupport then lua5 else "no";
-    optional = stdenv.lib.optional;
+let
+  luaValue = if luaSupport then lua5 else "no";
+  optional = stdenv.lib.optional;
 in
-
 stdenv.mkDerivation rec {
   pname = "modsecurity";
   version = "2.9.3";
@@ -19,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [  curl apacheHttpd pcre apr aprutil libxml2 ] ++
+  buildInputs = [ curl apacheHttpd pcre apr aprutil libxml2 ] ++
     optional luaSupport lua5;
 
   configureFlags = [
@@ -34,7 +42,7 @@ stdenv.mkDerivation rec {
     "--with-lua=${luaValue}"
   ];
 
-  outputs = ["out" "nginx"];
+  outputs = [ "out" "nginx" ];
   # by default modsecurity's install script copies compiled output to httpd's modules folder
   # this patch removes those lines
   patches = [ ./Makefile.in.patch ];
@@ -48,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Open source, cross-platform web application firewall (WAF)";
     license = licenses.asl20;
     homepage = https://www.modsecurity.org/;
-    maintainers = with maintainers; [offline];
-    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = with maintainers; [ offline ];
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

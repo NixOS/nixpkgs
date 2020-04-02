@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.zabbixAgent;
 
@@ -19,13 +18,11 @@ let
     Server = ${cfg.server}
     ListenIP = ${cfg.listen.ip}
     ListenPort = ${toString cfg.listen.port}
-    ${optionalString (cfg.modules != {}) "LoadModulePath = ${moduleEnv}/lib"}
+    ${optionalString (cfg.modules != { }) "LoadModulePath = ${moduleEnv}/lib"}
     ${concatMapStringsSep "\n" (name: "LoadModule = ${name}") (builtins.attrNames cfg.modules)}
     ${cfg.extraConfig}
   '';
-
 in
-
 {
   # interface
 
@@ -55,7 +52,7 @@ in
       modules = mkOption {
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
-        default = {};
+        default = { };
         example = literalExample ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {

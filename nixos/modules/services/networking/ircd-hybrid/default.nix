@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.ircdHybrid;
 
   ircdService = pkgs.stdenv.mkDerivation rec {
@@ -15,19 +13,16 @@ let
     ipv6Enabled = boolToString config.networking.enableIPv6;
 
     inherit (cfg) serverName sid description adminEmail
-            extraPort;
+      extraPort;
 
     cryptoSettings =
-      (optionalString (cfg.rsaKey != null) "rsa_private_key_file = \"${cfg.rsaKey}\";\n") +
-      (optionalString (cfg.certificate != null) "ssl_certificate_file = \"${cfg.certificate}\";\n");
+      (optionalString (cfg.rsaKey != null) "rsa_private_key_file = \"${cfg.rsaKey}\";\n") + (optionalString (cfg.certificate != null) "ssl_certificate_file = \"${cfg.certificate}\";\n");
 
-    extraListen = map (ip: "host = \""+ip+"\";\nport = 6665 .. 6669, "+extraPort+"; ") cfg.extraIPs;
+    extraListen = map (ip: "host = \"" + ip + "\";\nport = 6665 .. 6669, " + extraPort + "; ") cfg.extraIPs;
 
     builder = ./builder.sh;
   };
-
 in
-
 {
 
   ###### interface
@@ -89,8 +84,8 @@ in
       };
 
       extraIPs = mkOption {
-        default = [];
-        example = ["127.0.0.1"];
+        default = [ ];
+        example = [ "127.0.0.1" ];
         description = "
           Extra IP's to bind.
         ";
@@ -113,7 +108,8 @@ in
   config = mkIf config.services.ircdHybrid.enable {
 
     users.users.ircd =
-      { description = "IRCD owner";
+      {
+        description = "IRCD owner";
         group = "ircd";
         uid = config.ids.uids.ircd;
       };

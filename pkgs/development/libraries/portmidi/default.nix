@@ -9,23 +9,23 @@ stdenv.mkDerivation rec {
     sha256 = "03rfsk7z6rdahq2ihy5k13qjzgx757f75yqka88v3gc0pn9ais88";
   };
 
-  cmakeFlags = let
-    #base = "${jdk}/jre/lib/${jdk.architecture}";
-  in [
-    "-DPORTMIDI_ENABLE_JAVA=0"
-    /* TODO: Fix Java support.
-    "-DJAVA_AWT_LIBRARY=${base}/libawt.so"
-    "-DJAVA_JVM_LIBRARY=${base}/server/libjvm.so"
-    */
-    "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=Release"
-    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=Release"
-    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=Release"
-  ];
+  cmakeFlags =
+    let
+      #base = "${jdk}/jre/lib/${jdk.architecture}";
+    in [
+      "-DPORTMIDI_ENABLE_JAVA=0"
+      /* TODO: Fix Java support.
+      "-DJAVA_AWT_LIBRARY=${base}/libawt.so"
+      "-DJAVA_JVM_LIBRARY=${base}/server/libjvm.so"
+      */
+      "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=Release"
+      "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=Release"
+      "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=Release"
+    ];
 
   # XXX: This is to deactivate Java support.
   patches = stdenv.lib.singleton (fetchurl {
-    url = "https://raw.github.com/Rogentos/argent-gentoo/master/media-libs/"
-        + "portmidi/files/portmidi-217-cmake-libdir-java-opts.patch";
+    url = "https://raw.github.com/Rogentos/argent-gentoo/master/media-libs/" + "portmidi/files/portmidi-217-cmake-libdir-java-opts.patch";
     sha256 = "1jbjwan61iqq9fqfpq2a4fd30k3clg7a6j0gfgsw87r8c76kqf6h";
   });
 

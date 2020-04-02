@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, mkDerivation, pkgconfig, qtbase, qmake, imagemagick
-, libyubikey, yubikey-personalization }:
+{ stdenv
+, fetchurl
+, mkDerivation
+, pkgconfig
+, qtbase
+, qmake
+, imagemagick
+, libyubikey
+, yubikey-personalization
+}:
 
 mkDerivation rec {
   name = "yubikey-personalization-gui-3.1.25";

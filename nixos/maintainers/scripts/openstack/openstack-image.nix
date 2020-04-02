@@ -6,7 +6,8 @@ with lib;
 
 {
   imports =
-    [ ../../../modules/installer/cd-dvd/channel.nix
+    [
+      ../../../modules/installer/cd-dvd/channel.nix
       ../../../modules/virtualisation/openstack-config.nix
     ];
 

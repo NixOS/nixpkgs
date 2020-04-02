@@ -10,7 +10,7 @@ with lib;
 
     boot.blacklistedKernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "cirrusfb" "i2c_piix4" ];
       description = ''
         List of names of kernel modules that should not be loaded
@@ -46,15 +46,15 @@ with lib;
     environment.etc."modprobe.d/nixos.conf".text =
       ''
         ${flip concatMapStrings config.boot.blacklistedKernelModules (name: ''
-          blacklist ${name}
-        '')}
+        blacklist ${name}
+      '')}
         ${config.boot.extraModprobeConfig}
       '';
     environment.etc."modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 
     environment.systemPackages = [ pkgs.kmod ];
 
-    system.activationScripts.modprobe = stringAfter ["specialfs"]
+    system.activationScripts.modprobe = stringAfter [ "specialfs" ]
       ''
         # Allow the kernel to find our wrapped modprobe (which searches
         # in the right location in the Nix store for kernel modules).

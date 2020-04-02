@@ -5,19 +5,17 @@
 , purescript
 , runCommand
 }:
-
 let
   spago =
     haskell.lib.justStaticExecutables
       (haskell.lib.overrideCabal haskellPackages.spago (oldAttrs: {
-        maintainers = (oldAttrs.maintainers or []) ++ [
+        maintainers = (oldAttrs.maintainers or [ ]) ++ [
           lib.maintainers.cdepillabout
         ];
       }));
 in
-
 spago.overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or {}) // {
+  passthru = (oldAttrs.passthru or { }) // {
     updateScript = ./update.sh;
 
     # These tests can be run with the following command.  The tests access the
@@ -29,14 +27,14 @@ spago.overrideAttrs (oldAttrs: {
     tests =
       runCommand
         "spago-tests"
-        {
-          __noChroot = true;
-          nativeBuildInputs = [
-            nodejs
-            purescript
-            spago
-          ];
-        }
+      {
+        __noChroot = true;
+        nativeBuildInputs = [
+          nodejs
+          purescript
+          spago
+        ];
+      }
         ''
           # spago expects HOME to be set because it creates a cache file under
           # home.
@@ -50,4 +48,3 @@ spago.overrideAttrs (oldAttrs: {
         '';
   };
 })
-

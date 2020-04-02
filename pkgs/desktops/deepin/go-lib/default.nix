@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, glib, xorg, gdk-pixbuf, pulseaudio,
-  mobile-broadband-provider-info, deepin }:
+{ stdenv
+, fetchFromGitHub
+, glib
+, xorg
+, gdk-pixbuf
+, pulseaudio
+, mobile-broadband-provider-info
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "go-lib";

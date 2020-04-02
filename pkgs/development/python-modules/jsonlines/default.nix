@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, buildPythonPackage, six
-, flake8, pep8-naming, pytest, pytestcov, pytestpep8 }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, six
+, flake8
+, pep8-naming
+, pytest
+, pytestcov
+, pytestpep8
+}:
 
 buildPythonPackage rec {
   pname = "jsonlines";

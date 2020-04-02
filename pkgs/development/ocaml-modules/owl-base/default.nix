@@ -5,9 +5,9 @@ buildDune2Package rec {
   version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner  = "owlbarn";
-    repo   = "owl";
-    rev    = version;
+    owner = "owlbarn";
+    repo = "owl";
+    rev = version;
     sha256 = "1j3xmr4izfznmv8lbn8vkx9c77py2xr6fqyn6ypjlf5k9b8g4mmw";
   };
 

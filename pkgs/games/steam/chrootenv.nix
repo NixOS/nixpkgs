@@ -1,5 +1,11 @@
-{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
-, steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
+{ config
+, lib
+, writeScript
+, buildFHSUserEnv
+, steam
+, glxinfo-i686
+, steam-runtime-wrapped
+, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
@@ -7,11 +13,10 @@
 , runtimeOnly ? false
 , runtimeShell
 
-# DEPRECATED
+  # DEPRECATED
 , withJava ? config.steam.java or false
 , withPrimus ? config.steam.primus or false
 }:
-
 let
   commonTargetPkgs = pkgs: with pkgs;
     [
@@ -36,11 +41,11 @@ let
       procps
       usbutils
     ] ++ lib.optional withJava jdk
-      ++ lib.optional withPrimus primus
-      ++ extraPkgs pkgs;
+    ++ lib.optional withPrimus primus
+    ++ extraPkgs pkgs;
 
   ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
-           ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
+    ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
 
   setupSh = writeScript "setup.sh" ''
     #!${runtimeShell}
@@ -56,8 +61,8 @@ let
     export LD_LIBRARY_PATH="$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     exec "$@"
   '';
-
-in buildFHSUserEnv rec {
+in
+buildFHSUserEnv rec {
   name = "steam";
 
   targetPkgs = pkgs: with pkgs; [
@@ -79,7 +84,7 @@ in buildFHSUserEnv rec {
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
-    at-spi2-core   # CrossCode
+    at-spi2-core # CrossCode
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm
@@ -105,109 +110,111 @@ in buildFHSUserEnv rec {
 
     # called by steam's setup.sh
     file
-  ] ++ (if (!nativeOnly) then [
-    (steamPackages.steam-runtime-wrapped.override {
-      inherit runtimeOnly;
-    })
-  ] else [
-    # Required
-    glib
-    gtk2
-    bzip2
-    zlib
-    gdk-pixbuf
+  ] ++ (
+    if (!nativeOnly) then [
+      (steamPackages.steam-runtime-wrapped.override {
+        inherit runtimeOnly;
+      })
+    ] else [
+      # Required
+      glib
+      gtk2
+      bzip2
+      zlib
+      gdk-pixbuf
 
-    # Without these it silently fails
-    xorg.libXinerama
-    xorg.libXdamage
-    xorg.libXcursor
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXxf86vm
-    xorg.libXi
-    xorg.libSM
-    xorg.libICE
-    gnome2.GConf
-    freetype
-    (curl.override { gnutlsSupport = true; sslSupport = false; })
-    nspr
-    nss
-    fontconfig
-    cairo
-    pango
-    expat
-    dbus
-    cups
-    libcap
-    SDL2
-    libusb1
-    dbus-glib
-    libav
-    atk
-    # Only libraries are needed from those two
-    libudev0-shim
-    networkmanager098
+      # Without these it silently fails
+      xorg.libXinerama
+      xorg.libXdamage
+      xorg.libXcursor
+      xorg.libXrender
+      xorg.libXScrnSaver
+      xorg.libXxf86vm
+      xorg.libXi
+      xorg.libSM
+      xorg.libICE
+      gnome2.GConf
+      freetype
+      (curl.override { gnutlsSupport = true; sslSupport = false; })
+      nspr
+      nss
+      fontconfig
+      cairo
+      pango
+      expat
+      dbus
+      cups
+      libcap
+      SDL2
+      libusb1
+      dbus-glib
+      libav
+      atk
+      # Only libraries are needed from those two
+      libudev0-shim
+      networkmanager098
 
-    # Verified games requirements
-    xorg.libXt
-    xorg.libXmu
-    xorg.libxcb
-    libGLU
-    libuuid
-    libogg
-    libvorbis
-    SDL
-    SDL2_image
-    glew110
-    openssl
-    libidn
-    tbb
-    wayland
-    mesa
-    libxkbcommon
+      # Verified games requirements
+      xorg.libXt
+      xorg.libXmu
+      xorg.libxcb
+      libGLU
+      libuuid
+      libogg
+      libvorbis
+      SDL
+      SDL2_image
+      glew110
+      openssl
+      libidn
+      tbb
+      wayland
+      mesa
+      libxkbcommon
 
-    # Other things from runtime
-    flac
-    freeglut
-    libjpeg
-    libpng12
-    libsamplerate
-    libmikmod
-    libtheora
-    libtiff
-    pixman
-    speex
-    SDL_image
-    SDL_ttf
-    SDL_mixer
-    SDL2_ttf
-    SDL2_mixer
-    gstreamer
-    gst-plugins-base
-    libappindicator-gtk2
-    libcaca
-    libcanberra
-    libgcrypt
-    libvpx
-    librsvg
-    xorg.libXft
-    libvdpau
-  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs) ++ extraLibraries pkgs;
+      # Other things from runtime
+      flac
+      freeglut
+      libjpeg
+      libpng12
+      libsamplerate
+      libmikmod
+      libtheora
+      libtiff
+      pixman
+      speex
+      SDL_image
+      SDL_ttf
+      SDL_mixer
+      SDL2_ttf
+      SDL2_mixer
+      gstreamer
+      gst-plugins-base
+      libappindicator-gtk2
+      libcaca
+      libcanberra
+      libgcrypt
+      libvpx
+      librsvg
+      xorg.libXft
+      libvdpau
+    ] ++ steamPackages.steam-runtime-wrapped.overridePkgs) ++ extraLibraries pkgs;
 
-  extraBuildCommands = if (!nativeOnly) then ''
-    mkdir -p steamrt
-    ln -s ../lib/steam-runtime steamrt/${steam-runtime-wrapped.arch}
-    ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
+  extraBuildCommands =
+    if (!nativeOnly) then ''
+      mkdir -p steamrt
+      ln -s ../lib/steam-runtime steamrt/${steam-runtime-wrapped.arch}
+      ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
       ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
     ''}
-    ln -s ${runSh} steamrt/run.sh
-    ln -s ${setupSh} steamrt/setup.sh
-  '' else ''
-    ln -s /usr/lib/libbz2.so usr/lib/libbz2.so.1.0
-    ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
+      ln -s ${runSh} steamrt/run.sh
+      ln -s ${setupSh} steamrt/setup.sh
+    '' else ''
+      ln -s /usr/lib/libbz2.so usr/lib/libbz2.so.1.0
+      ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
       ln -s /usr/lib32/libbz2.so usr/lib32/libbz2.so.1.0
     ''}
-  '';
+    '';
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications

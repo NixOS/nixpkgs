@@ -1,11 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, intltool, perlPackages
-, goffice, gnome3, wrapGAppsHook, gtk3, bison, python3Packages
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, perlPackages
+, goffice
+, gnome3
+, wrapGAppsHook
+, gtk3
+, bison
+, python3Packages
 , itstool
 }:
-
 let
   inherit (python3Packages) python pygobject3;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gnumeric";
   version = "1.12.46";
 
@@ -20,8 +29,11 @@ in stdenv.mkDerivation rec {
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    goffice gtk3 gnome3.adwaita-icon-theme
-    python pygobject3
+    goffice
+    gtk3
+    gnome3.adwaita-icon-theme
+    python
+    pygobject3
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;

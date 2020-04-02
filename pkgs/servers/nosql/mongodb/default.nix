@@ -1,26 +1,38 @@
-{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, Security
+{ stdenv
+, fetchurl
+, fetchpatch
+, scons
+, boost
+, gperftools
+, pcre-cpp
+, snappy
+, zlib
+, libyamlcpp
+, sasl
+, openssl
+, libpcap
+, Security
 }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
 
 with stdenv.lib;
-
-let version = "3.4.10";
-    system-libraries = [
-      "pcre"
-      #"asio" -- XXX use package?
-      #"wiredtiger"
-      "boost"
-      "snappy"
-      "zlib"
-      #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
-      #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
-      "yaml"
-    ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
-
-in stdenv.mkDerivation {
+let
+  version = "3.4.10";
+  system-libraries = [
+    "pcre"
+    #"asio" -- XXX use package?
+    #"wiredtiger"
+    "boost"
+    "snappy"
+    "zlib"
+    #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
+    #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
+    "yaml"
+  ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+in
+stdenv.mkDerivation {
   pname = "mongodb";
   inherit version;
 
@@ -31,8 +43,17 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ scons ];
   buildInputs = [
-    sasl boost gperftools pcre-cpp snappy
-    zlib libyamlcpp sasl openssl.dev openssl.out libpcap
+    sasl
+    boost
+    gperftools
+    pcre-cpp
+    snappy
+    zlib
+    libyamlcpp
+    sasl
+    openssl.dev
+    openssl.out
+    libpcap
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   patches =

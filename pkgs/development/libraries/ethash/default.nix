@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, boost, cryptopp, opencl-headers, opencl-info,
-  openmpi, ocl-icd, mesa, gbenchmark, gtest }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, cryptopp
+, opencl-headers
+, opencl-info
+, openmpi
+, ocl-icd
+, mesa
+, gbenchmark
+, gtest
+}:
 
 stdenv.mkDerivation rec {
   pname = "ethash";

@@ -1,19 +1,18 @@
 { config, lib, pkgs, ... }:
 let
-
   inherit (config.security) wrapperDir wrappers;
 
   parentWrapperDir = dirOf wrapperDir;
 
   programs =
     (lib.mapAttrsToList
-      (n: v: (if v ? program then v else v // {program=n;}))
-      wrappers);
+      (n: v: (if v ? program then v else v // { program = n; }))
+    wrappers);
 
   securityWrapper = pkgs.stdenv.mkDerivation {
-    name            = "security-wrapper";
-    phases          = [ "installPhase" "fixupPhase" ];
-    buildInputs     = [ pkgs.libcap pkgs.libcap_ng pkgs.linuxHeaders ];
+    name = "security-wrapper";
+    phases = [ "installPhase" "fixupPhase" ];
+    buildInputs = [ pkgs.libcap pkgs.libcap_ng pkgs.linuxHeaders ];
     hardeningEnable = [ "pie" ];
     installPhase = ''
       mkdir -p $out/bin
@@ -27,8 +26,8 @@ let
     { program
     , capabilities
     , source
-    , owner  ? "nobody"
-    , group  ? "nogroup"
+    , owner ? "nobody"
+    , group ? "nogroup"
     , permissions ? "u+rx,g+x,o+x"
     , ...
     }:
@@ -54,8 +53,8 @@ let
   mkSetuidProgram =
     { program
     , source
-    , owner  ? "nobody"
-    , group  ? "nogroup"
+    , owner ? "nobody"
+    , group ? "nogroup"
     , setuid ? false
     , setgid ? false
     , permissions ? "u+rx,g+x,o+x"
@@ -74,23 +73,24 @@ let
 
   mkWrappedPrograms =
     builtins.map
-      (s: if (s ? capabilities)
-          then mkSetcapProgram
-                 ({ owner = "root";
-                    group = "root";
-                  } // s)
-          else if
-             (s ? setuid && s.setuid) ||
-             (s ? setgid && s.setgid) ||
-             (s ? permissions)
-          then mkSetuidProgram s
-          else mkSetuidProgram
-                 ({ owner  = "root";
-                    group  = "root";
-                    setuid = true;
-                    setgid = false;
-                    permissions = "u+rx,g+x,o+x";
-                  } // s)
+      (s:
+        if (s ? capabilities)
+        then mkSetcapProgram
+          ({
+            owner = "root";
+            group = "root";
+          } // s)
+        else if
+          (s ? setuid && s.setuid) || (s ? setgid && s.setgid) || (s ? permissions)
+        then mkSetuidProgram s
+        else mkSetuidProgram
+          ({
+            owner = "root";
+            group = "root";
+            setuid = true;
+            setgid = false;
+            permissions = "u+rx,g+x,o+x";
+          } // s)
       ) programs;
 in
 {
@@ -104,7 +104,7 @@ in
   options = {
     security.wrappers = lib.mkOption {
       type = lib.types.attrs;
-      default = {};
+      default = { };
       example = lib.literalExample
         ''
           { sendmail.source = "/nix/store/.../bin/sendmail";
@@ -146,9 +146,9 @@ in
     };
 
     security.wrapperDir = lib.mkOption {
-      type        = lib.types.path;
-      default     = "/run/wrappers/bin";
-      internal    = true;
+      type = lib.types.path;
+      default = "/run/wrappers/bin";
+      internal = true;
       description = ''
         This option defines the path to the wrapper programs. It
         should not be overriden.
