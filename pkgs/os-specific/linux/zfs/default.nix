@@ -11,6 +11,7 @@
 
 # Kernel dependencies
 , kernel ? null
+, enablePython ? true
 }:
 
 with stdenv.lib;
@@ -51,7 +52,12 @@ let
       '' + optionalString buildUser ''
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount" \
                                                       --replace "/bin/mount"              "${utillinux}/bin/mount"
-        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${nfs-utils}/bin/exportfs"
+        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${
+          # We don't *need* python support, but we set it like this to minimize closure size:
+          # If it's disabled by default, no need to enable it, even if we have python enabled
+          # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
+          nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
+        }/bin/exportfs"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
         substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d"
         substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
@@ -86,7 +92,8 @@ let
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs = optionals buildUser [ zlib libuuid attr ]
-        ++ optionals (buildUser) [ openssl python3 ]
+        ++ optional buildUser openssl
+        ++ optional (buildUser && enablePython) python3
         ++ optional stdenv.hostPlatform.isMusl libtirpc;
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
@@ -96,7 +103,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
-        (withFeatureAs buildUser "python" python3.interpreter)
+        (withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
