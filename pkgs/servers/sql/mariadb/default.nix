@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses
 , libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc450, jemalloc, cracklib, systemd, perl
+, bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , fixDarwinDylibNames, cctools, CoreServices, less
 , numactl # NUMA Support
 , withStorageMroonga ? true, kytea, msgpack, zeromq
@@ -144,7 +145,7 @@ server = stdenv.mkDerivation (common // {
   nativeBuildInputs = common.nativeBuildInputs ++ [ bison ] ++ optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
   buildInputs = common.buildInputs ++ [
-    xz lzo lz4 bzip2 snappy
+    bzip2 lz4 lzo snappy xz zstd
     libxml2 boost judy libevent cracklib
   ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
     ++ optionals withStorageMroonga [ kytea msgpack zeromq ]
