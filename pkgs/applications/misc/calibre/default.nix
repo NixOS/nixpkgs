@@ -166,6 +166,7 @@ mkDerivation rec {
   disallowedReferences = [ podofo.dev ];
 
   calibreDesktopItem = makeDesktopItem {
+    fileValidation = false; # fails before substitution
     name = "calibre-gui";
     desktopName = "calibre";
     exec = "@out@/bin/calibre --detach %F";
@@ -212,6 +213,7 @@ mkDerivation rec {
   };
 
   ebookEditDesktopItem = makeDesktopItem {
+    fileValidation = false; # fails before substitution
     name = "calibre-edit-book";
     desktopName = "Edit E-book";
     genericName = "E-book Editor";
@@ -224,6 +226,7 @@ mkDerivation rec {
   };
 
   ebookViewerDesktopItem = makeDesktopItem {
+    fileValidation = false; # fails before substitution
     name = "calibre-ebook-viewer";
     desktopName = "E-book Viewer";
     genericName = "E-book Viewer";
