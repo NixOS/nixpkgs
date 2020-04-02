@@ -18,6 +18,11 @@ while [[ $# -gt 0 ]]; do
         shift # past argument
         shift # past value
         ;;
+	--rev)
+	REVISION="$2"
+        shift # past argument
+        shift # past value
+        ;;
         *)    # unknown option
         POSITIONAL+=("$1")
         shift # past argument
@@ -26,11 +31,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$VERSION" || -n "$POSITIONAL" ]]; then
-    echo "Usage: update.sh [--url URL] --ver VERSION"
-    echo "URL may be any path acceptable to 'git clone' and VERSION any revision"
-    echo "acceptable to 'git checkout'.  If URL is not provided, it defaults"
-    echo "to https://github.com/tootsuite/mastodon.git."
+    echo "Usage: update.sh [--url URL] --ver VERSION [--rev REVISION]"
+    echo "URL may be any path acceptable to 'git clone' and VERSION the"
+    echo "semantic version number.  If VERSION is not a revision acceptable to"
+    echo "'git checkout', you must provide one in REVISION.  If URL is not"
+    echo "provided, it defaults to https://github.com/tootsuite/mastodon.git."
     exit 1
+fi
+
+if [[ -z "$REVISION" ]]; then
+    REVISION="$VERSION"
 fi
 
 rm -f gemset.nix yarn.nix version.nix version.patch source.nix package.json
@@ -53,8 +63,8 @@ function cleanup {
 }
 trap cleanup EXIT
 
-echo "Fetching source code from $URL"
-JSON=$(nix-prefetch-git --url "$URL" --rev "$VERSION"  2> $WORK_DIR/nix-prefetch-git.out)
+echo "Fetching source code $REVISION from $URL"
+JSON=$(nix-prefetch-git --url "$URL" --rev "$REVISION"  2> $WORK_DIR/nix-prefetch-git.out)
 SHA=$(echo $JSON | jq -r .sha256)
 FETCHED_SOURCE_DIR=$(grep '^path is' $WORK_DIR/nix-prefetch-git.out | sed 's/^path is //')
 
@@ -82,7 +92,7 @@ cat > source.nix << EOF
 { fetchgit, applyPatches }: let
   src = fetchgit {
     url = "$URL";
-    rev = "$VERSION";
+    rev = "$REVISION";
     sha256 = "$SHA";
   };
 in applyPatches {
