@@ -2103,6 +2103,8 @@ in
 
   pixiecore = callPackage ../tools/networking/pixiecore {};
 
+  waitron = callPackage ../tools/networking/waitron {};
+
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
