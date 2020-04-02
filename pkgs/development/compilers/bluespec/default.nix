@@ -11,6 +11,10 @@
 , libpoly
 , perl
 , pkgconfig
+, itktcl
+, incrtcl
+, tcl
+, tk
 , verilog
 , xorg
 , zlib
@@ -23,16 +27,16 @@ let
   # Compiling PreludeBSV fails with more recent GHC versions
   # > imperative statement (not BVI context)
   # https://github.com/B-Lang-org/bsc/issues/20#issuecomment-583724030
-  ghcWithPackages = haskell.packages.ghc844.ghc.withPackages (g: (with g; [old-time regex-compat syb]));
+  ghcWithPackages = haskell.packages.ghc844.ghc.withPackages (g: (with g; [old-time regex-compat syb split]));
 in stdenv.mkDerivation rec {
   pname = "bluespec";
-  version = "unstable-2020.02.09";
+  version = "unstable-2020.04.03";
 
   src = fetchFromGitHub {
     owner  = "B-Lang-org";
     repo   = "bsc";
-    rev    = "05c8afb08078e437c635b9c708124b428ac51b3d";
-    sha256 = "06yhpkz7wga1a0p9031cfjqbzw7205bj2jxgdghhfzmllaiphniy";
+    rev    = "4c4509894388cd7a17fbd4fffab2f35572673539";
+    sha256 = "1m51hagbvqv5kglhik1123rkv3fj57ybqispx8i7xm73rmcayinv";
     fetchSubmodules = true;
   };
 
@@ -41,6 +45,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     gmpStatic gperf libpoly # yices
+    tcl tk
     libX11 # tcltk
     xorg.libXft
     fontconfig
@@ -57,13 +62,7 @@ in stdenv.mkDerivation rec {
     verilog
   ];
 
-  patches = [
-    # drop stp support https://github.com/B-Lang-org/bsc/pull/31
-    (fetchpatch {
-      url = "https://github.com/flokli/bsc/commit/0bd48ecc2561541dc1368918863c0b2f4915006f.patch";
-      sha256 = "0bam9anld33zfi9d4gs502g94w49zhl5iqmbs2d1p5i19aqpy38l";
-    })
-  ];
+  NIX_LDFLAGS="-L${incrtcl}/lib -L${itktcl}/lib";
 
   preBuild = ''
     patchShebangs \
@@ -80,6 +79,7 @@ in stdenv.mkDerivation rec {
   makeFlags = [
     "NOGIT=1" # https://github.com/B-Lang-org/bsc/issues/12
     "LDCONFIG=ldconfig" # https://github.com/B-Lang-org/bsc/pull/43
+    "STP_STUB=1"
   ];
 
   installPhase = "mv inst $out";
