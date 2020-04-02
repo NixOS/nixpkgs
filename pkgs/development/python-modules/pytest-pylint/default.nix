@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pylint
 , six
@@ -10,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-pylint";
   version = "0.15.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
