@@ -216,7 +216,7 @@ in {
         };
       }
       { # Root backing each day up to a remote backup server. We assume that you have
-        #   * created a password less key: ssh-keygen -N '' -t ed25519 -f /path/to/ssh_key
+        #   * created a password less key: ssh-keygen -N "" -t ed25519 -f /path/to/ssh_key
         #     best practices are: use -t ed25519, /path/to = /run/keys
         #   * the passphrase is in the file /run/keys/borgbackup_passphrase
         #   * you have initialized the repository manually
