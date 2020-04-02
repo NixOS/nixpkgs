@@ -87,6 +87,12 @@
     githubId = 178750;
     name = "Andreas Baldeau";
   };
+  abathur = {
+    email = "travis.a.everett+nixpkgs@gmail.com";
+    github = "abathur";
+    githubId = 2548365;
+    name = "Travis A. Everett";
+  };
   abbe = {
     email = "ashish.is@lostca.se";
     github = "wahjava";
