@@ -757,6 +757,12 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      </warning>
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The TokuDB storage engine will be disabled in <package>mariadb</package> 10.5. It is recommended to switch
+       to RocksDB. See also <link xlink:href="https://mariadb.com/kb/en/tokudb/">TokuDB</link>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

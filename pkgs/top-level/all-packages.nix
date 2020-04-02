@@ -15767,7 +15767,7 @@ in
   mariadb = callPackage ../servers/sql/mariadb {
     # As per mariadb's cmake, "static jemalloc_pic.a can only be used up to jemalloc 4".
     # https://jira.mariadb.org/browse/MDEV-15034
-    jemalloc = jemalloc450.override ({ disableInitExecTls = true; });
+    jemalloc450 = jemalloc450.override ({ disableInitExecTls = true; });
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
