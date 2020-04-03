@@ -252,9 +252,12 @@ let
     tokenizer xmlreader xmlwriter zip zlib
   ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
 
+  defaultPhpExtensionsWithHash = extensions:
+    (defaultPhpExtensions extensions) ++ [ extensions.hash ];
+
   php74 = php74base.withExtensions defaultPhpExtensions;
-  php73 = php73base.withExtensions defaultPhpExtensions;
-  php72 = php72base.withExtensions defaultPhpExtensions;
+  php73 = php73base.withExtensions defaultPhpExtensionsWithHash;
+  php72 = php72base.withExtensions defaultPhpExtensionsWithHash;
 
 in {
   inherit php72base php73base php74base php72 php73 php74;
