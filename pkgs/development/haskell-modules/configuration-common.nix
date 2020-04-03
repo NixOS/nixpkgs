@@ -326,6 +326,7 @@ self: super: {
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
+  hspec-core = if pkgs.stdenv.isi686 then dontCheck super.hspec-core else super.hspec-core; # tests rely on `Int` being 64-bit; https://github.com/hspec/hspec/issues/431
   hspec-server = dontCheck super.hspec-server;
   HTF = dontCheck super.HTF;
   htsn = dontCheck super.htsn;
@@ -359,7 +360,6 @@ self: super: {
   optional = dontCheck super.optional;
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
-  pandoc-crossref = dontCheck super.pandoc-crossref;  # (most likely change when no longer 0.3.2.1) https://github.com/lierdakil/pandoc-crossref/issues/199
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -1192,10 +1192,10 @@ self: super: {
   });
 
   # Remove unecessary constraint:
-  # https://github.com/agrafix/superbuffer/pull/2
-  superbuffer = overrideCabal super.superbuffer (drv: {
+  # https://github.com/haskell-infra/hackage-trustees/issues/258
+  data-accessor-template = overrideCabal super.data-accessor-template (drv: {
     postPatch = ''
-      sed -i 's#QuickCheck < 2.10#QuickCheck < 2.13#' superbuffer.cabal
+      sed -i 's#template-haskell >=2.11 && <2.15#template-haskell#' data-accessor-template.cabal
     '';
   });
 
@@ -1463,6 +1463,18 @@ self: super: {
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
 
+  # 2020-01-19 - there were conflicting versions of brick, vty, and brick-skylighting;
+  # multiple versions of them were being pulled in by the others which is not allowed.
+  # There are more complicated ways of doing this but I was able to make it fairly simple -- kiwi
+  # 2020-03-31 - "..." it broke again. so here's a more complicated way -- kiwi
+  matterhorn = super.matterhorn.override {
+    brick-skylighting = self.brick-skylighting.override {
+      brick = self.brick_0_52_1.override {
+        vty = self.vty_5_28_2;
+      };
+    };
+  };
+
   persistent-mysql = dontCheck super.persistent-mysql;
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
@@ -1490,5 +1502,14 @@ self: super: {
 
   # Fixed at head, but hasn't cut a release in awhile.
   darcs = doJailbreak super.darcs;
+
+  polysemy-plugin = super.polysemy-plugin.override {
+    # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
+    # This upstream issue is relevant:
+    # https://github.com/polysemy-research/polysemy/issues/322
+    ghc-tcplugins-extra = self.ghc-tcplugins-extra_0_3_2;
+    # version of Polysemy the plugin goes with
+    polysemy = self.polysemy_1_3_0_0;
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
