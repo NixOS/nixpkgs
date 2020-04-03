@@ -41,10 +41,13 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # These builds need Cabal 3.2.x.
+  cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_0_0; };
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; hackage-security = self.hackage-security_0_6_0_0; });
+
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
   async = doJailbreak super.async;
-  cabal-install = doJailbreak super.cabal-install;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   chell = doJailbreak super.chell;
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;

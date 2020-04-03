@@ -1344,7 +1344,7 @@ self: super: {
   });
 
   # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_0_0_0; };
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
 
   # Several gtk2hs-provided packages at v0.13.8.0 fail to build on Darwin
   # until we pick up https://github.com/gtk2hs/gtk2hs/pull/293 so apply that
