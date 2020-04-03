@@ -1,9 +1,10 @@
 { lib
+, callPackage
 , stdenv
 , fetchzip
 , youtube-dl
 , fetchurl
-, mylibs
+, fetchFromGitHub
 , python
 , nodejs
 , nodePackages
@@ -12,12 +13,30 @@
 }:
 
 let
+  fetchedGithub = path:
+    let
+      json = lib.importJSON path;
+    in rec {
+      version = json.tag;
+      name = "${json.meta.name}-${version}";
+      src = fetchFromGitHub json.github;
+    };
+
+  yarn2nixPackage = let
+    src = builtins.fetchGit {
+      url = "git://github.com/moretea/yarn2nix.git";
+      ref = "master";
+      rev = "780e33a07fd821e09ab5b05223ddb4ca15ac663f";
+    };
+  in
+    (callPackage src {}) // { inherit src; };
+
   nodeHeaders = fetchurl {
     url = "https://nodejs.org/download/release/v${nodejs.version}/node-v${nodejs.version}-headers.tar.gz";
     sha256 = "16f20ya3ys6w5w6y6l4536f7jrgk4gz46bf71w1r1xxb26a54m32";
   };
 
-  patchedPackages = stdenv.mkDerivation (mylibs.fetchedGithub ./peertube.json // rec {
+  patchedPackages = stdenv.mkDerivation (fetchedGithub ./peertube.json // rec {
     patches = if ldap then [ ./ldap.patch ././yarn_fix_bluebird_ldap.patch ] else [ ./yarn_fix_bluebird.patch ];
     installPhase = ''
       mkdir $out
@@ -40,7 +59,7 @@ let
     yarnNix     = ./yarn-packages.nix;
 
     pkgConfig = {
-      all.buildInputs = [ mylibs.yarn2nixPackage.src ];
+      all.buildInputs = [ yarn2nixPackage.src ];
 
       bcrypt = {
         buildInputs = [ nodePackages.node-pre-gyp ];
@@ -105,15 +124,15 @@ let
     };
   };
 
-  yarnModules = mylibs.yarn2nixPackage.mkYarnModules yarnModulesArg;
+  yarnModules = yarn2nixPackage.mkYarnModules yarnModulesArg;
 
-  yarnModulesProd = mylibs.yarn2nixPackage.mkYarnModules (
+  yarnModulesProd = yarn2nixPackage.mkYarnModules (
     yarnModulesArg // {
-      yarnFlags = mylibs.yarn2nixPackage.defaultYarnFlags ++ [ "--production" ];
+      yarnFlags = yarn2nixPackage.defaultYarnFlags ++ [ "--production" ];
     }
   );
 
-  patchedServer = stdenv.mkDerivation (mylibs.fetchedGithub ./peertube.json // rec {
+  patchedServer = stdenv.mkDerivation (fetchedGithub ./peertube.json // rec {
     patches = lib.optionals ldap [ ./ldap.patch ] ++ [ ./sendmail.patch ];
 
     buildPhase = ''
