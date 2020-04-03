@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "cherrytree";
-  version = "0.39.0";
+  version = "0.39.1";
 
   src = fetchurl {
     url = "https://www.giuspen.com/software/${pname}-${version}.tar.xz";
-    sha256 = "07ibr891qix7xa2sk6fdxdsji8q56c1wf786mxaz77500m0xfx4m";
+    sha256 = "0qhycblnixvbybzr8psgmgcpfs6jc9m0p2h9lmd5zmiaggqlcsv7";
   };
 
   nativeBuildInputs = [ gettext ];

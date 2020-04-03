@@ -1,19 +1,27 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, libcap, libseccomp }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, glib
+, libcap
+, libseccomp
+, libslirp
+}:
 
 stdenv.mkDerivation rec {
   pname = "slirp4netns";
-  version = "0.4.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "slirp4netns";
     rev = "v${version}";
-    sha256 = "1932q80s6187k4fsvgia5iwc9lqsdkxzqqwpw1ksy0mx8wzmwbih";
+    sha256 = "152wmccz47anvx5w88qcz8higw80l17jl7i24xfj5574adviqnv2";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ libcap libseccomp glib ];
+  buildInputs = [ glib libcap libseccomp libslirp ];
 
   enableParallelBuilding = true;
 

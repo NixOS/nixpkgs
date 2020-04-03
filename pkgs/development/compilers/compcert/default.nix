@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "compcert";
-  version = "3.6";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "AbsInt";
     repo = "CompCert";
     rev = "v${version}";
-    sha256 = "1k9xhj7fgllhf7bn7rp3w6zfvs4clglnc4w39zp4678hrwvdcpha";
+    sha256 = "1h4zhk9rrqki193nxs9vjvya7nl9yxjcf07hfqb6g77riy1vd2jr";
   };
 
   nativeBuildInputs = [ makeWrapper ];

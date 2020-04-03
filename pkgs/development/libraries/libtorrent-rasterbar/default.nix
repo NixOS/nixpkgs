@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "1.1.11";
+  version = "1.2.5";
   formattedVersion = lib.replaceChars ["."] ["_"] version;
 
   # Make sure we override python, so the correct version is chosen
@@ -17,13 +17,14 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "libtorrent_${formattedVersion}";
+    rev = "libtorrent-${formattedVersion}";
     sha256 = "0nwdsv6d2gkdsh7l5a46g6cqx27xwh3msify5paf02l1qzjy4s5l";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
   buildInputs = [ boostPython openssl zlib python libiconv geoip ncurses ];
+
   preConfigure = "./autotool.sh";
 
   postInstall = ''

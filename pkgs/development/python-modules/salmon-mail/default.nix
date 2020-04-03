@@ -1,22 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose, dnspython
-,  chardet, lmtpd, python-daemon, six, jinja2, mock }:
+{ stdenv, buildPythonPackage, fetchPypi, dnspython, chardet, lmtpd
+, python-daemon, six, jinja2, mock, click }:
 
 buildPythonPackage rec {
   pname = "salmon-mail";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ddd9nwdmiibk3jaampznm8nai5b7zalp0f8c65l71674300bqnw";
+    sha256 = "0q2m6xri1b7qv46rqpv2qfdgk2jvswj8lpaacnxwjna3m685fhfx";
   };
 
-  checkInputs = [ nose jinja2 mock ];
-  propagatedBuildInputs = [ chardet dnspython lmtpd python-daemon six ];
+  checkInputs = [ jinja2 mock ];
+  propagatedBuildInputs = [ chardet dnspython lmtpd python-daemon six click ];
+
+  # Darwin tests fail without this. See:
+  # https://github.com/NixOS/nixpkgs/pull/82166#discussion_r399909846
+  __darwinAllowLocalNetworking = true;
 
   # The tests use salmon executable installed by salmon itself so we need to add
   # that to PATH
   checkPhase = ''
-    PATH=$out/bin:$PATH nosetests .
+    PATH=$out/bin:$PATH python setup.py test
   '';
 
   meta = with stdenv.lib; {

@@ -108,6 +108,23 @@
       <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The initrd SSH support now uses OpenSSH rather than Dropbear to
+     allow the use of Ed25519 keys and other OpenSSH-specific
+     functionality. Host keys must now be in the OpenSSH format, and at
+     least one pre-generated key must be specified.
+    </para>
+    <para>
+     If you used the <option>boot.initrd.network.ssh.host*Key</option>
+     options, you'll get an error explaining how to convert your host
+     keys and migrate to the new
+     <option>boot.initrd.network.ssh.hostKeys</option> option.
+     Otherwise, if you don't have any host keys set, you'll need to
+     generate some; see the <option>hostKeys</option> option
+     documentation for instructions.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

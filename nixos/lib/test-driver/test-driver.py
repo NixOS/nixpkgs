@@ -102,10 +102,12 @@ def make_command(args: list) -> str:
 def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]:
     global log
     log.log("starting VDE switch for network {}".format(vlan_nr))
-    vde_socket = os.path.abspath("./vde{}.ctl".format(vlan_nr))
+    vde_socket = tempfile.mkdtemp(
+        prefix="nixos-test-vde-", suffix="-vde{}.ctl".format(vlan_nr)
+    )
     pty_master, pty_slave = pty.openpty()
     vde_process = subprocess.Popen(
-        ["vde_switch", "-s", vde_socket, "--dirmode", "0777"],
+        ["vde_switch", "-s", vde_socket, "--dirmode", "0700"],
         bufsize=1,
         stdin=pty_slave,
         stdout=subprocess.PIPE,
@@ -939,7 +941,7 @@ if __name__ == "__main__":
                 machine.process.kill()
 
             for _, _, process, _ in vde_sockets:
-                process.kill()
+                process.terminate()
         log.close()
 
     tic = time.time()

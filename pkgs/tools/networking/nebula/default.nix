@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "nebula";
@@ -13,13 +13,11 @@ buildGoModule rec {
 
   modSha256 = "1sy5mnwn9fxjf3y41lm8gsggid2c0y08iw88m9ng8psaf4qid8ij";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
   buildFlagsArray = [ "-ldflags='-X main.Build=${version}'" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A scalable overlay networking tool with a focus on performance, simplicity and security";
     longDescription = ''
       Nebula is a scalable overlay networking tool with a focus on performance,

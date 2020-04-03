@@ -1,19 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "croc";
-  version = "8.0.4";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dc6h102jr5dkg6r3xxma51g702dnyd3d6s5rilwv1fivxn3bj43";
+    sha256 = "1qc7na1c0c5i2r19vg54ggvcmnkyz024hqlbzgix2v5n6wlpk0fc";
   };
 
-  modSha256 = "0ng4x9zmwax2vskbcadra4pdkgy1p1prmgkg1bjmh3b8rwsrhr0q";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  modSha256 = "1y6qfb71vaard2l9fv83alprwpvii0pbzl8b3damd4j9x158hk7b";
 
   subPackages = [ "." ];
 

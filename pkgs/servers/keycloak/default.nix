@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname   = "keycloak";
-  version = "9.0.0";
+  version = "9.0.2";
 
   src = fetchzip {
     url    = "https://downloads.jboss.org/keycloak/${version}/keycloak-${version}.zip";
-    sha256 = "1w2d76v1rjghvdks1w32qi08gh88cd37vbf6vx0kq9a2gnhn7hip";
+    sha256 = "0yavkmwhjb8i4j3g57nda77simlf1dj1m751xzbgxxq6nd0q73lw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
     license     = licenses.asl20;
+    platforms   = jre.meta.platforms;
     maintainers = [ maintainers.ngerstle ];
   };
 

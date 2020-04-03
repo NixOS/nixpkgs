@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "litecli";
-  version = "1.1.0";
+  version = "1.3.2";
 
   # Python 2 won't have prompt_toolkit 2.x.x
   # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0cqil2cmnbw0jvb14v6kbr7l9yarfgy253cbb8v9znp0l4qfs7ra";
+    sha256 = "0bfx7fw6jnkqxa82xvd10yx1w2wbmrrqxwbh4anp5x9wnl91a9lp";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -30,7 +30,8 @@ python3Packages.buildPythonApplication rec {
   preCheck = ''
     export XDG_CONFIG_HOME=$TMP
     # add missing file
-    echo "litecli is awesome!" > tests/test.txt
+    mkdir -p tests/data
+    echo -e "t1,11\nt2,22\n" > tests/data/import_data.csv
   '';
 
   meta = with lib; {

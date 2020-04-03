@@ -1,6 +1,6 @@
 { stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
-, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
+, gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
 , at-spi2-atk, libuuid, at-spi2-core }:
 
 let
@@ -29,6 +29,7 @@ let
     gnome2.GConf
     gdk-pixbuf
     gtk3
+    libappindicator-gtk3
 
     gnome3.gnome-keyring
 

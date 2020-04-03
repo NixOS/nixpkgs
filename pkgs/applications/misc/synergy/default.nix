@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, cmake, openssl
+{ stdenv, lib, fetchFromGitHub, cmake, openssl, qttools
 , ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
 , xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
 , withGUI ? true, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "symless";
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals withGUI [
+    qttools
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices Carbon Cocoa CoreServices ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [

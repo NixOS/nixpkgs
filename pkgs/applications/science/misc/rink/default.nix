@@ -16,8 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0shlh0m9k0iqxpv9zmiw7a6v197swrvpz9x6qzhximzkdwni9gz9";
 
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ openssl gmp ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl gmp ncurses ];
 
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;

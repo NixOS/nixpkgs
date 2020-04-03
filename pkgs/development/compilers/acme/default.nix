@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "BINDIR=$(out)/bin" ];
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "= gcc" "?= gcc"
+  '';
+
   meta = with stdenv.lib; {
     description = "A multi-platform cross assembler for 6502/6510/65816 CPUs.";
     homepage = "https://sourceforge.net/projects/acme-crossass/";

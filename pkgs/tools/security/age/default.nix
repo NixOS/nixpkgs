@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "age";
@@ -18,9 +18,7 @@ buildGoModule rec {
     sha256 = "1n1ww8yjw0mg00dvnfmggww9kwp1hls0a85iv6vx9k89mzv8mdrq";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
     license = licenses.bsd3;

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-pkcs11";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "0gqbbxh1y2vcznxw96xn1wpcvg613zzzrbbfrqbw3p7spbn65yfq";
+    sha256 = "0ydd88jc4pyf1v7008h2gf0napv6xpw4jn5w87slj9fphjdkwjiz";
   };
 
   patches = lib.singleton (

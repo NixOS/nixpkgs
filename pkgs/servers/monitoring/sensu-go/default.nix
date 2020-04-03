@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, stdenv, Security }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 let
   generic = { subPackages, pname, postInstall ? "" }:
@@ -20,8 +20,6 @@ let
 
       modSha256 = "02h4cav6ivzs3z0qakwxzf5lfy6hzax5c0i2icp0qymqc2789npw";
 
-      buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
       buildFlagsArray = let
         versionPkg = "github.com/sensu/sensu-go/version";
       in ''
@@ -30,11 +28,11 @@ let
           -X ${versionPkg}.BuildSHA=${shortRev}
       '';
 
-      meta = with stdenv.lib; {
+      meta = {
         homepage = "https://sensu.io";
         description = "Open source monitoring tool for ephemeral infrastructure & distributed applications";
-        license = licenses.mit;
-        maintainers = with maintainers; [ thefloweringash ];
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ thefloweringash ];
       };
     };
 in

@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit, CoreServices }:
+{ stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.11";
+  version = "1.9.12";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xhkdxn5ajzi05252is5whqank81xy94jp1l5z2a44rajv8rh9vs";
+    sha256 = "143imiphyzk3009cfnqj7q013pb1wva13zq63byfj3d204b58cg6";
   };
 
-  modSha256 = "0jcj0knkhyndndyv1j9xhgbg5psagvyd27ailna3x9ikjlb8f7gg";
+  modSha256 = "15a8if5gx361nrqgv201jy8saq1ir1g18rpqzdmavg4ic75si5x1";
 
   subPackages = [
     "cmd/abigen"
@@ -29,8 +29,6 @@ buildGoModule rec {
     "cmd/utils"
     "cmd/wnode"
   ];
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =

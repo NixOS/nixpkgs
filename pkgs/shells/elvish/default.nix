@@ -1,8 +1,8 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "elvish";
-  version = "0.13";
+  version = "0.13.1";
 
   goPackagePath = "github.com/elves/elvish";
   excludedPackages = [ "website" ];
@@ -15,12 +15,10 @@ buildGoModule rec {
     owner = "elves";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fprii430p9w8x4wq93iqkgkwi5kypwwlnzgvlcz0mkksayk8bzg";
+    sha256 = "0lz9lf1swrn67kymcp2wh67lh3c0ifqm9035gpkd3zynlq3wzqfm";
   };
 
   modSha256 = "13x4wbfj8049ygm3zbgzyr2bm4sq4x6xddrxx6shr8fydlcf1g8v";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "A friendly and expressive command shell";

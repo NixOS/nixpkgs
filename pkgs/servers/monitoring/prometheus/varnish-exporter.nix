@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, makeWrapper, varnish, Security }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish }:
 
 buildGoModule rec {
   pname = "prometheus_varnish_exporter";
@@ -15,8 +15,6 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   postInstall = ''
     wrapProgram $out/bin/prometheus_varnish_exporter \
       --prefix PATH : "${varnish}/bin"
@@ -24,10 +22,10 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";
     description = "Varnish exporter for Prometheus";
-    license = licenses.mit;
-    maintainers = with maintainers; [ MostAwesomeDude willibutz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MostAwesomeDude willibutz ];
   };
 }

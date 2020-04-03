@@ -19,7 +19,7 @@ releaseTools.sourceTarball {
   version = pkgs.lib.fileContents ../../.version;
   versionSuffix = "pre${
     if nixpkgs ? lastModified
-    then builtins.substring 0 8 nixpkgs.lastModified
+    then builtins.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified)
     else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
 
   buildInputs = [ nix.out jq lib-tests pkgs.brotli ];
@@ -107,7 +107,7 @@ releaseTools.sourceTarball {
     nix-env -f . -I nixpkgs=${src} -qa --json --arg config 'import ${./packages-config.nix}' "''${opts[@]}" >> tmp
     echo -n '}' >> tmp
     packages=$out/packages.json.br
-    jq -c < tmp | brotli -9 > $packages
+    < tmp sed "s|$(pwd)/||g" | jq -c | brotli -9 > $packages
 
     echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';

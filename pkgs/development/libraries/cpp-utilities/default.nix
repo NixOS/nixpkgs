@@ -7,25 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cpp-utilities";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cghk1a0ki1063ci63imakmggwzkky1hx6lhrvc0wjfv754wsklb";
+    sha256 = "1c5rs28pavv8zabprjbd2y1sblgqbbhww07qvairh149rahvxi85";
   };
-  # See https://github.com/Martchus/cpp-utilities/issues/18
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Martchus/cpp-utilities/commit/b2a2773cdfb2b0017a3fa3d0ed2259a9a5fda666.patch";
-      sha256 = "01js90ba4xxljifncm48zbxmg7mwwz1gla1hn87yzbic47d85hfj";
-    })
-    (fetchpatch {
-      url = "https://github.com/Martchus/cpp-utilities/commit/4dd2179f191d1ace113f26177944684fa1561dc1.patch";
-      sha256 = "0chw33mwsvj7cigd1c4xl2zhpbfsp5rrijdm46qpn78bq70xcz9j";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
   checkInputs = [ cppunit ];

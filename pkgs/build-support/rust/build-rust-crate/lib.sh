@@ -14,7 +14,6 @@ build_lib() {
     --crate-name $CRATE_NAME \
     $lib_src \
     --out-dir target/lib \
-    --emit=dep-info,link \
     -L dependency=target/deps \
     --cap-lints allow \
     $LIB_RUSTC_OPTS \
@@ -45,7 +44,6 @@ build_bin() {
     --crate-type bin \
     $BIN_RUSTC_OPTS \
     --out-dir target/bin \
-    --emit=dep-info,link \
     -L dependency=target/deps \
     $LINK \
     $EXTRA_LIB \
@@ -105,11 +103,6 @@ setup_link_paths() {
   done
 
   if [[ -e target/link ]]; then
-     sort -u target/link.final > target/link.final.sorted
-     mv target/link.final.sorted target/link.final
-     sort -u target/link > target/link.sorted
-     mv target/link.sorted target/link
-
      tr '\n' ' ' < target/link > target/link_
      LINK=$(cat target/link_)
   fi

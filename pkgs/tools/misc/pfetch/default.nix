@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "pfetch";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "pfetch";
     rev = version;
-    sha256 = "0yg9nlrjnm2404ysm2qp1klpq1wlmyih302kzfqchn6l2sibsm4j";
+    sha256 = "06z0k1naw3k052p2z7241lx92rp5m07zlr0alx8pdm6mkc3c4v8f";
   };
 
   dontBuild = true;
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "A pretty system information tool written in POSIX sh";
-    homepage = https://github.com/dylanaraps/pfetch;
+    homepage = "https://github.com/dylanaraps/pfetch";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ equirosa ];

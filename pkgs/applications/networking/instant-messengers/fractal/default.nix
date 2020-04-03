@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     python3
     rustc
     wrapGAppsHook
+    glib
   ];
 
   buildInputs = [
@@ -84,4 +85,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dtzWill worldofpeace ];
   };
 }
-

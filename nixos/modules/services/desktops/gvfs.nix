@@ -12,6 +12,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   # Added 2019-08-19
   imports = [
     (mkRenamedOptionModule
