@@ -37,9 +37,6 @@ self: super: {
   # compiled on Linux. We provide the name to avoid evaluation errors.
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
-  # The test suite depends on old versions of tasty and QuickCheck.
-  hackage-security = dontCheck super.hackage-security;
-
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
   # $ hoogle server
@@ -86,7 +83,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0y2qcjahi705c6nnypqpa5w3bzyzk4kqvbwfnpiaxzk5vna589gg";
+      sha256 = "1jjw6ar8ddcncwzksyx2xky50sm2jg1zjr7iiqk0vn8qq0fn2gwy";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -326,6 +323,7 @@ self: super: {
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
+  hspec-core = if pkgs.stdenv.isi686 then dontCheck super.hspec-core else super.hspec-core; # tests rely on `Int` being 64-bit; https://github.com/hspec/hspec/issues/431
   hspec-server = dontCheck super.hspec-server;
   HTF = dontCheck super.HTF;
   htsn = dontCheck super.htsn;
@@ -359,7 +357,6 @@ self: super: {
   optional = dontCheck super.optional;
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
-  pandoc-crossref = dontCheck super.pandoc-crossref;  # (most likely change when no longer 0.3.2.1) https://github.com/lierdakil/pandoc-crossref/issues/199
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -1192,10 +1189,10 @@ self: super: {
   });
 
   # Remove unecessary constraint:
-  # https://github.com/agrafix/superbuffer/pull/2
-  superbuffer = overrideCabal super.superbuffer (drv: {
+  # https://github.com/haskell-infra/hackage-trustees/issues/258
+  data-accessor-template = overrideCabal super.data-accessor-template (drv: {
     postPatch = ''
-      sed -i 's#QuickCheck < 2.10#QuickCheck < 2.13#' superbuffer.cabal
+      sed -i 's#template-haskell >=2.11 && <2.15#template-haskell#' data-accessor-template.cabal
     '';
   });
 
@@ -1344,7 +1341,7 @@ self: super: {
   });
 
   # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_0_0_0; };
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
 
   # Several gtk2hs-provided packages at v0.13.8.0 fail to build on Darwin
   # until we pick up https://github.com/gtk2hs/gtk2hs/pull/293 so apply that
@@ -1463,6 +1460,11 @@ self: super: {
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
 
+  # Needs the latest version of vty.
+  matterhorn = super.matterhorn.overrideScope (self: super: {
+    vty = self.vty_5_28_2;
+  });
+
   persistent-mysql = dontCheck super.persistent-mysql;
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
@@ -1487,5 +1489,17 @@ self: super: {
 
   # Needs a version that's newer than LTS-15.x provides.
   weeder = super.weeder.override { generic-lens = self.generic-lens_2_0_0_0;  };
+
+  polysemy-plugin = super.polysemy-plugin.override {
+    # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
+    # This upstream issue is relevant:
+    # https://github.com/polysemy-research/polysemy/issues/322
+    ghc-tcplugins-extra = self.ghc-tcplugins-extra_0_3_2;
+    # version of Polysemy the plugin goes with
+    polysemy = self.polysemy_1_3_0_0;
+  };
+
+  # Fixed at head, but hasn't cut a release in awhile.
+  darcs = doJailbreak super.darcs;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
