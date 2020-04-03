@@ -42,11 +42,95 @@ let
    installCrate = import ./install-crate.nix { inherit stdenv; };
 in
 
-crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides,
-  dependencies, buildDependencies, crateRenames,
-  extraRustcOpts, buildTests,
-  preUnpack, postUnpack, prePatch, patches, postPatch,
-  preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
+/* The overridable pkgs.buildRustCrate function.
+ *
+ * Any unrecognized parameters will be passed as to
+ * the underlying stdenv.mkDerivation.
+ */
+ crate_: lib.makeOverridable (
+   # The rust compiler to use.
+   #
+   # Default: pkgs.rustc
+   { rust
+   # Whether to build a release version (`true`) or a debug
+   # version (`false`). Debug versions are faster to build
+   # but might be much slower at runtime.
+   , release
+   # Whether to print rustc invocations etc.
+   #
+   # Example: false
+   # Default: true
+   , verbose
+   # A list of rust/cargo features to enable while building the crate.
+   # Example: [ "std" "async" ]
+   , features
+   # Additional build inputs for building this crate.
+   #
+   # Example: [ pkgs.openssl ]
+   , buildInputs
+   # Allows to override the parameters to buildRustCrate
+   # for any rust dependency in the transitive build tree.
+   #
+   # Default: pkgs.defaultCrateOverrides
+   #
+   # Example:
+   #
+   # pkgs.defaultCrateOverrides // {
+   #   hello = attrs: { buildInputs = [ openssl ]; };
+   # }
+   , crateOverrides
+   # Rust library dependencies, i.e. other libaries that were built
+   # with buildRustCrate.
+   , dependencies
+   # Rust build dependencies, i.e. other libaries that were built
+   # with buildRustCrate and are used by a build script.
+   , buildDependencies
+   # Specify the "extern" name of a library if it differs from the library target.
+   # See above for an extended explanation.
+   #
+   # Default: no renames.
+   #
+   # Example:
+   #
+   # ```nix
+   # {
+   #   my_crate_name = "my_alternative_name";
+   #   # ...
+   # }
+   # ```
+   , crateRenames
+   # A list of extra options to pass to rustc.
+   #
+   # Example: [ "-Z debuginfo=2" ]
+   # Default: []
+   , extraRustcOpts
+   # Whether to enable building tests.
+   # Use true to enable.
+   # Default: false
+   , buildTests
+   # Passed to stdenv.mkDerivation.
+   , preUnpack
+   # Passed to stdenv.mkDerivation.
+   , postUnpack
+   # Passed to stdenv.mkDerivation.
+   , prePatch
+   # Passed to stdenv.mkDerivation.
+   , patches
+   # Passed to stdenv.mkDerivation.
+   , postPatch
+   # Passed to stdenv.mkDerivation.
+   , preConfigure
+   # Passed to stdenv.mkDerivation.
+   , postConfigure
+   # Passed to stdenv.mkDerivation.
+   , preBuild
+   # Passed to stdenv.mkDerivation.
+   , postBuild
+   # Passed to stdenv.mkDerivation.
+   , preInstall
+   # Passed to stdenv.mkDerivation.
+   , postInstall
+   }:
 
 let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
     dependencies_ = dependencies;
