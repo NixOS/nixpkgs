@@ -8,8 +8,6 @@
 , python
 , nodejs
 , nodePackages
-
-, ldap ? false
 }:
 
 let
@@ -37,7 +35,7 @@ let
   };
 
   patchedPackages = stdenv.mkDerivation (fetchedGithub ./peertube.json // rec {
-    patches = if ldap then [ ./ldap.patch ././yarn_fix_bluebird_ldap.patch ] else [ ./yarn_fix_bluebird.patch ];
+    patches = [ ./yarn_fix_bluebird.patch ];
     installPhase = ''
       mkdir $out
       cp package.json yarn.lock $out/
@@ -133,7 +131,7 @@ let
   );
 
   patchedServer = stdenv.mkDerivation (fetchedGithub ./peertube.json // rec {
-    patches = lib.optionals ldap [ ./ldap.patch ] ++ [ ./sendmail.patch ];
+    patches = [ ./sendmail.patch ];
 
     buildPhase = ''
       ln -s ${yarnModules}/node_modules .
@@ -157,8 +155,6 @@ stdenv.mkDerivation rec {
     url = "https://github.com/Chocobozzz/PeerTube/releases/download/${version}/${name}.zip";
     sha256 = "18fp3fy1crw67gdpc29nr38b5zy2f68l70w47zwp7dzhd8bbbipp";
   };
-
-  patches = lib.optionals ldap [ ./ldap_yarn.patch ];
 
   buildPhase = ''
     ln -s ${yarnModulesProd}/node_modules .
