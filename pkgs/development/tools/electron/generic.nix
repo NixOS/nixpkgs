@@ -56,6 +56,8 @@ let
         --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [ libuuid at-spi2-atk at-spi2-core ]}:$out/lib/electron" \
         $out/lib/electron/electron
 
+      gappsWrapperArgsHook
+
       wrapProgram $out/lib/electron/electron \
         --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
         "''${gappsWrapperArgs[@]}"
