@@ -5177,7 +5177,7 @@ let
     pname = "vim-python-pep8-indent";
     version = "2020-03-20";
     src = fetchFromGitHub {
-      owner = "hynek";
+      owner = "Vimjas";
       repo = "vim-python-pep8-indent";
       rev = "60ba5e11a61618c0344e2db190210145083c91f8";
       sha256 = "1blyhkykfnf4pgfq9hn9l8pq0iqdvig9m4zd8qq9aa9rlm8f0kzh";
