@@ -193,7 +193,7 @@ let
             inherit (php) dev;
             nativeBuildInputs = [ makeWrapper ];
             passthru = {
-              inherit buildEnv;
+              inherit buildEnv withExtensions;
               inherit (php-packages) packages extensions;
             };
             paths = [ php ];
@@ -207,10 +207,12 @@ let
               fi
             '';
           };
+
+      withExtensions = extensions: buildEnv { inherit extensions; };
     in
       php.overrideAttrs (_: {
         passthru = {
-          inherit buildEnv;
+          inherit buildEnv withExtensions;
           inherit (php-packages) packages extensions;
         };
       });
@@ -242,19 +244,17 @@ let
     selfWithExtensions = php74;
   };
 
-  defaultPhpExtensions = {
-    extensions = extensions: with extensions; ([
-      bcmath calendar curl ctype dom exif fileinfo filter ftp gd
-      gettext gmp iconv intl json ldap mbstring mysqli mysqlnd opcache
-      openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql
-      posix readline session simplexml sockets soap sodium sqlite3
-      tokenizer xmlreader xmlwriter zip zlib
-    ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
-  };
+  defaultPhpExtensions = extensions: with extensions; ([
+    bcmath calendar curl ctype dom exif fileinfo filter ftp gd
+    gettext gmp iconv intl json ldap mbstring mysqli mysqlnd opcache
+    openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql
+    posix readline session simplexml sockets soap sodium sqlite3
+    tokenizer xmlreader xmlwriter zip zlib
+  ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
 
-  php74 = php74base.buildEnv defaultPhpExtensions;
-  php73 = php73base.buildEnv defaultPhpExtensions;
-  php72 = php72base.buildEnv defaultPhpExtensions;
+  php74 = php74base.withExtensions defaultPhpExtensions;
+  php73 = php73base.withExtensions defaultPhpExtensions;
+  php72 = php72base.withExtensions defaultPhpExtensions;
 
 in {
   inherit php72base php73base php74base php72 php73 php74;
