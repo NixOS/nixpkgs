@@ -41,7 +41,7 @@ buildGoPackage rec {
     homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester saschagrunert marsam ];
+    maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
     platforms = platforms.unix;
   };
 }
