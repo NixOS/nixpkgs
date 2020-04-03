@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, stdenv }:
+{ lib, callPackage, fetchpatch, fetchurl, stdenv }:
 
 let
 
@@ -22,10 +22,25 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "440.59";
-      sha256_64bit = "162gq6w44l8sgnn4qnl2rdlx8c008p04zv4c3i1ps20p21n1mjv1";
-      settingsSha256 = "0vxhmirqzyav5ljf0f04yk0az48ir5v0817dq9z9kyqfdvnby93g";
-      persistencedSha256 = "0npjh7nashasydp8q6bbcp21w8fc1dycgjy50ics775hjnvm61qn";
+      version = "440.64";
+      sha256_64bit = "0xbm1dh95kz8h4d62pql2wmvw2gbgc7iif2bkixbnqijl4dryg71";
+      settingsSha256 = "1vdir8a8cky4kmipqsbyjhjn0aqbwgzsxq73hafikrp5n4nbclfh";
+      persistencedSha256 = "0lcnila7xyl5r87c88sq2fn5k6ylmdf1bk2wcvm6aw5x6pmnrkgi";
+
+      patches = [
+        (fetchpatch {
+          url = "https://raw.githubusercontent.com/Frogging-Family/nvidia-all/master/patches/linux-version.diff";
+          sha256 = "0c7ildivgv0ncic43mlj92jn2pf5plw5nbw5minb8lp23glkfm84";
+          stripLen = 2;
+          extraPrefix = "kernel/";
+        })
+        (fetchpatch {
+          url = "https://raw.githubusercontent.com/Frogging-Family/nvidia-all/master/patches/kernel-5.6.patch";
+          sha256 = "1i0lj1jzwbpzd9vf424aylacwidqxa990qbi12jxxfvabbjq5fhi";
+          stripLen = 2;
+          extraPrefix = "kernel/";
+        })
+      ];
     }
     else legacy_390;
 
