@@ -383,11 +383,20 @@ stdenv.mkDerivation ({
       mv tmp "$d"
     done
 
-    for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
-      for lib in "$d/"*.{dylib,so}; do
-        ln -sf "$lib" "$dynamicLinksDir"
+    listDynamicLinks () {
+      for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
+        for lib in "$d/"*.{dylib,so} ; do
+          if [ -f "$lib" ] ; then
+            echo "$lib"
+          fi
+        done
       done
+    }
+
+    for lib in $(listDynamicLinks | sort | uniq) ; do
+      ln -s "$lib" "$dynamicLinksDir"
     done
+
     # Edit the local package DB to reference the links directory.
     for f in "$packageConfDir/"*.conf; do
       sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," "$f"
