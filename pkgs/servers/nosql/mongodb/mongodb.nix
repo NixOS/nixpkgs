@@ -1,58 +1,63 @@
-{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, Security
-}:
+{ stdenv, fetchurl, scons, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
+, sasl, openssl, libpcap, python27, curl, Security, CoreFoundation, cctools }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
 
 with stdenv.lib;
 
-let version = "3.4.10";
-    system-libraries = [
-      "pcre"
-      #"asio" -- XXX use package?
-      #"wiredtiger"
-      "boost"
-      "snappy"
-      "zlib"
-      #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
-      #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
-      "yaml"
-    ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+{ version, sha256, patches ? [] }@args:
 
-in stdenv.mkDerivation {
-  pname = "mongodb";
+let
+  python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+  system-libraries = [
+    "boost"
+    "pcre"
+    "snappy"
+    "yaml"
+    "zlib"
+    #"asio" -- XXX use package?
+    #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
+    #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
+    #"wiredtiger"
+  ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+  inherit (stdenv.lib) systems subtractLists;
+
+in stdenv.mkDerivation rec {
   inherit version;
+  name = "mongodb-${version}";
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1wz2mhl9z0b1bdkg6m8v8mvw9k60mdv5ybq554xn3yjj9z500f24";
+    inherit sha256;
   };
 
   nativeBuildInputs = [ scons ];
   buildInputs = [
-    sasl boost gperftools pcre-cpp snappy
-    zlib libyamlcpp sasl openssl.dev openssl.out libpcap
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+    boost
+    curl
+    gperftools
+    libpcap
+    libyamlcpp
+    openssl
+    pcre-cpp
+    python
+    sasl
+    snappy
+    zlib
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
 
-  patches =
-    [
-      # MongoDB keeps track of its build parameters, which tricks nix into
-      # keeping dependencies to build inputs in the final output.
-      # We remove the build flags from buildInfo data.
-      ./forget-build-dependencies.patch
-      (fetchpatch {
-        url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
-        name = "boost160.patch";
-        sha256 = "0bvsf3499zj55pzamwjmsssr6x63w434944w76273fr5rxwzcmh8";
-      })
-    ];
+  # MongoDB keeps track of its build parameters, which tricks nix into
+  # keeping dependencies to build inputs in the final output.
+  # We remove the build flags from buildInfo data.
+  inherit patches;
 
   postPatch = ''
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/third_party/mozjs-45/extract/js/src/jsmath.cpp --replace 'defined(HAVE_SINCOS)' 0
 
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
@@ -66,13 +71,14 @@ in stdenv.mkDerivation {
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+    "-Wno-unused-command-line-argument";
 
   sconsFlags = [
     "--release"
     "--ssl"
     #"--rocksdb" # Don't have this packaged yet
-    "--wiredtiger=${if stdenv.is64bit then "on" else "off"}"
+    "--wiredtiger=on"
     "--js-engine=mozjs"
     "--use-sasl-client"
     "--disable-warnings-as-errors"
@@ -87,8 +93,13 @@ in stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    mkdir -p $out/lib
+    mkdir -p "$out/lib"
   '';
+
+  postInstall = ''
+    rm -f "$out/bin/install_compass" || true
+  '';
+
   prefixKey = "--prefix=";
 
   enableParallelBuilding = true;
@@ -97,10 +108,10 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";
-    homepage = http://www.mongodb.org;
-    license = licenses.agpl3;
+    homepage = "http://www.mongodb.org";
+    license = licenses.sspl;
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
-    platforms = platforms.unix;
+    platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 }
