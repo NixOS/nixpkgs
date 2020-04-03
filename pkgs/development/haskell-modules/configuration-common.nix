@@ -1498,4 +1498,8 @@ self: super: {
     # version of Polysemy the plugin goes with
     polysemy = self.polysemy_1_3_0_0;
   };
+
+  # Fixed at head, but hasn't cut a release in awhile.
+  darcs = doJailbreak super.darcs;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
