@@ -25,7 +25,7 @@ let
       mv $out/bin/quaternion.app $out/Applications
       rmdir $out/bin || :
     '' else ''
-      substituteInPlace $out/share/applications/quaternion.desktop \
+      substituteInPlace $out/share/applications/com.github.quaternion.desktop \
         --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
     '';
 
@@ -40,7 +40,7 @@ let
   };
 
 in rec {
-  quaternion     = generic "0.0.9.4c"     "12mkwiqqbi4774kwl7gha72jyf0jf547acy6rw8ry249zl4lja54" "" libqmatrixclient_0_5;
+  quaternion     = generic "0.0.9.4e"     "0hqhg7l6wpkdbzrdjvrbqymmahziri07ba0hvbii7dd2p0h248fv" "" libqmatrixclient_0_5;
 
   quaternion-git = quaternion;
 }
