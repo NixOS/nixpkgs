@@ -2479,6 +2479,8 @@ package-maintainers:
     - termonad
   rkrzr:
     - icepeak
+  terlar:
+    - nix-diff
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
@@ -7822,7 +7824,6 @@ broken-packages:
   - nitro
   - nix-delegate
   - nix-deploy
-  - nix-diff
   - nix-eval
   - nix-freeze-tree
   - nix-tools
