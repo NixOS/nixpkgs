@@ -5,7 +5,7 @@
 , pkgconfig
 , meson
 , ninja
-, libusb
+, libusb1
 , pixman
 , glib
 , nss
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libusb
+    libusb1 # drop in 2.0 for gusb
     pixman
     glib
     nss
