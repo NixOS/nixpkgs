@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "luminescent-dreams";
     repo = "fitnesstrax";
-    rev = "${pname}-${version}";
+    rev = "${name}-${version}";
     sha256 = "1k6zhnbs0ggx7q0ig2abcnzprsgrychlpvsh6d36dw6mr8zpfkp7";
   };
 
