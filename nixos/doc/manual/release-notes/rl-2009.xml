@@ -134,7 +134,7 @@
 
        <programlisting>
 environment.systemPackages = [
-(pkgs.php.buildEnv { exts = pp: with pp; [
+(pkgs.php.buildEnv { extensions = pp: with pp; [
     imagick
     opcache
     pdo_mysql

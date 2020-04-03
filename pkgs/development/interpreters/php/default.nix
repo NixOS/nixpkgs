@@ -150,27 +150,22 @@ let
     let
       php = generic (builtins.removeAttrs args [ "self" "selfWithExtensions" ]);
 
-      packages = (callPackage ../../../top-level/php-packages.nix {
+      php-packages = (callPackage ../../../top-level/php-packages.nix {
         php = self;
         phpWithExtensions = selfWithExtensions;
-      }).packages;
+      });
 
-      extensions = (callPackage ../../../top-level/php-packages.nix {
-        php = self;
-        phpWithExtensions = selfWithExtensions;
-      }).extensions;
-
-      buildEnv = { exts ? (_: []), extraConfig ? "" }:
+      buildEnv = { extensions ? (_: []), extraConfig ? "" }:
         let
           getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
-          extList = exts extensions;
+          extList = extensions php-packages.extensions;
 
-          # Generate extension load configuration snippets from
-          # exts. This is an attrset suitable for use with
-          # textClosureList, which is used to put the strings in the
-          # right order - if a plugin which is dependent on another
-          # plugin is placed before its dependency, it will fail to
-          # load.
+          # Generate extension load configuration snippets from the
+          # extension parameter. This is an attrset suitable for use
+          # with textClosureList, which is used to put the strings in
+          # the right order - if a plugin which is dependent on
+          # another plugin is placed before its dependency, it will
+          # fail to load.
           extensionTexts =
             lib.listToAttrs
               (map (ext:
@@ -198,7 +193,8 @@ let
             inherit (php) dev;
             nativeBuildInputs = [ makeWrapper ];
             passthru = {
-              inherit buildEnv packages extensions;
+              inherit buildEnv;
+              inherit (php-packages) packages extensions;
             };
             paths = [ php ];
             postBuild = ''
@@ -214,7 +210,8 @@ let
     in
       php.overrideAttrs (_: {
         passthru = {
-          inherit buildEnv packages extensions;
+          inherit buildEnv;
+          inherit (php-packages) packages extensions;
         };
       });
 
@@ -246,7 +243,7 @@ let
   };
 
   defaultPhpExtensions = {
-    exts = pp: with pp; ([
+    extensions = extensions: with extensions; ([
       bcmath calendar curl ctype dom exif fileinfo filter ftp gd
       gettext gmp iconv intl json ldap mbstring mysqli mysqlnd opcache
       openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql
