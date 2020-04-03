@@ -20243,6 +20243,8 @@ in
 
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
+  kondo = callPackage ../applications/misc/kondo { };
+
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
 
   kotatogram-desktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
