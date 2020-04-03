@@ -8,8 +8,6 @@
 , packaging
 , six
 , pythonOlder
-, enum34
-, ipaddress
 , isPyPy
 , cffi
 , pytest
@@ -21,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.8"; # Also update the hash in vectors.nix
+  version = "2.9"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0l8nhw14npknncxdnp7n4hpmjyscly6g7fbivyxkjwvlv071zniw";
+    sha256 = "0vlqy2pki0fh1h6l6cbb43z3g2n9fv0849dzb5gqwjv0bkpx7b0c";
   };
 
   outputs = [ "out" "dev" ];
@@ -35,9 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     six
-  ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34
-  ++ stdenv.lib.optional (pythonOlder "3.3") ipaddress
-  ++ stdenv.lib.optional (!isPyPy) cffi;
+  ] ++ stdenv.lib.optional (!isPyPy) cffi;
 
   checkInputs = [
     cryptography_vectors
@@ -48,9 +44,8 @@ buildPythonPackage rec {
     pytz
   ];
 
-  # remove when https://github.com/pyca/cryptography/issues/4998 is fixed
   checkPhase = ''
-    py.test --disable-pytest-warnings tests -k 'not load_ecdsa_no_named_curve'
+    py.test --disable-pytest-warnings tests
   '';
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
@@ -64,9 +59,11 @@ buildPythonPackage rec {
       common cryptographic algorithms such as symmetric ciphers, message
       digests, and key derivation functions.
       Our goal is for it to be your "cryptographic standard library". It
-      supports Python 2.7, Python 3.4+, and PyPy 5.3+.
+      supports Python 2.7, Python 3.5+, and PyPy 5.4+.
     '';
-    homepage = https://github.com/pyca/cryptography;
+    homepage = "https://github.com/pyca/cryptography";
+    changelog = "https://cryptography.io/en/latest/changelog/#v"
+      + replaceStrings [ "." ] [ "-" ] version;
     license = with licenses; [ asl20 bsd3 psfl ];
     maintainers = with maintainers; [ primeos ];
   };
