@@ -15749,7 +15749,9 @@ in
 
   libpulseaudio = libpulseaudio-vanilla;
 
-  pulseeffects = callPackage ../applications/audio/pulseeffects { };
+  pulseeffects = callPackage ../applications/audio/pulseeffects {
+    boost = boost172;
+  };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
