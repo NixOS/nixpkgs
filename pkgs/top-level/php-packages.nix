@@ -26,8 +26,7 @@ in
 {
   inherit buildPecl;
 
-  # Packages are an attribute set meant for for human interaction and not
-  # extensions for the language itself.
+  # This is a set of interactive tools based on PHP.
   packages = {
     box = mkDerivation rec {
       version = "2.7.5";
@@ -293,8 +292,9 @@ in
 
 
 
-  # Extensions are an attribute set meant for for PHP extensions that extend the
-  # language rather than human interaction.
+  # This is a set of PHP extensions meant to be used in php.buildEnv
+  # or php.withExtensions to extend the functionality of the PHP
+  # interpreter.
   extensions = {
     apcu = buildPecl {
       version = "5.1.18";
