@@ -239,7 +239,7 @@ in
         # Apparently iconv won't work with bootstrap glibc, but it will be used
         # with glibc built later where we keep *this* build of libunistring,
         # so we need to trick it into supporting libiconv.
-        am_cv_func_iconv_works = "yes";
+        env = { am_cv_func_iconv_works = "yes"; } // attrs.env or {};
       });
       libidn2 = super.libidn2.overrideAttrs (attrs: {
         postFixup = attrs.postFixup or "" + ''
