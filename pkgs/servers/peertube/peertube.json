@@ -1,0 +1,15 @@
+{
+  "tag": "v1.2.0",
+  "meta": {
+    "name": "peertube",
+    "url": "https://github.com/Chocobozzz/PeerTube",
+    "branch": "refs/tags/v1.2.0"
+  },
+  "github": {
+    "owner": "Chocobozzz",
+    "repo": "PeerTube",
+    "rev": "5cc304b909a70d8cbfe9cb5e0c46b4fe7b3d8ea2",
+    "sha256": "0fpzp9qh3ns3bg2w7f50b5schg30swyhyhk1zd311fy27mdmza6z",
+    "fetchSubmodules": true
+  }
+}

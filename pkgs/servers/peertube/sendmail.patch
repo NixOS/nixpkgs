@@ -1,0 +1,121 @@
+commit 677374d59c6aa2cb8145da3cd9c17fe05fd9b149
+Author: Ismaël Bouya <ismael.bouya@normalesup.org>
+Date:   Wed Feb 13 12:16:27 2019 +0100
+
+    Add sendmail
+
+diff --git a/config/production.yaml.example b/config/production.yaml.example
+index bb5ac251..4583f1f5 100644
+--- a/config/production.yaml.example
++++ b/config/production.yaml.example
+@@ -46,6 +46,8 @@ ldap:
+ 
+ # SMTP server to send emails
+ smtp:
++  transport: smtp
++  sendmail: null
+   hostname: null
+   port: 465 # If you use StartTLS: 587
+   username: null
+diff --git a/server/initializers/constants.ts b/server/initializers/constants.ts
+index fb21df37..c551b4f9 100644
+--- a/server/initializers/constants.ts
++++ b/server/initializers/constants.ts
+@@ -188,6 +188,8 @@ const CONFIG = {
+     USER_FILTER: config.has('ldap.user_filter') ? config.get<string>('ldap.user_filter') : '(|(email=%username%)(uid=%username%))'
+   },
+   SMTP: {
++    TRANSPORT: config.has('smtp.transport') ? config.get<string>('smtp.transport') : 'smtp',
++    SENDMAIL: config.has('smtp.sendmail') ? config.get<string>('smtp.sendmail') : null,
+     HOSTNAME: config.get<string>('smtp.hostname'),
+     PORT: config.get<number>('smtp.port'),
+     USERNAME: config.get<string>('smtp.username'),
+diff --git a/server/lib/emailer.ts b/server/lib/emailer.ts
+index f384a254..ec6e249b 100644
+--- a/server/lib/emailer.ts
++++ b/server/lib/emailer.ts
+@@ -27,33 +27,41 @@ class Emailer {
+     this.initialized = true
+ 
+     if (Emailer.isEnabled()) {
+-      logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
+-
+-      let tls
+-      if (CONFIG.SMTP.CA_FILE) {
+-        tls = {
+-          ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
++      if (CONFIG.SMTP.TRANSPORT === 'smtp') {
++        logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
++
++        let tls
++        if (CONFIG.SMTP.CA_FILE) {
++          tls = {
++            ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
++          }
+         }
+-      }
+ 
+-      let auth
+-      if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
+-        auth = {
+-          user: CONFIG.SMTP.USERNAME,
+-          pass: CONFIG.SMTP.PASSWORD
++        let auth
++        if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
++          auth = {
++            user: CONFIG.SMTP.USERNAME,
++            pass: CONFIG.SMTP.PASSWORD
++          }
+         }
+-      }
+ 
+-      this.transporter = createTransport({
+-        host: CONFIG.SMTP.HOSTNAME,
+-        port: CONFIG.SMTP.PORT,
+-        secure: CONFIG.SMTP.TLS,
+-        debug: CONFIG.LOG.LEVEL === 'debug',
+-        logger: bunyanLogger as any,
+-        ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
+-        tls,
+-        auth
+-      })
++        this.transporter = createTransport({
++          host: CONFIG.SMTP.HOSTNAME,
++          port: CONFIG.SMTP.PORT,
++          secure: CONFIG.SMTP.TLS,
++          debug: CONFIG.LOG.LEVEL === 'debug',
++          logger: bunyanLogger as any,
++          ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
++          tls,
++          auth
++        })
++      } else { // sendmail
++        this.transporter = createTransport({
++          sendmail: true,
++          newline: 'unix',
++          path: CONFIG.SMTP.SENDMAIL,
++        })
++      }
+     } else {
+       if (!isTestInstance()) {
+         logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
+@@ -62,11 +70,17 @@ class Emailer {
+   }
+ 
+   static isEnabled () {
+-    return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
++    if (CONFIG.SMTP.TRANSPORT === 'sendmail') {
++      return !!CONFIG.SMTP.SENDMAIL
++    } else if (CONFIG.SMTP.TRANSPORT === 'smtp') {
++      return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
++    } else {
++      return false
++    }
+   }
+ 
+   async checkConnectionOrDie () {
+-    if (!this.transporter) return
++    if (!this.transporter || CONFIG.SMTP.TRANSPORT !== 'smtp') return
+ 
+     logger.info('Testing SMTP server...')
+ 
