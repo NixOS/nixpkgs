@@ -1649,6 +1649,8 @@ in {
 
   alabaster = callPackage ../development/python-modules/alabaster {};
 
+  alarmdecoder = callPackage ../development/python-modules/alarmdecoder {};
+
   alembic = callPackage ../development/python-modules/alembic {};
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
@@ -7135,6 +7137,8 @@ in {
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
 
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
+
+  qiskit-ignis = callPackage ../development/python-modules/qiskit-ignis { };
 
   qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
 

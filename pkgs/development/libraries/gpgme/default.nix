@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+{ stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which, ncurses
 , texinfo
 , buildPackages
@@ -19,6 +19,21 @@ stdenv.mkDerivation rec {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
     sha256 = "0imyjfryvvjdbai454p70zcr95m94j9xnzywrlilqdw2fqi0pqy4";
   };
+
+  patches = [
+    # Fix tests with gnupg > 2.2.19
+    # https://dev.gnupg.org/T4820
+    (fetchpatch {
+      name = "cff600f1f65a2164ab25ff2b039cba008776ce62.patch";
+      url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=cff600f1f65a2164ab25ff2b039cba008776ce62";
+      sha256 = "9vB2aTv3zeAQS3UxCDfkRjqUlng8lkcyJPgMzdm+Qzc=";
+    })
+    (fetchpatch {
+      name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
+      url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";
+      sha256 = "pKL1tvUw7PB2w4FHSt2up4SvpFiprBH6TLdgKxYFC3g=";
+    })
+  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool

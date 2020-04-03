@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     ++ (with perlPackages; [ perl IOTty ])
     ++ lib.optional withUtempter libutempter;
 
+  enableParallelBuilding = true;
+
   patches = [
     ./ssh_path.patch
     ./utempter_path.patch

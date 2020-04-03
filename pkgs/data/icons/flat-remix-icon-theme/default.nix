@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec  {
   pname = "flat-remix-icon-theme";
-  version = "20191122";
+  version = "20200116";
 
   src = fetchFromGitHub  {
     owner = "daniruiz";
     repo = "flat-remix";
     rev = version;
-    sha256 = "1rv35r52l7xxjpajwli0md07k3xl7xplbw919vjmsb1hhrzavzzg";
+    sha256 = "14n5wydhd5ifmsbj770s2qg2ksd3xa3m61qxydid6jq39k0lxbd8";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -32,4 +32,3 @@ stdenv.mkDerivation rec  {
     maintainers = with maintainers; [ mschneider ];
   };
 }
- 

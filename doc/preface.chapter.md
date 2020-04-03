@@ -37,7 +37,7 @@ security updates. More up to date packages and modules are available via the
 
 Both `nixos-unstable` and `nixpkgs` follow the `master` branch of the Nixpkgs
 repository, although both do lag the `master` branch by generally
-[a couple of days](https://howoldis.herokuapp.com/). Updates to a channel are
+[a couple of days](https://status.nixos.org/). Updates to a channel are
 distributed as soon as all tests for that channel pass, e.g.
 [this table](https://hydra.nixos.org/job/nixpkgs/trunk/unstable#tabs-constituents)
 shows the status of tests for the `nixpkgs` channel.

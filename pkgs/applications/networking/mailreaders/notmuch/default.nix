@@ -1,12 +1,13 @@
 { fetchurl, stdenv
 , pkgconfig, gnupg
 , xapian, gmime, talloc, zlib
-, doxygen, perl
+, doxygen, perl, texinfo
 , pythonPackages
 , bash-completion
 , emacs
 , ruby
 , which, dtach, openssl, bash, gdb, man
+, withEmacs ? true
 }:
 
 with stdenv.lib;
@@ -25,15 +26,20 @@ stdenv.mkDerivation rec {
     sha256 = "0dfwa38vgnxk9cvvpza66szjgp8lir6iz6yy0cry9593lywh9xym";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    doxygen                   # (optional) api docs
+    pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
+    texinfo                   # (optional) documentation -> doc/INSTALL
+    bash-completion           # (optional) dependency to install bash completion
+  ] ++ optional withEmacs [ emacs ];
+
   buildInputs = [
-    gnupg # undefined dependencies
+    gnupg                     # undefined dependencies
     xapian gmime talloc zlib  # dependencies described in INSTALL
-    doxygen perl  # (optional) api docs
-    pythonPackages.sphinx pythonPackages.python  # (optional) documentation -> doc/INSTALL
-    bash-completion  # (optional) dependency to install bash completion
-    emacs  # (optional) to byte compile emacs code, also needed for tests
-    ruby  # (optional) ruby bindings
+    perl
+    pythonPackages.python
+    ruby
   ];
 
   postPatch = ''
@@ -42,19 +48,26 @@ stdenv.mkDerivation rec {
 
     substituteInPlace lib/Makefile.local \
       --replace '-install_name $(libdir)' "-install_name $out/lib"
-
+  '' + optionalString withEmacs ''
     substituteInPlace emacs/notmuch-emacs-mua \
       --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
       --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
   '';
 
-  configureFlags = [ "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions" ];
+  configureFlags = [
+    "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
+    "--infodir=${placeholder "info"}"
+  ] ++ optional (!withEmacs) "--without-emacs"
+    ++ optional (isNull ruby) "--without-ruby";
 
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
   # friends
   setOutputFlags = false;
   enableParallelBuilding = true;
   makeFlags = [ "V=1" ];
+
+
+  outputs = [ "out" "man" "info" ];
 
   preCheck = let
     test-database = fetchurl {
@@ -68,10 +81,10 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   checkInputs = [
     which dtach openssl bash
-    gdb man
+    gdb man emacs
   ];
 
-  installTargets = [ "install" "install-man" ];
+  installTargets = [ "install" "install-man" "install-info" ];
 
   dontGzipMan = true; # already compressed
 
