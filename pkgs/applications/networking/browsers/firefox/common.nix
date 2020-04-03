@@ -16,6 +16,7 @@
 ### backorted packages
 
 , nss_3_51
+, sqlite_3_31_1
 
 ### optionals
 
@@ -93,6 +94,7 @@ let
 # Firefoxs requirements
 
 nss_pkg = if lib.versionAtLeast ffversion "74" then nss_3_51 else nss;
+sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
 
 in
 
@@ -119,7 +121,7 @@ stdenv.mkDerivation ({
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU libGL
     xorg.libXScrnSaver xorg.xorgproto
-    xorg.libXext sqlite unzip makeWrapper
+    xorg.libXext sqlite_pkg unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
     nasm

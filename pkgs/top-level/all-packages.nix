@@ -14325,6 +14325,7 @@ in
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
+  sqlite_3_31_1 = lowPrio (callPackage ../development/libraries/sqlite/3_31_1.nix { });
 
   sqlite-analyzer = lowPrio (callPackage ../development/libraries/sqlite/analyzer.nix { });
 
