@@ -505,15 +505,6 @@ def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
         print("no changes in working tree to commit")
 
 
-    try:
-        # synchronous variant for debugging
-        results = list(map(prefetch_with_cache, plugin_names))
-        #pool = Pool(processes=3)
-        #results = pool.map(prefetch_with_cache, plugin_names)
-    finally:
-        cache.store()
-
-
 def get_update(input_file: str, outfile: str, proc: int):
     cache: Cache = Cache(get_current_plugins())
     _prefetch = functools.partial(prefetch, cache=cache)
