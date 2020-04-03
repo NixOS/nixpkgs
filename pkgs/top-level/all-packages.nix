@@ -25383,7 +25383,6 @@ in
       boehmgc = boehmgc.override { enableLargeConfig = true; };
       })
     nix
-    nix1
     nixStable
     nixUnstable
     nixFlakes;

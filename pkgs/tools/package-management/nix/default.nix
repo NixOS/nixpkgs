@@ -20,7 +20,7 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 
-  , name, suffix ? "", src, includesPerl ? false
+  , name, suffix ? "", src
 
   }:
   let
@@ -29,7 +29,6 @@ common =
       inherit name src;
       version = lib.getVersion name;
 
-      is20 = lib.versionAtLeast version "2.0pre";
       is24 = lib.versionAtLeast version "2.4pre";
       isExactly23 = lib.versionAtLeast version "2.3" && lib.versionOlder version "2.4";
 
@@ -39,15 +38,16 @@ common =
 
       nativeBuildInputs =
         [ pkgconfig ]
-        ++ lib.optionals (!is20) [ curl perl ]
         ++ lib.optionals is24 [ jq ];
 
-      buildInputs = [ curl openssl sqlite xz bzip2 nlohmann_json ]
+      buildInputs =
+        [ curl openssl sqlite xz bzip2 nlohmann_json
+          brotli boost editline
+        ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is20 [ brotli boost editline ]
         ++ lib.optionals is24 [ libarchive rustc cargo ]
         ++ lib.optional withLibseccomp libseccomp
-        ++ lib.optional (withAWS && is20)
+        ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
               apis = ["s3" "transfer"];
               customMemoryManagement = false;
@@ -66,7 +66,7 @@ common =
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
         # https://github.com/NixOS/nixpkgs/issues/45462
-        lib.optionalString is20 ''
+        ''
           mkdir -p $out/lib
           cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
           rm -f $out/lib/*.a
@@ -97,12 +97,7 @@ common =
           "--disable-init-state"
           "--enable-gc"
         ]
-        ++ lib.optionals (!is20) [
-          "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-          "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-          "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
-          "BDW_GC_LIBS=\"-lgc -lgccpp\""
-        ] ++ lib.optionals (is20 && stdenv.isLinux) [
+        ++ lib.optionals stdenv.isLinux [
           "--with-sandbox-shell=${sh}/bin/busybox"
         ]
         ++ lib.optional (
@@ -143,7 +138,7 @@ common =
       };
 
       passthru = {
-        perl-bindings = if includesPerl then nix else stdenv.mkDerivation {
+        perl-bindings = stdenv.mkDerivation {
           pname = "nix-perl";
           inherit version;
 
@@ -154,8 +149,7 @@ common =
           # This is not cross-compile safe, don't have time to fix right now
           # but noting for future travellers.
           nativeBuildInputs =
-            [ perl pkgconfig curl nix libsodium ]
-            ++ lib.optional is20 boost;
+            [ perl pkgconfig curl nix libsodium boost ];
 
           configureFlags =
             [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -173,19 +167,6 @@ common =
 in rec {
 
   nix = nixStable;
-
-  nix1 = callPackage common rec {
-    name = "nix-1.11.16";
-    src = fetchurl {
-      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
-    };
-
-    # Nix1 has the perl bindings by default, so no need to build the manually.
-    includesPerl = true;
-
-    inherit storeDir stateDir confDir boehmgc;
-  };
 
   nixStable = callPackage common (rec {
     name = "nix-2.3.3";
