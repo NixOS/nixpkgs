@@ -12,6 +12,9 @@
 , buildVimPluginFrom2Nix
 , nodePackages
 
+# required by plenty of markdown viewers
+, pandoc
+
 # coc-go dependency
 , go
 
@@ -414,6 +417,17 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
+  });
+
+  nvim-markdown-preview = super.nvim-markdown-preview.overrideAttrs(old: {
+    buildInputs = [ nodePackages.live-server pandoc ];
+    preFixup = ''
+      substituteInPlace $out/share/vim-plugins/nvim-markdown-preview/ftplugin/markdown.vim --replace "executable('live-server')" \
+          "executable('${nodePackages.live-server}/bin/live-server')"
+
+      substituteInPlace $out/share/vim-plugins/nvim-markdown-preview/autoload/markdown.vim --replace "live-server" \
+          "${nodePackages.live-server}/bin/live-server"
+      '';
   });
 
   fzf-vim = super.fzf-vim.overrideAttrs(old: {

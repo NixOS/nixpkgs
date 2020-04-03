@@ -2311,6 +2311,17 @@ let
     };
   };
 
+  nvim-markdown-preview = buildVimPluginFrom2Nix {
+    pname = "nvim-markdown-preview";
+    version = "2019-01-29";
+    src = fetchFromGitHub {
+      owner = "davidgranstrom";
+      repo = "nvim-markdown-preview";
+      rev = "9914aae9c1736212f88f1893d14bfe69400443f0";
+      sha256 = "1kc74y9wd6ipz82ry7c3vzi4r65b817wiwcgf7q0632qxxczqdxr";
+    };
+  };
+
   nvim-terminal-lua = buildVimPluginFrom2Nix {
     pname = "nvim-terminal-lua";
     version = "2019-10-17";
