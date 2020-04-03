@@ -69,8 +69,6 @@ core-packages:
 default-package-overrides:
   # This was only intended for ghc-7.0.4, and has very old deps, one hidden behind a flag
   - MissingH ==1.4.2.0
-  # for cabal-install-3.0.0.0
-  - hackage-security >=0.5.2.2 && <0.6
   # pandoc-2.9 does not accept the 0.3 version yet
   - doclayout < 0.3
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
