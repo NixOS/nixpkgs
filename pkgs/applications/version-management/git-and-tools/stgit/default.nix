@@ -1,11 +1,8 @@
-{ stdenv, fetchFromGitHub, python2, git }:
+{ stdenv, python3, python3Packages, fetchFromGitHub, git }:
 
-let
-  name = "stgit-${version}";
+python3Packages.buildPythonApplication rec {
+  pname = "stgit";
   version = "0.22";
-in
-stdenv.mkDerivation {
-  inherit name;
 
   src = fetchFromGitHub {
     owner = "ctmarinas";
@@ -14,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0xpvs5fa50rrvl2c8naha1nblk5ip2mgg63a9srqqxfx6z8qmrfz";
   };
 
-  buildInputs = [ python2 git ];
+  nativeBuildInputs = [ git ];
 
   makeFlags = [ "prefix=$$out" ];
 
