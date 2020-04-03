@@ -12,6 +12,11 @@
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
+
+### backorted packages
+
+, nss_3_51
+
 ### optionals
 
 ## optional libraries
@@ -83,6 +88,12 @@ let
   execdir = if stdenv.isDarwin
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
+
+# backported dependencies where the versions on the stable release did not meet
+# Firefoxs requirements
+
+nss_pkg = if lib.versionAtLeast ffversion "74" then nss_3_51 else nss;
+
 in
 
 stdenv.mkDerivation ({
@@ -116,7 +127,7 @@ stdenv.mkDerivation ({
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss
+    nspr nss_pkg
   ]
 
   ++ lib.optional  alsaSupport alsaLib
@@ -130,7 +141,7 @@ stdenv.mkDerivation ({
 
   NIX_CFLAGS_COMPILE = toString ([
     "-I${glib.dev}/include/gio-unix-2.0"
-    "-I${nss.dev}/include/nss"
+    "-I${nss_pkg.dev}/include/nss"
   ]
   ++ lib.optional (pname == "firefox-esr" && lib.versionOlder ffversion "69")
     "-Wno-error=format-security");

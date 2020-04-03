@@ -13489,6 +13489,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  nss_3_51 = lowPrio (callPackage ../development/libraries/nss/3_51.nix { });
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
