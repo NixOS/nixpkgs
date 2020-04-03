@@ -74,9 +74,10 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
 
 class Repo:
-    def __init__(self, owner: str, name: str, alias: str) -> None:
+    def __init__(self, owner: str, name: str, branch: str, alias: Optional[str]) -> None:
         self.owner = owner
         self.name = name
+        self.branch = branch
         self.alias = alias
         self.redirect: Dict[str, str] = {}
 
@@ -90,7 +91,7 @@ class Repo:
     def has_submodules(self) -> bool:
         try:
             urllib.request.urlopen(
-                self.url("blob/master/.gitmodules"), timeout=10
+                self.url(f"blob/{self.branch}/.gitmodules"), timeout=10
             ).close()
         except urllib.error.HTTPError as e:
             if e.code == 404:
@@ -101,7 +102,7 @@ class Repo:
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
-        commit_url = self.url("commits/master.atom")
+        commit_url = self.url(f"commits/{self.branch}.atom")
         with urllib.request.urlopen(commit_url, timeout=10) as req:
             self.check_for_redirect(commit_url, req)
             xml = req.read()
@@ -218,9 +219,9 @@ def get_current_plugins() -> List[Plugin]:
 
 
 def prefetch_plugin(
-    user: str, repo_name: str, alias: str, cache: "Cache"
+    user: str, repo_name: str, branch: str, alias: Optional[str], cache: "Cache"
 ) -> Tuple[Plugin, Dict[str, str]]:
-    repo = Repo(user, repo_name, alias)
+    repo = Repo(user, repo_name, branch, alias)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit]
@@ -277,17 +278,21 @@ def check_results(
         sys.exit(1)
 
 
-def parse_plugin_line(line: str) -> Tuple[str, str, Optional[str]]:
+def parse_plugin_line(line: str) -> Tuple[str, str, str, Optional[str]]:
+    line = line.strip()
+    branch = "master"
     name, repo = line.split("/")
+    if "@" in repo:
+        repo, branch = repo.split("@")
     try:
         repo, alias = repo.split(" as ")
-        return (name, repo, alias.strip())
+        return (name, repo, branch, alias.strip())
     except ValueError:
         # no alias defined
-        return (name, repo.strip(), None)
+        return (name, repo.strip(), branch, None)
 
 
-def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, Optional[str]]]:
+def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, str, Optional[str]]]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
@@ -354,12 +359,12 @@ class Cache:
 
 
 def prefetch(
-    args: Tuple[str, str, str], cache: Cache
+    args: Tuple[str, str, str, Optional[str]], cache: Cache
 ) -> Tuple[str, str, Union[Exception, Plugin], dict]:
-    assert len(args) == 3
-    owner, repo, alias = args
+    assert len(args) == 4
+    owner, repo, branch, alias = args
     try:
-        plugin, redirect = prefetch_plugin(owner, repo, alias, cache)
+        plugin, redirect = prefetch_plugin(owner, repo, branch, alias, cache)
         cache[plugin.commit] = plugin
         return (owner, repo, plugin, redirect)
     except Exception as e:
@@ -492,9 +497,9 @@ def main() -> None:
 
     try:
         # synchronous variant for debugging
-        # results = list(map(prefetch_with_cache, plugin_names))
-        pool = Pool(processes=30)
-        results = pool.map(prefetch_with_cache, plugin_names)
+        results = list(map(prefetch_with_cache, plugin_names))
+        #pool = Pool(processes=3)
+        #results = pool.map(prefetch_with_cache, plugin_names)
     finally:
         cache.store()
 

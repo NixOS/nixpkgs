@@ -413,12 +413,12 @@ let
 
   coc-html = buildVimPluginFrom2Nix {
     pname = "coc-html";
-    version = "2020-02-10";
+    version = "2020-03-30";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc-html";
-      rev = "2221768187a1bb87af44715bce563bc7fc6917ab";
-      sha256 = "04rial5fvyq68qj66ys33sgw7020r81jjsxsycm6y0shn8pjd33y";
+      rev = "8ae5d2832761b5868f69c67f33ce26f9edb26c65";
+      sha256 = "1rf9qfimnbxjr5s55pzm8npixan5cz2v17g4j34f18i9ky6yyk0b";
     };
   };
 
@@ -705,6 +705,17 @@ let
       repo = "coc-yank";
       rev = "6cb8bc7f2d41b9fb75c797c5805444badeff3dd9";
       sha256 = "0s28684531ihczg5nf2m3f8z1vx9fw4yllfq7jz8g7ifw922ddxb";
+    };
+  };
+
+  coc-nvim = buildVimPluginFrom2Nix {
+    pname = "coc-nvim";
+    version = "2020-03-30";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "coc.nvim";
+      rev = "cae9778539eaebb277b8f60196ac1731410f8165";
+      sha256 = "17r71p3n0riqfyk2lv8c05ppxcbc8nykydz52inhqczmkj0v9dsd";
     };
   };
 
@@ -3392,12 +3403,12 @@ let
 
   vim-airline = buildVimPluginFrom2Nix {
     pname = "vim-airline";
-    version = "2020-03-29";
+    version = "2020-03-30";
     src = fetchFromGitHub {
       owner = "vim-airline";
       repo = "vim-airline";
-      rev = "74ca43a9b66a8fa6c01c3d7c51bbb034622eedf2";
-      sha256 = "1jfyalzab0mfnj9bgc5x81vrcf2p3ndxa36fz5w24xw36cw8sz87";
+      rev = "29eec37c66fcf44fc6b41793d649b246d4610c24";
+      sha256 = "16fg5vlbadk1ir8rmv1622kmschya8hp7xq362xdx0xkwscdigyx";
     };
   };
 
@@ -5819,6 +5830,17 @@ let
       repo = "vim-watchdogs";
       rev = "8ee2af37095af08376ba2409da152c2a36a4ee90";
       sha256 = "1hvgqdcnnz09afbas5brwls2sifs8y78jmq44ldgsjny9l445df4";
+    };
+  };
+
+  vim-which-key = buildVimPluginFrom2Nix {
+    pname = "vim-which-key";
+    version = "2020-03-16";
+    src = fetchFromGitHub {
+      owner = "liuchengxu";
+      repo = "vim-which-key";
+      rev = "4b70b443ba5838b165f90e26f9ed628d7d05e11d";
+      sha256 = "197rp20hngrq7qdlii0ai4vb81dlilah0q1wlil8hv3qcf4az7qr";
     };
   };
 
