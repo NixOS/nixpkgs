@@ -3972,7 +3972,6 @@ broken-packages:
   - Dao
   - dao
   - dapi
-  - darcs
   - darcs-benchmark
   - darcs-beta
   - darcs-buildpackage

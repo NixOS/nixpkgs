@@ -1488,4 +1488,7 @@ self: super: {
   # Needs a version that's newer than LTS-15.x provides.
   weeder = super.weeder.override { generic-lens = self.generic-lens_2_0_0_0;  };
 
+  # Fixed at head, but hasn't cut a release in awhile.
+  darcs = doJailbreak super.darcs;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
