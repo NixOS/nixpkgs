@@ -35,7 +35,7 @@ buildPythonPackage rec {
     comment = "Scientific Python Development Environment";
     desktopName = "Spyder";
     genericName = "Python IDE";
-    categories = "Application;Development;Editor;IDE;";
+    categories = "Application;Development;IDE;";
   };
 
   postPatch = ''

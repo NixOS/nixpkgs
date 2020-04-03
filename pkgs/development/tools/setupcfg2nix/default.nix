@@ -6,7 +6,7 @@ buildSetupcfg rec {
     owner = "target";
     repo = "setupcfg2nix";
     rev = info.version;
-    sha256 = "1zn9njpzwhwikrirgjlyz6ys3xr8gq61ry8blmnpscqvhsdhxcs6";
+    sha256 = "1rj227vxybwp9acwnpwg9np964b1qcw2av3qmx00isnrw5vcps8m";
   };
   application = true;
   meta = {

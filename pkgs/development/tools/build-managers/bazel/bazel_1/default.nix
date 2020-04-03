@@ -1,7 +1,7 @@
 { stdenv, callPackage, lib, fetchurl, fetchFromGitHub
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
-, bazel_1
+, bazel_self
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
@@ -247,7 +247,7 @@ stdenv.mkDerivation rec {
             touch $out
           '');
 
-      bazelWithNixHacks = bazel_1.override { enableNixHacks = true; };
+      bazelWithNixHacks = bazel_self.override { enableNixHacks = true; };
 
       bazel-examples = fetchFromGitHub {
         owner = "bazelbuild";

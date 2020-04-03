@@ -57,6 +57,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   options = {
 
     services.gnome3 = {

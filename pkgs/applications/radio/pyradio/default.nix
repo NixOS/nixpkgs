@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
-  version = "0.8.7.1";
+  version = "0.8.7.2";
 
   src = fetchFromGitHub {
     owner = "coderholic";
     repo = pname;
     rev = version;
-    sha256 = "1f1dch5vrx2armrff19rh9gpqydspn3nvzc9p9j2jfi6gsxhppyb";
+    sha256 = "0h2sxaqpmc1d1kpvpbcs9wymgzhx25x0x9p7dbyfw9r90i6123q1";
   };
 
   checkPhase = ''

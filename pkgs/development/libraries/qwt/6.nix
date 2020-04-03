@@ -1,11 +1,11 @@
 { stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "qwt-6.1.2";
+  name = "qwt-6.1.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/qwt/${name}.tar.bz2";
-    sha256 = "031x4hz1jpbirv9k35rqb52bb9mf2w7qav89qv1yfw1r3n6z221b";
+    sha256 = "1navkcnmn0qz8kzsyqmk32d929zl72l0b580w1ica7z5559j2a8m";
   };
 
   propagatedBuildInputs = [ qtbase qtsvg qttools ];
