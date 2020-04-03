@@ -335,13 +335,10 @@ in
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
       enable = mkDefault true;
-
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
-        }
-      ];
+      statements = ''
+        select 'create role ${cfg.database.user}' where not exists (select from pg_roles where rolname = '${cfg.database.user}')\gexec
+        select 'create database ${cfg.database.name} owner ${cfg.database.user}' where not exists (select from pg_database where datname = '${cfg.database.name}')\gexec
+      '';
     };
 
     services.mysql = optionalAttrs (useMysql && cfg.database.createDatabase) {
