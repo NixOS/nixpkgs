@@ -19923,6 +19923,8 @@ in
 
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
+  swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
+
   waybar = callPackage ../applications/misc/waybar {
     pulseSupport = config.pulseaudio or false;
   };
