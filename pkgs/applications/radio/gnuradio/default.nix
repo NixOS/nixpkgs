@@ -45,13 +45,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnuradio";
-  version = "3.7.13.4";
+  version = "3.7.14.0";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = "gnuradio";
     rev = "v${version}";
-    sha256 = "0ybfn2zfr9lc1bi3c794l4bzpj8y6vas9c4rbcj4nqlx0zf3p8fn";
+    sha256 = "1nh4f9dmygprlbqybd3j1byg9fsr6065n140mvc4b0v8qqygmhrc";
     fetchSubmodules = true;
   };
 
