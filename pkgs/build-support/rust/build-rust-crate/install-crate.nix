@@ -14,7 +14,7 @@ if !buildTests then ''
   fi
   if [[ "$(ls -A target/lib)" ]]; then
     mkdir -p $lib/lib
-    cp target/lib/* $lib/lib #*/
+    cp -r target/lib/* $lib/lib #*/
     for library in $lib/lib/*.so $lib/lib/*.dylib; do #*/
       ln -s $library $(echo $library | sed -e "s/-${metadata}//")
     done
@@ -26,7 +26,7 @@ if !buildTests then ''
   if [[ -d target/bin ]]; then
     if [[ "$(ls -A target/bin)" ]]; then
       mkdir -p $out/bin
-      cp -P target/bin/* $out/bin # */
+      cp -rP target/bin/* $out/bin # */
     fi
   fi
   runHook postInstall
