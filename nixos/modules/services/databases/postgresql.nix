@@ -25,9 +25,27 @@ let
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
+  statementsSql = pkgs.writeText "statements.sql" cfg.statements;
+
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "postgresql" "ensureDatabases" ] ''
+      `services.postgresql.ensureDatabases` often create systems which are not
+      reproducible, working against the general Nix philosophy. If you require this
+      functionality please use `services.postgresql.statements` after careful
+      consideration. For related discussion please see:
+      https://github.com/NixOS/nixpkgs/pull/84146
+    '')
+    (mkRemovedOptionModule [ "services" "postgresl" "ensureUsers" ] ''
+      `services.postgresql.ensureUsers` often create systems which are not
+      reproducible, working against the general Nix philosophy. If you require this
+      functionality please use `services.postgresql.statements` after careful
+      consideration. For related discussion please see:
+      https://github.com/NixOS/nixpkgs/pull/84146
+    '')
+  ];
 
   ###### interface
 
@@ -107,77 +125,35 @@ in
         '';
       };
 
-      ensureDatabases = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      statements = mkOption {
+        type = types.lines;
+        default = "";
         description = ''
-          Ensures that the specified databases exist.
-          This option will never delete existing databases, especially not when the value of this
-          option is changed. This means that databases created once through this option or
-          otherwise have to be removed manually.
-        '';
-        example = [
-          "gitea"
-          "nextcloud"
-        ];
-      };
-
-      ensureUsers = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = ''
-                Name of the user to ensure.
-              '';
-            };
-            ensurePermissions = mkOption {
-              type = types.attrsOf types.str;
-              default = {};
-              description = ''
-                Permissions to ensure for the user, specified as an attribute set.
-                The attribute names specify the database and tables to grant the permissions for.
-                The attribute values specify the permissions to grant. You may specify one or
-                multiple comma-separated SQL privileges here.
-
-                For more information on how to specify the target
-                and on which privileges exist, see the
-                <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
-              '';
-              example = literalExample ''
-                {
-                  "DATABASE nextcloud" = "ALL PRIVILEGES";
-                  "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
-                }
-              '';
-            };
-          };
-        });
-        default = [];
-        description = ''
-          Ensures that the specified users exist and have at least the ensured permissions.
-          The PostgreSQL users will be identified using peer authentication. This authenticates the Unix user with the
-          same name only, and that without the need for a password.
-          This option will never delete existing users or remove permissions, especially not when the value of this
-          option is changed. This means that users created and permissions assigned once through this option or
-          otherwise have to be removed manually.
+          <emphasis>Idempotent</emphasis> SQL statements to be executed by PostgreSQL. Useful for:
+          <itemizedlist>
+            <listitem><para>creating databases</para></listitem>
+            <listitem><para>creating local accounts with socket authentication</para></listitem>
+            <listitem><para>granting certain permissions on a database</para></listitem>
+          </itemizedlist>
+          <para>
+            See <link xlink:href="https://stackoverflow.com/a/18389184"/> for suggestions on writing
+            idempotent sql statements for PostgreSQL.
+          </para>
+          <warning>
+            <para>
+              This should <emphasis>NOT</emphasis> contain any sensitive data such as credentials
+              as the content will end up in the world readable nix store.
+            </para>
+            <para>
+              Using this option can result in systems which are not reproducible, working against
+              the general Nix philosophy. You are advised to exercise caution when using this
+              option, carefully weighing the pros and cons with respect to reproduciblity.
+            </para>
+          </warning>
         '';
         example = literalExample ''
-          [
-            {
-              name = "nextcloud";
-              ensurePermissions = {
-                "DATABASE nextcloud" = "ALL PRIVILEGES";
-              };
-            }
-            {
-              name = "superuser";
-              ensurePermissions = {
-                "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
-              };
-            }
-          ]
+          select 'create role nextcloud' where not exists (select from pg_roles where rolname = 'nextcloud')\gexec
+          select 'create database nextcloud owner nextcloud' where not exists (select from pg_database where datname = 'nextcloud')\gexec
         '';
       };
 
@@ -289,6 +265,7 @@ in
         environment.PGDATA = cfg.dataDir;
 
         path = [ postgresql ];
+        restartTriggers = [ statementsSql ];
 
         preStart =
           ''
@@ -349,17 +326,8 @@ in
                     ''}
                     rm -f "${cfg.dataDir}/.first_startup"
                   fi
-                '' + optionalString (cfg.ensureDatabases != []) ''
-                  ${concatMapStrings (database: ''
-                    $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-                  '') cfg.ensureDatabases}
-                '' + ''
-                  ${concatMapStrings (user: ''
-                    $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-                    ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                      $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
-                    '') user.ensurePermissions)}
-                  '') cfg.ensureUsers}
+
+                  $PSQL -qAtf ${statementsSql}
                 '');
               in
                 "+${setupScript}";
