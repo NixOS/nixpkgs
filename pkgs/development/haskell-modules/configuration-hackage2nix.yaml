@@ -3517,6 +3517,7 @@ broken-packages:
   - Chart-fltkhs
   - chart-histogram
   - Chart-simple
+  - chart-svg
   - chart-unit
   - chatter
   - chatty-text
@@ -5055,6 +5056,7 @@ broken-packages:
   - ghc-srcspan-plugin
   - ghc-syb
   - ghc-syb-utils
+  - ghc-tags-core
   - ghc-tags-plugin
   - ghc-time-alloc-prof
   - ghc-usage
@@ -6282,6 +6284,7 @@ broken-packages:
   - hssqlppp
   - hssqlppp-th
   - HsSVN
+  - hstar
   - hstatistics
   - hstats
   - hstatsd
