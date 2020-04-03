@@ -22207,6 +22207,8 @@ in
 
   tudu = callPackage ../applications/office/tudu { };
 
+  tut = callPackage ../applications/misc/tut { };
+
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
   twister = callPackage ../applications/networking/p2p/twister { };
