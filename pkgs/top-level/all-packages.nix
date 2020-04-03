@@ -15547,17 +15547,33 @@ in
   mariadb = callPackage ../servers/sql/mariadb {
     # As per mariadb's cmake, "static jemalloc_pic.a can only be used up to jemalloc 4".
     # https://jira.mariadb.org/browse/MDEV-15034
-    jemalloc = jemalloc450.override ({ disableInitExecTls = true; });
+    jemalloc450 = jemalloc450.override ({ disableInitExecTls = true; });
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
   mysql = mariadb; # TODO: move to aliases.nix
 
-  mongodb = callPackage ../servers/nosql/mongodb {
+  mongodb = hiPrio mongodb-3_4;
+  
+  mongodb-3_4 = callPackage ../servers/nosql/mongodb/v3_4.nix {
     sasl = cyrus_sasl;
     boost = boost160;
-    openssl = openssl_1_0_2;
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
+  mongodb-3_6 = callPackage ../servers/nosql/mongodb/v3_6.nix {
+    sasl = cyrus_sasl;
+    boost = boost160;
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
+  mongodb-4_0 = callPackage ../servers/nosql/mongodb/v4_0.nix {
+    sasl = cyrus_sasl;
+    boost = boost169;
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   nginx-sso = callPackage ../servers/nginx-sso { };

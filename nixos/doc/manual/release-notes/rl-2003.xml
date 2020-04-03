@@ -1007,6 +1007,12 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      </warning>
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The TokuDB storage engine will be disabled in <package>mariadb</package> 10.5. It is recommended to switch
+       to RocksDB. See also <link xlink:href="https://mariadb.com/kb/en/tokudb/">TokuDB</link>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -1133,6 +1139,20 @@ auth required pam_succeed_if.so uid >= 1000 quiet
     even when <link linkend="opt-systemd.network.enable">systemd-networkd</link> is disabled.
     This mirrors the behaviour of systemd - It's udev that parses <literal>.link</literal> files,
     not <command>systemd-networkd</command>.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
+    <package>mongodb</package> has been updated to version <literal>3.4.24</literal>.
+    <warning>
+     <para>
+      Please note that <package>mongodb</package> has been relicensed under their own
+      <link xlink:href="https://www.mongodb.com/licensing/server-side-public-license/faq"><literal>
+      sspl</literal></link>-license. Since it's not entirely free and not OSI-approved,
+      it's listed as non-free. This means that Hydra doesn't provide prebuilt
+      <package>mongodb</package>-packages and needs to be built locally.
+     </para>
+    </warning>
    </para>
   </listitem>
   </itemizedlist>
