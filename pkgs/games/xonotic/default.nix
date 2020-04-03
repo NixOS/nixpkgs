@@ -48,7 +48,7 @@ let
     exec = "$out/bin/xonotic";
     comment = meta.description;
     desktopName = "Xonotic";
-    categories = "Game;";
+    categories = "Game;Shooter;";
     icon = "xonotic";
     startupNotify = "false";
   };
@@ -84,7 +84,10 @@ let
     enableParallelBuilding = true;
 
     installPhase = ''
-      install -Dm644 ../../misc/logos/icons_png/xonotic_128.png $out/share/pixmaps/xonotic.png
+      for size in 16x16 24x24 32x32 48x48 64x64 72x72 96x96 128x128 192x192 256x256 512x512 1024x1024 scalable; do
+        install -Dm644 ../../misc/logos/xonotic_icon.svg \
+          $out/share/icons/hicolor/$size/xonotic.svg
+      done
     '' + lib.optionalString withDedicated ''
       install -Dm755 darkplaces-dedicated "$out/bin/xonotic-dedicated"
     '' + lib.optionalString withGLX ''
@@ -147,7 +150,7 @@ in rec {
     ln -sf $out/bin/xonotic-sdl $out/bin/xonotic
   '' + lib.optionalString (withSDL || withGLX) ''
     mkdir -p $out/share
-    ln -s ${xonotic-unwrapped}/share/pixmaps $out/share/pixmaps
+    ln -s ${xonotic-unwrapped}/share/icons $out/share/icons
     ${desktopItem.buildCommand}
   '' + ''
     for binary in $out/bin/xonotic-*; do
