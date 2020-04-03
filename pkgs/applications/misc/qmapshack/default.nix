@@ -29,6 +29,10 @@ mkDerivation rec {
     "${src}/FindQuaZip5.patch"
   ];
 
+  qtWrapperArgs = [
+    "--suffix PATH : ${lib.makeBinPath [ gdal routino ]}"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/Maproom/qmapshack";
     description = "Consumer grade GIS software";
