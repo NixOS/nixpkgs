@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, nose
 , jinja2
 , pyyaml
 , setuptools
@@ -16,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "6f6f643b3fa5c0f72fbe9f07e246f8e138052b9f689e14c7c64d582c59709ae4";
   };
 
-  checkInputs = [ nose ];
+  doCheck = false; # tests aren't installed thus aren't found, so skip
   propagatedBuildInputs = [ jinja2 pyyaml setuptools ];
 
   meta = with stdenv.lib; {
