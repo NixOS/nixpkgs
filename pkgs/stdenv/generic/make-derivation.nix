@@ -228,8 +228,10 @@ in rec {
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
 
-          env =
-            assert lib.all (v: lib.isString v || lib.isBool v || lib.isInt v) (lib.attrValues env);
+          env = lib.mapAttrs
+            (k: v: if lib.isString v || lib.isBool v || lib.isInt v
+                   then v
+                   else throw "Environment variable '${k}' is a ${builtins.typeOf v} but should be a string, boolean or integer")
             env;
 
           # The `system` attribute of a derivation has special meaning to Nix.
