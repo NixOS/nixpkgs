@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ mnacamura prikhi ];
     platforms = platforms.linux;
+    changelog = "https://github.com/prikhi/lightdm-mini-greeter/blob/master/CHANGELOG.md";
   };
 }
