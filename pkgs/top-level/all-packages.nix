@@ -10241,6 +10241,8 @@ in
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
+  effitask = callPackage ../applications/misc/effitask { };
+
   egypt = callPackage ../development/tools/analysis/egypt { };
 
   elfinfo = callPackage ../development/tools/misc/elfinfo { };
