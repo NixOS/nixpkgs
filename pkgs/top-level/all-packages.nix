@@ -20221,6 +20221,11 @@ in
 
   kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
 
+  kio-gdrive = libsForQt5.callPackage ../applications/misc/kio-gdrive {
+    inherit (kdeApplications) libkgapi kaccounts-integration kaccounts-providers;
+    inherit (kdeFrameworks) kcalendarcore;
+  };
+
   kile = libsForQt5.callPackage ../applications/editors/kile { };
 
   kino = callPackage ../applications/video/kino {
