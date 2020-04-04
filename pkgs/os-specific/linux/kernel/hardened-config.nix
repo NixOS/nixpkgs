@@ -40,7 +40,6 @@ assert (versionAtLeast version "4.9");
   # Perform additional validation of commonly targeted structures.
   DEBUG_CREDENTIALS     = yes;
   DEBUG_NOTIFIERS       = yes;
-  DEBUG_LIST            = yes;
   DEBUG_PI_LIST         = yes; # doesn't BUG()
   DEBUG_SG              = yes;
   SCHED_STACK_END_CHECK = yes;
