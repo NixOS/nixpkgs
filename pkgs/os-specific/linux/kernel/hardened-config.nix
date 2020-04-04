@@ -61,7 +61,6 @@ assert (versionAtLeast version "4.9");
   SECURITY_SAFESETID = whenAtLeast "5.1" yes;
 
   # Reboot devices immediately if kernel experiences an Oops.
-  PANIC_ON_OOPS = yes;
   PANIC_TIMEOUT = freeform "-1";
 
   GCC_PLUGINS = yes; # Enable gcc plugin options
