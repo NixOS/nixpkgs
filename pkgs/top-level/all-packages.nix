@@ -14136,6 +14136,8 @@ in
 
     signond = libsForQt5.callPackage ../development/libraries/signond { };
 
+    signon-ui = libsForQt5.callPackage ../development/libraries/signon-ui { };
+
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget {
