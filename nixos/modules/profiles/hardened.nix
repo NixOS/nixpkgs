@@ -21,8 +21,6 @@ with lib;
 
   security.lockKernelModules = mkDefault true;
 
-  security.allowUserNamespaces = mkDefault false;
-
   security.protectKernelImage = mkDefault true;
 
   security.allowSimultaneousMultithreading = mkDefault false;

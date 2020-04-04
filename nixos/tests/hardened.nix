@@ -76,7 +76,8 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Test userns
       subtest "userns", sub {
-          $machine->fail("unshare --user");
+          $machine->succeed("unshare --user true");
+          $machine->fail("su -l alice -c 'unshare --user true'");
       };
 
       # Test dmesg restriction
