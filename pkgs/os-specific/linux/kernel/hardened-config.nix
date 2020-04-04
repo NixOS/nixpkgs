@@ -17,10 +17,6 @@ with (stdenv.lib.kernel.whenHelpers version);
 assert (versionAtLeast version "4.9");
 
 optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
-  # Note: this config depends on EXPERT y and so will not take effect, hence
-  # it is left "optional" for now.
-  MODIFY_LDT_SYSCALL = option no;
-
   # Randomize position of kernel and memory.
   RANDOMIZE_BASE   = yes;
   RANDOMIZE_MEMORY = yes;
