@@ -15,6 +15,7 @@ fetchzip {
   meta = {
     homepage = http://junicode.sourceforge.net/;
     description = "A Unicode font for medievalists";
+    maintainers = with lib.maintainers; [ ivan-timokhin ];
     license = lib.licenses.ofl;
   };
 }
