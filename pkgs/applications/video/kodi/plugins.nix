@@ -1,6 +1,6 @@
 { stdenv, callPackage, fetchFromGitHub
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
-, steam, udev, libusb, jsoncpp, libhdhomerun, zlib
+, steam, udev, libusb1, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
@@ -299,7 +299,7 @@ let self = rec {
       sha256 = "1hbd8fdvn7xkr9csz1g9wah78nhnq1rkazl4zwa31y70830k3279";
     };
 
-    extraBuildInputs = [ libusb ];
+    extraBuildInputs = [ libusb1 ];
 
     meta = {
       description = "Binary addon for steam controller.";
