@@ -2,22 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = pname;
     rev = version;
-    sha256 = "1m709mnhhjs30s91542rhri3xbzsb3kw8zablvn11rwp2iq1lxxx";
+    sha256 = "12wbx4zhf1rf13g3mw8vcn8aqk9vcza61vi42y6c1pb2km73qw1h";
   };
 
-  cargoSha256 = "1j6pww4mpssnr9zsbfy74llv7336kjrif1qiph998b82qj63vdlg";
+  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "1nyci2vjwsyfscsd520d1r5vyazb33hv4mrsysy6amss4jdf2dlq";
 
   meta = with stdenv.lib; {
     description = "Sort of like top or htop but with zoom-able charts, network, and disk usage";
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
+    # doesn't build on aarch64 https://github.com/bvaisvil/zenith/issues/19
     platforms = platforms.x86;
   };
 }
