@@ -9,10 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "0fjh9qmmgj34zlgxb09231ld7khys562qxbpsjlaplq2j85p57im";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk2 ];
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+    iconnamingutils
+    gtk2
+  ];
 
-  # remove a tree of dirs with no files within
-  postInstall = '' rm -r "$out/share/locale" '';
+  postInstall = ''
+    # remove a tree of dirs with no files within
+    rm -r "$out/share/locale"
+  '';
 
   meta = with stdenv.lib; {
     description = "Collection of icons for the GNOME 2 desktop";
