@@ -13489,6 +13489,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  nss_3_51 = lowPrio (callPackage ../development/libraries/nss/3_51.nix { });
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
@@ -14324,6 +14325,7 @@ in
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
+  sqlite_3_31_1 = lowPrio (callPackage ../development/libraries/sqlite/3_31_1.nix { });
 
   sqlite-analyzer = lowPrio (callPackage ../development/libraries/sqlite/analyzer.nix { });
 

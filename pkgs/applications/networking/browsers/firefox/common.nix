@@ -12,6 +12,12 @@
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
+
+### backorted packages
+
+, nss_3_51
+, sqlite_3_31_1
+
 ### optionals
 
 ## optional libraries
@@ -83,6 +89,13 @@ let
   execdir = if stdenv.isDarwin
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
+
+# backported dependencies where the versions on the stable release did not meet
+# Firefoxs requirements
+
+nss_pkg = if lib.versionAtLeast ffversion "74" then nss_3_51 else nss;
+sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
+
 in
 
 stdenv.mkDerivation ({
@@ -94,11 +107,6 @@ stdenv.mkDerivation ({
   patches = [
     ./env_var_for_system_dir.patch
   ]
-  ++ lib.optional (lib.versionAtLeast ffversion "73") (fetchpatch {
-    # https://phabricator.services.mozilla.com/D60667
-    url = "https://hg.mozilla.org/mozilla-central/raw-rev/b3d8b08265b800165d684281d19ac845a8ff9a66";
-    sha256 = "0b4s75w7sl619rglcjmlyvyibpj2ar5cpy6pnywl1xpd9qzyb27p";
-  })
   ++ patches;
 
 
@@ -113,7 +121,7 @@ stdenv.mkDerivation ({
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU libGL
     xorg.libXScrnSaver xorg.xorgproto
-    xorg.libXext sqlite unzip makeWrapper
+    xorg.libXext sqlite_pkg unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
     nasm
@@ -121,7 +129,7 @@ stdenv.mkDerivation ({
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss
+    nspr nss_pkg
   ]
 
   ++ lib.optional  alsaSupport alsaLib
@@ -135,7 +143,7 @@ stdenv.mkDerivation ({
 
   NIX_CFLAGS_COMPILE = toString ([
     "-I${glib.dev}/include/gio-unix-2.0"
-    "-I${nss.dev}/include/nss"
+    "-I${nss_pkg.dev}/include/nss"
   ]
   ++ lib.optional (pname == "firefox-esr" && lib.versionOlder ffversion "69")
     "-Wno-error=format-security");
@@ -296,6 +304,9 @@ stdenv.mkDerivation ({
     inherit execdir;
     inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
+} //
+lib.optionalAttrs (lib.versionAtLeast ffversion "74") {
+  hardeningDisable = [ "format" ]; # -Werror=format-security
 } //
 # the build system verifies checksums of the bundled rust sources
 # ./third_party/rust is be patched by our libtool fixup code in stdenv
