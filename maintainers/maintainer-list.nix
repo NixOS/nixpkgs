@@ -6771,6 +6771,11 @@
     github = "shmish111";
     name = "David Smith";
   };
+  shnarazk = {
+    email = "shujinarazaki@protonmail.com";
+    github = "shnarazk";
+    name = "Narazaki Shuji";
+  };
   shou = {
     email = "x+g@shou.io";
     github = "Shou";
