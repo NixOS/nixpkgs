@@ -46,11 +46,6 @@ assert (versionAtLeast version "4.9");
 
   REFCOUNT_FULL = whenAtLeast "4.13" yes;
 
-  # Randomize allocator freelists.
-  SLAB_FREELIST_RANDOM = yes;
-
-  SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
-
   # Randomize page allocator when page_alloc.shuffle=1
   SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
 
