@@ -4074,6 +4074,12 @@
     githubId = 15692230;
     name = "Muhammad Herdiansyah";
   };
+  konstantsky = {
+    email = "konstantin@konstantsky.pw";
+    github = "konstantinous";
+    githubId = 4301666;
+    name = "Konstantin Khokhlov";
+  };
   koral = {
     email = "koral@mailoo.org";
     github = "k0ral";
