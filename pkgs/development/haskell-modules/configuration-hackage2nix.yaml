@@ -8097,7 +8097,6 @@ broken-packages:
   - persistent-migration
   - persistent-mongoDB
   - persistent-mysql-haskell
-  - persistent-postgresql
   - persistent-protobuf
   - persistent-ratelimit
   - persistent-redis

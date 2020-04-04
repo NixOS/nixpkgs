@@ -1474,7 +1474,9 @@ self: super: {
     vty = self.vty_5_28_2;
   });
 
+  # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
+  persistent-postgresql = dontCheck super.persistent-postgresql;
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
   # https://github.com/robdockins/edison/pull/16
