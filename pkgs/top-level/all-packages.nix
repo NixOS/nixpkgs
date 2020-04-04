@@ -14134,6 +14134,8 @@ in
       suffix = "qt5";
     };
 
+    signond = libsForQt5.callPackage ../development/libraries/signond { };
+
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget {
