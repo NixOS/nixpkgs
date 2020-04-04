@@ -7,7 +7,7 @@ let
 
   eachSite = config.services.dokuwiki;
 
-  user = config.services.nginx.user;
+  user = "dokuwiki";
   group = config.services.nginx.group;
 
   dokuwikiAclAuthConfig = cfg: pkgs.writeText "acl.auth.php" ''
@@ -372,5 +372,10 @@ in
       "d ${cfg.stateDir}/tmp 0750 ${user} ${group} - -"
       "C ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/users.auth.php.dist"
     ]) eachSite);
+
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
   };
 }
