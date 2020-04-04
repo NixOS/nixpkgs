@@ -1127,6 +1127,12 @@
     githubId = 510553;
     name = "Jos van Bakel";
   };
+  caadar = {
+    email = "v88m@posteo.net";
+    github = "caadar";
+    githubId = 15320726;
+    name = "Car Cdr";
+  };
   cab404 = {
     email = "cab404@mailbox.org";
     github = "cab404";
