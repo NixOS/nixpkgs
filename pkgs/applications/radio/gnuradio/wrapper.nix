@@ -2,17 +2,19 @@
 , unwrapped
 , makeWrapper
 , python
+, extraPythonPackages ? []
+, extraPaths ? []
 }:
 
 symlinkJoin rec {
   name = "${unwrapped.name}-wrapped";
-  paths = [ unwrapped ];
+  paths = [ unwrapped ] ++ extraPaths;
   # TODO:
   # Try to build unwrapped with propagatedBuildInputs = [ pythonEnv ] and test
   # if the unwrapped.pythonEnv is still not different then this pythonEnv
   # This is the real environment that'll be when shebanging the scripts
   pythonEnv = python.buildEnv.override { 
-    extraLibs = unwrapped.pythonEnvInputs;
+    extraLibs = unwrapped.pythonEnvInputs ++ extraPythonPackages;
     postBuild = ''
       ln -s ${unwrapped}/${python.sitePackages}/* -t $out/${python.sitePackages}
     '';
