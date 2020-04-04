@@ -68,6 +68,8 @@ let
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
 
+  git-cinnabar = callPackage ./git-cinnabar { };
+
   git-codeowners = callPackage ./git-codeowners { };
 
   git-codereview = callPackage ./git-codereview { };
