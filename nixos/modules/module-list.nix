@@ -649,6 +649,8 @@
   ./services/networking/hylafax/default.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
+  ./services/networking/icecream/scheduler.nix
+  ./services/networking/icecream/daemon.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
