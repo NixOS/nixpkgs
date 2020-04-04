@@ -1,9 +1,12 @@
 { lib, fetchzip }:
 
-fetchzip {
-  name = "junicode-1.002";
+let
+  pname = "junicode";
+  version = "1.002";
+in fetchzip {
+  name = "${pname}-${version}";
 
-  url = mirror://sourceforge/junicode/junicode/junicode-1.002/junicode-1.002.zip;
+  url = "mirror://sourceforge/junicode/junicode/junicode-${version}/junicode-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
