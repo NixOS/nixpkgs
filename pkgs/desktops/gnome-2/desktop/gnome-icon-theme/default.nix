@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   # remove a tree of dirs with no files within
   postInstall = '' rm -r "$out/share/locale" '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "Collection of icons for the GNOME 2 desktop";
+    homepage = "https://download.gnome.org/sources/gnome-icon-theme/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }
