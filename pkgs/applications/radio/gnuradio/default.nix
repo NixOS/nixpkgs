@@ -101,15 +101,7 @@ stdenv.mkDerivation rec {
         --replace BOOST_CONSTEXPR_OR_CONST const
   '';
 
-  # Enables composition with nix-shell
-  grcSetupHook = writeText "grcSetupHook.sh" ''
-    addGRCBlocksPath() {
-      addToSearchPath GRC_BLOCKS_PATH $1/share/gnuradio/grc/blocks
-    }
-    addEnvHooks "$targetOffset" addGRCBlocksPath
-  '';
-
-  setupHook = [ grcSetupHook ];
+  setupHook = ./setup-hook.sh;
 
   # patch wxgui and pygtk check due to python importerror in a headless environment
   # wxgtk gui will be removed in GR3.8
