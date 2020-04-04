@@ -87,11 +87,14 @@ let
           Access Control Lists: see <link xlink:href="https://www.dokuwiki.org/acl"/>
           Mutually exclusive with services.dokuwiki.aclFile
           Set this to a value other than null to take precedence over aclFile option.
+
+          Warning: Consider using aclFile instead if you do not
+          want to store the ACL in the world-readable Nix store.
         '';
       };
 
       aclFile = mkOption {
-        type = types.nullOr types.path;
+        type = with types; nullOr str;
         default = null;
         description = ''
           Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
@@ -99,6 +102,7 @@ let
           Consult documentation <link xlink:href="https://www.dokuwiki.org/acl"/> for further instructions.
           Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/acl.auth.php.dist"/>
         '';
+        example = "/var/lib/dokuwiki/${name}/acl.auth.php";
       };
 
       aclUse = mkOption {
@@ -135,14 +139,15 @@ let
       };
 
       usersFile = mkOption {
-        type = types.nullOr types.path;
-        default = "/var/lib/dokuwiki/${name}/users.php";
+        type = with types; nullOr str;
+        default = null;
         description = ''
           Location of the dokuwiki users file. List of users. Format:
           login:passwordhash:Real Name:email:groups,comma,separated
           Create passwordHash easily by using:$ mkpasswd -5 password `pwgen 8 1`
           Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist"/>
           '';
+        example = "/var/lib/dokuwiki/${name}/users.auth.php";
       };
 
       disableActions = mkOption {
@@ -284,11 +289,11 @@ in
     assertions = flatten (mapAttrsToList (hostName: cfg:
     [{
       assertion = cfg.aclUse -> (cfg.acl != null || cfg.aclFile != null);
-      message = "Either services.dokuwiki.${hostName}.acl or services.dokuwiki.${hostName}.aclFile is mandatory when aclUse is true";
+      message = "Either services.dokuwiki.${hostName}.acl or services.dokuwiki.${hostName}.aclFile is mandatory if aclUse true";
     }
     {
       assertion = cfg.usersFile != null -> cfg.aclUse != false;
-      message = "services.dokuwiki.${hostName}.aclUse must be true when usersFile is not null";
+      message = "services.dokuwiki.${hostName}.aclUse must must be true if usersFile is not null";
     }
     ]) eachSite);
 
@@ -299,6 +304,7 @@ in
         phpEnv = {
           DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig cfg}";
           DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig cfg}";
+        } // optionalAttrs (cfg.usersFile != null) {
           DOKUWIKI_USERS_AUTH_CONFIG = "${cfg.usersFile}";
         } //optionalAttrs (cfg.aclUse) {
           DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig cfg}" else "${toString cfg.aclFile}";
@@ -314,7 +320,7 @@ in
     services.nginx = {
       enable = true;
       virtualHosts = mapAttrs (hostName: cfg:  mkMerge [ cfg.nginx {
-        root = mkForce "${pkg hostName cfg}/share/dokuwiki/";
+        root = mkForce "${pkg hostName cfg}/share/dokuwiki";
         extraConfig = "fastcgi_param HTTPS on;";
 
         locations."~ /(conf/|bin/|inc/|install.php)" = {
@@ -370,8 +376,9 @@ in
       "d ${cfg.stateDir}/meta 0750 ${user} ${group} - -"
       "d ${cfg.stateDir}/pages 0750 ${user} ${group} - -"
       "d ${cfg.stateDir}/tmp 0750 ${user} ${group} - -"
-      "C ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/users.auth.php.dist"
-    ]) eachSite);
+    ] ++ lib.optional (cfg.aclFile != null) "C ${cfg.aclFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/acl.auth.php.dist"
+    ++ lib.optional (cfg.usersFile != null) "C ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/users.auth.php.dist"
+    ) eachSite);
 
     users.users.${user} = {
       group = group;
