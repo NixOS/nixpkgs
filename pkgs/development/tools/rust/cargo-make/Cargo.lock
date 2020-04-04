@@ -104,14 +104,14 @@ dependencies = [
 
 [[package]]
 name = "cargo-make"
-version = "0.30.1"
+version = "0.30.2"
 dependencies = [
  "ci_info 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "colored 1.9.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "dirs 2.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "duckscript 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "duckscriptsdk 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "duckscriptsdk 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "envmnt 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fern 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fsio 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -239,7 +239,7 @@ dependencies = [
 
 [[package]]
 name = "duckscriptsdk"
-version = "0.3.0"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "attohttpc 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -964,7 +964,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum dirs 2.0.2 (registry+https://github.com/rust-lang/crates.io-index)" = "13aea89a5c93364a98e9b37b2fa237effbb694d5cfe01c5b70941f7eb087d5e3"
 "checksum dirs-sys 0.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "afa0b23de8fd801745c471deffa6e12d248f962c9fd4b4c33787b055599bde7b"
 "checksum duckscript 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "aa4a338912dce0ada9929b9aa81c3b279e51b101583da13541339efaee46dfa9"
-"checksum duckscriptsdk 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9da937d7dc544fe56d34e2b70c68bac038a821f5822e8a567b1ce52d47edd1c0"
+"checksum duckscriptsdk 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)" = "0cc45d92450a257a4fbf28126086983c88010dbe2f99f3559d0073a6ed440046"
 "checksum encoding 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)" = "6b0d943856b990d12d3b55b359144ff341533e516d94098b1d3fc1ac666d36ec"
 "checksum encoding-index-japanese 1.20141219.5 (registry+https://github.com/rust-lang/crates.io-index)" = "04e8b2ff42e9a05335dbf8b5c6f7567e5591d0d916ccef4e0b1710d32a0d0c91"
 "checksum encoding-index-korean 1.20141219.5 (registry+https://github.com/rust-lang/crates.io-index)" = "4dc33fb8e6bcba213fe2f14275f0963fd16f0a02c878e3095ecfdf5bee529d81"
