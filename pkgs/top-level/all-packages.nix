@@ -14138,6 +14138,8 @@ in
 
     signon-ui = libsForQt5.callPackage ../development/libraries/signon-ui { };
 
+    signon-plugin-oauth2 = libsForQt5.callPackage ../development/libraries/signond/extensions/oauth2.nix { };
+
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget {
