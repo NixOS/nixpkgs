@@ -2,13 +2,17 @@
 
 # build-tools
 , bootPkgs
-, autoconf, autoreconfHook, automake, coreutils, fetchgit, fetchpatch, perl, python3, m4, sphinx
+, autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx
 , bash
 
 , libiconv ? null, ncurses
 
+, # GHC can be built with system libffi or a bundled one.
+  libffi ? null
+
 , enableDwarf ? !stdenv.targetPlatform.isDarwin &&
-                !stdenv.targetPlatform.isWindows, elfutils # for DWARF support
+                !stdenv.targetPlatform.isWindows
+, elfutils # for DWARF support
 
 , useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
@@ -75,6 +79,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
+    ++ [libffi]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
     ++ stdenv.lib.optional enableDwarf elfutils;
@@ -103,9 +108,6 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
-  patches = [
-  ];
-
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
@@ -128,8 +130,8 @@ stdenv.mkDerivation (rec {
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
 
     echo -n "${buildMK}" > mk/build.mk
-    echo ${version} >VERSION
-    echo ${src.rev} >GIT_COMMIT_ID
+    echo ${version} > VERSION
+    echo ${src.rev} > GIT_COMMIT_ID
     ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
@@ -164,6 +166,10 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+  ] ++ stdenv.lib.optionals (libffi != null) [
+    "--with-system-libffi"
+    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
+    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
@@ -176,15 +182,14 @@ stdenv.mkDerivation (rec {
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
-  ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
-    "--disable-large-address-space"
-  ] ++ stdenv.lib.optionals enableDwarf [
+  ] ++ stdenv.lib.optional disableLargeAddressSpace "--disable-large-address-space"
+    ++ stdenv.lib.optionals enableDwarf [
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${stdenv.lib.getDev elfutils}/include"
     "--with-libdw-libraries=${stdenv.lib.getLib elfutils}/lib"
   ];
 
-  # Make sure we never relax`$PATH` and hooks support for compatability.
+  # Make sure we never relax`$PATH` and hooks support for compatibility.
   strictDeps = true;
 
   # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
