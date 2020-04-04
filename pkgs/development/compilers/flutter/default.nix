@@ -9,22 +9,23 @@ in {
   stable = mkFlutter {
     pname = "flutter";
     channel = "stable";
-    version = "1.12.13+hotfix.8";
-    sha256Hash = "01ik4xckr3fp65sq4g0g6wy5b9i0r49l643xmbxa6z9k21sby46d";
+    version = "1.12.13+hotfix.9";
+    sha256Hash = "1ql3zvmmk5zk47y30lajxaam04q6vr373dayq15jv4vpc0fzif1y";
     patches = getPatches ./patches/stable;
   };
   beta = mkFlutter {
     pname = "flutter-beta";
     channel = "beta";
-    version = "1.14.6";
-    sha256Hash = "1a79pr741zkr39p5gc3p9x59d70vm60hpz2crgc53ysglj4ycigy";
+    version = "1.15.17";
+    sha256Hash = "0iil6y6y477dhjgzx54ab5m9nj0jg4xl8x4zzd9iwh8m756r7qsd";
     patches = getPatches ./patches/beta;
   };
-  dev = mkFlutter {
+  dev = mkFlutter rec {
     pname = "flutter-dev";
     channel = "dev";
-    version = "1.15.3";
-    sha256Hash = "06mawwqf7q7wdmzlyxlrlblhnnk4ckf3vp92lplippdh3d52r93i";
-    patches = getPatches ./patches/dev;
+    version = "1.17.0-dev.5.0";
+    filename = "flutter_linux_${version}-${channel}.tar.xz";
+    sha256Hash = "0ks2jf2bd42y2jsc91p33r57q7j3m94d8ihkmlxzwi53x1mwp0pk";
+    patches = getPatches ./patches/beta;
   };
 }
