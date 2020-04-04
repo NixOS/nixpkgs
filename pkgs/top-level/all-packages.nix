@@ -16574,6 +16574,8 @@ in
 
   hydron = callPackage ../servers/hydron { };
 
+  icecream = callPackage ../servers/icecream { };
+
   icingaweb2 = callPackage ../servers/icingaweb2 { };
   icingaweb2Modules = {
     theme-april = callPackage ../servers/icingaweb2/theme-april { };
