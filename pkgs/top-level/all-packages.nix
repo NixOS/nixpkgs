@@ -22262,6 +22262,8 @@ in
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
 
+  vcs = callPackage ../applications/video/vcs { };
+
   vcv-rack = callPackage ../applications/audio/vcv-rack { };
 
   vdirsyncer = callPackage ../tools/misc/vdirsyncer {
