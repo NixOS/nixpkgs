@@ -46,8 +46,11 @@ let
         patchShebangs scripts
         # The arrays must remain the same length, so we repeat a flag that is
         # already part of the command and therefore has no effect.
-        substituteInPlace ./module/zfs/zfs_ctldir.c --replace '"/usr/bin/env", "umount"' '"${utillinux}/bin/umount", "-n"' \
-                                                    --replace '"/usr/bin/env", "mount"'  '"${utillinux}/bin/mount", "-n"'
+        zfs_ctldir=./module/os/linux/zfs/zfs_ctldir.c
+        # 0.8.3 compatibility
+        [ -e $zfs_ctldir ] || zfs_ctldir=./module/zfs/zfs_ctldir.c
+        substituteInPlace $zfs_ctldir --replace '"/usr/bin/env", "umount"' '"${utillinux}/bin/umount", "-n"' \
+                                      --replace '"/usr/bin/env", "mount"'  '"${utillinux}/bin/mount", "-n"'
       '' + optionalString buildUser ''
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount" \
                                                       --replace "/bin/mount"              "${utillinux}/bin/mount"
@@ -170,11 +173,11 @@ let
         maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
       };
     };
-in {
+in mapAttrs (_: common) rec {
   # also check if kernel version constraints in
   # ./nixos/modules/tasks/filesystems/zfs.nix needs
   # to be adapted
-  zfsStable = common {
+  zfsStable = {
     # comment/uncomment if breaking kernel versions are known
     # incompatibleKernelVersion = "4.20";
 
@@ -182,16 +185,26 @@ in {
     version = "0.8.3";
 
     sha256 = "0viql8rnqr32diapkpdsrwm6xj8vw5vi4dk2x2m7s7g0q2zdkahw";
+
+    extraPatches = optionals (buildKernel && versionAtLeast kernel.version "5.6") [
+      # $ git checkout zfs-0.8.3
+      # $ git log --oneline --grep='Linux 5.6 compat' master
+      # (...cherry-pick, fix conflicts...)
+      # $ git format-patch -o ~/src/nixpkgs/pkgs/os-specific/linux/zfs zfs-0.8.3
+      ./0001-Linux-5.6-compat-struct-proc_ops.patch
+      ./0002-Linux-5.6-compat-timestamp_truncate.patch
+      ./0003-Linux-5.6-compat-ktime_get_raw_ts64.patch
+      ./0004-Linux-5.6-compat-time_t.patch
+    ];
   };
 
-  zfsUnstable = common {
+  zfsUnstable = {
     # comment/uncomment if breaking kernel versions are known
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.3";
+    inherit (zfsStable) version sha256 extraPatches;
 
-    sha256 = "0viql8rnqr32diapkpdsrwm6xj8vw5vi4dk2x2m7s7g0q2zdkahw";
     isUnstable = true;
   };
 }

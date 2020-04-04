@@ -1,0 +1,139 @@
+From 06ee3bf97e810ee3c4e944d27bc32df4fd438c3a Mon Sep 17 00:00:00 2001
+From: Brian Behlendorf <behlendorf1@llnl.gov>
+Date: Thu, 6 Feb 2020 12:37:25 -0800
+Subject: [PATCH 2/4] Linux 5.6 compat: timestamp_truncate()
+
+The timestamp_truncate() function was added, it replaces the existing
+timespec64_trunc() function.  This change renames our wrapper function
+to be consistent with the upstream name and updates the compatibility
+code for older kernels accordingly.
+
+Reviewed-by: Tony Hutter <hutter2@llnl.gov>
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Closes #9956
+Closes #9961
+---
+ config/kernel-inode-times.m4 | 31 +++++++++++++++++++++++++++----
+ include/sys/zpl.h            | 13 +++++++------
+ module/zfs/zfs_vnops.c       |  8 ++++----
+ module/zfs/zpl_inode.c       |  6 ++----
+ 4 files changed, 40 insertions(+), 18 deletions(-)
+
+diff --git a/config/kernel-inode-times.m4 b/config/kernel-inode-times.m4
+index 57e7f31fd..8a79c299e 100644
+--- a/config/kernel-inode-times.m4
++++ b/config/kernel-inode-times.m4
+@@ -1,8 +1,22 @@
+-dnl #
+-dnl # 4.18 API change
+-dnl # i_atime, i_mtime, and i_ctime changed from timespec to timespec64.
+-dnl #
+ AC_DEFUN([ZFS_AC_KERNEL_SRC_INODE_TIMES], [
++
++	dnl #
++	dnl # 5.6 API change
++	dnl # timespec64_trunc() replaced by timestamp_truncate() interface.
++	dnl #
++	ZFS_LINUX_TEST_SRC([timestamp_truncate], [
++		#include <linux/fs.h>
++	],[
++		struct timespec64 ts;
++		struct inode ip;
++
++		ts = timestamp_truncate(ts, &ip);
++	])
++
++	dnl #
++	dnl # 4.18 API change
++	dnl # i_atime, i_mtime, and i_ctime changed from timespec to timespec64.
++	dnl #
+ 	ZFS_LINUX_TEST_SRC([inode_times], [
+ 		#include <linux/fs.h>
+ 	],[
+@@ -15,6 +29,15 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_INODE_TIMES], [
+ ])
+ 
+ AC_DEFUN([ZFS_AC_KERNEL_INODE_TIMES], [
++	AC_MSG_CHECKING([whether timestamp_truncate() exists])
++	ZFS_LINUX_TEST_RESULT([timestamp_truncate], [
++		AC_MSG_RESULT(yes)
++		AC_DEFINE(HAVE_INODE_TIMESTAMP_TRUNCATE, 1,
++		    [timestamp_truncate() exists])
++	],[
++		AC_MSG_RESULT(no)
++	])
++
+ 	AC_MSG_CHECKING([whether inode->i_*time's are timespec64])
+ 	ZFS_LINUX_TEST_RESULT([inode_times], [
+ 		AC_MSG_RESULT(no)
+diff --git a/include/sys/zpl.h b/include/sys/zpl.h
+index 2766269f3..f88ccd540 100644
+--- a/include/sys/zpl.h
++++ b/include/sys/zpl.h
+@@ -188,13 +188,14 @@ zpl_dir_emit_dots(struct file *file, zpl_dir_context_t *ctx)
+ }
+ #endif /* HAVE_VFS_ITERATE */
+ 
+-/*
+- * Linux 4.18, inode times converted from timespec to timespec64.
+- */
+-#if defined(HAVE_INODE_TIMESPEC64_TIMES)
+-#define	zpl_inode_timespec_trunc(ts, gran)	timespec64_trunc(ts, gran)
++#if defined(HAVE_INODE_TIMESTAMP_TRUNCATE)
++#define	zpl_inode_timestamp_truncate(ts, ip)	timestamp_truncate(ts, ip)
++#elif defined(HAVE_INODE_TIMESPEC64_TIMES)
++#define	zpl_inode_timestamp_truncate(ts, ip)	\
++	timespec64_trunc(ts, (ip)->i_sb->s_time_gran)
+ #else
+-#define	zpl_inode_timespec_trunc(ts, gran)	timespec_trunc(ts, gran)
++#define	zpl_inode_timestamp_truncate(ts, ip)	\
++	timespec_trunc(ts, (ip)->i_sb->s_time_gran)
+ #endif
+ 
+ #endif	/* _SYS_ZPL_H */
+diff --git a/module/zfs/zfs_vnops.c b/module/zfs/zfs_vnops.c
+index 03a8c4a50..c322edf6a 100644
+--- a/module/zfs/zfs_vnops.c
++++ b/module/zfs/zfs_vnops.c
+@@ -3415,8 +3415,8 @@ top:
+ 
+ 	if (mask & (ATTR_MTIME | ATTR_SIZE)) {
+ 		ZFS_TIME_ENCODE(&vap->va_mtime, mtime);
+-		ZTOI(zp)->i_mtime = zpl_inode_timespec_trunc(vap->va_mtime,
+-		    ZTOI(zp)->i_sb->s_time_gran);
++		ZTOI(zp)->i_mtime = zpl_inode_timestamp_truncate(
++		    vap->va_mtime, ZTOI(zp));
+ 
+ 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_MTIME(zfsvfs), NULL,
+ 		    mtime, sizeof (mtime));
+@@ -3424,8 +3424,8 @@ top:
+ 
+ 	if (mask & (ATTR_CTIME | ATTR_SIZE)) {
+ 		ZFS_TIME_ENCODE(&vap->va_ctime, ctime);
+-		ZTOI(zp)->i_ctime = zpl_inode_timespec_trunc(vap->va_ctime,
+-		    ZTOI(zp)->i_sb->s_time_gran);
++		ZTOI(zp)->i_ctime = zpl_inode_timestamp_truncate(vap->va_ctime,
++		    ZTOI(zp));
+ 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_CTIME(zfsvfs), NULL,
+ 		    ctime, sizeof (ctime));
+ 	}
+diff --git a/module/zfs/zpl_inode.c b/module/zfs/zpl_inode.c
+index 5660f8b0e..1f228dcf8 100644
+--- a/module/zfs/zpl_inode.c
++++ b/module/zfs/zpl_inode.c
+@@ -390,10 +390,8 @@ zpl_setattr(struct dentry *dentry, struct iattr *ia)
+ 	vap->va_mtime = ia->ia_mtime;
+ 	vap->va_ctime = ia->ia_ctime;
+ 
+-	if (vap->va_mask & ATTR_ATIME) {
+-		ip->i_atime = zpl_inode_timespec_trunc(ia->ia_atime,
+-		    ip->i_sb->s_time_gran);
+-	}
++	if (vap->va_mask & ATTR_ATIME)
++		ip->i_atime = zpl_inode_timestamp_truncate(ia->ia_atime, ip);
+ 
+ 	cookie = spl_fstrans_mark();
+ 	error = -zfs_setattr(ip, vap, 0, cr);
+-- 
+2.25.1
+

@@ -1,0 +1,255 @@
+From d47a2c3d6026ecc06edfe4d594937c0ec9e6ccee Mon Sep 17 00:00:00 2001
+From: Brian Behlendorf <behlendorf1@llnl.gov>
+Date: Thu, 6 Feb 2020 10:30:41 -0800
+Subject: [PATCH 1/4] Linux 5.6 compat: struct proc_ops
+
+The proc_ops structure was introduced to replace the use of of the
+file_operations structure when registering proc handlers.  This
+change creates a new kstat_proc_op_t typedef for compatibility
+which can be used to pass around the correct structure.
+
+This change additionally adds the 'const' keyword to all of the
+existing proc operations structures.
+
+Reviewed-by: Tony Hutter <hutter2@llnl.gov>
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Closes #9961
+---
+ config/kernel-proc-operations.m4 | 41 ++++++++++++++++++++++++++++++++
+ config/kernel.m4                 |  2 ++
+ include/spl/sys/kstat.h          |  8 ++++++-
+ module/spl/spl-kstat.c           | 14 ++++++++---
+ module/spl/spl-proc.c            | 33 ++++++++++++++++++++-----
+ module/spl/spl-procfs-list.c     | 11 +++++++--
+ 6 files changed, 97 insertions(+), 12 deletions(-)
+ create mode 100644 config/kernel-proc-operations.m4
+
+diff --git a/config/kernel-proc-operations.m4 b/config/kernel-proc-operations.m4
+new file mode 100644
+index 000000000..df216222e
+--- /dev/null
++++ b/config/kernel-proc-operations.m4
+@@ -0,0 +1,41 @@
++dnl #
++dnl # 5.6 API Change
++dnl # The proc_ops structure was introduced to replace the use of
++dnl # of the file_operations structure when registering proc handlers.
++dnl #
++AC_DEFUN([ZFS_AC_KERNEL_SRC_PROC_OPERATIONS], [
++	ZFS_LINUX_TEST_SRC([proc_ops_struct], [
++		#include <linux/proc_fs.h>
++
++		int test_open(struct inode *ip, struct file *fp) { return 0; }
++		ssize_t test_read(struct file *fp, char __user *ptr,
++		    size_t size, loff_t *offp) { return 0; }
++		ssize_t test_write(struct file *fp, const char __user *ptr,
++		    size_t size, loff_t *offp) { return 0; }
++		loff_t test_lseek(struct file *fp, loff_t off, int flag)
++		    { return 0; }
++		int test_release(struct inode *ip, struct file *fp)
++		    { return 0; }
++
++		const struct proc_ops test_ops __attribute__ ((unused)) = {
++			.proc_open      = test_open,
++			.proc_read      = test_read,
++			.proc_write	= test_write,
++			.proc_lseek     = test_lseek,
++			.proc_release   = test_release,
++		};
++	], [
++		struct proc_dir_entry *entry __attribute__ ((unused)) =
++		    proc_create_data("test", 0444, NULL, &test_ops, NULL);
++	])
++])
++
++AC_DEFUN([ZFS_AC_KERNEL_PROC_OPERATIONS], [
++	AC_MSG_CHECKING([whether proc_ops structure exists])
++	ZFS_LINUX_TEST_RESULT([proc_ops_struct], [
++		AC_MSG_RESULT(yes)
++		AC_DEFINE(HAVE_PROC_OPS_STRUCT, 1, [proc_ops structure exists])
++	], [
++		AC_MSG_RESULT(no)
++	])
++])
+diff --git a/config/kernel.m4 b/config/kernel.m4
+index dce619729..780de3318 100644
+--- a/config/kernel.m4
++++ b/config/kernel.m4
+@@ -54,6 +54,7 @@ AC_DEFUN([ZFS_AC_KERNEL_TEST_SRC], [
+ 	ZFS_AC_KERNEL_SRC_CURRENT_BIO_TAIL
+ 	ZFS_AC_KERNEL_SRC_SUPER_USER_NS
+ 	ZFS_AC_KERNEL_SRC_SUBMIT_BIO
++	ZFS_AC_KERNEL_SRC_PROC_OPERATIONS
+ 	ZFS_AC_KERNEL_SRC_BLOCK_DEVICE_OPERATIONS
+ 	ZFS_AC_KERNEL_SRC_BLKDEV_GET_BY_PATH
+ 	ZFS_AC_KERNEL_SRC_BLKDEV_REREAD_PART
+@@ -170,6 +171,7 @@ AC_DEFUN([ZFS_AC_KERNEL_TEST_RESULT], [
+ 	ZFS_AC_KERNEL_CURRENT_BIO_TAIL
+ 	ZFS_AC_KERNEL_SUPER_USER_NS
+ 	ZFS_AC_KERNEL_SUBMIT_BIO
++	ZFS_AC_KERNEL_PROC_OPERATIONS
+ 	ZFS_AC_KERNEL_BLOCK_DEVICE_OPERATIONS
+ 	ZFS_AC_KERNEL_BLKDEV_GET_BY_PATH
+ 	ZFS_AC_KERNEL_BLKDEV_REREAD_PART
+diff --git a/include/spl/sys/kstat.h b/include/spl/sys/kstat.h
+index 3ce474248..c93c53171 100644
+--- a/include/spl/sys/kstat.h
++++ b/include/spl/sys/kstat.h
+@@ -152,6 +152,12 @@ typedef struct kstat_named_s {
+ #define	KSTAT_NAMED_STR_PTR(knptr) ((knptr)->value.string.addr.ptr)
+ #define	KSTAT_NAMED_STR_BUFLEN(knptr) ((knptr)->value.string.len)
+ 
++#ifdef HAVE_PROC_OPS_STRUCT
++typedef struct proc_ops kstat_proc_op_t;
++#else
++typedef struct file_operations kstat_proc_op_t;
++#endif
++
+ typedef struct kstat_intr {
+ 	uint_t intrs[KSTAT_NUM_INTRS];
+ } kstat_intr_t;
+@@ -197,7 +203,7 @@ extern void kstat_proc_entry_init(kstat_proc_entry_t *kpep,
+     const char *module, const char *name);
+ extern void kstat_proc_entry_delete(kstat_proc_entry_t *kpep);
+ extern void kstat_proc_entry_install(kstat_proc_entry_t *kpep, mode_t mode,
+-    const struct file_operations *file_ops, void *data);
++    const kstat_proc_op_t *file_ops, void *data);
+ 
+ extern void __kstat_install(kstat_t *ksp);
+ extern void __kstat_delete(kstat_t *ksp);
+diff --git a/module/spl/spl-kstat.c b/module/spl/spl-kstat.c
+index c97b6d6cb..c54378ace 100644
+--- a/module/spl/spl-kstat.c
++++ b/module/spl/spl-kstat.c
+@@ -507,12 +507,20 @@ proc_kstat_write(struct file *filp, const char __user *buf, size_t len,
+ 	return (len);
+ }
+ 
+-static struct file_operations proc_kstat_operations = {
++static const kstat_proc_op_t proc_kstat_operations = {
++#ifdef HAVE_PROC_OPS_STRUCT
++	.proc_open	= proc_kstat_open,
++	.proc_write	= proc_kstat_write,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= seq_release,
++#else
+ 	.open		= proc_kstat_open,
+ 	.write		= proc_kstat_write,
+ 	.read		= seq_read,
+ 	.llseek		= seq_lseek,
+ 	.release	= seq_release,
++#endif
+ };
+ 
+ void
+@@ -656,7 +664,7 @@ kstat_detect_collision(kstat_proc_entry_t *kpep)
+  */
+ void
+ kstat_proc_entry_install(kstat_proc_entry_t *kpep, mode_t mode,
+-    const struct file_operations *file_ops, void *data)
++    const kstat_proc_op_t *proc_ops, void *data)
+ {
+ 	kstat_module_t *module;
+ 	kstat_proc_entry_t *tmp = NULL;
+@@ -690,7 +698,7 @@ kstat_proc_entry_install(kstat_proc_entry_t *kpep, mode_t mode,
+ 
+ 	kpep->kpe_owner = module;
+ 	kpep->kpe_proc = proc_create_data(kpep->kpe_name, mode,
+-	    module->ksm_proc, file_ops, data);
++	    module->ksm_proc, proc_ops, data);
+ 	if (kpep->kpe_proc == NULL) {
+ 		list_del_init(&kpep->kpe_list);
+ 		if (list_empty(&module->ksm_kstat_list))
+diff --git a/module/spl/spl-proc.c b/module/spl/spl-proc.c
+index c0c13913c..40315ede3 100644
+--- a/module/spl/spl-proc.c
++++ b/module/spl/spl-proc.c
+@@ -532,11 +532,18 @@ proc_slab_open(struct inode *inode, struct file *filp)
+ 	return (seq_open(filp, &slab_seq_ops));
+ }
+ 
+-static struct file_operations proc_slab_operations = {
+-	.open	   = proc_slab_open,
+-	.read	   = seq_read,
+-	.llseek	 = seq_lseek,
++static const kstat_proc_op_t proc_slab_operations = {
++#ifdef HAVE_PROC_OPS_STRUCT
++	.proc_open	= proc_slab_open,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= seq_release,
++#else
++	.open		= proc_slab_open,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
+ 	.release	= seq_release,
++#endif
+ };
+ 
+ static void
+@@ -571,18 +578,32 @@ proc_taskq_open(struct inode *inode, struct file *filp)
+ 	return (seq_open(filp, &taskq_seq_ops));
+ }
+ 
+-static struct file_operations proc_taskq_all_operations = {
++static const kstat_proc_op_t proc_taskq_all_operations = {
++#ifdef HAVE_PROC_OPS_STRUCT
++	.proc_open	= proc_taskq_all_open,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= seq_release,
++#else
+ 	.open		= proc_taskq_all_open,
+ 	.read		= seq_read,
+ 	.llseek		= seq_lseek,
+ 	.release	= seq_release,
++#endif
+ };
+ 
+-static struct file_operations proc_taskq_operations = {
++static const kstat_proc_op_t proc_taskq_operations = {
++#ifdef HAVE_PROC_OPS_STRUCT
++	.proc_open	= proc_taskq_open,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= seq_release,
++#else
+ 	.open		= proc_taskq_open,
+ 	.read		= seq_read,
+ 	.llseek		= seq_lseek,
+ 	.release	= seq_release,
++#endif
+ };
+ 
+ static struct ctl_table spl_kmem_table[] = {
+diff --git a/module/spl/spl-procfs-list.c b/module/spl/spl-procfs-list.c
+index f6a00da5c..189d6a7c6 100644
+--- a/module/spl/spl-procfs-list.c
++++ b/module/spl/spl-procfs-list.c
+@@ -185,13 +185,20 @@ procfs_list_write(struct file *filp, const char __user *buf, size_t len,
+ 	return (len);
+ }
+ 
+-static struct file_operations procfs_list_operations = {
+-	.owner		= THIS_MODULE,
++static const kstat_proc_op_t procfs_list_operations = {
++#ifdef HAVE_PROC_OPS_STRUCT
++	.proc_open	= procfs_list_open,
++	.proc_write	= procfs_list_write,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= seq_release_private,
++#else
+ 	.open		= procfs_list_open,
+ 	.write		= procfs_list_write,
+ 	.read		= seq_read,
+ 	.llseek		= seq_lseek,
+ 	.release	= seq_release_private,
++#endif
+ };
+ 
+ /*
+-- 
+2.25.1
+

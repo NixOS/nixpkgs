@@ -1,0 +1,120 @@
+From 0b13e2ae0e2de6a2217984cc1f56aa3d1e5db587 Mon Sep 17 00:00:00 2001
+From: Brian Behlendorf <behlendorf1@llnl.gov>
+Date: Wed, 26 Feb 2020 13:18:07 -0800
+Subject: [PATCH 4/4] Linux 5.6 compat: time_t
+
+As part of the Linux kernel's y2038 changes the time_t type has been
+fully retired.  Callers are now required to use the time64_t type.
+
+Rather than move to the new type, I've removed the few remaining
+places where a time_t is used in the kernel code.  They've been
+replaced with a uint64_t which is already how ZFS internally
+handled these values.
+
+Going forward we should work towards updating the remaining user
+space time_t consumers to the 64-bit interfaces.
+
+Reviewed-by: Matthew Macy <mmacy@freebsd.org>
+Reviewed-by: Tony Hutter <hutter2@llnl.gov>
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Closes #10052
+Closes #10064
+---
+ include/spl/sys/time.h        | 2 +-
+ include/sys/vdev_impl.h       | 4 ++--
+ lib/libspl/include/sys/time.h | 2 +-
+ module/zfs/vdev_initialize.c  | 2 +-
+ module/zfs/vdev_trim.c        | 2 +-
+ module/zfs/zfs_debug.c        | 2 +-
+ 6 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/include/spl/sys/time.h b/include/spl/sys/time.h
+index 56fd725c0..4309c300b 100644
+--- a/include/spl/sys/time.h
++++ b/include/spl/sys/time.h
+@@ -85,7 +85,7 @@ gethrestime(inode_timespec_t *ts)
+ #endif
+ }
+ 
+-static inline time_t
++static inline uint64_t
+ gethrestime_sec(void)
+ {
+ #if defined(HAVE_INODE_TIMESPEC64_TIMES)
+diff --git a/include/sys/vdev_impl.h b/include/sys/vdev_impl.h
+index f6f7bbb4b..090ba3fbc 100644
+--- a/include/sys/vdev_impl.h
++++ b/include/sys/vdev_impl.h
+@@ -274,7 +274,7 @@ struct vdev {
+ 	range_tree_t	*vdev_initialize_tree;	/* valid while initializing */
+ 	uint64_t	vdev_initialize_bytes_est;
+ 	uint64_t	vdev_initialize_bytes_done;
+-	time_t		vdev_initialize_action_time;	/* start and end time */
++	uint64_t	vdev_initialize_action_time;	/* start and end time */
+ 
+ 	/* TRIM related */
+ 	boolean_t	vdev_trim_exit_wanted;
+@@ -295,7 +295,7 @@ struct vdev {
+ 	uint64_t	vdev_trim_rate;		/* requested rate (bytes/sec) */
+ 	uint64_t	vdev_trim_partial;	/* requested partial TRIM */
+ 	uint64_t	vdev_trim_secure;	/* requested secure TRIM */
+-	time_t		vdev_trim_action_time;	/* start and end time */
++	uint64_t	vdev_trim_action_time;	/* start and end time */
+ 
+ 	/* for limiting outstanding I/Os (initialize and TRIM) */
+ 	kmutex_t	vdev_initialize_io_lock;
+diff --git a/lib/libspl/include/sys/time.h b/lib/libspl/include/sys/time.h
+index 291f2190a..c9f616504 100644
+--- a/lib/libspl/include/sys/time.h
++++ b/lib/libspl/include/sys/time.h
+@@ -88,7 +88,7 @@ gethrestime(inode_timespec_t *ts)
+ 	ts->tv_nsec = tv.tv_usec * NSEC_PER_USEC;
+ }
+ 
+-static inline time_t
++static inline uint64_t
+ gethrestime_sec(void)
+ {
+ 	struct timeval tv;
+diff --git a/module/zfs/vdev_initialize.c b/module/zfs/vdev_initialize.c
+index 9958a2958..8a3635969 100644
+--- a/module/zfs/vdev_initialize.c
++++ b/module/zfs/vdev_initialize.c
+@@ -700,7 +700,7 @@ vdev_initialize_restart(vdev_t *vd)
+ 		    vd->vdev_leaf_zap, VDEV_LEAF_ZAP_INITIALIZE_ACTION_TIME,
+ 		    sizeof (timestamp), 1, &timestamp);
+ 		ASSERT(err == 0 || err == ENOENT);
+-		vd->vdev_initialize_action_time = (time_t)timestamp;
++		vd->vdev_initialize_action_time = timestamp;
+ 
+ 		if (vd->vdev_initialize_state == VDEV_INITIALIZE_SUSPENDED ||
+ 		    vd->vdev_offline) {
+diff --git a/module/zfs/vdev_trim.c b/module/zfs/vdev_trim.c
+index 5ad47cccd..b7548fc4c 100644
+--- a/module/zfs/vdev_trim.c
++++ b/module/zfs/vdev_trim.c
+@@ -1046,7 +1046,7 @@ vdev_trim_restart(vdev_t *vd)
+ 		    vd->vdev_leaf_zap, VDEV_LEAF_ZAP_TRIM_ACTION_TIME,
+ 		    sizeof (timestamp), 1, &timestamp);
+ 		ASSERT(err == 0 || err == ENOENT);
+-		vd->vdev_trim_action_time = (time_t)timestamp;
++		vd->vdev_trim_action_time = timestamp;
+ 
+ 		if (vd->vdev_trim_state == VDEV_TRIM_SUSPENDED ||
+ 		    vd->vdev_offline) {
+diff --git a/module/zfs/zfs_debug.c b/module/zfs/zfs_debug.c
+index 538533d27..cf8bbb3ce 100644
+--- a/module/zfs/zfs_debug.c
++++ b/module/zfs/zfs_debug.c
+@@ -27,7 +27,7 @@
+ 
+ typedef struct zfs_dbgmsg {
+ 	procfs_list_node_t	zdm_node;
+-	time_t			zdm_timestamp;
++	uint64_t		zdm_timestamp;
+ 	int			zdm_size;
+ 	char			zdm_msg[1]; /* variable length allocation */
+ } zfs_dbgmsg_t;
+-- 
+2.25.1
+
