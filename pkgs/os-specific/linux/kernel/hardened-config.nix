@@ -20,8 +20,6 @@ assert (versionAtLeast version "4.9");
   # Report BUG() conditions and kill the offending process.
   BUG = yes;
 
-  BUG_ON_DATA_CORRUPTION = whenAtLeast "4.10" yes;
-
   # Safer page access permissions (wrt. code injection).  Default on >=4.11.
   DEBUG_RODATA          = whenOlder "4.11" yes;
   DEBUG_SET_MODULE_RONX = whenOlder "4.11" yes;
