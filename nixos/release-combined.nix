@@ -96,6 +96,7 @@ in rec {
         (onFullSupported "nixos.tests.keymap.dvp")
         (onFullSupported "nixos.tests.keymap.neo")
         (onFullSupported "nixos.tests.keymap.qwertz")
+        (onFullSupported "nixos.tests.latestKernel.login")
         (onFullSupported "nixos.tests.lightdm")
         (onFullSupported "nixos.tests.login")
         (onFullSupported "nixos.tests.misc")
