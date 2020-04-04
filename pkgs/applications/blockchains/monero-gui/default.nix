@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     cppzmq hidapi libusb protobuf randomx
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   patches = [ ./move-log-file.patch ];
 

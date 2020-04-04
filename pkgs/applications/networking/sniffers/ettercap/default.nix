@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: Remove after the next release (0.8.4 should work without this):
-  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+  env.NIX_CFLAGS_COMPILE = "-I${harfbuzz.dev}/include/harfbuzz";
 
   meta = with stdenv.lib; {
     description = "Comprehensive suite for man in the middle attacks";

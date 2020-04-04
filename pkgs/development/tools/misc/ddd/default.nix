@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc44.patch ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = {
     homepage = https://www.gnu.org/software/ddd;

@@ -48,7 +48,7 @@ mkDerivation {
   ];
 
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
     ''-DNIXPKGS_XRDB="${getBin xrdb}/bin/xrdb"''
     ''-DNIXPKGS_XSETROOT="${getBin xsetroot}/bin/xsetroot"''

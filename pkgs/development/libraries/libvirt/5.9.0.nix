@@ -120,7 +120,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
+  env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   meta = {
     homepage = http://libvirt.org/;

@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     cp claws-mail.desktop $out/share/applications
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-deprecated-declarations" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   meta = {
     description = "The user-friendly, lightweight, and fast email client";

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     substituteInPlace Makefile --replace '$(MAKE) install-basic' ""
   '';
-  installTargets = "install install-config";
+  installTargets = [ "install" "install-config" ];
   postInstall = ''
     # don't make default files use hardcoded paths to commands
     sed -i 's@command_line *[^ ]*/\([^/]*\) @command_line \1 @'  $out/etc/objects/commands.cfg

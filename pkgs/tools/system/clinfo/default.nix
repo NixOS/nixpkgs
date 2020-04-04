@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocl-icd opencl-headers ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

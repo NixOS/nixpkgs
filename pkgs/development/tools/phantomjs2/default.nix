@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
 
   # Avoids error in webpage.cpp:80:89:
   # invalid suffix on literal; C++11 requires a space between litend identifier
-  NIX_CFLAGS_COMPILE = "-Wno-reserved-user-defined-literal";
+  env.NIX_CFLAGS_COMPILE = "-Wno-reserved-user-defined-literal";
 
   __impureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
 

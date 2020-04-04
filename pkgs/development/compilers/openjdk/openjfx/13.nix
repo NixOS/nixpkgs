@@ -11,7 +11,7 @@ let
     java = openjdk11_headless;
   }).gradle_4_10;
 
-  makePackage = args: stdenv.mkDerivation ({
+  makePackage = args: stdenv.mkDerivation (lib.recursiveUpdate {
     version = "${major}${update}-${build}";
 
     src = fetchurl {
@@ -30,7 +30,7 @@ let
     '' + args.gradleProperties or "");
 
     #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-    NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+    env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
     buildPhase = ''
       runHook preBuild
@@ -42,7 +42,7 @@ let
 
       runHook postBuild
     '';
-  } // args);
+  } args);
 
   # Fake build to pre-download deps into fixed-output derivation.
   # We run nearly full build because I see no other way to download everything that's needed.

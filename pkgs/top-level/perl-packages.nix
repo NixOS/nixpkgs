@@ -14812,7 +14812,7 @@ let
       sha256 = "4848679a3f201e3f3b0c5f6f9526e602af52923ffa471a2a3657db786bd3bdc5";
     };
     buildInputs = [ pkgs.zlib ];
-    NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
+    env.NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
       description = "Perl extension to provide a PerlIO layer to gzip/gunzip";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

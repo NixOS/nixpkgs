@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-usercheck" ];
 
-  env.NIX_CFLAGS_COMPILE = [ "-DALLOW_NON_TSS_CONFIG_FILE" ];
+  env.NIX_CFLAGS_COMPILE = "-DALLOW_NON_TSS_CONFIG_FILE";
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {

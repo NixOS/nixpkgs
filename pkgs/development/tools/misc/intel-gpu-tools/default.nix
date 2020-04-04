@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     libXext libXv libXrandr glib bison libunwind python3 procps
     gtk-doc openssl peg elfutils ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
 
   preConfigure = ''
     ./autogen.sh

@@ -32,11 +32,11 @@ buildPythonApplication rec {
     matrix-nio
     peewee
     prompt_toolkit
-  ] ++ lib.optional enableDbusUi [
-      dbus-python
-      notify2
-      pygobject3
-      pydbus
+  ] ++ lib.optionals enableDbusUi [
+    dbus-python
+    notify2
+    pygobject3
+    pydbus
   ];
 
   checkInputs = [

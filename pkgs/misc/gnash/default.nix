@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     ++ optional  enableQt        qt4
     ++ optional  enableFFmpeg    ffmpeg_2
     ++ optional  enableJemalloc  jemalloc
-    ++ optional  enableHwAccel   [ libGL libGLU ]
+    ++ optionals enableHwAccel   [ libGL libGLU ]
     ++ optionals enableOpenGL    [ libGL libGLU ]
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
     ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome2.GConf ];

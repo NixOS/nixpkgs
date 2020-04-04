@@ -32,9 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-  NIX_CFLAGS_COMPILE = [
-    "-I${glib.dev}/include/gio-unix-2.0"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   patches = [
     (fetchpatch { # details see https://github.com/linuxmint/xapps/pull/65
