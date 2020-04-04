@@ -7720,7 +7720,9 @@ in
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
-  zenith = callPackage ../tools/system/zenith {};
+  zenith = callPackage ../tools/system/zenith {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   zerotierone = callPackage ../tools/networking/zerotierone { };
 
