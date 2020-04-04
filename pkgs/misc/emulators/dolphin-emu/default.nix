@@ -19,7 +19,7 @@
 , libXdmcp
 , portaudio
 , fetchFromGitHub
-, libusb
+, libusb1
 , libevdev
 , wxGTK30
 , soundtouch
@@ -73,10 +73,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
+    cmake
   ];
 
   buildInputs = [
-    cmake
     bluez
     ffmpeg
     libao
@@ -93,12 +93,11 @@ stdenv.mkDerivation rec {
     libevdev
     libXdmcp
     portaudio
-    libusb
     libpulseaudio
     libevdev
     libXdmcp
     portaudio
-    libusb
+    libusb1
     libpulseaudio
     wxGTK30
     soundtouch
