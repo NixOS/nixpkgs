@@ -116,7 +116,7 @@ in {
     in 
       mkMerge [
         (mkIf (cfg != {}) { 
-          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits "nspawn" units [] []);
+          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits' false "nspawn" units [] []);
         })
         {
           systemd.targets.multi-user.wants = [ "machines.target" ];
