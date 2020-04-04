@@ -1,0 +1,25 @@
+From e14343d38c8c61ea3cbcf6a241cf8544fa01ba42 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Fri, 27 Mar 2020 22:13:35 +0100
+Subject: [PATCH] fix: xdo
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index b837c2b..a5ef430 100644
+--- a/meson.build
++++ b/meson.build
+@@ -55,7 +55,7 @@ xtst_dep = dependency('xtst', required : false)
+ xi_dep = dependency('xi', required : false)
+ 
+ cc = meson.get_compiler('c')
+-xdo_lib = cc.find_library('xdo', dirs : ['/usr/lib'], required : true)
++xdo_lib = cc.find_library('xdo', required : true)
+ 
+ libmutter_dep = dependency('libmutter-3', required: false)
+ mutter_clutter_dep = dependency('mutter-clutter-3', required : false)
+-- 
+2.25.1
+

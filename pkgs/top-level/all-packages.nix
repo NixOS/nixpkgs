@@ -12990,6 +12990,8 @@ in
     graphviz = graphviz-nox;
   };
 
+  libinputsynth = callPackage ../development/libraries/libinputsynth { };
+
   libinput-gestures = callPackage ../tools/inputmethods/libinput-gestures {};
 
   libinstpatch = callPackage ../development/libraries/audio/libinstpatch { };
@@ -14984,6 +14986,8 @@ in
 
   xml-tooling-c = callPackage ../development/libraries/xml-tooling-c { };
 
+  xrdesktop = callPackage ../development/libraries/xrdesktop { };
+
   xlslib = callPackage ../development/libraries/xlslib { };
 
   xvidcore = callPackage ../development/libraries/xvidcore { };
@@ -15068,6 +15072,10 @@ in
     lastfm = callPackage ../development/libraries/gsignond/plugins/lastfm.nix { };
     mail = callPackage ../development/libraries/gsignond/plugins/mail.nix { };
   };
+
+  gulkan = callPackage ../development/libraries/gulkan { };
+
+  gxr = callPackage ../development/libraries/gxr { };
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
@@ -24148,6 +24156,7 @@ in
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
     workspace-matrix = callPackage ../desktops/gnome-3/extensions/workspace-matrix { };
+    xrdesktop = callPackage ../desktops/gnome-3/extensions/xrdesktop { };
 
     nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
     mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
