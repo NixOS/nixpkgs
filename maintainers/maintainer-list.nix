@@ -8368,4 +8368,10 @@
     github = "ymeister";
     githubId = 47071325;
   };
+  cpcloud = {
+    name = "Phillip Cloud";
+    email = "417981+cpcloud@users.noreply.github.com";
+    github = "cpcloud";
+    githubId = 417981;
+  };
 }
