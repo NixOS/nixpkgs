@@ -16,14 +16,7 @@ with (stdenv.lib.kernel.whenHelpers version);
 
 assert (versionAtLeast version "4.9");
 
-optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
-  # Disable legacy virtual syscalls by default (modern glibc use vDSO instead).
-  #
-  # Note that the vanilla default is to *emulate* the legacy vsyscall mechanism,
-  # which is supposed to be safer than the native variant (wrt. ret2libc), so
-  # disabling it mainly helps reduce surface.
-  LEGACY_VSYSCALL_NONE = yes;
-} // {
+{
   # Report BUG() conditions and kill the offending process.
   BUG = yes;
 
