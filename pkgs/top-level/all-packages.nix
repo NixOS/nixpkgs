@@ -24555,6 +24555,8 @@ in
 
   boogie = dotnetPackages.Boogie;
 
+  cadical = callPackage ../applications/science/logic/cadical {};
+
   inherit (callPackage ./coq-packages.nix {
     inherit (ocaml-ng) ocamlPackages_4_05;
   }) mkCoqPackages
