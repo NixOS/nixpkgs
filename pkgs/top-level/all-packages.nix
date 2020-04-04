@@ -4886,6 +4886,8 @@ in
 
   libtins = callPackage ../development/libraries/libtins { };
 
+  libturbojpeg = callPackage ../development/libraries/libturbojpeg { };
+
   libshout = callPackage ../development/libraries/libshout { };
 
   libqb = callPackage ../development/libraries/libqb { };
