@@ -1,7 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, makeWrapper
-, writeText
 # Dependencies documented @ https://www.gnuradio.org/doc/doxygen-3.7/build_guide.html
 # => core dependencies
 , cmake
@@ -118,7 +116,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  setupHook = ./setup-hook.sh;
+  doCheck = true;
 
   # Framework path needed for qwt6_qt4 but not qwt5
   cmakeFlags = [
@@ -152,6 +150,9 @@ stdenv.mkDerivation rec {
     # TODO: Check if needed
     # optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ];
   ;
+
+  # patching is done at the wrapper
+  dontPatchShebangs = true;
 
   meta = with stdenv.lib; {
     description = "Software Defined Radio (SDR) software";
