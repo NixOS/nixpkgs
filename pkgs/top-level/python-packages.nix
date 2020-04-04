@@ -1063,6 +1063,9 @@ in {
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
 
   pulumi-azure = callPackage ../development/python-modules/pulumi-azure { };
+
+  pulumi-digitalocean = callPackage ../development/python-modules/pulumi-digitalocean { };
+
   backcall = callPackage ../development/python-modules/backcall { };
 
   backoff = callPackage ../development/python-modules/backoff { };
