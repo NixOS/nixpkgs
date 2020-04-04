@@ -1,6 +1,12 @@
-{ stdenv, fetchgit, cmake, pkgconfig, makeWrapper
+{ stdenv
+, fetchgit
+, cmake
+, pkgconfig
+, makeWrapper
 , boost
-, pythonSupport ? true, python, swig
+, pythonSupport ? true
+, python
+, swig
 , airspy
 , gnuradio
 , hackrf
@@ -22,12 +28,28 @@ stdenv.mkDerivation rec {
     sha256 = "0bf9bnc1c3c4yqqqgmg3nhygj6rcfmyk6pybi27f7461d2cw1drv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+  ];
   buildInputs = [
-    cmake makeWrapper boost
-    airspy gnuradio hackrf libbladeRF rtl-sdr uhd
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ soapysdr-with-plugins ]
-    ++ stdenv.lib.optionals pythonSupport [ python swig ];
+    cmake
+    makeWrapper
+    boost
+    airspy
+    gnuradio
+    hackrf
+    libbladeRF
+    rtl-sdr
+    uhd
+  ]
+    ++ stdenv.lib.optionals stdenv.isLinux [
+      soapysdr-with-plugins
+    ]
+    ++ stdenv.lib.optionals pythonSupport [
+      python
+      swig
+    ]
+  ;
 
   postInstall = ''
     for prog in "$out"/bin/*; do
