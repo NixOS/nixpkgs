@@ -7759,6 +7759,12 @@
     githubId = 13489144;
     name = "Calle Rosenquist";
   };
+  xe = {
+    email = "me@christine.website";
+    github = "Xe";
+    githubId = 529003;
+    name = "Christine Dodrill";
+  };
   xeji = {
     email = "xeji@cat3.de";
     github = "xeji";
