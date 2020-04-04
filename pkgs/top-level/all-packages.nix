@@ -19283,16 +19283,10 @@ in
 
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { boost=boost166; };
 
-  gnuradio = callPackage ../applications/radio/gnuradio {
+  gnuradio-unwrapped = callPackage ../applications/radio/gnuradio {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     fftw = fftwFloat;
     qwt = qwt6_qt4;
-  };
-
-  gnuradio-with-packages = callPackage ../applications/radio/gnuradio/wrapper.nix {
-    inherit (python2Packages) python;
-    extraPackages = [ gr-nacl gr-osmosdr gr-ais gr-rds ]
-      ++ lib.optionals stdenv.isLinux [ gr-gsm gr-limesdr ];
   };
 
   grandorgue = callPackage ../applications/audio/grandorgue { };

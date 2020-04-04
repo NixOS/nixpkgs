@@ -117,23 +117,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postPatch = ''
-    substituteInPlace \
-        gr-fec/include/gnuradio/fec/polar_decoder_common.h \
-        --replace BOOST_CONSTEXPR_OR_CONST const
-  '';
-
   setupHook = ./setup-hook.sh;
-
-  # patch wxgui and pygtk check due to python importerror in a headless environment
-  # wxgtk gui will be removed in GR3.8
-  # c++11 hack may not be necessary anymore
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable ${stdenv.lib.optionalString (!stdenv.isDarwin) "-std=c++11"}"
-    sed -i 's/.*wx\.version.*/set(WX_FOUND TRUE)/g' gr-wxgui/CMakeLists.txt
-    sed -i 's/.*pygtk_version.*/set(PYGTK_FOUND TRUE)/g' grc/CMakeLists.txt
-    find . -name "CMakeLists.txt" -exec sed -i '1iadd_compile_options($<$<COMPILE_LANGUAGE:CXX>:-std=c++11>)' "{}" ";"
-  '';
 
   # Framework path needed for qwt6_qt4 but not qwt5
   cmakeFlags = [
@@ -169,27 +153,6 @@ stdenv.mkDerivation rec {
     # TODO: Check if needed
     # optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ];
   ;
-
-  # - Ensure we get an interactive backend for matplotlib. If not the gr_plot_*
-  #   programs will not display anything. Yes, $MATPLOTLIBRC must point to the
-  #   *dirname* where matplotlibrc is located, not the file itself.
-  # - GNU Radio core is C++ but the user interface (GUI and API) is Python, so
-  #   we must wrap the stuff in bin/.
-  # Notes:
-  # - May want to use makeWrapper instead of wrapProgram
-  # - may want to change interpreter path on Python examples instead of wrapping
-  # - see https://github.com/NixOS/nixpkgs/issues/22688 regarding use of --prefix / python.withPackages
-  # - see https://github.com/NixOS/nixpkgs/issues/24693 regarding use of DYLD_FRAMEWORK_PATH on Darwin
-  postInstall = ''
-    printf "backend : Qt4Agg\n" > "$out/share/gnuradio/matplotlibrc"
-
-    for file in $(find $out/bin $out/share/gnuradio/examples -type f -executable); do
-        wrapProgram "$file" \
-            --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
-            --set MATPLOTLIBRC "$out/share/gnuradio" \
-            ${stdenv.lib.optionalString stdenv.isDarwin "--set DYLD_FRAMEWORK_PATH /System/Library/Frameworks"}
-    done
-  '';
 
   meta = with stdenv.lib; {
     description = "Software Defined Radio (SDR) software";
