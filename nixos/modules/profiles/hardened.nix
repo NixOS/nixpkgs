@@ -79,10 +79,6 @@ with lib;
   # Hide kptrs even for processes with CAP_SYSLOG
   boot.kernel.sysctl."kernel.kptr_restrict" = mkOverride 500 2;
 
-  # Unprivileged access to bpf() has been used for privilege escalation in
-  # the past
-  boot.kernel.sysctl."kernel.unprivileged_bpf_disabled" = mkDefault true;
-
   # Disable bpf() JIT (to eliminate spray attacks)
   boot.kernel.sysctl."net.core.bpf_jit_enable" = mkDefault false;
 
