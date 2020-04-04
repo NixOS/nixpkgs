@@ -1,0 +1,18 @@
+Compressed diff from
+```
+git show d21664cce1db8debe2528f36b1fbd2b8af9c9401 87dac7da68ea1e0adac78c59ef1891dcf9632b67 3a0f6e699bb6d96dc62dce6faef20ac26cf103fd
+```
+with the purpose of avoiding linker errors arising in the polly-flavoured clang.
+
+diff --git a/clang/CMakeLists.txt b/clang/CMakeLists.txt
+index 781c3eb7f2f..dc1413f4b59 100644
+--- clang/CMakeLists.txt
++++ clang/CMakeLists.txt
+@@ -864,6 +864,7 @@ add_subdirectory(utils/hmaptool)
+ 
+ if(CLANG_BUILT_STANDALONE)
+   llvm_distribution_add_targets()
++  process_llvm_pass_plugins()
+ endif()
+ 
+ configure_file(
