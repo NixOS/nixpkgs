@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     openssl.dev
     racket
   ];
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ scons.py2 ];
 
   patches = [ ./fix-build.patch ];
   sconsFlags = [
