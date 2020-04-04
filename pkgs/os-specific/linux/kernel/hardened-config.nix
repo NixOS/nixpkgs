@@ -17,10 +17,6 @@ with (stdenv.lib.kernel.whenHelpers version);
 assert (versionAtLeast version "4.9");
 
 optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
-  # Randomize position of kernel and memory.
-  RANDOMIZE_BASE   = yes;
-  RANDOMIZE_MEMORY = yes;
-
   # Disable legacy virtual syscalls by default (modern glibc use vDSO instead).
   #
   # Note that the vanilla default is to *emulate* the legacy vsyscall mechanism,
