@@ -34,8 +34,8 @@
 , alsaLib ? null
 , libjack2 ? null
 , CoreAudio ? null # audio
-# TODO: package https://github.com/Linux-Comedi/comedilib
 , enableComedi ? false
+, comedilib ? null # not yet packaged: https://github.com/NixOS/nixpkgs/pull/84243
 , enableChannels ? true
 , enableNoaa ? true
 , enablePager ? true
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     ++ optionals (enableAudio && stdenv.isLinux) [ alsaLib libjack2 ] 
     ++ optionals (enableAudio && stdenv.isDarwin) [ CoreAudio ]
     ++ optionals (enableQtgui) [ qt4 qwt ]
-    # ++ optionals (enableComedi) [ comedilib ] # not yet packaged, see TODO at top
+    ++ optionals (enableComedi) [ comedilib ] # not yet packaged, see https://github.com/NixOS/nixpkgs/pull/84243
   ;
 
   enableParallelBuilding = true;
