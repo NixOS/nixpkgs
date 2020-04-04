@@ -20860,6 +20860,8 @@ in
 
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
 
+  ninjas2 = callPackage ../applications/audio/ninjas2 {};
+
   notion = callPackage ../applications/window-managers/notion { };
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
