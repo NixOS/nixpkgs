@@ -37,10 +37,6 @@ assert (versionAtLeast version "4.9");
 
   STRICT_KERNEL_RWX = whenAtLeast "4.11" yes;
 
-  # Stricter /dev/mem
-  STRICT_DEVMEM    = option yes;
-  IO_STRICT_DEVMEM = option yes;
-
   # Perform additional validation of commonly targeted structures.
   DEBUG_CREDENTIALS     = yes;
   DEBUG_NOTIFIERS       = yes;
