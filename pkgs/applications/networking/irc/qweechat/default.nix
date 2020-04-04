@@ -18,7 +18,7 @@ python27Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python27Packages; [
-     pyside
+     pyside setuptools
   ];
 
   meta = with stdenv.lib; {

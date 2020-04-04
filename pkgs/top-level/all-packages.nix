@@ -792,8 +792,6 @@ in
 
   automirror = callPackage ../tools/misc/automirror { };
 
-  babashka = callPackage ../tools/misc/babashka { };
-
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
@@ -7720,7 +7718,9 @@ in
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
-  zenith = callPackage ../tools/system/zenith {};
+  zenith = callPackage ../tools/system/zenith {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   zerotierone = callPackage ../tools/networking/zerotierone { };
 
@@ -9197,6 +9197,8 @@ in
   angelscript = callPackage ../development/interpreters/angelscript {};
 
   angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix {};
+
+  babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
 
   chibi = callPackage ../development/interpreters/chibi { };
 
@@ -19978,6 +19980,8 @@ in
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
+  windowchef = callPackage ../applications/window-managers/windowchef {};
+
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
   wmfs = callPackage ../applications/window-managers/wmfs/default.nix { };
@@ -24667,6 +24671,8 @@ in
   };
 
   boogie = dotnetPackages.Boogie;
+
+  cadical = callPackage ../applications/science/logic/cadical {};
 
   inherit (callPackage ./coq-packages.nix {
     inherit (ocaml-ng) ocamlPackages_4_05;
