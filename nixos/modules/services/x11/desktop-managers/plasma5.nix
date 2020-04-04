@@ -158,6 +158,8 @@ in
         example = "vlc";
         description = "Phonon audio backend to install.";
       };
+
+      enableOnlineAccounts = mkEnableOption "Enable integration with online services";
     };
 
   };
@@ -340,6 +342,26 @@ in
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
     })
+
+   # Online acoounts integration
+   (mkIf cfg.enableOnlineAccounts {
+     environment.variables.SSO_PLUGINS_DIR = ["/run/current-system/sw/lib/signon"];
+     environment.variables.SSO_EXTENSIONS_DIR = ["/run/current-system/sw/lib/signon/extensions"];
+     environment.systemPackages = [
+       libsForQt5.signond
+       libsForQt5.signon-ui
+       libsForQt5.signon-plugin-oauth2
+       kdeApplications.ktp-accounts-kcm
+       kdeApplications.kaccounts-providers
+       kdeApplications.kaccounts-integration
+       kdeApplications.signon-kwallet-extension
+       pkgs.kio-gdrive
+       pkgs.telepathy-mission-control
+       pkgs.telepathy-haze
+       pkgs.telepathy-gabble
+       pkgs.telepathy-idle
+     ];
+   })
   ];
 
 }
