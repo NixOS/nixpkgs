@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
     # We are using a symlink that we will delete before installation.
     mkdir -p $out/lib
     ln -s $PWD/tests/scanner/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
-    cleanLibregressSymlink() {
-      rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
-    }
-    preInstallPhases="$preInstallPhases cleanLibregressSymlink"
+  '';
+
+  preInstall = ''
+    rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
   '';
 
   passthru = {
