@@ -20725,6 +20725,8 @@ in
 
   rofi-calc = callPackage ../applications/science/math/rofi-calc { };
 
+  rofi-emoji = callPackage ../applications/misc/rofi-emoji { };
+
   ympd = callPackage ../applications/audio/ympd { };
 
   nload = callPackage ../applications/networking/nload { };
