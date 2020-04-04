@@ -14,7 +14,9 @@ let
     user = ${cfg.user}
     show-password-label = true
     password-label-text = Password:
+    invalid-password-text = Invalid Password
     show-input-cursor = true
+    password-alignment = right
 
     [greeter-hotkeys]
     mod-key = meta
@@ -26,6 +28,8 @@ let
     [greeter-theme]
     font = Sans
     font-size = 1em
+    font-weight = bold
+    font-style = normal
     text-color = "#080800"
     error-color = "#F8F8F0"
     background-image = "${ldmcfg.background}"
@@ -36,6 +40,8 @@ let
     layout-space = 15
     password-color = "#F8F8F0"
     password-background-color = "#1B1D1E"
+    password-border-color = "#080800"
+    password-border-width = 2px
 
     ${cfg.extraConfig}
     '';
