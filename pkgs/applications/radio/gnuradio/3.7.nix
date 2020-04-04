@@ -87,6 +87,9 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit pythonEnvInputs;
     inherit pythonEnv;
+    # not sure if this is the best name for this property - but it's here to
+    # signal plugins that they are compiling against 3.7
+    branch = "3.7";
   };
 
 
