@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     gtk2
   ];
 
+  dontDropIconThemeCache = true;
+
   postInstall = ''
     # remove a tree of dirs with no files within
     rm -r "$out/share/locale"
