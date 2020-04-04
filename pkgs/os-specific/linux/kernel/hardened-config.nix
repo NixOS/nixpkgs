@@ -46,10 +46,6 @@ assert (versionAtLeast version "4.9");
 
   REFCOUNT_FULL = whenAtLeast "4.13" yes;
 
-  # Perform usercopy bounds checking.
-  HARDENED_USERCOPY = yes;
-  HARDENED_USERCOPY_FALLBACK = whenAtLeast "4.16" no; # for full whitelist enforcement
-
   # Randomize allocator freelists.
   SLAB_FREELIST_RANDOM = yes;
 
