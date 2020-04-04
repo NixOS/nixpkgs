@@ -3,8 +3,9 @@
 , makeWrapper
 , file
 , python
+, plugins # available plugins
 , extraPythonPackages ? []
-, extraPaths ? []
+, extraPaths ? [] # plugins to add
 }:
 
 symlinkJoin rec {
@@ -23,6 +24,7 @@ symlinkJoin rec {
   nativeBuildInputs = [ makeWrapper pythonEnv file ];
   passthru = {
     inherit unwrapped;
+    inherit plugins;
   };
 
   postBuild = ''

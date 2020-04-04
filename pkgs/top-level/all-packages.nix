@@ -19298,18 +19298,6 @@ in
 
   grandorgue = callPackage ../applications/audio/grandorgue { };
 
-  gr-nacl = callPackage ../applications/radio/gnuradio/nacl.nix { };
-
-  gr-gsm = callPackage ../applications/radio/gnuradio/gsm.nix { };
-
-  gr-ais = callPackage ../applications/radio/gnuradio/ais.nix { };
-
-  gr-limesdr = callPackage ../applications/radio/gnuradio/limesdr.nix { };
-
-  gr-rds = callPackage ../applications/radio/gnuradio/rds.nix { };
-
-  gr-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix { };
-
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
     inherit (darwin) libiconv;
   };

@@ -23,13 +23,23 @@ rec {
   # To be used as a library - no gui components are installed
   gnuradio3_7-no-gui = unwrapped3_7-no-gui;
   gnuradio3_7 = callPackage ./wrapper.nix {
+    plugins = plugins3_7;
     unwrapped = unwrapped3_7;
     python = python2;
   };
   gnuradio3_7-with-packages = callPackage ./wrapper.nix {
+    plugins = plugins3_7;
     unwrapped = unwrapped3_7;
     python = python2;
-    # TODO
-    # extraPackages = []
+    # TODO: test
+    # extraPackages = plugins3_7
+  };
+  plugins3_7 = {
+    ais = callPackage ./plugins/ais.nix { gnuradio = unwrapped3_7; };
+    gsm = callPackage ./plugins/gsm.nix { gnuradio = unwrapped3_7; };
+    rds = callPackage ./plugins/rds.nix { gnuradio = unwrapped3_7; };
+    nacl = callPackage ./plugins/nacl.nix { gnuradio = unwrapped3_7; };
+    limesdr = callPackage ./plugins/limesdr.nix { gnuradio = unwrapped3_7; };
+    osmosdr = callPackage ./plugins/osmosdr.nix { gnuradio = unwrapped3_7; };
   };
 }
