@@ -82,7 +82,4 @@ assert (versionAtLeast version "4.9");
   CC_STACKPROTECTOR_REGULAR = whenOlder "4.18" no;
   CC_STACKPROTECTOR_STRONG  = whenOlder "4.18" yes;
 
-  # Enable compile/run-time buffer overflow detection ala glibc's _FORTIFY_SOURCE
-  FORTIFY_SOURCE = whenAtLeast "4.13" yes;
-
 }
