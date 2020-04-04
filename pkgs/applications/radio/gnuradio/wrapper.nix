@@ -1,6 +1,7 @@
 { symlinkJoin
 , unwrapped
 , makeWrapper
+, file
 , python
 , extraPythonPackages ? []
 , extraPaths ? []
@@ -19,7 +20,7 @@ symlinkJoin rec {
       ln -s ${unwrapped}/${python.sitePackages}/* -t $out/${python.sitePackages}
     '';
   };
-  nativeBuildInputs = [ makeWrapper pythonEnv ];
+  nativeBuildInputs = [ makeWrapper pythonEnv file ];
   passthru = {
     inherit unwrapped;
   };
@@ -28,10 +29,12 @@ symlinkJoin rec {
     echo unwrapped python ${unwrapped.pythonEnv}
     echo our python is ${pythonEnv}
     for bin in $out/bin/*; do
-      cp -L "$bin" $bin.tmp
-      sed -i s,${unwrapped.pythonEnv},${pythonEnv},g "$bin".tmp
-      patchShebangs $bin.tmp
-      mv -f $bin.tmp $bin
+      if [[ "$(file -L --mime-type --brief "$bin")" =~ "text/" ]]; then
+        cp -L "$bin" $bin.tmp
+        sed -i s,${unwrapped.pythonEnv},${pythonEnv},g "$bin".tmp
+        patchShebangs $bin.tmp
+        mv -f $bin.tmp $bin
+      fi
     done
   '';
 
