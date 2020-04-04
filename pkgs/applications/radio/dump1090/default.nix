@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , pkgconfig
 , libbladeRF
-, libusb
+, libusb1
 , ncurses
 , rtl-sdr
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libbladeRF
-    libusb
+    libusb1
     ncurses
     rtl-sdr
   ];
