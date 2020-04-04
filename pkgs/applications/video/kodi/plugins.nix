@@ -1,6 +1,6 @@
 { stdenv, callPackage, fetchFromGitHub
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
+, steam, udev, libusb, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
@@ -236,8 +236,7 @@ let self = rec {
       maintainers = with maintainers; [ edwtjo ];
     };
 
-    extraBuildInputs = [ libusb pcre-cpp ];
-
+    extraBuildInputs = [ udev ];
   };
 
   simpleplugin = mkKodiPlugin rec {
