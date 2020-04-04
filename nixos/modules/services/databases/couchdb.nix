@@ -11,7 +11,13 @@ let
       database_dir = ${cfg.databaseDir}
       uri_file = ${cfg.uriFile}
       view_index_dir = ${cfg.viewIndexDir}
-    '' + (if useVersion2 then
+    '' + (if cfg.adminPass != null then
+    ''
+      [admins]
+      ${cfg.adminUser} = ${cfg.adminPass}
+    '' else
+    ''
+    '') + (if useVersion2 then
     ''
       [chttpd]
     '' else
@@ -54,6 +60,23 @@ in {
         '';
       };
 
+      adminUser = mkOption {
+        type = types.str;
+        default = "admin";
+        description = ''
+          Couchdb (i.e. fauxton) account with permission for all dbs and
+          tasks.
+        '';
+      };
+
+      adminPass = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Couchdb (i.e. fauxton) account with permission for all dbs and
+          tasks.
+        '';
+      };
 
       user = mkOption {
         type = types.str;
