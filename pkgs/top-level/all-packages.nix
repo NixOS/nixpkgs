@@ -4536,6 +4536,8 @@ in
 
   icecast = callPackage ../servers/icecast { };
 
+  icemon = libsForQt5.callPackage ../applications/networking/icemon { };
+
   icepeak = haskell.lib.justStaticExecutables haskellPackages.icepeak;
 
   iceshelf = callPackage ../tools/backup/iceshelf { };
