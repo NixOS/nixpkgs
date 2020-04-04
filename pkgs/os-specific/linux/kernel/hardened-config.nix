@@ -35,7 +35,6 @@ assert (versionAtLeast version "4.9");
   SECURITY_SELINUX_DISABLE = whenAtLeast "4.12" no;
   SECURITY_WRITABLE_HOOKS  = whenAtLeast "4.12" (option no);
 
-  DEBUG_WX = yes; # boot-time warning on RWX mappings
   STRICT_KERNEL_RWX = whenAtLeast "4.11" yes;
 
   # Stricter /dev/mem
