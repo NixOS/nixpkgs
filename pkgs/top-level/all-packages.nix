@@ -19285,13 +19285,16 @@ in
 
   inherit (callPackage ../applications/radio/gnuradio {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
-    fftw = fftwFloat;
   })
+    # wrapped versions
     gnuradio3_7
+    gnuradio3_7-full
     # Please use this one as a library
-    gnuradio3_7Minimal
+    gnuradio3_7-no-gui
   ;
+  # for backwards compatibility
   gnuradio = gnuradio3_7;
+  gnuradio-with-packages = gnuradio3_7-with-packages;
 
   grandorgue = callPackage ../applications/audio/grandorgue { };
 

@@ -23,7 +23,7 @@
 , enableFec ? true
 , enableFft ? true
 , enableFilter ? true
-, fftw ? null
+, fftwFloat ? null
 , enableAnalog ? true # needed for many other features
 , enableDigital ? true
 , enableDtv ? true
@@ -39,7 +39,7 @@
 , enablePager ? true
 , enableQtgui ? true
 , qt4 ? null
-, qwt ? null
+, qwt6_qt4 ? null
 , enableTrellis ? true
 , enableUhd ? true
 , uhd ? null
@@ -60,6 +60,15 @@
 let
   inherit (stdenv.lib) optionals;
   onOffBool = b: if b then "ON" else "OFF";
+  pythonEnvInputs = with python2.pkgs; [
+    Mako
+    six
+  ]
+    ++ optionals (enableSphinx) [ sphinx ]
+    ++ optionals (enableCompanion) [ lxml pygtk numpy cheetah ]
+    ++ optionals (enableQtgui) [ pyqt4 ]
+    ++ optionals (enableWxgui) [ wxPython ]
+  ;
 in
 
 stdenv.mkDerivation rec {
@@ -74,15 +83,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  pythonEnv = python2.withPackages(ps: with ps; [
-    Mako
-    six
-  ]
-    ++ optionals (enableSphinx) [ sphinx ]
-    ++ optionals (enableCompanion) [ lxml pygtk numpy cheetah ]
-    ++ optionals (enableQtgui) [ pyqt4 ]
-    ++ optionals (enableWxgui) [ wxPython ]
-  );
+  pythonEnv = python2.withPackages(ps: pythonEnvInputs );
+  passthru = {
+    inherit pythonEnvInputs;
+    inherit pythonEnv;
+  };
+
 
   nativeBuildInputs = [
     cmake
@@ -99,7 +105,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
   ]
-    ++ optionals (enableFft || enableFilter) [ fftw ]
+    ++ optionals (enableFft || enableFilter) [ fftwFloat ]
     ++ optionals (enablePython || enableWxgui || enableQtgui) [ pythonEnv ]
     ++ optionals (enableZeromq) [ cppzmq zeromq ]
     ++ optionals (enableVideoSdl) [ SDL ]
@@ -110,7 +116,7 @@ stdenv.mkDerivation rec {
     # gnuradio3_7.override { libjack2 = null; }
     ++ optionals (enableAudio && stdenv.isLinux) [ alsaLib libjack2 ] 
     ++ optionals (enableAudio && stdenv.isDarwin) [ CoreAudio ]
-    ++ optionals (enableQtgui) [ qt4 qwt ]
+    ++ optionals (enableQtgui) [ qt4 qwt6_qt4 ]
     ++ optionals (enableComedi) [ comedilib ] # not yet packaged, see https://github.com/NixOS/nixpkgs/pull/84243
   ;
 
@@ -149,7 +155,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_GR_ZEROMQ=${onOffBool enableZeromq}"
   ]
     # TODO: Check if needed
-    # optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ];
+    # optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt6_qt4}/lib" ];
   ;
 
   # patching is done at the wrapper

@@ -1,25 +1,37 @@
 { symlinkJoin
+, unwrapped
+, makeWrapper
+, python
 }:
 
-with { inherit (stdenv.lib) appendToName makeSearchPath; };
+symlinkJoin rec {
+  name = "${unwrapped.name}-wrapped";
+  paths = [ unwrapped ];
+  # TODO:
+  # Try to build unwrapped with propagatedBuildInputs = [ pythonEnv ] and test
+  # if the unwrapped.pythonEnv is still not different then this pythonEnv
+  # This is the real environment that'll be when shebanging the scripts
+  pythonEnv = python.buildEnv.override { 
+    extraLibs = unwrapped.pythonEnvInputs;
+    postBuild = ''
+      ln -s ${unwrapped}/${python.sitePackages}/* -t $out/${python.sitePackages}
+    '';
+  };
+  nativeBuildInputs = [ makeWrapper pythonEnv ];
+  passthru = {
+    inherit unwrapped;
+  };
 
-stdenv.mkDerivation {
-  name = (appendToName "with-packages" gnuradio).name;
-  buildInputs = [ makeWrapper python ];
-
-  buildCommand = ''
-    mkdir -p $out/bin
-    ln -s "${gnuradio}"/bin/* $out/bin/
-
-    for file in $(find -L $out/bin -type f); do
-        if test -x "$(readlink -f "$file")"; then
-            wrapProgram "$file" \
-                --prefix PYTHONPATH : ${stdenv.lib.concatStringsSep ":"
-                                         (map (path: "$(toPythonPath ${path})") extraPackages)} \
-                --prefix GRC_BLOCKS_PATH : ${makeSearchPath "share/gnuradio/grc/blocks" extraPackages}
-        fi
+  postBuild = ''
+    echo unwrapped python ${unwrapped.pythonEnv}
+    echo our python is ${pythonEnv}
+    for bin in $out/bin/*; do
+      cp -L "$bin" $bin.tmp
+      sed -i s,${unwrapped.pythonEnv},${pythonEnv},g "$bin".tmp
+      patchShebangs $bin.tmp
+      mv -f $bin.tmp $bin
     done
   '';
 
-  inherit (gnuradio) meta;
+  inherit (unwrapped) meta;
 }

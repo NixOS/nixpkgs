@@ -1,40 +1,35 @@
-{ callPackage }:
+{ callPackage
+, CoreAudio
+, python2
+, python3
+}:
 
-{
+rec {
   # All the defaults
-  connman = callPackage ./connman.nix { };
-
-  connmanFull = callPackage ./connman.nix {
-    # TODO: Why is this in `connmanFull` and not the default build? See TODO in
-    # nixos/modules/services/networking/connman.nix (near the assertions)
-    enableNetworkManager = true;
-    enableHh2serialGps = true;
-    enableL2tp = true;
-    enableIospm = true;
-    enableTist = true;
+  unwrapped3_7 = callPackage ./3.7.nix { };
+  # includes documentation
+  unwrapped3_7-full = callPackage ./3.7.nix {
+    enableSphinx = true;
+    enableDoxygen = true;
+    enableComedi = true;
   };
-
-  connmanMinimal = callPackage ./connman.nix {
-    enableOpenconnect = false;
-    enableOpenvpn = false;
-    enableVpnc = false;
-    vpnc = false;
-    enablePolkit = false;
-    enablePptp = false;
-    enableLoopback = false;
-    # enableEthernet = false; # If disabled no ethernet connection can be performed
-    enableWireguard = false;
-    enableGadget = false;
-    # enableWifi = false; # If disabled no WiFi connection can be performed
-    enableBluetooth = false;
-    enableOfono = false;
-    enableDundee = false;
-    enablePacrunner = false;
-    enableNeard = false;
-    enableWispr = false;
-    enableTools = false;
-    enableStats = false;
-    enableClient = false;
-    # enableDatafiles = false; # If disabled, configuration and data files are not installed
+  unwrapped3_7-no-gui = callPackage ./3.7.nix {
+    enablePython = false;
+    enableCompanion = false;
+    enableQtgui = false;
+    enableWxgui = false;
+    enableUtils = false;
+  };
+  # To be used as a library - no gui components are installed
+  gnuradio3_7-no-gui = unwrapped3_7-no-gui;
+  gnuradio3_7 = callPackage ./wrapper.nix {
+    unwrapped = unwrapped3_7;
+    python = python2;
+  };
+  gnuradio3_7-with-packages = callPackage ./wrapper.nix {
+    unwrapped = unwrapped3_7;
+    python = python2;
+    # TODO
+    # extraPackages = []
   };
 }
