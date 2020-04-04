@@ -161,11 +161,11 @@ let
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
         "INSTALL_PATH=$(out)"
-      ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
+      ] ++ optional isModular "INSTALL_MOD_PATH=$(out)"
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
       preInstall = ''
-        installFlagsArray+=("-j$NIX_BUILD_CORES")
+        installFlags+=("-j$NIX_BUILD_CORES")
       '';
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
@@ -184,10 +184,10 @@ let
         mkdir -p $dev
         cp vmlinux $dev/
         if [ -z "''${dontStrip-}" ]; then
-          installFlagsArray+=("INSTALL_MOD_STRIP=1")
+          installFlags+=("INSTALL_MOD_STRIP=1")
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
-          $installFlags "''${installFlagsArray[@]}"
+          "''${installFlags[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
         unlink $out/lib/modules/${modDirVersion}/source
 
@@ -256,7 +256,7 @@ let
         sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
       '' else optionalString installsFirmware ''
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
-          $installFlags "''${installFlagsArray[@]}"
+          "''${installFlags[@]}"
       '');
 
       requiredSystemFeatures = [ "big-parallel" ];
