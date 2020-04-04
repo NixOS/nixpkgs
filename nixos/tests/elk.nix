@@ -56,6 +56,23 @@ let
                 '');
               };
 
+              heartbeat = {
+                enable = true;
+                package = elk.heartbeat;
+                extraConfig = pkgs.lib.mkOptionDefault (''
+                  logging:
+                    to_syslog: true
+                    level: warning
+                    metrics.enabled: false
+                  output.elasticsearch:
+                    hosts: [ "127.0.0.1:9200" ]
+                  heartbeat.monitors:
+                  - type: icmp
+                    hosts: ["127.0.0.1"]
+                    schedule: '@every 5s'
+                '');
+              };
+
               logstash = {
                 enable = true;
                 package = elk.logstash;
@@ -123,12 +140,11 @@ let
       import json
 
 
-      def total_hits(message):
-          dictionary = {"query": {"match": {"message": message}}}
+      def total_hits(query):
           return (
               "curl --silent --show-error '${esUrl}/_search' "
               + "-H 'Content-Type: application/json' "
-              + "-d '{}' ".format(json.dumps(dictionary))
+              + "-d '{}' ".format(json.dumps({"query": query}))
               + "| jq .hits.total"
           )
 
@@ -160,8 +176,10 @@ let
           )
 
       with subtest("Logstash messages arive in elasticsearch"):
-          one.wait_until_succeeds(total_hits("flowers") + " | grep -v 0")
-          one.wait_until_succeeds(total_hits("dragons") + " | grep 0")
+          one.wait_until_succeeds(
+              total_hits({"match": {"message": "flowers"}}) + " | grep -v 0"
+          )
+          one.wait_until_succeeds(total_hits({"match": {"message": "dragons"}}) + " | grep 0")
 
       with subtest(
           "A message logged to the journal is ingested by elasticsearch via journalbeat"
@@ -169,7 +187,8 @@ let
           one.wait_for_unit("journalbeat.service")
           one.execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat")
           one.wait_until_succeeds(
-              total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
+              total_hits({"match": {"message": "Supercalifragilisticexpialidocious"}})
+              + " | grep -v 0"
           )
 
       with subtest("Elasticsearch-curator works"):
@@ -177,6 +196,23 @@ let
           one.systemctl("start elasticsearch-curator")
           one.wait_until_succeeds(
               '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep -q ^'
+          )
+
+      with subtest("Heartbeat successfully pings localhost"):
+          one.wait_for_unit("heartbeat.service")
+          one.wait_until_succeeds(
+              total_hits(
+                  {
+                      "bool": {
+                          "must": [
+                              {"match": {"monitor.type": "icmp",},},
+                              {"match": {"monitor.ip": "127.0.0.1",},},
+                              {"match": {"monitor.status": "up",},},
+                          ]
+                      }
+                  }
+              )
+              + " | grep -v '^0$'"
           )
     '';
   }) {};
@@ -186,12 +222,14 @@ in pkgs.lib.mapAttrs mkElkTest ({
     logstash      = pkgs.logstash6-oss;
     kibana        = pkgs.kibana6-oss;
     journalbeat   = pkgs.journalbeat6;
+    heartbeat     = pkgs.heartbeat6;
   };
   ELK-7 = {
     elasticsearch = pkgs.elasticsearch7-oss;
     logstash      = pkgs.logstash7-oss;
     kibana        = pkgs.kibana7-oss;
     journalbeat   = pkgs.journalbeat7;
+    heartbeat     = pkgs.heartbeat7;
   };
 } // (if enableUnfree
   then {
@@ -200,12 +238,14 @@ in pkgs.lib.mapAttrs mkElkTest ({
       logstash      = pkgs.logstash6;
       kibana        = pkgs.kibana6;
       journalbeat   = pkgs.journalbeat6;
+      heartbeat     = pkgs.heartbeat6;
     };
     ELK-7-UNFREE = {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
       journalbeat   = pkgs.journalbeat7;
+      heartbeat     = pkgs.heartbeat7;
     };
   }
   else {}))
