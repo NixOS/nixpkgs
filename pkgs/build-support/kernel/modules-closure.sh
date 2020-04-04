@@ -1,14 +1,12 @@
-source $stdenv/setup
-
 # When no modules are built, the $out/lib/modules directory will not
 # exist. Because the rest of the script assumes it does exist, we
 # handle this special case first.
 if ! test -d "$kernel/lib/modules"; then
-    if test -z "$rootModules" || test -n "$allowMissing"; then
+    if test -z "${rootModules[*]}" || test -n "$allowMissing"; then
         mkdir -p "$out"
         exit 0
     else
-        echo "Required modules: $rootModules"
+        echo "Required modules: ${rootModules[*]}"
         echo "Can not derive a closure of kernel modules because no modules were provided."
         exit 1
     fi
@@ -20,7 +18,7 @@ echo "kernel version is $version"
 
 # Determine the dependencies of each root module.
 closure=
-for module in $rootModules; do
+for module in "${rootModules[@]}"; do
     echo "root module: $module"
     deps=$(modprobe --config no-config -d $kernel --set-version "$version" --show-depends "$module" \
         | sed 's/^insmod //') \
