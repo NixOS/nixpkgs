@@ -23,6 +23,13 @@ in {
         type = types.str;
       };
 
+      port = mkOption {
+        description = "Port used to SSH to remote host.";
+        default = 22;
+        example = 2222;
+        type = types.port;
+      };
+
       identityFilePath = mkOption {
         description = "Path to SSH key used to login to host.";
         example = "/home/username/.ssh/id_rsa";
@@ -73,7 +80,7 @@ in {
         "https://github.com/alunduil/zfs-replicate"
       ];
       restartIfChanged = false;
-      serviceConfig.ExecStart = "${pkgs.zfs-replicate}/bin/zfs-replicate${recursive} -l ${escapeShellArg cfg.username} -i ${escapeShellArg cfg.identityFilePath}${followDelete} ${escapeShellArg cfg.host} ${escapeShellArg cfg.remoteFilesystem} ${escapeShellArg cfg.localFilesystem}";
+      serviceConfig.ExecStart = "${pkgs.zfs-replicate}/bin/zfs-replicate${recursive} -p ${escapeShellArg toString cfg.port} -l ${escapeShellArg cfg.username} -i ${escapeShellArg cfg.identityFilePath}${followDelete} ${escapeShellArg cfg.host} ${escapeShellArg cfg.remoteFilesystem} ${escapeShellArg cfg.localFilesystem}";
       wantedBy = [
         "zfs-snapshot-daily.service"
         "zfs-snapshot-frequent.service"
