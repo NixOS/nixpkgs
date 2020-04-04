@@ -17,8 +17,6 @@ with (stdenv.lib.kernel.whenHelpers version);
 assert (versionAtLeast version "4.9");
 
 optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
-  DEFAULT_MMAP_MIN_ADDR = freeform "65536";  # Prevent allocation of first 64K of memory
-
   # Note: this config depends on EXPERT y and so will not take effect, hence
   # it is left "optional" for now.
   MODIFY_LDT_SYSCALL = option no;
