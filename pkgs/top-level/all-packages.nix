@@ -19283,11 +19283,15 @@ in
 
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { boost=boost166; };
 
-  gnuradio-unwrapped = callPackage ../applications/radio/gnuradio {
+  inherit (callPackage ../applications/radio/gnuradio {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
     fftw = fftwFloat;
-    qwt = qwt6_qt4;
-  };
+  })
+    gnuradio3_7
+    # Please use this one as a library
+    gnuradio3_7Minimal
+  ;
+  gnuradio = gnuradio3_7;
 
   grandorgue = callPackage ../applications/audio/grandorgue { };
 

@@ -1,4 +1,5 @@
-{ stdenv, gnuradio, makeWrapper, python, extraPackages ? [] }:
+{ symlinkJoin
+}:
 
 with { inherit (stdenv.lib) appendToName makeSearchPath; };
 
