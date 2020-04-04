@@ -37,7 +37,7 @@
 , enableChannels ? true
 , enableNoaa ? true
 , enablePager ? true
-, enableQtgui ? true
+, enableQtgui ? true # TODO: Should we disable this or wxgui by default?
 , qt4 ? null
 , qwt6_qt4 ? null
 , enableTrellis ? true
@@ -125,7 +125,6 @@ stdenv.mkDerivation rec {
   # checks fail due to error: `libgnuradio-runtime-..so: cannot open shared object file`
   doCheck = false;
 
-  # Framework path needed for qwt6_qt4 but not qwt5
   cmakeFlags = [
     "-DENABLE_PYTHON=${onOffBool enablePython}"
     "-DENABLE_GNURADIO_RUNTIME=${onOffBool enableRuntime}"
