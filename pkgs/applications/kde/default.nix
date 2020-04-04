@@ -144,6 +144,7 @@ let
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
+      ktp-accounts-kcm = callPackage ./ktp-accounts-kcm.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
       krdc = callPackage ./krdc.nix {};
