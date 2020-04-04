@@ -1,0 +1,29 @@
+From cc953cc3f736fabef1f5c211964f30be719fb35e Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Tue, 17 Sep 2019 05:35:58 -0500
+Subject: [PATCH 07/10] qtbase-xcursor
+
+---
+ src/plugins/platforms/xcb/qxcbcursor.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/xcb/qxcbcursor.cpp b/src/plugins/platforms/xcb/qxcbcursor.cpp
+index fbadab4d50..c83ce0af5b 100644
+--- a/src/plugins/platforms/xcb/qxcbcursor.cpp
++++ b/src/plugins/platforms/xcb/qxcbcursor.cpp
+@@ -317,10 +317,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
+ #if QT_CONFIG(xcb_xlib) && QT_CONFIG(library)
+     static bool function_ptrs_not_initialized = true;
+     if (function_ptrs_not_initialized) {
+-        QLibrary xcursorLib(QLatin1String("Xcursor"), 1);
++        QLibrary xcursorLib(QLatin1String(NIXPKGS_LIBXCURSOR), 1);
+         bool xcursorFound = xcursorLib.load();
+         if (!xcursorFound) { // try without the version number
+-            xcursorLib.setFileName(QLatin1String("Xcursor"));
++            xcursorLib.setFileName(QLatin1String(NIXPKGS_LIBXCURSOR));
+             xcursorFound = xcursorLib.load();
+         }
+         if (xcursorFound) {
+-- 
+2.25.1
+
