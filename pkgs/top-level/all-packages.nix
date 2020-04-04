@@ -23784,7 +23784,9 @@ in
 
   inherit (callPackage ../games/scummvm/games.nix { })
     beneath-a-steel-sky
+    broken-sword-25
     drascula-the-vampire-strikes-back
+    dreamweb
     flight-of-the-amazon-queen
     lure-of-the-temptress;
 
