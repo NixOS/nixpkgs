@@ -26,12 +26,17 @@ symlinkJoin rec {
   };
 
   postBuild = ''
+    # Here just to make sure they are different
     echo unwrapped python ${unwrapped.pythonEnv}
     echo our python is ${pythonEnv}
     for bin in $out/bin/*; do
+      # we patch only text files in $out/bin
       if [[ "$(file -L --mime-type --brief "$bin")" =~ "text/" ]]; then
+        # we can't patch them if they are read only links
         cp -L "$bin" $bin.tmp
+        # replace the python intereter that was used originally in the unwrapped version
         sed -i s,${unwrapped.pythonEnv},${pythonEnv},g "$bin".tmp
+        # This will used what's in pythonEnv, not unwrapped.pythonEnv
         patchShebangs $bin.tmp
         mv -f $bin.tmp $bin
       fi
