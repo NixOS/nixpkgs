@@ -55,6 +55,7 @@
 , gsl ? null
 , enableWxgui ? true
 , enableZeromq ? true
+, cppzmq ? null # This is just for zmq.hpp - cpp compatibility headers
 , zeromq ? null
 }:
 
@@ -102,7 +103,7 @@ stdenv.mkDerivation rec {
   ]
     ++ optionals (enableFft || enableFilter) [ fftw ]
     ++ optionals (enablePython || enableWxgui || enableQtgui) [ pythonEnv ]
-    ++ optionals (enableZeromq) [ zeromq ]
+    ++ optionals (enableZeromq) [ cppzmq zeromq ]
     ++ optionals (enableVideoSdl) [ SDL ]
     ++ optionals (enableUhd) [ uhd ]
     ++ optionals (enableWavelet) [ gsl ]
@@ -148,8 +149,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_GR_WXGUI=${onOffBool enableWxgui}"
     "-DENABLE_GR_ZEROMQ=${onOffBool enableZeromq}"
   ]
-    # From some reason, zeromq is not detected without this
-    ++ optionals (enableZeromq) [ "-DZEROMQ_INCLUDE_DIRS=${zeromq}/include" ]
     # TODO: Check if needed
     # optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ];
   ;
