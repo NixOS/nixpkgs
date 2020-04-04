@@ -2,8 +2,8 @@
   config ? {},
   pkgs ? import ../.. { inherit system config; },
   enableUnfree ? false
-  # To run the test on the unfree ELK use the folllowing command:
-  # NIXPKGS_ALLOW_UNFREE=1 nix-build nixos/tests/elk.nix -A ELK-6 --arg enableUnfree true
+  # To additionally run the test on the unfree ELK use the folllowing command:
+  # NIXPKGS_ALLOW_UNFREE=1 nix-build nixos/tests/elk.nix --arg enableUnfree true
 }:
 
 let
@@ -180,33 +180,32 @@ let
           )
     '';
   }) {};
-in pkgs.lib.mapAttrs mkElkTest {
-  ELK-6 =
-    if enableUnfree
-    then {
+in pkgs.lib.mapAttrs mkElkTest ({
+  ELK-6 = {
+    elasticsearch = pkgs.elasticsearch6-oss;
+    logstash      = pkgs.logstash6-oss;
+    kibana        = pkgs.kibana6-oss;
+    journalbeat   = pkgs.journalbeat6;
+  };
+  ELK-7 = {
+    elasticsearch = pkgs.elasticsearch7-oss;
+    logstash      = pkgs.logstash7-oss;
+    kibana        = pkgs.kibana7-oss;
+    journalbeat   = pkgs.journalbeat7;
+  };
+} // (if enableUnfree
+  then {
+    ELK-6-UNFREE = {
       elasticsearch = pkgs.elasticsearch6;
       logstash      = pkgs.logstash6;
       kibana        = pkgs.kibana6;
       journalbeat   = pkgs.journalbeat6;
-    }
-    else {
-      elasticsearch = pkgs.elasticsearch6-oss;
-      logstash      = pkgs.logstash6-oss;
-      kibana        = pkgs.kibana6-oss;
-      journalbeat   = pkgs.journalbeat6;
     };
-  ELK-7 =
-    if enableUnfree
-    then {
+    ELK-7-UNFREE = {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
       journalbeat   = pkgs.journalbeat7;
-    }
-    else {
-      elasticsearch = pkgs.elasticsearch7-oss;
-      logstash      = pkgs.logstash7-oss;
-      kibana        = pkgs.kibana7-oss;
-      journalbeat   = pkgs.journalbeat7;
     };
-}
+  }
+  else {}))
