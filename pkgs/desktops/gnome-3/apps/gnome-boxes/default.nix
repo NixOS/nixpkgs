@@ -34,7 +34,7 @@
 , mtools
 , cdrkit
 , libcdio
-, libusb
+, libusb1
 , libarchive
 , acl
 , libgudev
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     librsvg
     libsecret
     libsoup
-    libusb
+    libusb1
     libvirt
     libvirt-glib
     libxml2
