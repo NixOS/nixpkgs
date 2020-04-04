@@ -116,7 +116,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # checks fail due to error: `libgnuradio-runtime-..so: cannot open shared object file`
+  doCheck = false;
 
   # Framework path needed for qwt6_qt4 but not qwt5
   cmakeFlags = [
