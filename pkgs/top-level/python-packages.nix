@@ -1067,6 +1067,8 @@ in {
   pulumi-digitalocean = callPackage ../development/python-modules/pulumi-digitalocean { };
 
   pulumi-gcp = callPackage ../development/python-modules/pulumi-gcp { };
+
+  pulumi-kubernetes = callPackage ../development/python-modules/pulumi-kubernetes { };
   backcall = callPackage ../development/python-modules/backcall { };
 
   backoff = callPackage ../development/python-modules/backoff { };
