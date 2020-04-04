@@ -2,7 +2,6 @@
 , fetchgit
 , cmake
 , pkgconfig
-, makeWrapper
 , boost
 , pythonSupport ? true
 , python
@@ -59,12 +58,6 @@ stdenv.mkDerivation rec {
       swig
     ]
   ;
-
-  postInstall = ''
-    for prog in "$out"/bin/*; do
-        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
-    done
-  '';
 
   enableParallelBuilding = true;
 
