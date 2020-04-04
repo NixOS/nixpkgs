@@ -11236,7 +11236,7 @@ in
     ogre = ogre1_10;
   };
 
-  certbot = callPackage ../tools/admin/certbot { };
+  certbot = python3Packages.callPackage ../tools/admin/certbot { };
 
   caf = callPackage ../development/libraries/caf {};
 
