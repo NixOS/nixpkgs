@@ -76,7 +76,7 @@ in
       XMODIFIERS = "@im=ibus";
     };
 
-    xdg.portal.extraPortals = mkIf xdg.portal.enable [
+    xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
       ibusPackage
     ];
   };
