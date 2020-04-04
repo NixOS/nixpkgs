@@ -82,9 +82,6 @@ with lib;
   # Disable bpf() JIT (to eliminate spray attacks)
   boot.kernel.sysctl."net.core.bpf_jit_enable" = mkDefault false;
 
-  # ... or at least apply some hardening to it
-  boot.kernel.sysctl."net.core.bpf_jit_harden" = mkDefault true;
-
   # Raise ASLR entropy for 64bit & 32bit, respectively.
   #
   # Note: mmap_rnd_compat_bits may not exist on 64bit.
