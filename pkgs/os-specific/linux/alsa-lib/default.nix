@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-lib-1.1.9";
+  name = "alsa-lib-1.2.2";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${name}.tar.bz2";
-    sha256 = "0jwr9g4yxg9gj6xx0sb2r6wrdl8amrjd19hilkrq4rirynp770s8";
+    sha256 = "1v5kb8jyvrpkvvq7dq8hfbmcj68lml97i4s0prxpfx2mh3c57s6q";
   };
 
   patches = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+    homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
 
     longDescription = ''
