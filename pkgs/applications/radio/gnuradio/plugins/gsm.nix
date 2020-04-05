@@ -15,6 +15,9 @@
 
 assert pythonSupport -> python != null && swig != null;
 
+# See https://github.com/ptrkrysik/gr-gsm/issues/475
+assert stdenv.lib.asserts.assertMsg (gnuradio.branch == "3.7") "gnuradio.plugins.gsm is not supported by a gnuradio version other then 3.7";
+
 stdenv.mkDerivation {
   pname = "gr-gsm";
   version = "2016-08-25";
