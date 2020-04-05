@@ -108,14 +108,11 @@ let
       "all" "docs"
     ];
 
-    FLAGS = [
-      "--release"
-      "--single-module" # needed for deterministic builds
-    ];
+    env.FLAGS = "--release --single-module"; # needed for deterministic builds
 
     # This makes sure we don't keep depending on the previous version of
     # crystal used to build this one.
-    CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+    env.CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
 
     # We *have* to add `which` to the PATH or crystal is unable to build stuff
     # later if which is not available.
