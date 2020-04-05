@@ -19,7 +19,7 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ boost kitemmodels ];
   outputs = [ "out" "dev" ];
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     ''-DNIXPKGS_MYSQL_MYSQLD=\"${lib.getBin mysql}/bin/mysqld\"''
     ''-DNIXPKGS_MYSQL_MYSQLADMIN=\"${lib.getBin mysql}/bin/mysqladmin\"''
     ''-DNIXPKGS_MYSQL_MYSQL_INSTALL_DB=\"${lib.getBin mysql}/bin/mysql_install_db\"''
