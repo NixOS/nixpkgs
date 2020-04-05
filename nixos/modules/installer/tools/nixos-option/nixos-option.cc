@@ -594,7 +594,7 @@ int main(int argc, char ** argv)
         using nix::LegacyArgs::LegacyArgs;
     };
 
-    MyArgs myArgs(nix::baseNameOf(argv[0]), [&](Strings::iterator & arg, const Strings::iterator & end) {
+    MyArgs myArgs(std::string(nix::baseNameOf(argv[0])), [&](Strings::iterator & arg, const Strings::iterator & end) {
         if (*arg == "--help") {
             nix::showManPage("nixos-option");
         } else if (*arg == "--version") {

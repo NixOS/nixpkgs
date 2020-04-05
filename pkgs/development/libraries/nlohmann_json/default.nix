@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, cmake
+, multipleHeaders ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -16,10 +17,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [
-    "-DBuildTests=${if doCheck then "ON" else "OFF"}"
-    "-DJSON_MultipleHeaders=ON"
-  ];
+  cmakeFlags =
+    [ "-DBuildTests=${if doCheck then "ON" else "OFF"}" ]
+    ++ stdenv.lib.optional multipleHeaders "-DJSON_MultipleHeaders=ON";
 
   # A test cause the build to timeout https://github.com/nlohmann/json/issues/1816
   #doCheck = stdenv.hostPlatform == stdenv.buildPlatform;

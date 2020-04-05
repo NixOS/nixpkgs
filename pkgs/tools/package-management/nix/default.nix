@@ -42,7 +42,7 @@ common =
         ++ lib.optionals (!is20) [ curl perl ]
         ++ lib.optionals is24 [ jq ];
 
-      buildInputs = [ curl openssl sqlite xz bzip2 nlohmann_json ]
+      buildInputs = [ curl openssl sqlite xz bzip2 (nlohmann_json.override { multipleHeaders = true; }) ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is20 [ brotli boost editline ]
         ++ lib.optionals is24 [ libarchive rustc cargo ]
