@@ -31,8 +31,7 @@ rec {
     plugins = plugins3_7;
     unwrapped = unwrapped3_7;
     python = python2;
-    # TODO: test
-    # extraPackages = plugins3_7
+    extraPackages = plugins3_7;
   };
   plugins3_7 = rec {
     ais = callPackage ./plugins/ais.nix { gnuradio = unwrapped3_7; gr-osmosdr = osmosdr;};
