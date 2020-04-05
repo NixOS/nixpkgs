@@ -4,13 +4,10 @@
 , pkgconfig
 , boost
 , gnuradio
-, pythonSupport ? true
 , python
 , swig
 , limesuite
 } :
-
-assert pythonSupport -> python != null && swig != null;
 
 let
   version = if gnuradio.branch == "3.7" then "2.0.0" else "3.0.1";
@@ -34,14 +31,15 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkgconfig
-  ] ++ stdenv.lib.optionals pythonSupport [ swig ];
+    python
+    swig
+  ];
 
   buildInputs = [
     boost
     gnuradio
     limesuite
-  ] ++ stdenv.lib.optionals pythonSupport [ python ];
-
+  ];
 
   enableParallelBuilding = true;
 
