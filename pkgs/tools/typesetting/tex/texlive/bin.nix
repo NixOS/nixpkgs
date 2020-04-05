@@ -181,7 +181,7 @@ core = stdenv.mkDerivation rec {
   '' + cleanBrokenLinks;
 
   # needed for poppler and xpdf
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++14";
+  env.CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++14";
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };
@@ -232,7 +232,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         fi
 
         mkdir -p "$path" && cd "$path"
-        "../../../$path/configure" $configureFlags $extraConfig
+        "../../../$path/configure" ''${configureFlags[@]} $extraConfig
       )
     done
   '';
@@ -246,8 +246,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   # (uninteresting stuff remains in $out, typically duplicates from `core`)
   outputs = [ "out" "metafont" "metapost" "luatex" "xetex" ];
   postInstall = ''
-    for output in $outputs; do
-      mkdir -p "''${!output}/bin"
+    for output in ''${outputs[@]}; do
+      mkdir -p "$output/bin"
     done
 
     mv "$out/bin"/{inimf,mf,mf-nowin} "$metafont/bin/"
