@@ -12,15 +12,24 @@
 
 assert pythonSupport -> python != null && swig != null;
 
+let
+  version = if gnuradio.branch == "3.7" then "1.1.0" else "3.8.0";
+  src_hash = if gnuradio.branch == "3.7" then
+   "0jkzchvw0ivcxsjhi1h0mf7k13araxf5m4wi5v9xdgqxvipjzqfy"
+  else # if gnuradio.branch == "3.8" then
+   "16k3zl8vc2rpkc9mhd7xbk2705knxzc3j8j0iqvb58wvxlk8n8pv"
+  ;
+in
+
 stdenv.mkDerivation rec {
   pname = "gr-rds";
-  version = "1.1.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "bastibl";
     repo = "gr-rds";
     rev = "v${version}";
-    sha256 = "0jkzchvw0ivcxsjhi1h0mf7k13araxf5m4wi5v9xdgqxvipjzqfy";
+    sha256 = src_hash;
   };
 
   nativeBuildInputs = [
