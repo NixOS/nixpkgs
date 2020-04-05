@@ -85,7 +85,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python plotting library, making publication quality plots";
     homepage    = "https://matplotlib.org/";
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 veprbl ];
   };
 
 }
