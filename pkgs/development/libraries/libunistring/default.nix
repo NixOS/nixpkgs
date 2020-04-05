@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
-  configureFlags = [
-    "--with-libiconv-prefix=${libiconv}"
-  ];
+  configureFlags = stdenv.lib.optional (!stdenv.isLinux) "--with-libiconv-prefix=${libiconv}";
 
   doCheck = false;
 
