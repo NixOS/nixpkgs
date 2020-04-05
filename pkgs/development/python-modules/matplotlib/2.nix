@@ -7,7 +7,6 @@
 # darwin has its own "MacOSX" backend
 , enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
 , enableQt ? false, pyqt4
-, libcxx
 , Cocoa
 , pythonOlder
 }:
@@ -28,8 +27,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "7355bf757ecacd5f0ac9dd9523c8e1a1103faadf8d33c22664178e17533f8ce5";
   };
-
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   XDG_RUNTIME_DIR = "/tmp";
 
