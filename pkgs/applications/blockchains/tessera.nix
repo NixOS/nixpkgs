@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tessera";
-  version = "0.10.4";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "https://oss.sonatype.org/service/local/repositories/releases/content/com/jpmorgan/quorum/${pname}-app/${version}/${pname}-app-${version}-app.jar";
-    sha256 = "1sqj0mc80922yavx9hlwnl1kpmavpza2g2aycz1qd0zv0s31z9wj";
+    sha256 = "1zn8w7q0q5man0407kb82lw4mlvyiy9whq2f6izf2b5415f9s0m4";
   };
 
   nativeBuildInputs = [ makeWrapper ];

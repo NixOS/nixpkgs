@@ -51,29 +51,24 @@ stdenv.mkDerivation (
       configureFlags="--prefix=$prefix $configureFlags"
       dontAddPrefix=1
       prefix=$TMPDIR/inst$prefix
-    ''; # */
-
+    '';
 
     doDist = true;
 
-    distPhase =
-      ''
-        mkdir -p $out/tarballs
-        tar cvfj $out/tarballs/''${releaseName:-binary-dist}.tar.bz2 -C $TMPDIR/inst .
-      '';
+    distPhase = ''
+      mkdir -p $out/tarballs
+      tar cvfj $out/tarballs/''${releaseName:-binary-dist}.tar.bz2 -C $TMPDIR/inst .
+    '';
 
+    finalPhase = ''
+      for i in $out/tarballs/*; do
+          echo "file binary-dist $i" >> $out/nix-support/hydra-build-products
+      done
 
-    finalPhase =
-      ''
-        for i in $out/tarballs/*; do
-            echo "file binary-dist $i" >> $out/nix-support/hydra-build-products
-        done
-
-        # Propagate the release name of the source tarball.  This is
-        # to get nice package names in channels.
-        test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
-      '';
-
+      # Propagate the release name of the source tarball.  This is
+      # to get nice package names in channels.
+      test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
+    '';
 
     meta = (if args ? meta then args.meta else {}) // {
       description = "Build of a generic binary distribution";

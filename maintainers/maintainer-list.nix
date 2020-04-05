@@ -981,6 +981,12 @@
     githubId = 2071583;
     name = "Benjamin Hipple";
   };
+  bhougland = {
+    email = "benjamin.hougland@gmail.com";
+    github = "bhougland18";
+    githubId = 28444296;
+    name = "Benjamin Hougland";
+  };
   binarin = {
     email = "binarin@binarin.ru";
     github = "binarin";
@@ -6771,6 +6777,11 @@
     github = "shmish111";
     name = "David Smith";
   };
+  shnarazk = {
+    email = "shujinarazaki@protonmail.com";
+    github = "shnarazk";
+    name = "Narazaki Shuji";
+  };
   shou = {
     email = "x+g@shou.io";
     github = "Shou";
@@ -8039,6 +8050,12 @@
     github = "xbreak";
     githubId = 13489144;
     name = "Calle Rosenquist";
+  };
+  xe = {
+    email = "me@christine.website";
+    github = "Xe";
+    githubId = 529003;
+    name = "Christine Dodrill";
   };
   xeji = {
     email = "xeji@cat3.de";

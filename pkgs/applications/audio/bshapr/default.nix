@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "BShapr";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1422xay28jkmqlj5y4vhb57kljy6ysvxh20cxpfxm980m8n54gq5";
+    sha256 = "0jlq5rjicc4fxlpk869dg0l5bwwz8k9aj2wfk9v89b0qw8l8kaxl";
   };
 
   nativeBuildInputs = [ pkgconfig ];

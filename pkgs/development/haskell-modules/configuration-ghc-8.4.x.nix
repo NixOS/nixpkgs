@@ -40,9 +40,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Needs Cabal 3.0.x.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_0_0_0; });
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_0_0_0; };
+  # Needs Cabal 3.2.x.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_0_0; };
 
   # Restricts aeson to <1.4
   # https://github.com/purescript/purescript/pull/3537

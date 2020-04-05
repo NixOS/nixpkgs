@@ -29,7 +29,9 @@ buildPythonPackage rec {
     cvxopt
     ecos
     multiprocess
+    numpy
     osqp
+    scipy
     scs
     six
   ];
@@ -39,11 +41,11 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A domain-specific language for modeling convex optimization problems in Python.";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxgrp/cvxpy/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }
