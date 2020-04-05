@@ -40,7 +40,6 @@ buildPythonPackage rec {
   propagatedBuildInputs =
     [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
       libpng mock pytz ]
-    ++ stdenv.lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ stdenv.lib.optionals enableQt [ pyqt5 ];
