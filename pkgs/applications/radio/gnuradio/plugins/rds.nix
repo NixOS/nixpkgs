@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
-, makeWrapper, pythonSupport ? true, python, swig
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, boost
+, gnuradio
+, makeWrapper
+, pythonSupport ? true
+, python
+, swig
 }:
 
 assert pythonSupport -> python != null && swig != null;
@@ -15,10 +23,20 @@ stdenv.mkDerivation rec {
     sha256 = "0jkzchvw0ivcxsjhi1h0mf7k13araxf5m4wi5v9xdgqxvipjzqfy";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+  ];
   buildInputs = [
-    cmake boost gnuradio makeWrapper
-  ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
+    cmake
+    boost
+    gnuradio
+    makeWrapper
+  ]
+    ++ stdenv.lib.optionals pythonSupport [
+      python
+      swig
+    ]
+  ;
 
   postInstall = ''
     for prog in "$out"/bin/*; do
