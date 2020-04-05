@@ -1,4 +1,11 @@
-{ stdenv, buildGoModule, fetchFromGitHub, git, gnupg, xclip, wl-clipboard, installShellFiles, makeWrapper }:
+{ stdenv, makeWrapper
+, buildGoModule, fetchFromGitHub, installShellFiles
+, git
+, gnupg
+, xclip
+, wl-clipboard
+, passAlias ? false
+}:
 
 buildGoModule rec {
   pname = "gopass";
@@ -28,6 +35,8 @@ buildGoModule rec {
       $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell
     done
+  '' + stdenv.lib.optionalString passAlias ''
+    ln -s $bin/bin/gopass $bin/bin/pass
   '';
 
   postFixup = ''
