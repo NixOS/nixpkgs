@@ -76,9 +76,6 @@ with lib;
   # (e.g., parent/child)
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkOverride 500 1;
 
-  # Restrict access to kernel ring buffer (information leaks)
-  boot.kernel.sysctl."kernel.dmesg_restrict" = mkDefault true;
-
   # Hide kptrs even for processes with CAP_SYSLOG
   boot.kernel.sysctl."kernel.kptr_restrict" = mkOverride 500 2;
 
