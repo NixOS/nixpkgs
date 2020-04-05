@@ -31,7 +31,7 @@ let
 
   nodeHeaders = fetchurl {
     url = "https://nodejs.org/download/release/v${nodejs.version}/node-v${nodejs.version}-headers.tar.gz";
-    sha256 = "16f20ya3ys6w5w6y6l4536f7jrgk4gz46bf71w1r1xxb26a54m32";
+    sha256 = "1df3yhlwlvai0m9kvjyknjg11hnw0kj0rnhyzbwvsfjnmr6z8r76";
   };
 
   patchedPackages = stdenv.mkDerivation (fetchedGithub ./peertube.json // rec {
