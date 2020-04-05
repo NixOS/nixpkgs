@@ -34,8 +34,8 @@ rec {
     # TODO: test
     # extraPackages = plugins3_7
   };
-  plugins3_7 = {
-    ais = callPackage ./plugins/ais.nix { gnuradio = unwrapped3_7; };
+  plugins3_7 = rec {
+    ais = callPackage ./plugins/ais.nix { gnuradio = unwrapped3_7; gr-osmosdr = osmosdr;};
     gsm = callPackage ./plugins/gsm.nix { gnuradio = unwrapped3_7; };
     rds = callPackage ./plugins/rds.nix { gnuradio = unwrapped3_7; };
     nacl = callPackage ./plugins/nacl.nix { gnuradio = unwrapped3_7; };
