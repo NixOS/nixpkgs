@@ -1,10 +1,4 @@
-source $stdenv/setup
-
 set -o pipefail
-
-objects=($objects)
-symlinks=($symlinks)
-suffices=($suffices)
 
 mkdir root
 
@@ -13,25 +7,21 @@ mkdir root/dev
 mkdir root/sys
 mkdir root/proc
 
+objectCount=$(<.attrs.json jq '.contents | length')
 
-for ((n = 0; n < ${#objects[*]}; n++)); do
-    object=${objects[$n]}
-    symlink=${symlinks[$n]}
-    suffix=${suffices[$n]}
+for ((n = 0; n < $objectCount; n++)); do
+    object=$(<.attrs.json jq -r ".contents[$n].object")
+    symlink=$(<.attrs.json jq -r ".contents[$n].symlink")
+    suffix=$(<.attrs.json jq -r '.contents['"$n"'] | if has("suffix") then .suffix else "" end')
     if test "$suffix" = none; then suffix=; fi
 
     mkdir -p $(dirname root/$symlink)
     ln -s $object$suffix root/$symlink
 done
 
-
-# Get the paths in the closure of `object'.
-storePaths=$(perl $pathsFromGraph closure-*)
-
-
 # Paths in cpio archives *must* be relative, otherwise the kernel
 # won't unpack 'em.
-(cd root && cp -prd --parents $storePaths .)
+(cd root && cp -prd --parents $(cat "$closure/store-paths") .)
 
 
 # Put the closure in a gzipped cpio archive.

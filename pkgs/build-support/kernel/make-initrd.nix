@@ -12,7 +12,7 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenvNoCC, perl, cpio, contents, ubootTools
+{ stdenvNoCC, closureInfo, cpio, contents, ubootTools, jq
 , name ? "initrd"
 , compressor ? "gzip -9n"
 , prepend ? []
@@ -26,27 +26,16 @@ let
 in stdenvNoCC.mkDerivation rec {
   inherit name;
 
-  builder = ./make-initrd.sh;
+  buildCommand = builtins.readFile ./make-initrd.sh;
 
   makeUInitrd = stdenvNoCC.hostPlatform.platform.kernelTarget == "uImage";
 
-  nativeBuildInputs = [ perl cpio ]
+  nativeBuildInputs = [ cpio jq ]
     ++ stdenvNoCC.lib.optional makeUInitrd ubootTools;
 
-  # !!! should use XML.
-  objects = map (x: x.object) contents;
-  symlinks = map (x: x.symlink) contents;
-  suffices = map (x: if x ? suffix then x.suffix else "none") contents;
+  inherit contents;
 
-  # For obtaining the closure of `contents'.
-  # Note: we don't use closureInfo yet, as that won't build with nix-1.x.
-  # See #36268.
-  exportReferencesGraph =
-    lib.zipListsWith
-      (x: i: [("closure-${toValidStoreName (baseNameOf x.symlink)}-${toString i}") x.object])
-      contents
-      (lib.range 0 (lib.length contents - 1));
-  pathsFromGraph = ./paths-from-graph.pl;
+  env.closure = "${closureInfo { rootPaths = map (x: x.object) contents; }}";
 
   inherit compressor prepend;
 }
