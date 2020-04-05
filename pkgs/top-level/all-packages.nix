@@ -14221,7 +14221,15 @@ in
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
-  qradiolink = callPackage ../applications/radio/qradiolink { };
+  qradiolink = qt5.callPackage ../applications/radio/qradiolink {
+    # Doesn't support yet gnuradio3_8, see https://github.com/qradiolink/qradiolink/pull/65
+    gnuradio = (callPackage ../applications/radio/gnuradio/wrapper.nix {
+      plugins = gnuradio3_7.plugins;
+      extraPaths = [ gnuradio3_7.plugins.osmosdr ];
+      unwrapped = gnuradio3_7-no-gui;
+      python = python2;
+    });
+  };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 

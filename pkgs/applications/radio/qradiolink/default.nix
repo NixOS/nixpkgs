@@ -1,18 +1,19 @@
 { stdenv
 , fetchFromGitHub
+, pkg-config
+, qmake
+, qtmultimedia
+, libsndfile
+, libftdi
 , alsaLib
 , boost
-, qt4
 , libpulseaudio
 , codec2
 , libconfig
 , gnuradio
-, gr-osmosdr
-, gsm
 , libopus
 , libjpeg
 , protobuf
-, qwt
 , speex
 } :
 
@@ -26,6 +27,11 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "11r93i7w3a3iaamlj7bis57qk7p74iq7ffcbmi89ac3mcf425csj";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
 
   preBuild = ''
     cd ext
@@ -41,20 +47,19 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    qt4
+    gnuradio
+    qtmultimedia
+    libsndfile
+    libftdi
     alsaLib
     boost
     libpulseaudio
     codec2
     libconfig
-    gsm
-    gnuradio
-    gr-osmosdr
     libopus
     libjpeg
     protobuf
     speex
-    qwt
   ];
 
   enableParallelBuilding = true;
@@ -63,6 +68,8 @@ stdenv.mkDerivation rec {
     description = "SDR transceiver application for analog and digital modes";
     homepage = "http://qradiolink.org/";
     license = licenses.agpl3;
+    # See https://github.com/qradiolink/qradiolink/issues/67
+    broken = true;
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
   };
