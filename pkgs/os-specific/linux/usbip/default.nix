@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ udev ];
 
-  env.NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
 
   preConfigure = ''
     cd tools/usb/usbip
