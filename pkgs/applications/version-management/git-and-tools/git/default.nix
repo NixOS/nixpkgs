@@ -110,6 +110,7 @@ stdenv.mkDerivation {
     make -C contrib/subtree
   '' + (stdenv.lib.optionalString perlSupport ''
     make -C contrib/diff-highlight
+    make -C contrib/credential/netrc
   '') + (stdenv.lib.optionalString stdenv.isDarwin ''
     make -C contrib/credential/osxkeychain
   '') + (stdenv.lib.optionalString withLibsecret ''
