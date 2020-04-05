@@ -20035,6 +20035,8 @@ in
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
+  musikcube = callPackage ../applications/audio/musikcube {};
+
   pinboard-notes-backup = haskell.lib.overrideCabal
     (haskell.lib.generateOptparseApplicativeCompletion "pnbackup"
       haskellPackages.pinboard-notes-backup)
