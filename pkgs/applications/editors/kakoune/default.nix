@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://kakoune.org/;
+    homepage = "http://kakoune.org/";
     description = "A vim inspired text editor";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ vrthra ];
