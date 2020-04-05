@@ -26134,6 +26134,8 @@ in
 
   zopfli = callPackage ../tools/compression/zopfli { };
 
+  hactool = callPackage ../tools/compression/hactool { };
+
   myEnvFun = callPackage ../misc/my-env {
     inherit (stdenv) mkDerivation;
   };
