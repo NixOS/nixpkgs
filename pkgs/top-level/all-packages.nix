@@ -7992,8 +7992,8 @@ in
       useMacosReexportHack = true;
     };
   };
-  llvm-polly = llvmPackages_latest.llvm-polly;
-  clang-polly = llvmPackages_latest.clang.override { cc = llvmPackages_latest.clang-polly-unwrapped; };
+  llvm-polly = llvmPackages_latest.llvm;
+  clang-polly = llvmPackages_latest.clang.override { cc = llvmPackages_latest.clang-unwrapped; };
 
   clang_10 = llvmPackages_10.clang;
   clang_9  = llvmPackages_9.clang;
