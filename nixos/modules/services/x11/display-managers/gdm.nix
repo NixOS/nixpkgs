@@ -188,6 +188,9 @@ in
       "systemd-machined.service"
       # setSessionScript wants AccountsService
       "accounts-daemon.service"
+      # Failed to open gpu '/dev/dri/card0': GDBus.Error:org.freedesktop.DBus.Error.AccessDenied: Operation not permitted
+      # https://github.com/NixOS/nixpkgs/pull/25311#issuecomment-609417621
+      "systemd-udev-settle.service"
     ];
 
     systemd.services.display-manager.after = [
@@ -197,6 +200,7 @@ in
       "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
+      "systemd-udev-settle.service"
     ];
     systemd.services.display-manager.conflicts = [
        "getty@tty${gdm.initialVT}.service"
