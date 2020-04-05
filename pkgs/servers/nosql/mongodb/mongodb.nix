@@ -1,5 +1,5 @@
 { stdenv, fetchurl, scons, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, python27, python35, curl, Security, CoreFoundation, cctools }:
+, sasl, openssl, libpcap, python27, python3, curl, Security, CoreFoundation, cctools }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
@@ -13,15 +13,16 @@ with stdenv.lib;
 
 let
   ifdef = if versionAtLeast version "4.2.5"
-          then { python = python35.withPackages (ps: with ps; [ pyyaml typing cheetah3 psutil setuptools ]);
+          then { python = python3.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
+                 scons = scons;
                  mozjsVersion = "60";
                  mozjsReplace = "defined(HAVE___SINCOS)";
                }
           else { python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+                 scons = scons.py2;
                  mozjsVersion = "45";
                  mozjsReplace = "defined(HAVE_SINCOS)";
                };
-  python = ifdef.python;
   system-libraries = [
     "boost"
     "pcre"
@@ -44,7 +45,7 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ scons.py2 ];
+  nativeBuildInputs = [ ifdef.scons ];
   buildInputs = [
     boost
     curl
@@ -53,7 +54,7 @@ in stdenv.mkDerivation rec {
     libyamlcpp
     openssl
     pcre-cpp
-    python
+    ifdef.python
     sasl
     snappy
     zlib

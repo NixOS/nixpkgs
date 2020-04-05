@@ -11093,9 +11093,6 @@ in
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
-  scons3Packages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons3 { });
-  scons3 = scons3Packages.scons_latest;
-
   mill = callPackage ../development/tools/build-managers/mill { };
 
   sbt = callPackage ../development/tools/build-managers/sbt { };
