@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libusb }:
+{ stdenv, fetchFromGitHub, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "xow";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "SYSDDIR=${placeholder ''out''}/lib/systemd/system"
   ];
   enableParallelBuilding = true;
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb1 ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/medusalix/xow";

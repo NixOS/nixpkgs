@@ -1,46 +1,65 @@
 { stdenv
+, substituteAll
 , fetchFromGitHub
-, pkgconfig
+, fetchpatch
+, pkg-config
 , meson
 , ninja
 , gobject-introspection
 , python3
 , libyaml
+, rpm
+, file
 , gtk-doc
-, docbook_xsl
+, docbook-xsl-nons
+, help2man
 , docbook_xml_dtd_412
 , glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmodulemd";
-  version = "2.6.0";
+  version = "2.9.2";
 
-  outputs = [ "out" "devdoc" "py" ];
+  outputs = [ "bin" "out" "dev" "devdoc" "man" "py" ];
 
   src = fetchFromGitHub {
     owner = "fedora-modularity";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0gizfmzs6jrzb29lwcimm5dq3027935xbzwgkbvbp67zcmjd3y5i";
+    sha256 = "dm0uvzM5v1zDQVkonHbrT9l9ICnXZbCSiLRCMZRxhXY=";
   };
 
   patches = [
-    ./pygobject-dir.patch
+    # Use proper glib devdoc path.
+    (substituteAll {
+      src = ./glib-devdoc.patch;
+      glib_devdoc = glib.devdoc;
+    })
+
+    # Install pygobject overrides to our prefix instead of python3 one.
+    # https://github.com/fedora-modularity/libmodulemd/pull/467
+    (fetchpatch {
+      url = "https://github.com/fedora-modularity/libmodulemd/commit/516cb64fd1488716a188add2715c8b3296960bd6.patch";
+      sha256 = "ZWagkqKkD9CIkcYsKLtC0+qjLp80wH3taivUCn8jQbY=";
+    })
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gtk-doc
-    docbook_xsl
+    docbook-xsl-nons
+    help2man
     docbook_xml_dtd_412
     gobject-introspection
   ];
 
   buildInputs = [
     libyaml
+    rpm
+    file # for libmagic
     glib
   ];
 

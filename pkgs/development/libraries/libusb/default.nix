@@ -1,14 +1,22 @@
-{stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1}:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, patchelf
+, pkgconfig
+, libusb1
+}:
 
 stdenv.mkDerivation rec {
-  name = "libusb-compat-${version}";
+  pname = "libusb-compat";
   version = "0.1.7";
 
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  propagatedBuildInputs = [ libusb1 ];
+  nativeBuildInputs = [ autoreconfHook patchelf pkgconfig ];
+
+  buildInputs = [ libusb1 ];
 
   src = fetchFromGitHub {
     owner = "libusb";
@@ -18,6 +26,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./fix-headers.patch;
+
+  # without this, libusb-compat is unable to find libusb1
+  postFixup = ''
+    find $out/lib -name \*.so\* -type f -exec \
+      patchelf --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://libusb.info/";

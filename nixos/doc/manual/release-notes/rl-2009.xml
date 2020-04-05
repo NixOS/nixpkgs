@@ -24,6 +24,9 @@
     </para>
    </listitem>
    <listitem>
+    <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
+   </listitem>
+   <listitem>
     <para>
      PHP now defaults to PHP 7.4, updated from 7.3.
     </para>

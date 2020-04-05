@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, fetchpatch, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
+{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, libX11, gnome3, gtk3, glib
 , gettext, libxml2, xkeyboard_config, isocodes, meson, wayland
 , libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
-  version = "3.34.4";
+  version = "3.36.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1g0cvsx0gk65kfa91knkqg7l2isrnlpvqwjbzpr3a5f2girp4gn5";
+    sha256 = "05awmswzd4qa0vg23np0s7z6qks73j3sfj71y8azpvyxricw612b";
   };
 
   nativeBuildInputs = [
     pkgconfig meson ninja gettext libxslt libxml2 gobject-introspection
-    gtk-doc docbook_xsl
+    gtk-doc docbook_xsl glib
   ];
   buildInputs = [
     libX11 bubblewrap xkeyboard_config isocodes wayland
@@ -29,14 +29,6 @@ stdenv.mkDerivation rec {
       src = ./bubblewrap-paths.patch;
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
       inherit (builtins) storeDir;
-    })
-
-    # honor $XKB_CONFIG_ROOT
-    # addresses #76590: services.xserver.extraLayouts aren't honored by GNOME3
-    # NOTE: should be merged upstream in 3.36.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-desktop/commit/450446b5353e8231edded4d5b5db90a67a9fa9b7.diff";
-      sha256 = "07y989x7mbgn3rsm2qfdi8qkkc8i60k28hw87l744nlkydn78kq5";
     })
   ];
 

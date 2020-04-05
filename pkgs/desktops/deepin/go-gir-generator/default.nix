@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, go, gobject-introspection,
+{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, go, gobject-introspection,
   libgudev, deepin }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1ydzll8zlk897iqcihvv6p046p0rzr4qqz2drmz2nx95njp8n03a";
   };
+
+  patches = [
+    # Fix compatibility with glib 2.63+
+    # https://github.com/linuxdeepin/go-gir-generator/pull/11
+    (fetchpatch {
+      url = "https://github.com/linuxdeepin/go-gir-generator/commit/7dea15a1a491f28d2ac8c411068ccefeba01aae3.patch";
+      sha256 = "7bn/mtruCcK+AIXMzhN2e3o7CuzuJ3mtTz0HOTEYTaA=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig

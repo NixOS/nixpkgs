@@ -12,7 +12,6 @@
 , libgtop
 , libnotify
 , upower
-, dbus-glib
 , wirelesstools
 , linuxPackages
 , adwaita-icon-theme
@@ -25,13 +24,13 @@
 
 let
   pname = "gnome-applets";
-  version = "3.34.0";
+  version = "3.36.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1mbhykqwzq18zpvfkdcdkbb4zhijmxqa2i6502an78yap87vq74i";
+    sha256 = "096n0ji478hfdrbi8illsyvdsgxznxfayr826pr9jdgzg1s0x9xs";
   };
 
   nativeBuildInputs = [
@@ -51,7 +50,6 @@ in stdenv.mkDerivation rec {
     libgtop
     libnotify
     upower
-    dbus-glib
     adwaita-icon-theme
     libgweather
     gucharmap

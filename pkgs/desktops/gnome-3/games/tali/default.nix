@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tali";
-  version = "3.32.1";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tali/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0na7sswfh63wj44aibcnqdsbb24yfngcwgi07lv8rky6rry0kqgz";
+    sha256 = "0knq2vwnbkzhb6yc0f8iznaz76yf5hwgg2z2xr079nz407p46v22";
   };
 
   passthru = {

@@ -4,8 +4,8 @@
 }:
 
 python.pkgs.buildPythonApplication rec {
+  pname = "bcc";
   version = "0.13.0";
-  name = "bcc-${version}";
 
   src = fetchurl {
     url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";

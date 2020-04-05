@@ -98,6 +98,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru = { inherit skia; };
+
   meta = with lib; {
     homepage = https://www.aseprite.org/;
     description = "Animated sprite editor & pixel art tool";

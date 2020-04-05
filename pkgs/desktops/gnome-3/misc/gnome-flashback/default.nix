@@ -1,6 +1,7 @@
 { stdenv
 , autoreconfHook
 , fetchurl
+, fetchpatch
 , gettext
 , glib
 , gnome-bluetooth
@@ -17,7 +18,10 @@
 , libxml2
 , pkgconfig
 , polkit
+, gdm
+, systemd
 , upower
+, pam
 , wrapGAppsHook
 , writeTextFile
 , writeShellScriptBin
@@ -27,15 +31,63 @@
 
 let
   pname = "gnome-flashback";
-  version = "3.34.2";
-  requiredComponents = wmName: "RequiredComponents=${wmName};gnome-flashback;gnome-panel;org.gnome.SettingsDaemon.A11ySettings;org.gnome.SettingsDaemon.Color;org.gnome.SettingsDaemon.Datetime;org.gnome.SettingsDaemon.Housekeeping;org.gnome.SettingsDaemon.Keyboard;org.gnome.SettingsDaemon.MediaKeys;org.gnome.SettingsDaemon.Power;org.gnome.SettingsDaemon.PrintNotifications;org.gnome.SettingsDaemon.Rfkill;org.gnome.SettingsDaemon.ScreensaverProxy;org.gnome.SettingsDaemon.Sharing;org.gnome.SettingsDaemon.Smartcard;org.gnome.SettingsDaemon.Sound;org.gnome.SettingsDaemon.Wacom;org.gnome.SettingsDaemon.XSettings;";
+  version = "3.36.0";
+
+  # From data/sessions/Makefile.am
+  requiredComponentsCommon = [
+    "gnome-flashback"
+    "gnome-panel"
+  ];
+  requiredComponentsGsd = [
+    "org.gnome.SettingsDaemon.A11ySettings"
+    "org.gnome.SettingsDaemon.Color"
+    "org.gnome.SettingsDaemon.Datetime"
+    "org.gnome.SettingsDaemon.Housekeeping"
+    "org.gnome.SettingsDaemon.Keyboard"
+    "org.gnome.SettingsDaemon.MediaKeys"
+    "org.gnome.SettingsDaemon.Power"
+    "org.gnome.SettingsDaemon.PrintNotifications"
+    "org.gnome.SettingsDaemon.Rfkill"
+    "org.gnome.SettingsDaemon.ScreensaverProxy"
+    "org.gnome.SettingsDaemon.Sharing"
+    "org.gnome.SettingsDaemon.Smartcard"
+    "org.gnome.SettingsDaemon.Sound"
+    "org.gnome.SettingsDaemon.UsbProtection"
+    "org.gnome.SettingsDaemon.Wacom"
+    "org.gnome.SettingsDaemon.XSettings"
+  ];
+  requiredComponents = wmName: "RequiredComponents=${stdenv.lib.concatStringsSep ";" ([wmName] ++ requiredComponentsCommon ++ requiredComponentsGsd)};";
   gnome-flashback = stdenv.mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "1726xcm2q94nfvb055d3m61m20s0xy3xl1fc3ds3k3rcrn457riv";
+      sha256 = "qwlTFs4wn6PpB7uZkpvnmECsSTa62OQMpgiIXoZoMRk=";
     };
+
+    patches = [
+      # Fix locking screen from log out dialogue
+      # https://gitlab.gnome.org/GNOME/gnome-flashback/issues/43
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/commit/7b151e0a947e4b49e1cee80097c1f8946ba46af9.patch";
+        sha256 = "pJcJb6EGlInlWpLbbBajWydBtbiWK3AMHzsFQ26bmwA=";
+      })
+
+      # Hide GNOME Shell Extensions manager from menu
+      # https://gitlab.gnome.org/GNOME/gnome-flashback/issues/42
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/commit/75f95379779c24d42d1e72cdcd4c16a9c6db7657.patch";
+        sha256 = "cwKZSQTFi0f/T1Ld6vJceQFHBsikOhkp//J1IY5aMKA=";
+      })
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/commit/12cacf25b1190d9c9bba42f085e54895de7a076e.patch";
+        sha256 = "mx37kLs3x/e9RJCGN6z8/7b5Tz6yzxeN/14NFi8IWfA=";
+      })
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/commit/7954376f32348028a3bdba0ea182b0000c4fcb0a.patch";
+        sha256 = "ZEQcg9OoIOIMh/yUYQ9R1Ky8DElteaDQrSdwFtA4Yno=";
+      })
+    ];
 
     # make .desktop Execs absolute
     postPatch = ''
@@ -76,13 +128,20 @@ let
       libpulseaudio
       libxkbfile
       polkit
+      gdm
+      gnome-panel
+      systemd
       upower
+      pam
       xkeyboard_config
     ];
 
     doCheck = true;
 
     enableParallelBuilding = true;
+
+    PKG_CONFIG_LIBGNOME_PANEL_LAYOUTSDIR = "${placeholder "out"}/share/gnome-panel/layouts";
+    PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
 
     passthru = {
       updateScript = gnome3.updateScript {

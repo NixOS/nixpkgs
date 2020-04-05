@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "00ycgi6q2yngh06bnz50wkvar6r2jnjf3j158grhi9k13jdrpimr";
   };
 
-  nativeBuildInputs = [ libcap libxslt docbook_xsl ];
+  nativeBuildInputs = [ libxslt docbook_xsl ];
+  buildInputs = [ libcap ];
 
   meta = with stdenv.lib; {
     description = "Unprivileged sandboxing tool";

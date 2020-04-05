@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, automake, autoconf, libtool, pkgconfig
-, libusb
+, libusb1
 , readline
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libusb
+    libusb1
     readline
   ];
 

@@ -28,10 +28,11 @@ mkDerivation rec {
     sha256 = "1h7q25fv62c5m74d4cn1m6mpanmqpbl2wqbch4qvn488jb2jw1dv";
   };
 
+  nativeBuildInputs = [ scons.py2 ];
   buildInputs = [
     chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout241 libsndfile
     libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
-    qtx11extras rubberband scons sqlite taglib upower vamp-plugin-sdk
+    qtx11extras rubberband sqlite taglib upower vamp-plugin-sdk
   ];
 
   enableParallelBuilding = true;

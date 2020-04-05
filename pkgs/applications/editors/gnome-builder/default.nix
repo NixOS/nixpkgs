@@ -5,7 +5,6 @@
 , docbook_xsl
 , docbook_xml_dtd_43
 , fetchurl
-, fetchpatch
 , flatpak
 , gnome3
 , libgit2-glib
@@ -18,6 +17,7 @@
 , jsonrpc-glib
 , libdazzle
 , libpeas
+, libportal
 , libxml2
 , meson
 , ninja
@@ -39,24 +39,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.34.1";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19018pq94cxf6fywd7fsmy98x56by5zfmh140pl530gaaw84cvhb";
+    sha256 = "G0nl6DVzb3k6cN2guFIe/XNhFNhKbaq5e8wz62VA0Qo=";
   };
-
-  patches = [
-    # Fix build with Meson 0.52
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/c8b862b491cfbbb4f79b24d7cd90e4fb1f37cb9f.patch";
-      sha256 = "0n8kg7nnjqmbnyag1ps6dvrlqrxc94djjncqx10d6y7ijwdxf4w8";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/da26dfbf78468f5ed724e022b300a07862a95833.patch";
-      sha256 = "0psa65bzjpjj7vc5rknv2w2dz3p50jjv10s6j2fd6lpw8j2800k4";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -65,7 +53,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     gobject-introspection
     gtk-doc
-    (meson.override ({ inherit stdenv; }))
+    meson
     ninja
     pkgconfig
     python3
@@ -80,6 +68,7 @@ stdenv.mkDerivation rec {
     gnome3.glade
     libgit2-glib
     libpeas
+    libportal
     vte
     gspell
     gtk3
@@ -108,8 +97,6 @@ stdenv.mkDerivation rec {
   prePatch = ''
     patchShebangs build-aux/meson/post_install.py
   '';
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   mesonFlags = [
     "-Dpython_libprefix=${python3.libPrefix}"

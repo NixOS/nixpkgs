@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, ninja, vala_0_40,
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, ninja, vala_0_40, fetchpatch,
   gettext, at-spi2-core, dbus, epoxy, expect, gtk3, json-glib,
   libXdmcp, libgee, libpthreadstubs, librsvg, libsecret, libtasn1,
   libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux, gnutls, pcre2,
@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1929saj828b438d07caw3cjhqq60v6gni7mi3fqrg9wdjz81xwv7";
   };
+
+  patches = [
+    # Fix build with VTE 0.60
+    (fetchpatch {
+      url = "https://github.com/linuxdeepin/deepin-terminal/commit/542d1035b609698ee81aa7971d20ca8e5930743d.patch";
+      sha256 = "1pihiy70yc25fm5fx7i7v9gmi65v4mhldvi7xwv8rgr2z6hbfj41";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig

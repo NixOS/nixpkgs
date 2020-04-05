@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-gnome-shell=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}"
+    "--disable-gnome-shell" # 3.36 not supported
     "--disable-unity"
   ];
 
