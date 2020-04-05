@@ -31,7 +31,6 @@ bind_host: "${cfg.bind_host}"
 ''}
 server_name: "${cfg.server_name}"
 pid_file: "/run/matrix-synapse.pid"
-web_client: ${boolToString cfg.web_client}
 ${optionalString (cfg.public_baseurl != null) ''
 public_baseurl: "${cfg.public_baseurl}"
 ''}
@@ -200,13 +199,6 @@ in {
           This is used by remote servers to connect to this server,
           e.g. matrix.org, localhost:8080, etc.
           This is also the last part of your UserID.
-        '';
-      };
-      web_client = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to serve a web client from the HTTP/HTTPS root resource.
         '';
       };
       public_baseurl = mkOption {
@@ -719,6 +711,7 @@ in {
       Database configuration must be done manually. An exemplary setup is demonstrated in
       <nixpkgs/nixos/tests/matrix-synapse.nix>
     '')
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
   ];
 
   meta.doc = ./matrix-synapse.xml;

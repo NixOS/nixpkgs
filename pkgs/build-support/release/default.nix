@@ -1,4 +1,4 @@
-{pkgs}:
+{ pkgs }:
 
 with pkgs;
 
@@ -77,7 +77,7 @@ rec {
      its contituents. Channel jobs are a special type of jobs that are
      listed in the channel tab of Hydra and that can be suscribed.
      A tarball of the src attribute is distributed via the channel.
-     
+
      - constituents: a list of derivations on which the channel success depends.
      - name: the channel name that will be used in the hydra interface.
      - src: should point to the root folder of the nix-expressions used by the
@@ -88,7 +88,7 @@ rec {
          name = "my-channel";
          src = ./.;
        };
-     
+
   */
   channel =
     { name, src, constituents ? [], meta ? {}, isNixOS ? true, ... }@args:
