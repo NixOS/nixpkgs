@@ -228,8 +228,8 @@ let
   };
 
   php73base = generic' {
-    version = "7.3.15";
-    sha256 = "0g84hws15s8gh8iq4h6q747dyfazx47vh3da3whz8d80x83ibgld";
+    version = "7.3.16";
+    sha256 = "0bh499v9dfgh9k51w4rird1slb9rh9whp5h37fb84c98d992s1xq";
     self = php73base;
     selfWithExtensions = php73;
 
