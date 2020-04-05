@@ -19335,7 +19335,15 @@ in
 
   gpx = callPackage ../applications/misc/gpx { };
 
-  gqrx = qt5.callPackage ../applications/radio/gqrx { };
+  gqrx = qt5.callPackage ../applications/radio/gqrx {
+    # gqrx expects to find osmosdr
+    gnuradio = (callPackage ../applications/radio/gnuradio/wrapper.nix {
+      plugins = gnuradio3_7.plugins;
+      extraPaths = [ gnuradio3_7.plugins.osmosdr ];
+      unwrapped = gnuradio3_7-no-gui;
+      python = python2;
+    });
+  };
 
   gpx-viewer = callPackage ../applications/misc/gpx-viewer { };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost
 , mkDerivation
 # drivers (optional):
 , rtl-sdr, hackrf
@@ -20,7 +20,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    qtbase qtsvg gnuradio boost gr-osmosdr rtl-sdr hackrf
+    qtbase qtsvg gnuradio boost rtl-sdr hackrf
   ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   enableParallelBuilding = true;
