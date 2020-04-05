@@ -3541,6 +3541,12 @@
     githubId = 4085046;
     name = "Imuli";
   };
+  immae = {
+    email = "ismael@bouya.org";
+    github = "immae";
+    githubId = 510202;
+    name = "Immae";
+  };
   infinisil = {
     email = "contact@infinisil.com";
     github = "infinisil";
