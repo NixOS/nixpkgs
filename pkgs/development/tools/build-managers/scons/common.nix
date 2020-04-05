@@ -16,6 +16,13 @@ in python2Packages.buildPythonApplication {
 
   setupHook = ./setup-hook.sh;
 
+  # If your PATH contains a python.withPackages interpreter and as part of your
+  # SConstruct build you want to launch a python script in a subprocess, which
+  # should run with '#!/usr/bin/env python', then it would be problematic to have
+  # scons wrapped with an additional PATH pointing to a different python
+  # interpreter. None of your withPackages-packages would be importable.
+  dontWrapPythonPrograms = true;
+
   meta = with stdenv.lib; {
     homepage = http://scons.org/;
     description = "An improved, cross-platform substitute for Make";
