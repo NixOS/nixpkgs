@@ -4,7 +4,6 @@
 , pkgconfig
 , boost
 , gnuradio
-, makeWrapper
 , pythonSupport ? true
 , python
 , swig
@@ -39,19 +38,12 @@ stdenv.mkDerivation rec {
     cmake
     boost
     gnuradio
-    makeWrapper
   ]
     ++ stdenv.lib.optionals pythonSupport [
       python
       swig
     ]
   ;
-
-  postInstall = ''
-    for prog in "$out"/bin/*; do
-        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
-    done
-  '';
 
   enableParallelBuilding = true;
 
