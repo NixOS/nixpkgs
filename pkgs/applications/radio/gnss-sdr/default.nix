@@ -9,7 +9,7 @@
 , gnuradio
 , orc
 , pkgconfig
-, pythonPackages
+, python
 , uhd
 , log4cpp
 , openblas
@@ -40,8 +40,10 @@ stdenv.mkDerivation rec {
     gnuradio
     orc
     pkgconfig
-    pythonPackages.Mako
-
+    (python.withPackages(ps: with ps;[
+      Mako
+      six
+    ]))
     # UHD support is optional, but gnuradio is built with it, so there's
     # nothing to be gained by leaving it out.
     uhd
