@@ -44,8 +44,10 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ stdenv.lib.optionals enableQt [ pyqt5 ];
 
-  patches =
-    [ ./basedirlist.patch ];
+  setup_cfg = ./setup.cfg;
+  preBuild = ''
+    cp "$setup_cfg" ./setup.cfg
+  '';
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if

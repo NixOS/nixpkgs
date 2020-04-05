@@ -28,6 +28,15 @@ buildPythonPackage rec {
     sha256 = "7355bf757ecacd5f0ac9dd9523c8e1a1103faadf8d33c22664178e17533f8ce5";
   };
 
+  patches = [
+    # https://github.com/matplotlib/matplotlib/pull/12478
+    (fetchpatch {
+      name = "numpy-1.16-compat.patch";
+      url = "https://github.com/matplotlib/matplotlib/commit/2980184d092382a40ab21f95b79582ffae6e19d6.patch";
+      sha256 = "1c0wj28zy8s5h6qiavx9zzbhlmhjwpzbc3fyyw9039mbnqk0spg2";
+    })
+  ];
+
   XDG_RUNTIME_DIR = "/tmp";
 
   nativeBuildInputs = [ pkgconfig ];
@@ -45,16 +54,10 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals enableQt [ pyqt4 ]
     ++ stdenv.lib.optionals python.isPy2 [ functools32 subprocess32 ];
 
-  patches = [
-    ./basedirlist.patch
-
-    # https://github.com/matplotlib/matplotlib/pull/12478
-    (fetchpatch {
-      name = "numpy-1.16-compat.patch";
-      url = "https://github.com/matplotlib/matplotlib/commit/2980184d092382a40ab21f95b79582ffae6e19d6.patch";
-      sha256 = "1c0wj28zy8s5h6qiavx9zzbhlmhjwpzbc3fyyw9039mbnqk0spg2";
-    })
-  ];
+  setup_cfg = ./setup.cfg;
+  preBuild = ''
+    cp "$setup_cfg" ./setup.cfg
+  '';
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
   # corresponding interpreter object for its library paths. This fails if
