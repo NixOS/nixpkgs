@@ -15,6 +15,8 @@
 
 assert pythonSupport -> python != null && swig != null;
 
+assert stdenv.lib.asserts.assertMsg (gnuradio.branch == "3.7") "gnuradio.plugins.nacl is not supported by a gnuradio version other then 3.7";
+
 stdenv.mkDerivation {
   pname = "gr-nacl";
   version = "2017-04-10";
