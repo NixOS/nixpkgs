@@ -82,12 +82,6 @@ with lib;
   # Disable bpf() JIT (to eliminate spray attacks)
   boot.kernel.sysctl."net.core.bpf_jit_enable" = mkDefault false;
 
-  # Raise ASLR entropy for 64bit & 32bit, respectively.
-  #
-  # Note: mmap_rnd_compat_bits may not exist on 64bit.
-  boot.kernel.sysctl."vm.mmap_rnd_bits" = mkDefault 32;
-  boot.kernel.sysctl."vm.mmap_rnd_compat_bits" = mkDefault 16;
-
   # Allowing users to mmap() memory starting at virtual address 0 can turn a
   # NULL dereference bug in the kernel into code execution with elevated
   # privilege.  Mitigate by enforcing a minimum base addr beyond the NULL memory
