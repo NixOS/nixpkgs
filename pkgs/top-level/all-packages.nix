@@ -19289,7 +19289,9 @@ in
 
   gksu = callPackage ../applications/misc/gksu { };
 
-  gnss-sdr = callPackage ../applications/radio/gnss-sdr { boost=boost166; };
+  gnss-sdr = callPackage ../applications/radio/gnss-sdr {
+    gnuradio = gnuradio3_7-no-gui;
+  };
 
   inherit (callPackage ../applications/radio/gnuradio {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
