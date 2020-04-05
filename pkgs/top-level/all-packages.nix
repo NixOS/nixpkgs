@@ -20041,7 +20041,9 @@ in
     lcms = lcms2;
   };
 
-  inspectrum = libsForQt5.callPackage ../applications/radio/inspectrum { };
+  inspectrum = libsForQt5.callPackage ../applications/radio/inspectrum {
+    gnuradio = gnuradio3_7-no-gui;
+  };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5_1;
