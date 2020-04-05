@@ -25388,6 +25388,8 @@ in
 
   keynav = callPackage ../tools/X11/keynav { };
 
+  kmon = callPackage ../tools/system/kmon { };
+
   kompose = callPackage ../applications/networking/cluster/kompose { };
 
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
