@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     armadillo
-    boost.dev
+    boost
     cmake
     glog
     gmock
-    openssl.dev
+    openssl
     gflags
     gnuradio
     orc
