@@ -61,22 +61,9 @@ buildPythonPackage rec {
     stdenv.lib.optionalString enableTk
       "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
 
-  checkPhase = ''
-    ${python.interpreter} tests.py
-  '';
-
-  # Test data is not included in the distribution (the `tests` folder
-  # is missing)
+  # Matplotlib needs to be built against a specific version of freetype in
+  # order for all of the tests to pass.
   doCheck = false;
-
-  prePatch = ''
-    # Failing test: ERROR: matplotlib.tests.test_style.test_use_url
-    sed -i 's/test_use_url/fails/' lib/matplotlib/tests/test_style.py
-    # Failing test: ERROR: test suite for <class 'matplotlib.sphinxext.tests.test_tinypages.TestTinyPages'>
-    sed -i 's/TestTinyPages/fails/' lib/matplotlib/sphinxext/tests/test_tinypages.py
-    # Transient errors
-    sed -i 's/test_invisible_Line_rendering/noop/' lib/matplotlib/tests/test_lines.py
-  '';
 
   meta = with stdenv.lib; {
     description = "Python plotting library, making publication quality plots";
