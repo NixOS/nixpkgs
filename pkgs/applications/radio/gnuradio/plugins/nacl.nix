@@ -5,7 +5,6 @@
 , boost
 , gnuradio
 , uhd
-, makeWrapper
 , libsodium
 , cppunit
 , pythonSupport ? true
@@ -34,7 +33,6 @@ stdenv.mkDerivation {
     boost
     gnuradio
     uhd
-    makeWrapper
     libsodium
     cppunit
   ] 
@@ -43,12 +41,6 @@ stdenv.mkDerivation {
       swig
     ]
   ;
-
-  postInstall = ''
-    for prog in "$out"/bin/*; do
-        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
-    done
-  '';
 
   enableParallelBuilding = true;
 
