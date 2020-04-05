@@ -1,6 +1,8 @@
-with import <nixpkgs> {};
-
-{ stdenv, lib, makeWrapper, fetchFromGitHub, fetchurl, fetchzip }:
+{ stdenv, lib, makeWrapper, socat, iptables, iproute, bridge-utils
+, conntrack-tools, buildGoPackage, git, runc, libseccomp, pkgconfig
+, autoPatchelfHook, breakpointHook, ethtool, utillinux, ipset
+, fetchFromGitHub, fetchurl, fetchzip, fetchgit
+}:
 
 with lib;
 
