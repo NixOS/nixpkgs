@@ -85,34 +85,27 @@ stdenv.mkDerivation rec {
   ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]
   ;
 
-  # dunno why i have to add $makeWrapperArgs manually...
+  # why does $makeWrapperArgs have to be added explicitly?
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
-  # not sure if anything has to be done with the other stuff in base/bin
-  # dxf2idf, idf2vrml, idfcyl, idfrect, kicad2step, kicad-ogltest
-  installPhase =
-    optionalString (scriptingSupport) '' buildPythonPath "${base} $pythonPath"
-    '' +
-    '' makeWrapper ${base}/bin/kicad $out/bin/kicad $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/pcbnew $out/bin/pcbnew $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/eeschema $out/bin/eeschema $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/gerbview $out/bin/gerbview $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/pcb_calculator $out/bin/pcb_calculator $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/pl_editor $out/bin/pl_editor $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${base}/bin/bitmap2component $out/bin/bitmap2component $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    ''
+  # kicad-ogltest's source seems to indicate that crashing is expected behaviour...
+  installPhase = with lib;
+    let
+      tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
+      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" "kicad-ogltest" ];
+    in
+    ( concatStringsSep "\n"
+      ( flatten [
+        ( optionalString (scriptingSupport) "buildPythonPath \"${base} $pythonPath\" \n" )
+
+        # wrap each of the directly usable tools
+        ( map ( tool: "makeWrapper ${base}/bin/${tool} $out/bin/${tool} $makeWrapperArgs"
+          + optionalString (scriptingSupport) " --set PYTHONPATH \"$program_PYTHONPATH\""
+            ) tools )
+
+        # link in the CLI utils
+        ( map ( util: "ln -s ${base}/bin/${util} $out/bin/${util}" ) utils )
+      ])
+    )
   ;
 
   # can't run this for each pname
