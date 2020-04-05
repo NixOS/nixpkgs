@@ -4,7 +4,6 @@
 , pkgconfig
 , boost
 , gnuradio
-, makeWrapper
 , cppunit
 , libosmocore
 , gr-osmosdr
@@ -34,7 +33,6 @@ stdenv.mkDerivation {
     cmake
     boost
     gnuradio
-    makeWrapper
     cppunit
     libosmocore
     gr-osmosdr
@@ -44,12 +42,6 @@ stdenv.mkDerivation {
       swig
     ]
   ;
-
-  postInstall = ''
-    for prog in "$out"/bin/*; do
-        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:${gr-osmosdr}/lib/${python.libPrefix}/site-packages:$(toPythonPath "$out")
-    done
-  '';
 
   enableParallelBuilding = true;
 
