@@ -6,16 +6,17 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage = pkgs.php74.buildEnv {
-    extensions = e: with e; [
-      bcmath calendar curl exif ftp filter gd gettext gmp intl json ldap
-      mysqlnd opcache openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql
-      pdo_sqlite pgsql readline session soap sodium sqlite3 zip zlib mbstring
-      posix ctype dom simplexml xmlreader xmlwriter
-      apcu redis memcached imagick
-    ];
-    extraConfig = phpOptionsStr;
-  };
+  phpPackage =
+    let
+      base = pkgs.php74;
+    in
+      base.buildEnv {
+        extensions = e: with e;
+          base.enabledExtensions ++ [
+            apcu redis memcached imagick
+          ];
+        extraConfig = phpOptionsStr;
+      };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
