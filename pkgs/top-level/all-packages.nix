@@ -12100,7 +12100,12 @@ in
   hwloc = callPackage ../development/libraries/hwloc {};
 
   inherit (callPackage ../development/tools/misc/hydra { })
-    hydra-migration hydra-unstable hydra-flakes;
+    hydra-migration hydra-unstable;
+
+  hydra-flakes = throw ''
+    Flakes support has been merged into Hydra's master. Please use
+    `pkgs.hydra-unstable` now.
+  '';
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
