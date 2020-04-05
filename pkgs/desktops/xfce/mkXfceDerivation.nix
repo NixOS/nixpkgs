@@ -27,6 +27,8 @@ let
     enableParallelBuilding = true;
     outputs = [ "out" "dev" ];
 
+    pos = builtins.unsafeGetAttrPos "pname" args;
+
     meta = with stdenv.lib; {
       homepage = "https://git.xfce.org/${category}/${pname}/about";
       license = licenses.gpl2; # some libraries are under LGPLv2+
