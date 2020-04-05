@@ -1,16 +1,16 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk11 }:
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "19.2";
+  version = "20";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "1q2kpkkh75b9l1x7fkmv88s8k84gzcdnrg5sgf8ih0zrp49lawg9";
+    sha256 = "1i9p6h98azgradrrkcwx18zwz4c6zkxp4bfykpa2imi1z3ry5q2b";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre8 ];
+  buildInputs = [ jdk11 ];
 
   desktopItem = makeDesktopItem {
     name = "gpsprune";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     mkdir -p $out/bin $out/share/java
     cp -v $src $out/share/java/gpsprune.jar
-    makeWrapper ${jre8}/bin/java $out/bin/gpsprune \
+    makeWrapper ${jdk11}/bin/java $out/bin/gpsprune \
       --add-flags "-jar $out/share/java/gpsprune.jar"
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications"/"* $out/share/applications
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
-    homepage = https://activityworkshop.net/software/gpsprune/;
+    homepage = "https://activityworkshop.net/software/gpsprune/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
