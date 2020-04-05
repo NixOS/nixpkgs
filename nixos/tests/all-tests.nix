@@ -176,6 +176,7 @@ in
   magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mariadb-galera-mariabackup = handleTest ./mysql/mariadb-galera-mariabackup.nix {};
+  mariadb-galera-rsync = handleTest ./mysql/mariadb-galera-rsync.nix {};
   mathics = handleTest ./mathics.nix {};
   matomo = handleTest ./matomo.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
