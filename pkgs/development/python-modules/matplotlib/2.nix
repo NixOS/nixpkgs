@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ python which sphinx stdenv ]
+  buildInputs = [ which sphinx ]
     ++ stdenv.lib.optional enableGhostscript ghostscript
     ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
 
