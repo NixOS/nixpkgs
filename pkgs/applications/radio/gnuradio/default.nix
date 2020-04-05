@@ -36,7 +36,7 @@ rec {
   };
   plugins3_7 = rec {
     ais = callPackage ./plugins/ais.nix { gnuradio = unwrapped3_7; gr-osmosdr = osmosdr;};
-    gsm = callPackage ./plugins/gsm.nix { gnuradio = unwrapped3_7; };
+    gsm = callPackage ./plugins/gsm.nix { gnuradio = unwrapped3_7; gr-osmosdr = osmosdr;};
     rds = callPackage ./plugins/rds.nix { gnuradio = unwrapped3_7; };
     nacl = callPackage ./plugins/nacl.nix { gnuradio = unwrapped3_7; };
     limesdr = callPackage ./plugins/limesdr.nix { gnuradio = unwrapped3_7; };
