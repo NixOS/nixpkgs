@@ -15,9 +15,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools python3Packages.notmuch chardet dkimpy
   ] ++ stdenv.lib.optional (!python3Packages.isPy3k) subprocess32;
 
-  makeWrapperArgs = [
-    ''--prefix PATH ':' "${notmuch}/bin"''
-  ];
+  makeWrapperArgs = ''--prefix PATH ':' "${notmuch}/bin"'';
 
   outputs = [ "out" "doc" ];
 
