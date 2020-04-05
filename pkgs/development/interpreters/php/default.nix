@@ -158,7 +158,7 @@ let
       buildEnv = { extensions ? (_: []), extraConfig ? "" }:
         let
           getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
-          extList = extensions php-packages.extensions;
+          enabledExtensions = extensions php-packages.extensions;
 
           # Generate extension load configuration snippets from the
           # extension parameter. This is an attrset suitable for use
@@ -178,9 +178,9 @@ let
                     deps = lib.optionals (ext ? internalDeps)
                       (map getExtName ext.internalDeps);
                   })
-                extList);
+                enabledExtensions);
 
-          extNames = map getExtName extList;
+          extNames = map getExtName enabledExtensions;
           extraInit = writeText "custom-php.ini" ''
             ${lib.concatStringsSep "\n"
               (lib.textClosureList extensionTexts extNames)}
@@ -189,11 +189,10 @@ let
         in
           symlinkJoin {
             name = "php-with-extensions-${version}";
-            inherit version;
-            inherit (php) dev;
+            inherit (php) version dev;
             nativeBuildInputs = [ makeWrapper ];
             passthru = {
-              inherit buildEnv withExtensions;
+              inherit buildEnv withExtensions enabledExtensions;
               inherit (php-packages) packages extensions;
             };
             paths = [ php ];
@@ -212,6 +211,7 @@ let
     in
       php.overrideAttrs (_: {
         passthru = {
+          enabledExtensions = [];
           inherit buildEnv withExtensions;
           inherit (php-packages) packages extensions;
         };

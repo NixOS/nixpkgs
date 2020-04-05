@@ -48,6 +48,21 @@ enabled:
 php.withExtensions (e: with e; [ imagick opcache ])
 ```
 
+Note that this will give you a package with _only_ opcache and
+ImageMagick, none of the other extensions which are enabled by default
+in the `php` package will be available.
+
+To enable building on a previous PHP package, the currently enabled
+extensions are made available in its `enabledExtensions`
+attribute. For example, to generate a package with all default
+extensions enabled, except opcache, but with ImageMagick:
+
+```nix
+php.withExtensions (e:
+  (lib.filter (e: e != php.extensions.opcache) php.enabledExtensions)
+  ++ [ e.imagick ])
+```
+
 If you want a PHP build with extra configuration in the `php.ini`
 file, you can use `php.buildEnv`. This function takes two named and
 optional parameters: `extensions` and `extraConfig`. `extensions`
