@@ -44,6 +44,23 @@ let
 
   instanceOptions = {
     options = sharedOptions // {
+      restartOnChange = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Whether to restart the nspawn machine if the .nspawn-config changes.
+        '';
+      };
+
+      reloadOnChange = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to reload the <literal>systemd-nspawn@&lt;container-name&gt;.service</literal>
+          unit if the .nspawn-config changes.
+        '';
+      };
+
       execConfig = mkOption {
         default = {};
         example = { Parameters = "/bin/sh"; };
@@ -88,6 +105,8 @@ let
       text = ''
         [Exec]
         ${attrsToSection def.execConfig}
+        ${optionalString (def.reloadOnChange) "X-ReloadOnChange=true"}
+        ${optionalString (def.restartOnChange) "X-RestartOnChange=true"}
 
         [Files]
         ${attrsToSection def.filesConfig}
@@ -115,8 +134,16 @@ in {
       units = mapAttrs' (n: v: let nspawnFile = "${n}.nspawn"; in nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
     in 
       mkMerge [
-        (mkIf (cfg != {}) { 
-          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits "nspawn" units [] []);
+        (mkIf (cfg != {}) {
+          assertions = mapAttrsToList (n: v: {
+            assertion = v.restartOnChange -> !v.reloadOnChange;
+            message = ''
+              If ${n}.nspawn is supposed to be restarted on config change, it can't
+              be reloaded at the same time!
+            '';
+          }) cfg;
+          systemd.targets.machines.wants = map (x: "systemd-nspawn@${x}.service") (attrNames cfg);
+          environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];
         })
         {
           systemd.targets.multi-user.wants = [ "machines.target" ];
@@ -126,7 +153,7 @@ in {
           systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [ 
             ""  # deliberately empty. signals systemd to override the ExecStart
             # Only difference between upstream is that we do not pass the -U flag
-            "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --network-veth --settings=override --machine=%i"
+            "${config.systemd.package}/bin/systemd-nspawn --quiet --boot --link-journal=try-guest --network-veth --settings=override --machine=%i"
           ];
         }
       ];

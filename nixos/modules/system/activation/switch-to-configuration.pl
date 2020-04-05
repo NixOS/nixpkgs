@@ -7,6 +7,7 @@ use File::Slurp;
 use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
+use experimental 'smartmatch';
 
 my $out = "@out@";
 
@@ -150,6 +151,37 @@ $unitsToRestart{$_} = 1 foreach
 $unitsToReload{$_} = 1 foreach
     split '\n', read_file($reloadListFile, err_mode => 'quiet') // "";
 
+my @currentNspawnUnits = glob("/etc/systemd/nspawn/*.nspawn");
+my @upcomingNspawnUnits = glob("$out/etc/systemd/nspawn/*.nspawn");
+foreach (@upcomingNspawnUnits) {
+    my $unit = basename($_);
+    $unit =~ s/\.nspawn//;
+    my $unitName = "systemd-nspawn\@$unit.service";
+    my $orig = $_;
+    $orig =~ s/^$out//;
+    if ($orig ~~ @currentNspawnUnits) {
+        if (fingerprintUnit($_) ne fingerprintUnit($orig)) {
+            my $info = parseUnit($_);
+            if ($info->{'X-ReloadOnChange'}) {
+                $unitsToReload{$unitName} = 1;
+            } elsif ($info->{'X-RestartOnChange'}) {
+                $unitsToRestart{$unitName} = 1;
+            }
+        }
+    } else {
+        $unitsToStart{$unitName} = 1;
+    }
+}
+
+foreach (@currentNspawnUnits) {
+    unless ("$out$_" ~~ @upcomingNspawnUnits) {
+        my $unit = basename($_);
+        $unit =~ s/\.nspawn//;
+        my $unitName = "systemd-nspawn\@$unit.service";
+        $unitsToStop{$unitName} = 1;
+    }
+}
+
 my $activePrev = getActiveUnits;
 while (my ($unit, $state) = each %{$activePrev}) {
     my $baseUnit = $unit;
@@ -259,7 +291,10 @@ while (my ($unit, $state) = each %{$activePrev}) {
                             recordUnit($startListFile, $unit);
                         }
 
-                        $unitsToStop{$unit} = 1;
+                        # FIXME find a better solution than this hack
+                        if (index($unit, "systemd-nspawn@") == -1) {
+                            $unitsToStop{$unit} = 1;
+                        }
                     }
                 }
             }

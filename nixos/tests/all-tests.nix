@@ -296,6 +296,7 @@ in
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
+  systemd-nspawn-reload = handleTest ./systemd-nspawn-reload {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
