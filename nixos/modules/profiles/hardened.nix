@@ -40,9 +40,6 @@ with lib;
     # Overwrite free'd memory
     "page_poison=1"
 
-    # Disable legacy virtual syscalls
-    "vsyscall=none"
-
     # Enable page allocator randomization
     "page_alloc.shuffle=1"
   ];
