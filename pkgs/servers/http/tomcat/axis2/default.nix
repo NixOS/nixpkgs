@@ -10,7 +10,20 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ unzip apacheAnt jdk ];
-  builder = ./builder.sh;
+
+  installPhase = ''
+    mkdir -p $out
+    cp -av * $out
+    cd webapp
+    ant
+    cd ..
+    mkdir -p $out/webapps
+    cp dist/axis2.war $out/webapps
+    cd $out/webapps
+    mkdir axis2
+    cd axis2
+    unzip ../axis2.war
+  '';
 
   meta = {
     description = "Web Services / SOAP / WSDL engine, the successor to the widely used Apache Axis SOAP stack";
