@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   ] ++ optional withMesa "--with-opengl";
 
   # These variables are used by configure to find some dependencies.
-  SEARCH_INCLUDE =
+  env.SEARCH_INCLUDE =
     "${libXinerama.dev}/include ${libSM.dev}/include ${libXxf86vm.dev}/include";
-  SEARCH_LIB =
+  env.SEARCH_LIB =
     "${libXinerama.out}/lib ${libSM.out}/lib ${libXxf86vm.out}/lib "
     + optionalString withMesa "${libGLU.out}/lib ${libGL.out}/lib ";
 
