@@ -14,6 +14,8 @@
 
 assert pythonSupport -> python != null && swig != null;
 
+assert stdenv.lib.asserts.assertMsg (gnuradio.branch == "3.7") "gnuradio.plugins.ais is not supported by a gnuradio version other then 3.7";
+
 stdenv.mkDerivation {
   pname = "gr-ais";
   version = "2015-12-20";
