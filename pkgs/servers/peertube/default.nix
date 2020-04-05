@@ -168,4 +168,33 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ yarnModulesProd ];
+
+  meta = {
+    description = "A free software to take back control of your videos";
+
+    longDescription = ''
+      PeerTube aspires to be a decentralized and free/libre alternative to video
+      broadcasting services.
+
+      PeerTube is not meant to become a huge platform that would centralize
+      videos from all around the world. Rather, it is a network of
+      inter-connected small videos hosters.
+
+      Anyone with a modicum of technical skills can host a PeerTube server, aka
+      an instance. Each instance hosts its users and their videos. In this way,
+      every instance is created, moderated and maintained independently by
+      various administrators.
+
+      You can still watch from your account videos hosted by other instances
+      though if the administrator of your instance had previously connected it
+      with other instances.
+    '';
+
+    license = stdenv.lib.licenses.agpl3Plus;
+
+    homepage = "https://joinpeertube.org/";
+
+    platforms = stdenv.lib.platforms.linux; # not sure here
+    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer immae ];
+  };
 }
