@@ -22,7 +22,6 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   # Note: this config depends on EXPERT y and so will not take effect, hence
   # it is left "optional" for now.
   MODIFY_LDT_SYSCALL = option no;
-  VMAP_STACK         = yes; # Catch kernel stack overflows
 
   # Randomize position of kernel and memory.
   RANDOMIZE_BASE   = yes;
