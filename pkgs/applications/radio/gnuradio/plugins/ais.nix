@@ -4,7 +4,6 @@
 , pkgconfig
 , boost
 , gnuradio
-, makeWrapper
 , cppunit
 , gr-osmosdr
 , pythonSupport ? true
@@ -35,7 +34,6 @@ stdenv.mkDerivation {
     cmake
     boost
     gnuradio
-    makeWrapper
     cppunit
     gr-osmosdr
   ]
@@ -44,12 +42,6 @@ stdenv.mkDerivation {
       swig
     ]
   ;
-
-  postInstall = ''
-    for prog in "$out"/bin/*; do
-        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
-    done
-  '';
 
   enableParallelBuilding = true;
 
