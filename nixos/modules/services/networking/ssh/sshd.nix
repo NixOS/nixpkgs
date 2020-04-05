@@ -9,8 +9,8 @@ let
   # This middle-ground solution ensures *an* sshd can do their basic validation
   # on the configuration.
   validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
-    then [ cfgc.package ]
-    else [ pkgs.buildPackages.openssh ];
+    then cfgc.package
+    else pkgs.buildPackages.openssh;
 
   sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
     cat >$out <<EOL
