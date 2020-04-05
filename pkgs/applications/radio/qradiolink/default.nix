@@ -4,18 +4,15 @@
 , libopus, libjpeg, protobuf, qwt, speex
 } :
 
-let
-  version = "0.5.0";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "qradiolink";
-  inherit version;
+  version = "0.8.2-3";
 
   src = fetchFromGitHub {
     owner = "kantooon";
     repo = "qradiolink";
     rev = version;
-    sha256 = "0xhg5zhjznmls5m3rhpk1qx0dipxmca12s85w15d0i7qwva2f1gi";
+    sha256 = "11r93i7w3a3iaamlj7bis57qk7p74iq7ffcbmi89ac3mcf425csj";
   };
 
   preBuild = ''
