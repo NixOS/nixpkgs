@@ -19,14 +19,14 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt5 != null;
 
 buildPythonPackage rec {
-  version = "3.1.3";
+  version = "3.2.1";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db3121f12fb9b99f105d1413aebaeb3d943f269f3d262b45586d12765866f0c6";
+    sha256 = "ffe2f9cdcea1086fc414e82f42271ecf1976700b8edd16ca9d376189c6d93aee";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
