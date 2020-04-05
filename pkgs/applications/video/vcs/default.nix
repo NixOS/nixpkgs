@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   unpackCmd = "mkdir src; cp $curSrc src/vcs";
   patches = [ ./fonts.patch ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   doBuild = false;
 
   inherit dejavu_fonts;
