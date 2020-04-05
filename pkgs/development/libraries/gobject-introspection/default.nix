@@ -10,11 +10,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
-  version = "1.64.0";
+  version = "1.64.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "10pwykfnk7pw8k9k8iz3p72phxvyrh5q4d7gr3ysv08w15immh7a";
+    sha256 = "19vz7vp10h0zj3f491yk72dp89bix6rgkzxg4qcm4d6151ksxgl0";
   };
 
   outputs = [ "out" "dev" "man" ];
