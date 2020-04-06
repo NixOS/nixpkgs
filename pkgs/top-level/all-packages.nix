@@ -21502,7 +21502,12 @@ in
 
   qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
 
-  qstopmotion = libsForQt5.callPackage ../applications/video/qstopmotion { };
+  qstopmotion = libsForQt5.callPackage ../applications/video/qstopmotion {
+    guvcview = guvcview.override {
+      useQt = true;
+      useGtk = false;
+    };
+  };
 
   qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
 
