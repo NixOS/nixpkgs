@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    intltool
+    pkgconfig
     wrapGAppsHook
   ];
 
@@ -22,10 +24,8 @@ stdenv.mkDerivation rec {
     alsaLib
     ffmpeg
     gtk3
-    intltool
     libusb1
     libv4l
-    pkgconfig
     portaudio
     udev
     gsl
