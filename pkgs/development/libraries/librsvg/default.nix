@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "installedTests" ];
 
-  buildInputs = [ libxml2 bzip2 pango libintl ];
+  buildInputs = [ libxml2 bzip2 pango libintl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
