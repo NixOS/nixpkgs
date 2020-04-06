@@ -5,18 +5,6 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
-  basePackages = with pkgs; [
-    crda
-    modemmanager
-    networkmanager
-    networkmanager-fortisslvpn
-    networkmanager-iodine
-    networkmanager-l2tp
-    networkmanager-openconnect
-    networkmanager-openvpn
-    networkmanager-vpnc
-   ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant;
-
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
 
   enableIwd = cfg.wifi.backend == "iwd";
@@ -195,7 +183,12 @@ in {
         description = ''
           Extra packages that provide NetworkManager plugins.
         '';
-        apply = list: basePackages ++ list;
+        apply = list: with pkgs; [
+          modemmanager
+          networkmanager
+        ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant
+        ++ optional (lib.versionOlser config.boot.kernelPackages.kernel.version "4.15") crda
+        ++ list;
       };
 
       dhcp = mkOption {
@@ -325,16 +318,75 @@ in {
         '';
       };
 
+      enableFortiSSL = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the FortiSSL plugin.
+          </para><para>
+          If you enable this option, the <literal>networkmanager_fortisslvpn</literal>
+          plugin will be added to <option>networking.networkmanager.packages</option>
+          for you.
+        '';
+      };
+
+      enableIodine = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the Iodine plugin.
+          </para><para>
+          If you enable this option, the <literal>networkmanager_iodine</literal>
+          plugin will be added to <option>networking.networkmanager.packages</option>
+          for you.
+        '';
+      };
+
+      enableL2TP = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the L2TP plugin.
+          </para><para>
+          If you enable this option, the <literal>networkmanager_l2tp</literal>
+          plugin will be added to <option>networking.networkmanager.packages</option>
+          for you.
+        '';
+      };
+
+      enableOpenVPN = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the OpenVPN plugin.
+          </para><para>
+          If you enable this option, the <literal>networkmanager_openvpn</literal>
+          plugin will be added to <option>networking.networkmanager.packages</option>
+          for you.
+        '';
+      };
+
       enableStrongSwan = mkOption {
         type = types.bool;
         default = false;
         description = ''
           Enable the StrongSwan plugin.
           </para><para>
-          If you enable this option the
-          <literal>networkmanager_strongswan</literal> plugin will be added to
-          the <option>networking.networkmanager.packages</option> option
-          so you don't need to to that yourself.
+          If you enable this option, the <literal>networkmanager_strongswan</literal>
+          plugin will be added to <option>networking.networkmanager.packages</option>
+          for you.
+        '';
+      };
+
+      enableVPNC = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the VPNC plugin.
+          </para><para>
+          If you enable this option, the <literal>networkmanager_vpnc</literal>
+          plugin will be added to <option>networking.networkmanager.packages</option>
+          for you.
         '';
       };
     };
@@ -368,33 +420,45 @@ in {
 
     environment.etc = with pkgs; {
       "NetworkManager/NetworkManager.conf".source = configFile;
-
-      "NetworkManager/VPN/nm-openvpn-service.name".source =
-        "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
-
-      "NetworkManager/VPN/nm-vpnc-service.name".source =
-        "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
-
-      "NetworkManager/VPN/nm-openconnect-service.name".source =
-        "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
-
-      "NetworkManager/VPN/nm-fortisslvpn-service.name".source =
-        "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
-
-      "NetworkManager/VPN/nm-l2tp-service.name".source =
-        "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
-
-      "NetworkManager/VPN/nm-iodine-service.name".source =
-        "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
       }
       // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
          {
            "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
          }
+      // optionalAttrs cfg.enableFortiSSL
+         {
+            "NetworkManager/VPN/nm-fortisslvpn-service.name".source =
+              "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
+         }
+      // optionalAttrs cfg.enableIodine
+         {
+            "NetworkManager/VPN/nm-iodine-service.name".source =
+              "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
+         }
+      // optionalAttrs cfg.enableL2TP
+         {
+            "NetworkManager/VPN/nm-l2tp-service.name".source =
+              "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
+         }
+      // optionalAttrs cfg.enableOpenConnect
+         {
+            "NetworkManager/VPN/nm-openconnect-service.name".source =
+              "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
+         }
+      // optionalAttrs cfg.enableOpenVPN
+         {
+            "NetworkManager/VPN/nm-openvpn-service.name".source =
+              "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
+         }
       // optionalAttrs cfg.enableStrongSwan
          {
            "NetworkManager/VPN/nm-strongswan-service.name".source =
              "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
+         }
+      // optionalAttrs cfg.enableVPNC
+         {
+            "NetworkManager/VPN/nm-vpnc-service.name".source =
+              "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
          }
       // listToAttrs (lib.imap1 (i: s:
          {
@@ -406,14 +470,16 @@ in {
 
     users.groups = {
       networkmanager.gid = config.ids.gids.networkmanager;
+    } // optionalAttrs cfg.enableOpenVPN {
       nm-openvpn.gid = config.ids.gids.nm-openvpn;
     };
 
-    users.users = {
+    users.users = optionalAttrs cfg.enableOpenVPN {
       nm-openvpn = {
         uid = config.ids.uids.nm-openvpn;
         extraGroups = [ "networkmanager" ];
       };
+    } // optionalAttrs cfg.enableIodine {
       nm-iodine = {
         isSystemUser = true;
         group = "networkmanager";
@@ -422,14 +488,11 @@ in {
 
     systemd.packages = cfg.packages;
 
-    systemd.tmpfiles.rules = [
-      "d /etc/NetworkManager/system-connections 0700 root root -"
-      "d /etc/ipsec.d 0700 root root -"
-      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
-
-      "d /var/lib/dhclient 0755 root root -"
-      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
-    ];
+    systemd.tmpfiles.rules = [ "d /etc/NetworkManager/system-connections 0700 root root -" ]
+    ++ optional cfg.enableFortiSSL "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
+    ++ optional cfg.enableStrongSwan "d /etc/ipsec.d 0700 root root -"
+    ++ optional (cfg.dns == "dnsmasq") "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    ++ optional (cfg.dhcp == "dhclient") "d /var/lib/dhclient 0755 root root -";
 
     systemd.services.NetworkManager = {
       wantedBy = [ "network.target" ];
@@ -464,8 +527,32 @@ in {
         useDHCP = false;
       })
 
+      (mkIf cfg.enableFortiSSL {
+        networkmanager.packages = [ pkgs.networkmanager_fortisslvpn ];
+      })
+
+      (mkIf cfg.enableIodine {
+        networkmanager.packages = [ pkgs.networkmanager_iodine ];
+      })
+
+      (mkIf cfg.enableL2TP {
+        networkmanager.packages = [ pkgs.networkmanager_l2tp ];
+      })
+
+      (mkIf cfg.enableOpenConnect {
+        networkmanager.packages = [ pkgs.networkmanager_openconnect ];
+      })
+
+      (mkIf cfg.enableOpenVPN {
+        networkmanager.packages = [ pkgs.networkmanager_openvpn ];
+      })
+
       (mkIf cfg.enableStrongSwan {
         networkmanager.packages = [ pkgs.networkmanager_strongswan ];
+      })
+
+      (mkIf cfg.enableVPNC {
+        networkmanager.packages = [ pkgs.networkmanager_vpnc ];
       })
 
       (mkIf enableIwd {
