@@ -95,5 +95,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/QISKit/qiskit-aer";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
+    # Doesn't build on aarch64 (libmuparserx issue).
+    # Can fix by building muparserx from source (https://github.com/beltoforion/muparserx)
+    # or in future updates (e.g. Raspberry Pi enabled via https://github.com/Qiskit/qiskit-aer/pull/651 & https://github.com/Qiskit/qiskit-aer/pull/660)
+    platforms = platforms.x86_64;
   };
 }
