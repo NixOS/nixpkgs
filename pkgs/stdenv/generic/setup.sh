@@ -969,9 +969,15 @@ patchPhase() {
                 uncompress="lzma -d"
                 ;;
         esac
+        local -a flagsArray
+        if [ -n "$__structuredAttrs" ]; then
+            flagsArray=( "${patchFlags[@]:--p1}" )
+        else
+            # shellcheck disable=SC2086
+            flagsArray=( ${patchFlags:--p1} )
+        fi
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
-        # shellcheck disable=SC2086
-        $uncompress < "$i" 2>&1 | patch ${patchFlags:--p1}
+        $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"
     done
 
     runHook postPatch
