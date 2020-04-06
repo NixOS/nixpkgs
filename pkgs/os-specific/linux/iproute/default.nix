@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, bison, flex, pkg-config
+, buildPackages, bison, flex, pkg-config
 , db, iptables, libelf, libmnl
 }:
 
@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
-    # Don't build netem tools--they're not installed and require HOSTCC
-    substituteInPlace Makefile --replace " netem " " "
   '';
 
   outputs = [ "out" "dev" ];
@@ -36,6 +34,7 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
   buildInputs = [ db iptables libelf libmnl ];
 
