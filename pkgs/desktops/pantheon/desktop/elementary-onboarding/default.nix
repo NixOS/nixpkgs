@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "1.1.0";
+  version = "1.2.0";
 
   repoName = "onboarding";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "17fw95qg7j0mvam90jrvr77hw2ipxb2lkw0xxql1lzwvdx1h0r2k";
+    sha256 = "0yxafz7jlzj8gsbp6m72q4zbcvm1ch2y4fibj9cymjvz2i0izhba";
   };
 
   passthru = {

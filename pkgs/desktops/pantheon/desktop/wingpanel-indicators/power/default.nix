@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "02gp9m9zkmhcl43nz02kjkcim4zm25zab3il8dhwkihh731g1c6j";
+    sha256 = "19zhgzyivf3y416r5xaajx81h87zdhvrrcsagli00gp1f2169q5m";
   };
 
   passthru = {
@@ -49,8 +49,6 @@ stdenv.mkDerivation rec {
     udev
     wingpanel
   ];
-
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py

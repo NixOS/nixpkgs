@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, kernel }:
 
 # facetimehd is not supported for kernels older than 3.19";
 assert stdenv.lib.versionAtLeast kernel.version "3.19";
@@ -44,8 +44,13 @@ stdenv.mkDerivation rec {
   '';
 
   hardeningDisable = [ "pic" ];
-  
+
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  preBuild = lib.optionalString (stdenv.lib.versionAtLeast kernel.version "5.6")
+  ''
+    sed -i 's/ioremap_nocache/ioremap_cache/g' fthd_drv.c
+  '';
 
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -55,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/patjak/bcwc_pcie;
     description = "Linux driver for the Facetime HD (Broadcom 1570) PCIe webcam";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ womfoo grahamc ];
+    maintainers = with maintainers; [ womfoo grahamc kraem ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

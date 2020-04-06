@@ -27,6 +27,7 @@ let
         CatalystPluginCaptcha
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
+        CatalystPluginSmartURI
         CatalystPluginStackTrace
         CatalystRuntime
         CatalystTraitForRequestProxyBase

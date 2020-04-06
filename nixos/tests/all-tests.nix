@@ -241,7 +241,7 @@ in
   peerflix = handleTest ./peerflix.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
-  php-pcre = handleTest ./php-pcre.nix {};
+  php = handleTest ./php {};
   plasma5 = handleTest ./plasma5.nix {};
   plotinus = handleTest ./plotinus.nix {};
   postgis = handleTest ./postgis.nix {};

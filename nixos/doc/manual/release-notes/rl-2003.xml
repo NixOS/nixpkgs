@@ -827,8 +827,8 @@ auth required pam_succeed_if.so uid >= 1000 quiet
    </listitem>
    <listitem>
     <para>
-     Predicatbly named network-interfaces get renamed in stage-1. This means that it's possible
-     to use the proper interface name for e.g. dropbear-setups.
+     Predictably named network interfaces get renamed in stage-1. This means that it is possible
+     to use the proper interface name for e.g. Dropbear setups.
     </para>
     <para>
      For further reference, please read <link xlink:href="https://github.com/NixOS/nixpkgs/pull/68953">#68953</link> or the corresponding <link xlink:href="https://discourse.nixos.org/t/predictable-network-interface-names-in-initrd/4055">discourse thread</link>.
