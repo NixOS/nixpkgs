@@ -9875,6 +9875,8 @@ in
     go = go_1_12;
   };
 
+  bazel-gazelle = callPackage ../development/tools/bazel-gazelle { };
+
   bazelisk = callPackage ../development/tools/bazelisk { };
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
