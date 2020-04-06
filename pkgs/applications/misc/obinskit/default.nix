@@ -29,11 +29,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "obinskit";
-  version = "1.1.1";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "http://releases.obins.net/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
-    sha256 = "0052m4msslc4k9g3i5vl933cz5q2n1affxhnm433w4apajr8h28h";
+    sha256 = "0q422rmfn4k4ww1qlgrwdmxz4l10dxkd6piynbcw5cr4i5icnh2l";
   };
 
   unpackPhase = "tar -xzf $src";
