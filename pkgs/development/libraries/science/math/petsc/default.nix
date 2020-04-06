@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(
       $configureFlagsArray
       "--CC=$CC"
-      "--with-cxx=g++"
+      "--with-cxx=$CXX"
       "--with-fc=0"
       "--with-mpi=0"
       "--with-blas-lib=[${blas}/lib/libblas.a,${gfortran.cc.lib}/lib/libgfortran.a]"
