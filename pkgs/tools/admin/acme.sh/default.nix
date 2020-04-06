@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
           socat
           openssl
           curl
+          bind.dnsutils
           (if stdenv.isLinux then iproute else unixtools.netstat)
         ]
       }"
