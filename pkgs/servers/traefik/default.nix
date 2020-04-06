@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, go-bindata }:
+{ stdenv, buildGoModule, fetchFromGitHub, go-bindata, nixosTests }:
 
 buildGoModule rec {
   pname = "traefik";
@@ -15,6 +15,8 @@ buildGoModule rec {
   subPackages = [ "cmd/traefik" ];
 
   nativeBuildInputs = [ go-bindata ];
+
+  passthru.tests = { inherit (nixosTests) traefik; };
 
   preBuild = ''
     go generate
