@@ -5,6 +5,12 @@ if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
 
+if [ -f .attrs.sh ]; then
+    __structuredAttrs=1
+else
+    __structuredAttrs=
+fi
+
 : ${outputs:=out}
 
 
