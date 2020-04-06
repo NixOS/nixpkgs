@@ -117,7 +117,7 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar
-    ];
+    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools;
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
