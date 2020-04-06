@@ -3,15 +3,15 @@
 , libpng }:
 
 stdenv.mkDerivation rec {
-  version = "1.11.3";
-  name = "gdal-${version}";
+  pname = "gdal";
+  version = "1.11.5";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/gdal/${version}/${name}.tar.gz";
-    sha256 = "561588bdfd9ca91919d4679a77a2b44214b158934ee8b425295ca5be33a1014d";
+    url = "https://download.osgeo.org/gdal/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0hphxzvy23v3vqxx1y22hhhg4cypihrb8555y12nb4mrhzlw7zfl";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libpng python pythonPackages.numpy proj openssl ];
+  buildInputs = [ unzip libjpeg libtiff libgeotiff libpng python pythonPackages.numpy proj openssl ];
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ./python.patch
   ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "fortify" ];
 
   # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
   # Unset CC and CXX as they confuse libtool.
@@ -33,11 +33,14 @@ stdenv.mkDerivation rec {
 
     "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql57.connector-c}/bin/mysql_config"
-    "--with-geotiff=${libgeotiff}"
+    "--with-geotiff=${libgeotiff.dev}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
   ];
+
+  # Allow use of old proj_api.h
+  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   # Prevent this:
   #
@@ -51,11 +54,13 @@ stdenv.mkDerivation rec {
     export PYTHONPATH=''${PYTHONPATH:+''${PYTHONPATH}:}$pythonInstallDir
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Translator library for raster geospatial data formats";
-    homepage = http://www.gdal.org/;
+    homepage = https://www.gdal.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

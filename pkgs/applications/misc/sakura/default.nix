@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gtk3, perl, vte, pcre, glib , makeWrapper }:
+{ stdenv, fetchurl, cmake, pkgconfig, gtk3, perl, vte, pcre2, glib , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "sakura-${version}";
-  version = "3.5.0";
+  pname = "sakura";
+  version = "3.7.0";
 
   src = fetchurl {
-    url = "http://launchpad.net/sakura/trunk/${version}/+download/${name}.tar.bz2";
-    sha256 = "0fhcn3540iw22l5zg3njh5z8cj0g2n9p6fvagjqa5zc323jfsc7b";
+    url = "https://launchpad.net/sakura/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    sha256 = "15gskj5yv5qs3cj4ps43735kfx2nzjlhq4dk9ghirl8lvhhxsm5m";
   };
 
   nativeBuildInputs = [ cmake perl pkgconfig ];
 
-  buildInputs = [ makeWrapper gtk3 vte pcre glib ];
+  buildInputs = [ makeWrapper gtk3 vte pcre2 glib ];
 
   # Wrapper sets path to gsettings-schemata so sakura knows where to find colorchooser, fontchooser ...
   postInstall = "wrapProgram $out/bin/sakura --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/";

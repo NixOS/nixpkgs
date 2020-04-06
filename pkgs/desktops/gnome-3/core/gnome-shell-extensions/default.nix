@@ -1,26 +1,59 @@
-{ stdenv, intltool, fetchurl, libgtop, pkgconfig, gtk3, glib
-, bash, makeWrapper, itstool, gnome3, file }:
+{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_68, glib
+, gnome3, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extensions-${version}";
-  version = "3.26.2";
+  pname = "gnome-shell-extensions";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "aefda4d810ef5ceb9402e2d620f4bdc1dc40c9cc4f6a51749840f7dd08628ab6";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1rmi6ccqfdisvmmzaiqr2r031r0f3h8qxgw5qwq62x859nbrzcmm";
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-shell-extensions"; attrPath = "gnome3.gnome-shell-extensions"; };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
   };
 
+  patches = [
+    (substituteAll {
+      src = ./fix_gmenu.patch;
+      gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+    })
+  ];
+
   doCheck = true;
+  # 60 is required for tests
+  # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/blob/3.34.0/meson.build#L23
+  checkInputs = [ spidermonkey_68 ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib libgtop intltool itstool
-                  makeWrapper file ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext glib ];
 
-  configureFlags = [ "--enable-extensions=all" ];
+  mesonFlags = [ "-Dextension_set=all" ];
+
+  preFixup = ''
+    # The meson build doesn't compile the schemas.
+    # Fixup adapted from export-zips.sh in the source.
+
+    extensiondir=$out/share/gnome-shell/extensions
+    schemadir=${glib.makeSchemaPath "$out" "${pname}-${version}"}
+
+    glib-compile-schemas $schemadir
+
+    for f in $extensiondir/*; do
+      name=`basename ''${f%%@*}`
+      uuid=$name@gnome-shell-extensions.gcampax.github.com
+      schema=$schemadir/org.gnome.shell.extensions.$name.gschema.xml
+
+      if [ -f $schema ]; then
+        mkdir $f/schemas
+        ln -s $schema $f/schemas;
+        glib-compile-schemas $f/schemas
+      fi
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeShell/Extensions;

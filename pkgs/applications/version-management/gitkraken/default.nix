@@ -1,8 +1,9 @@
-{ stdenv, lib, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
-, libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
+{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+, libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-, nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem
+, nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
+, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
+, e2fsprogs, krb5
 }:
 
 with stdenv.lib;
@@ -11,13 +12,16 @@ let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
 in
 stdenv.mkDerivation rec {
-  name = "gitkraken-${version}";
-  version = "3.4.0";
+  pname = "gitkraken";
+  version = "6.5.4";
 
-  src = fetchurl {
-    url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "0jj3a02bz30xa7p4migyhvxd9s0cllymsp1rdh2pbh40p79g1fp1";
+  src = fetchzip {
+    url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
+    sha256 = "0hrxkhxp6kp82jg1pkcl6vxa5mjpgncx0k353bcnm4986ysizhj4";
   };
+
+  dontBuild = true;
+  dontConfigure = true;
 
   libPath = makeLibraryPath [
     stdenv.cc.cc.lib
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
     cups
     alsaLib
     expat
-    gdk_pixbuf
+    gdk-pixbuf
     dbus
     libXdamage
     libXrandr
@@ -49,46 +53,58 @@ stdenv.mkDerivation rec {
     libXcomposite
     libXfixes
     libXrender
-    gtk2
-    gnome2.GConf
+    gtk3
     libgnome-keyring
+    openssl
+    at-spi2-atk
+    at-spi2-core
+    libuuid
+    e2fsprogs
+    krb5
   ];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  dontBuild = true;
 
   desktopItem = makeDesktopItem {
     name = "gitkraken";
     exec = "gitkraken";
-    icon = "app";
+    icon = "gitkraken";
     desktopName = "GitKraken";
     genericName = "Git Client";
     categories = "Application;Development;";
     comment = "Graphical Git client from Axosoft";
   };
 
-  buildInputs = [ dpkg ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
-  unpackPhase = "true";
-  buildCommand = ''
-    mkdir -p $out
-    dpkg -x $src $out
-    substituteInPlace $out/usr/share/applications/gitkraken.desktop \
-      --replace /usr/share/gitkraken $out/bin
-    cp -av $out/usr/* $out
-    rm -rf $out/etc $out/usr $out/share/lintian
-    chmod -R g-w $out
+  installPhase = ''
+    runHook preInstall
 
-    for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+    mkdir -p $out/share/gitkraken/
+    cp -R $src/* $out/share/gitkraken/
+
+    mkdir -p $out/bin
+    ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+
+    substituteInPlace $out/share/applications/gitkraken.desktop \
+      --replace $out/usr/share/gitkraken $out/bin
+
+    mkdir -p $out/share/pixmaps
+    cp gitkraken.png $out/share/pixmaps/gitkraken.png
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    pushd $out/share/gitkraken
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" gitkraken
+
+    for file in $(find . -type f \( -name \*.node -o -name gitkraken -o -name \*.so\* \) ); do
       patchelf --set-rpath ${libPath}:$out/share/gitkraken $file || true
     done
-
-    find $out/share/gitkraken -name "*.node" -exec patchelf --set-rpath "${libPath}:$out/share/gitkraken" {} \;
-
-    rm $out/bin/gitkraken
-    ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+    popd
   '';
 
   meta = {
@@ -96,6 +112,6 @@ stdenv.mkDerivation rec {
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ xnwdd ];
+    maintainers = with maintainers; [ xnwdd evanjs ];
   };
 }

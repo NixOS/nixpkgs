@@ -6,7 +6,7 @@ with import ./systemd-lib.nix { inherit config lib pkgs; };
 let
   checkService = checkUnitConfig "Service" [
     (assertValueOneOf "Type" [
-      "simple" "forking" "oneshot" "dbus" "notify" "idle"
+      "exec" "simple" "forking" "oneshot" "dbus" "notify" "idle"
     ])
     (assertValueOneOf "Restart" [
       "no" "on-success" "on-failure" "on-abnormal" "on-abort" "always"
@@ -24,7 +24,7 @@ in rec {
       in
         if isList (head defs'')
         then concatLists defs''
-        else mergeOneOption loc defs';
+        else mergeEqualOption loc defs';
   };
 
   sharedOptions = {
@@ -210,6 +210,15 @@ in rec {
       '';
     };
 
+    startLimitIntervalSec = mkOption {
+       type = types.int;
+       description = ''
+         Configure unit start rate limiting. Units which are started
+         more than burst times within an interval time interval are
+         not permitted to start any more.
+       '';
+    };
+
   };
 
 
@@ -217,7 +226,7 @@ in rec {
 
     environment = mkOption {
       default = {};
-      type = types.attrs; # FIXME
+      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
       example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
       description = "Environment variables passed to the service's processes.";
     };
@@ -394,7 +403,7 @@ in rec {
         Each attribute in this set specifies an option in the
         <literal>[Timer]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry> and
+        <manvolnum>5</manvolnum></citerefentry> and
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
         <manvolnum>7</manvolnum></citerefentry> for details.
       '';

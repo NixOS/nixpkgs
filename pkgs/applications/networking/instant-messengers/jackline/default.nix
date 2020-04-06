@@ -2,22 +2,20 @@
 
 assert stdenv.lib.versionAtLeast ocamlPackages.ocaml.version "4.02.2";
 
-stdenv.mkDerivation rec {
-  version = "2017-12-24";
-  name = "jackline-${version}";
+stdenv.mkDerivation {
+  pname = "jackline";
+  version = "2019-08-08";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "jackline";
-    rev    = "8678e8a1a06e641218a31ae25150040202f89289";
-    sha256 = "05z9kvd7gwr59ic7hnmbayhwyyqd41xxz01cvdlcgplk3z7zlwg5";
+    rev    = "b934594010a563ded9c0f436e3fab8f1cae29856";
+    sha256 = "076h03jd970xlii90ax6kvgyq67g81gs30yvdzps366n7zzy3yfc";
   };
-
-  patches = [ ./tls-0.9.0.patch ];
 
   buildInputs = with ocamlPackages; [
                   ocaml ocamlbuild findlib topkg ppx_sexp_conv
-                  erm_xmpp_0_3 tls nocrypto x509 ocaml_lwt otr astring
+                  erm_xmpp tls nocrypto x509 ocaml_lwt otr astring
                   ptime notty sexplib hex uutf
                 ];
 

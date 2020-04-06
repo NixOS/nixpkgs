@@ -1,11 +1,12 @@
 { stdenv, fetchurl, pkgconfig, json_c, hidapi }:
 
 stdenv.mkDerivation rec {
-  name = "libu2f-host-1.1.4";
+  pname = "libu2f-host";
+  version = "1.1.10";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/libu2f-host/Releases/${name}.tar.xz";
-    sha256 = "0vvs2p3b25cbybccv3f4ridnp7sg5i4hkzx3hx48ldcn1l1fqhv0";
+    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.xz";
+    sha256 = "0vrivl1dwql6nfi48z6dy56fwy2z13d7abgahgrs2mcmqng7hra2";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -20,8 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/libu2f-host;
     description = "A C library and command-line tool that implements the host-side of the U2F protocol";
-    license = licenses.bsd2;
+    license = with licenses; [ gpl3Plus lgpl21Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

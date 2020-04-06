@@ -1,14 +1,20 @@
-{ stdenv, fetchurl, zlib, pcre }:
+{ stdenv, fetchurl, lib, zlib, pcre
+, tlsSupport ? true, gnutls ? null
+# ^ set { tlsSupport = false; } to reduce closure size by ~= 18.6 MB
+}:
+
+assert tlsSupport -> gnutls != null;
 
 stdenv.mkDerivation rec {
-  name = "tintin-2.01.4";
+  name = "tintin-2.02.02";
 
   src = fetchurl {
     url    = "mirror://sourceforge/tintin/${name}.tar.gz";
-    sha256 = "1g7bh8xs1ml0iyraps3a3dzaycci922y7fk5j0wyr4ssyjzsy8nx";
+    sha256 = "11ylbp8ip7dwmh4gzb53z147pcfxkl3lwhyy8ngyn2zc634vdn65";
   };
 
-  buildInputs = [ zlib pcre ];
+  nativeBuildInputs = lib.optional tlsSupport gnutls.dev;
+  buildInputs = [ zlib pcre ] ++ lib.optional tlsSupport gnutls;
 
   preConfigure = ''
     cd src

@@ -1,51 +1,95 @@
-{ stdenv, lib, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook
-, intltool, yelp-tools, itstool, libxmlxx3
-, python, pygobject3, gtk3, gnome3, substituteAll
-, at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
-, xkbcomp, gsettings-desktop-schemas, liblouis
-, speechd, brltty, setproctitle, gst_all_1, gst-python
+{ stdenv
+, pkgconfig
+, fetchurl
+, buildPythonApplication
+, autoreconfHook
+, wrapGAppsHook
+, gobject-introspection
+, gettext
+, yelp-tools
+, itstool
+, libxmlxx3
+, python
+, pygobject3
+, gtk3
+, gnome3
+, substituteAll
+, at-spi2-atk
+, at-spi2-core
+, pyatspi
+, dbus
+, dbus-python
+, pyxdg
+, xkbcomp
+, procps
+, lsof
+, coreutils
+, gsettings-desktop-schemas
+, speechd
+, brltty
+, liblouis
+, setproctitle
+, gst_all_1
+, gst-python
 }:
 
-with lib;
-let
+buildPythonApplication rec {
   pname = "orca";
-  version = "3.26.0";
-in buildPythonApplication rec {
-  name = "${pname}-${version}";
+  version = "3.36.0";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0xk5k9cbswymma60nrfj00dl97wypx59c107fb1hwi75gm0i07a7";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0yrkl0j1mm4fd5zib8jvbfgm2iyanlx05vhhnmjcmvpm464c7pf9";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
+      cat = "${coreutils}/bin/cat";
+      lsof = "${lsof}/bin/lsof";
+      pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })
   ];
 
   nativeBuildInputs = [
-    autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    intltool yelp-tools itstool
+    autoreconfHook
+    wrapGAppsHook
+    pkgconfig
+    libxmlxx3
+    gettext
+    yelp-tools
+    itstool
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
-    pygobject3 pyatspi dbus-python pyxdg brltty liblouis speechd gst-python setproctitle
+    pygobject3
+    pyatspi
+    dbus-python
+    pyxdg
+    brltty
+    liblouis
+    speechd
+    gst-python
+    setproctitle
   ];
+
+  strictDeps = false;
 
   buildInputs = [
-    python gtk3 at-spi2-atk at-spi2-core dbus gsettings-desktop-schemas
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    python
+    gtk3
+    at-spi2-atk
+    at-spi2-core
+    dbus
+    gsettings-desktop-schemas
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
-
-  # Run intltoolize to create po/Makefile.in.in
-  preConfigure = ''
-    intltoolize
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -53,15 +97,15 @@ in buildPythonApplication rec {
     };
   };
 
-  meta = {
-    homepage = https://wiki.gnome.org/Projects/Orca;
+  meta = with stdenv.lib; {
+    homepage = "https://wiki.gnome.org/Projects/Orca";
     description = "Screen reader";
     longDescription = ''
       A free, open source, flexible and extensible screen reader that provides
       access to the graphical desktop via speech and refreshable braille.
       It works with applications and toolkits that support the Assistive
       Technology Service Provider Interface (AT-SPI). That includes the GNOME
-      Gtk+ toolkit, the Java platform's Swing toolkit, LibreOffice, Gecko, and
+      GTK toolkit, the Java platform's Swing toolkit, LibreOffice, Gecko, and
       WebKitGtk. AT-SPI support for the KDE Qt toolkit is being pursued.
 
       Needs `services.gnome3.at-spi2-core.enable = true;` in `configuration.nix`.

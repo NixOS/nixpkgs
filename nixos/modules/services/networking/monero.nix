@@ -51,7 +51,7 @@ in
 
     services.monero = {
 
-      enable = mkEnableOption "Monero node daemon.";
+      enable = mkEnableOption "Monero node daemon";
 
       mining.enable = mkOption {
         type = types.bool;
@@ -197,17 +197,15 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton {
-      name = "monero";
+    users.users.monero = {
       uid  = config.ids.uids.monero;
       description = "Monero daemon user";
       home = dataDir;
       createHome = true;
     };
 
-    users.extraGroups = singleton {
-      name = "monero";
-      gid  = config.ids.gids.monero;
+    users.groups.monero = {
+      gid = config.ids.gids.monero;
     };
 
     systemd.services.monero = {
@@ -224,15 +222,17 @@ in
       };
     };
 
-   assertions = singleton {
-     assertion = cfg.mining.enable -> cfg.mining.address != "";
-     message   = ''
+    assertions = singleton {
+      assertion = cfg.mining.enable -> cfg.mining.address != "";
+      message   = ''
        You need a Monero address to receive mining rewards:
        specify one using option monero.mining.address.
-    '';
-   };
+      '';
+    };
 
   };
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
 }
 

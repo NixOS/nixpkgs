@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "autorevision-${version}";
+  pname = "autorevision";
   version = "1.21";
 
   src = fetchurl {

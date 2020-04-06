@@ -1,17 +1,15 @@
-{ stdenv, buildPackages
-, fetchurl, fetchpatch, gnu-config, autoreconfHook264, bison
+{ stdenv
+, fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
 , libiberty, zlib
 }:
 
-let inherit (buildPackages.buildPackages) binutils-raw; in
-
-stdenv.mkDerivation rec {
-  name = "libbfd-${version}";
-  inherit (binutils-raw.bintools) version src;
+stdenv.mkDerivation {
+  pname = "libbfd";
+  inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils-raw.bintools.patches ++ [
+  patches = binutils-unwrapped.patches ++ [
     ../../tools/misc/binutils/build-components-separately.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/mxe/mxe/e1d4c144ee1994f70f86cf7fd8168fe69bd629c6/src/bfd-1-disable-subdir-doc.patch";
@@ -32,8 +30,8 @@ stdenv.mkDerivation rec {
   # We update these ourselves
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ autoreconfHook264 bison ];
-  buildInputs = [ libiberty zlib ];
+  nativeBuildInputs = [ autoreconfHook bison ];
+  buildInputs = [ libiberty zlib.dev ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
@@ -53,7 +51,7 @@ stdenv.mkDerivation rec {
       It is associated with GNU Binutils, and elsewhere often distributed with
       it.
     '';
-    homepage = http://www.gnu.org/software/binutils/;
+    homepage = https://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;

@@ -15,14 +15,19 @@ in
 
 stdenv.mkDerivation rec {
   name = "${package}-${version}";
-  version = "0.5.4";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     repo = "JFBView";
     owner = "jichu4n";
     rev = version;
-    sha256 = "0p12b5n07yfkmfswjdb3a4c5c50jcphl030n3i71djcq4jjvrxlw";
+    sha256 = "0ppns49hnmp04zdjw6wc28v0yvz31rkzvd5ylcj7arikx20llpxf";
   };
+
+  postPatch = ''
+    substituteInPlace main.cpp \
+      --replace "<stropts.h>" "<sys/ioctl.h>"
+  '';
 
   hardeningDisable = [ "format" ];
 
@@ -64,7 +69,5 @@ stdenv.mkDerivation rec {
     homepage = https://seasonofcode.com/pages/jfbview.html;
     license = licenses.asl20;
     platforms = platforms.linux;
-    # incompatible with latest mupdf, see https://github.com/jichu4n/JFBView/issues/17
-    broken = true;
   };
 }

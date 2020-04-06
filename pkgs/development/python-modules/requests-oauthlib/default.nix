@@ -2,13 +2,12 @@
 , oauthlib, requests }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
+  version = "1.3.0";
   pname = "requests-oauthlib";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s7lh5q661gjza1czlmibkrwf8dcj9qfqm3hs39sdbbyflbc8fl8";
+    sha256 = "0smaxs5ixng4z0k6dsgmm6s972ka3p6a2ykdpnl23mqzlw0ic9ml";
   };
 
   doCheck = false;        # Internet tests fail when building in chroot

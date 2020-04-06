@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, firefox, libX11, xproto }:
+{ stdenv, fetchurl, firefox, libX11, xorgproto }:
 
 stdenv.mkDerivation rec {
-  name = "mozplugger-${version}";
+  pname = "mozplugger";
   version = "2.1.6";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vszkq4kdbaxsrqr2xn9rq6ipza9fngdri79gvjqk3bvsdmg0k19";
   };
 
-  buildInputs = [ firefox libX11 xproto ];
+  buildInputs = [ firefox libX11 xorgproto ];
 
   installPhase = ''
     mkdir -p "$out/etc" "$out/bin" "$out/lib/mozilla/plugins" "$out/share/man/man7"
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     cp mozplugger.so "$out/lib/mozilla/plugins"
     cp mozplugger.7 "$out/share/man/man7"
 
-    mkdir -p "$out/share/${name}/plugin"
-    ln -s "$out/lib/mozilla/plugins/mozplugger.so" "$out/share/${name}/plugin"
+    mkdir -p "$out/share/${pname}-${version}/plugin"
+    ln -s "$out/lib/mozilla/plugins/mozplugger.so" "$out/share/${pname}-${version}/plugin"
   '';
 
   meta = {

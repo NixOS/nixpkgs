@@ -1,40 +1,53 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  six, cligj, munch, click-plugins, enum34, pytest, nose,
-  gdal
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
+, attrs, click, cligj, click-plugins, six, munch, enum34
+, pytest, boto3, mock, giflib
+, gdal_2 # can't bump to 3 yet, https://github.com/Toblerity/Fiona/issues/745
 }:
 
 buildPythonPackage rec {
   pname = "Fiona";
-  version = "1.7.11.post1";
-  name = "${pname}-${version}";
+  version = "1.8.13.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35df044fa805e6b420450f5d4281fc0edf96e1da0545c31032045cd3cfad3abf";
+    sha256 = "00366f2j21b5r4r8310sadf7jjhdr44s0381dhjqkw2nzpwjnhqs";
   };
 
-  buildInputs = [
-    gdal
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+
+  nativeBuildInputs = [
+    gdal_2 # for gdal-config
   ];
 
+  buildInputs = [
+    gdal_2
+  ] ++ lib.optionals stdenv.cc.isClang [ giflib ];
+
   propagatedBuildInputs = [
-    six
+    attrs
+    click
     cligj
-    munch
     click-plugins
-    enum34
-  ];
+    six
+    munch
+  ] ++ lib.optional (!isPy3k) enum34;
 
   checkInputs = [
     pytest
-    nose
-  ];
+    boto3
+  ] ++ lib.optional (pythonOlder "3.4") mock;
 
-  doCheck = false;
+  checkPhase = ''
+    rm -r fiona # prevent importing local fiona
+    # Some tests access network, others test packaging
+    pytest -k "not test_*_http \
+           and not test_*_https \
+           and not test_*_wheel"
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OGR's neat, nimble, no-nonsense API for Python";
-    homepage = http://toblerity.org/fiona/;
+    homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

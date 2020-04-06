@@ -5,12 +5,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "opentsdb-${version}";
-  version = "2.3.0";
+  pname = "opentsdb";
+  version = "2.4.0";
 
   src = fetchurl {
-    url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0nip40rh3vl5azfc27yha4ngnm9sw47hf110c90hg0warzz85sch";
+    url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "0b0hilqmgz6n1q7irp17h48v8fjpxhjapgw1py8kyav1d51s7mm2";
   };
 
   buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];

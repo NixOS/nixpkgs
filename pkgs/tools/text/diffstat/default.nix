@@ -1,14 +1,14 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "diffstat-1.61";
+  name = "diffstat-1.63";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/diffstat/${name}.tgz"
       "https://invisible-mirror.net/archives/diffstat/${name}.tgz"
     ];
-    sha256 = "1vjmda2zfjxg0qkaj8hfqa8g6bfwnn1ja8696rxrjgqq4w69wd95";
+    sha256 = "0vyw200s5dv1257pmrh6c6fdkmw3slyz5szpqfx916xr04sdbpby";
   };
 
   meta = with stdenv.lib; {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       insertions, deletions, and modifications per-file. It is useful for
       reviewing large, complex patch files.
     '';
-    homepage = http://invisible-island.net/diffstat/;
+    homepage = https://invisible-island.net/diffstat/;
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

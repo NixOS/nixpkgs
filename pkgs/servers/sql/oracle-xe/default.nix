@@ -1,15 +1,13 @@
 { stdenv, makeWrapper, requireFile, patchelf, rpmextract, libaio }:
 
-assert stdenv.system == "x86_64-linux";
-
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "oracle-xe-${version}";
+  pname = "oracle-xe";
   version = "11.2.0";
 
   src = requireFile {
-    name = "${name}-1.0.x86_64.rpm";
+    name = "${pname}-${version}-1.0.x86_64.rpm";
     sha256 = "0s2jj2xn56v5ys6hxb7l7045hw9c1mm1lhj4p2fvqbs02kqchab6";
 
     url = "http://www.oracle.com/technetwork/"
@@ -19,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   unpackCmd = ''
-    (mkdir -p "${name}" && cd "${name}" &&
+    (mkdir -p "${pname}-${version}" && cd "${pname}-${version}" &&
       ${rpmextract}/bin/rpmextract "$curSrc")
   '';
 
@@ -79,5 +77,6 @@ stdenv.mkDerivation rec {
     description = "Oracle Database Express Edition";
     homepage = http://www.oracle.com/technetwork/products/express-edition/;
     license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,20 +1,19 @@
 {
-  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools,
+  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools,
   boost, qttools, qtwebkit,
   breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
   kwidgetsaddons, kxmlgui,
-  kdb, kproperty, kreport, lcms2, mysql, marble, postgresql
+  kdb, kproperty, kreport, lcms2, libmysqlclient, marble, postgresql
 }:
 
 mkDerivation rec {
   pname = "kexi";
-  version = "3.0.2";
-  name = "${pname}-${version}";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "1fjvjifi5ygx5gs2lzfg22j0x3r7kl4wk5jll09r8gc3dfxaiblf";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
+    sha256 = "1zy1q7q9rfdaws3rwf3my22ywkn6g747s3ixfcg9r80mm2g3z0bs";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -24,10 +23,21 @@ mkDerivation rec {
     breeze-icons karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
     kcrash kguiaddons ki18n kiconthemes kitemviews kio ktexteditor ktextwidgets
     kwidgetsaddons kxmlgui
-    kdb kproperty kreport lcms2 mysql.connector-c marble postgresql
+    kdb kproperty kreport lcms2 libmysqlclient marble postgresql
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
+
+  patches = [
+    # Changes in Qt 5.13 mean that QDate isn't exported from certain places,
+    # which the build was relying on. This patch explicitly imports QDate where
+    # needed.
+    # Should be unnecessary with kexi >= 3.3
+    (fetchpatch {
+      url = "https://cgit.kde.org/kexi.git/patch/src/plugins/forms/widgets/kexidbdatepicker.cpp?id=511d99b7745a6ce87a208bdbf69e631f1f136d53";
+      sha256 = "0m5cwq2v46gb1b12p7acck6dadvn7sw4xf8lkqikj9hvzq3r1dnj";
+    })
+  ];
 
   meta = with lib; {
     description = "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";

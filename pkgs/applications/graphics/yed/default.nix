@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, requireFile, makeWrapper, unzip, jre }:
+{ stdenv, fetchzip, makeWrapper, unzip, jre }:
 
 stdenv.mkDerivation rec {
-  name = "yEd-${version}";
-  version = "3.17.2";
+  pname = "yEd";
+  version = "3.19.1.1";
 
-  src = requireFile {
-    name = "${name}.zip";
-    url = "https://www.yworks.com/en/products/yfiles/yed/";
-    sha256 = "0wpfvd3jqxgjk3xqkamvlg7rk0w0pmrv7srjfqns447ccc3i7qg2";
+  src = fetchzip {
+    url = "https://www.yworks.com/resources/yed/demo/${pname}-${version}.zip";
+    sha256 = "0px88rc1slf7n1n8lpk56hf29ppbnnd4lrqfyggihcr0pxmw157c";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
     mkdir -p $out/yed
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.unfree;
-    homepage = http://www.yworks.com/en/products/yfiles/yed/;
+    homepage = "https://www.yworks.com/products/yed";
     description = "A powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ abbradar ];

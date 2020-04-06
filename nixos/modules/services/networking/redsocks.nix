@@ -267,4 +267,6 @@ in
             "ip46tables -t nat -D OUTPUT -p tcp ${redCond block} -j ${chain} 2>/dev/null || true"
         ) cfg.redsocks;
     };
+
+  meta.maintainers = with lib.maintainers; [ ekleog ];
 }

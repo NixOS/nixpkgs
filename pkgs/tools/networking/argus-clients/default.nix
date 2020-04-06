@@ -3,10 +3,9 @@
 stdenv.mkDerivation rec {
   pname = "argus-clients";
   version = "3.0.8.2";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://qosient.com/argus/src/${name}.tar.gz";
+    url = "http://qosient.com/argus/src/${pname}-${version}.tar.gz";
     sha256 = "1c9vj6ma00gqq9h92fg71sxcsjzz912166sdg90ahvnmvmh3l1rj";
   };
 
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
     done
     '';
 
-  configureFlags = "--with-perl=${perl}/bin/perl";
+  configureFlags = [ "--with-perl=${perl}/bin/perl" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex ];

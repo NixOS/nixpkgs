@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp4, ncurses, zlib, makeWrapper, clang_35 }:
+{ stdenv, fetchurl, gmp4, ncurses, zlib, clang }:
 
 let
   libPath = stdenv.lib.makeLibraryPath
@@ -12,7 +12,7 @@ let
   url = "https://github.com/GaloisInc/saw-script/releases/download";
 
   saw-bin =
-    if stdenv.system == "i686-linux"
+    if stdenv.hostPlatform.system == "i686-linux"
     then fetchurl {
       url    = url + "/v0.1.1-dev/saw-0.1.1-dev-2015-07-31-CentOS6-32.tar.gz";
       sha256 = "126iag5nnvndi78c921z7vjrjfwcspn1hlxwwhzmqm4rvbhhr9v9";
@@ -22,8 +22,8 @@ let
       sha256 = "07gyf319v6ama6n1aj96403as04bixi8mbisfy7f7va689zklflr";
     };
 in
-stdenv.mkDerivation rec {
-  name    = "saw-tools-${version}";
+stdenv.mkDerivation {
+  pname = "saw-tools";
   version = "0.1.1-20150731";
 
   src = saw-bin;
@@ -34,12 +34,11 @@ stdenv.mkDerivation rec {
     mv bin $out/bin
     mv doc $out/share
 
-    # Hack around lack of libtinfo in NixOS
-    ln -s ${ncurses.out}/lib/libncursesw.so.5       $out/lib/libtinfo.so.5
+    ln -s ${ncurses.out}/lib/libtinfo.so.5       $out/lib/libtinfo.so.5
     ln -s ${stdenv.cc.libc}/lib/libpthread.so.0 $out/lib/libpthread.so.0
 
     # Add a clang symlink for easy building with a suitable compiler.
-    ln -s ${clang_35}/bin/clang $out/bin/saw-clang
+    ln -s ${clang}/bin/clang $out/bin/saw-clang
   '';
 
   fixupPhase = ''

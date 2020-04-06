@@ -7,11 +7,10 @@ let
 
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
-  hasVirtuals = any (i: i.virtual) interfaces;
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches)
+    ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches)
     ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
     ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
 
@@ -68,8 +67,7 @@ let
              (hasAttr dev cfg.macvlans) ||
              (hasAttr dev cfg.sits) ||
              (hasAttr dev cfg.vlans) ||
-             (hasAttr dev cfg.vswitches) ||
-             (hasAttr dev cfg.wlanInterfaces)
+             (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
@@ -87,7 +85,8 @@ let
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
-            partOf = map (i: "network-addresses-${i.name}.service") interfaces;
+            # exclude bridges from the partOf relationship to fix container networking bug #47210
+            partOf = map (i: "network-addresses-${i.name}.service") (filter (i: !(hasAttr i.name cfg.bridges)) interfaces);
             conflicts = [ "shutdown.target" ];
             wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 
@@ -104,16 +103,18 @@ let
 
             script =
               ''
-                # Set the static DNS configuration, if given.
-                ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-                ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
-                  domain ${cfg.domain}
+                ${optionalString config.networking.resolvconf.enable ''
+                  # Set the static DNS configuration, if given.
+                  ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
+                  ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
+                    domain ${cfg.domain}
+                  ''}
+                  ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
+                  ${flip concatMapStrings cfg.nameservers (ns: ''
+                    nameserver ${ns}
+                  '')}
+                  EOF
                 ''}
-                ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
-                ${flip concatMapStrings cfg.nameservers (ns: ''
-                  nameserver ${ns}
-                '')}
-                EOF
 
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
@@ -192,7 +193,7 @@ let
                     if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "failed"
+                      echo "'ip addr add "${cidr}" dev "${i.name}"' failed: $out"
                       exit 1
                     fi
                   ''
@@ -210,10 +211,10 @@ let
                   ''
                      echo "${cidr}" >> $state
                      echo -n "adding route ${cidr}... "
-                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" 2>&1); then
+                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "failed"
+                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''
@@ -290,13 +291,19 @@ let
 
               ${optionalString config.virtualisation.libvirtd.enable ''
                   # Enslave dynamically added interfaces which may be lost on nixos-rebuild
-                  for uri in qemu:///system lxc:///; do
-                    for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
-                      ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
-                      ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
-                      ${pkgs.bash}/bin/bash
+                  #
+                  # if `libvirtd.service` is not running, do not use `virsh` which would try activate it via 'libvirtd.socket' and thus start it out-of-order.
+                  # `libvirtd.service` will set up bridge interfaces when it will start normally.
+                  #
+                  if ${pkgs.systemd}/bin/systemctl --quiet is-active 'libvirtd.service'; then
+                    for uri in qemu:///system lxc:///; do
+                      for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
+                        ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
+                        ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
+                        ${pkgs.bash}/bin/bash
+                      done
                     done
-                  done
+                  fi
                 ''}
 
               # Enable stp on the interface
@@ -335,34 +342,47 @@ let
 
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"
           (let
-            deps = concatLists (map deviceDependency v.interfaces);
+            deps = concatLists (map deviceDependency (attrNames (filterAttrs (_: config: config.type != "internal") v.interfaces)));
+            internalConfigs = concatMap (i: ["network-link-${i}.service" "network-addresses-${i}.service"]) (attrNames (filterAttrs (_: config: config.type == "internal") v.interfaces));
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
-            wantedBy = [ "network-setup.service" "vswitchd.service" ] ++ deps;
-            bindsTo =  [ "vswitchd.service" (subsystemDevice n) ] ++ deps;
-            partOf = [ "network-setup.service" "vswitchd.service" ];
-            after = [ "network-pre.target" "vswitchd.service" ] ++ deps;
-            before = [ "network-setup.service" ];
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ] ++ internalConfigs;
+            # before = [ "network-setup.service" ];
+            # should work without internalConfigs dependencies because address/link configuration depends
+            # on the device, which is created by ovs-vswitchd with type=internal, but it does not...
+            before = [ "network-setup.service" ] ++ internalConfigs;
+            partOf = [ "network-setup.service" ]; # shutdown the bridge when network is shutdown
+            bindsTo = [ "ovs-vswitchd.service" ]; # requires ovs-vswitchd to be alive at all times
+            after = [ "network-pre.target" "ovs-vswitchd.service" ] ++ deps; # start switch after physical interfaces and vswitch daemon
+            wants = deps; # if one or more interface fails, the switch should continue to run
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            preStart = ''
+              echo "Resetting Open vSwitch ${n}..."
+              ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \
+                        -- set bridge ${n} protocols=${concatStringsSep "," v.supportedOpenFlowVersions}
+            '';
             script = ''
-              echo "Removing old Open vSwitch ${n}..."
-              ovs-vsctl --if-exists del-br ${n}
-
-              echo "Adding Open vSwitch ${n}..."
-              ovs-vsctl -- add-br ${n} ${concatMapStrings (i: " -- add-port ${n} ${i}") v.interfaces} \
+              echo "Configuring Open vSwitch ${n}..."
+              ovs-vsctl ${concatStrings (mapAttrsToList (name: config: " -- add-port ${n} ${name}" + optionalString (config.vlan != null) " tag=${toString config.vlan}") v.interfaces)} \
+                ${concatStrings (mapAttrsToList (name: config: optionalString (config.type != null) " -- set interface ${name} type=${config.type}") v.interfaces)} \
                 ${concatMapStrings (x: " -- set-controller ${n} " + x)  v.controllers} \
                 ${concatMapStrings (x: " -- " + x) (splitString "\n" v.extraOvsctlCmds)}
 
+
               echo "Adding OpenFlow rules for Open vSwitch ${n}..."
-              ovs-ofctl add-flows ${n} ${ofRules}
+              ovs-ofctl --protocols=${v.openFlowVersion} add-flows ${n} ${ofRules}
             '';
             postStop = ''
+              echo "Cleaning Open vSwitch ${n}"
+              echo "Shuting down internal ${n} interface"
               ip link set ${n} down || true
-              ovs-ofctl del-flows ${n} || true
-              ovs-vsctl --if-exists del-br ${n}
+              echo "Deleting flows for ${n}"
+              ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
+              echo "Deleting Open vSwitch ${n}"
+              ovs-vsctl --if-exists del-br ${n} || true
             '';
           });
 
@@ -475,7 +495,12 @@ let
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
-              ip link set "${n}" up
+
+              # We try to bring up the logical VLAN interface. If the master
+              # interface the logical interface is dependent upon is not up yet we will
+              # fail to immediately bring up the logical interface. The resulting logical
+              # interface will brought up later when the master interface is up.
+              ip link set "${n}" up || true
             '';
             postStop = ''
               ip link delete "${n}" || true
@@ -492,8 +517,8 @@ let
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
          // {
-           "network-setup" = networkSetup;
-           "network-local-commands" = networkLocalCommands;
+           network-setup = networkSetup;
+           network-local-commands = networkLocalCommands;
          };
 
     services.udev.extraRules =

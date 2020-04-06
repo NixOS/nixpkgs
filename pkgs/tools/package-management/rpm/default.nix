@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rpm-${version}";
-  version = "4.14.1";
+  pname = "rpm";
+  version = "4.14.2.1";
 
   src = fetchurl {
     url = "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-${version}.tar.bz2";
-    sha256 = "0fvrjq6jsvbllb5q6blchzh7p5flk61rz34g4g9mp9iwrhn0xx23";
+    sha256 = "1nmck2fq9h85fgs3zhh6w1avlw5y16cbz5khd459ry3jfd5w4f8i";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
     # Avoid macros like '%__ld' pointing to absolute paths
     for tool in ld nm objcopy objdump strip; do
       sed -i $out/lib/rpm/macros -e "s/^%__$tool.*/%__$tool $tool/"
+    done
+
+    # Avoid helper scripts pointing to absolute paths
+    for tool in find-provides find-requires; do
+      sed -i $out/lib/rpm/$tool -e "s#/usr/lib/rpm/#$out/lib/rpm/#"
     done
 
     # symlinks produced by build are incorrect

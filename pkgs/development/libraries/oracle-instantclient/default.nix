@@ -1,80 +1,118 @@
-{ stdenv, requireFile, libelf, gcc, glibc, patchelf, unzip, rpmextract, libaio
-, odbcSupport ? false, unixODBC
+{ stdenv
+, fetchurl
+, autoPatchelfHook
+, fixDarwinDylibNames
+, unzip
+, libaio
+, makeWrapper
+, odbcSupport ? true
+, unixODBC
 }:
 
 assert odbcSupport -> unixODBC != null;
 
-with stdenv.lib;
-
 let
-    baseVersion = "12.2";
-    requireSource = version: rel: part: hash: (requireFile rec {
-      name = "oracle-instantclient${baseVersion}-${part}-${version}-${rel}.x86_64.rpm";
-      message = ''
-        This Nix expression requires that ${name} already
-        be part of the store. Download the file
-        manually at
+  inherit (stdenv.lib) optional optionals optionalString;
 
-        http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-        and add it to the Nix store using either:
-          nix-store --add-fixed sha256 ${name}
-        or
-          nix-prefetch-url --type sha256 file:///path/to/${name}
-      '';
-      url = "http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html";
-      sha256 = hash;
-    });
-in stdenv.mkDerivation rec {
-  version = "${baseVersion}.0.1.0";
-  name = "oracle-instantclient-${version}";
+  # assemble list of components
+  components = [ "basic" "sdk" "sqlplus" ] ++ optional odbcSupport "odbc";
 
-  srcBase = (requireSource version "1" "basic" "43c4bfa938af741ae0f9964a656f36a0700849f5780a2887c8e9f1be14fe8b66");
-  srcDevel = (requireSource version "1" "devel" "4c7ad8d977f9f908e47c5e71ce56c2a40c7dc83cec8a5c106b9ff06d45bb3442");
-  srcSqlplus = (requireSource version "1" "sqlplus" "303e82820a10f78e401e2b07d4eebf98b25029454d79f06c46e5f9a302ce5552");
-  srcOdbc = optionalString odbcSupport (requireSource version "2" "odbc" "e870c84d2d4be6f77c0760083b82b7ffbb15a4bf5c93c4e6c84f36d6ed4dfdf1");
+  # determine the version number, there might be different ones per architecture
+  version = {
+    x86_64-linux = "19.3.0.0.0";
+    x86_64-darwin = "19.3.0.0.0";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
-  buildInputs = [ glibc patchelf rpmextract ] ++
-    optional odbcSupport unixODBC;
+  # hashes per component and architecture
+  hashes = {
+    x86_64-linux = {
+      basic   = "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy";
+      sdk     = "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99";
+      sqlplus = "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5";
+      odbc    = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
+    };
+    x86_64-darwin = {
+      basic   = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
+      sdk     = "b46b4b87af593f7cfe447cfb903d1ae5073cec34049143ad8cdc9f3e78b23b27";
+      sqlplus = "f7565c3cbf898b0a7953fbb0017c5edd9d11d1863781588b7caf3a69937a2e9e";
+      odbc    = "f91da40684abaa866aa059eb26b1322f2d527670a1937d678404c991eadeb725";
+    };
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
-  buildCommand = ''
-    mkdir -p "${name}"
-    cd "${name}"
-    ${rpmextract}/bin/rpmextract "${srcBase}"
-    ${rpmextract}/bin/rpmextract "${srcDevel}"
-    ${rpmextract}/bin/rpmextract "${srcSqlplus}"
-    '' + optionalString odbcSupport ''${rpmextract}/bin/rpmextract ${srcOdbc}
-    '' + ''
-    mkdir -p "$out/"{bin,include,lib,"share/${name}/demo/"}
-    mv "usr/share/oracle/${baseVersion}/client64/demo/"* "$out/share/${name}/demo/"
-    mv "usr/include/oracle/${baseVersion}/client64/"* "$out/include/"
-    mv "usr/lib/oracle/${baseVersion}/client64/lib/"* "$out/lib/"
-    mv "usr/lib/oracle/${baseVersion}/client64/bin/"* "$out/bin/"
-    ln -s "$out/bin/sqlplus" "$out/bin/sqlplus64"
+  # rels per component and architecture, optional
+  rels = {
+  }.${stdenv.hostPlatform.system} or {};
 
-    for lib in $out/lib/lib*.so; do
-      test -f $lib || continue
-      chmod +x $lib
-      patchelf --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
-               $lib
-    done
+  # convert platform to oracle architecture names
+  arch = {
+    x86_64-linux = "linux.x64";
+    x86_64-darwin = "macos.x64";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
-    for lib in $out/lib/libsqora*; do
-      test -f $lib || continue
-      chmod +x $lib
-      patchelf --force-rpath --set-rpath "$out/lib:${unixODBC}/lib" \
-               $lib
-    done
+  shortArch = {
+    x86_64-linux = "linux";
+    x86_64-darwin = "mac";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
-    for exe in $out/bin/sqlplus; do
-      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-               --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
-               $exe
-    done
+  # calculate the filename of a single zip file
+  srcFilename = component: arch: version: rel:
+    "instantclient-${component}-${arch}-${version}" +
+    (optionalString (rel != "") "-${rel}") +
+    (optionalString (arch == "linux.x64" || arch == "macos.x64") "dbru") + # ¯\_(ツ)_/¯
+    ".zip";
+
+  # fetcher for the non clickthrough artifacts
+  fetcher = srcFilename: hash: fetchurl {
+    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/193000/${srcFilename}";
+    sha256 = hash;
+  };
+
+  # assemble srcs
+  srcs = map (component:
+    (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or ""))
+  components;
+
+  pname = "oracle-instantclient";
+  extLib = stdenv.hostPlatform.extensions.sharedLibrary;
+in stdenv.mkDerivation {
+  inherit pname version srcs;
+
+  buildInputs = [ stdenv.cc.cc.lib ]
+    ++ optional stdenv.isLinux libaio
+    ++ optional odbcSupport unixODBC;
+
+  nativeBuildInputs = [ makeWrapper unzip ]
+    ++ optional stdenv.isLinux autoPatchelfHook
+    ++ optional stdenv.isDarwin fixDarwinDylibNames;
+
+  outputs = [ "out" "dev" "lib"];
+
+  unpackCmd = "unzip $curSrc";
+
+  installPhase = ''
+    mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
+    install -Dm755 {adrci,genezi,uidrvci,sqlplus} $out/bin
+
+    # cp to preserve symlinks
+    cp -P *${extLib}* $lib/lib
+
+    install -Dm644 *.jar $out/share/java
+    install -Dm644 sdk/include/* $out/include
+    install -Dm644 sdk/demo/* $out/share/${pname}-${version}/demo
+
+    # provide alias
+    ln -sfn $out/bin/sqlplus $out/bin/sqlplus64
   '';
 
-  dontStrip = true;
-  dontPatchELF = true;
+  postFixup = optionalString stdenv.isDarwin ''
+    for exe in "$out/bin/"* ; do
+      if [ ! -L "$exe" ]; then
+        install_name_tool -add_rpath "$lib/lib" "$exe"
+      fi
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "Oracle instant client libraries and sqlplus CLI";
@@ -84,7 +122,8 @@ in stdenv.mkDerivation rec {
       command line SQL client.
     '';
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ pesterhazy ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ pesterhazy flokli ];
+    hydraPlatforms = [];
   };
 }

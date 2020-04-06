@@ -1,25 +1,32 @@
-{ stdenv, pkgs, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium
-, keyutils, liburcu, zlib, libaio }:
+{ stdenv, fetchgit, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
+, liburcu, zlib, libaio, zstd, lz4 }:
 
-stdenv.mkDerivation rec {
-  name = "bcachefs-tools-unstable-2018-02-08";
+stdenv.mkDerivation {
+  pname = "bcachefs-tools";
+  version = "2019-10-12";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "fc96071b58c28ea492103e7649c0efd5bab50ead";
-    sha256 = "0a2sxkz0mkmvb5g4k2v8g2c89dj29haw9bd3bpwk0dsfkjif92vy";
+    rev = "6e696ea08703eecd0d1c7b8c520b6f62f06f4f26";
+    sha256 = "0m3valm68vc73b4kydlga17fglxa9bldrjaszlladzl5bd0zb967";
   };
 
+  enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ attr libuuid libscrypt libsodium keyutils liburcu zlib libaio ];
+  buildInputs = [ attr libuuid libscrypt libsodium keyutils liburcu zlib libaio zstd lz4 ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  preInstall = ''
+    substituteInPlace Makefile \
+      --replace "INITRAMFS_DIR=/etc/initramfs-tools" \
+                "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+  '';
 
   meta = with stdenv.lib; {
     description = "Tool for managing bcachefs filesystems";
     homepage = https://bcachefs.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ davidak chiiruno ];
     platforms = platforms.linux;
   };
 }

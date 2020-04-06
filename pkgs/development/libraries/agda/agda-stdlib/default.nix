@@ -1,14 +1,14 @@
 { stdenv, agda, fetchFromGitHub, ghcWithPackages }:
 
 agda.mkDerivation (self: rec {
-  version = "0.14";
+  version = "1.1";
   name = "agda-stdlib-${version}";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
     owner = "agda";
     rev = "v${version}";
-    sha256 = "0qx72w6lwskp18q608f95j5dcxb9xr4q4mzdkxp01sgib8v2v56l";
+    sha256 = "190bxsy92ffmvwpmyyg3lxs91vyss2z25rqz1w79gkj56484cy64";
   };
 
   nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
@@ -23,6 +23,6 @@ agda.mkDerivation (self: rec {
     description = "A standard library for use with the Agda compiler";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with maintainers; [ jwiegley fuuzetsu mudri ];
+    maintainers = with maintainers; [ jwiegley mudri ];
   };
 })

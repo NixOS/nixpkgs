@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "2.4";
-  name    = "commons-io-${version}";
+  version = "2.6";
+  pname = "commons-io";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/io/binaries/${name}-bin.tar.gz";
-    sha256 = "0m5xmjfr9k2zmbrz425q530jd0lm6368c4wm3jsjlsrqmqjpsvz1";
+    url    = "mirror://apache/commons/io/binaries/${pname}-${version}-bin.tar.gz";
+    sha256 = "1nzkv8gi56l1m4h7s8bcvqm0naq3bhh7fazcmgdhcr2zkjs5zfmn";
   };
 
   installPhase = ''

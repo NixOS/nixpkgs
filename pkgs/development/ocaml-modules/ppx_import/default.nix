@@ -1,32 +1,28 @@
-{stdenv, fetchFromGitHub, buildOcaml, ocaml, opam,
- cppo, ppx_tools, ounit, ppx_deriving}:
+{ lib, fetchurl, buildDunePackage, ocaml
+, ounit, ppx_deriving, ppx_tools_versioned
+}:
 
-buildOcaml rec {
-  name = "ppx_import";
+if !lib.versionAtLeast ocaml.version "4.04"
+then throw "ppx_import is not available for OCaml ${ocaml.version}"
+else
 
-  version = "1.4";
+buildDunePackage rec {
+  pname = "ppx_import";
+  version = "1.7.1";
 
-  minimumSupportedOcamlVersion = "4.02";
-
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = "ppx_import";
-    rev = "v${version}";
-    sha256 = "14c2lp7r9080c4hsb1y1drbxxx3v44b7ib5wfh3kkh3f1jfsjwbk";
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ppx_import/releases/download/v${version}/ppx_import-v${version}.tbz";
+    sha256 = "16dyxfb7syz659rqa7yq36ny5vzl7gkqd7f4m6qm2zkjc1gc8j4v";
   };
 
-  buildInputs = [ cppo ounit ppx_deriving opam ];
+  buildInputs = [ ounit ppx_deriving ];
+  propagatedBuildInputs = [ ppx_tools_versioned ];
 
   doCheck = true;
-  checkTarget = "test";
 
-  installPhase = ''
-    opam-installer --script --prefix=$out ppx_import.install | sh
-    ln -s $out/lib/ppx_import $out/lib/ocaml/${ocaml.version}/site-lib
-  '';
-
-  meta = with stdenv.lib; {
+  meta = {
     description = "A syntax extension that allows to pull in types or signatures from other compiled interface files";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    homepage = "https://github.com/ocaml-ppx/ppx_import";
   };
 }

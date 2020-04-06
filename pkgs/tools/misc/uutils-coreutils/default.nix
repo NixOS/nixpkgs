@@ -1,39 +1,41 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cargo, cmake, sphinx, lib, prefix ? "uutils-" }:
+{ stdenv, fetchFromGitHub, rustPlatform, cargo, cmake, sphinx, lib, prefix ? "uutils-"
+, Security
+}:
 
 rustPlatform.buildRustPackage {
-  name = "uutils-coreutils-2018-02-09";
+  name = "uutils-coreutils-2019-05-03";
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
-    rev = "f333ab26b03294a32a10c1c203a03c6b5cf8a89a";
-    sha256 = "0nkggs5nqvc1mxzzgcsqm1ahchh4ll11xh0xqmcljrr5yg1rhhzf";
+    rev = "036dd812958ace22d973acf7b370f58072049dac";
+    sha256 = "0d9w3iiphhsk7l5l34682wayp90rgq5a3d94l3qdvhcqkfmpg727";
   };
 
   # too many impure/platform-dependent tests
   doCheck = false;
 
-  cargoSha256 = "0qv2wz1bxhm5xhzbic7cqmn8jj8fyap0s18ylia4fbwpmv89nkc5";
+  cargoSha256 = "186hwzdpy7j0gw7491qx02vy4di5md47hipf1xxi1qccvmcfghwh";
 
   makeFlags =
     [ "CARGO=${cargo}/bin/cargo" "PREFIX=$(out)" "PROFILE=release" "INSTALLDIR_MAN=$(out)/share/man/man1" ]
     ++ lib.optional (prefix != null) [ "PROG_PREFIX=${prefix}" ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ cargo sphinx ];
+  nativeBuildInputs = [ cmake cargo sphinx ];
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   # empty {build,install}Phase to use defaults of `stdenv.mkDerivation` rather than rust defaults
   buildPhase = "";
   installPhase = "";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform Rust rewrite of the GNU coreutils";
     longDescription = ''
       uutils is an attempt at writing universal (as in cross-platform)
       CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
     '';
     homepage = https://github.com/uutils/coreutils;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

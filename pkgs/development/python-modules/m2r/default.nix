@@ -2,12 +2,11 @@
   mistune, docutils } :
 buildPythonPackage rec {
   pname = "m2r";
-  name = "${pname}-${version}";
-  version = "0.1.13";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b19e3703a3a897859f01ff6a068ee9a0eea8e8fdf75e896e00e88b3476a12f87";
+    sha256 = "bf90bad66cda1164b17e5ba4a037806d2443f2a4d5ddc9f6a5554a0322aaed99";
   };
 
   propagatedBuildInputs = [ mistune docutils ];

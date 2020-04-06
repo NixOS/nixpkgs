@@ -1,47 +1,57 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, gtk3
-, gobjectIntrospection, gdk_pixbuf, librsvg, libgweather, autoreconfHook
-, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, file, libsoup
-, webkitgtk }:
+{ stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
+, gobject-introspection, gdk-pixbuf, librsvg, libgweather
+, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup, gsettings-desktop-schemas
+, webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
 
-stdenv.mkDerivation rec {
-  name = "gnome-maps-${version}";
-  version = "3.26.2";
+let
+  pname = "gnome-maps";
+  version = "3.36.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-maps/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "031d5c4a1aa79f1fbaf87f01fb790f7aab1d8dcd5d061cb5daf0fa96eaa18050";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-maps"; attrPath = "gnome3.gnome-maps"; };
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0kyd4f15bj409mhs97i94ggzwqdj3r3yjdmvvkn80pym0vw1xik5";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gobjectIntrospection wrapGAppsHook
-                  gtk3 geoclue2 gnome3.gjs gnome3.libgee folks gfbgraph
-                  gnome3.geocode-glib libchamplain file libsoup
-                  gdk_pixbuf librsvg libgweather autoreconfHook
-                  gnome3.gsettings-desktop-schemas gnome3.evolution-data-server
-                  gnome3.gnome-online-accounts gnome3.defaultIconTheme
-                  webkitgtk ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext python3 wrapGAppsHook ];
+  buildInputs = [
+    gobject-introspection
+    gtk3 geoclue2 gjs libgee folks gfbgraph
+    geocode-glib libchamplain libsoup
+    gdk-pixbuf librsvg libgweather
+    gsettings-desktop-schemas evolution-data-server
+    gnome-online-accounts gnome3.adwaita-icon-theme
+    webkitgtk
+  ];
 
-  # The .service file isn't wrapped with the correct environment
-  # so misses GIR files when started. By re-pointing from the gjs
-  # entry point to the wrapped binary we get back to a wrapped
-  # binary.
-  preConfigure = ''
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+
+    # The .service file isn't wrapped with the correct environment
+    # so misses GIR files when started. By re-pointing from the gjs
+    # entry point to the wrapped binary we get back to a wrapped
+    # binary.
     substituteInPlace "data/org.gnome.Maps.service.in" \
         --replace "Exec=@pkgdatadir@/org.gnome.Maps" \
                   "Exec=$out/bin/gnome-maps"
   '';
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Maps;
     description = "A map application for GNOME 3";
     maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

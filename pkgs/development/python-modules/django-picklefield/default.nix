@@ -1,18 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, django }:
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  name = "${pname}-${version}";
-  version = "1.0.0";
+  version = "2.1.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0imncys5s3vsy2q79nn7k5d670da1xgmcr9gmhn06fry6ibf39b7";
+  };
+
+  propagatedBuildInputs = [ django ];
 
   meta = {
     description = "A pickled object field for Django";
     homepage = https://github.com/gintas/django-picklefield;
     license = lib.licenses.mit;
-  };
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "61e3ba7f6df82d8df9e6be3a8c55ef589eb3bf926c3d25d2b7949b07eae78354";
   };
 }

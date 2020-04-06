@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.4";
-  name = "mwic-${version}";
+  version = "0.7.8";
+  pname = "mwic";
 
   src = fetchurl {
-    url = "https://github.com/jwilk/mwic/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0c0xk7wx4vaamlry6srdixw1q6afmqznvxdzcg1skr0qjypw5i5q";
+    url = "https://github.com/jwilk/mwic/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0nnhziz9v523hpciylnxfajmxabh2ig5iawzwrfpf7aww70v330x";
   };
 
   makeFlags=["PREFIX=\${out}"];

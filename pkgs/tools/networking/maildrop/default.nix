@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, pcre, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "maildrop-2.6.0";
 
   src = fetchurl {
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre perl ];
 
   patches = [ ./maildrop.configure.hack.patch ]; # for building in chroot
+
+  doCheck = false; # fails with "setlocale: LC_ALL: cannot change locale (en_US.UTF-8)"
 
   meta = with stdenv.lib; {
     homepage = http://www.courier-mta.org/maildrop/;

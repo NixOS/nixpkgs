@@ -1,19 +1,15 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "google-fonts-${version}";
-  version = "2017-06-28";
+stdenv.mkDerivation {
+  pname = "google-fonts";
+  version = "2019-07-14";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "b1cb16c0ce2402242e0106d15b0429d1b8075ecc";
-    sha256 = "18kyclwipkdv4zxfws87x2l91jwn34vrizw8rmv8lqznnfsjh2lg";
+    rev = "f113126dc4b9b1473d9354a86129c9d7b837aa1a";
+    sha256 = "0safw5prpa63mqcyfw3gr3a535w4c9hg5ayw5pkppiwil7n3pyxs";
   };
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "0n0j2hi1qb2sc6p3v6lpaqb2aq0m9xjmi7apz3hf2nx97rrsam22";
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
@@ -29,6 +25,13 @@ stdenv.mkDerivation rec {
       ofl/siamreap \
       ofl/terminaldosislight
 
+    # See comment above, the structure of these is a bit odd
+    # We keep the ofl/<font>/static/ variants
+    rm -rv ofl/comfortaa/*.ttf \
+      ofl/mavenpro/*.ttf \
+      ofl/muli/*.ttf \
+      ofl/oswald/*.ttf
+
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"
       exit 1
@@ -37,9 +40,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     dest=$out/share/fonts/truetype
-    mkdir -p $dest
-    find . -name "*.ttf" -exec cp -v {} $dest \;
-    chmod -x $dest/*.ttf
+    find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '';
 
   meta = with stdenv.lib; {

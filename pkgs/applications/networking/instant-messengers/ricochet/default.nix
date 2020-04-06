@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, makeDesktopItem, unzip
+{ stdenv, fetchurl, pkgconfig, makeDesktopItem
 , qtbase, qttools, qtmultimedia, qtquick1, qtquickcontrols
 , openssl, protobuf, qmake
 }:
 
 stdenv.mkDerivation rec {
-  name = "ricochet-${version}";
+  pname = "ricochet";
   version = "1.1.4";
 
   src = fetchurl {

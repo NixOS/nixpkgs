@@ -44,8 +44,10 @@ in
           message bus.  Specifically, files in the following directories
           will be included into their respective DBus configuration paths:
           <filename><replaceable>pkg</replaceable>/etc/dbus-1/system.d</filename>
+          <filename><replaceable>pkg</replaceable>/share/dbus-1/system.d</filename>
           <filename><replaceable>pkg</replaceable>/share/dbus-1/system-services</filename>
           <filename><replaceable>pkg</replaceable>/etc/dbus-1/session.d</filename>
+          <filename><replaceable>pkg</replaceable>/share/dbus-1/session.d</filename>
           <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
         '';
       };
@@ -66,19 +68,16 @@ in
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
-    environment.etc = singleton
-      { source = configDir;
-        target = "dbus-1";
-      };
+    environment.etc."dbus-1".source = configDir;
 
-    users.extraUsers.messagebus = {
+    users.users.messagebus = {
       uid = config.ids.uids.messagebus;
       description = "D-Bus system message bus daemon user";
       home = homeDir;
       group = "messagebus";
     };
 
-    users.extraGroups.messagebus.gid = config.ids.gids.messagebus;
+    users.groups.messagebus.gid = config.ids.gids.messagebus;
 
     systemd.packages = [ pkgs.dbus.daemon ];
 
@@ -100,6 +99,7 @@ in
       # Don't restart dbus-daemon. Bad things tend to happen if we do.
       reloadIfChanged = true;
       restartTriggers = [ configDir ];
+      environment = { LD_LIBRARY_PATH = config.system.nssModules.path; };
     };
 
     systemd.user = {

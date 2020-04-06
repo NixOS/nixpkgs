@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , libGLU
-, x11
+, xlibsWrapper
 , xorg
 , xinput_calibrator
 , doxygen
@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "MAR1D-${version}";
+  pname = "MAR1D";
   version = "0.2.0";
   options = "-w${toString width}"
           + " -s${toString sensitivity}"
@@ -42,11 +42,12 @@ stdenv.mkDerivation rec {
       libao
       libpthreadstubs
       libGLU
-      x11
+      xlibsWrapper
       xinput_calibrator
       xorg.libXrandr
       xorg.libXi
       xorg.xinput
+      xorg.libXxf86vm
     ];
 
   preConfigure = ''

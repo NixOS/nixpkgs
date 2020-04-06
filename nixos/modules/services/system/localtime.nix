@@ -20,41 +20,28 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.geoclue2.enable = true;
+    services.geoclue2 = {
+      enable = true;
+      appConfig.localtime = {
+        isAllowed = true;
+        isSystem = true;
+      };
+    };
 
-    security.polkit.extraConfig = ''
-     polkit.addRule(function(action, subject) {
-       if (action.id == "org.freedesktop.timedate1.set-timezone"
-           && subject.user == "localtimed") {
-         return polkit.Result.YES;
-       }
-     });
-    '';
+    # We use the 'out' output, since localtime has its 'bin' output
+    # first, so that is what we get if we use the derivation bare.
+    # Install the polkit rules.
+    environment.systemPackages = [ pkgs.localtime.out ];
+    # Install the systemd unit.
+    systemd.packages = [ pkgs.localtime.out ];
 
-    users.users = [{
-      name = "localtimed";
+    users.users.localtimed = {
       description = "Taskserver user";
-    }];
+    };
 
     systemd.services.localtime = {
-      description = "localtime service";
       wantedBy = [ "multi-user.target" ];
-      partOf = [ "geoclue.service "];
-
-      serviceConfig = {
-        Restart                 = "on-failure";
-        # TODO: make it work with dbus
-        #DynamicUser             = true;
-        Nice                    = 10;
-        User                    = "localtimed";
-        PrivateTmp              = "yes";
-        PrivateDevices          = true;
-        PrivateNetwork          = "yes";
-        NoNewPrivileges         = "yes";
-        ProtectSystem           = "strict";
-        ProtectHome             = true;
-        ExecStart               = "${pkgs.localtime}/bin/localtimed";
-      };
+      serviceConfig.Restart = "on-failure";
     };
   };
 }

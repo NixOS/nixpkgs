@@ -1,11 +1,12 @@
 { stdenv, fetchurl, pkgconfig, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "libssh-0.7.5";
+  pname = "libssh";
+  version = "0.8.8";
 
   src = fetchurl {
-    url = "https://red.libssh.org/attachments/download/218/${name}.tar.xz";
-    sha256 = "15bh6dm9c50ndddzh3gqcgw7axp3ghrspjpkb1z3dr90vkanvs2l";
+    url = "https://www.libssh.org/files/0.8/${pname}-${version}.tar.xz";
+    sha256 = "1qk5bm9r6199jbfk54f8w24vkl52051g8s3kmq4z2kdc6vbpy4jb";
   };
 
   postPatch = ''
@@ -13,7 +14,8 @@ stdenv.mkDerivation rec {
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
 
-  outputs = [ "out" "dev" ];
+  # single output, otherwise cmake and .pc files point to the wrong directory
+  # outputs = [ "out" "dev" ];
 
   buildInputs = [ zlib openssl libsodium ];
 
@@ -21,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SSH client library";
+    homepage = "https://libssh.org";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;

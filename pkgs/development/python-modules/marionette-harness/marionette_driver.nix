@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -9,13 +8,12 @@
 
 buildPythonPackage rec {
   pname = "marionette_driver";
-  version = "2.5.0";
-  name = "${pname}-${version}";
+  version = "3.0.0";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0axhdin9ys3i9lnwqqqw87wap9000bk6cdgrzpd2gqricc7l3v65";
+    sha256 = "99ca2513d4e2ca29a08e550346f23947a50627a2b02f6ad36a4550e779fa0ce8";
   };
 
   propagatedBuildInputs = [ mozversion mozrunner ]; 

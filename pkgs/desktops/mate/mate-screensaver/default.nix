@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, dbus-glib, libXScrnSaver, libnotify, pam, systemd, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, dbus-glib, libXScrnSaver, libnotify, libxml2, pam, systemd, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-screensaver-${version}";
-  version = "1.20.0";
+  pname = "mate-screensaver";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1698608m6kf4dn91xdwy7l809yagz02h1k594smj75wvnhr7x4k9";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0gpw6x9d0b77f14vjl7ghq5dya1mwcnvmgigg00manfwlksr5zby";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
+    libxml2 # provides xmllint
     wrapGAppsHook
   ];
 
@@ -26,13 +27,15 @@ stdenv.mkDerivation rec {
     mate.mate-menus
   ];
 
-  configureFlags = "--without-console-kit";
+  configureFlags = [ "--without-console-kit" ];
 
-  makeFlags = "DBUS_SESSION_SERVICE_DIR=$(out)/etc";
+  makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Screen saver and locker for the MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

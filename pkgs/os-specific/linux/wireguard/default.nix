@@ -1,73 +1,40 @@
-{ stdenv, fetchurl, libmnl, kernel ? null }:
+{ stdenv, fetchzip, kernel, perl, wireguard-tools }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
-assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
+assert stdenv.lib.versionAtLeast kernel.version "3.10";
+# wireguard upstreamed since 5.6 https://lists.zx2c4.com/pipermail/wireguard/2019-December/004704.html
+assert stdenv.lib.versionOlder kernel.version "5.6";
 
-let
-  name = "wireguard-${version}";
+stdenv.mkDerivation rec {
+  pname = "wireguard";
+  version = "1.0.20200401";
 
-  version = "0.0.20180304";
-
-  src = fetchurl {
-    url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "11vp6aiqxrnwqlaslxy13cpmw2l2pdm9nhs021rv4zx61lpnbcgg";
+  src = fetchzip {
+    url = "https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${version}.tar.xz";
+    sha256 = "1q4gfpbvbyracnl219xqfz5yqfc08i6g41z6bn2skx5x8jbll3aq";
   };
+
+  preConfigure = ''
+    cd src
+    sed -i '/depmod/,+1d' Makefile
+  '';
+
+  hardeningDisable = [ "pic" ];
+
+  KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  INSTALL_MOD_PATH = "\${out}";
+
+  NIX_CFLAGS = ["-Wno-error=cpp"];
+
+  nativeBuildInputs = [ perl ] ++ kernel.moduleBuildDependencies;
+
+  buildFlags = [ "module" ];
+  installTargets = [ "module-install" ];
 
   meta = with stdenv.lib; {
-    homepage     = https://www.wireguard.com/;
-    downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    description  = "A prerelease of an experimental VPN tunnel which is not to be depended upon for security";
-    maintainers  = with maintainers; [ ericsagnes mic92 zx2c4 ];
-    license      = licenses.gpl2;
-    platforms    = platforms.linux;
+    inherit (wireguard-tools.meta) homepage license maintainers;
+    description = "Kernel module for the WireGuard secure network tunnel";
+    downloadPage = "https://git.zx2c4.com/wireguard-linux-compat/refs/";
+    platforms = platforms.linux;
   };
-
-  module = stdenv.mkDerivation {
-    inherit src meta name;
-
-    preConfigure = ''
-      cd src
-      sed -i '/depmod/,+1d' Makefile
-    '';
-
-    hardeningDisable = [ "pic" ];
-
-    KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-    INSTALL_MOD_PATH = "\${out}";
-
-    NIX_CFLAGS = ["-Wno-error=cpp"];
-
-    nativeBuildInputs = kernel.moduleBuildDependencies;
-
-    buildPhase = "make module";
-  };
-
-  tools = stdenv.mkDerivation {
-    inherit src meta name;
-
-    preConfigure = "cd src";
-
-    buildInputs = [ libmnl ];
-
-    enableParallelBuilding = true;
-
-    makeFlags = [
-      "WITH_BASHCOMPLETION=yes"
-      "WITH_WGQUICK=yes"
-      "WITH_SYSTEMDUNITS=yes"
-      "DESTDIR=$(out)"
-      "PREFIX=/"
-      "-C" "tools"
-    ];
-
-    buildPhase = "make tools";
-
-    postInstall = ''
-      substituteInPlace $out/lib/systemd/system/wg-quick@.service \
-        --replace /usr/bin $out/bin
-    '';
-  };
-
-in if kernel == null
-   then tools
-   else module
+}

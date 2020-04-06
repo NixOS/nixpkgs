@@ -1,36 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, efl, pcre, curl, makeWrapper }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, pcre, mesa, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "terminology-${version}";
-  version = "1.1.1";
+  pname = "terminology";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.xz";
-    sha256 = "05ncxvzb9rzkyjvd95hzn8lswqdwr8cix6rd54nqn9559jibh4ns";
+    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0xxx4xyhis6fy3frgb34ip0aj0kc4zashf60gzbxmq5gadbb0p5r";
   };
 
   nativeBuildInputs = [
-    (pkgconfig.override { vanilla = true; })
+    meson
+    ninja
+    pkgconfig
     makeWrapper
   ];
 
   buildInputs = [
     efl
     pcre
-    curl
+    mesa
   ];
 
-  postInstall = ''
-    for f in $out/bin/*; do
-      wrapProgram $f --prefix LD_LIBRARY_PATH : ${curl.out}/lib
-    done
-  '';
-
   meta = {
-    description = "The best terminal emulator written with the EFL";
-    homepage = http://enlightenment.org/;
-    platforms = stdenv.lib.platforms.linux;
+    description = "Powerful terminal emulator based on EFL";
+    homepage = https://www.enlightenment.org/about-terminology;
     license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

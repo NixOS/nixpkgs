@@ -1,12 +1,11 @@
 # Common configuration for headless machines (e.g., Amazon EC2
 # instances).
 
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 
 {
-  sound.enable = false;
   boot.vesa = false;
 
   # Don't start a tty on the serial consoles.

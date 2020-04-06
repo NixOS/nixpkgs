@@ -1,13 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, certifi, six }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, certifi, six }:
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "2.1.0";
-  name = "${pname}-${version}";
+  version = "3.1.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b9b51dc40a7d3ac3eee17ab5b462b8efb7f2c2ff195261ea846ae4e1168e1c5b";
+    sha256 = "0sk08l8dq0r4xgmqkxq6jzlbam34k95adaw468n0bh6cps18ddby";
   };
 
   propagatedBuildInputs = [ certifi six ];

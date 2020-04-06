@@ -42,21 +42,13 @@ let
       propagate = out:
         let setupHook = { writeScript }:
               writeScript "setup-hook" ''
-                if [ "$hookName" != postHook ]; then
+                if [ "''${hookName:-}" != postHook ]; then
                     postHooks+=("source @dev@/nix-support/setup-hook")
                 else
-                    # Propagate $${out} output
-                    propagatedUserEnvPkgs="$propagatedUserEnvPkgs @${out}@"
-
-                    if [ -z "$outputDev" ]; then
-                        echo "error: \$outputDev is unset!" >&2
-                        exit 1
-                    fi
-
                     # Propagate $dev so that this setup hook is propagated
                     # But only if there is a separate $dev output
-                    if [ "$outputDev" != out ]; then
-                        propagatedBuildInputs="$propagatedBuildInputs @dev@"
+                    if [ "''${outputDev:?}" != out ]; then
+                        propagatedBuildInputs="''${propagatedBuildInputs-} @dev@"
                     fi
                 fi
               '';
@@ -72,13 +64,12 @@ let
           let
 
             inherit (args) name;
-            inherit (srcs."${name}") src version;
+            inherit (srcs.${name}) src version;
 
             outputs = args.outputs or [ "bin" "dev" "out" ];
-            hasBin = lib.elem "bin" outputs;
-            hasDev = lib.elem "dev" outputs;
+            hasSeparateDev = lib.elem "dev" outputs;
 
-            defaultSetupHook = if hasBin && hasDev then propagateBin else null;
+            defaultSetupHook = if hasSeparateDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
 
             meta = {
@@ -86,7 +77,7 @@ let
               license = with lib.licenses; [
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
-              maintainers = [ lib.maintainers.ttuegel ];
+              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
               platforms = lib.platforms.linux;
             } // (args.meta or {});
 
@@ -106,8 +97,10 @@ let
       breeze-icons = callPackage ./breeze-icons.nix {};
       kapidox = callPackage ./kapidox.nix {};
       karchive = callPackage ./karchive.nix {};
+      kcalendarcore = callPackage ./kcalendarcore.nix {};
       kcodecs = callPackage ./kcodecs.nix {};
       kconfig = callPackage ./kconfig.nix {};
+      kcontacts = callPackage ./kcontacts.nix {};
       kcoreaddons = callPackage ./kcoreaddons.nix {};
       kdbusaddons = callPackage ./kdbusaddons.nix {};
       kdnssd = callPackage ./kdnssd.nix {};
@@ -129,6 +122,7 @@ let
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};
       kirigami2 = callPackage ./kirigami2.nix {};
+      kholidays = callPackage ./kholidays.nix {};
 
     # TIER 2
       kactivities = callPackage ./kactivities.nix {};
@@ -144,6 +138,7 @@ let
       kpackage = callPackage ./kpackage {};
       kpty = callPackage ./kpty.nix {};
       kunitconversion = callPackage ./kunitconversion.nix {};
+      syndication = callPackage ./syndication.nix {};
 
     # TIER 3
       baloo = callPackage ./baloo.nix {};
@@ -154,6 +149,7 @@ let
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
       kdesu = callPackage ./kdesu.nix {};
+      kdewebkit = callPackage ./kdewebkit.nix {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};
       kiconthemes = callPackage ./kiconthemes {};
@@ -171,6 +167,7 @@ let
       kxmlgui = callPackage ./kxmlgui.nix {};
       kxmlrpcclient = callPackage ./kxmlrpcclient.nix {};
       plasma-framework = callPackage ./plasma-framework.nix {};
+      kpurpose = callPackage ./purpose.nix {};
 
     # TIER 4
       frameworkintegration = callPackage ./frameworkintegration.nix {};

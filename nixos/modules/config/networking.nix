@@ -7,22 +7,23 @@ with lib;
 let
 
   cfg = config.networking;
-  dnsmasqResolve = config.services.dnsmasq.enable &&
-                   config.services.dnsmasq.resolveLocalQueries;
-  hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
 
-  resolvconfOptions = cfg.resolvconfOptions
-    ++ optional cfg.dnsSingleRequest "single-request"
-    ++ optional cfg.dnsExtensionMechanism "edns0";
+  localhostMapped4 = cfg.hosts ? "127.0.0.1" && elem "localhost" cfg.hosts."127.0.0.1";
+  localhostMapped6 = cfg.hosts ? "::1"       && elem "localhost" cfg.hosts."::1";
+
+  localhostMultiple = any (elem "localhost") (attrValues (removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]));
+
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "networking" "hostConf" ] "Use environment.etc.\"host.conf\" instead.")
+  ];
 
   options = {
 
     networking.hosts = lib.mkOption {
-      type = types.attrsOf ( types.listOf types.str );
-      default = {};
+      type = types.attrsOf (types.listOf types.str);
       example = literalExample ''
         {
           "127.0.0.1" = [ "foo.bar.baz" ];
@@ -34,67 +35,22 @@ in
       '';
     };
 
+    networking.hostFiles = lib.mkOption {
+      type = types.listOf types.path;
+      defaultText = lib.literalExample "Hosts from `networking.hosts` and `networking.extraHosts`";
+      example = lib.literalExample ''[ "''${pkgs.my-blocklist-package}/share/my-blocklist/hosts" ]'';
+      description = ''
+        Files that should be concatenated together to form <filename>/etc/hosts</filename>.
+      '';
+    };
+
     networking.extraHosts = lib.mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
       description = ''
         Additional verbatim entries to be appended to <filename>/etc/hosts</filename>.
-      '';
-    };
-
-    networking.hostConf = lib.mkOption {
-      type = types.lines;
-      default = "multi on";
-      example = ''
-        multi on
-        reorder on
-        trim lan
-      '';
-      description = ''
-        The contents of <filename>/etc/host.conf</filename>. See also <citerefentry><refentrytitle>host.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
-      '';
-    };
-
-    networking.dnsSingleRequest = lib.mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Recent versions of glibc will issue both ipv4 (A) and ipv6 (AAAA)
-        address queries at the same time, from the same port. Sometimes upstream
-        routers will systemically drop the ipv4 queries. The symptom of this problem is
-        that 'getent hosts example.com' only returns ipv6 (or perhaps only ipv4) addresses. The
-        workaround for this is to specify the option 'single-request' in
-        /etc/resolv.conf. This option enables that.
-      '';
-    };
-
-    networking.dnsExtensionMechanism = lib.mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
-        that option set, <code>glibc</code> supports use of the extension mechanisms for
-        DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
-        which does not work without it.
-      '';
-    };
-
-    networking.extraResolvconfConf = lib.mkOption {
-      type = types.lines;
-      default = "";
-      example = "libc=NO";
-      description = ''
-        Extra configuration to append to <filename>resolvconf.conf</filename>.
-      '';
-    };
-
-    networking.resolvconfOptions = lib.mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "ndots:1" "rotate" ];
-      description = ''
-        Set the options in <filename>/etc/resolv.conf</filename>.
+        For adding hosts from derivation results, use <option>networking.hostFiles</option> instead.
       '';
     };
 
@@ -190,69 +146,58 @@ in
 
   config = {
 
+    assertions = [{
+      assertion = localhostMapped4;
+      message = ''`networking.hosts` doesn't map "127.0.0.1" to "localhost"'';
+    } {
+      assertion = !cfg.enableIPv6 || localhostMapped6;
+      message = ''`networking.hosts` doesn't map "::1" to "localhost"'';
+    } {
+      assertion = !localhostMultiple;
+      message = ''
+        `networking.hosts` maps "localhost" to something other than "127.0.0.1"
+        or "::1". This will break some applications. Please use
+        `networking.extraHosts` if you really want to add such a mapping.
+      '';
+    }];
+
+    networking.hosts = {
+      "127.0.0.1" = [ "localhost" ];
+    } // optionalAttrs (cfg.hostName != "") {
+      "127.0.1.1" = [ cfg.hostName ];
+    } // optionalAttrs cfg.enableIPv6 {
+      "::1" = [ "localhost" ];
+    };
+
+    networking.hostFiles = let
+      stringHosts =
+        let
+          oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip} + "\n";
+          allToString = set: concatMapStrings (oneToString set) (attrNames set);
+        in pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != []) cfg.hosts));
+      extraHosts = pkgs.writeText "extra-hosts" cfg.extraHosts;
+    in mkBefore [ stringHosts extraHosts ];
+
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
-        "services".source = pkgs.iana-etc + "/etc/services";
+        services.source = pkgs.iana-etc + "/etc/services";
 
         # /etc/protocols: IP protocol numbers.
-        "protocols".source  = pkgs.iana-etc + "/etc/protocols";
-
-        # /etc/rpc: RPC program numbers.
-        "rpc".source = pkgs.glibc.out + "/etc/rpc";
+        protocols.source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        "hosts".text =
-          let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
-              allToString = set : concatMapStringsSep "\n" ( oneToString set ) ( attrNames set );
-              userLocalHosts = optionalString
-                ( builtins.hasAttr "127.0.0.1" cfg.hosts )
-                ( concatStringsSep " " ( remove "localhost" cfg.hosts."127.0.0.1" ));
-              userLocalHosts6 = optionalString
-                ( builtins.hasAttr "::1" cfg.hosts )
-                ( concatStringsSep " " ( remove "localhost" cfg.hosts."::1" ));
-              otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
-          in
-          ''
-            127.0.0.1 ${userLocalHosts} localhost
-            ${optionalString cfg.enableIPv6 ''
-              ::1 ${userLocalHosts6} localhost
-            ''}
-            ${otherHosts}
-            ${cfg.extraHosts}
-          '';
+        hosts.source = pkgs.runCommandNoCC "hosts" {} ''
+          cat ${escapeShellArgs cfg.hostFiles} > $out
+        '';
 
         # /etc/host.conf: resolver configuration file
-        "host.conf".text = cfg.hostConf;
+        "host.conf".text = ''
+          multi on
+        '';
 
-        # /etc/resolvconf.conf: Configuration for openresolv.
-        "resolvconf.conf".text =
-            ''
-              # This is the default, but we must set it here to prevent
-              # a collision with an apparently unrelated environment
-              # variable with the same name exported by dhcpcd.
-              interface_order='lo lo[0-9]*'
-            '' + optionalString config.services.nscd.enable ''
-              # Invalidate the nscd cache whenever resolv.conf is
-              # regenerated.
-              libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
-            '' + optionalString (length resolvconfOptions > 0) ''
-              # Options as described in resolv.conf(5)
-              resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
-            '' + optionalString hasLocalResolver ''
-              # This hosts runs a full-blown DNS resolver.
-              name_servers='127.0.0.1'
-            '' + optionalString dnsmasqResolve ''
-              dnsmasq_conf=/etc/dnsmasq-conf.conf
-              dnsmasq_resolv=/etc/dnsmasq-resolv.conf
-            '' + cfg.extraResolvconfConf + ''
-            '';
-
-      } // optionalAttrs config.services.resolved.enable {
-        # symlink the static version of resolv.conf as recommended by upstream:
-        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-        "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
-      } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
-        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
+        # /etc/rpc: RPC program numbers.
+        rpc.source = pkgs.glibc.out + "/etc/rpc";
       };
 
       networking.proxy.envVars =
@@ -276,26 +221,6 @@ in
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
 
-    # This is needed when /etc/resolv.conf is being overriden by networkd
-    # and other configurations. If the file is destroyed by an environment
-    # activation then it must be rebuilt so that applications which interface
-    # with /etc/resolv.conf directly don't break.
-    system.activationScripts.resolvconf = stringAfter [ "etc" "specialfs" "var" ]
-      ''
-        # Systemd resolved controls its own resolv.conf
-        rm -f /run/resolvconf/interfaces/systemd
-        ${optionalString config.services.resolved.enable ''
-          rm -rf /run/resolvconf/interfaces
-          mkdir -p /run/resolvconf/interfaces
-          ln -s /run/systemd/resolve/resolv.conf /run/resolvconf/interfaces/systemd
-        ''}
-
-        # Make sure resolv.conf is up to date if not managed manually or by systemd
-        ${optionalString (!config.environment.etc?"resolv.conf") ''
-          ${pkgs.openresolv}/bin/resolvconf -u
-        ''}
-      '';
-
   };
 
-  }
+}

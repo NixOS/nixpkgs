@@ -1,5 +1,5 @@
-args @ { fetchurl, ... }:
-rec {
+{ fetchurl, ... }:
+{
   baseName = ''metatilities-base'';
   version = ''20170403-git'';
 

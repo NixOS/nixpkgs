@@ -4,7 +4,7 @@ let
   date = "07.apr.2016";
 
 in stdenv.mkDerivation rec {
-  name = "mht2mht-${version}";
+  pname = "mht2mht";
   version = "1.8.1.35";
 
   src = fetchurl {
@@ -39,5 +39,6 @@ in stdenv.mkDerivation rec {
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.all;
+    broken = true; # 2018-04-11
   };
 }

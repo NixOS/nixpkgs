@@ -1,66 +1,65 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
-, libtool, libuv, luaPackages, ncurses, perl, pkgconfig
-, unibilium, vimUtils, xsel, gperf, callPackage
-, withJemalloc ? true, jemalloc
+{ stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+, libuv, lua, ncurses, pkgconfig
+, unibilium, xsel, gperf
+, libvterm-neovim
+, glibcLocales ? null, procps ? null
+
+# now defaults to false because some tests can be flaky (clipboard etc)
+, doCheck ? false
 }:
 
 with stdenv.lib;
 
 let
-
-  # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
-  neovimLibvterm = stdenv.mkDerivation rec {
-    name = "neovim-libvterm-${version}";
-    version = "2017-11-05";
-
-    src = fetchFromGitHub {
-      owner = "neovim";
-      repo = "libvterm";
-      rev = "4ca7ebf7d25856e90bc9d9cc49412e80be7c4ea8";
-      sha256 = "05kyvvz8af90mvig11ya5xd8f4mbvapwyclyrihm9lwas706lzf6";
-    };
-
-    buildInputs = [ perl ];
-    nativeBuildInputs = [ libtool ];
-
-    makeFlags = [ "PREFIX=$(out)" ]
-      ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
-
-    enableParallelBuilding = true;
-
-    meta = {
-      description = "VT220/xterm/ECMA-48 terminal emulator library";
-      homepage = http://www.leonerd.org.uk/code/libvterm/;
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-      platforms = platforms.unix;
-    };
-  };
-
-  neovim = stdenv.mkDerivation rec {
-    name = "neovim-unwrapped-${version}";
-    version = "0.2.2";
+  neovimLuaEnv = lua.withPackages(ps:
+    (with ps; [ lpeg luabitop mpack ]
+    ++ optionals doCheck [
+        nvim-client luv coxpcall busted luafilesystem penlight inspect
+      ]
+    ));
+in
+  stdenv.mkDerivation rec {
+    pname = "neovim-unwrapped";
+    version = "0.4.3";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "1dxr29d0hyag7snbww5s40as90412qb61rgj7gd9rps1iccl9gv4";
+      sha256 = "03p7pic7hw9yxxv7fbgls1f42apx3lik2k6mpaz1a109ngyc5kaj";
     };
 
+    patches = [
+      # introduce a system-wide rplugin.vim in addition to the user one
+      # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
+      # it installs. See https://github.com/neovim/neovim/issues/9413.
+      ./system_rplugin_manifest.patch
+    ];
+
+    dontFixCmake = true;
     enableParallelBuilding = true;
 
     buildInputs = [
+      gperf
       libtermkey
       libuv
-      libmsgpack
+      libvterm-neovim
+      lua.pkgs.luv.libluv
+      msgpack
       ncurses
-      neovimLibvterm
+      neovimLuaEnv
       unibilium
-      luaPackages.lua
-      gperf
-    ] ++ optional withJemalloc jemalloc
-      ++ lualibs;
+    ] ++ optional stdenv.isDarwin libiconv
+      ++ optionals doCheck [ glibcLocales procps ]
+    ;
+
+    inherit doCheck;
+
+    # to be exhaustive, one could run
+    # make oldtests too
+    checkPhase = ''
+      make functionaltest
+    '';
 
     nativeBuildInputs = [
       cmake
@@ -68,29 +67,39 @@ let
       pkgconfig
     ];
 
-    LUA_PATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaPath lualibs);
-    LUA_CPATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaCPath lualibs);
 
-    lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
+    # nvim --version output retains compilation flags and references to build tools
+    postPatch = ''
+      substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+    '';
+    # check that the above patching actually works
+    disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
-      "-DLUA_PRG=${luaPackages.lua}/bin/lua"
-    ];
+      "-DGPERF_PRG=${gperf}/bin/gperf"
+      "-DLUA_PRG=${neovimLuaEnv.interpreter}"
+    ]
+    # FIXME: this is verry messy and strange.
+    ++ optional (!stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv}/lib/lua/${lua.luaversion}/luv.so"
+    ++ optional (stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv.libluv}/lib/lua/${lua.luaversion}/libluv.dylib"
+    ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
+    ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
+    ;
 
     # triggers on buffer overflow bug while running tests
     hardeningDisable = [ "fortify" ];
 
     preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-      export DYLD_LIBRARY_PATH=${jemalloc}/lib
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
     postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" $out/share/nvim/runtime/autoload/provider/clipboard.vim
-    '' + stdenv.lib.optionalString (withJemalloc && stdenv.isDarwin) ''
-      install_name_tool -change libjemalloc.1.dylib \
-                ${jemalloc}/lib/libjemalloc.1.dylib \
-                $out/bin/nvim
+      sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
+    '';
+
+    # export PATH=$PWD/build/bin:${PATH}
+    shellHook=''
+      export VIMRUNTIME=$PWD/runtime
     '';
 
     meta = {
@@ -110,10 +119,7 @@ let
       # those contributions were copied from Vim (identified in the commit logs
       # by the vim-patch token). See LICENSE for details."
       license = with licenses; [ asl20 vim ];
-      maintainers = with maintainers; [ manveru garbas rvolosatovs ];
+      maintainers = with maintainers; [ manveru rvolosatovs ma27 ];
       platforms   = platforms.unix;
     };
-  };
-
-in
-  neovim
+  }

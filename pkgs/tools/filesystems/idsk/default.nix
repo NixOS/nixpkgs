@@ -2,23 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  repo = "idsk";
-  version = "unstable-2018-02-11";
-  rev = "1846729ac3432aa8c2c0525be45cfff8a513e007";
-  name = "${repo}-${version}";
-
-  meta = with stdenv.lib; {
-    description = "Manipulating CPC dsk images and files";
-    homepage = https://github.com/cpcsdk/idsk ;
-    license = "unknown";
-    maintainers = [ maintainers.genesis ];
-    platforms = platforms.linux;
-  };
+  pname = "idsk";
+  version = "0.19";
 
   src = fetchFromGitHub {
-    inherit rev repo;
+    repo = "idsk";
     owner = "cpcsdk";
-    sha256 = "0d891lvf2nc8bys8kyf69k54rf3jlwqrcczbff8xi0w4wsiy5ckv";
+    rev = "v${version}";
+    sha256 = "0b4my5cz5kbzh4n65jr721piha6zixaxmfiss2zidip978k9rb6f";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,4 +18,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp iDSK $out/bin
   '';
+
+  meta = with stdenv.lib; {
+    description = "Manipulating CPC dsk images and files";
+    homepage = "https://github.com/cpcsdk/idsk" ;
+    license = licenses.mit;
+    maintainers = [ maintainers.genesis ];
+    platforms = platforms.linux;
+  };
 }

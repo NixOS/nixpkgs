@@ -1,12 +1,12 @@
 { stdenv, fetchurl, alsaLib, gtk2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "praat-${version}";
-  version = "6.0.37";
+  pname = "praat";
+  version = "6.0.43";
 
   src = fetchurl {
     url = "https://github.com/praat/praat/archive/v${version}.tar.gz";
-    sha256 = "1c675jfzcrwfn8lcswm5y5kmazkhnb0p4mzlf5sim57hms88ffjq";
+    sha256 = "1l13bvnl7sv8v6s5z63201bhzavnj6bnqcj446akippsam13z4sf";
   };
 
   configurePhase = ''

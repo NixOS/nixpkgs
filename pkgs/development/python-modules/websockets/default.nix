@@ -1,26 +1,30 @@
 { lib
-, fetchurl
+, fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, pytest
+, stdenv
 }:
 
-let
+buildPythonPackage rec {
   pname = "websockets";
-  version = "4.0.1";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
+  version = "8.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "da4d4fbe059b0453e726d6d993760065d69b823a27efc3040402a6fcfe6a1ed9";
+  src = fetchFromGitHub {
+    owner = "aaugustin";
+    repo = pname;
+    rev = version;
+    sha256 = "05jbqcbjg50ydwl0fijhdlqcq7fl6v99kjva66kmmzzza7vwa872";
   };
 
   disabled = pythonOlder "3.3";
-  doCheck = false; # protocol tests fail
 
-  meta = {
+  # Tests fail on Darwin with `OSError: AF_UNIX path too long`
+  doCheck = !stdenv.isDarwin;
+
+  meta = with lib; {
     description = "WebSocket implementation in Python 3";
-    homepage = https://github.com/aaugustin/websockets;
-    license = lib.licenses.bsd3;
+    homepage = "https://github.com/aaugustin/websockets";
+    license = licenses.bsd3;
   };
 }

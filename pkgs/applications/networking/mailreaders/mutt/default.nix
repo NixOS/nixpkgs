@@ -26,17 +26,17 @@ assert gpgmeSupport -> gpgme      != null && openssl != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "mutt-${version}";
-  version = "1.9.4";
+  pname = "mutt";
+  version = "1.13.5";
 
   src = fetchurl {
-    url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
-    sha256 = "1pxmw5yyizb9bqbai6lihv6zxmw0znjfb60zaldwh6hc6lkbzlgl";
+    url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
+    sha256 = "0lx65a44b03rbvcrz0y9syrik67fx3hvblxyyvz5l9bb7rdipmvc";
   };
 
   patches = optional smimeSupport (fetchpatch {
-    url    = "https://sources.debian.net/src/mutt/1.7.2-1/debian/patches/misc/smime.rc.patch";
-    sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
+    sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
 
   buildInputs =

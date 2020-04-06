@@ -1,61 +1,177 @@
-{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, ibus, intltool, upower, wrapGAppsHook
-, libcanberra-gtk3, accountsservice, libpwquality, libpulseaudio
-, gdk_pixbuf, librsvg, libnotify, libgudev, gnome-color-manager
-, libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
-, cracklib, libkrb5, networkmanagerapplet, networkmanager, glibc
-, libwacom, samba, shared-mime-info, tzdata, libtool, libgnomekbd
-, docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter-gtk
-, fontconfig, sound-theme-freedesktop, grilo }:
+{ fetchurl
+, stdenv
+, substituteAll
+, accountsservice
+, adwaita-icon-theme
+, cheese
+, clutter
+, clutter-gtk
+, colord
+, colord-gtk
+, cups
+, docbook_xsl
+, fontconfig
+, gdk-pixbuf
+, gettext
+, glib
+, glib-networking
+, glibc
+, gnome-bluetooth
+, gnome-color-manager
+, gnome-desktop
+, gnome-online-accounts
+, gnome-session
+, gnome-settings-daemon
+, gnome3
+, grilo
+, grilo-plugins
+, gsettings-desktop-schemas
+, gsound
+, gtk3
+, ibus
+, libcanberra-gtk3
+, libgnomekbd
+, libgtop
+, libgudev
+, libhandy
+, libkrb5
+, libpulseaudio
+, libpwquality
+, librsvg
+, libsecret
+, libsoup
+, libwacom
+, libxml2
+, libxslt
+, meson
+, modemmanager
+, mutter
+, networkmanager
+, networkmanagerapplet
+, libnma
+, ninja
+, pkgconfig
+, polkit
+, python3
+, samba
+, shared-mime-info
+, sound-theme-freedesktop
+, tracker
+, tzdata
+, udisks2
+, upower
+, epoxy
+, gnome-user-share
+, gnome-remote-desktop
+, wrapGAppsHook
+}:
 
-let
-  version = "3.26.2";
-in stdenv.mkDerivation rec {
-  name = "gnome-control-center-${version}";
+stdenv.mkDerivation rec {
+  pname = "gnome-control-center";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-control-center/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "07aed27d6317f2cad137daa6d94a37ad02c32b958dcd30c8f07d0319abfb04c5";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0gdadbkynldxqffdlw760039ci1vv9wsi5i0mdq4q9dblmb79q1b";
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool wrapGAppsHook libtool libxslt docbook_xsl docbook_xsl_ns
+    docbook_xsl
+    gettext
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    python3
     shared-mime-info
+    wrapGAppsHook
   ];
 
-  buildInputs = with gnome3; [
-    ibus gtk glib glib-networking upower gsettings-desktop-schemas
-    libxml2 gnome-desktop gnome-settings-daemon polkit libgtop
-    gnome-online-accounts libsoup colord libpulseaudio fontconfig colord-gtk
-    accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify
-    grilo libpwquality cracklib vino libcanberra-gtk3 libgudev
-    gdk_pixbuf defaultIconTheme librsvg clutter clutter-gtk
-    networkmanager modemmanager gnome-bluetooth tracker
+  buildInputs = [
+    accountsservice
+    adwaita-icon-theme
+    cheese
+    clutter
+    clutter-gtk
+    colord
+    colord-gtk
+    fontconfig
+    gdk-pixbuf
+    glib
+    glib-networking
+    gnome-bluetooth
+    gnome-desktop
+    gnome-online-accounts
+    gnome-remote-desktop # optional, sharing panel
+    gnome-settings-daemon
+    gnome-user-share # optional, sharing panel
+    grilo
+    grilo-plugins # for setting wallpaper from Flickr
+    gsettings-desktop-schemas
+    gsound
+    gtk3
+    ibus
+    libcanberra-gtk3
+    libgtop
+    libgudev
+    libhandy
+    libkrb5
+    libpulseaudio
+    libpwquality
+    librsvg
+    libsecret
+    libsoup
+    libwacom
+    libxml2
+    modemmanager
+    mutter # schemas for the keybindings
+    networkmanager
+    libnma
+    polkit
+    samba
+    tracker
+    udisks2
+    upower
+    epoxy
   ];
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
+      gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
+      inherit cups networkmanagerapplet;
     })
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/meson/meson_post_install.py
+  '';
+
+  mesonFlags = [
+    "-Dgnome_session_libexecdir=${gnome-session}/libexec"
   ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share:${sound-theme-freedesktop}/share"
+      --prefix XDG_DATA_DIRS : "${sound-theme-freedesktop}/share"
       # Thumbnailers (for setting user profile pictures)
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      # WM keyboard shortcuts
+      --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
     for i in $out/share/applications/*; do
-      substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
+      substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
     done
   '';
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "gnome-control-center";
-      attrPath = "gnome3.gnome-control-center";
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
     };
   };
 

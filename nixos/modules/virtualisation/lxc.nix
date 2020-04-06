@@ -58,7 +58,7 @@ in
           ''
             This is the config file for managing unprivileged user network
             administration access in LXC. See <citerefentry>
-            <refentrytitle>lxc-user-net</refentrytitle><manvolnum>5</manvolnum>
+            <refentrytitle>lxc-usernet</refentrytitle><manvolnum>5</manvolnum>
             </citerefentry>.
           '';
       };
@@ -74,6 +74,9 @@ in
     systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
 
     security.apparmor.packages = [ pkgs.lxc ];
-    security.apparmor.profiles = [ "${pkgs.lxc}/etc/apparmor.d/lxc-containers" ];
+    security.apparmor.profiles = [
+      "${pkgs.lxc}/etc/apparmor.d/lxc-containers"
+      "${pkgs.lxc}/etc/apparmor.d/usr.bin.lxc-start"
+    ];
   };
 }

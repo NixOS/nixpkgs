@@ -1,0 +1,38 @@
+From 084c3cfcf4995c109ca2e96f042fe341f925b0b4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Thu, 16 May 2019 19:00:52 -0300
+Subject: [PATCH 4/4] Use xdg to look for pixmap icons
+
+---
+ dde-file-manager-lib/shutil/fileutils.cpp | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/dde-file-manager-lib/shutil/fileutils.cpp b/dde-file-manager-lib/shutil/fileutils.cpp
+index d6a0573a..e912e7c2 100644
+--- a/dde-file-manager-lib/shutil/fileutils.cpp
++++ b/dde-file-manager-lib/shutil/fileutils.cpp
+@@ -362,11 +362,16 @@ QIcon FileUtils::searchAppIcon(const DesktopFile &app,
+   }
+ 
+   // Last chance
+-  QDir appIcons("/usr/share/pixmaps","", 0, QDir::Files | QDir::NoDotAndDotDot);
+-  QStringList iconFiles = appIcons.entryList();
+-  QStringList searchIcons = iconFiles.filter(name);
+-  if (searchIcons.count() > 0) {
+-    return QIcon("/usr/share/pixmaps/" + searchIcons.at(0));
++  const QStringList dirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
++  qDebug() << "searchAppIcon: last chance: look for pixmaps at: " << dirs;
++  for (const QString &dir : dirs) {
++    const QString path = dir + QDir::separator() + "pixmaps";
++    QDir appIcons(path,"", 0, QDir::Files | QDir::NoDotAndDotDot);
++    QStringList iconFiles = appIcons.entryList();
++    QStringList searchIcons = iconFiles.filter(name);
++    if (searchIcons.count() > 0) {
++      return QIcon(path + QDir::separator() + searchIcons.at(0));
++    }
+   }
+ 
+   // Default icon
+-- 
+2.21.0
+

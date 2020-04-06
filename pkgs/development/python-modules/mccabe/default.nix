@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "mccabe";
   version = "0.6.1";
 
@@ -16,6 +15,6 @@ buildPythonPackage rec {
     description = "McCabe checker, plugin for flake8";
     homepage = https://github.com/flintwork/mccabe;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

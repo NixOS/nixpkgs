@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "yeshup-${builtins.substring 0 7 rev}";
-  rev = "5461a8f957c686ccd0240be3f0fd8124d7381b08";
+  pname = "yeshup";
+  version = "unstable-2013-10-29";
 
   src = fetchFromGitHub {
     owner = "RhysU";
     repo  = "yeshup";
-    inherit rev;
+    rev = "5461a8f957c686ccd0240be3f0fd8124d7381b08";
     sha256 = "1wwbc158y46jsmdi1lp0m3dlbr9kvzvwxfvzj6646cpy9d6h21v9";
   };
 

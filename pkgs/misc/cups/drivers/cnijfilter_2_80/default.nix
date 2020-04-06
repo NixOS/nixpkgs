@@ -6,8 +6,8 @@
 /* this derivation is basically just a transcription of the rpm .spec
    file included in the tarball */
 
-stdenv.mkDerivation rec {
-  name = "cnijfilter-${version}";
+stdenv.mkDerivation {
+  pname = "cnijfilter";
 
   /* important note about versions: cnijfilter packages seem to use
      versions in a non-standard way.  the version indicates which

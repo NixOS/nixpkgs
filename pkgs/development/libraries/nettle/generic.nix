@@ -4,7 +4,7 @@
 , version, src
 , ...}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   name = "nettle-${version}";
 
   inherit src;
@@ -16,11 +16,13 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
-  doCheck = (stdenv.system != "i686-cygwin" && !stdenv.isDarwin);
+  configureFlags = [ "--enable-fat" ]; # runtime selection of HW-accelerated code
+
+  doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;
 
-  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
+  patches = stdenv.lib.optional (stdenv.hostPlatform.system == "i686-cygwin")
               ./cygwin.patch;
 
   meta = with stdenv.lib; {
@@ -53,7 +55,6 @@ stdenv.mkDerivation (rec {
 
      homepage = http://www.lysator.liu.se/~nisse/nettle/;
 
-     maintainers = with maintainers; [ wkennington ];
      platforms = platforms.all;
   };
 }

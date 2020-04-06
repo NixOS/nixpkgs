@@ -1,41 +1,58 @@
-{ stdenv, fetchurl, writeShellScriptBin }:
+{ stdenv, fetchFromGitHub, fetchpatch
+, cmake, lingeling, btor2tools
+}:
 
 stdenv.mkDerivation rec {
-  name    = "boolector-${version}";
-  version = "2.4.1";
-  src = fetchurl {
-    url    = "http://fmv.jku.at/boolector/boolector-${version}-with-lingeling-bbc.tar.bz2";
-    sha256 = "0mdf7hwix237pvknvrpazcx6s3ininj5k7vhysqjqgxa7lxgq045";
+  pname = "boolector";
+  version = "3.0.0";
+
+  src = fetchFromGitHub {
+    owner  = "boolector";
+    repo   = "boolector";
+    rev    = "refs/tags/${version}";
+    sha256 = "15i3ni5klss423m57wcy1gx0m5wfrjmglapwg85pm7fb3jj1y7sz";
   };
 
-  prePatch =
-    let
-      lingelingPatch = writeShellScriptBin "lingeling-patch" ''
-        sed -i -e "1i#include <stdint.h>" lingeling/lglib.h
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-7560.patch";
+      url = "https://github.com/Boolector/boolector/commit/8d979d02e0482c7137c9f3a34e6d430dbfd1f5c5.patch";
+      sha256 = "1a1g02mk8b0azzjcigdn5zpshn0dn05fciwi8sd5q38yxvnvpbbi";
+    })
+  ];
 
-        ${crossFix}/bin/crossFix lingeling
-      '';
-      crossFix = writeShellScriptBin "crossFix" ''
-        # substituteInPlace not available here
-        sed -i $1/makefile.in \
-          -e 's@ar rc@$(AR) rc@' \
-          -e 's@ranlib@$(RANLIB)@'
-      '';
-    in ''
-    sed -i -e 's@mv lingeling\* lingeling@\0 \&\& ${lingelingPatch}/bin/lingeling-patch@' makefile
-    sed -i -e 's@mv boolector\* boolector@\0 \&\& ${crossFix}/bin/crossFix boolector@' makefile
-  '';
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ lingeling btor2tools ];
+
+  cmakeFlags =
+    [ "-DSHARED=ON"
+      "-DUSE_LINGELING=YES"
+      "-DBTOR2_INCLUDE_DIR=${btor2tools.dev}/include"
+      "-DBTOR2_LIBRARIES=${btor2tools.lib}/lib/libbtor2parser.so"
+      "-DLINGELING_INCLUDE_DIR=${lingeling.dev}/include"
+      "-DLINGELING_LIBRARIES=${lingeling.lib}/lib/liblgl.a"
+    ];
 
   installPhase = ''
-    mkdir $out
-    mv boolector/bin $out
+    mkdir -p $out/bin $lib/lib $dev/include
+
+    cp -vr bin/* $out/bin
+    cp -vr lib/* $lib/lib
+
+    rm -rf $out/bin/{examples,test}
+
+    cd ../src
+    find . -iname '*.h' -exec cp --parents '{}' $dev/include \;
+    rm -rf $dev/include/tests
   '';
 
-  meta = {
-    license = stdenv.lib.licenses.unfreeRedistributable;
+  outputs = [ "out" "dev" "lib" ];
+
+  meta = with stdenv.lib; {
     description = "An extremely fast SMT solver for bit-vectors and arrays";
-    homepage    = "http://fmv.jku.at/boolector";
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage    = https://boolector.github.io;
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

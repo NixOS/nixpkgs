@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "net-tools-${version}";
-  version = "1.60_p20170221182432";
+  pname = "net-tools";
+  version = "1.60_p20180626073013";
 
   src = fetchurl {
-    url = "mirror://gentoo/distfiles/${name}.tar.xz";
-    sha256 = "08r4r2a24g5bm8jwgfa998gs1fld7fgbdf7pilrpsw1m974xn04a";
+    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
+    sha256 = "0mzsjjmz5kn676w2glmxwwd8bj0xy9dhhn21aplb435b767045q4";
   };
 
   preBuild =
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     '';
 
   makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
     "BASEDIR=$(out)"
     "mandir=/share/man"
     "HAVE_ARP_TOOLS=1"

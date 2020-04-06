@@ -1,17 +1,17 @@
-{ stdenv, fetchgit, git,  espeak, SDL2, udev, doxygen, cmake
-, qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
-, qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmake
-, makeWrapper, lndir
-, gst_all_1, qt-gstreamer1, pkgconfig, glibc
+{ lib, mkDerivation, fetchgit, SDL2
+, qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
+, qtgraphicaleffects, qtspeech, qmake
+, makeWrapper
+, gst_all_1, pkgconfig
 }:
 
-stdenv.mkDerivation rec {
-  name = "qgroundcontrol-${version}";
-  version = "3.2.7";
+mkDerivation rec {
+  pname = "qgroundcontrol";
+  version = "3.5.5";
 
   qtInputs = [
-    qtbase qtlocation qtserialport qtdeclarative qtconnectivity qtxmlpatterns qtsvg
-    qtquick1 qtquickcontrols qtgraphicaleffects
+    qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
+    qtgraphicaleffects qtspeech
   ];
 
   gstInputs = with gst_all_1; [
@@ -19,13 +19,15 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  buildInputs = [ SDL2 udev doxygen git ] ++ gstInputs ++ qtInputs;
+  buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
   nativeBuildInputs = [ pkgconfig makeWrapper qmake ];
 
   preConfigure = ''
     mkdir build
     cd build
   '';
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-address-of-packed-member" ]; # Don't litter logs with these warnings
 
   qmakeFlags = [
     # Default install tries to copy Qt files into package
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
     cd ..
 
     mkdir -p $out/share/applications
+    sed 's/Exec=.*$/Exec=QGroundControl/g' --in-place deploy/qgroundcontrol.desktop
     cp -v deploy/qgroundcontrol.desktop $out/share/applications
 
     mkdir -p $out/bin
@@ -57,14 +60,14 @@ stdenv.mkDerivation rec {
   # TODO: package mavlink so we can build from a normal source tarball
   src = fetchgit {
     url = "https://github.com/mavlink/qgroundcontrol.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "1sla3sgj2p3h87d7kcaj53f8z5xzyadvsqlqzgh4d2n1f7sikdc5";
+    rev = "v${version}";
+    sha256 = "05zy6w9lwwh254wa8c6wysa67kk0flywcvipii9b1rmy47slflhs";
     fetchSubmodules = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
-    homepage = http://qgroundcontrol.org/;
+    homepage = "http://qgroundcontrol.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pxc ];

@@ -1,48 +1,29 @@
-{ stdenv, fetchurl, meson, ninja, intltool, gst_all_1, clutter
+{ stdenv, fetchurl, meson, ninja, gettext, gst_all_1
 , clutter-gtk, clutter-gst, python3Packages, shared-mime-info
-, pkgconfig, gtk3, glib, gobjectIntrospection
-, bash, wrapGAppsHook, itstool, libxml2, dbus-glib, vala, gnome3, librsvg
-, gdk_pixbuf, file, tracker, nautilus }:
+, pkgconfig, gtk3, glib, gobject-introspection, totem-pl-parser
+, wrapGAppsHook, itstool, libxml2, vala, gnome3, grilo, grilo-plugins
+, libpeas, adwaita-icon-theme, gnome-desktop, gsettings-desktop-schemas
+, gdk-pixbuf, tracker, nautilus, xvfb_run }:
 
 stdenv.mkDerivation rec {
-  name = "totem-${version}";
-  version = "3.26.0";
+  pname = "totem";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "e32fb9a68097045e75c87ad1b8177f5c01aea2a13dcb3b2e71a0f9570fe9ee13";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "totem"; attrPath = "gnome3.totem"; };
+    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "028sc6xbyi7rs884862d8f3di6zhcm0lhvlpc3r69ifzjsq9my3b";
   };
 
   doCheck = true;
 
-  # https://bugs.launchpad.net/ubuntu/+source/totem/+bug/1712021
-  # https://bugzilla.gnome.org/show_bug.cgi?id=784236
-  # https://github.com/mesonbuild/meson/issues/1994
-  enableParallelBuilding = false;
-
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
-
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
-
-  nativeBuildInputs = [ meson ninja vala pkgconfig intltool python3Packages.python itstool file wrapGAppsHook ];
-  buildInputs = [ gtk3 glib gnome3.grilo clutter-gtk clutter-gst gnome3.totem-pl-parser gnome3.grilo-plugins
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
-                  gst_all_1.gst-plugins-ugly gst_all_1.gst-libav gnome3.libpeas shared-mime-info dbus-glib
-                  gdk_pixbuf libxml2 gnome3.defaultIconTheme gnome3.gnome-desktop
-                  gnome3.gsettings-desktop-schemas tracker nautilus ];
-
-  propagatedBuildInputs = [ gobjectIntrospection python3Packages.pylint python3Packages.pygobject2 ];
-
-  patches = [
-    (fetchurl {
-      name = "remove-pycompile.patch";
-      url = "https://bug787965.bugzilla-attachments.gnome.org/attachment.cgi?id=360204";
-      sha256 = "1iphlazllv42k553jqh3nqrrh5jb63gy3nhj4ipwc9xh4sg2irhi";
-    })
+  nativeBuildInputs = [ meson ninja vala pkgconfig gettext python3Packages.python itstool gobject-introspection wrapGAppsHook ];
+  buildInputs = [
+    gtk3 glib grilo clutter-gtk clutter-gst totem-pl-parser grilo-plugins
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly gst_all_1.gst-libav libpeas shared-mime-info
+    gdk-pixbuf libxml2 adwaita-icon-theme gnome-desktop
+    gsettings-desktop-schemas tracker nautilus
+    python3Packages.pygobject3 python3Packages.dbus-python # for plug-ins
   ];
 
   postPatch = ''
@@ -50,10 +31,21 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  mesonFlags = [ "-Dwith-nautilusdir=lib/nautilus/extensions-3.0" ];
+  checkInputs = [ xvfb_run ];
 
-  GI_TYPELIB_PATH = "$out/lib/girepository-1.0";
+  checkPhase = ''
+    xvfb-run -s '-screen 0 800x600x24' \
+      ninja test
+  '';
+
   wrapPrefixVariables = [ "PYTHONPATH" ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "totem";
+      attrPath = "gnome3.totem";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;

@@ -14,7 +14,9 @@ stdenv.mkDerivation {
     sha256 = "0hbd2sqdz75lv5ax82yhsfdk1dlcvq12xpys6n85ysmrl0c3d3lk";
   });
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ findlib ];
+  configurePlatforms = [];
 
   dontAddPrefix = true;
 
@@ -30,7 +32,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

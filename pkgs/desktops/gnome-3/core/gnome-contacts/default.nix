@@ -1,36 +1,49 @@
-{ stdenv, gettext, fetchurl, evolution-data-server
-, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, gtk3, glib, cheese
+{ stdenv, gettext, fetchurl, evolution-data-server, fetchpatch
+, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
-, wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
-, vala, meson, ninja }:
+, wrapGAppsHook, folks, libxml2, gnome3
+, vala, meson, ninja, libhandy, gsettings-desktop-schemas
+# , telepathy-glib
+}:
 
-let
-  version = "3.26.1";
-in stdenv.mkDerivation rec {
-  name = "gnome-contacts-${version}";
+stdenv.mkDerivation rec {
+  pname = "gnome-contacts";
+  version = "3.36";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1jszv4b8rc5q8r460wb7qppvm1ssj4733b4z2vyavc95g00ik286";
+    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0yvgsfmqm8dxbhay12m20xp6qi9v31wwyv1gz4fx7j4kklhd5jzf";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
+    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 python3 wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 glib evolution-data-server gnome3.gsettings-desktop-schemas
-    folks gnome-desktop telepathy-glib
+    gtk3 glib evolution-data-server gsettings-desktop-schemas
+    folks gnome-desktop libhandy
     libxml2 gnome-online-accounts cheese
-    gnome3.defaultIconTheme libchamplain clutter-gtk geocode-glib
+    gnome3.adwaita-icon-theme libchamplain clutter-gtk geocode-glib
+    # telepathy-glib 3.35.90 fails to build with telepathy
+  ];
+
+  mesonFlags = [
+    # Upstream does not seem to maintain this properly: https://gitlab.gnome.org/GNOME/gnome-contacts/issues/103
+    "-Dtelepathy=false"
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
   '';
+
+  # In file included from src/gnome-contacts@exe/contacts-avatar-selector.c:30:0:
+  # /nix/store/*-cheese-3.28.0/include/cheese/cheese-widget.h:26:10: fatal error: clutter-gtk/clutter-gtk.h: No such file or directory
+  #  #include <clutter-gtk/clutter-gtk.h>
+  #           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+  NIX_CFLAGS_COMPILE = "-I${stdenv.lib.getDev clutter-gtk}/include/clutter-gtk-1.0";
 
   doCheck = true;
 

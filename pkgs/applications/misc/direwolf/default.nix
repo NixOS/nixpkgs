@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "direwolf-${version}";
+  pname = "direwolf";
   version = "1.4";
 
   src = fetchFromGitHub {

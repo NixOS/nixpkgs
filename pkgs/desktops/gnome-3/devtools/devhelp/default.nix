@@ -1,30 +1,80 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, webkitgtk, intltool, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gnome3
+, gtk3
+, wrapGAppsHook
+, glib
+, amtk
+, appstream-glib
+, gobject-introspection
+, python3
+, webkitgtk
+, gettext
+, itstool
+, gsettings-desktop-schemas
+, shared-mime-info
+}:
 
 stdenv.mkDerivation rec {
-  name = "devhelp-${version}";
-  version = "3.26.1";
+  pname = "devhelp";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/devhelp/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "10bd468ae2188abd98af9ba7b81aced337d2206e9d843eb44520be5b00d77d8e";
+    url = "mirror://gnome/sources/devhelp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0d2fvd7p08qfv21cxpjl3rh5cl0bzk3fj2msvyz49fqmc69k5z93";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "devhelp"; attrPath = "gnome3.devhelp"; };
-  };
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    itstool
+    wrapGAppsHook
+    appstream-glib
+    gobject-introspection
+    python3
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk3 wrapGAppsHook webkitgtk intltool gnome3.defaultIconTheme
+    glib
+    gtk3
+    webkitgtk
+    amtk
+    gnome3.adwaita-icon-theme
     gsettings-desktop-schemas
   ];
 
+  doCheck = true;
+
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Fix pages being blank
+      # https://gitlab.gnome.org/GNOME/devhelp/issues/14
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "devhelp";
+      attrPath = "gnome3.devhelp";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://live.gnome.org/devhelp;
     description = "API documentation browser for GNOME";
+    homepage = "https://wiki.gnome.org/Apps/Devhelp";
+    license = licenses.gpl3Plus;
     maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
     platforms = platforms.linux;
   };
 }

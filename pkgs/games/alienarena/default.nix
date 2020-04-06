@@ -1,22 +1,22 @@
 { stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
-, libvorbis, freetype, openal, libGLU_combined }:
+, libvorbis, freetype, openal, libGL }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "alienarena-7.65";
 
   src = fetchurl {
-    url = "http://icculus.org/alienarena/Files/alienarena-7.65-linux20130207.tar.gz";
+    url = "https://icculus.org/alienarena/Files/alienarena-7.65-linux20130207.tar.gz";
     sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libjpeg libX11 curl libogg libvorbis
-                  freetype openal libGLU_combined libXxf86vm ];
+                  freetype openal libGL libXxf86vm ];
 
   patchPhase = ''
     substituteInPlace ./configure \
       --replace libopenal.so.1 ${openal}/lib/libopenal.so.1 \
-      --replace libGL.so.1 ${libGLU_combined}/lib/libGL.so.1
+      --replace libGL.so.1 ${libGL}/lib/libGL.so.1
   '';
 
   meta = with stdenv.lib; {

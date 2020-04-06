@@ -1,20 +1,14 @@
-{ stdenv, fetchurl, python3Packages, qtbase }:
-
-let
-
-  python = python3Packages.python;
-
-in
+{ lib, fetchFromGitHub, python3Packages, qtbase, wrapQtAppsHook, secp256k1 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "3.1.2";
-  name = "electron-cash-${version}";
+  pname = "electron-cash";
+  version = "4.0.14";
 
-  src = fetchurl {
-    url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
-    # Verified using official SHA-1 and signature from
-    # https://github.com/fyookball/keys-n-hashes
-    sha256 = "18h44jfbc2ksj34hdzgszvvq82xi28schl3wp3lkq9fjp7ny0mf3";
+  src = fetchFromGitHub {
+    owner = "Electron-Cash";
+    repo = "Electron-Cash";
+    rev = version;
+    sha256 = "1dp7cj1185h6xfz6jzh0iq58zvg3wq9hl96bkgxkf5h4ygni2vm6";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -29,53 +23,66 @@ python3Packages.buildPythonApplication rec {
     pysocks
     qrcode
     requests
-    tlslite
+    tlslite-ng
+    qdarkstyle
+    stem
 
     # plugins
     keepkey
     trezor
+    btchip
   ];
 
+  nativeBuildInputs = [ wrapQtAppsHook ];
+
   postPatch = ''
-    # Remove pyqt5 check
-    sed -i '/pyqt5/d' setup.py
+    substituteInPlace contrib/requirements/requirements.txt \
+      --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
+
+    substituteInPlace setup.py \
+      --replace "(share_dir" "(\"share\""
   '';
 
-  preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
-    # Recording the creation timestamps introduces indeterminism to the build
-    sed -i '/Created: .*/d' gui/qt/icons_rc.py
-  '';
+  checkInputs = with python3Packages; [
+    pytest
+  ];
 
-  doCheck = false;
+  checkPhase = ''
+    unset HOME
+    pytest lib/tests
+  '';
 
   postInstall = ''
-    # Despite setting usr_share above, these files are installed under
-    # $out/nix ...
-    mv $out/${python.sitePackages}/nix/store"/"*/share $out
-    rm -rf $out/${python.sitePackages}/nix
-
     substituteInPlace $out/share/applications/electron-cash.desktop \
-      --replace "Exec=electron-cash %u" "Exec=$out/bin/electron-cash %u"
+      --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
+  '';
+
+  # If secp256k1 wasn't added to the library path, the following warning is given:
+  #
+  #   Electron Cash was unable to find the secp256k1 library on this system.
+  #   Elliptic curve cryptography operations will be performed in slow
+  #   Python-only mode.
+  postFixup = ''
+    wrapQtApp $out/bin/electron-cash \
+      --prefix LD_LIBRARY_PATH : ${secp256k1}/lib
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/electrum help >/dev/null
+    $out/bin/electron-cash help >/dev/null
   '';
 
-  meta = with stdenv.lib; {
-    description = "A lightweight Bitcoin wallet";
+  meta = with lib; {
+    description = "A Bitcoin Cash SPV Wallet";
     longDescription = ''
-      An easy-to-use Bitcoin client featuring wallets generated from
+      An easy-to-use Bitcoin Cash client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
     homepage = https://www.electroncash.org/;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lassulus ];
+    maintainers = with maintainers; [ lassulus nyanloutre ];
     license = licenses.mit;
   };
 }

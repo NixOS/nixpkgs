@@ -1,8 +1,8 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, nixosTests}:
 
 buildGoPackage rec {
-  name = "restic-${version}";
-  version = "0.8.3";
+  pname = "restic";
+  version = "0.9.6";
 
   goPackagePath = "github.com/restic/restic";
 
@@ -10,28 +10,29 @@ buildGoPackage rec {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "0vbwbxly3p1wj25ai1xak1bmhibh2ilxl55gsbnaaq7pcznc3ad9";
+    sha256 = "0lydll93n1lcn1fl669b9cikmzz9d6vfpc8ky3ng5fi8kj3v1dz7";
   };
 
-  buildPhase = ''
-    cd go/src/${goPackagePath}
-    go run build.go
-  '';
+  passthru.tests.restic = nixosTests.restic;
 
+  # Use a custom install phase here as by default the
+  # build-release-binaries and prepare-releases binaries are
+  # installed.
   installPhase = ''
+    mkdir -p "$bin/bin"
+    cp go/bin/restic "$bin/bin"
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p \
-      $bin/bin \
       $bin/etc/bash_completion.d \
       $bin/share/zsh/vendor-completions \
       $bin/share/man/man1
-    cp restic $bin/bin/
     $bin/bin/restic generate \
       --bash-completion $bin/etc/bash_completion.d/restic.sh \
-      --zsh-completion $bin/share/zsh/vendor-completions/restic.sh \
+      --zsh-completion $bin/share/zsh/vendor-completions/_restic \
       --man $bin/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://restic.net;
     description = "A backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;

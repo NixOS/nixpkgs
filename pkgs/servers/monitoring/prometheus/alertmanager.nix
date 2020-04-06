@@ -1,8 +1,8 @@
 { stdenv, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "alertmanager-${version}";
-  version = "0.14.0";
+  pname = "alertmanager";
+  version = "0.20.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/alertmanager";
@@ -11,11 +11,8 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "0f6yi19zffxnp3dlr4zs52b7bllks3kjxkdn9zvvi5lvpkzmba5j";
+    sha256 = "1bq6vbpy25k7apvs2ga3fbp1cbnv9j0y1g1khvz2qgz6a2zvhgg3";
   };
-
-  # Tests exist, but seem to clash with the firewall.
-  doCheck = false;
 
   buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
     -ldflags=
@@ -36,7 +33,7 @@ buildGoPackage rec {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = https://github.com/prometheus/alertmanager;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz ];
+    maintainers = with maintainers; [ benley fpletz globin ];
     platforms = platforms.unix;
   };
 }

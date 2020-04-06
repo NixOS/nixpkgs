@@ -5,11 +5,11 @@
 with stdenv.lib;
 
 let
-  rev = "7e09caa2a7a435aeb2cd5446aa590d6f9ae1699d";
-  sha256 = "0mjzsiknln3isdri9004wwjjjpak5fj8ncizyncf5jv7g4m4q1pj";
+  rev = "e4675e38ab54942e351c7686e40fabec822120b9";
+  sha256 = "1wm24p6pkxl1d7hrvf4ph6mwzawvqi22c60z9xzndn5xfyr4v0yr";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nix-serve-0.2-${substring 0 7 rev}";
 
   src = fetchFromGitHub {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/edolstra/nix-serve;
     description = "A utility for sharing a Nix store as a binary cache";
     maintainers = [ maintainers.eelco ];
-    license = licenses.gpl3;
+    license = licenses.lgpl21;
     platforms = nix.meta.platforms;
   };
 }

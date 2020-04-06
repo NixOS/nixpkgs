@@ -1,5 +1,5 @@
-args @ { fetchurl, ... }:
-rec {
+{ fetchurl, ... }:
+{
   baseName = ''plump-lexer'';
   version = ''plump-20170725-git'';
 

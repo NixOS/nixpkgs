@@ -1,26 +1,26 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, glib, zlib, pcre, mysql, libressl }:
+, glib, zlib, pcre, libmysqlclient, libressl }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.3";
-  name = "mydumper-${version}";
+  version = "0.9.5";
+  pname = "mydumper";
 
   src = fetchFromGitHub {
     owner  = "maxbube";
     repo   = "mydumper";
     rev    = "v${version}";
-    sha256 = "139v6707sxyslg7n1fii8b1ybdq50hbqhc8zf6p1cr3h2hhl6ns9";
+    sha256 = "0vbz0ri5hm6yzkrcgnaj8px6bf59myr5dbhyy7fd4cv44hr685k6";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ glib zlib pcre mysql.connector-c libressl ];
+  buildInputs = [ glib zlib pcre libmysqlclient libressl ];
 
   meta = with stdenv.lib; {
     description = ''High-perfomance MySQL backup tool'';
     homepage = https://github.com/maxbube/mydumper;
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "can-utils-${version}";
+stdenv.mkDerivation {
+  pname = "can-utils";
   # There are no releases (source archives or git tags), so use the date of the
   # latest commit in git master as version number.
   version = "20170830";
@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     rev = "5b518a0a5fa56856f804372a6b99b518dedb5386";
     sha256 = "1ygzp8rjr8f1gs48mb1pz7psdgbfhlvr6kjdnmzbsqcml06zvrpr";
   };
+
+  # Fixup build with newer Linux headers.
+  postPatch = ''
+    sed '1i#include <linux/sockios.h>' -i \
+      slcanpty.c cansniffer.c canlogserver.c isotpdump.c isotpsniffer.c isotpperf.c
+  '';
 
   preConfigure = ''makeFlagsArray+=(PREFIX="$out")'';
 

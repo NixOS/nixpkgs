@@ -1,51 +1,57 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeDesktopItem
 , python3, python3Packages
-, glew, freeglut, libpng, libxml2, tk, freetype }:
+, glew, glm, freeglut, libpng, libxml2, tk, freetype, msgpack }:
 
-
-with stdenv.lib;
 
 let
   pname = "pymol";
-  ver_maj = "1.8";
-  ver_min = "4";
-  version = "${ver_maj}.${ver_min}.0";
   description = "A Python-enhanced molecular graphics tool";
 
   desktopItem = makeDesktopItem {
-    name = "${pname}";
-    exec = "${pname}";
+    name = pname;
+    exec = pname;
     desktopName = "PyMol Molecular Graphics System";
-    genericName = "Molecular Modeller";
+    genericName = "Molecular Modeler";
     comment = description;
+    icon = pname;
     mimeType = "chemical/x-pdb;chemical/x-mdl-molfile;chemical/x-mol2;chemical/seq-aa-fasta;chemical/seq-na-fasta;chemical/x-xyz;chemical/x-mdl-sdf;";
     categories = "Graphics;Education;Science;Chemistry;";
   };
 in
-python3Packages.buildPythonApplication {
-  name = "pymol-${version}";
-  src = fetchurl {
-    url = "mirror://sourceforge/project/pymol/pymol/${ver_maj}/pymol-v${version}.tar.bz2";
-    sha256 = "0yfj8g5yic9zz6f0bw2n8h6ifvgsn8qvhq84alixsi28wzppn55n";
+python3Packages.buildPythonApplication rec {
+  inherit pname;
+  version = "2.3.0";
+  src = fetchFromGitHub {
+    owner = "schrodinger";
+    repo = "pymol-open-source";
+    rev = "v${version}";
+    sha256 = "175cqi6gfmvv49i3ws19254m7ljs53fy6y82fm1ywshq2h2c93jh";
   };
 
-  buildInputs = [ python3Packages.numpy glew freeglut libpng libxml2 tk freetype ];
+  buildInputs = [ python3Packages.numpy glew glm freeglut libpng libxml2 tk freetype msgpack ];
   NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
+  hardeningDisable = [ "format" ];
+
+  setupPyBuildFlags = [ "--glut" ];
 
   installPhase = ''
-    python setup.py install --home=$out
-    cp -r ${desktopItem}/share/ $out/
+    python setup.py install --home="$out"
     runHook postInstall
   '';
 
   postInstall = with python3Packages; ''
     wrapProgram $out/bin/pymol \
-      --prefix PYTHONPATH : ${makeSearchPathOutput "lib" python3.sitePackages [ Pmw tkinter ]}
+      --prefix PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages [ Pmw tkinter ]}
+
+    mkdir -p "$out/share/icons/"
+    ln -s ../../lib/python/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
+    cp -r "${desktopItem}/share/applications/" "$out/share/"
   '';
 
-  meta = {
+  meta = with lib; {
     description = description;
     homepage = https://www.pymol.org/;
-    license = licenses.psfl;
+    license = licenses.mit;
+    maintainers = with maintainers; [ samlich ];
   };
 }

@@ -1,7 +1,9 @@
 { stdenv, fetchurl, coreutils, utillinux,
-  nettools, kbd, bc, which, gnused, gnugrep,
+  which, gnused, gnugrep,
   groff, man-db, getent, libiconv, pcre2,
-  gettext, ncurses, python3
+  gettext, ncurses, python3,
+  cmake
+  , fetchpatch
 
   , writeText
 
@@ -87,37 +89,45 @@ let
   '';
 
   fish = stdenv.mkDerivation rec {
-    name = "fish-${version}";
-    version = "2.7.1";
+    pname = "fish";
+    version = "3.1.0";
 
     etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball github packages from the tag
       # Hence we cannot use fetchFromGithub
-      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${name}.tar.gz";
-      sha256 = "0nhc3yc5lnnan7zmxqqxm07rdpwjww5ijy45ll2njdc6fnfb2az4";
+      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
+      sha256 = "0s2356mlx7fp9kgqgw91lm5ds2i9iq9hq071fbqmcp3875l1xnz5";
     };
 
+    nativeBuildInputs = [ cmake ];
     buildInputs = [ ncurses libiconv pcre2 ];
-    configureFlags = [ "--without-included-pcre2" ];
+
+    preConfigure = ''
+      patchShebangs ./build_tools/git_version_gen.sh
+    '';
+
+    patches = [
+      # Fixes compilation on old Apple SDKs
+      (fetchpatch {
+        url = "https://github.com/fish-shell/fish-shell/commit/10385d422b3e2a823faebfdaf13edd0e7f48a27f.patch";
+        sha256 = "0hj13kyjf5wr9j5afd4mfylcr7mz68ilbncbcf307drk1lv1lvrn";
+      })
+    ];
 
     # Required binaries during execution
     # Python: Autocompletion generated from manpages and config editing
     propagatedBuildInputs = [
-      coreutils gnugrep gnused bc
+      coreutils gnugrep gnused
       python3 groff gettext
     ] ++ optional (!stdenv.isDarwin) man-db;
 
     postInstall = ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
-      sed -e "s|bc|${bc}/bin/bc|"                          \
-          -e "s|/usr/bin/seq|${coreutils}/bin/seq|"        \
-          -i "$out/share/fish/functions/seq.fish"          \
-            "$out/share/fish/functions/math.fish"
       sed -i "s|which |${which}/bin/which |"               \
-              "$out/share/fish/functions/type.fish"
+             "$out/share/fish/functions/type.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
           -i "$out/share/fish/functions/fish_prompt.fish"
       sed -e "s|gettext |${gettext}/bin/gettext |"         \
@@ -125,18 +135,18 @@ let
           -i "$out/share/fish/functions/_.fish"
       sed -e "s|uname|${coreutils}/bin/uname|"             \
           -i "$out/share/fish/functions/__fish_pwd.fish"   \
-            "$out/share/fish/functions/prompt_pwd.fish"
+             "$out/share/fish/functions/prompt_pwd.fish"
       sed -e "s|sed |${gnused}/bin/sed |"                  \
           -i "$out/share/fish/functions/alias.fish"        \
-            "$out/share/fish/functions/prompt_pwd.fish"
+             "$out/share/fish/functions/prompt_pwd.fish"
       sed -i "s|nroff |${groff}/bin/nroff |"               \
-            "$out/share/fish/functions/__fish_print_help.fish"
-      sed -i "s|/sbin /usr/sbin||" \
-            "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
-      sed -e "s|clear;|${getBin ncurses}/bin/clear;|" \
+             "$out/share/fish/functions/__fish_print_help.fish"
+      sed -e "s|clear;|${getBin ncurses}/bin/clear;|"      \
           -i "$out/share/fish/functions/fish_default_key_bindings.fish"
-      sed -e "s|python3|${getBin python3}/bin/python3|" \
+      sed -e "s|python3|${getBin python3}/bin/python3|"    \
           -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
+      sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
+             $out/share/fish/completions/{sudo.fish,doas.fish}
 
     '' + optionalString stdenv.isLinux ''
       sed -e "s| ul| ${utillinux}/bin/ul|" \
@@ -147,8 +157,6 @@ let
       done
 
     '' + optionalString (!stdenv.isDarwin) ''
-      sed -i "s|(hostname\||(${nettools}/bin/hostname\||"           \
-            "$out/share/fish/functions/fish_prompt.fish"
       sed -i "s|Popen(\['manpath'|Popen(\['${man-db}/bin/manpath'|" \
               "$out/share/fish/tools/create_manpage_completions.py"
       sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \

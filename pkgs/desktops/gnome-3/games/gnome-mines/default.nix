@@ -1,24 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, intltool, itstool, libxml2, libgames-support, libgee }:
+{ stdenv, fetchurl, meson, ninja, vala, gobject-introspection, pkgconfig, gnome3, gtk3, wrapGAppsHook
+, librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-mines-${version}";
-  version = "3.26.0";
+  pname = "gnome-mines";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mines/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "2b041eaf0d57307498c56d8e285b2e539f634fdba95d689f6af75aa4ed6edde9";
+    url = "mirror://gnome/sources/gnome-mines/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0m53ymxbgr3rb3yv13fzjwqh6shsfr51abkm47rchsy2jryqkzja";
   };
+
+  # gobject-introspection for finding vapi files
+  nativeBuildInputs = [
+    meson ninja vala gobject-introspection pkgconfig gettext itstool python3
+    libxml2 wrapGAppsHook desktop-file-utils
+  ];
+  buildInputs = [ gtk3 librsvg gnome3.adwaita-icon-theme libgnome-games-support libgee ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-mines"; attrPath = "gnome3.gnome-mines"; };
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-mines";
+      attrPath = "gnome3.gnome-mines";
+    };
   };
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gtk3 wrapGAppsHook librsvg intltool itstool libxml2
-    gnome3.defaultIconTheme libgames-support libgee
-  ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Mines;

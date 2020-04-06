@@ -24,9 +24,10 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.mailhog = {
+    users.users.mailhog = {
       name = cfg.user;
       description = "MailHog service user";
+      isSystemUser = true;
     };
 
     systemd.services.mailhog = {

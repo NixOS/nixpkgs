@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation (rec {
-  name = "pqiv-${version}";
-  version = "2.10.2";
+  pname = "pqiv";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "phillipberndt";
     repo = "pqiv";
     rev = version;
-    sha256 = "0zn7ps73lw04l9i4777c90ik07v3hkg66mnpz8vvvwjyi40i77a7";
+    sha256 = "06cwm28b7j1skwp21s5snmj1pqh3xh6y2i5v4w3pz0b8k3053h9i";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation (rec {
     description = "Powerful image viewer with minimal UI";
     homepage = http://www.pberndt.com/Programme/Linux/pqiv;
     license = licenses.gpl3;
-    maintainers = [ maintainers.ndowens ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 })

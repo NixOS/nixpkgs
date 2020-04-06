@@ -1,39 +1,63 @@
-{ fetchurl, stdenv, ant, jdk, makeWrapper, libXxf86vm, which }:
+{ stdenv, fetchFromGitHub, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "processing-${version}";
-  version = "2.2.1";
+  pname = "processing";
+  version = "3.5.3";
 
-  src = fetchurl {
-    url = "https://github.com/processing/processing/archive/processing-0227-${version}.tar.gz";
-    sha256 = "1r8q5y0h4gpqap5jwkspc0li6566hzx5chr7hwrdn8mxlzsm50xk";
+  src = fetchFromGitHub {
+    owner = "processing";
+    repo = "processing";
+    rev = "processing-0269-${version}";
+    sha256 = "0ajniy3a0i0rx7is46r85yh3ah4zm4ra1gbllmihw9pmnfjgfajn";
   };
 
-  # Stop it trying to download its own version of java
-  patches = [ ./use-nixpkgs-jre.patch ];
+  nativeBuildInputs = [ ant rsync makeWrapper ];
+  buildInputs = [ jdk ];
 
-  buildInputs = [ ant jdk makeWrapper libXxf86vm which ];
+  buildPhase = ''
+    # use compiled jogl to avoid patchelf'ing .so files inside jars
+    rm core/library/*.jar
+    cp ${javaPackages.jogl_2_3_2}/share/java/*.jar core/library/
 
-  buildPhase = "cd build && ant build";
+    # do not download a file during build
+    ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
+    install -D -m0444 ${fetchurl {
+                          url    = http://download.processing.org/reference.zip;
+                          sha256 = "198bpk8mzns6w5h0zdf50wr6iv7sgdi6v7jznj5rbsnpgyilxz35";
+                        }
+                       } ./java/reference.zip
+
+    # suppress "Not fond of this Java VM" message box
+    substituteInPlace app/src/processing/app/platform/LinuxPlatform.java \
+      --replace 'Messages.showWarning' 'if (false) Messages.showWarning'
+
+    ( cd build
+      substituteInPlace build.xml --replace "jre-download," ""  # do not download jre1.8.0_144
+      mkdir -p linux/jre1.8.0_144                               # fake dir to avoid error
+      ant build )
+  '';
 
   installPhase = ''
-    mkdir -p $out/${name}
-    mkdir -p $out/bin
-   cp -r linux/work/* $out/${name}/
-   makeWrapper $out/${name}/processing $out/bin/processing \
-     --prefix PATH : "${stdenv.lib.makeBinPath [ jdk which ]}" \
-     --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
-   makeWrapper $out/${name}/processing-java $out/bin/processing-java \
-     --prefix PATH : "${stdenv.lib.makeBinPath [ jdk which ]}" \
-     --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
-   ln -s ${jdk} $out/${name}/java
+    mkdir $out
+    cp -dpR build/linux/work $out/${pname}
+
+    rmdir $out/${pname}/java
+    ln -s ${jdk} $out/${pname}/java
+
+    makeWrapper $out/${pname}/processing      $out/bin/processing \
+        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
+        --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
+        --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
+    makeWrapper $out/${pname}/processing-java $out/bin/processing-java \
+        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
+        --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
+        --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
   '';
 
   meta = with stdenv.lib; {
     description = "A language and IDE for electronic arts";
     homepage = https://processing.org;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
   };
 }

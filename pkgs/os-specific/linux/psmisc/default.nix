@@ -1,20 +1,33 @@
-{stdenv, fetchurl, ncurses}:
-
-assert stdenv.isLinux;
+{stdenv, fetchFromGitLab, autoconf, automake, gettext, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "psmisc-23.1";
+  pname = "psmisc";
+  version = "23.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/psmisc/${name}.tar.xz";
-    sha256 = "0c5s94hqpwfmyswx2f96gifa6wdbpxxpkyxcrlzbxpvmrxsd911f";
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1132xvrldv0dar2mf221mv5kvajq0v6yrq8k3nl0wslnh5baa0r0";
   };
 
-  buildInputs = [ncurses];
+  nativeBuildInputs = [ autoconf automake gettext ];
+  buildInputs = [ ncurses ];
 
-  meta = {
-    homepage = http://psmisc.sourceforge.net/;
+  preConfigure = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # Goes past the rpl_malloc linking failure
+    export ac_cv_func_malloc_0_nonnull=yes
+    export ac_cv_func_realloc_0_nonnull=yes
+  '' + ''
+    echo $version > .tarball-version
+    ./autogen.sh
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = https://gitlab.com/psmisc/psmisc;
     description = "A set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ryantm ];
   };
 }

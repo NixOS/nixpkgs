@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, ghostscript }:
+{ stdenv, autoreconfHook, ghostscript }:
 
 stdenv.mkDerivation {
   name = "ijs-${ghostscript.version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = [ "--disable-static" "--enable-shared" ];
+  configureFlags = [ "--enable-shared" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.openprinting.org/download/ijs/;

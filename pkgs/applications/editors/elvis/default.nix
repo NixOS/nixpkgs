@@ -1,6 +1,6 @@
 { fetchurl, fetchpatch, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "elvis-2.2_0";
 
   src = fetchurl {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = "--ioctl=termios";
+  configureFlags = [ "--ioctl=termios" ];
 
   meta = {
     homepage = http://elvis.vi-editor.org/;

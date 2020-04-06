@@ -4,6 +4,10 @@ let
   pname = "dypgen";
 in
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "${pname} is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "20120619-1";
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
     make
   '';
 
-  makeFlags = "BINDIR=$(out)/bin  MANDIR=$(out)/usr/share/man/man1 DYPGENLIBDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib";
+  makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/usr/share/man/man1" "DYPGENLIBDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
 
   meta = {
     homepage = http://dypgen.free.fr;

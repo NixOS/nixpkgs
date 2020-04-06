@@ -34,6 +34,6 @@ in
 
   meta = {
     doc = ./doc.xml;
-    maintainers = with stdenv.lib.maintainers; [ vidbina ];
+    maintainers = with lib.maintainers; [ vidbina ];
   };
 }

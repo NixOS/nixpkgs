@@ -20,17 +20,11 @@ let
   '';
 
 in {
-  runInWindowsVM = drv: let
-    newDrv = drv.override {
-      stdenv = drv.stdenv.override {
-        shell = "/bin/sh";
-      };
-    };
-  in pkgs.lib.overrideDerivation drv (attrs: let
+  runInWindowsVM = drv: pkgs.lib.overrideDerivation drv (attrs: let
     bootstrap = bootstrapper attrs.windowsImage;
   in {
     requiredSystemFeatures = [ "kvm" ];
-    builder = "${pkgs.stdenv.shell}";
+    builder = pkgs.stdenv.shell;
     args = ["-e" (bootstrap.resumeAndRun builder)];
     windowsImage = bootstrap.suspendedVM;
     origArgs = attrs.args;

@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
+, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies
@@ -13,7 +13,6 @@
 , mock
 # Runtime dependencies
 , backports_shutil_get_terminal_size
-, jedi
 , decorator
 , pathlib2
 , pickleshare
@@ -27,17 +26,25 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "5.5.0";
-  name = "${pname}-${version}";
+  version = "5.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "66469e894d1f09d14a1f23b971a410af131daa9ad2a19922082e02e0ddfd150f";
+    sha256 = "4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906";
   };
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
+
+  patches = [
+    # Use the proper pygments lexer for python2 (https://github.com/ipython/ipython/pull/12095)
+    (fetchpatch {
+      name = "python2-lexer.patch";
+      url = "https://github.com/ipython/ipython/pull/12095/commits/8805293b5e4bce9150cc2ad9c5d6d984849ae447.patch";
+      sha256 = "16p4gl7a49v76w33j39ih7yspy6x2d14p9bh4wdpg9cafhw9nbc0";
+    })
+  ];
 
   buildInputs = [ glibcLocales ];
 
@@ -60,6 +67,6 @@ buildPythonPackage rec {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor jgeerds orivej lnl7 ];
+    maintainers = with lib.maintainers; [ bjornfor orivej lnl7 ];
   };
 }

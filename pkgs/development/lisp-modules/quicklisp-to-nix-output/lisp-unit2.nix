@@ -7,7 +7,7 @@ rec {
 
   description = ''Common Lisp library that supports unit testing.'';
 
-  deps = [ args."alexandria" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."iterate" args."symbol-munger" ];
+  deps = [ args."alexandria" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."iterate" args."named-readtables" args."symbol-munger" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/lisp-unit2/2018-01-31/lisp-unit2-20180131-git.tgz'';
@@ -30,8 +30,9 @@ rec {
      (NAME cl-unicode FILENAME cl-unicode)
      (NAME flexi-streams FILENAME flexi-streams)
      (NAME iterate FILENAME iterate)
+     (NAME named-readtables FILENAME named-readtables)
      (NAME symbol-munger FILENAME symbol-munger))
     DEPENDENCIES
     (alexandria cl-interpol cl-ppcre cl-unicode flexi-streams iterate
-     symbol-munger)
+     named-readtables symbol-munger)
     VERSION 20180131-git SIBLINGS NIL PARASITES (lisp-unit2-test)) */

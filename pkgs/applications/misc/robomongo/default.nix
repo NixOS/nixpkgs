@@ -2,7 +2,7 @@
   freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "robomongo-${version}";
+  pname = "robomongo";
   version = "0.9.0";
 
   src = fetchurl {

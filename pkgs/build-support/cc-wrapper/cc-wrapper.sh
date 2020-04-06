@@ -15,7 +15,7 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
-source @out@/nix-support/utils.sh
+source @out@/nix-support/utils.bash
 
 # Flirting with a layer violation here.
 if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
@@ -33,6 +33,7 @@ fi
 # GCC prints annoying warnings when they are not needed.
 dontLink=0
 nonFlagArgs=0
+cc1=0
 # shellcheck disable=SC2193
 [[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
 cppInclude=1
@@ -68,6 +69,8 @@ while (( "$n" < "$nParams" )); do
     elif [[ "$p" != -?* ]]; then
         # A dash alone signifies standard input; it is not a flag
         nonFlagArgs=1
+    elif [ "$p" = -cc1 ]; then
+        cc1=1
     fi
     n+=1
 done
@@ -126,7 +129,7 @@ fi
 
 if [[ "$isCpp" = 1 ]]; then
     if [[ "$cppInclude" = 1 ]]; then
-        NIX_@infixSalt@_CFLAGS_COMPILE+=" ${NIX_@infixSalt@_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+        NIX_@infixSalt@_CFLAGS_COMPILE+=" ${NIX_@infixSalt@_CXXSTDLIB_COMPILE:-@default_cxx_stdlib_compile@}"
     fi
     NIX_@infixSalt@_CFLAGS_LINK+=" $NIX_@infixSalt@_CXXSTDLIB_LINK"
 fi
@@ -134,8 +137,8 @@ fi
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
-extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE "${hardeningCFlags[@]}")
-extraBefore=()
+extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE)
+extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_@infixSalt@_CFLAGS_COMPILE_BEFORE)
 
 if [ "$dontLink" != 1 ]; then
 
@@ -165,6 +168,14 @@ fi
 if [ "$*" = -v ]; then
     extraAfter=()
     extraBefore=()
+fi
+
+# clang's -cc1 mode is not compatible with most options
+# that we would pass. Rather than trying to pass only
+# options that would work, let's just remove all of them.
+if [ "$cc1" = 1 ]; then
+  extraAfter=()
+  extraBefore=()
 fi
 
 # Optionally print debug info.

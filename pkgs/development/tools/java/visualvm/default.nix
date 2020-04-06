@@ -1,41 +1,36 @@
-{ stdenv, fetchzip, lib, makeWrapper, jdk, gtk2, gawk }:
+{ stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "visualvm-1.3.9";
+  version = "2.0";
+  pname = "visualvm";
 
   src = fetchzip {
-    url = "https://github.com/visualvm/visualvm.src/releases/download/1.3.9/visualvm_139.zip";
-    sha256 = "1gkdkxssh51jczhgv680i42jjrlia1vbpcqhxvf45xcq9xj95bm5";
+    url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";
+    hash = "sha256-+T8U/GwMA46FHd0p6qpklHXb6+HPCbbIbo6s2Y/77RQ=";
+  };
+
+  desktopItem = makeDesktopItem {
+      name = "visualvm";
+      exec = "visualvm";
+      comment = "Java Troubleshooting Tool";
+      desktopName = "VisualVM";
+      genericName = "Java Troubleshooting Tool";
+      categories = "Application;Development;";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    rm bin/visualvm.exe
-    rm platform/lib/nbexec64.exe
-    rm platform/lib/nbexec.exe
-    rm profiler/lib/deployed/jdk15/windows-amd64/profilerinterface.dll
-    rm profiler/lib/deployed/jdk15/windows/profilerinterface.dll
-    rm profiler/lib/deployed/jdk16/windows-amd64/profilerinterface.dll
-    rm profiler/lib/deployed/jdk16/windows/profilerinterface.dll
-    rm platform/modules/lib/amd64/jnidispatch-410.dll
-    rm platform/modules/lib/x86/jnidispatch-410.dll
-    rm platform/lib/nbexec.dll
-    rm platform/lib/nbexec64.dll
+    find . -type f -name "*.dll" -o -name "*.exe"  -delete;
 
     substituteInPlace etc/visualvm.conf \
       --replace "#visualvm_jdkhome=" "visualvm_jdkhome=" \
       --replace "/path/to/jdk" "${jdk.home}" \
-      --replace 'visualvm_default_options="' 'visualvm_default_options="--laf com.sun.java.swing.plaf.gtk.GTKLookAndFeel -J-Dawt.useSystemAAFontSettings=lcd -J-Dswing.aatext=true '
 
     substituteInPlace platform/lib/nbexec \
       --replace /usr/bin/\''${awk} ${gawk}/bin/awk
 
     cp -r . $out
-
-    # To get the native LAF, JVM needs to see GTK’s .so-s.
-    wrapProgram $out/bin/visualvm \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk2 ]}"
   '';
 
   meta = with stdenv.lib; {
@@ -47,9 +42,9 @@ stdenv.mkDerivation rec {
       capability of monitoring and performance analysis for the Java
       SE platform.
     '';
-    homepage = https://visualvm.java.net/;
+    homepage = "https://visualvm.github.io";
     license = licenses.gpl2ClasspathPlus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ michalrus ];
+    maintainers = with maintainers; [ michalrus moaxcp ];
   };
 }

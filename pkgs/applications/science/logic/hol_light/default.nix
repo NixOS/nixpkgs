@@ -1,32 +1,42 @@
-{ stdenv, fetchFromGitHub, fetchpatch, writeScript, ocaml, camlp5 }:
+{ stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5 }:
 
 let
-  start_script = ''
-    #!/bin/sh
-    cd "$out/lib/hol_light"
-    exec ${ocaml}/bin/ocaml -I \`${camlp5}/bin/camlp5 -where\` -init make.ml
-  '';
+  load_num =
+    if num == null then "" else
+      ''
+        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
+        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
+        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+      '';
+
+  start_script =
+    ''
+      #!${runtimeShell}
+      cd $out/lib/hol_light
+      exec ${ocaml}/bin/ocaml \
+        -I \`${camlp5}/bin/camlp5 -where\` \
+        ${load_num} \
+        -init make.ml
+    '';
 in
 
 stdenv.mkDerivation {
-  name     = "hol_light-2017-07-06";
+  name     = "hol_light-2019-10-06";
 
   src = fetchFromGitHub {
     owner  = "jrh13";
     repo   = "hol-light";
-    rev    = "0ad8cbdb4de08a38dac600f352555e8454499faa";
-    sha256 = "0px9hl1b0mkyqv84j0si1zdq4066ffdrhzp27p2iah9l8ynbvpaq";
+    rev    = "5c91b2ded8a66db571824ecfc18b4536c103b23e";
+    sha256 = "0sxsk8z08ba0q5aixdyczcx5l29lb51ba4ip3d2fry7y604kjsx6";
   };
 
+  patches = [(fetchpatch {
+    url = https://salsa.debian.org/ocaml-team/hol-light/-/raw/master/debian/patches/0004-Fix-compilation-with-camlp5-7.11.patch;
+    sha256 = "180qmxbrk3vb1ix7j77hcs8vsar91rs11s5mm8ir5352rz7ylicr";
+  })];
+
   buildInputs = [ ocaml camlp5 ];
-
-  patches = [ (fetchpatch {
-      url = https://github.com/girving/hol-light/commit/f80524bad61fd6f6facaa42153b2e29d1eab4658.patch;
-      sha256 = "1563wp597vakhmsgg8940dpirzzfvvxqp75x3dnx20rvmi2n2xw0";
-    })
-  ];
-
-  postPatch = "cp pa_j_3.1x_{6,7}.xx.ml";
+  propagatedBuildInputs = [ num ];
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"
@@ -40,6 +50,6 @@ stdenv.mkDerivation {
     homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license     = licenses.bsd2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice z77z vbgl ];
+    maintainers = with maintainers; [ thoughtpolice maggesi vbgl ];
   };
 }

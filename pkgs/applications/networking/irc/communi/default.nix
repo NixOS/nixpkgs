@@ -1,7 +1,7 @@
 { fetchgit, libcommuni, qtbase, qmake, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "communi-${version}";
+  pname = "communi";
   version = "3.5.0";
 
   src = fetchgit {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "
   '';
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace "$out/share/applications/communi.desktop" \
       --replace "/usr/bin" "$out/bin"
   '';

@@ -294,16 +294,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = [
-      { name = "turnserver";
-        uid = config.ids.uids.turnserver;
+    users.users.turnserver =
+      { uid = config.ids.uids.turnserver;
         description = "coturn TURN server user";
-      } ];
-    users.extraGroups = [
-      { name = "turnserver";
-        gid = config.ids.gids.turnserver;
+      };
+    users.groups.turnserver =
+      { gid = config.ids.gids.turnserver;
         members = [ "turnserver" ];
-      } ];
+      };
 
     systemd.services.coturn = {
       description = "coturn TURN server";

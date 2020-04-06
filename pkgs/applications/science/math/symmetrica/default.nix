@@ -1,29 +1,36 @@
-{stdenv, fetchurl}:
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, autoreconfHook
+}:
 stdenv.mkDerivation rec {
-  name = "symmetrica-${version}";
-  version = "2.0";
-  # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
-  src = fetchurl {
-    url = "http://www.algorithm.uni-bayreuth.de/en/research/SYMMETRICA/SYM2_0_tar.gz";
-    sha256 = "1qhfrbd5ybb0sinl9pad64rscr08qvlfzrzmi4p4hk61xn6phlmz";
-    name = "symmetrica-2.0.tar.gz";
+  pname = "symmetrica";
+  version = "3.0.1";
+
+  # Fork of the original symmetrica, which can be found here
+  # http://www.algorithm.uni-bayreuth.de/en/research/SYMMETRICA/index.html
+  # "This fork was created to modernize the codebase, and to resume making
+  # releases with the fixes that have accrued over the years."
+  # Also see https://trac.sagemath.org/ticket/29061#comment:3.
+  src = fetchFromGitLab {
+    owner = "sagemath";
+    repo = "symmetrica";
+    rev = version;
+    sha256 = "0wfmrzw82f5i91d7rf24mcdqcj2fmgrgy02pw4pliz7ncwaq14w3";
   };
-  buildInputs = [];
-  sourceRoot = ".";
-  installPhase = ''
-    mkdir -p "$out"/{lib,share/doc/symmetrica,include/symmetrica}
-    ar crs libsymmetrica.a *.o
-    ranlib libsymmetrica.a
-    cp libsymmetrica.a "$out/lib"
-    cp *.h "$out/include/symmetrica"
-    cp README *.doc "$out/share/doc/symmetrica"
-  '';
-  meta = {
-    inherit version;
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = ''A collection of routines for representation theory and combinatorics'';
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = http://www.symmetrica.de/;
+    license = licenses.isc;
+    maintainers = with maintainers; [raskin timokau];
+    platforms = platforms.unix;
+    homepage = "https://gitlab.com/sagemath/symmetrica";
   };
 }

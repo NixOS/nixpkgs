@@ -1,21 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, zlib }:
+{ stdenv, fetchFromGitHub
+, autoreconfHook
+, gnutls
+, openssl
+, pkgconfig
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  name = "librelp-1.2.14";
+  pname = "librelp";
+  version = "1.5.0";
 
-  src = fetchurl {
-    url = "http://download.rsyslog.com/librelp/${name}.tar.gz";
-    sha256 = "0marms2np729ck0x0hsj1bdmi0ly57pl7pfspwrqld9n8cd29xhi";
+  src = fetchFromGitHub {
+    owner = "rsyslog";
+    repo = "librelp";
+    rev = "v${version}";
+    sha256 = "1il8dany6y981ficrwnxjlc13v5lj6gqia5678p5pj6bcbq7l7lb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gnutls zlib ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ gnutls zlib openssl ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.librelp.com/;
     description = "A reliable logging library";
+    homepage = "https://www.librelp.com/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

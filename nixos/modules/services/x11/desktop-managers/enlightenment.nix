@@ -16,6 +16,10 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
+  ];
+
   options = {
 
     services.xserver.desktopManager.enlightenment.enable = mkOption {
@@ -25,28 +29,29 @@ in
 
   };
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [
       e.efl e.enlightenment
       e.terminology e.econnman
       pkgs.xorg.xauth # used by kdesu
-      pkgs.gtk2 # To get GTK+'s themes.
+      pkgs.gtk2 # To get GTK's themes.
       pkgs.tango-icon-theme
-      pkgs.shared-mime-info
-      pkgs.gnome2.gnomeicontheme
+
+      pkgs.gnome-icon-theme
       pkgs.xorg.xcursorthemes
     ];
 
-    environment.pathsToLink = [ "/etc/enlightenment" "/etc/xdg" "/share/enlightenment" "/share/elementary" "/share/applications" "/share/locale" "/share/icons" "/share/themes" "/share/mime" "/share/desktop-directories" ];
+    environment.pathsToLink = [
+      "/etc/enlightenment"
+      "/share/enlightenment"
+      "/share/elementary"
+      "/share/locale"
+    ];
 
     services.xserver.desktopManager.session = [
     { name = "Enlightenment";
       start = ''
-        # Set GTK_DATA_PREFIX so that GTK+ can find the themes
-        export GTK_DATA_PREFIX=${config.system.path}
-        # find theme engines
-        export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
         export XDG_MENU_PREFIX=e-
 
         export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}"
@@ -61,12 +66,9 @@ in
       '';
     }];
 
-    security.wrappers = (import (builtins.toPath "${e.enlightenment}/e-wrappers.nix")).security.wrappers;
+    security.wrappers = (import "${e.enlightenment}/e-wrappers.nix").security.wrappers;
 
-    environment.etc = singleton
-      { source = xcfg.xkbDir;
-        target = "X11/xkb";
-      };
+    environment.etc."X11/xkb".source = xcfg.xkbDir;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 

@@ -1,52 +1,62 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, python3, dconf
-, intltool, libsoup, libxml2, libsecret, icu, sqlite
-, p11-kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true
-, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
+{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobject-introspection
+, intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr
+, p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre
+, vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib
+, glib, gtk3, gnome-online-accounts, libgweather, libgdata, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "evolution-data-server-${version}";
-  version = "3.26.6";
+  pname = "evolution-data-server";
+  version = "3.36.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1v0hwlrlm23bz5dmamdavm771f4gs64fyq82argrc0nwgn2a2fp4";
+    url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1v4qjnggpwvafyqnkl1avsi3mpfxpcaz7kwxcf2iz7pvb1k0xmyl";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "evolution-data-server"; };
-  };
-
-  nativeBuildInputs = [
-    cmake ninja pkgconfig intltool python3 gperf makeWrapper
-  ] ++ stdenv.lib.optional valaSupport vala;
-  buildInputs = with gnome3; [
-    glib libsoup libxml2 gtk gnome-online-accounts
-    gcr p11-kit libgweather libgdata libaccounts-glib json-glib
-    icu sqlite kerberos openldap webkitgtk
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit tzdata;
+    })
   ];
 
-  propagatedBuildInputs = [ libsecret nss nspr libical db ];
+  prePatch = ''
+    substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch --subst-var-by ESD_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
+      --subst-var-by GDS_GSETTINGS_PATH ${glib.getSchemaPath gsettings-desktop-schemas}
+    patches="$patches $PWD/hardcode-gsettings.patch"
+  '';
 
-  # uoa irrelevant for now
+  nativeBuildInputs = [
+    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobject-introspection vala
+  ];
+  buildInputs = [
+    glib libsoup libxml2 gtk3 gnome-online-accounts
+    gcr p11-kit libgweather libgdata libaccounts-glib json-glib
+    icu sqlite kerberos openldap webkitgtk glib-networking
+    libcanberra-gtk3 pcre
+  ];
+
+  propagatedBuildInputs = [ libsecret nss nspr libical db libsoup ];
+
   cmakeFlags = [
     "-DENABLE_UOA=OFF"
-  ] ++ stdenv.lib.optionals valaSupport [
     "-DENABLE_VALA_BINDINGS=ON"
     "-DENABLE_INTROSPECTION=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
 
-  enableParallelBuilding = true;
-
-  preFixup = ''
-    for f in $(find $out/libexec/ -type f -executable); do
-      wrapProgram "$f" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
-    done
-  '';
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "evolution-data-server";
+    };
+  };
 
   meta = with stdenv.lib; {
+    description = "Unified backend for programs that work with contacts, tasks, and calendar information";
+    homepage = https://wiki.gnome.org/Apps/Evolution;
     license = licenses.lgpl2;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

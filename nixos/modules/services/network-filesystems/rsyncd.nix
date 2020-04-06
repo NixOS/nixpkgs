@@ -35,7 +35,7 @@ in
       };
 
       motd = mkOption {
-        type = types.string;
+        type = types.str;
         default = "";
         description = ''
           Message of the day to display to clients on each connect.
@@ -74,13 +74,14 @@ in
             See <command>man rsyncd.conf</command> for options.
           '';
         type = types.attrsOf (types.attrsOf types.str);
-        example =
+        example = literalExample ''
           { srv =
              { path = "/srv";
                "read only" = "yes";
                comment = "Public rsync share.";
              };
-          };
+          }
+        '';
       };
 
       user = mkOption {

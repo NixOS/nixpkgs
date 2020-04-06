@@ -8,14 +8,12 @@ else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-farfadet-${version}";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchurl {
     url = "https://github.com/oklm-wsh/Farfadet/releases/download/v${version}/farfadet-${version}.tbz";
-    sha256 = "06wvd57c8khpq0c2hvm15zng269zvabsw1lcaqphqdcckl67nsxr";
+    sha256 = "0nlafnp0pwx0n4aszpsk6nvcvqi9im306p4jhx70si7k3xprlr2j";
   };
-
-  unpackCmd = "tar -xjf $curSrc";
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
@@ -31,4 +29,3 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
   };
 }
-

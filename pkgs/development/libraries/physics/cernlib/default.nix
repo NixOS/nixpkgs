@@ -2,10 +2,13 @@
 
 stdenv.mkDerivation rec {
   version = "2006";
-  name = "cernlib-${version}";
+  pname = "cernlib";
 
   src = fetchurl {
-    url = "http://cernlib.web.cern.ch/cernlib/download/${version}_source/tar/${version}_src.tar.gz";
+    urls = [
+      "https://ftp.riken.jp/cernlib/download/${version}_source/tar/${version}_src.tar.gz"
+      "https://cernlib.web.cern.ch/cernlib/download/${version}_source/tar/${version}_src.tar.gz"
+    ];
     sha256 = "0awla1rl96z82br7slcmg8ks1d2a7slk6dj79ywb871j2ksi3fky";
   };
 
@@ -18,6 +21,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace 2006/src/config/site.def \
       --replace "# define MakeCmd gmake" "# define MakeCmd make"
+    substituteInPlace 2006/src/config/lnxLib.rules \
+      --replace "# lib" "// lib"
   '';
 
   configurePhase = ''
@@ -56,7 +61,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://cernlib.web.cern.ch;
     description = "Legacy collection of libraries and modules for data analysis in high energy physics";
-    platforms = stdenv.lib.platforms.unix;
+    broken = stdenv.isDarwin;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
     license = stdenv.lib.licenses.gpl2;
   };

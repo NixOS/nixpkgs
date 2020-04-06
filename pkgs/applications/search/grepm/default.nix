@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perlPackages, mutt }:
 
-stdenv.mkDerivation rec {
-  name = "grepm-${version}";
+stdenv.mkDerivation {
+  pname = "grepm";
   version = "0.6";
 
   src = fetchurl {

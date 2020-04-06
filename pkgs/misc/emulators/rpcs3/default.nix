@@ -1,19 +1,31 @@
-{ stdenv, lib, fetchgit, cmake, pkgconfig
-, qtbase, openal, glew, llvm_4, vulkan-loader, libpng, ffmpeg, libevdev
+{ mkDerivation, lib, fetchgit, cmake, pkgconfig, git
+, qtbase, qtquickcontrols, openal, glew, vulkan-loader, libpng, ffmpeg, libevdev, python3
 , pulseaudioSupport ? true, libpulseaudio
 , waylandSupport ? true, wayland
 , alsaSupport ? true, alsaLib
 }:
 
-stdenv.mkDerivation rec {
-  name = "rpcs3-${version}";
-  version = "2018-02-23";
+let
+  majorVersion = "0.0.8";
+  gitVersion = "9300-341fdf7eb"; # echo $(git rev-list HEAD --count)-$(git rev-parse --short HEAD)
+in
+mkDerivation {
+  pname = "rpcs3";
+  version = "${majorVersion}-${gitVersion}";
 
   src = fetchgit {
     url = "https://github.com/RPCS3/rpcs3";
-    rev = "41bd07274f15b8f1be2475d73c3c75ada913dabb";
-    sha256 = "1v28m64ahakzj4jzjkmdd7y8q75pn9wjs03vprbnl0z6wqavqn0x";
+    rev = "341fdf7eb14763fd06e2eab9a4b2b8f1adf9fdbd";
+    sha256 = "1qx97zkkjl6bmv5rhfyjqynbz0v8h40b2wxqnl59g287wj0yk3y1";
   };
+
+  preConfigure = ''
+    cat > ./rpcs3/git-version.h <<EOF
+    #define RPCS3_GIT_VERSION "${gitVersion}"
+    #define RPCS3_GIT_BRANCH "HEAD"
+    #define RPCS3_GIT_VERSION_NO_UPDATE 1
+    EOF
+  '';
 
   cmakeFlags = [
     "-DUSE_SYSTEM_LIBPNG=ON"
@@ -21,20 +33,20 @@ stdenv.mkDerivation rec {
     "-DUSE_NATIVE_INSTRUCTIONS=OFF"
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig git ];
 
   buildInputs = [
-    qtbase openal glew llvm_4 vulkan-loader libpng ffmpeg libevdev
+    qtbase qtquickcontrols openal glew vulkan-loader libpng ffmpeg libevdev python3
   ] ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional alsaSupport alsaLib
     ++ lib.optional waylandSupport wayland;
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar nocent ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
   };

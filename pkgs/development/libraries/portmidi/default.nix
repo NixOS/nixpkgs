@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, cmake, /*jdk,*/ alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "portmidi-${version}";
+  pname = "portmidi";
   version = "217";
 
   src = fetchurl {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   # XXX: This is to deactivate Java support.
-  patches = stdenv.lib.singleton (fetchurl rec {
+  patches = stdenv.lib.singleton (fetchurl {
     url = "https://raw.github.com/Rogentos/argent-gentoo/master/media-libs/"
         + "portmidi/files/portmidi-217-cmake-libdir-java-opts.patch";
     sha256 = "1jbjwan61iqq9fqfpq2a4fd30k3clg7a6j0gfgsw87r8c76kqf6h";

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, patchelf, makeWrapper
+{ stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
-, dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at-spi2-atk
-, kerberos
+, dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
+, kerberos, libdrm, mesa
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -52,33 +52,32 @@ let
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
     alsaLib libXdamage libXtst libXrandr expat cups
-    dbus_libs gdk_pixbuf gcc-unwrapped.lib
+    dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
     libexif
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
-    bzip2 libcap at-spi2-atk
-    kerberos
+    bzip2 libcap at-spi2-atk at-spi2-core
+    kerberos libdrm mesa
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
   suffix = if channel != "stable" then "-" + channel else "";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version;
 
   name = "google-chrome${suffix}-${version}";
 
   src = chromium.upstream-info.binary;
 
+  nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [
-    patchelf makeWrapper
-
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings-desktop-schemas glib gtk
 
     # needed for XDG_ICON_DIRS
-    gnome.defaultIconTheme
+    gnome.adwaita-icon-theme
   ];
 
   unpackPhase = ''

@@ -1,34 +1,26 @@
-{ stdenv, lib, fetchurl, xdg_utils, pkgs, pkgsi686Linux }:
+{ mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg_utils, dbus
+, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc
+, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes
+, wrapQtAppsHook
+}:
 
-let
-  ld32 =
-    if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
-    else if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
-    else throw "Unsupported system ${stdenv.system}";
-  ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-
-  mkLdPath = ps: lib.makeLibraryPath (with ps; [ qt4 dbus alsaLib ]);
-
-  deps = ps: (with ps; [ dbus zlib alsaLib fontconfig freetype libpng12 libjpeg ]) ++ (with ps.xorg; [ libX11 libXext libXdamage libXrandr libXrender libXfixes libSM libXtst libXinerama]);
-  tvldpath32 = lib.makeLibraryPath (with pkgsi686Linux; [ qt4 "$out/share/teamviewer/tv_bin/wine" ] ++ deps pkgsi686Linux);
-  tvldpath64 = lib.makeLibraryPath (deps pkgs);
-in
-
-stdenv.mkDerivation rec {
-  name = "teamviewer-${version}";
-  version = "12.0.90041";
+mkDerivation rec {
+  pname = "teamviewer";
+  version = "15.2.2756";
 
   src = fetchurl {
-    # There is a 64-bit package, but it has no differences apart from Debian dependencies.
-    # Generic versioned packages (teamviewer_${version}_i386.tar.xz) are not available for some reason.
-    url = "https://dl.tvcdn.de/download/version_12x/teamviewer_${version}_i386.deb";
-    sha256 = "19gf68xadayncrbpkk3v05xm698zavv8mz8ia6jhadrh5s6i0bwg";
+    url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
+    sha256 = "1g6a7yadvc6gc660m62yibj2hrj7bwy26z5ww0gk6rwqlz048i97";
   };
 
   unpackPhase = ''
     ar x $src
     tar xf data.tar.*
   '';
+
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
+  buildInputs = [ dbus qtbase qtwebkit qtx11extras libX11 ];
+  propagatedBuildInputs = [ qtquickcontrols ];
 
   installPhase = ''
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications
@@ -46,41 +38,29 @@ stdenv.mkDerivation rec {
     ln -s /var/log/teamviewer $out/share/teamviewer/logfiles
     ln -s ${xdg_utils}/bin $out/share/teamviewer/tv_bin/xdg-utils
 
-    pushd $out/share/teamviewer/tv_bin
+    sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" $out/share/teamviewer/tv_bin/desktop/com.teamviewer.*.desktop
 
-    sed -i "s,TV_LD32_PATH=.*,TV_LD32_PATH=$(cat ${ld32})," script/tvw_config
-    ${if stdenv.system == "x86_64-linux" then ''
-      sed -i "s,TV_LD64_PATH=.*,TV_LD64_PATH=$(cat ${ld64})," script/tvw_config
-    '' else ''
-      sed -i "/TV_LD64_PATH=.*/d" script/tvw_config
-    ''}
+    substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_aux \
+      --replace '/lib64/ld-linux-x86-64.so.2' '${glibc.out}/lib/ld-linux-x86-64.so.2'
+    substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_config \
+      --replace '/var/run/' '/run/'
 
-    sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" desktop/com.teamviewer.*.desktop
+    wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/teamviewerd --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes ]}"
 
-    for i in teamviewer-config teamviewerd TeamViewer_Desktop TVGuiDelegate TVGuiSlave.32 wine/bin/* RTlib/libQtCore.so.4; do
-      echo "patching $i"
-      patchelf --set-interpreter $(cat ${ld32}) --set-rpath $out/share/teamviewer/tv_bin/RTlib:${tvldpath32} $i || true
-    done
-    for i in resources/*.so wine/drive_c/TeamViewer/tvwine.dll.so wine/lib/*.so* wine/lib/wine/*.so RTlib/*.so* ;  do
-      echo "patching $i"
-      patchelf --set-rpath $out/share/teamviewer/tv_bin/RTlib:${tvldpath32} $i || true
-    done
-    ${if stdenv.system == "x86_64-linux" then ''
-      patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${tvldpath64} TVGuiSlave.64
-    '' else ''
-      rm TVGuiSlave.64
-    ''}
-    popd
+    wrapQtApp $out/bin/teamviewer
   '';
 
-  dontPatchELF = true;
   dontStrip = true;
+  preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://www.teamviewer.com;
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jagajaga dasuxullebt ];
   };
 }

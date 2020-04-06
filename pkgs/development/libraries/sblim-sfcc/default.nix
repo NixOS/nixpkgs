@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, curl }:
 
 stdenv.mkDerivation rec {
-  name = "sblim-sfcc-${version}";
+  pname = "sblim-sfcc";
   version = "2.2.9"; # this is technically 2.2.9-preview
 
   src = fetchFromGitHub {

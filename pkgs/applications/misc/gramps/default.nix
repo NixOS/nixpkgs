@@ -1,31 +1,36 @@
-{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool,
-  pango, gsettings-desktop-schemas,
+{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gnome3,
+  pango, gobject-introspection, wrapGAppsHook, gettext,
 # Optional packages:
- enableOSM ? true, osm-gps-map
+ enableOSM ? true, osm-gps-map,
+ enableGraphviz ? true, graphviz,
+ enableGhostscript ? true, ghostscript
  }:
 
 let
   inherit (pythonPackages) python buildPythonApplication;
 in buildPythonApplication rec {
-  version = "4.2.8";
-  name = "gramps-${version}";
+  version = "5.0.1";
+  pname = "gramps";
 
-  buildInputs = [ intltool gtk3 ] 
+  nativeBuildInputs = [ wrapGAppsHook gettext ];
+  buildInputs = [ intltool gtk3 gobject-introspection pango gnome3.gexiv2 ] 
     # Map support
     ++ stdenv.lib.optional enableOSM osm-gps-map
+    # Graphviz support
+    ++ stdenv.lib.optional enableGraphviz graphviz
+    # Ghostscript support
+    ++ stdenv.lib.optional enableGhostscript ghostscript
+    
   ;
-
-  # Currently broken
-  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
     rev = "v${version}";
-    sha256 = "17y6rjvvcz7lwjck4f5nmhnn07i9k5vzk5dp1jk7j3ldxjagscsd";
+    sha256 = "1jz1fbjj6byndvir7qxzhd2ryirrd5h2kwndxpp53xdc05z1i8g7";
   };
 
-  pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ] ++ [ pango ];
+  pythonPath = with pythonPackages; [ bsddb3 PyICU pygobject3 pycairo ];
 
   # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
   # install flag.
@@ -43,7 +48,7 @@ in buildPythonApplication rec {
     eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
     if [ -e "$eapth" ]; then
         # move colliding easy_install.pth to specifically named one
-        mv "$eapth" $(dirname "$eapth")/${name}.pth
+        mv "$eapth" $(dirname "$eapth")/${pname}-${version}.pth
     fi
 
     rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
@@ -51,16 +56,10 @@ in buildPythonApplication rec {
     runHook postInstall
   '';
 
-  # gobjectIntrospection package, wrap accordingly
-  preFixup = ''
-    wrapProgram $out/bin/gramps \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
-  '';
-
   meta = with stdenv.lib; {
     description = "Genealogy software";
-    homepage = http://gramps-project.org;
+    homepage = https://gramps-project.org;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ joncojonathan ];
   };
 }

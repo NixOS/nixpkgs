@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libsamplerate, libsndfile, fftw
-, vampSDK, ladspaH }:
+, vamp-plugin-sdk, ladspaH }:
 
 stdenv.mkDerivation {
   name = "rubberband-1.8.1";
@@ -10,11 +10,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libsamplerate libsndfile fftw vampSDK ladspaH ];
+  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ];
 
   meta = with stdenv.lib; {
     description = "High quality software library for audio time-stretching and pitch-shifting";
-    homepage = http://www.breakfastquay.com/rubberband/index.html;
+    homepage = https://www.breakfastquay.com/rubberband/index.html;
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];

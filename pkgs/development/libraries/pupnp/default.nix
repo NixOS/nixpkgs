@@ -1,17 +1,18 @@
-{ fetchFromGitHub, stdenv, autoreconfHook }:
+{ fetchFromGitHub, stdenv, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "libupnp-${version}";
-  version = "1.6.21";
+  pname = "libupnp";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "mrjimenez";
     repo = "pupnp";
     rev = "release-${version}";
-    sha256 = "07ksfhadinaa20542gblrxi9pqz0v6y70a836hp3qr4037id4nm9";
+    sha256 = "17jhbzx8khz5vbl0lhcipjzgg897p1k2lp5wcc3hiddcfyh05pdj";
   };
+  outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   hardeningDisable = [ "fortify" ];
 

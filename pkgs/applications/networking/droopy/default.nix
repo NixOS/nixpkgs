@@ -2,8 +2,8 @@
 
 with lib;
 
-stdenv.mkDerivation rec {
-  name = "droopy-${version}";
+stdenv.mkDerivation {
+  pname = "droopy";
   version = "20160830";
 
   src = fetchFromGitHub {

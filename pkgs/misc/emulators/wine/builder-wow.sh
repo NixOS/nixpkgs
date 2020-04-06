@@ -1,5 +1,3 @@
-#!/bin/sh
-
 ## build described at http://wiki.winehq.org/Wine64
 
 source $stdenv/setup

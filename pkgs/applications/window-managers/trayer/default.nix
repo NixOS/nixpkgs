@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gdk_pixbuf, gtk2 }:
+{ stdenv, fetchFromGitHub, pkgconfig, gdk-pixbuf, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "trayer-1.1.8";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gdk_pixbuf gtk2 ];
+  buildInputs = [ gdk-pixbuf gtk2 ];
 
   src = fetchFromGitHub {
     owner = "sargon";

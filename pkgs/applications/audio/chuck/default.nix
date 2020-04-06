@@ -1,38 +1,41 @@
-{ stdenv, fetchurl, alsaLib, bison, flex, libsndfile, which }:
+{ stdenv, lib, fetchurl, alsaLib, bison, flex, libsndfile, which
+, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.3.5.2";
-  name = "chuck-${version}";
+  version = "1.4.0.0";
+  pname = "chuck";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "02z7sglax3j09grj5s1skmw8z6wz7b21hjrm95nrrdpwbxabh079";
+    sha256 = "1b17rsf7bv45gfhyhfmpz9d4rkxn24c0m2hgmpfjz3nlp0rf7bic";
   };
 
-  buildInputs = [ bison flex libsndfile which ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+  nativeBuildInputs = [ flex bison which ];
+
+  buildInputs = [ libsndfile ]
+    ++ lib.optional (!stdenv.isDarwin) alsaLib
+    ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
 
   patches = [ ./darwin-limits.patch ];
 
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
+
   postPatch = ''
-    substituteInPlace src/makefile --replace "/usr/bin" "$out/bin"
-    substituteInPlace src/makefile.osx --replace "xcodebuild" "/usr/bin/xcodebuild"
-    substituteInPlace src/makefile.osx --replace "weak_framework" "framework"
+    substituteInPlace src/core/makefile.x/makefile.osx \
+      --replace "weak_framework" "framework" \
+      --replace "MACOSX_DEPLOYMENT_TARGET=10.9" "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET"
   '';
 
-  buildPhase =
-    stdenv.lib.optionals stdenv.isLinux  ["make -C src linux-alsa"] ++
-    stdenv.lib.optionals stdenv.isDarwin ["make -C src osx"];
+  makeFlags = [ "-C src" "DESTDIR=$(out)/bin" ];
+  buildFlags = [ (if stdenv.isDarwin then "osx" else "linux-alsa") ];
 
-  installPhase = ''
-    install -Dm755 ./src/chuck $out/bin/chuck
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Programming language for real-time sound synthesis and music creation";
     homepage = http://chuck.cs.princeton.edu;
     license = licenses.gpl2;
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];
   };
 }

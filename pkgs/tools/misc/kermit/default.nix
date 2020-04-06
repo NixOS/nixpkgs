@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ncurses, glibc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kermit-9.0.302";
 
   src = fetchurl {
@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

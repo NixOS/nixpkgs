@@ -1,9 +1,12 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
-, pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
+, pythonPackages, imagemagick, gobject-introspection, gst_all_1
+, runtimeShell
+, fetchpatch
 
 # Attributes needed for tests of the external plugins
 , callPackage, beets
 
+, enableAbsubmit       ? stdenv.lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor ? null
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
@@ -15,20 +18,27 @@
 , enableKeyfinder      ? true, keyfinder-cli ? null
 , enableKodiupdate     ? true
 , enableLastfm         ? true
+, enableLoadext        ? true
 , enableMpd            ? true
+, enablePlaylist       ? true
 , enableReplaygain     ? true, bs1770gain ? null
+, enableSonosUpdate    ? true
+, enableSubsonicupdate ? true
 , enableThumbnails     ? true
 , enableWeb            ? true
 
 # External plugins
 , enableAlternatives   ? false
+, enableCheck          ? false, liboggz ? null
 , enableCopyArtifacts  ? false
 
 , bashInteractive, bash-completion
 }:
 
+assert enableAbsubmit    -> essentia-extractor            != null;
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
+assert enableCheck       -> flac != null && mp3val != null && liboggz != null;
 assert enableConvert     -> ffmpeg != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
@@ -37,6 +47,7 @@ assert enableKeyfinder   -> keyfinder-cli != null;
 assert enableLastfm      -> pythonPackages.pylast         != null;
 assert enableMpd         -> pythonPackages.mpd2           != null;
 assert enableReplaygain  -> bs1770gain                    != null;
+assert enableSonosUpdate -> pythonPackages.soco           != null;
 assert enableThumbnails  -> pythonPackages.pyxdg          != null;
 assert enableWeb         -> pythonPackages.flask          != null;
 
@@ -44,6 +55,7 @@ with stdenv.lib;
 
 let
   optionalPlugins = {
+    absubmit = enableAbsubmit;
     acousticbrainz = enableAcousticbrainz;
     badfiles = enableBadfiles;
     chroma = enableAcoustid;
@@ -56,20 +68,24 @@ let
     kodiupdate = enableKodiupdate;
     lastgenre = enableLastfm;
     lastimport = enableLastfm;
+    loadext = enableLoadext;
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
+    playlist = enablePlaylist;
     replaygain = enableReplaygain;
+    sonosupdate = enableSonosUpdate;
+    subsonicupdate = enableSubsonicupdate;
     thumbnails = enableThumbnails;
     web = enableWeb;
   };
 
   pluginsWithoutDeps = [
-    "absubmit" "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates"
-    "edit" "embedart" "export" "filefilter" "freedesktop" "fromfilename"
-    "ftintitle" "fuzzy" "hook" "ihate" "importadded" "importfeeds" "info"
-    "inline" "ipfs" "lyrics" "mbcollection" "mbsubmit" "mbsync" "metasync"
-    "missing" "permissions" "play" "plexupdate" "random" "rewrite" "scrub"
-    "smartplaylist" "spotify" "the" "types" "zero"
+    "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
+    "export" "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
+    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
+    "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "permissions" "play"
+    "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
+    "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -88,20 +104,23 @@ let
     doInstallCheck = false;
   });
 
+  pluginArgs = externalTestArgs // { inherit pythonPackages; };
+
   plugins = {
-    alternatives = callPackage ./alternatives-plugin.nix externalTestArgs;
-    copyartifacts = callPackage ./copyartifacts-plugin.nix externalTestArgs;
+    alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
+    check = callPackage ./check-plugin.nix pluginArgs;
+    copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
   };
 
 in pythonPackages.buildPythonApplication rec {
-  name = "beets-${version}";
-  version = "1.4.6";
+  pname = "beets";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "0m8macydkn1fp4ymig0rg7bzw77rrm454q763gxdpq2kg08yl5py";
+    sha256 = "1qxdqbzvz97zgykzdwn78g2xyxmg0q2jdb12dnjnrwvhmjv67vi8";
   };
 
   propagatedBuildInputs = [
@@ -111,45 +130,61 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.munkres
     pythonPackages.musicbrainzngs
     pythonPackages.mutagen
-    pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
     pythonPackages.gst-python
     pythonPackages.pygobject3
-    gobjectIntrospection
-  ] ++ optional enableAcoustid      pythonPackages.pyacoustid
+    gobject-introspection
+  ] ++ optional enableAbsubmit      essentia-extractor
+    ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableKodiupdate
+              || enableLoadext
+              || enablePlaylist
+              || enableSubsonicupdate
               || enableAcousticbrainz)
                                     pythonPackages.requests
+    ++ optional enableCheck         plugins.check
     ++ optional enableConvert       ffmpeg
     ++ optional enableDiscogs       pythonPackages.discogs_client
     ++ optional enableGmusic        pythonPackages.gmusicapi
     ++ optional enableKeyfinder     keyfinder-cli
     ++ optional enableLastfm        pythonPackages.pylast
     ++ optional enableMpd           pythonPackages.mpd2
+    ++ optional enableSonosUpdate   pythonPackages.soco
     ++ optional enableThumbnails    pythonPackages.pyxdg
     ++ optional enableWeb           pythonPackages.flask
     ++ optional enableAlternatives  plugins.alternatives
     ++ optional enableCopyArtifacts plugins.copyartifacts;
 
-  buildInputs = with pythonPackages; [
-    beautifulsoup4
+  buildInputs = [
     imagemagick
-    mock
-    nose
-    rarfile
-    responses
   ] ++ (with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
   ]);
 
+  checkInputs = with pythonPackages; [
+    beautifulsoup4
+    mock
+    nose
+    rarfile
+    responses
+    # Although considered as plugin dependencies, they are needed for the
+    # tests, for disabling them via an override makes the build fail. see:
+    # https://github.com/beetbox/beets/blob/v1.4.9/setup.py
+    pylast
+    mpd2
+    discogs_client
+    pyxdg
+  ];
+
   patches = [
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
+    ./mutagen-1.43.patch
   ];
 
   postPatch = ''
@@ -174,6 +209,11 @@ in pythonPackages.buildPythonApplication rec {
       test/test_replaygain.py
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/zsh/site-functions
+    cp extra/_beet $out/share/zsh/site-functions/
+  '';
+
   doCheck = true;
 
   preCheck = ''
@@ -193,9 +233,7 @@ in pythonPackages.buildPythonApplication rec {
     LOCALE_ARCHIVE=${assert stdenv.isLinux; glibcLocales}/lib/locale/locale-archive \
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
-    HOME="$(mktemp -d)" \
-      # Exclude failing test https://github.com/beetbox/beets/issues/2652
-      nosetests -v --exclude=test_single_month_nonmatch_ --exclude=test_asciify_variable --exclude=test_asciify_character_expanding_to_slash
+    HOME="$(mktemp -d)" nosetests -v
 
     runHook postCheck
   '';
@@ -208,7 +246,7 @@ in pythonPackages.buildPythonApplication rec {
     tmphome="$(mktemp -d)"
 
     EDITOR="${writeScript "beetconfig.sh" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cat > "$1" <<CFG
       plugins: ${concatStringsSep " " allEnabledPlugins}
       CFG
@@ -220,9 +258,13 @@ in pythonPackages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
 
+  passthru = {
+    externalPlugins = plugins;
+  };
+
   meta = {
     description = "Music tagger and library organizer";
-    homepage = http://beets.radbox.org;
+    homepage = "http://beets.io";
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig domenkozar pjones ];
     platforms = platforms.linux;

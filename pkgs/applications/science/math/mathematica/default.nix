@@ -2,13 +2,14 @@
 , coreutils
 , patchelf
 , requireFile
+, callPackage
 , alsaLib
 , dbus
 , fontconfig
 , freetype
 , gcc
 , glib
-, libpng
+, libssh2
 , ncurses
 , opencv
 , openssl
@@ -18,29 +19,20 @@
 , zlib
 , libxml2
 , libuuid
+, lang ? "en"
+, libGL
+, libGLU
 }:
 
 let
-  platform =
-    if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then
-      "Linux"
-    else
-      throw "Mathematica requires i686-linux or x86_64 linux";
+  l10n =
+    import ./l10ns.nix {
+      lib = stdenv.lib;
+      inherit requireFile lang;
+    };
 in
 stdenv.mkDerivation rec {
-  version = "11.2.0";
-
-  name = "mathematica-${version}";
-
-  src = requireFile rec {
-    name = "Mathematica_${version}_LINUX.sh";
-    message = '' 
-      This nix expression requires that ${name} is
-      already part of the store. Find the file on your Mathematica CD
-      and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
-    '';
-    sha256 = "4a1293cc1c404303aa1cab1bd273c7be151d37ac5ed928fbbb18e9c5ab2d8df9";
-  };
+  inherit (l10n) version name src;
 
   buildInputs = [
     coreutils
@@ -53,14 +45,18 @@ stdenv.mkDerivation rec {
     gcc.cc
     gcc.libc
     glib
+    libssh2
     ncurses
     opencv
     openssl
+    stdenv.cc.cc.lib
     unixODBC
     xkeyboard_config
     libxml2
     libuuid
     zlib
+    libGL
+    libGLU
   ] ++ (with xorg; [
     libX11
     libXext
@@ -77,10 +73,8 @@ stdenv.mkDerivation rec {
   ]);
 
   ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
+    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
-
-  phases = "unpackPhase installPhase fixupPhase";
 
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="
@@ -102,14 +96,16 @@ stdenv.mkDerivation rec {
     # Fix library paths
     cd $out/libexec/Mathematica/Executables
     for path in mathematica MathKernel Mathematica WolframKernel wolfram math; do
-      sed -i -e 's#export LD_LIBRARY_PATH$#export LD_LIBRARY_PATH=${zlib}/lib:\''${LD_LIBRARY_PATH}#' $path
+      sed -i -e "2iexport LD_LIBRARY_PATH=${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}\n" $path
     done
 
     # Fix xkeyboard config path for Qt
     for path in mathematica Mathematica; do
-      line=$(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//')
-      sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
+      sed -i -e "2iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"\n" $path
     done
+
+    # Remove some broken libraries
+    rm -f $out/libexec/Mathematica/SystemFiles/Libraries/Linux-x86-64/libz.so*
   '';
 
   preFixup = ''
@@ -142,15 +138,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  dontBuild = true;
+
   # all binaries are already stripped
   dontStrip = true;
 
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Wolfram Mathematica computational software system";
     homepage = http://www.wolfram.com/mathematica/;
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ herberteuler ];
+    platforms = [ "x86_64-linux" ];
   };
 }

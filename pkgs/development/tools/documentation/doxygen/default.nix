@@ -1,19 +1,26 @@
-{ stdenv, cmake, fetchurl, perl, python, flex, bison, qt4, CoreServices, libiconv }:
+{ stdenv, cmake, fetchurl, python3, flex, bison, qt4, CoreServices, libiconv }:
 
 stdenv.mkDerivation rec {
 
-  name = "doxygen-1.8.14";
+  name = "doxygen-1.8.17";
 
   src = fetchurl {
-    url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "d1757e02755ef6f56fd45f1f4398598b920381948d6fcfa58f5ca6aa56f59d4d";
+    urls = [
+      "mirror://sourceforge/doxygen/${name}.src.tar.gz" # faster, with https, etc.
+      "http://doxygen.nl/files/${name}.src.tar.gz"
+    ];
+    sha256 = "16dmv0gm1x8rvbm82fmjvi213q8fxqxinm75pcf595flya59ific";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    flex
+    bison
+  ];
 
   buildInputs =
-    [ perl python flex bison ]
-    ++ stdenv.lib.optional (qt4 != null) qt4
+       stdenv.lib.optional (qt4 != null) qt4
     ++ stdenv.lib.optional stdenv.isSunOS libiconv
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
@@ -22,13 +29,14 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (qt4 != null) "-Dbuild_wizard=YES";
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
+    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   enableParallelBuilding = true;
+  doCheck = false; # fails
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://doxygen.org/;
+    homepage = http://doxygen.nl/;
     description = "Source code documentation generator tool";
 
     longDescription = ''

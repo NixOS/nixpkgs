@@ -1,11 +1,12 @@
 { stdenv, fetchurl, osinfo-db-tools, intltool, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "osinfo-db-20170813";
+  pname = "osinfo-db";
+  version = "20200214";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/libosinfo/${name}.tar.xz";
-    sha256 = "0v9i325aaflzj2y5780mj9b0jv5ysb1bn90bm3s4f2ck5n124ffw";
+    url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
+    sha256 = "1fpdb8r8kzwp1k5dc9xyy9jr2jr3haq7n9b6spamm599zvzf8nb6";
   };
 
   nativeBuildInputs = [ osinfo-db-tools intltool libxml2 ];
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Osinfo database of information about operating systems for virtualization provisioning tools";
-    homepage = https://libosinfo.org/;
+    homepage = "https://gitlab.com/libosinfo/osinfo-db/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

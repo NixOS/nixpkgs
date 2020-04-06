@@ -1,38 +1,60 @@
-{ stdenv, fetchgit, autoreconfHook, openssl, libpcap, dpdk }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig
+, dpdk, libconfig, libpcap, numactl, openssl, zlib, libbsd, libelf, jansson
+}: let
+  dpdk_18_11 = dpdk.overrideAttrs (old: rec {
+    version = "18.11.5";
+    src = fetchurl {
+      url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
+      sha256 = "1n6nfaj7703l19jcw540lm8avni48hj9q1rq4mfp8b8gd4zjprj0";
+    };
+  });
 
-stdenv.mkDerivation rec {
-  name = "odp-dpdk-${version}";
-  version = "1.15.0.0";
+in stdenv.mkDerivation rec {
+  pname = "odp-dpdk";
+  version = "1.22.0.0_DPDK_18.11";
 
-  src = fetchgit {
-    url = "https://git.linaro.org/lng/odp-dpdk.git";
-    rev = "d8533b4e575d62c9f6f2caedd38d98a1a56fb8d3";
-    sha256 = "1p09rw7dxxqcxxrdb8wbwp2imapyjvdbvap7s9km2i9hbd8ipdif";
+  src = fetchurl {
+    url = "https://git.linaro.org/lng/odp-dpdk.git/snapshot/${pname}-${version}.tar.gz";
+    sha256 = "1m8xhmfjqlj2gkkigq5ka3yh0xgzrcpfpaxp1pnh8d1g99094vbx";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl dpdk libpcap ];
-
-  RTE_SDK = "${dpdk}";
-  RTE_TARGET = "x86_64-native-linuxapp-gcc";
-
-  dontDisableStatic = true;
-
-  configureFlags = [
-    "--disable-shared"
-    "--with-sdk-install-path=${dpdk}/${RTE_TARGET}"
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+  ];
+  buildInputs = [
+    dpdk_18_11
+    libconfig
+    libpcap
+    numactl
+    openssl
+    zlib
+    libbsd
+    libelf
+    jansson
   ];
 
-  patches = [
-    ./configure.patch
-    ./odp_crypto.patch
-  ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+
+  # for some reason, /build/odp-dpdk-1.22.0.0_DPDK_18.11/lib/.libs ends up in all binaries,
+  # while it should be $out/lib instead.
+  # prepend rpath with the proper location, the /build will get removed during rpath shrinking
+  preFixup = ''
+    for prog in $out/bin/*; do
+      patchelf --set-rpath $out/lib:`patchelf --print-rpath $prog` $prog
+    done
+  '';
+
+  # binaries will segfault otherwise
+  dontStrip = true;
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Open Data Plane optimized for DPDK";
-    homepage = http://www.opendataplane.org;
+    homepage = https://www.opendataplane.org;
     license = licenses.bsd3;
-    platforms =  [ "x86_64-linux" ];
+    platforms =  platforms.linux;
     maintainers = [ maintainers.abuibrahim ];
   };
 }

@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake qt4 fftw ];
 
-  cmakeFlags = "-DUSE_SYSTEM_FFTW=ON";
+  cmakeFlags = [ "-DUSE_SYSTEM_FFTW=ON" ];
 
   meta = {
     homepage = https://github.com/Y-Vladimir/SmartDeblur;
     description = "Tool for restoring blurry and defocused images";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -1,32 +1,39 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra-gtk3, clutter-gtk, intltool, itstool
-, libxml2, libgee, libgames-support }:
+, librsvg, gsound, clutter-gtk, gettext, itstool, vala, python3
+, libxml2, libgee, libgnome-games-support, meson, ninja
+, desktop-file-utils, hicolor-icon-theme}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-nibbles-${version}";
-  version = "3.24.0";
+  pname = "gnome-nibbles";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nibbles/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0ddc1fe03483958dd5513d04f5919ade991902d12da18a4c2d3307f818a5cb4f";
+    url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "01vzcjys2x95wnanwq25x0a7x6cc4j6g8gk69c5yc9ild48rr9c1";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-nibbles"; attrPath = "gnome3.gnome-nibbles"; };
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    meson ninja vala python3
+    pkgconfig wrapGAppsHook gettext itstool libxml2
+    desktop-file-utils hicolor-icon-theme
+  ];
   buildInputs = [
-    gtk3 wrapGAppsHook intltool itstool libxml2
-    librsvg libcanberra-gtk3 clutter-gtk gnome3.defaultIconTheme
-    libgee libgames-support
+    gtk3 librsvg gsound clutter-gtk gnome3.adwaita-icon-theme
+    libgee libgnome-games-support
   ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-nibbles";
+      attrPath = "gnome3.gnome-nibbles";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Nibbles;
     description = "Guide a worm around a maze";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Nibbles;
     license = licenses.gpl2;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

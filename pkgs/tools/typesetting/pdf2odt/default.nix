@@ -14,7 +14,7 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "pdf2odt-${version}";
+  pname = "pdf2odt";
   version = "20170207";
 
   src = fetchFromGitHub {

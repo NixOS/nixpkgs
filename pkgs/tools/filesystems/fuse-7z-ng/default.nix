@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkgconfig, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "fuse-7z-ng";
   version = "git-2014-06-08";
 

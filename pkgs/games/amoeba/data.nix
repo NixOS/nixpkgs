@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "amoeba-data-${version}";
+  pname = "amoeba-data";
   version = "1.1";
 
   src = fetchurl {

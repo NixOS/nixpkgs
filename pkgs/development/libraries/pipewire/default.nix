@@ -1,41 +1,82 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, doxygen, graphviz, valgrind
-, glib, dbus, gst_all_1, v4l_utils, alsaLib, ffmpeg, libjack2, libudev, libva, xorg
-, sbc, SDL2, makeFontsConf, freefont_ttf
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkgconfig
+, doxygen
+, graphviz
+, valgrind
+, glib
+, dbus
+, gst_all_1
+, alsaLib
+, ffmpeg
+, libjack2
+, udev
+, libva
+, xorg
+, sbc
+, SDL2
+, libsndfile
+, bluez
+, vulkan-headers
+, vulkan-loader
+, libpulseaudio
+, makeFontsConf
 }:
 
 let
-  version = "0.1.9";
-
   fontsConf = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
+    fontDirectories = [];
   };
-in stdenv.mkDerivation rec {
-  name = "pipewire-${version}";
+in
+stdenv.mkDerivation rec {
+  pname = "pipewire";
+  version = "0.3.1";
 
-  src = fetchFromGitHub {
-    owner = "PipeWire";
+  outputs = [ "out" "lib" "dev" "doc" ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "0r9mgwbggnnijhdz49fnv0qdka364xn1h8yml2jakyqpfrm3i2nm";
+    sha256 = "DfUgXTSSCl+JszFEKwBha67nauQi4noR25m00auXDnA=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
-
   nativeBuildInputs = [
-    meson ninja pkgconfig doxygen graphviz valgrind
-  ];
-  buildInputs = [
-    glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer v4l_utils
-    alsaLib ffmpeg libjack2 libudev libva xorg.libX11 sbc SDL2
+    doxygen
+    graphviz
+    meson
+    ninja
+    pkgconfig
+    valgrind
   ];
 
-  patches = [
-    ./fix-paths.patch
+  buildInputs = [
+    SDL2
+    alsaLib
+    bluez
+    dbus
+    ffmpeg
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libjack2
+    libpulseaudio
+    libsndfile
+    libva
+    sbc
+    udev
+    vulkan-headers
+    vulkan-loader
+    xorg.libX11
   ];
 
   mesonFlags = [
-    "-Denable_docs=true"
-    "-Denable_gstreamer=true"
+    "-Ddocs=true"
+    "-Dman=false" # we don't have xmltoman
+    "-Dgstreamer=true"
   ];
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
@@ -44,8 +85,8 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Server and user space API to deal with multimedia pipelines";
-    homepage = http://pipewire.org/;
-    license = licenses.lgpl21;
+    homepage = https://pipewire.org/;
+    license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jtojnar ];
   };

@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   pname = "django-jinja";
-  name = "${pname}-${version}";
   version = "2.4.1";
 
   meta = {

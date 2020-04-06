@@ -1,45 +1,43 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gettext, ncurses, libiconv, libintlOrEmpty
-, withBuildColors ? true
+{ stdenv, fetchurl, meson, ninja, pkgconfig, check, dbus, xvfb_run, glib, gtk, gettext, libiconv, json_c, libintl
 }:
 
-assert withBuildColors -> ncurses != null;
-
 stdenv.mkDerivation rec {
-  name = "girara-${version}";
-  version = "0.2.8";
+  pname = "girara";
+  version = "0.3.4";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url    = "http://pwmt.org/projects/girara/download/${name}.tar.gz";
-    sha256 = "18wss3sak3djip090v2vdbvq1mvkwcspfswc87zbvv3magihan98";
+    url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+    sha256 = "08zdsr4zwi49facsl5596l0g1xqqv2jk3sqk841gkxwawcggim44";
   };
 
-  preConfigure = ''
-    substituteInPlace colors.mk \
-      --replace 'ifdef TPUT_AVAILABLE' 'ifneq ($(TPUT_AVAILABLE), 0)'
-  '';
+  nativeBuildInputs = [ meson ninja pkgconfig gettext check dbus xvfb_run ];
+  buildInputs = [ libintl libiconv json_c ];
+  propagatedBuildInputs = [ glib gtk ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk gettext libintlOrEmpty ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  doCheck = true;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
-  makeFlags = [
-    "PREFIX=$(out)"
-    (if withBuildColors
-      then "TPUT=${ncurses.out}/bin/tput"
-      else "TPUT_AVAILABLE=0")
+  mesonFlags = [
+    "-Ddocs=disabled" # docs do not seem to be installed
   ];
 
+  checkPhase = ''
+    export NO_AT_BRIDGE=1
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
+  '';
+
   meta = with stdenv.lib; {
-    homepage = https://pwmt.org/projects/girara/;
+    homepage = "https://git.pwmt.org/pwmt/girara";
     description = "User interface library";
     longDescription = ''
-      girara is a library that implements a GTK+ based VIM-like user interface
+      girara is a library that implements a GTK based VIM-like user interface
       that focuses on simplicity and minimalism.
     '';
     license = licenses.zlib;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.garbas ];
+    maintainers = [ ];
   };
 }

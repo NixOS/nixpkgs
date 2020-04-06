@@ -1,41 +1,68 @@
-{ stdenv, fetchFromGitHub, gcc5, scons, pkgconfig, libX11, libXcursor
-, libXinerama, libXrandr, libXrender, freetype, openssl, alsaLib
-, libpulseaudio, libGLU, zlib }:
+{ stdenv, lib, fetchFromGitHub, scons, pkgconfig, libX11, libXcursor
+, libXinerama, libXrandr, libXrender, libpulseaudio ? null
+, libXi ? null, libXext, libXfixes, freetype, openssl
+, alsaLib, libGLU, zlib, yasm ? null }:
 
-stdenv.mkDerivation rec {
-  name    = "godot-${version}";
-  version = "2.1.4";
+let
+  options = {
+    touch = libXi != null;
+    pulseaudio = false;
+  };
+in stdenv.mkDerivation rec {
+  pname = "godot";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "0d2zczn5k7296sky5gllq55cxd586nx134y2iwjpkqqjr62g0h48";
+    sha256 = "1kndls0rklha7kz9l4i2ivjxab4jpk3b2j7dcgcg2qc3s81yd0r6";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gcc5 scons libX11 libXcursor libXinerama libXrandr libXrender
-    freetype openssl alsaLib libpulseaudio libGLU zlib
+    scons libX11 libXcursor libXinerama libXrandr libXrender
+    libXi libXext libXfixes freetype openssl alsaLib libpulseaudio
+    libGLU zlib yasm
   ];
 
-  patches = [ ./pkg_config_additions.patch ];
+  patches = [
+    ./pkg_config_additions.patch
+    ./dont_clobber_environment.patch
+  ];
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    scons platform=x11 prefix=$out -j $NIX_BUILD_CORES
+  sconsFlags = "target=release_debug platform=x11";
+  preConfigure = ''
+    sconsFlags+=" ${lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}"
   '';
 
+  outputs = [ "out" "dev" "man" ];
+
   installPhase = ''
-    mkdir $out/bin -p
-    cp bin/godot.* $out/bin/
+    mkdir -p "$out/bin"
+    cp bin/godot.* $out/bin/godot
+
+    mkdir "$dev"
+    cp -r modules/gdnative/include $dev
+
+    mkdir -p "$man/share/man/man6"
+    cp misc/dist/linux/godot.6 "$man/share/man/man6/"
+
+    mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
+    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/"
+    cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
+    cp icon.png "$out/share/icons/godot.png"
+    substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
+      --replace "Exec=godot" "Exec=$out/bin/godot"
   '';
 
   meta = {
     homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [ stdenv.lib.maintainers.twey ];
   };
 }

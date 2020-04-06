@@ -1,65 +1,66 @@
-{ stdenv, python, fetchPypi, fetchurl, makeWrapper, unzip }:
+{ stdenv, python, fetchPypi, makeWrapper, unzip, makeSetupHook
+, pipInstallHook
+, setuptoolsBuildHook
+, wheel, pip, setuptools
+}:
 
-let
-  wheel_source = fetchPypi {
-    pname = "wheel";
-    version = "0.30.0";
-    format = "wheel";
-    sha256 = "e721e53864f084f956f40f96124a74da0631ac13fbbd1ba99e8e2b5e9cafdf64";
-  };
-  setuptools_source = fetchPypi {
-    pname = "setuptools";
-    version = "38.4.1";
-    format = "wheel";
-    sha256 = "22f8bcff5ce7fd1867785701769eaba42b79331d0abf890974a9288787dc015b";
-  };
-
-  # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
-  # https://github.com/NixOS/nixpkgs/issues/26392
-  # https://github.com/pypa/setuptools/issues/885
-  pkg_resources = fetchurl {
-    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py";
-    sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pip";
-  version = "9.0.1";
+  inherit (pip) version;
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
-  src = fetchPypi {
-    inherit pname version;
-    format = "wheel";
-    sha256 = "690b762c0a8460c303c089d5d0be034fb15a5ea2b75bdf565f40421f542fefb0";
-  };
+  srcs = [ wheel.src pip.src setuptools.src ];
+  sourceRoot = ".";
 
-  unpackPhase = ''
-    mkdir -p $out/${python.sitePackages}
-    unzip -d $out/${python.sitePackages} $src
-    unzip -d $out/${python.sitePackages} ${setuptools_source}
-    unzip -d $out/${python.sitePackages} ${wheel_source}
-    # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
-    cp ${pkg_resources} $out/${python.sitePackages}/pip/_vendor/pkg_resources/__init__.py
-  '';
+  dontUseSetuptoolsBuild = true;
+  dontUsePipInstall = true;
 
-  patchPhase = ''
+  # Should be propagatedNativeBuildInputs
+  propagatedBuildInputs = [
+    # Override to remove dependencies to prevent infinite recursion.
+    (pipInstallHook.override{pip=null;})
+    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+  ];
+
+  postPatch = ''
     mkdir -p $out/bin
   '';
 
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ python ];
 
-  installPhase = ''
+  buildPhase = ":";
 
-    # install pip binary
-    echo '#!${python.interpreter}' > $out/bin/pip
-    echo 'import sys;from pip import main' >> $out/bin/pip
-    echo 'sys.exit(main())' >> $out/bin/pip
-    chmod +x $out/bin/pip
+  installPhase = stdenv.lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+    export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
+  '' + ''
+    # Give folders a known name
+    mv pip* pip
+    mv setuptools* setuptools
+    mv wheel* wheel
+    # Set up PYTHONPATH. The above folders need to be on PYTHONPATH
+    # $out is where we are installing to and takes precedence
+    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel"
 
-    # wrap binaries with PYTHONPATH
-    for f in $out/bin/*; do
-      wrapProgram $f --prefix PYTHONPATH ":" $out/${python.sitePackages}/
-    done
+    echo "Building setuptools wheel..."
+    pushd setuptools
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    popd
+
+    echo "Building wheel wheel..."
+    pushd wheel
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    popd
+
+    echo "Building pip wheel..."
+    pushd pip
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    popd
   '';
+
+  meta = {
+    description = "Version of pip used for bootstrapping";
+    license = stdenv.lib.unique (pip.meta.license ++ setuptools.meta.license ++ wheel.meta.license);
+    homepage = pip.meta.homepage;
+  };
 }

@@ -3,6 +3,9 @@
 with lib;
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "fonts" "enableCoreFonts" ] "Use fonts.fonts = [ pkgs.corefonts ]; instead.")
+  ];
 
   options = {
 
@@ -43,6 +46,7 @@ with lib;
         pkgs.xorg.fontmiscmisc
         pkgs.xorg.fontcursormisc
         pkgs.unifont
+        pkgs.noto-fonts-emoji
       ];
 
   };

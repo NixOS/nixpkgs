@@ -1,5 +1,6 @@
-{ stdenv, writeScriptBin, lib, fetchurl, git, cacert
+{ stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps, gd
+, flock
 , withMysql ? false
 , withPgsql ? false
 , withSqlite ? false, sqlite
@@ -23,17 +24,17 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "18.01";
-  name = "ejabberd-${version}";
+  version = "20.03";
+  pname = "ejabberd";
 
   src = fetchurl {
-    url = "http://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
-    sha256 = "01i2n8mlgw293jdf4172f9q8ca8m35vysjws791p7nynpfdb4cn6";
+    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
+    sha256 = "0i013l9cygmgainfid298n6llhs3mblfklry3jw2a6irvhffym0s";
   };
 
   nativeBuildInputs = [ fakegit ];
 
-  buildInputs = [ erlang openssl expat libyaml gd ]
+  buildInputs = [ erlang openssl expat libyaml gd makeWrapper ]
     ++ lib.optional withSqlite sqlite
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
@@ -44,7 +45,8 @@ in stdenv.mkDerivation rec {
   LANG = "en_US.UTF-8";
 
   deps = stdenv.mkDerivation {
-    name = "ejabberd-deps-${version}";
+    pname = "ejabberd-deps";
+    inherit version;
 
     inherit src;
 
@@ -74,7 +76,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "1v3h0c7kfifb6wsfxyv5j1wc7rlxbb7r0pgd4s340wiyxnllzzhk";
+    outputHash = "0xwgi9hy6y0m8mwznl6px98kdmkcxg98k62zgqbaqd4paks5zwqa";
   };
 
   configureFlags =
@@ -101,18 +103,19 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     sed -i \
       -e '2iexport PATH=${ctlpath}:$PATH' \
-      -e 's,\(^ *FLOCK=\).*,\1${utillinux}/bin/flock,' \
+      -e 's,\(^ *FLOCK=\).*,\1${flock}/bin/flock,' \
       -e 's,\(^ *JOT=\).*,\1,' \
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
+    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
   '';
 
   meta = with stdenv.lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
-    homepage = http://www.ejabberd.im;
+    homepage = https://www.ejabberd.im;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sander abbradar ];
+    maintainers = with maintainers; [ sander abbradar ajs124 ];
     broken = withElixir;
   };
 }

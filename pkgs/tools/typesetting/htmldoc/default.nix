@@ -8,7 +8,7 @@ assert stdenv.isDarwin -> SystemConfiguration != null
 
 stdenv.mkDerivation rec {
   version = "1.8.29";
-  name = "htmldoc-${version}";
+  pname = "htmldoc";
   src = fetchurl {
     url = "https://github.com/michaelrsweet/htmldoc/releases/download"
       + "/release-${version}/htmldoc-${version}-source.tar.gz";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Converts HTML files to PostScript and PDF";
     homepage    = https://michaelrsweet.github.io/htmldoc;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ viric shanemikel ];
+    maintainers = with maintainers; [ shanemikel ];
     platforms   = with platforms; linux ++ darwin;
 
     longDescription = ''

@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, ncurses, pcre }:
+{ stdenv, fetchurl, ncurses, pcre, buildPackages }:
 
 let
-  version = "5.4.2";
+  version = "5.8";
 
   documentation = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.gz";
-    sha256 = "1703g6vfz2vpb866wgl71nvg0ynjq0zvrjwkqbv7v6q3606jbmn3";
+    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.xz";
+    sha256 = "1i6wdzq6rfjx5yjrpzan1jf50hk2pfzy5qib9mb7cnnbjfar6klv";
   };
-
 in
 
 stdenv.mkDerivation {
-  name = "zsh-${version}";
+  pname = "zsh";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
-    sha256 = "1jdcfinzmki2w963msvsanv29vqqfmdfm4rncwpw0r3zqnrcsywm";
+    url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
+    sha256 = "09yyaadq738zlrnlh1hd3ycj1mv3q5hh4xl1ank70mjnqm6bbi6w";
   };
 
   buildInputs = [ ncurses pcre ];
@@ -25,10 +25,8 @@ stdenv.mkDerivation {
     "--enable-multibyte"
     "--with-tcsetpgrp"
     "--enable-pcre"
+    "--enable-zprofile=${placeholder "out"}/etc/zprofile"
   ];
-  preConfigure = ''
-    configureFlagsArray+=(--enable-zprofile=$out/etc/zprofile)
-  '';
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z
@@ -63,7 +61,11 @@ else
   fi
 fi
 EOF
-    $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    ${if stdenv.hostPlatform == stdenv.buildPlatform then ''
+      $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    '' else ''
+      ${stdenv.lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
+    ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
@@ -80,7 +82,7 @@ EOF
     '';
     license = "MIT-like";
     homepage = http://www.zsh.org/;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
+    maintainers = with stdenv.lib.maintainers; [ pSub ];
     platforms = stdenv.lib.platforms.unix;
   };
 

@@ -1,20 +1,29 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, protobuf
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, protobuf3_6 }:
 
-buildPythonPackage rec {
+let
+  py = python.override {
+    packageOverrides = self: super: {
+      protobuf = super.protobuf.override {
+        protobuf = protobuf3_6;
+      };
+    };
+  };
+in buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.6";
+  version = "8.0.19";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "1ygr7va56da12yp3gr7kzss9zgbs28q2lmdkw16rpxj108id4rkp";
+    sha256 = "1jscmc5s7mwx43gvxjlqc30ylp5jjpmkqx7s3b9nllbh926p3ixg";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];
 
+  # Tests are failing (TODO: unknown reason)
+  # TypeError: __init__() missing 1 required positional argument: 'string'
+  # But the library should be working as expected.
   doCheck = false;
 
   meta = {

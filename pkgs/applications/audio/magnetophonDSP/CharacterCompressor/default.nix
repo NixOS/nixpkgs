@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "CharacterCompressor-${version}";
+  pname = "CharacterCompressor";
   version = "0.3.3";
 
   src = fetchFromGitHub {

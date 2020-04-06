@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake, pkgconfig, fcitx, gettext, curl }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-cloudpinyin-${version}";
-  version = "0.3.4";
+  pname = "fcitx-cloudpinyin";
+  version = "0.3.7";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-cloudpinyin/${name}.tar.xz";
-    sha256 = "143x9gbswzfngvgfy77zskrzrpywj8qg2d19kisgfwfisk7yhcf1";
+    url = "http://download.fcitx-im.org/fcitx-cloudpinyin/${pname}-${version}.tar.xz";
+    sha256 = "0ai347wv3qdjzcbh0j9hdjpzwvh2kk57324xbxq37nzagrdgg5x0";
   };
 
   nativeBuildInputs = [ pkgconfig ];

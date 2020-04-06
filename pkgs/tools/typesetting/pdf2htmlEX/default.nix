@@ -3,7 +3,7 @@
 
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pdf2htmlEX-0.14.6";
 
   src = fetchFromGitHub {
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.taktoa ];
     platforms   = with platforms; linux;
+    broken      = true; # 2018-09-08
   };
 }

@@ -37,13 +37,15 @@ let
 
   haveLocalDB = cfg.dbi == localDB;
 
+  inherit (config.system) stateVersion;
+
 in
 
 {
   ###### interface
   options = {
 
-    services.hydra = rec {
+    services.hydra = {
 
       enable = mkOption {
         type = types.bool;
@@ -63,8 +65,7 @@ in
       };
 
       package = mkOption {
-        type = types.path;
-        default = pkgs.hydra;
+        type = types.package;
         defaultText = "pkgs.hydra";
         description = "The Hydra package.";
       };
@@ -167,7 +168,7 @@ in
 
       buildMachinesFiles = mkOption {
         type = types.listOf types.path;
-        default = [ "/etc/nix/machines" ];
+        default = optional (config.nix.buildMachines != []) "/etc/nix/machines";
         example = [ "/etc/nix/machines" "/var/lib/hydra/provisioner/machines" ];
         description = "List of files containing build machines.";
       };
@@ -194,11 +195,39 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraGroups.hydra = {
+    warnings = optional (cfg.package.migration or false) ''
+      You're currently deploying an older version of Hydra which is needed to
+      make some required database changes[1]. As soon as this is done, it's recommended
+      to run `hydra-backfill-ids` and set `services.hydra.package` to either `pkgs.hydra-unstable`
+      or `pkgs.hydra-flakes` after that.
+
+      [1] https://github.com/NixOS/hydra/pull/711
+    '';
+
+    services.hydra.package = with pkgs;
+      mkDefault (
+        if pkgs ? hydra
+          then throw ''
+            The Hydra package doesn't exist anymore in `nixpkgs`! It probably exists
+            due to an overlay. To upgrade Hydra, you need to take two steps as some
+            bigger changes in the database schema were implemented recently[1]. You first
+            need to deploy `pkgs.hydra-migration`, run `hydra-backfill-ids` on the server
+            and then deploy either `pkgs.hydra-unstable` or `pkgs.hydra-flakes`.
+
+            If you want to use `pkgs.hydra` from your overlay, please set `services.hydra.package`
+            explicitly to `pkgs.hydra` and make sure you know what you're doing.
+
+            [1] https://github.com/NixOS/hydra/pull/711
+          ''
+        else if versionOlder stateVersion "20.03" then hydra-migration
+        else hydra-unstable
+      );
+
+    users.groups.hydra = {
       gid = config.ids.gids.hydra;
     };
 
-    users.extraUsers.hydra =
+    users.users.hydra =
       { description = "Hydra";
         group = "hydra";
         createHome = true;
@@ -207,7 +236,7 @@ in
         uid = config.ids.uids.hydra;
       };
 
-    users.extraUsers.hydra-queue-runner =
+    users.users.hydra-queue-runner =
       { description = "Hydra queue runner";
         group = "hydra";
         useDefaultShell = true;
@@ -215,7 +244,7 @@ in
         uid = config.ids.uids.hydra-queue-runner;
       };
 
-    users.extraUsers.hydra-www =
+    users.users.hydra-www =
       { description = "Hydra web server";
         group = "hydra";
         useDefaultShell = true;
@@ -242,8 +271,8 @@ in
     environment.variables = hydraEnv;
 
     nix.extraOptions = ''
-      gc-keep-outputs = true
-      gc-keep-derivations = true
+      keep-outputs = true
+      keep-derivations = true
 
       # The default (`true') slows Nix down a lot since the build farm
       # has so many GC roots.
@@ -275,6 +304,7 @@ in
               ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
               touch ${baseDir}/.db-created
             fi
+            echo "create extension if not exists pg_trgm" | ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
           ''}
 
           if [ ! -e ${cfg.gcRootsDir} ]; then
@@ -332,7 +362,7 @@ in
           IN_SYSTEMD = "1"; # to get log severity levels
         };
         serviceConfig =
-          { ExecStart = "@${cfg.package}/bin/hydra-queue-runner hydra-queue-runner -v --option build-use-substitutes ${boolToString cfg.useSubstitutes}";
+          { ExecStart = "@${cfg.package}/bin/hydra-queue-runner hydra-queue-runner -v";
             ExecStopPost = "${cfg.package}/bin/hydra-queue-runner --unlock";
             User = "hydra-queue-runner";
             Restart = "always";
@@ -379,6 +409,23 @@ in
           };
       };
 
+    systemd.services.hydra-notify =
+      { wantedBy = [ "multi-user.target" ];
+        requires = [ "hydra-init.service" ];
+        after = [ "hydra-init.service" ];
+        restartTriggers = [ hydraConf ];
+        environment = env // {
+          PGPASSFILE = "${baseDir}/pgpass-queue-runner";
+        };
+        serviceConfig =
+          { ExecStart = "@${cfg.package}/bin/hydra-notify hydra-notify";
+            # FIXME: run this under a less privileged user?
+            User = "hydra-queue-runner";
+            Restart = "always";
+            RestartSec = 5;
+          };
+      };
+
     # If there is less than a certain amount of free disk space, stop
     # the queue/evaluator to prevent builds from failing or aborting.
     systemd.services.hydra-check-space =
@@ -416,6 +463,8 @@ in
         hydra-users hydra-queue-runner hydra
         hydra-users hydra-www hydra
         hydra-users root hydra
+        # The postgres user is used to create the pg_trgm extension for the hydra database
+        hydra-users postgres postgres
       '';
 
     services.postgresql.authentication = optionalString haveLocalDB

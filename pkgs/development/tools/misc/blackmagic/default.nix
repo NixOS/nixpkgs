@@ -1,25 +1,31 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, bash, libftdi
+, gcc-arm-embedded, libftdi1, libusb, pkgconfig
 , python, pythonPackages
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blackmagic-${version}";
-  version = "1.6.1";
+  pname = "blackmagic";
+  version = "unstable-2020-02-20";
+  # `git describe --always`
+  firmwareVersion = "v1.6.1-409-g7a595ea";
 
   src = fetchFromGitHub {
     owner = "blacksphere";
     repo = "blackmagic";
-    rev = "d3a8f27fdbf952194e8fc5ce9b2fc9bcef7c545c";
-    sha256 = "0c3l7cfqag3g7zrfn4mmikkx7076hb1r856ybhhdh0f6zji2j6jx";
+    rev = "7a595ead255f2a052fe4561c24a0577112c9de84";
+    sha256 = "01kdm1rkj7ll0px882crf9w27d2ka8f3hcdmvhb9jwd60bf5dlap";
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [
+    gcc-arm-embedded pkgconfig
+  ];
+
   buildInputs = [
-    gcc-arm-embedded
-    libftdi
+    libftdi1
+    libusb
     python
     pythonPackages.intelhex
   ];
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Prevent calling out to `git' to generate a version number:
     substituteInPlace src/Makefile \
-      --replace '`git describe --always --dirty`' '${version}'
+      --replace '$(shell git describe --always --dirty)' '${firmwareVersion}'
 
     # Fix scripts that generate headers:
     for f in $(find scripts libopencm3/scripts -type f); do
@@ -37,6 +43,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = "${stdenv.shell} ${./helper.sh}";
   installPhase = ":"; # buildPhase does this.
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "In-application debugger for ARM Cortex microcontrollers";
@@ -53,7 +61,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/blacksphere/blackmagic;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pjones ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ pjones emily sorki ];
+    # fails on darwin with
+    # arm-none-eabi-gcc: error: unrecognized command line option '-iframework'
+    platforms = platforms.linux;
   };
 }

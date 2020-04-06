@@ -1,15 +1,19 @@
-{ stdenv, zlib, fetchFromGitHub, python3Packages }:
+{ stdenv, zlib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
-  name = "manuskript";
-  version = "0.3.0";
+  pname = "manuskript";
+  version = "0.11.0";
+
+  format = "other";
 
   src = fetchFromGitHub {
-    repo = name;
+    repo = pname;
     owner = "olivierkes";
     rev = version;
-    sha256 = "0bqxc4a8kyi6xz1zs0dp85wxl9h4v8lzc6073bbcsn1zg4y59ys7";
+    sha256 = "1l6l9k6k69yv8xqpll0zv9cwdqqg4zvxy90l6sx5nv2yywh5crla";
   };
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     python3Packages.pyqt5
@@ -19,15 +23,19 @@ python3Packages.buildPythonApplication rec {
 
   patchPhase = ''
     substituteInPlace manuskript/ui/welcome.py \
-      --replace sample-projects $out/share/${name}/sample-projects
+      --replace sample-projects $out/share/${pname}/sample-projects
    '';
 
   buildPhase = '''';
 
   installPhase = ''
-    mkdir -p $out/share/${name}
+    mkdir -p $out/share/${pname}
     cp -av  bin/ i18n/ libs/ manuskript/ resources/ icons/ $out
-    cp -r sample-projects/ $out/share/${name}
+    cp -r sample-projects/ $out/share/${pname}
+  '';
+
+  postFixup = ''
+    wrapQtApp $out/bin/manuskript
   '';
 
   doCheck = false;

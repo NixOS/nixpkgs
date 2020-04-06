@@ -1,52 +1,114 @@
-{ stdenv, fetchurl, bash-completion
-, glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
-, gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_38
-, libgudev, sane-backends, udev, gnome3, makeWrapper }:
+{ stdenv
+, fetchurl
+, nixosTests
+, bash-completion
+, glib
+, polkit
+, pkgconfig
+, gettext
+, gusb
+, lcms2
+, sqlite
+, systemd
+, dbus
+, gobject-introspection
+, argyllcms
+, meson
+, ninja
+, vala
+, libgudev
+, wrapGAppsHook
+, shared-mime-info
+, sane-backends
+, docbook_xsl
+, docbook_xsl_ns
+, docbook_xml_dtd_412
+, gtk-doc
+, libxslt
+}:
 
 stdenv.mkDerivation rec {
-  name = "colord-1.4.1";
+  pname = "colord";
+  version = "1.4.4";
+
+  outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "0m854clp8szvq38z16jpazzlqfb3lb3icxcfnsisfrc25748y1ib";
+    url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
+    sha256 = "19f0938fr7nvvm3jr263dlknaq7md40zrac2npfyz25zc00yh3ws";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    # Put installed tests into its own output
+    ./installed-tests-path.patch
+  ];
+
+  postPatch = ''
+    for file in data/tests/meson.build lib/colord/cd-test-shared.c lib/colord/meson.build; do
+        substituteInPlace $file --subst-var-by installed_tests_dir "$installedTests"
+    done
+  '';
 
   mesonFlags = [
-    "-Denable-sane=true"
-    "-Denable-vala=true"
     "--localstatedir=/var"
-    "-Denable-bash-completion=true"
-    # TODO: man page cannot be build with docbook2x
-    "-Denable-man=false"
-    "-Denable-docs=false"
+    "-Dinstalled_tests=true"
+    "-Dlibcolordcompat=true"
+    "-Dsane=true"
+    "-Dvapi=true"
+    "-Ddaemon_user=colord"
   ];
 
-  patches = [
-    ./fix-build-paths.patch
+  nativeBuildInputs = [
+    docbook_xml_dtd_412
+    docbook_xsl
+    docbook_xsl_ns
+    gettext
+    gobject-introspection
+    gtk-doc
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    shared-mime-info
+    vala
+    wrapGAppsHook
   ];
 
-  nativeBuildInputs = [ meson pkgconfig vala_0_38 ninja gettext libxml2 gobjectIntrospection makeWrapper ];
-
-  buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus
-                  bash-completion argyllcms libgudev sane-backends ];
+  buildInputs = [
+    argyllcms
+    bash-completion
+    dbus
+    glib
+    gusb
+    lcms2
+    libgudev
+    polkit
+    sane-backends
+    sqlite
+    systemd
+  ];
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  postFixup = ''
-    wrapProgram "$out/libexec/colord-session" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
-  '';
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
-  meta = {
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.colord;
+    };
+  };
+
+  meta = with stdenv.lib; {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = https://www.freedesktop.org/software/colord/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl2Plus;
+    maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;
+    platforms = platforms.linux;
   };
 }

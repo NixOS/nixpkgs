@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qttools, packagekit }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
+, qttools, packagekit }:
 
 stdenv.mkDerivation rec {
-  name = "packagekit-qt-${version}";
+  pname = "packagekit-qt";
   version = "1.0.1";
 
   src = fetchFromGitHub {

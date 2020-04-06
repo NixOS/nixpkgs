@@ -1,28 +1,32 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2,  alsaLib, rtmidi }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2,  alsaLib, pulseaudio, rtmidi }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.2";
-  name = "rtaudio-${version}";
+  version = "5.1.0";
+  pname = "rtaudio";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtaudio";
-    rev = "${version}";
-    sha256 = "09j84l9l3q0g238z5k89rm8hgk0i1ir8917an7amq474nwjp80pq";
+    rev = version;
+    sha256 = "1pglnjz907ajlhnlnig3p0sx7hdkpggr8ss7b3wzf1lykzgv9l52";
   };
 
-  buildInputs = [ autoconf automake libtool libjack2 alsaLib rtmidi ];
+  patches = [ ./rtaudio-pkgconfig.patch ];
+
+  enableParallelBuilding = true;
+
+  buildInputs = [ autoconf automake libtool libjack2 alsaLib pulseaudio rtmidi ];
 
   preConfigure = ''
     ./autogen.sh --no-configure
     ./configure
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A set of C++ classes that provide a cross platform API for realtime audio input/output";
     homepage =  http://www.music.mcgill.ca/~gary/rtaudio/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = licenses.mit;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.unix;
   };
 }

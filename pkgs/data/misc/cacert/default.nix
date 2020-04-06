@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, nss, python
+{ stdenv, fetchurl, nss, python3
 , blacklist ? []
 , includeEmail ? false
 }:
@@ -9,20 +9,20 @@ let
 
   certdata2pem = fetchurl {
     name = "certdata2pem.py";
-    url = "https://anonscm.debian.org/cgit/collab-maint/ca-certificates.git/plain/mozilla/certdata2pem.py?h=debian/20170717";
+    url = "https://salsa.debian.org/debian/ca-certificates/raw/debian/20170717/mozilla/certdata2pem.py";
     sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
   };
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nss-cacert-${nss.version}";
 
   src = nss.src;
 
   outputs = [ "out" "unbundled" ];
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
 
   configurePhase = ''
     ln -s nss/lib/ckfw/builtins/certdata.txt
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = https://curl.haxx.se/docs/caextract.html;
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

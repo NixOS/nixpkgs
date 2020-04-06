@@ -1,65 +1,86 @@
-{ stdenv, fetchFromGitHub, ncurses, gettext
-, pkgconfig, cscope, python, ruby, tcl, perl, luajit
+{ stdenv, fetchFromGitHub, runCommand, ncurses, gettext
+, pkgconfig, cscope, ruby, tcl, perl, luajit
 , darwin
+
+, usePython27 ? false
+, python27 ? null, python37 ? null
 }:
 
-stdenv.mkDerivation rec {
-  name = "macvim-${version}";
+let
+  python = if usePython27
+           then { pkg = python27; name = "python"; }
+           else { pkg = python37; name = "python3"; };
+in
+assert python.pkg != null;
 
-  version = "7.4.909";
+let
+  # Building requires a few system tools to be in PATH.
+  # Some of these we could patch into the relevant source files (such as xcodebuild and
+  # qlmanage) but some are used by Xcode itself and we have no choice but to put them in PATH.
+  # Symlinking them in this way is better than just putting all of /usr/bin in there.
+  buildSymlinks = runCommand "macvim-build-symlinks" {} ''
+    mkdir -p $out/bin
+    ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
+  '';
+in
+
+stdenv.mkDerivation {
+  pname = "macvim";
+
+  version = "8.2.319";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "75aa7774645adb586ab9010803773bd80e659254";
-    sha256 = "0k04jimbms6zffh8i8fjm2y51q01m5kga2n4djipd3pxij1qy89y";
+    rev = "snapshot-162";
+    sha256 = "1mg55jlrz533wlqrx028fyv86rfhdzvm5kdi8xlf67flc5hh9vrp";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig buildSymlinks ];
   buildInputs = [
-    gettext ncurses luajit ruby tcl perl python
+    gettext ncurses cscope luajit ruby tcl perl python.pkg
   ];
 
   patches = [ ./macvim.patch ];
 
-  postPatch = ''
-    substituteInPlace src/MacVim/mvim --replace "# VIM_APP_DIR=/Applications" "VIM_APP_DIR=$out/Applications"
-
-    # Don't create custom icons.
-    substituteInPlace src/MacVim/icons/Makefile --replace '$(MAKE) -C makeicns' ""
-    substituteInPlace src/MacVim/icons/make_icons.py --replace "dont_create = False" "dont_create = True"
-
-    # Full path to xcodebuild
-    substituteInPlace src/Makefile --replace "xcodebuild" "/usr/bin/xcodebuild"
-  '';
-
   configureFlags = [
-      #"--enable-cscope" # TODO: cscope doesn't build on Darwin yet
+      "--enable-cscope"
       "--enable-fail-if-missing"
       "--with-features=huge"
       "--enable-gui=macvim"
       "--enable-multibyte"
       "--enable-nls"
       "--enable-luainterp=dynamic"
-      "--enable-pythoninterp=dynamic"
+      "--enable-${python.name}interp=dynamic"
       "--enable-perlinterp=dynamic"
       "--enable-rubyinterp=dynamic"
       "--enable-tclinterp=yes"
       "--without-local-dir"
       "--with-luajit"
       "--with-lua-prefix=${luajit}"
+      "--with-${python.name}-command=${python.pkg}/bin/${python.name}"
       "--with-ruby-command=${ruby}/bin/ruby"
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
       "--with-compiledby=Nix"
+      "--disable-sparkle"
+      "LDFLAGS=-headerpad_max_install_names"
   ];
 
   makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
 
-  # This is unfortunate, but we need to use the same compiler as XCode,
-  # but XCode doesn't provide a way to configure the compiler.
+  # Remove references to Sparkle.framework from the project.
+  # It's unused (we disabled it with --disable-sparkle) and this avoids
+  # copying the unnecessary several-megabyte framework into the result.
+  postPatch = ''
+    echo "Patching file src/MacVim/MacVim.xcodeproj/project.pbxproj"
+    sed -e '/Sparkle\.framework/d' -i src/MacVim/MacVim.xcodeproj/project.pbxproj
+  '';
+
+  # This is unfortunate, but we need to use the same compiler as Xcode,
+  # but Xcode doesn't provide a way to configure the compiler.
   #
   # If you're willing to modify the system files, you can do this:
   #   http://hamelot.co.uk/programming/add-gcc-compiler-to-xcode-6/
@@ -72,10 +93,18 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=(
       "--with-developer-dir=$DEV_DIR"
     )
-  '';
+  ''
+  # For some reason having LD defined causes PSMTabBarControl to fail at link-time as it
+  # passes arguments to ld that it meant for clang.
+  + ''
+    unset LD
+  ''
+  ;
 
   postConfigure = ''
     substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
+
+    substituteInPlace src/MacVim/vimrc --subst-var-by CSCOPE ${cscope}/bin/cscope
   '';
 
   postInstall = ''
@@ -83,13 +112,11 @@ stdenv.mkDerivation rec {
     cp -r src/MacVim/build/Release/MacVim.app $out/Applications
     rm -rf $out/MacVim.app
 
-    rm $out/bin/{Vimdiff,Vimtutor,Vim,ex,rVim,rview,view}
+    rm $out/bin/*
 
-    cp src/MacVim/mvim $out/bin
     cp src/vimtutor $out/bin
-
-    for prog in "vimdiff" "vi" "vim" "ex" "rvim" "rview" "view"; do
-      ln -s $out/bin/mvim $out/bin/$prog
+    for prog in mvim ex vi vim vimdiff view rvim rvimdiff rview; do
+      ln -s $out/Applications/MacVim.app/Contents/bin/mvim $out/bin/$prog
     done
 
     # Fix rpaths
@@ -97,17 +124,29 @@ stdenv.mkDerivation rec {
     libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
     install_name_tool -add_rpath ${luajit}/lib $exe
     install_name_tool -add_rpath ${tcl}/lib $exe
-    install_name_tool -add_rpath ${python}/lib $exe
+    install_name_tool -add_rpath ${python.pkg}/lib $exe
     install_name_tool -add_rpath $libperl $exe
     install_name_tool -add_rpath ${ruby}/lib $exe
+
+    # Remove manpages from tools we aren't providing
+    find $out/share/man \( -name eVim.1 -or -name xxd.1 \) -delete
+  '';
+
+  # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
+  # it's not clear what system-level components it may require, so for now we'll just allow full
+  # filesystem access. This way the package still can't access the network.
+  sandboxProfile = ''
+    (allow file-read* file-write* process-exec mach-lookup)
+    ; block homebrew dependencies
+    (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
   '';
 
   meta = with stdenv.lib; {
-    broken = true; # needs ruby 2.2
     description = "Vim - the text editor - for macOS";
-    homepage    = https://github.com/b4winckler/macvim;
+    homepage    = https://github.com/macvim-dev/macvim;
     license = licenses.vim;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cstrahan lilyball ];
     platforms   = platforms.darwin;
+    hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 }

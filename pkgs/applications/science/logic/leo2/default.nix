@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "leo2-${version}";
+  pname = "leo2";
   version = "1.6.2";
 
   src = fetchurl {
-    url = "http://page.mi.fu-berlin.de/cbenzmueller/leo/leo2_v${version}.tgz";
+    url = "https://page.mi.fu-berlin.de/cbenzmueller/leo/leo2_v${version}.tgz";
     sha256 = "1wjpmizb181iygnd18lx7p77fwaci2clgzs5ix5j51cc8f3pazmv";
   };
 

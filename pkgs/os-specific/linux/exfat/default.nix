@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
 
 
 # Upstream build for kernel 4.1 is broken, 3.12 and below seems to be working
@@ -6,13 +6,13 @@ assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.versi
 
 stdenv.mkDerivation rec {
   name = "exfat-nofuse-${version}-${kernel.version}";
-  version = "2017-06-19";
+  version = "2019-09-06";
 
   src = fetchFromGitHub {
-    owner = "dorimanx";
+    owner = "AdrianBan";
     repo = "exfat-nofuse";
-    rev = "de4c760bc9a05ead83bc3ec6eec6cf1fb106f523";
-    sha256 = "0v979d8sbcb70lakm4jal2ck3gspkdgq9108k127f7ph08vf8djm";
+    rev = "5536f067373c196f152061f5000fe0032dc07c48";
+    sha256 = "00mhadsv2iw8z00a6170hwbvk3afx484nn3irmd5f5kmhs34sw7k";
   };
 
   hardeningDisable = [ "pic" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "exfat kernel module";
-    homepage = https://github.com/dorimanx/exfat-nofuse;
+    inherit (src.meta) homepage;
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.linux;

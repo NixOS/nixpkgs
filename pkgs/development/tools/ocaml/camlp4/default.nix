@@ -1,5 +1,9 @@
 { stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.09"
+then throw "camlp4 is not available for OCaml ${ocaml.version}"
+else
+
 let param = {
   "4.02" = {
      version = "4.02+6";
@@ -16,11 +20,17 @@ let param = {
   "4.06" = {
      version = "4.06+1";
      sha256 = "0fazfw2l7wdmbwnqc22xby5n4ri1wz27lw9pfzhsbcdrighykysf"; };
-  }."${ocaml.meta.branch}";
+  "4.07" = {
+     version = "4.07+1";
+     sha256 = "0cxl4hkqcvspvkx4f2k83217rh6051fll9i2yz7cw6m3bq57mdvl"; };
+  "4.08" = {
+     version = "4.08+1";
+     sha256 = "0qplawvxwai25bi27niw2cgz2al01kcnkj8wxwhxslpi21z6pyx1"; };
+  }.${ocaml.meta.branch};
 in
 
 stdenv.mkDerivation rec {
-  name = "camlp4-${version}";
+  pname = "camlp4";
   inherit (param) version;
 
   src = fetchzip {
@@ -45,9 +55,9 @@ stdenv.mkDerivation rec {
     --replace +camlp4 $out/lib/ocaml/${ocaml.version}/site-lib/camlp4
   '';
 
-  makeFlags = "all";
+  makeFlags = [ "all" ];
 
-  installTargets = "install install-META";
+  installTargets = [ "install" "install-META" ];
 
   dontStrip = true;
 

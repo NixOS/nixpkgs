@@ -1,9 +1,9 @@
-{ fetchurl, pythonPackages, lib }:
+{ fetchurl, python2Packages, lib }:
 
-with pythonPackages;
+with python2Packages;
 
 buildPythonApplication rec {
-  name = "couchpotato-${version}";
+  pname = "couchpotato";
   version = "3.0.1";
   disabled = isPy3k;
 
@@ -29,9 +29,8 @@ buildPythonApplication rec {
     chmod +x $out/bin/*
   '';
 
-  fixupPhase = ''
-    wrapProgram "$out/bin/couchpotato" --set PYTHONPATH "$PYTHONPATH:$out/${python.sitePackages}" \
-                                       --set PATH ${python}/bin
+  postFixup = ''
+    wrapProgram "$out/bin/couchpotato" --set PYTHONPATH "$PYTHONPATH:$out/${python.sitePackages}"
   '';
 
   meta = {

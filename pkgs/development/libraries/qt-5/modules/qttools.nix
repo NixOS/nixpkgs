@@ -1,10 +1,10 @@
-{ qtModule, stdenv, lib, qtbase }:
+{ qtModule, stdenv, lib, qtbase, qtdeclarative }:
 
 with lib;
 
 qtModule {
   name = "qttools";
-  qtInputs = [ qtbase ];
+  qtInputs = [ qtbase qtdeclarative ];
   outputs = [ "out" "dev" "bin" ];
 
   # fixQtBuiltinPaths overwrites a builtin path we should keep
@@ -31,6 +31,9 @@ qtModule {
   ] ++ optionals stdenv.isDarwin [
     "bin/macdeployqt"
   ];
+
+  NIX_CFLAGS_COMPILE =
+    lib.optional stdenv.isDarwin ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
 
   setupHook = ../hooks/qttools-setup-hook.sh;
 }

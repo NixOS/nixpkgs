@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkgconfig, cmake
+{ stdenv, fetchgit, pkgconfig, cmake
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
@@ -8,15 +8,15 @@
 , enableDocs ? false }:
 
 stdenv.mkDerivation rec {
-  version = "1.1";
-  name = "openmvg-${version}";
+  version = "1.3";
+  pname = "openmvg";
 
   src = fetchgit {
     url = "https://www.github.com/openmvg/openmvg.git";
 
     # Tag v1.1
     rev = "refs/tags/v${version}";
-    sha256 = "1di9i7yxnkdvl8lhflynmqw62gaxwv00r1sd7nzzs9qn63g0af0f";
+    sha256 = "1cf1gbcl8zvxp4rr6f6vaxwcg0yzc4xban2b5p9zy1m4k1f81zyb";
     fetchSubmodules = true;
   };
 
@@ -42,9 +42,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
-    homepage = http://openmvg.readthedocs.io/en/latest/;
+    homepage = https://openmvg.readthedocs.io/en/latest/;
     license = stdenv.lib.licenses.mpl20;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ mdaiter ];
+    broken = true; # 2018-04-11
   };
 }

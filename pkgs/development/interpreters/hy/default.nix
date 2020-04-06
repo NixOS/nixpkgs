@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "hy-${version}";
-  version = "0.14.0";
+python2Packages.buildPythonApplication rec {
+  pname = "hy";
+  version = "0.17.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/h/hy/${name}.tar.gz";
-    sha256 = "0cbdh1q0zm00p4h7i44kir4qhw0p6sid78xf6llrx2p21llsnv98";
+  src = python2Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "1gdbqsirsdxj320wnp7my5awzs1kfs6m4fqmkzbd1zd47qzj0zfi";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ appdirs clint astor rply ];
+  propagatedBuildInputs = with python2Packages; [
+    appdirs
+    astor
+    clint
+    fastentrypoints
+    funcparserlib
+    rply
+  ];
 
-  # The build generates a .json parser file in the home directory under .cache.
-  # This is needed to get it to not try and open files in /homeless-shelter
-  preConfigure = ''
-    export HOME=$TMP
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A LISP dialect embedded in Python";
-    homepage = http://hylang.org/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.nixy ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://hylang.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nixy ];
+    platforms = platforms.all;
   };
 }

@@ -1,24 +1,33 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, intltool, itstool, libcanberra-gtk3, librsvg, libxml2 }:
+, gettext, meson, gsound, librsvg, itstool, vala
+, python3, ninja, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "four-in-a-row-${version}";
-  version = "3.22.2";
+  pname = "four-in-a-row";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "bc4194e8ab6d1d2a6a63a2e91945cd5465f49ebf0dae2eecacc66e69db56a420";
+    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1bl63npcbr5ymka2y06wps612qynxa4hsqlzn7bvwpz2v53pai1z";
   };
+
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook gettext meson itstool vala
+    ninja python3 desktop-file-utils
+  ];
+  buildInputs = [ gtk3 gsound librsvg gnome3.adwaita-icon-theme ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "four-in-a-row"; attrPath = "gnome3.four-in-a-row"; };
+    updateScript = gnome3.updateScript {
+      packageName = "four-in-a-row";
+      attrPath = "gnome3.four-in-a-row";
+    };
   };
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gtk3 wrapGAppsHook intltool itstool libcanberra-gtk3 librsvg
-    libxml2 gnome3.defaultIconTheme
-  ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Four-in-a-row;

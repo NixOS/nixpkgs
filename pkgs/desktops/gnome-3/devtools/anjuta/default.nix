@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, flex, bison, libxml2, intltool,
+{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, gjs, flex, bison, libxml2, intltool,
+  gdl, libgda, gtksourceview, gsettings-desktop-schemas,
   itstool, python3, ncurses, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "anjuta-${version}";
-  version = "3.26.0";
+  pname = "anjuta";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/anjuta/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "fb895464c1a3c915bb2bb3ea5d236fd17202caa7205f6792f70a75affc343d70";
+    url = "mirror://gnome/sources/anjuta/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "13ql7axw6zz387s7pa1m7wmh7qps3x7fk53h9832vq1yxlq33aa2";
   };
 
   passthru = {
@@ -22,9 +23,9 @@ stdenv.mkDerivation rec {
     ncurses
   ];
   buildInputs = [
-    flex bison gtk3 libxml2 gnome3.gjs gnome3.gdl
-    gnome3.libgda gnome3.gtksourceview
-    gnome3.gsettings-desktop-schemas
+    flex bison gtk3 libxml2 gjs gdl
+    libgda gtksourceview
+    gsettings-desktop-schemas
   ];
 
   preFixup = ''

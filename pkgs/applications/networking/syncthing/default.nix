@@ -1,40 +1,39 @@
-{ stdenv, lib, go, procps, removeReferencesTo, fetchFromGitHub }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub }:
 
 let
-  common = { stname, target, patches ? [], postInstall ? "" }:
-    stdenv.mkDerivation rec {
-      version = "0.14.45";
+  common = { stname, target, postInstall ? "" }:
+    buildGoModule rec {
+      version = "1.4.0";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "0hhldmvsbvkaj0x6af7c41zq5mbzcymv5xxmwvb4h5zbz49z9vzl";
+        sha256 = "049f9h03qq9a7pa8ngwampwf5xc7kr7mm473zn56yl3nrmv0nid6";
       };
 
-      inherit patches;
+      modSha256 = "1qq0979cm42wd3scy3blyi0hg67mkghis9r5rn2x1lqi2b982wfh";
 
-      buildInputs = [ go ];
-      nativeBuildInputs = [ removeReferencesTo ];
+      patches = [
+        ./add-stcli-target.patch
+      ];
+      BUILD_USER="nix";
+      BUILD_HOST="nix";
 
       buildPhase = ''
-        # Syncthing expects that it is checked out in $GOPATH, if that variable is
-        # set.  Since this isn't true when we're fetching source, we can explicitly
-        # unset it and force Syncthing to set up a temporary one for us.
-        env GOPATH= BUILD_USER=nix BUILD_HOST=nix go run build.go -no-upgrade -version v${version} build ${target}
+        runHook preBuild
+        go run build.go -no-upgrade -version v${version} build ${target}
+        runHook postBuild
       '';
 
       installPhase = ''
+        runHook preInstall
         install -Dm755 ${target} $out/bin/${target}
         runHook postInstall
       '';
 
       inherit postInstall;
-
-      preFixup = ''
-        find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
-      '';
 
       meta = with lib; {
         homepage = https://www.syncthing.net/;
@@ -79,7 +78,6 @@ in {
   syncthing-cli = common {
     stname = "syncthing-cli";
 
-    patches = [ ./add-stcli-target.patch ];
     target = "stcli";
   };
 

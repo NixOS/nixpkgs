@@ -1,21 +1,20 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "0.27.1";
-  name = "cmark-${version}";
+  version = "0.29.0";
+  pname = "cmark";
 
   src = fetchFromGitHub {
     owner = "jgm";
     repo = "cmark";
     rev = version;
-    sha256 = "06miwq3rl2bighkn6iq7bdwzmvcqa53qwpa0pqjqa8yn44j8ijj8";
+    sha256 = "0r7jpqhgnssq444i8pwji2g36058vfzwkl70wbiwj13h4w5rfc8f";
   };
 
   nativeBuildInputs = [ cmake ];
   doCheck = !stdenv.isDarwin;
-  checkPhase = ''
+  preCheck = ''
     export LD_LIBRARY_PATH=$(readlink -f ./src)
-    CTEST_OUTPUT_ON_FAILURE=1 make test
   '';
 
   meta = with stdenv.lib; {
@@ -23,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/jgm/cmark;
     maintainers = [ maintainers.michelk ];
     platforms = platforms.unix;
+    license = licenses.bsd2;
   };
 }

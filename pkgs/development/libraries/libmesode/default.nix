@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libtool, openssl, expat, pkgconfig, check }:
 
 stdenv.mkDerivation rec {
-  name = "libmesode-${version}";
-  version = "0.9.1";
+  pname = "libmesode";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "boothj5";
     repo = "libmesode";
     rev = version;
-    sha256 = "1zb1x422zkpnxrz9d2b7pmi8ms60lbw49yh78mydqfypsmj2iyfh";
+    sha256 = "0xzfg1xx88cn36352nnjlb1p7xyw32yqkhjzq10px88iaaqz1vv0";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

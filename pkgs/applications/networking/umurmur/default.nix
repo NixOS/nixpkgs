@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, openssl, protobufc, libconfig }:
 
 stdenv.mkDerivation rec {
-  name = "umurmur-${version}";
+  pname = "umurmur";
   version = "0.2.17";
 
   src = fetchFromGitHub {

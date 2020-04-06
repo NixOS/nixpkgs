@@ -1,0 +1,13 @@
+diff --git a/scapy/__init__.py b/scapy/__init__.py
+index d5ad6164..245ce2fb 100644
+--- a/scapy/__init__.py
++++ b/scapy/__init__.py
+@@ -90,7 +90,7 @@ def _version():
+                 return 'unknown.version'
+ 
+ 
+-VERSION = __version__ = _version()
++VERSION = __version__ = "NIXPKGS_SCAPY_VERSION"
+ VERSION_MAIN = re.search(r"[0-9.]+", VERSION).group()
+ 
+ if __name__ == "__main__":

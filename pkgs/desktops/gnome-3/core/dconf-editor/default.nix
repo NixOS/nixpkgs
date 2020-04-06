@@ -1,23 +1,35 @@
-{ stdenv, fetchurl, vala, libxslt, pkgconfig, glib, dbus-glib, gnome3
-, libxml2, intltool, docbook_xsl_ns, docbook_xsl, wrapGAppsHook }:
+{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3, dconf
+, libxml2, gettext, docbook_xsl, wrapGAppsHook, gobject-introspection }:
 
-stdenv.mkDerivation rec {
-  name = "dconf-editor-${version}";
-  version = "3.26.2";
+let
+  pname = "dconf-editor";
+  version = "3.36.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/dconf-editor/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "28b453fe49c49d7dfaf07c85c01d7495913f93ab64a0b223c117eb17d1cb8ad1";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "14q678bwgmhzmi7565xhhw51y8b0pv3cqh0f411qwzwif1bd1vkj";
   };
+
+  nativeBuildInputs = [
+    meson ninja vala libxslt pkgconfig wrapGAppsHook
+    gettext docbook_xsl libxml2 gobject-introspection python3
+  ];
+
+  buildInputs = [ glib gtk3 dconf ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "dconf-editor"; attrPath = "gnome3.dconf-editor"; };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
   };
-
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-
-  buildInputs = [ vala libxslt glib dbus-glib gnome3.gtk libxml2 gnome3.defaultIconTheme
-                  intltool docbook_xsl docbook_xsl_ns gnome3.dconf ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

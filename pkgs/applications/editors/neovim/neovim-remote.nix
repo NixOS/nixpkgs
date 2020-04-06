@@ -2,19 +2,23 @@
 
 with stdenv.lib;
 
-pythonPackages.buildPythonPackage rec {
-  name = "neovim-remote-${version}";
-  version = "v1.8.6";
+pythonPackages.buildPythonApplication rec {
+  pname = "neovim-remote";
+  version = "2.4.0";
   disabled = !pythonPackages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
-    rev = version;
-    sha256 = "0x01zpmxi37jr7j2az2bd8902h7zhkpg6kpvc8xmll9f7703zz2l";
+    rev = "v${version}";
+    sha256 = "0jlw0qksak4bdzddpsj74pm2f2bgpj3cwrlspdjjy0j9qzg0mpl9";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ neovim psutil ];
+  propagatedBuildInputs = with pythonPackages; [
+    pynvim
+    psutil
+    setuptools
+  ];
 
   meta = {
     description = "A tool that helps controlling nvim processes from a terminal";

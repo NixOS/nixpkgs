@@ -1,32 +1,35 @@
-{ buildPythonPackage
-, fetchPypi
-, mock
-, unittest2
-, msgpack-python
-, requests
+{ buildPythonPackage, fetchFromGitHub, isPy38
 , flask
 , gevent
+, mock
+, msgpack
 , pyzmq
+, requests
+, unittest2
 }:
 
 buildPythonPackage rec {
   pname = "locustio";
-  version = "0.8.1";
+  version = "0.14.4";
+  # tests hang on python38
+  disabled = isPy38;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "64583987ba1c330bb071aee3e29d2eedbfb7c8b342fa064bfb74fafcff660d61";
+  src = fetchFromGitHub {
+    owner = "locustio";
+    repo = "locust";
+    rev = version;
+    sha256 = "1645d63ig4ymw716b6h53bhmjqqc13p9r95k1xfx66ck6vdqnisd";
   };
 
-  patchPhase = ''
-    sed -i s/"pyzmq=="/"pyzmq>="/ setup.py
+  propagatedBuildInputs = [ msgpack requests flask gevent pyzmq ];
+  checkInputs = [ mock unittest2 ];
+  # remove file which attempts to do GET request
+  preCheck = ''
+    rm locust/test/test_stats.py
   '';
 
-  propagatedBuildInputs = [ msgpack-python requests flask gevent pyzmq ];
-  buildInputs = [ mock unittest2 ];
-
   meta = {
-    homepage = http://locust.io/;
+    homepage = "https://locust.io/";
     description = "A load testing tool";
   };
 }

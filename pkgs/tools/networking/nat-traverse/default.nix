@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "nat-traverse-${version}";
+  pname = "nat-traverse";
   version = "0.7";
 
   src = fetchurl {

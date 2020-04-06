@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libevent, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "fstrm-${version}";
-  version = "0.3.2";
+  pname = "fstrm";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "farsightsec";
     repo = "fstrm";
     rev = "v${version}";
-    sha256 = "135m0d4z1wbiaazs3bh6z53a35mgs33gvfki8pl4xfaw9cfcfpd2";
+    sha256 = "0b6x9wgyn92vykkmd3ynhnpbdl77zb4wf4rm7p0h8p9pwq953hdm";
   };
 
   outputs = [ "bin" "out" "dev" ];

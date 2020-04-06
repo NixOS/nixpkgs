@@ -1,35 +1,48 @@
-{ stdenv, intltool, fetchurl, enchant, isocodes
-, pkgconfig, gtk3, glib
-, bash, wrapGAppsHook, itstool, libsoup, libxml2
-, gnome3, librsvg, gdk_pixbuf, file, gspell }:
+{ stdenv, meson, fetchurl, python3
+, pkgconfig, gtk3, glib, adwaita-icon-theme
+, libpeas, gtksourceview4, gsettings-desktop-schemas
+, wrapGAppsHook, ninja, libsoup, tepl
+, gnome3, gspell, perl, itstool, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
-  name = "gedit-${version}";
-  version = "3.22.1";
+  pname = "gedit";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "aa7bc3618fffa92fdb7daf2f57152e1eb7962e68561a9c92813d7bbb7fc9492b";
+    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0dclapyghbkg15cjcf6nljcyy4980ipjw1m3mbqpmnz9lh9dv0y9";
   };
+
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook meson ninja
+    python3 perl itstool desktop-file-utils
+  ];
+
+  buildInputs = [
+    gtk3 glib
+    adwaita-icon-theme libsoup
+    libpeas gtksourceview4
+    gsettings-desktop-schemas gspell
+    tepl
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/meson/post_install.py
+    chmod +x plugins/externaltools/scripts/gedit-tool-merge.pl
+    patchShebangs build-aux/meson/post_install.py
+    patchShebangs plugins/externaltools/scripts/gedit-tool-merge.pl
+  '';
+
+  # Reliably fails to generate gedit-file-browser-enum-types.h in time
+  enableParallelBuilding = false;
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gedit"; attrPath = "gnome3.gedit"; };
+    updateScript = gnome3.updateScript {
+      packageName = "gedit";
+      attrPath = "gnome3.gedit";
+    };
   };
-
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
-
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-
-  buildInputs = [ gtk3 glib intltool itstool enchant isocodes
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg libsoup
-                  gnome3.libpeas gnome3.gtksourceview libxml2
-                  gnome3.gsettings-desktop-schemas gnome3.dconf file gspell ];
-
-  enableParallelBuilding = true;
-
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gnome3.libpeas gnome3.gtksourceview ]}")
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Gedit;

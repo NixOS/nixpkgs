@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name = "miniball-${version}";
+stdenv.mkDerivation {
+  pname = "miniball";
   version = "3.0";
 
   src = fetchurl {

@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libtool, gettext, zlib, bzip2, flac, libvorbis
-, exiv2, libgsf, rpm, pkgconfig
+, exiv2, libgsf, rpm, pkgconfig, fetchpatch
 , gtkSupport ? true, glib ? null, gtk3 ? null
 , videoSupport ? true, ffmpeg ? null, libmpeg2 ? null}:
 
@@ -7,12 +7,28 @@ assert gtkSupport -> glib != null && gtk3 != null;
 assert videoSupport -> ffmpeg != null && libmpeg2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libextractor-1.6";
+  name = "libextractor-1.9";
 
   src = fetchurl {
     url = "mirror://gnu/libextractor/${name}.tar.gz";
-    sha256 = "17gnpgspdhfgcr27j8sn9105vb4lw22yqdrhic62l79q5v5avm16";
+    sha256 = "1zz2zvikvfibxnk1va3kgzs7djsmiqy7bmk8y01vbsf54ryjb3zh";
   };
+
+  patches = [
+    ./fix-gcc8-build.patch
+    # Fixes build with exiv2 0.27
+    (fetchpatch {
+      name = "libextractor-exiv2-0.27.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/libextractor-exiv2-0.27.patch?h=packages/libextractor&id=4dc53f7fc69210ae571285dface108ed65d8ee53";
+      sha256 = "0w4gc1q1m1yxsd4hv105nblmif465nw3g5nxzldy0x2rl9mdncg6";
+    })
+    (fetchpatch {
+      name = "CVE-2019-15531.patch";
+      url = "https://git.gnunet.org/libextractor.git/patch/?id=d2b032452241708bee68d02aa02092cfbfba951a";
+      sha256 = "01xhcjbzv6p53wz7y2ii76kb8m9iwvnm4ip9w4a0bpgaxqz4b9fw";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   preConfigure =
     '' echo "patching installation directory in \`extractor.c'..."
@@ -27,10 +43,12 @@ stdenv.mkDerivation rec {
    ] ++ stdenv.lib.optionals gtkSupport [ glib gtk3 ]
      ++ stdenv.lib.optionals videoSupport [ ffmpeg libmpeg2 ];
 
-  configureFlags = "--disable-ltdl-install "
-    + "--with-ltdl-include=${libtool}/include "
-    + "--with-ltdl-lib=${libtool.lib}/lib "
-    + "--enable-xpdf";
+  configureFlags = [
+    "--disable-ltdl-install"
+    "--with-ltdl-include=${libtool}/include"
+    "--with-ltdl-lib=${libtool.lib}/lib"
+    "--enable-xpdf"
+  ];
 
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.

@@ -1,28 +1,49 @@
-{ stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, gnome3, pango
-, gnome-doc-utils, intltool, libX11, which, itstool, wrapGAppsHook }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libxml2
+, gnome3
+, gtk3
+, yelp-tools
+, gettext
+, libX11
+, itstool
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "zenity-${version}";
-  version = "3.26.0";
+  pname = "zenity";
+  version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/zenity/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "6a7f34626dd62b751fe22bcdb32f3558f8a8fdddcc9406893dd264f0ac18e830";
+    url = "mirror://gnome/sources/zenity/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "15fdh8xfdhnwcynyh4byx3mrjxbyprqnwxzi7qn3g5wwaqryg1p7";
   };
+
+  nativeBuildInputs = [
+    pkgconfig
+    gettext
+    yelp-tools
+    itstool
+    libxml2
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk3
+    libX11
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "zenity"; attrPath = "gnome3.zenity"; };
+    updateScript = gnome3.updateScript {
+      packageName = "zenity";
+      attrPath = "gnome3.zenity";
+    };
   };
 
-  preBuild = ''
-    mkdir -p $out/include
-  '';
-
-  buildInputs = [ gnome3.gtk libxml2 libxslt libX11 itstool ];
-
-  nativeBuildInputs = [ pkgconfig intltool gnome-doc-utils which wrapGAppsHook ];
-
   meta = with stdenv.lib; {
+    description = "Tool to display dialogs from the commandline and shell scripts";
+    homepage = "https://wiki.gnome.org/Projects/Zenity";
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;
   };

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libunibreak-${version}";
+  pname = "libunibreak";
   version = "1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/vimgadgets/libunibreak/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/vimgadgets/libunibreak/${version}/${pname}-${version}.tar.gz";
     sha256 = "02657l426bk5d8h42b9ixxy1clc50mx4bzwg02nkdhs09wqw32wn";
   };
 

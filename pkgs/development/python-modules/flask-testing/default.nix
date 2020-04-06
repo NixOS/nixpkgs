@@ -4,13 +4,12 @@
 with stdenv.lib;
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Flask-Testing";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dc076623d7d850653a018cb64f500948334c8aeb6b10a5a842bf1bcfb98122bc";
+    sha256 = "1rkkqgmrzmhpv6y1xysqh0ij03xniic8h631yvghksqwxd9vyjfq";
   };
 
   postPatch = ''
@@ -22,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Flask unittest integration.";
-    homepage = https://pythonhosted.org/Flask-Testing/;
+    homepage = "https://pythonhosted.org/Flask-Testing/";
     license = licenses.bsd3;
     maintainers = [ maintainers.mic92 ];
   };

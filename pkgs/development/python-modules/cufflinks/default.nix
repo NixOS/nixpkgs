@@ -1,25 +1,48 @@
-{ buildPythonPackage, stdenv, fetchPypi, pandas, plotly, colorlover
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
+, chart-studio
+, colorlover
+, ipython
+, ipywidgets
+, pytest
+, nose
+, numpy
+, pandas
+, six
+, statsmodels
 }:
 
 buildPythonPackage rec {
   pname = "cufflinks";
-  version = "0.12.1";
-  name = "${pname}-${version}";
+  version = "0.17.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f11e4b6326cc5b2a18011c09fb64f178ba21002f337fd305f64818012a6c679";
+    sha256 = "0i56062k54dlg5iz3qyl1ykww62mpkp8jr4n450h0c60dm0b7ha8";
   };
 
-  propagatedBuildInputs = [ pandas plotly colorlover ];
+  propagatedBuildInputs = [
+    chart-studio
+    colorlover
+    ipython
+    ipywidgets
+    numpy
+    pandas
+    six
+    statsmodels
+  ];
 
-  # tests not included in archive
-  doCheck = false;
+  checkInputs = [ pytest nose ];
 
-  meta = {
-    homepage = https://github.com/santosjorge/cufflinks;
+  # ignore tests which are incompatible with pandas>=1.0
+  # https://github.com/santosjorge/cufflinks/issues/236
+  checkPhase = ''
+    pytest tests.py -k 'not bar_row'
+  '';
+
+  meta = with lib; {
     description = "Productivity Tools for Plotly + Pandas";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ globin ];
+    homepage = "https://github.com/santosjorge/cufflinks";
+    license = licenses.mit;
+    maintainers = with maintainers; [ globin ];
   };
 }

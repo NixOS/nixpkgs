@@ -1,7 +1,7 @@
 mesonConfigurePhase() {
     runHook preConfigure
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "${dontAddPrefix-}" ]; then
         mesonFlags="--prefix=$prefix $mesonFlags"
     fi
 
@@ -10,7 +10,18 @@ mesonConfigurePhase() {
       crossMesonFlags="--cross-file=@crossFile@/cross-file.conf"
     fi
 
-    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-release} $mesonFlags"
+    # See multiple-outputs.sh and meson’s coredata.py
+    mesonFlags="\
+        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
+        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
+        --includedir=${!outputInclude}/include \
+        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
+        --localedir=${!outputLib}/share/locale \
+        -Dauto_features=${mesonAutoFeatures:-enabled} \
+        -Dwrap_mode=${mesonWrapMode:-nodownload} \
+        $mesonFlags"
+
+    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain} $mesonFlags"
 
     echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
 
@@ -25,19 +36,7 @@ mesonConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$dontUseMesonConfigure" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseMesonConfigure-}" -a -z "${configurePhase-}" ]; then
     setOutputFlags=
     configurePhase=mesonConfigurePhase
-fi
-
-mesonCheckPhase() {
-    runHook preCheck
-
-    meson test --print-errorlogs
-
-    runHook postCheck
-}
-
-if [ -z "$dontUseMesonCheck" -a -z "$checkPhase" ]; then
-    checkPhase=mesonCheckPhase
 fi

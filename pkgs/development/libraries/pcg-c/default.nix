@@ -4,10 +4,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "0.94";
-  name = "pcg-c-${version}";
+  pname = "pcg-c";
 
   src = fetchzip {
-    url = "http://www.pcg-random.org/downloads/${name}.zip";
+    url = "http://www.pcg-random.org/downloads/${pname}-${version}.zip";
     sha256 = "0smm811xbvs03a5nc2668zd0178wnyri2h023pqffy767bpy1vlv";
   };
 

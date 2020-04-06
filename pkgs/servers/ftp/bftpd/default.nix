@@ -1,24 +1,36 @@
-{stdenv, fetchurl}:
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+{ stdenv, fetchurl }:
+
+let
   pname = "bftpd";
-  version = "4.8";
-  # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
+
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "5.4";
+
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${name}/${name}.tar.gz";
-    sha256 = "1zlsajj6wjd9wcijzngmafhy2gr3sm5rphsr5n44rlmx1jdkk00c";
+    sha256 = "19fd9r233wkjk8gdxn6qsjgfijiw67a48xhgbm2kq46bx80yf3pg";
   };
-  buildInputs = [];
+
   preConfigure = ''
     sed -re 's/-[og] 0//g' -i Makefile*
   '';
-  meta = {
+
+  postInstall = ''
+    mkdir -p $out/share/doc/${pname}
+    mv $out/etc/*.conf $out/share/doc/${pname}
+    rm -rf $out/{etc,var}
+  '';
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     inherit version;
-    description = ''A minimal ftp server'';
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = http://bftpd.sf.net/;
+    description = "A minimal ftp server";
     downloadPage = "http://bftpd.sf.net/download.html";
+    homepage = http://bftpd.sf.net/;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

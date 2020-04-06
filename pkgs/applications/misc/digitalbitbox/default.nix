@@ -5,8 +5,8 @@
 , git
 , libevent
 , libtool
-, libqrencode
-, libudev
+, qrencode
+, udev
 , libusb
 , makeWrapper
 , pkgconfig
@@ -47,7 +47,7 @@ let
   copyUdevRuleToOutput = name: rule:
     "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
 in stdenv.mkDerivation rec {
-  name = "digitalbitbox-${version}";
+  pname = "digitalbitbox";
   version = "2.2.2";
 
   src = fetchFromGitHub {
@@ -66,12 +66,12 @@ in stdenv.mkDerivation rec {
     qttools
   ];
 
-  buildInputs = with stdenv.lib; [
+  buildInputs = [
     libevent
     libtool
-    libudev
+    udev
     libusb
-    libqrencode
+    qrencode
 
     qtbase
     qtwebsockets
@@ -81,7 +81,7 @@ in stdenv.mkDerivation rec {
   LUPDATE="${qttools.dev}/bin/lupdate";
   LRELEASE="${qttools.dev}/bin/lrelease";
   MOC="${qtbase.dev}/bin/moc";
-  QTDIR="${qtbase.dev}";
+  QTDIR=qtbase.dev;
   RCC="${qtbase.dev}/bin/rcc";
   UIC="${qtbase.dev}/bin/uic";
 
@@ -112,6 +112,8 @@ in stdenv.mkDerivation rec {
     ${copyUdevRuleToOutput "52-hid-digitalbox.rules" udevRule52}
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A QT based application for the Digital Bitbox hardware wallet";
     longDescription = ''
@@ -136,5 +138,6 @@ in stdenv.mkDerivation rec {
       vidbina
     ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

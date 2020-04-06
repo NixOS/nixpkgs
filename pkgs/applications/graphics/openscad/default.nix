@@ -1,24 +1,68 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, bison, flex, eigen, boost, libGLU_combined, glew, opencsg, cgal
-, mpfr, gmp, glib, pkgconfig, harfbuzz, qscintilla, gettext
+{ stdenv
+, fetchFromGitHub
+, qtbase
+, qtmultimedia
+, qscintilla
+, bison
+, flex
+, eigen
+, boost
+, libGLU, libGL
+, glew
+, opencsg
+, cgal
+, mpfr
+, gmp
+, glib
+, pkgconfig
+, harfbuzz
+, gettext
+, freetype
+, fontconfig
+, double-conversion
+, lib3mf
+, libzip
+, mkDerivation
+, qtmacextras
+, qmake
 }:
 
-stdenv.mkDerivation rec {
-  version = "2015.03-3";
-  name = "openscad-${version}";
+mkDerivation rec {
+  pname = "openscad";
+  version = "2019.05";
 
-  src = fetchurl {
-    url = "http://files.openscad.org/${name}.src.tar.gz";
-    sha256 = "0djsgi9yx1nxr2gh1kgsqw5vrbncp8v5li0p1pp02higqf1psajx";
+  src = fetchFromGitHub {
+    owner = "openscad";
+    repo = "openscad";
+    rev = "${pname}-${version}";
+    sha256 = "1qz384jqgk75zxk7sqd22ma9pyd94kh4h6a207ldx7p9rny6vc5l";
   };
 
+  nativeBuildInputs = [ bison flex pkgconfig gettext qmake ];
+
   buildInputs = [
-    qt4 qmake4Hook bison flex eigen boost libGLU_combined glew opencsg cgal mpfr gmp glib
-    pkgconfig harfbuzz qscintilla gettext
-  ];
+    eigen boost glew opencsg cgal mpfr gmp glib
+    harfbuzz lib3mf libzip double-conversion freetype fontconfig
+    qtbase qtmultimedia qscintilla
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ libGLU libGL ]
+    ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
+  ;
 
   qmakeFlags = [ "VERSION=${version}" ];
 
-  doCheck = false;
+  # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
+  enableParallelBuilding = false; # true by default due to qmake
+
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/*.app $out/Applications
+    rmdir $out/bin || true
+
+    mv --target-directory=$out/Applications/OpenSCAD.app/Contents/Resources \
+      $out/share/openscad/{examples,color-schemes,locale,libraries,fonts}
+
+    rmdir $out/share/openscad
+  '';
 
   meta = {
     description = "3D parametric model compiler";
@@ -35,8 +79,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://openscad.org/;
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers;
-      [ bjornfor raskin the-kenny ];
+      [ bjornfor raskin the-kenny gebner ];
   };
 }

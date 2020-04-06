@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse, pam
-, enableDebugBuild ? false }:
+{ config, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
+, enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxcfs-2.0.8";
+  name = "lxcfs-4.0.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = name;
-    sha256 = "04dzn6snqgw0znf7a7qdm64400jirip6q8amcx5fmz4705qdqahc";
+    sha256 = "0p9fl7zya65wsxg2vabdc0jrhw6mdz081cacd7np4zrppv16v6dx";
   };
 
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
-  buildInputs = [ fuse pam ];
+  buildInputs = [ fuse ];
 
   preConfigure = stdenv.lib.optionalString enableDebugBuild ''
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://linuxcontainers.org/lxcfs;
+    homepage = "https://linuxcontainers.org/lxcfs";
     description = "FUSE filesystem for LXC";
     license = licenses.asl20;
     platforms = platforms.linux;

@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''ironclad'';
-  version = ''v0.37'';
+  version = ''v0.47'';
 
   parasites = [ "ironclad/tests" ];
 
   description = ''A cryptographic toolkit written in pure Common Lisp'';
 
-  deps = [ args."nibbles" ];
+  deps = [ args."alexandria" args."bordeaux-threads" args."nibbles" args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/ironclad/2017-11-30/ironclad-v0.37.tgz'';
-    sha256 = ''061ln65yj9psch84nmsjrrlq41bkfv6iyg8sd9kpdc75lfc0vpi2'';
+    url = ''http://beta.quicklisp.org/archive/ironclad/2019-10-07/ironclad-v0.47.tgz'';
+    sha256 = ''1aczr4678jxz9kvzvwfdbgdbqhihsbj1nz6j2qflc9sdr6hx24rk'';
   };
 
   packageName = "ironclad";
@@ -21,8 +21,11 @@ rec {
 }
 /* (SYSTEM ironclad DESCRIPTION
     A cryptographic toolkit written in pure Common Lisp SHA256
-    061ln65yj9psch84nmsjrrlq41bkfv6iyg8sd9kpdc75lfc0vpi2 URL
-    http://beta.quicklisp.org/archive/ironclad/2017-11-30/ironclad-v0.37.tgz
-    MD5 9d8734764eead79f3a5d230b8e800d8f NAME ironclad FILENAME ironclad DEPS
-    ((NAME nibbles FILENAME nibbles)) DEPENDENCIES (nibbles) VERSION v0.37
+    1aczr4678jxz9kvzvwfdbgdbqhihsbj1nz6j2qflc9sdr6hx24rk URL
+    http://beta.quicklisp.org/archive/ironclad/2019-10-07/ironclad-v0.47.tgz
+    MD5 b82d370b037422fcaf8953857f03b5f6 NAME ironclad FILENAME ironclad DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME nibbles FILENAME nibbles) (NAME rt FILENAME rt))
+    DEPENDENCIES (alexandria bordeaux-threads nibbles rt) VERSION v0.47
     SIBLINGS (ironclad-text) PARASITES (ironclad/tests)) */

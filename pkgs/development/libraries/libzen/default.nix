@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.4.37";
-  name = "libzen-${version}";
+  pname = "libzen";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libzen/${version}/libzen_${version}.tar.bz2";
     sha256 = "1hcsrmn85b0xp0mp33aazk7g071q1v3f163nnhv8b0mv9c4bgsfn";

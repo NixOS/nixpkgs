@@ -1,23 +1,25 @@
-{ stdenv, buildPythonPackage, fetchurl, isPyPy
-, numpy, zlib, netcdf, hdf5, curl, libjpeg, cython
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, pytest
+, numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
 }:
 buildPythonPackage rec {
   pname = "netCDF4";
-  name = "${pname}-${version}";
-  version = "1.3.1";
+  version = "1.5.3";
 
   disabled = isPyPy;
 
-  src = fetchurl {
-    url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
-    sha256 = "570ea59992aa6d98a9b672c71161d11ba5683f787da53446086077470a869957";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "2a3ca855848f4bbf07fac366da77a681fcead18c0a8813d91d46302f562dc3be";
   };
+
+  checkInputs = [ pytest ];
 
   buildInputs = [
     cython
   ];
 
   propagatedBuildInputs = [
+    cftime
     numpy
     zlib
     netcdf
@@ -26,12 +28,19 @@ buildPythonPackage rec {
     libjpeg
   ];
 
+  checkPhase = ''
+    py.test test/tst_*.py
+  '';
+
+  # Tests need fixing.
+  doCheck = false;
+
   # Variables used to configure the build process
   USE_NCCONFIG="0";
-  HDF5_DIR="${hdf5}";
-  NETCDF4_DIR="${netcdf}";
-  CURL_DIR="${curl.dev}";
-  JPEG_DIR="${libjpeg.dev}";
+  HDF5_DIR = lib.getDev hdf5;
+  NETCDF4_DIR=netcdf;
+  CURL_DIR=curl.dev;
+  JPEG_DIR=libjpeg.dev;
 
   meta = with stdenv.lib; {
     description = "Interface to netCDF library (versions 3 and 4)";

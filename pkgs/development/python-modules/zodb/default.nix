@@ -1,11 +1,11 @@
 { stdenv
 , fetchPypi
+, fetchpatch
 , buildPythonPackage
-, isPy3k
+, python
 , zope_testrunner
 , transaction
 , six
-, wheel
 , zope_interface
 , zodbpickle
 , zconfig
@@ -17,24 +17,29 @@
 
 buildPythonPackage rec {
     pname = "ZODB";
-    version = "5.3.0";
-    name = "${pname}-${version}";
+    version = "5.5.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "633c2f89481d8ebc55639b59216f7d16d07b44a94758850c0b887006967214f3";
+      sha256 = "20155942fa326e89ad8544225bafd74237af332ce9d7c7105a22318fe8269666";
     };
 
     patches = [
-      ./ZODB-5.3.0-fix-tests.patch
+      # Compatibility with transaction v3.0
+      (fetchpatch {
+        url = "https://github.com/zopefoundation/ZODB/commit/0adcc6877f690186c97cc5da7e13788946d5e0df.patch";
+        sha256 = "1zmbgm7r36nj5w7icpinp61fm81svh2wk213pzr3l0jxzr9i5qi4";
+      })
     ];
 
+    # remove broken test
+    postPatch = ''
+      rm -vf src/ZODB/tests/testdocumentation.py
+    '';
+
     propagatedBuildInputs = [
-      manuel
       transaction
-      zope_testrunner
       six
-      wheel
       zope_interface
       zodbpickle
       zconfig
@@ -42,6 +47,15 @@ buildPythonPackage rec {
       zc_lockfile
       BTrees
     ];
+
+    checkInputs = [
+      manuel
+      zope_testrunner
+    ];
+
+    checkPhase = ''
+      ${python.interpreter} -m zope.testrunner --test-path=src []
+    '';
 
     meta = with stdenv.lib; {
       description = "Zope Object Database: object database and persistence";

@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = pname + "-" + version;
   pname = "dcadec";
   version = "0.2.0";
 
@@ -13,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = "make PREFIX=/ DESTDIR=$out install";
+
+  doCheck = false; # fails with "ERROR: Run 'git submodule update --init test/samples' first."
 
   meta = with stdenv.lib; {
     description = "DTS Coherent Acoustics decoder with support for HD extensions";

@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libsepol, pcre
+{ stdenv, fetchurl, pcre, pkgconfig, libsepol
 , enablePython ? true, swig ? null, python ? null
+, fts
 }:
 
 assert enablePython -> swig != null && python != null;
@@ -7,54 +8,44 @@ assert enablePython -> swig != null && python != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libselinux-${version}";
-  version = "2.4";
+  pname = "libselinux";
+  version = "2.9";
   inherit (libsepol) se_release se_url;
+
+  outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libselinux-${version}.tar.gz";
-    sha256 = "0yqg73ns97jwjh1iyv0jr5qxb8k5sqq5ywfkx11lzfn5yj8k0126";
+    sha256 = "14r69mgmz7najf9wbizvp68q56mqx4yjbkxjlbcqg5a47s3wik0v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libsepol pcre ]
-             ++ optionals enablePython [ swig python ];
+  nativeBuildInputs = [ pkgconfig ] ++ optionals enablePython [ swig python ];
+  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python ];
 
-  # Avoid this false warning:
-  # avc_internal.c: In function 'avc_netlink_receive':
-  # avc_internal.c:105:25: error: cast increases required alignment of target type [-Werror=cast-align]
-  #  struct nlmsghdr *nlh = (struct nlmsghdr *)buf;
-  #                         ^
+  # drop fortify here since package uses it by default, leading to compile error:
+  # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
+  hardeningDisable = [ "fortify" ];
 
-  NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-error=cast-align";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  # Unreleased upstream patch that fixes Python package issue arising
-  # from recent SWIG changes.
-  patches = optional enablePython (fetchpatch {
-    name = "fix-python-swig.patch";
-    url = "https://github.com/SELinuxProject/selinux/commit/a9604c30a5e2f71007d31aa6ba41cf7b95d94822.patch";
-    sha256 = "0mjrclh0sd8m7vq0wvl6pg29ss415j3kn0266v8ixy4fprafagfp";
-    stripLen = 1;
-  });
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INCDIR=$(dev)/include/selinux"
+    "INCLUDEDIR=$(dev)/include"
+    "MAN3DIR=$(man)/share/man/man3"
+    "MAN5DIR=$(man)/share/man/man5"
+    "MAN8DIR=$(man)/share/man/man8"
+    "PYTHON=${python.pythonForBuild}/bin/python"
+    "PYTHONLIBDIR=$(py)/${python.sitePackages}"
+    "SBINDIR=$(bin)/sbin"
+    "SHLIBDIR=$(out)/lib"
 
-  postPatch = optionalString enablePython ''
-    sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
-  ''
-  + ''
-    sed '1i#include <sys/uio.h>' -i src/setrans_client.c
-  '';
-
-  preBuild = ''
-    # Build fails without this precreated
-    mkdir -p $out/include
-
-    makeFlagsArray+=("PREFIX=$out")
-    makeFlagsArray+=("DESTDIR=$out")
-  '';
+    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+  ];
 
   installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
 
-  meta = libsepol.meta // {
+  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux core library";
   };
 }

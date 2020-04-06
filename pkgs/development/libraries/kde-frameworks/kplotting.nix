@@ -1,5 +1,5 @@
 { mkDerivation, lib
-, extra-cmake-modules, qtbase
+, extra-cmake-modules, qttools, qtbase
 }:
 
 mkDerivation {
@@ -9,6 +9,6 @@ mkDerivation {
     broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase qttools ];
   outputs = [ "out" "dev" ];
 }

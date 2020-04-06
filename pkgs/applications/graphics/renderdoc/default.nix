@@ -1,73 +1,67 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtx11extras, qtsvg, makeWrapper, python3, bison
-, pcre, vulkan-loader, xorg, autoreconfHook
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
+, qtbase, qtx11extras, qtsvg, makeWrapper
+, vulkan-loader, libglvnd, xorg, python3, python3Packages
+, bison, pcre, automake, autoconf, addOpenGLRunpath
 }:
-
 let
-  custom_swig = stdenv.mkDerivation {
-    name = "renderdoc-custom-swig";
-    src = fetchFromGitHub {
-      owner = "baldurk";
-      repo = "swig";
-      rev = "renderdoc-modified-1";
-      sha256 = "1whymd3vamwnp4jqfc9asls3dw9wsdi21xhm1d2a4vx9nql8if1x";
-    };
-
-    nativeBuildInputs = [ autoreconfHook pcre ];
-
-    autoreconfPhase = ''
-      patchShebangs autogen.sh
-      ./autogen.sh
-    '';
+  custom_swig = fetchFromGitHub {
+    owner = "baldurk";
+    repo = "swig";
+    rev = "renderdoc-modified-7";
+    sha256 = "15r2m5kcs0id64pa2fsw58qll3jyh71jzc04wy20pgsh2326zis6";
   };
+  pythonPackages = python3Packages;
 in
-stdenv.mkDerivation rec {
-  name = "renderdoc-${version}";
-  version = "0.91";
+mkDerivation rec {
+  version = "1.7";
+  pname = "renderdoc";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
-    rev = "2d8b2cf818746b6a2add54e2fef449398816a40c";
-    sha256 = "07yc3fk7j2nqmrhc4dm3v2pgbc37scd7d28nlzk6v0hw99zck8k0";
+    rev = "v${version}";
+    sha256 = "0r0y0lx48hkyf39pgippsc9q8hdcf57bdva6gx7f35vlhicx5hlz";
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader
-  ];
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
+  ]; # ++ (with pythonPackages; [pyside2 pyside2-tools shiboken2]);
+  # TODO: figure out how to make cmake recognise pyside2
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig python3 bison ];
+  nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf addOpenGLRunpath ];
+
+  postUnpack = ''
+    cp -r ${custom_swig} swig
+    chmod -R +w swig
+    patchShebangs swig/autogen.sh
+  '';
 
   cmakeFlags = [
     "-DBUILD_VERSION_HASH=${src.rev}"
     "-DBUILD_VERSION_DIST_NAME=NixOS"
-    "-DBUILD_VERSION_DIST_VER=0.91"
+    "-DBUILD_VERSION_DIST_VER=${version}"
     "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
-    "-DBUILD_VERSION_DIST_STABLE=ON"
-    # TODO: use this instead of preConfigure once placeholders land
-    #"-DVULKAN_LAYER_FOLDER=${placeholder out}/share/vulkan/implicit_layer.d/"
+    "-DBUILD_VERSION_STABLE=ON"
   ];
 
+  # TODO: define these in the above array via placeholders, once those are widely supported
   preConfigure = ''
     cmakeFlags+=" -DVULKAN_LAYER_FOLDER=$out/share/vulkan/implicit_layer.d/"
+    cmakeFlags+=" -DRENDERDOC_SWIG_PACKAGE=$PWD/../swig"
   '';
 
+  dontWrapQtApps = true;
   preFixup = ''
-    mkdir $out/bin/.bin
-    mv $out/bin/qrenderdoc $out/bin/.bin/qrenderdoc
-    ln -s $out/bin/.bin/qrenderdoc $out/bin/qrenderdoc
-    wrapProgram $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : $out/lib --suffix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    mv $out/bin/renderdoccmd $out/bin/.bin/renderdoccmd
-    ln -s $out/bin/.bin/renderdoccmd $out/bin/renderdoccmd
-    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : $out/lib --suffix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    wrapQtApp $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
+    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
   '';
 
-  # Set path to custom swig binary
-  NIXOS_CUSTOM_SWIG = "${custom_swig}/bin/swig";
+  # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh
+  postFixup = ''
+    addOpenGLRunpath $out/lib/librenderdoc.so
+  '';
 
   enableParallelBuilding = true;
-
-  patches = [ ./custom_swig.patch ];
 
   meta = with stdenv.lib; {
     description = "A single-frame graphics debugger";

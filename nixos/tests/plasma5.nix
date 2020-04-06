@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 {
   name = "plasma5";
@@ -6,56 +6,54 @@ import ./make-test.nix ({ pkgs, ...} :
     maintainers = [ ttuegel ];
   };
 
-  machine = { lib, ... }: {
+  machine = { ... }:
+
+  {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
+    services.xserver.displayManager.defaultSession = "plasma5";
     services.xserver.desktopManager.plasma5.enable = true;
-    services.xserver.desktopManager.default = "plasma5";
-    virtualisation.memorySize = 1024;
-
-    # fontconfig-penultimate-0.3.3 -> 0.3.4 broke OCR apparently, but no idea why.
-    nixpkgs.config.packageOverrides = superPkgs: {
-      fontconfig-penultimate = superPkgs.fontconfig-penultimate.override {
-        version = "0.3.3";
-        sha256 = "1z76jbkb0nhf4w7fy647yyayqr4q02fgk6w58k0yi700p0m3h4c9";
-      };
+    services.xserver.displayManager.sddm.autoLogin = {
+      enable = true;
+      user = "alice";
     };
+    hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
+    virtualisation.memorySize = 1024;
   };
 
-  enableOCR = true;
-
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.extraUsers.alice;
+    user = nodes.machine.config.users.users.alice;
     xdo = "${pkgs.xdotool}/bin/xdotool";
   in ''
-    startAll;
+    with subtest("Wait for login"):
+        start_all()
+        machine.wait_for_file("${user.home}/.Xauthority")
+        machine.succeed("xauth merge ${user.home}/.Xauthority")
 
-    # Wait for display manager to start
-    $machine->waitForText(qr/${user.description}/);
-    $machine->screenshot("sddm");
+    with subtest("Check plasmashell started"):
+        machine.wait_until_succeeds("pgrep plasmashell")
+        machine.wait_for_window("^Desktop ")
 
-    # Log in
-    $machine->sendChars("${user.password}\n");
-    $machine->waitForFile("/home/alice/.Xauthority");
-    $machine->succeed("xauth merge ~alice/.Xauthority");
+    with subtest("Check that logging in has given the user ownership of devices"):
+        machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
-    $machine->waitUntilSucceeds("pgrep plasmashell");
-    $machine->waitForWindow("^Desktop ");
+    with subtest("Run Dolphin"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin &'")
+        machine.wait_for_window(" Dolphin")
 
-    # Check that logging in has given the user ownership of devices.
-    $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+    with subtest("Run Konsole"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 konsole &'")
+        machine.wait_for_window("Konsole")
 
-    $machine->execute("su - alice -c 'DISPLAY=:0.0 dolphin &'");
-    $machine->waitForWindow(" Dolphin");
+    with subtest("Run systemsettings"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 systemsettings5 &'")
+        machine.wait_for_window("Settings")
 
-    $machine->execute("su - alice -c 'DISPLAY=:0.0 konsole &'");
-    $machine->waitForWindow("Konsole");
-
-    $machine->execute("su - alice -c 'DISPLAY=:0.0 systemsettings5 &'");
-    $machine->waitForWindow("Settings");
-
-    $machine->execute("${xdo} key Alt+F1 sleep 10");
-    $machine->screenshot("screen");
+    with subtest("Wait to get a screenshot"):
+        machine.execute(
+            "${xdo} key Alt+F1 sleep 10"
+        )
+        machine.screenshot("screen")
   '';
 })

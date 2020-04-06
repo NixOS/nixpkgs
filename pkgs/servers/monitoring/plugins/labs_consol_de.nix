@@ -1,33 +1,30 @@
-{ stdenv, fetchFromGitHub, buildPerlPackage, autoreconfHook, makeWrapper
-, perl, NetSNMP, coreutils, gnused, gnugrep }:
+{ stdenv, fetchFromGitHub, fetchurl, autoreconfHook, makeWrapper
+, perlPackages, coreutils, gnused, gnugrep }:
 
 let
-  owner = "lausser";
-
   glplugin = fetchFromGitHub {
+    owner = "lausser";
     repo   = "GLPlugin";
-    rev    = "b92a261ca4bf84e5b20d3025cc9a31ade03c474b";
-    sha256 = "0kflnmpjmklq8fy2vf2h8qyvaiznymdi09z2h5qscrfi51xc9gmh";
-    inherit owner;
+    rev    = "ef3107f01afe55fad5452e64ac5bbea00b18a8d5";
+    sha256 = "047fwrycsl2vmpi4wl46fs6f8y191d6qc9ms5rvmrj1dm2r828ws";
   };
 
-  generic = { pname, version, rev, sha256, description, ... } @ attrs:
-  let
-    attrs' = builtins.removeAttrs attrs [ "pname" "version" "rev" "sha256"];
-  in perl.stdenv.mkDerivation rec {
-    name = stdenv.lib.replaceStrings [ "-" ] [ "_" ] "${pname}-${version}";
+  generic = { pname, version, sha256, description, buildInputs, ... }:
+  stdenv.mkDerivation {
+    inherit pname version;
 
-    src = fetchFromGitHub {
-      repo   = pname;
-      inherit owner rev sha256;
+    src = fetchurl {
+      url = "https://labs.consol.de/assets/downloads/nagios/${pname}-${version}.tar.gz";
+      inherit sha256;
     };
 
-    buildInputs = [ perl NetSNMP ];
+    buildInputs = [ perlPackages.perl ] ++ buildInputs;
 
     nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
     prePatch = with stdenv.lib; ''
-      ln -s ${glplugin}/* GLPlugin
+      rm -rf GLPlugin
+      ln -s ${glplugin} GLPlugin
       substituteInPlace plugins-scripts/Makefile.am \
         --replace /bin/cat  ${getBin coreutils}/bin/cat \
         --replace /bin/echo ${getBin coreutils}/bin/echo \
@@ -54,19 +51,27 @@ let
   };
 
 in {
+  check-mssql-health = generic {
+    pname       = "check_mssql_health";
+    version     = "2.6.4.15";
+    sha256      = "12z0b3c2p18viy7s93r6bbl8fvgsqh80136d07118qhxshp1pwxg";
+    description = "Check plugin for Microsoft SQL Server.";
+    buildInputs = [ perlPackages.DBDsybase ];
+  };
+
   check-nwc-health = generic {
     pname       = "check_nwc_health";
-    version     = "20170804";
-    rev         = "e959b412b5cf027c82a446668e026214fdcf8df3";
-    sha256      = "11l74xw62g15rqrbf9ff2bfd5iw159gwhhgbkxwdqi8sp9j6navk";
+    version     = "7.10.0.6";
+    sha256      = "092rhaqnk3403z0y60x38vgh65gcia3wrd6gp8mr7wszja38kxv2";
     description = "Check plugin for network equipment.";
+    buildInputs = [ perlPackages.NetSNMP ];
   };
 
   check-ups-health = generic {
     pname       = "check_ups_health";
-    version     = "20170804";
-    rev         = "32a8a359ea46ec0d6f3b7aea19ddedaad63b04b9";
-    sha256      = "05na48dxfxrg0i9185j1ck2795p0rw1zwcs8ra0f14cm0qw0lp4l";
+    version     = "2.8.3.3";
+    sha256      = "0qc2aglppwr9ms4p53kh9nr48625sqrbn46xs0k9rx5sv8hil9hm";
     description = "Check plugin for UPSs.";
+    buildInputs = [ perlPackages.NetSNMP ];
   };
 }

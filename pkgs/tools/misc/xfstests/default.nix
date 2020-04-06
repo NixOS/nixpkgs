@@ -1,23 +1,31 @@
-{ stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs, fetchgit, fio, gawk, keyutils
-, lib, libaio, libcap, libtool, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, quota, su
-, time, utillinux, which, writeScript, xfsprogs }:
+{ stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
+, fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
+, libuuid, libxfs, lvm2, openssl, perl, procps, quota
+, time, utillinux, which, writeScript, xfsprogs, runtimeShell }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2017-07-16";
+  name = "xfstests-2019-09-08";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
-    rev = "c3893c2dc623a07b1ace8e72ee4beb29f8bfae15";
-    sha256 = "1p42dakry4r2366hdgj4i1wcnjs4qk0bfmyr70r1n7s7ykvnvnrl";
+    rev = "0837e907988a5f410cae0ae714f42f9c4242e072";
+    sha256 = "1f5cv0vwc1g9difzp69k49rc5nfd08y72vdg318j25nv3rwv7wc9";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ acl attr gawk libaio libuuid libxfs openssl perl ];
+  nativeBuildInputs = [
+    autoconf automake libtool
+  ];
+  buildInputs = [
+    acl attr gawk libaio libuuid libxfs openssl perl
+  ];
 
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
 
   patchPhase = ''
+    substituteInPlace Makefile \
+      --replace "cp include/install-sh ." "cp -f include/install-sh ."
+
     # Patch the destination directory
     sed -i include/builddefs.in -e "s|^PKG_LIB_DIR\s*=.*|PKG_LIB_DIR=$out/lib/xfstests|"
 
@@ -73,7 +81,7 @@ stdenv.mkDerivation {
   # wants to write temporary files there. So create a temporary
   # to run from and symlink the runtime files to it.
   wrapperScript = writeScript "xfstests-check" ''
-    #!/bin/sh
+    #!${runtimeShell}
     set -e
     export RESULT_BASE="$(pwd)/results"
 
@@ -86,7 +94,9 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils libcap lvm2 perl procps psmisc quota utillinux which xfsprogs]}:$PATH
+    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils
+                                   libcap lvm2 perl procps killall quota
+                                   utillinux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 

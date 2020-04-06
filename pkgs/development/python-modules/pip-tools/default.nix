@@ -1,41 +1,44 @@
-{ stdenv, fetchurl, buildPythonPackage, pip, pytest, click, six, first
+{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six
 , setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "1.11.0";
-  name = pname + "-" + version;
+  version = "4.5.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pip-tools/${name}.tar.gz";
-    sha256 = "ba427b68443466c389e3b0b0ef55f537ab39344190ea980dfebb333d0e6a50a3";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "166crncd9zrk9wgk9dss9968mx2c1dzj80sjnaqrcmw7a7j30gv9";
   };
 
   LC_ALL = "en_US.UTF-8";
   checkInputs = [ pytest git glibcLocales mock ];
-  propagatedBuildInputs = [ pip click six first setuptools_scm ];
+  propagatedBuildInputs = [ pip click six setuptools_scm ];
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
     # Depend on network tests:
+    "test_allow_unsafe_option" #paramaterized, but all fail
+    "test_annotate_option" #paramaterized, but all fail
     "test_editable_package_vcs"
+    "test_editable_top_level_deps_preserved" # can't figure out how to select only one parameter to ignore
+    "test_filter_pip_markers"
+    "test_filter_pip_markes"
     "test_generate_hashes_all_platforms"
-    "test_generate_hashes_without_interfering_with_each_other"
-    "test_realistic_complex_sub_dependencies"
+    "test_generate_hashes_verbose"
     "test_generate_hashes_with_editable"
-    # Expect specific version of "six":
+    "test_generate_hashes_with_url"
+    "test_generate_hashes_without_interfering_with_each_other"
+    "test_get_file_hash_without_interfering_with_each_other"
+    "test_get_hashes_local_repository_cache_miss"
+    "test_realistic_complex_sub_dependencies"
+    "test_stdin"
+    "test_upgrade_packages_option"
+    "test_url_package"
     "test_editable_package"
-    "test_input_file_without_extension"
     "test_locally_available_editable_package_is_not_archived_in_cache_dir"
   ];
 
   checkPhase = ''
     export HOME=$(mktemp -d) VIRTUAL_ENV=1
-    tests_without_network_access="
-      not test_realistic_complex_sub_dependencies
-      and not test_editable_package_vcs
-      and not test_generate_hashes_all_platforms
-      and not test_generate_hashes_without_interfering_with_each_other
-    "
     py.test -k "${disabledTests}"
   '';
 

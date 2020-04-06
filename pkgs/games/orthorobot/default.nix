@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "orthorobot";
-  version = "1.0";
+  version = "1.1.1";
 
   icon = fetchurl {
     url = "http://stabyourself.net/images/screenshots/orthorobot-5.png";
@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "orthorobot";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Robot game";
     desktopName = "Orthorobot";
     genericName = "orthorobot";
@@ -21,35 +21,29 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://stabyourself.net/dl.php?file=${pname}/${pname}-source.zip";
-    sha256 = "023nc3zwjkbmy4c8w6mfg39mg69zpqqr2gzlmp4fpydrjas70kbl";
+  src = fetchFromGitHub {
+    owner = "Stabyourself";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ lua love ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ lua love zip ];
 
   phases = [ "unpackPhase" "installPhase" ];
 
-  unpackPhase = ''
-    unzip -j $src
-  '';  
-
   installPhase =
   ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/games/lovegames
-
-    cp -v ./*.love $out/share/games/lovegames/${pname}.love
-
+    mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
+    zip -9 -r ${pname}.love ./*
+    mv ${pname}.love $out/share/games/lovegames/${pname}.love
     makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
-
-    chmod +x $out/bin/${pname}
-    mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    chmod +x $out/bin/${pname}
   '';
 
   meta = with stdenv.lib; {

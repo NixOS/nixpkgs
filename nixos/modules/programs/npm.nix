@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -36,9 +36,11 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    environment.etc."npmrc".text = cfg.npmrc;
+    environment.etc.npmrc.text = cfg.npmrc;
 
     environment.variables.NPM_CONFIG_GLOBALCONFIG = "/etc/npmrc";
+
+    environment.systemPackages = [ pkgs.nodePackages.npm ];
   };
 
 }

@@ -6,7 +6,7 @@ let
 
   cfg = config.programs.less;
 
-  configFile = ''
+  configText = if (cfg.configFile != null) then (builtins.readFile cfg.configFile) else ''
     #command
     ${concatStringsSep "\n"
       (mapAttrsToList (command: action: "${command} ${action}") cfg.commands)
@@ -25,7 +25,7 @@ let
   '';
 
   lessKey = pkgs.runCommand "lesskey"
-            { src = pkgs.writeText "lessconfig" configFile; }
+            { src = pkgs.writeText "lessconfig" configText; preferLocalBuild = true; }
             "${pkgs.less}/bin/lesskey -o $out $src";
 
 in
@@ -37,12 +37,25 @@ in
 
       enable = mkEnableOption "less";
 
+      configFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = literalExample "$${pkgs.my-configs}/lesskey";
+        description = ''
+          Path to lesskey configuration file.
+
+          <option>configFile</option> takes precedence over <option>commands</option>,
+          <option>clearDefaultCommands</option>, <option>lineEditingKeys</option>, and
+          <option>envVariables</option>.
+        '';
+      };
+
       commands = mkOption {
         type = types.attrsOf types.str;
         default = {};
         example = {
-          "h" = "noaction 5\e(";
-          "l" = "noaction 5\e)";
+          h = "noaction 5\\e(";
+          l = "noaction 5\\e)";
         };
         description = "Defines new command keys.";
       };
@@ -61,7 +74,7 @@ in
         type = types.attrsOf types.str;
         default = {};
         example = {
-          "\e" = "abort";
+          e = "abort";
         };
         description = "Defines new line-editing keys.";
       };
@@ -98,11 +111,11 @@ in
     environment.systemPackages = [ pkgs.less ];
 
     environment.variables = {
-      "LESSKEY_SYSTEM" = toString lessKey;
+      LESSKEY_SYSTEM = toString lessKey;
     } // optionalAttrs (cfg.lessopen != null) {
-      "LESSOPEN" = cfg.lessopen;
+      LESSOPEN = cfg.lessopen;
     } // optionalAttrs (cfg.lessclose != null) {
-      "LESSCLOSE" = cfg.lessclose;
+      LESSCLOSE = cfg.lessclose;
     };
 
     warnings = optional (

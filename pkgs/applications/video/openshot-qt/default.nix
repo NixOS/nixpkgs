@@ -1,28 +1,36 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, mkDerivationWith, fetchFromGitHub, fetchpatch
 , doxygen, python3Packages, libopenshot
 , wrapGAppsHook, gtk3 }:
 
-python3Packages.buildPythonApplication rec {
-  name = "openshot-qt-${version}";
-  version = "2.4.1";
+mkDerivationWith python3Packages.buildPythonApplication rec {
+  pname = "openshot-qt";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "182dldj9ybs6aqjfrc9dqx1mifdyhv0rf3ifxcp52cm9rz5yv8ml";
+    sha256 = "0qc5i0ay6j2wab1whl41sjb71cj02pg6y79drf7asrprq8b2rmfq";
   };
 
   nativeBuildInputs = [ doxygen wrapGAppsHook ];
 
   buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5 requests sip httplib2 pyzmq ];
+  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5_with_qtwebkit requests sip httplib2 pyzmq ];
 
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
 
   preConfigure = ''
     # tries to create caching directories during install
     export HOME=$(mktemp -d)
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/openshot-qt \
+      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}"
   '';
 
   doCheck = false;

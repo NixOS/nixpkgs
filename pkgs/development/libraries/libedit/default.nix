@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, ncurses, groff }:
+{ stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "libedit-20160903-3.1";
+  pname = "libedit";
+  version = "20191231-3.1";
 
   src = fetchurl {
-    url = "http://thrysoee.dk/editline/${name}.tar.gz";
-    sha256 = "0rvmm8z6hal5bbp5pljp7yvkpqi4pkas1amizhvg35v0skkx5jqc";
+    url = "https://thrysoee.dk/editline/${pname}-${version}.tar.gz";
+    sha256 = "0wch48nml28jj6ild889745dsg2agm7mpvrmbl1gi98nw6vjrf6v";
   };
 
   outputs = [ "out" "dev" ];
@@ -16,8 +17,6 @@ stdenv.mkDerivation rec {
   patches = [ ./01-cygwin.patch ];
 
   propagatedBuildInputs = [ ncurses ];
-
-  configureFlags = [ "--enable-widec" ];
 
   postInstall = ''
     find $out/lib -type f | grep '\.\(la\|pc\)''$' | xargs sed -i \

@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, fetchpatch
 , python
 , glibcLocales
 , pkgconfig
@@ -11,48 +11,64 @@
 , ncurses
 }:
 
-buildPythonPackage rec {
+let
+  excludedTests = []
+    ++ [ "reimport_from_subinterpreter" ]
+    # cython's testsuite is not working very well with libc++
+    # We are however optimistic about things outside of testsuite still working
+    ++ stdenv.lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
+    # Some tests in the test suite isn't working on aarch64. Disable them for
+    # now until upstream finds a workaround.
+    # Upstream issue here: https://github.com/cython/cython/issues/2308
+    ++ stdenv.lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
+    ++ stdenv.lib.optionals stdenv.isi686 [ "future_division" "overflow_check_longlong" ]
+  ;
+
+in buildPythonPackage rec {
   pname = "Cython";
-  name = "${pname}-${version}";
-  version = "0.27.3";
+  version = "0.29.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6a00512de1f2e3ce66ba35c5420babaef1fe2d9c43a8faab4080b0dbcc26bc64";
+    sha256 = "e4d6bb8703d0319eb04b7319b12ea41580df44fd84d83ccda13ea463c6801414";
   };
-
-  # With Python 2.x on i686-linux or 32-bit ARM this test fails because the
-  # result is "3L" instead of "3", so let's fix it in-place.
-  #
-  # Upstream issue: https://github.com/cython/cython/issues/1548
-  postPatch = lib.optionalString ((stdenv.isi686 || stdenv.isArm) && !isPy3k) ''
-    sed -i -e 's/\(>>> *\)\(verify_resolution_GH1533()\)/\1int(\2)/' \
-      tests/run/cpdef_enums.pyx
-  '';
 
   nativeBuildInputs = [
     pkgconfig
-    # For testing
+  ];
+  checkInputs = [
     numpy ncurses
   ];
   buildInputs = [ glibcLocales gdb ];
   LC_ALL = "en_US.UTF-8";
 
-  # cython's testsuite is not working very well with libc++
-  # We are however optimistic about things outside of testsuite still working
+  patches = [
+    # https://github.com/cython/cython/issues/2752, needed by sage (https://trac.sagemath.org/ticket/26855) and up to be included in 0.30
+    (fetchpatch {
+      name = "non-int-conversion-to-pyhash.patch";
+      url = "https://github.com/cython/cython/commit/28251032f86c266065e4976080230481b1a1bb29.patch";
+      sha256 = "19rg7xs8gr90k3ya5c634bs8gww1sxyhdavv07cyd2k71afr83gy";
+    })
+  ];
+
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
-    ${python.interpreter} runtests.py \
-      ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
+    ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
+      --no-code-style \
+      ${stdenv.lib.optionalString (builtins.length excludedTests != 0)
+        ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
-  # Disable tests temporarily
-  # https://github.com/cython/cython/issues/1676
+  # https://github.com/cython/cython/issues/2785
+  # Temporary solution
   doCheck = false;
+
+#   doCheck = !stdenv.isDarwin;
+
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
-    homepage = http://cython.org;
+    homepage = https://cython.org;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fridh ];
   };

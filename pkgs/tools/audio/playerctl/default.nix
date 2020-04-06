@@ -1,24 +1,18 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, which, gnome2, glib,
-  pkgconfig, gobjectIntrospection }:
+{ stdenv, meson, ninja, fetchFromGitHub, glib, pkgconfig, gtk-doc, docbook_xsl, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  name = "playerctl-${version}";
-  version = "0.5.0";
+  pname = "playerctl";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "playerctl";
     rev = "v${version}";
-    sha256 = "0b4pg5pwblgbf6kvvynzh9dshfikxy5c2ks7733n7wza5wkpgmng";
+    sha256 = "03f3645ssqf8dpkyzj9rlglrzh0840sflalskx9s4i03bgq3v4r9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    which autoconf automake libtool gnome2.gtkdoc glib
-    gobjectIntrospection
-  ];
-
-  preConfigure = "./autogen.sh";
+  nativeBuildInputs = [ meson ninja pkgconfig gtk-doc docbook_xsl gobject-introspection ];
+  buildInputs = [ glib ];
 
   meta = with stdenv.lib; {
     description = "Command-line utility and library for controlling media players that implement MPRIS";
@@ -26,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ puffnfresh ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

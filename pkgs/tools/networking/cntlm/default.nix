@@ -1,15 +1,20 @@
 { stdenv, fetchurl, which}:
 
 stdenv.mkDerivation rec {
-  name = "cntlm-${version}";
+  pname = "cntlm";
   version = "0.92.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cntlm/${name}.tar.gz";
+    url = "mirror://sourceforge/cntlm/${pname}-${version}.tar.gz";
     sha256 = "1632szz849wasvh5sm6rm1zbvbrkq35k7kcyvx474gyl4h4x2flw";
   };
 
   buildInputs = [ which ];
+
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "xlc_r gcc" "xlc_r gcc $CC"
+    substitute Makefile Makefile.$CC --replace "CC=gcc" "CC=$CC"
+  '';
 
   installPhase = ''
     mkdir -p $out/bin; cp cntlm $out/bin/;
@@ -21,11 +26,12 @@ stdenv.mkDerivation rec {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
     homepage = http://cntlm.sourceforge.net/;
     license = licenses.gpl2;
-    maintainers = 
+    maintainers =
       [
         maintainers.qknight
         maintainers.markWot
+        maintainers.carlosdagos
       ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

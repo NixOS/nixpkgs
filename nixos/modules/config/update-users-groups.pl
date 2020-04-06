@@ -56,12 +56,12 @@ sub allocGid {
         $gidsUsed{$prevGid} = 1;
         return $prevGid;
     }
-    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 499, 0, sub { my ($gid) = @_; getgrgid($gid) });
+    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 999, 0, sub { my ($gid) = @_; getgrgid($gid) });
 }
 
 sub allocUid {
     my ($name, $isSystemUser) = @_;
-    my ($min, $max, $up) = $isSystemUser ? (400, 499, 0) : (1000, 29999, 1);
+    my ($min, $max, $up) = $isSystemUser ? (400, 999, 0) : (1000, 29999, 1);
     my $prevUid = $uidMap->{$name};
     if (defined $prevUid && $prevUid >= $min && $prevUid <= $max && !defined $uidsUsed{$prevUid}) {
         print STDERR "reviving user '$name' with UID $prevUid\n";
@@ -267,6 +267,7 @@ foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
     next if !defined $u;
     $hashedPassword = "!" if !$spec->{mutableUsers};
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
+    chomp $hashedPassword;
     push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
     $shadowSeen{$name} = 1;
 }

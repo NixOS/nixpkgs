@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.librevisa.org/;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

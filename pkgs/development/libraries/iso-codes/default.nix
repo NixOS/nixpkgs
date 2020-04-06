@@ -1,24 +1,27 @@
-{stdenv, fetchurl, gettext, python3, xz}:
+{stdenv, fetchurl, gettext, python3}:
 
 stdenv.mkDerivation rec {
-  name = "iso-codes-3.74";
+  pname = "iso-codes";
+  version = "4.4";
 
   src = fetchurl {
-    url = "http://pkg-isocodes.alioth.debian.org/downloads/${name}.tar.xz";
-    sha256 = "1vkaxkcx8h8lbg3z3jjfjs1x1rz1l01j6ll46ysza2gym37g7x11";
+    url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.bz2";
+    sha256 = "02x0wcz783ammkdrmrh31wsmww481xbkbz70vf766ivbnn5sfxn6";
   };
+
   patchPhase = ''
     for i in `find . -name \*.py`
     do
         sed -i -e "s|#!/usr/bin/env python|#!${python3}/bin/python|" $i
     done
   '';
-  buildInputs = [ gettext python3 ];
+
+  nativeBuildInputs = [ gettext python3 ];
 
   meta = with stdenv.lib; {
-    homepage = http://pkg-isocodes.alioth.debian.org/;
+    homepage = https://salsa.debian.org/iso-codes-team/iso-codes;
     description = "Various ISO codes packaged as XML files";
-    maintainers = [ ];
+    license = licenses.lgpl21;
     platforms = platforms.all;
   };
 }

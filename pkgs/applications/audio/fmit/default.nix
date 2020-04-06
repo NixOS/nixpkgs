@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, freeglut, libGLU, qtbase, qtmultimedia, qmake
+{ stdenv, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
@@ -9,18 +9,18 @@ assert portaudioSupport -> portaudio != null;
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "fmit-${version}";
-  version = "1.1.13";
+mkDerivation rec {
+  pname = "fmit";
+  version = "1.2.13";
 
   src = fetchFromGitHub {
-    sha256 = "1p374gf7iksrlyvddm3w4qk3l0rxsiyymz5s8dmc447yvin8ykfq";
-    rev = "v${version}";
-    repo = "fmit";
     owner = "gillesdegottex";
+    repo = "fmit";
+    rev = "v${version}";
+    sha256 = "1qyskam053pvlap1av80rgp12pzhr92rs88vqs6s0ia3ypnixcc6";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake itstool wrapQtAppsHook ];
   buildInputs = [ fftw qtbase qtmultimedia ]
     ++ optionals alsaSupport [ alsaLib ]
     ++ optionals jackSupport [ libjack2 ]

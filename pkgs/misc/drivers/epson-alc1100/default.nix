@@ -1,4 +1,4 @@
-{ stdenv, stdenv_32bit, fetchurl, cups, pkgsi686Linux, dpkg, psutils, makeWrapper, ghostscript, bash }:
+{ stdenv, fetchurl, cups, pkgsi686Linux, dpkg, psutils, makeWrapper, ghostscript, bash }:
 
 let
   version = "1.2-0";
@@ -9,7 +9,8 @@ let
   };
 in
   stdenv.mkDerivation {
-    name = "epson-alc1100-${version}";
+    pname = "epson-alc1100";
+    inherit version;
 
     src = fetchurl {
       url = "http://a1227.g.akamai.net/f/1227/40484/7d/download.ebz.epson.net/dsc/f/01/00/01/58/65/cd71929d2bf41ebf7e96f68fa9f1279556545ef1/Epson-ALC1100-filter-1.2.tar.gz";

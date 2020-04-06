@@ -6,22 +6,18 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "librep-${version}";
+  pname = "librep";
   version = "0.92.7";
   sourceName = "librep_${version}";
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/librep/${sourceName}.tar.xz";
+    url = "https://download.tuxfamily.org/librep/${sourceName}.tar.xz";
     sha256 = "1bmcjl1x1rdh514q9z3hzyjmjmwwwkziipjpjsl301bwmiwrd8a8";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ readline texinfo ];
   propagatedBuildInputs = [ gdbm gmp libffi ];
-
-  configureFlags = [
-    "--disable-static"
-  ];
 
   setupHook = ./setup-hook.sh;
 

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "libdevil-${version}";
+  pname = "libdevil";
   version = "1.7.8";
 
   src = fetchurl {
@@ -41,6 +41,13 @@ stdenv.mkDerivation rec {
     ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    for a in test/Makefile.in test/format_test/format_checks.sh.in ; do
+      substituteInPlace $a \
+        --replace /bin/bash ${stdenv.shell}
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://openil.sourceforge.net/;

@@ -117,11 +117,10 @@ in
 
   /* fake entry, just to have a happy stage-1. Users
      may boot without having stage-1 though */
-  fileSystems = [
+  fileSystems.fake =
     { mountPoint = "/";
       device = "/dev/something";
-      }
-  ];
+    };
 
   services.mingetty = {
     # Some more help text.
@@ -137,7 +136,7 @@ in
   # Setting vesa, we don't get the nvidia driver, which can't work in arm.
   services.xserver.videoDrivers = [ "vesa" ];
 
-  services.nixosManual.enable = false;
+  documentation.nixos.enable = false;
 
   # Include the firmware for various wireless cards.
   networking.enableRalinkFirmware = true;

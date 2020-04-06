@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, alsaLib, AudioUnit, CoreServices }:
+{ stdenv, lib, fetchurl, fetchpatch, alsaLib, AudioUnit, CoreServices }:
 
 let
 
@@ -21,9 +21,12 @@ stdenv.mkDerivation rec {
     ];
 
   src = fetchurl {
-    url = "http://audiofile.68k.org/${name}.tar.gz";
+    url = "https://audiofile.68k.org/${name}.tar.gz";
     sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
+
+  # fix build with gcc9
+  NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux") "-lgcc";
 
   patches = [
     ./gcc-6.patch

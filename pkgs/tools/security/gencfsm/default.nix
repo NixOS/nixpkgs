@@ -1,10 +1,10 @@
 { stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, encfs
-, glib , gnome3, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg
+, glib , gnome3, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   version = "1.8.19";
-  name = "gnome-encfs-manager-${version}";
+  pname = "gnome-encfs-manager";
 
   src = fetchurl {
     url = "https://launchpad.net/gencfsm/trunk/1.8/+download/gnome-encfs-manager_${version}.tar.xz";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ autoconf automake intltool libtool vala glib encfs
     gtk3 libgnome-keyring gnome3.libgee xorg.libSM xorg.libICE
-    wrapGAppsHook ];
+    wrapGAppsHook gobject-introspection  ];
 
   patches = [ ./makefile-mkdir.patch ];
 

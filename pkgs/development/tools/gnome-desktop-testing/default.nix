@@ -1,25 +1,39 @@
-{ stdenv, glib, autoreconfHook, pkgconfig, libgsystem, fetchgit }:
+{ stdenv
+, glib
+, autoreconfHook
+, pkgconfig
+, systemd
+, fetchFromGitLab
+}:
 
 stdenv.mkDerivation rec {
-  version = "2016.1";
-  name = "gnome-desktop-testing-${version}";
+  pname = "gnome-desktop-testing";
+  version = "unstable-2019-12-11";
 
-  src = fetchgit {
-    url = https://git.gnome.org/browse/gnome-desktop-testing;
-    rev = "v${version}";
-    sha256 = "18qhmsab6jc01qrfzjx8m4799gbs72c4jg830mp0p865rcbl68dc";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-desktop-testing";
+    rev = "57239dc8ef49ba74d442603a07a3e132b0cfdc6a";
+    sha256 = "01c4jhpk23kfcnw3l9kfwjw9v5kgqmfhhqypw4k2d2sdkf4mgfv4";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+  ];
 
-  buildInputs = [ glib libgsystem ];
+  buildInputs = [
+    glib
+    systemd
+  ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "GNOME OSTree testing code";
-    homepage = https://live.gnome.org/Initiatives/GnomeGoals/InstalledTests;
-    license = licenses.lgpl21;
+    description = "GNOME test runner for installed tests";
+    homepage = "https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests";
+    license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.jtojnar ];
   };

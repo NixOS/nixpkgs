@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (lib) mkOption mkIf types;
@@ -24,7 +24,10 @@ in
   ###### implementation
 
   config = mkIf (cfg.screenrc != "") {
-    environment.etc."screenrc".text = cfg.screenrc;
+    environment.etc.screenrc.text = cfg.screenrc;
+
+    environment.systemPackages = [ pkgs.screen ];
+    security.pam.services.screen = {};
   };
 
 }

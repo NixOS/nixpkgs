@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tt-rss-${version}";
-  version = "2018-01-05";
-  rev = "c30f5e18119d1935e8fe6d422053b127e8f4f1b3";
+  pname = "tt-rss";
+  version = "2019-01-29";
+  rev = "c7c9c5fb0ab6b3d4ea3078865670d6c1dfe2ecac";
 
   src = fetchurl {
     url = "https://git.tt-rss.org/git/tt-rss/archive/${rev}.tar.gz";
-    sha256 = "18pc1l0dbjr7d5grcrb70y6j7cr2zb9575yqmy6zfwzrlvw0pa0l";
+    sha256 = "0k184zqrfscv17gnl106q4yzhqmxb0g1dn1wkdkrclc3qcrviyp6";
   };
 
   installPhase = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     license = licenses.gpl2Plus;
-    homepage = http://tt-rss.org;
+    homepage = https://tt-rss.org;
     maintainers = with maintainers; [ globin zohl ];
     platforms = platforms.all;
   };

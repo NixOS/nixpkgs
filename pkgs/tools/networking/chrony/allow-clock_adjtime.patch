@@ -1,0 +1,26 @@
+From 0cf506c92967c84f9ed83ba9e1be946a7fda6425 Mon Sep 17 00:00:00 2001
+From: Miroslav Lichvar <mlichvar@redhat.com>
+Date: Mon, 2 Dec 2019 12:47:13 +0100
+Subject: sys_linux: allow clock_adjtime in seccomp filter
+
+The adjtimex() function in glibc was switched to the clock_adjtime
+system call.
+
+diff --git a/sys_linux.c b/sys_linux.c
+index 63eb8f1..fcf89c2 100644
+--- a/sys_linux.c
++++ b/sys_linux.c
+@@ -478,8 +478,8 @@ SYS_Linux_EnableSystemCallFilter(int level)
+ {
+   const int syscalls[] = {
+     /* Clock */
+-    SCMP_SYS(adjtimex), SCMP_SYS(clock_gettime), SCMP_SYS(gettimeofday),
+-    SCMP_SYS(settimeofday), SCMP_SYS(time),
++    SCMP_SYS(adjtimex), SCMP_SYS(clock_adjtime), SCMP_SYS(clock_gettime),
++    SCMP_SYS(gettimeofday), SCMP_SYS(settimeofday), SCMP_SYS(time),
+     /* Process */
+     SCMP_SYS(clone), SCMP_SYS(exit), SCMP_SYS(exit_group), SCMP_SYS(getpid),
+     SCMP_SYS(getrlimit), SCMP_SYS(rt_sigaction), SCMP_SYS(rt_sigreturn),
+-- 
+cgit v0.10.2
+

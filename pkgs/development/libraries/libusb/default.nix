@@ -1,22 +1,47 @@
-{stdenv, fetchurl, pkgconfig, libusb1}:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, patchelf
+, pkgconfig
+, libusb1
+}:
 
-stdenv.mkDerivation {
-  name = "libusb-compat-0.1.5";
+stdenv.mkDerivation rec {
+  pname = "libusb-compat";
+  version = "0.1.7";
 
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ libusb1 ];
+  nativeBuildInputs = [ autoreconfHook patchelf pkgconfig ];
 
-  src = fetchurl {
-    url = mirror://sourceforge/libusb/libusb-compat-0.1.5.tar.bz2;
-    sha256 = "0nn5icrfm9lkhzw1xjvaks9bq3w6mjg86ggv3fn7kgi4nfvg8kj0";
+  buildInputs = [ libusb1 ];
+
+  src = fetchFromGitHub {
+    owner = "libusb";
+    repo = "libusb-compat-0.1";
+    rev = "v${version}";
+    sha256 = "1nybccgjs14b3phhaycq2jx1gym4nf6sghvnv9qdfmlqxacx0jz5";
   };
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./fix-headers.patch;
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  # without this, libusb-compat is unable to find libusb1
+  postFixup = ''
+    find $out/lib -name \*.so\* -type f -exec \
+      patchelf --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://libusb.info/";
+    repositories.git = "https://github.com/libusb/libusb-compat-0.1";
+    description = "cross-platform user-mode USB device library";
+    longDescription = ''
+      libusb is a cross-platform user-mode library that provides access to USB devices.
+      The current API is of 1.0 version (libusb-1.0 API), this library is a wrapper exposing the legacy API.
+    '';
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
   };
 }

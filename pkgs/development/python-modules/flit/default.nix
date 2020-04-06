@@ -1,14 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchurl
 , isPy3k
 , docutils
 , requests
 , requests_download
 , zipfile36
 , pythonOlder
-, pytest
+, pytest_4
 , testpath
 , responses
 , pytoml
@@ -21,28 +20,29 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "0.13";
+  version = "1.3";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f558351bf4bb82b872d3bdbea7055cbb2e33ed2bdf809284bf927d4c78bf0ee";
+    sha256 = "6f6f0fb83c51ffa3a150fa41b5ac118df9ea4a87c2c06dff4ebf9adbe7b52b36";
   };
 
-  disabled = !isPy3k;
-  propagatedBuildInputs = [ docutils requests requests_download pytoml ] ++ lib.optional (pythonOlder "3.6") zipfile36;
+  propagatedBuildInputs = [ docutils requests requests_download pytoml ]
+    ++ lib.optional (pythonOlder "3.6") zipfile36;
 
-  checkInputs = [ pytest testpath responses ];
+  checkInputs = [ pytest_4 testpath responses ];
 
   # Disable test that needs some ini file.
   # Disable test that wants hg
   checkPhase = ''
-    py.test -k "not test_invalid_classifier and not test_build_sdist"
+    HOME=$(mktemp -d) pytest -k "not test_invalid_classifier and not test_build_sdist"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A simple packaging tool for simple packages";
     homepage = https://github.com/takluyver/flit;
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.fridh ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.fridh ];
   };
 }

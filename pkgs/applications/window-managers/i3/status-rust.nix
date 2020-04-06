@@ -1,27 +1,30 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, dbus, gperftools }:
+{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, dbus, libpulseaudio }:
 
 rustPlatform.buildRustPackage rec {
-  name = "i3status-rust-${version}";
-  version = "0.9.0.2018-01-15";
+  pname = "i3status-rust";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "greshake";
-    repo = "i3status-rust";
-    rev = "aa7bc98d945ba63358cd48c66e0261c201b999e4";
-    sha256 = "1q2p53nl499yxsw0i81ryyc2ln80p8i3iii5hx7aiwfi4ybm55b1";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0va6ny1v7lk30hhx4i5qyk9fwg3apy2nmh6kbmxhcf0rs5449ikg";
   };
 
-  cargoSha256 = "1197hp6d4z14j0r22bvw9ly294li0ivg6yfql4lgi27hbvzag71h";
+  cargoSha256 = "1lywr21kk3idjyc10gy4848dmmgyqc2jjf7hpzq0vywkp639bf2x";
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ dbus gperftools ];
+  buildInputs = [ dbus libpulseaudio ];
+
+  # Currently no tests are implemented, so we avoid building the package twice
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = https://github.com/greshake/i3status-rust;
     license = licenses.gpl3;
-    maintainers = [ maintainers.backuitist ];
+    maintainers = with maintainers; [ backuitist globin ma27 ];
     platforms = platforms.linux;
   };
 }

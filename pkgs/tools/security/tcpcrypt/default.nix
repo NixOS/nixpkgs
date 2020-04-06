@@ -6,7 +6,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "tcpcrypt-${version}";
+  pname = "tcpcrypt";
   version = "0.5";
 
   src = fetchFromGitHub {
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl ]
-    ++ optionals stdenv.isLinux [ libcap libpcap libnfnetlink libnetfilter_conntrack libnetfilter_queue ];
+  buildInputs = [ openssl libpcap ]
+    ++ optionals stdenv.isLinux [ libcap libnfnetlink libnetfilter_conntrack libnetfilter_queue ];
 
   enableParallelBuilding = true;
 

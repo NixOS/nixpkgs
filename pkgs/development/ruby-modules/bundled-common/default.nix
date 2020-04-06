@@ -1,4 +1,4 @@
-{ stdenv, runCommand, ruby, lib
+{ stdenv, runCommand, ruby, lib, rsync
 , defaultGemConfig, buildRubyGem, buildEnv
 , makeWrapper
 , bundler
@@ -13,12 +13,14 @@
 , lockfile ? null
 , gemset ? null
 , ruby ? defs.ruby
+, copyGemFiles ? false # Copy gem files instead of symlinking
 , gemConfig ? defaultGemConfig
 , postBuild ? null
 , document ? []
 , meta ? {}
-, groups ? ["default"]
+, groups ? null
 , ignoreCollisions ? false
+, buildInputs ? []
 , ...
 }@args:
 
@@ -29,7 +31,7 @@ with  import ./functions.nix { inherit lib gemConfig; };
 let
   gemFiles = bundlerFiles args;
 
-  importedGemset = if builtins.typeOf gemFiles.gemset == "path"
+  importedGemset = if builtins.typeOf gemFiles.gemset != "set"
     then import gemFiles.gemset
     else gemFiles.gemset;
 
@@ -51,7 +53,7 @@ let
     name
   else
     let
-      gem = gems."${pname}";
+      gem = gems.${pname};
       version = gem.version;
     in
       "${pname}-${version}";
@@ -61,7 +63,7 @@ let
   else
     name;
 
-  copyIfBundledByPath = { bundledByPath ? false, ...}@main:
+  copyIfBundledByPath = { bundledByPath ? false, ...}:
   (if bundledByPath then
       assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
     else ""
@@ -69,7 +71,7 @@ let
 
   maybeCopyAll = pkgname: if pkgname == null then "" else
   let
-    mainGem = gems."${pkgname}" or (throw "bundlerEnv: gem ${pkgname} not found");
+    mainGem = gems.${pkgname} or (throw "bundlerEnv: gem ${pkgname} not found");
   in
     copyIfBundledByPath mainGem;
 
@@ -88,15 +90,16 @@ let
       gemAttrs = composeGemAttrs ruby gems name attrs;
     in
     if gemAttrs.type == "path" then
-      pathDerivation gemAttrs
+      pathDerivation (gemAttrs.source // gemAttrs)
     else
       buildRubyGem gemAttrs
   );
 
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
-  basicEnv = buildEnv {
-    inherit  ignoreCollisions;
+
+  basicEnvArgs = {
+    inherit buildInputs ignoreCollisions;
 
     name = name';
 
@@ -153,5 +156,17 @@ let
         };
     };
   };
+
+  basicEnv =
+    if copyGemFiles then
+      runCommand name' basicEnvArgs ''
+        mkdir -p $out
+        for i in $paths; do
+          ${rsync}/bin/rsync -a $i/lib $out/
+        done
+        eval "$postBuild"
+      ''
+    else
+      buildEnv basicEnvArgs;
 in
   basicEnv

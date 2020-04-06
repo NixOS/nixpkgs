@@ -5,7 +5,7 @@
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   optAlsaLib = shouldUsePkg alsaLib;
   optDb = shouldUsePkg db;
@@ -14,27 +14,26 @@ let
   optCelt = shouldUsePkg celt;
 in
 stdenv.mkDerivation rec {
-  name = "jack1-${version}";
-  version = "0.124.1";
+  pname = "jack1";
+  version = "0.125.0";
 
   src = fetchurl {
-    url = "http://jackaudio.org/downloads/jack-audio-connection-kit-${version}.tar.gz";
-    sha256 = "1mk1wnx33anp6haxfjjkfhwbaknfblsvj35nxvz0hvspcmhdyhpb";
+    url = "https://jackaudio.org/downloads/jack-audio-connection-kit-${version}.tar.gz";
+    sha256 = "0i6l25dmfk2ji2lrakqq9icnwjxklgcjzzk65dmsff91z2zva5rm";
   };
-  
-  configureFlags = ''
-    ${if (optLibffado != null) then "--enable-firewire" else ""}
-  '';
+
+  configureFlags = [
+    (stdenv.lib.enableFeature (optLibffado != null) "firewire")
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ optAlsaLib optDb optLibffado optCelt ];
   propagatedBuildInputs = [ optLibuuid ];
-  
+
   meta = with stdenv.lib; {
     description = "JACK audio connection kit";
-    homepage = http://jackaudio.org;
-    license = "GPL";
+    homepage = https://jackaudio.org;
+    license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

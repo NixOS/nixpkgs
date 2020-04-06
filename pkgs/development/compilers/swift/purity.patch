@@ -1,6 +1,8 @@
---- a/lib/Driver/Tools.cpp	2016-08-25 15:48:05.187553443 +0200
-+++ b/lib/Driver/Tools.cpp	2016-08-25 15:48:47.534468882 +0200
-@@ -9420,13 +9420,6 @@
+"purity" patch for 5.0
+
+--- a/lib/Driver/ToolChains/Gnu.cpp
++++ b/lib/Driver/ToolChains/Gnu.cpp
+@@ -402,13 +402,6 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
    if (!Args.hasArg(options::OPT_static)) {
      if (Args.hasArg(options::OPT_rdynamic))
        CmdArgs.push_back("-export-dynamic");

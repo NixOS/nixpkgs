@@ -3,13 +3,13 @@
 # add_executable(main src/main.cpp ${EASYLOGGINGPP_PREFIX}/include/easylogging++.cc)
 { stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
-  name = "easyloggingpp-${version}";
-  version = "9.96.1";
+  pname = "easyloggingpp";
+  version = "9.96.7";
   src = fetchFromGitHub {
     owner = "muflihun";
     repo = "easyloggingpp";
     rev = "v${version}";
-    sha256 = "1x5wwm62l1231sgxfwx8mj7fc8452j3f509jyxa9wd2krkpvqxmy";
+    sha256 = "0nhszn0yyjwpnv7swm4vqs3i7admgbnifi5dvq5h01fk5nc8yjqz";
   };
 
   nativeBuildInputs = [cmake];

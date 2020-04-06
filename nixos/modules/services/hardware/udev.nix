@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  inherit (pkgs) stdenv writeText procps;
-
   udev = config.systemd.package;
 
   cfg = config.services.udev;
@@ -87,7 +85,7 @@ let
       for i in $import_progs $run_progs; do
         if [[ ! -x $i ]]; then
           echo "FAIL"
-          echo "$i is called in udev rules but not installed by udev"
+          echo "$i is called in udev rules but is not executable or does not exist"
           exit 1
         fi
       done
@@ -117,10 +115,6 @@ let
         done
         exit 1
       fi
-
-      ${optionalString config.networking.usePredictableInterfaceNames ''
-        cp ${./80-net-setup-link.rules} $out/80-net-setup-link.rules
-      ''}
 
       # If auto-configuration is disabled, then remove
       # udev's 80-drivers.rules file, which contains rules for
@@ -227,8 +221,8 @@ in
         type = types.lines;
         description = ''
           Additional <command>hwdb</command> files. They'll be written
-          into file <filename>10-local.hwdb</filename>. Thus they are
-          read before all other files.
+          into file <filename>99-local.hwdb</filename>. Thus they are
+          read after all other files.
         '';
       };
 
@@ -284,14 +278,13 @@ in
 
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux udev ];
 
+    boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
+
     environment.etc =
-      [ { source = udevRules;
-          target = "udev/rules.d";
-        }
-        { source = hwdbBin;
-          target = "udev/hwdb.bin";
-        }
-      ];
+      {
+        "udev/rules.d".source = udevRules;
+        "udev/hwdb.bin".source = hwdbBin;
+      };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "UNIX")

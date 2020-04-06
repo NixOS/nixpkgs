@@ -1,4 +1,5 @@
-{ stdenv
+{ config, stdenv
+, mkDerivation
 , fetchFromGitHub
 , cmake
 , fdk_aac
@@ -10,6 +11,7 @@
 , libXdmcp
 , qtbase
 , qtx11extras
+, qtsvg
 , speex
 , libv4l
 , x264
@@ -18,31 +20,33 @@
 , makeWrapper
 , pkgconfig
 , vlc
+, mbedtls
 
-, alsaSupport ? false
+, scriptingSupport ? true
+, luajit
+, swig
+, python3
+
+, alsaSupport ? stdenv.isLinux
 , alsaLib
-, pulseaudioSupport ? false
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 }:
 
 let
-  optional = stdenv.lib.optional;
-in stdenv.mkDerivation rec {
-  name = "obs-studio-${version}";
-  version = "21.0.3";
+  inherit (stdenv.lib) optional optionals;
+in mkDerivation rec {
+  pname = "obs-studio";
+  version = "25.0.2";
 
   src = fetchFromGitHub {
-    owner = "jp9000";
+    owner = "obsproject";
     repo = "obs-studio";
-    rev = "${version}";
-    sha256 = "1mrihhzlsc66w5lr1lcm8c8jg6z0iwmmckr3pk3gk92z4s55969q";
+    rev = version;
+    sha256 = "12c2p179fijz5606h3bp4g88479gwgr7d5f8vk6j2n0rlzs76nsn";
   };
 
-  patches = [ ./find-xcb.patch ];
-
-  nativeBuildInputs = [ cmake
-                        pkgconfig
-                      ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ curl
                   fdk_aac
@@ -55,11 +59,14 @@ in stdenv.mkDerivation rec {
                   libXdmcp
                   qtbase
                   qtx11extras
+                  qtsvg
                   speex
                   x264
                   vlc
                   makeWrapper
+                  mbedtls
                 ]
+                ++ optionals scriptingSupport [ luajit swig python3 ]
                 ++ optional alsaSupport alsaLib
                 ++ optional pulseaudioSupport libpulseaudio;
 
@@ -80,9 +87,9 @@ in stdenv.mkDerivation rec {
       Software", software originally designed for recording and streaming live
       video content, efficiently
     '';
-    homepage = https://obsproject.com;
+    homepage = "https://obsproject.com";
     maintainers = with maintainers; [ jb55 MP2E ];
     license = licenses.gpl2;
-    platforms = with platforms; linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

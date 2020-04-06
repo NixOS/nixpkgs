@@ -1,19 +1,19 @@
-{ stdenv, fetchPypi, buildPythonPackage, nose, six, glibcLocales, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, nose, mock, glibcLocales, isPy3k, isPy38 }:
 
 buildPythonPackage rec {
   pname = "parameterized";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qj1939shm48d9ql6fm1nrdy4p7sdyj8clz1szh5swwpf1qqxxfa";
+    sha256 = "6a94dbea30c6abde99fd4c2f2042c1bf7f980e48908bf92ead62394f93cf57ed";
   };
 
   # Tests require some python3-isms but code works without.
-  doCheck = isPy3k;
+  # python38 is not fully supported yet
+  doCheck = isPy3k && (!isPy38);
 
-  checkInputs = [ nose glibcLocales ];
-  propagatedBuildInputs = [ six ];
+  checkInputs = [ nose mock glibcLocales ];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" nosetests -v

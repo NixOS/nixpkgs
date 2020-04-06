@@ -1,12 +1,12 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "ConfigArgParse";
-  version = "0.13.0";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e6441aa58e23d3d122055808e5e2220fd742dff6e1e51082d2a4e4ed145dd788";
+    sha256 = "0cvinm7bb03qfjpq2zhfacm0qs4ip4378nvya8x41p4wpi2q4dxz";
   };
 
   # no tests in tarball

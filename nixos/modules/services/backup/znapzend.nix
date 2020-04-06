@@ -5,37 +5,25 @@ with types;
 
 let
 
-  # Converts a plan like
-  #   { "1d" = "1h"; "1w" = "1d"; }
-  # into
-  #   "1d=>1h,1w=>1d"
-  attrToPlan = attrs: concatStringsSep "," (builtins.attrValues (
-    mapAttrs (n: v: "${n}=>${v}") attrs));
-
   planDescription = ''
       The znapzend backup plan to use for the source.
-    </para>
-    <para>
+
       The plan specifies how often to backup and for how long to keep the
       backups. It consists of a series of retention periodes to interval
       associations:
-    </para>
-    <para>
+
       <literal>
         retA=>intA,retB=>intB,...
       </literal>
-    </para>
-    <para>
-    Both intervals and retention periods are expressed in standard units
-    of time or multiples of them. You can use both the full name or a
-    shortcut according to the following listing:
-    </para>
-    <para>
+
+      Both intervals and retention periods are expressed in standard units
+      of time or multiples of them. You can use both the full name or a
+      shortcut according to the following listing:
+
       <literal>
         second|sec|s, minute|min, hour|h, day|d, week|w, month|mon|m, year|y
       </literal>
-    </para>
-    <para>
+
       See <citerefentry><refentrytitle>znapzendzetup</refentrytitle><manvolnum>1</manvolnum></citerefentry> for more info.
   '';
   planExample = "1h=>10min,1d=>1h,1w=>1d,1m=>1w,1y=>1m";
@@ -45,6 +33,8 @@ let
     check = x: str.check x && builtins.isList (builtins.match "^[0-9]+[bkMG]$" x);
     description = "string of the form number{b|k|M|G}";
   };
+
+  enabledFeatures = concatLists (mapAttrsToList (name: enabled: optional enabled name) cfg.features);
 
   # Type for a string that must contain certain other strings (the list parameter).
   # Note that these would need regex escaping.
@@ -146,12 +136,10 @@ let
           type = nullOr ints.u16;
           description = ''
               Port to use for <command>mbuffer</command>.
-            </para>
-            <para>
+
               If this is null, it will run <command>mbuffer</command> through
               ssh.
-            </para>
-            <para>
+
               If this is not null, it will run <command>mbuffer</command>
               directly through TCP, which is not encrypted but faster. In that
               case the given port needs to be open on the destination host.
@@ -262,7 +250,7 @@ let
   cfg = config.services.znapzend;
 
   onOff = b: if b then "on" else "off";
-  nullOff = b: if isNull b then "off" else toString b;
+  nullOff = b: if b == null then "off" else toString b;
   stripSlashes = replaceStrings [ "/" ] [ "." ];
 
   attrsToFile = config: concatStringsSep "\n" (builtins.attrValues (
@@ -270,7 +258,7 @@ let
 
   mkDestAttrs = dst: with dst;
     mapAttrs' (n: v: nameValuePair "dst_${label}${n}" v) ({
-      "" = optionalString (! isNull host) "${host}:" + dataset;
+      "" = optionalString (host != null) "${host}:" + dataset;
       _plan = plan;
     } // optionalAttrs (presend != null) {
       _precmd = presend;
@@ -368,6 +356,22 @@ in
         '';
         default = false;
       };
+
+      features.recvu = mkEnableOption ''
+        recvu feature which uses <literal>-u</literal> on the receiving end to keep the destination
+        filesystem unmounted.
+      '';
+      features.compressed = mkEnableOption ''
+        compressed feature which adds the options <literal>-Lce</literal> to
+        the <command>zfs send</command> command. When this is enabled, make
+        sure that both the sending and receiving pool have the same relevant
+        features enabled. Using <literal>-c</literal> will skip unneccessary
+        decompress-compress stages, <literal>-L</literal> is for large block
+        support and -e is for embedded data support. see
+        <citerefentry><refentrytitle>znapzend</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+        and <citerefentry><refentrytitle>zfs</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+        for more info.
+      '';
     };
   };
 
@@ -375,7 +379,7 @@ in
     environment.systemPackages = [ pkgs.znapzend ];
 
     systemd.services = {
-      "znapzend" = {
+      znapzend = {
         description = "ZnapZend - ZFS Backup System";
         wantedBy    = [ "zfs.target" ];
         after       = [ "zfs.target" ];
@@ -386,19 +390,31 @@ in
           echo Resetting znapzend zetups
           ${pkgs.znapzend}/bin/znapzendzetup list \
             | grep -oP '(?<=\*\*\* backup plan: ).*(?= \*\*\*)' \
-            | xargs ${pkgs.znapzend}/bin/znapzendzetup delete
+            | xargs -I{} ${pkgs.znapzend}/bin/znapzendzetup delete "{}"
         '' + concatStringsSep "\n" (mapAttrsToList (dataset: config: ''
           echo Importing znapzend zetup ${config} for dataset ${dataset}
-          ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config}
-        '') files);
+          ${pkgs.znapzend}/bin/znapzendzetup import --write ${dataset} ${config} &
+        '') files) + ''
+          wait
+        '';
 
         serviceConfig = {
+          # znapzendzetup --import apparently tries to connect to the backup
+          # host 3 times with a timeout of 30 seconds, leading to a startup
+          # delay of >90s when the host is down, which is just above the default
+          # service timeout of 90 seconds. Increase the timeout so it doesn't
+          # make the service fail in that case.
+          TimeoutStartSec = 180;
+          # Needs to have write access to ZFS
+          User = "root";
           ExecStart = let
             args = concatStringsSep " " [
               "--logto=${cfg.logTo}"
               "--loglevel=${cfg.logLevel}"
               (optionalString cfg.noDestroy "--nodestroy")
               (optionalString cfg.autoCreation "--autoCreation")
+              (optionalString (enabledFeatures != [])
+                "--features=${concatStringsSep "," enabledFeatures}")
             ]; in "${pkgs.znapzend}/bin/znapzend ${args}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-failure";

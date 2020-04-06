@@ -2,18 +2,18 @@
 , buildPythonPackage
 , fetchPypi
 , cython
-, msgpack-python
+, msgpack
 , numpy
 , python
 }:
 
 buildPythonPackage rec {
   pname = "msgpack-numpy";
-  version = "0.4.1";
+  version = "0.4.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1czf125nixzwskiqiw0145kfj15030sp334cb89gp5w4rz3h7img";
+    sha256 = "a02c0069fb580c6a2dda9b98d40d34fda3840863112a5465ba9b54fa2ee005a5";
   };
 
   buildInputs = [
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-   msgpack-python
+   msgpack
    numpy
   ];
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Practical Machine Learning for NLP in Python";
+    description = "Numpy data type serialization using msgpack";
     homepage = https://github.com/lebedov/msgpack-numpy;
     license = licenses.bsd3;
     maintainers = with maintainers; [ aborsu ];

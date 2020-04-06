@@ -1,13 +1,11 @@
 { lib
-, stdenv
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
 , nose
 , can
 , canmatrix }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "canopen";
   version = "0.5.1";
 

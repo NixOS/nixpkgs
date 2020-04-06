@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "vue-${version}";
+  pname = "vue";
   version = "3.3.0";
   src = fetchurl {
     url = "http://releases.atech.tufts.edu/jenkins/job/VUE/116/deployedArtifacts/download/artifact.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out"/{share/vue,bin}
     cp ${src} "$out/share/vue/vue.jar"
-    echo '#!${stdenv.shell}' >> "$out/bin/vue"
+    echo '#!${runtimeShell}' >> "$out/bin/vue"
     echo '${jre}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue"
     chmod a+x "$out/bin/vue"
   '';

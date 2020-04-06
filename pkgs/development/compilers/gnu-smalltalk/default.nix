@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, libtool, zip, libffi, libsigsegv, readline, gmp,
-gnutls, gnome2, cairo, SDL, sqlite, emacsSupport ? false, emacs ? null }:
+{ config, stdenv, fetchurl, pkgconfig, libtool
+, zip, libffi, libsigsegv, readline, gmp
+, gnutls, gnome2, cairo, SDL, sqlite
+, emacsSupport ? config.emacsSupport or false, emacs ? null }:
 
 assert emacsSupport -> (emacs != null);
 
@@ -16,7 +18,7 @@ let # The gnu-smalltalk project has a dependency to the libsigsegv library.
 in stdenv.mkDerivation rec {
 
   version = "3.2.5";
-  name = "gnu-smalltalk-${version}";
+  pname = "gnu-smalltalk";
 
   src = fetchurl {
     url = "mirror://gnu/smalltalk/smalltalk-${version}.tar.xz";
@@ -33,6 +35,8 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optional emacsSupport emacs;
 
   configureFlags = stdenv.lib.optional (!emacsSupport) "--without-emacs";
+
+  hardeningDisable = [ "format" ];
 
   installFlags = stdenv.lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
 

@@ -11,7 +11,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "frab-2016-12-28";
 
   src = fetchFromGitHub {
@@ -42,5 +42,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit env ruby;
+  };
+
+  meta = with stdenv.lib; {
+    description = "Web-based conference planning and management system";
+    homepage = https://github.com/frab/frab;
+    license = licenses.mit;
+    broken = true; # 2018-09-08; no successful hydra build since 2018-02-14
   };
 }

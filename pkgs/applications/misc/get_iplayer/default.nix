@@ -1,21 +1,23 @@
-{stdenv, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, buildPerlPackage, perlPackages, rtmpdump}:
+{stdenv, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
 
 with stdenv.lib;
 
-buildPerlPackage rec {
-  name = "get_iplayer-${version}";
-  version = "2.99";
-  
+perlPackages.buildPerlPackage rec {
+  pname = "get_iplayer";
+  version = "3.24";
+
   src = fetchFromGitHub {
     owner = "get-iplayer";
     repo = "get_iplayer";
     rev = "v${version}";
-    sha256 = "085bgwkjnaqp96gvd2s8qmkw69rz91si1sgzqdqbplkzj9bk2qii";
+    sha256 = "0yd84ncb6cjrk4v4kz3zrddkl7iwkm3zlfbjyswd9hanp8fvd4q3";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
-  propagatedBuildInputs = with perlPackages; [HTMLParser HTTPCookies LWP XMLLibXML XMLSimple];
+  propagatedBuildInputs = with perlPackages; [
+    HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple
+  ];
 
   preConfigure = "touch Makefile.PL";
   doCheck = false;
@@ -33,6 +35,7 @@ buildPerlPackage rec {
     license = licenses.gpl3Plus;
     homepage = https://squarepenguin.co.uk/;
     platforms = platforms.all;
+    maintainers = with maintainers; [ rika ];
   };
-  
+
 }

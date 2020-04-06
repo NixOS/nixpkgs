@@ -1,19 +1,23 @@
-{stdenv, fetchurl}:
+{ stdenv, buildPackages, autoreconfHook, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-firmware-1.0.29";
+  name = "alsa-firmware-1.2.1";
 
   src = fetchurl {
-    urls = [
-      "ftp://ftp.alsa-project.org/pub/firmware/${name}.tar.bz2"
-      "http://alsa.cybermirror.org/firmware/${name}.tar.bz2"
-    ];
-    sha256 = "0gfcyj5anckjn030wcxx5v2xk2s219nyf99s9m833275b5wz2piw";
+    url = "mirror://alsa/firmware/${name}.tar.bz2";
+    sha256 = "1aq8z8ajpjvcx7bwhwp36bh5idzximyn77ygk3ifs0my3mbpr8mf";
   };
 
-  configureFlags = ''
-    --with-hotplug-dir=$(out)/lib/firmware
-  '';
+  patches = [ (fetchpatch {
+    url = "https://github.com/alsa-project/alsa-firmware/commit/a8a478485a999ff9e4a8d8098107d3b946b70288.patch";
+    sha256 = "0zd7vrgz00hn02va5bkv7qj2395a1rl6f8jq1mwbryxs7hiysb78";
+  }) ];
+
+  nativeBuildInputs = [ autoreconfHook buildPackages.stdenv.cc ];
+
+  configureFlags = [
+    "--with-hotplug-dir=$(out)/lib/firmware"
+  ];
 
   dontStrip = true;
 
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.alsa-project.org/main/index.php/Main_Page;
+    homepage = http://www.alsa-project.org/;
     description = "Soundcard firmwares from the alsa project";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

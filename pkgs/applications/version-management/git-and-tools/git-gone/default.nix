@@ -1,0 +1,32 @@
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, makeWrapper, openssl, git, libiconv, Security }:
+
+rustPlatform.buildRustPackage rec {
+  pname = "git-gone";
+  version = "0.3.0";
+
+  src = fetchFromGitHub {
+    owner = "lunaryorn";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "05wlng563p9iy0ky3z23a4jakcix887fb45r7j2mk0fp5ykdjmzh";
+  };
+
+  cargoSha256 = "1scp9rzn59akxsf9p48j1zq6clbwdyasnyi4j28nj03ghvdv2i33";
+
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+
+  buildInputs = [ openssl ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  postFixup = ''
+    wrapProgram $out/bin/git-gone --prefix PATH : "${stdenv.lib.makeBinPath [ git ]}"
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Cleanup stale Git branches of pull requests";
+    homepage = "https://github.com/lunaryorn/git-gone";
+    license = licenses.asl20;
+    maintainers = [ maintainers.marsam ];
+    platforms = platforms.unix;
+  };
+}

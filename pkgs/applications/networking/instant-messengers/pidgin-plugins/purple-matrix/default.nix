@@ -1,30 +1,35 @@
-{ stdenv, fetchgit, pkgconfig, pidgin, json-glib, glib, http-parser } :
+{ stdenv, fetchFromGitHub, pkgconfig, pidgin, json-glib, glib, http-parser, sqlite, olm, libgcrypt } :
 
-let
-  version = "2016-07-11";
-in
 stdenv.mkDerivation rec {
-  name = "purple-matrix-unstable-${version}";
+  pname = "purple-matrix-unstable";
+  version = "2019-06-06";
 
-  src = fetchgit {
-    url = "https://github.com/matrix-org/purple-matrix";
-    rev = "f9d36198a57de1cd1740a3ae11c2ad59b03b724a";
-    sha256 = "1mmyvc70gslniphmcpk8sfl6ylik6dnprqghx4n47gsj1sb1cy00";
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "purple-matrix";
+    rev = "4494ba22b479917f0b1f96a3019792d3d75bcff1";
+    sha256 = "1gjm0z4wa5vi9x1xk43rany5pffrwg958n180ahdj9a7sa8a4hpm";
   };
 
+  NIX_CFLAGS_COMPILE = builtins.toString [
+    # glib-2.62 deprecations
+    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
+    # override "-O0 -Werror" set by build system
+    "-O3" "-Wno-error"
+  ];
+
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pidgin json-glib glib http-parser ];
+  buildInputs = [ pidgin json-glib glib http-parser sqlite olm libgcrypt ];
 
-  installPhase = ''
-    install -Dm755 -t $out/lib/pidgin/ libmatrix.so
-    for size in 16 22 48; do
-      install -TDm644 matrix-"$size"px.png $out/pixmaps/pidgin/protocols/$size/matrix.png
-    done
-  '';
+  makeFlags = [
+    "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"
+    "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
+  ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/matrix-org/purple-matrix;
     description = "Matrix support for Pidgin / libpurple";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ symphorien ];
   };
 }

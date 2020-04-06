@@ -1,0 +1,20 @@
+--- a/build.gradle	2019-09-01 16:17:17.815513296 +0200
++++ b/build.gradle	2019-09-01 16:21:14.688832785 +0200
+@@ -73,7 +73,7 @@
+ 
+ buildscript {
+     repositories {
+-        jcenter()
++REPLACE
+     }
+ 
+     dependencies {
+@@ -83,7 +83,7 @@
+ }
+ 
+ repositories {
+-    jcenter()
++REPLACE
+ }
+ 
+ dependencies {

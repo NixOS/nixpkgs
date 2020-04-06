@@ -17,12 +17,13 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "megaglest-${version}";
+  pname = "megaglest";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "MegaGlest";
     repo = "megaglest-source";
-    rev = "${version}";
+    rev = version;
     fetchSubmodules = true;
     sha256 = "0fb58a706nic14ss89zrigphvdiwy5s9dwvhscvvgrfvjpahpcws";
   };

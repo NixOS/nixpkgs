@@ -1,11 +1,9 @@
 {stdenv, fetchurl, libusb, makeWrapper}:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation {
   name = "pk2cmd-1.20";
   src = fetchurl {
-    url = http://ww1.microchip.com/downloads/en/DeviceDoc/pk2cmdv1.20LinuxMacSource.tar.gz;
+    url = https://ww1.microchip.com/downloads/en/DeviceDoc/pk2cmdv1.20LinuxMacSource.tar.gz;
     sha256 = "1yjpi2qshnqfpan4w3ggakkr3znfrx5cxkny92ka7v9na3g2fc4h";
   };
 
@@ -21,7 +19,7 @@ stdenv.mkDerivation {
   buildInputs = [ libusb makeWrapper ];
 
   meta = {
-    homepage = http://www.microchip.com/pickit2;
+    homepage = https://www.microchip.com/pickit2;
     license = stdenv.lib.licenses.unfree; #MicroChip-PK2
     description = "Microchip PIC programming software for the PICKit2 programmer";
   };

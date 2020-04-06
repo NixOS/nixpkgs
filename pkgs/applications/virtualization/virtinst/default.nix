@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, python2Packages, intltool, libxml2Python, curl }:
+{ stdenv, fetchurl, python2Packages, intltool, libxml2Python }:
 
 with stdenv.lib;
 
 let version = "0.600.4"; in
 
 stdenv.mkDerivation rec {
-  name = "virtinst-${version}";
+  pname = "virtinst";
+  inherit version;
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virtinst/virtinst-${version}.tar.gz";

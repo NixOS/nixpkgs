@@ -1,31 +1,49 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, patchelfUnstable }:
 
-stdenv.mkDerivation rec {
+with stdenv.lib;
+
+let versions = builtins.fromJSON (builtins.readFile ./versions.json);
+    arch = if stdenv.isi686 then "386"
+           else if stdenv.isx86_64 then "amd64"
+           else if stdenv.isAarch32 then "arm"
+           else if stdenv.isAarch64 then "arm64"
+           else throw "Unsupported architecture";
+    os = if stdenv.isLinux then "linux"
+         else if stdenv.isDarwin then "darwin"
+         else throw "Unsupported os";
+    versionInfo = versions."${os}-${arch}";
+    inherit (versionInfo) version sha256 url;
+
+in
+stdenv.mkDerivation {
   name = "ngrok-${version}";
-  version = "2.2.8";
+  version = version;
 
-  src = if stdenv.system == "i686-linux" then fetchurl {
-    url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-i386.tgz";
-    sha256 = "0s5ymlaxrvm13q3mlvfirh74sx60qh56c5sgdma2r7q5qlsq41xg";
-  } else if stdenv.system == "x86_64-linux" then fetchurl {
-    url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz";
-    sha256 = "1mn9iwgy6xzrjihikwc2k2j59igqmph0cwx17qp0ziap9lp5xxad";
-  } else throw "platform ${stdenv.system} not supported!";
+  # run ./update
+  src = fetchurl { inherit sha256 url; };
 
   sourceRoot = ".";
+
+  nativeBuildInputs = optionals stdenv.isLinux [ patchelfUnstable ];
+
+  unpackPhase = "cp $src ngrok";
+
+  buildPhase = "chmod a+x ngrok";
 
   installPhase = ''
     install -D ngrok $out/bin/ngrok
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "ngrok";
     longDescription = ''
       Allows you to expose a web server running on your local machine to the internet.
     '';
     homepage = https://ngrok.com/;
-    license = stdenv.lib.licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.unfree;
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.bobvanderlinden ];
   };
 }

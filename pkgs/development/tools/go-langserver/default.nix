@@ -1,18 +1,17 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go-langserver-${version}";
-  version = "unstable-2018-03-05";
-  rev = "5d7a5dd74738978d635f709669241f164c120ebd";
+  pname = "go-langserver";
+  version = "2.0.0";
 
   goPackagePath = "github.com/sourcegraph/go-langserver";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "sourcegraph";
     repo = "go-langserver";
-    sha256 = "0aih0akk3wk3332znkhr2bzxcc3parijq7n089mdahnf20k69xyz";
+    sha256 = "1wv7xf81s3qi8xydxjkkp8vacdzrq8sbj04346fz73nsn85z0sgp";
   };
 
   meta = with stdenv.lib; {

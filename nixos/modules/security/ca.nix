@@ -14,6 +14,7 @@ let
     { files =
         cfg.certificateFiles ++
         [ (builtins.toFile "extra.crt" (concatStringsSep "\n" cfg.certificates)) ];
+      preferLocalBuild = true;
      }
     ''
       cat $files > $out

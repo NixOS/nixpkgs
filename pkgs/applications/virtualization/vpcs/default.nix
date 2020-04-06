@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, cmake, glibc, buildPlatform }:
+{ stdenv, fetchurl, glibc }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "vpcs";
   version = "0.8";
 
   src = fetchurl {
-    name = "${name}.tar.bz2";
-    url = "mirror://sourceforge/project/${pname}/${version}/${name}-src.tbz";
+    name = "${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/${pname}/${version}/${pname}-${version}-src.tbz";
     sha256 = "14y9nflcyq486vvw0na0fkfmg5dac004qb332v4m5a0vaz8059nw";
   };
 
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''(
     cd src
-    ./mk.sh ${buildPlatform.platform.kernelArch}
+    ./mk.sh ${stdenv.buildPlatform.platform.kernelArch}
   )'';
 
   installPhase = ''

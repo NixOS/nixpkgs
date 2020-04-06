@@ -4,24 +4,23 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "vcstool";
-  version = "0.1.33";
+  version = "0.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1140d3ecafb2c42c2c1a309950c7f327b09b548c00fbf6e37c8f44b8a610dfbc";
+    sha256 = "1mq8lmb1wh55cqdj7javq7qia4217h6vf5ljc99gsjyibi7g7d3k";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  propagatedBuildInputs = [ pyyaml setuptools ];
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ git bazaar subversion ]}"];
+  makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ git bazaar subversion ])];
 
   doCheck = false; # requires network
 
   meta = with stdenv.lib; {
     description = "Provides a command line tool to invoke vcs commands on multiple repositories";
-    homepage = https://github.com/dirk-thomas/vcstool;
+    homepage = "https://github.com/dirk-thomas/vcstool";
     license = licenses.asl20;
     maintainers = with maintainers; [ sivteck ];
   };

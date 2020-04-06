@@ -44,21 +44,20 @@ stdenv.mkDerivation rec {
     HOME=$TMPDIR
   '';
 
-  configureFlags = "
-    --without-arts --disable-docs
-    --x-includes=${libX11.dev}/include
-    --x-libraries=${libX11.out}/lib
-    --with-qt-dir=${qt3}
-  ";
+  configureFlags = [
+    "--without-arts" "--disable-docs"
+    "--x-includes=${libX11.dev}/include"
+    "--x-libraries=${libX11.out}/lib"
+    "--with-qt-dir=${qt3}"
+  ];
 
   preInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
     cp Contrib/emacs/taskjug.el $out/share/emacs/site-lisp/
   '';
 
-  installFlags =
-    # kde_locale is not defined when installing without kde.
-    "kde_locale=\${out}/share/locale";
+  # kde_locale is not defined when installing without kde.
+  installFlags = [ "kde_locale=\${out}/share/locale" ];
 
   meta = {
     homepage = http://www.taskjuggler.org;

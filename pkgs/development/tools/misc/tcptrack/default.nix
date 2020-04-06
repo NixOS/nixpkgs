@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "tcptrack-${version}";
+  pname = "tcptrack";
   version = "1.4.3";
 
   src = fetchFromGitHub {

@@ -1,17 +1,17 @@
-{ mkDerivation, lib, fetchurl,
-  cmake, extra-cmake-modules, qtwebkit, qtscript, grantlee,
+{ mkDerivation, lib, fetchpatch, fetchurl,
+  cmake, extra-cmake-modules, qtwebengine, qtscript, grantlee,
   kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
   kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
   kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared-mime-info
 }:
 
 mkDerivation rec {
-  name = "skrooge-${version}";
-  version = "2.11.0";
+  pname = "skrooge";
+  version = "2.21.1";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/skrooge/${name}.tar.xz";
-    sha256 = "11ns0j3ss09aqd8snfzd52xf0cgsjjcgzalb031p7v17rn14yqaq";
+    url = "http://download.kde.org/stable/skrooge/${pname}-${version}.tar.xz";
+    sha256 = "0lv953i7cybzbxr5gx6g4libdcjj086jf152mwrwvx1avrpjavb8";
   };
 
   nativeBuildInputs = [
@@ -19,9 +19,17 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtwebkit qtscript grantlee kxmlgui kwallet kparts
+    qtwebengine qtscript grantlee kxmlgui kwallet kparts
     kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
     kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
+  ];
+
+  # SKG_DESIGNER must be used to generate the needed library for QtDesigner.
+  # This is needed ONLY for developers. So NOT NEEDED for end user.
+  # Source: https://forum.kde.org/viewtopic.php?f=210&t=143375#p393675
+  cmakeFlags = [
+    "-DSKG_DESIGNER=OFF"
+    "-DSKG_WEBENGINE=ON"
   ];
 
   meta = with lib; {

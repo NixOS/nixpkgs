@@ -12,6 +12,9 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
+  ];
 
   ###### interface
 
@@ -54,12 +57,17 @@ in
           description = ''
             Whether to enable volume and capture control with keyboard media keys.
 
+            You want to leave this disabled if you run a desktop environment
+            like KDE, Gnome, Xfce, etc, as those handle such things themselves.
+            You might want to enable this if you run a minimalistic desktop
+            environment or work from bare linux ttys/framebuffers.
+
             Enabling this will turn on <option>services.actkbd</option>.
           '';
         };
 
         volumeStep = mkOption {
-          type = types.string;
+          type = types.str;
           default = "1";
           example = "1%";
           description = ''
@@ -83,18 +91,14 @@ in
     environment.systemPackages = [ alsaUtils ];
 
     environment.etc = mkIf (!pulseaudioEnabled && config.sound.extraConfig != "")
-      [
-        { source = pkgs.writeText "asound.conf" config.sound.extraConfig;
-          target = "asound.conf";
-        }
-      ];
+      { "asound.conf".text = config.sound.extraConfig; };
 
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsaUtils ];
 
     boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
 
-    systemd.services."alsa-store" =
+    systemd.services.alsa-store =
       { description = "Store Sound Card State";
         wantedBy = [ "multi-user.target" ];
         unitConfig.RequiresMountsFor = "/var/lib/alsa";

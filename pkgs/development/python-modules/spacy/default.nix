@@ -1,67 +1,48 @@
-{ stdenv
-, pkgs
+{ lib
 , buildPythonPackage
-, python
 , fetchPypi
-, html5lib
+, pythonOlder
 , pytest
-, cython
-, preshed
-, ftfy
-, numpy
+, blis
+, catalogue
+, cymem
+, jsonschema
 , murmurhash
+, numpy
+, pathlib
 , plac
-, six
-, ujson
-, dill
+, preshed
 , requests
+, setuptools
+, srsly
 , thinc
-, pip
-, regex
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.0.9";
+  version = "2.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ihkhflhyz67bp73kfjqfrbcgdxi2msz5asbrh0pkk590c4vmms5";
+    sha256 = "1fgm1zlw8mjhmk64skxs79ymhcningml13y9c9fy7rj1b1yadwzh";
   };
 
-  prePatch = ''
-    substituteInPlace setup.py --replace \
-      "'html5lib==1.0b8'," \
-      "'html5lib',"
-
-    substituteInPlace setup.py --replace \
-      "'regex==2017.4.5'," \
-      "'regex',"
-
-    substituteInPlace setup.py --replace \
-      "'ftfy==2017.4.5'," \
-      "'ftfy',"
-
-    substituteInPlace setup.py --replace \
-      "'pathlib'," \
-      "\"pathlib; python_version<'3.4'\","
-  '';
-
   propagatedBuildInputs = [
-   cython
-   dill
-   html5lib
+   blis
+   catalogue
+   cymem
+   jsonschema
    murmurhash
    numpy
    plac
    preshed
-   regex
    requests
-   six
+   setuptools
+   srsly
    thinc
-   ujson
-   ftfy
-  ];
+   wasabi
+  ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
     pytest
@@ -72,10 +53,10 @@ buildPythonPackage rec {
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   # '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = https://github.com/explosion/spaCy;
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll ];
+    maintainers = with maintainers; [ danieldk sdll ];
     };
 }

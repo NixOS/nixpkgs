@@ -1,5 +1,5 @@
-{ stdenv, targetPlatform, fetchurl, buildPythonApplication
-, zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
+{ lib, fetchurl, buildPythonPackage
+, zip, ffmpeg_4, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -8,42 +8,52 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? !targetPlatform.isDarwin # phantomjs2 is broken on darwin
+, phantomjsSupport ? false
 , hlsEncryptedSupport ? true
-, makeWrapper }:
+, installShellFiles, makeWrapper }:
 
-with stdenv.lib;
-buildPythonApplication rec {
+buildPythonPackage rec {
 
   pname = "youtube-dl";
-  version = "2018.03.14";
+  # The websites youtube-dl deals with are a very moving target. That means that
+  # downloads break constantly. Because of that, updates should always be backported
+  # to the latest stable release.
+  version = "2020.03.24";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0j8j797gqc29fd5ra3cjvwkp8dgvigdydsj0zzjs05zccfqrj9lh";
+    sha256 = "05l4asakakxn53wrvxn6c03fd80zdizdbj6r2cj8c1ja3sj9i8s5";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ zip ] ++ optional generateManPage pandoc;
-  propagatedBuildInputs = optional hlsEncryptedSupport pycryptodome;
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  buildInputs = [ zip ] ++ lib.optional generateManPage pandoc;
+  propagatedBuildInputs = lib.optional hlsEncryptedSupport pycryptodome;
 
-  # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
-  # rtmpdump is required to download files over RTMP
-  # atomicparsley for embedding thumbnails
+  # Ensure these utilities are available in $PATH:
+  # - ffmpeg: post-processing & transcoding support
+  # - rtmpdump: download files over RTMP
+  # - atomicparsley: embedding thumbnails
   makeWrapperArgs = let
       packagesToBinPath =
         [ atomicparsley ]
-        ++ optional ffmpegSupport ffmpeg
-        ++ optional rtmpSupport rtmpdump
-        ++ optional phantomjsSupport phantomjs2;
-    in [ ''--prefix PATH : "${makeBinPath packagesToBinPath}"'' ];
+        ++ lib.optional ffmpegSupport ffmpeg_4
+        ++ lib.optional rtmpSupport rtmpdump
+        ++ lib.optional phantomjsSupport phantomjs2;
+    in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+
+  setupPyBuildFlags = [
+    "build_lazy_extractors"
+  ];
+
+  postInstall = ''
+    installShellCompletion youtube-dl.zsh
+  '';
 
   # Requires network
   doCheck = false;
 
-  meta = {
-    homepage = http://rg3.github.io/youtube-dl/;
-    repositories.git = https://github.com/rg3/youtube-dl.git;
+  meta = with lib; {
+    homepage = "https://ytdl-org.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
       youtube-dl is a small, Python-based command-line program
@@ -53,6 +63,6 @@ buildPythonApplication rec {
     '';
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu fpletz ];
+    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fpletz enzime ma27 ];
   };
 }

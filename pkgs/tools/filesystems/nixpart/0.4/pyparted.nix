@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, python, buildPythonApplication, parted, e2fsprogs }:
 
 buildPythonApplication rec {
-  name = "pyparted-${version}";
+  pname = "pyparted";
   version = "3.10";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/p/y/pyparted/${name}.tar.gz";
+    url = "https://fedorahosted.org/releases/p/y/pyparted/${pname}-${version}.tar.gz";
     sha256 = "17wq4invmv1nfazaksf59ymqyvgv3i8h4q03ry2az0s9lldyg3dv";
   };
 

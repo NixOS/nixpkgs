@@ -1,24 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf
-, librsvg, intltool, itstool, libxml2, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
+, librsvg, gettext, itstool, libxml2, wrapGAppsHook
+, meson, ninja, python3, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
-  name = "tali-${version}";
-  version = "3.22.0";
+  pname = "tali";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tali/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "5ba17794d6fb06b794daaffa62a6aaa372b7de8886ce5ec596c37e62bb71728b";
+    url = "mirror://gnome/sources/tali/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0knq2vwnbkzhb6yc0f8iznaz76yf5hwgg2z2xr079nz407p46v22";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "tali"; attrPath = "gnome3.tali"; };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg
-                  libxml2 itstool intltool wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson ninja python3 desktop-file-utils
+    pkgconfig gnome3.adwaita-icon-theme
+    libxml2 itstool gettext wrapGAppsHook
+  ];
+  buildInputs = [ gtk3 gdk-pixbuf librsvg ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Tali;

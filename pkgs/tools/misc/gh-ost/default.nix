@@ -1,13 +1,14 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 let
   goPackagePath = "github.com/github/gh-ost";
-  version = "1.0.36";
-  sha256 = "0qa7k50bf87bx7sr6iwqri8l49f811gs0bj3ivslxfibcs1z5d4h";
+  version = "1.0.47";
+  sha256 = "0yyhkqis4j2cl6w2drrjxdy5j8x9zp4j89gsny6w4ql8gm5qgvvk";
 
-in {
-  gh-ost = buildGoPackage ({
-    name = "gh-ost-${version}";
+in
+buildGoPackage ({
+    pname = "gh-ost";
+    inherit version;
     inherit goPackagePath;
 
     src = fetchFromGitHub {
@@ -21,7 +22,6 @@ in {
       description = "Triggerless online schema migration solution for MySQL";
       homepage = https://github.com/github/gh-ost;
       license = licenses.mit;
-      platforms = platforms.linux;
     };
-  });
-}
+})
+

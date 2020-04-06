@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, python }:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "uncrustify";
-  version = "0.66.1";
+  version = "0.70.1";
 
   src = fetchFromGitHub {
     owner = product;
     repo = product;
     rev = name;
-    sha256 = "1y69b0g07ksynf1fwfh5qqwmscxfbvs1yi3n3lbdd4vplb9zakyx";
+    sha256 = "0zr3vxhd947zdvwccw3cj0vsriaawcpfjq3x94v9887hsi8fk87b";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake python ];
 
   enableParallelBuilding = true;
 

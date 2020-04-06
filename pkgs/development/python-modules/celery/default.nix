@@ -1,28 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect,
-  pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
-}: 
+{ lib, buildPythonPackage, fetchPypi, libredirect
+, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
+}:
+
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.1.0";
+  version = "4.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dcb0s6kdcd3vc9pwvazngppkdbhwpmpjmghq6rifsld34q3gzvp";
+    sha256 = "0ps1c6ill7q0m5kzb87hisgshdk3kzpa6cvcjch1d1wa07whp2hh";
   };
 
-  # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-  preCheck = ''
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols \
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
-  postCheck = ''
-    unset NIX_REDIRECTS LD_PRELOAD
+  postPatch = ''
+    substituteInPlace requirements/test.txt \
+      --replace "moto==1.3.7" moto \
+      --replace "pytest>=4.3.1,<4.4.0" pytest
   '';
 
-  buildInputs = [ pytest case ];
+  # ignore test that's incompatible with pytest5
+  # test_eventlet touches network
+  # test_mongodb requires pymongo
+  checkPhase = ''
+    pytest -k 'not restore_current_app_fallback and not msgpack and not on_apply' \
+      --ignore=t/unit/concurrency/test_eventlet.py \
+      --ignore=t/unit/backends/test_mongodb.py
+  '';
+
+  checkInputs = [ case pytest boto3 moto ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/celery/celery/;
     description = "Distributed task queue";
     license = licenses.bsd3;

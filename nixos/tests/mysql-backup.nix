@@ -1,12 +1,12 @@
 # Test whether mysqlBackup option works
-import ./make-test.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... } : {
   name = "mysql-backup";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ rvl ];
   };
 
   nodes = {
-    master = { config, pkgs, ... }: {
+    master = { pkgs, ... }: {
       services.mysql = {
         enable = true;
         initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
@@ -20,23 +20,37 @@ import ./make-test.nix ({ pkgs, ... } : {
     };
   };
 
-  testScript =
-    '' startAll;
+  testScript = ''
+    start_all()
 
-       # Need to have mysql started so that it can be populated with data.
-       $master->waitForUnit("mysql.service");
+    # Delete backup file that may be left over from a previous test run.
+    # This is not needed on Hydra but useful for repeated local test runs.
+    master.execute("rm -f /var/backup/mysql/testdb.gz")
 
-       # Wait for testdb to be populated.
-       $master->sleep(10);
+    # Need to have mysql started so that it can be populated with data.
+    master.wait_for_unit("mysql.service")
 
-       # Do a backup and wait for it to finish.
-       $master->startJob("mysql-backup.service");
-       $master->waitForJob("mysql-backup.service");
+    # Wait for testdb to be fully populated (5 rows).
+    master.wait_until_succeeds(
+        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+    )
 
-       # Check that data appears in backup
-       $master->succeed("${pkgs.gzip}/bin/zcat /var/backup/mysql/testdb.gz | grep hello");
+    # Do a backup and wait for it to start
+    master.start_job("mysql-backup.service")
+    master.wait_for_unit("mysql-backup.service")
 
-       # Check that a failed backup is logged
-       $master->succeed("journalctl -u mysql-backup.service | grep 'fail.*doesnotexist' > /dev/null");
-    '';
+    # wait for backup to fail, because of database 'doesnotexist'
+    master.wait_until_fails("systemctl is-active -q mysql-backup.service")
+
+    # wait for backup file and check that data appears in backup
+    master.wait_for_file("/var/backup/mysql/testdb.gz")
+    master.succeed(
+        "${pkgs.gzip}/bin/zcat /var/backup/mysql/testdb.gz | grep hello"
+    )
+
+    # Check that a failed backup is logged
+    master.succeed(
+        "journalctl -u mysql-backup.service | grep 'fail.*doesnotexist' > /dev/null"
+    )
+  '';
 })

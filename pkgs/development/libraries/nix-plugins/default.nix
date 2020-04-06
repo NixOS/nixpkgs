@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, nix, cmake, pkgconfig }:
-let version = "3.0.1"; in
+{ stdenv, fetchFromGitHub, nix, cmake, pkgconfig, boost }:
+let version = "6.0.0"; in
 stdenv.mkDerivation {
-  name = "nix-plugins-${version}";
+  pname = "nix-plugins";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-plugins";
     rev = version;
-    sha256 = "1pmk2m0kc6a3jqygm5cy1fl5gbcy0ghc2xs4ww0gh20walrys82r";
+    sha256 = "08kxdci0sijj1hfkn3dbr7nbpb9xck0xr3xa3a0j116n4kvwb6qv";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ nix ];
+  buildInputs = [ nix boost ];
 
   meta = {
     description = "Collection of miscellaneous plugins for the nix expression language";

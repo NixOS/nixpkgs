@@ -7,12 +7,12 @@ assert sslSupport -> openssl != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "sylpheed-${version}";
-  version = "3.6.0";
+  pname = "sylpheed";
+  version = "3.7.0";
 
   src = fetchurl {
-    url = "http://sylpheed.sraoss.jp/sylpheed/v3.6/${name}.tar.bz2";
-    sha256 = "0idk9nz3d200l2bxc38vnxlx0wcslrvncy9lk50vz7dl8c5sg97b";
+    url = "https://sylpheed.sraoss.jp/sylpheed/v3.7/${pname}-${version}.tar.xz";
+    sha256 = "0j9y5vdzch251s264diw9clrn88dn20bqqkwfmis9l7m8vmwasqd";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
     ++ optionals gpgSupport [ gpgme ]
     ++ optionals sslSupport [ openssl ];
 
-  configureFlags = [
-    (optional gpgSupport "--enable-gpgme")
-    (optional sslSupport "--enable-ssl")
-  ];
+  configureFlags = optional gpgSupport "--enable-gpgme"
+    ++ optional sslSupport "--enable-ssl";
 
   meta = {
     homepage = http://sylpheed.sraoss.jp/en/;

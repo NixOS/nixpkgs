@@ -2,18 +2,19 @@
 
 buildPythonPackage rec {
   pname = "aenum";
-  version = "2.1.0";
-  name = "${pname}-${version}";
+  version = "2.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9eb1c8f48ae13c56d22a7227db0e4b1717131b284c6c0db6e4ccca6f5894df95";
+    sha256 = "a4334cabf47c167d44ab5a6198837b80deec5d5bad1b5cf70c966c3a330260e8";
   };
 
   # For Python 3, locale has to be set to en_US.UTF-8 for
   # tests to pass
   checkInputs = if isPy3k then [ glibcLocales ] else [];
 
+  # py2 likes to reorder tests
+  doCheck = isPy3k;
   checkPhase = ''
   runHook preCheck
   ${if isPy3k then "export LC_ALL=en_US.UTF-8" else ""}

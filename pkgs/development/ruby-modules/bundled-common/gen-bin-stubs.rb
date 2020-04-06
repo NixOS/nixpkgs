@@ -8,7 +8,7 @@ out = ENV["out"]
 ruby = ARGV[0]
 gemfile = ARGV[1]
 bundle_path = ARGV[2]
-bundler_gem_path = ARGV[3]
+bundler_path = ARGV[3]
 paths = ARGV[4].split
 groups = ARGV[5].split
 
@@ -35,7 +35,7 @@ ENV["BUNDLE_GEMFILE"] = #{gemfile.dump}
 ENV["BUNDLE_PATH"] = #{bundle_path.dump}
 ENV['BUNDLE_FROZEN'] = '1'
 
-Gem.use_paths(#{bundler_gem_path.dump}, ENV["GEM_PATH"])
+$LOAD_PATH.unshift #{bundler_path.dump} + "/lib"
 
 require 'bundler'
 Bundler.setup(#{groups.map(&:dump).join(', ')})

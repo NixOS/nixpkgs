@@ -1,48 +1,36 @@
-{ stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
-, goffice, gnome3, makeWrapper, gtk3, bison, pythonPackages
+{ stdenv, fetchurl, pkgconfig, intltool, perlPackages
+, goffice, gnome3, wrapGAppsHook, gtk3, bison, python3Packages
 , itstool
 }:
 
 let
-  inherit (pythonPackages) python pygobject3;
-  isopub = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent; sha256 = "073l492jz70chcadr2p7ssx7gz5hd731s2cazhxx4r845kilyr77"; };
-  isonum = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent; sha256 = "04b62dw2g3cj9i4vn9xyrsrlz8fpmmijq98dm0nrkky31bwbbrs3"; };
-  isogrk1 = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent; sha256 = "04b23anhs5wr62n4rgsjirzvw7rpjcsf8smz4ffzaqh3b0vw90vm"; };
+  inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.38";
+  pname = "gnumeric";
+  version = "1.12.46";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "3435d7d93a47a32764b1ec2d03f7fbb348a97af52530815e49370803a1a69c65";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "9fdc67377af52dfe69a7db4f533938024a75f454fc5d25ab43b8e6739be0b5e1";
   };
 
-  configureFlags = "--disable-component";
+  configureFlags = [ "--disable-component" ];
 
-  prePatch = ''
-    substituteInPlace doc/C/gnumeric.xml \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent ${isopub} \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent ${isonum} \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent ${isogrk1}
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig intltool bison itstool wrapGAppsHook ];
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    intltool perl perlXMLParser bison
-    goffice gtk3 makeWrapper gnome3.defaultIconTheme
-    python pygobject3 itstool
-  ];
+    goffice gtk3 gnome3.adwaita-icon-theme
+    python pygobject3
+  ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
 
-  preFixup = ''
-    for f in "$out"/bin/gnumeric-*; do
-      wrapProgram $f \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        ${stdenv.lib.optionalString (!stdenv.isDarwin) "--prefix GIO_EXTRA_MODULES : '${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules'"}
-    done
-  '';
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "The GNOME Office Spreadsheet";

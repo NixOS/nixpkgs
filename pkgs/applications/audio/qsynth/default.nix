@@ -1,21 +1,17 @@
-{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, qtbase, qttools, qtx11extras, cmake, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkgconfig
+, mkDerivation, qtbase, qttools, qtx11extras
+}:
 
-stdenv.mkDerivation  rec {
-  name = "qsynth-${version}";
-  version = "0.5.0";
+mkDerivation  rec {
+  pname = "qsynth";
+  version = "0.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qsynth/${name}.tar.gz";
-    sha256 = "1sr6vrz8z9r99j9xcix86lgcqldragb2ajmq1bnhr58d99sda584";
+    url = "mirror://sourceforge/qsynth/${pname}-${version}.tar.gz";
+    sha256 = "12jhfan81a10vbqfky5nmam3lk6d0i4654mm192v68q5r867xmcl";
   };
 
-  # cmake is looking for qsynth.desktop.in and fails if it doesn't find it
-  # seems like a bug and can presumable go in the next version after 0.5.0
-  postPatch = ''
-    mv src/qsynth.desktop src/qsynth.desktop.in
-  '';
-
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ autoconf pkgconfig ];
 
   buildInputs = [ alsaLib fluidsynth libjack2 qtbase qttools qtx11extras ];
 

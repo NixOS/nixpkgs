@@ -1,12 +1,20 @@
-{ stdenv, fetchPypi, buildPythonPackage, certifi, future, urllib3 }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, certifi
+, future
+, urllib3
+, tornado
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "9.0.0";
+  version = "12.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a5b4wfc6ms7kblynw2h3ygpww98kyz5n8iibqbdyykwx8xj7hzm";
+    sha256 = "0yrg5342zz0hpf2pc85ffwx57msa6jpcmvvjfkzh8nh2lc98aq21";
   };
 
   prePatch = ''
@@ -15,17 +23,22 @@ buildPythonPackage rec {
       --replace "import telegram.vendor.ptb_urllib3.urllib3 as urllib3" "import urllib3 as urllib3" \
       --replace "import telegram.vendor.ptb_urllib3.urllib3.contrib.appengine as appengine" "import urllib3.contrib.appengine as appengine" \
       --replace "from telegram.vendor.ptb_urllib3.urllib3.connection import HTTPConnection" "from urllib3.connection import HTTPConnection" \
-      --replace "from telegram.vendor.ptb_urllib3.urllib3.util.timeout import Timeout" "from urllib3.util.timeout import Timeout"
+      --replace "from telegram.vendor.ptb_urllib3.urllib3.util.timeout import Timeout" "from urllib3.util.timeout import Timeout" \
+      --replace "from telegram.vendor.ptb_urllib3.urllib3.fields import RequestField" "from urllib3.fields import RequestField"
+
+    touch LICENSE.dual
   '';
 
-  propagatedBuildInputs = [ certifi future urllib3 ];
+  checkInputs = [ pytest ];
+  propagatedBuildInputs = [ certifi future urllib3 tornado ];
 
+  # tests not included with release
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "This library provides a pure Python interface for the Telegram Bot API.";
     homepage = https://python-telegram-bot.org;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ veprbl pingiun ];
   };
 }

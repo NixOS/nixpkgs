@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, python, alsaUtils, timidity }:
+{ stdenv, fetchurl, makeWrapper, python3, alsaUtils, timidity }:
 
   stdenv.mkDerivation rec {
-  version = "16.06";
-  name = "mma-${version}";
+  version = "20.02";
+  pname = "mma";
 
   src = fetchurl {
-    url = "http://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
-    sha256 = "1g4gvc0nr0qjc0fyqrnx037zpaasgymgmrm5s7cdxqnld9wqw8ww";
+    url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
+    sha256 = "0i9c3f14j7wy2c86ky83f2vgmg5bihnnwsmpkq13fgqjsaf0qwnv";
   };
 
-  buildInputs = [ makeWrapper python alsaUtils timidity ];
+  buildInputs = [ makeWrapper python3 alsaUtils timidity ];
 
   patchPhase = ''
     sed -i 's@/usr/bin/aplaymidi@/${alsaUtils}/bin/aplaymidi@g' mma-splitrec
@@ -18,7 +18,8 @@
     sed -i 's@/usr/bin/arecord@/${alsaUtils}/bin/arecord@g' util/mma-splitrec.py
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' mma-splitrec
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' util/mma-splitrec.py
-    find . -type f | xargs sed -i 's@/usr/bin/env python@${python}/bin/python@g'
+    find . -type f | xargs sed -i 's@/usr/bin/env python@${python3.interpreter}@g'
+    find . -type f | xargs sed -i 's@/usr/bin/python@${python3.interpreter}@g'
   '';
 
   installPhase = ''
@@ -60,7 +61,7 @@
 
   meta = {
     description = "Creates MIDI tracks for a soloist to perform over from a user supplied file containing chords";
-    homepage =  http://www.mellowood.ca/mma/index.html;
+    homepage =  "https://www.mellowood.ca/mma/index.html";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

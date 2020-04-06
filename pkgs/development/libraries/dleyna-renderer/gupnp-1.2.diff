@@ -1,0 +1,130 @@
+ configure.ac                |  4 ++--
+ libdleyna/renderer/device.c | 51 +++++++++++++++++++++++++++++++++++++++++++--
+ libdleyna/renderer/upnp.c   |  4 ++--
+ 3 files changed, 53 insertions(+), 6 deletions(-)
+
+diff --git c/configure.ac i/configure.ac
+index 271ee92..364659d 100644
+--- c/configure.ac
++++ i/configure.ac
+@@ -38,8 +38,8 @@ LT_LANG([C])
+ PKG_PROG_PKG_CONFIG(0.16)
+ PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.28])
+ PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.28])
+-PKG_CHECK_MODULES([GSSDP], [gssdp-1.0 >= 0.13.2])
+-PKG_CHECK_MODULES([GUPNP], [gupnp-1.0 >= 0.20.5])
++PKG_CHECK_MODULES([GSSDP], [gssdp-1.2 >= 1.2.0])
++PKG_CHECK_MODULES([GUPNP], [gupnp-1.2 >= 1.2.0])
+ PKG_CHECK_MODULES([GUPNPAV], [gupnp-av-1.0 >= 0.11.5])
+ PKG_CHECK_MODULES([GUPNPDLNA], [gupnp-dlna-2.0 >= 0.9.4])
+ PKG_CHECK_MODULES([SOUP], [libsoup-2.4 >= 2.28.2])
+diff --git c/libdleyna/renderer/device.c i/libdleyna/renderer/device.c
+index 7acef89..f6d571e 100644
+--- c/libdleyna/renderer/device.c
++++ i/libdleyna/renderer/device.c
+@@ -2121,33 +2121,80 @@ exit:
+ 	return;
+ }
+ 
++typedef struct
++{
++  GMainLoop *loop;
++  GUPnPServiceIntrospection *introspection;
++  GError **error;
++} GetIntrospectionAsyncData;
++
++static void
++get_introspection_async_cb (GUPnPServiceInfo           *info,
++                            GUPnPServiceIntrospection  *introspection,
++                            const GError               *error,
++                            gpointer                    user_data)
++{
++  GetIntrospectionAsyncData *data = user_data;
++  data->introspection = introspection;
++  if (data->error)
++    *data->error = g_error_copy (error);
++  g_main_loop_quit (data->loop);
++}
++
++static GUPnPServiceIntrospection *
++_gupnp_service_info_get_introspection (GUPnPServiceInfo *info,
++                                       GError          **error)
++{
++  GetIntrospectionAsyncData data;
++  GMainContext *context;
++
++  context = g_main_context_new ();
++  data.loop = g_main_loop_new (context, FALSE);
++  data.error = error;
++
++  g_main_context_push_thread_default (context);
++
++  gupnp_service_info_get_introspection_async (info,
++                                              get_introspection_async_cb,
++                                              &data);
++
++  g_main_loop_run (data.loop);
++
++  g_main_context_pop_thread_default (context);
++
++  g_main_loop_unref (data.loop);
++  g_main_context_unref (context);
++
++  return data.introspection;
++}
++
+ static gboolean prv_get_av_service_states_values(GUPnPServiceProxy *av_proxy,
+ 						 GVariant **mpris_tp_speeds,
+ 						 GPtrArray **upnp_tp_speeds,
+ 						 double *min_rate,
+ 						 double *max_rate,
+ 						 gboolean *can_get_byte_pos)
+ {
+ 	const GUPnPServiceStateVariableInfo *svi;
+ 	const GUPnPServiceActionInfo *sai;
+ 	GUPnPServiceIntrospection *introspection;
+ 	GError *error = NULL;
+ 	GVariant *speeds = NULL;
+ 	GList *allowed_values;
+ 	gpointer weak_ref = NULL;
+ 	gboolean  device_alive = TRUE;
+ 
+ 	/* TODO: this weak_ref hack is needed as
+ 	   gupnp_service_info_get_introspection iterates the main loop.
+ 	   This can result in our device getting deleted before this
+ 	   function returns.  Ultimately, this code needs to be re-written
+ 	   to use gupnp_service_info_get_introspection_async but this cannot
+ 	   really be done until GUPnP provides a way to cancel this function. */
+ 
+ 	weak_ref = av_proxy;
+ 	g_object_add_weak_pointer(G_OBJECT(av_proxy), &weak_ref);
+ 
+-	introspection = gupnp_service_info_get_introspection(
++	introspection = _gupnp_service_info_get_introspection(
+ 		GUPNP_SERVICE_INFO(av_proxy),
+ 		&error);
+ 
+@@ -2215,7 +2262,7 @@ static gboolean prv_get_rc_service_states_values(GUPnPServiceProxy *rc_proxy,
+ 	weak_ref = rc_proxy;
+ 	g_object_add_weak_pointer(G_OBJECT(rc_proxy), &weak_ref);
+ 
+-	introspection = gupnp_service_info_get_introspection(
++	introspection = _gupnp_service_info_get_introspection(
+ 		GUPNP_SERVICE_INFO(rc_proxy),
+ 		&error);
+ 
+diff --git c/libdleyna/renderer/upnp.c i/libdleyna/renderer/upnp.c
+index 17cbda7..068912b 100644
+--- c/libdleyna/renderer/upnp.c
++++ i/libdleyna/renderer/upnp.c
+@@ -243,8 +243,8 @@ static void prv_server_unavailable_cb(GUPnPControlPoint *cp,
+ 
+ 	udn = gupnp_device_info_get_udn((GUPnPDeviceInfo *)proxy);
+ 
+-	ip_address = gupnp_context_get_host_ip(
+-		gupnp_control_point_get_context(cp));
++	ip_address = gssdp_client_get_host_ip(
++		GSSDP_CLIENT(gupnp_control_point_get_context(cp)));
+ 
+ 	if (!udn || !ip_address)
+ 		goto on_error;

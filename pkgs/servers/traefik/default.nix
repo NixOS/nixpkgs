@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub, bash, go-bindata}:
 
 buildGoPackage rec {
-  name = "traefik-${version}";
-  version = "1.5.2";
+  pname = "traefik";
+  version = "1.7.14";
 
   goPackagePath = "github.com/containous/traefik";
 
@@ -10,10 +10,10 @@ buildGoPackage rec {
     owner = "containous";
     repo = "traefik";
     rev = "v${version}";
-    sha256 = "0cv05nm7jj1g2630l5zmzpmsrjx712ba3l7klh8nqs02mzykzsha";
+    sha256 = "1j3p09j8rpdkp8v4d4mz224ddakkvhzchvccm9qryrqc2fq4022v";
   };
 
-  buildInputs = [ go-bindata bash ];
+  nativeBuildInputs = [ go-bindata bash ];
 
   buildPhase = ''
     runHook preBuild
@@ -34,6 +34,6 @@ buildGoPackage rec {
     homepage = https://traefik.io;
     description = "A modern reverse proxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ hamhut1066 ];
+    maintainers = with maintainers; [ hamhut1066 vdemeester ];
   };
 }

@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 let
-  inherit (stdenv) system;
+  inherit (stdenv.hostPlatform) system;
   version = "21b";
   downloadUrl = arch:
     "http://common-lisp.net/project/cmucl/downloads/release/" +
@@ -19,7 +19,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "cmucl-binary-${version}";
+  pname = "cmucl-binary";
+  inherit version;
 
   buildCommand = ''
     mkdir -p $out

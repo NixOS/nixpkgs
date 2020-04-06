@@ -15,7 +15,7 @@
 #
 #   $ nix-build ./option-usage.nix --argstr testOption service.xserver.enable -A txt -o service.xserver.enable._txt
 #
-# otther target exists such as, `dotContent`, `dot`, and `pdf`.  If you are
+# Other targets exists such as `dotContent`, `dot`, and `pdf`.  If you are
 # looking for the option usage of multiple options, you can provide a list
 # as argument.
 #
@@ -35,7 +35,7 @@
 # value is replaced by a `throw` statement which is caught by the `tryEval`
 # evaluation of each option value.
 #
-# We then compare the result of the evluation of the original module, with
+# We then compare the result of the evaluation of the original module, with
 # the result of the second evaluation, and consider that the new failures are
 # caused by our mutation of the `config` argument.
 #
@@ -62,7 +62,7 @@ let
     "_module.args"
 
     # For some reasons which we yet have to investigate, some options cannot
-    # be replaced by a throw without cuasing a non-catchable failure.
+    # be replaced by a throw without causing a non-catchable failure.
     "networking.bonds"
     "networking.bridges"
     "networking.interfaces"
@@ -102,7 +102,7 @@ let
       # builtins multiply by 4 the memory usage and the time used to compute
       # each options.
       tryCollectOptions = moduleResult:
-        flip map (excludeOptions (collect isOption moduleResult)) (opt:
+        forEach (excludeOptions (collect isOption moduleResult)) (opt:
           { name = showOption opt.loc; } // builtins.tryEval (strict opt.value));
      in
        keepNames (
@@ -145,11 +145,11 @@ let
   displayOptionsGraph =
      let
        checkList =
-         if !(isNull testOption) then [ testOption ]
+         if testOption != null then [ testOption ]
          else testOptions;
        checkAll = checkList == [];
      in
-       flip filter graph ({option, usedBy}:
+       flip filter graph ({option, ...}:
          (checkAll || elem option checkList)
          && !(elem option excludedTestOptions)
        );
@@ -165,7 +165,7 @@ let
   '';
 
   graphToText = graph:
-    concatMapStrings ({option, usedBy}:
+    concatMapStrings ({usedBy, ...}:
         concatMapStrings (user: ''
           ${user}
         '') usedBy

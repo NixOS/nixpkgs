@@ -53,6 +53,13 @@ in
 
       enable = mkEnableOption "Unbound domain name server";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.unbound;
+        defaultText = "pkgs.unbound";
+        description = "The unbound package to use";
+      };
+
       allowedAccess = mkOption {
         default = [ "127.0.0.0/24" ];
         type = types.listOf types.str;
@@ -60,7 +67,7 @@ in
       };
 
       interfaces = mkOption {
-        default = [ "127.0.0.1" "::1" ];
+        default = [ "127.0.0.1" ] ++ optional config.networking.enableIPv6 "::1";
         type = types.listOf types.str;
         description = "What addresses the server should listen on.";
       };
@@ -94,12 +101,14 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.unbound ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users.unbound = {
       description = "unbound daemon user";
       isSystemUser = true;
     };
+
+    networking.resolvconf.useLocalResolver = mkDefault true;
 
     systemd.services.unbound = {
       description = "Unbound recursive Domain Name Server";
@@ -112,22 +121,27 @@ in
         mkdir -m 0755 -p ${stateDir}/dev/
         cp ${confFile} ${stateDir}/unbound.conf
         ${optionalString cfg.enableRootTrustAnchor ''
-        ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile}
-        chown unbound ${stateDir} ${rootTrustAnchorFile}
+          ${cfg.package}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
+          chown unbound ${stateDir} ${rootTrustAnchorFile}
         ''}
         touch ${stateDir}/dev/random
         ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf";
+        ExecStart = "${cfg.package}/bin/unbound -d -c ${stateDir}/unbound.conf";
         ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
 
         ProtectSystem = true;
         ProtectHome = true;
         PrivateDevices = true;
+        Restart = "always";
+        RestartSec = "5s";
       };
     };
+
+    # If networkmanager is enabled, ask it to interface with unbound.
+    networking.networkmanager.dns = "unbound";
 
   };
 

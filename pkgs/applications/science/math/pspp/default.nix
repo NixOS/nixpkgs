@@ -1,25 +1,38 @@
 { stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
-, pkgconfig, gtksourceview, pango, gettext
+, pkgconfig, gtksourceview, pango, gettext, dconf
+, makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
+, texinfo, ssw
 }:
 
 stdenv.mkDerivation rec {
-  name = "pspp-1.0.1";
+  pname = "pspp";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "mirror://gnu/pspp/${name}.tar.gz";
-    sha256 = "1r8smr5057993h90nx0mdnff8nxw9x546zzh6qpy4h3xblp1la5s";
+    url = "mirror://gnu/pspp/${pname}-${version}.tar.gz";
+    sha256 = "07pp27zycrb5x927jwaj9r3q7hy915jh51xs85zxby6gfiwl63m5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl
-    gtksourceview pango gettext ];
+    gtksourceview pango gettext
+    makeWrapper gsettings-desktop-schemas hicolor-icon-theme ssw
+  ];
 
   doCheck = false;
 
   enableParallelBuilding = true;
 
+  preFixup = ''
+    wrapProgram "$out/bin/psppire" \
+     --prefix XDG_DATA_DIRS : "$out/share" \
+     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
+     --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+     --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
+  '';
+
   meta = {
-    homepage = http://www.gnu.org/software/pspp/;
+    homepage = https://www.gnu.org/software/pspp/;
     description = "A free replacement for SPSS, a program for statistical analysis of sampled data";
     license = stdenv.lib.licenses.gpl3Plus;
 
@@ -35,6 +48,6 @@ stdenv.mkDerivation rec {
       more traditional syntax commands.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

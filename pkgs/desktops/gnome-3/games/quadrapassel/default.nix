@@ -1,32 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf
-, librsvg, libcanberra-gtk3
-, intltool, itstool, libxml2, clutter, clutter-gtk, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
+, librsvg, gsound, libmanette
+, gettext, itstool, libxml2, clutter, clutter-gtk, wrapGAppsHook
+, meson, ninja, python3, vala, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
-  name = "quadrapassel-${version}";
-  version = "3.22.0";
+  pname = "quadrapassel";
+  version = "3.36.00";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/quadrapassel/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0ed44ef73c8811cbdfc3b44c8fd80eb6e2998d102d59ac324e4748f5d9dddb55";
+    url = "mirror://gnome/sources/quadrapassel/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1xk9x1pp71armj47vxja7fsj6gs116kcjkd8xgwf8wi4zr4kgx7g";
   };
+
+  nativeBuildInputs = [
+    meson ninja python3 vala desktop-file-utils
+    pkgconfig gnome3.adwaita-icon-theme
+    libxml2 itstool gettext wrapGAppsHook
+  ];
+  buildInputs = [
+    gtk3 gdk-pixbuf librsvg libmanette
+    gsound clutter libxml2 clutter-gtk
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "quadrapassel"; attrPath = "gnome3.quadrapassel"; };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg
-                  libcanberra-gtk3 itstool intltool clutter
-                  libxml2 clutter-gtk wrapGAppsHook ];
-
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Quadrapassel;
     description = "Classic falling-block game, Tetris";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Quadrapassel;
     license = licenses.gpl2;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

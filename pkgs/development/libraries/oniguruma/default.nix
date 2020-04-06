@@ -1,28 +1,23 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "onig-${version}";
-  version = "6.6.1";
+  pname = "onig";
+  version = "6.9.4";
 
   src = fetchFromGitHub {
     owner = "kkos";
     repo = "oniguruma";
     rev = "v${version}";
-    sha256 = "062g5443dyxsraq346panfqvbd6wal6nmb336n4dw1rszx576sxz";
+    sha256 = "11imbhj4p5w8lvrmcczccm1zq014h9j85r51z2ibb8jhf5p3lslh";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  prePatch = stdenv.lib.optional stdenv.isDarwin ''
-    substituteInPlace cmake/dist.cmake \
-      --replace '@executable_path/''${UP_DIR}/''${INSTALL_LIB}' $out'/''${INSTALL_LIB}'
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/kkos/oniguruma;
     description = "Regular expressions library";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
 }

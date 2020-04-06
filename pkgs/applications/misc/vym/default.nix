@@ -1,18 +1,45 @@
-{ stdenv, fetchurl, pkgconfig, qt4, qmake4Hook }:
+{ stdenv, mkDerivation, fetchurl, pkgconfig, qmake, qtscript, qtsvg }:
 
-stdenv.mkDerivation rec {
-  name = "vym-${version}";
-  version = "2.2.4";
+mkDerivation rec {
+  pname = "vym";
+  version = "2.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/vym/${version}/${name}.tar.bz2";
-    sha256 = "1x4qp6wpszscbbs4czkfvskm7qjglvxm813nqv281bpy4y1hhvgs";
+    url = "mirror://sourceforge/project/vym/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0lyf0m4y5kn5s47z4sg10215f3jsn3k1bl389jfbh2f5v4srav4g";
   };
+
+  # Hardcoded paths scattered about all have form share/vym
+  # which is encouraging, although we'll need to patch them (below).
+  qmakeFlags = [
+    "DATADIR=${placeholder "out"}/share"
+    "DOCDIR=${placeholder "out"}/share/doc/vym"
+  ];
+
+  postPatch = ''
+    for x in \
+      exportoofiledialog.cpp \
+      main.cpp \
+      mainwindow.cpp \
+      tex/*.{tex,lyx}; \
+    do
+      substituteInPlace $x \
+        --replace /usr/share/vym $out/share/vym \
+        --replace /usr/local/share/vym $out/share/vym \
+        --replace /usr/share/doc $out/share/doc/vym
+    done
+  '';
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ qt4 qmake4Hook ];
+  nativeBuildInputs = [ pkgconfig qmake ];
+  buildInputs = [ qtscript qtsvg ];
+
+  postInstall = ''
+    install -Dm755 -t $out/share/man/man1 doc/*.1.gz
+  '';
+
+  dontGzipMan = true;
 
   meta = with stdenv.lib; {
     description = "A mind-mapping software";

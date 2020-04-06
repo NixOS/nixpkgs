@@ -1,24 +1,35 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, wl-clipboard, makeWrapper }:
 
 buildGoPackage rec {
-  version = "1.6.11";
-  name = "gopass-${version}";
+  pname = "gopass";
+  version = "1.8.6";
 
-  goPackagePath = "github.com/justwatchcom/gopass";
+  goPackagePath = "github.com/gopasspw/gopass";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
-    owner = "justwatchcom";
-    repo = "gopass";
+    owner = "gopasspw";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "12pih414232bsdj1qqc04vck2p9254wjy044n5kbbdqbmfgap7sj";
+    sha256 = "0v3sx9hb03bdn4rvsv2r0jzif6p1rx47hrkpsbnwva31k396mck2";
   };
 
-  wrapperPath = with stdenv.lib; makeBinPath ([
+  wrapperPath = stdenv.lib.makeBinPath ([
     git
     gnupg
-  ]);
+    xclip
+  ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard);
+
+  postInstall = ''
+    mkdir -p \
+      $bin/share/bash-completion/completions \
+      $bin/share/zsh/site-functions \
+      $bin/share/fish/vendor_completions.d
+    $bin/bin/gopass completion bash > $bin/share/bash-completion/completions/_gopass
+    $bin/bin/gopass completion zsh  > $bin/share/zsh/site-functions/_gopass
+    $bin/bin/gopass completion fish > $bin/share/fish/vendor_completions.d/gopass.fish
+  '';
 
   postFixup = ''
     wrapProgram $bin/bin/gopass \
@@ -27,7 +38,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description     = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go.";
-    homepage        = https://github.com/justwatchcom/gopass;
+    homepage        = https://www.gopass.pw/;
     license         = licenses.mit;
     maintainers     = with maintainers; [ andir ];
     platforms       = platforms.unix;

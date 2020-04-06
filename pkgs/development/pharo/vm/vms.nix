@@ -1,4 +1,24 @@
-{ cmake, stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, libGLU_combined, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, fetchFromGitHub, makeWrapper} @args:
+{ cmake
+, stdenv
+, fetchurl
+, bash
+, unzip
+, glibc
+, openssl
+, gcc
+, libgit2
+, libGLU, libGL
+, freetype
+, xorg
+, alsaLib
+, cairo
+, libuuid
+, autoreconfHook
+, gcc48
+, fetchFromGitHub
+, makeWrapper
+, runtimeShell
+} @args:
 
 let
   pharo-vm-build = import ./build-vm.nix args;
@@ -7,7 +27,7 @@ in
 
 let suffix = if stdenv.is64bit then "64" else "32"; in
 
-rec {
+{
   # Build the latest VM
   spur = pharo-vm-build rec {
     name = "pharo-spur${suffix}";
@@ -43,4 +63,3 @@ rec {
   };
 
 }
-

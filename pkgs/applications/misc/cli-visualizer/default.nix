@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, fftw, ncurses5, libpulseaudio, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "1.6";
-  name = "cli-visualizer-${version}";
+  version = "1.8";
+  pname = "cli-visualizer";
 
   src = fetchFromGitHub {
     owner = "dpayne";
     repo = "cli-visualizer";
-    rev = version;
-    sha256 = "0mirp8bk398di5xyq95iprmdyvplfghxqmrfj7jdnpy554vx7ppc";
+    rev = "v${version}";
+    sha256 = "003mbbwsz43mg3d7llphpypqa9g7rs1p1cdbqi1mbc2bfrc1gcq2";
   };
 
   postPatch = ''

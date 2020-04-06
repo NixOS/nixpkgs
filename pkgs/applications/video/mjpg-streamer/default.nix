@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libjpeg }:
 
-stdenv.mkDerivation rec {
-  name = "mjpg-streamer-${version}";
-  version = "2016-03-08";
+stdenv.mkDerivation {
+  pname = "mjpg-streamer";
+  version = "unstable-2019-05-24";
 
   src = fetchFromGitHub {
     owner = "jacksonliam";
     repo = "mjpg-streamer";
-    rev = "4060cb64e3557037fd404d10e1c1d076b672e9e8";
-    sha256 = "0g7y832jsz4ylmq9qp2l4fq6bm8l6dhsbi60fr5jfqpx4l0pia8m";
+    rev = "501f6362c5afddcfb41055f97ae484252c85c912";
+    sha256 = "1cl159svfs1zzzrd3zgn4x7qy6751bvlnxfwf5hn5fmg4iszajw7";
   };
 
   prePatch = ''
@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/mjpg-streamer/;
+    homepage = "https://github.com/jacksonliam/mjpg-streamer";
     description = "MJPG-streamer takes JPGs from Linux-UVC compatible webcams, filesystem or other input plugins and streams them as M-JPEG via HTTP to webbrowsers, VLC and other software";
     platforms = platforms.linux;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ gebner ];
   };
 }

@@ -4,19 +4,22 @@
 , stdenv
 , setuptools_scm
 , pytest
+, glibcLocales
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "typeguard";
-  version = "2.1.4";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "40b22d18d2215b76b3ddda2564acfbddfa6e702968637fbd969187c2a6fb99da";
+    sha256 = "2d545c71e9439c21bcd7c28f5f55b3606e6106f7031ab58375656a1aed483ef2";
   };
 
   buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ glibcLocales ];
+
+  LC_ALL="en_US.utf-8";
 
   postPatch = ''
     substituteInPlace setup.cfg --replace " --cov" ""

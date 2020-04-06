@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "20120105";
-  name = "schismtracker-${version}";
+  pname = "schismtracker";
 
   src = fetchurl {
-    url = "http://schismtracker.org/dl/${name}.tar.bz2";
+    url = "http://schismtracker.org/dl/${pname}-${version}.tar.bz2";
     sha256 = "1ny7wv2wxm1av299wvpskall6438wjjpadphmqc7c0h6d0zg5kii";
   };
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     export ac_cv_prog_ac_ct_WINDRES=
   '';
 
-  configureFlags = "--enable-dependency-tracking";
+  configureFlags = [ "--enable-dependency-tracking" ];
 
   buildInputs = [ alsaLib python SDL ];
 

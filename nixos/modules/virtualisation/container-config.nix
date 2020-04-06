@@ -7,9 +7,10 @@ with lib;
   config = mkIf config.boot.isContainer {
 
     # Disable some features that are not useful in a container.
-    sound.enable = mkDefault false;
+    nix.optimise.automatic = mkDefault false; # the store is host managed
     services.udisks2.enable = mkDefault false;
     powerManagement.enable = mkDefault false;
+    documentation.nixos.enable = mkDefault false;
 
     networking.useHostResolvConf = mkDefault true;
 
@@ -21,6 +22,9 @@ with lib;
 
     # Not supported in systemd-nspawn containers.
     security.audit.enable = false;
+
+    # Use the host's nix-daemon.
+    environment.variables.NIX_REMOTE = "daemon";
 
   };
 

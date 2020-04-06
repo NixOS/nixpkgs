@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, pkgconfig, python, file, bc
+{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc
 , qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.2.3";
-  name = "lyx-${version}";
+mkDerivation rec {
+  version = "2.3.4.3";
+  pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.2.x/${name}.tar.xz";
-    sha256 = "0mrbr24xbdg25gd7w8g76gpmy0a10nrnz0mz47mdjwi441yfpjjg";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
+    sha256 = "1rpp6wq0dc0bxwc0pipajv98vi7cpg391nq10d3c4pmpq38m08wx";
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
@@ -30,12 +30,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # python is run during runtime to do various tasks
-  postFixup = ''
-    wrapProgram "$out/bin/lyx" \
-      --prefix PATH : '${python}/bin'
-  '';
+  qtWrapperArgs = [
+    " --prefix PATH : ${python}/bin"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = http://www.lyx.org;
     license = licenses.gpl2Plus;

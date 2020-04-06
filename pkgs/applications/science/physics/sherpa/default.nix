@@ -1,24 +1,21 @@
-{ stdenv, fetchurl, gfortran, hepmc, fastjet, lhapdf, rivet, sqlite }:
+{ stdenv, fetchurl, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "sherpa-${version}";
-  version = "2.2.4";
+  pname = "sherpa";
+  version = "2.2.8";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
-    sha256 = "1rw0ivx78zkbkl7nwil9i4fn8rvkifc3i20zrq3asbi4kb6brj2x";
+    url = "https://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
+    sha256 = "1al1imdrknvbcy8k113xysc14lln4msbv281bf0kx7p73wz59mv3";
   };
 
   buildInputs = [ gfortran sqlite lhapdf rivet ];
 
   enableParallelBuilding = true;
 
-  # LLVM 4 doesn't allow ambigous type in std::abs argument
-  patches = stdenv.lib.optional stdenv.cc.isClang [ ./explicit_overloads.patch ];
-
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
-    "--enable-hepmc2=${hepmc}"
+    "--enable-hepmc2=${hepmc2}"
     "--enable-fastjet=${fastjet}"
     "--enable-lhapdf=${lhapdf}"
     "--enable-rivet=${rivet}"
@@ -29,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simulation of High-Energy Reactions of PArticles in lepton-lepton, lepton-photon, photon-photon, lepton-hadron and hadron-hadron collisions";
     license     = stdenv.lib.licenses.gpl2;
-    homepage    = https://sherpa.hepforge.org;
+    homepage    = https://gitlab.com/sherpa-team/sherpa;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };

@@ -1,32 +1,28 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, doxygen, graphviz, makeWrapper
-, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
-, libjpeg, libGLU_combined, glew, libxslt
+{ stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
+, boost168, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
+, libjpeg, libGLU, libGL, glew, libxslt
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.7.1";
-  name = "freeorion-${version}";
+  version = "0.4.9";
+  pname = "freeorion";
 
   src = fetchFromGitHub {
     owner  = "freeorion";
     repo   = "freeorion";
-    rev    = "v${version}";
-    sha256 = "1m05l3a6ilqd7p2g3aqjpq89grb571cg8n9bpgz0y3sxskcym6sp";
+    rev = "v${version}";
+    sha256 = "18xigx4qla225ybf7mc1w8zfm81nhcm1i5181n5l2fbndvslb1wf";
   };
 
-  buildInputs = [ boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU_combined glew ];
+  buildInputs = [
+	(boost168.override { enablePython = true; })
+    SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU libGL glew ];
 
   nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];
 
   enableParallelBuilding = true;
 
   patches = [
-    # fix build with boost 1.66
-    (fetchpatch {
-      url = https://github.com/freeorion/freeorion/commit/c9b5b13fb81b1ed142dee0e843101c6b8832ca95.patch;
-      sha256 = "0agqhxk8462sgd230lmdzbrbrfd77zyy7a4g8hrf28zxza1nza94";
-    })
-    ./fix_rpaths.patch
   ];
 
   postInstall = ''
@@ -37,11 +33,13 @@ stdenv.mkDerivation rec {
       --subst-var-by out "$out/"
     substitute ${./fix-paths.sh} $out/fixpaths/fix-paths \
       --subst-var-by libxsltBin ${libxslt.bin} \
+      --subst-var-by shell ${stdenv.shell} \
       --subst-var out
     chmod +x $out/fixpaths/fix-paths
 
     wrapProgram $out/bin/freeorion \
-      --run $out/fixpaths/fix-paths
+      --run $out/fixpaths/fix-paths \
+      --prefix LD_LIBRARY_PATH : $out/lib/freeorion
   '';
 
   meta = with stdenv.lib; {
@@ -49,5 +47,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.freeorion.org;
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
+    maintainers = with maintainers; [ tex ];
   };
 }

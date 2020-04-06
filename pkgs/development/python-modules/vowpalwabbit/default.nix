@@ -1,33 +1,65 @@
-{ fetchurl, boost, zlib, clang, ncurses, pythonPackages, lib }:
+{ stdenv
+, lib
+, fetchPypi
+, buildPythonPackage
+, cmake
+, python
+, zlib
+, ncurses
+, pytest
+, docutils
+, pygments
+, numpy
+, scipy
+, scikitlearn }:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "vowpalwabbit";
-  name = "${pname}-${version}";
-  version = "8.4.0";
+  version = "8.8.1";
 
-  src = fetchurl{
-    url = "mirror://pypi/v/vowpalwabbit/${name}.tar.gz";
-    sha256 = "abd22bfae99fb102cf8a6aec49e8c278cb7317d3a7eb60f70cd102be9c336fd5";
+  src = fetchPypi{
+    inherit pname version;
+    sha256 = "17fw1g4ka9jppd41srw39zbp2b8h81izc71bbggxgf2r0xbdpga6";
   };
-  # vw tries to write some explicit things to home
-  # python installed: The directory '/homeless-shelter/.cache/pip/http'
-  preInstall = ''
-    export HOME=$PWD
-  '';
 
-  buildInputs = with pythonPackages; [ boost.dev zlib.dev clang ncurses pytest docutils pygments ];
-  propagatedBuildInputs = with pythonPackages; [ numpy scipy scikitlearn ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    docutils
+    ncurses
+    pygments
+    python.pkgs.boost
+    zlib.dev
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    scikitlearn
+    scipy
+  ];
+
+  # Python build script uses CMake, but we don't want CMake to do the
+  # configuration.
+  dontUseCmakeConfigure = true;
+
+  # Python ctypes.find_library uses DYLD_LIBRARY_PATH.
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="${python.pkgs.boost}/lib"
+  '';
 
   checkPhase = ''
     # check-manifest requires a git clone, not a tarball
     # check-manifest --ignore "Makefile,PACKAGE.rst,*.cc,tox.ini,tests*,examples*,src*"
-    python setup.py check -mrs
+    ${python.interpreter} setup.py check -ms
   '';
 
   meta = with lib; {
     description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project.";
-    homepage    = https://github.com/JohnLangford/vowpal_wabbit;
+    homepage    = "https://github.com/JohnLangford/vowpal_wabbit";
     license     = licenses.bsd3;
+    broken      = stdenv.isAarch64;
     maintainers = with maintainers; [ teh ];
   };
 }

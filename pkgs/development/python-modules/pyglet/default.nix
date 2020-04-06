@@ -1,23 +1,79 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, libGLU_combined, xorg, freetype, fontconfig, future}:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, libGL
+, libGLU
+, xorg
+, future
+, pytest
+, glibc
+, gtk2-x11
+, gdk-pixbuf
+, fontconfig
+, freetype
+, ffmpeg-full
+}:
 
 buildPythonPackage rec {
-  version = "1.3.1";
+  version = "1.4.2";
   pname = "pyglet";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a73280fa3949ea4890fee28f625c10b1e10a7cda390a08b6bce4740948167cd";
+    sha256 = "1dxxrl4nc7xh3aai1clgzvk48bvd35r7ksirsddz0mwhx7jmm8px";
   };
 
+  # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
+  # Even naively searching `LD_LIBRARY_PATH` won't work since `libc.so` is a linker script and
+  # ctypes.cdll.LoadLibrary cannot deal with those. Therefore, just hardcode the paths to the
+  # necessary libraries.
   postPatch = let
-    libs = [ libGLU_combined xorg.libX11 freetype fontconfig ];
-    paths = builtins.concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
-  in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
-
-  doCheck = false;
+    ext = stdenv.hostPlatform.extensions.sharedLibrary;
+  in ''
+    cat > pyglet/lib.py <<EOF
+    import ctypes
+    def load_library(*names, **kwargs):
+        for name in names:
+            path = None
+            if name == 'GL':
+                path = '${libGL}/lib/libGL${ext}'
+            elif name == 'GLU':
+                path = '${libGLU}/lib/libGLU${ext}'
+            elif name == 'c':
+                path = '${glibc}/lib/libc${ext}.6'
+            elif name == 'X11':
+                path = '${xorg.libX11}/lib/libX11${ext}'
+            elif name == 'gdk-x11-2.0':
+                path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
+            elif name == 'gdk_pixbuf-2.0':
+                path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
+            elif name == 'Xext':
+                path = '${xorg.libXext}/lib/libXext${ext}'
+            elif name == 'fontconfig':
+                path = '${fontconfig.lib}/lib/libfontconfig${ext}'
+            elif name == 'freetype':
+                path = '${freetype}/lib/libfreetype${ext}'
+            elif name[0:2] == 'av' or name[0:2] == 'sw':
+                path = '${ffmpeg-full}/lib/lib' + name + '${ext}'
+            if path is not None:
+                return ctypes.cdll.LoadLibrary(path)
+        raise Exception("Could not load library {}".format(names))
+    EOF
+  '';
 
   propagatedBuildInputs = [ future ];
+
+  # needs an X server. Keep an eye on
+  # https://bitbucket.org/pyglet/pyglet/issues/219/egl-support-headless-rendering
+  doCheck = false;
+
+  checkInputs = [
+    pytest
+  ];
+
+  checkPhase = ''
+    py.test tests/unit tests/integration
+  '';
 
   meta = with stdenv.lib; {
     homepage = "http://www.pyglet.org/";

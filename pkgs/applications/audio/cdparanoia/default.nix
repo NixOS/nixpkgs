@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
       url = "https://trac.macports.org/export/70964/trunk/dports/audio/cdparanoia/files/patch-paranoia_paranoia.c.10.4.diff";
       sha256 = "17l2qhn8sh4jy6ryy5si6ll6dndcm0r537rlmk4a6a8vkn852vad";
     })
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./utils.patch;
+    ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./utils.patch
+    ++ [./fix_private_keyword.patch];
 
-  buildInputs = stdenv.lib.optional stdenv.isAarch64 autoreconfHook;
+  nativeBuildInputs = stdenv.lib.optional stdenv.isAarch64 autoreconfHook;
 
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [
     Carbon
@@ -28,14 +29,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  preConfigure = "unset CC" + stdenv.lib.optionalString stdenv.isAarch64 ''\n
+  preConfigure = "unset CC" + stdenv.lib.optionalString stdenv.isAarch64 '';
     cp ${gnu-config}/config.sub configure.sub
     cp ${gnu-config}/config.guess configure.guess
   '';
 
-  meta = {
-    homepage = http://xiph.org/paranoia;
+  meta = with stdenv.lib; {
+    homepage = https://xiph.org/paranoia;
     description = "A tool and library for reading digital audio from CDs";
-    platforms = stdenv.lib.platforms.unix;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    platforms = platforms.unix;
   };
 }

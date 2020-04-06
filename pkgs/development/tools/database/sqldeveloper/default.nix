@@ -1,12 +1,26 @@
-{ stdenv, makeWrapper, requireFile, unzip, openjdk }:
+{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
 
-stdenv.mkDerivation rec {
-  version = "17.4.0.355.2349";
-  name = "sqldeveloper-${version}";
+let
+  version = "19.4.0.354.1759";
+
+  desktopItem = makeDesktopItem {
+    name = "sqldeveloper";
+    exec = "sqldeveloper";
+    icon = "sqldeveloper";
+    desktopName = "Oracle SQL Developer";
+    genericName = "Oracle SQL Developer";
+    comment = "Oracle's Oracle DB GUI client";
+    categories = "Application;Development;";
+  };
+in
+  stdenv.mkDerivation {
+
+  inherit version;
+  pname = "sqldeveloper";
 
   src = requireFile rec {
     name = "sqldeveloper-${version}-no-jre.zip";
-    url = "http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/";
+    url = "https://www.oracle.com/tools/downloads/sqldev-downloads.html";
     message = ''
       This Nix expression requires that ${name} already be part of the store. To
       obtain it you need to
@@ -32,25 +46,23 @@ stdenv.mkDerivation rec {
 
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
-    # obtained by `sha256sum sqldeveloper-${version}-no-jre.zip`
-    sha256 = "70add9b5c998583416e3d127aeb63dde8e3d0489036982026b930c85496c7850";
+    sha256 = "1hk3hfxyl6ryp4v1l9mgzflban565ayfmm2k412azmw5rnmjf6fv";
   };
 
   buildInputs = [ makeWrapper unzip ];
 
-  buildCommand = ''
-    mkdir -p $out/bin
-    echo  >$out/bin/sqldeveloper '#! ${stdenv.shell}'
-    echo >>$out/bin/sqldeveloper 'export JAVA_HOME=${openjdk}/lib/openjdk'
-    echo >>$out/bin/sqldeveloper 'export JDK_HOME=$JAVA_HOME'
-    echo >>$out/bin/sqldeveloper "cd $out/lib/${name}/sqldeveloper/bin"
-    echo >>$out/bin/sqldeveloper '${stdenv.shell} sqldeveloper "$@"'
-    chmod +x $out/bin/sqldeveloper
+  unpackCmd = "unzip $curSrc";
 
-    mkdir -p $out/lib/
-    cd $out
-    unzip ${src}
-    mv sqldeveloper $out/lib/${name}
+  installPhase = ''
+    mkdir -p $out/libexec $out/share/{applications,pixmaps}
+    mv * $out/libexec/
+
+    mv $out/libexec/icon.png $out/share/pixmaps/sqldeveloper.png
+    cp ${desktopItem}/share/applications/* $out/share/applications
+
+    makeWrapper $out/libexec/sqldeveloper/bin/sqldeveloper $out/bin/sqldeveloper \
+      --set JAVA_HOME ${jdk.home} \
+      --run "cd $out/libexec/sqldeveloper/bin"
   '';
 
   meta = with stdenv.lib; {
@@ -66,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
     license = licenses.unfree;
-    maintainers = [ maintainers.ardumont ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ ardumont ma27 ];
   };
 }

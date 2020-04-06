@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkgconfig, SDL, SDL_gfx
-, withMinimal ? false
+, withMinimal ? true
 }:
 
 # TODO:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdv libjpeg libpng ]
               ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
 
-  NIX_CFLAGS_COMPILE = lib.optional (!withMinimal) "-I${SDL.dev}/include/SDL";
+  NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${SDL.dev}/include/SDL";
 
   postPatch = ''
     sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure

@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gmpc-${version}";
+  pname = "gmpc";
   version = "11.8.16";
 
   libmpd = stdenv.mkDerivation {
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://gmpclient.org;
+    homepage = https://gmpclient.org;
     description = "A GTK2 frontend for Music Player Daemon";
     license = licenses.gpl2;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

@@ -1,45 +1,50 @@
 { stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
-, ffmpeg, libGLU_combined, freetype, libxml2, python34
+, ffmpeg, libGLU, libGL, freetype, libxml2, python3
 , libobjc, AppKit, Foundation
 , alsaLib ? null
+, libdrm ? null
 , libpulseaudio ? null
 , libv4l ? null
 , libX11 ? null
 , libXdmcp ? null
 , libXext ? null
 , libXxf86vm ? null
+, mesa ? null
 , SDL2 ? null
 , udev ? null
 , enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
 , withVulkan ? stdenv.isLinux, vulkan-loader ? null
+, fetchurl
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "retroarch-bare-${version}";
-  version = "1.7.1";
+  pname = "retroarch-bare";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "0qv8ci76f5kwv5b49ijgpc6jdfp6sm21fw5hq06mq6ygyiy9vdzf";
+    sha256 = "1pg8j9wvwgrzsv4xdai6i6jgdcc922v0m42rbqxvbghbksrc8la3";
     rev = "v${version}";
   };
 
   nativeBuildInputs = [ pkgconfig ]
-                      ++ optional withVulkan [ makeWrapper ];
+                      ++ optional withVulkan makeWrapper;
 
-  buildInputs = [ ffmpeg freetype libxml2 libGLU_combined python34 SDL2 which ]
+  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
-                ++ optional withVulkan [ vulkan-loader ]
+                ++ optional withVulkan vulkan-loader
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
-                ++ optionals stdenv.isLinux [ alsaLib libpulseaudio libv4l libX11
-                                              libXdmcp libXext libXxf86vm udev ];
+                ++ optionals stdenv.isLinux [ alsaLib libdrm libpulseaudio libv4l libX11
+                                              libXdmcp libXext libXxf86vm mesa udev ];
 
   enableParallelBuilding = true;
 
-  postInstall = optional withVulkan ''
+  configureFlags = stdenv.lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
+
+  postInstall = optionalString withVulkan ''
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
   '';
 
@@ -50,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer ];
+    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch ];
   };
 }

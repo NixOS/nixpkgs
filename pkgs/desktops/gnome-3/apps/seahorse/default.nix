@@ -1,40 +1,79 @@
-{ stdenv, intltool, fetchurl, vala
-, pkgconfig, gtk3, glib
-, wrapGAppsHook, itstool, gnupg, libsoup
-, gnome3, librsvg, gdk_pixbuf, gpgme
-, libsecret, avahi, p11-kit, openssh }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, vala
+, meson
+, ninja
+, libpwquality
+, pkgconfig
+, gtk3
+, glib
+, wrapGAppsHook
+, itstool
+, gnupg
+, libsoup
+, gnome3
+, gpgme
+, python3
+, openldap
+, gcr
+, libsecret
+, avahi
+, p11-kit
+, openssh
+, gsettings-desktop-schemas
+, libhandy
+}:
 
 stdenv.mkDerivation rec {
-  name = "seahorse-${version}";
-  version = "3.20.0";
+  pname = "seahorse";
+  version = "3.36";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/seahorse/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "e2b07461ed54a8333e5628e9b8e517ec2b731068377bf376570aad998274c6df";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "seahorse"; attrPath = "gnome3.seahorse"; };
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1nqn4a6dr4l1fpzj3mv4swhpnvhjcqlwsyhwm59sdzqgdfx4hbwr";
   };
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    vala
+    itstool
+    wrapGAppsHook
+    python3
+  ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  buildInputs = [
+    gtk3
+    glib
+    gcr
+    gsettings-desktop-schemas
+    gnupg
+    gnome3.adwaita-icon-theme
+    gpgme
+    libsecret
+    avahi
+    libsoup
+    p11-kit
+    openssh
+    openldap
+    libpwquality
+    libhandy
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool gnome3.gcr
-                  gnome3.gsettings-desktop-schemas wrapGAppsHook gnupg
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg gpgme
-                  libsecret avahi libsoup p11-kit vala
-                  openssh ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share"
-    )
+  postPatch = ''
+    patchShebangs build-aux/
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Seahorse;

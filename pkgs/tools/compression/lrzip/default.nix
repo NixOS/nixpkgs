@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.631";
-  name = "lrzip-${version}";
+  pname = "lrzip";
 
   src = fetchurl {
-    url = "http://ck.kolivas.org/apps/lrzip/${name}.tar.bz2";
+    url = "http://ck.kolivas.org/apps/lrzip/${pname}-${version}.tar.bz2";
     sha256 = "0mb449vmmwpkalq732jdyginvql57nxyd31sszb108yps1lf448d";
   };
 

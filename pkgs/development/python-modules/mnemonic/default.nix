@@ -1,13 +1,12 @@
-{ lib, fetchurl, buildPythonPackage, pbkdf2 }:
+{ lib, fetchPypi, buildPythonPackage, pbkdf2 }:
 
 buildPythonPackage rec {
   pname = "mnemonic";
-  version = "0.18";
-  name = "${pname}-${version}";
+  version = "0.19";
 
-  src = fetchurl {
-    url = "mirror://pypi/m/${pname}/${name}.tar.gz";
-    sha256 = "02a7306a792370f4a0c106c2cf1ce5a0c84b9dbd7e71c6792fdb9ad88a727f1d";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "4e37eb02b2cbd56a0079cabe58a6da93e60e3e4d6e757a586d9f23d96abea931";
   };
 
   propagatedBuildInputs = [ pbkdf2 ];

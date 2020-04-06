@@ -1,17 +1,24 @@
-{lib, fetchurl, python, buildPythonPackage, isPyPy, gfortran, nose, pytest, numpy}:
+{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
 
-buildPythonPackage rec {
+let
+  pybind = pybind11.overridePythonAttrs(oldAttrs: {
+    cmakeFlags = oldAttrs.cmakeFlags ++ [
+      "-DPYBIND11_TEST=off"
+    ];
+    doCheck = false; # Circular test dependency
+  });
+in buildPythonPackage rec {
   pname = "scipy";
-  version = "1.0.0";
-  name = "${pname}-${version}";
+  version = "1.4.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-    sha256 = "87ea1f11a0e9ec08c264dc64551d501fa307289460705f6fccd84cbfc7926d10";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59";
   };
 
   checkInputs = [ nose pytest ];
-  buildInputs = [ gfortran numpy.blas ];
+  nativeBuildInputs = [ gfortran ];
+  buildInputs = [ numpy.blas pybind ];
   propagatedBuildInputs = [ numpy ];
 
   # Remove tests because of broken wrapper
@@ -19,18 +26,15 @@ buildPythonPackage rec {
     rm scipy/linalg/tests/test_lapack.py
   '';
 
+  doCheck = true;
+
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
   '';
 
   preBuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [openblas]
-    include_dirs = ${numpy.blas}/include
-    library_dirs = ${numpy.blas}/lib
-    EOF
+    ln -s ${numpy.cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -51,7 +55,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
-    homepage = http://www.scipy.org/;
+    homepage = https://www.scipy.org/;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

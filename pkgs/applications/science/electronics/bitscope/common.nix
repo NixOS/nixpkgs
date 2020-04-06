@@ -2,14 +2,12 @@
 , buildFHSUserEnv
 , cairo
 , dpkg
-, fetchurl
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gtk2-x11
 , makeWrapper
 , pango
 , stdenv
-, writeTextFile
 , xorg
 }:
 
@@ -41,7 +39,7 @@ let
     libs = attrs.libs or [
       atk
       cairo
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       gtk2-x11
       pango
@@ -60,10 +58,6 @@ let
       ${(wrapBinary libs) attrs.toolName}
     '';
   });
-  fhs = target: buildFHSUserEnv {
-    inherit (pkg) name;
-    runScript = target;
-  };
 in buildFHSUserEnv {
   name = "${attrs.toolName}-${attrs.version}";
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";

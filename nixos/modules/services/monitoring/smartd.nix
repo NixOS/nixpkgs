@@ -64,7 +64,7 @@ let
        "DEVICESCAN ${notifyOpts}${cfg.defaults.autodetected}"}
   '';
 
-  smartdDeviceOpts = { name, ... }: {
+  smartdDeviceOpts = { ... }: {
 
     options = {
 

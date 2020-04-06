@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-DSYSV";
 
-  installFlags = "BINDIR=$(out)/sbin MANDIR=$(out)/share/man INSTALL=install";
+  installFlags = [ "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man" "INSTALL=install" ];
 
   preConfigure =
     ''

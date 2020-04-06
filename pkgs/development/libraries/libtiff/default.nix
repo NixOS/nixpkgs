@@ -1,25 +1,21 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, zlib, libjpeg, xz }:
+{ stdenv
+, fetchurl
 
-let
-  version = "4.0.9";
-in
+, pkgconfig
+
+, zlib
+, libjpeg
+, xz
+}:
+
 stdenv.mkDerivation rec {
-  name = "libtiff-${version}";
+  version = "4.1.0";
+  pname = "libtiff";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1kfg4q01r4mqn7dj63ifhi6pmqzbf4xax6ni6kkk81ri5kndwyvf";
+    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
+    sha256 = "0d46bdvxdiv59lxnb0xz9ywm8arsr6xsapi5s6y6vnys2wjz6aax";
   };
-
-  prePatch = let
-      debian = fetchurl {
-        url = http://snapshot.debian.org/archive/debian-debug/20180128T155203Z//pool/main/t/tiff/tiff_4.0.9-3.debian.tar.xz;
-        sha256 = "0wya42y7kcq093g3h7ca10cm5sns1mgnkjmdd2qdi59v8arga4y4";
-      };
-    in ''
-      tar xf '${debian}'
-      patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
-    '';
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 

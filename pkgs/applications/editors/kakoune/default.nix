@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, ncurses, boost, asciidoc, docbook_xsl, libxslt, pkgconfig }:
+{ stdenv, fetchFromGitHub, ncurses, asciidoc, docbook_xsl, libxslt, pkgconfig }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "kakoune-unstable-${version}";
-  version = "2018-02-15";
+  pname = "kakoune-unwrapped";
+  version = "2020.01.16";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "f5e39972eb525166dc5b1d963067f79990991a75";
-    sha256 = "160a302xg6nfzx49dkis6ij20kyzr63kxvcv8ld3l07l8k69g80r";
+    rev = "v${version}";
+    sha256 = "16v6z1nzj54j19fraxhb18jdby4zfs1br91gxpg9s2s4nsk0km0b";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses asciidoc docbook_xsl libxslt ];
+  makeFlags = [ "debug=no" ];
 
   postPatch = ''
     export PREFIX=$out
@@ -20,8 +21,17 @@ stdenv.mkDerivation rec {
     sed -ie 's#--no-xmllint#--no-xmllint --xsltproc-opts="--nonet"#g' Makefile
   '';
 
+  preConfigure = ''
+    export version="v${version}"
+  '';
+
+  doInstallCheckPhase = true;
+  installCheckPhase = ''
+    $out/bin/kak -ui json -E "kill 0"
+  '';
+
   meta = {
-    homepage = http://kakoune.org/;
+    homepage = "http://kakoune.org/";
     description = "A vim inspired text editor";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ vrthra ];

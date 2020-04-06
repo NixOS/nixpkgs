@@ -1,49 +1,78 @@
-{ stdenv, fetchurl, gobjectIntrospection
-, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
-, libffi, cyrus_sasl, intltool, perl, perlPackages, libpulseaudio
-, kbproto, libX11, libXext, xextproto, libgcrypt, gtk3, vala_0_32
-, libogg, libgpgerror, pythonPackages }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, gobject-introspection
+, gnutls
+, cairo
+, glib
+, pkgconfig
+, cyrus_sasl
+, libpulseaudio
+, libgcrypt
+, gtk3
+, vala
+, gettext
+, perl
+, gnome3
+, gdk-pixbuf
+, zlib
+}:
 
-let
-  inherit (pythonPackages) pygobject3 python;
-in stdenv.mkDerivation rec {
-  name = "gtk-vnc-${version}";
-  version = "0.7.0";
+stdenv.mkDerivation rec {
+  pname = "gtk-vnc";
+  version = "1.0.0";
+
+  outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-vnc/${stdenv.lib.strings.substring 0 3 version}/${name}.tar.xz";
-    sha256 = "0gj8dpy3sj4dp810gy67spzh5f0jd8aqg69clcwqjcskj1yawbiw";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1060ws037v556rx1qhfrcg02859rscksrzr8fq11himdg4d1y6m8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  patches = [
+    # Fix undeclared gio-unix-2.0 in example program.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk-vnc/commit/8588bc1c8321152ddc5086ca9b2c03a7f511e0d0.patch";
+      sha256 = "0i1iapsbngl1mhnz22dd73mnzk68qc4n51pqdhnm18zqc8pawvh4";
+    })
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gobject-introspection
+    vala
+    gettext
+    perl # for pod2man
+  ];
+
   buildInputs = [
-    python gnutls cairo libtool glib libffi libgcrypt
-    intltool cyrus_sasl libpulseaudio perl perlPackages.TextCSV
-    gobjectIntrospection libogg libgpgerror
-    gtk3 vala_0_32 pygobject3
+    gnutls
+    cairo
+    gdk-pixbuf
+    zlib
+    glib
+    libgcrypt
+    cyrus_sasl
+    libpulseaudio
+    gtk3
   ];
-
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all";
-  configureFlags = [
-    "--with-python"
-    "--with-examples"
-  ];
-
-  # Fix broken .la files
-  preFixup = ''
-    sed 's,-lgpg-error,-L${libgpgerror.out}/lib -lgpg-error,' -i $out/lib/*.la
-  '';
-
-  meta = with stdenv.lib; {
-    description = "A GTK VNC widget";
-    maintainers = with maintainers; [ raskin offline ];
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
-  };
 
   passthru = {
-    updateInfo = {
-      downloadPage = "http://ftp.gnome.org/pub/GNOME/sources/gtk-vnc";
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
     };
+  };
+
+  meta = with stdenv.lib; {
+    description = "GTK VNC widget";
+    homepage = https://wiki.gnome.org/Projects/gtk-vnc;
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ raskin offline ];
+    platforms = platforms.linux;
   };
 }

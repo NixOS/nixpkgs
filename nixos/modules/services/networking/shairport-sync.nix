@@ -27,7 +27,7 @@ in
       };
 
       arguments = mkOption {
-        default = "-v -o pulse";
+        default = "-v -o pa";
         description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
           server.
@@ -55,9 +55,8 @@ in
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
 
-    users.extraUsers = singleton
-      { name = cfg.user;
-        description = "Shairport user";
+    users.users.${cfg.user} =
+      { description = "Shairport user";
         isSystemUser = true;
         createHome = true;
         home = "/var/lib/shairport-sync";
@@ -72,6 +71,7 @@ in
         serviceConfig = {
           User = cfg.user;
           ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
+          RuntimeDirectory = "shairport-sync";
         };
       };
 

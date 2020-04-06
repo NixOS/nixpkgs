@@ -1,9 +1,9 @@
-{ stdenv, fetchhg, cmake, dos2unix, glib, gst_all_1, makeWrapper, pkgconfig
-, python, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib
+{ stdenv, fetchhg, cmake, glib, gst_all_1, makeWrapper, pkgconfig
+, python, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib, runtimeShell
 }:
 
-stdenv.mkDerivation rec {
-  name = "retrofe-${version}";
+stdenv.mkDerivation {
+  pname = "retrofe";
   version = "0.6.169";
 
   src = fetchhg {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     mv $out/share/retrofe/example/retrofe $out/bin/
 
     cat > $out/bin/retrofe-init << EOF
-    #!/bin/sh
+    #!${runtimeShell}
 
     echo "This will install retrofe's example files into this directory"
     echo "Example files location: $out/share/retrofe/example/"

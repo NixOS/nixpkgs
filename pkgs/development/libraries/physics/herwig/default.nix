@@ -1,22 +1,22 @@
-{ stdenv, fetchpatch, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
+{ stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "herwig-${version}";
-  version = "7.1.2";
+  pname = "herwig";
+  version = "7.2.0";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "0wr2mmmf5rlvcc6xgdagafm6vb5g6ifvrjc7kd86gs9jip32p29i";
+    url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
+    sha256 = "0r5iyai2j99pk9p36g4rp98bxm55zd1ik9kgm2zf5zgpvxfm8csr";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
 
   buildInputs = [ boost fastjet gfortran gsl thepeg zlib ]
-    # There is a bug that requires for MMHT PDF's to be presend during the build
-    ++ (with lhapdf.pdf_sets; [ MMHT2014lo68cl MMHT2014nlo68cl ]);
+    # There is a bug that requires for default PDF's to be present during the build
+    ++ (with lhapdf.pdf_sets; [ CT14lo CT14nlo ]);
 
   postPatch = ''
-    patchShebangs ./cat_with_cpplines
+    patchShebangs ./
   '';
 
   configureFlags = [
@@ -25,11 +25,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A multi-purpose particle physics event generator";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = https://herwig.hepforge.org/;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    homepage = https://herwig.hepforge.org/;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ veprbl ];
+    platforms = platforms.unix;
+    broken = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

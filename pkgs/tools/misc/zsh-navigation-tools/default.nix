@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "zsh-navigation-tools-${version}";
+  pname = "zsh-navigation-tools";
   version = "2.2.7";
 
   src = fetchFromGitHub {

@@ -1,7 +1,11 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
-stdenv.mkDerivation rec {
-  name = "ocaml-cryptgps-${version}";
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "cryptgps is not available for OCaml ${ocaml.version}"
+else
+
+stdenv.mkDerivation {
+  pname = "ocaml-cryptgps";
   version = "0.2.1";
 
   src = fetchurl {
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ocaml findlib];
 
-  configurePhase = "true";	# Skip configure phase
+  dontConfigure = true;	# Skip configure phase
 
   createFindlibDestdir = true;
 
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

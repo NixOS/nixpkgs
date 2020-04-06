@@ -6,14 +6,14 @@
 let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation rec {
-  name = "mlt-${version}";
-  version = "6.6.0";
+  pname = "mlt";
+  version = "6.20.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0b2fq0819r7n141l6hhr66hpayqqcmjr2yxw9azxkapg1h0div6q";
+    sha256 = "14kayzas2wisyw0z27qkcm4qnxbdb7bqa0hg7gaj5kbm3nvsnafk";
   };
 
   buildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   # mlt is unable to cope with our multi-prefix Qt build
   # because it does not use CMake or qmake.
-  NIX_CFLAGS_COMPILE = [ "-I${getDev qtsvg}/include/QtSvg" ];
+  NIX_CFLAGS_COMPILE = "-I${getDev qtsvg}/include/QtSvg";
 
   CXXFLAGS = "-std=c++11";
 

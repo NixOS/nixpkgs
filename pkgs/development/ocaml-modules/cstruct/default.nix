@@ -1,28 +1,18 @@
-{ stdenv, fetchurl, ocaml, jbuilder, findlib, sexplib, ocplib-endian }:
+{ lib, fetchurl, buildDunePackage }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-cstruct-${version}";
-  version = "3.0.2";
+buildDunePackage rec {
+  pname = "cstruct";
+  version = "4.0.0";
+
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-${version}.tbz";
-    sha256 = "03caxcyzfjmbnnwa15zy9s1ckkl4sc834d1qkgi4jcs3zqchvd8z";
+    url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-v${version}.tbz";
+    sha256 = "1q4fsc2m6d96yf42g3wb3gcnhpnxw800df5mh3yr25pprj8y4m1a";
   };
-
-  unpackCmd = "tar -xjf $curSrc";
-
-  buildInputs = [ ocaml jbuilder findlib ];
-
-  propagatedBuildInputs = [ sexplib ocplib-endian ];
-
-  buildPhase = "jbuilder build -p cstruct";
-
-  inherit (jbuilder) installPhase;
 
   meta = {
     description = "Access C-like structures directly from OCaml";
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     homepage = "https://github.com/mirage/ocaml-cstruct";
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

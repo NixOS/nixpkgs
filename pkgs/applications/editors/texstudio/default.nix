@@ -1,31 +1,32 @@
-{ stdenv, fetchurl, qt5, poppler_qt5, zlib, pkgconfig}:
+{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtscript, qtsvg,
+  wrapQtAppsHook, poppler, zlib, pkgconfig }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "texstudio";
-  version = "2.12.6";
-  name = "${pname}-${version}";
-  altname="Texstudio";
+  version = "2.12.22";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/texstudio/${name}.tar.gz";
-    sha256 = "18rxd7ra5k2f7s4c296b3v3pqhxjmfix9xpy9i1g4jm87ygqrbnd";
+  src = fetchFromGitHub {
+    owner = "${pname}-org";
+    repo = pname;
+    rev = version;
+    sha256 = "037jvsfln8wav17qj9anxz2a7p51v7ky85wmhdj2hgwp40al651g";
   };
 
-  nativeBuildInputs = [ qt5.qmake pkgconfig ];
-  buildInputs = [ qt5.qtbase qt5.qtscript qt5.qtsvg poppler_qt5 zlib ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook pkgconfig ];
+  buildInputs = [ qtbase qtscript qtsvg poppler zlib ];
 
   qmakeFlags = [ "NO_APPDATA=True" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TeX and LaTeX editor";
     longDescription=''
-	Fork of TeXMaker, this editor is a full fledged IDE for
-	LaTeX editing with completion, structure viewer, preview,
-	spell checking and support of any compilation chain.
-	'';
+      Fork of TeXMaker, this editor is a full fledged IDE for
+      LaTeX editing with completion, structure viewer, preview,
+      spell checking and support of any compilation chain.
+    '';
     homepage = http://texstudio.sourceforge.net;
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cfouche ];
+    maintainers = with maintainers; [ ajs124 cfouche ];
   };
 }

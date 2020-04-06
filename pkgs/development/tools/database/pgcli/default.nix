@@ -1,30 +1,34 @@
-{ lib, pythonPackages, fetchFromGitHub }:
+{ buildPythonApplication, lib, fetchPypi, isPy3k
+, cli-helpers, click, configobj, humanize, prompt_toolkit, psycopg2
+, pygments, sqlparse, pgspecial, setproctitle, keyring, pytest, mock
+}:
 
-pythonPackages.buildPythonApplication rec {
-  name = "pgcli-${version}";
-  version = "1.6.0";
+buildPythonApplication rec {
+  pname = "pgcli";
+  version = "2.2.0";
 
-  src = fetchFromGitHub {
-    sha256 = "0f1zv4kwi2991pclf8chrhgjwf8jkqxdh5ndc9qx6igh56iyyncz";
-    rev = "v${version}";
-    repo = "pgcli";
-    owner = "dbcli";
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "54138a31e6736a34c63b84a6d134c9292c9a73543cc0f66e80a0aaf79259d39b";
   };
 
-  buildInputs = with pythonPackages; [ pytest mock ];
-  checkPhase = ''
-    mkdir /tmp/homeless-shelter
-    HOME=/tmp/homeless-shelter py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
-  '';
-
-  propagatedBuildInputs = with pythonPackages; [
-    click configobj humanize prompt_toolkit psycopg2
-    pygments sqlparse pgspecial setproctitle
+  propagatedBuildInputs = [
+    cli-helpers click configobj humanize prompt_toolkit psycopg2
+    pygments sqlparse pgspecial setproctitle keyring
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "==" ">="
-    rm tests/test_rowlimit.py
+    substituteInPlace setup.py \
+      --replace "prompt_toolkit>=2.0.6,<3.0.0" "prompt_toolkit"
+  '';
+
+  checkInputs = [ pytest mock ];
+
+  # `test_application_name_db_uri` fails: https://github.com/dbcli/pgcli/issues/1104
+  checkPhase = ''
+    pytest --deselect=tests/test_main.py::test_application_name_db_uri
   '';
 
   meta = with lib; {
@@ -35,5 +39,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     homepage = https://pgcli.com;
     license = licenses.bsd3;
+    maintainers = with maintainers; [ dywedir ];
   };
 }

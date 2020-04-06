@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "robotfindskitten-${version}";
+  pname = "robotfindskitten";
   version = "2.7182818.701";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/rfk/robotfindskitten-POSIX/mayan_apocalypse_edition/${name}.tar.gz";
+    url = "mirror://sourceforge/project/rfk/robotfindskitten-POSIX/mayan_apocalypse_edition/${pname}-${version}.tar.gz";
     sha256 = "06fp6b4li50mzw83j3pkzqspm6dpgxgxw03b60xkxlkgg5qa6jbp";
   };
 

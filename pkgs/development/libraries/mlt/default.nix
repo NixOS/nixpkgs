@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper
+{ stdenv, fetchFromGitHub, makeWrapper
 , SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
 , libvorbis, libxml2, movit, pkgconfig, sox
 , gtk2
 }:
 
 stdenv.mkDerivation rec {
-  name = "mlt-${version}";
-  version = "6.6.0";
+  pname = "mlt";
+  version = "6.20.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0b2fq0819r7n141l6hhr66hpayqqcmjr2yxw9azxkapg1h0div6q";
+    sha256 = "14kayzas2wisyw0z27qkcm4qnxbdb7bqa0hg7gaj5kbm3nvsnafk";
   };
 
   buildInputs = [
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
   configureFlags = [
-    "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
-    "--enable-opengl"
+    "--avformat-swscale" "--enable-gpl" "--enable-gpl3" "--enable-opengl"
   ];
 
   enableParallelBuilding = true;
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = https://www.mltframework.org;
     license = licenses.gpl3;
-    maintainers = [ maintainers.tohl ];
+    maintainers = with maintainers; [ tohl peti ];
     platforms = platforms.linux;
   };
 }

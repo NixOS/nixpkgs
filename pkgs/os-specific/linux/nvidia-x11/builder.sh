@@ -17,7 +17,6 @@ buildPhase() {
         # Create the module.
         echo "Building linux driver against kernel: $kernel";
         cd kernel
-        kernelVersion=$(cd $kernel/lib/modules && ls)
         sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
@@ -27,41 +26,82 @@ buildPhase() {
     fi
 }
 
-    
+
 installPhase() {
     # Install libGL and friends.
-    mkdir -p "$out/lib"
-    cp -prd *.so.* tls "$out/lib/"
-    rm $out/lib/lib{glx,nvidia-wfb}.so.* # handled separately
-    rm -f $out/lib/libnvidia-gtk* # built from source
-    if [ "$useGLVND" = "1" ]; then
-        # Pre-built libglvnd
-        rm $out/lib/lib{GL,GLX,EGL,GLESv1_CM,GLESv2,OpenGL,GLdispatch}.so.*
-    fi
-    # Use ocl-icd instead
-    rm $out/lib/libOpenCL.so*
-    # Move VDPAU libraries to their place
-    mkdir $out/lib/vdpau
-    mv $out/lib/libvdpau* $out/lib/vdpau
 
-    # Install ICDs.
-    install -Dm644 nvidia.icd $out/etc/OpenCL/vendors/nvidia.icd
-    if [ -e nvidia_icd.json.template ]; then
-        sed "s#__NV_VK_ICD__#libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
-        install -Dm644 nvidia_icd.json $out/share/vulkan/icd.d/nvidia.json
+    # since version 391, 32bit libraries are bundled in the 32/ sub-directory
+    if [ "$i686bundled" = "1" ]; then
+        mkdir -p "$lib32/lib"
+        cp -prd 32/*.so.* "$lib32/lib/"
+        if [ -d 32/tls ]; then
+            cp -prd 32/tls "$lib32/lib/"
+        fi
     fi
-    if [ "$useGLVND" = "1" ]; then
-        install -Dm644 10_nvidia.json $out/share/glvnd/egl_vendor.d/nvidia.json
+
+    mkdir -p "$out/lib"
+    cp -prd *.so.* "$out/lib/"
+    if [ -d tls ]; then
+        cp -prd tls "$out/lib/"
     fi
+
+    for i in $lib32 $out; do
+        rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
+        rm -f $i/lib/libnvidia-gtk* # built from source
+        if [ "$useGLVND" = "1" ]; then
+            # Pre-built libglvnd
+            rm $i/lib/lib{GL,GLX,EGL,GLESv1_CM,GLESv2,OpenGL,GLdispatch}.so.*
+        fi
+        # Use ocl-icd instead
+        rm -f $i/lib/libOpenCL.so*
+        # Move VDPAU libraries to their place
+        mkdir $i/lib/vdpau
+        mv $i/lib/libvdpau* $i/lib/vdpau
+
+        # Install ICDs, make absolute paths.
+        # Be careful not to modify any original files because this runs twice.
+
+        # OpenCL
+        sed -E "s#(libnvidia-opencl)#$i/lib/\\1#" nvidia.icd > nvidia.icd.fixed
+        install -Dm644 nvidia.icd.fixed $i/etc/OpenCL/vendors/nvidia.icd
+
+        # Vulkan
+        if [ -e nvidia_icd.json.template ] || [ -e nvidia_icd.json ]; then
+            if [ -e nvidia_icd.json.template ]; then
+                # template patching for version < 435
+                sed "s#__NV_VK_ICD__#$i/lib/libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json.fixed
+            else
+                sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
+            fi
+            install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia.json
+        fi
+        if [ -e nvidia_layers.json ]; then
+            sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_layers.json > nvidia_layers.json.fixed
+            install -Dm644 nvidia_layers.json.fixed $i/share/vulkan/implicit_layer.d/nvidia_layers.json
+        fi
+
+        # EGL
+        if [ "$useGLVND" = "1" ]; then
+            sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
+            sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
+
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
+            install -Dm644 10_nvidia_wayland.json.fixed $i/share/glvnd/egl_vendor.d/nvidia_wayland.json
+        fi
+
+    done
+
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
         mkdir -p $bin/lib/xorg/modules
-        cp -p libnvidia-wfb.* $bin/lib/xorg/modules/
+        if [ -f libnvidia-wfb.so ]; then
+            cp -p libnvidia-wfb.* $bin/lib/xorg/modules/
+        fi
         mkdir -p $bin/lib/xorg/modules/drivers
         cp -p nvidia_drv.so $bin/lib/xorg/modules/drivers
         mkdir -p $bin/lib/xorg/modules/extensions
-        cp -p libglx.so.* $bin/lib/xorg/modules/extensions
+        cp -p libglx*.so* $bin/lib/xorg/modules/extensions
 
         # Install the kernel module.
         mkdir -p $bin/lib/modules/$kernelVersion/misc
@@ -79,11 +119,15 @@ installPhase() {
     fi
 
     # All libs except GUI-only are installed now, so fixup them.
-    for libname in `find "$out/lib/" -name '*.so.*'` `test -z "$bin" || find "$bin/lib/" -name '*.so.*'`
+    for libname in $(find "$out/lib/" $(test -n "$lib32" && echo "$lib32/lib/") $(test -n "$bin" && echo "$bin/lib/") -name '*.so.*')
     do
       # I'm lazy to differentiate needed libs per-library, as the closure is the same.
       # Unfortunately --shrink-rpath would strip too much.
-      patchelf --set-rpath "$out/lib:$libPath" "$libname"
+      if [[ -n $lib32 && $libname == "$lib32/lib/"* ]]; then
+        patchelf --set-rpath "$lib32/lib:$libPath32" "$libname"
+      else
+        patchelf --set-rpath "$out/lib:$libPath" "$libname"
+      fi
 
       libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
 
@@ -112,6 +156,8 @@ installPhase() {
         for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump; do
             if [ -e "$i" ]; then
                 install -Dm755 $i $bin/bin/$i
+                # unmodified binary backup for mounting in containers
+                install -Dm755 $i $bin/origBin/$i
                 patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                     --set-rpath $out/lib:$libPath $bin/bin/$i
             fi

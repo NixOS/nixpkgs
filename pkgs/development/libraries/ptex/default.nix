@@ -1,36 +1,27 @@
-{ stdenv, fetchFromGitHub, zlib, python, cmake }:
+{ stdenv, fetchFromGitHub, zlib, python, cmake, pkg-config }:
 
 stdenv.mkDerivation rec
 {
-  name = "ptex-${version}";
-  version = "2.1.28";
+  pname = "ptex";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "ptex";
     rev = "v${version}";
-    sha256 = "1h6gb3mpis4m6ph7h9q764w50f9jrar3jz2ja76rn5czy6wn318x";
+    sha256 = "1c3pdqszn4y3d86qzng8b0hqdrchnl39adq5ab30wfnrgl2hnm4z";
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];
 
-  buildInputs = [ zlib python cmake ];
+  buildInputs = [ zlib python cmake pkg-config ];
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-      mkdir -p $out
-
-      make prefix=$out
-
-      mkdir -p $bin/bin
-      mkdir -p $dev/include
-      mkdir -p $lib/lib
-      '';
-
-  installPhase = ''
-    make install
-    mv $out/bin $bin/
+  # Can be removed in the next release
+  # https://github.com/wdas/ptex/pull/42
+  patchPhase = ''
+    echo v${version} >version
   '';
 
   meta = with stdenv.lib; {

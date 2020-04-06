@@ -1,37 +1,39 @@
-{ stdenv, fetchFromGitHub, pkgs }:
+{ stdenv, fetchFromGitHub, makeWrapper, lib
+, dnsutils, coreutils, openssl, nettools, utillinux, procps }:
 
-let
-  version = "2.9.5-2";
-  pwdBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ coreutils ])}/pwd";
-  opensslBinPath = "${stdenv.lib.makeBinPath (with pkgs; [ openssl ])}/openssl";
-
-in stdenv.mkDerivation rec {
-  name = "testssl.sh-${version}";
+stdenv.mkDerivation rec {
+  pname = "testssl.sh";
+  version = "3.0rc6";
 
   src = fetchFromGitHub {
     owner = "drwetter";
-    repo = "testssl.sh";
-    rev = "v${version}";
-    sha256 = "0nrzb2lhjq0s4dabyq8nldjijsld9gq4cxm8ys1cw5jyz1875g2w";
+    repo = pname;
+    rev = version;
+    sha256 = "1ks7pqgrg382ry0a0jf1dwgcwv81snhkrhkjdbcpym6w5flmpjsv";
   };
 
-  nativeBuildInputs = with pkgs; [
-    makeWrapper
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    coreutils # for pwd and printf
+    dnsutils  # for dig
+    nettools  # for hostname
+    openssl   # for openssl
+    procps    # for ps
+    utillinux # for hexdump
   ];
 
-  patches = [ ./testssl.patch ];
-
   postPatch = ''
-    sed -i -e "s|/bin/pwd|${pwdBinPath}|g"                                     \
-           -e "s|TESTSSL_INSTALL_DIR:-\"\"|TESTSSL_INSTALL_DIR:-\"$out\"|g"    \
-           -e "s|OPENSSL:-\"\"|OPENSSL:-\"${opensslBinPath}\"|g" \
-           testssl.sh
+    substituteInPlace testssl.sh                                               \
+      --replace /bin/pwd                    pwd                                \
+      --replace TESTSSL_INSTALL_DIR:-\"\"   TESTSSL_INSTALL_DIR:-\"$out\"      \
+      --replace PROG_NAME=\"\$\(basename\ \"\$0\"\)\" PROG_NAME=\"testssl.sh\"
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/etc
-    cp -r etc/ $out/
-    cp testssl.sh $out/bin/testssl.sh
+    install -D testssl.sh $out/bin/testssl.sh
+    cp -r etc $out
+
+    wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
   '';
 
   meta = with stdenv.lib; {
@@ -40,8 +42,8 @@ in stdenv.mkDerivation rec {
       CLI tool which checks a server's service on any port for the support of
       TLS/SSL ciphers, protocols as well as recent cryptographic flaws and more.
     '';
-    homepage = https://testssl.sh/;
+    homepage = "https://testssl.sh/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.etu ];
+    maintainers = with maintainers; [ etu ];
   };
 }

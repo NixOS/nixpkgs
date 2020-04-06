@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, qt5 }:
+{ stdenv, fetchzip, qt5, mkDerivation }:
 
 let
-  version = "1.10.01";
+  version = "1.40.43";
 in
-stdenv.mkDerivation {
-  name = "qtbitcointrader-${version}";
+mkDerivation {
+  pname = "qtbitcointrader";
+  inherit version;
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/JulyIGHOR/QtBitcoinTrader/archive/v${version}.tar.gz";
-    sha256 = "0pgj8rsk9yxvls7yjpzblzbci2vvd0mlf9c7wdbjhwf6qyi7dfi3";
+    sha256 = "07xbsi78cykpyxidp1bw5ahmymdrs2afg7b0lla7dfhagz18lzxv";
   };
 
   buildInputs = [ qt5.qtbase qt5.qtmultimedia qt5.qtscript ];
@@ -25,11 +26,11 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  meta = with stdenv.lib;
-    { description = "Bitcoin trading client";
-      homepage = https://centrabit.com/;
-      license = licenses.lgpl3;
-      platforms = qt5.qtbase.meta.platforms;
-      maintainers = [ maintainers.ehmry ];
-    };
+  meta = with stdenv.lib; {
+    description = "Bitcoin trading client";
+    homepage = https://centrabit.com/;
+    license = licenses.gpl3;
+    platforms = qt5.qtbase.meta.platforms;
+    maintainers = [ maintainers.ehmry ];
+  };
 }

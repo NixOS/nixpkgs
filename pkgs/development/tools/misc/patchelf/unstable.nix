@@ -1,13 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.10-pre-20180108";
+  name = "patchelf-${version}";
+  version = "0.10";
 
-  src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = "patchelf";
-    rev = "48452cf6b4ccba1c1f47a09f4284a253634ab7d1";
-    sha256 = "1f1s8q3as3nrhcc1a8qc2z7imm644jfz44msn9sfv4mdynp2m2yb";
+  src = fetchurl {
+    url = "https://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
+    sha256 = "1wzwvnlyf853hw9zgqq5522bvf8gqadk8icgqa41a5n7593csw7n";
   };
 
   # Drop test that fails on musl (?)
@@ -21,13 +20,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://nixos.org/patchelf.html;
-    license = "GPL";
+    license = licenses.gpl3;
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.all;
   };
 }

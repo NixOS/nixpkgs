@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pythonPackages, keybinder, vte, gettext, intltool, file, gtk3, gobjectIntrospection, cairo
-, wrapGAppsHook, gnome3
+{ stdenv, fetchurl, python2, keybinder3, intltool, file, gtk3, gobject-introspection
+, libnotify, wrapGAppsHook, vte
 }:
 
-pythonPackages.buildPythonApplication rec {
+python2.pkgs.buildPythonApplication rec {
   name = "terminator-${version}";
   version = "1.91";
 
@@ -11,13 +11,11 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "95f76e3c0253956d19ceab2f8da709a496f1b9cf9b1c5b8d3cd0b6da3cc7be69";
   };
 
-  nativeBuildInputs = [ file intltool wrapGAppsHook ];
-  buildInputs = [ gtk3 gnome3.vte gobjectIntrospection cairo ];
-
-  pythonPath = with pythonPackages; [
-    pygobject3 vte keybinder notify gettext psutil
-    pycairo
+  nativeBuildInputs = [ file intltool wrapGAppsHook gobject-introspection ];
+  buildInputs = [ gtk3 vte libnotify keybinder3
+    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ];
+  propagatedBuildInputs = with python2.pkgs; [ pygobject3 psutil pycairo ];
 
   postPatch = ''
     patchShebangs .
@@ -37,7 +35,7 @@ pythonPackages.buildPythonApplication rec {
     '';
     homepage = https://gnometerminator.blogspot.no/p/introduction.html;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bjornfor globin ];
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;
   };
 }

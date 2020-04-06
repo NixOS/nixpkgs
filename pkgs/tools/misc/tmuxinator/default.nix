@@ -1,4 +1,4 @@
-{ lib, buildRubyGem, makeWrapper, ruby }:
+{ lib, buildRubyGem, ruby }:
 
 # Cannot use bundleEnv because bundleEnv create stub with
 # BUNDLE_FROZEN='1' environment variable set, which broke everything
@@ -8,8 +8,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "0.10.1";
-  source.sha256 = "0rjy2glqwbz07ci0snycq19myfczd2pry2iw4g0nqsw37wclm1vi";
+  version = "1.1.4";
+  source.sha256 = "06ajfvsmq2040b7nk2ifih3sqxgwzih5j1d25nh4ilgjlrfmha98";
 
   erubis = buildRubyGem rec {
     inherit ruby;
@@ -23,16 +23,16 @@ buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
     gemName = "thor";
-    version = "0.20.0";
-    source.sha256 = "0nmqpyj642sk4g16nkbq6pj856adpv91lp4krwhqkh2iw63aszdl";
+    version = "1.0.1";
+    source.sha256 = "1xbhkmyhlxwzshaqa7swy2bx6vd64mm0wrr8g3jywvxy7hg0cwkm";
   };
 
   xdg = buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
     gemName = "xdg";
-    version = "2.2.3";
-    source.sha256 = "1bn47fdbwxqbdvjcfg86i32hmwm36k0xl876kb85f5da5v84lzmq";
+    version = "2.2.5";
+    source.sha256 = "04xr4cavnzxlk926pkji7b5yiqy4qsd3gdvv8mg6jliq6sczg9gk";
   };
 
   propagatedBuildInputs = [ erubis thor xdg ];

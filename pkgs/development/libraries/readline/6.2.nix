@@ -1,5 +1,4 @@
 { fetchurl, stdenv, ncurses
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation (rec {
@@ -12,7 +11,7 @@ stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   patches =
     [ ./link-against-ncurses.patch
       ./no-arch_only.patch
@@ -46,7 +45,7 @@ stdenv.mkDerivation (rec {
       desire its capabilities.
     '';
 
-    homepage = http://savannah.gnu.org/projects/readline/;
+    homepage = https://savannah.gnu.org/projects/readline/;
 
     license = stdenv.lib.licenses.gpl3Plus;
 
@@ -59,6 +58,6 @@ stdenv.mkDerivation (rec {
 //
 
 # Don't run the native `strip' when cross-compiling.
-(if hostPlatform != buildPlatform
+(if stdenv.hostPlatform != stdenv.buildPlatform
  then { dontStrip = true; }
  else { }))

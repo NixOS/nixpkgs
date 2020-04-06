@@ -1,13 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "cachetools";
-  version = "2.0.1";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pdw2fr29pxlyn1g5fhdrrqbpn0iw062nv716ngdqvdx7hnizq7d";
+    sha256 = "9a52dd97a85f257f4e4127f15818e71a0c7899f121b34591fcc1173ea79a0198";
   };
 
   meta = with stdenv.lib; {

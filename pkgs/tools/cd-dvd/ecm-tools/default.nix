@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "ecm-tools-${version}";
+  pname = "ecm-tools";
   version = "1.0.3";
 
   src = fetchFromGitHub {

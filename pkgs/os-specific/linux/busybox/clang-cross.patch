@@ -1,0 +1,37 @@
+diff --git a/Makefile b/Makefile
+index 6fedcffba..3385836c4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -271,8 +271,8 @@ export quiet Q KBUILD_VERBOSE
+ # Look for make include files relative to root of kernel src
+ MAKEFLAGS += --include-dir=$(srctree)
+ 
+-HOSTCC  	= gcc
+-HOSTCXX  	= g++
++HOSTCC		= cc
++HOSTCXX	= c++
+ HOSTCFLAGS	:=
+ HOSTCXXFLAGS	:=
+ # We need some generic definitions
+@@ -289,7 +289,7 @@ MAKEFLAGS += -rR
+ # Make variables (CC, etc...)
+ 
+ AS		= $(CROSS_COMPILE)as
+-CC		= $(CROSS_COMPILE)gcc
++CC		= $(CROSS_COMPILE)cc
+ LD		= $(CC) -nostdlib
+ CPP		= $(CC) -E
+ AR		= $(CROSS_COMPILE)ar
+diff --git a/scripts/Makefile.IMA b/scripts/Makefile.IMA
+index f155108d7..185257064 100644
+--- a/scripts/Makefile.IMA
++++ b/scripts/Makefile.IMA
+@@ -39,7 +39,7 @@ ifndef HOSTCC
+ HOSTCC = cc
+ endif
+ AS              = $(CROSS_COMPILE)as
+-CC              = $(CROSS_COMPILE)gcc
++CC              = $(CROSS_COMPILE)cc
+ LD              = $(CC) -nostdlib
+ CPP             = $(CC) -E
+ AR              = $(CROSS_COMPILE)ar

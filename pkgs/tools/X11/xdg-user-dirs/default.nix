@@ -1,18 +1,19 @@
 { stdenv, fetchurl, libxslt, docbook_xsl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "xdg-user-dirs-0.16";
+  name = "xdg-user-dirs-0.17";
 
   src = fetchurl {
-    url = "http://user-dirs.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "1rp3c94hxjlfsryvwajklynfnrcvxplhwnjqc7395l89i0nb83vp";
+    url = "https://user-dirs.freedesktop.org/releases/${name}.tar.gz";
+    sha256 = "13216b8rfkzak5k6bvpx6jvqv3cnbgpijnjwj8a8d3kq4cl0a1ra";
   };
 
   buildInputs = [ libxslt docbook_xsl makeWrapper ];
 
   preFixup = ''
+    # fallback values need to be last
     wrapProgram "$out/bin/xdg-user-dirs-update" \
-      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
+      --suffix XDG_CONFIG_DIRS : "$out/etc/xdg"
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, dbus_libs, nettle, libidn, libnetfilter_conntrack, fetchpatch }:
+{ stdenv, fetchurl, pkgconfig, dbus, nettle, fetchpatch
+, libidn, libnetfilter_conntrack }:
 
 with stdenv.lib;
 let
@@ -11,22 +12,24 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.78";
+  name = "dnsmasq-2.80";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "0ar5h5v3kas2qx2wgy5iqin15gc4jhqrqs067xacgc3lii1rz549";
+    sha256 = "1fv3g8vikj3sn37x1j6qsywn09w1jipvlv34j3q5qrljbrwa5ayd";
   };
 
   patches = [
+    # Fix build with nettle 3.5
     (fetchpatch {
-      name = "CVE-2017-15107.patch";
-      url = "http://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=4fe6744a220eddd3f1749b40cac3dfc510787de6";
-      sha256 = "0r8grhh1q46z8v6manx1vvfpf2vmchfzsg7l1djh63b1fy1mbjkk";
-      # changelog does not apply cleanly but its safe to skip
-      excludes = [ "CHANGELOG" ];
+      name = "nettle-3.5.patch";
+      url = "thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=ab73a746a0d6fcac2e682c5548eeb87fb9c9c82e";
+      sha256 = "1hnixij3jp1p6zc3bx2dr92yyf9jp1ahhl9hiiq7bkbhbrw6mbic";
     })
   ];
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    sed '1i#include <linux/sockios.h>' -i src/dhcp.c
+  '';
 
   preBuild = ''
     makeFlagsArray=("COPTS=${copts}")
@@ -55,7 +58,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist \
       --replace "/usr/local/sbin" "$out/bin"
   '' + optionalString stdenv.isLinux ''
-    install -Dm644 dbus/dnsmasq.conf $out/etc/dbus-1/system.d/dnsmasq.conf
+    install -Dm644 dbus/dnsmasq.conf $out/share/dbus-1/system.d/dnsmasq.conf
     install -Dm755 contrib/lease-tools/dhcp_lease_time $out/bin/dhcp_lease_time
     install -Dm755 contrib/lease-tools/dhcp_release $out/bin/dhcp_release
     install -Dm755 contrib/lease-tools/dhcp_release6 $out/bin/dhcp_release6
@@ -72,13 +75,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ nettle libidn ]
-    ++ optionals stdenv.isLinux [ dbus_libs libnetfilter_conntrack ];
+    ++ optionals stdenv.isLinux [ dbus libnetfilter_conntrack ];
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
     homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ eelco fpletz ];
+    maintainers = with maintainers; [ eelco fpletz globin ];
   };
 }

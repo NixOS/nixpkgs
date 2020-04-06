@@ -1,22 +1,25 @@
 { lib, fetchurl, stdenv, libgcrypt, libevent, libidn, gnutls
-, libxml2, zlib, guile, texinfo, cppunit, psmisc }:
+, libxml2, zlib, guile, texinfo, cppunit, killall }:
 
 let version = "0.11"; in
 
 stdenv.mkDerivation rec {
-  name = "myserver-${version}";
+  pname = "myserver";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnu/myserver/${version}/${name}.tar.xz";
+    url = "mirror://gnu/myserver/${version}/${pname}-${version}.tar.xz";
     sha256 = "02y3vv4hxpy5h710y79s8ipzshhc370gbz1wm85x0lnq5nqxj2ax";
   };
 
   patches =
     [ ./disable-dns-lookup-in-chroot.patch ];
 
-  buildInputs =
-    [ libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo ]
-    ++ lib.optional doCheck cppunit;
+  buildInputs = [
+    libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo
+  ];
+
+  checkInputs = [ cppunit ];
 
   makeFlags = [ "V=1" ];
 
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # On GNU/Linux the `test_suite' process sometimes stays around, so
   # forcefully terminate it.
-  postCheck = lib.optionalString stdenv.isLinux "${psmisc}/bin/killall test_suite || true";
+  postCheck = "${killall}/bin/killall test_suite || true";
 
   meta = {
     description = "GNU MyServer, a powerful and easy to configure web server";
@@ -38,12 +41,12 @@ stdenv.mkDerivation rec {
       built-in features.  Share your files in minutes!
     '';
 
-    homepage = http://www.gnu.org/software/myserver/;
+    homepage = https://www.gnu.org/software/myserver/;
 
     license = lib.licenses.gpl3Plus;
 
     # libevent fails to build on Cygwin and Guile has troubles on Darwin.
-    platforms = lib.platforms.gnu;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
 
     broken = true; # needs patch for gets()
   };

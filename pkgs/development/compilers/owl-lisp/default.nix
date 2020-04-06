@@ -1,31 +1,31 @@
-{ stdenv, fetchFromGitHub, coreutils }:
+{ stdenv, fetchFromGitLab, coreutils, which }:
 
 stdenv.mkDerivation rec {
-  name    = "owl-lisp-${version}";
-  version = "0.1.14";
+  pname = "owl-lisp";
+  version = "0.1.19";
 
-  src = fetchFromGitHub {
-    owner  = "aoh";
-    repo   = "owl-lisp";
+  src = fetchFromGitLab {
+    owner  = "owl-lisp";
+    repo   = "owl";
     rev    = "v${version}";
-    sha256 = "1rr0icprna3zs834q1pj4xy21cql3pcfknfkqipq01rhnl2893sz";
+    sha256 = "1bgjd2gkr5risfcc401rlr5fc82gwm4r2gpp9gzkg9h64acivkjx";
   };
 
-  prePatch = ''
-    substituteInPlace Makefile --replace /usr $out
+  nativeBuildInputs = [ which ];
 
-    for f in tests/run tests/exec.sh ; do
-      substituteInPlace $f --replace /bin/echo ${coreutils}/bin/echo
-    done
+  prePatch = ''
+    substituteInPlace Makefile \
+      --replace /usr $out
   '';
 
-  # tests are already run as part of the compilation process
+  # tests are run as part of the compilation process
   doCheck = false;
 
   meta = with stdenv.lib; {
-    description = "A functional lisp";
-    homepage    = https://github.com/aoh/owl-lisp;
+    description = "A functional Scheme for world domination";
+    homepage    = "https://gitlab.com/owl-lisp/owl";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
+    platforms   = platforms.linux;
   };
 }

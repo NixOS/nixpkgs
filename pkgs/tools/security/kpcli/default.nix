@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  version = "3.2";
-  name = "kpcli-${version}";
+  version = "3.3";
+  pname = "kpcli";
 
   src = fetchurl {
-    url = "mirror://sourceforge/kpcli/${name}.pl";
-    sha256 = "11z6zbnsmqgjw73ai4nrq4idr83flrib22d8fqh1637d36p1nnk1";
+    url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
+    sha256 = "1z6dy70d3ag16vgzzafcnxb8gap3wahfmy4vd22fpgbrdd6riph4";
   };
 
   buildInputs = [ makeWrapper perl ];
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   phases = [ "installPhase" "fixupPhase" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ${src} $out/bin/kpcli
-    chmod +x $out/bin/kpcli
+    mkdir -p $out/{bin,share}
+    cp ${src} $out/share/kpcli.pl
+    chmod +x $out/share/kpcli.pl
 
-    wrapProgram $out/bin/kpcli --set PERL5LIB \
-      "${with perlPackages; stdenv.lib.makePerlPath ([
+    makeWrapper $out/share/kpcli.pl $out/bin/kpcli --set PERL5LIB \
+      "${with perlPackages; makePerlPath ([
          CaptureTiny Clipboard Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
       ] ++ stdenv.lib.optional stdenv.isDarwin MacPasteboard)}"
   '';

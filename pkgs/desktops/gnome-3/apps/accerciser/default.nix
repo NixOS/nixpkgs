@@ -1,24 +1,60 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, itstool, libxml2, python3Packages, at-spi2-core
-, dbus, intltool, libwnck3 }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gnome3
+, gtk3
+, wrapGAppsHook
+, gobject-introspection
+, itstool
+, libxml2
+, python3
+, at-spi2-core
+, dbus
+, gettext
+, libwnck3
+, adwaita-icon-theme
+}:
 
-stdenv.mkDerivation rec {
+ python3.pkgs.buildPythonApplication rec {
   name = "accerciser-${version}";
-  version = "3.22.0";
+  version = "3.36.0";
+
+  format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/accerciser/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "883306274442c7ecc076b24afca5190c835c40871ded1b9790da69347e9ca3c5";
+    url = "mirror://gnome/sources/accerciser/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "1iwi7mnayw1f90s439flh0zkgmj4qx10dzgj38nd5f3wvqmhabk3";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook itstool intltool ];
-  buildInputs = [
-    gtk3 libxml2 python3Packages.python python3Packages.pyatspi
-    python3Packages.pygobject3 python3Packages.ipython
-    at-spi2-core dbus libwnck3 gnome3.defaultIconTheme
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection # For setup hook
+    itstool
+    libxml2
+    pkgconfig
+    dbus
+    wrapGAppsHook
   ];
 
-  wrapPrefixVariables = [ "PYTHONPATH" ];
+  buildInputs = [
+    adwaita-icon-theme
+    at-spi2-core
+    gtk3
+    libwnck3
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    ipython
+    pyatspi
+    pycairo
+    pygobject3
+    setuptools
+    xlib
+  ];
+
+  # Strict deps breaks accerciser
+  # and https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   passthru = {
     updateScript = gnome3.updateScript {

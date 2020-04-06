@@ -5,10 +5,11 @@
 let
   generic = { version, sha256, license }:
     stdenv.mkDerivation rec {
-      name = "ragel-${version}";
+      pname = "ragel";
+      inherit version;
 
       src = fetchurl {
-        url = "http://www.colm.net/files/ragel/${name}.tar.gz";
+        url = "https://www.colm.net/files/ragel/${pname}-${version}.tar.gz";
         inherit sha256;
       };
 
@@ -20,7 +21,7 @@ let
 
       configureFlags = [ "--with-colm=${colm}" ];
 
-      NIX_CFLAGS_COMPILE = "-std=gnu++98";
+      NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-std=gnu++98";
 
       doCheck = true;
 
@@ -43,8 +44,8 @@ in
   };
 
   ragelDev = generic {
-    version = "7.0.0.10";
-    sha256 = "1v4ddzxal4gf8l8nkn32qabba6nbpd2mg8sphgmdn8kaqv52nmj0";
+    version = "7.0.0.12";
+    sha256 = "0x3si355lv6q051lgpg8bpclpiq5brpri5lv3p8kk2qhzfbyz69r";
     license = stdenv.lib.licenses.mit;
   };
 }

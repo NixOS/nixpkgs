@@ -1,15 +1,15 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk11, libXxf86vm }:
 
 stdenv.mkDerivation rec {
-  name = "josm-${version}";
-  version = "13500";
+  pname = "josm";
+  version = "15937";
 
   src = fetchurl {
     url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-    sha256 = "1dyys4y859dazjqpn3f7vd0cpyglk82y3igrdca293y0n0hrmi7v";
+    sha256 = "1mwrmhs5k3b3pvl3cmq78h8gh8zna06l4sym1a4vvlcx6j26a01f";
   };
 
-  buildInputs = [ jre8 makeWrapper ];
+  buildInputs = [ jdk11 makeWrapper ];
 
   desktopItem = makeDesktopItem {
     name = "josm";
@@ -21,12 +21,14 @@ stdenv.mkDerivation rec {
     categories = "Education;Geoscience;Maps;";
   };
 
+  # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
   buildCommand = ''
     mkdir -p $out/bin $out/share/java
     cp -v $src $out/share/java/josm.jar
 
-    makeWrapper ${jre8}/bin/java $out/bin/josm \
-      --add-flags "-jar $out/share/java/josm.jar"
+    makeWrapper ${jdk11}/bin/java $out/bin/josm \
+      --add-flags "-jar $out/share/java/josm.jar" \
+      --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications"/"* $out/share/applications

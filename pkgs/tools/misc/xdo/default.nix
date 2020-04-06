@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libxcb, xcbutil, xcbutilwm }:
 
 stdenv.mkDerivation rec {
-   name = "xdo-${version}";
+   pname = "xdo";
    version = "0.5.7";
 
    src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
      sha256 = "1h3jrygcjjbavdbkpx2hscsf0yf97gk487lzjdlvymd7dxdv9hy9";
    };
 
-   makeFlags = "PREFIX=$(out)";
+   makeFlags = [ "PREFIX=$(out)" ];
 
    buildInputs = [ libxcb xcbutilwm xcbutil ];
 

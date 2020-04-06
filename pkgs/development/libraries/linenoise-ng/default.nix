@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "linenoise-ng-${version}";
+  pname = "linenoise-ng";
   version = "1.0.1";
 
   src = fetchFromGitHub {

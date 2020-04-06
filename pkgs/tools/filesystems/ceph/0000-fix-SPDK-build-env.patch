@@ -1,0 +1,11 @@
+--- a/cmake/modules/BuildSPDK.cmake	2018-08-09 09:22:34.950684960 +0200
++++ b/cmake/modules/BuildSPDK.cmake	2018-08-09 09:21:59.986964224 +0200
+@@ -16,7 +16,7 @@
+     # unset $CFLAGS, otherwise it will interfere with how SPDK sets
+     # its include directory.
+     # unset $LDFLAGS, otherwise SPDK will fail to mock some functions.
+-    BUILD_COMMAND env -i PATH=$ENV{PATH} CC=${CMAKE_C_COMPILER} $(MAKE) EXTRA_CFLAGS="-fPIC"
++    BUILD_COMMAND env PATH=$ENV{PATH} CC=${CMAKE_C_COMPILER} $(MAKE) EXTRA_CFLAGS="-fPIC" C_OPT="-mssse3"
+     BUILD_IN_SOURCE 1
+     INSTALL_COMMAND "true")
+   ExternalProject_Get_Property(spdk-ext source_dir)

@@ -1,14 +1,14 @@
 # Test the firewall module.
 
-import ./make-test.nix ( { pkgs, ... } : {
+import ./make-test-python.nix ( { pkgs, ... } : {
   name = "firewall";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow ];
+    maintainers = [ eelco ];
   };
 
   nodes =
     { walled =
-        { config, pkgs, nodes, ... }:
+        { ... }:
         { networking.firewall.enable = true;
           networking.firewall.logRefusedPackets = true;
           services.httpd.enable = true;
@@ -20,13 +20,13 @@ import ./make-test.nix ( { pkgs, ... } : {
       # original walled configuration so that there is a change in the service
       # file.
       walled2 =
-        { config, pkgs, nodes, ... }:
+        { ... }:
         { networking.firewall.enable = true;
           networking.firewall.rejectPackets = true;
         };
 
       attacker =
-        { config, pkgs, ... }:
+        { ... }:
         { services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.enable = false;
@@ -36,30 +36,30 @@ import ./make-test.nix ( { pkgs, ... } : {
   testScript = { nodes, ... }: let
     newSystem = nodes.walled2.config.system.build.toplevel;
   in ''
-    $walled->start;
-    $attacker->start;
+    start_all()
 
-    $walled->waitForUnit("firewall");
-    $walled->waitForUnit("httpd");
-    $attacker->waitForUnit("network.target");
+    walled.wait_for_unit("firewall")
+    walled.wait_for_unit("httpd")
+    attacker.wait_for_unit("network.target")
 
     # Local connections should still work.
-    $walled->succeed("curl -v http://localhost/ >&2");
+    walled.succeed("curl -v http://localhost/ >&2")
 
     # Connections to the firewalled machine should fail, but ping should succeed.
-    $attacker->fail("curl --fail --connect-timeout 2 http://walled/ >&2");
-    $attacker->succeed("ping -c 1 walled >&2");
+    attacker.fail("curl --fail --connect-timeout 2 http://walled/ >&2")
+    attacker.succeed("ping -c 1 walled >&2")
 
     # Outgoing connections/pings should still work.
-    $walled->succeed("curl -v http://attacker/ >&2");
-    $walled->succeed("ping -c 1 attacker >&2");
+    walled.succeed("curl -v http://attacker/ >&2")
+    walled.succeed("ping -c 1 attacker >&2")
 
     # If we stop the firewall, then connections should succeed.
-    $walled->stopJob("firewall");
-    $attacker->succeed("curl -v http://walled/ >&2");
+    walled.stop_job("firewall")
+    attacker.succeed("curl -v http://walled/ >&2")
 
     # Check whether activation of a new configuration reloads the firewall.
-    $walled->succeed("${newSystem}/bin/switch-to-configuration test 2>&1" .
-                     " | grep -qF firewall.service");
+    walled.succeed(
+        "${newSystem}/bin/switch-to-configuration test 2>&1 | grep -qF firewall.service"
+    )
   '';
 })

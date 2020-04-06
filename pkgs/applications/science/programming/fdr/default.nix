@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qtbase, qtx11extras, ncurses, xorg, zlib, python27Packages}:
+{stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages}:
 stdenv.mkDerivation {
   name = "fdr-4.2.3";
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     python27Packages.python
     qtbase
     qtx11extras
-    ncurses
+    ncurses5
     xorg.libX11
     xorg.libXft
     zlib
@@ -26,8 +26,7 @@ stdenv.mkDerivation {
     rm -r lib/qt_plugins
 
     cp -r * "$out"
-    # Hack around lack of libtinfo in NixOS
-    ln -s ${ncurses.out}/lib/libncursesw.so.6 $out/lib/libtinfo.so.5
+    ln -s ${ncurses5.out}/lib/libtinfo.so.5 $out/lib/libtinfo.so.5
     ln -s ${qtbase.bin}/${qtbase.qtPluginPrefix} $out/lib/qt_plugins
     ln -s ${zlib.out}/lib/libz.so.1 $out/lib/libz.so.1
 

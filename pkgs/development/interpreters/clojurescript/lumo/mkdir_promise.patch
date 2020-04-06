@@ -1,0 +1,20 @@
+diff --git a/vendor/nexe/exe.js b/vendor/nexe/exe.js
+index 21e78bb..ecbfca4 100644
+--- a/vendor/nexe/exe.js
++++ b/vendor/nexe/exe.js
+@@ -254,9 +254,7 @@ return initModule._compile(${JSON.stringify(source)}, process.execPath);
+      */
+ 
+     function makeOutputDirectory(next) {
+-      mkdirp(path.dirname(options.output), function() {
+-        next();
+-      });
++        mkdirp(path.dirname(options.output)).then(() => next());
+     },
+ 
+     /**
+@@ -1107,4 +1105,3 @@ exports.package = function(path, options) {
+ 
+   return obj;
+ }
+-

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, glib, gettext, bash }:
+{ stdenv, fetchFromGitHub, glib, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-topicons-plus-${version}";
-  version = "21";
+  pname = "gnome-shell-extension-topicons-plus";
+  version = "22";
 
   src = fetchFromGitHub {
     owner = "phocean";
     repo = "TopIcons-plus";
     rev = "v${version}";
-    sha256 = "15p61krd7lcmgr1d4s2ydfjy3pyq79pq5100xzy6dln1538901m3";
+    sha256 = "196s1gdir52gbc444pzrb5l7gn5xr5vqk5ajqaiqryqlmp3i8vil";
   };
 
   buildInputs = [ glib ];
@@ -22,5 +22,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
     homepage = https://github.com/phocean/TopIcons-plus;
+    # Unmaintained and no longer working with GNOME Shell 3.34+
+    broken = stdenv.lib.versionAtLeast gnome3.gnome-shell.version "3.32";
   };
 }

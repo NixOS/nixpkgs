@@ -1,52 +1,57 @@
-{ stdenv, requireFile, xpwn }:
+{ stdenv, requireFile, lib }:
 
-with stdenv.lib;
+let requireXcode = version: sha256:
+  let
+    xip = "Xcode_" + version +  ".xip";
+    # TODO(alexfmpe): Find out how to validate the .xip signature in Linux
+    unxip = if stdenv.isDarwin
+            then ''
+              open -W ${xip}
+              rm -rf ${xip}
+            ''
+            else ''
+              xar -xf ${xip}
+              rm -rf ${xip}
+              pbzx -n Content | cpio -i
+              rm Content Metadata
+            '';
+    app = requireFile rec {
+      name     = "Xcode.app";
+      url      = "https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_${version}/${xip}";
+      hashMode = "recursive";
+      inherit sha256;
+      message  = ''
+        Unfortunately, we cannot download ${name} automatically.
+        Please go to ${url}
+        to download it yourself, and add it to the Nix store by running the following commands.
+        Note: download (~ 5GB), extraction and storing of Xcode will take a while
 
-let
-  osxVersion = "10.9";
-in stdenv.mkDerivation rec {
-  name = "xcode-${version}";
-  version = "5.1";
+        ${unxip}
+        nix-store --add-fixed --recursive sha256 Xcode.app
+        rm -rf Xcode.app
+      '';
+    };
+    meta = with stdenv.lib; {
+      homepage = https://developer.apple.com/downloads/;
+      description = "Apple's XCode SDK";
+      license = licenses.unfree;
+      platforms = platforms.darwin ++ platforms.linux;
+    };
 
-  src = requireFile {
-    name = "xcode_${version}.dmg";
-    url = meta.homepage;
-    sha256 = "70bb550cc14eca80b9825f4ae9bfbf7f076bb75777311be428bc30a7eb7a6f7e";
-  };
+  in app.overrideAttrs ( oldAttrs: oldAttrs // { inherit meta; });
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-  outputs = [ "out" "toolchain" ];
-
-
-  unpackCmd = let
-    basePath = "Xcode.app/Contents/Developer/Platforms/MacOSX.platform";
-    sdkPath = "${basePath}/Developer/SDKs";
-  in ''
-    ${xpwn}/bin/dmg extract "$curSrc" main.hfs > /dev/null
-    ${xpwn}/bin/hfsplus main.hfs extractall "${sdkPath}" > /dev/null
-  '';
-
-  setSourceRoot = "sourceRoot=MacOSX${osxVersion}.sdk";
-
-  patches = optional (osxVersion == "10.9") ./gcc-fix-enum-attributes.patch;
-
-  installPhase = ''
-    mkdir -p "$out/share/sysroot"
-    cp -a * "$out/share/sysroot/"
-    ln -s "$out/share/sysroot/usr/lib" "$out/lib"
-    ln -s "$out/share/sysroot/usr/include" "$out/include"
-
-    mkdir -p "$toolchain"
-    pushd "$toolchain"
-    ${xpwn}/bin/hfsplus "$(dirs +1)/../main.hfs" extractall \
-      Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr \
-      > /dev/null
-    popd
-  '';
-
-  meta = {
-    homepage = https://developer.apple.com/downloads/;
-    description = "Apple's XCode SDK";
-    license = stdenv.lib.licenses.unfree;
-  };
-}
+in lib.makeExtensible (self: {
+  xcode_8_1 = requireXcode "8.1" "18xjvfipwzia66gm3r9p770xdd4r375vak7chw5vgqnv9yyjiq2n";
+  xcode_8_2 = requireXcode "8.2" "13nd1zsfqcp9hwp15hndr0rsbb8rgprrz7zr2ablj4697qca06m2";
+  xcode_9_1 = requireXcode "9.1" "0ab1403wy84ys3yn26fj78cazhpnslmh3nzzp1wxib3mr1afjvic";
+  xcode_9_2 = requireXcode "9.2" "1bgfgdp266cbbqf2axcflz92frzvhi0qw0jdkcw6r85kdpc8dj4c";
+  xcode_9_3 = requireXcode "9.3" "12m9kb4759s2ky42b1vf7y38qqxn2j99s99adzc6ljnmy26ii12w";
+  xcode_9_4 = requireXcode "9.4" "00az1cf9pm8zmvzs6yq04prdmxp8xi3ymxw94jjh4mh7hlbkhcb7";
+  xcode_9_4_1 = requireXcode "9.4.1" "0y9kphj86c14jl6aibv57sd7ln0w06vdhzm8ysp0s98rfgyq2lbw";
+  xcode_10_1 = requireXcode "10.1" "1ssdbg4v8r11fjf4jl38pwyry2aia1qihbxyxapz0v0n5gfnp05v";
+  xcode_10_2 = requireXcode "10.2" "1xzybl1gvb3q5qwlwchanzpws4sb70i3plf0vrzvlfdp2hsb3pg7";
+  xcode_10_2_1 = requireXcode "10.2.1" "11sdb54nr0x7kp987qq839x6k5gdx7vqdxjiy5xm5279n1n47bmg";
+  xcode_10_3 = requireXcode "10.3" "1i628vfn6zad81fsz3zpc6z15chhskvyp8qnajp2wnpzvrwl6ngb";
+  xcode_11 = requireXcode "11" "1r03j3kkp4blfp2kqpn538w3dx57ms930fj8apjkq6dk7fv3jcqh";
+  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if stdenv.targetPlatform.useiOSPrebuilt then stdenv.targetPlatform.xcodeVer else "10.3")}";
+})

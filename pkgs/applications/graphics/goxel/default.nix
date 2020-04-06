@@ -1,19 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkgconfig, wrapGAppsHook
+{ stdenv, fetchFromGitHub, scons, pkgconfig, wrapGAppsHook
 , glfw3, gtk3, libpng12 }:
 
 stdenv.mkDerivation rec {
-  name = "goxel-${version}";
-  version = "0.7.2";
+  pname = "goxel";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
     rev = "v${version}";
-    sha256 = "1d6waj8zz9iq3ddbi9wbpcnh200ajjy9x53xrj5bij01pb8jwskv";
+    sha256 = "1b63jqryq19qa81g1ml6d85f27wj1ci3h56r02cl9xn8di5p674f";
   };
+
+  patches = [ ./disable-imgui_ini.patch ];
 
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
+  NIX_LDFLAGS = "-lpthread";
 
   buildPhase = ''
     make release

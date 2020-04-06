@@ -1,31 +1,31 @@
 { stdenv, fetchFromGitHub, cmake
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
-  name = "nlohmann_json-${version}";
-  version = "3.1.1";
+  pname = "nlohmann_json";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${version}";
-    sha256 = "0s5xiyvnvxc2k0zkyb12mm5cwn61lavyxlfpknlx5f243g1xi6f6";
+    sha256 = "04rry1xzis71z5gj1ylcj8b4li5q18zxhcwaviwvi3hx0frzxl9w";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
-  checkTarget = "test";
-
   enableParallelBuilding = true;
 
-  crossAttrs = {
-    cmakeFlags = "-DBuildTests=OFF";
-    doCheck = false;
-  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
-    cmakeFlags = "-DBuildTests=OFF -DCMAKE_SYSTEM_NAME=Windows";
-  };
+  cmakeFlags = [
+    "-DBuildTests=${if doCheck then "ON" else "OFF"}"
+    "-DJSON_MultipleHeaders=ON"
+  ];
+
+  # A test cause the build to timeout https://github.com/nlohmann/json/issues/1816
+  #doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = false;
+
+  postInstall = "rm -rf $out/lib64";
 
   meta = with stdenv.lib; {
     description = "Header only C++ library for the JSON file format";

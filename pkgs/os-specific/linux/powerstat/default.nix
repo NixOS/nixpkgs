@@ -1,20 +1,24 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "powerstat-${version}";
-  version = "0.02.15";
+  pname = "powerstat";
+  version = "0.02.22";
+  
   src = fetchurl {
-    url = "http://kernel.ubuntu.com/~cking/tarballs/powerstat/powerstat-${version}.tar.gz";
-    sha256 = "0m8662qv77nzbwkdpydiz87kd75cjjajgp30j6mc5padyw65bxxx";
+    url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0r355b9syqa2nhfy8ksvxyy5d58v0isf983842js091s6liy0x7g";
   };
-  installFlags = [ "DESTDIR=$(out)" ];
+  
+  installFlags = [ "DESTDIR=${placeholder "out"}" ];
+  
   postInstall = ''
     mv $out/usr/* $out
     rm -r $out/usr
   '';
+  
   meta = with lib; {
     description = "Laptop power measuring tool";
-    homepage = http://kernel.ubuntu.com/~cking/powerstat/;
+    homepage = "https://kernel.ubuntu.com/~cking/powerstat/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];

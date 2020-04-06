@@ -1,14 +1,14 @@
 {stdenv, git, xdg_utils, gnugrep, fetchFromGitHub, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "git-open-${version}";
-  version = "1.3.1";
+  pname = "git-open";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-open";
     rev = "v${version}";
-    sha256 = "1klj41vqgyyigqzi6s1ykz9vd8wvaq3skin63pi989dlsjf7igyr";
+    sha256 = "0lprzrjsqrg83gixfaiw26achgd8l7s56jknsjss4p7y0w1fxm05";
   };
 
   buildInputs = [ makeWrapper ];

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, libgit2 }:
 
-buildGoPackage rec {
-  name = "blsd-${version}";
+buildGoPackage {
+  pname = "blsd";
   version = "2017-07-27";
 
   goPackagePath = "github.com/junegunn/blsd";
@@ -15,7 +15,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ pkgconfig libgit2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgit2 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/junegunn/blsd;
@@ -23,5 +24,6 @@ buildGoPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;
+    broken = true; # since 2020-02-08, libgit2 is incompatible upstream is dead.
   };
 }

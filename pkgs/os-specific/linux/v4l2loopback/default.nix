@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, kernel, kmod }:
+{ stdenv, fetchFromGitHub, kernel, kmod }:
 
 stdenv.mkDerivation rec {
   name = "v4l2loopback-${version}-${kernel.version}";
-  version = "0.9.1";
+  version = "0.12.3";
 
-  src = fetchurl {
-    url = "https://github.com/umlaeute/v4l2loopback/archive/v${version}.tar.gz";
-    sha256 = "1crkhxlnskqrfj3f7jmiiyi5m75zmj7n0s26xz07wcwdzdf2p568";
+  src = fetchFromGitHub {
+    owner = "umlaeute";
+    repo = "v4l2loopback";
+    rev = "v${version}";
+    sha256 = "01wahmrh4iw27cfmypik6frapq14vn7m9shmj5g7cr1apz2523aq";
   };
 
   hardeningDisable = [ "format" "pic" ];

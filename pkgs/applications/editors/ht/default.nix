@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ht-${version}";
+  pname = "ht";
   version = "2.1.0";
 
   src = fetchurl {

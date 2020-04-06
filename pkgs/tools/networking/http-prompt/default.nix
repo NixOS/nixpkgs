@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, pythonPackages, httpie }:
+{ stdenv, fetchFromGitHub, python3Packages, httpie }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "0.11.1";
-  name = "http-prompt";
+python3Packages.buildPythonApplication rec {
+  pname = "http-prompt";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     repo = "http-prompt";
     owner = "eliangcs";
-    sha256 = "0gi76wcn6lxkd74ljpbyhr7ylhq6sm8z7h66dnfmpsw4nhw49178";
+    sha256 = "0kngz2izcqjphbrdkg489p0xmf65xjc8ki1a2szcc8sgwc7z74xy";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     click
     httpie
     parsimonious
-    prompt_toolkit
+    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
     pygments
     six
   ];
 
   checkPhase = ''
-    $out/bin/${name} --version | grep -q "${version}"
+    $out/bin/${pname} --version | grep -q "${version}"
   '';
 
   meta = with stdenv.lib; {
@@ -29,6 +29,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/eliangcs/http-prompt;
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.linux; # can only test on linux
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

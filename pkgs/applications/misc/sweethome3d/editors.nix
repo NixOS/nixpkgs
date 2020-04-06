@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings-desktop-schemas, p7zip, sweethome3dApp }:
+{ stdenv, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
+, gtk3, gsettings-desktop-schemas, sweethome3dApp }:
 
 let
 
@@ -7,20 +7,17 @@ let
     m: "sweethome3d-"
     + removeSuffix "libraryeditor" (toLower m)
     + "-editor";
-  sweetName = m: v: sweetExec m + "-" + v;
-
-  getDesktopFileName = drvName: (builtins.parseDrvName drvName).name;
 
   mkEditorProject =
-  { name, module, version, src, license, description, desktopName }:
+  { pname, module, version, src, license, description, desktopName }:
 
   stdenv.mkDerivation rec {
     application = sweethome3dApp;
-    inherit name module version src description;
+    inherit pname module version src description;
     exec = sweetExec module;
     editorItem = makeDesktopItem {
       inherit exec desktopName;
-      name = getDesktopFileName name;
+      name = pname;
       comment =  description;
       genericName = "Computer Aided (Interior) Design";
       categories = "Application;Graphics;2DGraphics;3DGraphics;";
@@ -44,7 +41,7 @@ let
       cp "${editorItem}/share/applications/"* $out/share/applications
       makeWrapper ${jre}/bin/java $out/bin/$exec \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
-        --add-flags "-jar $out/share/java/${module}-${version}.jar ${if stdenv.system == "x86_64-linux" then "-d64" else "-d32"}"
+        --add-flags "-jar $out/share/java/${module}-${version}.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '';
 
     dontStrip = true;
@@ -66,7 +63,7 @@ in {
   textures-editor = mkEditorProject rec {
     version = "1.5";
     module = "TexturesLibraryEditor";
-    name = sweetName module version;
+    pname = module;
     description = "Easily create SH3T files and edit the properties of the texture images it contain";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchcvs {
@@ -81,7 +78,7 @@ in {
   furniture-editor = mkEditorProject rec {
     version = "1.19";
     module = "FurnitureLibraryEditor";
-    name = sweetName module version;
+    pname = module;
     description = "Quickly create SH3F files and edit the properties of the 3D models it contain";
     license = stdenv.lib.licenses.gpl2;
     src = fetchcvs {

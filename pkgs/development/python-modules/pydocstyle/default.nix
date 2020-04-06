@@ -1,23 +1,25 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pythonOlder
-, snowballstemmer, six, configparser
-, pytest, pytestpep8, mock, pathlib }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+, mock
+, pytest
+, pytestpep8
+, snowballstemmer
+}:
 
 buildPythonPackage rec {
   pname = "pydocstyle";
-  version = "2.1.1";
+  version = "4.0.1";
+  disabled = !isPy3k;
 
-  # no tests on PyPI
-  # https://github.com/PyCQA/pydocstyle/issues/302
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = version;
-    sha256 = "1h0k8lpx14svc8dini62j0kqiam10pck5sdzvxa4xhsx7y689g5l";
+    sha256 = "1sr8d2fsfpam4f14v4als6g2v6s3n9h138vxlwhd6slb3ll14y4l";
   };
 
-  propagatedBuildInputs = [ snowballstemmer six ] ++ lib.optional (!isPy3k) configparser;
+  propagatedBuildInputs = [ snowballstemmer ];
 
-  checkInputs = [ pytest pytestpep8 mock ] ++ lib.optional (pythonOlder "3.4") pathlib;
+  checkInputs = [ pytest pytestpep8 mock ];
 
   checkPhase = ''
     # test_integration.py installs packages via pip

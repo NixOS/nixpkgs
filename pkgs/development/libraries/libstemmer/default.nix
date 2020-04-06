@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libstemmer-2017-03-02";
 
   src = fetchFromGitHub {

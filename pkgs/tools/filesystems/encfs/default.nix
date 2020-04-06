@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "encfs-${version}";
-  version = "1.9.4";
+  pname = "encfs";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
-    sha256 = "1hp2l4yk7fsimlrrd6a675vigmyikd323l1n3mybcdng58skj2ag";
+    sha256 = "099rjb02knr6yz7przlnyj62ic0ag5ncs7vvcc36ikyqrmpqsdch";
     rev = "v${version}";
     repo = "encfs";
     owner = "vgough";

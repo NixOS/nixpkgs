@@ -1,6 +1,6 @@
 {stdenv, fetchurl, protobuf}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libosmpbf-1.3.3";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "OSM-binary-1.3.3/src";
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     homepage = https://github.com/scrosby/OSM-binary;

@@ -1,27 +1,26 @@
 { stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
-, openal, freealut, libGLU_combined, libvorbis, libogg, gettext, curl, freetype
-, fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr }:
+, openal, freealut, libGLU, libGL, libvorbis, libogg, gettext, curl, freetype
+, fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet, harfbuzz }:
 
 let
   dir = "stk-code";
 
 in stdenv.mkDerivation rec {
-  name = "supertuxkart-${version}";
-
-  version = "0.9.3";
+  pname = "supertuxkart";
+  version = "1.1";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "supertuxkart";
       repo   = "stk-code";
       rev    = version;
-      sha256 = "1smnanjjaj4yq2ywikv0l6xysh6n2h1cm549plbg5xdk9mx2sfia";
+      sha256 = "01vxxl94583ixswzmi4caz8dk64r56pn3zxh7v63zml60yfvxbvp";
       name   = dir;
     })
     (fetchsvn {
       url    = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
-      rev    = "17448";
-      sha256 = "0lxbb4k57gv4gj12l5hnvhwdycpzcxjwg7qdfwglj2bdvaxf9f21";
+      rev    = "18212";
+      sha256 = "1dyj8r5rfifhnhayga8w8irkpa99vw57xjmy74cp8xz8g7zvdzqf";
       name   = "stk-assets";
     })
   ];
@@ -30,8 +29,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libX11 libXrandr
-    openal freealut libGLU_combined libvorbis libogg zlib freetype
-    curl fribidi bluez libjpeg libpng
+    openal freealut libGLU libGL libvorbis libogg zlib freetype
+    curl fribidi bluez libjpeg libpng enet harfbuzz
   ];
 
   enableParallelBuilding = true;
@@ -52,7 +51,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = https://supertuxkart.net/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0dehero fuuzetsu peterhoeg ];
+    maintainers = with maintainers; [ pyrolagus peterhoeg ];
     platforms = with platforms; linux;
   };
 }

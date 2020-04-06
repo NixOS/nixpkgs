@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchurl,
+{ stdenv, buildPythonPackage, fetchPypi,
   m2r, setuptools_scm, six, attrs }:
-buildPythonPackage rec {
-  version = "0.6.0";
-  pname = "Automat";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/A/Automat/${name}.tar.gz";
-    sha256 = "3c1fd04ecf08ac87b4dd3feae409542e9bf7827257097b2b6ed5692f69d6f6a8";
+buildPythonPackage rec {
+  version = "0.8.0";
+  pname = "Automat";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "269a09dfb063a3b078983f4976d83f0a0d3e6e7aaf8e27d8df1095e09dc4a484";
   };
 
   buildInputs = [ m2r setuptools_scm ];

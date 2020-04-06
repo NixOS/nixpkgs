@@ -1,27 +1,43 @@
 {
   lolcat = {
-    dependencies = ["paint" "trollop"];
+    dependencies = ["manpages" "optimist" "paint"];
+    groups = ["default"];
+    platforms = [];
     source = {
-      remotes = ["http://rubygems.org"];
-      sha256 = "1q031wq8wvp09llb39w0ql5k1zkblvkbmhlvrkc3ym832pibk06f";
+      remotes = ["https://rubygems.org"];
+      sha256 = "0k1m2ihcprjq9jdmq2v3xlf27hqbpr2vjnnyfwp3z2zspzbl0nys";
       type = "gem";
     };
-    version = "90.8.8";
+    version = "100.0.0";
+  };
+  manpages = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "11p6ilnfda6af15ks3xiz2pr0hkvdvadnk1xm4ahqlf84dld3fnd";
+      type = "gem";
+    };
+    version = "0.6.1";
+  };
+  optimist = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "05jxrp3nbn5iilc1k7ir90mfnwc5abc9h78s5rpm3qafwqxvcj4j";
+      type = "gem";
+    };
+    version = "3.0.0";
   };
   paint = {
+    groups = ["default"];
+    platforms = [];
     source = {
-      remotes = ["http://rubygems.org"];
-      sha256 = "1gnh9cihc84w4xbw51pg15crjvhblbq6nkzljrp7kmn3434nsg0d";
+      remotes = ["https://rubygems.org"];
+      sha256 = "0rrb2p2yk6ffhm0gz8ba431mf63kq7w27gwavxl7n8qd2splj4mh";
       type = "gem";
     };
-    version = "2.0.1";
-  };
-  trollop = {
-    source = {
-      remotes = ["http://rubygems.org"];
-      sha256 = "0415y63df86sqj43c0l82and65ia5h64if7n0znkbrmi6y0jwhl8";
-      type = "gem";
-    };
-    version = "2.1.2";
+    version = "2.1.1";
   };
 }

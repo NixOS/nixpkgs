@@ -4,12 +4,11 @@ let
   inherit (pythonPackages) python;
 in stdenv.mkDerivation rec {
   pname = "pyunbound";
-  name = "${pname}-${version}";
-  version = "1.6.0";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/unbound-${version}.tar.gz";
-    sha256 = "1dzsxyp34ianp08wk4vf13qzl5ss5rr9v1p8zr1aggfywrsbhzbb";
+    sha256 = "1ykdy62sgzv33ggkmzwx2h0ifm7hyyxyfkb4zckv7gz4f28xsm8v";
   };
 
   buildInputs = [ openssl expat libevent swig python ];
@@ -19,7 +18,7 @@ in stdenv.mkDerivation rec {
     --replace "\$(LIBTOOL) --mode=install cp _unbound.la" "cp _unbound.la"
     '';
 
-  preConfigure = "export PYTHON_VERSION=${python.majorVersion}";
+  preConfigure = "export PYTHON_VERSION=${python.pythonVersion}";
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -46,13 +45,13 @@ in stdenv.mkDerivation rec {
 
   # All we want is the Unbound Python module
   postInstall = ''
-    # Generate the built in root anchor and root key and store these in a logical place 
+    # Generate the built in root anchor and root key and store these in a logical place
     # to be used by tools depending only on the Python module
     $out/bin/unbound-anchor -l | head -1 > $out/etc/${pname}/root.anchor
     $out/bin/unbound-anchor -l | tail --lines=+2 - > $out/etc/${pname}/root.key
     # We don't need anything else
     rm -fR $out/bin $out/share $out/include $out/etc/unbound
-    patchelf --replace-needed libunbound.so.2 $out/${python.sitePackages}/libunbound.so.2 $out/${python.sitePackages}/_unbound.so 
+    patchelf --replace-needed libunbound.so.2 $out/${python.sitePackages}/libunbound.so.2 $out/${python.sitePackages}/_unbound.so
     '';
 
   meta = with stdenv.lib; {
@@ -61,5 +60,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.unbound.net;
     maintainers = with maintainers; [ leenaars ];
     platforms = stdenv.lib.platforms.unix;
+    broken = true;
   };
 }

@@ -4,20 +4,19 @@
 , python
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "plac";
-  version = "0.9.6";
+  version = "1.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16zqpalx4i1n1hrcvaj8sdixapy2g76fc13bbahz0xc106d72gxs";
+    sha256 = "398cb947c60c4c25e275e1f1dadf027e7096858fb260b8ece3b33bcff90d985f";
   };
 
   checkPhase = ''
       cd doc
       ${python.interpreter} -m unittest discover -p "*test_plac*"
     '';
-  
+
   meta = with stdenv.lib; {
     description = "Parsing the Command Line the Easy Way";
     homepage = https://github.com/micheles/plac;

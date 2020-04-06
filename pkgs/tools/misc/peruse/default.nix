@@ -1,38 +1,55 @@
-{
-  mkDerivation, fetchFromGitHub, fetchurl, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  baloo, karchive, kconfig, kcrash, kfilemetadata, kinit, kirigami, knewstuff, plasma-framework
+{ mkDerivation
+, fetchFromGitHub
+, lib
+, extra-cmake-modules
+, kdoctools
+, wrapGAppsHook
+, baloo
+, karchive
+, kconfig
+, kcrash
+, kfilemetadata
+, kinit
+, kirigami2
+, knewstuff
+, plasma-framework
 }:
 
-let
+mkDerivation rec {
   pname = "peruse";
-  version = "1.2";
-  unarr = fetchFromGitHub {
-    owner  = "zeniko";
-    repo   = "unarr";
-    rev    = "d1be8c43a82a4320306c8e835a86fdb7b2574ca7";
-    sha256 = "03ds5da69zipa25rsp76l6xqivrh3wcgygwyqa5x2rgcz3rjnlpr";
-  };
-in mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.2.20200208";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${name}.tar.xz";
-    sha256 = "1ik2627xynkichsq9x28rkczqn3l3p06q6vw5jdafdh3hisccmjq";
+  # The last formal release from 2016 uses kirigami1 which is deprecated
+  src = fetchFromGitHub {
+    owner = "KDE";
+    repo = pname;
+    rev = "4a1b3f954d2fe7e4919c0c5dbee1917776da582e";
+    sha256 = "1s5yy240x4cvrk93acygnrp5m10xp7ln013gdfbm0r5xvd8xy19k";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapGAppsHook
+  ];
 
-  propagatedBuildInputs = [ baloo karchive kconfig kcrash kfilemetadata kinit kirigami knewstuff plasma-framework ];
+  propagatedBuildInputs = [
+    baloo
+    karchive
+    kconfig
+    kcrash
+    kfilemetadata
+    kinit
+    kirigami2
+    knewstuff
+    plasma-framework
+  ];
 
-  pathsToLink = [ "/etc/xdg/peruse.knsrc"];
-
-  preConfigure = ''
-    rm -rf src/qtquick/karchive-rar/external/unarr
-    ln -s ${unarr} src/qtquick/karchive-rar/external/unarr
-  '';
+  pathsToLink = [ "/etc/xdg/peruse.knsrc" ];
 
   meta = with lib; {
+    description = "A comic book reader";
+    homepage = "https://peruse.kde.org";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

@@ -1,12 +1,11 @@
 { stdenv, fetchurl, qmake, qtbase, qtwebkit, qtx11extras, lzo, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = pname + "-" + version;
   pname = "cb2bib";
-  version = "1.9.2";
+  version = "2.0.0";
   src = fetchurl {
-    url = "http://www.molspaces.com/dl/progs/${name}.tar.gz";
-    sha256 = "0yz79v023w1229wzck3gij0iqah1xg8rg4a352q8idvg7bdmyfin";
+    url = "https://www.molspaces.com/dl/progs/${pname}-${version}.tar.gz";
+    sha256 = "0gv7cnxi84lr6d5y71pd67h0ilmf5c88j1jxgyn9dvj19smrv99h";
   };
   buildInputs = [ qtbase qtwebkit qtx11extras lzo libX11 ];
   nativeBuildInputs = [ qmake ];

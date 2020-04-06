@@ -20,7 +20,7 @@
 , speex
 , boost
 , opendht
-, libmsgpack
+, msgpack
 , gnutls
 , zlib
 , jsoncpp
@@ -30,7 +30,6 @@
 , openssl
 , perl
 , python3
-, bash
 , libupnp
 , speexdsp
 , fetchFromGitHub
@@ -79,8 +78,8 @@ let
     CFLAGS = "-g -DPJ_ICE_MAX_CAND=256 -DPJ_ICE_MAX_CHECKS=150 -DPJ_ICE_COMP_BITS=2 -DPJ_ICE_MAX_STUN=3 -DPJSIP_MAX_PKT_LEN=8000";
   });
 in
-stdenv.mkDerivation rec {
-  name = "ring-daemon-${version}";
+stdenv.mkDerivation {
+  pname = "ring-daemon";
   version = "2017-07-11";
 
   inherit src;
@@ -109,7 +108,7 @@ stdenv.mkDerivation rec {
     speex
     boost
     opendht
-    libmsgpack
+    msgpack
     gnutls
     zlib
     jsoncpp

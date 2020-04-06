@@ -1,31 +1,25 @@
-{ stdenv, fetchzip, ncurses
-, ocamlPackages
-, jbuilder }:
+{ lib, fetchzip, ncurses, ocamlPackages }:
 
-stdenv.mkDerivation {
-  name = "ocaml-top-1.1.4";
+with ocamlPackages; buildDunePackage rec {
+  pname = "ocaml-top";
+  version = "1.2.0-rc";
+
   src = fetchzip {
-    url = https://github.com/OCamlPro/ocaml-top/archive/1.1.4.tar.gz;
-    sha256 = "1lmzjmnzsg8xdz0q5nm95zclihi9z80kzsalapg0s9wq0id8qm4j";
+    url = "https://github.com/OCamlPro/ocaml-top/archive/${version}.tar.gz";
+    sha256 = "1r290m9vvr25lgaanivz05h0kf4fd3h5j61wj4hpp669zffcyyb5";
   };
 
-  buildInputs = [ ncurses jbuilder ]
-  ++ (with ocamlPackages; [ ocaml ocpBuild findlib lablgtk ocp-index ]);
+  buildInputs = [ ncurses ocp-build lablgtk3-sourceview3 ocp-index ];
 
   configurePhase = ''
     export TERM=xterm
     ocp-build -init
   '';
 
-  buildPhase = "jbuilder build";
-
-  inherit (jbuilder) installPhase;
-
   meta = {
     homepage = https://www.typerex.org/ocaml-top.html;
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     description = "A simple cross-platform OCaml code editor built for top-level evaluation";
-    platforms = ocamlPackages.ocaml.meta.platforms or [];
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

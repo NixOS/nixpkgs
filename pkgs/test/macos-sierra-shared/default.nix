@@ -25,7 +25,7 @@ let
       meta.platforms = lib.platforms.darwin;
     }) count;
 
-    finalExe = stdenv.mkDerivation rec {
+    finalExe = stdenv.mkDerivation {
       name = "${prefix}-final-asdf";
       unpackPhase = ''
         src=$PWD

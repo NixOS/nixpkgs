@@ -1,24 +1,20 @@
-{ stdenv, buildOcaml, fetchFromGitHub, ocaml-migrate-parsetree }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml-migrate-parsetree }:
 
-buildOcaml rec {
-  name = "ppx_tools_versioned";
-  version = "5.0.1";
-
-  minimumSupportedOcamlVersion = "4.02";
+buildDunePackage rec {
+  pname = "ppx_tools_versioned";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
-    owner = "let-def";
-    repo = "ppx_tools_versioned";
+    owner = "ocaml-ppx";
+    repo = pname;
     rev = version;
-    sha256 = "1rpbxbhk3k7f61h7lr4qkllkc12gjpq0rg52q7i6hcrg2dxkhwh6";
+    sha256 = "0c735w9mq49dmvkdw9ahfwh0icsk2sbhnfwmdhpibj86phfm17yj";
   };
 
   propagatedBuildInputs = [ ocaml-migrate-parsetree ];
 
-  createFindlibDestdir = true;
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/let-def/ppx_tools_versioned;
+  meta = with lib; {
+    homepage = "https://github.com/let-def/ppx_tools_versioned";
     description = "Tools for authors of syntactic tools (such as ppx rewriters)";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];

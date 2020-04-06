@@ -15,25 +15,27 @@ let
   ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
   sssd = canLoadExternalModules && config.services.sssd.enable;
   resolved = canLoadExternalModules && config.services.resolved.enable;
+  googleOsLogin = canLoadExternalModules && config.security.googleOsLogin.enable;
 
   hostArray = [ "files" ]
-    ++ optionals mymachines [ "mymachines" ]
-    ++ optionals nssmdns [ "mdns_minimal [NOTFOUND=return]" ]
-    ++ optionals nsswins [ "wins" ]
-    ++ optionals resolved ["resolve [!UNAVAIL=return]"]
+    ++ optional mymachines "mymachines"
+    ++ optional nssmdns "mdns_minimal [NOTFOUND=return]"
+    ++ optional nsswins "wins"
+    ++ optional resolved "resolve [!UNAVAIL=return]"
     ++ [ "dns" ]
-    ++ optionals nssmdns [ "mdns" ]
-    ++ optionals myhostname ["myhostname" ];
+    ++ optional nssmdns "mdns"
+    ++ optional myhostname "myhostname";
 
   passwdArray = [ "files" ]
     ++ optional sssd "sss"
-    ++ optionals ldap [ "ldap" ]
-    ++ optionals mymachines [ "mymachines" ]
+    ++ optional ldap "ldap"
+    ++ optional mymachines "mymachines"
+    ++ optional googleOsLogin "cache_oslogin oslogin"
     ++ [ "systemd" ];
 
   shadowArray = [ "files" ]
     ++ optional sssd "sss"
-    ++ optionals ldap [ "ldap" ];
+    ++ optional ldap "ldap";
 
   servicesArray = [ "files" ]
     ++ optional sssd "sss";
@@ -57,6 +59,15 @@ in {
           inherit list;
           path = makeLibraryPath list;
         };
+    };
+
+    system.nssHosts = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "mdns" ];
+      description = ''
+        List of host entries to configure in <filename>/etc/nsswitch.conf</filename>.
+      '';
     };
 
   };
@@ -83,7 +94,7 @@ in {
       group:     ${concatStringsSep " " passwdArray}
       shadow:    ${concatStringsSep " " shadowArray}
 
-      hosts:     ${concatStringsSep " " hostArray}
+      hosts:     ${concatStringsSep " " config.system.nssHosts}
       networks:  files
 
       ethers:    files
@@ -92,12 +103,14 @@ in {
       rpc:       files
     '';
 
+    system.nssHosts = hostArray;
+
     # Systemd provides nss-myhostname to ensure that our hostname
     # always resolves to a valid IP address.  It returns all locally
     # configured IP addresses, or ::1 and 127.0.0.2 as
     # fallbacks. Systemd also provides nss-mymachines to return IP
     # addresses of local containers.
-    system.nssModules = optionals canLoadExternalModules [ config.systemd.package.out ];
-
+    system.nssModules = (optionals canLoadExternalModules [ config.systemd.package.out ])
+      ++ optional googleOsLogin pkgs.google-compute-engine-oslogin.out;
   };
 }

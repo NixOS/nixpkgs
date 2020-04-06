@@ -1,13 +1,13 @@
 { stdenv, fetchurl, libnfnetlink }:
 
 stdenv.mkDerivation rec {
-  name = "minissdpd-${version}";
-  version = "1.5.20180203";
+  pname = "minissdpd";
+  version = "1.5.20180223";
 
   src = fetchurl {
-    sha256 = "1yiri887s8wxh4zrjc5dw19gyypqg63962aimcgd19blvpbwnfcv";
-    url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    name = "${name}.tar.gz";
+    sha256 = "1c47h1zil04jnbxiaaci2rm8jij47zp5156v48hb6m87nh4l5adv";
+    url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
   };
 
   buildInputs = [ libnfnetlink ];

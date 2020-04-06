@@ -5,7 +5,7 @@ let
              if stdenv.isDarwin then "macosx" else
              throw "Unsupported platform";
 in stdenv.mkDerivation rec {
-  name = "xalan-c-${version}";
+  pname = "xalan-c";
   version = "1.11";
 
   src = fetchurl {
@@ -13,12 +13,11 @@ in stdenv.mkDerivation rec {
     sha256 = "0a3a2b15vpacnqgpp6fiy1pwyc8q6ywzvyb5445f6wixfdspypjg";
   };
 
-  # TODO: should we really be putting outputs in $out/usr? I'd expect -P$out below
   configurePhase = ''
     export XALANCROOT=`pwd`/c
     cd `pwd`/c
-    mkdir -p $out/usr
-    ./runConfigure -p ${platform} -c cc -x c++ -P$out/usr
+    mkdir -p $out
+    ./runConfigure -p ${platform} -c cc -x c++ -P$out
   '';
 
   buildInputs = [ xercesc getopt ];

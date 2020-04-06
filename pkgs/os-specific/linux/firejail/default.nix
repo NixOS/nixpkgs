@@ -3,11 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="firejail";
-    version="0.9.52";
+    version="0.9.62";
     name="${baseName}-${version}";
-    hash="0w8l8z4j7iph8fp7rchhnfsrik3f00f9v5xr191fp38fphzcj56s";
-    url="https://vorboss.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.52.tar.xz";
-    sha256="0w8l8z4j7iph8fp7rchhnfsrik3f00f9v5xr191fp38fphzcj56s";
+    url="mirror://sourceforge/firejail/firejail/firejail-${version}.tar.xz";
+    sha256="1q2silgy882fl61p5qa9f9jqkxcqnwa71jig3c729iahx4f0hs05";
   };
   buildInputs = [
     which
@@ -37,13 +36,40 @@ stdenv.mkDerivation {
     sed -e "s@/etc/@$out/etc/@g" -e "/chmod u+s/d" -i Makefile
   '';
 
+  # The profile files provided with the firejail distribution include `.local`
+  # profile files using relative paths. The way firejail works when it comes to
+  # handling includes is by looking target files up in `~/.config/firejail`
+  # first, and then trying `SYSCONFDIR`. The latter normally points to
+  # `/etc/filejail`, but in the case of nixos points to the nix store. This
+  # makes it effectively impossible to place any profile files in
+  # `/etc/firejail`.
+  #
+  # The workaround applied below is by creating a set of `.local` files which
+  # only contain respective includes to `/etc/firejail`. This way
+  # `~/.config/firejail` still takes precedence, but `/etc/firejail` will also
+  # be searched in second order. This replicates the behaviour from
+  # non-nixos platforms.
+  #
+  # See https://github.com/netblue30/firejail/blob/e4cb6b42743ad18bd11d07fd32b51e8576239318/src/firejail/profile.c#L68-L83
+  # for the profile file lookup implementation.
+  postInstall = ''
+    for local in $(grep -Eh '^include.*local$' $out/etc/firejail/*.profile | awk '{print $2}' | sort | uniq)
+    do
+      echo "include /etc/firejail/$local" >$out/etc/firejail/$local
+    done
+  '';
+
+  # At high parallelism, the build sometimes fails with:
+  # bash: src/fsec-optimize/fsec-optimize: No such file or directory
+  enableParallelBuilding = false;
+
   meta = {
     inherit (s) version;
     description = ''Namespace-based sandboxing tool for Linux'';
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = https://l3net.wordpress.com/projects/firejail/;
-    downloadPage = "http://sourceforge.net/projects/firejail/files/firejail/";
+    homepage = https://firejail.wordpress.com/;
+    downloadPage = "https://sourceforge.net/projects/firejail/files/firejail/";
   };
 }

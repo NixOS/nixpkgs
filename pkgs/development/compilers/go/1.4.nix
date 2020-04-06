@@ -4,11 +4,11 @@
 , Security }:
 
 let
-  libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
+  libc = if stdenv ? cross then libcCross else stdenv.cc.libc;
 in
 
 stdenv.mkDerivation rec {
-  name = "go-${version}";
+  pname = "go";
   version = "1.4-bootstrap-20161024";
   revision = "79d85a4965ea7c46db483314c3981751909d7883";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcre ];
-  propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
+  depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
 
   hardeningDisable = [ "all" ];
 
@@ -61,7 +61,9 @@ stdenv.mkDerivation rec {
 
     sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
-    sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
+    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
+    # that run outside a nix server
+    sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
 
     # Find the loader dynamically
     LOADER="$(find ${lib.getLib libc}/lib -name ld-linux\* | head -n 1)"
@@ -128,11 +130,11 @@ stdenv.mkDerivation rec {
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
-           else if stdenv.system == "i686-linux" then "386"
-           else if stdenv.system == "x86_64-linux" then "amd64"
-           else if stdenv.isArm then "arm"
+           else if stdenv.hostPlatform.system == "i686-linux" then "386"
+           else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
+           else if stdenv.isAarch32 then "arm"
            else throw "Unsupported system";
-  GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
+  GOARM = stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 0;
 
@@ -156,7 +158,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan wkennington ];
+    maintainers = with maintainers; [ cstrahan ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

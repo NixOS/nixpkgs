@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "jbigkit-2.1";
 
   src = fetchurl {
-    url = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/download/${name}.tar.gz";
+    url = "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/${name}.tar.gz";
     sha256 = "0cnrcdr1dwp7h7m0a56qw09bv08krb37mpf7cml5sjdgpyv0cwfy";
   };
 
@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     description = "A software implementation of the JBIG1 data compression standard";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.scollector;
 
-  collectors = pkgs.runCommand "collectors" {}
+  collectors = pkgs.runCommand "collectors" { preferLocalBuild = true; }
     ''
     mkdir -p $out
     ${lib.concatStringsSep
@@ -51,7 +51,7 @@ in {
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "scollector";
         description = ''
           User account under which scollector runs.
@@ -59,7 +59,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "scollector";
         description = ''
           Group account under which scollector runs.
@@ -67,7 +67,7 @@ in {
       };
 
       bosunHost = mkOption {
-        type = types.string;
+        type = types.str;
         default = "localhost:8070";
         description = ''
           Host and port of the bosun server that will store the collected
@@ -116,20 +116,19 @@ in {
       path = [ pkgs.coreutils pkgs.iproute ];
 
       serviceConfig = {
-        PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
         ExecStart = "${cfg.package.bin}/bin/scollector -conf=${conf} ${lib.concatStringsSep " " cfg.extraOpts}";
       };
     };
 
-    users.extraUsers.scollector = {
+    users.users.scollector = {
       description = "scollector user";
       group = "scollector";
       uid = config.ids.uids.scollector;
     };
 
-    users.extraGroups.scollector.gid = config.ids.gids.scollector;
+    users.groups.scollector.gid = config.ids.gids.scollector;
 
   };
 

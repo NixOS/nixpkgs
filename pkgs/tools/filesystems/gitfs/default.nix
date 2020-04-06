@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-python2Packages.buildPythonApplication rec {
-  name = "gitfs-${version}";
-  version = "0.4.5.1";
+python3Packages.buildPythonApplication rec {
+  pname = "gitfs";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "PressLabs";
     repo = "gitfs";
     rev = version;
-    sha256 = "1s9ml2ryqxvzzq9mxa9y3xmzr742qxcpw9kzzbr7vm3bxgkyi074";
+    sha256 = "1jzwdwan8ndvp2lw6j7zbvg5k9rgf2d8dcxjrwc6bwyk59xdxn4p";
   };
 
   patchPhase = ''
@@ -16,8 +16,8 @@ python2Packages.buildPythonApplication rec {
     echo > requirements.txt
   '';
 
-  buildInputs = with python2Packages; [ pytest pytestcov mock ];
-  propagatedBuildInputs = with python2Packages; [ atomiclong fusepy pygit2 ];
+  checkInputs = with python3Packages; [ pytest pytestcov mock ];
+  propagatedBuildInputs = with python3Packages; [ atomiclong fusepy pygit2 six ];
 
   checkPhase = "py.test";
   doCheck = false;

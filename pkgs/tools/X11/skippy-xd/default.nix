@@ -1,15 +1,15 @@
-{stdenv, fetchgit, xproto, libX11, libXft, libXcomposite, libXdamage
-, libXext, xextproto, libXinerama, libjpeg, giflib, pkgconfig
+{stdenv, fetchgit, xorgproto, libX11, libXft, libXcomposite, libXdamage
+, libXext, libXinerama, libjpeg, giflib, pkgconfig
 }:
 let
   buildInputs = [
-    xproto libX11 libXft libXcomposite libXdamage libXext xextproto 
+    xorgproto libX11 libXft libXcomposite libXdamage libXext
     libXinerama libjpeg giflib pkgconfig
   ];
 in
 stdenv.mkDerivation rec {
   version = "git-2015-03-01";
-  name = "skippy-xd-${version}";
+  pname = "skippy-xd";
   inherit buildInputs;
   src = fetchgit {
     url = "https://github.com/richardgv/skippy-xd/";

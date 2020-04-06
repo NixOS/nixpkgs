@@ -1,42 +1,48 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, makeWrapper, git
-, python3, sshfs-fuse, torsocks, sshuttle, conntrack_tools }:
+{ lib, pythonPackages, fetchgit, fetchFromGitHub, makeWrapper, git
+, sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
+, iptables, bash }:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
     src = fetchgit {
       url = "https://github.com/datawire/sshuttle.git";
-      rev = "8f881d131a0d5cb203c5a530d233996077f1da1e";
-      sha256 = "0c760xhblz5mpcn5ddqpvivvgn0ixqbhpjsy50dkhgn6lymrx9bx";
-      leaveDotGit = true;
+      rev = "32226ff14d98d58ccad2a699e10cdfa5d86d6269";
+      sha256 = "1q20lnljndwcpgqv2qrf1k0lbvxppxf98a4g5r9zd566znhcdhx3";
     };
 
-    buildInputs = p.buildInputs ++ [ git ];
+    nativeBuildInputs = p.nativeBuildInputs ++ [ git ];
+
     postPatch = "rm sshuttle/tests/client/test_methods_nat.py";
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
-in stdenv.mkDerivation rec {
+in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
-  version = "0.67";
-  name = "${pname}-${version}";
+  version = "0.104";
 
   src = fetchFromGitHub {
     owner = "datawire";
     repo = "telepresence";
     rev = version;
-    sha256 = "1bpyzgvrf43yvhwp5bzkp2qf3z9dhjma165w8ssca9g00v4b5vg9";
+    sha256 = "0fccbd54ryd9rcbhfh5lx8qcc3kx3k9jads918rwnzwllqzjf7sg";
   };
 
   buildInputs = [ makeWrapper ];
 
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
-    mkdir -p $out/libexec $out/bin
-    cp cli/telepresence $out/libexec/telepresence
-
-    makeWrapper $out/libexec/telepresence $out/bin/telepresence \
-      --prefix PATH : ${lib.makeBinPath [python3 sshfs-fuse torsocks conntrack_tools sshuttle-telepresence]}
+  postInstall = ''
+    wrapProgram $out/bin/telepresence \
+      --prefix PATH : ${lib.makeBinPath [
+        sshfs-fuse
+        torsocks
+        conntrack-tools
+        sshuttle-telepresence
+        openssh
+        coreutils
+        iptables
+        bash
+      ]}
   '';
+
+  doCheck = false;
 
   meta = {
     homepage = https://www.telepresence.io/;

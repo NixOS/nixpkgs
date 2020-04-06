@@ -1,12 +1,11 @@
-{ lib, fetchurl, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "simpleeval";
-  name = "${pname}-${version}";
-  version = "0.9.5";
-  src = fetchurl {
-    url = "mirror://pypi/s/simpleeval/${name}.tar.gz";
-    sha256 = "0sda13bqg9l4j17iczmfanxbzsg6fm9aw8i3crzsjfxx51rwj1i3";
+  version = "0.9.10";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1skvl467kj83rzkhk01i0wm8m5vmh6j5znrfdizn6r18ii45a839";
   };
   meta = {
     homepage = https://github.com/danthedeckie/simpleeval;

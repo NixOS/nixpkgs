@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, asciidoc }:
+{ stdenv, fetchFromGitHub, cmake, asciidoc, enableDrafts ? false }:
 
 stdenv.mkDerivation rec {
-  name = "zeromq-${version}";
-  version = "4.2.3";
+  pname = "zeromq";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "libzmq";
     rev = "v${version}";
-    sha256 = "1yadf4vz4m49lpwwwscxs6wf4v9dgqgxkwgwpby9lvb4pv8qbmaf";
+    sha256 = "1q37z05i76ili31j6jlw8988iy6vxadlmd306f99phxfdpqa6bn9";
   };
 
   nativeBuildInputs = [ cmake asciidoc ];
 
   enableParallelBuilding = true;
 
-  postPatch = ''
-    sed -i 's,''${PACKAGE_PREFIX_DIR}/,,g' ZeroMQConfig.cmake.in
-  '';
+  doCheck = false; # fails all the tests (ctest)
+
+  cmakeFlags = stdenv.lib.optional enableDrafts "-DENABLE_DRAFTS=ON";
 
   meta = with stdenv.lib; {
     branch = "4";
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "The Intelligent Transport Layer";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

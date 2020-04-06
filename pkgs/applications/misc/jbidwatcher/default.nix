@@ -1,10 +1,8 @@
-{ stdenv, fetchurl, java }:
+{ stdenv, fetchurl, java, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "jbidwatcher";
   version = "2.5.6";
-
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.jbidwatcher.com/download/JBidwatcher-${version}.jar";
@@ -15,13 +13,13 @@ stdenv.mkDerivation rec {
 
   jarfile = "$out/share/java/${pname}/JBidwatcher.jar";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
-    echo > "$out/bin/${pname}" "#!/bin/sh"
+    echo > "$out/bin/${pname}" "#!${runtimeShell}"
     echo >>"$out/bin/${pname}" "${java}/bin/java -Xmx512m -jar ${jarfile}"
     chmod +x "$out/bin/${pname}"
     install -D -m644 ${src} ${jarfile}

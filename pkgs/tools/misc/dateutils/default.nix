@@ -1,13 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoreconfHook, tzdata }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.3";
-  name = "dateutils-${version}";
+  version = "0.4.7";
+  pname = "dateutils";
 
   src = fetchurl {
-    url = "https://bitbucket.org/hroptatyr/dateutils/downloads/${name}.tar.xz";
-    sha256 = "06lgqp2cyvmh09j04lm3g6ml7yxn1x92rjzgnwzq4my95c37kmdh";
+    url = "https://bitbucket.org/hroptatyr/dateutils/downloads/${pname}-${version}.tar.xz";
+    sha256 = "16jr9yjk8wgzfh22hr3z6mp4jm3fkacyibds4jj5xx5yymbm8wj9";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ tzdata ]; # needed for datezone
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "A bunch of tools that revolve around fiddling with dates and times in the command line";

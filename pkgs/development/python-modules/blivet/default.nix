@@ -4,17 +4,15 @@
 
 let
   pyenable = { enablePython = true; };
-  selinuxWithPython = libselinux.override pyenable;
   cryptsetupWithPython = cryptsetup.override pyenable;
 in buildPythonPackage rec {
   pname = "blivet";
-  name = "${pname}-${version}";
   version = "0.67";
 
   src = fetchFromGitHub {
     owner = "dwlehman";
     repo = "blivet";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1gk94ghjrxfqnx53hph1j2s7qcv86fjz48is7l099q9c24rjv8ky";
   };
 
@@ -32,11 +30,10 @@ in buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock pyudev selinuxWithPython cryptsetupWithPython
+    pykickstart pyparted pyblock pyudev libselinux cryptsetupWithPython
     six
   ];
 
-  # Tests are in nixos/tests/blivet.nix.
   doCheck = false;
 
   meta = with stdenv.lib; {

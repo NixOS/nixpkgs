@@ -7,12 +7,12 @@
 , chardet
 , stevedore
 , restructuredtext_lint
+, pygments
 }:
 
 buildPythonPackage rec {
   pname = "doc8";
   version = "0.8.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +20,14 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pbr ];
-  propagatedBuildInputs = [ docutils six chardet stevedore restructuredtext_lint ];
+  propagatedBuildInputs = [
+    docutils
+    six
+    chardet
+    stevedore
+    restructuredtext_lint
+    pygments
+  ];
 
   doCheck = false;
 

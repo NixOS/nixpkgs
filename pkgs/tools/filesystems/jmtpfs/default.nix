@@ -2,7 +2,8 @@
 
 let version = "0.5"; in
 stdenv.mkDerivation {
-  name = "jmtpfs-${version}";
+  pname = "jmtpfs";
+  inherit version;
 
   src = fetchFromGitHub {
     sha256 = "1pm68agkhrwgrplrfrnbwdcvx5lrivdmqw8pb5gdmm3xppnryji1";

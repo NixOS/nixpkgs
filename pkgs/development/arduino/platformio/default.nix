@@ -1,10 +1,10 @@
 
-{ pkgs, newScope }:
+{ newScope }:
 
 let
   callPackage = newScope self;
 
-  self = rec {
+  self = {
       platformio-chrootenv = callPackage ./chrootenv.nix { };
   };
 

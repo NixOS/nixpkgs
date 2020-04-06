@@ -1,25 +1,22 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
+{ lib, fetchFromGitHub, buildDunePackage }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-stdint-${version}";
-  version = "0.3.0";
+buildDunePackage rec {
+  pname = "stdint";
+  version = "0.6.0";
+
+  minimumOCamlVersion = "4.07";
+
   src = fetchFromGitHub {
     owner = "andrenth";
     repo = "ocaml-stdint";
     rev = version;
-    sha256 = "18nh23yx4ghgq7mjf4mdyq8kj1fdw5d0abw919s8n4mv21cmpwia";
+    sha256 = "19ccxs0vij81vyc9nqc9kbr154ralb9dgc2y2nr71a5xkx6xfn0y";
   };
-
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
-
-  createFindlibDestdir = true;
 
   meta = {
     description = "Various signed and unsigned integers for OCaml";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.gebner ];
-    inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
+    homepage = "https://github.com/andrenth/ocaml-stdint";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.gebner ];
   };
 }

@@ -1,14 +1,14 @@
 { stdenv, openssl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "open-isns-${version}";
-  version = "0.97";
+  pname = "open-isns";
+  version = "0.99";
 
   src = fetchFromGitHub {
     owner = "gonzoleeman";
     repo = "open-isns";
     rev = "v${version}";
-    sha256 = "17aichjgkwjfp9dx1piw7dw8ddz1bgm5mk3laid2zvjks1h739k3";
+    sha256 = "0m294aiv80rkihacw5094093pc0kd5bkbxqgs6i32jsglxy33hvf";
   };
 
   propagatedBuildInputs = [ openssl ];
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-shared" ];
 
-  installFlags = "etcdir=$(out)/etc vardir=$(out)/var/lib/isns";
-  installTargets = "install install_hdrs install_lib";
+  installFlags = [ "etcdir=$(out)/etc" "vardir=$(out)/var/lib/isns" ];
+  installTargets = [ "install" "install_hdrs" "install_lib" ];
 
   meta = {
     description = "iSNS server and client for Linux";

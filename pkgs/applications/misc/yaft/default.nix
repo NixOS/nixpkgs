@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.9";
-  name = "yaft-${version}";
+  pname = "yaft";
 
   src = fetchFromGitHub {
     owner = "uobikiemukot";

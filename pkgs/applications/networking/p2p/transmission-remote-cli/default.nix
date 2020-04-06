@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "transmission-remote-cli-${version}";
+  pname = "transmission-remote-cli";
   version = "1.7.1";
 
   src = fetchurl {

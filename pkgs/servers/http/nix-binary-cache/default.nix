@@ -1,9 +1,9 @@
-{stdenv, fetchurl
+{stdenv
 , coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
 , lighttpd, iproute }:
 stdenv.mkDerivation rec {
   version = "2014-06-29-1";
-  name = "nix-binary-cache-${version}";
+  pname = "nix-binary-cache";
 
   phases = ["installPhase"];
 

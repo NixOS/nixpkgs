@@ -1,19 +1,23 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "range-v3-${version}";
-  version = "0.3.5";
+  pname = "range-v3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ericniebler";
     repo = "range-v3";
     rev = version;
-    sha256 = "00bwm7n3wyf49xpr7zjhm08dzwx3lwibgafi6isvfls3dhk1m4kp";
+    sha256 = "1h9h5j7pdi0afpip9ncq76h1xjhvb8bnm585q17afz2l4fydy8qj";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
+  # Building the tests currently fails on AArch64 due to internal compiler
+  # errors (with GCC 9.2):
+  cmakeFlags = stdenv.lib.optional stdenv.isAarch64 "-DRANGE_V3_TESTS=OFF";
+
+  doCheck = !stdenv.isAarch64;
   checkTarget = "test";
 
   enableParallelBuilding = true;
@@ -23,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/ericniebler/range-v3;
     license = licenses.boost;
     platforms = platforms.all;
-    maintainers = with maintainers; [ xwvvvvwx ];
+    maintainers = with maintainers; [ primeos xwvvvvwx ];
   };
 }

@@ -1,7 +1,7 @@
-{stdenv, fetchurl, writeText, zlib, gperf}:
+{stdenv, fetchurl, zlib, gperf}:
 
 stdenv.mkDerivation rec {
-  name = "libid3tag-${version}";
+  pname = "libid3tag";
   version = "0.15.1b";
 
   src = fetchurl {
@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib gperf ];
 
-  patches = [ ./debian-patches.patch ];
+  patches = [
+    ./debian-patches.patch
+    ./CVE-2017-11550-and-CVE-2017-11551.patch
+  ];
 
   preConfigure = ''
     configureFlagsArray+=(
@@ -35,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "ID3 tag manipulation library";
     homepage = http://mad.sourceforge.net/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

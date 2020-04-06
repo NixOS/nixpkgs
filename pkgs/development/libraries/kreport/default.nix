@@ -1,17 +1,16 @@
 {
   mkDerivation, lib, fetchurl,
   extra-cmake-modules,
-  qtbase, qtdeclarative, qtwebkit, kconfig, kcoreaddons, kwidgetsaddons, kguiaddons, kproperty, marble, python2
+  qtdeclarative, qtwebkit, kconfig, kcoreaddons, kwidgetsaddons, kguiaddons, kproperty, marble, python2
 }:
 
 mkDerivation rec {
   pname = "kreport";
-  version = "3.0.2";
-  name = "${pname}-${version}";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "1zd3vhf26cyp8xrq11awm9pmhnk88ppyc0riyr0gxj8y703ahkp0";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
+    sha256 = "1mycsvkz5rphi9df2i4ch4ykvprd4m76acsdzs3zis2ljrqnsw92";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

@@ -1,0 +1,323 @@
+From 29f4ad88e2294ae70b10180e7361d135c4e5c896 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Mon, 13 May 2019 00:09:42 -0300
+Subject: [PATCH 2/2] Use XDG to look for mime cache
+
+---
+ .../shutil/mimesappsmanager.cpp               | 230 ++++++++++--------
+ .../shutil/mimesappsmanager.h                 |   6 +-
+ 2 files changed, 125 insertions(+), 111 deletions(-)
+
+diff --git a/dde-file-manager-lib/shutil/mimesappsmanager.cpp b/dde-file-manager-lib/shutil/mimesappsmanager.cpp
+index c9e53630..7a21df51 100644
+--- a/dde-file-manager-lib/shutil/mimesappsmanager.cpp
++++ b/dde-file-manager-lib/shutil/mimesappsmanager.cpp
+@@ -552,14 +552,20 @@ QString MimesAppsManager::getMimeAppsCacheFile()
+     return QString("%1/%2").arg(DFMStandardPaths::location(DFMStandardPaths::CachePath), "MimeApps.json");
+ }
+ 
+-QString MimesAppsManager::getMimeInfoCacheFilePath()
++QStringList MimesAppsManager::getMimeInfoCacheFilePath()
+ {
+-    return "/usr/share/applications/mimeinfo.cache";
++    QStringList paths;
++    for (const QString dir : getMimeInfoCacheFileRootPath() )
++       paths.append(dir + QDir::separator() + "mimeinfo.cache");
++    qDebug() << "getMimeInfoCacheFilePath: " << paths;
++    return paths;
+ }
+ 
+-QString MimesAppsManager::getMimeInfoCacheFileRootPath()
++QStringList MimesAppsManager::getMimeInfoCacheFileRootPath()
+ {
+-    return "/usr/share/applications";
++    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
++    qDebug() << "getMimeInfoCacheFileRootPath: " << paths;
++    return paths;
+ }
+ 
+ QString MimesAppsManager::getDesktopFilesCacheFile()
+@@ -574,23 +580,27 @@ QString MimesAppsManager::getDesktopIconsCacheFile()
+ 
+ QStringList MimesAppsManager::getDesktopFiles()
+ {
+-      QStringList desktopFiles;
++    QStringList desktopFiles;
+ 
+-      foreach (QString desktopFolder, getApplicationsFolders()) {
+-          QDirIterator it(desktopFolder, QStringList("*.desktop"),
+-                          QDir::Files | QDir::NoDotAndDotDot,
+-                          QDirIterator::Subdirectories);
+-          while (it.hasNext()) {
+-            it.next();
+-            desktopFiles.append(it.filePath());
+-          }
+-      }
+-      return desktopFiles;
++    foreach (QString desktopFolder, getApplicationsFolders()) {
++        QDirIterator it(desktopFolder, QStringList("*.desktop"),
++                        QDir::Files | QDir::NoDotAndDotDot,
++                        QDirIterator::Subdirectories);
++        while (it.hasNext()) {
++          it.next();
++          desktopFiles.append(it.filePath());
++        }
++    }
++    return desktopFiles;
+ }
+ 
+-QString MimesAppsManager::getDDEMimeTypeFile()
++QStringList MimesAppsManager::getDDEMimeTypeFile()
+ {
+-    return QString("%1/%2/%3").arg(getMimeInfoCacheFileRootPath(), "deepin", "dde-mimetype.list");
++    QStringList paths;
++    for (const QString path : getMimeInfoCacheFileRootPath())
++       paths.append(QString("%1/%2/%3").arg(path, "deepin", "dde-mimetype.list"));
++    qDebug() << "getDDEMimeTypeFile: " << paths;
++    return paths;
+ }
+ 
+ QMap<QString, DesktopFile> MimesAppsManager::getDesktopObjs()
+@@ -663,124 +673,128 @@ void MimesAppsManager::initMimeTypeApps()
+         MimeApps.insert(key, orderApps);
+     }
+ 
+-    //check mime apps from cache
+-    QFile f(getMimeInfoCacheFilePath());
+-    if(!f.open(QIODevice::ReadOnly)){
+-        qDebug () << "failed to read mime info cache file:" << f.errorString();
+-        return;
+-    }
+-
+     QStringList audioDesktopList;
+     QStringList imageDeksopList;
+     QStringList textDekstopList;
+     QStringList videoDesktopList;
+ 
+-    while (!f.atEnd()) {
+-        QString data = f.readLine();
+-        QString _desktops = data.split("=").last();
+-        QString mimeType = data.split("=").first();
+-        QStringList desktops = _desktops.split(";");
+-
+-        foreach (const QString desktop, desktops) {
+-            if(desktop.isEmpty() || audioDesktopList.contains(desktop))
+-                continue;
++    //check mime apps from cache
++    for (const QString path : getMimeInfoCacheFilePath()) {
++        QFile f(path);
++        if(!f.open(QIODevice::ReadOnly)){
++            qDebug () << "failed to read mime info cache file:" << f.errorString();
++            return;
++        }
+ 
+-            if(mimeType.startsWith("audio")){
+-                if(!audioDesktopList.contains(desktop))
+-                    audioDesktopList << desktop;
+-            } else if(mimeType.startsWith("image")){
+-                if(!imageDeksopList.contains(desktop))
+-                    imageDeksopList << desktop;
+-            } else if(mimeType.startsWith("text")){
+-                if(!textDekstopList.contains(desktop))
+-                    textDekstopList << desktop;
+-            } else if(mimeType.startsWith("video")){
+-                if(!videoDesktopList.contains(desktop))
+-                    videoDesktopList << desktop;
++        while (!f.atEnd()) {
++            QString data = f.readLine();
++            QString _desktops = data.split("=").last();
++            QString mimeType = data.split("=").first();
++            QStringList desktops = _desktops.split(";");
++
++            foreach (const QString desktop, desktops) {
++                if(desktop.isEmpty() || audioDesktopList.contains(desktop))
++                    continue;
++
++                if(mimeType.startsWith("audio")){
++                    if(!audioDesktopList.contains(desktop))
++                        audioDesktopList << desktop;
++                } else if(mimeType.startsWith("image")){
++                    if(!imageDeksopList.contains(desktop))
++                        imageDeksopList << desktop;
++                } else if(mimeType.startsWith("text")){
++                    if(!textDekstopList.contains(desktop))
++                        textDekstopList << desktop;
++                } else if(mimeType.startsWith("video")){
++                    if(!videoDesktopList.contains(desktop))
++                        videoDesktopList << desktop;
++                }
+             }
+         }
++        f.close();
+     }
+-    f.close();
+ 
+-    const QString mimeInfoCacheRootPath = getMimeInfoCacheFileRootPath();
+-    foreach (QString desktop, audioDesktopList) {
+-        const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath,desktop);
+-        if(!QFile::exists(path))
+-            continue;
+-        DesktopFile df(path);
+-        AudioMimeApps.insert(path, df);
+-    }
++    for (const QString mimeInfoCacheRootPath : getMimeInfoCacheFileRootPath()) {
++        foreach (QString desktop, audioDesktopList) {
++            const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath,desktop);
++            if(!QFile::exists(path))
++                continue;
++            DesktopFile df(path);
++            AudioMimeApps.insert(path, df);
++        }
+ 
+-    foreach (QString desktop, imageDeksopList) {
+-        const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath,desktop);
+-        if(!QFile::exists(path))
+-            continue;
+-        DesktopFile df(path);
+-        ImageMimeApps.insert(path, df);
+-    }
++        foreach (QString desktop, imageDeksopList) {
++            const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath,desktop);
++            if(!QFile::exists(path))
++                continue;
++            DesktopFile df(path);
++            ImageMimeApps.insert(path, df);
++        }
+ 
+-    foreach (QString desktop, textDekstopList) {
+-        const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath,desktop);
+-        if(!QFile::exists(path))
+-            continue;
+-        DesktopFile df(path);
+-        TextMimeApps.insert(path, df);
+-    }
++        foreach (QString desktop, textDekstopList) {
++            const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath,desktop);
++            if(!QFile::exists(path))
++                continue;
++            DesktopFile df(path);
++            TextMimeApps.insert(path, df);
++        }
+ 
+-    foreach (QString desktop, videoDesktopList) {
+-        const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath,desktop);
+-        if(!QFile::exists(path))
+-            continue;
+-        DesktopFile df(path);
+-        VideoMimeApps.insert(path, df);
++        foreach (QString desktop, videoDesktopList) {
++            const QString path = QString("%1/%2").arg(mimeInfoCacheRootPath,desktop);
++            if(!QFile::exists(path))
++                continue;
++            DesktopFile df(path);
++            VideoMimeApps.insert(path, df);
++        }
+     }
+-
+     return;
+ }
+ 
+ void MimesAppsManager::loadDDEMimeTypes()
+ {
+-    QSettings settings(getDDEMimeTypeFile(), QSettings::IniFormat);
+-    qDebug() << settings.childGroups();
++    for (const QString path : getDDEMimeTypeFile()) {
++        QSettings settings(path, QSettings::IniFormat);
++        qDebug() << settings.childGroups();
+ 
+-    QFile file(getDDEMimeTypeFile());
+-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+-        return;
+-    }
++        QFile file(path);
++        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
++            continue;
++        }
++
++        // Read propeties
++        QTextStream in(&file);
++        QString desktopKey;
++        while (!in.atEnd()) {
+ 
+-    // Read propeties
+-    QTextStream in(&file);
+-    QString desktopKey;
+-    while (!in.atEnd()) {
++          // Read new line
++          QString line = in.readLine();
+ 
+-      // Read new line
+-      QString line = in.readLine();
++          // Skip empty line or line with invalid format
++          if (line.trimmed().isEmpty()) {
++            continue;
++          }
+ 
+-      // Skip empty line or line with invalid format
+-      if (line.trimmed().isEmpty()) {
+-        continue;
+-      }
++          // Read group
++          // NOTE: symbols '[' and ']' can be found not only in group names, but
++          // only group can start with '['
+ 
+-      // Read group
+-      // NOTE: symbols '[' and ']' can be found not only in group names, but
+-      // only group can start with '['
++          if (line.trimmed().startsWith("[") && line.trimmed().endsWith("]")) {
++                QString tmp = line.trimmed().replace("[", "").replace("]", "");
++                desktopKey = tmp;
++                continue;
++          }
+ 
+-      if (line.trimmed().startsWith("[") && line.trimmed().endsWith("]")) {
+-            QString tmp = line.trimmed().replace("[", "").replace("]", "");
+-            desktopKey = tmp;
+-            continue;
+-      }
+-
+-      // If we are in correct group and line contains assignment then read data
+-      int first_equal = line.indexOf('=');
+-      if (!desktopKey.isEmpty() && first_equal >= 0) {
+-            QString value = line.mid(first_equal + 1);
+-            QStringList mimetypes = value.split(";");
+-            DDE_MimeTypes.insert(desktopKey, mimetypes);
+-            desktopKey.clear();
++          // If we are in correct group and line contains assignment then read data
++          int first_equal = line.indexOf('=');
++          if (!desktopKey.isEmpty() && first_equal >= 0) {
++                QString value = line.mid(first_equal + 1);
++                QStringList mimetypes = value.split(";");
++                DDE_MimeTypes.insert(desktopKey, mimetypes);
++                desktopKey.clear();
++            }
+         }
++        file.close();
+     }
+-    file.close();
+ }
+ 
+ bool MimesAppsManager::lessByDateTime(const QFileInfo &f1, const QFileInfo &f2)
+diff --git a/dde-file-manager-lib/shutil/mimesappsmanager.h b/dde-file-manager-lib/shutil/mimesappsmanager.h
+index 223c80aa..00a61302 100644
+--- a/dde-file-manager-lib/shutil/mimesappsmanager.h
++++ b/dde-file-manager-lib/shutil/mimesappsmanager.h
+@@ -101,12 +101,12 @@ public:
+ 
+     static QStringList getApplicationsFolders();
+     static QString getMimeAppsCacheFile();
+-    static QString getMimeInfoCacheFilePath();
+-    static QString getMimeInfoCacheFileRootPath();
++    static QStringList getMimeInfoCacheFilePath();
++    static QStringList getMimeInfoCacheFileRootPath();
+     static QString getDesktopFilesCacheFile();
+     static QString getDesktopIconsCacheFile();
+     static QStringList getDesktopFiles();
+-    static QString getDDEMimeTypeFile();
++    static QStringList getDDEMimeTypeFile();
+     static QMap<QString, DesktopFile> getDesktopObjs();
+     static void initMimeTypeApps();
+     static void loadDDEMimeTypes();
+-- 
+2.21.0
+

@@ -29,7 +29,7 @@ in
       };
 
       nodeName = mkOption {
-        type = types.string;
+        type = types.str;
         default = "riak@127.0.0.1";
         description = ''
           Name of the Erlang node.
@@ -37,7 +37,7 @@ in
       };
 
       distributedCookie = mkOption {
-        type = types.string;
+        type = types.str;
         default = "riak";
         description = ''
           Cookie for distributed node communication.  All nodes in the
@@ -102,14 +102,14 @@ in
       ${cfg.extraAdvancedConfig}
     '';
 
-    users.extraUsers.riak = {
+    users.users.riak = {
       name = "riak";
       uid = config.ids.uids.riak;
       group = "riak";
       description = "Riak server user";
     };
 
-    users.extraGroups.riak.gid = config.ids.gids.riak;
+    users.groups.riak.gid = config.ids.gids.riak;
 
     systemd.services.riak = {
       description = "Riak Server";

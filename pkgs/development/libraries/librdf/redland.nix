@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, openssl, libxslt, perl
-, curl, pcre, libxml2, librdf_rasqal
-, mysql, withMysql ? false
+, curl, pcre, libxml2, librdf_rasqal, gmp
+, libmysqlclient, withMysql ? false
 , postgresql, withPostgresql ? false
 , sqlite, withSqlite ? true
 , db, withBdb ? false
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig ];
 
-  buildInputs = [ openssl libxslt curl pcre libxml2 ]
-    ++ stdenv.lib.optional withMysql mysql.connector-c
+  buildInputs = [ openssl libxslt curl pcre libxml2 gmp ]
+    ++ stdenv.lib.optional withMysql libmysqlclient
     ++ stdenv.lib.optional withSqlite sqlite
     ++ stdenv.lib.optional withPostgresql postgresql
     ++ stdenv.lib.optional withBdb db;
@@ -28,13 +28,20 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-threads" ]
-    ++ stdenv.lib.optional withBdb "--with-bdb=${db}";
+    ++ stdenv.lib.optionals withBdb [
+      "--with-bdb-include=${db.dev}/include"
+      "--with-bdb-lib=${db.out}/lib"
+    ];
 
   # Fix broken DT_NEEDED in lib/redland/librdf_storage_sqlite.so.
   NIX_CFLAGS_LINK = "-lraptor2";
 
-  meta = {
+  doCheck = false; # fails 1 out of 17 tests with a segmentation fault
+
+  meta = with stdenv.lib; {
+    description = "C libraries that provide support for the Resource Description Framework (RDF)";
     homepage = http://librdf.org/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

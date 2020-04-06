@@ -1,29 +1,36 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "caddy-${version}";
-  version = "0.10.11";
+buildGoModule rec {
+  pname = "caddy";
+  version = "1.0.5";
 
-  goPackagePath = "github.com/mholt/caddy";
+  goPackagePath = "github.com/caddyserver/caddy";
 
   subPackages = [ "caddy" ];
 
   src = fetchFromGitHub {
-    owner = "mholt";
-    repo = "caddy";
+    owner = "caddyserver";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "04ls0s79dsyxnrpra55qvl0dk9nyvps59l034326r3bzk4jhb3q6";
+    sha256 = "0jrhwmr6gggppskg5h450wybzkv17iq69dgw36hd1dp56q002i7g";
   };
+  modSha256 = "1gc0xvsihr4zp7hkrdfrplvzkaphz1y4q53rgwn2jhd8s98l57an";
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X github.com/mholt/caddy/caddy/caddymain.gitTag=v${version}
+  preBuild = ''
+    cat << EOF > caddy/main.go
+    package main
+    import "github.com/caddyserver/caddy/caddy/caddymain"
+    func main() {
+      caddymain.EnableTelemetry = false
+      caddymain.Run()
+    }
+    EOF
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://caddyserver.com;
+    homepage = "https://caddyserver.com";
     description = "Fast, cross-platform HTTP/2 web server with automatic HTTPS";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem fpletz zimbatm ];
+    maintainers = with maintainers; [ rushmorem fpletz zimbatm filalex77 ];
   };
 }

@@ -1,15 +1,15 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql55, mariadb, sqlite, zlib, libxml2 }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, libuuid, patchelf, libiconv, fetchFromGitHub }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
 {
   psql = stdenv.mkDerivation rec {
-    name = "psqlodbc-${version}";
-    version = "09.05.0210";
+    pname = "psqlodbc";
+    version = "10.01.0000";
 
     src = fetchurl {
-      url = "http://ftp.postgresql.org/pub/odbc/versions/src/${name}.tar.gz";
-      sha256 = "0317zrxaiy209xzcc6b5sz6hsyiv4zm74iikp91rgz7z3ll4n4dc";
+      url = "http://ftp.postgresql.org/pub/odbc/versions/src/${pname}-${version}.tar.gz";
+      sha256 = "1cyams7157f3gry86x64xrplqi2vyqrq3rqka59gv4lb4rpl7jl7";
     };
 
     buildInputs = [ unixODBC postgresql ];
@@ -28,46 +28,58 @@
   };
 
   mariadb = stdenv.mkDerivation rec {
-    name = "mariadb-connector-odbc-${version}";
-    version = "2.0.10";
+    pname = "mariadb-connector-odbc";
+    version = "3.1.4";
 
-    src = fetchurl {
-      url = "https://downloads.mariadb.org/interstitial/connector-odbc-${version}/src/${name}-ga-src.tar.gz";
-      sha256 = "0b6ximy0dg0xhqbrm1l7pn8hjapgpmddi67kh54h6i9cq9hqfdvz";
+    src = fetchFromGitHub {
+      owner = "MariaDB";
+      repo = "mariadb-connector-odbc";
+      rev = version;
+      sha256 = "1kbz5mng9vx89cw2sx7gsvhbv4h86zwp31fr0hxqing3cwxhkfgw";
+      # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
+      # (see https://github.com/NixOS/nixpkgs/issues/73258)
+      fetchSubmodules = true;
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mariadb.connector-c ];
+    buildInputs = [ unixODBC openssl libiconv ];
+
+    preConfigure = ''
+      # we don't want to build a .pkg
+      sed -i 's/ADD_SUBDIRECTORY(osxinstall)//g' CMakeLists.txt
+    '';
 
     cmakeFlags = [
-      "-DMARIADB_INCLUDE_DIR=${mariadb.connector-c}/include/mariadb"
+      "-DWITH_OPENSSL=ON"
+      # on darwin this defaults to ON but we want to build against unixODBC
+      "-DWITH_IODBC=OFF"
     ];
 
     passthru = {
       fancyName = "MariaDB";
-      driver = "lib/libmyodbc3-3.51.12.so";
+      driver = if stdenv.isDarwin then "lib/libmaodbc.dylib" else "lib/libmaodbc.so";
     };
 
     meta = with stdenv.lib; {
       description = "MariaDB ODBC database driver";
       homepage =  https://downloads.mariadb.org/connector-odbc/;
       license = licenses.gpl2;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
     };
   };
 
   mysql = stdenv.mkDerivation rec {
-    name = "mysql-connector-odbc-${version}";
+    pname = "mysql-connector-odbc";
     majorVersion = "5.3";
     version = "${majorVersion}.6";
 
     src = fetchurl {
-      url = "https://dev.mysql.com/get/Downloads/Connector-ODBC/${majorVersion}/${name}-src.tar.gz";
+      url = "https://dev.mysql.com/get/Downloads/Connector-ODBC/${majorVersion}/${pname}-${version}-src.tar.gz";
       sha256 = "1smi4z49i4zm7cmykjkwlxxzqvn7myngsw5bc35z6gqxmi8c55xr";
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mysql55 ];
+    buildInputs = [ unixODBC mysql ];
 
     cmakeFlags = [ "-DWITH_UNIXODBC=1" ];
 
@@ -86,18 +98,18 @@
   };
 
   sqlite = stdenv.mkDerivation rec {
-    name = "sqlite-connector-odbc-${version}";
+    pname = "sqlite-connector-odbc";
     version = "0.9993";
- 
+
     src = fetchurl {
       url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
       sha256 = "0dgsj28sc7f7aprmdd0n5a1rmcx6pv7170c8dfjl0x1qsjxim6hs";
     };
- 
+
     buildInputs = [ unixODBC sqlite zlib libxml2 ];
- 
+
     configureFlags = [ "--with-odbc=${unixODBC}" ];
- 
+
     installTargets = [ "install-3" ];
 
     # move libraries to $out/lib where they're expected to be
@@ -105,7 +117,7 @@
       mkdir -p "$out/lib"
       mv "$out"/*.* "$out/lib"
     '';
- 
+
     passthru = {
       fancyName = "SQLite";
       driver = "lib/libsqlite3odbc.so";
@@ -117,6 +129,49 @@
       license = licenses.bsd2;
       platforms = platforms.linux;
       maintainers = with maintainers; [ vlstill ];
+    };
+  };
+
+  msodbcsql17 = stdenv.mkDerivation rec {
+    pname = "msodbcsql17";
+    version = "${versionMajor}.${versionMinor}.${versionAdditional}-1";
+
+    versionMajor = "17";
+    versionMinor = "5";
+    versionAdditional = "1.1";
+
+    src = fetchurl {
+      url = "https://packages.microsoft.com/debian/9/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
+      sha256 = "0ysrl01z5ca72qw8n8kwwcl432cgiyw4pibfwg5nifx0kd7i7z4z";
+    };
+
+    nativeBuildInputs = [ dpkg patchelf ];
+
+    unpackPhase = "dpkg -x $src ./";
+    buildPhase = "";
+
+    installPhase = ''
+      mkdir -p $out
+      mkdir -p $out/lib
+      cp -r opt/microsoft/msodbcsql${versionMajor}/lib64 opt/microsoft/msodbcsql${versionMajor}/share $out/
+    '';
+
+    postFixup = ''
+      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out kerberos libuuid stdenv.cc.cc ]} \
+        $out/lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
+    '';
+
+    passthru = {
+      fancyName = "ODBC Driver 17 for SQL Server";
+      driver = "lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}";
+    };
+
+    meta = with stdenv.lib; {
+      description = "ODBC Driver 17 for SQL Server";
+      homepage = https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017;
+      license = licenses.unfree;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ spencerjanssen ];
     };
   };
 }

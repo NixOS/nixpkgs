@@ -1,9 +1,8 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap
+, libseccomp, systemd, libcap, lzma, zstd, scrypt
 
 # for update.nix
 , writeScript
-, runCommand
 , common-updater-scripts
 , bash
 , coreutils
@@ -15,20 +14,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.2.10";
+  pname = "tor";
+  version = "0.4.2.7";
 
   src = fetchurl {
-    url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "1vnb2wkcmm8rnz0fqi3k7arl60mpycs8rjn8hvbgv56g3p1pgpv0";
+    url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
+    sha256 = "0v82ngwwmmcb7i9563bgsmrjy6xp83xyhqhaljygd0pkvlsxi886";
   };
 
   outputs = [ "out" "geoip" ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libevent openssl zlib ] ++
+  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+
+  patches = [ ./disable-monotonic-timer-tests.patch ];
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -36,7 +36,13 @@ stdenv.mkDerivation rec {
     substituteInPlace contrib/client-tools/torify \
       --replace 'pathfind torsocks' true          \
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+
+    patchShebangs ./scripts/maint/checkShellScripts.sh
   '';
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   postInstall = ''
     mkdir -p $geoip/share/tor
@@ -44,13 +50,10 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/tor
   '';
 
-  doCheck = true;
-
   passthru.updateScript = import ./update.nix {
     inherit (stdenv) lib;
     inherit
       writeScript
-      runCommand
       common-updater-scripts
       bash
       coreutils
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.torproject.org/;
+    homepage = "https://www.torproject.org/";
     repositories.git = https://git.torproject.org/git/tor;
     description = "Anonymizing overlay network";
 

@@ -1,32 +1,62 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, vega, pandas, ipython, traitlets }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
+, entrypoints
+, glibcLocales
+, ipython
+, jinja2
+, jsonschema
+, numpy
+, pandas
+, pytest
+, pythonOlder
+, recommonmark
+, six
+, sphinx
+, toolz
+, typing
+, vega_datasets
+}:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "1.2.1";
-  name = "${pname}-${version}";
+  version = "4.0.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c1303f77f1ba4d632f2958c83c0f457b2b969860b1ac9adfb872aefa1780baa7";
+    sha256 = "145gjad415zjfp0ciq1b19i97ibavj8fki1vzhjppqz55k4704nk";
   };
 
-  buildInputs = [ pytest ];
+  propagatedBuildInputs = [
+    entrypoints
+    jsonschema
+    numpy
+    pandas
+    six
+    toolz
+  ] ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+
+  checkInputs = [
+    glibcLocales
+    ipython
+    jinja2
+    pytest
+    recommonmark
+    sphinx
+    vega_datasets
+  ];
 
   checkPhase = ''
     export LANG=en_US.UTF-8
-    py.test altair --doctest-modules
+    # histogram_responsive.py attempt network access, and cannot be disabled through pytest flags
+    rm altair/examples/histogram_responsive.py
+    pytest --doctest-modules altair
   '';
-
-  propagatedBuildInputs = [ vega pandas ipython traitlets ];
-  # Disabling checks, MockRequest object has no method send()
-  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A declarative statistical visualization library for Python.";
     homepage = https://github.com/altair-viz/altair;
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

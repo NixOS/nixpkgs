@@ -1,0 +1,74 @@
+--- a/media/gpu/vaapi/vaapi_video_decode_accelerator.cc
++++ b/media/gpu/vaapi/vaapi_video_decode_accelerator.cc
+@@ -641,6 +641,7 @@ void VaapiVideoDecodeAccelerator::AssignPictureBuffers(
+   // |vpp_vaapi_wrapper_| for VaapiPicture to DownloadFromSurface() the VA's
+   // internal decoded frame.
+   if (buffer_allocation_mode_ != BufferAllocationMode::kNone &&
++      buffer_allocation_mode_ != BufferAllocationMode::kWrapVdpau &&
+       !vpp_vaapi_wrapper_) {
+     vpp_vaapi_wrapper_ = VaapiWrapper::Create(
+         VaapiWrapper::kVideoProcess, VAProfileNone,
+@@ -665,7 +666,8 @@ void VaapiVideoDecodeAccelerator::AssignPictureBuffers(
+     PictureBuffer buffer = buffers[i];
+     buffer.set_size(requested_pic_size_);
+     std::unique_ptr<VaapiPicture> picture = vaapi_picture_factory_->Create(
+-        (buffer_allocation_mode_ == BufferAllocationMode::kNone)
++        ((buffer_allocation_mode_ == BufferAllocationMode::kNone) ||
++         (buffer_allocation_mode_ == BufferAllocationMode::kWrapVdpau))
+             ? vaapi_wrapper_
+             : vpp_vaapi_wrapper_,
+         make_context_current_cb_, bind_image_cb_, buffer);
+@@ -1093,6 +1095,12 @@ VaapiVideoDecodeAccelerator::GetSupportedProfiles() {
+
+ VaapiVideoDecodeAccelerator::BufferAllocationMode
+ VaapiVideoDecodeAccelerator::DecideBufferAllocationMode() {
++  // NVIDIA blobs use VDPAU
++  if (VaapiWrapper::GetImplementationType() == VAImplementation::kNVIDIAVDPAU) {
++    LOG(INFO) << "VA-API driver on VDPAU backend";
++    return BufferAllocationMode::kWrapVdpau;
++  }
++
+   // TODO(crbug.com/912295): Enable a better BufferAllocationMode for IMPORT
+   // |output_mode_| as well.
+   if (output_mode_ == VideoDecodeAccelerator::Config::OutputMode::IMPORT)
+@@ -1105,7 +1113,7 @@ VaapiVideoDecodeAccelerator::DecideBufferAllocationMode() {
+   // depends on the bitstream and sometimes it's not enough to cover the amount
+   // of frames needed by the client pipeline (see b/133733739).
+   // TODO(crbug.com/911754): Enable for VP9 Profile 2.
+-  if (IsGeminiLakeOrLater() &&
++  if (false && IsGeminiLakeOrLater() &&
+       (profile_ == VP9PROFILE_PROFILE0 || profile_ == VP8PROFILE_ANY)) {
+     // Add one to the reference frames for the one being currently egressed, and
+     // an extra allocation for both |client_| and |decoder_|, see
+--- a/media/gpu/vaapi/vaapi_video_decode_accelerator.h
++++ b/media/gpu/vaapi/vaapi_video_decode_accelerator.h
+@@ -204,6 +204,7 @@ class MEDIA_GPU_EXPORT VaapiVideoDecodeAccelerator
+     // Using |client_|s provided PictureBuffers and as many internally
+     // allocated.
+     kNormal,
++    kWrapVdpau,
+   };
+
+   // Decides the concrete buffer allocation mode, depending on the hardware
+--- a/media/gpu/vaapi/vaapi_wrapper.cc
++++ b/media/gpu/vaapi/vaapi_wrapper.cc
+@@ -131,6 +131,9 @@ media::VAImplementation VendorStringToImplementationType(
+   } else if (base::StartsWith(va_vendor_string, "Intel iHD driver",
+                               base::CompareCase::SENSITIVE)) {
+     return media::VAImplementation::kIntelIHD;
++  } else if (base::StartsWith(va_vendor_string, "Splitted-Desktop Systems VDPAU",
++                              base::CompareCase::SENSITIVE)) {
++    return media::VAImplementation::kNVIDIAVDPAU;
+   }
+   return media::VAImplementation::kOther;
+ }
+--- a/media/gpu/vaapi/vaapi_wrapper.h
++++ b/media/gpu/vaapi/vaapi_wrapper.h
+@@ -79,6 +79,7 @@ enum class VAImplementation {
+   kIntelIHD,
+   kOther,
+   kInvalid,
++  kNVIDIAVDPAU,
+ };
+
+ // This class handles VA-API calls and ensures proper locking of VA-API calls

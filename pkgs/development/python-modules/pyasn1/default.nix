@@ -1,13 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyasn1";
-  version = "0.4.2";
+  version = "0.4.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d258b0a71994f7770599835249cece1caef3c70def868c4915e6e5ca49b67d15";
+    sha256 = "aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba";
   };
 
   meta = with stdenv.lib; {

@@ -1,17 +1,16 @@
-{ stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
+{ stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, fetchpatch
 , readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.3.3";
-  name = "${pname}-${version}";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
-    rev = name;
-    sha256 = "1gw5ia6cl5b0q91kv4vfg35my2p49np23aikxqf5gn00zhqrkfap";
+    rev = "${pname}-${version}";
+    sha256 = "1lrzgnq8ywq28qd4xyd0y5qfv3j25ra81lcbdqqfywasl8lwz3lf";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkgconfig ];
@@ -26,13 +25,26 @@ stdenv.mkDerivation rec {
       rm -f contrib/config.make-*
   '';
 
+  patches = [
+    # Fix memory leak. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/jonas/tig/commit/6202c6032f17438a2facb23f02e330b9d0566d9d.patch";
+      sha256 = "15zn8hw9y7bqa1np4mj0qnm2z86nif7qwh7wc4vgy2rwxdil85bd";
+    })
+  ];
+
   enableParallelBuilding = true;
 
   installPhase = ''
     make install
     make install-doc
-    mkdir -p $out/etc/bash_completion.d/
-    cp contrib/tig-completion.bash $out/etc/bash_completion.d/
+
+    substituteInPlace contrib/tig-completion.zsh \
+      --replace 'e=$(dirname ''${funcsourcetrace[1]%:*})/tig-completion.bash' "e=$out/etc/bash_completion.d/tig-completion.bash"
+
+    install -D contrib/tig-completion.bash $out/etc/bash_completion.d/tig-completion.bash
+    install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
+    cp contrib/vim.tigrc $out/etc/
 
     wrapProgram $out/bin/tig \
       --prefix PATH ':' "${git}/bin"
@@ -41,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://jonas.github.io/tig/;
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ garbas bjornfor domenkozar qknight ];
+    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, SDL, SDL_image }:
 
 stdenv.mkDerivation rec {
-  name = "vp-${version}";
+  pname = "vp";
   version = "1.8";
 
   src = fetchFromGitHub {

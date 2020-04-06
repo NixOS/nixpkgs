@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "mrrescue";
@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "mrrescue";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Arcade-style fire fighting game"; 
     desktopName = "Mr. Rescue";
     genericName = "mrrescue";
@@ -21,7 +21,7 @@ let
 
 in 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

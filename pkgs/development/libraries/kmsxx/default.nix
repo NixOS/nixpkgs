@@ -1,25 +1,24 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libdrm, python }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, libdrm
+, withPython ? false, python }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kmsxx";
-  version = "2017-10-10";
-  name = pname + "-" + version;
+  version = "2020-02-14";
 
   src = fetchFromGitHub {
     owner = "tomba";
     repo = "kmsxx";
     fetchSubmodules = true;
-    rev = "f32b82c17cd357ae1c8ed2636266113955293feb";
-    sha256 = "14panqdqq83wh6wym5afdiyrr78mb12ga63pgrppj27kgv398yjj";
+    rev = "7c5e645112a899ad018219365c3898b0e896353f";
+    sha256 = "1hj4gk4gwlvpjprjbrmrbrzqjhdgszsndrb1i4f9z7mjvdv8gij2";
   };
 
   enableParallelBuilding = true;
 
+  cmakeFlags = stdenv.lib.optional (!withPython) "-DKMSXX_ENABLE_PYTHON=OFF";
+
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libdrm python ];
-
-  pythonPath = [ ];
-  passthru.python = python;
 
   meta = with stdenv.lib; {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";

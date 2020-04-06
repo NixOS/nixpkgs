@@ -2,7 +2,7 @@
 , libpulseaudio, mplayer, gnome_mplayer }:
 
 stdenv.mkDerivation rec {
-  name = "gmtk-${version}";
+  pname = "gmtk";
   version = "1.0.9";
 
   src = fetchFromGitHub {

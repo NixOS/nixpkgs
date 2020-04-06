@@ -258,6 +258,16 @@ foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
     }
 }
 
+# Add bcache module, if needed.
+my @bcacheDevices = glob("/dev/bcache*");
+if (scalar @bcacheDevices > 0) {
+    push @initrdAvailableKernelModules, "bcache";
+}
+
+# Prevent unbootable systems if LVM snapshots are present at boot time.
+if (`lsblk -o TYPE` =~ "lvm") {
+    push @initrdKernelModules, "dm-snapshot";
+}
 
 my $virt = `systemd-detect-virt`;
 chomp $virt;
@@ -277,8 +287,7 @@ if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
 
 # Also for Hyper-V.
 if ($virt eq "microsoft") {
-    push @initrdAvailableKernelModules, "hv_storvsc";
-    $videoDriver = "fbdev";
+    push @attrs, "virtualisation.hypervGuest.enable = true;"
 }
 
 
@@ -315,14 +324,28 @@ push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDr
 
 # Generate the swapDevices option from the currently activated swap
 # devices.
-my @swaps = read_file("/proc/swaps");
-shift @swaps;
+my @swaps = read_file("/proc/swaps", err_mode => 'carp');
 my @swapDevices;
-foreach my $swap (@swaps) {
-    $swap =~ /^(\S+)\s/;
-    next unless -e $1;
-    my $dev = findStableDevPath $1;
-    push @swapDevices, "{ device = \"$dev\"; }";
+if (@swaps) {
+    shift @swaps;
+    foreach my $swap (@swaps) {
+        my @fields = split ' ', $swap;
+        my $swapFilename = $fields[0];
+        my $swapType = $fields[1];
+        next unless -e $swapFilename;
+        my $dev = findStableDevPath $swapFilename;
+        if ($swapType =~ "partition") {
+            # zram devices are more likely created by configuration.nix, so
+            # ignore them here
+            next if ($swapFilename =~ /^\/dev\/zram/);
+            push @swapDevices, "{ device = \"$dev\"; }";
+        } elsif ($swapType =~ "file") {
+            # swap *files* are more likely specified in configuration.nix, so
+            # ignore them here.
+        } else {
+            die "Unsupported swap type: $swapType\n";
+        }
+    }
 }
 
 
@@ -339,6 +362,8 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     chomp $fs;
     my @fields = split / /, $fs;
     my $mountPoint = $fields[4];
+    $mountPoint =~ s/\\040/ /g; # account for mount points with spaces in the name (\040 is the escape character)
+    $mountPoint =~ s/\\011/\t/g; # account for mount points with tabs in the name (\011 is the escape character)
     next unless -d $mountPoint;
     my @mountOptions = split /,/, $fields[5];
 
@@ -354,6 +379,8 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     my $fsType = $fields[$n];
     my $device = $fields[$n + 1];
     my @superOptions = split /,/, $fields[$n + 2];
+    $device =~ s/\\040/ /g; # account for devices with spaces in the name (\040 is the escape character)
+    $device =~ s/\\011/\t/g; # account for mount points with tabs in the name (\011 is the escape character)
 
     # Skip the read-only bind-mount on /nix/store.
     next if $mountPoint eq "/nix/store" && (grep { $_ eq "rw" } @superOptions) && (grep { $_ eq "ro" } @mountOptions);
@@ -417,6 +444,10 @@ EOF
         }
     }
 
+    # Don't emit tmpfs entry for /tmp, because it most likely comes from the
+    # boot.tmpOnTmpfs option in configuration.nix (managed declaratively).
+    next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
+
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
@@ -448,10 +479,29 @@ EOF
                 if (-e $slave) {
                     my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
                     chomp $dmName;
-                    $fileSystems .= "  boot.initrd.luks.devices.\"$dmName\".device = \"${\(findStableDevPath $slave)}\";\n\n";
+                    # Ensure to add an entry only once
+                    my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\".device";
+                    if ($fileSystems !~ /^\Q$luksDevice\E/m) {
+                        $fileSystems .= "$luksDevice = \"${\(findStableDevPath $slave)}\";\n\n";
+                    }
                 }
             }
         }
+    }
+}
+
+# For lack of a better way to determine it, guess whether we should use a
+# bigger font for the console from the display mode on the first
+# framebuffer. A way based on the physical size/actual DPI reported by
+# the monitor would be nice, but I don't know how to do this without X :)
+my $fb_modes_file = "/sys/class/graphics/fb0/modes";
+if (-f $fb_modes_file && -r $fb_modes_file) {
+    my $modes = read_file($fb_modes_file);
+    $modes =~ m/([0-9]+)x([0-9]+)/;
+    my $console_width = $1, my $console_height = $2;
+    if ($console_width > 1920) {
+        push @attrs, "# High-DPI console";
+        push @attrs, 'console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
     }
 }
 
@@ -488,6 +538,7 @@ sub multiLineList {
 }
 
 my $initrdAvailableKernelModules = toNixStringList(uniq @initrdAvailableKernelModules);
+my $initrdKernelModules = toNixStringList(uniq @initrdKernelModules);
 my $kernelModules = toNixStringList(uniq @kernelModules);
 my $modulePackages = toNixList(uniq @modulePackages);
 
@@ -507,12 +558,31 @@ my $hwConfig = <<EOF;
   imports =${\multiLineList("    ", @imports)};
 
   boot.initrd.availableKernelModules = [$initrdAvailableKernelModules ];
+  boot.initrd.kernelModules = [$initrdKernelModules ];
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
   nix.maxJobs = lib.mkDefault $cpus;
 ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
+
+sub generateNetworkingDhcpConfig {
+    my $config = <<EOF;
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  # Per-interface useDHCP will be mandatory in the future, so this generated config
+  # replicates the default behaviour.
+  networking.useDHCP = false;
+EOF
+
+    foreach my $path (glob "/sys/class/net/*") {
+        my $dev = basename($path);
+        if ($dev ne "lo") {
+            $config .= "  networking.interfaces.$dev.useDHCP = true;\n";
+        }
+    }
+
+    return $config;
+}
 
 
 if ($showHardwareConfig) {
@@ -537,6 +607,13 @@ if ($showHardwareConfig) {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
+        } elsif (-e "/boot/extlinux") {
+            $bootLoaderConfig = <<EOF;
+  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
+  boot.loader.grub.enable = false;
+  # Enables the generation of /boot/extlinux/extlinux.conf
+  boot.loader.generic-extlinux-compatible.enable = true;
+EOF
         } elsif ($virt ne "systemd-nspawn") {
             $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
@@ -550,88 +627,10 @@ EOF
 EOF
         }
 
+        my $networkingDhcpConfig = generateNetworkingDhcpConfig();
+
         write_file($fn, <<EOF);
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
-{
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
-$bootLoaderConfig
-  # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
-
-  # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
-
-  # List packages installed in system profile. To search by name, run:
-  # \$ nix-env -qaP | grep wget
-  # environment.systemPackages = with pkgs; [
-  #   wget vim
-  # ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.bash.enableCompletion = true;
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.extraUsers.guest = {
-  #   isNormalUser = true;
-  #   uid = 1000;
-  # };
-
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "${\(qw(@release@))}"; # Did you read the comment?
-
-}
+@configuration@
 EOF
     } else {
         print STDERR "warning: not overwriting existing $fn\n";

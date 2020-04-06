@@ -1,10 +1,38 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchFromGitHub, cmake, enableShared ? true}:
 
-stdenv.mkDerivation
-  { name = "gflags-2.2.1";
-    src = fetchurl
-      { url = "https://github.com/gflags/gflags/archive/v2.2.1.tar.gz";
-        sha256 = "03lxc2ah8i392kh1naq99iip34k4fpv22kwflyx3byd2ssycs9xf";
-      };
-    nativeBuildInputs = [ cmake ];
-  }
+stdenv.mkDerivation rec {
+  pname = "gflags";
+  version = "2.2.2";
+
+  src = fetchFromGitHub {
+    owner = "gflags";
+    repo = "gflags";
+    rev = "v${version}";
+    sha256 = "147i3md3nxkjlrccqg4mq1kyzc7yrhvqv5902iibc7znkvzdvlp0";
+  };
+
+  nativeBuildInputs = [ cmake ];
+
+  # This isn't used by the build and breaks the CMake build on case-insensitive filesystems (e.g., on Darwin)
+  preConfigure = "rm BUILD";
+
+  cmakeFlags = [
+    "-DGFLAGS_BUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
+    "-DGFLAGS_BUILD_STATIC_LIBS=ON"
+  ];
+
+  doCheck = false;
+
+  meta = with stdenv.lib; {
+    description = "A C++ library that implements commandline flags processing";
+    longDescription = ''
+      The gflags package contains a C++ library that implements commandline flags processing.
+      As such it's a replacement for getopt().
+      It was owned by Google. google-gflags project has been renamed to gflags and maintained by new community.
+    '';
+    homepage = https://gflags.github.io/gflags/;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.linquize ];
+    platforms = platforms.all;
+  };
+}

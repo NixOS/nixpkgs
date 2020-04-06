@@ -1,8 +1,8 @@
 { stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
 , libiconv, icu, curl
-, outputsSupport ? false # outputs screen
+, outputsSupport ? true # outputs screen
 , visualizerSupport ? false, fftw ? null # visualizer screen
-, clockSupport ? false # clock screen
+, clockSupport ? true # clock screen
 , taglibSupport ? true, taglib ? null # tag editor
 }:
 
@@ -11,12 +11,12 @@ assert taglibSupport -> (taglib != null);
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "ncmpcpp-${version}";
-  version = "0.8.1";
+  pname = "ncmpcpp";
+  version = "0.8.2";
 
   src = fetchurl {
-    url = "https://ncmpcpp.rybczak.net/stable/${name}.tar.bz2";
-    sha256 = "1zw8d07b2bkssbsybg6jnmpq001w525viajrnz4jvfml3l55gyad";
+    url = "https://ncmpcpp.rybczak.net/stable/${pname}-${version}.tar.bz2";
+    sha256 = "0m0mjb049sl62vx13h9waavysa30mk0rphacksnvf94n13la62v5";
   };
 
   configureFlags = [ "BOOST_LIB_SUFFIX=" ]

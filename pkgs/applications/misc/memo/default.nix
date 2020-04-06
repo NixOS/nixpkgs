@@ -1,26 +1,40 @@
-{ fetchFromGitHub, ag, tree, stdenv, ... }:
+{ fetchFromGitHub, silver-searcher, tree, man, stdenv,
+  git,
+  pandocSupport ? true, pandoc ? null
+  , ... }:
+
+assert pandocSupport -> pandoc != null;
 
 stdenv.mkDerivation rec {
 
-  name = "memo-${version}";
+  pname = "memo";
 
-  version = "0.2";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner  = "mrVanDalo";
     repo   = "memo";
-    rev    = "${version}";
-    sha256 = "0mww4w5m6jv4s0krm74cccrz0vlr8rrwiv122jk67l1v9r80pchs";
+    rev    = version;
+    sha256 = "0azx2bx6y7j0637fg3m8zigcw09zfm2mw9wjfg218sx88cm1wdkp";
   };
 
-  installPhase = ''
-    mkdir -p $out/{bin,share/man/man1,share/bash-completion/completions}
+  installPhase = let
+    pandocReplacement = if pandocSupport then
+      "pandoc_cmd=${pandoc}/bin/pandoc"
+    else
+      "#pandoc_cmd=pandoc";
+  in ''
+    mkdir -p $out/{bin,share/man/man1,share/bash-completion/completions,share/zsh/site-functions}
     substituteInPlace memo \
-      --replace "ack "  "${ag}/bin/ag " \
-      --replace "tree " "${tree}/bin/tree "
+      --replace "ack_cmd=ack"       "ack_cmd=${silver-searcher}/bin/ag" \
+      --replace "tree_cmd=tree"     "tree_cmd=${tree}/bin/tree" \
+      --replace "man_cmd=man"       "man_cmd=${man}/bin/man" \
+      --replace "git_cmd=git"       "git_cmd=${git}/bin/git" \
+      --replace "pandoc_cmd=pandoc" "${pandocReplacement}"
     mv memo $out/bin/
     mv doc/memo.1 $out/share/man/man1/memo.1
-    mv completion/memo.bash $out/share/bash-completion/completions/memo.sh
+    mv completion/bash/memo.sh $out/share/bash-completion/completions/memo.sh
+    mv completion/zsh/_memo    $out/share/zsh/site-functions/_memo
   '';
 
   meta = {

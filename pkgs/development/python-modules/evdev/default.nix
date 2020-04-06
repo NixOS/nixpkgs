@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "evdev";
-  version = "0.7.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "188ahmqnh5y1f46m7pyjdmi9zfxswaggn6xga65za554d72azvap";
+    sha256 = "b03f5e1be5b4a5327494a981b831d251a142b09e8778eda1a8b53eba91100166";
   };
 
   buildInputs = [ linuxHeaders ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Provides bindings to the generic input event interface in Linux";
-    homepage = http://pythonhosted.org/evdev;
+    homepage = https://pythonhosted.org/evdev;
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;

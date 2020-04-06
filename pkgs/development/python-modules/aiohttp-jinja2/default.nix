@@ -1,12 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp }:
+{ lib, buildPythonPackage, fetchPypi, aiohttp, jinja2, pytest, pytest-aiohttp }:
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";
-  version = "0.16.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ps182yrc5g9ph55927a7ssqx6m9kx0bivfxpaj8sa3znrdkl94d";
+    sha256 = "2dfe29cfd278d07cd0a851afb98471bc8ce2a830968443e40d67636f3c035d79";
   };
 
   propagatedBuildInputs = [ aiohttp jinja2 ];

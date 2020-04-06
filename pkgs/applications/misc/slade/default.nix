@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
 
 stdenv.mkDerivation rec {
-  name = "slade-${version}";
+  pname = "slade";
   version = "3.1.1.5";
 
   src = fetchFromGitHub {

@@ -6,9 +6,8 @@
 assert useUnrar -> unrar != null;
 assert !useUnrar -> libarchive != null;
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rarfile";
-  name = "${pname}-${version}";
   version = "3.0";
 
   src = fetchFromGitHub {

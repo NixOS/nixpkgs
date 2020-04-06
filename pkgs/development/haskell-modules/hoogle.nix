@@ -23,12 +23,12 @@
 # This will build mmorph and monadControl, and have the hoogle installation
 # refer to their documentation via symlink so they are not garbage collected.
 
-{ lib, stdenv, hoogle, writeText, ghc
+{ lib, stdenv, buildPackages
+, hoogle, writeText, ghc
 , packages
 }:
 
 let
-  inherit (stdenv.lib) optional;
   wrapper = ./hoogle-local-wrapper.sh;
   isGhcjs = ghc.isGhcjs or false;
   opts = lib.optionalString;
@@ -36,10 +36,6 @@ let
     if !isGhcjs
     then "haddock"
     else "haddock-ghcjs";
-  ghcName =
-    if !isGhcjs
-    then "ghc"
-    else "ghcjs";
   ghcDocLibDir =
     if !isGhcjs
     then ghc.doc + ''/share/doc/ghc*/html/libraries''
@@ -58,15 +54,15 @@ let
     (map (lib.getOutput "doc") packages);
 
 in
-stdenv.mkDerivation {
+buildPackages.stdenv.mkDerivation {
   name = "hoogle-local-0.1";
   buildInputs = [ghc hoogle];
 
-  phases = [ "buildPhase" ];
-
   inherit docPackages;
 
-  buildPhase = ''
+  passAsFile = ["buildCommand"];
+
+  buildCommand = ''
     ${lib.optionalString (packages != [] -> docPackages == [])
        ("echo WARNING: localHoogle package list empty, even though"
        + " the following were specified: "

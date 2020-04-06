@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python3, texinfo, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ponysay-3.0.3";
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cowsay reimplemention for ponies";
-    homepage = http://erkin.co/ponysay/;
+    homepage = "https://github.com/erkin/ponysay";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ bodil ];
     platforms = with stdenv.lib.platforms; unix;

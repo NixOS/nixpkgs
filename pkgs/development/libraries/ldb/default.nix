@@ -1,39 +1,63 @@
-{ stdenv, fetchurl, python, pkgconfig, readline, tdb, talloc, tevent
-, popt, libxslt, docbook_xsl, docbook_xml_dtd_42
+{ stdenv
+, fetchurl
+, python3
+, pkg-config
+, readline
+, tdb
+, talloc
+, tevent
+, popt
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, cmocka
+, wafHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "ldb-1.1.27";
+  pname = "ldb";
+  version = "2.1.1";
 
   src = fetchurl {
-    url = "mirror://samba/ldb/${name}.tar.gz";
-    sha256 = "1b1mkl5p8swb67s9aswavhzswlib34hpgsv66zgns009paf2df6d";
+    url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
+    sha256 = "jO+y8l/KkT+hinktDvsDrwf4f1uVGkze0DD1uY8lx7A=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    python readline tdb talloc tevent popt
-    libxslt docbook_xsl docbook_xml_dtd_42
+  nativeBuildInputs = [
+    pkg-config
+    python3
+    wafHook
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_42
   ];
 
-  preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
-  '';
+  buildInputs = [
+    python3
+    readline # required to build python
+    tdb
+    talloc
+    tevent
+    popt
+    cmocka
+  ];
 
-  configureFlags = [
+  wafPath = "buildtools/bin/waf";
+
+  wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+    "--without-ldb-lmdb"
   ];
 
   stripDebugList = "bin lib modules";
 
   meta = with stdenv.lib; {
     description = "A LDAP-like embedded database";
-    homepage = http://ldb.samba.org/;
+    homepage = "https://ldb.samba.org/";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cppcheck, libmrss }:
 
-stdenv.mkDerivation rec {
-  name = "rsstail-${version}";
+stdenv.mkDerivation {
+  pname = "rsstail";
   version = "2.1";
 
   src = fetchFromGitHub {
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     owner = "flok99";
   };
 
-  buildInputs = [ libmrss ]
-    ++ stdenv.lib.optional doCheck cppcheck;
+  buildInputs = [ libmrss ];
+  checkInputs = [ cppcheck ];
 
   postPatch = ''
     substituteInPlace Makefile --replace -liconv_hook ""

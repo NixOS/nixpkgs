@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 let cfg = config.nix.sshServe;
@@ -36,7 +36,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.nix-ssh = {
+    users.users.nix-ssh = {
       description = "Nix SSH store user";
       uid = config.ids.uids.nix-ssh;
       useDefaultShell = true;
@@ -55,7 +55,7 @@ in {
       Match All
     '';
 
-    users.extraUsers.nix-ssh.openssh.authorizedKeys.keys = cfg.keys;
+    users.users.nix-ssh.openssh.authorizedKeys.keys = cfg.keys;
 
   };
 }

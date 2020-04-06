@@ -1,33 +1,39 @@
-{ stdenv, fetchFromGitHub, python, asciidoc, re2c }:
+{ stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "ninja-${version}";
-  version = "1.8.2";
+  pname = "ninja";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    sha256 = "16scq9hcq6c5ap6sy8j4qi75qps1zvrf3p79j1vbrvnqzp928i5f";
+    sha256 = "1fbzl7mrcrwp527sgkc1npfl3k6bbpydpiq98xcf1a1hkrx0z5x4";
   };
 
-  nativeBuildInputs = [ python asciidoc re2c ];
+  nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
 
   buildPhase = ''
     python configure.py --bootstrap
-    asciidoc doc/manual.asciidoc
+  '' + optionalString buildDocs ''
+    # "./ninja -vn manual" output copied here to support cross compilation.
+    asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
+    xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
   '';
 
   installPhase = ''
     install -Dm555 -t $out/bin ninja
-    install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
     install -Dm444 misc/bash-completion $out/share/bash-completion/completions/ninja
     install -Dm444 misc/zsh-completion $out/share/zsh/site-functions/_ninja
+  '' + optionalString buildDocs ''
+    install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Small build system with a focus on speed";
     longDescription = ''
       Ninja is a small build system with a focus on speed. It differs from

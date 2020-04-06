@@ -1,12 +1,13 @@
-{ lib, ... }:
+{ ... }:
 
-{ users.extraUsers.alice =
+{ users.users.alice =
     { isNormalUser = true;
       description = "Alice Foobar";
       password = "foobar";
+      uid = 1000;
     };
 
-  users.extraUsers.bob =
+  users.users.bob =
     { isNormalUser = true;
       description = "Bob Foobar";
       password = "foobar";

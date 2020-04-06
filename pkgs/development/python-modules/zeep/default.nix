@@ -1,89 +1,78 @@
 { fetchPypi
 , lib
+, fetchpatch
 , buildPythonPackage
-, python
 , isPy3k
 , appdirs
+, attrs
 , cached-property
 , defusedxml
 , isodate
 , lxml
-, pytz
+, requests
 , requests_toolbelt
 , six
+, pytz
+, tornado
+, aiohttp
 # test dependencies
 , freezegun
 , mock
-, nose
 , pretend
 , pytest
 , pytestcov
 , requests-mock
-, testtools
-, tornado
+, aioresponses
 }:
 
-let
+buildPythonPackage rec {
   pname = "zeep";
-  version = "2.5.0";
-in buildPythonPackage {
-  name = "${pname}-${version}";
+  version = "3.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f9db52c7d269813fc6251da4cb050869158858aeea75a055b4550f19e52ac84";
+    sha256 = "0e98669cfeb60756231ae185498f9ae21b30b2681786b8de58ed34c3b93e41dd";
   };
+
+  patches = [
+    ( fetchpatch {
+        url = "https://github.com/mvantellingen/python-zeep/pull/1006/commits/ba7edd6bf2b31023b31e8f17c161e1d6d5af3d29.patch";
+        sha256 = "1j0jd5hmh457im9sbawaqf6pnfy36fhr9wqdim8wk5da9ixr0ajs";
+     })
+  ];
 
   propagatedBuildInputs = [
     appdirs
+    attrs
     cached-property
     defusedxml
     isodate
     lxml
-    pytz
+    requests
     requests_toolbelt
     six
-  ];
+    pytz
 
-  # testtools dependency not supported for py3k
-  doCheck = !isPy3k;
+    # optional requirements
+    tornado
+  ] ++ lib.optional isPy3k aiohttp;
 
   checkInputs = [
-    tornado
-  ];
-
-  buildInputs = if isPy3k then [] else [
     freezegun
     mock
-    nose
     pretend
-    pytest
     pytestcov
+    pytest
     requests-mock
-  ];
-
-  patchPhase = ''
-    # remove overly strict bounds and lint requirements
-    sed -e "s/freezegun==.*'/freezegun'/" \
-        -e "s/pytest-cov==.*'/pytest-cov'/" \
-        -e "s/'isort.*//" \
-        -e "s/'flake8.*//" \
-        -i setup.py
-
-    # locale.preferredencoding() != 'utf-8'
-    sed -e "s/xsd', 'r')/xsd', 'r', encoding='utf-8')/" -i tests/*.py
-
-    # cache defaults to home directory, which doesn't exist
-    sed -e "s|SqliteCache()|SqliteCache(path='./zeeptest.db')|" \
-        -i tests/test_transports.py
-
-    # requires xmlsec python module
-    rm tests/test_wsse_signature.py
-  '';
+  ] ++ lib.optional isPy3k aioresponses;
 
   checkPhase = ''
     runHook preCheck
-    ${python.interpreter} -m pytest tests
+    # fix compatibility with pytest 4
+    substituteInPlace tests/conftest.py \
+       --replace 'request.node.get_marker("requests")' 'request.node.get_closest_marker("requests")'
+    # ignored tests requires xmlsec python module
+    HOME=$(mktemp -d) pytest tests --ignore tests/test_wsse_signature.py
     runHook postCheck
   '';
 

@@ -1,0 +1,24 @@
+diff --git a/installed-tests/meson.build b/installed-tests/meson.build
+index 294d20c6..1e5029e0 100644
+--- a/installed-tests/meson.build
++++ b/installed-tests/meson.build
+@@ -1,7 +1,7 @@
+ ### Installed tests ############################################################
+ 
+-installed_tests_execdir = get_option('prefix') / pkglibexecdir / 'installed-tests'
+-installed_tests_metadir = abs_datadir / 'installed-tests' / meson.project_name()
++installed_tests_execdir = get_option('installed_test_prefix') / 'libexec' / meson.project_name() / 'installed-tests'
++installed_tests_metadir = get_option('installed_test_prefix') / 'share' / 'installed-tests' / meson.project_name()
+ 
+ # Simple shell script tests #
+ 
+diff --git a/meson_options.txt b/meson_options.txt
+index 66f66024..008687cb 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -25,3 +25,5 @@ option('skip_gtk_tests', type: 'boolean', value: false,
+     description: 'Skip tests that need a display connection')
+ option('verbose_logs', type: 'boolean', value: false,
+     description: 'Enable extra log messages that may decrease performance (not allowed in release builds)')
++option('installed_test_prefix', type: 'string', value: '',
++    description: 'Prefix for installed tests')

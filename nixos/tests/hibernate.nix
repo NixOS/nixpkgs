@@ -1,6 +1,6 @@
 # Test whether hibernation from partition works.
 
-import ./make-test.nix (pkgs: {
+import ./make-test-python.nix (pkgs: {
   name = "hibernate";
 
   nodes = {
@@ -16,7 +16,7 @@ import ./make-test.nix (pkgs: {
       systemd.services.listener.serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l 4444 -k";
     };
 
-    probe = { config, lib, pkgs, ...}: {
+    probe = { pkgs, ...}: {
       environment.systemPackages = [ pkgs.netcat ];
     };
   };
@@ -28,16 +28,17 @@ import ./make-test.nix (pkgs: {
 
   testScript =
     ''
-      $machine->waitForUnit("multi-user.target");
-      $machine->succeed("mkswap /dev/vdb");
-      $machine->succeed("swapon -a");
-      $machine->startJob("listener");
-      $machine->waitForOpenPort(4444);
-      $machine->succeed("systemctl hibernate &");
-      $machine->waitForShutdown;
-      $machine->start;
-      $probe->waitForUnit("network.target");
-      $probe->waitUntilSucceeds("echo test | nc machine 4444 -q 0");
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+      machine.succeed("mkswap /dev/vdb")
+      machine.succeed("swapon -a")
+      machine.start_job("listener")
+      machine.wait_for_open_port(4444)
+      machine.succeed("systemctl hibernate &")
+      machine.wait_for_shutdown()
+      probe.wait_for_unit("multi-user.target")
+      machine.start()
+      probe.wait_until_succeeds("echo test | nc machine 4444 -N")
     '';
 
 })

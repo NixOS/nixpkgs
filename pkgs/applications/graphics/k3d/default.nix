@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch, unzip, ftgl, glew, asciidoc
-, cmake, libGLU_combined, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-, libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
+{ stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
+, cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
+, libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
+, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.6";
-  name = "k3d-${version}";
+  pname = "k3d";
   src = fetchFromGitHub {
     owner = "K-3D";
     repo = "k3d";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0vdjjg6h8mxm2n8mvkkg2mvd27jn2xx90hnmx23cbd35mpz9p4aa";
   };
 
@@ -20,30 +20,32 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = "-DK3D_BUILD_DOCS=false -DK3D_BUILD_GUIDE=false";
+  cmakeFlags = [
+    "-DK3D_BUILD_DOCS=false"
+    "-DK3D_BUILD_GUIDE=false"
+  ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE  -I$(echo ${gtkglext}/include/gtkglext-*) -I$(echo ${gtkglext}/lib/gtkglext-*/include)"
   '';
 
+  nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkgconfig perl asciidoc ];
+
   buildInputs = [
-     cmake libGLU_combined zlib python expat libxml2 libsigcxx libuuid freetype libpng
-     boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff
-     gettext intltool perl unzip ftgl glew asciidoc
-     gtkmm2 glibmm gtkglext pangox_compat libXmu
+     libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
+     boost cairomm libjpeg libtiff
+     ftgl glew gtkmm2 glibmm gtkglext libXmu
     ];
 
   #doCheck = false;
 
-  enableParallelBuilding = true;
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";
     homepage = http://www.k-3d.org/;
-    platforms = with stdenv.lib.platforms;
-      linux;
-    maintainers = with stdenv.lib.maintainers;
-      [raskin];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
   };
 }

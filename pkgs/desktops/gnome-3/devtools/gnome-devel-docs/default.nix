@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gnome3, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-devel-docs-${version}";
-  version = "3.26.0";
+  pname = "gnome-devel-docs";
+  version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-devel-docs/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "12eea77b550acfa617e14a89e4d24f93881294340abcc2c3abc7092c851703c3";
+    url = "mirror://gnome/sources/gnome-devel-docs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0xqpgf975rws60qxilq635pblbpgwspyykgzxnb4awd9zrs5lbx0";
   };
 
   passthru = {

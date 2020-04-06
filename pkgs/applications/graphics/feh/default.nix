@@ -1,43 +1,40 @@
 { stdenv, fetchurl, makeWrapper
 , xorg, imlib2, libjpeg, libpng
-, curl, libexif, perlPackages }:
+, curl, libexif, jpegexiforient, perlPackages }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "feh-${version}";
-  version = "2.25.1";
+  pname = "feh";
+  version = "3.3";
 
   src = fetchurl {
-    url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "197sm78bm33dvahr5nxqkbmpmdn4b13ahc9mrgn1l7n104bg4phc";
+    url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
+    sha256 = "04c8cgwzkax481sz7lbzy23mk79bqmjy3qpvr7vxa4c14mc9k5gk";
   };
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ makeWrapper xorg.libXt ]
-    ++ optionals doCheck [ perlPackages.TestCommand perlPackages.TestHarness ];
+  nativeBuildInputs = [ makeWrapper xorg.libXt ];
 
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
-    "PREFIX=$(out)" "exif=1"
+    "PREFIX=${placeholder "out"}" "exif=1"
   ] ++ optional stdenv.isDarwin "verscmp=0";
 
-  postBuild = ''
-    pushd man
-    make
-    popd
-  '';
-
+  installTargets = [ "install" ];
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${makeBinPath [ libjpeg jpegexiforient ]}" \
                                --add-flags '--theme=feh'
-    install -D -m 644 man/*.1 $out/share/man/man1
   '';
 
-  checkPhase = ''
-    PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl" make test
+  checkInputs = [ perlPackages.perl perlPackages.TestCommand ];
+  preCheck = ''
+    export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
+  '';
+  postCheck = ''
+    unset PERL5LIB
   '';
 
   doCheck = true;
@@ -46,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "A light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.viric maintainers.willibutz ];
+    maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
   };
 }

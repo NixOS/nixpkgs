@@ -11,14 +11,15 @@ assert idnSupport -> libidn != null;
 with stdenv.lib;
 
 let
-  version = "1.0.20";
+  version = "1.0.23";
 in
-stdenv.mkDerivation rec {
-  name = "gloox-${version}";
+stdenv.mkDerivation {
+  pname = "gloox";
+  inherit version;
 
   src = fetchurl {
-    url = "http://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "1a6yhs42wcdm8az3983m3lx4d9296bw0amz5v3b4012g1xn0hhq2";
+    url = "https://camaya.net/download/gloox-${version}.tar.bz2";
+    sha256 = "12jz8glg9zmyk0iyv1ywf5i0hq93dfq8lvn6lyjgy8730w66mjwp";
   };
 
   buildInputs = [ ]
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "A portable high-level Jabber/XMPP library for C++";
     homepage = http://camaya.net/gloox;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

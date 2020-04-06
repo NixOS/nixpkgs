@@ -1,5 +1,5 @@
 { stdenv
-, intltool
+, gettext
 , fetchurl
 , pkgconfig
 , gtk3
@@ -7,33 +7,38 @@
 , meson
 , ninja
 , upower
+, python3
 , desktop-file-utils
 , wrapGAppsHook
 , gnome3 }:
 
-stdenv.mkDerivation rec {
-  name = "gnome-power-manager-${version}";
-  version = "3.26.0";
+let
+  pname = "gnome-power-manager";
+  version = "3.32.0";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-power-manager/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "20aee0b0b4015e7cc6fbabc3cbc4344c07c230fe3d195e90c8ae0dc5d55a2d4e";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0drfn3wcc8l4n07qwv6p0rw2dwcd00hwzda282q62l6sasks2b2g";
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-power-manager"; attrPath = "gnome3.gnome-power-manager"; };
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
   };
-
-  propagatedUserEnvPkgs = [ gnome3.gnome-themes-standard ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkgconfig
     wrapGAppsHook
-    intltool
+    gettext
 
     # needed by meson_post_install.sh
+    python3
     glib.dev
     desktop-file-utils
   ];
@@ -42,13 +47,11 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     upower
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
-    homepage = https://projects.gnome.org/gnome-power-manager/;
+    homepage = https://projects-old.gnome.org/gnome-power-manager/;
     description = "View battery and power statistics provided by UPower";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2Plus;

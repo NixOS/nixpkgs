@@ -1,35 +1,42 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, bison, flex
-, python, swig2, tcl, libsepol, libselinux, libxml2, sqlite, bzip2 }:
+{ stdenv, fetchFromGitHub, python3
+, libsepol, libselinux, checkpolicy
+, withGraphics ? false
+}:
 
-stdenv.mkDerivation rec {
-  name = "setools-2015-02-12";
+with stdenv.lib;
+with python3.pkgs;
+
+buildPythonApplication rec {
+  pname = "setools";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
-    owner = "TresysTechnology";
-    repo = "setools3";
-    rev = "f1e5b208d507171968ca4d2eeefd7980f1004a3c";
-    sha256 = "02gzy2kpszhr13f0d9qfiwh2hj4201g2x366j53v5n5qz481aykd";
+    owner = "SELinuxProject";
+    repo = pname;
+    rev = version;
+    sha256 = "18kklv26dwm2fdjjzfflvxsq83b2svnwf4g18xq7wsfsri121a90";
   };
 
-  configureFlags = [
-    "--disable-gui"
-    "--with-sepol-devel=${libsepol}"
-    "--with-selinux-devel=${libselinux}"
-    "--with-tcl=${tcl}/lib"
-  ];
+  nativeBuildInputs = [ cython ];
+  buildInputs = [ libsepol ];
+  propagatedBuildInputs = [ enum34 libselinux networkx ]
+    ++ optionals withGraphics [ pyqt5 ];
 
-  hardeningDisable = [ "format" ];
+  checkInputs = [ tox checkpolicy ];
+  preCheck = ''
+    export CHECKPOLICY=${checkpolicy}/bin/checkpolicy
+  '';
 
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all";
-  NIX_LDFLAGS = "-L${libsepol}/lib -L${libselinux}/lib";
+  setupPyBuildFlags = [ "-i" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python swig2 bison flex ];
-  buildInputs = [ tcl libxml2 sqlite bzip2 ];
+  preBuild = ''
+    export SEPOL="${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+  '';
 
   meta = {
-    description = "SELinux Tools";
-    homepage = http://oss.tresys.com/projects/setools/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    description = "SELinux Policy Analysis Tools";
+    homepage = https://github.com/SELinuxProject/setools;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

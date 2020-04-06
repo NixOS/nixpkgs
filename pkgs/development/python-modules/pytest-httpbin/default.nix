@@ -1,32 +1,30 @@
 { buildPythonPackage
 , lib
-, fetchFromGitHub
+, fetchPypi
 , pytest
-, flask
-, decorator
 , httpbin
 , six
-, requests
 }:
 
 buildPythonPackage rec {
   pname = "pytest-httpbin";
-  version = "0.3.0";
+  version = "1.0.0";
 
-  src = fetchFromGitHub {
-    owner = "kevin1024";
-    repo = "pytest-httpbin";
-    rev = "v${version}";
-    sha256 = "0p86ljx775gxxicscs1dydmmx92r1g9bs00vdvxrsl3qdll1ksfm";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0wlvw5qgkax7f0i5ks1562s37h2hdmn5yxnp1rajcc2289zm9knq";
   };
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ flask decorator httpbin six requests ];
+  propagatedBuildInputs = [ httpbin six ];
 
   checkPhase = ''
     py.test
   '';
+
+  # https://github.com/kevin1024/pytest-httpbin/pull/51
+  doCheck = false;
 
   meta = {
     description = "Easily test your HTTP library against a local copy of httpbin.org";

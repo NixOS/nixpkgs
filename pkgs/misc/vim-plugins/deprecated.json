@@ -1,0 +1,18 @@
+{
+    "gist-vim": {
+        "date": "2020-03-27",
+        "new": "vim-gist"
+    },
+    "vim-jade": {
+        "date": "2020-03-27",
+        "new": "vim-pug"
+    },
+    "vundle": {
+        "date": "2020-03-27",
+        "new": "Vundle-vim"
+    },
+    "youcompleteme": {
+        "date": "2020-03-27",
+        "new": "YouCompleteMe"
+    }
+}

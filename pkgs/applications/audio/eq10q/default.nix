@@ -1,18 +1,25 @@
-{ stdenv, fetchurl, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig, xorg }:
+{ stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig
+, xorg }:
 stdenv.mkDerivation rec {
-  name = "eq10q-${version}";
+  pname = "eq10q";
   version = "2.2";
   src = fetchurl {
-    url = "mirror://sourceforge/project/eq10q/${name}.tar.gz";
+    url = "mirror://sourceforge/project/eq10q/${pname}-${version}.tar.gz";
     sha256 = "16mhcav8gwkp29k9ki4dlkajlcgh1i2wvldabxb046d37dq4qzrk";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
 
-  installFlags = ''
-    DESTDIR=$(out)
-  '';
+  patches = [
+    (fetchpatch {
+      # glibc 2.27 compatibility
+      url = https://sources.debian.org/data/main/e/eq10q/2.2~repack0-2.1/debian/patches/05-pow10.patch;
+      sha256 = "07b0wf6k4xqgigv4h095bzfaw8r218wa36r9w1817jcys13r6c5r";
+    })
+  ];
+
+  installFlags = [ "DESTDIR=$(out)" ];
 
   fixupPhase = ''
     cp -r $out/var/empty/local/lib $out

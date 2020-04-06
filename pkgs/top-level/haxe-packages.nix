@@ -1,8 +1,7 @@
-{ stdenv, fetchzip, fetchFromGitHub, newScope, haxe, neko, nodejs, wine, php, python3, jdk, mono, haskellPackages, fetchpatch }:
+{ stdenv, fetchzip, fetchFromGitHub, haxe, neko, jdk, mono }:
 
 let
   self = haxePackages;
-  callPackage = newScope self;
   haxePackages = with self; {
 
     withCommas = stdenv.lib.replaceChars ["."] [","];
@@ -100,7 +99,7 @@ let
     hxnodejs_6 = let
       libname = "hxnodejs";
       version = "6.9.0";
-    in stdenv.mkDerivation rec {
+    in stdenv.mkDerivation {
       name = "${libname}-${version}";
       src = fetchFromGitHub {
         owner = "HaxeFoundation";

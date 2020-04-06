@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."iolib_dot_asdf" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz'';
+    url = ''http://beta.quicklisp.org/archive/iolib/2018-02-28/iolib-v0.8.3.tgz'';
     sha256 = ''12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM iolib.conf DESCRIPTION Compile-time configuration for IOLib. SHA256
     12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c URL
-    http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5
+    http://beta.quicklisp.org/archive/iolib/2018-02-28/iolib-v0.8.3.tgz MD5
     fc28d4cad6f8e43972df3baa6a8ac45c NAME iolib.conf FILENAME iolib_dot_conf
     DEPS
     ((NAME alexandria FILENAME alexandria)

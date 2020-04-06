@@ -5,8 +5,9 @@ let
   sha256 = "039rh4z3lsj4vqjsqgakk0b7dkrdrkkzj0p1cjikpc9gn36zpghc";
 in
 
-stdenv.mkDerivation rec {
-  name = "ior-${version}";
+stdenv.mkDerivation {
+  pname = "ior";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/LLNL/ior/archive/${version}.tar.gz";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap";
 
   meta = with stdenv.lib; {
-    homepage = http://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/;
+    homepage = https://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/;
     description = "Parallel file system I/O performance test";
     license = licenses.gpl2;
     platforms = platforms.linux;

@@ -1,38 +1,49 @@
-{ stdenv, python2Packages, fetchFromGitHub, dialog }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
+, dialog, mock, gnureadline
+, pytest_xdist, pytest, dateutil
+}:
 
-# Latest version of certbot supports python3 and python3 version of pythondialog
-
-python2Packages.buildPythonApplication rec {
-  name = "certbot-${version}";
-  version = "0.19.0";
+buildPythonApplication rec {
+  pname = "certbot";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "certbot";
-    repo = "certbot";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "14i3q59v7j0q2pa1dri420fhil4h0vgl4vb471hp81f4y14gq6h7";
+    sha256 = "1nzp1l63f64qqp89y1vyd4lgfhykfp5dkr6iwfiyf273y7sjwpsa";
   };
 
-  propagatedBuildInputs = with python2Packages; [
+  patches = [
+    ./0001-Don-t-use-distutils.StrictVersion-that-cannot-handle.patch
+  ];
+
+  propagatedBuildInputs = [
     ConfigArgParse
     acme
     configobj
     cryptography
+    distro
+    josepy
     parsedatetime
-    psutil
     pyRFC3339
     pyopenssl
-    python2-pythondialog
     pytz
+    requests
     six
     zope_component
     zope_interface
   ];
-  buildInputs = [ dialog ] ++ (with python2Packages; [ nose mock gnureadline ]);
 
-  patchPhase = ''
-    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
-    substituteInPlace certbot/util.py --replace "sw_vers" "/usr/bin/sw_vers"
+  buildInputs = [ dialog mock gnureadline ];
+
+  checkInputs = [ pytest_xdist pytest dateutil ];
+
+  preBuild = ''
+    cd certbot
   '';
 
   postInstall = ''
@@ -42,11 +53,13 @@ python2Packages.buildPythonApplication rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+
+  meta = with lib; {
     homepage = src.meta.homepage;
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
-    maintainers = [ maintainers.domenkozar ];
-    license = licenses.asl20;
+    maintainers = with maintainers; [ domenkozar ];
+    license = with licenses; [ asl20 ];
   };
 }

@@ -1,8 +1,6 @@
-{ stdenv, cctools, appleDerivation }:
+{ appleDerivation }:
 
 appleDerivation {
-  nativeBuildInputs = [ cctools ];
-
   patches = [ ./clang-5.patch ];
 
   postPatch = ''
@@ -20,5 +18,6 @@ appleDerivation {
 
   postInstall = ''
     mv $out/usr/local/include $out/include
+    rm -rf $out/usr
   '';
 }

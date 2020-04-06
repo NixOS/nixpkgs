@@ -1,35 +1,34 @@
-{ stdenv, buildPythonPackage, fetchurl, isPy3k, isPy33,
-  unittest2, mock, pytest, trollius, asyncio,
-  pytest-asyncio, futures,
-  six, twisted, txaio, zope_interface
+{ lib, buildPythonPackage, fetchPypi, isPy3k,
+  six, txaio, twisted, zope_interface, cffi, trollius, futures,
+  mock, pytest, cryptography, pynacl
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "autobahn";
-  version = "17.9.3";
+  version = "19.11.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-    sha256 = "206a3a579a580ca3ce2532ac12ec52d447135c9ace7c4bf6065b832a7cff25ba";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "201b9879b49c6e259d4126dbafe9e3c73807de0c242d50065fbebc62c6ccb181";
   };
 
-  # Upstream claim python2 support, but tests require pytest-asyncio which
-  # is pythn3 only. Therefore, tests are skipped for python2.
-  doCheck = isPy3k;
-  buildInputs = stdenv.lib.optionals isPy3k [ unittest2 mock pytest pytest-asyncio ];
-  propagatedBuildInputs = [ six twisted zope_interface txaio ] ++
-    (stdenv.lib.optional isPy33 asyncio) ++
-    (stdenv.lib.optionals (!isPy3k) [ trollius futures ]);
+  propagatedBuildInputs = [ six txaio twisted zope_interface cffi cryptography pynacl ] ++
+    (lib.optionals (!isPy3k) [ trollius futures ]);
 
+  checkInputs = [ mock pytest ];
   checkPhase = ''
-    py.test $out
+    runHook preCheck
+    USE_TWISTED=true py.test $out
+    runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  # Tests do no seem to be compatible yet with pytest 5.1
+  # https://github.com/crossbario/autobahn-python/issues/1235
+  doCheck = false;
+
+  meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio.";
-    homepage    = "http://crossbar.io/autobahn";
+    homepage    = "https://crossbar.io/autobahn";
     license     = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
-    platforms   = platforms.all;
   };
 }

@@ -1,31 +1,38 @@
-{ stdenv, lib, fetchurl, cmake, fcitx, pkgconfig, qtbase, extra-cmake-modules }:
+{ lib, mkDerivation, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, fcitx
+, pkgconfig
+, qtbase
+}:
 
-stdenv.mkDerivation rec {
-  name = "fcitx-qt5-${version}";
-  version = "1.2.1";
+mkDerivation rec {
+  pname = "fcitx-qt5";
+  version = "1.2.3";
 
-  src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-qt5/${name}.tar.xz";
-    sha256 = "0z8ax0dxk88byic41mfaiahjdv1k8ciwn97xfjkkgr4ijgscdr8c";
+  src = fetchFromGitLab {
+    owner = "fcitx";
+    repo = pname;
+    rev = version;
+    sha256 = "0860v3rxsh054wkkbawvyin5mk0flp4cwfcpmcpq147lvdm5lq2i";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
 
   buildInputs = [ fcitx qtbase ];
 
-  preInstall = ''
-    substituteInPlace platforminputcontext/cmake_install.cmake \
-      --replace ${qtbase.out} $out
-    substituteInPlace quickphrase-editor/cmake_install.cmake \
-      --replace ${fcitx} $out
+  preConfigure = ''
+    substituteInPlace platforminputcontext/CMakeLists.txt \
+      --replace \$"{CMAKE_INSTALL_QTPLUGINDIR}" $out/${qtbase.qtPluginPrefix}
+    substituteInPlace quickphrase-editor/CMakeLists.txt \
+      --replace \$"{FCITX4_ADDON_INSTALL_DIR}" $out/lib/fcitx
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = http://github.com/fcitx/fcitx-qt5;
+  meta = with lib; {
+    homepage    = "https://gitlab.com/fcitx/fcitx-qt5";
     description = "Qt5 IM Module for Fcitx";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ ericsagnes ];
   };
-
 }

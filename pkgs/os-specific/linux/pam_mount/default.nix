@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sh autogen.sh --prefix=$out
     '';
 
-  makeFlags = "DESTDIR=$(out)";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   # Probably a hack, but using DESTDIR and PREFIX makes everything work!
   postInstall = ''
@@ -27,10 +27,11 @@ stdenv.mkDerivation rec {
     rm -r $out/nix
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pam-mount.sourceforge.net/;
     description = "PAM module to mount volumes for a user session";
-    maintainers = [ stdenv.lib.maintainers.tstrobel ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.tstrobel ];
+    license = with licenses; [ gpl2 gpl3 lgpl21 lgpl3 ];
+    platforms = platforms.linux;
   };
 }

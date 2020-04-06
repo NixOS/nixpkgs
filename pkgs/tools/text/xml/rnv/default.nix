@@ -1,7 +1,7 @@
 { stdenv, fetchurl, expat }:
 
 stdenv.mkDerivation rec {
-  name = "rnv-${version}";
+  pname = "rnv";
   version = "1.7.11";
 
   src = fetchurl {

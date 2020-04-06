@@ -20,7 +20,7 @@ in
   imports = [
     ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
     ./lxqt.nix ./enlightenment.nix ./gnome3.nix ./kodi.nix ./maxx.nix
-    ./mate.nix
+    ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
   ];
 
   options = {
@@ -68,46 +68,31 @@ in
           scripts before forwarding the value to the
           <varname>displayManager</varname>.
         '';
-        apply = list: {
-          list = map (d: d // {
-            manage = "desktop";
-            start = d.start
-            + optionalString (needBGCond d) ''
-              if [ -e $HOME/.background-image ]; then
-                ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
-              else
-                # Use a solid black background as fallback
-                ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
-              fi
-            '';
-          }) list;
-          needBGPackages = [] != filter needBGCond list;
-        };
+        apply = map (d: d // {
+          manage = "desktop";
+          start = d.start
+          + optionalString (needBGCond d) ''
+            if [ -e $HOME/.background-image ]; then
+              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
+            fi
+          '';
+        });
       };
 
       default = mkOption {
-        type = types.str;
-        default = "none";
-        example = "plasma5";
-        description = "Default desktop manager loaded if none have been chosen.";
-        apply = defaultDM:
-          if defaultDM == "none" && cfg.session.list != [] then
-            (head cfg.session.list).name
-          else if any (w: w.name == defaultDM) cfg.session.list then
-            defaultDM
-          else
-            throw ''
-              Default desktop manager (${defaultDM}) not found.
-              Probably you want to change
-                services.xserver.desktopManager.default = "${defaultDM}";
-              to one of
-                ${concatMapStringsSep "\n  " (w: "services.xserver.desktopManager.default = \"${w.name}\";") cfg.session.list}
-            '';
+        type = types.nullOr types.str;
+        default = null;
+        example = "none";
+        description = ''
+          <emphasis role="strong">Deprecated</emphasis>, please use <xref linkend="opt-services.xserver.displayManager.defaultSession"/> instead.
+
+          Default desktop manager loaded if none have been chosen.
+        '';
       };
 
     };
 
   };
 
-  config.services.xserver.displayManager.session = cfg.session.list;
+  config.services.xserver.displayManager.session = cfg.session;
 }

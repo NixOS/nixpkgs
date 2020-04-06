@@ -20,7 +20,7 @@ in
 
     services.miredo = {
 
-      enable = mkEnableOption "the Miredo IPv6 tunneling service.";
+      enable = mkEnableOption "the Miredo IPv6 tunneling service";
 
       package = mkOption {
         type = types.package;

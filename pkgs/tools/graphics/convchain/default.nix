@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, mono}:
 stdenv.mkDerivation rec {
-  name = "convchain-${version}";
+  pname = "convchain";
   version = "0.0pre20160901";
   src = fetchFromGitHub {
     owner = "mxgmn";

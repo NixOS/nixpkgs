@@ -1,18 +1,20 @@
 { stdenv, lib, fetchgit, cmake, llvmPackages, boost, python
 , gocode ? null
 , godef ? null
+, gotools ? null
 , rustracerd ? null
 , fixDarwinDylibNames, Cocoa ? null
 }:
 
-stdenv.mkDerivation rec {
-  name = "ycmd-${version}";
-  version = "2017-11-05";
+stdenv.mkDerivation {
+  pname = "ycmd";
+  version = "2020-02-22";
+  disabled = !python.isPy3k;
 
   src = fetchgit {
-    url = "git://github.com/Valloric/ycmd.git";
-    rev = "0ca16e7ba3a9078b697befdce64104e61829aa3b";
-    sha256 = "0bs94iv521ac2n53n3k8mw3s6v0hi3hhxhjsr0ips3n99al8wndi";
+    url = "https://github.com/Valloric/ycmd.git";
+    rev = "9a6b86e3a156066335b678c328f226229746bae5";
+    sha256 = "1c5axdngxaxj5vc6lr8sxb99mr5adsm1dnjckaxc23kq78pc8cn7";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,9 +26,7 @@ stdenv.mkDerivation rec {
     ${python.interpreter} build.py --system-libclang --clang-completer --system-boost
   '';
 
-  patches = [ ./dont-symlink-clang.patch ];
-
-  configurePhase = ":";
+  dontConfigure = true;
 
   # remove the tests
   #
@@ -51,19 +51,28 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
 
-    mkdir -p $out/lib/ycmd/third_party/{gocode,godef,racerd/target/release}
-
-    cp -r third_party/JediHTTP $out/lib/ycmd/third_party
-    for p in waitress frozendict bottle python-future argparse requests; do
-      cp -r third_party/$p $out/lib/ycmd/third_party
-    done
+    # Copy everything: the structure of third_party has been known to change.
+    # When linking our own libraries below, do so with '-f'
+    # to clobber anything we may have copied here.
+    mkdir -p $out/lib/ycmd/third_party
+    cp -r third_party/* $out/lib/ycmd/third_party/
 
   '' + lib.optionalString (gocode != null) ''
-    ln -s ${gocode}/bin/gocode $out/lib/ycmd/third_party/gocode
+    TARGET=$out/lib/ycmd/third_party/gocode
+    mkdir -p $TARGET
+    ln -sf ${gocode}/bin/gocode $TARGET
   '' + lib.optionalString (godef != null) ''
-    ln -s ${godef}/bin/godef $out/lib/ycmd/third_party/godef
+    TARGET=$out/lib/ycmd/third_party/godef
+    mkdir -p $TARGET
+    ln -sf ${godef}/bin/godef $TARGET
+  '' + lib.optionalString (gotools != null) ''
+    TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
+    mkdir -p $TARGET
+    ln -sf ${gotools}/bin/gopls $TARGET
   '' + lib.optionalString (rustracerd != null) ''
-    ln -s ${rustracerd}/bin/racerd $out/lib/ycmd/third_party/racerd/target/release
+    TARGET=$out/lib/ycmd/third_party/racerd/target/release
+    mkdir -p $TARGET
+    ln -sf ${rustracerd}/bin/racerd $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so

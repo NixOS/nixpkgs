@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "check-${version}";
-  version = "0.11.0";
+  pname = "check";
+  version = "0.14.0";
 
   src = fetchurl {
     url = "https://github.com/libcheck/check/releases/download/${version}/check-${version}.tar.gz";
-    sha256 = "05jn1pgb7hqb937xky2147nnq3r4qy5wwr79rddpax3bms5a9xr4";
+    sha256 = "02zkfiyklckmivrfvdsrlzvzphkdsgjrz3igncw05dv5pshhq3xx";
   };
 
   # Test can randomly fail: http://hydra.nixos.org/build/7243912
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

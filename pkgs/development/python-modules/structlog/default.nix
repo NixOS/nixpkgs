@@ -1,35 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pytest
+, python-rapidjson
 , pretend
 , freezegun
+, twisted
 , simplejson
+, six
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "17.2.0";
+  version = "19.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6980001045abd235fa12582222627c19b89109e58b85eb77d5a5abc778df6e20";
+    sha256 = "4287058cf4ce1a59bc5dea290d6386d37f29a37529c9a51cdf7387e51710152b";
   };
 
-  patches = [
-    # Fix tests for pytest 3.3
-    (fetchpatch {
-      url = "https://github.com/hynek/structlog/commit/22f0ae50607a0cb024361599f84610ce290deb99.patch";
-      sha256 = "03622i13ammkpyrdk48kimbz94gbkpcmdpy0kj2z09m1kp6q2ljv";
-    })
-  ];
-
-  checkInputs = [ pytest pretend freezegun ];
-  propagatedBuildInputs = [ simplejson ];
+  checkInputs = [ pytest pretend freezegun simplejson twisted ]
+    ++ lib.optionals (pythonAtLeast "3.6") [ python-rapidjson ];
+  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
-    rm tests/test_twisted.py*
+    # rm tests/test_twisted.py*
     py.test
   '';
 

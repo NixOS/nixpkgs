@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vis-${version}";
-  version  = "0.4";
+  pname = "vis";
+  version  = "0.5";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "1crsg3ssqv4xix9z16hwl0zyx7hxk686s52zmrp7yfak3m5igf9k";
+    sha256 = "1vhq6hprkgj90iwl5vl3pxs3xwc01mx8yhi6c1phzry5agqqp8jb";
     repo = "vis";
     owner = "martanne";
   };
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     libselinux
   ];
 
+  postPatch = ''
+    patchShebangs ./configure
+  '';
+
   LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;";
   LUA_PATH="${lpeg}/share/lua/${lua.luaversion}/?.lua";
 
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "vis";
     exec = "vis %U";
     type = "Application";

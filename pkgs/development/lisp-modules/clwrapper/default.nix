@@ -1,4 +1,4 @@
-{stdenv, fetchurl, asdf, which, bash, lisp ? null}:
+{stdenv, asdf, which, bash, lisp ? null}:
 stdenv.mkDerivation {
   name = "cl-wrapper-script";
 
@@ -15,6 +15,7 @@ stdenv.mkDerivation {
     chmod a+x "$out"/bin/*
 
     substituteAll "${./setup-hook.sh}" "setup-hook-parsed"
+    addEnvHooks(){ true; };
     source setup-hook-parsed
     setLisp "${lisp}"
     echo "$NIX_LISP"

@@ -1,8 +1,7 @@
-{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
-, ncurses ? null
-, libelf
+{ buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
+, libelf, cpio
 , utillinux
-, writeTextFile, ubootTools
+, writeTextFile
 }:
 
 let
@@ -24,19 +23,22 @@ in {
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
   src,
-  # Any patches
+  # a list of { name=..., patch=..., extraConfig=...} patches
   kernelPatches ? [],
   # The kernel .config file
   configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
   config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+  # automatically extended with extra per-version and per-config values.
+  randstructSeed ? "",
   # Use defaultMeta // extraMeta
   extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
-
-  hostPlatform
+  # ignored
+  features ? null,
 }:
 
 let
@@ -55,8 +57,8 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-  ] ++ stdenv.lib.optionals (hostPlatform.platform ? kernelMakeFlags)
-    hostPlatform.platform.kernelMakeFlags;
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.platform ? kernelMakeFlags)
+    stdenv.hostPlatform.platform.kernelMakeFlags;
 
   drvAttrs = config_: platform: kernelPatches: configfile:
     let
@@ -89,10 +91,12 @@ let
 
       inherit src;
 
-      preUnpack = ''
-      '';
-
-      patches = map (p: p.patch) kernelPatches;
+      patches =
+        map (p: p.patch) kernelPatches
+        # Required for deterministic builds along with some postPatch magic.
+        ++ optional (stdenv.lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch
+        # Fixes determinism by normalizing metadata for the archive of kheaders
+        ++ optional (stdenv.lib.versionAtLeast version "5.2" && stdenv.lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
       prePatch = ''
         for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
@@ -100,6 +104,20 @@ let
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
+        sed -i scripts/ld-version.sh -e "s|/usr/bin/awk|${buildPackages.gawk}/bin/awk|"
+      '';
+
+      postPatch = ''
+        # Set randstruct seed to a deterministic but diversified value. Note:
+        # we could have instead patched gen-random-seed.sh to take input from
+        # the buildFlags, but that would require also patching the kernel's
+        # toplevel Makefile to add a variable export. This would be likely to
+        # cause future patch conflicts.
+        if [ -f scripts/gcc-plugins/gen-random-seed.sh ]; then
+          substituteInPlace scripts/gcc-plugins/gen-random-seed.sh \
+            --replace NIXOS_RANDSTRUCT_SEED \
+            $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
+        fi
       '';
 
       configurePhase = ''
@@ -109,11 +127,6 @@ let
         export buildRoot="$(pwd)/build"
 
         echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
-
-        if [[ -z "$buildRoot" || ! -d "$buildRoot" ]]; then
-          echo "set $buildRoot to the build folder please"
-          exit 1
-        fi
 
         if [ -f "$buildRoot/.config" ]; then
           echo "Could not link $buildRoot/.config : file exists"
@@ -126,7 +139,7 @@ let
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
-        make $makeFlags prepare
+        make $makeFlags "''${makeFlagsArray[@]}" prepare
         actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
         if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
           echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
@@ -151,10 +164,17 @@ let
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
+      preInstall = ''
+        installFlagsArray+=("-j$NIX_BUILD_CORES")
+      '';
+
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else
-                          if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall" else
-                          "install") ];
+      installTargets = [ (
+        if platform ? kernelInstallTarget then platform.kernelInstallTarget
+        else if platform.kernelTarget == "uImage" then "uinstall"
+        else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
+        else "install"
+      ) ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
@@ -163,7 +183,7 @@ let
       '' else "") + (if isModular then ''
         mkdir -p $dev
         cp vmlinux $dev/
-        if [ -z "$dontStrip" ]; then
+        if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
@@ -171,12 +191,21 @@ let
         unlink $out/lib/modules/${modDirVersion}/build
         unlink $out/lib/modules/${modDirVersion}/source
 
-        mkdir -p $dev/lib/modules/${modDirVersion}/build
-        cp -dpR .. $dev/lib/modules/${modDirVersion}/source
+        mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
+
+        # To save space, exclude a bunch of unneeded stuff when copying.
+        (cd .. && rsync --archive --prune-empty-dirs \
+            --exclude='/build/' \
+            * $dev/lib/modules/${modDirVersion}/source/)
+
         cd $dev/lib/modules/${modDirVersion}/source
 
         cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
         make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
+
+        # For reproducibility, removes accidental leftovers from a `cc1` call
+        # from a `try-run` call from the Makefile
+        rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
 
         # Keep some extra files on some arches (powerpc, aarch64)
         for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
@@ -246,26 +275,29 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
+        timeout = 14400; # 4 hours
       } // extraMeta;
     };
 in
 
 assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
 assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
-stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches configfile) // {
-  name = "linux-${version}";
+stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
+  pname = "linux";
+  inherit version;
 
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
-      ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
-      ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
-      ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
+      ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
+      ++ optional  (stdenv.lib.versionAtLeast version "4.14") libelf
+      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinux
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
+      ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
       ;
 
-  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
+  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
   makeFlags = commonMakeFlags ++ [
@@ -276,5 +308,5 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  karch = hostPlatform.platform.kernelArch;
+  karch = stdenv.hostPlatform.platform.kernelArch;
 })

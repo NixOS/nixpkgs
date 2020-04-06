@@ -1,14 +1,14 @@
 { stdenv, lib, fetchurl, unzip, makeWrapper, setJavaClassPath
 , zulu, glib, libxml2, libav_0_8, ffmpeg, libxslt, libGL, alsaLib
-, fontconfig, freetype, gnome2, cairo, gdk_pixbuf, atk, xorg
+, fontconfig, freetype, gnome2, cairo, gdk-pixbuf, atk, xorg
 , swingSupport ? true }:
 
 let
-  version = "8.21.0.1";
-  openjdk = "8.0.131";
+  version = "8.28.0.1";
+  openjdk = "8.0.163";
 
-  sha256_linux = "0cr1wvk1ifdq69ia8sr6171yzciba8l5x7dszwa5g2v0vmmqq88p";
-  sha256_darwin = "0xq9bdzbdq8wq48gj6j56bw30l2iafz6sy1wdhrf92n9bnz5qmw7";
+  sha256_linux = "1z8s3a948nvv92wybnhkyr27ipibcy45k0zv5h5gp37ynd91df45";
+  sha256_darwin = "0i0prjijsgg0yyycplpp9rlfl428126rqz7bb31pchrhi6jhk699";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
@@ -17,16 +17,16 @@ let
   libraries = [
     stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
     xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango
-    gnome2.gtk cairo gdk_pixbuf atk
+    gnome2.gtk cairo gdk-pixbuf atk
   ] ++ (lib.optionals swingSupport (with xorg; [
     xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp
     xorg.libXt xorg.libXrender stdenv.cc.cc
   ]));
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version openjdk platform hash extension;
 
-  name = "zulu-${version}";
+  pname = "zulu";
 
   src = fetchurl {
     url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk${openjdk}-${platform}_x64.${extension}";
@@ -58,14 +58,14 @@ in stdenv.mkDerivation rec {
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
-    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
   '';
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
   passthru = {
-    home = "${zulu}";
+    home = zulu;
   };
 
   meta = with stdenv.lib; {

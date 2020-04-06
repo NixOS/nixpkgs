@@ -1,23 +1,31 @@
-{ lib, stdenv, fetchurl, interactive ? false, readline ? null, ncurses ? null }:
+{ stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
 
 assert interactive -> readline != null && ncurses != null;
 
-stdenv.mkDerivation {
-  name = "sqlite-3.22.0";
+with stdenv.lib;
 
+let
+  archiveVersion = import ./archive-version.nix stdenv.lib;
+in
+
+stdenv.mkDerivation rec {
+  pname = "sqlite";
+  version = "3.31.1";
+
+  # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
-    url = "http://sqlite.org/2018/sqlite-autoconf-3220000.tar.gz";
-    sha256 = "04n6hnw2g818d7r92cp2608kd5mhzyysy83k29kbq1mp709an918";
+    url = "https://sqlite.org/2020/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    sha256 = "1bj936svd8i5g25xd1bj52hj4zca01fgl3sqkj86z9q5pkz4wa32";
   };
 
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = lib.optionals interactive [ readline ncurses ];
+  buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
 
-  configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
+  configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -58,10 +66,19 @@ stdenv.mkDerivation {
     echo ""
   '';
 
+  postInstall = ''
+    # Do not contaminate dependent libtool-based projects with sqlite dependencies.
+    sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
+  '';
+
+  doCheck = false; # fails to link against tcl
+
   meta = {
-    homepage = http://www.sqlite.org/;
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ eelco np ];
+    downloadPage = https://sqlite.org/download.html;
+    homepage = "https://www.sqlite.org/";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ eelco np ];
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

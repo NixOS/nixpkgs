@@ -1,83 +1,65 @@
-{ stdenv
-, fetchFromGitHub
-, fixDarwinDylibNames
-, which, perl
-
-# Optional Arguments
-, snappy ? null, google-gflags ? null, zlib ? null, bzip2 ? null, lz4 ? null
-, numactl ? null
-
-# Malloc implementation
-, jemalloc ? null, gperftools ? null
-
+{ stdenv, fetchFromGitHub, fetchpatch
+, cmake, ninja
+, bzip2, lz4, snappy, zlib, zstd
 , enableLite ? false
 }:
 
-let
-  malloc = if jemalloc != null then jemalloc else gperftools;
-in
 stdenv.mkDerivation rec {
-  name = "rocksdb-${version}";
-  version = "5.10.3";
-
-  outputs = [ "dev" "out" "static" ];
+  pname = "rocksdb";
+  version = "6.4.6";
 
   src = fetchFromGitHub {
     owner = "facebook";
-    repo = "rocksdb";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "19d8i8map8qz639mhflmxc0w9gp78fvkq1l46y5s6b5imwh0w7xq";
+    sha256 = "0s0n4p1b4jzmslz9d2xd4ajra0m6l9x26mjwlbgw0klxjggmy8qn";
   };
-  
-  nativeBuildInputs = [ which perl ];
-  buildInputs = [ snappy google-gflags zlib bzip2 lz4 malloc fixDarwinDylibNames ];
+
+  nativeBuildInputs = [ cmake ninja ];
+  buildInputs = [ bzip2 lz4 snappy zlib zstd ];
+
+  patches = [
+    # https://github.com/facebook/rocksdb/pull/6076
+    (fetchpatch {
+      url = "https://github.com/facebook/rocksdb/commit/c0be4b2ff1a5393419673fab961cb9b09ba38752.diff";
+      sha256 = "1f2wg9kqlmf2hiiihmbp8m5fr2wnn7896g6i9yg9hdgi40pw30w6";
+    })
+  ];
 
   postPatch = ''
-    # Hack to fix typos
-    sed -i 's,#inlcude,#include,g' build_tools/build_detect_platform
+    substituteInPlace CMakeLists.txt --replace "find_package(zlib " "find_package(ZLIB "
   '';
 
-  # Environment vars used for building certain configurations
-  PORTABLE = "1";
-  USE_SSE = "1";
-  CMAKE_CXX_FLAGS = "-std=gnu++11";
-  JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
 
-  ${if enableLite then "LIBNAME" else null} = "librocksdb_lite";
-  ${if enableLite then "CXXFLAGS" else null} = "-DROCKSDB_LITE=1";
-  
-  buildAndInstallFlags = [
-    "USE_RTTI=1"
-    "DEBUG_LEVEL=0"
-    "DISABLE_WARNING_AS_ERROR=1"     
+  cmakeFlags = [
+    "-DPORTABLE=1"
+    "-DWITH_JEMALLOC=0"
+    "-DWITH_JNI=0"
+    "-DWITH_TESTS=0"
+    "-DWITH_TOOLS=0"
+    "-DWITH_BZ2=1"
+    "-DWITH_LZ4=1"
+    "-DWITH_SNAPPY=1"
+    "-DWITH_ZLIB=1"
+    "-DWITH_ZSTD=1"
+    "-DWITH_GFLAGS=0"
+    "-DUSE_RTTI=1"
+    "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
+    (stdenv.lib.optional
+        (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
+        "-DFORCE_SSE42=1")
+    (stdenv.lib.optional enableLite "-DROCKSDB_LITE=1")
+    "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
   ];
 
-  buildFlags = buildAndInstallFlags ++ [
-    "shared_lib"
-    "static_lib"
-  ];
-
-  installFlags = buildAndInstallFlags ++ [
-    "INSTALL_PATH=\${out}"
-    "install-shared"
-    "install-static"
-  ];
-
-  postInstall = ''
-    # Might eventually remove this when we are confident in the build process
-    echo "BUILD CONFIGURATION FOR SANITY CHECKING"
-    cat make_config.mk
-    mkdir -pv $static/lib/
-    mv -vi $out/lib/librocksdb.a $static/lib/
-  '';
-
-  enableParallelBuilding = true;
+  # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
+  hardeningDisable = stdenv.lib.optional stdenv.hostPlatform.isWindows "format";
 
   meta = with stdenv.lib; {
-    homepage = http://rocksdb.org;
+    homepage = https://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
-    license = licenses.bsd3;
-    platforms = platforms.x86_64 ++ platforms.aarch64;
-    maintainers = with maintainers; [ adev wkennington ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ adev magenbluten ];
   };
 }

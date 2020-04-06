@@ -1,46 +1,74 @@
 { stdenv
 , fetchFromGitHub
-, which
-, xfce
-, glib
+, meson
+, ninja
 , pkgconfig
+, gtk3
+, glib
+, intltool
+, dbus-glib
 , libX11
 , libXScrnSaver
-, libXxf86misc
-, gtk3
-, dbus-glib
+, libXxf86vm
+, libXext
 , systemd
+, pantheon
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "${basename}-${version}";
-  basename = "light-locker";
-  version = "1.7.0";
+  pname = "light-locker";
+  version = "1.9.0";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "the-cavalry";
-    repo = basename;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0ygkp5vgkx2nfhfql6j2jsfay394gda23ir3sx4f72j4agsirjvj";
+    sha256 = "1z5lcd02gqax65qc14hj5khifg7gr53zy3s5i6apba50lbdlfk46";
   };
 
-  # Patch so that systemd is "found" when configuring.
-  patches = [ ./systemd.patch ];
+  nativeBuildInputs = [
+    intltool
+    meson
+    ninja
+    pkgconfig
+    wrapGAppsHook
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ which xfce.xfce4-dev-tools glib systemd
-                  libX11 libXScrnSaver libXxf86misc gtk3 dbus-glib wrapGAppsHook ];
+  buildInputs = [
+    dbus-glib
+    glib
+    gtk3
+    libX11
+    libXScrnSaver
+    libXext
+    libXxf86vm
+    systemd
+  ];
 
-  preConfigure = ''
-    ./autogen.sh
+  mesonFlags = [
+    "-Dmit-ext=true"
+    "-Ddpms-ext=true"
+    "-Dxf86gamma-ext=true"
+    "-Dsystemd=true"
+    "-Dupower=true"
+    "-Dlate-locking=true"
+    "-Dlock-on-suspend=true"
+    "-Dlock-on-lid=true"
+    "-Dgsettings=true"
+  ];
+
+  postInstall = ''
+    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  configureFlags = [ "--with-xf86gamma-ext" "--with-mit-ext"
-                     "--with-dpms-ext" "--with-systemd"
-                     # ConsoleKit and UPower were dropped in favor
-                     # of systemd replacements
-                     "--without-console-kit" "--without-upower" ];
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://github.com/the-cavalry/light-locker;
@@ -55,7 +83,7 @@ stdenv.mkDerivation rec {
       ConsoleKit/UPower or logind/systemd.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ obadz ];
+    maintainers = with maintainers; [ obadz ] ++ pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

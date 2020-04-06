@@ -5,7 +5,7 @@ xcbuildBuildPhase() {
 
     echo "running xcodebuild"
 
-    xcodebuild OTHER_CFLAGS="$NIX_CFLAGS_COMPILE" OTHER_CPLUSPLUSFLAGS="$NIX_CFLAGS_COMPILE" OTHER_LDFLAGS="$NIX_LDFLAGS" build
+    xcodebuild SYMROOT=$PWD/Products OBJROOT=$PWD/Intermediates $xcbuildFlags build
 
     runHook postBuild
 }
@@ -19,11 +19,9 @@ xcbuildInstallPhase () {
     runHook postInstall
 }
 
-if [ -z "$dontUseXcbuild" ]; then
-    buildPhase=xcbuildBuildPhase
-    if [ -z "$installPhase" ]; then
-        installPhase=xcbuildInstallPhase
-    fi
+buildPhase=xcbuildBuildPhase
+if [ -z "${installPhase-}" ]; then
+    installPhase=xcbuildInstallPhase
 fi
 
 # if [ -d "*.xcodeproj" ]; then

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, smlnj, rsync }:
 
 stdenv.mkDerivation rec {
-  name = "twelf-${version}";
+  pname = "twelf";
   version = "1.7.1";
 
   src = fetchurl {

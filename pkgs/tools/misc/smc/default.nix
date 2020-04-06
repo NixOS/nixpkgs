@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, runtimeShell }:
 
-stdenv.mkDerivation rec {
-  name = "smc-6.6.0";
+stdenv.mkDerivation {
+  name = "smc-6.6.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/smc/smc/6_6_0/smc_6_6_0.tgz";
-    sha256 = "14lf286dslm7ymkr4my1xgjvwvqc9181mwkfr65ab49cxl0q85wz";
+    url = "mirror://sourceforge/project/smc/smc/6_6_3/smc_6_6_3.tgz";
+    sha256 = "1gv0hrgdl4wp562virpf9sib6pdhapwv4zvwbl0d5f5xyx04il11";
   };
 
   # Prebuilt Java package.
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp misc/smc.ico "$out/share/icons/"
 
     cat > "$out/bin/smc" << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     ${jre}/bin/java -jar "$out/share/java/Smc.jar" "\$@"
     EOF
     chmod a+x "$out/bin/smc"

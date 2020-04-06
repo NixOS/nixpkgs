@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub , cairomm, cmake, libjack2, libpthreadstubs, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "artyFX-${version}";
+  pname = "artyFX";
   version = "1.3";
 
   src = fetchFromGitHub {
@@ -20,5 +20,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
+    # Build uses `-msse` and `-mfpmath=sse`
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

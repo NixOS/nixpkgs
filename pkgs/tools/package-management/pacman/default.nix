@@ -1,20 +1,35 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, perl, libarchive, openssl,
-zlib, bzip2, lzma }:
+{ stdenv, lib, fetchurl, pkgconfig, m4, perl, libarchive, openssl, zlib, bzip2,
+lzma, curl, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "pacman-${version}";
-  version = "5.0.2";
+  pname = "pacman";
+  version = "5.2.1";
 
   src = fetchurl {
-    url = "https://git.archlinux.org/pacman.git/snapshot/pacman-${version}.tar.gz";
-    sha256 = "1lk54k7d281v55fryqsajl4xav7rhpk8x8pxcms2v6dapp959hgi";
+    url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "04pkb8qvkldrayfns8cx4fljl4lyys1dqvlf7b5kkl2z4q3w8c0r";
   };
 
-  # trying to build docs fails with a2x errors, unable to fix through asciidoc
-  configureFlags = [ "--disable-doc" ];
+  enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ perl libarchive openssl zlib bzip2 lzma ];
+  configureFlags = [
+    # trying to build docs fails with a2x errors, unable to fix through asciidoc
+    "--disable-doc"
+
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--with-scriptlet-shell=${runtimeShell}"
+  ];
+
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
+
+  nativeBuildInputs = [ pkgconfig m4 ];
+  buildInputs = [ curl perl libarchive openssl zlib bzip2 lzma ];
+
+  postFixup = ''
+    substituteInPlace $out/bin/repo-add \
+      --replace bsdtar "${libarchive}/bin/bsdtar"
+  '';
 
   meta = with lib; {
     description = "A simple library-based package manager";

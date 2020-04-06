@@ -1,24 +1,39 @@
-{ stdenv, buildPythonPackage, fetchurl
-, pytest, mock, pytestcov, coverage }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
+, coverage
+, mock
+, pytest
+, pytestcov
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "19.7.1";
-  name = "${pname}-${version}";
+  version = "20.0.4";
+  disabled = isPy27;
 
-  src = fetchurl {
-    url = "mirror://pypi/g/gunicorn/${name}.tar.gz";
-    sha256 = "eee1169f0ca667be05db3351a0960765620dad53f53434262ff8901b68a1b622";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626";
   };
 
-  buildInputs = [ pytest mock pytestcov coverage ];
+  propagatedBuildInputs = [ setuptools ];
+
+  checkInputs = [ pytest mock pytestcov coverage ];
 
   prePatch = ''
-    substituteInPlace requirements_test.txt --replace "==" ">="
+    substituteInPlace requirements_test.txt --replace "==" ">=" \
+      --replace "coverage>=4.0,<4.4" "coverage"
   '';
 
+  # better than no tests
+  checkPhase = ''
+    $out/bin/gunicorn --help > /dev/null
+  '';
+
+  pythonImportsCheck = [ "gunicorn" ];
+
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/gunicorn;
+    homepage = "https://github.com/benoitc/gunicorn";
     description = "WSGI HTTP Server for UNIX";
     license = licenses.mit;
   };

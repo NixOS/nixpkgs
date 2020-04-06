@@ -1,46 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, protobuf, automake
-, autoreconfHook, zlib
-, enableGrpc ? false
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+, opentracing-cpp, protobuf, zlib
+, enableGrpc ? false, grpc ? null, openssl ? null, c-ares ? null
 }:
 
-let
-  # be sure to use the right revision based on the submodule!
-  common =
-    fetchFromGitHub {
-      owner = "lightstep";
-      repo = "lightstep-tracer-common";
-      rev = "fe1f65f4a221746f9fffe8bf544c81d4e1b8aded";
-      sha256 = "1qqpjxfrjmhnhs15nhbfv28fsgzi57vmfabxlzc99j4vl78h5iln";
-    };
-
-in
+assert enableGrpc -> grpc != null;
+assert enableGrpc -> openssl != null;
+assert enableGrpc -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "lightstep-tracer-cpp-${version}";
-  version = "0.36";
+  pname = "lightstep-tracer-cpp";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "lightstep";
-    repo = "lightstep-tracer-cpp";
-    rev = "v0_36";
-    sha256 = "1sfj91bn7gw7fga7xawag076c8j9l7kiwhm4x3zh17qhycmaqq16";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0zwj5r0rmfk6cm5ikay4kh7na455vskylc5yrxkhisn4n850d1l4";
   };
 
-  postUnpack = ''
-    cp -r ${common}/* $sourceRoot/lightstep-tracer-common
-  '';
-
-  preConfigure = lib.optionalString (!enableGrpc) ''
-    configureFlagsArray+=("--disable-grpc")
-  '';
-
   nativeBuildInputs = [
-    pkgconfig automake autoreconfHook
+    cmake pkgconfig
   ];
 
   buildInputs = [
-    protobuf zlib
+    opentracing-cpp protobuf zlib
+  ] ++ lib.optionals enableGrpc [
+    grpc openssl c-ares c-ares.cmake-config
   ];
+
+  cmakeFlags = lib.optionals (!enableGrpc) [ "-DWITH_GRPC=OFF" ];
 
   meta = with lib; {
     description = "Distributed tracing system built on top of the OpenTracing standard";

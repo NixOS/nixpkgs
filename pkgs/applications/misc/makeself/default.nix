@@ -1,26 +1,29 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.1";
-  name = "makeself-${version}";
+  version = "2.4.0";
+  pname = "makeself";
 
   src = fetchFromGitHub {
     owner = "megastep";
     repo = "makeself";
     rev = "release-${version}";
-    sha256 = "01r7vb9vyb99s3g5cw0c04s1ahcingynk3ki17wknlk2asjrbc4p";
+    sha256 = "1lw3gx1zpzp2wmzrw5v7k31vfsrdzadqha9ni309fp07g8inrr9n";
   };
 
-  patchPhase = ''
-    sed -e "s|^HEADER=.*|HEADER=$out/share/${name}/makeself-header.sh|" -i makeself.sh
+  # backported from https://github.com/megastep/makeself/commit/77156e28ff21231c400423facc7049d9c60fd1bd
+  patches = [ ./Use-rm-from-PATH.patch ];
+
+  postPatch = ''
+    sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i makeself.sh
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,share/{${name},man/man1}}
-    cp makeself.lsm README.md $out/share/${name}
+    mkdir -p $out/{bin,share/{${pname}-${version},man/man1}}
+    cp makeself.lsm README.md $out/share/${pname}-${version}
     cp makeself.sh $out/bin/makeself
     cp makeself.1  $out/share/man/man1/
-    cp makeself-header.sh $out/share/${name}
+    cp makeself-header.sh $out/share/${pname}-${version}
   '';
 
   meta = with stdenv.lib; {

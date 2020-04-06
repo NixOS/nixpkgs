@@ -7,10 +7,10 @@
 , sha256 ? null
 , rev ? "v${version}"
 , src ? fetchFromGitHub { inherit rev sha256; owner = "elixir-lang"; repo = "elixir"; }
-}:
+} @ args:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast;
+  inherit (stdenv.lib) getVersion versionAtLeast optional;
 
 in
   assert versionAtLeast (getVersion erlang) minimumOTPVersion;
@@ -22,23 +22,21 @@ in
 
     buildInputs = [ erlang rebar makeWrapper ];
 
-    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
-      "${pkgs.glibcLocales}/lib/locale/locale-archive";
-    LANG = "en_US.UTF-8";
-    LC_TYPE = "en_US.UTF-8";
+    LANG = "C.UTF-8";
+    LC_TYPE = "C.UTF-8";
 
     setupHook = ./setup-hook.sh;
 
     inherit debugInfo;
 
-    buildFlags = if debugInfo
-      then "ERL_COMPILER_OPTIONS=debug_info"
-      else "";
+    buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
     preBuild = ''
       # The build process uses ./rebar. Link it to the nixpkgs rebar
-      rm -v rebar
+      rm -vf rebar
       ln -s ${rebar}/bin/rebar rebar
+
+      patchShebangs lib/elixir/generate_app.escript || true
 
       substituteInPlace Makefile \
         --replace "/usr/local" $out
@@ -60,6 +58,7 @@ in
             --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
     '';
 
+    pos = builtins.unsafeGetAttrPos "sha256" args;
     meta = with stdenv.lib; {
       homepage = https://elixir-lang.org/;
       description = "A functional, meta-programming aware language built on top of the Erlang VM";
@@ -74,6 +73,6 @@ in
 
       license = licenses.epl10;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ the-kenny havvy couchemar ankhers ];
+      maintainers = with maintainers; [ the-kenny havvy couchemar ankhers filalex77 ];
     };
   })

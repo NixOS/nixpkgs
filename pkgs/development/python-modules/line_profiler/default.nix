@@ -10,18 +10,23 @@
 buildPythonPackage rec {
   pname = "line_profiler";
   version = "2.1.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "efa66e9e3045aa7cb1dd4bf0106e07dec9f80bc781a993fbaf8162a36c20af5c";
   };
 
+  patches = [ ./python37.patch ];
+
   buildInputs = [ cython ];
 
   propagatedBuildInputs = [ ipython ];
 
   disabled = isPyPy;
+
+  preBuild = ''
+    rm -f _line_profiler.c
+  '';
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests

@@ -43,7 +43,7 @@ stageFuns: let
 
   /* "dfold" a ternary function `op' between successive elements of `list' as if
      it was a doubly-linked list with `lnul' and `rnul` base cases at either
-     end. In precise terms, `fold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
+     end. In precise terms, `dfold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
      same as
 
        let
@@ -95,13 +95,25 @@ stageFuns: let
         __hatPackages = nextStage;
       };
     };
-  in
-    if args.__raw or false
-    then args'
-    else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
-      buildPackages = if args.selfBuild or true then null else prevStage;
-      targetPackages = if args.selfBuild or true then null else nextStage;
-    });
+    thisStage =
+      if args.__raw or false
+      then args'
+      else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
+        adjacentPackages = if args.selfBuild or true then null else rec {
+          pkgsBuildBuild = prevStage.buildPackages;
+          pkgsBuildHost = prevStage;
+          pkgsBuildTarget =
+            if args.stdenv.targetPlatform == args.stdenv.hostPlatform
+            then pkgsBuildHost
+            else assert args.stdenv.hostPlatform == args.stdenv.buildPlatform; thisStage;
+          pkgsHostHost =
+            if args.stdenv.hostPlatform == args.stdenv.targetPlatform
+            then thisStage
+            else assert args.stdenv.buildPlatform == args.stdenv.hostPlatform; pkgsBuildHost;
+          pkgsTargetTarget = nextStage;
+        };
+      });
+  in thisStage;
 
   # This is a hack for resolving cross-compiled compilers' run-time
   # deps. (That is, compilers that are themselves cross-compiled, as
@@ -109,9 +121,16 @@ stageFuns: let
   postStage = buildPackages: {
     __raw = true;
     stdenv.cc =
-      if buildPackages.stdenv.cc.isClang or false
-      then buildPackages.clang
-      else buildPackages.gcc;
+      if buildPackages.stdenv.hasCC
+      then
+        if buildPackages.stdenv.cc.isClang or false
+        then buildPackages.clang
+        else buildPackages.gcc
+      else
+        # This will blow up if anything uses it, but that's OK. The `if
+        # buildPackages.stdenv.cc.isClang then ... else ...` would blow up
+        # everything, so we make sure to avoid that.
+        buildPackages.stdenv.cc;
   };
 
 in dfold folder postStage (_: {}) withAllowCustomOverrides

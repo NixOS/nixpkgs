@@ -1,10 +1,10 @@
-{ stdenv, fetchgit, which, python2Packages }:
+{ stdenv, fetchgit, python2Packages }:
 
 let
   inherit (python2Packages) buildPythonApplication boto m2crypto;
-in buildPythonApplication rec {
-  name = "euca2ools-2.1.4";
-  namePrefix = "";
+in buildPythonApplication {
+  pname = "euca2ools";
+  version = "2.1.4";
 
   src = fetchgit {
     url = https://github.com/eucalyptus/euca2ools.git;
@@ -15,7 +15,7 @@ in buildPythonApplication rec {
   propagatedBuildInputs = [ boto m2crypto ];
 
   meta = {
-    homepage = http://open.eucalyptus.com/downloads;
+    homepage = https://github.com/eucalyptus/euca2ools;
     description = "Tools for interacting with Amazon EC2/S3-compatible cloud computing services";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

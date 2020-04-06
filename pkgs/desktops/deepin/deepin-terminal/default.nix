@@ -1,46 +1,86 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, vte, libgee, wnck, zssh, gettext, librsvg, libsecret, json-glib, gobjectIntrospection }:
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, ninja, vala_0_40, fetchpatch,
+  gettext, at-spi2-core, dbus, epoxy, expect, gtk3, json-glib,
+  libXdmcp, libgee, libpthreadstubs, librsvg, libsecret, libtasn1,
+  libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux, gnutls, pcre2,
+  libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "deepin-terminal-${version}";
-  version = "2.9.2";
+  pname = "deepin-terminal";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "1pmg1acs44c30hz9rpr6x1l6lyvlylc2pz5lv4ai0rhv37n51yn2";
+    sha256 = "1929saj828b438d07caw3cjhqq60v6gni7mi3fqrg9wdjz81xwv7";
   };
 
   patches = [
-    # Do not build vendored zssh and vte
-    (fetchurl {
-      name = "remove-vendor.patch";
-      url = https://git.archlinux.org/svntogit/community.git/plain/trunk/remove-vendor.patch?h=packages/deepin-terminal&id=5baa756e8e6ac8ce43fb122fce270756cc55086c;
-      sha256 = "0zrq004malphpy7xv5z502bpq30ybyj1rr4hlq4k5m4fpk29dlw6";
+    # Fix build with VTE 0.60
+    (fetchpatch {
+      url = "https://github.com/linuxdeepin/deepin-terminal/commit/542d1035b609698ee81aa7971d20ca8e5930743d.patch";
+      sha256 = "1pihiy70yc25fm5fx7i7v9gmi65v4mhldvi7xwv8rgr2z6hbfj41";
     })
   ];
 
+  nativeBuildInputs = [
+    pkgconfig
+    cmake
+    ninja
+    vala_0_40 # xcb.vapi:411.3-411.48: error: missing return statement at end of subroutine body
+    gettext
+    libselinux libsepol utillinux # required by gio
+    deepin.setupHook
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    at-spi2-core
+    dbus
+    deepin-menu
+    deepin-shortcut-viewer
+    epoxy
+    expect
+    gtk3
+    json-glib
+    libXdmcp
+    libgee
+    libpthreadstubs
+    librsvg
+    libsecret
+    libtasn1
+    libxcb
+    libxkbcommon
+    p11-kit
+    pcre
+    vte
+    wnck
+    gnutls
+    pcre2
+  ];
+
   postPatch = ''
-    substituteInPlace project_path.c --replace __FILE__ \"$out/share/deepin-terminal/\"
-    substituteInPlace ssh_login.sh --replace /usr/lib/deepin-terminal/zssh "${zssh}/bin/zssh"
+    searchHardCodedPaths
   '';
 
-  nativeBuildInputs = [
-    pkgconfig vala cmake gettext
-    # For setup hook
-    gobjectIntrospection
+  cmakeFlags = [
+    "-DTEST_BUILD=OFF"
+    "-DUSE_VENDOR_LIB=OFF"
+    "-DVERSION=${version}"
   ];
-  buildInputs = [ gtk3 vte libgee wnck librsvg libsecret json-glib ];
+
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
-    description = "The default terminal emulation for Deepin";
+    description = "Default terminal emulator for Deepin";
     longDescription = ''
       Deepin terminal, it sharpens your focus in the world of command line!
-      It is an advanced terminal emulator with workspace, multiple windows, remote management, quake mode and other features.
+      It is an advanced terminal emulator with workspace, multiple
+      windows, remote management, quake mode and other features.
      '';
-    homepage = https://github.com/linuxdeepin/deepin-terminal/;
+    homepage = https://github.com/linuxdeepin/deepin-terminal;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }

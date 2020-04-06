@@ -1,16 +1,27 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv
 
- stdenv.mkDerivation {
-  name = "cfitsio-3.43";
+# Optional dependencies
+, bzip2 ? null }:
+stdenv.mkDerivation rec {
+  pname = "cfitsio";
+  version = "3.47";
 
   src = fetchurl {
-    url = "ftp://heasarc.gsfc.nasa.gov/software/fitsio/c/cfitsio3430.tar.gz";
-    sha256 = "1rw481bv5srfmldf1h8bqmyljjh0siqh87xh6rip67ms59ssxpn8";
+    url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${version}.tar.gz";
+    sha256 = "1vzlxnrjckz78p2wf148v2z3krkwnykfqvlj42sz3q711vqid1a1";
   };
 
+  buildInputs = [ bzip2 ];
+
+  patches = [ ./darwin-rpath-universal.patch ];
+
+  configureFlags = stdenv.lib.optional (bzip2 != null) "--with-bzip2=${bzip2.out}";
+
+  hardeningDisable = [ "format" ];
+
   # Shared-only build
-  buildFlags = "shared";
-  patchPhase = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
+  buildFlags = [ "shared" ];
+  postPatch = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
    '';
 
   meta = with stdenv.lib; {
@@ -25,8 +36,8 @@
          advanced features for manipulating and filtering the information in
          FITS files.
       '';
-    # Permissive BSD-style license.
-    license = "permissive";
-    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.xbreak ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

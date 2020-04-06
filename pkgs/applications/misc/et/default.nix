@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libnotify, gdk_pixbuf }:
+{ stdenv, fetchFromGitHub, pkgconfig, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "et-${version}";
-  version = "0.1";
+  pname = "et";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "geistesk";
     repo = "et";
-    rev = "${version}";
-    sha256 = "1d2hq6p1y2ynk0a3l35lwbm1fcl9kg7rpjcin8bx4xcdpbw42y94";
+    rev = version;
+    sha256 = "0i0lgmnly8n7y4y6pb10pxgxyz8s5zk26k8z1g1578v1wan01lnq";
   };
 
-  buildInputs = [ libnotify gdk_pixbuf ];
+  buildInputs = [ libnotify gdk-pixbuf ];
   nativeBuildInputs = [ pkgconfig ];
 
   installPhase = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Minimal libnotify-based (egg) timer";
-    homepage = https://github.com/geistesk/et;
+    homepage = "https://github.com/geistesk/et";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ geistesk ];

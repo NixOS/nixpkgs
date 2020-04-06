@@ -1,13 +1,12 @@
-{stdenv, buildPythonPackage, fetchurl}:
+{stdenv, buildPythonPackage, fetchPypi}:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.4.21";
-  name = "${pname}-${version}";
+  version = "0.5.10";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pyroute2/${name}.tar.gz";
-    sha256 = "7afad28ee0a0f3e7c34adaa9f953d00560ed9910203e93f107833b6e8d151171";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0akls1w67v17dmgr07n6rr5xy6yyj6p83ss05033gk1c3mfsbb1r";
   };
 
   # requires root priviledges
@@ -15,9 +14,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Netlink library";
-    homepage = https://github.com/svinota/pyroute2;
+    homepage = "https://github.com/svinota/pyroute2";
     license = licenses.asl20;
     maintainers = [maintainers.mic92];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

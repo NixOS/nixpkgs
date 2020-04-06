@@ -1,17 +1,17 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "kernel-lts";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ nequissimus ];
   };
 
-  machine = { config, lib, pkgs, ... }:
+  machine = { pkgs, ... }:
     {
       boot.kernelPackages = pkgs.linuxPackages;
     };
 
   testScript =
     ''
-      $machine->succeed("uname -s | grep 'Linux'");
-      $machine->succeed("uname -a | grep '${pkgs.linuxPackages.kernel.version}'");
+      assert "Linux" in machine.succeed("uname -s")
+      assert "${pkgs.linuxPackages.kernel.version}" in machine.succeed("uname -a")
     '';
 })

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, glib, gettext, readline }:
 
 stdenv.mkDerivation rec {
-  name = "sdcv-${version}";
+  pname = "sdcv";
   version = "0.5.2";
 
   src = fetchFromGitHub {
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
     mkdir locale
   '';
 
-  NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__"
-    + stdenv.lib.optionalString stdenv.isDarwin " -lintl";
+  NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
   meta = with stdenv.lib; {
     homepage = https://dushistov.github.io/sdcv/;

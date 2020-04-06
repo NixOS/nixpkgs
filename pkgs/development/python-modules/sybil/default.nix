@@ -1,13 +1,17 @@
-{ stdenv, buildPythonApplication, fetchPypi
-, pytest, nose }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, pytest
+, nose
+}:
 
 buildPythonApplication rec {
-  pname   = "sybil";
-  version = "1.0.7";
+  pname = "sybil";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "86332553392f865403883e44695bd8d9d47fe3887c01e17591955237b8fd2d8f";
+    sha256 = "0x34mzxvxj1kkld7sz9n90pdcinxcan56jg6cnnwkv87v7s1vna6";
   };
 
   checkInputs = [ pytest nose ];
@@ -16,9 +20,9 @@ buildPythonApplication rec {
     py.test tests
   '';
 
-  meta = with stdenv.lib; {
-    description = "Automated testing for the examples in your documentation.";
-    homepage    = https://github.com/cjw296/sybil/;
-    license     = licenses.mit;
+  meta = with lib; {
+    description = "Automated testing for the examples in your documentation";
+    homepage = "https://github.com/cjw296/sybil";
+    license = licenses.mit;
   };
 }

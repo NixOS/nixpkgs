@@ -2,12 +2,12 @@
 , ncurses, libdrm, libpciaccess, libxcb }:
 
 stdenv.mkDerivation rec {
-  name = "radeontop-${version}";
-  version = "2016-10-28";
+  pname = "radeontop";
+  version = "2019-06-03";
 
   src = fetchFromGitHub {
-    sha256 = "0y4rl8pm7p22s1ipyb75mlsk9qb6j4rd6nlqb3digmimnyxda1q3";
-    rev = "v1.0";
+    sha256 = "1b1m30r2nfwqkajqw6m01xmfhlq83z1qylyijxg7962mp9x2k0gw";
+    rev = "v1.2";
     repo = "radeontop";
     owner = "clbr";
   };

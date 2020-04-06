@@ -1,20 +1,26 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, coreutils, bash, gzip, openssh
+{ stdenv, buildGoPackage, fetchurl, makeWrapper
+, git, bash, gzip, openssh, pam
 , sqliteSupport ? true
+, pamSupport ? true
 }:
 
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "gitea-${version}";
-  version = "1.3.3";
+  pname = "gitea";
+  version = "1.11.4";
 
-  src = fetchFromGitHub {
-    owner = "go-gitea";
-    repo = "gitea";
-    rev = "v${version}";
-    sha256 = "0ikkpvarp6mzsqk56ihw72fbv7r98g5v5i83rxq8dk709fdqplm6";
+  src = fetchurl {
+    url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
+    sha256 = "18k6kcdq0ijpzgay2aq1w95qkgfvrn1dgh4cxyj9c4i0pwb3ar7f";
   };
+
+  unpackPhase = ''
+    mkdir source/
+    tar xvf $src -C source/
+  '';
+
+  sourceRoot = "source";
 
   patches = [ ./static-root-path.patch ];
 
@@ -25,15 +31,26 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildFlags = optionalString sqliteSupport "-tags sqlite";
+  buildInputs = optional pamSupport pam;
+
+  preBuild = let
+    tags = optional pamSupport "pam"
+        ++ optional sqliteSupport "sqlite";
+    tagsString = concatStringsSep " " tags;
+  in ''
+    export buildFlagsArray=(
+      -tags="${tagsString}"
+      -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
+    )
+  '';
 
   outputs = [ "bin" "out" "data" ];
 
   postInstall = ''
     mkdir $data
-    cp -R $src/{public,templates} $data
+    cp -R ./go/src/${goPackagePath}/{public,templates,options} $data
     mkdir -p $out
-    cp -R $src/options/locale $out/locale
+    cp -R ./go/src/${goPackagePath}/options/locale $out/locale
 
     wrapProgram $bin/bin/gitea \
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
@@ -43,8 +60,8 @@ buildGoPackage rec {
 
   meta = {
     description = "Git with a cup of tea";
-    homepage = https://gitea.io;
+    homepage = "https://gitea.io";
     license = licenses.mit;
-    maintainers = [ maintainers.disassembler ];
+    maintainers = with maintainers; [ disassembler kolaente ma27 ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, curl }: # Note that `curl' may be `null', in case of the native stdenvNoCC.
+{ lib, buildPackages ? { inherit stdenvNoCC; }, stdenvNoCC, curl }: # Note that `curl' may be `null', in case of the native stdenvNoCC.
 
 let
 
@@ -10,7 +10,7 @@ let
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
   mirrorsFile =
-    stdenvNoCC.mkDerivation ({
+    buildPackages.stdenvNoCC.mkDerivation ({
       name = "mirrors-list";
       builder = ./write-mirror-list.sh;
       preferLocalBuild = true;
@@ -49,8 +49,11 @@ in
   # first element of `urls').
   name ? ""
 
-  # Different ways of specifying the hash.
-, outputHash ? ""
+, # SRI hash.
+  hash ? ""
+
+, # Legacy ways of specifying the hash.
+  outputHash ? ""
 , outputHashAlgo ? ""
 , md5 ? ""
 , sha1 ? ""
@@ -87,12 +90,14 @@ in
 
   # Passthru information, if any.
 , passthru ? {}
+  # Doing the download on a remote machine just duplicates network
+  # traffic, so don't do that by default
+, preferLocalBuild ? true
 }:
 
 assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
 
 let
-
   urls_ =
     if urls != [] && url == "" then
       (if lib.isList urls then urls
@@ -101,13 +106,13 @@ let
     else throw "fetchurl requires either `url` or `urls` to be set";
 
   hash_ =
-    if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
+    if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+    else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
     else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
-
 in
 
 stdenvNoCC.mkDerivation {
@@ -135,9 +140,9 @@ stdenvNoCC.mkDerivation {
 
   impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
 
-  # Doing the download on a remote machine just duplicates network
-  # traffic, so don't do that.
-  preferLocalBuild = true;
+  nixpkgsVersion = lib.trivial.release;
+
+  inherit preferLocalBuild;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}

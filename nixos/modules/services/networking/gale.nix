@@ -104,16 +104,15 @@ in
          systemPackages = [ pkgs.gale ];
        };
 
-       users.extraUsers = [{
-         name = cfg.user;
+       users.users.${cfg.user} = {
          description = "Gale daemon";
          uid = config.ids.uids.gale;
          group = cfg.group;
          home = home;
          createHome = true;
-       }];
+       };
 
-       users.extraGroups = [{
+       users.groups = [{
          name = cfg.group;
          gid = config.ids.gids.gale;
        }];

@@ -10,6 +10,7 @@ use Cwd;
 use File::Basename;
 use File::Path qw(make_path);
 use File::Slurp;
+use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
 
 
 my $showGraphics = defined $ENV{'DISPLAY'};
@@ -30,12 +31,31 @@ sub new {
 
     if (!$startCommand) {
         # !!! merge with qemu-vm.nix.
+        my $netBackend = "-netdev user,id=net0";
+        my $netFrontend = "-device virtio-net-pci,netdev=net0";
+
+        $netBackend .= "," . $args->{netBackendArgs}
+            if defined $args->{netBackendArgs};
+
+        $netFrontend .= "," . $args->{netFrontendArgs}
+            if defined $args->{netFrontendArgs};
+
         $startCommand =
-            "qemu-kvm -m 384 " .
-            "-net nic,model=virtio \$QEMU_OPTS ";
-        my $iface = $args->{hdaInterface} || "virtio";
-        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,werror=report "
-            if defined $args->{hda};
+            "qemu-kvm -m 384 $netBackend $netFrontend \$QEMU_OPTS ";
+
+        if (defined $args->{hda}) {
+            if ($args->{hdaInterface} eq "scsi") {
+                $startCommand .= "-drive id=hda,file="
+                               . Cwd::abs_path($args->{hda})
+                               . ",werror=report,if=none "
+                               . "-device scsi-hd,drive=hda ";
+            } else {
+                $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda})
+                               . ",if=" . $args->{hdaInterface}
+                               . ",werror=report ";
+            }
+        }
+
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         $startCommand .= "-device piix3-usb-uhci -drive id=usbdisk,file=$args->{usb},if=none,readonly -device usb-storage,drive=usbdisk "
@@ -236,12 +256,15 @@ sub connect {
 
         $self->start;
 
+        my $now = clock_gettime(CLOCK_MONOTONIC);
         local $SIG{ALRM} = sub { die "timed out waiting for the VM to connect\n"; };
-        alarm 300;
+        alarm 600;
         readline $self->{socket} or die "the VM quit before connecting\n";
         alarm 0;
 
         $self->log("connected to guest root shell");
+        # We're interested in tracking how close we are to `alarm`.
+        $self->log(sprintf("(connecting took %.2f seconds)", clock_gettime(CLOCK_MONOTONIC) - $now));
         $self->{connected} = 1;
 
     });
@@ -612,7 +635,7 @@ sub waitForX {
     my ($self, $regexp) = @_;
     $self->nest("waiting for the X11 server", sub {
         retry sub {
-            my ($status, $out) = $self->execute("journalctl -b SYSLOG_IDENTIFIER=systemd | grep 'session opened'");
+            my ($status, $out) = $self->execute("journalctl -b SYSLOG_IDENTIFIER=systemd | grep 'Reached target Current graphical'");
             return 0 if $status != 0;
             ($status, $out) = $self->execute("[ -e /tmp/.X11-unix/X0 ]");
             return 1 if $status == 0;

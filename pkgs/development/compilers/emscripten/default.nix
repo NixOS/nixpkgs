@@ -1,19 +1,20 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, pkgs
-, jre, binaryen, enableWasm ? true ,  python2Packages, cmake
+{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
+, jre, binaryen, enableWasm ? true ,  cmake
 }:
 
 let
   rev = emscriptenVersion;
   appdir = "share/emscripten";
+  binaryenVersioned = binaryen.override { emscriptenRev = rev; };
 in
 
 stdenv.mkDerivation {
   name = "emscripten-${rev}";
 
   src = fetchFromGitHub {
-    owner = "kripken";
+    owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "02p0cp86vd1mydlpq544xbydggpnrq9dhbxx7h08j235frjm5cdc";
+    sha256 = "1j3f0hpy05qskaiyv75l7wv4n0nzxhrh9b296zchx3f6f9h2rghq";
     inherit rev;
   };
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
     echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
   ''
   + stdenv.lib.optionalString enableWasm ''
-    echo "BINARYEN_ROOT = '${binaryen}'" >> $out/share/emscripten/config
+    echo "BINARYEN_ROOT = '${binaryenVersioned}'" >> $out/share/emscripten/config
   ''
   +
   ''
@@ -60,7 +61,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kripken/emscripten;
+    homepage = https://github.com/emscripten-core/emscripten;
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
     maintainers = with maintainers; [ qknight matthewbauer ];

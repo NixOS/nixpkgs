@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, lcms2, jasper, pkgconfig }:
+{ stdenv, fetchurl, lcms2, pkgconfig
+, jasper ? null, withJpeg2k ? false
+# disable JPEG2000 support by default as jasper has many CVE
+}:
 
 stdenv.mkDerivation rec {
-  name = "libraw-${version}";
-  version = "0.18.8";
+  pname = "libraw";
+  version = "0.19.5";
 
   src = fetchurl {
-    url = "http://www.libraw.org/data/LibRaw-${version}.tar.gz";
-    sha256 = "1qi0fkw2zmd0yplrf79z7lgpz0hxl45dj5rdgpaj7283jzys9b2n";
+    url = "https://www.libraw.org/data/LibRaw-${version}.tar.gz";
+    sha256 = "1x827sh6vl8j3ll2ihkcr234y07f31hi1v7sl08jfw3irkbn58j0";
   };
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
-  buildInputs = [ jasper ];
+  buildInputs = stdenv.lib.optionals withJpeg2k [ jasper ];
 
   propagatedBuildInputs = [ lcms2 ];
 

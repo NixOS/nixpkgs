@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
-  name = "screen-${version}";
-  version = "4.6.2";
+  pname = "screen";
+  version = "4.8.0";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/${name}.tar.gz";
-    sha256 = "0fps0fsipfbh7c2cnp7rjw9n79j0ysq21mk8hzifa33a1r924s8v";
+    url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
+    sha256 = "18ascpjzsy70h6hk7wpg8zmzjwgdyrdr7c6z4pg5z4l9hhyv24bf";
   };
 
   configureFlags= [
@@ -23,13 +23,19 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     });
 
+  postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    # XXX: Awful hack to allow cross-compilation.
+    '' sed -i ./configure \
+           -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
+    ''; # "
+
   buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
                             ++ stdenv.lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/screen/;
+    homepage = https://www.gnu.org/software/screen/;
     description = "A window manager that multiplexes a physical terminal";
     license = licenses.gpl2Plus;
 
@@ -56,6 +62,6 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ peti jgeerds vrthra ];
+    maintainers = with maintainers; [ peti vrthra ];
   };
 }

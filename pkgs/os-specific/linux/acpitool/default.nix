@@ -3,7 +3,7 @@
 let
    acpitool-patch-051-4 = params: fetchpatch rec {
      inherit (params) name sha256;
-     url = "https://anonscm.debian.org/cgit/pkg-acpi/acpitool.git/plain/debian/patches/${name}?h=debian/0.5.1-4&id=3fd9f396f12ec9c1cae3337a2a25026b7faad2ae";
+     url = "https://salsa.debian.org/debian/acpitool/raw/33e2ef42a663de820457b212ea2925e506df3b88/debian/patches/${name}";
    };
 
 in stdenv.mkDerivation rec {

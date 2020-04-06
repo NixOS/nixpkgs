@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , boost, libbitcoin, libbitcoin-protocol }:
 
 let
   pname = "libbitcoin-client";
-  version = "3.4.0";
+  version = "3.5.0";
 
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "libbitcoin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vdp6qgpxshh6nhdvr81z3nvh42wgmsm4prli4ajigwp970y8p56";
+    sha256 = "0a9c00f1pfi8wczbfd1djkvr7di3iw1ynak6if910w01dkhbm6v4";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

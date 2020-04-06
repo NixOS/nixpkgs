@@ -1,22 +1,38 @@
-{ stdenv, python27Packages, gdb, pkgs }:
-let
-  deps = import ./requirements.nix { inherit pkgs; };
-in
-python27Packages.buildPythonApplication rec {
-  name = "${pname}-${version}";
+{ stdenv
+, buildPythonApplication
+, fetchPypi
+, gdb
+, flask
+, flask-socketio
+, flask-compress
+, pygdbmi
+, pygments
+, gevent
+, }:
+
+buildPythonApplication rec {
   pname = "gdbgui";
-  version = "0.11.1.2";
+  version = "0.13.2.0";
 
   buildInputs = [ gdb ];
-  propagatedBuildInputs = builtins.attrValues deps.packages;
+  propagatedBuildInputs = [
+    flask
+    flask-socketio
+    flask-compress
+    pygdbmi
+    pygments
+    gevent
+  ];
 
-  src = python27Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "15502fg90df183mcg6nic8fakf111pgrlp7f044g3136wpwgfln7";
+    sha256 = "0m1fnwafzrpk77yj3p26vszlz11cv4g2lj38kymk1ilcifh4gqw0";
   };
 
   postPatch = ''
     echo ${version} > gdbgui/VERSION.txt
+    # remove upper version bound
+    sed -ie 's!, <.*"!"!' setup.py
   '';
 
   postInstall = ''
@@ -24,15 +40,8 @@ python27Packages.buildPythonApplication rec {
       --prefix PATH : ${stdenv.lib.makeBinPath [ gdb ]}
   '';
 
-  # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols \
-      LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
-  '';
-
-  postCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    unset NIX_REDIRECTS LD_PRELOAD
-  '';
+  # tests do not work without stdout/stdin
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A browser-based frontend for GDB";

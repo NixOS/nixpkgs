@@ -1,8 +1,8 @@
-{stdenv, fetchsvn, python, wordnet, writeScript}:
+{stdenv, python, wordnet, writeScript}:
 
 stdenv.mkDerivation rec {
   version = "542";
-  name = "dict-db-wordnet-${version}";
+  pname = "dict-db-wordnet";
 
   buildInputs = [python wordnet];
   convert = ./wordnet_structures.py;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          the wordnet data available to dictd and by extension for lookup with
          the dict command. '';
 
-    homepage = http://wordnet.princeton.edu/;
+    homepage = https://wordnet.princeton.edu/;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;

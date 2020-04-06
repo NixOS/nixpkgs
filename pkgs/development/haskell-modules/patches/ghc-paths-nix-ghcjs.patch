@@ -43,13 +43,13 @@ index c87565d..88b3db4 100644
 +ghc     = fromMaybe GHC_PATHS_GHC     nixGhc
 +ghc_pkg = fromMaybe GHC_PATHS_GHC_PKG nixGhcPkg
 diff --git a/Setup.hs b/Setup.hs
-index fad5026..1651650 100644
+index f2d1733..ca4792e 100644
 --- a/Setup.hs
 +++ b/Setup.hs
-@@ -27,13 +27,13 @@ main = defaultMainWithHooks simpleUserHooks {
-     defaultPostConf :: Args -> ConfigFlags -> PackageDescription -> LocalBuildInfo -> IO ()
-     defaultPostConf args flags pkgdescr lbi = do
+@@ -39,13 +39,13 @@ main = defaultMainWithHooks simpleUserHooks {
+ #else
        libdir_ <- rawSystemProgramStdoutConf (fromFlag (configVerbosity flags))
+ #endif
 -                     ghcProgram (withPrograms lbi) ["--print-libdir"]
 +                     ghcjsProgram (withPrograms lbi) ["--print-libdir"]
        let libdir = reverse $ dropWhile isSpace $ reverse libdir_

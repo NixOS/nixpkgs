@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "crafty-${version}";
+  pname = "crafty";
   version = "25.0.1";
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "bind_exporter-${version}";
+  pname = "bind_exporter";
   version = "20161221-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "4e1717c7cd5f31c47d0c37274464cbaabdd462ba";
 

@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, makeWrapper, gcc, ncurses }:
+{ stdenv, fetchFromGitLab, makeWrapper, gcc, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "icmake-${version}";
-  version = "9.02.06";
+  pname = "icmake";
+  version = "9.03.01";
 
-  src = fetchFromGitHub {
-    sha256 = "1hs7fhqpkhlrjvjhfarf5bmxl8dw3r0immzdib27gwh3sfzgpx0b";
+  src = fetchFromGitLab {
+    sha256 = "05r0a69w0hv2qhjpb2bxd0lmp2vv5r2d4iggg6ly4miam0i318jy";
     rev = version;
     repo = "icmake";
     owner = "fbb-git";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A program maintenance (make) utility using a C-like grammar";
-    homepage = https://fbb-git.github.io/icmake/;
+    homepage = https://fbb-git.gitlab.io/icmake/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, findutils
+{ stdenv, fetchurl, findutils, fixDarwinDylibNames
 , sslSupport? true, openssl
 }:
 
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "libevent-${version}";
-  version = "2.1.8";
+  pname = "libevent";
+  version = "2.1.11";
 
   src = fetchurl {
     url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
-    sha256 = "1hhxnxlr0fsdv7bdmzsnhdz16fxf3jg2r6vyljcl3kj6pflcap4n";
+    sha256 = "0g988zqm45sj1hlhhz4il5z4dpi5dl74hzjwzl4md37a09iaqnx6";
   };
 
   # libevent_openssl is moved into its own output, so that openssl isn't present
@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
   buildInputs = []
     ++ stdenv.lib.optional sslSupport openssl
     ++ stdenv.lib.optional stdenv.isCygwin findutils
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
     ;
+
+  doCheck = false; # needs the net
 
   postInstall = stdenv.lib.optionalString sslSupport ''
     moveToOutput "lib/libevent_openssl*" "$openssl"
@@ -34,6 +37,8 @@ stdenv.mkDerivation rec {
       --replace "$out" "$openssl"
     sed "/^libdir=/s|$out|$openssl|" -i "$openssl"/lib/libevent_openssl.la
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Event notification library";
@@ -51,6 +56,5 @@ stdenv.mkDerivation rec {
     homepage = http://libevent.org/;
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

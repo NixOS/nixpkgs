@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig
-, qtbase, qtimageformats, qtwebkit, qtx11extras
+, qtbase, qtimageformats, qtwebkit, qtx11extras, mkDerivation
 , libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
 
-stdenv.mkDerivation rec {
-  name = "zeal-${version}";
-  version = "0.6.0";
+mkDerivation rec {
+  pname = "zeal";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner  = "zealdocs";
     repo   = "zeal";
     rev    = "v${version}";
-    sha256 = "0zsrb89jz04b8in1d69p7mg001yayyljc47vdlvm48cjbhvxwj0k";
+    sha256 = "05qcjpibakv4ibhxgl5ajbkby3w7bkxsv3nfv2a0kppi1z0f8n8v";
   };
 
   # while ads can be disabled from the user settings, by default they are not so

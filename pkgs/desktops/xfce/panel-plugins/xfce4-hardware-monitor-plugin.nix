@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2,
+{ stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2, gtkmm2,
   libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname  = "xfce4-hardware-monitor-plugin";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "https://git.xfce.org/panel-plugins/${pname}/snapshot/${name}.tar.bz2";
-    sha256 = "0sqvisr8gagpywq9sfyzqw37hxmj54ii89j5s2g8hx8bng5a98z1";
+    url = "https://git.xfce.org/archive/${pname}/snapshot/${pname}-${version}.tar.gz";
+    sha256 = "11k7m41jxkaqmpp5njkixw60q517xnw923mz34dnm1llx9ilvfk8";
   };
 
   nativeBuildInputs = [
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome2.gtkmm2
+    gtkmm2
     gnome2.libgnomecanvas
     gnome2.libgnomecanvasmm
     libgtop
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${pname}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${pname}";
     description = "Hardware monitor plugin for the XFCE4 panel";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;

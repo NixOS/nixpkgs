@@ -1,13 +1,18 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, fts }:
 
 stdenv.mkDerivation rec {
-  name = "fpart-${version}";
-  version = "1.0.0";
+  pname = "fpart";
+  version = "1.2.0";
 
-  src = fetchurl {
-    url = "http://contribs.martymac.org/fpart/${name}.tar.gz";
-    sha256 = "1p0ajmry18lcg82znfp8nxs4w3izic775l7df08hywlq4vfa66pg";
+  src = fetchFromGitHub {
+    owner = "martymac";
+    repo = "fpart";
+    rev = "${pname}-${version}";
+    sha256 = "17zm3cgp3f2plynqhj8a0hbma5rvawrx5kqygjqyynn7cljv458v";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ fts ];
 
   postInstall = ''
     sed "s|^FPART_BIN=.*|FPART_BIN=\"$out/bin/fpart\"|" \

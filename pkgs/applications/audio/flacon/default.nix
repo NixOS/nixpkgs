@@ -1,26 +1,27 @@
-{ stdenv, lib, fetchFromGitHub, cmake, qt5, libuchardet, pkgconfig, makeWrapper
-, shntool, flac, opusTools, vorbisTools, mp3gain, lame, wavpack, vorbisgain
+{ stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkgconfig
+, shntool, flac, opusTools, vorbis-tools, mp3gain, lame, wavpack, vorbisgain
 , gtk3
+, qtbase, qttools, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "flacon-${version}";
-  version = "4.0.0";
+  pname = "flacon";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
     rev = "v${version}";
-    sha256 = "0l0xbzpy4nnr08z7gqvb4ngrjwzpspa382cbcrpkya3nd40987kr";
+    sha256 = "05pvg5xhc2azwzld08m81r4b2krqdbcbm5lmdvg2zkk67xq9pqyd";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
-  buildInputs = [ qt5.qtbase qt5.qttools libuchardet ];
+  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  buildInputs = [ qtbase qttools libuchardet ];
 
   postInstall = ''
     wrapProgram $out/bin/flacon \
       --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
-      --prefix PATH : "${lib.makeBinPath [ shntool flac opusTools vorbisTools
+      --prefix PATH : "${lib.makeBinPath [ shntool flac opusTools vorbis-tools
      mp3gain lame wavpack vorbisgain ]}"
   '';
 
@@ -29,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = https://flacon.github.io/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ndowens nico202 ];
+    maintainers = with maintainers; [ snglth ];
   };
 }

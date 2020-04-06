@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,11 @@ let
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
   isFindutils = hasPrefix "findutils" cfg.locate.name;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
+    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths" )
+  ];
+
   options.services.locate = with types; {
     enable = mkOption {
       type = bool;
@@ -97,11 +102,11 @@ in {
         Whether not to index bind mounts
       '';
     };
-    
+
   };
 
   config = mkIf cfg.enable {
-    users.extraGroups = mkIf isMLocate { mlocate = {}; };
+    users.groups = mkIf isMLocate { mlocate = {}; };
 
     security.wrappers = mkIf isMLocate {
       locate = {
@@ -126,20 +131,29 @@ in {
             ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
             ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
 
-    # directory creation needs to be separated from main service
-    # because ReadWritePaths fails when the directory doesn't already exist
-    systemd.tmpfiles.rules = [ "d ${dirOf cfg.output} 0755 root root -" ];
-
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
         path = mkIf (!isMLocate) [ pkgs.su ];
+
+        # mlocate's updatedb takes flags via a configuration file or
+        # on the command line, but not by environment variable.
         script =
+          if isMLocate
+          then let toFlags = x: optional (cfg.${x} != [])
+                                         "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
+                   args = concatLists (map toFlags ["pruneFS" "pruneNames" "prunePaths"]);
+               in ''
+            exec ${cfg.locate}/bin/updatedb \
+              --output ${toString cfg.output} ${concatStringsSep " " args} \
+              --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
+              ${concatStringsSep " " cfg.extraFlags}
           ''
+          else ''
             exec ${cfg.locate}/bin/updatedb \
               ${optionalString (cfg.localuser != null && ! isMLocate) ''--localuser=${cfg.localuser}''} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
-        environment = {
+        environment = optionalAttrs (!isMLocate) {
           PRUNEFS = concatStringsSep " " cfg.pruneFS;
           PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
           PRUNENAMES = concatStringsSep " " cfg.pruneNames;

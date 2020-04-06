@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, ncurses, libvorbis }:
+{ stdenv, fetchFromGitHub, ncurses, libvorbis, SDL }:
 stdenv.mkDerivation rec {
 
   version = "3.2.6";
 
-  name = "mp3blaster-${version}";
+  pname = "mp3blaster";
 
   src = fetchFromGitHub {
     owner = "stragulus";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libvorbis
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin SDL;
 
   buildFlags = [ "CXXFLAGS=-Wno-narrowing" ];
 

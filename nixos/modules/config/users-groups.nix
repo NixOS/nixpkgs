@@ -35,6 +35,7 @@ let
 
       name = mkOption {
         type = types.str;
+        apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
@@ -91,6 +92,7 @@ let
 
       group = mkOption {
         type = types.str;
+        apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "nogroup";
         description = "The user's primary group.";
       };
@@ -118,8 +120,8 @@ let
 
       shell = mkOption {
         type = types.either types.shellPackage types.path;
-        default = pkgs.nologin;
-        defaultText = "pkgs.nologin";
+        default = pkgs.shadow;
+        defaultText = "pkgs.shadow";
         example = literalExample "pkgs.bashInteractive";
         description = ''
           The path to the user's shell. Can use shell derivations,
@@ -179,7 +181,7 @@ let
       };
 
       hashedPassword = mkOption {
-        type = with types; uniq (nullOr str);
+        type = with types; nullOr str;
         default = null;
         description = ''
           Specifies the hashed password for the user.
@@ -189,7 +191,7 @@ let
       };
 
       password = mkOption {
-        type = with types; uniq (nullOr str);
+        type = with types; nullOr str;
         default = null;
         description = ''
           Specifies the (clear text) password for the user.
@@ -201,7 +203,7 @@ let
       };
 
       passwordFile = mkOption {
-        type = with types; uniq (nullOr string);
+        type = with types; nullOr str;
         default = null;
         description = ''
           The full path to a file that contains the user's password. The password
@@ -213,7 +215,7 @@ let
       };
 
       initialHashedPassword = mkOption {
-        type = with types; uniq (nullOr str);
+        type = with types; nullOr str;
         default = null;
         description = ''
           Specifies the initial hashed password for the user, i.e. the
@@ -228,7 +230,7 @@ let
       };
 
       initialPassword = mkOption {
-        type = with types; uniq (nullOr str);
+        type = with types; nullOr str;
         default = null;
         description = ''
           Specifies the initial password for the user, i.e. the
@@ -249,7 +251,7 @@ let
         default = [];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
-          The set of packages that should be made availabe to the user.
+          The set of packages that should be made available to the user.
           This is in contrast to <option>environment.systemPackages</option>,
           which adds packages to all users.
         '';
@@ -264,7 +266,7 @@ let
         (mkIf config.isNormalUser {
           group = mkDefault "users";
           createHome = mkDefault true;
-          home = mkDefault "/home/${name}";
+          home = mkDefault "/home/${config.name}";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
@@ -280,7 +282,7 @@ let
 
   };
 
-  groupOpts = { name, config, ... }: {
+  groupOpts = { name, ... }: {
 
     options = {
 
@@ -302,7 +304,7 @@ let
       };
 
       members = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         default = [];
         description = ''
           The user names of the group members, added to the
@@ -401,6 +403,10 @@ let
       filter types.shellPackage.check shells;
 
 in {
+  imports = [
+    (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
+    (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+  ];
 
   ###### interface
 
@@ -502,9 +508,6 @@ in {
       };
     };
 
-    # Install all the user shells
-    environment.systemPackages = systemShells;
-
     users.groups = {
       root.gid = ids.gids.root;
       wheel.gid = ids.gids.wheel;
@@ -525,6 +528,8 @@ in {
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
       input.gid = ids.gids.input;
+      kvm.gid = ids.gids.kvm;
+      render.gid = ids.gids.render;
     };
 
     system.activationScripts.users = stringAfter [ "stdio" ]
@@ -533,22 +538,40 @@ in {
         install -m 0755 -d /home
 
         ${pkgs.perl}/bin/perl -w \
-          -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl \
-          -I${pkgs.perlPackages.JSON}/lib/perl5/site_perl \
+          -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix} \
+          -I${pkgs.perlPackages.JSON}/${pkgs.perl.libPrefix} \
           ${./update-users-groups.pl} ${spec}
       '';
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
-    environment.etc."subuid" = {
-      text = subuidFile;
-      mode = "0644";
-    };
-    environment.etc."subgid" = {
-      text = subgidFile;
-      mode = "0644";
-    };
+    # Install all the user shells
+    environment.systemPackages = systemShells;
+
+    environment.etc = {
+      subuid = {
+        text = subuidFile;
+        mode = "0644";
+      };
+      subgid = {
+        text = subgidFile;
+        mode = "0644";
+      };
+    } // (mapAttrs' (name: { packages, ... }: {
+      name = "profiles/per-user/${name}";
+      value.source = pkgs.buildEnv {
+        name = "user-environment";
+        paths = packages;
+        inherit (config.environment) pathsToLink extraOutputsToInstall;
+        inherit (config.system.path) ignoreCollisions postBuild;
+      };
+    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+
+    environment.profiles = [
+      "$HOME/.nix-profile"
+      "/etc/profiles/per-user/$USER"
+    ];
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
@@ -579,22 +602,4 @@ in {
 
   };
 
-  imports =
-    [ (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
-      (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
-      {
-        environment = {
-          etc = mapAttrs' (name: { packages, ... }: {
-            name = "profiles/per-user/${name}";
-            value.source = pkgs.buildEnv {
-              name = "user-environment";
-              paths = packages;
-              inherit (config.environment) pathsToLink extraOutputsToInstall;
-              inherit (config.system.path) ignoreCollisions postBuild;
-            };
-          }) (filterAttrs (_: { packages, ... }: packages != []) cfg.users);
-          profiles = ["/etc/profiles/per-user/$USER"];
-        };
-      }
-    ];
 }

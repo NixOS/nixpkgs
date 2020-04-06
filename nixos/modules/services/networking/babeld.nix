@@ -52,7 +52,7 @@ in
         example =
           {
             type = "tunnel";
-            "split-horizon" = true;
+            split-horizon = true;
           };
       };
 
@@ -66,8 +66,8 @@ in
         example =
           { enp0s2 =
             { type = "wired";
-              "hello-interval" = 5;
-              "split-horizon" = "auto";
+              hello-interval = 5;
+              split-horizon = "auto";
             };
           };
       };

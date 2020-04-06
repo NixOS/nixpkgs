@@ -1,33 +1,47 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool
-, gtk2, halibut, ncurses, perl }:
+{ stdenv, lib, fetchurl, autoconf, automake, pkgconfig, libtool
+, gtk2, halibut, ncurses, perl, darwin
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.70";
-  name = "putty-${version}";
+  version = "0.73";
+  pname = "putty";
 
   src = fetchurl {
     urls = [
-      "https://the.earth.li/~sgtatham/putty/${version}/${name}.tar.gz"
-      "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${name}.tar.gz"
+      "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
+      "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    sha256 = "1gmhwwj1y7b5hgkrkxpf4jddjpk9l5832zq5ibhsiicndsfs92mv";
+    sha256 = "076z34jpik2dmlwxicvf1djjgnahcqv12rjhmb9yq6ml7x0bbc1x";
   };
 
-  preConfigure = ''
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
     perl mkfiles.pl
     ( cd doc ; make );
-    sed -e '/AM_PATH_GTK(/d' \
-        -e '/AC_OUTPUT/iAM_PROG_CC_C_O' \
-        -e '/AC_OUTPUT/iAM_PROG_AR' -i configure.ac
     ./mkauto.sh
     cd unix
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
+    cd windows
   '';
 
+  TOOLPATH = stdenv.cc.targetPrefix;
+  makefile = if stdenv.hostPlatform.isWindows then "Makefile.mgw" else null;
+
+  installPhase = if stdenv.hostPlatform.isWindows then ''
+    for exe in *.exe; do
+       install -D $exe $out/bin/$exe
+    done
+  '' else null;
+
   nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
-  buildInputs = [ gtk2 ncurses ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
+    gtk2 ncurses
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
@@ -36,6 +50,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.chiark.greenend.org.uk/~sgtatham/putty/;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

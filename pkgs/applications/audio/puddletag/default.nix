@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, python2Packages, makeWrapper, chromaprint }:
+{ stdenv, fetchFromGitHub, python2Packages, chromaprint }:
 
 python2Packages.buildPythonApplication rec {
-  name = "puddletag-${version}";
+  pname = "puddletag";
   version = "1.2.0";
 
   src = fetchFromGitHub {
@@ -27,20 +27,9 @@ python2Packages.buildPythonApplication rec {
   doCheck = false;   # there are no tests
   dontStrip = true;  # we are not generating any binaries
 
-  installPhase = ''
-    runHook preInstall
-
-    siteDir=$(toPythonPath $out)
-    mkdir -p $siteDir
-    PYTHONPATH=$PYTHONPATH:$siteDir
-    ${python2Packages.python.interpreter} setup.py install --prefix $out
-
-    runHook postInstall
-  '';
-
   meta = with stdenv.lib; {
-    homepage    = https://puddletag.net;
     description = "An audio tag editor similar to the Windows program, Mp3tag";
+    homepage    = https://docs.puddletag.net;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.linux;

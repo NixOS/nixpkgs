@@ -43,14 +43,16 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = optional (cfg.user == defaultUserGroup) {
-      name = cfg.user;
-      description = "usbmuxd user";
-      group = cfg.group;
+    users.users = optionalAttrs (cfg.user == defaultUserGroup) {
+      ${cfg.user} = {
+        description = "usbmuxd user";
+        group = cfg.group;
+        isSystemUser = true;
+      };
     };
 
-    users.extraGroups = optional (cfg.group == defaultUserGroup) {
-      name = cfg.group;
+    users.groups = optionalAttrs (cfg.group == defaultUserGroup) {
+      ${cfg.group} = { };
     };
 
     # Give usbmuxd permission for Apple devices
@@ -65,7 +67,7 @@ in
       serviceConfig = {
         # Trigger the udev rule manually. This doesn't require replugging the
         # device when first enabling the option to get it to work
-        ExecStartPre = "${pkgs.libudev}/bin/udevadm trigger -s usb -a idVendor=${apple}";
+        ExecStartPre = "${pkgs.udev}/bin/udevadm trigger -s usb -a idVendor=${apple}";
         ExecStart = "${pkgs.usbmuxd}/bin/usbmuxd -U ${cfg.user} -f";
       };
     };

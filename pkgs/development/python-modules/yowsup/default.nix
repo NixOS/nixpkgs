@@ -1,21 +1,20 @@
 { buildPythonPackage, stdenv, fetchFromGitHub, six, python-axolotl, pytest
-, isPy3k
+, isPy3k, consonance, appdirs
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "yowsup";
-  version = "2.5.2";
+  version = "3.2.3";
 
-  # python2 is currently incompatible with yowsup:
-  # https://github.com/tgalal/yowsup/issues/2325#issuecomment-343516519
+  # The Python 2.x support of this package is incompatible with `six==1.11`:
+  # https://github.com/tgalal/yowsup/issues/2416#issuecomment-365113486
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "tgalal";
     repo = "yowsup";
     rev = "v${version}";
-    sha256 = "16l8jmr32wwvl11m0a4r4id3dkfqj2n7dn6gky1077xwmj2da4fl";
+    sha256 = "0wb8yl685nr1i3vx89hwan5m6a482x8g48f5ksvdlph538p720pm";
   };
 
   checkInputs = [ pytest ];
@@ -23,9 +22,9 @@ buildPythonPackage rec {
     HOME=$(mktemp -d) py.test yowsup
   '';
 
-  patches = [ ./argparse-dependency.patch ];
+  patches = [ ./dependency-fixes.patch ];
 
-  propagatedBuildInputs = [ six python-axolotl ];
+  propagatedBuildInputs = [ six python-axolotl consonance appdirs ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/tgalal/yowsup";

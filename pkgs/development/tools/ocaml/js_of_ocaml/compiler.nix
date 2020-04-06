@@ -1,35 +1,28 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
-, cmdliner, cppo, yojson
+{ lib, fetchFromGitHub, buildDunePackage
+, ocaml, findlib, cmdliner, dune, cppo, yojson, ocaml-migrate-parsetree
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "js_of_ocaml-compiler is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-	name = "js_of_ocaml-compiler-${version}";
-	version = "3.0.0";
+buildDunePackage rec {
+	pname = "js_of_ocaml-compiler";
+	version = "3.5.2";
 
 	src = fetchFromGitHub {
 		owner = "ocsigen";
 		repo = "js_of_ocaml";
 		rev = version;
-		sha256 = "17w1pqjk521jd4yp34miyif0cxjxchnw59xhj188qfl635ykb4k8";
+		sha256 = "1fm855iavljx7rf9hii2qb7ky920zv082d9zlcl504by1bxp1yg8";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder cmdliner cppo ];
+	nativeBuildInputs = [ ocaml findlib dune cppo ];
+  buildInputs = [ cmdliner ];
 
-	propagatedBuildInputs = [ yojson ];
-
-	buildPhase = "jbuilder build -p js_of_ocaml-compiler";
-
-	inherit (jbuilder) installPhase;
+  configurePlatforms = [];
+	propagatedBuildInputs = [ yojson ocaml-migrate-parsetree ];
 
 	meta = {
 		description = "Compiler from OCaml bytecode to Javascript";
-		license = stdenv.lib.licenses.gpl2;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = lib.licenses.gpl2;
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (src.meta) homepage;
-		inherit (ocaml.meta) platforms;
 	};
 }

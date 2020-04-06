@@ -1,18 +1,25 @@
-{ stdenv, fetchFromGitHub, go }:
+{ buildGoPackage, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "curl-unix-socket-2014-09-01";
+buildGoPackage rec {
+  name = "curl-unix-socket-2015-04-10";
 
   src = fetchFromGitHub {
     owner = "Soulou";
     repo = "curl-unix-socket";
-    rev = "e926dca77ba7d4a1eeae073918fdd3db92f1a350";
+    rev = "a7da90b01ed43e8c0d606f760c9da82f8e3ed307";
     sha256 = "1ynrrav90y3dhk8jq2fxm3jswj5nvrffwslgykj429hk6n0czb3d";
   };
 
-  buildInputs = [ go ];
-  buildPhase = "go build -o curl-unix-socket";
-  installPhase = "install -D curl-unix-socket $out/bin/curl-unix-socket";
+  goPackagePath = "github.com/Soulou/curl-unix-socket";
+
+  buildPhase = ''
+    runHook preBuild
+    (
+      cd go/src/${goPackagePath}
+      go build -o $NIX_BUILD_TOP/go/bin/curl-unix-socket
+    )
+    runHook postBuild
+  '';
 
   meta = with stdenv.lib; {
     description = "Run HTTP requests over UNIX socket";

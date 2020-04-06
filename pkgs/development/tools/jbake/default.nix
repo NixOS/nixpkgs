@@ -1,25 +1,33 @@
-{ stdenv, fetchzip, jre }:
+{ stdenv, fetchzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "2.5.1";
-  name = "jbake-${version}";
+  version = "2.6.4";
+  pname = "jbake";
 
   src = fetchzip {
-    url = "http://jbake.org/files/jbake-${version}-bin.zip";
-    sha256 = "1ib5gvz6sl7k0ywx22anhz69i40wc6jj5lxjxj2aa14qf4lrw912";
+    url = "https://dl.bintray.com/jbake/binary/${pname}-${version}-bin.zip";
+    sha256 = "0zgp0wwxxmi13v5q5jvr610igx2vxg0bwck9j1imnn9ciakg1aaw";
   };
 
-  buildInputs = [ jre ];
+  buildInputs = [ makeWrapper jre ];
+
+  postPatch = "patchShebangs .";
 
   installPhase = ''
-    substituteInPlace bin/jbake --replace "java" "${jre}/bin/java" 
     mkdir -p $out
     cp -vr * $out
+    wrapProgram $out/bin/jbake --set JAVA_HOME "${jre}"
   '';
+
+  checkPhase = ''
+    export JAVA_HOME=${jre}
+    bin/jbake | grep -q "${version}" || (echo "jbake did not return correct version"; exit 1)
+  '';
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "JBake is a Java based, open source, static site/blog generator for developers & designers";
-    homepage = "http://jbake.org/";
+    homepage = "https://jbake.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ moaxcp ];
   };

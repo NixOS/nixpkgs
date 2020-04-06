@@ -1,13 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchurl, dateutil, lxml }:
+{ stdenv, buildPythonPackage, fetchPypi, dateutil, lxml }:
 
 buildPythonPackage rec {
   pname = "feedgen";
-  version = "0.6.1";
-  name = "${pname}-${version}";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e5a1f2a8aaed06dae325e6024aa7083e90655c6cbddeb3671249b3895c135762";
+    sha256 = "0jl0b87l7v6c0f1nx6k81skjhdj5i11kmchdjls00mynpvdip0cf";
   };
 
   propagatedBuildInputs = [ dateutil lxml ];

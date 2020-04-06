@@ -1,29 +1,26 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, perl, docbook2x
-, docbook_xml_dtd_45, python3Packages
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, docbook2x
+, docbook_xml_dtd_45, python3Packages, pam
 
 # Optional Dependencies
 , libapparmor ? null, gnutls ? null, libselinux ? null, libseccomp ? null
-, cgmanager ? null, libnih ? null, dbus ? null, libcap ? null, systemd ? null
+, libcap ? null, systemd ? null
 }:
 
-let
-  enableCgmanager = cgmanager != null && libnih != null && dbus != null;
-in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-${version}";
-  version = "2.1.1";
+  pname = "lxc";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "1xpghrinxhm2072fwmn42pxhjwh7qx6cbsipw4s6g38a8mkklrk8";
+    sha256 = "1x63nbfsicqxckq62ga3k0g8fm4qgcpn45ianj6m7rvw4lnaxwxk";
   };
 
   nativeBuildInputs = [
     autoreconfHook pkgconfig perl docbook2x python3Packages.wrapPython
   ];
   buildInputs = [
-    libapparmor gnutls libselinux libseccomp cgmanager libnih dbus libcap
+    pam libapparmor gnutls libselinux libseccomp libcap
     python3Packages.python python3Packages.setuptools systemd
   ];
 
@@ -37,15 +34,8 @@ stdenv.mkDerivation rec {
 
   XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
-  # FIXME
-  # glibc 2.25 moved major()/minor() to <sys/sysmacros.h>.
-  # this commit should detect this: https://github.com/lxc/lxc/pull/1388/commits/af6824fce9c9536fbcabef8d5547f6c486f55fdf
-  # However autotools checks if mkdev is still defined in <sys/types.h> runs before
-  # checking if major()/minor() is defined there. The mkdev check succeeds with
-  # a warning and the check which should set MAJOR_IN_SYSMACROS is skipped.
-  NIX_CFLAGS_COMPILE = [ "-DMAJOR_IN_SYSMACROS" ];
-
   configureFlags = [
+    "--enable-pam"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-api-docs"
@@ -77,6 +67,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapPythonPrograms
+
+    completions=(
+      lxc-attach lxc-cgroup lxc-console lxc-destroy lxc-device lxc-execute
+      lxc-freeze lxc-info lxc-monitor lxc-snapshot lxc-stop lxc-unfreeze
+    )
+    pushd $out/share/bash-completion/completions/
+      mv lxc lxc-start
+      for completion in ''${completions[@]}; do
+        ln -sfn lxc-start $completion
+      done
+    popd
   '';
 
   meta = {
@@ -93,6 +94,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wkennington globin fpletz ];
+    maintainers = with maintainers; [ fpletz ];
   };
 }

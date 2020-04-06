@@ -1,42 +1,49 @@
-{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline, perl, python2
-, utillinux, check, enableStatic ? false, hurd ? null }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, lvm2
+, libuuid
+, gettext
+, readline
+, dosfstools
+, e2fsprogs
+, perl
+, python2
+, utillinux
+, check
+, enableStatic ? false
+}:
 
 stdenv.mkDerivation rec {
-  name = "parted-3.2";
+  name = "parted-3.3";
 
   src = fetchurl {
     url = "mirror://gnu/parted/${name}.tar.xz";
-    sha256 = "1r3qpg3bhz37mgvp9chsaa3k0csby3vayfvz8ggsqz194af5i2w5";
+    sha256 = "0i1xp367wpqw75b20c3jnism3dg3yqj4a7a22p2jb1h1hyyv9qjp";
   };
 
-  patches = stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch;
+  outputs = [ "out" "dev" "man" "info" ];
 
-  postPatch = stdenv.lib.optionalString doCheck ''
+  postPatch = ''
     patchShebangs tests
   '';
 
   buildInputs = [ libuuid ]
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (devicemapper != null) devicemapper
-    ++ stdenv.lib.optional (hurd != null) hurd
-    ++ stdenv.lib.optionals doCheck [ check perl python2 ];
+    ++ stdenv.lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
        (if (readline != null)
         then [ "--with-readline" ]
         else [ "--without-readline" ])
-    ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
+    ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 
   # Tests were previously failing due to Hydra running builds as uid 0.
   # That should hopefully be fixed now.
-  doCheck = true;
-
-  preCheck =
-    stdenv.lib.optionalString doCheck
-      # The `t0400-loop-clobber-infloop.sh' test wants `mkswap'.
-      "export PATH=\"${utillinux}/sbin:$PATH\"";
+  doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
+  checkInputs = [ check dosfstools e2fsprogs perl python2 utillinux ];
 
   meta = {
     description = "Create, destroy, resize, check, and copy partitions";
@@ -51,7 +58,7 @@ stdenv.mkDerivation rec {
       which also serves as a sample implementation and script backend.
     '';
 
-    homepage = http://www.gnu.org/software/parted/;
+    homepage = https://www.gnu.org/software/parted/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [

@@ -6,7 +6,6 @@ let
   cfg = config.services.frab;
 
   package = pkgs.frab;
-  ruby = package.ruby;
 
   databaseConfig = builtins.toJSON { production = cfg.database; };
 
@@ -20,7 +19,7 @@ let
     RAILS_SERVE_STATIC_FILES = "1";
   } // cfg.extraEnvironment;
 
-  frab-rake = pkgs.stdenv.mkDerivation rec {
+  frab-rake = pkgs.stdenv.mkDerivation {
     name = "frab-rake";
     buildInputs = [ package.env pkgs.makeWrapper ];
     phases = "installPhase fixupPhase";
@@ -174,14 +173,17 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ frab-rake ];
 
-    users.extraUsers = [
-      { name = cfg.user;
-        group = cfg.group;
+    users.users.${cfg.user} =
+      { group = cfg.group;
         home = "${cfg.statePath}";
-      }
-    ];
+        isSystemUser = true;
+      };
 
-    users.extraGroups = [ { name = cfg.group; } ];
+    users.groups.${cfg.group} = { };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.statePath}/system/attachments' - ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.frab = {
       after = [ "network.target" "gitlab.service" ];
@@ -189,10 +191,6 @@ in
       environment = frabEnv;
 
       preStart = ''
-        mkdir -p ${cfg.statePath}/system/attachments
-        chown ${cfg.user}:${cfg.group} -R ${cfg.statePath}
-
-        mkdir /run/frab -p
         ln -sf ${pkgs.writeText "frab-database.yml" databaseConfig} /run/frab/database.yml
         ln -sf ${cfg.statePath}/system /run/frab/system
 
@@ -205,7 +203,6 @@ in
       '';
 
       serviceConfig = {
-        PermissionsStartOnly = true;
         PrivateTmp = true;
         PrivateDevices = true;
         Type = "simple";
@@ -214,6 +211,7 @@ in
         TimeoutSec = "300s";
         Restart = "on-failure";
         RestartSec = "10s";
+        RuntimeDirectory = "frab";
         WorkingDirectory = "${package}/share/frab";
         ExecStart = "${frab-rake}/bin/frab-bundle exec rails server " +
           "--binding=${cfg.listenAddress} --port=${toString cfg.listenPort}";

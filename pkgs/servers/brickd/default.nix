@@ -11,8 +11,9 @@ daemonlib = fetchgit {
 
 in
 
-stdenv.mkDerivation rec {
-  name = "brickd-${version}";
+stdenv.mkDerivation {
+  pname = "brickd";
+  inherit version;
 
   src = fetchgit {
     url = "git://github.com/Tinkerforge/brickd.git";

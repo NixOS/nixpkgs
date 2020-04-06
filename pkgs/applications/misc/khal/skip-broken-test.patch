@@ -1,0 +1,21 @@
+diff --git a/tests/ui/test_editor.py b/tests/ui/test_editor.py
+index 27b7fa5..5978d72 100644
+--- a/tests/ui/test_editor.py
++++ b/tests/ui/test_editor.py
+@@ -1,5 +1,7 @@
+ import datetime as dt
+ 
++import pytest
++
+ import icalendar
+ from khal.ui.editor import RecurrenceEditor, StartEndEditor
+ 
+@@ -19,7 +21,7 @@ palette = {
+     'edit': 'blue',
+ }
+ 
+-
++@pytest.mark.skip(reason="Mocking breaks in this testcase")
+ def test_popup(monkeypatch):
+     """making sure the popup calendar gets callend with the right inital value
+ 

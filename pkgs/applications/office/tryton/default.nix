@@ -1,23 +1,65 @@
-{ stdenv, fetchurl, python2Packages, librsvg }:
+{ stdenv
+, python3Packages
+, pkgconfig
+, librsvg
+, gobject-introspection
+, atk
+, gtk3
+, gtkspell3
+, gnome3
+, glib
+, goocanvas2
+, gdk-pixbuf
+, pango
+, fontconfig
+, freetype
+, wrapGAppsHook
+}:
 
 with stdenv.lib;
 
-python2Packages.buildPythonApplication rec {
-  name = "tryton-${version}";
-  version = "4.6.2";
-  src = fetchurl {
-    url = "mirror://pypi/t/tryton/${name}.tar.gz";
-    sha256 = "0bamr040np02gfjk8c734rw3mbgg75irfgpdcl2npgkdzyw1ksf9";
+python3Packages.buildPythonApplication rec {
+  pname = "tryton";
+  version = "5.4.2";
+
+  disabled = !python3Packages.isPy3k;
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
   };
-  propagatedBuildInputs = with python2Packages; [
-    chardet
+
+  nativeBuildInputs = [
+    pkgconfig
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
     dateutil
-    pygtk
+    pygobject3
+    goocalendar
+    pycairo
+  ];
+
+  buildInputs = [
+    atk
+    gdk-pixbuf
+    glib
+    gnome3.adwaita-icon-theme
+    goocanvas2
+    fontconfig
+    freetype
+    gtk3
+    gtkspell3
     librsvg
+    pango
   ];
-  makeWrapperArgs = [
-    ''--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"''
-  ];
+
+  strictDeps = false;
+
+  doCheck = false;
+
   meta = {
     description = "The client of the Tryton application platform";
     longDescription = ''
@@ -30,6 +72,6 @@ python2Packages.buildPythonApplication rec {
     '';
     homepage = http://www.tryton.org/;
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.johbo ];
+    maintainers = with maintainers; [ johbo udono ];
   };
 }

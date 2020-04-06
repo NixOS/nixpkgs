@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "premake5-${version}";
+  pname = "premake5";
   version = "5.0.0-alpha12";
 
   src = fetchFromGitHub {
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 bin/release/premake5 $out/bin/premake5
   '';
+
+  premake_cmd = "premake5";
+  setupHook = ./setup-hook.sh;
 
   meta = {
     homepage = https://premake.github.io;

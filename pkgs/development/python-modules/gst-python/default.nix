@@ -1,40 +1,56 @@
-{ fetchurl, stdenv, pkgconfig, python, pygobject3
-, gst-plugins-base, ncurses
+{ buildPythonPackage
+, fetchurl
+, meson
+, ninja
+, stdenv
+, pkgconfig
+, python
+, pygobject3
+, gobject-introspection
+, gst-plugins-base
+, isPy3k
 }:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.12.3";
-  name = "${pname}-${version}";
+  version = "1.16.2";
 
-  src = fetchurl {
-    urls = [
-      "${meta.homepage}/src/gst-python/${name}.tar.xz"
-      "mirror://gentoo/distfiles/${name}.tar.xz"
-      ];
-    sha256 = "19rb06x2m7103zwfm0plxx95gb8bp01ng04h4q9k6ii9q7g2kxf3";
-  };
-
-  patches = [ ./different-path-with-pygobject.patch ];
+  format = "other";
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig python ];
+  src = fetchurl {
+    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
+    sha256 = "II3zFI1z2fQW0BZWRzdYXY6nY9kSAXMtRLX+aIxiiKg=";
+  };
 
-  # XXX: in the Libs.private field of python3.pc
-  buildInputs = [ ncurses ];
-
-  configureFlags = [
-    "--with-pygi-overrides-dir=$(out)/${python.sitePackages}/gi/overrides"
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    python
+    gobject-introspection
+    gst-plugins-base
   ];
 
-  propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
+  propagatedBuildInputs = [
+    gst-plugins-base
+    pygobject3
+  ];
 
-  # Needed for python.buildEnv
-  passthru.pythonPath = [];
+  mesonFlags = [
+    "-Dpython=python${if isPy3k then "3" else "2"}"
+    "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
+  ];
+
+  doCheck = true;
+
+  # TODO: Meson setup hook does not like buildPythonPackage
+  # https://github.com/NixOS/nixpkgs/issues/47390
+  installCheckPhase = "meson test --print-errorlogs";
 
   meta = {
-    homepage = https://gstreamer.freedesktop.org;
+    homepage = "https://gstreamer.freedesktop.org";
 
     description = "Python bindings for GStreamer";
 

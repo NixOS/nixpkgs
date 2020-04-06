@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, scons, qt4, lash, libjack2, jack ? libjack2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "jackmix-0.5.2";
   src = fetchurl {
     url = https://github.com/kampfschlaefer/jackmix/archive/v0.5.2.tar.gz;
@@ -9,20 +9,15 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no_error.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ scons.py2 pkgconfig ];
   buildInputs = [
-    scons
     qt4
     lash
     jack
   ];
 
-  buildPhase = ''
-    scons
-  '';
   installPhase = ''
-    mkdir -p $out/bin
-    cp jackmix/jackmix $out/bin
+    install -D jackmix/jackmix $out/bin/jackmix
   '';
 
   meta = {

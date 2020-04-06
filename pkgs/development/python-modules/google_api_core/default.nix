@@ -1,26 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, google_auth, protobuf, googleapis_common_protos, requests, grpcio, setuptools, mock, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
+, google_auth, protobuf, googleapis_common_protos, requests, setuptools, grpcio, mock }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "0.1.4";
+  version = "1.16.0";
+  disabled = isPy27; # google namespace no longer works on python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0144d467083ed54d2e8ccb4212d42c3724fe0b844b7d3a0ff85aea54b7ae8347";
+    sha256 = "1qh30ji399gngv2j1czzvi3h0mgx3lfdx2n8qp8vii7ihyh65scj";
   };
 
-  propagatedBuildInputs = [ google_auth protobuf googleapis_common_protos requests grpcio ];
-  checkInputs = [ setuptools mock pytest ];
+  propagatedBuildInputs = [
+    googleapis_common_protos protobuf
+    google_auth requests setuptools grpcio
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  # requires nox
+  doCheck = false;
+  checkInputs = [ mock ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "google.auth"
+    "google.protobuf"
+    "google.api"
+  ];
+
+  meta = with lib; {
     description = "This library is not meant to stand-alone. Instead it defines common helpers used by all Google API clients.";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -6,12 +6,12 @@ stdenv.mkDerivation rec {
   major = "2";
   minor = "5";
   version = "${major}-${minor}";
-  name = "plm-${version}";
+  pname = "plm";
 
   src = fetchurl {
     url = "http://webloria.loria.fr/~quinson/Teaching/PLM/plm-${major}_${minor}.jar";
     sha256 = "0m17cxa3nxi2cbswqvlfzp0mlfi3wrkw8ry2xhkxy6aqzm2mlgcc";
-    name = "${name}.jar";
+    name = "${pname}-${version}.jar";
   };
 
   buildInputs = [ makeWrapper jre gcc valgrind ];
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free cross-platform programming exerciser";
-    homepage = http://webloria.loria.fr/~quinson/Teaching/PLM/;
     license = licenses.gpl3;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
+    broken = true;
   };
 }

@@ -1,53 +1,59 @@
-{ stdenv
+{ stdenv, targetPackages
 
 # Build time
-, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs
+, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
 
-, buildPlatform, hostPlatform, targetPlatform
-
-, pythonSupport ? hostPlatform == buildPlatform && !hostPlatform.isCygwin, python ? null
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
-
-# Additional dependencies for GNU/Hurd.
-, mig ? null, hurd ? null
-
+, safePaths ? [
+   # $debugdir:$datadir/auto-load are whitelisted by default by GDB
+   "$debugdir" "$datadir/auto-load"
+   # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
+   targetPackages.stdenv.cc.cc.lib
+  ]
 }:
 
 let
   basename = "gdb-${version}";
-  version = "8.1";
+  version = "9.1";
 in
 
-assert targetPlatform.isHurd -> mig != null && hurd != null;
-assert pythonSupport -> python != null;
+assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   name =
-    stdenv.lib.optionalString (targetPlatform != hostPlatform)
-                              (targetPlatform.config + "-")
+    stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                              (stdenv.targetPlatform.config + "-")
     + basename;
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0d2bpqk58fqlx21rbnk8mbcjlggzc9kb5sjirrfrrrjq70ka0qdg";
+    sha256 = "0dqp1p7w836iwijg1zb4a784n0j4pyjiw5v6h8fg5lpx6b40x7k9";
   };
 
-  patches = [ ./debug-info-from-env.patch ]
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-target-match.patch;
+  postPatch = if stdenv.isDarwin then ''
+    substituteInPlace gdb/darwin-nat.c \
+      --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+  '' else null;
 
-  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ]
-    # TODO(@Ericson2314) not sure if should be host or target
-    ++ stdenv.lib.optional targetPlatform.isHurd mig;
+  patches = [
+    ./debug-info-from-env.patch
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    ./darwin-target-match.patch
+  ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat zlib guile ]
-    ++ stdenv.lib.optional pythonSupport python
-    ++ stdenv.lib.optional targetPlatform.isHurd hurd
+  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
+
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
+    ++ stdenv.lib.optional pythonSupport python3
     ++ stdenv.lib.optional doCheck dejagnu;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 
@@ -57,7 +63,14 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+
+  # GDB have to be built out of tree.
+  preConfigure = ''
+    mkdir _build
+    cd _build
+  '';
+  configureScript = "../configure";
 
   configureFlags = with stdenv.lib; [
     "--enable-targets=all" "--enable-64-bit-bfd"
@@ -69,6 +82,7 @@ stdenv.mkDerivation rec {
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+    "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
 
   postInstall =
@@ -88,11 +102,11 @@ stdenv.mkDerivation rec {
       program was doing at the moment it crashed.
     '';
 
-    homepage = http://www.gnu.org/software/gdb/;
+    homepage = https://www.gnu.org/software/gdb/;
 
     license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = with platforms; linux ++ cygwin ++ darwin;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [ pierron globin lsix ];
   };
 }

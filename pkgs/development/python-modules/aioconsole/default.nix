@@ -10,11 +10,11 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.1.7";
+  version = "0.1.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17bnfcp0gacnmpdam6byb7rwhqibw57f736bbgk45w4cy2lglj3y";
+    sha256 = "0yk4ghvg47drfvdrrcw7nk14pg4shccmyhln9d8hy1lyafcqmnd5";
   };
 
   # hardcodes a test dependency on an old version of pytest-asyncio
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Asynchronous console and interfaces for asyncio";
-    homepage = https://github.com/vxgmichel/aioconsole;
+    homepage = "https://github.com/vxgmichel/aioconsole";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.catern ];
   };

@@ -1,7 +1,7 @@
 { stdenv, fetchhg, autoconf, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "vcprompt-${version}";
+  pname = "vcprompt";
   version = "1.2.1";
 
   src = fetchhg {
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage    = http://hg.gerg.ca/vcprompt;
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
+    license = licenses.gpl2Plus;
   };
 }

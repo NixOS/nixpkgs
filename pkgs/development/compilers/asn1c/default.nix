@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "asn1c-${version}";
+  pname = "asn1c";
   version = "0.9.28";
 
   src = fetchurl {
-    url = "http://lionet.info/soft/asn1c-${version}.tar.gz";
+    url = "https://lionet.info/soft/asn1c-${version}.tar.gz";
     sha256 = "1fc64g45ykmv73kdndr4zdm4wxhimhrir4rxnygxvwkych5l81w0";
   };
 

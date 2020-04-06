@@ -236,7 +236,7 @@ in
         }
       ];
 
-    users.extraUsers.rslsync = {
+    users.users.rslsync = {
       description     = "Resilio Sync Service user";
       home            = cfg.storagePath;
       createHome      = true;
@@ -244,12 +244,12 @@ in
       group           = "rslsync";
     };
 
-    users.extraGroups = [ { name = "rslsync"; } ];
+    users.groups.rslsync = {};
 
     systemd.services.resilio = with pkgs; {
       description = "Resilio Sync Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" "local-fs.target" ];
+      after       = [ "network.target" ];
       serviceConfig = {
         Restart   = "on-abort";
         UMask     = "0002";

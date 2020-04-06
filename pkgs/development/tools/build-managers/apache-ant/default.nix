@@ -1,15 +1,16 @@
 { fetchurl, stdenv, coreutils, makeWrapper }:
 
-let version = "1.9.6"; in
+let version = "1.10.2"; in
 
 stdenv.mkDerivation {
-  name = "ant-${version}";
+  pname = "ant";
+  inherit version;
 
   buildInputs = [ makeWrapper ];
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
-    sha256 = "1cwd5vq175gyicw0hkm8idwa33zxwhf7xlxywaqxcqqdjql0jfx4";
+    sha256 = "0662qammjvibh9kgkxzadkayfn2r7iwnagbwaw28crqqclrb2rp1";
   };
 
   contrib = fetchurl {
@@ -45,14 +46,14 @@ stdenv.mkDerivation {
       # JRE by looking for java.  The latter allows just the JRE to be
       # used with (say) ECJ as the compiler.  Finally, allow the GNU
       # JVM.
-      if [ -z "\$JAVA_HOME" ]; then
+      if [ -z "\''${JAVA_HOME-}" ]; then
           for i in javac java gij; do
               if p="\$(type -p \$i)"; then
                   export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
                   break
               fi
           done
-          if [ -z "\$JAVA_HOME" ]; then
+          if [ -z "\''${JAVA_HOME-}" ]; then
               echo "\$0: cannot find the JDK or JRE" >&2
               exit 1
           fi

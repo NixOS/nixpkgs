@@ -3,14 +3,13 @@
 , setuptools }:
 
 buildPythonPackage rec {
-  version = "1.0.15.8";
+  version = "1.0.19";
   pname = "pysmbc";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.bz2";
-    sha256 = "07dzxfdqaj6zjg2rxxdww363bh8m02mcvgk47jw005cik9wc2rq5";
+    sha256 = "0dwffbfp3ay8y35hhc37ip61xdh522f5rfs097f3ia121h9x1mvj";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -18,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "libsmbclient binding for Python";
-    homepage = https://github.com/hamano/pysmbc;
+    homepage = "https://github.com/hamano/pysmbc";
     license = licenses.gpl2Plus;
   };
 }

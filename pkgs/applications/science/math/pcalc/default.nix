@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, bison2, flex }:
+{ stdenv, fetchgit, bison, flex }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pcalc-${version}";
+  pname = "pcalc";
   version = "20141224";
 
   src = fetchgit {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "DESTDIR= BINDIR=$(out)/bin" ];
-  buildInputs = [ bison2 flex ];
+  buildInputs = [ bison flex ];
 
   meta = {
     homepage = http://pcalc.sourceforge.net/;

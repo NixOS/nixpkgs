@@ -2,12 +2,12 @@
 , pcre, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, freetype, gdb, git, perl, mysql, gmp, libyaml, libedit
+, libxslt, freetype, gdb, git, perl, libmysqlclient, gmp, libyaml, libedit
 , libvpx, imagemagick, fribidi, gperf, which, ocamlPackages
 }:
 
 stdenv.mkDerivation rec {
-  name    = "hhvm-${version}";
+  pname = "hhvm";
   version = "3.23.2";
 
   # use git version since we need submodules
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ cmake pkgconfig boost libunwind mysql.connector-c libmemcached pcre gdb git perl
+    [ cmake pkgconfig boost libunwind libmysqlclient libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt libkrb5
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
   # (setting it to an absolute path causes include files to go to $out/$out/include,
   #  because the absolute path is interpreted with root at $out).
-  cmakeFlags = "-DCMAKE_INSTALL_INCLUDEDIR=include";
+  cmakeFlags = [ "-DCMAKE_INSTALL_INCLUDEDIR=include" ];
 
   prePatch = ''
     substituteInPlace ./configure \
@@ -59,9 +59,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "High-performance JIT compiler for PHP/Hack";
-    homepage    = "http://hhvm.com";
+    homepage    = "https://hhvm.com";
     license     = "PHP/Zend";
     platforms   = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    broken = true; # Since 2018-04-21, see https://hydra.nixos.org/build/73059373
   };
 }

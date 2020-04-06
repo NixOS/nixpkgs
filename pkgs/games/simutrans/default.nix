@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
-, buildEnv, config
+, buildEnv, config, runtimeShell
 }:
 
 let
@@ -16,7 +16,6 @@ let
   ver3 = "2";
   version =   "${ver1}.${ver2}.${ver3}";
   ver_dash =  "${ver1}-${ver2}-${ver3}";
-  ver2_dash = "${ver1}-${ver2}";
 
   binary_src = fetchurl {
     url = "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
@@ -71,7 +70,7 @@ let
   }:
     stdenv.mkDerivation {
       name = "simutrans-${pakName}";
-      unpackPhase = "true";
+      dontUnpack = true;
       preferLocalBuild = true;
       installPhase = let src = fetchurl { inherit url sha256; };
       in ''
@@ -96,9 +95,9 @@ let
     postBuild = ''
       rm "$out/bin" && mkdir "$out/bin"
       cat > "$out/bin/simutrans" <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd "$out"/share/simutrans
-      exec "${binaries}/bin/simutrans" -use_workdir "\''${extraFlagsArray[@]}" "\$@"
+      exec "${binaries}/bin/simutrans" -use_workdir "\$@"
       EOF
       chmod +x "$out/bin/simutrans"
     '';
@@ -107,8 +106,9 @@ let
     passthru.binaries = binaries;
   };
 
-  binaries = stdenv.mkDerivation rec {
-    name = "simutrans-${version}";
+  binaries = stdenv.mkDerivation {
+    pname = "simutrans";
+    inherit version;
 
     src = binary_src;
 
@@ -164,8 +164,8 @@ let
       license = with licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ kkallio vcunat phile314 ];
       platforms = with platforms; linux; # TODO: ++ darwin;
+      broken = true;
     };
   };
 
 in result
-

@@ -1,18 +1,27 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "proj-4.9.3";
+stdenv.mkDerivation rec {
+  pname = "proj";
+  version = "6.3.1";
 
-  src = fetchurl {
-    url = http://download.osgeo.org/proj/proj-4.9.3.tar.gz;
-    sha256 = "1xw5f427xk9p2nbsj04j6m5zyjlyd66sbvl2bkg8hd1kx8pm9139";
+  src = fetchFromGitHub {
+    owner = "OSGeo";
+    repo = "PROJ";
+    rev = version;
+    sha256 = "1ildcp57qsa01kvv2qxd05nqw5mg0wfkksiv9l138dbhp0s7rkxp";
   };
+
+  outputs = [ "out" "dev"];
+
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+
+  buildInputs = [ sqlite ];
 
   doCheck = stdenv.is64bit;
 
   meta = with stdenv.lib; {
     description = "Cartographic Projections Library";
-    homepage = http://trac.osgeo.org/proj/;
+    homepage = https://proj4.org;
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ vbgl ];

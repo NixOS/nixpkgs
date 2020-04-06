@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, ncurses, python, perl, textual-window-manager }:
+{ stdenv, fetchurl, python3, perl, textual-window-manager }:
 
 stdenv.mkDerivation rec {
-  version = "5.124";
+  version = "5.133";
   name = "byobu-" + version;
 
   src = fetchurl {
     url = "https://launchpad.net/byobu/trunk/${version}/+download/byobu_${version}.orig.tar.gz";
-    sha256 = "08pipvh2iwy5d4b1bnrh0vwlmm884cqzgsz6jx3ar4shp63i5jjf";
+    sha256 = "0qvmmdnvwqbgbhn5c8asmrmjhclcl029py2d2zvmd7h5ij7s93jd";
   };
 
   doCheck = true;
 
-  buildInputs = [ python perl ];
+  buildInputs = [ python3 perl ];
   propagatedBuildInputs = [ textual-window-manager ];
 
   meta = {
-    homepage = https://launchpad.net/byobu/;
+    homepage = "https://launchpad.net/byobu/";
     description = "Text-based window manager and terminal multiplexer";
 
     longDescription =

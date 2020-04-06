@@ -1,56 +1,141 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice-gtk
-, spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
-, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
-, mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
-, libcap_ng, numactl, xen, libapparmor
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, wrapGAppsHook
+, pkgconfig
+, gettext
+, itstool
+, libvirt-glib
+, glib
+, gobject-introspection
+, libxml2
+, gtk3
+, gtk-vnc
+, freerdp
+, libvirt
+, spice-gtk
+, python3
+, spice-protocol
+, libsoup
+, libosinfo
+, systemd
+, tracker
+, tracker-miners
+, vala
+, libcap
+, yajl
+, gmp
+, gdbm
+, cyrus_sasl
+, gnome3
+, librsvg
+, desktop-file-utils
+, mtools
+, cdrkit
+, libcdio
+, libusb1
+, libarchive
+, acl
+, libgudev
+, libsecret
+, libcap_ng
+, numactl
+, xen
+, libapparmor
+, json-glib
+, webkitgtk
+, vte
+, glib-networking
 }:
 
-# TODO: ovirt (optional)
-
 stdenv.mkDerivation rec {
-  name = "gnome-boxes-${version}";
-  version = "3.26.2";
+  pname = "gnome-boxes";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-boxes/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "d00fc083182963dc1bbdee5e743ceb28ba03fbf5a9ea87c78d29dca5fb5b9210";
+    url = "mirror://gnome/sources/gnome-boxes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0saxz2mwp7y348izzgp7mmp6vnv5zi57x5rbsyag8s7pd7yp211n";
   };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-boxes"; attrPath = "gnome3.gnome-boxes"; };
-  };
-
-  enableParallelBuilding = true;
 
   doCheck = true;
 
   nativeBuildInputs = [
-    makeWrapper pkgconfig gettext
+    desktop-file-utils
+    gettext
+    gobject-introspection
+    itstool
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
+  ];
+
+  # Required for USB redirection PolicyKit rules file
+  propagatedUserEnvPkgs = [
+    spice-gtk
   ];
 
   buildInputs = [
-    itstool libvirt-glib glib gobjectIntrospection libxml2 gtk3 gtkvnc
-    libvirt spice-gtk spice-protocol libsoup libosinfo systemd
-    tracker tracker-miners vala libcap yajl gmp gdbm cyrus_sasl libusb libarchive
-    gnome3.defaultIconTheme librsvg desktop-file-utils acl libgudev libsecret
-    libcap_ng numactl xen libapparmor
+    acl
+    cyrus_sasl
+    freerdp
+    gdbm
+    glib
+    glib-networking
+    gmp
+    gnome3.adwaita-icon-theme
+    gtk-vnc
+    gtk3
+    json-glib
+    libapparmor
+    libarchive
+    libcap
+    libcap_ng
+    libgudev
+    libosinfo
+    librsvg
+    libsecret
+    libsoup
+    libusb1
+    libvirt
+    libvirt-glib
+    libxml2
+    numactl
+    spice-gtk
+    spice-protocol
+    systemd
+    tracker
+    tracker-miners
+    vte
+    webkitgtk
+    xen
+    yajl
   ];
 
   preFixup = ''
-    for prog in "$out/bin/"*; do
-        wrapProgram "$prog" \
-            --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-            --prefix XDG_DATA_DIRS : "${gnome3.gnome-themes-standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-            --prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio qemu ]}"
-    done
+    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio ]}")
   '';
+
+  postPatch = ''
+    chmod +x build-aux/post_install.py # patchShebangs requires executable file
+    patchShebangs build-aux/post_install.py
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
-    homepage = https://wiki.gnome.org/action/show/Apps/Boxes;
+    homepage = https://wiki.gnome.org/Apps/Boxes;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = gnome3.maintainers;
   };
 }

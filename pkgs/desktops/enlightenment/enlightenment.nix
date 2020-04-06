@@ -1,48 +1,78 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, efl,
-  xcbutilkeysyms, libXrandr, libXdmcp, libxcb, libffi, pam, alsaLib,
-  luajit, bzip2, libpthreadstubs, gdbm, libcap, libGLU,
-  xkeyboard_config, pcre
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, alsaLib, bc,
+  bzip2, efl, gdbm, libXdmcp, libXrandr, libcap, libffi,
+  libpthreadstubs, libxcb, luajit, mesa, pam, pcre, xcbutilkeysyms,
+  xkeyboard_config,
+
+  bluetoothSupport ? true, bluez5,
+  pulseSupport ? !stdenv.isDarwin, libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
-  name = "enlightenment-${version}";
-  version = "0.22.1";
+  pname = "enlightenment";
+  version = "0.23.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "1q57fz57d0b26z06m1wiq7c1sniwh885b0vs02mk4jgwva46nyr0";
+    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0d1cyl07w9pvi2pf029kablazks2q9aislzl46b6fq5m1465jc75";
   };
 
   nativeBuildInputs = [
+    gettext
     meson
     ninja
-    (pkgconfig.override { vanilla = true; })
-    gettext
+    pkgconfig
   ];
 
   buildInputs = [
+    alsaLib
+    bc  # for the Everything module calculator mode
+    bzip2
     efl
+    gdbm
     libXdmcp
-    libxcb
-    xcbutilkeysyms
     libXrandr
     libffi
-    pam
-    alsaLib
-    luajit
-    bzip2
     libpthreadstubs
-    gdbm
+    libxcb
+    luajit
+    mesa
+    pam
     pcre
-  ] ++
-    stdenv.lib.optionals stdenv.isLinux [ libcap ];
+    xcbutilkeysyms
+    xkeyboard_config
+  ]
+  ++ stdenv.lib.optional stdenv.isLinux libcap
+  ++ stdenv.lib.optional bluetoothSupport bluez5
+  ++ stdenv.lib.optional pulseSupport libpulseaudio
+  ;
 
-  # Instead of setting owner to root and permissions to setuid/setgid
-  # (which is not allowed for files in /nix/store) of some
-  # enlightenment programs, the file $out/e-wrappers.nix is created,
-  # containing the needed configuration for that purpose. It can be
-  # used in the enlightenment module.
-  patches = [ ./enlightenment.suid-exes.patch ];
+  patches = [
+    # Some programs installed by enlightenment (to set the cpu frequency,
+    # for instance) need root ownership and setuid/setgid permissions, which
+    # are not allowed for files in /nix/store. Instead of allowing the
+    # installer to try to do this, the file $out/e-wrappers.nix is created,
+    # containing the needed configuration for wrapping those programs. It
+    # can be used in the enlightenment module. The idea is:
+    #
+    #  1) rename the original binary adding the extension .orig
+    #  2) wrap the renamed binary at /run/wrappers/bin/
+    #  3) create a new symbolic link using the original binary name (in the
+    #     original directory where enlightenment wants it) pointing to the
+    #     wrapper
+
+    ./enlightenment.suid-exes.patch
+  ];
+
+  postPatch = ''
+    # edge_cc is a binary provided by efl and cannot be found at the directory
+    # given by e_prefix_bin_get(), which is $out/bin
+
+    substituteInPlace src/bin/e_import_config_dialog.c \
+      --replace "e_prefix_bin_get()" "\"${efl}/bin\""
+
+    substituteInPlace src/modules/everything/evry_plug_calc.c \
+      --replace "ecore_exe_pipe_run(\"bc -l\"" "ecore_exe_pipe_run(\"${bc}/bin/bc -l\""
+  '';
 
   mesonFlags = [ "-Dsystemdunitdir=lib/systemd/user" ];
 

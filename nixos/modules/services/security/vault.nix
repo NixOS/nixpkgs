@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
   cfg = config.services.vault;
 
@@ -24,14 +25,21 @@ let
           ${cfg.telemetryConfig}
         }
       ''}
+    ${cfg.extraConfig}
   '';
 in
+
 {
   options = {
-
     services.vault = {
-
       enable = mkEnableOption "Vault daemon";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vault;
+        defaultText = "pkgs.vault";
+        description = "This option specifies the vault package to use.";
+      };
 
       address = mkOption {
         type = types.str;
@@ -58,11 +66,11 @@ in
         default = ''
           tls_min_version = "tls12"
         '';
-        description = "extra configuration";
+        description = "Extra text appended to the listener section.";
       };
 
       storageBackend = mkOption {
-        type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" ];
+        type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" "raft" ];
         default = "inmem";
         description = "The name of the type of storage backend";
       };
@@ -84,6 +92,12 @@ in
         default = "";
         description = "Telemetry configuration";
       };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Extra text appended to <filename>vault.hcl</filename>.";
+      };
     };
   };
 
@@ -97,13 +111,16 @@ in
       }
     ];
 
-    users.extraUsers.vault = {
+    users.users.vault = {
       name = "vault";
       group = "vault";
       uid = config.ids.uids.vault;
       description = "Vault daemon user";
     };
-    users.extraGroups.vault.gid = config.ids.gids.vault;
+    users.groups.vault.gid = config.ids.gids.vault;
+
+    systemd.tmpfiles.rules = optional (cfg.storagePath != null)
+      "d '${cfg.storagePath}' 0700 vault vault - -";
 
     systemd.services.vault = {
       description = "Vault server daemon";
@@ -114,15 +131,11 @@ in
 
       restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
 
-      preStart = optionalString (cfg.storagePath != null) ''
-        install -d -m0700 -o vault -g vault "${cfg.storagePath}"
-      '';
-
       serviceConfig = {
         User = "vault";
         Group = "vault";
-        PermissionsStartOnly = true;
-        ExecStart = "${pkgs.vault}/bin/vault server -config ${configFile}";
+        ExecStart = "${cfg.package}/bin/vault server -config ${configFile}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         PrivateDevices = true;
         PrivateTmp = true;
         ProtectSystem = "full";

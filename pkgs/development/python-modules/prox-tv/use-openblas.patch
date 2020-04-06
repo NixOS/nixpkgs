@@ -1,0 +1,11 @@
+index f100b35..448bbaf 100644
+--- a/prox_tv/prox_tv_build.py
++++ b/prox_tv/prox_tv_build.py
+@@ -109,6 +109,6 @@ ffi.set_source(
+     define_macros=[('NOMATLAB', 1)],
+     extra_compile_args=extra_compile_args,
+     extra_link_args=extra_link_args,
+-    libraries=['blas', 'lapack'],
++    libraries=['openblas'],
+     include_dirs=['/usr/include']
+ )

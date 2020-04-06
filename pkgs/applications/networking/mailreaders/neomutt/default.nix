@@ -1,38 +1,27 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mime-types }:
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell, sqlite, zlib
+}:
 
-let
-  muttWrapper = writeScript "mutt" ''
-    #!${stdenv.shell} -eu
-
-    echo 'The neomutt project has renamed the main binary from `mutt` to `neomutt`.'
-    echo ""
-    echo 'This wrapper is provided for compatibility purposes only. You should start calling `neomutt` instead.'
-    echo ""
-    read -p 'Press any key to launch NeoMutt...' -n1 -s
-    exec neomutt "$@"
-  '';
-
-in stdenv.mkDerivation rec {
-  version = "20180223";
-  name = "neomutt-${version}";
+stdenv.mkDerivation rec {
+  version = "20200320";
+  pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
-    rev    = "neomutt-${version}";
-    sha256 = "1q0zwm8p2mk85icrbq42z4235mpqfra38pigd064kharx54k36sb";
+    rev    = version;
+    sha256 = "06xcl9pr8dna4kqjaqm7ss50gdy185425bwl31i0xs3l11cyjap4";
   };
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
-    mime-types
+    mailcap sqlite
   ];
 
   nativeBuildInputs = [
-    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which
+    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib
   ];
 
   enableParallelBuilding = true;
@@ -47,19 +36,21 @@ in stdenv.mkDerivation rec {
         --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
     done
 
+
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
     # and use a far more comprehensive list than the one shipped with neomutt
     substituteInPlace sendlib.c \
-      --replace /etc/mime.types ${mime-types}/etc/mime.types
+      --replace /etc/mime.types ${mailcap}/etc/mime.types
 
     # The string conversion tests all fail with the first version of neomutt
-    # that has tests (20180223) so we disable them for now.
+    # that has tests (20180223) as well as 20180716 so we disable them for now.
     # I don't know if that is related to the tests or our build environment.
     # Try again with a later release.
     sed -i '/rfc2047/d' test/Makefile.autosetup test/main.c
   '';
 
   configureFlags = [
+    "--enable-autocrypt"
     "--gpgme"
     "--gss"
     "--lmdb"
@@ -70,6 +61,7 @@ in stdenv.mkDerivation rec {
     "--with-mailpath="
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"
+    "--zlib"
   ];
 
   # Fix missing libidn in mutt;
@@ -78,8 +70,7 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lidn";
 
   postInstall = ''
-    cp ${muttWrapper} $out/bin/mutt
-    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/lib/neomutt"
+    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
   '';
 
   doCheck = true;
@@ -90,7 +81,7 @@ in stdenv.mkDerivation rec {
     description = "A small but very powerful text-based mail client";
     homepage    = http://www.neomutt.org;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
+    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ma27 ];
     platforms   = platforms.unix;
   };
 }

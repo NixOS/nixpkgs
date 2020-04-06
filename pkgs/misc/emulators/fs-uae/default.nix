@@ -1,19 +1,19 @@
 { stdenv, fetchurl, pkgconfig
-, gettext, gtk2, SDL2, zlib, glib, openal, libGLU_combined, lua, freetype, libmpeg2, zip }:
+, gettext, gtk2, SDL2, zlib, glib, openal, libGLU, libGL, lua, freetype, libmpeg2, zip }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "fs-uae-${version}";
-  version = "2.8.3";
+  pname = "fs-uae";
+  version = "3.0.3";
 
   src = fetchurl {
-    url = "http://fs-uae.net/fs-uae/stable/${version}/${name}.tar.gz";
-    sha256 = "14k2p324sdr662f49299mv0bw5jmpj1i2iqn0xs5pgf80x6l3mg2";
+    url = "https://fs-uae.net/stable/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0v5c8ns00bam4myj7454hpkrnm9i81jwdzrp5nl7gaa18qb60hjq";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gettext gtk2 SDL2 zlib glib openal libGLU_combined lua freetype libmpeg2 zip ];
+  buildInputs = [ gettext gtk2 SDL2 zlib glib openal libGLU libGL lua freetype libmpeg2 zip ];
 
   meta = {
     description = "An accurate, customizable Amiga Emulator";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       create customized Amigas.
     '';
     license = licenses.gpl2Plus;
-    homepage = http://fs-uae.net;
+    homepage = "https://fs-uae.net";
     maintainers = with stdenv.lib; [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

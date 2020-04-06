@@ -10,9 +10,16 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
-  buildPhase     = "ocaml setup.ml -build";
-  installPhase   = "ocaml setup.ml -install";
+  configurePhase = ''
+    substituteInPlace src/ocamlify.ml --replace 'OCamlifyConfig.version' '"0.0.2"'
+  '';
+
+  buildPhase = "ocamlbuild src/ocamlify.native";
+
+  installPhase = ''
+    mkdir -p $out/bin
+    mv _build/src/ocamlify.native $out/bin/ocamlify
+  '';
 
   dontStrip = true;
 
@@ -22,7 +29,7 @@ stdenv.mkDerivation {
     platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [
-      z77z
+      maggesi
     ];
   };
 }

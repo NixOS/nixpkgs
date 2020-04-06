@@ -4,7 +4,7 @@ with stdenv;
 with stdenv.lib;
 
 mkDerivation rec {
-  name = "wraith-${version}";
+  pname = "wraith";
   version = "1.4.7";
   src = fetchurl {
     url = "mirror://sourceforge/wraithbotpack/wraith-v${version}.tar.gz";
@@ -40,7 +40,7 @@ mkDerivation rec {
       The binary will not run when moved onto non-NixOS systems; use patchelf
       to fix its runtime dependenices.
     '';
-    homepage = http://wraith.botpack.net/;
+    homepage = https://wraith.botpack.net/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ elitak ];
     platforms = platforms.linux;

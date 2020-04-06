@@ -1,32 +1,29 @@
-{ stdenv, fetchFromGitHub, python3Packages, makeWrapper }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-stdenv.mkDerivation rec {
-  name    = "grc-${version}";
-  version = "1.11.1";
+python3Packages.buildPythonApplication rec {
+  pname = "grc";
+  version = "1.11.3";
+  format = "other";
 
   src = fetchFromGitHub {
     owner  = "garabik";
     repo   = "grc";
     rev    = "v${version}";
-    sha256 = "10h65qmv2cymixzfsckfcn6f01xsjzfq1x303rv01nibniwbq5z9";
+    sha256 = "0b3wx9zr7l642hizk93ysbdss7rfymn22b2ykj4kpkf1agjkbv35";
   };
 
-  buildInputs = with python3Packages; [ wrapPython makeWrapper ];
+  postPatch = ''
+    for f in grc grcat; do
+      substituteInPlace $f \
+        --replace /usr/local/ $out/
+    done
+  '';
 
   installPhase = ''
     runHook preInstall
 
     ./install.sh "$out" "$out"
-
-    for f in $out/bin/* ; do
-      patchPythonScript $f
-      substituteInPlace $f \
-        --replace ' /usr/bin/env python3' '${python3Packages.python.interpreter}' \
-        --replace "'/etc/grc.conf'"   "'$out/etc/grc.conf'" \
-        --replace "'/usr/share/grc/'" "'$out/share/grc/'"
-      wrapProgram $f \
-        --prefix PATH : $out/bin
-    done
+    install -Dm444 -t $out/share/zsh/vendor-completions _grc
 
     runHook postInstall
   '';

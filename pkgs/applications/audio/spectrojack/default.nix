@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libjack2, fftwFloat, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "spectrojack-${version}";
-  version = "0.4";
+  pname = "spectrojack";
+  version = "0.4.1";
 
   src = fetchurl {
-    url = "http://sed.free.fr/spectrojack/${name}.tar.gz";
-    sha256 = "0p5aa55hnazv5djw0431mza068h7mjkb9pnglxfpqkx5z0czisdx";
+    url = "http://sed.free.fr/spectrojack/${pname}-${version}.tar.gz";
+    sha256 = "1kiwx0kag7kq7rhg0bvckfm8r7pqmbk76ppa39cq2980jb5v8rfp";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libjack2 fftwFloat gtk2 ];

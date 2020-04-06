@@ -1,28 +1,53 @@
 # A profile with most (vanilla) hardening options enabled by default,
 # potentially at the cost of features and performance.
 
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 
 {
+  meta = {
+    maintainers = [ maintainers.joachifm ];
+  };
+
   boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
+
+  nix.allowedUsers = mkDefault [ "@users" ];
+
+  environment.memoryAllocator.provider = mkDefault "scudo";
+  environment.variables.SCUDO_OPTIONS = mkDefault "ZeroContents=1";
 
   security.hideProcessInformation = mkDefault true;
 
   security.lockKernelModules = mkDefault true;
 
+  security.allowUserNamespaces = mkDefault false;
+
+  security.protectKernelImage = mkDefault true;
+
+  security.allowSimultaneousMultithreading = mkDefault false;
+
+  security.forcePageTableIsolation = mkDefault true;
+
+  security.virtualisation.flushL1DataCache = mkDefault "always";
+
   security.apparmor.enable = mkDefault true;
 
   boot.kernelParams = [
+    # Slab/slub sanity checks, redzoning, and poisoning
+    "slub_debug=FZP"
+
+    # Disable slab merging to make certain heap overflow attacks harder
+    "slab_nomerge"
+
     # Overwrite free'd memory
     "page_poison=1"
 
     # Disable legacy virtual syscalls
     "vsyscall=none"
 
-    # Disable hibernation (allows replacing the running kernel)
-    "nohibernate"
+    # Enable page allocator randomization
+    "page_alloc.shuffle=1"
   ];
 
   boot.blacklistedKernelModules = [
@@ -30,14 +55,32 @@ with lib;
     "ax25"
     "netrom"
     "rose"
+
+    # Old or rare or insufficiently audited filesystems
+    "adfs"
+    "affs"
+    "bfs"
+    "befs"
+    "cramfs"
+    "efs"
+    "erofs"
+    "exofs"
+    "freevxfs"
+    "f2fs"
+    "hfs"
+    "hpfs"
+    "jfs"
+    "minix"
+    "nilfs2"
+    "qnx4"
+    "qnx6"
+    "sysv"
+    "ufs"
   ];
 
   # Restrict ptrace() usage to processes with a pre-defined relationship
   # (e.g., parent/child)
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkOverride 500 1;
-
-  # Prevent replacing the running kernel image w/o reboot
-  boot.kernel.sysctl."kernel.kexec_load_disabled" = mkDefault true;
 
   # Restrict access to kernel ring buffer (information leaks)
   boot.kernel.sysctl."kernel.dmesg_restrict" = mkDefault true;
@@ -55,18 +98,6 @@ with lib;
   # ... or at least apply some hardening to it
   boot.kernel.sysctl."net.core.bpf_jit_harden" = mkDefault true;
 
-  # A recurring problem with user namespaces is that there are
-  # still code paths where the kernel's permission checking logic
-  # fails to account for namespacing, instead permitting a
-  # namespaced process to act outside the namespace with the
-  # same privileges as it would have inside it.  This is particularly
-  # bad in the common case of running as root within the namespace.
-  #
-  # Setting the number of allowed user namespaces to 0 effectively disables
-  # the feature at runtime.  Attempting to create a user namespace
-  # with unshare will then fail with "no space left on device".
-  boot.kernel.sysctl."user.max_user_namespaces" = mkDefault 0;
-
   # Raise ASLR entropy for 64bit & 32bit, respectively.
   #
   # Note: mmap_rnd_compat_bits may not exist on 64bit.
@@ -82,4 +113,34 @@ with lib;
   #
   # The value is taken from the KSPP recommendations (Debian uses 4096).
   boot.kernel.sysctl."vm.mmap_min_addr" = mkDefault 65536;
+
+  # Disable ftrace debugging
+  boot.kernel.sysctl."kernel.ftrace_enabled" = mkDefault false;
+
+  # Enable strict reverse path filtering (that is, do not attempt to route
+  # packets that "obviously" do not belong to the iface's network; dropped
+  # packets are logged as martians).
+  boot.kernel.sysctl."net.ipv4.conf.all.log_martians" = mkDefault true;
+  boot.kernel.sysctl."net.ipv4.conf.all.rp_filter" = mkDefault "1";
+  boot.kernel.sysctl."net.ipv4.conf.default.log_martians" = mkDefault true;
+  boot.kernel.sysctl."net.ipv4.conf.default.rp_filter" = mkDefault "1";
+
+  # Ignore broadcast ICMP (mitigate SMURF)
+  boot.kernel.sysctl."net.ipv4.icmp_echo_ignore_broadcasts" = mkDefault true;
+
+  # Ignore incoming ICMP redirects (note: default is needed to ensure that the
+  # setting is applied to interfaces added after the sysctls are set)
+  boot.kernel.sysctl."net.ipv4.conf.all.accept_redirects" = mkDefault false;
+  boot.kernel.sysctl."net.ipv4.conf.all.secure_redirects" = mkDefault false;
+  boot.kernel.sysctl."net.ipv4.conf.default.accept_redirects" = mkDefault false;
+  boot.kernel.sysctl."net.ipv4.conf.default.secure_redirects" = mkDefault false;
+  boot.kernel.sysctl."net.ipv6.conf.all.accept_redirects" = mkDefault false;
+  boot.kernel.sysctl."net.ipv6.conf.default.accept_redirects" = mkDefault false;
+
+  # Ignore outgoing ICMP redirects (this is ipv4 only)
+  boot.kernel.sysctl."net.ipv4.conf.all.send_redirects" = mkDefault false;
+  boot.kernel.sysctl."net.ipv4.conf.default.send_redirects" = mkDefault false;
+
+  # Restrict userfaultfd syscalls to processes with the SYS_PTRACE capability
+  boot.kernel.sysctl."vm.unprivileged_userfaultfd" = mkDefault false;
 }

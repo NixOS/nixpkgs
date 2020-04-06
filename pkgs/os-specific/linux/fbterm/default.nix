@@ -1,12 +1,12 @@
 {stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkgconfig, ncurses, libx86}:
 let
   s = # Generated upstream information
-  rec {
+  {
     baseName="fbterm";
     version="1.7.0";
     name="fbterm-1.7.0";
     hash="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
-    url="http://fbterm.googlecode.com/files/fbterm-1.7.0.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-1.7.0.tar.gz";
     sha256="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
   };
   buildInputs = [gpm freetype fontconfig ncurses]
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ncurses ];
   inherit buildInputs;
 
   preConfigure = ''
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   preBuild = ''
     mkdir -p "$out/share/terminfo"
     tic -a -v2 -o"$out/share/terminfo" terminfo/fbterm
+    makeFlagsArray+=("AR=$AR")
   '';
 
   patches = [
@@ -47,12 +48,15 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/miscoloring-fix.patch";
       sha256 = "1mjszji0jgs2jsagjp671fv0d1983wmxv009ff1jfhi9pbay6jd0";
     })
+    ./select.patch
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (s) version;
     description = "Framebuffer terminal emulator";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://code.google.com/archive/p/fbterm/;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

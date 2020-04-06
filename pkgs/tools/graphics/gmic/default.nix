@@ -1,40 +1,53 @@
-{ stdenv, fetchurl, fftw, zlib, libjpeg, libtiff, libpng, pkgconfig }:
+{ stdenv
+, fetchurl
+, cmake
+, ninja
+, pkgconfig
+, opencv3
+, openexr
+, graphicsmagick
+, fftw
+, zlib
+, libjpeg
+, libtiff
+, libpng
+}:
 
 stdenv.mkDerivation rec {
-  name = "gmic-${version}";
-  version = "1.7.9";
+  pname = "gmic";
+  version = "2.7.5";
+
+  outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
-    url = "http://gmic.eu/files/source/gmic_${version}.tar.gz";
-    sha256 = "0cvi5kmcrrg5pm774ligyy33fasgsfp3mr6ingjzd99rn4710bqm";
+    url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
+    sha256 = "008lpjm3w5hzfccam6qf0rizdg3a9cqrizhr7vrpskmbr1j451d6";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkgconfig
+  ];
 
-  buildInputs = [ fftw zlib libjpeg libtiff libpng ];
+  buildInputs = [
+    fftw
+    zlib
+    libjpeg
+    libtiff
+    libpng
+    opencv3
+    openexr
+    graphicsmagick
+  ];
 
-  sourceRoot = "${name}/src";
-
-  preBuild = ''
-    buildFlagsArray=( \
-      CURL_CFLAGS= CURL_LIBS= \
-      OPENEXR_CFLAGS= OPENEXR_LIBS= \
-      OPENCV_CFLAGS= OPENCV_LIBS= \
-      X11_CFLAGS="-Dcimg_display=0" X11_LIBS= \
-      cli \
-    )
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man1
-
-    cp -v gmic $out/bin/
-    cp -v ../man/gmic.1.gz $out/share/man/man1/
-  '';
+  cmakeFlags = [
+    "-DBUILD_LIB_STATIC=OFF"
+    "-DENABLE_DYNAMIC_LINKING=ON"
+  ];
 
   meta = with stdenv.lib; {
-    description = "G'MIC is an open and full-featured framework for image processing";
+    description = "Open and full-featured framework for image processing";
     homepage = http://gmic.eu/;
     license = licenses.cecill20;
     platforms = platforms.unix;

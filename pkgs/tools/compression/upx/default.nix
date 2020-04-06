@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchFromGitHub, ucl, zlib, perl }:
+{ stdenv, fetchurl, ucl, zlib, perl }:
 
 stdenv.mkDerivation rec {
-  name = "upx-${version}";
-  version = "3.94";
+  pname = "upx";
+  version = "3.96";
   src = fetchurl {
-    url = "https://github.com/upx/upx/releases/download/v3.94/upx-3.94-src.tar.xz";
-    sha256 = "08anybdliqsbsl6x835iwzljahnm9i7v26icdjkcv33xmk6p5vw1";
+    url = "https://github.com/upx/upx/releases/download/v${version}/${pname}-${version}-src.tar.xz";
+    sha256 = "051pk5jk8fcfg5mpgzj43z5p4cn7jy5jbyshyn78dwjqr7slsxs7";
   };
 
   CXXFLAGS = "-Wno-unused-command-line-argument";

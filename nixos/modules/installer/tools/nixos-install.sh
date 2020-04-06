@@ -13,6 +13,9 @@ extraBuildFlags=()
 
 mountPoint=/mnt
 channelPath=
+system=
+verbosity=()
+buildLogs=
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -54,6 +57,12 @@ while [ "$#" -gt 0 ]; do
         --debug)
             set -x
             ;;
+        -v*|--verbose)
+            verbosity+=("$i")
+            ;;
+        -L|--print-build-logs)
+            buildLogs="$i"
+            ;;
         *)
             echo "$0: unknown option \`$i'"
             exit 1
@@ -93,7 +102,7 @@ if [[ -z $system ]]; then
     outLink="$tmpdir/system"
     nix build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
-        -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG"
+        -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG" ${verbosity[@]} ${buildLogs}
     system=$(readlink -f $outLink)
 fi
 
@@ -102,7 +111,7 @@ fi
 # a progress bar.
 nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
-        -p $mountPoint/nix/var/nix/profiles/system --set "$system"
+        -p $mountPoint/nix/var/nix/profiles/system --set "$system" ${verbosity[@]}
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
@@ -114,7 +123,8 @@ if [[ -z $noChannelCopy ]]; then
         echo "copying channel..."
         mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
         nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
-                -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet
+                -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet \
+                ${verbosity[@]}
         install -m 0700 -d $mountPoint/root/.nix-defexpr
         ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
     fi
@@ -137,7 +147,18 @@ fi
 # Ask the user to set a root password, but only if the passwd command
 # exists (i.e. when mutable user accounts are enabled).
 if [[ -z $noRootPasswd ]] && [ -t 0 ]; then
-    nixos-enter --root "$mountPoint" -c '[[ -e /nix/var/nix/profiles/system/sw/bin/passwd ]] && echo "setting root password..." && /nix/var/nix/profiles/system/sw/bin/passwd'
+    if nixos-enter --root "$mountPoint" -c 'test -e /nix/var/nix/profiles/system/sw/bin/passwd'; then
+        set +e
+        nixos-enter --root "$mountPoint" -c 'echo "setting root password..." && /nix/var/nix/profiles/system/sw/bin/passwd'
+        exit_code=$?
+        set -e
+
+        if [[ $exit_code != 0 ]]; then
+            echo "Setting a root password failed with the above printed error."
+            echo "You can set the root password manually by executing \`nixos-enter --root ${mountPoint@Q}\` and then running \`passwd\` in the shell of the new system."
+            exit $exit_code
+        fi
+    fi
 fi
 
 echo "installation finished!"

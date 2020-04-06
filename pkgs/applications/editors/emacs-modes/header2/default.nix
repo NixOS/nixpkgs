@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, melpaBuild }:
+{ fetchurl, lib, melpaBuild }:
 
 melpaBuild {
   pname = "header2";
@@ -10,7 +10,7 @@ melpaBuild {
     name = "header2.el";
   };
 
-  recipeFile = fetchurl {
+  recipe = fetchurl {
     url = "https://raw.githubusercontent.com/milkypostman/melpa/a5d15f875b0080b12ce45cf696c581f6bbf061ba/recipes/header2";
     sha256 = "1dg25krx3wxma2l5vb2ji7rpfp17qbrl62jyjpa52cjfsvyp6v06";
     name = "header2";

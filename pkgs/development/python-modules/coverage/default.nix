@@ -1,18 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "4.5.1";
-  name = "${pname}-${version}";
+  version = "4.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "56e448f051a201c5ebbaa86a5efd0ca90d327204d8b059ab25ad0f35fbfd79f1";
+    sha256 = "e07d9f1a23e9e93ab5c62902833bf3e4b1f65502927379148b6622686223125c";
   };
 
   # No tests in archive

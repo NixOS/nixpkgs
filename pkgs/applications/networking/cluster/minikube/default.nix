@@ -1,81 +1,67 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm,
-  gpgme, makeWrapper, hostPlatform, vmnet }:
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkgconfig
+, makeWrapper
+, go-bindata
+, libvirt
+, vmnet
+}:
 
-let
-  binPath = [ kubernetes ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libvirt qemu docker-machine-kvm ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [];
-
-  # Normally, minikube bundles localkube in its own binary via go-bindata. Unfortunately, it needs to make that localkube
-  # a static linux binary, and our Linux nixpkgs go compiler doesn't seem to work when asking for a cgo binary that's static
-  # (presumably because we don't have some static system libraries it wants), and cross-compiling cgo on Darwin is a nightmare.
-  #
-  # Note that minikube can download (and cache) versions of localkube it needs on demand. Unfortunately, minikube's knowledge
-  # of where it can download versions of localkube seems to rely on a json file that doesn't get updated as often as we'd like. So
-  # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
-  # currently https://storage.googleapis.com/minikube/k8s_releases.json
-
-  localkube-version = "1.9.0";
-  localkube-binary = fetchurl {
-    url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
-    sha256 = "1z5c061mx2flg6hq05d00bvkn722gxv8y9rfpjyk23nk697k31fh";
-  };
-in buildGoPackage rec {
+buildGoModule rec {
   pname   = "minikube";
-  name    = "${pname}-${version}";
-  version = "0.25.0";
+  version = "1.8.1";
+  # for -ldflags
+  commit  = "cbda04cf6bbe65e987ae52bb393c10099ab62014";
 
   goPackagePath = "k8s.io/minikube";
+  subPackages   = [ "cmd/minikube" ];
+  modSha256     = "1wyz8aq291lx614ilqrcgzdc8rjxbd6v3rv1fy6r2m6snyysycfn";
 
   src = fetchFromGitHub {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "0nsdi8mr8p69z696ksfb5ahzqqnvjn4a2z6cp0kyby8sakcjhsby";
+    sha256 = "1nf0n701rw3anp8j7k3f553ipqwpzzxci41zsi0il4l35dpln5g0";
   };
 
-  patches = [
-    ./localkube.patch
-  ];
-
-  # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
-  # that kubectl is on the $PATH, even if it doesn't use it at all to generate the completions
-  buildInputs = [ go-bindata makeWrapper kubernetes gpgme ] ++ stdenv.lib.optional hostPlatform.isDarwin vmnet;
-  subPackages = [ "cmd/minikube" ];
+  nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libvirt ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ vmnet ];
 
   preBuild = ''
-    pushd go/src/${goPackagePath} >/dev/null
+    go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets deploy/addons/...
+    go-bindata -nomemcopy -o pkg/minikube/translate/translations.go -pkg translate translations/...
 
-    mkdir -p out
-    cp ${localkube-binary} out/localkube
-
-    go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets ./out/localkube deploy/addons/...
-
-    ISO_VERSION=$(grep "^ISO_VERSION" Makefile | sed "s/^.*\s//")
+    VERSION_MAJOR=$(grep "^VERSION_MAJOR" Makefile | sed "s/^.*\s//")
+    VERSION_MINOR=$(grep "^VERSION_MINOR" Makefile | sed "s/^.*\s//")
+    ISO_VERSION=v$VERSION_MAJOR.$VERSION_MINOR.0
     ISO_BUCKET=$(grep "^ISO_BUCKET" Makefile | sed "s/^.*\s//")
 
     export buildFlagsArray="-ldflags=\
-      -X k8s.io/minikube/pkg/version.version=v${version} \
-      -X k8s.io/minikube/pkg/version.isoVersion=$ISO_VERSION \
-      -X k8s.io/minikube/pkg/version.isoPath=$ISO_BUCKET"
-
-    popd >/dev/null
+      -X ${goPackagePath}/pkg/version.version=v${version} \
+      -X ${goPackagePath}/pkg/version.isoVersion=$ISO_VERSION \
+      -X ${goPackagePath}/pkg/version.isoPath=$ISO_BUCKET \
+      -X ${goPackagePath}/pkg/version.gitCommitID=${commit} \
+      -X ${goPackagePath}/pkg/drivers/kvm.version=v${version} \
+      -X ${goPackagePath}/pkg/drivers/kvm.gitCommitID=${commit} \
+      -X ${goPackagePath}/pkg/drivers/hyperkit.version=v${version} \
+      -X ${goPackagePath}/pkg/drivers/hyperkit.gitCommitID=${commit}"
   '';
 
   postInstall = ''
-    mkdir -p $bin/share/bash-completion/completions/
-    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
-    mkdir -p $bin/share/zsh/site-functions/
-    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion zsh > $bin/share/zsh/site-functions/_minikube
-  '';
+    mkdir -p $out/share/bash-completion/completions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $out/bin/minikube completion bash > $out/share/bash-completion/completions/minikube
 
-  postFixup = "wrapProgram $bin/bin/${pname} --prefix PATH : ${stdenv.lib.makeBinPath binPath}";
+    mkdir -p $out/share/zsh/site-functions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $out/bin/minikube completion zsh > $out/share/zsh/site-functions/_minikube
+  '';
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/kubernetes/minikube;
     description = "A tool that makes it easy to run Kubernetes locally";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ ebzzry copumpkin ];
+    maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang ];
     platforms   = with platforms; unix;
   };
 }

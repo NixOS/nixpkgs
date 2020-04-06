@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "cygwin-setup-${version}";
+  pname = "cygwin-setup";
   version = "20131101";
 
   src = fetchcvs {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     });
   in map mkStatic [ zlib bzip2 lzma libgcrypt ];
 
-  configureFlags = "--disable-shared";
+  configureFlags = [ "--disable-shared" ];
 
   dontDisableStatic = true;
 

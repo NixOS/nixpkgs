@@ -1,18 +1,21 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  name = "leveldb-${version}";
-  version = "1.18";
+  pname = "leveldb";
+  version = "1.20";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "leveldb";
     rev = "v${version}";
-    sha256 = "1bnsii47vbyqnbah42qgq6pbmmcg4k3fynjnw7whqfv6lpdgmb8d";
+    sha256 = "01kxga1hv4wp94agx5vl3ybxfw5klqrdsrb6p6ywvnjmjxm8322y";
   };
 
+  nativeBuildInputs = []
+    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
+
   buildPhase = ''
-    make all leveldbutil libmemenv.a
+    make all
   '';
 
   installPhase = "
@@ -22,9 +25,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include/leveldb/helpers
     cp helpers/memenv/memenv.h $out/include/leveldb/helpers
 
-    cp lib* $out/lib
+    cp out-shared/lib* $out/lib
+    cp out-static/lib* $out/lib
 
-    cp leveldbutil $out/bin
+    cp out-static/leveldbutil $out/bin
   ";
 
   meta = with stdenv.lib; {
@@ -32,6 +36,5 @@ stdenv.mkDerivation rec {
     description = "Fast and lightweight key/value database library by Google";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

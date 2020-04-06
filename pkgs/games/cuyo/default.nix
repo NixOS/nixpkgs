@@ -1,11 +1,11 @@
 { stdenv, fetchurl, SDL, SDL_mixer, zlib }:
 
-stdenv.mkDerivation rec {
-  name = "cuyo-${version}";
+stdenv.mkDerivation {
+  pname = "cuyo";
   version = "2.1.0";
   
   src = fetchurl {
-     url = http://download.savannah.gnu.org/releases/cuyo/cuyo-2.1.0.tar.gz;
+     url = https://download.savannah.gnu.org/releases/cuyo/cuyo-2.1.0.tar.gz;
      sha256 = "17yqv924x7yvwix7yz9jdhgyar8lzdhqvmpvv0any8rdkajhj23c";
      };
 

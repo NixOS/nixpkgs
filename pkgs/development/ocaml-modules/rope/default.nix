@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, jbuilder, benchmark }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, dune, benchmark }:
 
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.03"
-  then {
-    version = "0.6";
-    url = " https://github.com/Chris00/ocaml-rope/releases/download/0.6/rope-0.6.tbz";
-    sha256 = "06pkbnkad2ck50jn59ggwv154yd9vb01abblihvam6p27m4za1pc";
-    buildInputs = [ jbuilder ];
+  then rec {
+    version = "0.6.2";
+    url = "https://github.com/Chris00/ocaml-rope/releases/download/${version}/rope-${version}.tbz";
+    sha256 = "15cvfa0s1vjx7gjd07d3fkznilishqf4z4h2q5f20wm9ysjh2h2i";
+    buildInputs = [ dune ];
     extra = {
-      unpackCmd = "tar -xjf $curSrc";
-      buildPhase = "jbuilder build -p rope";
-      inherit (jbuilder) installPhase;
+      buildPhase = "dune build -p rope";
+      inherit (dune) installPhase;
     };
   } else {
     version = "0.5";

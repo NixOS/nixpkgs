@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, autoconf, automake, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "unrtf-${version}";
+  pname = "unrtf";
   version = "0.21.9";
 
   src = fetchurl {
-    url = "https://www.gnu.org/software/unrtf/${name}.tar.gz";
+    url = "https://www.gnu.org/software/unrtf/${pname}-${version}.tar.gz";
     sha256 = "1pcdzf2h1prn393dkvg93v80vh38q0v817xnbwrlwxbdz4k7i8r2";
   };
 
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake ];
 
-  buildInputs = [ ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
+  buildInputs = [ libiconv ];
 
   preConfigure = "./bootstrap";
 

@@ -1,12 +1,13 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy27 }:
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "4.0b4";
+  version = "5.0.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ra2bbsihwfhnf1ibahzzabgfjfghxqcrbfx6r5r50mlil5n8bf4";
+    sha256 = "0f9137f74bd95fa54329ace88d8dc695fbe895369a632e35f7a136e003e41d73";
   };
 
   # No tests

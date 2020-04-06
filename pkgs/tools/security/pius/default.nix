@@ -1,15 +1,16 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gnupg }:
+{ fetchFromGitHub, stdenv, python3Packages, gnupg, perl }:
 
-let version = "2.2.4"; in
-pythonPackages.buildPythonApplication {
-  name = "pius-${version}";
+let version = "3.0.0"; in
+python3Packages.buildPythonApplication {
+  pname = "pius";
   namePrefix = "";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "jaymzh";
     repo = "pius";
     rev = "v${version}";
-    sha256 = "1yk6ngpk55yjdnzhm5sj675xbzwp7rir816a3aris647gsph1vlx";
+    sha256 = "0l87dx7n6iwy8alxnhvval8h1kl4da6a59hsilbi65c6bpj4dh3y";
   };
 
   patchPhase = ''
@@ -17,6 +18,8 @@ pythonPackages.buildPythonApplication {
       sed -i "$file" -E -e's|/usr/bin/gpg2?|${gnupg}/bin/gpg|g'
     done
   '';
+
+  buildInputs = [ perl ];
 
   meta = {
     homepage = https://www.phildev.net/pius/;
@@ -32,7 +35,7 @@ pythonPackages.buildPythonApplication {
 
     license = stdenv.lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.gnu;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu kierdavis ];
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ kierdavis ];
   };
 }

@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libpcap, gnumake3, pcre }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libpcap, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "ngrep-${version}";
+  pname = "ngrep";
   version = "1.47";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook gnumake3 ];
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libpcap pcre ];
 
   configureFlags = [

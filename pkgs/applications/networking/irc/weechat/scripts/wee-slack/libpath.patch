@@ -1,0 +1,13 @@
+diff --git a/wee_slack.py b/wee_slack.py
+index dbe6446..d1b7546 100644
+--- a/wee_slack.py
++++ b/wee_slack.py
+@@ -25,6 +25,8 @@ import random
+ import socket
+ import string
+ 
++sys.path.append('@env@')
++
+ from websocket import ABNF, create_connection, WebSocketConnectionClosedException
+ 
+ try:

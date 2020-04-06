@@ -3,8 +3,8 @@
 , Carbon ? null, Cocoa ? null
 }:
 
-stdenv.mkDerivation rec {
-  name = "pangolin-${version}";
+stdenv.mkDerivation {
+  pname = "pangolin";
 
   version = "2017-08-02";
 

@@ -1,0 +1,39 @@
+From 1b802175914418f5675047c34f1ab1593dd35b18 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Wed, 8 Jan 2020 11:04:27 +0100
+Subject: [PATCH] fix werror
+
+---
+ js/src/moz.build       | 2 +-
+ js/src/shell/moz.build | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/js/src/moz.build b/js/src/moz.build
+index 1162cb70c..595ea9842 100644
+--- a/js/src/moz.build
++++ b/js/src/moz.build
+@@ -785,7 +785,7 @@ if CONFIG['JS_HAS_CTYPES']:
+         DEFINES['FFI_BUILDING'] = True
+ 
+ if CONFIG['GNU_CXX']:
+-    CXXFLAGS += ['-Wno-shadow', '-Werror=format']
++    CXXFLAGS += ['-Wno-shadow']
+ 
+ # Suppress warnings in third-party code.
+ if CONFIG['CLANG_CXX']:
+diff --git a/js/src/shell/moz.build b/js/src/shell/moz.build
+index 72ea8145c..77475b241 100644
+--- a/js/src/shell/moz.build
++++ b/js/src/shell/moz.build
+@@ -51,7 +51,7 @@ shellmoduleloader.inputs = [
+ ]
+ 
+ if CONFIG['GNU_CXX']:
+-    CXXFLAGS += ['-Wno-shadow', '-Werror=format']
++    CXXFLAGS += ['-Wno-shadow']
+ 
+ # This is intended as a temporary workaround to enable VS2015.
+ if CONFIG['_MSC_VER']:
+-- 
+2.17.1
+

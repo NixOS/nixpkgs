@@ -1,27 +1,32 @@
-{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, substituteAll, syncthing, wrapGAppsHook, gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3, bcrypt, gobjectIntrospection }:
+{ stdenv, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
+, gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
+, gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3
+, bcrypt, gobject-introspection, gsettings-desktop-schemas
+, pango, gdk-pixbuf, atk }:
 
 buildPythonApplication rec {
-  version = "0.9.2.7";
-  name = "syncthing-gtk-${version}";
+  version = "0.9.4.4";
+  pname = "syncthing-gtk";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing-gtk";
     rev = "v${version}";
-    sha256 = "08k7vkibia85klwjxbnzk67h4pphrizka5v9zxwvvv3cisjiclc2";
+    sha256 = "0nc0wd7qvyri7841c3dd9in5d7367hys0isyw8znv5fj4c0a6v1f";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook
     # For setup hook populating GI_TYPELIB_PATH
-    gobjectIntrospection
+    gobject-introspection
+    pango gdk-pixbuf atk libnotify
   ];
 
   buildInputs = [
-    gtk3 (librsvg.override { enableIntrospection = true; })
-    libnotify
+    gtk3 librsvg libappindicator-gtk3
+    libnotify gnome3.adwaita-icon-theme
     # Schemas with proxy configuration
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [
@@ -29,13 +34,17 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    ./disable-syncthing-binary-configuration.patch
     (substituteAll {
       src = ./paths.patch;
-      killall = "${psmisc}/bin/killall";
+      killall = "${killall}/bin/killall";
       syncthing = "${syncthing}/bin/syncthing";
     })
   ];
+
+  # repo doesn't have any tests
+  doCheck = false;
+
+  setupPyBuildFlags = [ "build_py" "--nofinddaemon" "--nostdownloader" ];
 
   postPatch = ''
     substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
@@ -48,9 +57,9 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "GTK3 & python based GUI for Syncthing";
-    maintainers = with maintainers; [ ];
-    platforms = syncthing.meta.platforms;
     homepage = https://github.com/syncthing/syncthing-gtk;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
+    platforms = syncthing.meta.platforms;
   };
 }

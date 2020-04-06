@@ -1,19 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, SDL2_image, pkgconfig
-, libvorbis, libGL, boost, cmake }:
-
+{ stdenv, fetchFromGitLab, SDL2, SDL2_image, pkgconfig
+, libvorbis, libGL, boost, cmake, zlib, curl, SDL2_mixer, python3
+}:
 
 stdenv.mkDerivation rec {
-  name = "commandergenius-${version}";
-  version = "1822release";
+  pname = "commandergenius";
+  version = "2.3.3";
 
-  src = fetchFromGitHub {
-    owner = "gerstrong";
+  src = fetchFromGitLab {
+    owner = "Dringgstein";
     repo = "Commander-Genius";
     rev = "v${version}";
-    sha256 = "07vxg8p1dnnkajzs5nifxpwn4mdd1hxsw05jl25gvaimpl9p2qc8";
+    sha256 = "04nb23wwvc3yywz3cr6gvn02fa7psfs22ssg4wk12s08z1azvz3h";
   };
 
-  buildInputs = [ SDL2 SDL2_image libGL boost libvorbis ];
+  buildInputs = [ SDL2 SDL2_image SDL2_mixer libGL boost libvorbis zlib curl python3 ];
+
+  preConfigure = ''
+    export cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_PREFIX=$out -DSHAREDIR=$out/share"
+    export makeFlags="$makeFlags DESTDIR=$(out)"
+  '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

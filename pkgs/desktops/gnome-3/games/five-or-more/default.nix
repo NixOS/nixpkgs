@@ -1,27 +1,37 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, intltool, itstool, libxml2 }:
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gtk3, wrapGAppsHook
+, librsvg, libgnome-games-support, gettext, itstool, libxml2, python3, vala }:
 
 stdenv.mkDerivation rec {
-  name = "five-or-more-${version}";
-  version = "3.26.0";
+  pname = "five-or-more";
+  version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/five-or-more/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "7c24f7f2603df99299d38b40b14c005aaad88820113ed71e4b3765ac3b027772";
+    url = "mirror://gnome/sources/five-or-more/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0xw05dd2dwi9vsph9h158b4n89s5k07xrh6bjz1icm0pdmjwhpgk";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "five-or-more"; attrPath = "gnome3.five-or-more"; };
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext itstool libxml2 python3 wrapGAppsHook
+    vala
+  ];
   buildInputs = [
-    gtk3 wrapGAppsHook librsvg intltool itstool libxml2
-    gnome3.defaultIconTheme
+    gtk3 librsvg libgnome-games-support gnome3.adwaita-icon-theme
   ];
 
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+  '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "five-or-more";
+      attrPath = "gnome3.five-or-more";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Five_or_more;
+    homepage = "https://wiki.gnome.org/Apps/Five_or_more";
     description = "Remove colored balls from the board by forming lines";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

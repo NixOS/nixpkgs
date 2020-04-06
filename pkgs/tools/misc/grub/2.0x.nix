@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, devicemapper, unifont
+{ stdenv, fetchgit, flex, bison, python, autoconf, automake, gnulib, libtool
+, gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
+, fuse # only needed for grub-mount
 , zfs ? null
 , efiSupport ? false
 , zfsSupport ? true
@@ -9,28 +10,28 @@
 with stdenv.lib;
 let
   pcSystems = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "i386";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386";
   };
 
   efiSystemsBuild = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "x86_64";
-    "aarch64-linux".target = "aarch64";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+    aarch64-linux.target = "aarch64";
   };
 
   # For aarch64, we need to use '--target=aarch64-efi' when building,
   # but '--target=arm64-efi' when installing. Insanity!
   efiSystemsInstall = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "x86_64";
-    "aarch64-linux".target = "arm64";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+    aarch64-linux.target = "arm64";
   };
 
-  canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
-  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
+  canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
+  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.02";
+  version = "2.04";
 
 in (
 
@@ -39,15 +40,21 @@ assert zfsSupport -> zfs != null;
 assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
-  name = "grub-${version}";
+  pname = "grub";
+  inherit version;
 
-  src = fetchurl {
-    url = "mirror://gnu/grub/${name}.tar.xz";
-    sha256 = "03vvdfhdmf16121v7xs8is2krwnv15wpkhkf16a4yf8nsfc3f2w1";
+  src = fetchgit {
+    url = "git://git.savannah.gnu.org/grub.git";
+    rev = "${pname}-${version}";
+    sha256 = "02gly3xw88pj4zzqjniv1fxa1ilknbq1mdk30bj6qy8n44g90i8w";
   };
 
-  nativeBuildInputs = [ bison flex python ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+  patches = [
+    ./fix-bash-completion.patch
+  ];
+
+  nativeBuildInputs = [ bison flex python pkgconfig autoconf automake ];
+  buildInputs = [ ncurses libusb freetype gettext lvm2 fuse libtool ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
@@ -56,14 +63,10 @@ stdenv.mkDerivation rec {
   # Work around a bug in the generated flex lexer (upstream flex bug?)
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  postPatch = ''
-    substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
-  '';
-
   preConfigure =
     '' for i in "tests/util/"*.in
        do
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
 
        # Apparently, the QEMU executable is no longer called
@@ -79,27 +82,30 @@ stdenv.mkDerivation rec {
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
 
       unset CPP # setting CPP intereferes with dependency calculation
+
+      patchShebangs .
+
+      ./bootstrap --no-git --gnulib-srcdir=${gnulib}
+
+      substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';
 
-  patches = [ ./fix-bash-completion.patch ];
-
-  configureFlags = optional zfsSupport "--enable-libzfs"
-    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.system}.target}" "--program-prefix=" ]
-    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.system}.target}"];
+  configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
+    ++ optional zfsSupport "--enable-libzfs"
+    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
+    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
 
   # save target that grub is compiled for
   grubTarget = if efiSupport
-               then "${efiSystemsInstall.${stdenv.system}.target}-efi"
+               then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
                else if inPCSystems
-                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
                     else "";
 
   doCheck = false;
   enableParallelBuilding = true;
 
   postInstall = ''
-    paxmark pms $out/sbin/grub-{probe,bios-setup}
-
     # Avoid a runtime reference to gcc
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
@@ -119,10 +125,10 @@ stdenv.mkDerivation rec {
          operating system (e.g., GNU).
       '';
 
-    homepage = http://www.gnu.org/software/grub/;
+    homepage = https://www.gnu.org/software/grub/;
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 })

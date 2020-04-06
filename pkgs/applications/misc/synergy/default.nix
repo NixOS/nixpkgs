@@ -1,69 +1,81 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
-, xinput, curl, openssl, unzip }:
-
-with stdenv.lib;
+{ stdenv, lib, fetchFromGitHub, cmake, openssl, qttools
+, ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
+, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
+, withGUI ? true, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "synergy-${version}";
-  version = "1.8.8";
+  pname = "synergy";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
-    rev = "v${version}-stable";
-    sha256 = "0ksgr9hkf09h54572p7k7b9zkfhcdb2g2d5x7ixxn028y8i3jyp3";
+    rev = "${version}-stable";
+    sha256 = "1jk60xw4h6s5crha89wk4y8rrf1f3bixgh5mzh3cq3xyrkba41gh";
   };
 
-  patches = [ ./openssl-1.1.patch ];
+  patches = [ ./build-tests.patch
+  ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
 
-  patch_gcc6 = fetchpatch {
-    url = https://raw.githubusercontent.com/gentoo/gentoo/20e2bff3697ebf5f291e9907b34aae3074a36b53/dev-cpp/gmock/files/gmock-1.7.0-gcc6.patch;
-    sha256 = "0j3f381x1lf8qci9pfv6mliggl8qs2w05v5lw3rs3gn7aibg174d";
+  # Since the included gtest and gmock don't support clang and the
+  # segfault when built with gcc9, we replace it with 1.10.0 for
+  # synergy-1.11.0. This should become unnecessary when upstream
+  # updates these dependencies.
+  googletest = fetchFromGitHub {
+    owner = "google";
+    repo = "googletest";
+    rev = "release-1.10.0";
+    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
   };
 
   postPatch = ''
-    ${unzip}/bin/unzip -d ext/gmock-1.6.0 ext/gmock-1.6.0.zip
-    ${unzip}/bin/unzip -d ext/gtest-1.6.0 ext/gtest-1.6.0.zip
-    patch -d ext/gmock-1.6.0 -p1 -i ${patch_gcc6}
-  ''
-    # We have XRRNotifyEvent (libXrandr), but with the upstream CMakeLists.txt
-    # it's not able to find it (it's trying to search the store path of libX11
-    # instead) and we don't get XRandR support, even though the CMake output
-    # _seems_ to say so:
-    #
-    #   Looking for XRRQueryExtension in Xrandr - found
-    #
-    # The relevant part however is:
-    #
-    #   Looking for XRRNotifyEvent - not found
-    #
-    # So let's force it:
-  + optionalString stdenv.isLinux ''
-    sed -i -e '/HAVE_X11_EXTENSIONS_XRANDR_H/c \
-      set(HAVE_X11_EXTENSIONS_XRANDR_H true)
-    ' CMakeLists.txt
+    rm -r ext/*
+    cp -r ${googletest}/googlemock ext/gmock/
+    cp -r ${googletest}/googletest ext/gtest/
+    chmod -R +w ext/
   '';
 
+  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
+
+  nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
+
+  dontWrapQtApps = true;
+
   buildInputs = [
-    cmake xlibsWrapper libX11 libXi libXtst libXrandr xinput curl openssl
+    openssl
+  ] ++ lib.optionals withGUI [
+    qttools
+  ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices Carbon Cocoa CoreServices ScreenSaver
+  ] ++ lib.optionals stdenv.isLinux [
+    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
   ];
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ../bin/synergyc $out/bin
-    cp ../bin/synergys $out/bin
-    cp ../bin/synergyd $out/bin
+    cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
+  '' + lib.optionalString withGUI ''
+    cp bin/synergy $out/bin/
+    wrapQtApp $out/bin/synergy --prefix PATH : ${lib.makeBinPath [ openssl ]}
+  '' + lib.optionalString stdenv.isLinux ''
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
+    mkdir -p $out/share/applications
+    substitute ../res/synergy.desktop $out/share/applications/synergy.desktop --replace /usr/bin $out/bin
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/
+    mv bundle/Synergy.app $out/Applications/
+    ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
   '';
 
   doCheck = true;
-  checkPhase = "../bin/unittests";
+  checkPhase = "bin/unittests";
 
-  meta = {
+  meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";
     homepage = http://synergy-project.org/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.aszlig ];
+    maintainers = with maintainers; [ aszlig enzime ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
   };
 }

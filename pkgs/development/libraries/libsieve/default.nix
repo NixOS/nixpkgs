@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation rec {
   version = "2.3.1";
-  name = "libsieve-${version}";
+  pname = "libsieve";
 
   src = fetchurl {
     url = "https://github.com/downloads/sodabrew/libsieve/libsieve-${version}.tar.gz";

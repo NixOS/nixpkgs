@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia }:
+{ stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "focuswriter-${version}";
-  version = "1.6.10";
+mkDerivation rec {
+  pname = "focuswriter";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "https://gottcode.org/focuswriter/focuswriter-${version}-src.tar.bz2";
-    sha256 = "0hrbycy5lapdkaa2xm90j45sgsiqdnlk9wry41kxxpdln9msabxs";
+    sha256 = "19fqxyas941xcqjj68qpj42ayq0vw5rbd4ms5kvx8jyspp7wysqc";
   };
 
   nativeBuildInputs = [ pkgconfig qmake qttools ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Simple, distraction-free writing environment";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ madjar ];
-    platforms = platforms.all;
-    homepage = https://gottcode.org/focuswriter/;
+    platforms = platforms.linux;
+    homepage = "https://gottcode.org/focuswriter/";
   };
 }

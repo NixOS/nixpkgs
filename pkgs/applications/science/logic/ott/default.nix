@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, ocaml }:
 
 stdenv.mkDerivation rec {
-  name = "ott-${version}";
-  version = "0.27";
+  pname = "ott";
+  version = "0.30";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
     rev = version;
-    sha256 = "12hzpyinswqaxwp6y793h7ywrv6289cw4911ah2yzq04ji095pfb";
+    sha256 = "16bxfnm30z94x36vr8vs6zd6fj55vnb7aypjl6hf7clk42040brc";
   };
 
   nativeBuildInputs = [ pkgconfig ];

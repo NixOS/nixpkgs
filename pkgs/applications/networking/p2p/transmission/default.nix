@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, wrapGAppsHook
+{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
@@ -10,11 +10,11 @@ let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
-  version = "2.93";
+  version = "2.94";
 
   src = fetchurl {
-    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.93.tar.xz";
-    sha256 = "8815920e0a4499bcdadbbe89a4115092dab42ce5199f71ff9a926cfd12b9b90b";
+    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.94.tar.xz";
+    sha256 = "0zbbj7rlm6m7vb64x68a64cwmijhsrwx9l63hbwqs7zr9742qi1m";
   };
 
   nativeBuildInputs = [ pkgconfig ]
@@ -39,10 +39,6 @@ stdenv.mkDerivation rec {
     ++ optional enableSystemd "--with-systemd-daemon"
     ++ optional enableGTK3 "--with-gtk";
 
-  preFixup = optionalString enableGTK3 ''
-    rm "$out/share/icons/hicolor/icon-theme.cache"
-  '';
-
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   meta = with stdenv.lib; {
@@ -52,7 +48,7 @@ stdenv.mkDerivation rec {
       on top of a cross-platform back-end.
       Feature spotlight:
         * Uses fewer resources than other clients
-        * Native Mac, GTK+ and Qt GUI clients
+        * Native Mac, GTK and Qt GUI clients
         * Daemon ideal for servers, embedded systems, and headless use
         * All these can be remote controlled by Web and Terminal clients
         * Bluetack (PeerGuardian) blocklists with automatic updates

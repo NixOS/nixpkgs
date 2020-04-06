@@ -1,25 +1,32 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub }:
+{ stdenv, rustPlatform, fetchFromGitHub, CoreServices, installShellFiles }:
 
-with rustPlatform;
-
-buildRustPackage rec {
-  name = "watchexec-${version}";
-  version = "1.8.6";
+rustPlatform.buildRustPackage rec {
+  pname = "watchexec";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
-    owner = "mattgreen";
-    repo = "watchexec";
-    rev = "${version}";
-    sha256 = "1jib51dbr6s1iq21inm2xfsjnz1730nyd3af1x977iqivmwdisax";
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "03s9nsss4895x4lp90y65jajavk8c2nj1jjnmx0vbbwl210ghlv1";
   };
 
-  cargoSha256 = "0sm1jvx1y18h7y66ilphsqmkbdxc76xly8y7kxmqwdi4lw54i9vl";
+  cargoSha256 = "0p20d7paiafvl4k9iiazbgq75wk7k42sz2h1y5lalq16f5rp6dbp";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+
+  postInstall = ''
+    installManPage doc/watchexec.1
+    installShellCompletion --zsh --name _watchexec completions/zsh
+  '';
 
   meta = with stdenv.lib; {
     description = "Executes commands in response to file modifications";
-    homepage = https://github.com/mattgreen/watchexec;
+    homepage = https://github.com/watchexec/watchexec;
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

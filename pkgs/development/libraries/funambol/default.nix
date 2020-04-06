@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, curl, autoreconfHook, unzip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "funambol-client-cpp-9.0.0";
 
   src = fetchurl {
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook unzip ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "SyncML client sdk by Funambol project";
     homepage = http://www.funambol.com;
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.agpl3;
+    platforms = platforms.unix;
   };
 }

@@ -1,0 +1,80 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    asetus (0.3.0)
+    backports (3.14.0)
+    charlock_holmes (0.7.6)
+    emk-sinatra-url-for (0.2.1)
+      sinatra (>= 0.9.1.1)
+    ffi (1.10.0)
+    git (1.5.0)
+    haml (5.0.4)
+      temple (>= 0.8.0)
+      tilt
+    htmlentities (4.3.4)
+    json (2.2.0)
+    multi_json (1.13.1)
+    net-ssh (5.2.0)
+    net-telnet (0.1.1)
+    oxidized (0.26.3)
+      asetus (~> 0.1)
+      git (~> 1)
+      net-ssh (~> 5)
+      net-telnet (~> 0.1.1)
+      rugged (~> 0.21, >= 0.21.4)
+      slop (~> 3.5)
+    oxidized-script (0.6.0)
+      oxidized (~> 0.25)
+      slop (~> 3.5)
+    oxidized-web (0.13.1)
+      charlock_holmes (~> 0.7.5)
+      emk-sinatra-url-for (~> 0.2)
+      haml (~> 5.0)
+      htmlentities (~> 4.3)
+      json (>= 1.7.0)
+      oxidized (~> 0.26)
+      puma (~> 3.11.4)
+      rack-test (~> 0.7.0)
+      sass (~> 3.3)
+      sinatra (~> 1.4, >= 1.4.6)
+      sinatra-contrib (~> 1.4, >= 1.4.6)
+    puma (3.11.4)
+    rack (1.6.11)
+    rack-protection (1.5.5)
+      rack
+    rack-test (0.7.0)
+      rack (>= 1.0, < 3)
+    rb-fsevent (0.10.3)
+    rb-inotify (0.10.0)
+      ffi (~> 1.0)
+    rugged (0.28.1)
+    sass (3.7.4)
+      sass-listen (~> 4.0.0)
+    sass-listen (4.0.0)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+    sinatra (1.4.8)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
+    sinatra-contrib (1.4.7)
+      backports (>= 2.0)
+      multi_json
+      rack-protection
+      rack-test
+      sinatra (~> 1.4.0)
+      tilt (>= 1.3, < 3)
+    slop (3.6.0)
+    temple (0.8.1)
+    tilt (2.0.9)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  oxidized (= 0.26.3)
+  oxidized-script (= 0.6.0)
+  oxidized-web (= 0.13.1)
+
+BUNDLED WITH
+   1.17.2

@@ -4,13 +4,13 @@ let
 # The version number here is whatever is reported by the RUBY_VERSION string
 rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "3" "3" "";
 jruby = stdenv.mkDerivation rec {
-  name = "jruby-${version}";
+  pname = "jruby";
 
-  version = "9.1.16.0";
+  version = "9.2.11.1";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "0nj8v4dcg4jj0z3fk661v6mzrgg4613xr0k9xzzsz81jkqsjnb6r";
+    sha256 = "1p4ml5rqidqllc7z85zn2q4pyyih71j0gb71wl43j4v74p44j17i";
   };
 
   buildInputs = [ makeWrapper ];
@@ -48,7 +48,7 @@ jruby = stdenv.mkDerivation rec {
 
   meta = {
     description = "Ruby interpreter written in Java";
-    homepage = http://jruby.org/;
+    homepage = "http://jruby.org/";
     license = with stdenv.lib.licenses; [ cpl10 gpl2 lgpl21 ];
     platforms = stdenv.lib.platforms.unix;
   };

@@ -3,21 +3,17 @@
 , glib, intltool, gtk3, gtksourceview }:
 
 stdenv.mkDerivation rec {
-  name = "xpad-${version}";
-  version = "5.0.0";
+  pname = "xpad";
+  version = "5.4.0";
 
   src = fetchurl {
     url = "https://launchpad.net/xpad/trunk/${version}/+download/xpad-${version}.tar.bz2";
-    sha256 = "02yikxg6z9bwla09ka001ppjlpbv5kbza3za9asazm5aiz376mkb";
+    sha256 = "1qpmlwn0bcw1q73ag0l0fdnlzmwawfvsy4g9y5b0vyrc58lcp5d3";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook ];
 
   buildInputs = [ glib intltool gtk3 gtksourceview ];
-
-  autoreconfPhase = ''
-    ./autogen.sh
-  '';
 
   meta = with stdenv.lib; {
     description = "A sticky note application for jotting down things to remember";

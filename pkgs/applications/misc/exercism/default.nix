@@ -1,23 +1,24 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name    = "exercism-${version}";
-  version = "2.4.1";
-
-  goPackagePath = "github.com/exercism/cli";
+buildGoModule rec {
+  pname = "exercism";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
     owner  = "exercism";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "1nab4459zi2gkh18k9vsm54bz39c2sb60v2xy0i72j1vd99axjjj";
+    sha256 = "17gvz9a0sn4p36hf4l77bxhhfipf4x998iay31layqwbnzmb4xy7";
   };
 
+  modSha256 = "0pg0hxrr6jjd03wbjn5y65x02md3h352mnm1gr6vyiv7hn4ws14m";
+
+  subPackages = [ "./exercism" ];
+
   meta = with stdenv.lib; {
+   inherit (src.meta) homepage;
    description = "A Go based command line tool for exercism.io";
-   homepage    = http://exercism.io/cli;
    license     = licenses.mit;
    maintainers = [ maintainers.rbasso ];
-   platforms   = platforms.unix;
   };
 }

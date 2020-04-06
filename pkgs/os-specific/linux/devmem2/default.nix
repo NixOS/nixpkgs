@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "devmem2-2004-08-05";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];  # fix compile error
 
   buildCommand = ''
-    cc "$src" -o devmem2
+    $CC "$src" -o devmem2
     install -D devmem2 "$out/bin/devmem2"
   '';
 

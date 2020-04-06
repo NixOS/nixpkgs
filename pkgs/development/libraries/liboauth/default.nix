@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "07w1aq8y8wld43wmbk2q8134p3bfkp2vma78mmsfgw2jn1bh3xhd";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ nss nspr ];
@@ -25,6 +27,7 @@ stdenv.mkDerivation rec {
     description = "C library implementing the OAuth secure authentication protocol";
     homepage = http://liboauth.sourceforge.net/;
     repositories.git = https://github.com/x42/liboauth.git;
+    license = licenses.mit;
   };
 
 }

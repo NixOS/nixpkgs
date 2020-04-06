@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, protobuf, protobufc, asciidoc
-, xmlto, utillinux, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
-, python }:
+{ stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
+, which, python, makeWrapper, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name    = "criu-${version}";
-  version = "3.7";
+  pname = "criu";
+  version = "3.13";
 
   src = fetchurl {
-    url    = "http://download.openvz.org/criu/${name}.tar.bz2";
-    sha256 = "0qrpz7pvnks34v7d8lb73flz3mb7qwnib94pdwaxh0mskn8470fq";
+    url    = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
+    sha256 = "1yn9ix9lqvqvjrs3a3g6g1wqfniyf9n7giy0mr3jvijmrcm7y0pa";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig docbook_xsl ];
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python ];
+  nativeBuildInputs = [ pkgconfig docbook_xsl which makeWrapper docbook_xml_dtd_45 ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python iptables ];
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
@@ -23,17 +23,22 @@ stdenv.mkDerivation rec {
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  buildPhase = "make PREFIX=$out";
+  makeFlags = [ "PREFIX=$(out)" "ASCIIDOC=${asciidoc}/bin/asciidoc" "XMLTO=${xmlto}/bin/xmlto" ];
 
-  makeFlags = "PREFIX=$(out)";
+  outputs = [ "out" "dev" "man" ];
+
+  preBuild = ''
+    # No idea why but configure scripts break otherwise.
+    export SHELL=""
+  '';
 
   hardeningDisable = [ "stackprotector" "fortify" ];
   # dropping fortify here as well as package uses it by default:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
 
-  installPhase = ''
-    mkdir -p $out/etc/logrotate.d
-    make install PREFIX=$out LIBDIR=$out/lib ASCIIDOC=${asciidoc}/bin/asciidoc XMLTO=${xmlto}/bin/xmlto
+  postFixup = ''
+    wrapProgram $out/bin/criu \
+      --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
   meta = with stdenv.lib; {

@@ -1,7 +1,7 @@
 From: Thomas Perl <m@thp.io>
 Description: Fix FTBFS 
-Origin: upstream, http://repo.or.cz/w/tennix.git/commitdiff/6144cb7626dfdc0820a0036af83a531e8e68bae6
-Bug-Debian:  http://bugs.debian.org/664907
+Origin: upstream, https://repo.or.cz/w/tennix.git/commitdiff/6144cb7626dfdc0820a0036af83a531e8e68bae6
+Bug-Debian:  https://bugs.debian.org/664907
 
 --- tennix-1.1.orig/archivetool.cc
 +++ tennix-1.1/archivetool.cc

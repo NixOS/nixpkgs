@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0pmpgx91j984snrsxbq1dgf3ximks2dfh1sqqmic72lrls7wp4w1";
   };
 
-  makeFlags = "RM=rm LN=ln MV=mv";
+  makeFlags = [ "RM=rm" "LN=ln" "MV=mv" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libvorbis libmad libao ];
@@ -28,9 +28,10 @@ stdenv.mkDerivation {
   # Needed on gcc >= 6.
   NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
     homepage = http://cdrdao.sourceforge.net/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

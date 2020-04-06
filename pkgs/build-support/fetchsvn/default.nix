@@ -1,6 +1,13 @@
-{stdenvNoCC, subversion, glibcLocales, sshSupport ? false, openssh ? null}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "",
- ignoreExternals ? false, ignoreKeywords ? false, name ? null}:
+{ stdenvNoCC, buildPackages
+, subversion, glibcLocales, sshSupport ? true, openssh ? null
+}:
+
+{ url, rev ? "HEAD", md5 ? "", sha256 ? ""
+, ignoreExternals ? false, ignoreKeywords ? false, name ? null
+, preferLocalBuild ? true
+}:
+
+assert sshSupport -> openssh != null;
 
 let
   repoName = with stdenvNoCC.lib;
@@ -31,14 +38,17 @@ else
 stdenvNoCC.mkDerivation {
   name = name_;
   builder = ./builder.sh;
-  nativeBuildInputs = [ subversion glibcLocales ];
+  nativeBuildInputs = [ subversion glibcLocales ]
+    ++ stdenvNoCC.lib.optional sshSupport openssh;
+
+  SVN_SSH = if sshSupport then "${buildPackages.openssh}/bin/ssh" else null;
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  inherit url rev sshSupport openssh ignoreExternals ignoreKeywords;
+  inherit url rev ignoreExternals ignoreKeywords;
 
   impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
-  preferLocalBuild = true;
+  inherit preferLocalBuild;
 }

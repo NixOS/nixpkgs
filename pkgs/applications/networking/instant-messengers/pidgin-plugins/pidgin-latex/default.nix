@@ -3,7 +3,8 @@
 let version = "1.5.0";
 in
 stdenv.mkDerivation {
-  name = "pidgin-latex-${version}";
+  pname = "pidgin-latex";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin-latex/pidgin-latex_${version}.tar.bz2";
@@ -12,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [pkgconfig];
   buildInputs = [gtk2 glib pidgin];
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postPatch = ''
     sed -e 's/-Wl,-soname//' -i Makefile

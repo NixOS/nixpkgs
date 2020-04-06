@@ -1,20 +1,30 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, ncurses, libcap_ng }:
 
 stdenv.mkDerivation rec {
-  name = "irqbalance-${version}";
-  version = "1.3.0";
+  pname = "irqbalance";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "irqbalance";
     repo = "irqbalance";
     rev = "v${version}";
-    sha256 = "009777p5v72x4r58skqgaf03qv3app9b8lkxkpxq0226l0x3j4qh";
+    sha256 = "01r9s63yxaijg8jqcbkwqlyqq2z673szb0vzd7qb2y3gk5jlif2y";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ glib ncurses libcap_ng ];
 
   LDFLAGS = "-lncurses";
+
+  postInstall =
+    ''
+      # Systemd service
+      mkdir -p $out/lib/systemd/system
+      grep -vi "EnvironmentFile" misc/irqbalance.service >$out/lib/systemd/system/irqbalance.service
+      substituteInPlace $out/lib/systemd/system/irqbalance.service \
+        --replace /usr/sbin/irqbalance $out/bin/irqbalance \
+        --replace ' $IRQBALANCE_ARGS' ""
+    '';
 
   meta = {
     homepage = https://github.com/Irqbalance/irqbalance;

@@ -7,7 +7,7 @@ let
 
   programs =
     (lib.mapAttrsToList
-      (n: v: (if v ? "program" then v else v // {program=n;}))
+      (n: v: (if v ? program then v else v // {program=n;}))
       wrappers);
 
   securityWrapper = pkgs.stdenv.mkDerivation {
@@ -74,15 +74,15 @@ let
 
   mkWrappedPrograms =
     builtins.map
-      (s: if (s ? "capabilities")
+      (s: if (s ? capabilities)
           then mkSetcapProgram
                  ({ owner = "root";
                     group = "root";
                   } // s)
           else if
-             (s ? "setuid" && s.setuid) ||
-             (s ? "setgid" && s.setgid) ||
-             (s ? "permissions")
+             (s ? setuid && s.setuid) ||
+             (s ? setgid && s.setgid) ||
+             (s ? permissions)
           then mkSetuidProgram s
           else mkSetuidProgram
                  ({ owner  = "root";
@@ -94,6 +94,10 @@ let
       ) programs;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
+    (lib.mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
+  ];
 
   ###### interface
 
@@ -179,35 +183,6 @@ in
           # Look in the system path and in the default profile for
           # programs to be wrapped.
           WRAPPER_PATH=${config.system.path}/bin:${config.system.path}/sbin
-
-          # Remove the old /var/setuid-wrappers path from the system...
-          #
-          # TODO: this is only necessary for upgrades 16.09 => 17.x;
-          # this conditional removal block needs to be removed after
-          # the release.
-          if [ -d /var/setuid-wrappers ]; then
-            rm -rf /var/setuid-wrappers
-            ln -s /run/wrappers/bin /var/setuid-wrappers
-          fi
-
-          # Remove the old /run/setuid-wrappers-dir path from the
-          # system as well...
-          #
-          # TODO: this is only necessary for upgrades 16.09 => 17.x;
-          # this conditional removal block needs to be removed after
-          # the release.
-          if [ -d /run/setuid-wrapper-dirs ]; then
-            rm -rf /run/setuid-wrapper-dirs
-            ln -s /run/wrappers/bin /run/setuid-wrapper-dirs
-          fi
-
-          # TODO: this is only necessary for upgrades 16.09 => 17.x;
-          # this conditional removal block needs to be removed after
-          # the release.
-          if readlink -f /run/booted-system | grep nixos-17 > /dev/null; then
-            rm -rf /run/setuid-wrapper-dirs
-            rm -rf /var/setuid-wrappers
-          fi
 
           # We want to place the tmpdirs for the wrappers to the parent dir.
           wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)

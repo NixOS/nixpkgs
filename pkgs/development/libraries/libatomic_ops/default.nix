@@ -1,21 +1,18 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, hostPlatform }:
+{ stdenv, fetchurl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "libatomic_ops-${version}";
-  version = "7.6.2";
+  pname = "libatomic_ops";
+  version = "7.6.10";
 
   src = fetchurl {
     urls = [
       "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz"
       "https://github.com/ivmai/libatomic_ops/releases/download/v${version}/libatomic_ops-${version}.tar.gz"
     ];
-    sha256 ="1rif2hjscq5mh639nsnjhb90c01gnmy1sbmj6x6hsn1xmpnj95r1";
+    sha256 = "1bwry043f62pc4mgdd37zx3fif19qyrs8f5bw7qxlmkzh5hdyzjq";
   };
 
   outputs = [ "out" "dev" "doc" ];
-
-  # https://github.com/ivmai/libatomic_ops/pull/32
-  patches = if hostPlatform.isRiscV then [ ./riscv.patch ] else null;
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
 
@@ -28,6 +25,6 @@ stdenv.mkDerivation rec {
     description = ''A library for semi-portable access to hardware-provided atomic memory update operations'';
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = with stdenv.lib.platforms; unix ++ windows;
   };
 }

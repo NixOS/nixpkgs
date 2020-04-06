@@ -1,25 +1,29 @@
-{ stdenv, fetchurl, buildOcaml, ocsigen-toolkit, eliom, ocaml_pcre, pgocaml, macaque, safepass, yojson, ojquery, magick, ocsigen_deriving, ocsigen_server }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, macaque, safepass, yojson
+, cohttp-lwt-unix
+, resource-pooling
+}:
 
-buildOcaml rec
-{
-  name = "ocsigen-start";
-  version = "1.0.0";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-ocsigen-start-${version}";
+  version = "2.16.1";
 
-  buildInputs = [ eliom ];
-  propagatedBuildInputs = [ pgocaml macaque safepass ocaml_pcre ocsigen-toolkit yojson ojquery ocsigen_deriving ocsigen_server magick ];
+  buildInputs = [ ocaml findlib ];
+  propagatedBuildInputs = [ pgocaml_ppx safepass ocsigen-toolkit yojson resource-pooling cohttp-lwt-unix ];
 
   patches = [ ./templates-dir.patch ];
 
   postPatch = ''
   substituteInPlace "src/os_db.ml" --replace "citext" "text"
   '';
-  
-  src = fetchurl {
-    url = "https://github.com/ocsigen/${name}/archive/${version}.tar.gz";
-    sha256 = "0npc2iq39ixci6ly0fssklv07zqi5cfa1adad4hm8dbzjawkqqll";
-  };
 
   createFindlibDestdir = true;
+  
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "ocsigen-start";
+    rev = version;
+    sha256 = "1pzpyrd3vbhc7zvzh6bv44793ikx5bglpd5p4wk5jj65v1w39jwd";
+  };
 
   meta = {
     homepage = http://ocsigen.org/ocsigen-start;
@@ -28,6 +32,7 @@ buildOcaml rec
      An Eliom application skeleton, ready to use to build your own application with users, (pre)registration, notifications, etc.
       '';
     license = stdenv.lib.licenses.lgpl21;
+    inherit (ocaml.meta) platforms;
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };
 

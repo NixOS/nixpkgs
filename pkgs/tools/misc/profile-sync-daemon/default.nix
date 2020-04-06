@@ -1,15 +1,24 @@
-{ stdenv, fetchurl, rsync, glibc, gawk }:
+{ stdenv, fetchurl, utillinux}:
 
 stdenv.mkDerivation rec {
-  version = "v5.53";
-  name = "profile-sync-daemon-${version}";
+  version = "6.36";
+  pname = "profile-sync-daemon";
 
   src = fetchurl {
-    url = "http://github.com/graysky2/profile-sync-daemon/archive/${version}.tar.gz";
-    sha256 = "0m7h9l7dndqgb5k3grpc00f6dpg73p6h4q5sgkf8bvyzvcbdafwx";
+    url = "https://github.com/graysky2/profile-sync-daemon/archive/v${version}.tar.gz";
+    sha256 = "0zw9fqpfiz1ld443cw2vp54y86maksmq4mnjs73nlp00nn5z2047";
   };
 
-  installPhase = "PREFIX=\"\" DESTDIR=$out make install-systemd-all";
+  installPhase = ''
+    PREFIX=\"\" DESTDIR=$out make install
+    substituteInPlace $out/bin/profile-sync-daemon \
+      --replace "/usr/" "$out/" \
+      --replace "sudo " "/run/wrappers/bin/sudo "
+    # $HOME detection fails (and is unnecessary)
+    sed -i '/^HOME/d' $out/bin/profile-sync-daemon
+    substituteInPlace $out/bin/psd-overlay-helper \
+      --replace "PATH=/usr/bin:/bin" "PATH=${utillinux.bin}/bin"
+  '';
 
   preferLocalBuild = true;
 
@@ -23,7 +32,7 @@ stdenv.mkDerivation rec {
       between the two. One of the major design goals of psd is a completely
       transparent user experience.
     '';
-    homepage = https://github.com/graysky2/profile-sync-daemon;
+    homepage = "https://github.com/graysky2/profile-sync-daemon";
     downloadPage = https://github.com/graysky2/profile-sync-daemon/releases;
     license = licenses.mit;
     maintainers = [ maintainers.prikhi ];

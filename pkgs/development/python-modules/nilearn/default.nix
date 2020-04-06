@@ -1,24 +1,33 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose, nibabel, numpy, scikitlearn
-, scipy, matplotlib }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, nose
+, nibabel, numpy, pandas, scikitlearn, scipy, matplotlib, joblib }:
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.4.0";
-  name = pname + "-" + version;
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb692254bde35d7e1d3d1534d9b3117810b35a744724625f150fbbc64d519c02";
+    sha256 = "07eb764f2b7b39b487f806a067e394d8ebffff21f57cd1ecdb5c4030b7210210";
   };
 
-  checkPhase = "nosetests --exclude with_expand_user nilearn/tests";
+  postPatch = ''
+    substituteInPlace setup.py --replace "required_packages.append('sklearn')" ""
+  '';
+  # https://github.com/nilearn/nilearn/issues/2288
 
-  buildInputs = [ nose ];
+  # disable some failing tests
+  checkPhase = ''
+    pytest nilearn/tests -k 'not test_cache_mixin_with_expand_user'  # accesses ~/
+  '';
+
+  checkInputs = [ pytest nose ];
 
   propagatedBuildInputs = [
+    joblib
     matplotlib
     nibabel
     numpy
+    pandas
     scikitlearn
     scipy
   ];

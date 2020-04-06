@@ -1,20 +1,20 @@
-{lib, python2Packages, git, mercurial, coreutils}:
+{lib, python, git, mercurial, coreutils}:
 
-with python2Packages;
+with python.pkgs;
 buildPythonApplication rec {
-  name = "${pname}-${version}";
-  version = "0.3.1";
+  version = "0.3.7";
   pname = "nbstripout";
 
   # Mercurial should be added as a build input but because it's a Python
   # application, it would mess up the Python environment. Thus, don't add it
   # here, instead add it to PATH when running unit tests
-  buildInputs = [ pytest pytest-flake8 pytest-cram git pytestrunner ];
+  checkInputs = [ pytest pytest-flake8 git ];
+  nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ ipython nbformat ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b997c99b8bbb865988202d2f005cdaabb2598b07dad891c302a147a5871a4a95";
+    sha256 = "13w2zhw8vrfv6637bw5ygygj1dky55fvvncz11hq0abwkkzb3wb2";
   };
 
   # for some reason, darwin uses /bin/sh echo native instead of echo binary, so

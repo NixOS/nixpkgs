@@ -17,7 +17,7 @@ in
 
         alias = mkOption {
           default = "fuck";
-          type = types.string;
+          type = types.str;
 
           description = ''
             `thefuck` needs an alias to be configured.
@@ -29,10 +29,10 @@ in
 
     config = mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ thefuck ];
-      environment.shellInit = initScript;
 
-      programs.zsh.shellInit = mkIf prg.zsh.enable initScript;
-      programs.fish.shellInit = mkIf prg.fish.enable ''
+      programs.bash.interactiveShellInit = initScript;
+      programs.zsh.interactiveShellInit = mkIf prg.zsh.enable initScript;
+      programs.fish.interactiveShellInit = mkIf prg.fish.enable ''
         ${pkgs.thefuck}/bin/thefuck --alias | source
       '';
     };

@@ -7,32 +7,32 @@
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.6.4";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0bef9a3a5407fb8d6344cf91b658bef7c13ec8a8eb13f423822d9d2ca5af6ce";
+    sha256 = "1c82z0zx0542j9df6ckjz6pn1g13b21hbza4hghcw6vyhbckklmh";
   };
+
+  # Remove existing site.cfg, use the one we built for numpy.
+  preBuild = ''
+    ln -s ${numpy.cfg} site.cfg
+  '';
 
   propagatedBuildInputs = [ numpy ];
 
   # Run the test suite.
   # It requires the build path to be in the python search path.
   checkPhase = ''
+    pushd $out
     ${python}/bin/${python.executable} <<EOF
-    import sysconfig
     import sys
-    import os
-    f = "lib.{platform}-{version[0]}.{version[1]}"
-    lib = f.format(platform=sysconfig.get_platform(),
-                   version=sys.version_info)
-    build = os.path.join(os.getcwd(), 'build', lib)
-    sys.path.insert(0, build)
     import numexpr
     r = numexpr.test()
     if not r.wasSuccessful():
         sys.exit(1)
     EOF
+    popd
   '';
 
   meta = {

@@ -36,6 +36,7 @@ let
 
       preStart = ''
         mkdir -m 755 -p ${cfg.stateDir}
+        chown dhcpd:nogroup ${cfg.stateDir}
         touch ${cfg.stateDir}/dhcpd.leases
       '';
 
@@ -181,6 +182,10 @@ in
 
 {
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "dhcpd" ] [ "services" "dhcpd4" ])
+  ];
+
   ###### interface
 
   options = {
@@ -196,7 +201,7 @@ in
   config = mkIf (cfg4.enable || cfg6.enable) {
 
     users = {
-      extraUsers.dhcpd = {
+      users.dhcpd = {
         uid = config.ids.uids.dhcpd;
         description = "DHCP daemon user";
       };

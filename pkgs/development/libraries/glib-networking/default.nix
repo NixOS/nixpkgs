@@ -1,46 +1,93 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, gnutls, libproxy, gnome3
-, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, substituteAll
+, meson
+, ninja
+, nixosTests
+, pkgconfig
+, glib
+, gettext
+, makeWrapper
+, python3
+, gnutls
+, p11-kit
+, libproxy
+, gnome3
+, gsettings-desktop-schemas
+}:
 
-let
-  pname = "glib-networking";
-  version = "2.54.1";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "glib-networking";
+  version = "2.64.0";
+
+  outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0bq16m9nh3gcz9x2fvygr0iwxd2pxcbrm3lj3kihsnh1afv8g9za";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1fm1462v7z556qivlwflvc3qpz36jwpzqxxvsihh45j7aka2gnjw";
   };
 
-  outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
+  patches = [
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
+    })
 
-  configureFlags = if stdenv.isDarwin then "--without-ca-certificates"
-    else "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+    ./installed-tests-path.patch
+  ];
 
-  LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
-  preBuild = ''
-    sed -e "s@${glib.out}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ pkgconfig intltool ];
-  propagatedBuildInputs = [ glib gnutls libproxy gsettings-desktop-schemas ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    makeWrapper
+    python3 # for install_script
+  ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+  buildInputs = [
+    glib
+    gnutls
+    p11-kit
+    libproxy
+    gsettings-desktop-schemas
+  ];
 
   doCheck = false; # tests need to access the certificates (among other things)
+
+  mesonFlags = [
+    "-Dinstalled_tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ];
+
+  postFixup = ''
+    find "$installedTests/libexec" "$out/libexec" -type f -executable -print0 \
+      | while IFS= read -r -d "" file; do
+      echo "Wrapping program '$file'"
+      wrapProgram "$file" --prefix GIO_EXTRA_MODULES : "$out/lib/gio/modules"
+    done
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
     };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.glib-networking;
+    };
   };
 
   meta = with stdenv.lib; {
     description = "Network-related giomodules for glib";
-    license = licenses.lgpl2Plus;
+    homepage = https://gitlab.gnome.org/GNOME/glib-networking;
+    license = licenses.lgpl21Plus;
+    maintainers = gnome3.maintainers;
     platforms = platforms.unix;
   };
 }
-

@@ -2,28 +2,24 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, docopt
 , six
 , wcwidth
-, pygments
 }:
 
 buildPythonPackage rec {
   pname = "prompt_toolkit";
-  name = "${pname}-${version}";
-  version = "1.0.15";
+  version = "3.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "858588f1983ca497f1cf4ffde01d978a3ea02b01c8a26a8bbc5cd2e66d816917";
+    sha256 = "10wpsbl1mmnvm8q63zs40633kbq93bidx4vz1p2q92w8ijqb3rpb";
   };
   checkPhase = ''
-    rm prompt_toolkit/win32_types.py
     py.test -k 'not test_pathcompleter_can_expanduser'
   '';
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ docopt six wcwidth pygments ];
+  propagatedBuildInputs = [ six wcwidth ];
 
   meta = {
     description = "Python library for building powerful interactive command lines";

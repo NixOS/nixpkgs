@@ -1,64 +1,228 @@
-{ stdenv, fetchurl, fetchpatch, gtk-doc, pkgconfig, gobjectIntrospection, intltool
-, libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib-networking
-, libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
-, fwupdate, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
-, ninja, gcab, gnutls, python3, wrapGAppsHook, json-glib
-, shared-mime-info, umockdev
+# Updating? Keep $out/etc synchronized with passthru keys
+
+{ stdenv
+, fetchurl
+, substituteAll
+, gtk-doc
+, pkgconfig
+, gobject-introspection
+, intltool
+, libgudev
+, polkit
+, libxmlb
+, gusb
+, sqlite
+, libarchive
+, glib-networking
+, libsoup
+, help2man
+, gpgme
+, libxslt
+, elfutils
+, libsmbios
+, efivar
+, gnu-efi
+, libyaml
+, valgrind
+, meson
+, libuuid
+, colord
+, docbook_xml_dtd_43
+, docbook_xsl
+, ninja
+, gcab
+, gnutls
+, python3
+, wrapGAppsHook
+, json-glib
+, bash-completion
+, shared-mime-info
+, umockdev
+, vala
+, makeFontsConf
+, freefont_ttf
+, cairo
+, freetype
+, fontconfig
+, pango
+, tpm2-tss
+, bubblewrap
+, efibootmgr
+, flashrom
+, tpm2-tools
+, nixosTests
 }:
+
 let
-  # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
-  version = "1.0.5";
-  python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
-  installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
-in stdenv.mkDerivation {
-  name = "fwupd-${version}";
-  src = fetchurl {
-    url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0wm195vkf6x1kg1dz0sbfwpdcn9f6638l7vyzplcfrb3v07pqxpq";
+  python = python3.withPackages (p: with p; [
+    pygobject3
+    pycairo
+    pillow
+    setuptools
+  ]);
+
+  installedTestsPython = python3.withPackages (p: with p; [
+    pygobject3
+    requests
+  ]);
+
+  fontsConf = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
   };
 
-  outputs = [ "out" "devdoc" "man" "installedTests" ];
+  isx86 = stdenv.isx86_64 || stdenv.isi686;
+
+  # Dell isn't supported on Aarch64
+  haveDell = isx86;
+
+  # only redfish for x86_64
+  haveRedfish = stdenv.isx86_64;
+
+  # # Currently broken on Aarch64
+  # haveFlashrom = isx86;
+  # Experimental
+  haveFlashrom = false;
+
+in
+
+stdenv.mkDerivation rec {
+  pname = "fwupd";
+  version = "1.3.9";
+
+  src = fetchurl {
+    url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
+    sha256 = "ZuRG+UN8ebXv5Z8fOYWT0eCtHykGXoB8Ysu3wAeqx0A=";
+  };
+
+  # libfwupd goes to lib
+  # daemon, plug-ins and libfwupdplugin go to out
+  # CLI programs go to out
+  outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
-    meson ninja gtk-doc pkgconfig gobjectIntrospection intltool glibcLocales shared-mime-info
-    valgrind gcab docbook_xml_dtd_43 docbook_xsl help2man libxslt python wrapGAppsHook
-  ];
-  buildInputs = [
-    polkit appstream-glib gusb sqlite libarchive libsoup elfutils libsmbios fwupdate libyaml
-    libgudev colord gpgme libuuid gnutls glib-networking efivar json-glib umockdev
+    meson
+    ninja
+    gtk-doc
+    pkgconfig
+    gobject-introspection
+    intltool
+    shared-mime-info
+    valgrind
+    gcab
+    docbook_xml_dtd_43
+    docbook_xsl
+    help2man
+    libxslt
+    python
+    wrapGAppsHook
+    vala
   ];
 
-  LC_ALL = "en_US.UTF-8"; # For po/make-images
+  buildInputs = [
+    polkit
+    libxmlb
+    gusb
+    sqlite
+    libarchive
+    libsoup
+    elfutils
+    gnu-efi
+    libyaml
+    libgudev
+    colord
+    gpgme
+    libuuid
+    gnutls
+    glib-networking
+    json-glib
+    umockdev
+    bash-completion
+    cairo
+    freetype
+    fontconfig
+    pango
+    tpm2-tss
+    efivar
+  ] ++ stdenv.lib.optionals haveDell [
+    libsmbios
+  ];
 
   patches = [
-    ./fix-missing-deps.patch
-    (fetchpatch {
-      url = https://github.com/hughsie/fwupd/commit/767210e4b1401d5d5bb7ac1e7c052a60b6529d88.patch;
-      sha256 = "00adfabxpgdg74jx7i6jihhh8njjk2r7v3fxqs4scj3vn06k5fmw";
+    ./fix-paths.patch
+    ./add-option-for-installation-sysconfdir.patch
+
+    # install plug-ins and libfwupdplugin to out,
+    # they are not really part of the library
+    ./install-fwupdplugin-to-out.patch
+
+    # installed tests are installed to different output
+    # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle
+    (substituteAll {
+      src = ./installed-tests-path.patch;
+      # needs a different set of modules than po/make-images
+      inherit installedTestsPython;
     })
   ];
 
   postPatch = ''
-    # needs a different set of modules than po/make-images
-    escapedInterpreterLine=$(echo "${installedTestsPython}/bin/python3" | sed 's|\\|\\\\|g')
-    sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" data/installed-tests/hardware.py
+    patchShebangs \
+      contrib/get-version.py \
+      contrib/generate-version-script.py \
+      meson_post_install.sh \
+      po/make-images \
+      po/make-images.sh \
+      po/test-deps
 
-    patchShebangs .
-    substituteInPlace data/installed-tests/fwupdmgr.test.in --subst-var-by installedtestsdir "$installedTests/share/installed-tests/fwupd"
+    # we cannot use placeholder in substituteAll
+    # https://github.com/NixOS/nix/issues/1846
+    substituteInPlace data/installed-tests/meson.build --subst-var installedTests
+
+    substituteInPlace data/meson.build --replace \
+      "install_dir: systemd.get_pkgconfig_variable('systemdshutdowndir')" \
+      "install_dir: '${placeholder "out"}/lib/systemd/system-shutdown'"
   '';
 
-  doCheck = true;
+  # /etc/os-release not available in sandbox
+  # doCheck = true;
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  preFixup = let
+    binPath = [
+      efibootmgr
+      bubblewrap
+      tpm2-tools
+    ] ++ stdenv.lib.optional haveFlashrom flashrom;
+  in ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      # See programs reached with fu_common_find_program_in_path in source
+      --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
+    )
   '';
 
   mesonFlags = [
+    "-Dgtkdoc=true"
     "-Dplugin_dummy=true"
-    "-Dbootdir=/boot"
     "-Dudevdir=lib/udev"
     "-Dsystemdunitdir=lib/systemd/system"
+    "-Defi-libdir=${gnu-efi}/lib"
+    "-Defi-ldsdir=${gnu-efi}/lib"
+    "-Defi-includedir=${gnu-efi}/include/efi"
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "-Dsysconfdir_install=${placeholder "out"}/etc"
+
+    # We do not want to place the daemon into lib (cyclic reference)
+    "--libexecdir=${placeholder "out"}/libexec"
+    # Our builder only adds $lib/lib to rpath but some things link
+    # against libfwupdplugin which is in $out/lib.
+    "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
+  ] ++ stdenv.lib.optionals (!haveDell) [
+    "-Dplugin_dell=false"
+    "-Dplugin_synaptics=false"
+  ] ++ stdenv.lib.optionals (!haveRedfish) [
+    "-Dplugin_redfish=false"
+  ] ++ stdenv.lib.optionals haveFlashrom [
+    "-Dplugin_flashrom=true"
   ];
 
   postInstall = ''
@@ -67,23 +231,64 @@ in stdenv.mkDerivation {
       --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0:${libsoup}/lib/girepository-1.0"
   '';
 
+  FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
+
+  # error: “PolicyKit files are missing”
+  # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
+  PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
+
+  # cannot install to systemd prefix
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMPRESETDIR = "${placeholder "out"}/lib/systemd/system-preset";
+
+  # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
+  dontWrapGApps = true;
+  # so we need to wrap the executables manually
+  postFixup = ''
+    find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
+      | while IFS= read -r -d ''' file; do
+      if [[ "$file" != *.efi ]]; then
+        echo "Wrapping program $file"
+        wrapGApp "$file"
+      fi
+    done
+  '';
+
+  # /etc/fwupd/uefi.conf is created by the services.hardware.fwupd NixOS module
   passthru = {
     filesInstalledToEtc = [
-      "fwupd/remotes.d/fwupd.conf"
+      # "fwupd/daemon.conf" # already created by the module
+      "fwupd/redfish.conf"
+      "fwupd/remotes.d/dell-esrt.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
+      "fwupd/remotes.d/vendor-directory.conf"
+      "fwupd/thunderbolt.conf"
+      "fwupd/upower.conf"
+      # "fwupd/uefi.conf" # already created by the module
       "pki/fwupd/GPG-KEY-Hughski-Limited"
+      "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd/LVFS-CA.pem"
+      "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
     ];
+
+    # BlacklistPlugins key in fwupd/daemon.conf
+    defaultBlacklistedPlugins = [
+      "test"
+      "invalid"
+    ];
+
+    tests = {
+      installedTests = nixosTests.installed-tests.fwupd;
+    };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://fwupd.org/;
-    maintainers = with maintainers; [];
+    homepage = "https://fwupd.org/";
+    maintainers = with maintainers; [ jtojnar ];
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;
   };

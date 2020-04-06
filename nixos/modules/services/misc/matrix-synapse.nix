@@ -30,8 +30,7 @@ ${optionalString (cfg.bind_host != null) ''
 bind_host: "${cfg.bind_host}"
 ''}
 server_name: "${cfg.server_name}"
-pid_file: "/var/run/matrix-synapse.pid"
-web_client: ${boolToString cfg.web_client}
+pid_file: "/run/matrix-synapse.pid"
 ${optionalString (cfg.public_baseurl != null) ''
 public_baseurl: "${cfg.public_baseurl}"
 ''}
@@ -79,7 +78,11 @@ turn_user_lifetime: "${cfg.turn_user_lifetime}"
 user_creation_max_duration: ${cfg.user_creation_max_duration}
 bcrypt_rounds: ${cfg.bcrypt_rounds}
 allow_guest_access: ${boolToString cfg.allow_guest_access}
-trusted_third_party_id_servers: ${builtins.toJSON cfg.trusted_third_party_id_servers}
+
+account_threepid_delegates:
+  ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
+  ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
+
 room_invite_state_types: ${builtins.toJSON cfg.room_invite_state_types}
 ${optionalString (cfg.macaroon_secret_key != null) ''
   macaroon_secret_key: "${cfg.macaroon_secret_key}"
@@ -102,10 +105,14 @@ perspectives:
     '') cfg.servers)}
     }
   }
+redaction_retention_period: ${toString cfg.redaction_retention_period}
 app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
 
 ${cfg.extraConfig}
 '';
+
+  hasLocalPostgresDB = let args = cfg.database_args; in
+    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
 in {
   options = {
     services.matrix-synapse = {
@@ -192,13 +199,6 @@ in {
           This is used by remote servers to connect to this server,
           e.g. matrix.org, localhost:8080, etc.
           This is also the last part of your UserID.
-        '';
-      };
-      web_client = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to serve a web client from the HTTP/HTTPS root resource.
         '';
       };
       public_baseurl = mkOption {
@@ -349,13 +349,6 @@ in {
           The database engine name. Can be sqlite or psycopg2.
         '';
       };
-      create_local_database = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to create a local database automatically.
-        '';
-      };
       database_name = mkOption {
         type = types.str;
         default = "matrix-synapse";
@@ -374,7 +367,7 @@ in {
             user = cfg.database_user;
             database = cfg.database_name;
           };
-        }."${cfg.database_type}";
+        }.${cfg.database_type};
         description = ''
           Arguments to pass to the engine.
         '';
@@ -395,7 +388,17 @@ in {
       };
       url_preview_ip_range_blacklist = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [
+          "127.0.0.0/8"
+          "10.0.0.0/8"
+          "172.16.0.0/12"
+          "192.168.0.0/16"
+          "100.64.0.0/10"
+          "169.254.0.0/16"
+          "::1/128"
+          "fe80::/64"
+          "fc00::/7"
+        ];
         description = ''
           List of IP address CIDR ranges that the URL preview spider is denied
           from accessing.
@@ -412,14 +415,7 @@ in {
       };
       url_preview_url_blacklist = mkOption {
         type = types.listOf types.str;
-        default = [
-          "127.0.0.0/8"
-          "10.0.0.0/8"
-          "172.16.0.0/12"
-          "192.168.0.0/16"
-          "100.64.0.0/10"
-          "169.254.0.0/16"
-        ];
+        default = [];
         description = ''
           Optional list of URL matches that the URL preview spider is
           denied from accessing.
@@ -552,11 +548,18 @@ in {
           accessible to anonymous users.
         '';
       };
-      trusted_third_party_id_servers = mkOption {
-        type = types.listOf types.str;
-        default = ["matrix.org"];
+      account_threepid_delegates.email = mkOption {
+        type = types.nullOr types.str;
+        default = null;
         description = ''
-          The list of identity servers trusted to verify third party identifiers by this server.
+          Delegate email sending to https://example.org
+        '';
+      };
+      account_threepid_delegates.msisdn = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Delegate SMS sending to this local process (https://localhost:8090)
         '';
       };
       room_invite_state_types = mkOption {
@@ -597,6 +600,13 @@ in {
           A list of application service config file to use
         '';
       };
+      redaction_retention_period = mkOption {
+        type = types.int;
+        default = 7;
+        description = ''
+          How long to keep redacted events in unredacted form in the database.
+        '';
+      };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -635,64 +645,75 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = [
-      { name = "matrix-synapse";
+    assertions = [
+      { assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
+        message = ''
+          Cannot deploy matrix-synapse with a configuration for a local postgresql database
+            and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
+            database (please read the thread in https://github.com/NixOS/nixpkgs/pull/80447 for
+            further reference).
+
+            If you
+            - try to deploy a fresh synapse, you need to configure the database yourself. An example
+              for this can be found in <nixpkgs/nixos/tests/matrix-synapse.nix>
+            - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
+              to your configuration.
+
+          For further information about this update, please read the release-notes of 20.03 carefully.
+        '';
+      }
+    ];
+
+    users.users.matrix-synapse = { 
         group = "matrix-synapse";
         home = cfg.dataDir;
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.matrix-synapse;
-      } ];
+      };
 
-    users.extraGroups = [
-      { name = "matrix-synapse";
-        gid = config.ids.gids.matrix-synapse;
-      } ];
-
-    services.postgresql.enable = mkIf usePostgresql (mkDefault true);
+    users.groups.matrix-synapse = {
+      gid = config.ids.gids.matrix-synapse;
+    };
 
     systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         ${cfg.package}/bin/homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
-      '' + optionalString (usePostgresql && cfg.create_local_database) ''
-        if ! test -e "${cfg.dataDir}/db-created"; then
-          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createuser \
-            --login \
-            --no-createdb \
-            --no-createrole \
-            --encrypted \
-            ${cfg.database_user}
-          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createdb \
-            --owner=${cfg.database_user} \
-            --encoding=UTF8 \
-            --lc-collate=C \
-            --lc-ctype=C \
-            --template=template0 \
-            ${cfg.database_name}
-          touch "${cfg.dataDir}/db-created"
-        fi
       '';
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
-        PermissionsStartOnly = true;
         ExecStart = ''
           ${cfg.package}/bin/homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
+        ExecReload = "${pkgs.utillinux}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
       };
     };
   };
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "trusted_third_party_id_servers" ] ''
+      The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
+      as the behavior is now obsolete.
+    '')
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
+      Database configuration must be done manually. An exemplary setup is demonstrated in
+      <nixpkgs/nixos/tests/matrix-synapse.nix>
+    '')
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
+  ];
+
+  meta.doc = ./matrix-synapse.xml;
+
 }

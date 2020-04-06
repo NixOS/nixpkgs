@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with pkgs;
 with lib;
@@ -19,7 +19,7 @@ let
 
   # Forces 32bit pulseaudio and alsaPlugins to be built/supported for apps
   # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs_i686.alsaLib != null && pkgs_i686.libpulseaudio != null);
+  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs.pkgsi686Linux.alsaLib != null && pkgs.pkgsi686Linux.libpulseaudio != null);
 
 
   myConfigFile =
@@ -51,8 +51,7 @@ let
   # that we can disable the autospawn feature in programs that
   # are built with PulseAudio support (like KDE).
   clientConf = writeText "client.conf" ''
-    autospawn=${if nonSystemWide then "yes" else "no"}
-    ${optionalString nonSystemWide "daemon-binary=${binary}"}
+    autospawn=no
     ${cfg.extraClientConf}
   '';
 
@@ -63,7 +62,7 @@ let
     pcm_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
+     "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
     }
     pcm.!default {
       type pulse
@@ -72,7 +71,7 @@ let
     ctl_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
+     "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
     }
     ctl.!default {
       type pulse
@@ -99,11 +98,12 @@ in {
         description = ''
           If false, a PulseAudio server is launched automatically for
           each user that tries to use the sound system. The server runs
-          with user privileges. This is the recommended and most secure
-          way to use PulseAudio. If true, one system-wide PulseAudio
+          with user privileges. If true, one system-wide PulseAudio
           server is launched on boot, running as the user "pulse", and
           only users in the "audio" group will have access to the server.
           Please read the PulseAudio documentation for more details.
+
+          Don't enable this option unless you know what you are doing.
         '';
       };
 
@@ -144,13 +144,25 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pulseaudioLight;
-        defaultText = "pkgs.pulseaudioLight";
+        default = pkgs.pulseaudio;
+        defaultText = "pkgs.pulseaudio";
         example = literalExample "pkgs.pulseaudioFull";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable
           features (such as JACK support, Bluetooth) via the
           <literal>pulseaudioFull</literal> package.
+        '';
+      };
+
+      extraModules = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.pulseaudio-modules-bt ]";
+        description = ''
+          Extra pulseaudio modules to use. This is intended for out-of-tree
+          pulseaudio modules like extra bluetooth codecs.
+
+          Extra modules take precedence over built-in pulseaudio modules.
         '';
       };
 
@@ -168,7 +180,7 @@ in {
           type = types.attrsOf types.unspecified;
           default = {};
           description = ''Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.'';
-          example = literalExample ''{ flat-volumes = "no"; }'';
+          example = literalExample ''{ realtime-scheduling = "yes"; }'';
         };
       };
 
@@ -203,9 +215,8 @@ in {
 
   config = mkMerge [
     {
-      environment.etc = singleton {
-        target = "pulse/client.conf";
-        source = clientConf;
+      environment.etc = {
+        "pulse/client.conf".source = clientConf;
       };
 
       hardware.pulseaudio.configFile = mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
@@ -214,24 +225,44 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
 
-      environment.etc = [
-        { target = "asound.conf";
-          source = alsaConf; }
+      sound.enable = true;
 
-        { target = "pulse/daemon.conf";
-          source = writeText "daemon.conf" (lib.generators.toKeyValue {} cfg.daemon.config); }
+      environment.etc = {
+        "asound.conf".source = alsaConf;
 
-        { target = "openal/alsoft.conf";
-          source = writeText "alsoft.conf" "drivers=pulse"; }
+        "pulse/daemon.conf".source = writeText "daemon.conf"
+          (lib.generators.toKeyValue {} cfg.daemon.config);
 
-        { target = "libao.conf";
-          source = writeText "libao.conf" "default_driver=pulse"; }
-      ];
+        "openal/alsoft.conf".source = writeText "alsoft.conf" "drivers=pulse";
+
+        "libao.conf".source = writeText "libao.conf" "default_driver=pulse";
+      };
+
+      # Disable flat volumes to enable relative ones
+      hardware.pulseaudio.daemon.config.flat-volumes = mkDefault "no";
+
+      # Upstream defaults to speex-float-1 which results in audible artifacts
+      hardware.pulseaudio.daemon.config.resample-method = mkDefault "speex-float-5";
 
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 
       systemd.packages = [ overriddenPackage ];
+
+      # PulseAudio is packaged with udev rules to handle various audio device quirks
+      services.udev.packages = [ overriddenPackage ];
+    })
+
+    (mkIf (cfg.extraModules != []) {
+      hardware.pulseaudio.daemon.config.dl-search-path = let
+        overriddenModules = builtins.map
+          (drv: drv.override { pulseaudio = overriddenPackage; })
+          cfg.extraModules;
+        modulePaths = builtins.map
+          (drv: "${drv}/lib/pulse-${overriddenPackage.version}/modules")
+          # User-provided extra modules take precedence
+          (overriddenModules ++ [ overriddenPackage ]);
+      in lib.concatStringsSep ":" modulePaths;
     })
 
     (mkIf hasZeroconf {
@@ -243,9 +274,8 @@ in {
     })
 
     (mkIf nonSystemWide {
-      environment.etc = singleton {
-        target = "pulse/default.pa";
-        source = myConfigFile;
+      environment.etc = {
+        "pulse/default.pa".source = myConfigFile;
       };
       systemd.user = {
         services.pulseaudio = {
@@ -262,7 +292,7 @@ in {
     })
 
     (mkIf systemWide {
-      users.extraUsers.pulse = {
+      users.users.pulse = {
         # For some reason, PulseAudio wants UID == GID.
         uid = assert uid == gid; uid;
         group = "pulse";
@@ -272,7 +302,7 @@ in {
         createHome = true;
       };
 
-      users.extraGroups.pulse.gid = gid;
+      users.groups.pulse.gid = gid;
 
       systemd.services.pulseaudio = {
         description = "PulseAudio System-Wide Server";

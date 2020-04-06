@@ -1,33 +1,25 @@
-{ stdenv, cmake, fetchFromGitHub }:
+{ stdenv, cmake, ninja, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
-  name = "gtest-${version}";
-  version = "1.8.0";
+  pname = "gtest";
+  version = "1.10.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
     rev = "release-${version}";
-    sha256 = "0bjlljmbf8glnd9qjabx73w6pd7ibv43yiyngqvmvgxsabzr8399";
+    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
   };
 
-  buildInputs = [ cmake ];
+  patches = [
+    ./fix-cmake-config-includedir.patch
+  ];
 
-  configurePhase = ''
-    mkdir build
-    cd build
-    cmake ../ -DCMAKE_INSTALL_PREFIX=$out
-  '';
+  nativeBuildInputs = [ cmake ninja ];
 
-  installPhase = ''
-    mkdir -p $out/lib
-    cp -v googlemock/gtest/libgtest.a googlemock/gtest/libgtest_main.a googlemock/libgmock.a googlemock/libgmock_main.a $out/lib
-    ln -s $out/lib/libgmock.a $out/lib/libgoogletest.a
-    mkdir -p $out/include
-    cp -v -r ../googlemock/include/gmock $out/include
-    cp -v -r ../googletest/include/gtest $out/include
-    mkdir -p $out/src
-    cp -v -r ../googlemock/src/* ../googletest/src/* $out/src
-  '';
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with stdenv.lib; {
     description = "Google's framework for writing C++ tests";

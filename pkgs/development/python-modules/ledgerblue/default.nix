@@ -1,18 +1,23 @@
 { stdenv, fetchPypi, buildPythonPackage, hidapi
-, pycrypto, pillow, protobuf, future, ecpy
+, pycrypto, pillow, protobuf, future, ecpy, python-u2flib-host, pycryptodomex
+, websocket_client
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "ledgerblue";
-  version = "0.1.16";
+  version = "0.1.31";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eba56b887339fb5f8582771e4e398df4fa5a017183b908d4f8950588157c1504";
+    sha256 = "f1fc7ab685780309a7220c6ee517d88072cc594a9615bcc18e68ed5f149fa432";
   };
 
-  buildInputs = [ hidapi pycrypto pillow protobuf future ecpy ];
+  propagatedBuildInputs = [
+    hidapi pycrypto pillow protobuf future ecpy python-u2flib-host pycryptodomex websocket_client
+  ];
+
+  # No tests
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python library to communicate with Ledger Blue/Nano S";

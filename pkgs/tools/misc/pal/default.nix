@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, glib, gettext, readline, pkgconfig }:
+{stdenv, fetchurl, glib, gettext, readline, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "pal-0.4.3";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/etc/pal\.conf,'$out/etc/pal.conf, src/input.c
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib gettext readline ];

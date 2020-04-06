@@ -2,14 +2,14 @@
 , p7zip, mtools, syslinux }:
 
 stdenv.mkDerivation rec {
-  name = "unetbootin-${version}";
-  version = "657";
+  pname = "unetbootin";
+  version = "677";
 
   src = fetchFromGitHub {
     owner  = "unetbootin";
     repo   = "unetbootin";
     rev    = version;
-    sha256 = "18bbcrjk6ladr46kl3dvqz5pq2xcv4nnwmajqllb4sl3k1xqsngy";
+    sha256 = "1mk6179r2lz2d0pvln1anvf5p4l7vfrnnnlhgyx2dlx6pfacsspy";
   };
 
   setSourceRoot = ''

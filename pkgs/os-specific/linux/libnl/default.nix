@@ -1,25 +1,37 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, bison, flex, pkgconfig }:
+{ stdenv, file, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig
+, pythonSupport ? false, swig ? null, python}:
 
-let version = "3.3.0"; in
-stdenv.mkDerivation {
-  name = "libnl-${version}";
+stdenv.mkDerivation rec {
+  pname = "libnl";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
     rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1796kyq2lkhz2802v9kp32vlxf8ynlyqgyw9nhmry3qh5d0ahcsv";
+    sha256 = "1ak30jcx52gl5yz1691qq0b76ldbcp2z6vsvdr2mrrwqiplqbcs2";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional pythonSupport "py";
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/musl/48d2a28710ae40877fd3e178ead1fb1bb0baa62c/dev-libs/libnl/files/libnl-3.3.0_rc1-musl.patch";
-      sha256 = "0dd7xxikib201i99k2if066hh7gwf2i4ffckrjplq6lr206jn00r";
-    });
+  enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig file ]
+    ++ lib.optional pythonSupport swig;
+
+  postBuild = lib.optionalString (pythonSupport) ''
+      cd python
+      ${python}/bin/python setup.py install --prefix=../pythonlib
+      cd -
+  '';
+
+  postFixup = lib.optionalString pythonSupport ''
+    mv "pythonlib/" "$py"
+  '';
+
+  passthru = {
+    inherit pythonSupport;
+  };
 
   meta = with lib; {
     inherit version;

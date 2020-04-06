@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   rev = "2823";
   version = "hg-2012-12-09";
-  name = "wmii-${version}";
+  pname = "wmii";
 
   src = fetchurl {
     url = https://storage.googleapis.com/google-code-archive-source/v2/code.google.com/wmii/source-archive.zip;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
   # For some reason including mercurial in buildInputs did not help
-  makeFlags = "WMII_HGVERSION=hg${rev}";
+  makeFlags = [ "WMII_HGVERSION=hg${rev}" ];
 
   meta = {
     homepage = https://suckless.org/; # https://wmii.suckless.org/ does not exist anymore

@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "accounts-qt-${version}";
-  version = "1.13";
+  pname = "accounts-qt";
+  version = "1.16";
 
   src = fetchFromGitLab {
-    sha256 = "1gpkgw05dwsf2wk5cy3skgss3kw6mqh7iv3fadrxqxfc1za1xmyl";
-    rev = version;
+    sha256 = "1vmpjvysm0ld8dqnx8msa15hlhrkny02cqycsh4k2azrnijg0xjz";
+    rev = "VERSION_${version}";
     repo = "libaccounts-qt";
     owner = "accounts-sso";
   };

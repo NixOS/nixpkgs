@@ -1,31 +1,32 @@
-{ stdenv, fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook,
-pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir,
-gobjectIntrospection, pygobject3, gtk3, matplotlib }:
+{ fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook
+, pkg-config, boost, expat, scipy, cgal, gmp, mpfr
+, gobject-introspection, pygobject3, gtk3, matplotlib, ncurses
+, buildPythonPackage
+, fetchpatch
+, pythonAtLeast
+, lib
+}:
 
-stdenv.mkDerivation rec {
-  version = "2.16";
-  name = "${python.libPrefix}-graph-tool-${version}";
-
-  meta = with stdenv.lib; {
-    description = "Python module for manipulation and statistical analysis of graphs";
-    homepage    = http://graph-tool.skewed.de/;
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
-    maintainers = [ stdenv.lib.maintainers.joelmo ];
-  };
+buildPythonPackage rec {
+  pname = "graph-tool";
+  format = "other";
+  version = "2.30";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    sha256 = "03b1pmh2gvsgyq491gvskx8fwgqy9k942faymdnhwpbbbfhx911p";
+    sha256 = "1gy8xhwfms0psdji7vzqjbzj3l0k743aw20db27zxyq89cvz6g42";
   };
 
   configureFlags = [
     "--with-python-module-path=$(out)/${python.sitePackages}"
+    "--with-boost-libdir=${boost}/lib"
+    "--with-expat=${expat}"
+    "--with-cgal=${cgal}"
     "--enable-openmp"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ ncurses ];
 
   propagatedBuildInputs = [
     boost
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     sparsehash
     # drawing
     cairomm
-    gobjectIntrospection
+    gobject-introspection
     gtk3
     pycairo
     matplotlib
@@ -47,4 +48,11 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = false;
+
+  meta = with lib; {
+    description = "Python module for manipulation and statistical analysis of graphs";
+    homepage    = "https://graph-tool.skewed.de/";
+    license     = licenses.gpl3;
+    maintainers = [ maintainers.joelmo ];
+  };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jdk, jre, ant }:
 
 stdenv.mkDerivation rec {
-  name = "freemind-${version}";
+  pname = "freemind";
   version = "1.0.1";
 
   src = fetchurl {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -i 's/which/type -p/' $out/nix-support/dist/freemind.sh
 
     cat >$out/bin/freemind <<EOF
-    #! /bin/sh
+    #! ${stdenv.shell}
     JAVA_HOME=${jre} $out/nix-support/dist/freemind.sh
     EOF
     chmod +x $out/{bin/freemind,nix-support/dist/freemind.sh}

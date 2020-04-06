@@ -1,32 +1,38 @@
-{ stdenv, fetchurl, bison, flex, libsepol, libselinux, ustr, bzip2, libaudit }:
+{ stdenv, fetchurl, pkgconfig, bison, flex, libsepol, libselinux, bzip2, audit
+, enablePython ? true, swig ? null, python ? null
+}:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libsemanage-${version}";
-  version = "2.4";
+  pname = "libsemanage";
+  version = "2.9";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
-    sha256 = "1134ka4mi4387ac5yv68bpp2y7ln5xxhwp07xhqnay0nxzjaqk0s";
-  };
+    sha256 = "075w6y3l9hiy5hicgwrmijyxmhfyd1r7cnc08qxyg4j46jfk8xi5";
+   };
 
-  nativeBuildInputs = [ bison flex ];
-  buildInputs = [ libsepol libselinux ustr bzip2 libaudit ];
+  outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
 
-  NIX_CFLAGS_COMPILE = [
-    "-fstack-protector-all"
-    "-std=gnu89"
-    # these were added to fix build with gcc7. review on update
-    "-Wno-error=format-truncation"
-    "-Wno-error=implicit-fallthrough"
+  nativeBuildInputs = [ bison flex pkgconfig ];
+  buildInputs = [ libsepol libselinux bzip2 audit ]
+    ++ optionals enablePython [ swig python ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INCLUDEDIR=$(dev)/include"
+    "MAN3DIR=$(man)/share/man/man3"
+    "MAN5DIR=$(man)/share/man/man5"
+    "PYTHON=python"
+    "PYTHONLIBDIR=$(py)/${python.sitePackages}"
+    "DEFAULT_SEMANAGE_CONF_LOCATION=$(out)/etc/selinux/semanage.conf"
   ];
 
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-    makeFlagsArray+=("DESTDIR=$out")
-  '';
+  installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
 
-  meta = libsepol.meta // {
+  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "Policy management tools for SELinux";
     license = stdenv.lib.licenses.lgpl21;
   };

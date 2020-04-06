@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, makeWrapper, xkbcomp, xorgserver, getopt
+{ stdenv, fetchurl, makeWrapper, xorgserver, getopt
 , xauth, utillinux, which, fontsConf, gawk, coreutils }:
 let
   xvfb_run = fetchurl {
-    url = https://projects.archlinux.org/svntogit/packages.git/plain/trunk/xvfb-run?h=packages/xorg-server;
-    sha256 = "1f9mrhqy0l72i3674n98bqlq9a10h0rh9qfjiwvivz3hjhq5c0gz";
+    name = "xvfb-run";
+    # https://git.archlinux.org/svntogit/packages.git/?h=packages/xorg-server
+    url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/xvfb-run?h=packages/xorg-server&id=9cb733cefa92af3fca608fb051d5251160c9bbff;
+    sha256 = "1307mz4nr8ga3qz73i8hbcdphky75rq8lrvfk2zm4kmv6pkbk611";
   };
 in
 stdenv.mkDerivation {
@@ -20,7 +22,8 @@ stdenv.mkDerivation {
       --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux gawk coreutils ]}
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

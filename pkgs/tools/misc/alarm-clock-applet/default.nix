@@ -1,8 +1,14 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig
+{ stdenv, fetchFromGitHub
+, pkgconfig
+, autoconf
+, automake111x
+, libtool
+
 , glib
 , gtk2
 , gst_all_1
 , gnome2
+, gnome-icon-theme
 , libnotify
 , libxml2
 , libunique
@@ -13,29 +19,38 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.4";
-  name = "alarm-clock-applet-${version}";
+  pname = "alarm-clock-applet";
 
-  src = fetchurl {
-    url = "http://launchpad.net/alarm-clock/trunk/${version}/+download/${name}.tar.gz";
-    sha256 = "1mrrw5cgv0izdmhdg83vprvbj6062yzk77b2nr1nx6hhmk00946r";
+  src = fetchFromGitHub {
+    owner = "joh";
+    repo = "alarm-clock";
+    rev = version;
+    sha256 = "18blvgy8hmw3jidz7xrv9yiiilnzcj65m6wxhw58nrnbcqbpydwn";
   };
 
   nativeBuildInputs = [
-    makeWrapper
     pkgconfig
+    intltool
+    automake111x
+    autoconf
+    libtool
+
+    gnome2.gnome-common
+
+    wrapGAppsHook
   ];
+
+  preConfigure = "./autogen.sh";
 
   buildInputs = [
     glib
     gtk2
     gst_all_1.gstreamer
     gnome2.GConf
-    gnome2.gnome_icon_theme
+    gnome-icon-theme
     libnotify
     libxml2
     libunique
-    intltool
-    wrapGAppsHook
   ] ++ gst_plugins;
 
   propagatedUserEnvPkgs = [ gnome2.GConf.out ];

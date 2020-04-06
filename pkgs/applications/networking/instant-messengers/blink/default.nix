@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, pythonPackages, libvncserver, zlib
-, gnutls, libvpx, makeDesktopItem }:
+{ stdenv, fetchdarcs, pythonPackages, libvncserver, zlib
+, gnutls, libvpx, makeDesktopItem, mkDerivationWith }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "blink-${version}";
-  version = "2.0.0";
+mkDerivationWith pythonPackages.buildPythonApplication rec {
 
-  src = fetchurl {
-    url = "http://download.ag-projects.com/BlinkQt/${name}.tar.gz";
-    sha256 = "07hvy45pavgkvdlh4wbz3shsxh4fapg96qlqmfymdi1nfhwghb05";
+  pname = "blink";
+  version = "3.2.0";
+
+  src = fetchdarcs {
+    url = http://devel.ag-projects.com/repositories/blink-qt;
+    rev = "release-${version}";
+    sha256 = "19rcwr5scw48qnj79q1pysw95fz9h98nyc3161qy2kph5g7dwkc3";
   };
 
   patches = [ ./pythonpath.patch ];
@@ -15,9 +17,20 @@ pythonPackages.buildPythonApplication rec {
     sed -i 's|@out@|'"''${out}"'|g' blink/resources.py
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ pyqt4 cjson sipsimple twisted ];
+  propagatedBuildInputs = with pythonPackages; [
+    pyqt5_with_qtwebkit
+    cjson
+    sipsimple
+    twisted
+    google_api_python_client
+  ];
 
-  buildInputs = [ pythonPackages.cython zlib libvncserver libvpx ];
+  buildInputs = [
+    pythonPackages.cython
+    zlib
+    libvncserver
+    libvpx
+  ];
 
   desktopItem = makeDesktopItem {
     name = "Blink";
@@ -29,13 +42,20 @@ pythonPackages.buildPythonApplication rec {
     categories = "Application;Internet;";
   };
 
+  dontWrapQtApps = true;
+
   postInstall = ''
-    wrapProgram $out/bin/blink \
-      --prefix LD_LIBRARY_PATH ":" ${gnutls.out}/lib
     mkdir -p "$out/share/applications"
     mkdir -p "$out/share/pixmaps"
     cp "$desktopItem"/share/applications/* "$out/share/applications"
     cp "$out"/share/blink/icons/blink.* "$out/share/pixmaps"
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      --prefix "LD_LIBRARY_PATH" ":" "${gnutls.out}/lib"
+      "''${qtWrapperArgs[@]}"
+    )
   '';
 
   meta = with stdenv.lib; {

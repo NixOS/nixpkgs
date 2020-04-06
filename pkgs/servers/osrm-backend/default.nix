@@ -1,15 +1,17 @@
 {stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, libxml2, libzip, boost, lua, luabind, tbb, expat}:
 
 stdenv.mkDerivation rec {
-  name = "osrm-backend-${version}";
-  version = "5.15.0";
+  pname = "osrm-backend";
+  version = "5.22.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner  = "Project-OSRM";
     repo   = "osrm-backend";
-    sha256 = "1vdy7j1k1brgd5jgvi5pm3flfw70v48d4rwfq404iiyipkjdy3kz";
+    sha256 = "1m4hf26mgfvvx9z37qww8v8w4mhzyfl554ymdnzl99pr5ild093s";
   };
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=pessimizing-move" "-Wno-error=redundant-move" ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];

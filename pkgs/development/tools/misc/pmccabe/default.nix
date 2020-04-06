@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pmccabe-${version}";
+  pname = "pmccabe";
   version = "2.6";
 
   src = fetchurl {

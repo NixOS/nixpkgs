@@ -1,19 +1,29 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , stdenv
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.13.2";
-  name = "${pname}-${version}";
+  version = "3.17.0";
   doCheck = !stdenv.isDarwin;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4c4ecf20e054716cc1e5a81cadc44d3f4027108d8dd0861d8b1e3bd7a32d4f0a";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1b1hhh1dia673vhq3jl2br1iqwb9yjii6iak56w96s9972vjbz3z";
   };
+
+  # Package does not need pytest, but its a bit easier debugging.
+  checkInputs = [ pytest ];
+  # Ignore warnings because test does not expect them in stderr
+  # See https://github.com/simplejson/simplejson/issues/241
+  checkPhase = ''
+    PYTHONWARNINGS="ignore" pytest simplejson/tests
+  '';
 
   meta = {
     description = "A simple, fast, extensible JSON encoder/decoder for Python";
@@ -24,7 +34,7 @@ buildPythonPackage rec {
       default, encoding is done in an encoding neutral fashion (plain
       ASCII with \uXXXX escapes for unicode characters).
     '';
-    homepage = http://code.google.com/p/simplejson/;
-    license = lib.licenses.mit;
+    homepage = https://github.com/simplejson/simplejson;
+    license = with lib.licenses; [ mit afl21 ];
   };
 }

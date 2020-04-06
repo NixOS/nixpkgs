@@ -1,24 +1,24 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
-  version = "10.0.2";
+  version = "13.0.3";
 in fetchzip {
   name = "babelstone-han-${version}";
 
-  url = http://www.babelstone.co.uk/Fonts/7932/BabelStoneHan.zip;
+  # upstream download links are unversioned, so hash changes
+  url = https://web.archive.org/web/20200210125314/https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip;
   postFetch = ''
     mkdir -p $out/share/fonts/truetype
     unzip $downloadedFile '*.ttf' -d $out/share/fonts/truetype
   '';
-  sha256 = "17r5cf028v66yzjf9qbncn4rchv2xxkl2adxr35ppg1l7zssz9v6";
+  sha256 = "018isk3hbzsihzrxavgjbn485ngzvlm96npqx9y7zpkxsssslc4w";
 
-  meta = with stdenv.lib; {
-    description = "Unicode CJK font with over 32600 Han characters";
-    homepage = http://www.babelstone.co.uk/Fonts/Han.html;
+  meta = with lib; {
+    description = "Unicode CJK font with over 36000 Han characters";
+    homepage = https://www.babelstone.co.uk/Fonts/Han.html;
 
     license = licenses.free;
     platforms = platforms.all;
-    hydraPlatforms = [];
-    maintainers = [ maintainers.volth ];
+    maintainers = with maintainers; [ volth emily ];
   };
 }

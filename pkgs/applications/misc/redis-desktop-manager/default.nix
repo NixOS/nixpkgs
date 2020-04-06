@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchgit, fetchpatch, pkgconfig, libssh2
+{ stdenv, lib, fetchFromGitHub, fetchFromGitiles, pkgconfig, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
 , qtsvg, qttools, qtquick1, qtcharts
 , qmake
 }:
 
 let
-  breakpad_lss = fetchgit {
+  breakpad_lss = fetchFromGitiles {
     url = "https://chromium.googlesource.com/linux-syscall-support";
     rev = "08056836f2b4a5747daff75435d10d649bed22f6";
     sha256 = "1ryshs2nyxwa0kn3rlbnd5b3fhna9vqm560yviddcfgdm2jyg0hz";
@@ -14,14 +14,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "redis-desktop-manager-${version}";
-  version = "0.9.0-alpha5";
+  pname = "redis-desktop-manager";
+  version = "0.9.1";
 
-  src = fetchgit {
-    url = "https://github.com/uglide/RedisDesktopManager.git";
+  src = fetchFromGitHub {
+    owner = "uglide";
+    repo = "RedisDesktopManager";
     fetchSubmodules = true;
-    rev = "refs/tags/${version}";
-    sha256 = "1grw4zng0ff0lvplzzld133hlz6zjn5f5hl3z6z7kc1nq5642yr9";
+    rev = version;
+    sha256 = "0yd4i944d4blw8jky0nxl7sfkkj975q4d328rdcbhizwvf6dx81f";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -30,16 +31,14 @@ stdenv.mkDerivation rec {
     qtquick1 qtquickcontrols qtsvg qttools qtcharts
   ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/google/breakpad/commit/bddcc58860f522a0d4cbaa7e9d04058caee0db9d.patch";
-      sha256 = "1bcamjkmif62rb0lbp111r0ppf4raqw664m5by7vr3pdkcjbbilq";
-    })
-  ];
-
-  patchFlags = "-d 3rdparty/gbreakpad -p1";
-
   dontUseQmakeConfigure = true;
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated" ];
+
+  # Disable annoying update reminder
+  postPatch = ''
+    sed -i s/'^\s*initUpdater();'/'\/\/initUpdater():'/ src/app/app.cpp
+  '';
 
   buildPhase = ''
     srcdir=$PWD

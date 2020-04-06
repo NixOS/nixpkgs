@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml }:
 
 stdenv.mkDerivation rec {
-  name = "statverif-${version}";
+  pname = "statverif";
   version = "1.86pl4";
 
   src = fetchurl {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Verification of stateful processes (via Proverif)";
-    homepage    = "http://markryan.eu/research/statverif/";
+    homepage    = "https://markryan.eu/research/statverif/";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

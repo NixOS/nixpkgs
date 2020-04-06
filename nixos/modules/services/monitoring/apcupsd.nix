@@ -45,7 +45,7 @@ let
 
   eventToShellCmds = event: if builtins.hasAttr event cfg.hooks then (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks)) else "";
 
-  scriptDir = pkgs.runCommand "apcupsd-scriptdir" {} (''
+  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (''
     mkdir "$out"
     # Copy SCRIPTDIR from apcupsd package
     cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/
@@ -91,7 +91,7 @@ in
           BATTERYLEVEL 50
           MINUTES 5
         '';
-        type = types.string;
+        type = types.lines;
         description = ''
           Contents of the runtime configuration file, apcupsd.conf. The default
           settings makes apcupsd autodetect USB UPSes, limit network access to
@@ -106,7 +106,7 @@ in
         example = {
           doshutdown = ''# shell commands to notify that the computer is shutting down'';
         };
-        type = types.attrsOf types.string;
+        type = types.attrsOf types.lines;
         description = ''
           Each attribute in this option names an apcupsd event and the string
           value it contains will be executed in a shell, in response to that
@@ -180,7 +180,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd --killpower -f ${configFile}";
-        TimeoutSec = 0;
+        TimeoutSec = "infinity";
         StandardOutput = "tty";
         RemainAfterExit = "yes";
       };

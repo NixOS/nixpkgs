@@ -1,52 +1,83 @@
-{ stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  pythonPackages, readline, udev, libical,
-  systemd, enableWiimote ? false }:
-
-assert stdenv.isLinux;
+{ stdenv
+, lib
+, fetchurl
+, alsaLib
+, dbus
+, glib
+, json_c
+, libical
+, pkgconfig
+, python3
+, readline
+, systemd
+, udev
+}:
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.48";
+  pname = "bluez";
+  version = "5.54";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "140fjyxa2q4y35d9n52vki649jzb094pf71hxkkvlrpgf8q75a5r";
+    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
+    sha256 = "1p2ncvjz6alr9n3l5wvq2arqgc7xjs6dqyar1l9jp0z8cfgapkb8";
   };
 
-  pythonPath = with pythonPackages;
-    [ dbus-python pygobject2 pygobject3 recursivePthLoader ];
+  pythonPath = with python3.pkgs; [
+    dbus-python
+    pygobject3
+    recursivePthLoader
+  ];
 
   buildInputs = [
-    pkgconfig dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
-    readline udev libical
+    alsaLib
+    dbus
+    glib
+    json_c
+    libical
+    python3
+    readline
+    udev
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig
+    python3.pkgs.wrapPython
   ];
 
   outputs = [ "out" "dev" "test" ];
 
-  patches = [ ./bluez-5.37-obexd_without_systemd-1.patch ];
-
-  preConfigure = ''
-      substituteInPlace tools/hid2hci.rules --replace /sbin/udevadm ${systemd}/bin/udevadm
-      substituteInPlace tools/hid2hci.rules --replace "hid2hci " "$out/lib/udev/hid2hci "
-    '';
+  postPatch = ''
+    substituteInPlace tools/hid2hci.rules \
+      --replace /sbin/udevadm ${systemd}/bin/udevadm \
+      --replace "hid2hci " "$out/lib/udev/hid2hci "
+  '';
 
   configureFlags = [
     "--localstatedir=/var"
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
-    "--with-dbusconfdir=$(out)/etc"
-    "--with-dbussystembusdir=$(out)/share/dbus-1/system-services"
-    "--with-dbussessionbusdir=$(out)/share/dbus-1/services"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-systemduserunitdir=$(out)/etc/systemd/user"
-    "--with-udevdir=$(out)/lib/udev"
-    ] ++
-    stdenv.lib.optional enableWiimote [ "--enable-wiimote" ];
+    "--with-dbusconfdir=${placeholder "out"}/share"
+    "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
+    "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+    "--with-udevdir=${placeholder "out"}/lib/udev"
+    "--enable-health"
+    "--enable-mesh"
+    "--enable-midi"
+    "--enable-nfc"
+    "--enable-sap"
+    "--enable-sixaxis"
+    "--enable-wiimote"
+  ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
-  installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
+  installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
 
-  makeFlags = "rulesdir=$(out)/lib/udev/rules.d";
+  makeFlags = [ "rulesdir=${placeholder "out"}/lib/udev/rules.d" ];
+
+  doCheck = stdenv.hostPlatform.isx86_64;
 
   postInstall = ''
     mkdir -p $test/{bin,test}
@@ -73,14 +104,21 @@ stdenv.mkDerivation rec {
     # Add extra configuration
     mkdir $out/etc/bluetooth
     ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
+
+    # Add missing tools, ref https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/bluez
+    for files in `find tools/ -type f -perm -755`; do
+      filename=$(basename $files)
+      install -Dm755 tools/$filename $out/bin/$filename
+    done
   '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.bluez.org/;
-    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
     description = "Bluetooth support for Linux";
+    homepage = "http://www.bluez.org/";
+    license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
+    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
   };
 }

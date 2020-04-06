@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , jsoncpp
-, libjson_rpc_cpp
+, libjson-rpc-cpp
 , curl
 , boost
 , leveldb
@@ -13,11 +13,11 @@
 , miniupnpc
 , libmicrohttpd
 , gmp
-, libGLU_combined
+, libGLU, libGL
 , extraCmakeFlags ? []
 }:
 stdenv.mkDerivation rec {
-  name = "cpp-ethereum-${version}";
+  pname = "cpp-ethereum";
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake
     jsoncpp
-    libjson_rpc_cpp
+    libjson-rpc-cpp
     curl
     boost
     leveldb
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     miniupnpc
     libmicrohttpd
     gmp
-    libGLU_combined
+    libGLU libGL
   ];
 
   dontStrip = true;
@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ artuuge ];
     platforms = platforms.linux;
+    broken = true; # 2018-04-10
   };
 }

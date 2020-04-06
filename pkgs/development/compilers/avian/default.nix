@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib, jdk, CoreServices, Foundation }:
 
 stdenv.mkDerivation rec {
-  name = "avian-${version}";
+  pname = "avian";
   version = "1.2.0";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib jdk ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Foundation ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postPatch = ''
     substituteInPlace makefile \

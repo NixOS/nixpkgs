@@ -1,24 +1,54 @@
-{stdenv, fetchurl, ncurses, libjpeg, libX11, libXt, alsaLib, aalib, libXft, xproto, libv4l
-, libFS, fontsproto, libXaw, libXpm, libXext, libSM, libICE, perl, xextproto, linux}:
+{ stdenv
+, fetchurl
+, ncurses
+, libjpeg
+, libX11
+, libXt
+, alsaLib
+, aalib
+, libXft
+, xorgproto
+, libv4l
+, libFS
+, libXaw
+, libXpm
+, libXext
+, libSM
+, libICE
+, perl
+}:
 
 stdenv.mkDerivation rec {
-  name = "xawtv-3.103";
+  name = "xawtv-3.106";
+
   src = fetchurl {
-    url = "http://linuxtv.org/downloads/xawtv/${name}.tar.bz2";
-    sha256 = "0lnxr3xip80g0rz7h6n14n9d1qy0cm56h0g1hsyr982rbldskwrc";
+    url = "https://linuxtv.org/downloads/xawtv/${name}.tar.bz2";
+    sha256 = "174wd36rk0k23mgx9nlnpc398yd1f0wiv060963axg6sz0v4rksp";
   };
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${linux}/lib/modules/${linux.modDirVersion}/build"
-  '';
+  buildInputs = [
+    ncurses
+    libjpeg
+    libX11
+    libXt
+    libXft
+    xorgproto
+    libFS
+    perl
+    alsaLib
+    aalib
+    libXaw
+    libXpm
+    libXext
+    libSM
+    libICE
+    libv4l
+  ];
 
-  configureFlags="--prefix=";
-  NIX_LDFLAGS="-lgcc_s";
-
-  makeFlags = "SUID_ROOT= DESTDIR=\$(out) PREFIX=";
-
-  buildInputs = [ncurses libjpeg libX11 libXt libXft xproto libFS perl alsaLib aalib
-                 fontsproto libXaw libXpm libXext libSM libICE xextproto libv4l];
+  makeFlags = [
+    "SUID_ROOT=" # do not try to setuid
+    "resdir=${placeholder ''out''}/share/X11"
+  ];
 
   meta = {
     description = "TV application for Linux with apps and tools such as a teletext browser";
@@ -27,5 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ domenkozar ];
     platforms = stdenv.lib.platforms.linux;
   };
-  
 }

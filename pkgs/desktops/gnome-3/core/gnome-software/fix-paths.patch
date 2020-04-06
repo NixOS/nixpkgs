@@ -5,7 +5,7 @@
  
  	/* find filename */
 -	filename = g_build_filename (DATADIR, "xml", "iso-codes", "iso_639.xml", NULL);
-+	filename = g_build_filename ("@isoCodes@", "share", "xml", "iso-codes", "iso_639.xml", NULL);
++	filename = g_build_filename ("@isocodes@", "share", "xml", "iso-codes", "iso_639.xml", NULL);
  	if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
  		g_free (filename);
  		filename = g_build_filename ("/usr", "share", "xml", "iso-codes", "iso_639.xml", NULL);

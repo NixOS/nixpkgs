@@ -1,6 +1,6 @@
 {stdenv, buildOcamlJane, type_conv}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "variantslib";
   version = "113.33.03";
 

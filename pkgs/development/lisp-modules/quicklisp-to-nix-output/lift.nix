@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lift'';
-  version = ''20151031-git'';
+  version = ''20190521-git'';
 
   description = ''LIsp Framework for Testing'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lift/2015-10-31/lift-20151031-git.tgz'';
-    sha256 = ''1h8fkpm377brbrc06zdynd2qilc85vr9i8r9f8pjqqmk3p1qyl46'';
+    url = ''http://beta.quicklisp.org/archive/lift/2019-05-21/lift-20190521-git.tgz'';
+    sha256 = ''0cinilin9bxzsj3mzd4488zx2irvyl5qpbykv0xbyfz2mjh94ac9'';
   };
 
   packageName = "lift";
@@ -18,8 +18,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM lift DESCRIPTION LIsp Framework for Testing SHA256
-    1h8fkpm377brbrc06zdynd2qilc85vr9i8r9f8pjqqmk3p1qyl46 URL
-    http://beta.quicklisp.org/archive/lift/2015-10-31/lift-20151031-git.tgz MD5
-    b92e97b3d337607743f47bde0889f3ee NAME lift FILENAME lift DEPS NIL
-    DEPENDENCIES NIL VERSION 20151031-git SIBLINGS
+    0cinilin9bxzsj3mzd4488zx2irvyl5qpbykv0xbyfz2mjh94ac9 URL
+    http://beta.quicklisp.org/archive/lift/2019-05-21/lift-20190521-git.tgz MD5
+    c03d3fa715792440c7b51a852ad581e3 NAME lift FILENAME lift DEPS NIL
+    DEPENDENCIES NIL VERSION 20190521-git SIBLINGS
     (lift-documentation lift-test) PARASITES NIL) */

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libtool, pkgconfig, libgphoto2, fuse, glib }:
 
 stdenv.mkDerivation rec {
-  name = "gphoto2fs-${version}";
+  pname = "gphoto2fs";
   version = "0.5.0";
   src = fetchurl {
     url="mirror://sourceforge/gphoto/gphotofs/${version}/gphotofs-0.5.tar.bz2";
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     libgphoto2 fuse glib libtool
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Fuse FS to mount a digital camera";
-    maintainers = [
-      stdenv.lib.maintainers.raskin
-    ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://www.gphoto.org/;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = with licenses; [ lgpl2 gpl2 ];
   };
 }

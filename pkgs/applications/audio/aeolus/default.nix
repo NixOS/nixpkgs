@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aeolus-${version}";
-  version = "0.9.5";
+  pname = "aeolus";
+  version = "0.9.8";
 
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "0wfp8ihldyq2dhdyy7ld7z0zzfvnwam1dvbxnpd9d6xgc4k3j4nv";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "1zfr3567mwbqsfybkhg03n5dvmhllk88c9ayb10qzz2nh6d7g2qn";
   };
 
   buildInputs = [
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   preBuild = "cd source";
 
-  makeFlags = "DESTDIR= PREFIX=$(out)";
+  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
   meta = {
     description = "Synthetized (not sampled) pipe organ emulator";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

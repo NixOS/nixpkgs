@@ -1,19 +1,20 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, coreutils, bash, gzip, openssh
+, git, bash, gzip, openssh, pam
 , sqliteSupport ? true
+, pamSupport ? true
 }:
 
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "gogs-${version}";
-  version = "0.11.29";
+  pname = "gogs";
+  version = "0.11.91";
 
   src = fetchFromGitHub {
-    owner = "gogits";
+    owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "1xn1b4dxf7r8kagps3yvp31zskfxn50k1gfic9abl4kjwpwk78c0";
+    sha256 = "1yfimgjg9n773kdml17119539w9736mi66bivpv5yp3cj2hj9mlj";
   };
 
   patches = [ ./static-root-path.patch ];
@@ -25,7 +26,13 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildFlags = optionalString sqliteSupport "-tags sqlite";
+  buildInputs = optional pamSupport pam;
+
+  buildFlags = [ "-tags" ];
+
+  buildFlagsArray =
+    (  optional sqliteSupport "sqlite"
+    ++ optional pamSupport "pam");
 
   outputs = [ "bin" "out" "data" ];
 
@@ -37,7 +44,7 @@ buildGoPackage rec {
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
-  goPackagePath = "github.com/gogits/gogs";
+  goPackagePath = "github.com/gogs/gogs";
 
   meta = {
     description = "A painless self-hosted Git service";

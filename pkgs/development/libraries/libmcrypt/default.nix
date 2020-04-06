@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libmcrypt-2.5.8";
   
   src = fetchurl {

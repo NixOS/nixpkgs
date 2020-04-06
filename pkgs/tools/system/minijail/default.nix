@@ -1,39 +1,60 @@
-{ stdenv, fetchgit, libcap }:
+{ stdenv, lib, fetchFromGitiles, glibc, libcap, qemu }:
+
+let
+  dumpConstants =
+    if stdenv.buildPlatform == stdenv.hostPlatform then "./dump_constants"
+    else if stdenv.hostPlatform.isAarch32 then "qemu-arm dump_constants"
+    else if stdenv.hostPlatform.isAarch64 then "qemu-aarch64 dump_constants"
+    else if stdenv.hostPlatform.isx86_64 then "qemu-x86_64 dump_constants"
+    else throw "Unsupported host platform";
+in
 
 stdenv.mkDerivation rec {
-  shortname = "minijail";
-  name = "${shortname}-${version}";
-  version = "android-8.0.0_r34";
+  pname = "minijail";
+  version = "14";
 
-  src = fetchgit {
+  src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/external/minijail";
-    rev = version;
-    sha256 = "1d0q08cgks6h6ffsw3zw8dz4rm9y2djj2pwwy3xi6flx7vwy0psf";
+    rev = "linux-v${version}";
+    sha256 = "00dq854n4zg3ca2b46f90k15n32zn2sgabi76mnq2w985k9v977n";
   };
 
+  nativeBuildInputs =
+    lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) qemu;
   buildInputs = [ libcap ];
 
   makeFlags = [ "LIBDIR=$(out)/lib" ];
+  dumpConstantsFlags = lib.optional (stdenv.hostPlatform.libc == "glibc")
+    "LDFLAGS=-L${glibc.static}/lib";
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace common.mk --replace /bin/echo echo
-    sed -i '/#include <asm\/siginfo.h>/ d' signal_handler.c
+    patchShebangs platform2_preinstall.sh
+  '';
+
+  postBuild = ''
+    make $makeFlags $buildFlags $dumpConstantsFlags dump_constants
+    ${dumpConstants} > constants.json
   '';
 
   installPhase = ''
-    mkdir -p $out/lib
+    ./platform2_preinstall.sh ${version} $out/include/chromeos
+
+    mkdir -p $out/lib/pkgconfig $out/include/chromeos $out/bin \
+        $out/share/minijail
+
     cp -v *.so $out/lib
-    mkdir -p $out/include
-    cp -v libminijail.h $out/include
-    mkdir -p $out/bin
-    cp minijail0 $out/bin
+    cp -v *.pc $out/lib/pkgconfig
+    cp -v libminijail.h scoped_minijail.h $out/include/chromeos
+    cp -v minijail0 $out/bin
+    cp -v constants.json $out/share/minijail
   '';
 
-  meta = {
-    homepage = https://android.googlesource.com/platform/external/minijail/;
+  meta = with lib; {
+    homepage = "https://android.googlesource.com/platform/external/minijail/";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [pcarrier];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pcarrier qyliss ];
+    platforms = platforms.linux;
   };
 }

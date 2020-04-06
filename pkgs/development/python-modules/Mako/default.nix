@@ -1,26 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
 , markupsafe
 , nose
 , mock
-, pytest
 , isPyPy
 }:
 
 buildPythonPackage rec {
   pname = "Mako";
-  version = "1.0.7";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e02fde57bd4abb5ec400181e4c314f56ac3e49ba4fb8b0d50bba18cb27d25ae";
+    sha256 = "2984a6733e1d472796ceef37ad48c26f4a984bb18119bb2dbc37a44d8f6e75a4";
   };
 
-  checkInputs = [ markupsafe nose mock pytest ];
+  checkInputs = [ markupsafe nose mock ];
   propagatedBuildInputs = [ markupsafe ];
 
   doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover
+  '';
 
   meta = {
     description = "Super-fast templating language";

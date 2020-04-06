@@ -1,7 +1,7 @@
-{ stdenv, writeScriptBin }:
+{ stdenv, writeScriptBin, runtimeShell }:
 
 let fake = name: stdenv.lib.overrideDerivation (writeScriptBin name ''
-  #!${stdenv.shell}
+  #!${runtimeShell}
   echo >&2 "Faking call to ${name} with arguments:"
   echo >&2 "$@"
 '') (drv: {

@@ -1,29 +1,29 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
-  name = "fd-${version}";
-  version = "6.3.0";
+  pname = "fd";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "1q666k7rssjd2cbkm8bm2gsn5shlkh756qpam53kibi5ahrwa7dc";
+    sha256 = "029xr7l751dy167hfzrd030llkaiy8j585h1d4l6391fgrsvnav7";
   };
 
-  cargoSha256 = "1dikix9d46f0ydi81ray2vdvsy6y326w8ql6c89zx0p9cjm8m83r";
+  cargoSha256 = "0lq6da2f6xywyhzyyrpph96d8b9vpdzakzipci167g6hhh232b5b";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   preFixup = ''
-    mkdir -p "$out/man/man1"
-    cp "$src/doc/fd.1" "$out/man/man1"
+    installManPage "$src/doc/fd.1"
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-    cp target/release/build/fd-find-*/out/fd.bash "$out/share/bash-completion/completions/"
-    cp target/release/build/fd-find-*/out/fd.fish "$out/share/fish/vendor_completions.d/"
-    cp target/release/build/fd-find-*/out/_fd "$out/share/zsh/site-functions/"
+    (cd target/release/build/fd-find-*/out
+    installShellCompletion fd.{bash,fish}
+    installShellCompletion --zsh _fd)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [ dywedir globin ma27 ];
     platforms = platforms.all;
   };
 }

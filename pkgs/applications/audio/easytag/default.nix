@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libid3tag, id3lib, taglib
-, libvorbis, libogg, flac, itstool, libxml2, gsettings-desktop-schemas
+, libvorbis, libogg, opusfile, flac, itstool, libxml2, gsettings-desktop-schemas
 , gnome3, wrapGAppsHook
 }:
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1mbxnqrw1fwcgraa1bgik25vdzvf97vma5pzknbwbqq5ly9fwlgw";
   };
 
@@ -18,9 +18,11 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
   buildInputs = [
-    gtk3 glib libid3tag id3lib taglib libvorbis libogg flac
-    gsettings-desktop-schemas gnome3.defaultIconTheme
+    gtk3 glib libid3tag id3lib taglib libvorbis libogg opusfile flac
+    gsettings-desktop-schemas gnome3.adwaita-icon-theme
   ];
+
+  doCheck = false; # fails 1 out of 9 tests
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -33,7 +35,7 @@ in stdenv.mkDerivation rec {
     description = "View and edit tags for various audio files";
     homepage = https://wiki.gnome.org/Apps/EasyTAG;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

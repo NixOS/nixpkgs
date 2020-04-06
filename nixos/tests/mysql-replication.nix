@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 let
   replicateUser = "replicate";
@@ -8,12 +8,12 @@ in
 {
   name = "mysql-replication";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ eelco chaoflow shlevy ];
+    maintainers = [ eelco shlevy ];
   };
 
   nodes = {
     master =
-      { pkgs, config, ... }:
+      { pkgs, ... }:
 
       {
         services.mysql.enable = true;
@@ -27,7 +27,7 @@ in
       };
 
     slave1 =
-      { pkgs, config, nodes, ... }:
+      { pkgs, nodes, ... }:
 
       {
         services.mysql.enable = true;
@@ -40,7 +40,7 @@ in
       };
 
     slave2 =
-      { pkgs, config, nodes, ... }:
+      { pkgs, nodes, ... }:
 
       {
         services.mysql.enable = true;
@@ -54,21 +54,36 @@ in
   };
 
   testScript = ''
-    $master->start;
-    $master->waitForUnit("mysql");
-    $master->waitForOpenPort(3306);
-    $slave1->start;
-    $slave2->start;
-    $slave1->waitForUnit("mysql");
-    $slave1->waitForOpenPort(3306);
-    $slave2->waitForUnit("mysql");
-    $slave2->waitForOpenPort(3306);
-    $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
-    $slave2->succeed("systemctl stop mysql");
-    $master->succeed("echo 'insert into testdb.tests values (123, 456);' | mysql -u root -N");
-    $slave2->succeed("systemctl start mysql");
-    $slave2->waitForUnit("mysql");
-    $slave2->waitForOpenPort(3306);
-    $slave2->succeed("echo 'select * from testdb.tests where Id = 123;' | mysql -u root -N | grep 456");
+    master.start()
+    master.wait_for_unit("mysql")
+    master.wait_for_open_port(3306)
+    # Wait for testdb to be fully populated (5 rows).
+    master.wait_until_succeeds(
+        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+    )
+
+    slave1.start()
+    slave2.start()
+    slave1.wait_for_unit("mysql")
+    slave1.wait_for_open_port(3306)
+    slave2.wait_for_unit("mysql")
+    slave2.wait_for_open_port(3306)
+
+    # wait for replications to finish
+    slave1.wait_until_succeeds(
+        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+    )
+    slave2.wait_until_succeeds(
+        "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+    )
+
+    slave2.succeed("systemctl stop mysql")
+    master.succeed("echo 'insert into testdb.tests values (123, 456);' | mysql -u root -N")
+    slave2.succeed("systemctl start mysql")
+    slave2.wait_for_unit("mysql")
+    slave2.wait_for_open_port(3306)
+    slave2.wait_until_succeeds(
+        "echo 'select * from testdb.tests where Id = 123;' | mysql -u root -N | grep 456"
+    )
   '';
 })

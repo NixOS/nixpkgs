@@ -1,28 +1,51 @@
-{ stdenv, fetchurl, qt4, flex, bison, docutils }:
+{ lib, mkDerivation, fetchFromBitbucket, docutils, bison, flex, qmake
+, qtbase
+}:
 
-stdenv.mkDerivation rec {
-  name = "xxdiff-4.0.1";
+mkDerivation rec {
+  pname = "xxdiff";
+  version = "5.0b1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xxdiff/${name}.tar.bz2";
-    sha256 = "0050qd12fvlcfdh0iwjsaxgxdq7jsl70f85fbi7pz23skpddsn5z";
+  src = fetchFromBitbucket {
+    owner = "blais";
+    repo = pname;
+    rev = "5e5f885dfc43559549a81c59e9e8c9525306356a";
+    sha256 = "0gbvxrkwkbvag3298j89smszghpr8ilxxfb0cvsknfqdf15b296w";
   };
 
-  nativeBuildInputs = [ flex bison qt4 docutils ];
+  nativeBuildInputs = [ bison docutils flex qmake ];
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ qtbase ];
 
-  QMAKE = "qmake";
+  dontUseQmakeConfigure = true;
 
-  configurePhase = "cd src; make -f Makefile.bootstrap";
+  # c++11 and above is needed for building with Qt 5.9+
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
 
-  installPhase = "mkdir -pv $out/bin; cp -v ../bin/xxdiff $out/bin";
+  sourceRoot = "source/src";
 
-  meta = with stdenv.lib; {
-    homepage = http://furius.ca/xxdiff/;
+  postPatch = ''
+    substituteInPlace xxdiff.pro --replace ../bin ./bin
+  '';
+
+  preConfigure = ''
+    make -f Makefile.bootstrap
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm555 -t $out/bin                ./bin/xxdiff
+    install -Dm444 -t $out/share/doc/${pname} ${src}/README
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "Graphical file and directories comparator and merge tool";
+    homepage = "http://furius.ca/xxdiff/";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub raskin ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
   };
 }

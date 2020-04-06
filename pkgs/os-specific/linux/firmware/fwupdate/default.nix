@@ -1,20 +1,19 @@
 { efivar, fetchurl, gettext, gnu-efi, libsmbios, pkgconfig, popt, stdenv }:
 let
-  version = "10";
+  version = "12";
 in stdenv.mkDerivation {
-  name = "fwupdate-${version}";
+  pname = "fwupdate";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/rhinstaller/fwupdate/releases/download/${version}/fwupdate-${version}.tar.bz2";
-    sha256 = "0fpk3q0msq2l0bs2mvk0cqp8jbwnmi17ggc81r4v96h4jxh2rx3k";
+    sha256 = "00w7jsg7wrlq4cpfz26m9rbv2jwyf0sansf343vfq02fy5lxars1";
   };
 
   patches = [
-    # https://github.com/rhboot/fwupdate/pull/99
-    ./fix-paths.patch
     ./do-not-create-sharedstatedir.patch
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${gnu-efi}/include/efi" ];
+  NIX_CFLAGS_COMPILE = "-I${gnu-efi}/include/efi -Wno-error=address-of-packed-member";
 
   # TODO: Just apply the disable to the efi subdir
   hardeningDisable = [ "stackprotector" ];

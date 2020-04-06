@@ -1,31 +1,26 @@
-{ fetchFromGitHub, lib, python3Packages, stdenv }:
+{ lib, python3Packages }:
 
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "vim-vint-${version}";
-  version = "0.3.18";
+  pname = "vim-vint";
+  version = "0.3.21";
 
-  src = fetchFromGitHub {
-    owner = "kuniwak";
-    repo = "vint";
-    rev = "v${version}";
-    sha256 = "0qrlimg385sxq4y6vqbanby31inaa1q47w9qcw5knwffbz96whrs";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "15qdh8fby9xgfjxidcfv1xmrqqrxxapky7zmyn46qx1abhp9piax";
   };
 
   # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.
   disabled = ! pythonAtLeast "3.5";
 
-  # Prevent setup.py from adding dependencies in run-time and insisting on specific package versions
-  patchPhase = ''
-    substituteInPlace setup.py --replace "return requires" "return []"
-    '';
-  buildInputs = [ coverage pytest pytestcov ];
-  propagatedBuildInputs = [ ansicolor chardet pyyaml ] ;
+  checkInputs = [ pytest pytestcov ];
+  propagatedBuildInputs = [ ansicolor chardet pyyaml setuptools ];
 
-  # The acceptance tests check for stdout and location of binary files, which fails in nix-build.
-  checkPhase = ''
-    py.test -k "not acceptance"
+  # Unpin test dependency versions. This is fixed in master but not yet released.
+  preCheck = ''
+    sed -i 's/==.*//g' test-requirements.txt
+    sed -i 's/mock == 1.0.1/mock/g' setup.py
   '';
 
   meta = with lib; {

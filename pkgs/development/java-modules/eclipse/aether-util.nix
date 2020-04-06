@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   aetherUtil_0_9_0_M2 = map (obj: fetchMaven {
     version = "0.9.0.M2";
     artifactId = "aether-util";

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-appindicator-${version}";
-  version = "22";
+  pname = "gnome-shell-extension-appindicator";
+  version = "33";
 
   src = fetchFromGitHub {
     owner = "Ubuntu";
     repo = "gnome-shell-extension-appindicator";
     rev = "v${version}";
-    sha256 = "1gqw54d55hxjj2hh04p0dx2j40bhi4ck9hgwlz8f7j4v7r37z0qw";
+    sha256 = "B039bgg5b63oaHp1Z36k9Dh5FLr8fmfxI25ZgIA+p2I=";
   };
 
   # This package has a Makefile, but it's used for building a zip for
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     description = "AppIndicator/KStatusNotifierItem support for GNOME Shell";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonafato ];
-    homepage = https://github.com/Ubuntu/gnome-shell-extension-appindicator;
+    platforms = gnome3.gnome-shell.meta.platforms;
+    homepage = "https://github.com/Ubuntu/gnome-shell-extension-appindicator";
   };
 }

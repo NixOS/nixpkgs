@@ -5,8 +5,9 @@ with lib;
 let
   cfg = config.virtualisation.virtualbox.host;
 
-  virtualbox = pkgs.virtualbox.override {
+  virtualbox = cfg.package.override {
     inherit (cfg) enableHardening headless;
+    extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
@@ -17,9 +18,7 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
+    enable = mkEnableOption "VirtualBox" // {
       description = ''
         Whether to enable VirtualBox.
 
@@ -27,6 +26,26 @@ in
           In order to pass USB devices from the host to the guests, the user
           needs to be in the <literal>vboxusers</literal> group.
         </para></note>
+      '';
+    };
+
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
+      description = ''
+        Whether to install the Oracle Extension Pack for VirtualBox.
+
+        <important><para>
+          You must set <literal>nixpkgs.config.allowUnfree = true</literal> in
+          order to use this.  This requires you accept the VirtualBox PUEL.
+        </para></important>
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.virtualbox;
+      defaultText = "pkgs.virtualbox";
+      description = ''
+        Which VirtualBox package to use.
       '';
     };
 
@@ -64,6 +83,8 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [{
+    warnings = mkIf (config.nixpkgs.config.virtualbox.enableExtensionPack or false)
+      ["'nixpkgs.virtualbox.enableExtensionPack' has no effect, please use 'virtualisation.virtualbox.host.enableExtensionPack'"];
     boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];
     boot.extraModulePackages = [ kernelModules ];
     environment.systemPackages = [ virtualbox ];
@@ -83,10 +104,10 @@ in
       "VBoxNetNAT"
       "VBoxSDL"
       "VBoxVolInfo"
-      "VirtualBox"
+      "VirtualBoxVM"
     ]));
 
-    users.extraGroups.vboxusers.gid = config.ids.gids.vboxusers;
+    users.groups.vboxusers.gid = config.ids.gids.vboxusers;
 
     services.udev.extraRules =
       ''
@@ -101,7 +122,7 @@ in
 
     # Since we lack the right setuid/setcap binaries, set up a host-only network by default.
   } (mkIf cfg.addNetworkInterface {
-    systemd.services."vboxnet0" =
+    systemd.services.vboxnet0 =
       { description = "VirtualBox vboxnet0 Interface";
         requires = [ "dev-vboxnetctl.device" ];
         after = [ "dev-vboxnetctl.device" ];
@@ -128,5 +149,12 @@ in
     # Make sure NetworkManager won't assume this interface being up
     # means we have internet access.
     networking.networkmanager.unmanaged = ["vboxnet0"];
-  })]);
+  }) (mkIf config.networking.useNetworkd {
+    systemd.network.networks."40-vboxnet0".extraConfig = ''
+      [Link]
+      RequiredForOnline=no
+    '';
+  })
+
+]);
 }

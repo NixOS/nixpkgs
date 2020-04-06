@@ -1,6 +1,6 @@
 { stdenv, fetchgit, mlton }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ceptre-2016-11-27";
 
   src = fetchgit {

@@ -4,10 +4,14 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Slurp;
+use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
 
 my $out = "@out@";
+
+# FIXME: maybe we should use /proc/1/exe to get the current systemd.
+my $curSystemd = abs_path("/run/current-system/sw/bin");
 
 # To be robust against interruption, record what units need to be started etc.
 my $startListFile = "/run/systemd/start-list";
@@ -67,17 +71,15 @@ EOF
 $SIG{PIPE} = "IGNORE";
 
 sub getActiveUnits {
-    # FIXME: use D-Bus or whatever to query this, since parsing the
-    # output of list-units is likely to break.
-    # Use current version of systemctl binary before daemon is reexeced.
-    my $lines = `LANG= /run/current-system/sw/bin/systemctl list-units --full --no-legend`;
+    my $mgr = Net::DBus->system->get_service("org.freedesktop.systemd1")->get_object("/org/freedesktop/systemd1");
+    my $units = $mgr->ListUnitsByPatterns([], []);
     my $res = {};
-    foreach my $line (split '\n', $lines) {
-        chomp $line;
-        last if $line eq "";
-        $line =~ /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
-        next if $1 eq "UNIT";
-        $res->{$1} = { load => $2, state => $3, substate => $4 };
+    for my $item (@$units) {
+        my ($id, $description, $load_state, $active_state, $sub_state,
+            $following, $unit_path, $job_id, $job_type, $job_path) = @$item;
+        next unless $following eq '';
+        next if $job_id == 0 and $active_state eq 'inactive';
+        $res->{$id} = { load => $load_state, state => $active_state, substate => $sub_state };
     }
     return $res;
 }
@@ -181,7 +183,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target" && $unit ne "hybrid-sleep.target") {
-                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no")) {
+                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
                     $unitsToStart{$unit} = 1;
                     recordUnit($startListFile, $unit);
                     # Don't spam the user with target units that always get started.
@@ -220,7 +222,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                     $unitsToReload{$unit} = 1;
                     recordUnit($reloadListFile, $unit);
                 }
-                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") ) {
+                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
                     $unitsToSkip{$unit} = 1;
                 } else {
                     if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
@@ -268,7 +270,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
 sub pathToUnitName {
     my ($path) = @_;
     # Use current version of systemctl binary before daemon is reexeced.
-    open my $cmd, "-|", "/run/current-system/sw/bin/systemd-escape", "--suffix=mount", "-p", $path
+    open my $cmd, "-|", "$curSystemd/systemd-escape", "--suffix=mount", "-p", $path
         or die "Unable to escape $path!\n";
     my $escaped = join "", <$cmd>;
     chomp $escaped;
@@ -371,7 +373,7 @@ if (scalar (keys %unitsToStop) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
         if scalar @unitsToStopFiltered;
     # Use current version of systemctl binary before daemon is reexeced.
-    system("/run/current-system/sw/bin/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
+    system("$curSystemd/systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
@@ -383,10 +385,12 @@ my $res = 0;
 print STDERR "activating the configuration...\n";
 system("$out/activate", "$out") == 0 or $res = 2;
 
-# Restart systemd if necessary.
+# Restart systemd if necessary. Note that this is done using the
+# current version of systemd, just in case the new one has trouble
+# communicating with the running pid 1.
 if ($restartSystemd) {
     print STDERR "restarting systemd...\n";
-    system("@systemd@/bin/systemctl", "daemon-reexec") == 0 or $res = 2;
+    system("$curSystemd/systemctl", "daemon-reexec") == 0 or $res = 2;
 }
 
 # Forget about previously failed services.
@@ -394,6 +398,21 @@ system("@systemd@/bin/systemctl", "reset-failed");
 
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
+
+# Reload user units
+open my $listActiveUsers, '-|', '@systemd@/bin/loginctl', 'list-users', '--no-legend';
+while (my $f = <$listActiveUsers>) {
+    next unless $f =~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/;
+    my ($uid, $name) = ($+{uid}, $+{user});
+    print STDERR "reloading user units for $name...\n";
+
+    system("@su@", "-s", "@shell@", "-l", $name, "-c",
+           "export XDG_RUNTIME_DIR=/run/user/$uid; " .
+           "$curSystemd/systemctl --user daemon-reexec; " .
+           "@systemd@/bin/systemctl --user start nixos-activation.service");
+}
+
+close $listActiveUsers;
 
 # Set the new tmpfiles
 print STDERR "setting up tmpfiles\n";

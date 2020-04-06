@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.6";
-  name = "EZTrace-${version}";
+  version = "1.1-7";
+  pname = "EZTrace";
 
   src = fetchurl {
-    url = "http://gforge.inria.fr/frs/download.php/file/34082/eztrace-${version}.tar.gz";
-    sha256 = "06q5y9qmdn1h0wjmy28z6gwswskmph49j7simfqcqwv05gvd9svr";
+    url = "https://gforge.inria.fr/frs/download.php/file/37155/eztrace-${version}.tar.gz";
+    sha256 = "0cr2d4fdv4ljvag55dsz3rpha1jan2gc3jhr06ycyk43450pl58p";
   };
 
   # Goes past the rpl_malloc linking failure; fixes silent file breakage
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
     license = stdenv.lib.licenses.cecill-b;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

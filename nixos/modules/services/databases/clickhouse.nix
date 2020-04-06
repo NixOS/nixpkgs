@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.clickhouse;
-  confDir = "/etc/clickhouse-server";
-  stateDir = "/var/lib/clickhouse";
 in
 with lib;
 {
@@ -27,14 +25,14 @@ with lib;
 
   config = mkIf cfg.enable {
 
-    users.extraUsers.clickhouse = {
+    users.users.clickhouse = {
       name = "clickhouse";
       uid = config.ids.uids.clickhouse;
       group = "clickhouse";
       description = "ClickHouse server user";
     };
 
-    users.extraGroups.clickhouse.gid = config.ids.gids.clickhouse;
+    users.groups.clickhouse.gid = config.ids.gids.clickhouse;
 
     systemd.services.clickhouse = {
       description = "ClickHouse server";
@@ -43,20 +41,13 @@ with lib;
 
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -p ${stateDir}
-        chown clickhouse:clickhouse ${confDir} ${stateDir}
-      '';
-
-      script = ''
-        cd "${confDir}"
-        exec ${pkgs.clickhouse}/bin/clickhouse-server
-      '';
-
       serviceConfig = {
         User = "clickhouse";
         Group = "clickhouse";
-        PermissionsStartOnly = true;
+        ConfigurationDirectory = "clickhouse-server";
+        StateDirectory = "clickhouse";
+        LogsDirectory = "clickhouse";
+        ExecStart = "${pkgs.clickhouse}/bin/clickhouse-server --config-file=${pkgs.clickhouse}/etc/clickhouse-server/config.xml";
       };
     };
 
@@ -69,6 +60,11 @@ with lib;
         source = "${pkgs.clickhouse}/etc/clickhouse-server/users.xml";
       };
     };
+
+    environment.systemPackages = [ pkgs.clickhouse ];
+
+    # startup requires a `/etc/localtime` which only if exists if `time.timeZone != null`
+    time.timeZone = mkDefault "UTC";
 
   };
 

@@ -1,31 +1,38 @@
-{ stdenv, pkgs, fetchurl, fetchFromGitHub, pkgconfig, libconfig, 
-  gtkmm2, glibmm, libxml2, libsecret, curl, unrar, libzip,
-  librsvg, gst_all_1, autoreconfHook, makeWrapper }:
+{ config, stdenv, fetchFromGitHub, pkgconfig, libconfig
+, gtkmm2, glibmm, libxml2, libsecret, curl, libzip
+, librsvg, gst_all_1, autoreconfHook, makeWrapper
+, useUnrar ? config.ahoviewer.useUnrar or false, unrar
+}:
+
+assert useUnrar -> unrar != null;
 
 stdenv.mkDerivation rec {
-  name = "ahoviewer-${version}";
-  version = "1.4.9";
+  pname = "ahoviewer";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
     rev = version;
-    sha256 = "194h3k5zvd8gjrbs91qba7d9h7i30yh4rjk4w3aa1vwvv0qm2amx";
+    sha256 = "1avdl4qcpznvf3s2id5qi1vnzy4wgh6vxpnrz777a1s4iydxpcd8";
   };
 
-  enableParallelBuilding = true; 
-  
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
-  buildInputs = [ glibmm libconfig gtkmm2 glibmm libxml2
-                  libsecret curl unrar libzip librsvg 
-                  gst_all_1.gstreamer
-                  gst_all_1.gst-plugins-good 
-                  gst_all_1.gst-plugins-bad 
-                  gst_all_1.gst-libav
-                  gst_all_1.gst-plugins-base ];
-  
+  buildInputs = [
+    glibmm libconfig gtkmm2 glibmm libxml2
+    libsecret curl libzip librsvg
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+  ] ++ stdenv.lib.optional useUnrar unrar;
+
+  NIX_LDFLAGS = "-lpthread";
+
   postPatch = ''patchShebangs version.sh'';
-  
+
   postInstall = ''
     wrapProgram $out/bin/ahoviewer \
     --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \

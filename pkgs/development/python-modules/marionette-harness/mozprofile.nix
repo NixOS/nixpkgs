@@ -1,23 +1,24 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , mozlog
 , mozfile
 , mozhttpd
+, wptserve
 }:
 
 buildPythonPackage rec {
   pname = "mozprofile";
-  version = "0.29";
-  name = "${pname}-${version}";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "92af4b9f527a18997dccb60e846e1844b2428668dadf3ccb1a8cd30c706b25c1";
+    sha256 = "09l18x72vahq7il9nj6qj7la2d21vvbcn9szlm3vsvsbkz68w0yk";
   };
 
-  propagatedBuildInputs = [ mozlog mozfile mozhttpd ]; 
+  propagatedBuildInputs = [ mozlog mozfile mozhttpd ];
+
+  checkInputs = [ wptserve ];
 
   meta = {
     description = "Mozilla application profile handling library";

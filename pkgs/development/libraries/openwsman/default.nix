@@ -2,14 +2,14 @@
 , curl, libxml2, pam, sblim-sfcc }:
 
 stdenv.mkDerivation rec {
-  name = "openwsman-${version}";
-  version = "2.6.5";
+  pname = "openwsman";
+  version = "2.6.11";
 
   src = fetchFromGitHub {
     owner  = "Openwsman";
     repo   = "openwsman";
     rev    = "v${version}";
-    sha256 = "1r0zslgpcr4m20car4s3hsccy10xcb39qhpw3dhpjv42xsvvs5xv";
+    sha256 = "0s8xdxrxnh1l0v41n5cw89b89rrlqlxn1yj14sw224230y8m70ka";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -18,13 +18,15 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_RUBY_GEM=no"
+    "-DBUILD_PYTHON=no"
+    "-DBUILD_PYTHON3=yes"
   ];
 
   preConfigure = ''
     cmakeFlags="$cmakeFlags -DPACKAGE_ARCHITECTURE=$(uname -m)";
   '';
 
-  configureFlags = "--disable-more-warnings";
+  configureFlags = [ "--disable-more-warnings" ];
 
   meta = with stdenv.lib; {
     description  = "Openwsman server implementation and client API with bindings";

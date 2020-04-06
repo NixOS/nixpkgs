@@ -1,20 +1,22 @@
 { stdenv, fetchurl, autoreconfHook, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "mps-${version}";
-  version = "1.116.0";
+  pname = "mps";
+  version = "1.117.0";
 
   src = fetchurl {
     url    = "https://www.ravenbrook.com/project/mps/release/${version}/mps-kit-${version}.tar.gz";
-    sha256 = "1k7vnanpgawnj84x2xs6md57pfib9p7c3acngqzkl3c2aqw8qay0";
+    sha256 = "04ix4l7lk6nxxk9sawpnxbybvqb82lks5606ym10bc1qbc2kqdcz";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ sqlite ];
 
   # needed for 1.116.0 to build with gcc7
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-Wno-implicit-fallthrough"
+    "-Wno-error=clobbered"
+    "-Wno-error=cast-function-type"
   ];
 
 

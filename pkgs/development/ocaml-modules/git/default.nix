@@ -1,31 +1,26 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, opam
-, astring, decompress, fmt, hex, logs, mstruct, ocaml_lwt, ocamlgraph, uri
+{ lib, fetchurl, buildDunePackage
+, alcotest, git, mtime, nocrypto
+, angstrom, astring, cstruct, decompress, digestif, encore, duff, fmt
+, fpath, hex, ke, logs, lru, ocaml_lwt, ocamlgraph, ocplib-endian, uri, rresult
 }:
 
-stdenv.mkDerivation rec {
-	version = "1.11.4";
-	name = "ocaml${ocaml.version}-git-${version}";
+buildDunePackage rec {
+  pname = "git";
+	version = "2.1.2";
 
-	src = fetchFromGitHub {
-		owner = "mirage";
-		repo = "ocaml-git";
-		rev = version;
-		sha256 = "182b6shcfcq50r5snm01hwalnmck43x1xgdd4fvjb6q78pbwag2x";
+	src = fetchurl {
+		url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
+		sha256 = "0yyclsh255k7pvc2fcsdi8k2fcrr0by2nz6g3sqnwlimjyp7mz5j";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder ];
-
-	propagatedBuildInputs = [ astring decompress fmt hex logs mstruct ocaml_lwt ocamlgraph uri ];
-
-	buildPhase = "jbuilder build -p git";
-
-	inherit (jbuilder) installPhase;
+	propagatedBuildInputs = [ angstrom astring cstruct decompress digestif encore duff fmt fpath hex ke logs lru ocaml_lwt ocamlgraph ocplib-endian uri rresult ];
+	checkInputs = lib.optionals doCheck [ alcotest git mtime nocrypto ];
+	doCheck = true;
 
 	meta = {
 		description = "Git format and protocol in pure OCaml";
-		license = stdenv.lib.licenses.isc;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
-		inherit (src.meta) homepage;
-		inherit (ocaml.meta) platforms;
+		license = lib.licenses.isc;
+		maintainers = [ lib.maintainers.vbgl ];
+		homepage = "https://github.com/mirage/ocaml-git";
 	};
 }

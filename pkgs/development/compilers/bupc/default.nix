@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       parallelism is fixed at program startup time, typically with a single
       thread of execution per processor.
     '';
-    homepage = http://upc.lbl.gov/;
+    homepage = https://upc.lbl.gov/;
     license = licenses.mit;
     platforms = with platforms; [ linux ];
     maintainers = with maintainers; [ zimbatm ];

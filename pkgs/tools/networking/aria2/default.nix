@@ -1,25 +1,33 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook
 , openssl, c-ares, libxml2, sqlite, zlib, libssh2
+, cppunit, sphinx
 , Security
 }:
 
 stdenv.mkDerivation rec {
-  name = "aria2-${version}";
-  version = "1.33.1";
+  pname = "aria2";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "aria2";
     repo = "aria2";
     rev = "release-${version}";
-    sha256 = "0ai84ijgsvnixwhxkj8if2mj9hcg2a41w81vy8bdvi89h3bmq9zf";
+    sha256 = "195r3711ly3drf9jkygwdc2m7q99hiqlfrig3ip1127b837gzsf9";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook sphinx ];
 
   buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
     stdenv.lib.optional stdenv.isDarwin Security;
 
   configureFlags = [ "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" ];
+
+  prePatch = ''
+    patchShebangs doc/manual-src/en/mkapiref.py
+  '';
+
+  checkInputs = [ cppunit ];
+  doCheck = false; # needs the net
 
   enableParallelBuilding = true;
 
@@ -28,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "A lightweight, multi-protocol, multi-source, command-line download utility";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ koral jgeerds ];
+    maintainers = with maintainers; [ filalex77 koral ];
   };
 }

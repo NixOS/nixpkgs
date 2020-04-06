@@ -2,19 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "vmtouch";
-  version = "1.3.0";
-  name = "${pname}-git-${version}";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "hoytech";
     repo = "vmtouch";
     rev = "v${version}";
-    sha256 = "0xpigfpwidk25k605y2m2g1952nzl5fgp0wn65hhn7hbra7srglf";
+    sha256 = "08da6apzfkfjwasn4dxrlfxqfx7arl28apdzac5nvm0fhvws0dxk";
   };
 
   buildInputs = [perl];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     description = "Portable file system cache diagnostics and control";

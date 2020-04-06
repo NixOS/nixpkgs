@@ -1,30 +1,40 @@
-{ stdenv, fetchurl, glib, pkgconfig, gnome3, intltool, itstool, libxml2, libarchive
-, attr, bzip2, acl, wrapGAppsHook, librsvg, gdk_pixbuf, libnotify, nautilus }:
+{ stdenv, fetchurl, glib, gtk3, meson, ninja, pkgconfig, gnome3, gettext, itstool, libxml2, libarchive
+, file, json-glib, python3, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales }:
 
 stdenv.mkDerivation rec {
-  name = "file-roller-${version}";
-  version = "3.26.2";
+  pname = "file-roller";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/file-roller/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "3e677b8e1c2f19aead69cf4fc419a19fc3373aaf5d7bf558b4f077f10bbba8a5";
+    url = "mirror://gnome/sources/file-roller/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0y04y58sbggsgqzmxkb6q7300bdzf30w40yp57n87x9nypl4s55r";
   };
+
+  LANG = "en_US.UTF-8"; # postinstall.py
+
+  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 python3 wrapGAppsHook glibcLocales desktop-file-utils ];
+
+  buildInputs = [ glib gtk3 json-glib libarchive file gnome3.adwaita-icon-theme libnotify nautilus ];
+
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
+
+  postPatch = ''
+    chmod +x postinstall.py # patchShebangs requires executable file
+    patchShebangs postinstall.py
+    patchShebangs data/set-mime-type-entry.py
+  '';
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "file-roller"; attrPath = "gnome3.file-roller"; };
+    updateScript = gnome3.updateScript {
+      packageName = "file-roller";
+      attrPath = "gnome3.file-roller";
+    };
   };
-
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-
-  buildInputs = [ glib gnome3.gtk intltool itstool libxml2 libarchive
-                  gnome3.defaultIconTheme attr bzip2 acl gdk_pixbuf librsvg
-                  gnome3.dconf libnotify nautilus ];
-
-  installFlags = [ "nautilus_extensiondir=$(out)/lib/nautilus/extensions-3.0" ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/FileRoller;
     description = "Archive manager for the GNOME desktop environment";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;
   };

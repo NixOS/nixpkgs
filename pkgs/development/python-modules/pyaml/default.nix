@@ -3,16 +3,15 @@
 , fetchPypi
 , pyyaml
 , unidecode
-, python
 }:
 
 buildPythonPackage rec {
   pname = "pyaml";
-  version = "17.12.1";
+  version = "19.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "66623c52f34d83a2c0fc963e08e8b9d0c13d88404e3b43b1852ef71eda19afa3";
+    sha256 = "b3f636b467864319d7ded1558f86bb305b8612a274f5d443a62dc5eceb1b7176";
   };
 
   propagatedBuildInputs = [ pyyaml ];

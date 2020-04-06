@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip
-, coreutils, gnugrep, which, git, python, unzip, libsecret
+{ stdenv, lib, makeDesktopItem, makeWrapper, patchelf, p7zip
+, coreutils, gnugrep, which, git, unzip, libsecret, libnotify
 }:
 
-{ name, product, version, src, wmClass, jdk, meta } @ attrs:
+{ name, product, version, src, wmClass, jdk, meta }:
 
 with stdenv.lib;
 
@@ -26,9 +26,9 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     '';
   };
 
-  buildInputs = [ makeWrapper patchelf p7zip unzip ];
+  nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
 
-  patchPhase = ''
+  patchPhase = lib.optionalString (!stdenv.isDarwin) ''
       get_file_size() {
         local fname="$1"
         echo $(ls -l $fname | cut -d ' ' -f5)
@@ -42,7 +42,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
       }
 
       interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-      if [ "${stdenv.system}" == "x86_64-linux" ]; then
+      if [ "${stdenv.hostPlatform.system}" == "x86_64-linux" ]; then
         target_size=$(get_file_size bin/fsnotifier64)
         patchelf --set-interpreter "$interpreter" bin/fsnotifier64
         munge_size_hack bin/fsnotifier64 $target_size
@@ -63,10 +63,11 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     item=${desktopItem}
 
     makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
-      --prefix PATH : "$out/libexec/${name}:${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+      --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret
+        libnotify
       ]}" \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
@@ -76,4 +77,6 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     ln -s "$item/share/applications" $out/share
   '';
 
+} // stdenv.lib.optionalAttrs (!(meta.license.free or true)) {
+  preferLocalBuild = true;
 }

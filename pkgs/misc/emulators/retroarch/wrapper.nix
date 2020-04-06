@@ -1,14 +1,8 @@
 { stdenv, lib, makeWrapper, retroarch, cores }:
 
-let
-
-  p = builtins.parseDrvName retroarch.name;
-
-in
-
 stdenv.mkDerivation {
-  name = "retroarch-" + p.version;
-  version = p.version;
+  pname = "retroarch";
+  version = lib.getVersion retroarch;
 
   buildInputs = [ makeWrapper ];
 
@@ -16,14 +10,18 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     $(for coreDir in $cores
     do
-      $(ln -s $coreDir/*.so $out/lib/.)
+      $(ln -s $coreDir/* $out/lib/.)
     done)
 
     ln -s -t $out ${retroarch}/share
 
+    if [ -d ${retroarch}/Applications ]; then
+      ln -s -t $out ${retroarch}/Applications
+    fi
+
     makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch \
       --suffix-each LD_LIBRARY_PATH ':' "$cores" \
-      --add-flags "-L $out/lib/ --menu" \
+      --add-flags "-L $out/lib/" \
   '';
 
   cores = map (x: x + x.libretroCore) cores;

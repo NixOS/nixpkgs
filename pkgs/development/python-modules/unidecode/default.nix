@@ -1,13 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, glibcLocales }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Unidecode";
-  version = "1.0.22";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c33dd588e0c9bc22a76eaa0c715a5434851f726131bd44a6c26471746efabf5";
+    sha256 = "2b6aab710c2a1647e928e36d69c21e76b453cd455f4e2621000e54b2a9b8cce8";
   };
 
   LC_ALL="en_US.UTF-8";

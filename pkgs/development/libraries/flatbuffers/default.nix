@@ -1,22 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
-stdenv.mkDerivation rec {
-  name = "flatbuffers-${version}";
-  version = "1.8.0";
+stdenv.mkDerivation (rec {
+  pname = "flatbuffers";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "1qq8qbv8wkiiizj8s984f17bsbjsrhbs9q1nw1yjgrw0grcxlsi9";
+    sha256 = "1gl8pnykzifh7pnnvl80f5prmj5ga60dp44inpv9az2k9zaqx3qr";
   };
 
-  buildInputs = [ cmake ];
+  preConfigure = stdenv.lib.optional stdenv.buildPlatform.isDarwin ''
+    rm BUILD
+  '';
+
+  nativeBuildInputs = [ cmake ];
   enableParallelBuilding = true;
 
-  # Not sure how tests are supposed to be run.
-  # "make: *** No rule to make target 'check'.  Stop."
-  doCheck = false;
+  doCheck = true;
+  checkTarget = "test";
 
   meta = {
     description = "Memory Efficient Serialization Library.";
@@ -29,6 +32,14 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.teh ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
-    homepage = http://google.github.io/flatbuffers;
+    homepage = https://google.github.io/flatbuffers/;
   };
-}
+} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  # Remove when updating to the next version.
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/google/flatbuffers/commit/2b52494047fb6e97af03e1801b42adc7ed3fd78a.diff";
+      sha256 = "01k07ws0f4w7nnl8nli795wgjm4p94lxd3kva4yf7nf3pg4p8arx";
+    })
+  ];
+})

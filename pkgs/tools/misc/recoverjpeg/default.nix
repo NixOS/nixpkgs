@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, python2, exif, imagemagick }:
 
 stdenv.mkDerivation rec {
-  name = "recoverjpeg-${version}";
-  version = "2.6.1";
+  pname = "recoverjpeg";
+  version = "2.6.3";
 
   src = fetchurl {
-    url = "https://www.rfc1149.net/download/recoverjpeg/${name}.tar.gz";
-    sha256 = "00zi23l4nq9nfjg1zzbpsfxf1s47r5w713aws90w13fd19jqn0rj";
+    url = "https://www.rfc1149.net/download/recoverjpeg/${pname}-${version}.tar.gz";
+    sha256 = "009jgxi8lvdp00dwfj0n4x5yqrf64x00xdkpxpwgl2v8wcqn56fv";
   };
 
   nativeBuildInputs = [ makeWrapper ];

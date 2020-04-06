@@ -1,4 +1,6 @@
-{stdenv, fetchurl, pkgconfig, gtk, libxml2, python, gettext}:
+{ stdenv, fetchurl, pkgconfig, gtk2, libxml2, python2 ? null, withLibgladeConvert ? false, gettext }:
+
+assert withLibgladeConvert -> python2 != null;
 
 stdenv.mkDerivation {
   name = "libglade-2.6.4";
@@ -11,9 +13,10 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk python gettext ];
+  buildInputs = [ gtk2 gettext ]
+    ++ stdenv.lib.optional withLibgladeConvert python2;
+
+  NIX_LDFLAGS = "-lgmodule-2.0";
 
   propagatedBuildInputs = [ libxml2 ];
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 }

@@ -12,8 +12,13 @@ stdenv.mkDerivation {
     sha256 = "0nr833bl0q4zq52drjxmmpf7bs6kqxwa5kahwwxm9411khkxz0vc";
   };
 
-  configureFlags =
-    "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib";
+  configureFlags = [
+    "--disable-readline"
+    "--enable-udev_rules"
+    "--enable-udev_sync"
+    "--enable-pkgconfig"
+    "--enable-applib"
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ systemd ];
@@ -35,7 +40,7 @@ stdenv.mkDerivation {
   #patches = [ ./purity.patch ];
 
   # To prevent make install from failing.
-  preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
+  installFlags = [ "OWNER=" "GROUP=" "confdir=${placeholder "out"}/etc" ];
 
   # Install systemd stuff.
   #installTargets = "install install_systemd_generators install_systemd_units install_tmpfiles_configuration";

@@ -1,43 +1,98 @@
-{ stdenv, fetchurl, pkgconfig, perl, bison, flex, python, gobjectIntrospection
-, glib, makeWrapper
+{ stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkgconfig
+, gettext
+, gobject-introspection
+, bison
+, flex
+, python3
+, glib
+, makeWrapper
+, libcap
+, libunwind
 , darwin
+, elfutils # for libdw
+, bash-completion
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk-doc
+, lib
+, CoreServices
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-1.12.3";
+  pname = "gstreamer";
+  version = "1.16.2";
 
-  meta = {
-    description = "Open source multimedia framework";
-    homepage = https://gstreamer.freedesktop.org;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-  };
-
-  src = fetchurl {
-    url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "0vi1g8rmmsnd630ds3jwv2iph46ll8y07fzf04mz15q88j9g926k";
-  };
-
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [
-    pkgconfig perl bison flex python gobjectIntrospection makeWrapper
+  src = fetchurl {
+    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0kp93622y29pck8asvil1fmzf55s2gx76wv475a6izc3cwj49w73";
+  };
+
+  patches = [
+    ./fix_pkgconfig_includedir.patch
   ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreServices;
 
-  propagatedBuildInputs = [ glib ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    bison
+    flex
+    python3
+    makeWrapper
+    glib
+    gobject-introspection
+    bash-completion
 
-  enableParallelBuilding = true;
+    # documentation
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
+  ];
 
-  preConfigure = ''
-    configureFlagsArray+=("--exec-prefix=$dev")
+  buildInputs = [
+    bash-completion
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap
+    libunwind
+    elfutils
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
+
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  mesonFlags = [
+    "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
+    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+  ] ++ lib.optionals stdenv.isDarwin [
+    # darwin.libunwind doesn't have pkgconfig definitions so meson doesn't detect it.
+    "-Dlibunwind=disabled"
+    "-Dlibdw=disabled"
+  ];
+
+  postPatch = ''
+    patchShebangs \
+      gst/parse/get_flex_version.py \
+      gst/parse/gen_grammar.py.in \
+      gst/parse/gen_lex.py.in \
+      libs/gst/helpers/ptp_helper_post_install.sh
   '';
 
   postInstall = ''
     for prog in "$dev/bin/"*; do
-        wrapProgram "$prog" --suffix GST_PLUGIN_SYSTEM_PATH : "\$(unset _tmp; for profile in \$NIX_PROFILES; do _tmp="\$profile/lib/gstreamer-1.0''$\{_tmp:+:\}\$_tmp"; done; printf "\$_tmp")"
+        # We can't use --suffix here due to quoting so we craft the export command by hand
+        wrapProgram "$prog" --run "export GST_PLUGIN_SYSTEM_PATH=\$GST_PLUGIN_SYSTEM_PATH"$\{GST_PLUGIN_SYSTEM_PATH:+:\}"\$(unset _tmp; for profile in \$NIX_PROFILES; do _tmp="\$profile/lib/gstreamer-1.0''$\{_tmp:+:\}\$_tmp"; done; printf "\$_tmp")"
     done
   '';
 
@@ -46,4 +101,12 @@ stdenv.mkDerivation rec {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  meta = with lib ;{
+    description = "Open source multimedia framework";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ttuegel matthewbauer ];
+  };
 }

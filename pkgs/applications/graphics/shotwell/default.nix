@@ -1,35 +1,94 @@
-{ fetchurl, stdenv, meson, ninja, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
-, webkitgtk, pkgconfig, gnome3, gst_all_1, libgudev, libraw, glib, json-glib
-, gettext, desktop-file-utils, gdk_pixbuf, librsvg, wrapGAppsHook
-, itstool, libgdata }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gtk3
+, libexif
+, libgphoto2
+, libwebp
+, libsoup
+, libxml2
+, vala
+, sqlite
+, webkitgtk
+, pkgconfig
+, gnome3
+, gst_all_1
+, libgudev
+, libraw
+, glib
+, json-glib
+, gcr
+, libgee
+, gexiv2
+, librest
+, gettext
+, desktop-file-utils
+, gdk-pixbuf
+, librsvg
+, wrapGAppsHook
+, gobject-introspection
+, itstool
+, libgdata
+, libchamplain
+, gsettings-desktop-schemas
+, python3
+}:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
-let
+stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.27.4";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.31.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0g2vphhpxrljpy9sryfsgaayix807i1i9plj9bay72dk0zphqab2";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1pwq953wl7h9cvw7rvlr6pcbq9w28kkr7ddb8x2si81ngp0imwyx";
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig itstool gettext desktop-file-utils wrapGAppsHook
+    meson
+    ninja
+    vala
+    pkgconfig
+    itstool
+    gettext
+    desktop-file-utils
+    python3
+    wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gtk3 libexif libgphoto2 libsoup libxml2 sqlite webkitgtk
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee
-    libgudev gnome3.gexiv2 gnome3.gsettings-desktop-schemas
-    libraw json-glib glib gdk_pixbuf librsvg gnome3.rest
-    gnome3.gcr gnome3.defaultIconTheme libgdata
+    gtk3
+    libexif
+    libgphoto2
+    libwebp
+    libsoup
+    libxml2
+    sqlite
+    webkitgtk
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    libgee
+    libgudev
+    gexiv2
+    gsettings-desktop-schemas
+    libraw
+    json-glib
+    glib
+    gdk-pixbuf
+    librsvg
+    librest
+    gcr
+    gnome3.adwaita-icon-theme
+    libgdata
+    libchamplain
   ];
 
-  postInstall = ''
-    glib-compile-schemas $out/share/glib-2.0/schemas
+  postPatch = ''
+    chmod +x build-aux/meson/postinstall.py # patchShebangs requires executable file
+    patchShebangs build-aux/meson/postinstall.py
   '';
 
   passthru = {

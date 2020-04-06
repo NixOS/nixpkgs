@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.110";
-  name = "libaio-${version}";
+  pname = "libaio";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/l/i/libaio/${name}.tar.gz";
+    url = "https://fedorahosted.org/releases/l/i/libaio/${pname}-${version}.tar.gz";
     sha256 = "0zjzfkwd1kdvq6zpawhzisv7qbq1ffs343i5fs9p498pcf7046g0";
   };
 
@@ -14,15 +14,27 @@ stdenv.mkDerivation rec {
     sha256 = "1kqpiswjn549s3w3m89bw5qkl7bw5pvq6gp5cdzd926ymlgivj5c";
   }) ];
 
-  makeFlags = "prefix=$(out)";
+  postPatch = ''
+    patchShebangs harness
+
+    # Makefile is too optimistic, gcc is too smart
+    substituteInPlace harness/Makefile \
+      --replace "-Werror" ""
+  '';
+
+  makeFlags = [
+    "prefix=${placeholder ''out''}"
+  ];
 
   hardeningDisable = stdenv.lib.optional (stdenv.isi686) "stackprotector";
+
+  checkTarget = "partcheck"; # "check" needs root
 
   meta = {
     description = "Library for asynchronous I/O in Linux";
     homepage = http://lse.sourceforge.net/io/aio.html;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

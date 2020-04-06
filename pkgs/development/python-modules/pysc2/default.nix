@@ -4,7 +4,6 @@
 , absl-py
 , enum34
 , future
-, futures
 , mock
 , mpyq
 , numpy
@@ -17,7 +16,7 @@
 , sc2-headless
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "PySC2";
   version = "1.2";
 

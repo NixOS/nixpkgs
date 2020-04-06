@@ -1,13 +1,13 @@
 { stdenv, fetchurl, libextractor, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "doodle-0.7.0";
+  name = "doodle-0.7.1";
 
   buildInputs = [ libextractor gettext ];
 
   src = fetchurl {
     url = "https://grothoff.org/christian/doodle/download/${name}.tar.gz";
-    sha256 = "0ayx5q7chzll9sv3miq35xl36r629cvgdzphf379kxzlzhjldy3j";
+    sha256 = "086va4q8swiablv5x72yikrdh5swhy7kzmg5wlszi5a7vjya29xw";
   };
 
   meta = {

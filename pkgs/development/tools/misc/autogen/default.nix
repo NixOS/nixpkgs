@@ -1,7 +1,7 @@
-{ stdenv, buildPackages, fetchurl, which, pkgconfig, texinfo, perl, guile, libxml2 }:
+{ stdenv, buildPackages, fetchurl, which, pkgconfig, perl, guile, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "autogen-${version}";
+  pname = "autogen";
   version = "5.18.12";
 
   src = fetchurl {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Automated text and program generation tool";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
-    homepage = http://www.gnu.org/software/autogen/;
+    homepage = https://www.gnu.org/software/autogen/;
     platforms = platforms.all;
     maintainers = [ ];
   };

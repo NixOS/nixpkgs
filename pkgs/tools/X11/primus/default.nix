@@ -6,9 +6,9 @@
 { stdenv
 , stdenv_i686
 , lib
-, bumblebee
 , primusLib
 , writeScriptBin
+, runtimeShell
 , primusLib_i686 ? null
 , useNvidia ? true
 }:
@@ -26,7 +26,9 @@ let
   ));
 
 in writeScriptBin "primusrun" ''
-  #!${stdenv.shell}
-  export LD_LIBRARY_PATH=${ldPath}:$LD_LIBRARY_PATH
+  #!${runtimeShell}
+  export LD_LIBRARY_PATH=${ldPath}''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+  # https://bugs.launchpad.net/ubuntu/+source/bumblebee/+bug/1758243
+  export __GLVND_DISALLOW_PATCHING=1
   exec "$@"
 ''

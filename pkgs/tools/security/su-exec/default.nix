@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "su-exec-${version}";
+  pname = "su-exec";
   version = "0.2";
 
   src = fetchFromGitHub {

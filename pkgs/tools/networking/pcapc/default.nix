@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libpcap, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "pcapc-${version}";
+  pname = "pcapc";
   version = "1.0.0";
 
   src = fetchFromGitHub {

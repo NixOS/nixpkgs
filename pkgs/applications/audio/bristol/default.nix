@@ -1,18 +1,18 @@
 { stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xorg }:
 
 stdenv.mkDerivation  rec {
-  name = "bristol-${version}";
+  pname = "bristol";
   version = "0.60.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bristol/${name}.tar.gz";
+    url = "mirror://sourceforge/bristol/${pname}-${version}.tar.gz";
     sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     alsaLib libjack2 libpulseaudio xorg.libX11 xorg.libXext
-    xorg.xproto
+    xorg.xorgproto
   ];
 
   patchPhase = "sed -i '41,43d' libbristolaudio/audioEngineJack.c"; # disable alsa/iatomic

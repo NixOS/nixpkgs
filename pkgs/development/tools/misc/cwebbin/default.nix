@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, tie }:
 
 stdenv.mkDerivation rec {
-  name = "cwebbin-${version}";
+  pname = "cwebbin";
   version = "22p";
 
   src = fetchFromGitHub {
@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     description = "Literate Programming in C/C++";
     platforms = with platforms; unix;
     maintainers = with maintainers; [ vrthra ];
+    license = licenses.abstyles;
   };
 }

@@ -1,12 +1,12 @@
-{ config, stdenv, fetchgit, makeWrapper, gnome3, at-spi2-core, libcxx,
+{ stdenv, fetchgit, dconf, gtksourceview3, at-spi2-core, gtksourceviewmm,
   boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkgconfig, pcre,
-  libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts,
-  coreutils, glibc, dbus_libs, openssl, libxml2, gnumake, ctags }:
+  libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts, gtkmm3,
+  coreutils, glibc, dbus, openssl, libxml2, gnumake, ctags }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "juicipp-${version}";
+  pname = "juicipp";
   version = "1.2.3";
 
   meta = {
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [
-    dbus_libs
+    dbus
     openssl
     libxml2
-    gnome3.gtksourceview
+    gtksourceview3
     at-spi2-core
     pcre
     epoxy
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     aspell
     libgit2
     libxkbcommon
-    gnome3.gtkmm3
+    gtkmm3
     libpthreadstubs
-    gnome3.gtksourceviewmm
+    gtksourceviewmm
     llvmPackages.clang.cc
     llvmPackages.lldb
-    gnome3.dconf
+    dconf
   ];
 
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     sed -i 's|liblldb LIBLLDB_LIBRARIES|liblldb LIBNOTHING|g' CMakeLists.txt
     sed -i 's|> arguments;|> arguments; ${lintIncludes}|g' src/source_clang.cc
   '';
-  cmakeFlags = "-DLIBLLDB_LIBRARIES=${stdenv.lib.makeLibraryPath [ llvmPackages.lldb ]}/liblldb.so";
+  cmakeFlags = [ "-DLIBLLDB_LIBRARIES=${stdenv.lib.makeLibraryPath [ llvmPackages.lldb ]}/liblldb.so" ];
   postInstall = ''
     mv $out/bin/juci $out/bin/.juci
     makeWrapper "$out/bin/.juci" "$out/bin/juci" \

@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchgit, python3Packages, docutils, help2man
+{ lib, stdenv, fetchurl, python3Packages, docutils, help2man
 , acl, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnupg1, gnutar
-, gzip, imagemagick, jdk, libarchive, libcaca, llvm, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
+, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
+, gzip, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
 , squashfsTools, tcpdump, unoconv, unzip, xxd, xz
 , enableBloat ? false
 }:
 
+# Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
-  name = "diffoscope-${version}";
-  version = "91";
+  pname = "diffoscope";
+  version = "138";
 
-  src = fetchgit {
-    url    = "https://anonscm.debian.org/git/reproducible/diffoscope.git";
-    rev    = "refs/tags/${version}";
-    sha256 = "16xqy71115cj4kws6bkcjm98nlaff3a32fz82rn2l1xk9w9n3dnz";
+  src = fetchurl {
+    url    = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
+    sha256 = "171nz5n4dayr7bj04h0x282vdk92kp7lgarnb3x0md91m2i9x997";
   };
 
   patches = [
@@ -23,19 +23,29 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     # Upstream doesn't provide a PKG-INFO file
     sed -i setup.py -e "/'rpm-python',/d"
+
+    # When generating manpage, use the installed version
+    substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
   '';
 
   nativeBuildInputs = [ docutils help2man ];
 
-  # Still missing these tools: abootimg docx2txt dumpxsb enjarify js-beautify lipo oggDump otool procyon-decompiler Rscript
+  # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
+  # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
+  #
+  # Still missing these tools: abootimg docx2txt dumpxsb enjarify js-beautify lipo oggDump otool procyon-decompiler Rscript wasm2wat zipnode
   # Also these libraries: python3-guestfs
-  pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
-      acl binutils-unwrapped bzip2 cdrkit colordiff coreutils cpio db diffutils
+  pythonPath = [
+      binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca pgpdump sng sqlite squashfsTools unzip xxd xz
-    ] ++ lib.optionals enableBloat [
-      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 imagemagick
+      libarchive libcaca lz4 pgpdump sng sqlite squashfsTools unzip xxd xz
+    ]
+    ++ (with python3Packages; [ debian libarchive-c python_magic tlsh rpm progressbar33 ])
+    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit ]
+    ++ lib.optionals enableBloat [
+      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg gnumeric imagemagick
       llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
+      python3Packages.guestfs
     ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
@@ -59,9 +69,9 @@ python3Packages.buildPythonApplication rec {
       diffoscope is developed as part of the "reproducible builds" Debian
       project and was formerly known as "debbindiff".
     '';
-    homepage    = https://wiki.debian.org/ReproducibleBuilds;
+    homepage    = "https://diffoscope.org/";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms   = platforms.linux;
+    maintainers = with maintainers; [ dezgeg ma27 ];
+    platforms   = platforms.unix;
   };
 }

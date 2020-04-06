@@ -1,0 +1,26 @@
+diff --git a/src/Views/VPNPage.vala b/src/Views/VPNPage.vala
+index ba9dc22..a12871a 100644
+--- a/src/Views/VPNPage.vala
++++ b/src/Views/VPNPage.vala
+@@ -264,7 +264,7 @@ public class Network.VPNPage : Network.Widgets.Page {
+     private void try_connection_editor (string args) {
+         try {
+             var appinfo = AppInfo.create_from_commandline (
+-                "nm-connection-editor %s".printf (args),
++                "@networkmanagerapplet@/bin/nm-connection-editor %s".printf (args),
+                 null,
+                 GLib.AppInfoCreateFlags.NONE
+             );
+diff --git a/src/Widgets/SettingsButton.vala b/src/Widgets/SettingsButton.vala
+index 5849b69..7bbd172 100644
+--- a/src/Widgets/SettingsButton.vala
++++ b/src/Widgets/SettingsButton.vala
+@@ -55,7 +55,7 @@ public class Network.Widgets.SettingsButton : Gtk.Button {
+         clicked.connect (() => {
+             try {
+                 var appinfo = AppInfo.create_from_commandline (
+-                    "nm-connection-editor %s".printf (args), null, AppInfoCreateFlags.NONE
++                    "@networkmanagerapplet@/bin/nm-connection-editor %s".printf (args), null, AppInfoCreateFlags.NONE
+                 );
+ 
+                 appinfo.launch (null, null);

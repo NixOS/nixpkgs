@@ -1,7 +1,7 @@
 { stdenv, fetchurl, xorg, pkgconfig, ncurses }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
-  name = "xrestop-${version}";
+  pname = "xrestop";
   version = "0.4";
 
   src = fetchurl {
@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

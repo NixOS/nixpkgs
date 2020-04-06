@@ -1,19 +1,26 @@
-{ stdenv, fetchurl, autoreconfHook
+{ stdenv, fetchFromGitHub, autoreconfHook
 , bison, flac, flex, id3v2, vorbis-tools
 }:
 
 stdenv.mkDerivation rec {
-  name = "cuetools-${version}";
+  pname = "cuetools";
   version = "1.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/svend/cuetools/archive/${version}.tar.gz";
-    sha256 = "01xi3rvdmil9nawsha04iagjylqr1l9v9vlzk99scs8c207l58i4";
+  src = fetchFromGitHub {
+    owner = "svend";
+    repo = pname;
+    rev = version;
+    sha256 = "02ksv1ahf1v4cr2xbclsfv5x17m9ivzbssb5r8xjm97yh8a7spa3";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ bison flac flex id3v2 vorbis-tools ];
+
+  postInstall = ''
+    # add link for compatibility with Debian-based distros, which package `cuetag.sh` as `cuetag`
+    ln -s $out/bin/cuetag.sh $out/bin/cuetag
+  '';
 
   meta = with stdenv.lib; {
     description = "A set of utilities for working with cue files and toc files";

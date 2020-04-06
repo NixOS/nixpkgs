@@ -1,16 +1,18 @@
 { stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, asciidoc-full, makeWrapper }:
+, utillinux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "btrbk-${version}";
-  version = "0.26.0";
+  pname = "btrbk";
+  version = "0.29.1";
 
   src = fetchurl {
-    url = "http://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "1brnh5x3fd91j3v8rz3van08m9i0ym4lv4hqz274s86v1kx4k330";
+    url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
+    sha256 = "153inyvvnl17hq1w3nsa783havznaykdam2yrj775bmi2wg6fvwn";
   };
 
-  buildInputs = with perlPackages; [ asciidoc-full makeWrapper perl DateCalc ];
+  nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
+
+  buildInputs = with perlPackages; [ perl DateCalc ];
 
   preInstall = ''
     for f in $(find . -name Makefile); do
@@ -27,20 +29,24 @@ stdenv.mkDerivation rec {
       --replace "/bin/date" "${coreutils}/bin/date" \
       --replace "/bin/echo" "${coreutils}/bin/echo" \
       --replace '$btrbk' 'btrbk'
+
+    # Fix SSH filter script
+    sed -i '/^export PATH/d' ssh_filter_btrbk.sh
+    substituteInPlace ssh_filter_btrbk.sh --replace logger ${utillinux}/bin/logger
   '';
 
   preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
-      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash openssh ]}"
+      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
   meta = with stdenv.lib; {
     description = "A backup tool for btrfs subvolumes";
-    homepage = http://digint.ch/btrbk;
+    homepage = https://digint.ch/btrbk;
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ asymmetric the-kenny ];
     inherit version;
   };
 }

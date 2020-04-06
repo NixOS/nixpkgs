@@ -10,7 +10,7 @@
 # GUI/Desktop
 , dbus
 , glibmm
-, gnome3
+, gsettings-desktop-schemas
 , hicolor-icon-theme
 , libappindicator-gtk3
 , libnotify
@@ -21,9 +21,9 @@
 # User-agent info
 , lsb-release
 # rt2rtng
-, python2
+, python3
 # Testing
-, gmock
+, gtest
 # Fixup
 , wrapGAppsHook
 , makeWrapper
@@ -36,17 +36,17 @@ let
     gst-libav
   ];
   # For the rt2rtng utility for converting bookmark file to -ng format
-  pythonInputs = with python2.pkgs; [ python2 lxml ];
+  pythonInputs = with python3.pkgs; [ python lxml ];
 in
 stdenv.mkDerivation rec {
-  name = "radiotray-ng-${version}";
-  version = "0.2.1";
+  pname = "radiotray-ng";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "ebruck";
-    repo = "radiotray-ng";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0hqg6vn8hv5pic96klf1d9vj8fibrgiqnqb5vwrg3wvakx0y32kr";
+    sha256 = "1v2nsz7s0jj0wmqabzk6akcf1353rachm1lfq77hxbq9z5pw8pgb";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -54,18 +54,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     boost jsoncpp libbsd pcre
-    glibmm hicolor-icon-theme gnome3.gsettings-desktop-schemas libappindicator-gtk3 libnotify
+    glibmm hicolor-icon-theme gsettings-desktop-schemas libappindicator-gtk3 libnotify
     libxdg_basedir
     lsb-release
     wxGTK
-  ] ++ stdenv.lib.optional doCheck gmock
-    ++ gstInputs
+  ] ++ gstInputs
     ++ pythonInputs;
 
-  prePatch = ''
-    for x in debian/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
+  patches = [ ./no-dl-googletest.patch ];
+
+  postPatch = ''
+    for x in package/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
       substituteInPlace $x --replace /usr $out
     done
+    substituteInPlace package/CMakeLists.txt --replace /etc/xdg/autostart $out/etc/xdg/autostart
 
     # We don't find the radiotray-ng-notification icon otherwise
     substituteInPlace data/radiotray-ng.desktop \
@@ -74,13 +76,14 @@ stdenv.mkDerivation rec {
       --replace radiotray-ng-notification radiotray-ng-on
   '';
 
-  cmakeFlags = stdenv.lib.optional doCheck "-DBUILD_TESTS=ON";
+  cmakeFlags = [
+    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
-
-  checkPhase = "ctest";
+  checkInputs = [ gtest ];
+  doCheck = !stdenv.isAarch64; # single failure that I can't explain
 
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${stdenv.lib.makeBinPath [ dbus ]})

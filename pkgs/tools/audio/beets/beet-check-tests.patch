@@ -1,0 +1,17 @@
+diff --git a/test/cli_test.py b/test/cli_test.py
+index 26df140..2eb913c 100644
+--- a/test/cli_test.py
++++ b/test/cli_test.py
+@@ -372,12 +372,6 @@ class ToolListTest(TestHelper, TestCase):
+         self.assertIn('flac', stdout.getvalue())
+         self.assertIn('oggz-validate', stdout.getvalue())
+ 
+-    def test_found_mp3val(self):
+-        shutil.copy('/bin/echo', os.path.join(self.temp_dir, 'mp3val'))
+-        with captureStdout() as stdout:
+-            beets.ui._raw_main(['check', '--list-tools'])
+-        self.assertRegexpMatches(stdout.getvalue(), r'mp3val *found')
+-
+     def test_oggz_validate_not_found(self):
+         with captureStdout() as stdout:
+             beets.ui._raw_main(['check', '--list-tools'])

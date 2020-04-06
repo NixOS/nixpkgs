@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-, sqlite, iproute, bridge-utils, devicemapper, systemd
+, sqlite, iproute, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
 , procps, libseccomp
 }:
@@ -15,10 +15,11 @@ rec {
       , tiniRev, tiniSha256
     } :
   let
-    docker-runc = runc.overrideAttrs (oldAttrs: rec {
-      name = "docker-runc";
+    docker-runc = runc.overrideAttrs (oldAttrs: {
+      name = "docker-runc-${version}";
+      inherit version;
       src = fetchFromGitHub {
-        owner = "docker";
+        owner = "opencontainers";
         repo = "runc";
         rev = runcRev;
         sha256 = runcSha256;
@@ -27,22 +28,20 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
-      name = "docker-containerd";
+    docker-containerd = containerd.overrideAttrs (oldAttrs: {
+      name = "docker-containerd-${version}";
+      inherit version;
       src = fetchFromGitHub {
         owner = "docker";
         repo = "containerd";
         rev = containerdRev;
         sha256 = containerdSha256;
       };
-
-      hardeningDisable = [ "fortify" ];
-
-      buildInputs = [ removeReferencesTo go btrfs-progs ];
     });
 
-    docker-tini = tini.overrideAttrs  (oldAttrs: rec {
-      name = "docker-init";
+    docker-tini = tini.overrideAttrs  (oldAttrs: {
+      name = "docker-init-${version}";
+      inherit version;
       src = fetchFromGitHub {
         owner = "krallin";
         repo = "tini";
@@ -54,22 +53,20 @@ rec {
       patchPhase = ''
       '';
 
-      NIX_CFLAGS_COMPILE = [
-        "-DMINIMAL=ON"
-      ];
+      NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
   in
-    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) rec {
+    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {
 
     inherit docker-runc docker-containerd docker-proxy docker-tini;
 
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
       ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper"
+      ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
       ++ optional (libseccomp != null) "seccomp";
 
-   }) // rec {
+   }) // {
     inherit version rev;
 
     name = "docker-${version}";
@@ -81,19 +78,18 @@ rec {
       sha256 = sha256;
     };
 
-    # Optimizations break compilation of libseccomp c bindings
-    hardeningDisable = [ "fortify" ];
-
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [
       makeWrapper removeReferencesTo go-md2man go libtool
     ] ++ optionals (stdenv.isLinux) [
-      sqlite devicemapper btrfs-progs systemd libseccomp
+      sqlite lvm2 btrfs-progs systemd libseccomp
     ];
 
     dontStrip = true;
 
-    buildPhase = (optionalString (stdenv.isLinux) ''
+    buildPhase = ''
+      export GOCACHE="$TMPDIR/go-cache"
+    '' + (optionalString (stdenv.isLinux) ''
       # build engine
       cd ./components/engine
       export AUTO_GOPATH=1
@@ -136,9 +132,9 @@ rec {
         --prefix PATH : "$out/libexec/docker:$extraPath"
 
       # docker uses containerd now
-      ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/docker-containerd
-      ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
-      ln -s ${docker-runc}/bin/runc $out/libexec/docker/docker-runc
+      ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
+      ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
+      ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
       ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
       ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
@@ -195,29 +191,29 @@ rec {
   });
 
   # Get revisions from
-  # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
+  # https://github.com/docker/docker-ce/tree/${version}/components/engine/hack/dockerfile/install/*
 
-  docker_17_12 = dockerGen rec {
-    version = "17.12.1-ce";
-    rev = "7390fc6103da41cf98ae66cfac80fa143268bf60"; # git commit
-    sha256 = "14pz5yqsjypjb6xiq828jrg9aq7wajrrf3mnd9109lw224p03d8i";
-    runcRev = "9f9c96235cc97674e935002fc3d78361b696a69e";
-    runcSha256 = "18f8vqdbf685dd777pjh8jzpxafw2vapqh4m43xgyi7lfwa0gsln";
-    containerdRev = "9b55aab90508bd389d7654c4baf173a981477d55";
-    containerdSha256 = "0kfafqi66yp4qy738pl11f050hfrx9m4kc670qpx7fmf9ii7q6p2";
-    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
-    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+  docker_18_09 = makeOverridable dockerGen {
+    version = "18.09.9";
+    rev = "039a7df9ba8097dd987370782fcdd6ea79b26016";
+    sha256 = "0wqhjx9qs96q2jd091wffn3cyv2aslqn2cvpdpgljk8yr9s0yg7h";
+    runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
+    runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
+    containerdRev = "894b81a4b802e4eb2a91d1ce216b8817763c29fb";
+    containerdSha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
+    tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
+    tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 
-  docker_18_02 = dockerGen rec {
-    version = "18.02.0-ce";
-    rev = "fc4de447b563498eb4da89f56fb858bbe761d91b"; # git commit
-    sha256 = "1025cwv2niiwg5pc30nb1qky1raisvd9ix2qw6rdib232hwq9k8m";
-    runcRev = "9f9c96235cc97674e935002fc3d78361b696a69e";
-    runcSha256 = "18f8vqdbf685dd777pjh8jzpxafw2vapqh4m43xgyi7lfwa0gsln";
-    containerdRev = "9b55aab90508bd389d7654c4baf173a981477d55";
-    containerdSha256 = "0kfafqi66yp4qy738pl11f050hfrx9m4kc670qpx7fmf9ii7q6p2";
-    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
-    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+  docker_19_03 = makeOverridable dockerGen {
+    version = "19.03.8";
+    rev = "afacb8b7f0d8d4f9d2a8e8736e9c993e672b41f3";
+    sha256 = "15iq16rlnkw78lvapcfpbnsnxhdjbvfvgzg3xzxhpdg1dmq40b6j";
+    runcRev = "dc9208a3303feef5b3839f4323d9beb36df0a9dd"; # v1.0.0-rc10
+    runcSha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
+    containerdRev = "7ad184331fa3e55e52b890ea95e65ba581ae3429"; # v1.2.13
+    containerdSha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
+    tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662"; # v0.18.0
+    tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 }

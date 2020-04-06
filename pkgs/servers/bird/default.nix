@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, flex, bison, readline }:
+{ lib, stdenv, fetchurl, fetchpatch, flex, bison, readline, libssh }:
 
 with lib;
 
@@ -6,19 +6,29 @@ let
 
   generic = { version, sha256, enableIPv6 ? false }:
     stdenv.mkDerivation rec {
-      name = "bird-${version}";
+      pname = "bird";
+      inherit version;
 
       src = fetchurl {
         inherit sha256;
-        url = "ftp://bird.network.cz/pub/bird/${name}.tar.gz";
+        url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
       };
 
       nativeBuildInputs = [ flex bison ];
-      buildInputs = [ readline ];
+      buildInputs = [ readline libssh ];
 
       patches = [
-        (./. + (builtins.toPath "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch"))
-      ];
+        (./. + "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch")
+      ]
+      ++ optional (lib.versionOlder version "2")
+        # https://github.com/BIRD/bird/pull/4
+        (fetchpatch {
+          url = "https://github.com/BIRD/bird/commit/fca9ab48e3823c734886f47156a92f6b804c16e9.patch";
+          sha256 = "1pnndc3n56lqqcy74ln0w5kn3i9rbzsm2dqiyp1qw7j33dpkln1b";
+        })
+        ;
+
+      CPP="${stdenv.cc.targetPrefix}cpp -E";
 
       configureFlags = [
         "--localstatedir=/var"
@@ -28,7 +38,7 @@ let
         description = "BIRD Internet Routing Daemon";
         homepage = http://bird.network.cz;
         license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ viric fpletz ];
+        maintainers = with maintainers; [ fpletz globin ];
         platforms = platforms.linux;
       };
     };
@@ -37,18 +47,18 @@ in
 
 {
   bird = generic {
-    version = "1.6.3";
-    sha256 = "0z3yrxqb0p7f8b7r2gk4mvrwfzk45zx7yr9aifbvba1vgksiri9r";
+    version = "1.6.8";
+    sha256 = "1ch0pkkhd7axdjlvhprynh9q08x0nm984nvkm1cjb7gm5rfsnqbc";
   };
 
   bird6 = generic {
-    version = "1.6.3";
-    sha256 = "0z3yrxqb0p7f8b7r2gk4mvrwfzk45zx7yr9aifbvba1vgksiri9r";
+    version = "1.6.8";
+    sha256 = "1ch0pkkhd7axdjlvhprynh9q08x0nm984nvkm1cjb7gm5rfsnqbc";
     enableIPv6 = true;
   };
 
   bird2 = generic {
-    version = "2.0.1";
-    sha256 = "0qyh2cxj7hfz90x3fnczjdm3i9g7vr0nc4l4wjkj9qm0646vc52n";
+    version = "2.0.7";
+    sha256 = "0rhhbfmfw2d93rvhglv03rdzxsq2disw6s1wm8d6bgdxmrc2n7b3";
   };
 }

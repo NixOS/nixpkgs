@@ -3,8 +3,6 @@
 with python2Packages;
 
 buildPythonApplication rec {
-
-  name = "${pname}-${version}";
   pname = "cloudmonkey";
   version = "5.3.3";
 

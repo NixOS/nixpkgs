@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pure ];
   propagatedBuildInputs = [ pandoc gawk getopt ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   preInstall = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1

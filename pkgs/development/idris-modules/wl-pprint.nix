@@ -1,9 +1,6 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
-, base
 , lib
-, idris
 }:
 build-idris-package {
   name = "wl-pprint";
@@ -16,16 +13,9 @@ build-idris-package {
     sha256 = "0ifp76cqg340jkkzanx69vg76qivv53vh1lzv9zkp5f49prkwl5d";
   };
 
-  # The tests for this package fail. We should attempt to enable them when
-  # updating this package again.
-  doCheck = false;
-
-  idrisDeps = [ prelude base ];
-
   meta = {
     description = "Wadler-Leijen pretty-printing library";
     homepage = https://github.com/shayan-najd/wl-pprint;
     license = lib.licenses.bsd2;
-    inherit (idris.meta) platforms;
   };
 }

@@ -1,24 +1,23 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "c14-cli-unstable-${version}";
-  version = "2017-05-15";
-  rev = "97f437ef5133f73edd551c883db3076c76cb1f6b";
+  pname = "c14-cli";
+  version = "0.3";
 
   goPackagePath = "github.com/online-net/c14-cli";
 
   src = fetchFromGitHub {
     owner = "online-net";
     repo = "c14-cli";
-    inherit rev;
-    sha256 = "1b44bh0zhh6rhw4d3nprnnxhjgaskl9kzp2cvwwyli5svhjxrfdj";
+    rev = version;
+    sha256 = "0b1piviy6vvdbak8y8bc24rk3c1fi67vv3352pmnzvrhsar2r5yf";
   };
 
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "C14 is designed for data archiving & long-term backups.";
-    homepage = https://www.online.net/en/c14;
+    homepage = https://www.online.net/en/storage/c14-cold-storage;
     license = licenses.mit;
     maintainers = with maintainers; [ apeyroux ];
   };

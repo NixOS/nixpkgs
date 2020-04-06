@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "fsql-${version}";
+  pname = "fsql";
   version = "0.3.1";
 
   goPackagePath = "github.com/kshvmdn/fsql";
@@ -18,7 +18,7 @@ buildGoPackage rec {
     homepage = https://github.com/kshvmdn/fsql;
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     inherit version;
   };
 

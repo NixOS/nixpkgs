@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "quantities";
-  version = "0.12.1";
+  version = "0.12.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a03e8511db603c57ca80dee851c43f08d0457f4d592bcac2e154570756cb934";
+    sha256 = "12qx6cgib3wxmm2cvann4zw4jnhhn24ms61ifq9f3jbh31nn6gd3";
   };
 
   propagatedBuildInputs = [ numpy ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Quantities is designed to handle arithmetic and";
-    homepage = http://python-quantities.readthedocs.io/;
+    homepage = https://python-quantities.readthedocs.io/;
     license = lib.licenses.bsd2;
   };
 }

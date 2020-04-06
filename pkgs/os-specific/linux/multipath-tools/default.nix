@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, lvm2, libaio, gzip, readline, systemd, liburcu }:
+{ stdenv, fetchurl, pkgconfig, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c }:
 
 stdenv.mkDerivation rec {
-  name = "multipath-tools-0.6.2";
+  pname = "multipath-tools";
+  version = "0.8.3";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "http://git.opensvc.com/?p=multipath-tools/.git;a=snapshot;h=e165b73a16fc9027aa3306df40052038c175be1b;sf=tgz";
-    sha256 = "159hxvbk9kh1qay9x04w0gsqzg0hkl5yghfc1wi9kv2n5pcwbkpm";
+    name = "${pname}-${version}.tar.gz";
+    url = "https://git.opensvc.com/gitweb.cgi?p=multipath-tools/.git;a=snapshot;h=refs/tags/${version};sf=tgz";
+    sha256 = "1mgjylklh1cx8px8ffgl12kyc0ln3445vbabd2sy8chq31rpiiq8";
   };
 
   postPatch = ''
+    substituteInPlace libmultipath/Makefile --replace /usr/include/libdevmapper.h ${lvm2}/include/libdevmapper.h
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
     ' libmultipath/defaults.h
@@ -19,21 +21,22 @@ stdenv.mkDerivation rec {
       Makefile.inc
   '';
 
-  nativeBuildInputs = [ gzip ];
-  buildInputs = [ systemd lvm2 libaio readline liburcu ];
+  nativeBuildInputs = [ gzip pkgconfig perl ];
+  buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
 
   makeFlags = [
     "LIB=lib"
     "prefix=$(out)"
-    "mandir=$(out)/share/man/man8"
+    "man8dir=$(out)/share/man/man8"
     "man5dir=$(out)/share/man/man5"
     "man3dir=$(out)/share/man/man3"
-    "unitdir=$(out)/lib/systemd/system"
+    "SYSTEMDPATH=lib"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools for the Linux multipathing driver";
     homepage = http://christophe.varoqui.free.fr/;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

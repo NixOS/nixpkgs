@@ -1,25 +1,25 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, tmux, makeWrapper }:
+{ lib, buildGoPackage, fetchFromGitHub, tmux, which, makeWrapper }:
 
 buildGoPackage rec {
-  name = "overmind-${version}";
-  version = "1.1.1";
+  pname = "overmind";
+  version = "2.0.3";
   goPackagePath = "github.com/DarthSim/overmind";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$bin/bin/overmind" --prefix PATH : "${stdenv.lib.makeBinPath [ tmux ]}"
+    wrapProgram "$bin/bin/overmind" --prefix PATH : "${lib.makeBinPath [ tmux which ]}"
   '';
 
   src = fetchFromGitHub {
     owner = "DarthSim";
-    repo = "overmind";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0gdsbm54ln07jv1kgg53fiavx18xxw4f21lfcdl74ijk6bx4jbzv";
+    sha256 = "0c551c240lqxdjg0jj01rh2fyhwls02k5lczlxacj05prp1plz9p";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/DarthSim/;
+  meta = with lib; {
+    homepage = "https://github.com/DarthSim/overmind";
     description = "Process manager for Procfile-based applications and tmux";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.adisbladis ];

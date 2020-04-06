@@ -1,12 +1,12 @@
 { stdenv, fetchurl, which }:
 
 stdenv.mkDerivation rec {
-  name = "eprover-${version}";
-  version = "2.0";
+  pname = "eprover";
+  version = "2.4";
 
   src = fetchurl {
-    url = "http://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${version}/E.tgz";
-    sha256 = "1xmwr32pd8lv3f6yh720mdqhi3na505y3zbgcsgh2hwb7b5i3ngb";
+    url = "https://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${version}/E.tgz";
+    sha256 = "1xn5yypy6w36amsb3kvj1srlbv6v5dl51k64cd264asz2n469dxw";
   };
 
   buildInputs = [ which ];
@@ -14,11 +14,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's/ *CC *= *gcc$//' -i Makefile.vars
   '';
-  configureFlags = "--exec-prefix=$(out) --man-prefix=$(out)/share/man";
-
-  postInstall = ''
-    sed -e s,EXECPATH=.\*,EXECPATH=$out/bin, -i $out/bin/eproof{,_ram}
-  '';
+  configureFlags = [
+    "--exec-prefix=$(out)"
+    "--man-prefix=$(out)/share/man"
+  ];
 
   meta = with stdenv.lib; {
     description = "Automated theorem prover for full first-order logic with equality";

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, automake, autoconf, pkgconfig, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "gsimplecal-${version}";
+  pname = "gsimplecal";
   version = "2.1";
 
   src = fetchurl {

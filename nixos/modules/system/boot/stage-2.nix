@@ -4,8 +4,7 @@ with lib;
 
 let
 
-  kernel = config.boot.kernelPackages.kernel;
-  activateConfiguration = config.system.activationScripts.script;
+  useHostResolvConf = config.networking.resolvconf.enable && config.networking.useHostResolvConf;
 
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
@@ -13,13 +12,13 @@ let
     shell = "${pkgs.bash}/bin/bash";
     isExecutable = true;
     inherit (config.nix) readOnlyStore;
-    inherit (config.networking) useHostResolvConf;
+    inherit useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
-    path = lib.makeBinPath [
+    path = lib.makeBinPath ([
       pkgs.coreutils
       pkgs.utillinux
-      pkgs.openresolv
-    ];
+    ] ++ lib.optional useHostResolvConf pkgs.openresolv);
+    fsPackagesPath = lib.makeBinPath config.system.fsPackages;
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}

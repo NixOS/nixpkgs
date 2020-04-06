@@ -1,18 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, perl, cracklib, python }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, perl, cracklib, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "libpwquality-${version}";
-  version = "1.4.0";
+  pname = "libpwquality";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "libpwquality";
     repo = "libpwquality";
-    rev = name;
-    sha256 = "0k564hj2q13z5ag8cj6rnkzm1na7001k4chz4f736p6aqvspv0bd";
+    rev = "${pname}-${version}";
+    sha256 = "0n4pjhm7wfivk0wizggaxq4y4mcxic876wcarjabkp5z9k14y36h";
   };
 
   nativeBuildInputs = [ autoreconfHook perl ];
-  buildInputs = [ cracklib python ];
+  buildInputs = [ cracklib python3 ];
 
   meta = with lib; {
     description = "Password quality checking and random password generation library";

@@ -1,34 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs
-, libgweather, intltool, itstool, geoclue2 }:
+{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs, gobject-introspection
+, libgweather, meson, ninja, geoclue2, gnome-desktop, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-weather-${version}";
-  version = "3.26.0";
+  pname = "gnome-weather";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "965cc0d1b4d4e53c06d494db96f0b124d232af5c0e731ca900edd10f77a74c78";
+    url = "mirror://gnome/sources/gnome-weather/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1g63xzs17i36if923b36k9fwbk0nqa5vz6zh1k6q2axrzhhpx1i4";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-weather"; attrPath = "gnome3.gnome-weather"; };
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig meson ninja wrapGAppsHook python3 ];
   buildInputs = [
-    gtk3 wrapGAppsHook gjs intltool itstool
-    libgweather gnome3.defaultIconTheme geoclue2 gnome3.gsettings-desktop-schemas
+    gtk3 gjs gobject-introspection gnome-desktop
+    libgweather gnome3.adwaita-icon-theme geoclue2 gsettings-desktop-schemas
   ];
 
-  # The .service file isn't wrapped with the correct environment
-  # so misses GIR files when started. By re-pointing from the gjs
-  # entry point to the wrapped binary we get back to a wrapped
-  # binary.
-  preConfigure = ''
-    substituteInPlace "data/org.gnome.Weather.Application.service.in" \
-        --replace "Exec=@pkgdatadir@/@PACKAGE_NAME@.Application" \
+  postPatch = ''
+    # The .service file is not wrapped with the correct environment
+    # so misses GIR files when started. By re-pointing from the gjs
+    # entry point to the wrapped binary we get back to a wrapped
+    # binary.
+    substituteInPlace "data/org.gnome.Weather.service.in" \
+        --replace "Exec=@DATA_DIR@/@APP_ID@" \
                   "Exec=$out/bin/gnome-weather"
+
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-weather";
+      attrPath = "gnome3.gnome-weather";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Weather;

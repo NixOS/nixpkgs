@@ -12,7 +12,9 @@ toPythonPath() {
     echo $result
 }
 
-addEnvHooks "$hostOffset" addPythonPath
+if [ -z "${dontAddPythonPath:-}" ]; then
+    addEnvHooks "$hostOffset" addPythonPath
+fi
 
 # Determinism: The interpreter is patched to write null timestamps when compiling python files.
 # This way python doesn't try to update them when we freeze timestamps in nix store.

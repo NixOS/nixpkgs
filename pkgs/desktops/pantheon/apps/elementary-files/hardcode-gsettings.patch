@@ -1,0 +1,22 @@
+diff --git a/filechooser-module/FileChooserDialog.vala b/filechooser-module/FileChooserDialog.vala
+index cb7c3c49..8b1899d1 100644
+--- a/filechooser-module/FileChooserDialog.vala
++++ b/filechooser-module/FileChooserDialog.vala
+@@ -57,10 +57,15 @@ public class CustomFileChooserDialog : Object {
+         chooser_dialog.deletable = false;
+         chooser_dialog.local_only = false;
+ 
+-        var settings = new Settings ("io.elementary.files.preferences");
++        SettingsSchemaSource sss = new SettingsSchemaSource.from_directory ("@ELEMENTARY_FILES_GSETTINGS_PATH@", SettingsSchemaSource.get_default (), true);
++        SettingsSchema preferences_schema = sss.lookup ("io.elementary.files.preferences", false);
++        SettingsSchema chooser_schema = sss.lookup ("io.elementary.files.file-chooser", false);
++
++        var settings = new Settings.full (preferences_schema, null, null);
++
+         is_single_click = settings.get_boolean ("single-click");
+ 
+-        var chooser_settings = new Settings ("io.elementary.files.file-chooser");
++        var chooser_settings = new Settings.full (chooser_schema, null, null);
+ 
+         assign_container_box ();
+         remove_gtk_widgets ();

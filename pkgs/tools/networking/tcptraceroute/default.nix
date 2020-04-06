@@ -1,4 +1,4 @@
-{ stdenv , pkgs , fetchurl, libpcap, libnet
+{ stdenv  , fetchurl, libpcap, libnet
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
      description = "A traceroute implementation using TCP packets.";
      homepage = https://github.com/mct/tcptraceroute;
      license = stdenv.lib.licenses.gpl2;
-     maintainers = [ stdenv.lib.maintainers.pbogdan ];
+     maintainers = [ ];
    };
 }

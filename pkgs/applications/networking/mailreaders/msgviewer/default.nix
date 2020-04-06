@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, makeWrapper, writeScript, unzip, jre }:
+{ stdenv, fetchurl, makeWrapper, unzip, jre, runtimeShell }:
 
 let
   version = "1.9";
   name = "msgviewer-${version}";
   uname = "MSGViewer-${version}";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     mv $dir/${uname}/* $dir
     rmdir $dir/${uname}
     cat <<_EOF > $out/bin/msgviewer
-    #!${stdenv.shell} -eu
+    #!${runtimeShell} -eu
     exec ${stdenv.lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
     _EOF
     chmod 755 $out/bin/msgviewer

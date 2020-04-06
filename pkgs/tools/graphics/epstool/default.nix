@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.08";
-  name = "epstool-${version}";
+  pname = "epstool";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/e/epstool/epstool_${version}+repack.orig.tar.gz";

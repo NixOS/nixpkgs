@@ -1,32 +1,80 @@
-{ stdenv, fetchurl
-, meson, ninja, gettext, pkgconfig, wrapGAppsHook, itstool, desktop-file-utils
-, vala,  gtk3, glib, gsound
-, gnome3, gdk_pixbuf, geoclue2, libgweather }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, pkgconfig
+, wrapGAppsHook
+, itstool
+, desktop-file-utils
+, vala
+, gobject-introspection
+, libxml2
+, gtk3
+, glib
+, gsound
+, sound-theme-freedesktop
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, gnome-desktop
+, geocode-glib
+, gnome3
+, gdk-pixbuf
+, geoclue2
+, libgweather
+, libhandy
+}:
 
 stdenv.mkDerivation rec {
-  name = "gnome-clocks-${version}";
-  version = "3.26.1";
+  pname = "gnome-clocks";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-clocks/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "2bd8d8df1d6aa0feddd4afc15d84b1308202fda59a3c3be42e3bce7e9ccd11f7";
+    url = "mirror://gnome/sources/gnome-clocks/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1ij9xwp3c96gsnnlhkqkiw3y45a4lpw7a09d4yysx7bvgw68p5sc";
   };
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-clocks"; attrPath = "gnome3.gnome-clocks"; };
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-clocks";
+      attrPath = "gnome3.gnome-clocks";
+    };
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    vala meson ninja pkgconfig gettext itstool wrapGAppsHook desktop-file-utils
+    vala
+    meson
+    ninja
+    pkgconfig
+    gettext
+    itstool
+    wrapGAppsHook
+    desktop-file-utils
+    libxml2
+    gobject-introspection # for finding vapi files
   ];
   buildInputs = [
-    gtk3 glib gnome3.gsettings-desktop-schemas gdk_pixbuf gnome3.defaultIconTheme
-    gnome3.gnome-desktop gnome3.geocode-glib geoclue2 libgweather gsound
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    adwaita-icon-theme
+    gnome-desktop
+    geocode-glib
+    geoclue2
+    libgweather
+    gsound
+    libhandy
   ];
 
-  prePatch = "patchShebangs build-aux/";
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Fallback sound theme
+      --prefix XDG_DATA_DIRS : "${sound-theme-freedesktop}/share"
+    )
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Clocks;

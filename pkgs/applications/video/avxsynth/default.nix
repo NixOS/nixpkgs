@@ -7,8 +7,8 @@ let
   inherit (stdenv.lib) enableFeature optional;
 in
 
-stdenv.mkDerivation rec {
-  name = "avxsynth-${version}";
+stdenv.mkDerivation {
+  pname = "avxsynth";
   version = "2015-04-07";
 
   src = fetchFromGitHub {
@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
     description = "A script system that allows advanced non-linear editing";
     homepage = https://github.com/avxsynth/avxsynth;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ codyopel viric ];
+    maintainers = with maintainers; [ codyopel ];
     platforms = platforms.linux;
+    broken = true; # 2018-04-10
   };
 }
