@@ -1,14 +1,53 @@
-{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, doxygen
-, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtkmm2, libjack2
-, libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg
-, librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv, lrdf, lv2, makeWrapper
-, perl, pkgconfig, python2, rubberband, serd, sord, sratom
-, taglib, vamp-plugin-sdk, dbus, fftw, pango, suil, libarchive
-, wafHook }:
-
+{ stdenv
+, fetchgit
+, alsaLib
+, aubio
+, boost
+, cairomm
+, curl
+, doxygen
+, fftwSinglePrec
+, flac
+, glibc
+, glibmm
+, graphviz
+, gtkmm2
+, libjack2
+, libgnomecanvas
+, libgnomecanvasmm
+, liblo
+, libmad
+, libogg
+, librdf_raptor
+, librdf_rasqal
+, libsamplerate
+, libsigcxx
+, libsndfile
+, libusb
+, libuuid
+, libxml2
+, libxslt
+, lilv
+, lrdf
+, lv2
+, makeWrapper
+, perl
+, pkgconfig
+, python2
+, rubberband
+, serd
+, sord
+, sratom
+, taglib
+, vamp-plugin-sdk
+, dbus
+, fftw
+, pango
+, suil
+, libarchive
+, wafHook
+}:
 let
-
   # Ardour git repo uses a mix of annotated and lightweight tags. Annotated
   # tags are used for MAJOR.MINOR versioning, and lightweight tags are used
   # in-between; MAJOR.MINOR.REV where REV is the number of commits since the
@@ -18,10 +57,7 @@ let
 
   # Version to build.
   tag = "5.12";
-
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "ardour-${tag}";
 
   src = fetchgit {
@@ -30,15 +66,56 @@ stdenv.mkDerivation rec {
     sha256 = "0mla5lm51ryikc2rrk53max2m7a5ds6i1ai921l2h95wrha45nkr";
   };
 
-  nativeBuildInputs = [ wafHook ];
-  buildInputs =
-    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac
-      glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
-      libmad libogg librdf_raptor librdf_rasqal libsamplerate
-      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lrdf lv2
-      makeWrapper pango perl pkgconfig python2 rubberband serd sord
-      sratom suil taglib vamp-plugin-sdk libarchive
-    ];
+  nativeBuildInputs = [
+    wafHook
+  ];
+
+  buildInputs = [
+    alsaLib
+    aubio
+    boost
+    cairomm
+    curl
+    doxygen
+    dbus
+    fftw
+    fftwSinglePrec
+    flac
+    glibmm
+    graphviz
+    gtkmm2
+    libjack2
+    libgnomecanvas
+    libgnomecanvasmm
+    liblo
+    libmad
+    libogg
+    librdf_raptor
+    librdf_rasqal
+    libsamplerate
+    libsigcxx
+    libsndfile
+    libusb
+    libuuid
+    libxml2
+    libxslt
+    lilv
+    lrdf
+    lv2
+    makeWrapper
+    pango
+    perl
+    pkgconfig
+    python2
+    rubberband
+    serd
+    sord
+    sratom
+    suil
+    taglib
+    vamp-plugin-sdk
+    libarchive
+  ];
 
   # ardour's wscript has a "tarball" target but that required the git revision
   # be available. Since this is an unzipped tarball fetched from github we
