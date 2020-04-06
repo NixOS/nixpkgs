@@ -4046,6 +4046,8 @@ in {
 
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
+  ipyvue = callPackage ../development/python-modules/ipyvue { };
+
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
   ipaddr = callPackage ../development/python-modules/ipaddr { };
