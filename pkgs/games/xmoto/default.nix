@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     lua5 ode libxdg_basedir libxml2
   ];
 
-  CXXFLAGS = [ "-fpermissive" ];
+  env.CXXFLAGS = "-fpermissive";
 
   meta = with stdenv.lib; {
     description = "Obstacled race game";
