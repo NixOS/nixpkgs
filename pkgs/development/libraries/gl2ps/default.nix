@@ -2,12 +2,12 @@
 , zlib, libGL, libGLU, libpng, freeglut }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.4.1";
   pname = "gl2ps";
 
   src = fetchurl {
     url = "http://geuz.org/gl2ps/src/${pname}-${version}.tgz";
-    sha256 = "1qpidkz8x3bxqf69hlhyz1m0jmfi9kq24fxsp7rq6wfqzinmxjq3";
+    sha256 = "0fsx5lh9pz1xswr4yng24j4ngiijnanksbgz05bfzkh07m5h6qkk";
   };
 
   buildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://geuz.org/gl2ps;
+    homepage = "http://geuz.org/gl2ps";
     description = "An OpenGL to PostScript printing library";
     platforms = platforms.all;
     license = licenses.lgpl2;
