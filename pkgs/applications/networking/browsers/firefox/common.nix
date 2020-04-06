@@ -8,7 +8,8 @@
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
-, hunspell, libXdamage, libevent, libstartup_notification, libvpx
+, hunspell, libXdamage, libevent, libstartup_notification
+, libvpx, libvpx_1_8
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
@@ -151,7 +152,7 @@ stdenv.mkDerivation (rec {
     libnotify xorg.pixman yasm libGLU_combined
     xorg.libXScrnSaver xorg.xorgproto
     xorg.libXext sqlite_pkg unzip makeWrapper
-    libevent libstartup_notification libvpx /* cairo */
+    libevent libstartup_notification /* cairo */
     icu libpng jemalloc glib
   ]
   ++ lib.optionals (!isTorBrowserLike) [ nspr_pkg nss_pkg ]
@@ -163,6 +164,8 @@ stdenv.mkDerivation (rec {
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
   # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
   ++ lib.optional (lib.versionAtLeast ffversion "66") nasm
+  ++ lib.optionals  (lib.versionOlder ffversion "75") [ libvpx sqlite ]
+  ++ lib.optional  (lib.versionAtLeast ffversion "75.0") libvpx_1_8
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
@@ -255,7 +258,6 @@ stdenv.mkDerivation (rec {
     "--with-system-icu"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    "--enable-system-sqlite"
     #"--enable-system-cairo"
     "--enable-startup-notification"
     #"--enable-content-sandbox" # TODO: probably enable after 54
@@ -276,6 +278,8 @@ stdenv.mkDerivation (rec {
   ++ lib.optionals (lib.versionAtLeast ffversion "57" && lib.versionOlder ffversion "69") [
     "--enable-webrender=build"
   ]
+  ++ lib.optional (lib.versionOlder ffversion "75") "--enable-system-sqlite"
+  ++ lib.optional (stdenv.isDarwin) "--disable-xcode-checks"
 
   # TorBrowser patches these
   ++ lib.optionals (!isTorBrowserLike) [
