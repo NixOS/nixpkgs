@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ./01_use_system_tinyxml.patch
   ];
 
-  CXXFLAGS = "-fpermissive";
+  env.CXXFLAGS = "-fpermissive";
 
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
