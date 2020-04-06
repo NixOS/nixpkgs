@@ -9,7 +9,6 @@
 , granite
 , wingpanel
 , libgee
-, libwnck3
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
-    libwnck3
     wingpanel
   ];
 
