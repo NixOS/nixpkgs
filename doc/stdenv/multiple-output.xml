@@ -106,7 +106,7 @@
    </para>
 
    <para>
-    The reason for why <literal>glibc</literal> deviates from the convention is because referencing a library provided by <literal>glibc</literal> is a very common operation among Nix packages. For instance, third-party executables packaged by Nix are typically patched and relinked with the relevant version of <literal>glibc</literal> libraries from Nix packages (please see the documentation on <link xlink:href="https://nixos.org/patchelf.html">patchelf</link> for more details).
+    The reason for why <literal>glibc</literal> deviates from the convention is because referencing a library provided by <literal>glibc</literal> is a very common operation among Nix packages. For instance, third-party executables packaged by Nix are typically patched and relinked with the relevant version of <literal>glibc</literal> libraries from Nix packages (please see the documentation on <link xlink:href="https://github.com/NixOS/patchelf/blob/master/README">patchelf</link> for more details).
    </para>
   </section>
 
