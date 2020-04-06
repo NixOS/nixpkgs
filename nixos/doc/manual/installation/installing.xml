@@ -41,6 +41,11 @@
    neo</command>!)
   </para>
 
+  <para>
+   If the text is too small to be legible, try <command>setfont ter-132n</command>
+   to increase the font size.
+  </para>
+
   <section xml:id="sec-installation-booting-networking">
    <title>Networking in the installer</title>
 
