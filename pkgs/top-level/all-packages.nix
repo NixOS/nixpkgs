@@ -14212,6 +14212,8 @@ in
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
+  qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
+
   qradiolink = callPackage ../applications/radio/qradiolink { };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
