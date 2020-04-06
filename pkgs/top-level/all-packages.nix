@@ -19299,6 +19299,7 @@ in
     # wrapped versions
     gnuradio3_7
     gnuradio3_7-full
+    gnuradio3_7-with-packages # with all available plugins wrapped as well
     # Please use this one as a library
     gnuradio3_7-no-gui
   ;

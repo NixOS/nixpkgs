@@ -2,6 +2,7 @@
 , CoreAudio
 , python2
 , python3
+, lib
 }:
 
 rec {
@@ -31,7 +32,13 @@ rec {
     plugins = plugins3_7;
     unwrapped = unwrapped3_7;
     python = python2;
-    extraPackages = plugins3_7;
+    extraPaths = lib.attrValues plugins3_7;
+  };
+  gnuradio3_7-full = callPackage ./wrapper.nix {
+    plugins = plugins3_7;
+    unwrapped = unwrapped3_7-full;
+    python = python2;
+    extraPaths = lib.attrValues plugins3_7;
   };
   plugins3_7 = rec {
     ais = callPackage ./plugins/ais.nix { gnuradio = unwrapped3_7; gr-osmosdr = osmosdr;};
