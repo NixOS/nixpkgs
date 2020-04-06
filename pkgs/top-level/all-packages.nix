@@ -7760,6 +7760,8 @@ in
 
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
 
+  zsh-nix-shell = callPackage ../shells/zsh/zsh-nix-shell { };
+
   zsh-syntax-highlighting = callPackage ../shells/zsh/zsh-syntax-highlighting { };
 
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
