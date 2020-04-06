@@ -6,12 +6,12 @@ assert fuseSupport -> fuse3 != null;
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "2020-03-25";
+  version = "2020-04-04";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs-tools.git";
-    rev = "2aed686c235a7d08adf601f147f823eb62e697a1";
-    sha256 = "0prr8m6lwsabflslvi9j906wlm6m052zgi480y3gbkdm1sqcfjcs";
+    rev = "5d6e237b728cfb7c3bf2cb1a613e64bdecbd740d";
+    sha256 = "1syym9k3njb0bk2mg6832cbf6r42z6y8b6hjv7dg4gmv2h7v7l7g";
   };
 
   postPatch = ''
