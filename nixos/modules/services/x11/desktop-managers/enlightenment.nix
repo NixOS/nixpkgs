@@ -38,7 +38,7 @@ in
       pkgs.gtk2 # To get GTK's themes.
       pkgs.tango-icon-theme
 
-      pkgs.gnome2.gnome-icon-theme
+      pkgs.gnome-icon-theme
       pkgs.xorg.xcursorthemes
     ];
 
