@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0.2";
+  version = "5.0.3";
 
   repoName = "greeter";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0557lr8czqwjrm39ykfacqw5x7nng7fmf1gxkif70xg7dk3lc7gd";
+    sha256 = "1zbfcdgjn57r8pz01xrz6kk8rmviq133snz9f1vqhjdsznk82w5i";
   };
 
   passthru = {
