@@ -19800,6 +19800,8 @@ in
 
   hashit = callPackage ../tools/misc/hashit { };
 
+  hactool = callPackage ../tools/compression/hactool { };
+
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
