@@ -4048,6 +4048,8 @@ in {
 
   ipyvue = callPackage ../development/python-modules/ipyvue { };
 
+  ipyvuetify = callPackage ../development/python-modules/ipyvuetify { };
+
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
   ipaddr = callPackage ../development/python-modules/ipaddr { };
