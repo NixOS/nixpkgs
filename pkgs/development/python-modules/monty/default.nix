@@ -29,6 +29,13 @@ buildPythonPackage rec {
   checkInputs = [ lsof nose numpy msgpack coverage coveralls pymongo];
   propagatedBuildInputs = [ six ruamel_yaml ];
 
+  # test suite tries to decode bytes, but msgpack now returns a str
+  # https://github.com/materialsvirtuallab/monty/pull/121
+  postPatch = ''
+    substituteInPlace tests/test_serialization.py \
+      --replace ".decode('utf-8')" ""
+  '';
+
   preCheck = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
