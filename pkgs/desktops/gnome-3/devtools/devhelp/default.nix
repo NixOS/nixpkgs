@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "API documentation browser for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Devhelp";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

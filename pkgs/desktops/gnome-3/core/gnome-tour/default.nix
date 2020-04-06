@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage rec {
   meta = with stdenv.lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
     description = "GNOME Greeter & Tour";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
