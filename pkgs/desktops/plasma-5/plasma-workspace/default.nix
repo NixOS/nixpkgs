@@ -47,7 +47,6 @@ mkDerivation {
     ./0002-absolute-wallpaper-install-dir.patch
   ];
 
-
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
     ''-DNIXPKGS_XRDB="${getBin xrdb}/bin/xrdb"''
