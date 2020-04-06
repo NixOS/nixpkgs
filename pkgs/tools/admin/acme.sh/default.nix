@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute, unixtools }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute, unixtools, dnsutils }:
 stdenv.mkDerivation rec {
   pname = "acme.sh";
   version = "2.8.5";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
           socat
           openssl
           curl
-          bind.dnsutils
+          dnsutils
           (if stdenv.isLinux then iproute else unixtools.netstat)
         ]
       }"
