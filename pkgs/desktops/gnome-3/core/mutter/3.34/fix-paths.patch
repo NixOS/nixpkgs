@@ -1,8 +1,8 @@
 diff --git a/src/core/util.c b/src/core/util.c
-index 5b8de18c7..546352a95 100644
+index 57b73747d..f424cc81c 100644
 --- a/src/core/util.c
 +++ b/src/core/util.c
-@@ -635,7 +635,7 @@ meta_show_dialog (const char *type,
+@@ -636,7 +636,7 @@ meta_show_dialog (const char *type,
 
    args = g_ptr_array_new ();
 
