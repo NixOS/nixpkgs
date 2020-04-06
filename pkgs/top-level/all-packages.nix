@@ -16408,6 +16408,8 @@ in
 
   gmailieer = callPackage ../applications/networking/gmailieer {};
 
+  gmailctl = callPackage ../applications/networking/gmailctl {};
+
   gpm = callPackage ../servers/gpm {
     ncurses = null;  # Keep curses disabled for lack of value
   };
