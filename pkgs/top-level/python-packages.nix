@@ -4986,6 +4986,8 @@ in {
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
+  psycopg2cffi = callPackage ../development/python-modules/psycopg2cffi {};
+
   ptpython = callPackage ../development/python-modules/ptpython {
     prompt_toolkit = self.prompt_toolkit;
   };
