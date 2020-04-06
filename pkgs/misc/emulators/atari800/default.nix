@@ -28,7 +28,7 @@ stdenv.mkDerivation rec{
   ];
 
   meta = {
-    homepage = "http://atari800.github.io/";
+    homepage = "https://atari800.github.io/";
     description = "An Atari 8-bit emulator";
     longDescription = ''
       Atari800 is the emulator of Atari 8-bit computer systems and
