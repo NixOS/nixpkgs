@@ -6,27 +6,28 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage = pkgs.php73;
-  phpPackages = pkgs.php73Packages;
+  phpPackage =
+    let
+      base = pkgs.php74;
+    in
+      base.buildEnv {
+        extensions = e: with e;
+          base.enabledExtensions ++ [
+            apcu redis memcached imagick
+          ];
+        extraConfig = phpOptionsStr;
+      };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
 
-  phpOptionsExtensions = ''
-    ${optionalString cfg.caching.apcu "extension=${phpPackages.apcu}/lib/php/extensions/apcu.so"}
-    ${optionalString cfg.caching.redis "extension=${phpPackages.redis}/lib/php/extensions/redis.so"}
-    ${optionalString cfg.caching.memcached "extension=${phpPackages.memcached}/lib/php/extensions/memcached.so"}
-    extension=${phpPackages.imagick}/lib/php/extensions/imagick.so
-    zend_extension = opcache.so
-    opcache.enable = 1
-  '';
   phpOptions = {
     upload_max_filesize = cfg.maxUploadSize;
     post_max_size = cfg.maxUploadSize;
     memory_limit = cfg.maxUploadSize;
   } // cfg.phpOptions;
-  phpOptionsStr = phpOptionsExtensions + (toKeyValue phpOptions);
+  phpOptionsStr = toKeyValue phpOptions;
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.stdenv.shell}
@@ -38,7 +39,6 @@ let
     export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
     $sudo \
       ${phpPackage}/bin/php \
-      -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
   '';
 

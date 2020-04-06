@@ -1,12 +1,12 @@
 { stdenv, glibcLocales, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.15.1";
+  version = "0.16.0";
   pname = "khard";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "18ba2xgfq8sw0bg6xmlfjpizid1hkzgswcfcc54gl21y2dwfda2w";
+    sha256 = "0a1zpkq0pplmn9flxczq2wafs6zc07r9xx9qi6dqmyv9mhy9d87f";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = https://github.com/scheibler/khard;
+    homepage = "https://github.com/scheibler/khard";
     description = "Console carddav client";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];

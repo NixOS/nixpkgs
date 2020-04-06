@@ -44,7 +44,7 @@ self: super: {
   text = self.text_1_2_4_0;
 
   # Needs Cabal 3.0.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_0_0_0; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_0_0; };
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {

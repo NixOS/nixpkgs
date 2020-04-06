@@ -1,7 +1,7 @@
 { lib, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
 
 buildPythonApplication rec {
-  name = "frescobaldi-${version}";
+  pname = "frescobaldi";
   version = "3.1.1";
 
   src = fetchFromGitHub {

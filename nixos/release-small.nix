@@ -40,7 +40,7 @@ in rec {
         nat
         nfs3
         openssh
-        php-pcre
+        php
         predictable-interface-names
         proxy
         simple;
@@ -108,7 +108,8 @@ in rec {
         "nixos.tests.nat.standalone.x86_64-linux"
         "nixos.tests.nfs3.simple.x86_64-linux"
         "nixos.tests.openssh.x86_64-linux"
-        "nixos.tests.php-pcre.x86_64-linux"
+        "nixos.tests.php.fpm.x86_64-linux"
+        "nixos.tests.php.pcre.x86_64-linux"
         "nixos.tests.predictable-interface-names.predictable.x86_64-linux"
         "nixos.tests.predictable-interface-names.predictableNetworkd.x86_64-linux"
         "nixos.tests.predictable-interface-names.unpredictable.x86_64-linux"

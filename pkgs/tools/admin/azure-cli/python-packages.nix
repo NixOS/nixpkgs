@@ -11,10 +11,7 @@ let
     '';
 
     # Prevent these __init__'s from violating PEP420, only needed for python2
-    postInstall = (attrs.postInstall or "") + ''
-      rm $out/${python.sitePackages}/azure/{,__pycache__/}__init__.* \
-         $out/${python.sitePackages}/azure/cli/{,__pycache__/}__init__.*
-    '';
+    pythonNamespaces = [ "azure.cli" ];
 
     checkInputs = [ mock pytest ] ++ (attrs.checkInputs or []);
     checkPhase = attrs.checkPhase or ''
@@ -39,9 +36,7 @@ let
       '';
 
       # force PEP420
-      postInstall = ''
-        rm -f $out/${py.sitePackages}/azure/{,mgmt/}__init__.py
-      '';
+      pythonNamespaces = [ "azure.mgmt" ];
     });
 
   py = python.override {
@@ -277,9 +272,7 @@ let
         propagatedBuildInputs = with self; [
           azure-common azure-nspkg msrest msrestazure cryptography
         ];
-        postInstall = ''
-          rm -f $out/${self.python.sitePackages}/azure/__init__.py
-        '';
+        pythonNamespaces = [ "azure" ];
         pythonImportsCheck = [ ];
       });
 

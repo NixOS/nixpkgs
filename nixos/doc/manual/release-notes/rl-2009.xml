@@ -24,6 +24,9 @@
     </para>
    </listitem>
    <listitem>
+    <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
+   </listitem>
+   <listitem>
     <para>
      PHP now defaults to PHP 7.4, updated from 7.3.
     </para>
@@ -124,6 +127,73 @@
      generate some; see the <option>hostKeys</option> option
      documentation for instructions.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Since this release there's an easy way to customize your PHP install to get a much smaller
+       base PHP with only wanted extensions enabled. See the following snippet installing a smaller PHP
+       with the extensions <literal>imagick</literal>, <literal>opcache</literal> and
+       <literal>pdo_mysql</literal> loaded:
+
+       <programlisting>
+environment.systemPackages = [
+(pkgs.php.buildEnv { extensions = pp: with pp; [
+    imagick
+    opcache
+    pdo_mysql
+  ]; })
+];</programlisting>
+
+       The default <literal>php</literal> attribute hasn't lost any extensions -
+       the <literal>opcache</literal> extension was added there.
+
+       All upstream PHP extensions are available under <package><![CDATA[php.extensions.<name?>]]></package>.
+     </para>
+     <para>
+       The updated <literal>php</literal> attribute is now easily customizable to your liking
+       by using extensions instead of writing config files or changing configure flags.
+
+       Therefore we have removed the following configure flags:
+
+       <itemizedlist>
+         <title>PHP <literal>config</literal> flags that we don't read anymore:</title>
+         <listitem><para><literal>config.php.argon2</literal></para></listitem>
+         <listitem><para><literal>config.php.bcmath</literal></para></listitem>
+         <listitem><para><literal>config.php.bz2</literal></para></listitem>
+         <listitem><para><literal>config.php.calendar</literal></para></listitem>
+         <listitem><para><literal>config.php.curl</literal></para></listitem>
+         <listitem><para><literal>config.php.exif</literal></para></listitem>
+         <listitem><para><literal>config.php.ftp</literal></para></listitem>
+         <listitem><para><literal>config.php.gd</literal></para></listitem>
+         <listitem><para><literal>config.php.gettext</literal></para></listitem>
+         <listitem><para><literal>config.php.gmp</literal></para></listitem>
+         <listitem><para><literal>config.php.imap</literal></para></listitem>
+         <listitem><para><literal>config.php.intl</literal></para></listitem>
+         <listitem><para><literal>config.php.ldap</literal></para></listitem>
+         <listitem><para><literal>config.php.libxml2</literal></para></listitem>
+         <listitem><para><literal>config.php.libzip</literal></para></listitem>
+         <listitem><para><literal>config.php.mbstring</literal></para></listitem>
+         <listitem><para><literal>config.php.mysqli</literal></para></listitem>
+         <listitem><para><literal>config.php.mysqlnd</literal></para></listitem>
+         <listitem><para><literal>config.php.openssl</literal></para></listitem>
+         <listitem><para><literal>config.php.pcntl</literal></para></listitem>
+         <listitem><para><literal>config.php.pdo_mysql</literal></para></listitem>
+         <listitem><para><literal>config.php.pdo_odbc</literal></para></listitem>
+         <listitem><para><literal>config.php.pdo_pgsql</literal></para></listitem>
+         <listitem><para><literal>config.php.phpdbg</literal></para></listitem>
+         <listitem><para><literal>config.php.postgresql</literal></para></listitem>
+         <listitem><para><literal>config.php.readline</literal></para></listitem>
+         <listitem><para><literal>config.php.soap</literal></para></listitem>
+         <listitem><para><literal>config.php.sockets</literal></para></listitem>
+         <listitem><para><literal>config.php.sodium</literal></para></listitem>
+         <listitem><para><literal>config.php.sqlite</literal></para></listitem>
+         <listitem><para><literal>config.php.tidy</literal></para></listitem>
+         <listitem><para><literal>config.php.xmlrpc</literal></para></listitem>
+         <listitem><para><literal>config.php.xsl</literal></para></listitem>
+         <listitem><para><literal>config.php.zip</literal></para></listitem>
+         <listitem><para><literal>config.php.zlib</literal></para></listitem>
+       </itemizedlist>
+     </para>
    </listitem>
   </itemizedlist>
  </section>

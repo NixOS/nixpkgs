@@ -1,4 +1,4 @@
-{ config, lib, callPackage, fetchurl }:
+{ config, stdenv, lib, callPackage, fetchurl }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "74.0";
+    ffversion = "74.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "245n2ilfgx3rd0xlxzpg4gcwddcy0cgaqnaf5pwixjx0n8py1imiylwlsbihf70s41cq5q8awckchs287yysr4v6pdfqqbj7s0f02ki";
+      sha512 = "3aycj3wllsz97x30dxngpbwryqss209cisj91vs1yfgspp8nbl148fk37id6bgl33hga1irc4zxx7glmymibymkfkrmy0xx803w8dy4";
     };
 
     patches = [
@@ -23,6 +23,8 @@ rec {
       maintainers = with lib.maintainers; [ eelco andir ];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
@@ -33,10 +35,10 @@ rec {
 
   firefox-esr-68 = common rec {
     pname = "firefox-esr";
-    ffversion = "68.6.0esr";
+    ffversion = "68.6.1esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "2ipajk86s7hfz7qky9lh24i5fgzgpv9hl12invr1rr6jhpp0h6gbb44ffim0z9lmcj49cr01cgqis0swhb4vph8dl1jvgfq9rjmsml4";
+      sha512 = "1xg2hdk50ys9np5a0jdwr2wb543sq8ibmvr05h9apmb4yn1hhz3ml9yq9r4v2di4hnb3s181zvq4np5srka2v6aqz8rk7cq46096fls";
     };
 
     patches = [

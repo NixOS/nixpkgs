@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkg-config, boost, gtkmm2
-, imagemagick, sane-backends, tesseract4, udev, libusb}:
+, imagemagick, sane-backends, tesseract4, udev, libusb1}:
 
 stdenv.mkDerivation rec {
   pname = "utsushi";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     imagemagick
     sane-backends
     udev.dev
-    libusb.dev
+    libusb1.dev
   ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=parentheses -Wno-error=unused-variable";

@@ -1,25 +1,17 @@
 { stdenv, fetchurl, meson, ninja, python3, vala, libxslt, pkgconfig, glib, bash-completion, dbus, gnome3
-, libxml2, gtk-doc, docbook_xsl, docbook_xml_dtd_42, fetchpatch }:
+, libxml2, gtk-doc, docbook_xsl, docbook_xml_dtd_42 }:
 
 let
   pname = "dconf";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "0.34.0";
+  version = "0.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0lnsl85cp2vpzgp8pkf6l6yd2i3lp02jdvga1icfa78j2smr8fll";
+    sha256 = "0bfs069pjv6lhp7xrzmrhz3876ay2ryqxzc6mlva1hhz34ibprlz";
   };
-
-  patches = [
-    # Fix build with Meson 0.52
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/dconf/commit/cc32667c5d7d9ff95e65cc21f59905d8f9218394.patch";
-      sha256 = "02gfadn34bg818a7vb3crhsiahskiflcvx9l6iqwf1v269q93mr8";
-    })
-  ];
 
   postPatch = ''
     chmod +x meson_post_install.py tests/test-dconf.py
@@ -29,7 +21,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig python3 libxslt libxml2 gtk-doc docbook_xsl docbook_xml_dtd_42 ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig python3 libxslt libxml2 glib gtk-doc docbook_xsl docbook_xml_dtd_42 ];
   buildInputs = [ glib bash-completion dbus ];
 
   mesonFlags = [
@@ -42,7 +34,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
     };
   };
 

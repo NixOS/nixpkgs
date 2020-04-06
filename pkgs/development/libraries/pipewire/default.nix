@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitHub
+, fetchFromGitLab
 , meson
 , ninja
 , pkgconfig
@@ -17,6 +17,11 @@
 , xorg
 , sbc
 , SDL2
+, libsndfile
+, bluez
+, vulkan-headers
+, vulkan-loader
+, libpulseaudio
 , makeFontsConf
 }:
 
@@ -27,15 +32,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.2.7";
+  version = "0.3.1";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
-  src = fetchFromGitHub {
-    owner = "PipeWire";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "1q5wrqnhhs6r49p8yvkw1pl0cnsd4rndxy4h5lvdydwgf1civcwc";
+    sha256 = "DfUgXTSSCl+JszFEKwBha67nauQi4noR25m00auXDnA=";
   };
 
   nativeBuildInputs = [
@@ -50,24 +56,28 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     alsaLib
+    bluez
     dbus
     ffmpeg
     glib
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     libjack2
+    libpulseaudio
+    libsndfile
     libva
     sbc
     udev
+    vulkan-headers
+    vulkan-loader
     xorg.libX11
   ];
 
   mesonFlags = [
     "-Ddocs=true"
-    "-Dgstreamer=enabled"
+    "-Dman=false" # we don't have xmltoman
+    "-Dgstreamer=true"
   ];
-
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
@@ -76,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Server and user space API to deal with multimedia pipelines";
     homepage = https://pipewire.org/;
-    license = licenses.lgpl21;
+    license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jtojnar ];
   };

@@ -41,10 +41,13 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # These builds need Cabal 3.2.x.
+  cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_0_0; };
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
+
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
   async = doJailbreak super.async;
-  cabal-install = doJailbreak super.cabal-install;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   chell = doJailbreak super.chell;
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
@@ -72,12 +75,6 @@ self: super: {
   time-compat = doJailbreak super.time-compat;
   http-media = doJailbreak super.http-media;
   servant-server = doJailbreak super.servant-server;
-
-  # These packages don't work and need patching and/or an update.
-  hackage-security = appendPatch (doJailbreak super.hackage-security) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
-    sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
-  });
   foundation = dontCheck super.foundation;
   vault = dontHaddock super.vault;
 

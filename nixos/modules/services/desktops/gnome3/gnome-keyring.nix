@@ -39,6 +39,8 @@ with lib;
 
     services.dbus.packages = [ pkgs.gnome3.gnome-keyring pkgs.gcr ];
 
+    xdg.portal.extraPortals = [ pkgs.gnome3.gnome-keyring ];
+
     security.pam.services.login.enableGnomeKeyring = true;
 
     security.wrappers.gnome-keyring-daemon = {

@@ -221,6 +221,7 @@ mapAliases ({
   libcanberra_gtk3 = libcanberra-gtk3; # added 2018-02-25
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
+  libcroco = throw "libcroco has been removed as it's no longer used in any derivations."; # added 2020-03-04
   libindicate = throw "libindacate has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   libindicate-gtk3 = throw "libindacate-gtk2 has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   libindicate-gtk2 = throw "libindacate-gtk3 has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
@@ -321,6 +322,55 @@ mapAliases ({
   perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
   pg_tmp = ephemeralpg; # added 2018-01-16
+
+  php-embed = throw ''
+    php*-embed has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override { config.php.embed = true; config.php.apxs2 = false; })
+  ''; # added 2020-04-01
+  php72-embed = php-embed; # added 2020-04-01
+  php73-embed = php-embed; # added 2020-04-01
+  php74-embed = php-embed; # added 2020-04-01
+
+  phpPackages-embed = throw ''
+    php*Packages-embed has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override { config.php.embed = true; config.php.apxs2 = false; }).packages
+  ''; # added 2020-04-01
+  php74Packages-embed = phpPackages-embed;
+  php73Packages-embed = phpPackages-embed;
+  php72Packages-embed = phpPackages-embed;
+
+  php-unit = throw ''
+    php*-unit has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override {
+      config.php.embed = true;
+      config.php.apxs2 = false;
+      config.php.systemd = false;
+      config.php.phpdbg = false;
+      config.php.cgi = false;
+      config.php.fpm = false; })
+  ''; # added 2020-04-01
+  php72-unit = php-unit; # added 2020-04-01
+  php73-unit = php-unit; # added 2020-04-01
+  php74-unit = php-unit; # added 2020-04-01
+
+  phpPackages-unit = throw ''
+    php*Packages-unit has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override {
+      config.php.embed = true;
+      config.php.apxs2 = false;
+      config.php.systemd = false;
+      config.php.phpdbg = false;
+      config.php.cgi = false;
+      config.php.fpm = false; }).packages
+  ''; # added 2020-04-01
+  php74Packages-unit = phpPackages-unit;
+  php73Packages-unit = phpPackages-unit;
+  php72Packages-unit = phpPackages-unit;
+
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
   pidginlatexSF = pidgin-latex; # added 2014-11-02

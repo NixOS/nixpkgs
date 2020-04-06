@@ -89,22 +89,6 @@ switchboard-with-plugs.override {
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry xml:id="sec-pantheon-faq-slow-shutdown">
-    <term>
-     Using Pantheon sometimes makes my shutdown take a long time.
-    </term>
-    <listitem>
-     <para>
-      We have not yet determined what processes fight with systemd during shutdown, there are many reports. In elementary OS the default system timeout is lowered to lessen the impact of the issue. If you'd like to do this in NixOS, set
-<programlisting>
- <xref linkend="opt-systemd.extraConfig"/> = ''
-  DefaultTimeoutStopSec=10s
-  DefaultTimeoutStartSec=10s
-'';
-</programlisting>
-     </para>
-    </listitem>
-   </varlistentry>
    <varlistentry xml:id="sec-pantheon-faq-gnome3-and-pantheon">
     <term>
      I cannot enable both GNOME 3 and Pantheon.

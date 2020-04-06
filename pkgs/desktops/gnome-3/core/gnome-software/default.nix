@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "3.34.2";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zhi6zkphq0wfm9z2d1rp1ym8x52c7as4r8h2nrcd34mmv02xnm7";
+    sha256 = "0b5b1k0a531c2jyf4g59dw7lblga8xrba38mzfdl57dnknbvbafs";
   };
 
   patches = [
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dubuntu_reviews=false"
     "-Dgudev=false"
+    # FIXME: package malcontent parental controls
+    "-Dmalcontent=false"
   ] ++ stdenv.lib.optionals (!withFwupd) [
     "-Dfwupd=false"
   ];

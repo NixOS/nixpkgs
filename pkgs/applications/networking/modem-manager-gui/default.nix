@@ -2,6 +2,7 @@
 , pkgconfig
 , python3
 , fetchhg
+, fetchpatch
 , gtk3
 , glib
 , gdbm
@@ -24,6 +25,14 @@ stdenv.mkDerivation rec {
     rev = "version ${version}";
     sha256 = "11iibh36567814h2bz41sa1072b86p1l13xyj670pwkh9k8kw8fd";
   };
+
+  patches = [
+    # Fix docs build
+    (fetchpatch {
+      url = "https://bitbucket.org/linuxonly/modem-manager-gui/commits/68fb09c12413b7de9b7477cbf4241c3527568325/raw";
+      sha256 = "58XIT/RTZ9sjUK2e47h+SqpRWhQ2vbKb2h9MKiHNdgw=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig

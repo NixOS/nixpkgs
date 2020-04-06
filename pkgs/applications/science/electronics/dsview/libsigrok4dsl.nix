@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, autoreconfHook,
-glib, libzip, libserialport, check, libusb, libftdi,
+glib, libzip, libserialport, check, libusb1, libftdi,
 systemd, alsaLib, dsview
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   buildInputs = [
-    glib libzip libserialport libusb libftdi systemd check alsaLib
+    glib libzip libserialport libusb1 libftdi systemd check alsaLib
   ];
 
   meta = with stdenv.lib; {

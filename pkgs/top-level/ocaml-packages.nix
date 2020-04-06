@@ -1234,5 +1234,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_10;
 
-  ocamlPackages = ocamlPackages_4_08;
+  ocamlPackages = ocamlPackages_4_09;
 }

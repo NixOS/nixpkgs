@@ -22,9 +22,7 @@ buildPythonPackage rec {
     azure-common
   ];
 
-  postInstall = lib.optionalString isPy3k ''
-    rm -rf $out/${python.sitePackages}/azure/__init__.py
-  '';
+  pythonNamespaces = [ "azure" ];
 
   # has no tests
   doCheck = false;

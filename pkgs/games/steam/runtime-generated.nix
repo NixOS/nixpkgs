@@ -1444,9 +1444,9 @@
       };
     }
     rec {
-      name = "libvulkan1_1.1.73+dfsg-1+steamrt1.2+srt1_amd64";
-      sha256 = "e70dbce3db8d74df853dd10265d37c8b4b4f7336043f79ae480be3d6922c206c";
-      url = "mirror://steamrt/pool/main/v/vulkan/libvulkan1_1.1.73+dfsg-1+steamrt1.2+srt1_amd64.deb";
+      name = "libvulkan1_1.2.135~srt-0+steamrt1.1+srt1_amd64";
+      sha256 = "99b0d38e6a2240dbea57c3ebee18de7013ee5d346c82bc82243c18e66bc50ae4";
+      url = "mirror://steamrt/pool/main/v/vulkan-loader/libvulkan1_1.2.135~srt-0+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libvulkan1.deb";
@@ -1975,18 +1975,36 @@
       };
     }
     rec {
-      name = "vulkan-utils_1.1.73+dfsg-1+steamrt1.2+srt1_amd64";
-      sha256 = "01420d08d0c99d4f70d350af91ac127635e6a75a88200350a4691b8440a7926c";
-      url = "mirror://steamrt/pool/main/v/vulkan/vulkan-utils_1.1.73+dfsg-1+steamrt1.2+srt1_amd64.deb";
+      name = "vulkan-tools_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64";
+      sha256 = "b5c0c3fd9f5329f2aff54ce73f9281e3e61156556e1ee50c697b37f2144b1531";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "vulkan-tools.deb";
+      };
+    }
+    rec {
+      name = "vulkan-tools-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64";
+      sha256 = "33b03b9413ec308f5ee5b8699e9f9ad939b501b602eea185fdcaa69863deb70c";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "vulkan-tools-multiarch.deb";
+      };
+    }
+    rec {
+      name = "vulkan-utils_1.2.131.1+dfsg1-1+steamrt1.1+srt1_all";
+      sha256 = "f10004e20ed5fc93edf035f8f34bb9f8307eb34974a3ed5aae9ba87f00a2c468";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-utils_1.2.131.1+dfsg1-1+steamrt1.1+srt1_all.deb";
       source = fetchurl {
         inherit url sha256;
         name = "vulkan-utils.deb";
       };
     }
     rec {
-      name = "vulkan-utils-multiarch_1.1.73+dfsg-1+steamrt1.2+srt1_amd64";
-      sha256 = "ea9fbf565059fc5106a2a13bd56e5a37f2d641655304fd0d4b0d3989b69a8046";
-      url = "mirror://steamrt/pool/main/v/vulkan/vulkan-utils-multiarch_1.1.73+dfsg-1+steamrt1.2+srt1_amd64.deb";
+      name = "vulkan-utils-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64";
+      sha256 = "a1e9387bb5cb7effb23c5994dd2724614cfed7a447ec9c449ee4effcab58fd4c";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-utils-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "vulkan-utils-multiarch.deb";
@@ -3480,9 +3498,9 @@
       };
     }
     rec {
-      name = "libvulkan1_1.1.73+dfsg-1+steamrt1.2+srt1_i386";
-      sha256 = "4e06285406434cc1184884438a15e6dd11f1d9aa2e1d6c95d2138fbe0f61a172";
-      url = "mirror://steamrt/pool/main/v/vulkan/libvulkan1_1.1.73+dfsg-1+steamrt1.2+srt1_i386.deb";
+      name = "libvulkan1_1.2.135~srt-0+steamrt1.1+srt1_i386";
+      sha256 = "ac161149e1106247de706788a7ea29dbe5e3c17c2b8aedf97ec892b311abbb75";
+      url = "mirror://steamrt/pool/main/v/vulkan-loader/libvulkan1_1.2.135~srt-0+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libvulkan1.deb";
@@ -4011,18 +4029,36 @@
       };
     }
     rec {
-      name = "vulkan-utils_1.1.73+dfsg-1+steamrt1.2+srt1_i386";
-      sha256 = "2deda8ceeaef31ec4103e614282e554f360db2a7f51e2e868918845cb1187c75";
-      url = "mirror://steamrt/pool/main/v/vulkan/vulkan-utils_1.1.73+dfsg-1+steamrt1.2+srt1_i386.deb";
+      name = "vulkan-tools_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386";
+      sha256 = "6a8576cc6fadc4d18c97b100dc24bad1906f6f56cab024997787355025695df4";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "vulkan-tools.deb";
+      };
+    }
+    rec {
+      name = "vulkan-tools-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386";
+      sha256 = "fae0430f540c71bd8f6ab3099f8aa132d2eda858b66facf3d8a586ab38cffde6";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-tools-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "vulkan-tools-multiarch.deb";
+      };
+    }
+    rec {
+      name = "vulkan-utils_1.2.131.1+dfsg1-1+steamrt1.1+srt1_all";
+      sha256 = "f10004e20ed5fc93edf035f8f34bb9f8307eb34974a3ed5aae9ba87f00a2c468";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-utils_1.2.131.1+dfsg1-1+steamrt1.1+srt1_all.deb";
       source = fetchurl {
         inherit url sha256;
         name = "vulkan-utils.deb";
       };
     }
     rec {
-      name = "vulkan-utils-multiarch_1.1.73+dfsg-1+steamrt1.2+srt1_i386";
-      sha256 = "13be3dd08ade9e67e7a3b870ee0787c2a96d6c2f99b3173c5439f643d52be220";
-      url = "mirror://steamrt/pool/main/v/vulkan/vulkan-utils-multiarch_1.1.73+dfsg-1+steamrt1.2+srt1_i386.deb";
+      name = "vulkan-utils-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386";
+      sha256 = "f81b81ef14f11662d2d5e5a7f688c2ef4f9ad9625ec5e59de91aab3f1ad45406";
+      url = "mirror://steamrt/pool/main/v/vulkan-tools/vulkan-utils-multiarch_1.2.131.1+dfsg1-1+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "vulkan-utils-multiarch.deb";

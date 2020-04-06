@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
   pname = "swiften";
   version = "4.0.2";
 
-  nativeBuildInputs = [ scons];
+  nativeBuildInputs = [ scons.py2 ];
   buildInputs           = [ python ];
   propagatedBuildInputs = [ openssl boost ];
 

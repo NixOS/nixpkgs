@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     pkgconfig
     python3
     wrapGAppsHook
+    glib # for glib-compile-resources
   ];
 
   buildInputs = [
