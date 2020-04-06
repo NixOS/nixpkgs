@@ -35,7 +35,9 @@ ENV["BUNDLE_GEMFILE"] = #{gemfile.dump}
 ENV.delete 'BUNDLE_PATH'
 ENV['BUNDLE_FROZEN'] = '1'
 
-$LOAD_PATH.unshift #{bundler_path.dump} + "/lib"
+Gem.paths = { 'GEM_HOME' => #{bundle_path.dump} }
+
+$LOAD_PATH.unshift #{File.join(bundler_path, "/lib").dump}
 
 require 'bundler'
 Bundler.setup(#{groups.map(&:dump).join(', ')})
