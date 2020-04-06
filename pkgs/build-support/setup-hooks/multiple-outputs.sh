@@ -66,14 +66,13 @@ _multioutConfig() {
         fi
     fi
 
-    configureFlags="\
-        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
-        --includedir=${!outputInclude}/include --oldincludedir=${!outputInclude}/include \
-        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --docdir=${!outputDoc}/share/doc/${shareDocName} \
-        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
-        --localedir=${!outputLib}/share/locale \
-        $configureFlags"
+    _prepend configureFlags \
+        --bindir="${!outputBin}"/bin --sbindir="${!outputBin}"/sbin \
+        --includedir="${!outputInclude}"/include --oldincludedir="${!outputInclude}"/include \
+        --mandir="${!outputMan}"/share/man --infodir="${!outputInfo}"/share/info \
+        --docdir="${!outputDoc}"/share/doc/"${shareDocName}" \
+        --libdir="${!outputLib}"/lib --libexecdir="${!outputLib}"/libexec \
+        --localedir="${!outputLib}"/share/locale
 
     installFlags="\
         pkgconfigdir=${!outputDev}/lib/pkgconfig \

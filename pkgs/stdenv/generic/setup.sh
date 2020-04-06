@@ -1028,20 +1028,20 @@ configurePhase() {
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
+        _prepend configureFlags "${prefixKey:---prefix=}$prefix"
     fi
 
     # Add --disable-dependency-tracking to speed up some builds.
     if [ -z "${dontAddDisableDepTrack:-}" ]; then
         if [ -f "$configureScript" ] && grep -q dependency-tracking "$configureScript"; then
-            configureFlags="--disable-dependency-tracking $configureFlags"
+            _prepend configureFlags --disable-dependency-tracking
         fi
     fi
 
     # By default, disable static builds.
     if [ -z "${dontDisableStatic:-}" ]; then
         if [ -f "$configureScript" ] && grep -q enable-static "$configureScript"; then
-            configureFlags="--disable-static $configureFlags"
+            _prepend configureFlags --disable-static
         fi
     fi
 
