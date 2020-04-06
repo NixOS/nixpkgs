@@ -16,12 +16,13 @@
 , libgee
 , elementary-icon-theme
 , appstream
+, pcre2
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.1";
+  version = "5.5.2";
 
   repoName = "terminal";
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1b8fzs9s7djhwp02l3fwjpwxylklpbnw7x46mv7c8ksbp0m75iyj";
+    sha256 = "119iwmzbpkj4nmxinqfsh73lx23g8gbl6ha6wc4mc4fq9hpnc9c2";
   };
 
   passthru = {
@@ -37,14 +38,6 @@ stdenv.mkDerivation rec {
       attrPath = "pantheon.${pname}";
     };
   };
-
-  patches = [
-    # fix build with vte-2.91 https://github.com/elementary/terminal/pull/488
-    (fetchpatch {
-      url = "https://github.com/elementary/terminal/commit/48da5328cefdc481a3ac76fbdd771096f542d55a.patch";
-      sha256 = "1y4043jxb0qzd3pp28kdij2yj1p9pg158il7q3aq1sf7c474gz4d";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream
@@ -64,6 +57,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libnotify
+    pcre2
     vte
   ];
 

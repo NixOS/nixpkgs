@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1gvrk8gh959bmq8w0kaym7sx13v763lk8x5hck00msgmyrsarfwa";
+    sha256 = "12f1n07cjlc7czf642ak6964wl4fsgakc39nnmiba22z5aahfpz9";
   };
 
   passthru = {

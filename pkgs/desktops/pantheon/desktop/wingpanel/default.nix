@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.2.6";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0q5jhg3gpcjfzfi7g33fv8pb916cqsgk6543b82yy97c20902ap9";
+    sha256 = "0m3pd4sf86kk1wv9asq4z2816bcal076vlk820mrdz9b2fm79lh3";
   };
 
   passthru = {
