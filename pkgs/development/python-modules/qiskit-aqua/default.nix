@@ -85,27 +85,41 @@ buildPythonPackage rec {
     "--ignore=test/chemistry/test_qeom_vqe.py"
     "--ignore=test/chemistry/test_vqe_uccsd_adapt.py"
 
-    # following tend to be slow tests, all pass
-    "--ignore-glob=*vqc.py"
-    "--ignore-glob=*hhl.py"
-    "--ignore-glob=*qgan.py"
+    # Following tend to be slow tests, all pass
+    "--ignore=test/aqua/test_vqc.py"
+    "--ignore=test/aqua/test_hhl.py"
+    "--ignore=test/aqua/test_qgan.py"
+    "--ignore=test/aqua/test_mcr.py"
+    "--ignore=test/aqua/test_mcu1.py"
+    "--ignore=test/aqua/test_vqe.py"
   ];
   disabledTests = [
     # Disabled due to missing pyscf
     "test_validate" # test/chemistry/test_inputparser.py
 
-    # Disabling slow tests > 1 min
-    "test_qsvm_multiclass_error_correcting_code"
-    "test_vqe_qasm"
-    "test_qgan_training"
-    "test_qgan_training_run_algo_numpy"
-    "test_shor_factoring_0"
-    "test_lookup_rotation_4"
-    "test_lookup_rotation_neg_4"
-    "test_mcrz_11"
+    # Disabling slow tests > 10 seconds
+    "test_clique_vqe"
+    "test_delta_3_qasm"
+    "test_evaluate_qasm_mode"
     "test_evolve_1_suzuki"
+    "test_exact_cover_vqe"
+    "test_exchangedata"
+    "test_expected_value_0_statevector"
+    "test_expected_value_1_qasm"
+    "test_expected_value_2_statevector"
+    "test_graph_partition_vqe"
+    "test_lookup_rotation"
     "test_mct_with_dirty_ancillae_15"
+    "test_mcrz_11"
+    "test_measurement_error_mitigation_auto_refresh"
+    "test_qgan_training"
+    "test_qsvm_multiclass"
+    "test_shor_factoring_0"
+    "test_vertex_cover_vqe"
     "test_vqc_with_raw_feature_vector_on_wine"
+    "test_vqe_2_iqpe"
+    "test_vqe_qasm"
+    "test_wikipedia"
   ];
 
   meta = with lib; {
