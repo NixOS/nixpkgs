@@ -18514,11 +18514,6 @@ in
 
   bb =  callPackage ../applications/misc/bb { };
 
-  beast = callPackage ../applications/audio/beast {
-    inherit (gnome2) libgnomecanvas libart_lgpl;
-    guile = guile_1_8;
-  };
-
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
