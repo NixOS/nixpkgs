@@ -8,7 +8,7 @@ let
 in
 
 mkXfceDerivation {
-  category = "apps";
+  category = "archive";
   pname = "orage";
   version = "4.12.1";
 
