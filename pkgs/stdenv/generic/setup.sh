@@ -183,6 +183,25 @@ addToSearchPath() {
     addToSearchPathWithCustomDelimiter ":" "$@"
 }
 
+# Prepend elements to variable "$1", which may come from an attr.
+#
+# This is useful in generic setup code, which must (for now) support
+# both derivations with and without __structuredAttrs true, so the
+# variable may be an array or a space-separated string.
+#
+# Expressions for individual packages should simply switch to array
+# syntax when they switch to setting __structuredAttrs = true.
+_prepend() {
+    local varName="$1"; shift
+    if [ -n "$__structuredAttrs" ]; then
+        # e.g., buildFlags=( "$@" ${buildFlags+"${buildFlags[@]}"} )
+        eval $varName'=( "$@" ${'$varName'+"${'$varName'[@]}"} )'
+    else
+        # e.g., buildFlags="$* $buildFlags"
+        eval $varName'="$* ${'$varName'-}"'
+    fi
+}
+
 # Add $1/lib* into rpaths.
 # The function is used in multiple-outputs.sh hook,
 # so it is defined here but tried after the hook.
