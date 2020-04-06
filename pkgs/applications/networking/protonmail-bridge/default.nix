@@ -55,7 +55,7 @@ in mkDerivation {
       --set-rpath "${rpath}" \
       $out/lib/protonmail-bridge
 
-    substituteInPlace $out/share/applications/ProtonMail_Bridge.desktop \
+    substituteInPlace $out/share/applications/protonmail_bridge.desktop \
       --replace "/usr/" "$out/" \
       --replace "Exec=protonmail-bridge" "Exec=$out/bin/protonmail-bridge"
   '';

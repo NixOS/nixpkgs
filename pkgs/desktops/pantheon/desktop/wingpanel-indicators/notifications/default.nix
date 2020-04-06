@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , pantheon
 , pkgconfig
+, fetchpatch
 , meson
 , ninja
 , vala
@@ -9,6 +10,7 @@
 , granite
 , wingpanel
 , libgee
+, elementary-notifications
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +23,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0qp13iaf2956ss4d6w6vwnzdvb7izqmyh6xrdii7j8gxxwjd4lxm";
   };
+
+  patches = [
+    # Fix do not disturb on NixOS
+    # https://github.com/elementary/wingpanel-indicator-notifications/pull/110
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-notifications/commit/02b1e226c0262c1535fdf2b4f1daba6be9084f67.patch";
+      sha256 = "1a5phygygndr28yx8yp0lyk0wxypc5656dpidw1z8x1yd6xysqhy";
+    })
+  ];
 
   passthru = {
     updateScript = pantheon.updateScript {
@@ -36,6 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-notifications
     granite
     gtk3
     libgee

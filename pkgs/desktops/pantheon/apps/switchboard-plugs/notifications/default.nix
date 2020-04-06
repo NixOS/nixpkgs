@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , pantheon
 , meson
 , ninja
@@ -9,6 +10,7 @@
 , granite
 , gtk3
 , switchboard
+, elementary-notifications
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +23,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1ikq058svdan0whg4ks35m50apvbmzcz7h2wznxdbsimczzvj5sz";
   };
+
+  patches = [
+    # Fix do not disturb on NixOS
+    # https://github.com/elementary/switchboard-plug-notifications/pull/66
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-notifications/commit/c306366b39c3199f0b64eda73419005fcb5e29b8.patch";
+      sha256 = "0m018rfw5iv582sw6qgwc8lzn0j32ix1w47fvlfmx0kw04irl2x3";
+    })
+  ];
 
   passthru = {
     updateScript = pantheon.updateScript {
@@ -36,6 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-notifications
     granite
     gtk3
     libgee
