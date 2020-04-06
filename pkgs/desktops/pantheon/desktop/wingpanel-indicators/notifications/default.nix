@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1lx023z7xxlgwh0br48fw5w7xw673p2sqxwl1gz9f54xx7rv81py";
+    sha256 = "0qp13iaf2956ss4d6w6vwnzdvb7izqmyh6xrdii7j8gxxwjd4lxm";
   };
 
   passthru = {

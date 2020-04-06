@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0p0aj3bbjrh6x8wajqqb5yqm2iqfnj7kp16zf4hdr4siw0sx5p8n";
+    sha256 = "1ikq058svdan0whg4ks35m50apvbmzcz7h2wznxdbsimczzvj5sz";
   };
 
   passthru = {
@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
     libgee
     switchboard
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Notifications Plug";
