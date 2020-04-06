@@ -11,8 +11,8 @@ let
   # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
   # https://github.com/matthewbauer/undmg/issues/4
   year = if stdenvNoCC.isDarwin then "2019" else "2020";
-  spot = if stdenvNoCC.isDarwin then "3" else "0";
-  rel = if stdenvNoCC.isDarwin then "199" else "166";
+  spot = if stdenvNoCC.isDarwin then "3" else "1";
+  rel = if stdenvNoCC.isDarwin then "199" else "217";
 
   rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
 
@@ -32,8 +32,8 @@ in stdenvNoCC.mkDerivation {
       })
     else
       (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16318/l_mkl_${version}.tgz";
-        sha256 = "1q4ab87qzraksn8mm4117vj7l3sgpdi2qszj7nx122zi7zmjvngn";
+        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16533/l_mkl_${version}.tgz";
+        sha256 = "0v86hrqg15mbc78m9qk8dbkaaq3mlwashgbf9n79kxpl1gilnah8";
       });
 
   nativeBuildInputs = if stdenvNoCC.isDarwin
