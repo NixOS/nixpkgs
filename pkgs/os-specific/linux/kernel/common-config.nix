@@ -122,6 +122,7 @@ let
       XDP_SOCKETS        = whenAtLeast "4.19" yes;
       XDP_SOCKETS_DIAG   = whenAtLeast "4.19" yes;
       WAN                = yes;
+      TCP_CONG_CUBIC     = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
       CGROUP_NET_PRIO             = yes; # Required by systemd
