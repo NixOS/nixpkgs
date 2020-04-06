@@ -17753,6 +17753,8 @@ in
 
   gnome-breeze = callPackage ../data/themes/gnome-breeze { };
 
+  gnome-icon-theme = callPackage ../data/icons/gnome-icon-theme { };
+
   go-font = callPackage ../data/fonts/go-font { };
 
   greybird = callPackage ../data/themes/greybird { };

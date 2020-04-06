@@ -8,6 +8,7 @@
 , gtk2
 , gst_all_1
 , gnome2
+, gnome-icon-theme
 , libnotify
 , libxml2
 , libunique
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     gtk2
     gst_all_1.gstreamer
     gnome2.GConf
-    gnome2.gnome_icon_theme
+    gnome-icon-theme
     libnotify
     libxml2
     libunique
