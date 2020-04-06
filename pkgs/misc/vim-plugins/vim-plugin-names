@@ -304,6 +304,7 @@ ncm2/ncm2-bufword
 ncm2/ncm2-jedi
 ncm2/ncm2-path
 ncm2/ncm2-tmux
+ncm2/ncm2-tagprefix
 ncm2/ncm2-ultisnips
 ndmitchell/ghcid
 neoclide/coc-css
