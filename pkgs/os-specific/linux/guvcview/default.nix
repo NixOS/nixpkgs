@@ -1,5 +1,5 @@
 { config, stdenv, fetchurl, intltool, pkgconfig
-, gtk3, portaudio, SDL2, ffmpeg, udev, libusb1, libv4l, alsaLib, gsl
+, gtk3, portaudio, SDL2, ffmpeg, udev, libusb1, libv4l, alsaLib, gsl, wrapGAppsHook
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -13,19 +13,23 @@ stdenv.mkDerivation rec {
     sha256 = "11byyfpkcik7wvf2qic77zjamfr2rhji97dpj1gy2fg1bvpiqf4m";
   };
 
-  buildInputs =
-    [ SDL2
-      alsaLib
-      ffmpeg
-      gtk3
-      intltool
-      libusb1
-      libv4l
-      pkgconfig
-      portaudio
-      udev
-      gsl
-    ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
+  nativeBuildInputs = [
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    SDL2
+    alsaLib
+    ffmpeg
+    gtk3
+    intltool
+    libusb1
+    libv4l
+    pkgconfig
+    portaudio
+    udev
+    gsl
+  ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   meta = with stdenv.lib; {
     description = "A simple interface for devices supported by the linux UVC driver";
