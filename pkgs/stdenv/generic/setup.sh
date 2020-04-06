@@ -1090,22 +1090,17 @@ configurePhase() {
 buildPhase() {
     runHook preBuild
 
-    # set to empty if unset
-    : ${makeFlags=}
-
-    if [[ -z "$makeFlags" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile, doing nothing"
     else
         foundMakefile=1
 
-        # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
+        _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
         echoCmd 'build flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1142,10 +1137,15 @@ checkPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
-            ${checkTarget}
         )
+        _accumFlagsArray makeFlags makeFlagsArray
+        if [ -n "$__structuredAttrs" ]; then
+            flagsArray+=( "${checkFlags[@]:-VERBOSE=y}" )
+        else
+            flagsArray+=( ${checkFlags:-VERBOSE=y} )
+        fi
+        _accumFlagsArray checkFlagsArray
+        flagsArray+=( ${checkTarget} )
 
         echoCmd 'check flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1164,14 +1164,16 @@ installPhase() {
         mkdir -p "$prefix"
     fi
 
-    # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
         SHELL=$SHELL
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
-        ${installTargets:-install}
     )
+    _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray
+    if [ -n "$__structuredAttrs" ]; then
+        flagsArray+=( "${installTargets[@]:-install}" )
+    else
+        flagsArray+=( ${installTargets:-install} )
+    fi
 
     echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
