@@ -20763,7 +20763,9 @@ in
 
   neap = callPackage ../applications/misc/neap { };
 
-  neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
+  neomutt = callPackage ../applications/networking/mailreaders/neomutt {
+    notmuch = notmuch-lib;
+  };
 
   natron = callPackage ../applications/video/natron { };
 
@@ -20991,20 +20993,22 @@ in
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     gmime = gmime3;
-    pythonPackages = python3Packages;
   };
-  notmuch-emacs = callPackage ../applications/networking/mailreaders/notmuch {
-    withEmacs = true;
-    pythonPackages = python3Packages;
+  # Use this as a library for e.g neomutt
+  notmuch-lib = callPackage ../applications/networking/mailreaders/notmuch {
+    gmime = gmime3;
+    withDocs = false;
+    withRuby = false;
+    withEmacs = false;
   };
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
+  muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
+
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
   notejot = callPackage ../applications/misc/notejot { };
-
-  muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
 
   nova-filters =  callPackage ../applications/audio/nova-filters { };
 
