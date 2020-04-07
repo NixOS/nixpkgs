@@ -20993,14 +20993,18 @@ in
     gmime = gmime3;
     pythonPackages = python3Packages;
   };
-
-  notejot = callPackage ../applications/misc/notejot { };
+  notmuch-emacs = callPackage ../applications/networking/mailreaders/notmuch {
+    withEmacs = true;
+    pythonPackages = python3Packages;
+  };
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
-  muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
-
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
+
+  notejot = callPackage ../applications/misc/notejot { };
+
+  muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
 
   nova-filters =  callPackage ../applications/audio/nova-filters { };
 

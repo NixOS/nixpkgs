@@ -7,7 +7,7 @@
 , emacs
 , ruby
 , which, dtach, openssl, bash, gdb, man
-, withEmacs ? true
+, withEmacs ? false
 }:
 
 with stdenv.lib;
