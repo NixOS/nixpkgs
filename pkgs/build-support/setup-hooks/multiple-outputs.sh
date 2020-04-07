@@ -74,10 +74,10 @@ _multioutConfig() {
         --libdir="${!outputLib}"/lib --libexecdir="${!outputLib}"/libexec \
         --localedir="${!outputLib}"/share/locale
 
-    installFlags="\
-        pkgconfigdir=${!outputDev}/lib/pkgconfig \
-        m4datadir=${!outputDev}/share/aclocal aclocaldir=${!outputDev}/share/aclocal \
-        $installFlags"
+    _prepend installFlags \
+        pkgconfigdir="${!outputDev}"/lib/pkgconfig \
+        m4datadir="${!outputDev}"/share/aclocal aclocaldir="${!outputDev}"/share/aclocal
+
 }
 
 
