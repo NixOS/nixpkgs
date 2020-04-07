@@ -15,12 +15,13 @@
 , libgee
 , elementary-icon-theme
 , appstream
+, pcre2
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.1";
+  version = "5.5.2";
 
   repoName = "terminal";
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1b8fzs9s7djhwp02l3fwjpwxylklpbnw7x46mv7c8ksbp0m75iyj";
+    sha256 = "119iwmzbpkj4nmxinqfsh73lx23g8gbl6ha6wc4mc4fq9hpnc9c2";
   };
 
   passthru = {
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libnotify
+    pcre2
     vte
   ];
 

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "09734c3qc0296zf14rdhl4p6ppga015rz9hhsvlcc3nvyw7kdqkc";
+    sha256 = "0lpmxl42r5vn6mddwppn6zwmai0yabs3n467w027vkzw4axdi6bf";
   };
 
   passthru = {
@@ -45,15 +45,6 @@ stdenv.mkDerivation rec {
     libgee
     switchboard
   ];
-
-  patches = [
-    (substituteAll {
-      src = ./timezone.patch;
-      tzdata = "${tzdata}/share/zoneinfo/zone.tab";
-    })
-  ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Date & Time Plug";
