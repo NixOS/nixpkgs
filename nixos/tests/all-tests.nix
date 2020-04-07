@@ -176,6 +176,7 @@ in
   matomo = handleTest ./matomo.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   mediawiki = handleTest ./mediawiki.nix {};
+  meilisearch = handleTest ./meilisearch.nix {};
   memcached = handleTest ./memcached.nix {};
   mesos = handleTest ./mesos.nix {};
   metabase = handleTest ./metabase.nix {};
