@@ -7119,6 +7119,19 @@ let
     };
   };
 
+  FileGrep = buildPerlPackage {
+    pname = "File-Grep";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MN/MNEYLON/File-Grep-0.02.tar.gz";
+      sha256 = "462e15274eb6278521407ea302d9eea7252cd44cab2382871f7de833d5f85632";
+    };
+    meta = {
+      description = "Find matches to a pattern in a series of files and related functions";
+      maintainers = [ maintainers.limeytexan ];
+    };
+  };
+
   FileHandleUnget = buildPerlPackage {
     pname = "FileHandle-Unget";
     version = "0.1634";
