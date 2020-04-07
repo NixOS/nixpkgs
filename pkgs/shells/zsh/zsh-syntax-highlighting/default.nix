@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zsh }:
+{ stdenv, fetchFromGitHub, runtimeShell, zsh }:
 
 # To make use of this derivation, use the `programs.zsh.enableSyntaxHighlighting` option
 
@@ -16,6 +16,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ zsh ];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    mkdir -p $out/bin
+    cat <<SCRIPT > $out/bin/zsh-syntax-highlighting-share
+    #!${runtimeShell}
+    # Run this script to find the zsh-syntax-highlighting shared folder where
+    # all the shell integration scripts are living.
+    echo $out/share/zsh-syntax-highlighting
+    SCRIPT
+    chmod +x $out/bin/zsh-syntax-highlighting-share
+  '';
 
   meta = with stdenv.lib; {
     description = "Fish shell like syntax highlighting for Zsh";

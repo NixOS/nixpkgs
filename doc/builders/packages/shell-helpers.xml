@@ -16,6 +16,16 @@
      <literal>fzf</literal>: <command>fzf-share</command>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>zsh-autoenv</literal>: <command>zsh-autoenv-share</command>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>zsh-syntax-highlighting</literal>: <command>zsh-syntax-highlighting-share</command>
+    </para>
+   </listitem>
   </itemizedlist>
   E.g. <literal>autojump</literal> can then used in the .bashrc like this:
 <screen>
