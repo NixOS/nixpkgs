@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, qttools, qtbase }:
+{ mkDerivation, stdenv, fetchFromGitHub, qmake, qttools, qtbase }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "calaos_installer-3.1";
   version = "3.1";
 
