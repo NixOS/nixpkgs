@@ -21,6 +21,7 @@
 , rustc_1_41
 , cargo_1_41
 , rust-cbindgen_0_1_13
+, nodejs-12_x
 
 , debugBuild ? false
 
@@ -129,6 +130,7 @@ let
   rustc_pkg = if lib.versionAtLeast ffversion "73" then rustc_1_41 else rustc;
   cargo_pkg = if lib.versionAtLeast ffversion "73" then cargo_1_41 else cargo;
   cbindgen_pkg = if lib.versionAtLeast ffversion "73" then rust-cbindgen_0_1_13 else rust-cbindgen;
+  nodejs_pkg = if lib.versionAtLeast ffversion "75" then nodejs-12_x else nodejs;
 
 in
 
@@ -194,7 +196,7 @@ stdenv.mkDerivation (rec {
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
     ++ lib.optional  (lib.versionAtLeast ffversion "61.0") [ python3 ]
-    ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ cbindgen_pkg nodejs ]
+    ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ cbindgen_pkg nodejs_pkg ]
     ++ lib.optionals (lib.versionAtLeast ffversion "67.0") [ llvmPackages.llvm ] # llvm-objdump is required in version >=67.0
     ++ extraNativeBuildInputs;
 
