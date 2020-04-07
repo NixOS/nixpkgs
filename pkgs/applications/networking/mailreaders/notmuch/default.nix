@@ -3,7 +3,6 @@
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
 , pythonPackages
-, bash-completion
 , emacs
 , ruby
 , which, dtach, openssl, bash, gdb, man
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     doxygen                   # (optional) api docs
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
-    bash-completion           # (optional) dependency to install bash completion
   ] ++ optional withEmacs [ emacs ];
 
   buildInputs = [
@@ -56,6 +54,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
+    "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
     "--infodir=${placeholder "info"}"
   ] ++ optional (!withEmacs) "--without-emacs"
     ++ optional (isNull ruby) "--without-ruby";
