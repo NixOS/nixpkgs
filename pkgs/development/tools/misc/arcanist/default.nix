@@ -13,13 +13,14 @@ let
     rev = "21a1828ea06cf031e93082db8664d73efc88290a";
     sha256 = "05rq9l9z7446ks270viay57r5ibx702b5bnlf4ck529zc4abympx";
   };
+  php' = php.withExtensions (e: with e; [ curl json ]);
 in
 stdenv.mkDerivation {
   pname = "arcanist";
   version = "20200127";
 
   src = [ arcanist libphutil ];
-  buildInputs = [ php makeWrapper flex ];
+  buildInputs = [ php' makeWrapper flex ];
 
   unpackPhase = ''
     cp -aR ${libphutil} libphutil
@@ -45,7 +46,7 @@ stdenv.mkDerivation {
 
     ln -s $out/libexec/arcanist/bin/arc $out/bin
     wrapProgram $out/bin/arc \
-      --prefix PATH : "${php}/bin"
+      --prefix PATH : "${php'}/bin"
   '';
 
   meta = {
