@@ -25,6 +25,9 @@ let
           ${cfg.telemetryConfig}
         }
       ''}
+    ${optionalString (cfg.disableMlock == true) ''
+    disable_mlock = true
+      ''}
     ${cfg.extraConfig}
   '';
 in
@@ -93,6 +96,12 @@ in
         description = "Telemetry configuration";
       };
 
+      disableMlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Disables the server from executing the mlock syscall.";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -140,7 +149,11 @@ in
         PrivateTmp = true;
         ProtectSystem = "full";
         ProtectHome = "read-only";
-        AmbientCapabilities = "cap_ipc_lock";
+        AmbientCapabilities =
+          if cfg.disableMlock == false then
+            "cap_ipc_lock"
+          else 
+            "";
         NoNewPrivileges = true;
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";
@@ -151,6 +164,7 @@ in
 
       unitConfig.RequiresMountsFor = optional (cfg.storagePath != null) cfg.storagePath;
     };
+
   };
 
 }
