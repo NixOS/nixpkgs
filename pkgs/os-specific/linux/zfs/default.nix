@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+{ stdenv, fetchFromGitHub, fetchpatch
+, autoreconfHook, utillinux, nukeReferences, coreutils
 , perl, buildPackages
 , configFile ? "all"
 
@@ -40,7 +41,12 @@ let
         inherit rev sha256;
       };
 
-      patches = extraPatches;
+      patches = [ (fetchpatch {
+        # https://github.com/openzfs/zfs/pull/9961#issuecomment-585827288
+        # will be included in zfs 0.5.4 as well
+        url = "https://gist.githubusercontent.com/satmandu/67cbae9c4d461be0e64428a1707aef1c/raw/ba0fb65f17ccce5b710e4ce86a095de577f7dfe1/k5.6.3.patch";
+        sha256 = "0zay7cz078v7wcnk7xl96blp7j6y64q1migb91c7h66zkpikqvgb";
+      }) ] ++ extraPatches;
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
