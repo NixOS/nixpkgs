@@ -29,6 +29,22 @@ nodePackages // {
     buildInputs = [ nodePackages.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
   };
 
+  dat-fox-helper = nodePackages."dat-fox-helper-git://github.com/sammacbeth/dat-fox-helper#v0.2.1 ".override {
+    postInstall = ''
+      sdir=$out/lib/node_modules/dat-fox-helper
+      binOut=$out/bin/datfox-helper
+      mkdir -p $out/bin
+      ln -s $sdir/datfox-helper.js $binOut
+
+      nmOut=$out/lib/mozilla/native-messaging-hosts
+      mkdir -p $nmOut
+      ${pkgs.jq}/bin/jq 'setpath(["path"];"'$binOut'")' \
+        < $sdir/dathelper.json \
+        > $nmOut/com.github.datfoxhelper.native.json
+    '';
+  }
+;
+
   dnschain = nodePackages.dnschain.override {
     buildInputs = [ pkgs.makeWrapper nodePackages.coffee-script ];
     postInstall = ''

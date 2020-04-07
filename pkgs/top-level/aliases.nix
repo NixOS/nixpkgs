@@ -86,6 +86,7 @@ mapAliases ({
   d1x_rebirth = dxx-rebirth; # added 2018-04-25
   d2x_rebirth = dxx-rebirth; # added 2018-04-25
   dat = nodePackages.dat;
+  dat-fox-helper = nodePackages.dat-fox-helper;
   dbus_daemon = dbus.daemon; # added 2018-04-25
   dbus_glib = dbus-glib; # added 2018-02-25
   dbus_libs = dbus; # added 2018-04-25
