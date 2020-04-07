@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    doxygen                   # (optional) api docs
-    pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
   ] ++ optional withEmacs [ emacs ];
 
