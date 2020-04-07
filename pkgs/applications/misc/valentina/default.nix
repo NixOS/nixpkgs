@@ -1,4 +1,4 @@
-{ stdenv, fetchhg
+{ mkDerivation, stdenv, fetchhg
 , qmake, qttools
 , qtbase, qtsvg, qtxmlpatterns
 , poppler_utils
@@ -6,7 +6,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "valentina";
   version = "0.6.1";
 
