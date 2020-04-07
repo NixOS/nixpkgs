@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
     bash-completion           # (optional) dependency to install bash completion
-  ] ++ optional withEmacs [ emacs ];
+  ] ++ optional withEmacs emacs;
 
   buildInputs = [
     gnupg                     # undefined dependencies

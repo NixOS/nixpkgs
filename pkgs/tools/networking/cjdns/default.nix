@@ -15,10 +15,12 @@ stdenv.mkDerivation {
     # for flock
     stdenv.lib.optional stdenv.isLinux utillinux;
 
-  CFLAGS = "-O2 -Wno-error=stringop-truncation";
+  env.CFLAGS = "-O2 -Wno-error=stringop-truncation";
+
   buildPhase =
     stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";
+
   installPhase = ''
     install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
     sed -i 's,/usr/bin/env node,'$(type -P node), \

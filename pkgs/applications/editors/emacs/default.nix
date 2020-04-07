@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     rm -fr .git
   '';
 
-  CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
+  env.CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
 
   nativeBuildInputs = [ pkgconfig ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ]

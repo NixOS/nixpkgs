@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace "CC=gcc" ""
   '';
 
-  CFLAGS = "-D_DARWIN_C_SOURCE";
+  env.CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [ libX11 libXi libXt libXft ];
 
