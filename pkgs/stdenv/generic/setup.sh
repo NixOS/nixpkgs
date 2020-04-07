@@ -202,6 +202,33 @@ _prepend() {
     fi
 }
 
+# Accumulate into `flagsArray` the flags from the named variables.
+#
+# If __structuredAttrs, the variables are all treated as arrays
+# and simply concatenated onto `flagsArray`.
+#
+# If not __structuredAttrs, then:
+#   * Each variable is treated as a string, and split on whitespace;
+#   * except variables whose names end in "Array", which are treated
+#     as arrays.
+_accumFlagsArray() {
+    local name
+    if [ -n "$__structuredAttrs" ]; then
+        for name in "$@"; do
+            eval 'flagsArray+=( ${'$name'+"${'$name'[@]}"} )'
+        done
+    else
+        for name in "$@"; do
+            case "$name" in
+                *Array)
+                    eval 'flagsArray+=( ${'$name'+"${'$name'[@]}"} )' ;;
+                *)
+                    eval 'flagsArray+=( ${'$name'-} )' ;;
+            esac
+        done
+    fi
+}
+
 # Add $1/lib* into rpaths.
 # The function is used in multiple-outputs.sh hook,
 # so it is defined here but tried after the hook.
