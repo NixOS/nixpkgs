@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xbps";
-  version = "0.59";
+  version = "0.59.1";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
     rev = version;
-    sha256 = "0m00h1f004gsa998cr93b4zmsn4162983d360pzpd3hfi3qzan5d";
+    sha256 = "0pab3xf97y4wqlyrb92zxd3cfsrbnlx6pssbw4brgwcxccw9jrhy";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
