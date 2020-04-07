@@ -6,4 +6,6 @@ import ./generic.nix {
 
   # If the executable is stripped it does not work
   dontStrip = true;
+
+  prefixAsSeperateFlag = true;
 }

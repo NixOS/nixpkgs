@@ -149,7 +149,8 @@ stdenv.mkDerivation rec {
       mkspecs/win32-g++/qmake.conf
   '';
 
-  prefixKey = "-prefix ";
+  prefixKey = "-prefix";
+  prefixAsSeperateFlag = true;
 
   configurePlatforms = [];
   configureFlags = let

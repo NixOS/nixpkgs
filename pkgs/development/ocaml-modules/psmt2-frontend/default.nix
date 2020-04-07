@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "097zmbrx4gp2gnrxdmsm9lkkp5450gwi0blpxqy3833m6k5brx3n";
   };
 
-  prefixKey = "-prefix ";
-
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ocaml findlib menhir ];
 

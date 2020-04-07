@@ -207,8 +207,6 @@ stdenv.mkDerivation {
        ]
     ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
 
-  prefixKey = "-prefix ";
-
   # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
   # if dependency paths contain the string "pq", which can occur in the hash.
   # To prevent these failures, we need to override PostgreSQL detection.

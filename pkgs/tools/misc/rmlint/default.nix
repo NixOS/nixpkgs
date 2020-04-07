@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
     glib json-glib libelf utillinux
   ];
 
-  prefixKey = "--prefix=";
-
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = https://rmlint.readthedocs.org;

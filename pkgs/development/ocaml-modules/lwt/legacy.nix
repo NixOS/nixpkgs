@@ -36,7 +36,6 @@ buildOcaml {
   ++ [ libev ];
 
   configureScript = "ocaml setup.ml -configure";
-  prefixKey = "--prefix ";
   configureFlags =
   optionals [ "--enable-glib" "--enable-ssl" "--enable-react" ]
   ++ [ "--enable-camlp4" ]

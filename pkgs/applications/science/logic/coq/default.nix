@@ -141,7 +141,8 @@ self = stdenv.mkDerivation {
     )
   '';
 
-  prefixKey = "-prefix ";
+  prefixKey = "-prefix";
+  prefixAsSeperateFlag = true;
 
   buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
 

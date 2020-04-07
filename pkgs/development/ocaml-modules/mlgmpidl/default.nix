@@ -12,10 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl gmp mpfr ocaml findlib camlidl ];
 
-  prefixKey = "-prefix ";
+  prefixAsSeperateFlag = true;
+
   configureFlags = [
-    "--gmp-prefix ${gmp.dev}"
-    "--mpfr-prefix ${mpfr.dev}"
+    "--gmp-prefix" gmp.dev
+    "--mpfr-prefix" mpfr.dev
   ];
 
   postConfigure = ''

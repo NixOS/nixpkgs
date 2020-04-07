@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ apron camlidl gmp mpfr ];
 
-  prefixKey = "--prefix ";
   configureFlags = [
     "--use-apron"
     "--use-opam"
@@ -20,6 +19,8 @@ stdenv.mkDerivation rec {
   ]
   ++ stdenv.lib.optional stdenv.isDarwin "--absolute-dylibs"
   ;
+
+  prefixAsSeperateFlag = true;
 
   createFindlibDestdir = true;
 

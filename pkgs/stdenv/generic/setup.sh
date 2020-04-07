@@ -963,7 +963,11 @@ configurePhase() {
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        configureFlags=("${prefixKey:---prefix=}$prefix" "${configureFlags[@]}")
+        if [[ -z "${prefixAsSeperateFlag:-}" ]]; then
+            configureFlags=("${prefixKey:---prefix=}$prefix" "${configureFlags[@]}")
+        else
+            configureFlags=("${prefixKey:---prefix}" "$prefix" "${configureFlags[@]}")
+        fi
     fi
 
     # Add --disable-dependency-tracking to speed up some builds.

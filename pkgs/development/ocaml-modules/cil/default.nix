@@ -19,7 +19,6 @@ stdenv.mkDerivation {
     substituteInPlace Makefile.in --replace 'MACHDEPCC=gcc' 'MACHDEPCC=$(CC)'
     export FORCE_PERL_PREFIX=1
   '';
-  prefixKey = "-prefix=";
 
   meta = with stdenv.lib; {
     homepage = http://kerneis.github.io/cil/;

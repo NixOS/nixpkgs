@@ -28,11 +28,6 @@ stdenv.mkDerivation {
     make PREFIX=$out all
     make PREFIX=$out install
   '';
-#  prefixKey = "-prefix ";
-#
-#  configureFlags = if transitional then "--transitional" else "--strict";
-#
-#  buildFlags = [ "world.opt" ];		
 
   meta = {
     description = "Omake build system";

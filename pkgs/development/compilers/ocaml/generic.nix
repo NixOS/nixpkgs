@@ -42,7 +42,6 @@ stdenv.mkDerivation (args // {
     inherit sha256;
   };
 
-  prefixKey = "-prefix ";
   configureFlags =
     let flags = new: old:
       if stdenv.lib.versionAtLeast version "4.08"

@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "1j34xc30vg7sfszm2jx9mlz9hy7p1l929fka9wnfcpbib8gfi43x";
   };
 
-  prefixKey = "--prefix ";
   propagatedBuildInputs = [ qt4 libsamplerate fftwSinglePrec ];
   nativeBuildInputs = [ pkgconfig which cmake ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;

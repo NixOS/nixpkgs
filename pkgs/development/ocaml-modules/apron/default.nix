@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl gmp mpfr ppl ocaml findlib camlidl ];
   propagatedBuildInputs = [ mlgmpidl ];
 
-  prefixKey = "-prefix ";
+  prefixAsSeperateFlag = true;
   preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
   meta = {

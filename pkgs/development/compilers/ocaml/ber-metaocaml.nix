@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   x11lib = "${x11env}/lib";
   x11inc = "${x11env}/include";
 
-  prefixKey = "-prefix ";
+  prefixAsSeperateFlag = true;
+
   configureFlags = optionals useX11
     [ "-x11lib" x11lib
       "-x11include" x11inc
