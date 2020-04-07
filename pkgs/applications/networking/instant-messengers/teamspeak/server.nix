@@ -4,12 +4,12 @@ let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.11.0";
+  version = "3.12.1";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "18hsr119dq46rvhz5sb9snn2gfxwiig37g6bfzk24x6wlga3xihq"
+      then "1dxbnk12ry6arn1p38hpv5jfak55pmfmxkkl7aihn3sp1aizpgyg"
       else "1lyazw328azi0asvgvcsxglc1saqih6ss0g8pc8f5pzqngk9p953";
   };
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "TeamSpeak voice communication server";
-    homepage = https://teamspeak.com/;
+    homepage = "https://teamspeak.com/";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn gerschtli ];
