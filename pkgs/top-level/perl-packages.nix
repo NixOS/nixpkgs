@@ -799,6 +799,21 @@ let
     };
   };
 
+  AuthenKrb5 = buildPerlModule {
+    pname = "Authen-Krb5";
+    version = "1.905";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IO/IOANR/Authen-Krb5-1.905.tar.gz";
+      sha256 = "0kgpl0x1qxq1p2ccxy8qqkrvqba2gq6aq6p931qnz9812nxh0yyp";
+    };
+    perlPreHook = "export LD=$CC";
+    propagatedBuildInputs = [ pkgs.libkrb5 DevelChecklib FileWhich PkgConfig ];
+    meta = {
+      description = "XS bindings for Kerberos 5";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AuthenModAuthPubTkt = buildPerlPackage {
     pname = "Authen-ModAuthPubTkt";
     version = "0.1.1";
