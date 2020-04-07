@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ automake autoconf ];
 
   # Make sure we don't strip the libraries in lib/gcc/avr.
-  stripDebugList = "bin";
+  stripDebugList = [ "bin" ];
   dontPatchELF = true;
 
   passthru = {

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  stripDebugList = "lib modules bin";
+  stripDebugList = [ "lib" "modules" "bin" ];
 
   postInstall = ''
     mkdir -p $doc/share/doc/httpd
