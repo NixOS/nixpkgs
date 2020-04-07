@@ -3649,6 +3649,20 @@ let
     };
   };
 
+  CryptRandom = buildPerlPackage rec {
+    pname = "Crypt-Random";
+    version = "1.52";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/${pname}-${version}.tar.gz";
+      sha256 = "a93c06de409e6f2eb2e9868ea6d4e653d99f2f7900b2c1831e1f65ace0c4ef84";
+    };
+    propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare ];
+    meta = {
+      description = "Interface to /dev/random and /dev/urandom";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CryptRandomSource = buildPerlModule {
     pname = "Crypt-Random-Source";
     version = "0.14";
