@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
+{ mkDerivation, stdenv, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
 , SDL, SDL_mixer, boost, curl, gsasl, libgcrypt, libircclient, protobuf, sqlite
 , tinyxml2, target ? "client" }:
 
@@ -15,7 +15,7 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "pokerth-${target}-${version}";
   version = "1.1.2";
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://www.pokerth.net;
+    homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ obadz yegortimoshenko ];
