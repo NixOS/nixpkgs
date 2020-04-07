@@ -23,14 +23,23 @@ _doStrip() {
         if [[ "${dontStrip-}" || "${flag-}" ]] || ! type -f "${stripCmd-}" 2>/dev/null
         then continue; fi
 
-        stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
+        # TODO(structured-attrs): This doesn't work correctly if one of
+        #   the items in strip*List or strip*Flags contains a space,
+        #   even with structured attrs enabled.  This is OK for now
+        #   because very few packages set any of these, and it doesn't
+        #   affect any of them.
+        #
+        #   After __structuredAttrs = true is universal, come back and
+        #   push arrays all the way through this logic.
+
+        stripDebugList=${stripDebugList[*]:-lib lib32 lib64 libexec bin sbin}
         if [ -n "$stripDebugList" ]; then
-            stripDirs "$stripCmd" "$stripDebugList" "${stripDebugFlags:--S}"
+            stripDirs "$stripCmd" "$stripDebugList" "${stripDebugFlags[*]:--S}"
         fi
 
-        stripAllList=${stripAllList:-}
+        stripAllList=${stripAllList[*]:-}
         if [ -n "$stripAllList" ]; then
-            stripDirs "$stripCmd" "$stripAllList" "${stripAllFlags:--s}"
+            stripDirs "$stripCmd" "$stripAllList" "${stripAllFlags[*]:--s}"
         fi
     done
 }
