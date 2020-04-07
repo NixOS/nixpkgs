@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "computecpp";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchzip {
     url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/ubuntu-16.04-64bit.tar.gz";
-    sha256 = "191kwvzxfg1sbaq6aw6f84chi7bhsibb2a63zsyz3gz8m0c0syr5";
+    sha256 = "1q6gqjpzz4a260gsd6mm1iv4z8ar3vxaypmgdwl8pb4i7kg6ykaz";
     stripRoot = true;
   };
 

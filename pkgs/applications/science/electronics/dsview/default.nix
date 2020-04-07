@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, cmake,
 libzip, boost, fftw, qtbase,
-libusb, wrapQtAppsHook, libsigrok4dsl, libsigrokdecode4dsl
+libusb1, wrapQtAppsHook, libsigrok4dsl, libsigrokdecode4dsl
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
-   boost fftw qtbase libusb libzip libsigrokdecode4dsl libsigrok4dsl
+   boost fftw qtbase libusb1 libzip libsigrokdecode4dsl libsigrok4dsl
   ];
 
   enableParallelBuilding = true;

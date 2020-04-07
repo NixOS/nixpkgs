@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libusb, zlib }:
+{ stdenv, fetchFromGitHub, pkgconfig, libusb1, zlib }:
 
 stdenv.mkDerivation {
   name = "sunxi-tools-20181113";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb zlib ];
+  buildInputs = [ libusb1 zlib ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

@@ -4998,6 +4998,16 @@ let
     };
   };
 
+  DBDCSV = buildPerlPackage {
+    pname = "DBD-CSV";
+    version = "0.54";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.54.tgz;
+      sha256 = "bc597cd7195e5a023e2b3413d8dc614602b9b3f279f436027881796464d4f0be";
+    };
+    propagatedBuildInputs = [ DBI TextCSV_XS SQLStatement ModuleRuntime ParamsUtil ];
+  };
+
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
     version = "1.55";
@@ -11137,6 +11147,15 @@ let
     };
   };
 
+  MathBaseConvert = buildPerlPackage {
+    pname = "Math-Base-Convert";
+    version = "0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIKER/Math-Base-Convert-0.11.tar.gz;
+      sha256 = "8c0971355f24c93b79e77ad54a4570090a1a598fcb9b86f5c17eba42f38b40e0";
+    };
+  };
+
   MathLibm = buildPerlPackage {
     pname = "Math-Libm";
     version = "1.00";
@@ -16618,6 +16637,17 @@ let
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
+  };
+
+  SQLStatement = buildPerlPackage {
+    pname = "SQL-Statement";
+    version = "1.412";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RE/REHSACK/SQL-Statement-1.412.tar.gz;
+      sha256 = "65c870883379c11b53f19ead10aaac241ccc86a90bbab77f6376fe750720e5c8";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ Clone ModuleRuntime ParamsUtil TextSoundex MathBaseConvert ];
   };
 
   SQLTokenizer = buildPerlPackage {

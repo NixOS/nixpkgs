@@ -87,7 +87,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
       versionPolicy = "none";
     };
   };
@@ -95,7 +94,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Grilo;
     description = "A collection of plugins for the Grilo framework";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

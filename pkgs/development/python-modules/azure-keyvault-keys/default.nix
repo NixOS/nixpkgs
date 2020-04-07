@@ -26,6 +26,8 @@ buildPythonPackage rec {
     cryptography
   ];
 
+  pythonNamespaces = [ "azure.keyvault" ];
+
   # requires relative paths to utilities in the mono-repo
   doCheck = false;
   checkInputs = [ aiohttp pytestCheckHook ];

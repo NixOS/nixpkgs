@@ -572,17 +572,34 @@ self: super: builtins.intersectAttrs super {
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
-  futhark = if pkgs.stdenv.isDarwin then super.futhark else with pkgs;
-    let path = stdenv.lib.makeBinPath [ gcc ];
-    in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
-      postInstall = ''
-        wrapProgram $out/bin/futhark \
-          --prefix PATH : "${path}" \
-          --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
-          --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
-          --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
-      '';
-    });
+  # * Compile manpages (which are in RST and are compiled with Sphinx).
+  #
+  # * Wrap so that binary can find GCC and OpenCL headers (dubious if
+  #   a good idea).
+  futhark = with pkgs;
+    let maybeWrap =
+          if pkgs.stdenv.isDarwin then ""
+          else
+            let path = stdenv.lib.makeBinPath [ gcc ];
+            in ''
+            wrapProgram $out/bin/futhark \
+              --prefix PATH : "${path}" \
+              --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
+              --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
+              --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
+            '';
+    in overrideCabal (addBuildTools super.futhark [makeWrapper python37Packages.sphinx])
+      (_drv: {
+        postBuild = (_drv.postBuild or "") + ''
+        make -C docs man
+        '';
+
+        postInstall = (_drv.postInstall or "") + ''
+        mkdir -p $out/share/man/man1
+        mv docs/_build/man/*.1 $out/share/man/man1/
+        ''
+        + maybeWrap;
+      });
 
   git-annex = with pkgs;
     if (!stdenv.isLinux) then

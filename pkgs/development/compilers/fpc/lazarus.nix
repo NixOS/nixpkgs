@@ -4,11 +4,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "lazarus";
-  version = "1.8.4";
+  version = "2.0.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${version}/lazarus-${version}.tar.gz";
-    sha256 = "1s8hdip973fc1lynklddl0mvg2jd2lzkfk8hzb8jlchs6jn0362s";
+    sha256 = "0v1ax6039nm2bksh646znrkah20ak2zmhaz5p3mz2p60y2qazkc2";
   };
 
   buildInputs = [

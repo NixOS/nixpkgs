@@ -19,11 +19,11 @@ assert withFonts -> freetype != null;
 
 stdenv.mkDerivation rec {
   pname = "libbluray";
-  version  = "1.1.2";
+  version  = "1.2.0";
 
   src = fetchurl {
     url = "http://get.videolan.org/libbluray/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0hhbgkm11fw4pwbrklm76aiy54r6d7hk06yhl2fxq05i74i4bpd3";
+    sha256 = "04bcd53ml0zn8b4f9r1grs0yy20rcirji1v3pxzaf4i5zl3flhfd";
   };
 
   patches = optional withJava ./BDJ-JARFILE-path.patch;
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
                  ;
 
   meta = with stdenv.lib; {
-    homepage = http://www.videolan.org/developers/libbluray.html;
+    homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

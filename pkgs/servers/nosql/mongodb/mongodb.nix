@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ scons.py2 ];
   buildInputs = [
     boost
     curl

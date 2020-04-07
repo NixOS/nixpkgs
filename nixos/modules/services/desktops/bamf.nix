@@ -5,6 +5,10 @@
 with lib;
 
 {
+  meta = {
+    maintainers = with maintainers; [ worldofpeace ];
+  };
+
   ###### interface
 
   options = {

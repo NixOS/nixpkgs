@@ -38,6 +38,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
 
   options = {

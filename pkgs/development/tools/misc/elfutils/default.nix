@@ -28,41 +28,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # This program does not cross-build fine. So I only cross-build some parts
-  # I need for the linux perf tool.
-  # On the awful cross-building:
-  # http://comments.gmane.org/gmane.comp.sysutils.elfutils.devel/2005
-  #
-  # I wrote this testing for the nanonote.
-
-  buildPhase = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    pushd libebl
-    make
-    popd
-    pushd libelf
-    make
-    popd
-    pushd libdwfl
-    make
-    popd
-    pushd libdw
-    make
-    popd
-  '';
-
-  installPhase = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    pushd libelf
-    make install
-    popd
-    pushd libdwfl
-    make install
-    popd
-    pushd libdw
-    make install
-    popd
-    cp version.h $out/include
-  '';
-
   doCheck = false; # fails 3 out of 174 tests
   doInstallCheck = false; # fails 70 out of 174 tests
 

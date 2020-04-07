@@ -26,8 +26,8 @@ in
 
 mkDerivation {
   name = "breeze-plymouth";
-  nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ plymouth ] ++ lib.optionals (logoFile != null) [ imagemagick netpbm perl ];
+  nativeBuildInputs = [ extra-cmake-modules ] ++ lib.optionals (logoFile != null) [ imagemagick netpbm perl ];
+  buildInputs = [ plymouth ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   cmakeFlags = []
     ++ lib.optional (osName      != null) "-DDISTRO_NAME=${osName}"

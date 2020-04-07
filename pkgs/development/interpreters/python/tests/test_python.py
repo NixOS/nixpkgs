@@ -27,7 +27,7 @@ class TestCasePython(unittest.TestCase):
     def test_interpreter(self):
         self.assertEqual(sys.executable, INTERPRETER)
 
-    @unittest.skipIf(IS_NIXENV or IS_PYPY, "Prefix is incorrect and needs to be fixed.")
+    @unittest.skipIf(IS_PYPY, "Prefix is incorrect and needs to be fixed.")
     def test_prefix(self):
         self.assertEqual(sys.prefix, ENV)
         self.assertEqual(sys.prefix, sys.exec_prefix)
@@ -35,9 +35,9 @@ class TestCasePython(unittest.TestCase):
     def test_site_prefix(self):
         self.assertTrue(sys.prefix in site.PREFIXES)
 
-    @unittest.skipIf(sys.version_info.major==2, "Python 2 does not have base_prefix")
+    @unittest.skipIf(IS_PYPY or sys.version_info.major==2, "Python 2 does not have base_prefix")
     def test_base_prefix(self):
-        if IS_VENV:
+        if IS_VENV or IS_NIXENV:
             self.assertNotEqual(sys.prefix, sys.base_prefix)
         else:
             self.assertEqual(sys.prefix, sys.base_prefix)

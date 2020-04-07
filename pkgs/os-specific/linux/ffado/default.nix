@@ -43,7 +43,15 @@ mkDerivation rec {
 
   outputs = [ "out" "bin" "dev" ];
 
-  nativeBuildInputs = [ desktop-file-utils scons pkgconfig which python pyqt5 wrapQtAppsHook ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    scons.py2
+    pkgconfig
+    which
+    python
+    pyqt5
+    wrapQtAppsHook
+  ];
 
   prefixKey = "PREFIX=";
   sconsFlags = [

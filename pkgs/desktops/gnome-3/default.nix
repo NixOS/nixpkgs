@@ -18,8 +18,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     in
       lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
 
-  maintainers = lib.teams.gnome.members;
-
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   gnome3 = self // { recurseForDerivations = false; };
@@ -146,8 +144,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   totem = callPackage ./core/totem { };
 
-  vino = callPackage ./core/vino { };
-
   yelp = callPackage ./core/yelp { };
 
   yelp-xsl = callPackage ./core/yelp-xsl { };
@@ -271,8 +267,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-panel = callPackage ./misc/gnome-panel { };
 
-  gnome-screensaver = callPackage ./misc/gnome-screensaver { };
-
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
   gpaste = callPackage ./misc/gpaste { };
@@ -324,7 +318,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
       libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
       easytag meld orca rhythmbox shotwell gnome-usage
-      clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 gnome-menus gdl;
+      clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 gnome-menus gdl;
   inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
   inherit (pkgs) gnome-video-effects; # added 2019-08-19
   inherit (pkgs) gnome-online-accounts grilo grilo-plugins tracker tracker-miners gnome-photos; # added 2019-08-23
@@ -358,4 +352,10 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) dconf; # added 2019-11-30
 
   inherit (pkgs) networkmanagerapplet; # added 2019-12-12
+
+  vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
+
+  gnome-screensaver = throw "gnome-screensaver is deprecated. If you are using GNOME Flashback, it now has a built-in lock screen. If you are using it elsewhere, you can try xscreenlock or other alternatives."; # added 2020-03-19
+
+  maintainers = lib.teams.gnome.members;
 })

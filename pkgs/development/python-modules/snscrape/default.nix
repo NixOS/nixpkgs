@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "snscrape";
-  version = "0.3.0";
+  version = "0.3.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f3lyq06l8s4kcsmwbxcwcxnv6mvz9c3zj70np8vnx149p3zi983";
+    sha256 = "11jv5mv3l11qjlsjihd74gc1jafq0i7360cksqjkx1wv2hcc32rf";
   };
 
   # There are no tests; make sure the executable works.
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools requests lxml beautifulsoup4 ];
 
   meta = with lib; {
-    homepage = https://github.com/JustAnotherArchivist/snscrape;
+    homepage = "https://github.com/JustAnotherArchivist/snscrape";
     description = "A social networking service scraper in Python";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ivan ];

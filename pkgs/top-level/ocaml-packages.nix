@@ -615,6 +615,8 @@ let
 
     pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
 
+    ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
+
     ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
 
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
@@ -1226,5 +1228,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_10;
 
-  ocamlPackages = ocamlPackages_4_08;
+  ocamlPackages = ocamlPackages_4_09;
 }

@@ -18,7 +18,6 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
     };
   };
 
@@ -26,7 +25,7 @@ in stdenv.mkDerivation rec {
     description = "Documentation metadata library based on the proposed Freedesktop.org spec";
     homepage = https://rarian.freedesktop.org/;
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

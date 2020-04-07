@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
-  name = "sickrage-${version}";
+  pname = "sickrage";
   version = "v2018.07.21-1";
 
   src = fetchFromGitHub {

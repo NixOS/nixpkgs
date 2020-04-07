@@ -4,16 +4,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "kubie";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "sbstp";
     repo = "kubie";
-    sha256 = "0c94ggrkzyy8zl2z5r4pgfscyhcjp4x64k3bl2byqp3ysgjwkjqx";
+    sha256 = "186h5fng16gwqhsy2nxswbrrxsx0ysqrb4pqznyygbiz5cd9bgxp";
   };
 
-  cargoSha256 = "1lzyda838s9fmg8hibg2w2wszwyvvqsy20w9877skfcx370rvndi";
+  cargoSha256 = "1yllpi8dp1fy39z4zmhyf1hdjpl62vwh8b8qlj0g778qsdrm9p98";
 
   meta = with stdenv.lib; {
     description =

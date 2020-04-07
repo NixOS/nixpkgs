@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.xiph.org/xiph/vorbis/uploads/a68cf70fa10c8081a633f77b5c6576b7/0001-CVE-2017-14160-make-sure-we-don-t-overflow.patch";
       sha256 = "0v21p59cb3z77ch1v6q5dcrd733h91f3m8ifnd7kkkr8gzn17d5x";
-      name = "CVE-2017-14160";
+      name = "CVE-2017-14160+CVE-2018-10393.patch";
     })
     (fetchpatch {
       url = "https://gitlab.xiph.org/xiph/vorbis/commit/112d3bd0aaa.diff";

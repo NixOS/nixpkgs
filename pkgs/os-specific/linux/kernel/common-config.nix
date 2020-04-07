@@ -122,6 +122,7 @@ let
       XDP_SOCKETS        = whenAtLeast "4.19" yes;
       XDP_SOCKETS_DIAG   = whenAtLeast "4.19" yes;
       WAN                = yes;
+      TCP_CONG_CUBIC     = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
       CGROUP_NET_PRIO             = yes; # Required by systemd
@@ -244,6 +245,7 @@ let
       SND_HDA_RECONFIG    = yes; # Support reconfiguration of jack functions
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
+      SND_HDA_CODEC_CA0132_DSP = whenOlder "5.8" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       # Enable PSS mixer (Beethoven ADSP-16 and other compatible)

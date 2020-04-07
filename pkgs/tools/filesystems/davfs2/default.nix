@@ -1,5 +1,7 @@
 { stdenv
 , fetchurl
+, fetchpatch
+, autoreconfHook
 , neon
 , procps
 , substituteAll
@@ -14,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "00fqadhmhi2bmdar5a48nicmjcagnmaj9wgsvjr6cffmrz6pcx21";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook # neon-0.31.patch requires reconfiguration
+  ];
+
   buildInputs = [ neon zlib ];
 
   patches = [
@@ -22,6 +28,15 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./0001-umount_davfs-substitute-ps-command.patch;
       ps = "${procps}/bin/ps";
+    })
+
+    # Fix build with neon 0.31
+    # http://savannah.nongnu.org/bugs/?58101
+    (fetchpatch {
+      name = "neon-0.31.patch";
+      url = "http://savannah.nongnu.org/bugs/download.php?file_id=48737";
+      sha256 = "EtQfcstWkn8AcbZo93midGt076gq20AvGGJyQ3FO/YQ=";
+      extraPrefix = ""; # empty means add 'a/' and 'b/'
     })
   ];
 

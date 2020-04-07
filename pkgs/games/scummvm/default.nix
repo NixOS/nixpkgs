@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
-    homepage = https://www.scummvm.org/;
+    homepage = "https://www.scummvm.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.peterhoeg ];
     platforms = platforms.linux;

@@ -1,4 +1,7 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_7, riot-web, mkYarnPackage }:
+{ stdenv, fetchFromGitHub
+, makeWrapper, makeDesktopItem, mkYarnPackage
+, electron_7, riot-web, gtk3,
+}:
 
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
@@ -6,12 +9,12 @@
 
 let
   executableName = "riot-desktop";
-  version = "1.5.14";
+  version = "1.5.15";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "0dkji5rgiakdzcba2v104hhvbw9j98ik95vzwcckksja79zfjmww";
+    sha256 = "08yk5is6n9ci1jml0b94a3swdybx01k5klbl30i1b76biyn75m77";
   };
   electron = electron_7;
 
@@ -24,7 +27,7 @@ in mkYarnPackage rec {
   packageJSON = ./riot-desktop-package.json;
   yarnNix = ./riot-desktop-yarndeps.nix;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper gtk3 ];
 
   installPhase = ''
     # resources
@@ -47,7 +50,8 @@ in mkYarnPackage rec {
 
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
-      --add-flags "$out/share/riot/electron"
+      --add-flags "$out/share/riot/electron" \
+      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
   '';
 
   # Do not attempt generating a tarball for riot-web again.

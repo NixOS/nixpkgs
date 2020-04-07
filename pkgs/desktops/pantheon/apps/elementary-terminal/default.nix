@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , pantheon
 , pkgconfig
 , meson
@@ -37,6 +38,14 @@ stdenv.mkDerivation rec {
     };
   };
 
+  patches = [
+    # fix build with vte-2.91 https://github.com/elementary/terminal/pull/488
+    (fetchpatch {
+      url = "https://github.com/elementary/terminal/commit/48da5328cefdc481a3ac76fbdd771096f542d55a.patch";
+      sha256 = "1y4043jxb0qzd3pp28kdij2yj1p9pg158il7q3aq1sf7c474gz4d";
+    })
+  ];
+
   nativeBuildInputs = [
     appstream
     desktop-file-utils
@@ -72,7 +81,7 @@ stdenv.mkDerivation rec {
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
-    homepage = https://github.com/elementary/terminal;
+    homepage = "https://github.com/elementary/terminal";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-workspace-matrix";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "mzur";
     repo = "gnome-shell-wsmatrix";
     rev = "v${version}";
-    sha256 = "1fgyzmd16kklcca7600bwg8w8pbb4klmapqsvmahlwa99vmkhfkn";
+    sha256 = "LTDkKSKvReJxBzAERE+vV+uJBNZw6UyhiB7kN48BZCo=";
   };
 
   uuid = "wsmatrix@martin.zurowietz.de";

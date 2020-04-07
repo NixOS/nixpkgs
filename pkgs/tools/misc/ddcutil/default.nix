@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, glib, i2c-tools, udev, libgudev, libusb, libdrm, xorg }:
+, glib, i2c-tools, udev, libgudev, libusb1, libdrm, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
     i2c-tools udev libgudev
-    glib libusb libdrm xorg.libXrandr
+    glib libusb1 libdrm xorg.libXrandr
   ];
 
   meta = with stdenv.lib; {

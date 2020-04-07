@@ -2,12 +2,12 @@
 , coreutils, iptables, nettools, openssh, procps }:
 
 python3Packages.buildPythonApplication rec {
-  name = "sshuttle-${version}";
+  pname = "sshuttle";
   version = "0.78.5";
 
-  src = fetchurl {
+  src = python3Packages.fetchPypi {
+    inherit pname version;
     sha256 = "0vp13xwrhx4m6zgsyzvai84lkq9mzkaw47j58dk0ll95kaymk2x8";
-    url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
   patches = [ ./sudo.patch ];

@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "Tool to display dialogs from the commandline and shell scripts";
     homepage = "https://wiki.gnome.org/Projects/Zenity";
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

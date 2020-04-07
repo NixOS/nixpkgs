@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig
+{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
 , wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
 , ffmpeg_4, x264, libvpx, libwebp, x265
@@ -11,7 +11,23 @@ with lib;
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
-  xf86videodummy = callPackage ./xf86videodummy { };
+  xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
+    patches = [
+      ./0002-Constant-DPI.patch
+      ./0003-fix-pointer-limits.patch
+      ./0005-support-for-30-bit-depth-in-dummy-driver.patch
+    ];
+  });
+
+  xorgModulePaths = writeText "module-paths" ''
+    Section "Files"
+      ModulePath "${xorgserver}/lib/xorg/modules"
+      ModulePath "${xorgserver}/lib/xorg/modules/extensions"
+      ModulePath "${xorgserver}/lib/xorg/modules/drivers"
+      ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
+    EndSection
+  '';
+
 in buildPythonApplication rec {
   pname = "xpra";
   version = "3.0.7";
@@ -79,6 +95,11 @@ in buildPythonApplication rec {
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudio ]}
     )
+  '';
+
+  # append module paths to xorg.conf
+  postInstall = ''
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
   '';
 
   doCheck = false;
