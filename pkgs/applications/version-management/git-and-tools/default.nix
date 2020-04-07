@@ -167,6 +167,8 @@ let
 
   gita = python3Packages.callPackage ./gita {};
 
+  gitbatch = callPackage ./gitbatch { };
+
   gitflow = callPackage ./gitflow { };
 
   gitstatus = callPackage ./gitstatus { };
