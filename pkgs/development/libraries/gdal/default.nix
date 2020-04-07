@@ -58,12 +58,11 @@ stdenv.mkDerivation rec {
     "--with-geos=${geos}/bin/geos-config" # optional
     "--with-hdf4=${hdf4.dev}" # optional
     "--with-xml2=${libxml2.dev}/bin/xml2-config" # optional
-    (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
-  ];
+  ] ++ stdenv.lib.optional netcdfSupport "--with-netcdf=${netcdf}";
 
   hardeningDisable = [ "format" ];
 
-  CXXFLAGS = "-fpermissive";
+  env.CXXFLAGS = "-fpermissive";
 
   # - Unset CC and CXX as they confuse libtool.
   # - teach gdal that libdf is the legacy name for libhdf

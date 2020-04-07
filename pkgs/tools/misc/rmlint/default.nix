@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b5cziam14h80xrfb285fmfrzz2rligxcpsq1xsig14xf4l2875i";
   };
 
-  CFLAGS="-I${stdenv.lib.getDev utillinux}/include";
+  env.CFLAGS = "-I${stdenv.lib.getDev utillinux}/include";
 
   nativeBuildInputs = [
     pkgconfig sphinx gettext scons

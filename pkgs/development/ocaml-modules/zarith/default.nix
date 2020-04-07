@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = "patchShebangs ./z_pp.pl";
   dontAddPrefix = true;
-  configureFlags = [ "-installdir ${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib" ];
+  configureFlags = [ "-installdir" "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib" ];
 
   preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 

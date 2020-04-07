@@ -101,6 +101,7 @@ in rec {
     assert lib.isList (attrs.patchFlags or []);
     assert lib.isList (attrs.installFlags or []);
     assert lib.isList (attrs.installTargets or []);
+    assert !(attrs ? CFLAGS);
     assert !(attrs ? CXXFLAGS);
     assert !(attrs ? NIX_LDFLAGS);
     assert !(attrs ? NIX_CFLAGS_COMPILE);
