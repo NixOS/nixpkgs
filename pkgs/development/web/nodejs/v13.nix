@@ -1,7 +1,10 @@
-{ callPackage, openssl, icu, enableNpm ? true }:
+{ callPackage, openssl, icu, python3, enableNpm ? true }:
 
 let
-  buildNodejs = callPackage ./nodejs.nix { inherit openssl icu; };
+  buildNodejs = callPackage ./nodejs.nix { 
+    inherit openssl icu;
+    python = python3;
+  };
 in
   buildNodejs {
     inherit enableNpm;

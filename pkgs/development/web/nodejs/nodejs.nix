@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python2, zlib, libuv, utillinux, http-parser
+{ stdenv, fetchurl, openssl, python, zlib, libuv, utillinux, http-parser
 , pkgconfig, which
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
@@ -55,7 +55,7 @@ in
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which utillinux pkgconfig python2 ]
+    nativeBuildInputs = [ which utillinux pkgconfig python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
 
     configureFlags = let
@@ -145,5 +145,5 @@ in
       platforms = platforms.linux ++ platforms.darwin;
     };
 
-    passthru.python = python2; # to ensure nodeEnv uses the same version
+    passthru.python = python; # to ensure nodeEnv uses the same version
 }
