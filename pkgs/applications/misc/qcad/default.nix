@@ -11,7 +11,7 @@
 
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "v3.24.2.1";
+  version = "3.24.2.1";
 
   src = fetchFromGitHub {
     owner = "qcad";
