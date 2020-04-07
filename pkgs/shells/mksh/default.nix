@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mksh";
-  version = "57";
+  version = "58";
 
   src = fetchurl {
     urls = [
       "https://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
       "http://pub.allbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
     ];
-    sha256 = "0xdykm1z710wriwd6nc8s8lwk2dwjl63dq96xxaawlid31a1241x";
+    sha256 = "1337zjvzh14yncg9igdry904a3ns52l8rnm1kcq262w7f5xyp2v0";
   };
 
-  buildPhase = ''sh ./Build.sh -r -c lto'';
+  dontConfigure = true;
+
+  buildPhase = ''sh ./Build.sh -r'';
 
   installPhase = ''
     install -D -m 755 mksh $out/bin/mksh
