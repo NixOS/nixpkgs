@@ -141,7 +141,7 @@ let
       mergeAttrsWithFunc mergeAttrsConcatenateValues
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy
-      fakeSha256 fakeSha512
+      fakeSri fakeSha256 fakeSha512
       nixType imap;
     inherit (versions)
       splitVersion;
