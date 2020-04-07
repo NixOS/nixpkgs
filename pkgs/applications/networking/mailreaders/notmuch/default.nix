@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--infodir=${placeholder "info"}"
   ] ++ optional (!withEmacs) "--without-emacs"
+    ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
     ++ optional (isNull ruby) "--without-ruby";
 
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "V=1" ];
 
 
-  outputs = [ "out" "man" "info" ];
+  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional withEmacs "emacs";
 
   preCheck = let
     test-database = fetchurl {
@@ -85,6 +86,10 @@ stdenv.mkDerivation rec {
   ];
 
   installTargets = [ "install" "install-man" "install-info" ];
+
+  postInstall = stdenv.lib.optionalString withEmacs ''
+    moveToOutput bin/notmuch-emacs-mua $emacs
+  '';
 
   dontGzipMan = true; # already compressed
 
