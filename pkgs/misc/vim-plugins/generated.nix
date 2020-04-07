@@ -3807,6 +3807,17 @@ let
     };
   };
 
+  vim-dasht = buildVimPluginFrom2Nix {
+    pname = "vim-dasht";
+    version = "2019-09-29";
+    src = fetchFromGitHub {
+      owner = "sunaku";
+      repo = "vim-dasht";
+      rev = "9c7484eaea26b8dd1edd8af21a38cee6c4ef4f49";
+      sha256 = "1rjckipy7b4ygwvc1hbc24da1x3pwklbkfljrz16znlcm2y5q72k";
+    };
+  };
+
   vim-devicons = buildVimPluginFrom2Nix {
     pname = "vim-devicons";
     version = "2020-04-11";

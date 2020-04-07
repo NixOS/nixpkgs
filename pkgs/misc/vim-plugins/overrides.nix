@@ -11,6 +11,7 @@
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 , nodePackages
+, dasht
 
 # coc-go dependency
 , go
@@ -515,6 +516,13 @@ self: super: {
 
   vim-codefmt = super.vim-codefmt.overrideAttrs(old: {
     dependencies = with super; [ vim-maktaba ];
+  });
+
+  vim-dasht = super.vim-dasht.overrideAttrs(old: {
+    preFixup = ''
+      substituteInPlace $out/share/vim-plugins/vim-dasht/autoload/dasht.vim \
+        --replace "['dasht']" "['${dasht}/bin/dasht']"
+    '';
   });
 
   vim-easytags = super.vim-easytags.overrideAttrs(old: {
