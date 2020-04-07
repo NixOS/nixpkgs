@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.18.1";
+  version = "0.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "de033ad69f86a655f50d407648b3aa2dd9647c69fd7bb317e9adfcd38a1adf4b";
+    sha256 = "0dgca286vhrabm4r4jj545k895z6w2c70ars06vrjhf9cpgg7qck";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = http://python-soco.com/;
+    homepage = "http://python-soco.com/";
     description = "A CLI and library to control Sonos speakers";
     license = lib.licenses.mit;
   };
