@@ -4,6 +4,7 @@
 , fetchPypi
 , html5lib
 , wcwidth
+, setuptools
 , pytest
 }:
 
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     html5lib
     wcwidth
+    setuptools
   ];
 
   checkInputs = [
