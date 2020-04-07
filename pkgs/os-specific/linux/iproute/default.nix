@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.5.0";
+  version = "5.6.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0ywg70f98wgfai35jl47xzpjp45a6n7crja4vc8ql85cbi1l7ids";
+    sha256 = "14j6n1bc09xhq8lxs40vfsx8bb8lx12a07ga4rsxl8vfrqjhwnqv";
   };
 
   preConfigure = ''
