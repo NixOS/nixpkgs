@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     # do not download a file during build
     xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
     install -D -m0444 ${fetchurl {
-                          url    = http://web.archive.org/web/20200406132357/http://download.processing.org/reference.zip;
+                          url    = https://web.archive.org/web/20200406132357/http://download.processing.org/reference.zip;
                           sha256 = "093hc7kc9wfxqgf5dzfmfp68pbsy8x647cj0a25vgjm1swi61zbi";
                         }
                        } ./java/reference.zip
