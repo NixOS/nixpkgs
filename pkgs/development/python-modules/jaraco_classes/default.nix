@@ -1,8 +1,9 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm, six, more-itertools }:
+{ buildPythonPackage, fetchPypi, isPy27, setuptools_scm, six, more-itertools }:
 
 buildPythonPackage rec {
   pname = "jaraco.classes";
   version = "3.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
