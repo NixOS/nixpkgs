@@ -575,7 +575,6 @@ mapAliases ({
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_4_01_0 ocamlPackages_4_02
-    ocamlPackages_4_03
     ocamlPackages_latest;
 
   gst_all = { # added 2018-04-25
@@ -599,7 +598,6 @@ mapAliases ({
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
   ocaml_4_02   = ocamlPackages_4_02.ocaml;
-  ocaml_4_03   = ocamlPackages_4_03.ocaml;
 }) // {
 
   # added 2019-10-28
