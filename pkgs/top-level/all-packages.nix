@@ -12112,6 +12112,8 @@ in
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
+  hydra-check = with python3.pkgs; toPythonApplication hydra-check;
+
   hyena = callPackage ../development/libraries/hyena { };
 
   hyperscan = callPackage ../development/libraries/hyperscan { };
