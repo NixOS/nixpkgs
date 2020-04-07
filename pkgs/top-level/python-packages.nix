@@ -4008,6 +4008,8 @@ in {
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
+  hydra-check = callPackage ../development/python-modules/hydra-check { };
+
   colored = callPackage ../development/python-modules/colored { };
 
   xdg = callPackage ../development/python-modules/xdg { };
