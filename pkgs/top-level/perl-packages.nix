@@ -814,6 +814,34 @@ let
     };
   };
 
+  AuthenKrb5Admin = buildPerlPackage rec {
+    pname = "Authen-Krb5-Admin";
+    version = "0.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SJ/SJQUINNEY/${pname}-${version}.tar.gz";
+      sha256 = "5dd49cacd983efd61a8c3f1a56571bb73785eb155908b5d7bec97eed78df0c54";
+    };
+    propagatedBuildInputs = [ pkgs.krb5Full.dev AuthenKrb5 ];
+    # The following ENV variables are required by Makefile.PL to find
+    # programs in krb5Full.dev. It is not enough to just specify the
+    # path to krb5-config as this tool returns the prefix of krb5Full,
+    # which implies a working value for KRB5_LIBDIR, but not the others.
+    perlPreHook = ''
+      export KRB5_CONFTOOL=${pkgs.krb5Full.dev}/bin/krb5-config
+      export KRB5_BINDIR=${pkgs.krb5Full.dev}/bin
+      export KRB5_INCDIR=${pkgs.krb5Full.dev}/include
+    '';
+    # Tests require working Kerberos infrastructure so replace with a
+    # simple attempt to exercise the module.
+    checkPhase = ''
+      perl -I blib/lib -I blib/arch -MAuthen::Krb5::Admin -e 'print "1..1\nok 1\n"'
+    '';
+    meta = {
+      description = "Perl extension for MIT Kerberos 5 admin interface";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   AuthenModAuthPubTkt = buildPerlPackage {
     pname = "Authen-ModAuthPubTkt";
     version = "0.1.1";
