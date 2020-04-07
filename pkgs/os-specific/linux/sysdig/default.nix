@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, kernel
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, kernel
 , luajit, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, c-ares, protobuf, grpc
 }:
 
@@ -27,16 +27,22 @@ stdenv.mkDerivation rec {
     "-DCREATE_TEST_TARGETS=OFF"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
-  # needed since luajit-2.1.0-beta3
-  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
+  NIX_CFLAGS_COMPILE = toString [
+    "-ltbb -lcurl"
+    # needed since luajit-2.1.0-beta3
+    "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))"
+  ];
 
-  preConfigure = ''
-    cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl")
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Mic92/sysdig/commit/798c43d814c74d7fb955933cda35979e82fb8f92.patch";
+      sha256 = "10qky6s924yrvk3n9qvy3sxx1bw7c073rzcj0zq46rwihdgb6bw1";
+    })
+  ];
 
-    export INSTALL_MOD_PATH="$out"
-  '' + optionalString (kernel != null) ''
-    export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  '';
+  KERNELDIR = stdenv.lib.optionalString (kernel != null)
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  INSTALL_MOD_PATH = placeholder "out";
 
   postInstall = optionalString (kernel != null) ''
     make install_driver
