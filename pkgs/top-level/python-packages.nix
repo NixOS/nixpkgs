@@ -2975,6 +2975,24 @@ in {
 
   latexcodec = callPackage ../development/python-modules/latexcodec {};
 
+  libmodulemd = pipe pkgs.libmodulemd [
+    toPythonModule
+
+    (p: p.overrideAttrs (super: {
+      meta = super.meta // {
+        outputsToInstall = [ "py" ];
+        # The package always builds python3 bindings
+        broken = (super.meta.broken or false) || !isPy3k;
+      };
+    }))
+
+    (p: p.override {
+      python3 = python;
+    })
+
+    (p: p.py)
+  ];
+
   libselinux = pipe pkgs.libselinux [
     toPythonModule
 
