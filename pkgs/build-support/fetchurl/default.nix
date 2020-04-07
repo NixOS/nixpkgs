@@ -44,7 +44,7 @@ in
   urls ? []
 
 , # Additional curl options needed for the download to succeed.
-  curlOpts ? ""
+  curlOpts ? []
 
 , # Name of the file.  If empty, use the basename of `url' (or of the
   # first element of `urls').

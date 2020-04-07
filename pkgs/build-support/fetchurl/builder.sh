@@ -1,3 +1,5 @@
+source .attrs.sh
+
 source $stdenv/setup
 
 source $mirrorsFile
@@ -17,7 +19,7 @@ curl=(
     --cookie-jar cookies
     --insecure
     --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
-    $curlOpts
+    "${curlOpts[@]}"
     $NIX_CURL_FLAGS
 )
 
@@ -85,10 +87,10 @@ tryHashedMirrors() {
 # URL list may contain ?. No glob expansion for that, please
 set -o noglob
 
-urls2=
-for url in $urls; do
+declare -a urls2
+for url in "${urls[@]}"; do
     if test "${url:0:9}" != "mirror://"; then
-        urls2="$urls2 $url"
+        urls2+=("$url")
     else
         url2="${url:9}"; echo "${url2/\// }" > split; read site fileName < split
         #varName="mirror_$site"
@@ -103,18 +105,18 @@ for url in $urls; do
             if test -n "${!varName}"; then mirrors="${!varName}"; fi
 
             for url3 in $mirrors; do
-                urls2="$urls2 $url3$fileName";
+                urls2+=("$url3$fileName")
             done
         fi
     fi
 done
-urls="$urls2"
+urls=("${urls2[@]}")
 
 # Restore globbing settings
 set +o noglob
 
 if test -n "$showURLs"; then
-    echo "$urls" > $out
+    echo "${urls[@]}" > $out
     exit 0
 fi
 
@@ -126,7 +128,7 @@ fi
 set -o noglob
 
 success=
-for url in $urls; do
+for url in "${urls[@]}"; do
     if [ -z "$postFetch" ]; then
        case "$url" in
            https://github.com/*/archive/*)
