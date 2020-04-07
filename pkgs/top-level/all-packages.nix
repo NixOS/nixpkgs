@@ -4654,6 +4654,10 @@ in
 
   medfile = callPackage ../development/libraries/medfile { };
 
+  meilisearch = callPackage ../servers/search/meilisearch {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+  };
+
   memtester = callPackage ../tools/system/memtester { };
 
   mhonarc = perlPackages.MHonArc;
