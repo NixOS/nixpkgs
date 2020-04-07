@@ -210,14 +210,14 @@ stdenv.mkDerivation {
   # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
   # if dependency paths contain the string "pq", which can occur in the hash.
   # To prevent these failures, we need to override PostgreSQL detection.
-  PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
+  env.PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags =
     [
-      "-plugindir $(out)/$(qtPluginPrefix)"
-      "-qmldir $(out)/$(qtQmlPrefix)"
-      "-docdir $(out)/$(qtDocPrefix)"
+      "-plugindir" "$(out)/$(qtPluginPrefix)"
+      "-qmldir" "$(out)/$(qtQmlPrefix)"
+      "-docdir" "$(out)/$(qtDocPrefix)"
 
       "-verbose"
       "-confirm-license"
@@ -233,7 +233,7 @@ stdenv.mkDerivation {
 
       "-gui"
       "-widgets"
-      "-opengl desktop"
+      "-opengl" "desktop"
       "-icu"
       "-L" "${icu.out}/lib"
       "-I" "${icu.dev}/include"
@@ -286,13 +286,13 @@ stdenv.mkDerivation {
       "-L" "${openssl.out}/lib"
       "-I" "${openssl.dev}/include"
       "-system-sqlite"
-      ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
-      ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
+      "-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql"
+      "-${if postgresql != null then "plugin" else "no"}-sql-psql"
 
-      "-make libs"
-      "-make tools"
-      ''-${lib.optionalString (!buildExamples) "no"}make examples''
-      ''-${lib.optionalString (!buildTests) "no"}make tests''
+      "-make" "libs"
+      "-make" "tools"
+      "-${lib.optionalString (!buildExamples) "no"}make" "examples"
+      "-${lib.optionalString (!buildTests) "no"}make" "tests"
       "-v"
     ]
 
@@ -300,7 +300,7 @@ stdenv.mkDerivation {
       if stdenv.isDarwin
       then
         [
-          "-platform macx-clang"
+          "-platform" "macx-clang"
           "-no-fontconfig"
           "-qt-freetype"
           "-qt-libpng"
@@ -312,7 +312,7 @@ stdenv.mkDerivation {
 
           "-system-xcb"
           "-xcb"
-          "-qpa xcb"
+          "-qpa" "xcb"
           "-L" "${libX11.out}/lib"
           "-I" "${libX11.out}/include"
           "-L" "${libXext.out}/lib"
@@ -322,7 +322,7 @@ stdenv.mkDerivation {
 
           "-libinput"
 
-          ''-${lib.optionalString (cups == null) "no-"}cups''
+          "-${lib.optionalString (cups == null) "no-"}cups"
           "-dbus-linked"
           "-glib"
           "-system-libjpeg"

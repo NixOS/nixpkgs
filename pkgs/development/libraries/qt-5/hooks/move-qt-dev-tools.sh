@@ -10,14 +10,14 @@ updateToolPath() {
 }
 
 moveQtDevTools() {
-    if [ -n "$devTools" ]; then
-        for tool in $devTools; do
+    if [[ -n ${devTools[@]+"${devTools[@]}"} ]]; then
+        for tool in "${devTools[@]}"; do
             moveToOutput "$tool" "${!outputDev}"
         done
 
         if [ -d "${!outputDev}/mkspecs" ]; then
             find "${!outputDev}/mkspecs" -name '*.pr?' | while read pr_; do
-                for tool in $devTools; do
+                for tool in "${devTools[@]}"; do
                     updateToolPath "$tool" "$pr_"
                 done
             done
@@ -25,7 +25,7 @@ moveQtDevTools() {
 
         if [ -d "${!outputDev}/lib/cmake" ]; then
             find "${!outputDev}/lib/cmake" -name '*.cmake' | while read cmake; do
-                for tool in $devTools; do
+                for tool in "${devTools[@]}"; do
                     updateToolPath "$tool" "$cmake"
                 done
             done

@@ -37,7 +37,7 @@ envBuildHostHooks+=(qmakePathHook)
 qtEnvHostTargetHook() {
     if providesQtRuntime "$1" && [ "z${!outputBin}" != "z${!outputDev}" ]
     then
-        propagatedBuildInputs+=" $1"
+        propagatedBuildInputs+=("$1")
     fi
 }
 envHostTargetHooks+=(qtEnvHostTargetHook)
