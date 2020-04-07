@@ -1295,7 +1295,7 @@ installTargets = "install-bin install-doc";</programlisting>
      </term>
      <listitem>
       <para>
-       List of directories to search for libraries and executables from which only debugging-related symbols should be stripped. It defaults to <literal>lib bin sbin</literal>.
+       List of directories to search for libraries and executables from which only debugging-related symbols should be stripped. It defaults to <literal>lib lib32 lib64 libexec bin sbin</literal>.
       </para>
      </listitem>
     </varlistentry>
