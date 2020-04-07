@@ -3097,6 +3097,10 @@ in {
 
   oyaml = callPackage ../development/python-modules/oyaml { };
 
+  pam = callPackage ../development/python-modules/pam {
+    inherit (pkgs) pam;
+  };
+
   pamela = callPackage ../development/python-modules/pamela { };
 
   paperspace = callPackage ../development/python-modules/paperspace { };
