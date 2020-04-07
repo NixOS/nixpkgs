@@ -1273,15 +1273,14 @@ installCheckPhase() {
        && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
-        # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
-            ${installCheckTarget:-installcheck}
         )
+        _accumFlagsArray makeFlags makeFlagsArray \
+          installCheckFlags installCheckFlagsArray
+        flagsArray+=( ${installCheckTarget:-installcheck} )
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1295,11 +1294,9 @@ installCheckPhase() {
 distPhase() {
     runHook preDist
 
-    # Old bash empty array hack
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        $distFlags ${distFlagsArray+"${distFlagsArray[@]}"} ${distTarget:-dist}
-    )
+    local flagsArray=()
+    _accumFlagsArray distFlags distFlagsArray
+    flagsArray+=( ${distTarget:-dist} )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
