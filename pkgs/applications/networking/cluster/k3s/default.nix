@@ -34,7 +34,6 @@ let
     url = "https://kubernetes-charts.storage.googleapis.com/traefik-${traefikChartVersion}.tgz";
     sha256 = "1aqpzgjlvqhil0g3angz94zd4xbl4iq0qmpjcy5aq1xv9qciwdi9";
   };
-  pkgMaintainers = [ maintainers.euank ];
   # so, k3s is a complicated thing to package
   # This derivation attempts to avoid including any random binaries from the
   # internet. k3s-root is _mostly_ binaries built to be bundled in k3s (which
@@ -68,7 +67,7 @@ let
       description = "CNI plugins, as patched by rancher for k3s";
       license = licenses.asl20;
       homepage = https://k3s.io;
-      maintainers = pkgMaintainers;
+      maintainers = [ maintainers.euank ];
       platforms = platforms.linux;
     };
   };
@@ -137,7 +136,7 @@ let
       description = "The various binaries that get packaged into the final k3s binary.";
       license = licenses.asl20;
       homepage = https://k3s.io;
-      maintainers = pkgMaintainers;
+      maintainers = [ maintainers.euank ];
       platforms = platforms.linux;
     };
   };
@@ -192,7 +191,7 @@ let
       description = "The k3s go binary which is used by the final wrapped output below.";
       license = licenses.asl20;
       homepage = https://k3s.io;
-      maintainers = pkgMaintainers;
+      maintainers = [ maintainers.euank ];
       platforms = platforms.linux;
     };
   };
@@ -230,7 +229,7 @@ stdenv.mkDerivation rec {
       description = "A lightweight Kubernetes distribution.";
       license = licenses.asl20;
       homepage = https://k3s.io;
-      maintainers = pkgMaintainers;
+      maintainers = [ maintainers.euank ];
       platforms = platforms.linux;
     };
 }
