@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake }:
+{ mkDerivation, stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake }:
 
 let
 
@@ -26,7 +26,7 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   pname = "dfasma";
   version = "1.4.5";
 
