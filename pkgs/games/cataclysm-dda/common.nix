@@ -13,6 +13,8 @@ let
     ++ optionals stdenv.isDarwin [ Cocoa ];
 
   common = {
+    pname = "cataclysm-dda";
+
     nativeBuildInputs = [ pkgconfig ];
 
     buildInputs = cursesDeps ++ optionals tiles tilesDeps;

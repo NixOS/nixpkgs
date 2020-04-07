@@ -10,7 +10,6 @@ in
 
 stdenv.mkDerivation (common // rec {
   version = "0.E-2";
-  name = "cataclysm-dda-${version}";
 
   src = fetchFromCleverRaven {
     rev = version;

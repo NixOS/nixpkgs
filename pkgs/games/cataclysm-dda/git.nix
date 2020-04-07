@@ -10,8 +10,8 @@ let
 in
 
 stdenv.mkDerivation (common // rec {
+  pname = common.pname + "-git";
   version = "2019-11-22";
-  name = "cataclysm-dda-git-${version}";
 
   src = fetchFromCleverRaven {
     rev = "a6c8ece992bffeae3788425dd4b3b5871e66a9cd";
