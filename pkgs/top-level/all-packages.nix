@@ -13987,10 +13987,6 @@ in
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
-  qt3 = callPackage ../development/libraries/qt-3 {
-    libpng = libpng12;
-  };
-
   qt4 = qt48;
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
