@@ -6219,10 +6219,6 @@ in
 
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
-  relfs = callPackage ../tools/filesystems/relfs {
-    inherit (gnome2) gnome_vfs GConf;
-  };
-
   remarkjs = callPackage ../development/web/remarkjs { };
 
   alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
