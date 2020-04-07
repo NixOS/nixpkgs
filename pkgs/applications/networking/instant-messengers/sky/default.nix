@@ -1,10 +1,10 @@
 { stdenv, fetchurl, file, libX11, libXScrnSaver
 , libGL, qt5, SDL, libpulseaudio
 , libXrandr, libXext, libXcursor, libXinerama, libXi
-, curl, sqlite, openssl
+, curl, sqlite, openssl_1_0_2
 , libuuid, openh264, libv4l, libxkbfile, libXv, zlib, libXmu
 , libXtst, libXdamage, pam, libXfixes, libXrender, libjpeg_original
-, ffmpeg
+, ffmpeg_2
 }:
  let
    # Sky is linked to the libjpeg 8 version and checks for the version number in the code.
@@ -16,22 +16,22 @@
   });
 in
 stdenv.mkDerivation rec {
-  version_major = "2.1.7369";
+  version_major = "2.1.7520";
   version_minor = "1";
   version = version_major + "." + version_minor;
   pname = "sky";
   unpackCmd = "ar x $curSrc; tar -xf data.tar.xz";
   src = fetchurl {
     url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+xenial_amd64.deb";
-    sha256 = "0b3j90km3rp5bgaklxw881g0gcy09mqzbhjdfrq4s2np026ql3d9";
+    sha256 = "078gdk4dbw7aqfrrc5xlhhzpiy3br8wpn0mbfbqfxrnbpgn5ya2w";
   };
-  buildInputs = [ 
+  buildInputs = [
     file
     qt5.qtbase
     SDL
-    ffmpeg
+    ffmpeg_2
     sqlite
-    openssl
+    openssl_1_0_2  # sky needs legacy openssl
     openh264
     pam
     curl
@@ -68,6 +68,11 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libxfreerdp-client.so.2.0.0
     patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/sky
     patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/sky_sender
+    # map libavcodec-ffmpeg.so.56 to libavcodec.so.56
+    ln -s ${ffmpeg_2.out}/lib/libavcodec.so.56 $out/lib/libavcodec-ffmpeg.so.56
+    ln -s ${ffmpeg_2.out}/lib/libavformat.so.56 $out/lib/libavformat-ffmpeg.so.56
+    ln -s ${ffmpeg_2.out}/lib/libswscale.so.3 $out/lib/libswscale-ffmpeg.so.3
+    ln -s ${ffmpeg_2.out}/lib/libavutil.so.54 $out/lib/libavutil-ffmpeg.so.54
     sed -i "s#/usr/bin/sky#$out/bin/sky#g" $out/share/applications/sky.desktop
     sed -i "s#/usr/lib/sky#$out/bin/#g" $out/share/applications/sky.desktop
   '';
