@@ -78,6 +78,7 @@ let
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
       dragon = callPackage ./dragon.nix {};
+      elisa = callPackage ./elisa.nix {};
       eventviews = callPackage ./eventviews.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};

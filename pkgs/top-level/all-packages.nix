@@ -4520,8 +4520,6 @@ in
 
   krop = callPackage ../applications/graphics/krop { };
 
-  elisa = libsForQt5.callPackage ../applications/audio/elisa { };
-
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
   kube-router = callPackage ../applications/networking/cluster/kube-router { };
@@ -20123,7 +20121,7 @@ in
       recurseIntoAttrs (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
-    akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
+    akonadi akregator ark dolphin dragon elisa ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
     keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular spectacle;
