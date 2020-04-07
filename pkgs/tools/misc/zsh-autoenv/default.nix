@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
     cat <<SCRIPT > $out/bin/zsh-autoenv-share
     #!${runtimeShell}
-    # Run this script to find the fzf shared folder where all the shell
+    # Run this script to find the zsh-autoenv shared folder where all the shell
     # integration scripts are living.
     echo $out/share/zsh-autoenv
     SCRIPT
