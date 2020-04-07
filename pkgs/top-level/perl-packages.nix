@@ -16726,6 +16726,19 @@ let
     };
   };
 
+  StatisticsChiSquare = buildPerlPackage rec {
+    pname = "Statistics-ChiSquare";
+    version = "1.0000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/${pname}-${version}.tar.gz";
+      sha256 = "255a5a38336d048ddb9077222691e000984e907aae09a4ea695a9cfd49a1ddd0";
+    };
+    meta = {
+      description = "Implements the Chi Squared test, using pre-computed tables";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   StatisticsDescriptive = buildPerlModule {
     pname = "Statistics-Descriptive";
     version = "3.0702";
