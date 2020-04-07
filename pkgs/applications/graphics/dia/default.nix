@@ -1,75 +1,69 @@
 { stdenv
-, fetchgit
-, autoconf
-, automake
-, libtool
-, gtk2
-, pkgconfig
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
 , perlPackages
+, glib
+, gtk2
 , libxml2
-, gettext
-, python
-, libxml2Python
-, docbook5
-, docbook_xsl
+, python2
+, docbook_xml_dtd_45
+, docbook-xsl-nons
 , libxslt
-, intltool
-, libart_lgpl
-, withGNOME ? false
-, libgnomeui
+, gettext
+, python3
+, desktop-file-utils
+, zlib
+, cairo
 , gtk-mac-integration-gtk2
 }:
 
 stdenv.mkDerivation {
   pname = "dia";
-  version = "0.97.3.20170622";
+  version = "unstable-2020-04-07";
 
-  src = fetchgit {
-    url = https://gitlab.gnome.org/GNOME/dia.git;
-    rev = "b86085dfe2b048a2d37d587adf8ceba6fb8bc43c";
-    sha256 = "1fyxfrzdcs6blxhkw3bcgkksaf3byrsj4cbyrqgb4869k3ynap96";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "dia";
+    rev = "475bceff3f445f3fe691593a3003527a0d8bf0d9";
+    sha256 = "mxP2FJl77SEURO6AUlLusMLHW0EeBw4hI5gw7egt3HE=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    pkgconfig
-    intltool
-  ] ++ (with perlPackages; [
-    perl
-    XMLParser
-  ]);
+    meson
+    ninja
+    pkg-config
+    gettext
+    python3 # for install script
+    gtk2 # for gtk-update-icon-cache
+    libxslt # for xsltproc
+    desktop-file-utils
+    docbook_xml_dtd_45
+    docbook-xsl-nons
+  ];
 
   buildInputs = [
+    glib
     gtk2
     libxml2
-    gettext
-    python
-    libxml2Python
-    docbook5
-    libxslt
-    docbook_xsl
-    libart_lgpl
-  ] ++ stdenv.lib.optionals withGNOME [
-    libgnomeui
+    python2
+    zlib
+    cairo
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     gtk-mac-integration-gtk2
   ];
 
-  configureFlags = stdenv.lib.optionals withGNOME [
-    "--enable-gnome"
-  ];
-
-  preConfigure = ''
-    NOCONFIGURE=1 ./autogen.sh # autoreconfHook is not enough
+  postPatch = ''
+    patchShebangs \
+      generate_run_with_dia_env.sh \
+      build-aux/post-install.py
   '';
 
-  hardeningDisable = [ "format" ];
-
   meta = with stdenv.lib; {
-    description = "Gnome Diagram drawing software";
-    homepage = http://live.gnome.org/Dia;
+    description = "GNOME Diagram drawing software";
+    homepage = "https://wiki.gnome.org/Apps/Dia";
     maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
