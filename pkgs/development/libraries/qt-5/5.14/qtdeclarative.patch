@@ -1,0 +1,13 @@
+diff --git a/tools/qmlcachegen/qmlcache.prf b/tools/qmlcachegen/qmlcache.prf
+index 537eaf62e..e21de58f6 100644
+--- a/tools/qmlcachegen/qmlcache.prf
++++ b/tools/qmlcachegen/qmlcache.prf
+@@ -26,7 +26,7 @@ defineReplace(qmlCacheOutputFileName) {
+ }
+ 
+ qmlcacheinst.base = $$QMLCACHE_DESTDIR
+-qmlcacheinst.path = $$[QT_INSTALL_QML]/$$TARGETPATH
++qmlcacheinst.path = $$NIX_OUTPUT_QML/$$TARGETPATH
+ qmlcacheinst.CONFIG = no_check_exist
+ 
+ qmlcachegen.input = CACHEGEN_FILES
