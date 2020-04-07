@@ -1,12 +1,15 @@
 { fetchurl, stdenv
 , pkgconfig, gnupg
 , xapian, gmime, talloc, zlib
-, doxygen, perl, texinfo
-, pythonPackages
-, emacs
-, ruby
 , which, dtach, openssl, bash, gdb, man
-, withEmacs ? false
+, texinfo
+, perl
+, python3
+, withDocs ? true
+, withRuby ? true
+, ruby ? null
+, withEmacs ? true
+, emacs ? null
 }:
 
 with stdenv.lib;
@@ -27,16 +30,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    texinfo                   # (optional) documentation -> doc/INSTALL
-  ] ++ optional withEmacs [ emacs ];
+    python3
+    perl
+    texinfo
+  ];
 
   buildInputs = [
     gnupg                     # undefined dependencies
     xapian gmime talloc zlib  # dependencies described in INSTALL
-    perl
-    pythonPackages.python
-    ruby
-  ];
+  ]
+    ++ optional withRuby [ ruby ]
+    ++ optional withEmacs [ emacs ]
+  ;
 
   postPatch = ''
     patchShebangs configure
@@ -54,8 +59,11 @@ stdenv.mkDerivation rec {
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
     "--infodir=${placeholder "info"}"
-  ] ++ optional (!withEmacs) "--without-emacs"
-    ++ optional (isNull ruby) "--without-ruby";
+  ]
+    ++ optionals (!withEmacs) [ "--without-emacs" ]
+    ++ optionals (!withDocs) [ "--without-docs" ]
+    ++ optionals (!withRuby) [ "--without-ruby" ]
+  ;
 
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
   # friends
