@@ -126,17 +126,18 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    configureFlags+="
-      -docdir $out/share/doc/${name}
-      -plugindir $out/lib/qt4/plugins
-      -importdir $out/lib/qt4/imports
-      -examplesdir $TMPDIR/share/doc/${name}/examples
-      -demosdir $TMPDIR/share/doc/${name}/demos
-      -datadir $out/share/${name}
-      -translationdir $out/share/${name}/translations
-      --jobs=$NIX_BUILD_CORES
-    "
     unset LD # Makefile uses gcc for linking; setting LD interferes
+
+    configureFlags+=(
+      "-docdir" "''${out}/share/doc/${name}"
+      "-plugindir" "''${out}/lib/qt4/plugins"
+      "-importdir" "''${out}/lib/qt4/imports"
+      "-examplesdir" "''${TMPDIR}/share/doc/${name}/examples"
+      "-demosdir" "''${TMPDIR}/share/doc/${name}/demos"
+      "-datadir" "''${out}/share/${name}"
+      "-translationdir" "''${out}/share/${name}/translations"
+      "--jobs=''${NIX_BUILD_CORES}"
+    )
   '' + lib.optionalString stdenv.cc.isClang ''
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
@@ -199,7 +200,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ lib.optionals (libmysqlclient != null) [ libmysqlclient ]
+    ++ lib.optional (libmysqlclient != null) libmysqlclient
     ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 

@@ -1,7 +1,7 @@
 qmakeConfigurePhase() {
     runHook preConfigure
 
-    $QMAKE PREFIX=$out $qmakeFlags
+    $QMAKE PREFIX=$out "${qmakeFlags[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
