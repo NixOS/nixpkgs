@@ -71,9 +71,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [ "V=1" ];
 
-
-  outputs = [ "out" "man" "info" ];
-
   preCheck = let
     test-database = fetchurl {
       url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
@@ -89,7 +86,9 @@ stdenv.mkDerivation rec {
     gdb man emacs
   ];
 
-  installTargets = [ "install" "install-man" "install-info" ];
+  installTargets = [ "install" ]
+  ++ optionals (withDocs) [ "install-man" "install-info" ]
+  ;
 
   dontGzipMan = true; # already compressed
 
