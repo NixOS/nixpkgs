@@ -61,12 +61,9 @@ in
         '';
       };
 
-      # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
       pubkeyAcceptedKeyTypes = mkOption {
         type = types.listOf types.str;
-        default = [
-          "+ssh-dss"
-        ];
+        default = [];
         example = [ "ssh-ed25519" "ssh-rsa" ];
         description = ''
           Specifies the key types that will be used for public key authentication.
@@ -75,9 +72,7 @@ in
 
       hostKeyAlgorithms = mkOption {
         type = types.listOf types.str;
-        default = [
-          "+ssh-dss"
-        ];
+        default = [];
         example = [ "ssh-ed25519" "ssh-rsa" ];
         description = ''
           Specifies the host key algorithms that the client wants to use in order of preference.
