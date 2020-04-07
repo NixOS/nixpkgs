@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU_combined }:
+{ mkDerivation, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU_combined }:
 
 
-stdenv.mkDerivation {
+mkDerivation {
   name = "openbrf-unstable-2016-01-09";
 
   src = fetchFromGitHub {
