@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "jaraco.classes";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "886ad165d495e7d18781142d6dda4f0045053a038f9e63c38ef03e2f7127bafc";
+    sha256 = "1avsxzm5mwylmy2zbxq3xvn48z5djb0qy3hwv4ryncprivzri1n3";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
