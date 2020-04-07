@@ -137,7 +137,8 @@ let
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
-    ] ++ optionals (versionRange "80" "82.0.4076.0") [
+      # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
+    ] ++ optionals (versionRange "80" "81.0.4044.56") [
       # fix race condition in the interaction with pulseaudio
       (githubPatch "704dc99bd05a94eb61202e6127df94ddfd571e85" "0nzwzfwliwl0959j35l0gn94sbsnkghs3dh1b9ka278gi7q4648z")
     ] ++ optionals (useVaapi) [
