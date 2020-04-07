@@ -774,6 +774,7 @@
   ./services/search/elasticsearch-curator.nix
   ./services/search/hound.nix
   ./services/search/kibana.nix
+  ./services/search/meilisearch.nix
   ./services/search/solr.nix
   ./services/security/bitwarden_rs/default.nix
   ./services/security/certmgr.nix
