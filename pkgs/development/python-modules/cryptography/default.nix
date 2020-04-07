@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, isPy27
+, ipaddress
 , openssl
 , cryptography_vectors
 , darwin
@@ -33,7 +35,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     six
-  ] ++ stdenv.lib.optional (!isPyPy) cffi;
+  ] ++ stdenv.lib.optional (!isPyPy) cffi
+  ++ stdenv.lib.optionals isPy27 [ ipaddress ];
 
   checkInputs = [
     cryptography_vectors
