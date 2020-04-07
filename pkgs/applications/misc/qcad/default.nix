@@ -16,7 +16,7 @@ mkDerivationWith stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "qcad";
     repo = "qcad";
-    rev = version;
+    rev = "v${version}";
     sha256 = "1g295gljq051x09f4d8k586bkg3vs8z22dn3rxj6xrm6803z8zw2";
   };
 
