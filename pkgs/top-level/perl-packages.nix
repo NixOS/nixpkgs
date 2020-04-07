@@ -7205,6 +7205,21 @@ let
     propagatedBuildInputs = [ HTTPDate ];
   };
 
+  FileMap = buildPerlModule rec {
+    pname = "File-Map";
+    version = "0.67";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/${pname}-${version}.tar.gz";
+      sha256 = "1hpv4aprgypjxjx1kzbjnf6r29a98rw7mndlinixzk62vyz5sy0j";
+    };
+    buildInputs = [ TestFatal TestWarnings ];
+    propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
+    meta = {
+      description = "Memory mapping made simple and safe";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileMimeInfo = buildPerlPackage {
     pname = "File-MimeInfo";
     version = "0.29";
@@ -14821,10 +14836,10 @@ let
 
   PerlIOLayers = buildPerlModule rec {
     pname = "PerlIO-Layers";
-    version = "0.011";
+    version = "0.012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/${pname}-${version}.tar.gz";
-      sha256 = "1d77e164aa5d5d24699a5479a423abdc1b07973fbe5a22d304fef2c560254b42";
+      sha256 = "1psaq3kwlk7g9rxvgsacfjk2mh6cscqf4xl7ggfkzfrnz91aabal";
     };
     meta = {
       description = "Querying your filehandle's capabilities";
