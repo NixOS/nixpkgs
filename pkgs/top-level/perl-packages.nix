@@ -2558,6 +2558,19 @@ let
     };
   };
 
+  ClassLoader = buildPerlPackage rec {
+    pname = "Class-Loader";
+    version = "2.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/${pname}-${version}.tar.gz";
+      sha256 = "4fef2076ead60423454ff1f4e82859a9a9b9942b5fb8eee0c98b9c63c9f2b8e7";
+    };
+    meta = {
+      description = "Load modules and create objects on demand";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassMakeMethods = buildPerlPackage {
     pname = "Class-MakeMethods";
     version = "1.01";
