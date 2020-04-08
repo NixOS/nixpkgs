@@ -4,8 +4,8 @@ with lib;
 
 let
 
-  inherit (pkgs) plymouth;
-  inherit (pkgs) nixos-icons;
+  inherit (pkgs) plymouth nixos-icons;
+  inherit (pkgs) buildEnv writeText;
 
   cfg = config.boot.plymouth;
 
@@ -16,12 +16,12 @@ let
     osVersion = config.system.nixos.release;
   };
 
-  themesEnv = pkgs.buildEnv {
+  themesEnv = buildEnv {
     name = "plymouth-themes";
-    paths = [ plymouth ] ++ cfg.themePackages;
+    paths = [ (lowPrio plymouth) ] ++ cfg.themePackages;
   };
 
-  configFile = pkgs.writeText "plymouthd.conf" ''
+  configFile = writeText "plymouthd.conf" ''
     [Daemon]
     ShowDelay=0
     Theme=${cfg.theme}
@@ -83,7 +83,6 @@ in
 
     boot.kernelParams = [ "splash" ];
 
-    # To be discoverable by systemd.
     environment.systemPackages = [ plymouth ];
 
     environment.etc."plymouth/plymouthd.conf".source = configFile;
@@ -93,8 +92,8 @@ in
     # XXX: Needed because we supply a different set of plugins in initrd.
     environment.etc."plymouth/plugins".source = "${plymouth}/lib/plymouth";
 
+    # To be discoverable by systemd.
     systemd.packages = [ plymouth ];
-
     systemd.services.plymouth-kexec.wantedBy = [ "kexec.target" ];
     systemd.services.plymouth-halt.wantedBy = [ "halt.target" ];
     systemd.services.plymouth-quit-wait.wantedBy = [ "multi-user.target" ];
@@ -106,8 +105,8 @@ in
     systemd.paths.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.plymouth}/bin/plymouthd
-      copy_bin_and_libs ${pkgs.plymouth}/bin/plymouth
+      copy_bin_and_libs ${plymouth}/bin/plymouth
+      copy_bin_and_libs ${plymouth}/bin/plymouthd
 
       moduleName="$(sed -n 's,ModuleName *= *,,p' ${themesEnv}/share/plymouth/themes/${cfg.theme}/${cfg.theme}.plymouth)"
 
