@@ -15,6 +15,7 @@ let
     map (childConfig:
       (import ../../../lib/eval-config.nix {
         inherit baseModules;
+        system = config.nixpkgs.initialSystem;
         modules =
            (optionals inheritParent modules)
         ++ [ ./no-clone.nix ]
@@ -74,7 +75,7 @@ let
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
-      echo -n "${pkgs.stdenv.hostPlatform.system}" > $out/system
+      echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
       mkdir $out/fine-tune
       childCount=0

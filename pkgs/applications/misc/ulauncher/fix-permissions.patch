@@ -1,0 +1,12 @@
+diff --git a/ulauncher/utils/Theme.py b/ulauncher/utils/Theme.py
+index 9cde624..4e36c4f 100644
+--- a/ulauncher/utils/Theme.py
++++ b/ulauncher/utils/Theme.py
+@@ -138,6 +138,9 @@ class Theme:
+         rmtree(new_theme_dir)
+         copytree(self.path, new_theme_dir)
+ 
++        # change file permissions (because Nix store is read-only)
++        os.chmod(new_theme_dir, 0o755)
++
+         return os.path.join(new_theme_dir, 'generated.css')

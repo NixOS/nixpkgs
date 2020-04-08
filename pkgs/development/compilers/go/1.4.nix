@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcre ];
-  propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
+  depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
 
   hardeningDisable = [ "all" ];
 

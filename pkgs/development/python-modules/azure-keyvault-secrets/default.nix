@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-secrets";
-  version = "4.0.0";
+  version = "4.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "066p4x2ixasz6qbxss2ilchl73w1kh2nc32lgh8qygl3d90059lp";
+    sha256 = "4f3bfac60e025e01dd1c1998b73649d45d706975356c0cf147174cf5a6ddf8be";
   };
 
   propagatedBuildInputs = [
@@ -20,6 +20,8 @@ buildPythonPackage rec {
     azure-core
     msrest
   ];
+
+  pythonNamespaces = [ "azure.keyvault" ];
 
   # requires checkout from mono-repo
   doCheck = false;

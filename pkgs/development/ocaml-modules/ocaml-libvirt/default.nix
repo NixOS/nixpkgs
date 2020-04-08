@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  buildPhase = if stdenv.cc.isClang then "make all opt CPPFLAGS=-Wno-error" else "make all opt";
+  buildPhase = "make all opt CPPFLAGS=-Wno-error";
 
   installPhase = "make install-opt";
 

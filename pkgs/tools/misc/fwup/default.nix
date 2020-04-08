@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fwup";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "08gscwdq7fwfpk3mf7dfdf64n5ijm5kjb7f5wrzzvpnnqz24xnb0";
+    sha256 = "05sjdlh450hk474a44yr6kz9dzx72jfxpi1krxbd0pdizlmfypsg";
   };
 
   doCheck = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Configurable embedded Linux firmware update creator and runner";
-    homepage = https://github.com/fhunleth/fwup;
+    homepage = "https://github.com/fhunleth/fwup";
     license = licenses.asl20;
     maintainers = [ maintainers.georgewhewell ];
     platforms = platforms.all;

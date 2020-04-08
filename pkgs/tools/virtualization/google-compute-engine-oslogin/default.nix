@@ -3,6 +3,7 @@
 , curl
 , json_c
 , pam
+, bashInteractive
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     # change sudoers dir from /var/google-sudoers.d to /run/google-sudoers.d (managed through systemd-tmpfiles)
     substituteInPlace pam_module/pam_oslogin_admin.cc --replace /var/google-sudoers.d /run/google-sudoers.d
     # fix "User foo not allowed because shell /bin/bash does not exist"
-    substituteInPlace compat.h --replace /bin/bash ${stdenv.shell}
+    substituteInPlace compat.h --replace /bin/bash ${bashInteractive}/bin/bash
   '';
 
   buildInputs = [ curl.dev pam ];

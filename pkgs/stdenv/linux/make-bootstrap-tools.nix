@@ -123,6 +123,8 @@ in with pkgs; rec {
         cp -d ${bootGCC.out}/bin/g++ $out/bin
         cp -d ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
         cp -d ${bootGCC.lib}/lib/libstdc++.so* $out/lib
+        cp -d ${bootGCC.out}/lib/libssp.a* $out/lib
+        cp -d ${bootGCC.out}/lib/libssp_nonshared.a $out/lib
         cp -rd ${bootGCC.out}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux

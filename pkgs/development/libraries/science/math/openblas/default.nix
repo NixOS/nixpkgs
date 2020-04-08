@@ -123,6 +123,12 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
+  # Disable an optimisation which seems to cause issues, pending an
+  # upstream fix: https://github.com/xianyi/OpenBLAS/issues/2496
+  patches = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
+    ./0001-Disable-optimised-aarch64-dgemm_beta-pending-fix.patch
+  ];
+
   makeFlags = mkMakeFlagsFromConfig (config // {
     FC = "${stdenv.cc.targetPrefix}gfortran";
     CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";

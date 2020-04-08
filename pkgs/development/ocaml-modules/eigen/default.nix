@@ -1,8 +1,10 @@
-{ stdenv, buildDune2Package, fetchFromGitHub, ctypes }:
+{ stdenv, buildDunePackage, fetchFromGitHub, ctypes, libcxx }:
 
-buildDune2Package rec {
+buildDunePackage rec {
   pname = "eigen";
   version = "0.2.0";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "owlbarn";
@@ -12,6 +14,8 @@ buildDune2Package rec {
   };
 
   minimumOCamlVersion = "4.02";
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ ctypes ];
 

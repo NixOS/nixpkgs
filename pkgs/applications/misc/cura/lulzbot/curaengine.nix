@@ -1,6 +1,6 @@
-{ stdenv, callPackage, fetchgit, fetchpatch, cmake, libarcusLulzbot, stb, protobuf }:
+{ gcc8Stdenv, callPackage, fetchgit, fetchpatch, cmake, libarcusLulzbot, stb, protobuf }:
 
-stdenv.mkDerivation rec {
+gcc8Stdenv.mkDerivation rec {
   pname = "curaengine-lulzBot";
   version = "3.6.21";
 
@@ -10,12 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "0wdkvg1hmqp1gaym804lw09x4ngf5ffasd861jhflpy7djbmkfn8";
   };
 
+  patches = [ ./curaengine-openmp-compat.patch ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libarcusLulzbot stb protobuf ];
 
   cmakeFlags = [ "-DCURA_ENGINE_VERSION=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with gcc8Stdenv.lib; {
     description = "A powerful, fast and robust engine for processing 3D models into 3D printing instruction";
     homepage = https://code.alephobjects.com/source/curaengine-lulzbot/;
     license = licenses.agpl3;
@@ -23,4 +25,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ chaduffy ];
   };
 }
-

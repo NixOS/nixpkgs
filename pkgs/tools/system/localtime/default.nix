@@ -9,13 +9,14 @@ buildGoPackage rec {
     rev = "2e7b4317c723406bd75b2a1d640219ab9f8090ce";
     sha256 = "04fyna8p7q7skzx9fzmncd6gx7x5pwa9jh8a84hpljlvj0kldfs8";
   };
+
   goPackagePath = "github.com/Stebalien/localtime";
 
-  buildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 ];
 
-  makeFlags = [ 
-    "PREFIX=${placeholder "out"}" 
-    "BINDIR=${placeholder "bin"}/bin" 
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "bin"}/bin"
   ];
 
   buildPhase = ''

@@ -24,6 +24,7 @@ let
     # packaging
     customisation = callLibs ./customisation.nix;
     maintainers = import ../maintainers/maintainer-list.nix;
+    teams = callLibs ../maintainers/team-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
     versions = callLibs ./versions.nix;
@@ -54,6 +55,9 @@ let
 
     # back-compat aliases
     platforms = systems.doubles;
+
+    # linux kernel configuration
+    kernel = callLibs ./kernel.nix;
 
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr

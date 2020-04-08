@@ -186,7 +186,7 @@ with import <nixpkgs> {};
 androidenv.emulateApp {
   name = "emulate-MyAndroidApp";
   platformVersion = "28";
-  abiVersion = "x86_64"; # armeabi-v7a, mips, x86
+  abiVersion = "x86"; # armeabi-v7a, mips, x86_64
   systemImageType = "google_apis_playstore";
 }
 ```
@@ -235,5 +235,5 @@ package manager uses. To update the expressions run the `generate.sh` script
 that is stored in the `pkgs/development/mobile/androidenv/` sub directory:
 
 ```bash
-sh ./generate.sh
+./generate.sh
 ```

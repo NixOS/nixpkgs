@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, nixosTests}:
 
 buildGoPackage rec {
   pname = "restic";
@@ -13,20 +13,19 @@ buildGoPackage rec {
     sha256 = "0lydll93n1lcn1fl669b9cikmzz9d6vfpc8ky3ng5fi8kj3v1dz7";
   };
 
-  buildPhase = ''
-    cd go/src/${goPackagePath}
-    go run build.go
-  '';
-
   passthru.tests.restic = nixosTests.restic;
 
+  # Use a custom install phase here as by default the
+  # build-release-binaries and prepare-releases binaries are
+  # installed.
   installPhase = ''
+    mkdir -p "$bin/bin"
+    cp go/bin/restic "$bin/bin"
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p \
-      $bin/bin \
       $bin/etc/bash_completion.d \
       $bin/share/zsh/vendor-completions \
       $bin/share/man/man1
-    cp restic $bin/bin/
     $bin/bin/restic generate \
       --bash-completion $bin/etc/bash_completion.d/restic.sh \
       --zsh-completion $bin/share/zsh/vendor-completions/_restic \

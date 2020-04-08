@@ -39,8 +39,6 @@ let
     GRAPHITE_URL = cfg.seyren.graphiteUrl;
   } // cfg.seyren.extraConfig;
 
-  pagerConfig = pkgs.writeText "alarms.yaml" cfg.pager.alerts;
-
   configDir = pkgs.buildEnv {
     name = "graphite-config";
     paths = lists.filter (el: el != null) [
@@ -61,18 +59,20 @@ let
 
   carbonEnv = {
     PYTHONPATH = let
-      cenv = pkgs.python.buildEnv.override {
-        extraLibs = [ pkgs.python27Packages.carbon ];
+      cenv = pkgs.python3.buildEnv.override {
+        extraLibs = [ pkgs.python3Packages.carbon ];
       };
-      cenvPack =  "${cenv}/${pkgs.python.sitePackages}";
-    # opt/graphite/lib contains twisted.plugins.carbon-cache
-    in "${cenvPack}/opt/graphite/lib:${cenvPack}";
+    in "${cenv}/${pkgs.python3.sitePackages}";
     GRAPHITE_ROOT = dataDir;
     GRAPHITE_CONF_DIR = configDir;
     GRAPHITE_STORAGE_DIR = dataDir;
   };
 
 in {
+
+  imports = [
+    (mkRemovedOptionModule ["services" "graphite" "pager"] "")
+  ];
 
   ###### interface
 
@@ -132,7 +132,7 @@ in {
       finders = mkOption {
         description = "List of finder plugins to load.";
         default = [];
-        example = literalExample "[ pkgs.python27Packages.influxgraph ]";
+        example = literalExample "[ pkgs.python3Packages.influxgraph ]";
         type = types.listOf types.package;
       };
 
@@ -159,8 +159,8 @@ in {
 
       package = mkOption {
         description = "Package to use for graphite api.";
-        default = pkgs.python27Packages.graphite_api;
-        defaultText = "pkgs.python27Packages.graphite_api";
+        default = pkgs.python3Packages.graphite_api;
+        defaultText = "pkgs.python3Packages.graphite_api";
         type = types.package;
       };
 
@@ -344,49 +344,6 @@ in {
       };
     };
 
-    pager = {
-      enable = mkOption {
-        description = ''
-          Whether to enable graphite-pager service. For more information visit
-          <link xlink:href="https://github.com/seatgeek/graphite-pager"/>
-        '';
-        default = false;
-        type = types.bool;
-      };
-
-      redisUrl = mkOption {
-        description = "Redis connection string.";
-        default = "redis://localhost:${toString config.services.redis.port}/";
-        type = types.str;
-      };
-
-      graphiteUrl = mkOption {
-        description = "URL to your graphite service.";
-        default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
-        type = types.str;
-      };
-
-      alerts = mkOption {
-        description = "Alerts configuration for graphite-pager.";
-        default = ''
-          alerts:
-            - target: constantLine(100)
-              warning: 90
-              critical: 200
-              name: Test
-        '';
-        example = ''
-          pushbullet_key: pushbullet_api_key
-          alerts:
-            - target: stats.seatgeek.app.deal_quality.venue_info_cache.hit
-              warning: .5
-              critical: 1
-              name: Deal quality venue cache hits
-        '';
-        type = types.lines;
-      };
-    };
-
     beacon = {
       enable = mkEnableOption "graphite beacon";
 
@@ -409,7 +366,7 @@ in {
         environment = carbonEnv;
         serviceConfig = {
           RuntimeDirectory = name;
-          ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
+          ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
@@ -431,7 +388,7 @@ in {
         environment = carbonEnv;
         serviceConfig = {
           RuntimeDirectory = name;
-          ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
+          ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PIDFile="/run/${name}/${name}.pid";
@@ -447,7 +404,7 @@ in {
         environment = carbonEnv;
         serviceConfig = {
           RuntimeDirectory = name;
-          ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
+          ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PIDFile="/run/${name}/${name}.pid";
@@ -457,19 +414,11 @@ in {
 
     (mkIf (cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay) {
       environment.systemPackages = [
-        pkgs.pythonPackages.carbon
+        pkgs.python3Packages.carbon
       ];
     })
 
-    (mkIf cfg.web.enable (let
-      python27' = pkgs.python27.override {
-        packageOverrides = self: super: {
-          django = self.django_1_8;
-          django_tagging = self.django_tagging_0_4_3;
-        };
-      };
-      pythonPackages = python27'.pkgs;
-    in {
+    (mkIf cfg.web.enable ({
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
@@ -477,28 +426,27 @@ in {
         path = [ pkgs.perl ];
         environment = {
           PYTHONPATH = let
-              penv = pkgs.python.buildEnv.override {
+              penv = pkgs.python3.buildEnv.override {
                 extraLibs = [
-                  pythonPackages.graphite-web
-                  pythonPackages.pysqlite
+                  pkgs.python3Packages.graphite-web
                 ];
               };
-              penvPack = "${penv}/${pkgs.python.sitePackages}";
+              penvPack = "${penv}/${pkgs.python3.sitePackages}";
             in concatStringsSep ":" [
                  "${graphiteLocalSettingsDir}"
-                 "${penvPack}/opt/graphite/webapp"
                  "${penvPack}"
                  # explicitly adding pycairo in path because it cannot be imported via buildEnv
-                 "${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}"
+                 "${pkgs.python3Packages.pycairo}/${pkgs.python3.sitePackages}"
                ];
           DJANGO_SETTINGS_MODULE = "graphite.settings";
+          GRAPHITE_SETTINGS_MODULE = "graphite_local_settings";
           GRAPHITE_CONF_DIR = configDir;
           GRAPHITE_STORAGE_DIR = dataDir;
           LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.python27Packages.waitress-django}/bin/waitress-serve-django \
+            ${pkgs.python3Packages.waitress-django}/bin/waitress-serve-django \
               --host=${cfg.web.listenAddress} --port=${toString cfg.web.port}
           '';
           User = "graphite";
@@ -510,7 +458,7 @@ in {
             mkdir -p ${dataDir}/{whisper/,log/webapp/}
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
-            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py migrate --noinput
+            ${pkgs.python3Packages.django}/bin/django-admin.py migrate --noinput
 
             chown -R graphite:graphite ${dataDir}
 
@@ -518,16 +466,16 @@ in {
           fi
 
           # Only collect static files when graphite_web changes.
-          if ! [ "${dataDir}/current_graphite_web" -ef "${pythonPackages.graphite-web}" ]; then
+          if ! [ "${dataDir}/current_graphite_web" -ef "${pkgs.python3Packages.graphite-web}" ]; then
             mkdir -p ${staticDir}
-            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py collectstatic  --noinput --clear
+            ${pkgs.python3Packages.django}/bin/django-admin.py collectstatic  --noinput --clear
             chown -R graphite:graphite ${staticDir}
-            ln -sfT "${pythonPackages.graphite-web}" "${dataDir}/current_graphite_web"
+            ln -sfT "${pkgs.python3Packages.graphite-web}" "${dataDir}/current_graphite_web"
           fi
         '';
       };
 
-      environment.systemPackages = [ pythonPackages.graphite-web ];
+      environment.systemPackages = [ pkgs.python3Packages.graphite-web ];
     }))
 
     (mkIf cfg.api.enable {
@@ -537,16 +485,16 @@ in {
         after = [ "network.target" ];
         environment = {
           PYTHONPATH = let
-              aenv = pkgs.python.buildEnv.override {
-                extraLibs = [ cfg.api.package pkgs.cairo pkgs.pythonPackages.cffi ] ++ cfg.api.finders;
+              aenv = pkgs.python3.buildEnv.override {
+                extraLibs = [ cfg.api.package pkgs.cairo pkgs.python3Packages.cffi ] ++ cfg.api.finders;
               };
-            in "${aenv}/${pkgs.python.sitePackages}";
+            in "${aenv}/${pkgs.python3.sitePackages}";
           GRAPHITE_API_CONFIG = graphiteApiConfig;
           LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.python27Packages.waitress}/bin/waitress-serve \
+            ${pkgs.python3Packages.waitress}/bin/waitress-serve \
             --host=${cfg.api.listenAddress} --port=${toString cfg.api.port} \
             graphite_api.app:app
           '';
@@ -591,34 +539,13 @@ in {
       services.mongodb.enable = mkDefault true;
     })
 
-    (mkIf cfg.pager.enable {
-      systemd.services.graphitePager = {
-        description = "Graphite Pager Alerting Daemon";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" "redis.service" ];
-        environment = {
-          REDIS_URL = cfg.pager.redisUrl;
-          GRAPHITE_URL = cfg.pager.graphiteUrl;
-        };
-        serviceConfig = {
-          ExecStart = "${pkgs.pythonPackages.graphitepager}/bin/graphite-pager --config ${pagerConfig}";
-          User = "graphite";
-          Group = "graphite";
-        };
-      };
-
-      services.redis.enable = mkDefault true;
-
-      environment.systemPackages = [ pkgs.pythonPackages.graphitepager ];
-    })
-
     (mkIf cfg.beacon.enable {
       systemd.services.graphite-beacon = {
         description = "Grpahite Beacon Alerting Daemon";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.pythonPackages.graphite_beacon}/bin/graphite-beacon \
+            ${pkgs.python3Packages.graphite_beacon}/bin/graphite-beacon \
               --config=${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
           '';
           User = "graphite";
@@ -630,7 +557,7 @@ in {
     (mkIf (
       cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
       cfg.web.enable || cfg.api.enable ||
-      cfg.seyren.enable || cfg.pager.enable || cfg.beacon.enable
+      cfg.seyren.enable || cfg.beacon.enable
      ) {
       users.users.graphite = {
         uid = config.ids.uids.graphite;

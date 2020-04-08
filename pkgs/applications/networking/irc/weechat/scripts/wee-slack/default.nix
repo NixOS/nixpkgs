@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "0h425ln5vv76zv41dccapyfbl8qmmflbpwmrd26knqyj8k24zfpr";
+    sha256 = "0sxgi5fg8qvzqmxy7sdma6v0wj93xwh21av10n8nxvdskacw5dxz";
   };
 
   patches = [
@@ -19,13 +19,19 @@ stdenv.mkDerivation rec {
         paths = with python3Packages; [ websocket_client six ];
       }}/${python3Packages.python.sitePackages}";
     })
+    ./hardcode-json-file-path.patch
   ];
+
+  postPatch = ''
+    substituteInPlace wee_slack.py --subst-var out
+  '';
 
   passthru.scripts = [ "wee_slack.py" ];
 
   installPhase = ''
     mkdir -p $out/share
     cp wee_slack.py $out/share/wee_slack.py
+    install -D -m 0444 weemoji.json $out/share/wee-slack/weemoji.json
   '';
 
   meta = with stdenv.lib; {

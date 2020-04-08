@@ -21,13 +21,13 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.31.8";
+  version = "0.31.9";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "sha256:1h0w7x7d9g3z7vmxn5w7qxdkjya3sl0xfnklfaaaj8dkb5mjldpi";
+    sha256 = "06hd6a1hhd57hrq4vbwfs0saplkhsrz2krv8kq9kw4fz4hx7zj74";
   };
 
   # The tests require all the providers, disable otherwise.
@@ -53,8 +53,7 @@ buildPythonPackage rec {
     "test_pandas_completions"
     "test_matplotlib_completions"
     "test_snippet_parsing"
-
-  ];
+  ] ++ stdenv.lib.optional isPy27 "test_flake8_lint";
   # checkPhase = ''
   #   HOME=$TEMPDIR pytest -k "not test_pyqt_completion and not 
   # '';

@@ -104,7 +104,6 @@ let
 
       with subtest("Assert readiness of login prompt"):
           machine.succeed("echo hello")
-          machine.wait_for_unit("nixos-manual")
 
       with subtest("Wait for hard disks to appear in /dev"):
           machine.succeed("udevadm settle")

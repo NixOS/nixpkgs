@@ -3,8 +3,8 @@
 let
   inherit (python2Packages) buildPythonApplication boto m2crypto;
 in buildPythonApplication {
-  name = "euca2ools-2.1.4";
-  namePrefix = "";
+  pname = "euca2ools";
+  version = "2.1.4";
 
   src = fetchgit {
     url = https://github.com/eucalyptus/euca2ools.git;

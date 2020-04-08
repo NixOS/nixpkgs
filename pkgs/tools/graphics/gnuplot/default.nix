@@ -48,12 +48,16 @@ in
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
   ];
 
+  CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
+
   postInstall = lib.optionalString withX ''
     wrapProgram $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \
        --prefix PATH : '${coreutils}/bin' \
        --prefix PATH : '${fontconfig.bin}/bin' \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
+  '' + lib.optionalString (stdenv.isDarwin && withQt) ''
+     wrapQtApp $out/bin/gnuplot
   '';
 
   enableParallelBuilding = true;

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.7.5";
+  version = "1.9.3";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16ndzvyvx4s3b6cnhxbd5fs3fkc3fwygz7qzaw7ws76sag1zpx67";
+    sha256 = "1hg6h3ag4pbilpmqylnj7dflz7avk3w8ngmk6psfqrizizwx0hnj";
   };
 
   propagatedBuildInputs = [ ruamel_yaml ifconfig-parser xmltodict ];

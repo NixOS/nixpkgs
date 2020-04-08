@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "unicode-${version}";
+  pname = "unicode";
   version = "2.6";
 
   src = fetchFromGitHub {

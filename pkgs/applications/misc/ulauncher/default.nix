@@ -1,8 +1,11 @@
 { stdenv
 , fetchurl
-, python27Packages
+, python3Packages
+, gdk-pixbuf
+, glib
 , gnome3
 , gobject-introspection
+, gtk3
 , wrapGAppsHook
 , webkitgtk
 , libnotify
@@ -11,49 +14,54 @@
 , intltool
 , wmctrl
 , xvfb_run
+, librsvg
 }:
 
-python27Packages.buildPythonApplication rec  {
+python3Packages.buildPythonApplication rec  {
   pname = "ulauncher";
-  version = "4.4.0.r1";
+  version = "5.6.1";
 
-  # Python 3 support is currently in development
-  # on the dev branch and 5.x.x releases
-  disabled = ! python27Packages.isPy27;
+  disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "12v7qpjhf0842ivsfflsl2zlvhiaw25f9ffv7vhnkvrhrmksim9f";
+    sha256 = "14k68lp58wldldhaq4cf0ffkhi81czv4ps9xa86iw1j5b1gd2vbl";
   };
 
-  nativeBuildInputs = with python27Packages;  [
+  nativeBuildInputs = with python3Packages;  [
     distutils_extra
     intltool
     wrapGAppsHook
   ];
 
   buildInputs = [
+    gdk-pixbuf
+    glib
     gnome3.adwaita-icon-theme
     gobject-introspection
+    gtk3
     keybinder3
     libappindicator
     libnotify
+    librsvg
     webkitgtk
     wmctrl
   ];
 
-  propagatedBuildInputs = with python27Packages; [
+  propagatedBuildInputs = with python3Packages; [
+    mock
+    mypy
+    mypy-extensions
     dbus-python
-    notify
     pygobject3
     pyinotify
-    pysqlite
     python-Levenshtein
     pyxdg
+    requests
     websocket_client
   ];
 
-  checkInputs = with python27Packages; [
+  checkInputs = with python3Packages; [
     mock
     pytest
     pytest-mock
@@ -63,6 +71,9 @@ python27Packages.buildPythonApplication rec  {
 
   patches = [
     ./fix-path.patch
+    ./fix-permissions.patch # ulauncher PR #523
+    ./0001-Adjust-get_data_path-for-NixOS.patch
+    ./fix-extensions.patch
   ];
 
   postPatch = ''
@@ -73,7 +84,7 @@ python27Packages.buildPythonApplication rec  {
   doCheck = false;
 
   preCheck = ''
-    export PYTHONPATH=$PYTHONPATH:$out/${python27Packages.python.sitePackages}
+    export PYTHONPATH=$PYTHONPATH:$out/${python3Packages.python.sitePackages}
   '';
 
   # Simple translation of

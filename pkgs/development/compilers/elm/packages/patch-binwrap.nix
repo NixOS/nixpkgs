@@ -14,7 +14,7 @@ in
 targets:
 pkg:
 pkg.override {
-  buildInputs = [ binwrap binwrap-install ];
+  nativeBuildInputs = pkg.nativeBuildInputs ++ [ binwrap binwrap-install ];
 
   # Manually install targets
   # by symlinking binaries into `node_modules`

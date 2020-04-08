@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, pytestrunner, pytestcov, mock, glibcLocales, lxml, boto3
+, pytest, pytestrunner, pytestcov, mock, glibcLocales, lxml, botocore
 , requests, requests-kerberos, click, configparser, fido2, isPy27 }:
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "1.21.2";
+  version = "1.24.3";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ba96e71404474350b2c3ae4d5cb2dd25e9267b6d0680933c5711a51ea364e3bc";
+    sha256 = "0bcjlf5dkg2q0db0ra1ssa3hy98spflkd3ykhmlyv65rkgx8w1wv";
   };
 
   # Relax version constraint
@@ -24,11 +24,11 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
 
   checkInputs = [ glibcLocales pytest pytestrunner pytestcov mock ];
-  propagatedBuildInputs = [ lxml boto3 requests requests-kerberos click configparser fido2 ];
+  propagatedBuildInputs = [ botocore lxml requests requests-kerberos click configparser fido2 ];
 
   meta = with lib; {
     description = "Command line tool to ease aws cli authentication against ADFS";
-    homepage = https://github.com/venth/aws-adfs;
+    homepage = "https://github.com/venth/aws-adfs";
     license = licenses.psfl;
     maintainers = [ maintainers.bhipple ];
   };

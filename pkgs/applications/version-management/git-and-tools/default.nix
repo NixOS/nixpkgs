@@ -70,6 +70,8 @@ let
 
   git-codeowners = callPackage ./git-codeowners { };
 
+  git-codereview = callPackage ./git-codereview { };
+
   git-cola = callPackage ./git-cola { };
 
   git-crypt = callPackage ./git-crypt { };
@@ -138,6 +140,10 @@ let
 
   git-test = callPackage ./git-test { };
 
+  git-trim = callPackage ./git-trim {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-workspace = callPackage ./git-workspace {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -172,6 +178,8 @@ let
   lab = callPackage ./lab { };
 
   lefthook = callPackage ./lefthook { };
+
+  legit = callPackage ./legit { };
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 

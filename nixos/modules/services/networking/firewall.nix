@@ -546,9 +546,13 @@ in
       options nf_conntrack nf_conntrack_helper=1
     '';
 
-    assertions = [ { assertion = (cfg.checkReversePath != false) || kernelHasRPFilter;
-                     message = "This kernel does not support rpfilter"; }
-                 ];
+    assertions = [
+      # This is approximately "checkReversePath -> kernelHasRPFilter",
+      # but the checkReversePath option can include non-boolean
+      # values.
+      { assertion = cfg.checkReversePath == false || kernelHasRPFilter;
+        message = "This kernel does not support rpfilter"; }
+    ];
 
     systemd.services.firewall = {
       description = "Firewall";

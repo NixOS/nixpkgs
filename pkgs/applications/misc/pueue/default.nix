@@ -1,23 +1,19 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "0.1.5";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03aj4vw8kvwqk1i1a4kah5b574ahs930ij7xmqsvdy7f8c2g6pbq";
+    sha256 = "11x4y3ah9f7mv9jssws95sw7rd20fxwdh11mrhcb4vwk59cmqsjz";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  cargoSha256 = "06zv3li14sg4a8bgj38zzx576ggm32ss0djmys1g0h5a0nxaaqfx";
 
-  cargoSha256 = "08zqhj3b0v4fxj8vi323zrxg4xvbp9gndm2khzs6daacglbwbvhk";
-
-  postInstall = ''
-    installShellCompletion utils/completions/pueue.{bash,fish} --zsh utils/completions/_pueue
-  '';
+  checkPhase = "cargo test -- --skip test_single_huge_payload";
 
   meta = with lib; {
     description = "A daemon for managing long running shell commands";

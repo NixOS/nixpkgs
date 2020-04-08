@@ -1,19 +1,25 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, pytestCheckHook, cffi, cacert }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, cached-property, pytestCheckHook, cffi, cacert }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.0.3";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ql7hkcxrh8yszglrg7d3y0ivh1l56xdc3j34j2fjy4qq06ifv6y";
+    sha256 = "klXVB9XYe/It/VeZeniQgBAzH8IfmoPsoSGlP2V76zw=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  propagatedBuildInputs = [ libgit2 ] ++ lib.optional (!isPyPy) cffi;
+  buildInputs = [
+    libgit2
+  ];
+
+  propagatedBuildInputs = [
+    cached-property
+  ] ++ lib.optional (!isPyPy) cffi;
 
   checkInputs = [ pytestCheckHook ];
 

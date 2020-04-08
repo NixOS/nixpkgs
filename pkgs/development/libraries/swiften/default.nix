@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
   pname = "swiften";
   version = "4.0.2";
 
-  nativeBuildInputs = [ scons];
+  nativeBuildInputs = [ scons.py2 ];
   buildInputs           = [ python ];
   propagatedBuildInputs = [ openssl boost ];
 
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = [ maintainers.twey ];
+    broken = true; # Broken since 2019-11-20 (https://hydra.nixos.org/build/114681755)
   };
 }

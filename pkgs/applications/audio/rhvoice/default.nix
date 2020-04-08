@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    scons pkgconfig
+    scons.py2 pkgconfig
   ];
 
   buildInputs = [

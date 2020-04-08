@@ -1,7 +1,6 @@
 { stdenv, fetchzip, which, ocsigen_server, ocaml,
   lwt_react,
-  opaline, ppx_tools, ppx_deriving, findlib
-, ppx_tools_versioned
+  opaline, ppx_deriving, findlib
 , js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
@@ -15,15 +14,14 @@ else
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "6.8.0";
+  version = "6.10.1";
 
   src = fetchzip {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "0di4q0wzbnk9sxlaj97ivghzh8qvjb8n17h80y4nmqhys97pldif";
+    sha256 = "006722wcmhsfhyzv3qbgrrn53fbv9v4i31z52a0pznb6cll45nkm";
   };
 
-  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline ppx_tools
-    ppx_tools_versioned
+  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline
   ];
 
   propagatedBuildInputs = [

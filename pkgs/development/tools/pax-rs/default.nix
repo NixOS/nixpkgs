@@ -36,8 +36,5 @@ buildRustPackage rec {
       cp ${cargo-lock} $out/Cargo.lock
     '';
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "132a9vnlyp78zxiw5xrazadvx0scs7h2vbm5wz612dmh436mwnxg";
+  cargoSha256 = "0wx5x7ll21bb6v34csk63kkvxdk3as720hdkaj0izdkpy0xf1knr";
 }

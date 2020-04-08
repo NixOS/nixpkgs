@@ -2,13 +2,15 @@
 
 libgit2.overrideAttrs (oldAttrs: {
   cmakeFlags = oldAttrs.cmakeFlags ++ [
-    "-DUSE_BUNDLED_ZLIB=ON"
-    "-DUSE_ICONV=OFF"
     "-DBUILD_CLAR=OFF"
-    "-DUSE_SSH=OFF"
-    "-DUSE_HTTPS=OFF"
     "-DBUILD_SHARED_LIBS=OFF"
-    "-DUSE_EXT_HTTP_PARSER=OFF"
+    "-DREGEX_BACKEND=builtin"
+    "-DUSE_BUNDLED_ZLIB=ON"
+    "-DUSE_HTTPS=OFF"
+    "-DUSE_HTTP_PARSER=builtin"  # overwritten from libgit2
+    "-DUSE_ICONV=OFF"
+    "-DUSE_SSH=OFF"
+    "-DZERO_NSEC=ON"
   ];
   src = fetchFromGitHub {
     owner = "romkatv";

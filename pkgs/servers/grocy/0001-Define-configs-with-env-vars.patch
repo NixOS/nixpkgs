@@ -1,0 +1,76 @@
+From 931958d8f11cb55f2e88a178a3b828f3c537eba8 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Fri, 6 Mar 2020 23:43:58 +0100
+Subject: [PATCH] Define configs with env vars
+
+---
+ app.php                      | 4 ++--
+ services/DatabaseService.php | 2 +-
+ services/FilesService.php    | 2 +-
+ services/StockService.php    | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/app.php b/app.php
+index af65ad1..4963c28 100644
+--- a/app.php
++++ b/app.php
+@@ -25,7 +25,7 @@ else
+ require_once __DIR__ . '/vendor/autoload.php';
+ 
+ // Load config files
+-require_once GROCY_DATAPATH . '/config.php';
++require_once getenv('GROCY_CONFIG_FILE');
+ require_once __DIR__ . '/config-dist.php'; // For not in own config defined values we use the default ones
+ 
+ // Definitions for dev/demo/prerelease mode
+@@ -50,7 +50,7 @@ $app = AppFactory::create();
+ $container = $app->getContainer();
+ $container->set('view', function(Container $container)
+ {
+-	return new Slim\Views\Blade(__DIR__ . '/views', GROCY_DATAPATH . '/viewcache');
++	return new \Slim\Views\Blade(__DIR__ . '/views', getenv('GROCY_CACHE_DIR'));
+ });
+ $container->set('LoginControllerInstance', function(Container $container)
+ {
+diff --git a/services/DatabaseService.php b/services/DatabaseService.php
+index 23fc7b9..daa1993 100644
+--- a/services/DatabaseService.php
++++ b/services/DatabaseService.php
+@@ -25,7 +25,7 @@ class DatabaseService
+ 			return GROCY_DATAPATH . '/grocy_' . GROCY_CULTURE . '.db';
+ 		}
+ 
+-		return GROCY_DATAPATH . '/grocy.db';
++		return getenv('GROCY_DB_FILE');
+ 	}
+ 
+     private static $DbConnectionRaw = null;
+diff --git a/services/FilesService.php b/services/FilesService.php
+index cecdae3..357298d 100644
+--- a/services/FilesService.php
++++ b/services/FilesService.php
+@@ -12,7 +12,7 @@ class FilesService extends BaseService
+ 	{
+ 		parent::__construct();
+ 
+-		$this->StoragePath = GROCY_DATAPATH . '/storage';
++		$this->StoragePath = getenv('GROCY_STORAGE_DIR');
+ 
+ 		if (!file_exists($this->StoragePath))
+ 		{
+diff --git a/services/StockService.php b/services/StockService.php
+index bfde3fc..53b2245 100644
+--- a/services/StockService.php
++++ b/services/StockService.php
+@@ -934,7 +934,7 @@ class StockService extends BaseService
+ 			throw new \Exception('No barcode lookup plugin defined');
+ 		}
+ 
+-		$path = GROCY_DATAPATH . "/plugins/$pluginName.php";
++		$path = getenv('GROCY_PLUGIN_DIR');
+ 		if (file_exists($path))
+ 		{
+ 			require_once $path;
+-- 
+2.25.0
+

@@ -9,10 +9,12 @@ let
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
+    ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
+    ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
   '';
 
   plugins = [
-    "${pkgs.netdata}/libexec/netdata/plugins.d"
+    "${cfg.package}/libexec/netdata/plugins.d"
     "${wrappedPlugins}/libexec/netdata/plugins.d"
   ] ++ cfg.extraPluginPaths;
 
@@ -34,6 +36,13 @@ in {
   options = {
     services.netdata = {
       enable = mkEnableOption "netdata";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.netdata;
+        defaultText = "pkgs.netdata";
+        description = "Netdata package to use.";
+      };
 
       user = mkOption {
         type = types.str;
@@ -141,8 +150,8 @@ in {
       path = (with pkgs; [ curl gawk which ]) ++ lib.optional cfg.python.enable
         (pkgs.python3.withPackages cfg.python.extraPackages);
       serviceConfig = {
-        Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
-        ExecStart = "${pkgs.netdata}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
+        Environment="PYTHONPATH=${cfg.package}/libexec/netdata/python.d/python_modules";
+        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
         ExecReload = "${pkgs.utillinux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         TimeoutStopSec = 60;
         # User and group
@@ -159,7 +168,7 @@ in {
     systemd.enableCgroupAccounting = true;
 
     security.wrappers."apps.plugin" = {
-      source = "${pkgs.netdata}/libexec/netdata/plugins.d/apps.plugin.org";
+      source = "${cfg.package}/libexec/netdata/plugins.d/apps.plugin.org";
       capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
       owner = cfg.user;
       group = cfg.group;
@@ -167,11 +176,27 @@ in {
     };
 
     security.wrappers."freeipmi.plugin" = {
-      source = "${pkgs.netdata}/libexec/netdata/plugins.d/freeipmi.plugin.org";
+      source = "${cfg.package}/libexec/netdata/plugins.d/freeipmi.plugin.org";
       capabilities = "cap_dac_override,cap_fowner+ep";
       owner = cfg.user;
       group = cfg.group;
       permissions = "u+rx,g+rx,o-rwx";
+    };
+
+    security.wrappers."perf.plugin" = {
+      source = "${cfg.package}/libexec/netdata/plugins.d/perf.plugin.org";
+      capabilities = "cap_sys_admin+ep";
+      owner = cfg.user;
+      group = cfg.group;
+      permissions = "u+rx,g+rx,o-rx";
+    };
+
+    security.wrappers."slabinfo.plugin" = {
+      source = "${cfg.package}/libexec/netdata/plugins.d/slabinfo.plugin.org";
+      capabilities = "cap_dac_override+ep";
+      owner = cfg.user;
+      group = cfg.group;
+      permissions = "u+rx,g+rx,o-rx";
     };
 
     security.pam.loginLimits = [

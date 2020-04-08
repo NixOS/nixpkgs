@@ -302,7 +302,7 @@ in
                 lpath = "acme/${cert}";
                 apath = "/var/lib/${lpath}";
                 spath = "/var/lib/acme/.lego";
-                rights = if data.allowKeysForGroup then "750" else "700";
+                fileMode = if data.allowKeysForGroup then "640" else "600";
                 globalOpts = [ "-d" data.domain "--email" data.email "--path" "." "--key-type" data.keyType ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
                           ++ optionals (data.dnsProvider != null && !data.dnsPropagationCheck) [ "--dns.disable-cp" ]
@@ -318,7 +318,7 @@ in
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
                   wants = [ "network-online.target" ];
-                  wantedBy = [ "multi-user.target" ];
+                  wantedBy = mkIf (!config.boot.isContainer) [ "multi-user.target" ];
                   serviceConfig = {
                     Type = "oneshot";
                     # With RemainAfterExit the service is considered active even
@@ -331,7 +331,7 @@ in
                     Group = data.group;
                     PrivateTmp = true;
                     StateDirectory = "acme/.lego ${lpath}";
-                    StateDirectoryMode = rights;
+                    StateDirectoryMode = if data.allowKeysForGroup then "750" else "700";
                     WorkingDirectory = spath;
                     # Only try loading the credentialsFile if the dns challenge is enabled
                     EnvironmentFile = if data.dnsProvider != null then data.credentialsFile else null;
@@ -354,9 +354,10 @@ in
                             cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
                             ln -sf fullchain.pem cert.pem
                             cat key.pem fullchain.pem > full.pem
-                            chmod ${rights} *.pem
-                            chown '${data.user}:${data.group}' *.pem
                           fi
+
+                          chmod ${fileMode} *.pem
+                          chown '${data.user}:${data.group}' *.pem
 
                           ${data.postRun}
                         '';
@@ -399,7 +400,7 @@ in
 
                       # Give key acme permissions
                       chown '${data.user}:${data.group}' "${apath}/"{key,fullchain,full}.pem
-                      chmod ${rights} "${apath}/"{key,fullchain,full}.pem
+                      chmod ${fileMode} "${apath}/"{key,fullchain,full}.pem
                     '';
                   serviceConfig = {
                     Type = "oneshot";

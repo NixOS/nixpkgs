@@ -7,7 +7,6 @@
 , gettext
 , glib
 , gnome-desktop
-, gnome-flashback
 , gnome-menus
 , gnome3
 , gtk3
@@ -23,7 +22,7 @@
 
 let
   pname = "gnome-panel";
-  version = "3.34.1";
+  version = "3.36.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -31,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "03dr54njdh2szy6yrib2q0agjscbj3bmzrfb9fb4psrf4mah5g56";
+    sha256 = "08x0xjrg36h6x5c68w5jf8gg57767p2m3ljgzyglx2ij0nfbpc8d";
   };
 
   # make .desktop Exec absolute
@@ -46,8 +45,8 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome-menus}/share:${gnome-flashback}/share"
-      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg:${gnome-flashback}/etc/xdg"
+      --prefix XDG_DATA_DIRS : "${gnome-menus}/share"
+      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg"
     )
   '';
 

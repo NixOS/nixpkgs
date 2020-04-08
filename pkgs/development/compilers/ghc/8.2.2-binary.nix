@@ -1,12 +1,15 @@
 { stdenv, substituteAll
 , fetchurl, perl, gcc, llvm
 , ncurses5, gmp, glibc, libiconv
+, llvmPackages
 }:
 
 # Prebuilt only does native
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
+  useLLVM = !stdenv.targetPlatform.isx86;
+
   libPath = stdenv.lib.makeLibraryPath ([
     ncurses5 gmp
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isAarch32 || stdenv.targetPlatform.isAarch64) [ llvm ];
+  propagatedBuildInputs = stdenv.lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/

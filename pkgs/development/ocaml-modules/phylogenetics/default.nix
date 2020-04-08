@@ -1,21 +1,23 @@
-{ stdenv, buildDune2Package, fetchFromGitHub, ppx_deriving
-, alcotest, biocaml, gnuplot, lacaml, menhir, owl }:
+{ stdenv, buildDunePackage, fetchFromGitHub, ppx_deriving
+, alcotest, biocaml, gnuplot, lacaml, menhir, ocaml-r, owl, printbox }:
 
-buildDune2Package rec {
+buildDunePackage rec {
   pname = "phylogenetics";
-  version = "unstable-2019-11-15";
+  version = "unstable-2020-01-05";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner  = "biocaml";
     repo   = pname;
-    rev    = "91c03834db065cf4a86f33affbb9cfd216defc9f";
-    sha256 = "0i9m0633a6a724as35ix8z3p1gj267cl0hmqrpw4qfq39zxmgnxb";
+    rev    = "b55ef7d7322bd822be26d21339945d45487fb547";
+    sha256 = "0hzfjhs5w3a7hlzxs739k5ik3k1xn3dzyzziid765s74f638n4hj";
   };
 
   minimumOCamlVersion = "4.08";  # e.g., uses Float.min
 
   checkInputs = [ alcotest ];
-  propagatedBuildInputs = [ biocaml gnuplot lacaml menhir owl ppx_deriving ];
+  propagatedBuildInputs = [ biocaml gnuplot lacaml menhir ocaml-r owl ppx_deriving printbox ];
 
   doCheck = false;  # many tests require bppsuite
 

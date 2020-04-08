@@ -1,6 +1,6 @@
 { stdenv, callPackage, fetchFromGitHub
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
+, steam, udev, libusb1, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
@@ -236,8 +236,7 @@ let self = rec {
       maintainers = with maintainers; [ edwtjo ];
     };
 
-    extraBuildInputs = [ libusb pcre-cpp ];
-
+    extraBuildInputs = [ udev ];
   };
 
   simpleplugin = mkKodiPlugin rec {
@@ -300,7 +299,7 @@ let self = rec {
       sha256 = "1hbd8fdvn7xkr9csz1g9wah78nhnq1rkazl4zwa31y70830k3279";
     };
 
-    extraBuildInputs = [ libusb ];
+    extraBuildInputs = [ libusb1 ];
 
     meta = {
       description = "Binary addon for steam controller.";
@@ -531,14 +530,14 @@ let self = rec {
 
   vfs-libarchive = mkKodiABIPlugin rec {
     namespace = "vfs.libarchive";
-    version = "1.0.5";
+    version = "1.0.6";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "0l1f1fijflr1ia30r0dcz1x2zn35c4lxy30az1cqxdf8nipza0b8";
+      sha256 = "1gz39i97n8xgbja8miqligmhxsvmqimlxx75xr9v0r9lfxp7135f";
     };
 
     meta = with stdenv.lib; {

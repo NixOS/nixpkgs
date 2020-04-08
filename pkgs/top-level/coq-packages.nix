@@ -31,13 +31,14 @@ let
       flocq = callPackage ../development/coq-modules/flocq {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
       heq = callPackage ../development/coq-modules/heq {};
+      hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
-      inherit (callPackage ../development/coq-modules/mathcomp { })
+      inherit (callPackage ../development/coq-modules/mathcomp {})
         mathcompGen mathcompGenSingle ssreflect
 
         mathcompCorePkgs mathcomp
@@ -136,7 +137,7 @@ in rec {
     version = "8.10.2";
   };
   coq_8_11 = callPackage ../applications/science/logic/coq {
-    version = "8.11.0";
+    version = "8.11.1";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;

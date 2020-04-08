@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlp4, ocsigen-toolkit, pgocaml, macaque, safepass, yojson
-, js_of_ocaml-camlp4, lwt_camlp4
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, macaque, safepass, yojson
 , cohttp-lwt-unix
 , resource-pooling
 }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ocsigen-start-${version}";
-  version = "2.7.0";
+  version = "2.16.1";
 
-  buildInputs = [ ocaml findlib js_of_ocaml-camlp4 lwt_camlp4 ];
-  propagatedBuildInputs = [ pgocaml macaque safepass ocsigen-toolkit yojson resource-pooling cohttp-lwt-unix camlp4 ];
+  buildInputs = [ ocaml findlib ];
+  propagatedBuildInputs = [ pgocaml_ppx safepass ocsigen-toolkit yojson resource-pooling cohttp-lwt-unix ];
 
   patches = [ ./templates-dir.patch ];
 
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = "ocsigen-start";
     rev = version;
-    sha256 = "1kp9g679xnff2ybwsicnc9c203hi9ri1ijbpp6221b2sj6zxf2wc";
+    sha256 = "1pzpyrd3vbhc7zvzh6bv44793ikx5bglpd5p4wk5jj65v1w39jwd";
   };
 
   meta = {

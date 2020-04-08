@@ -9,12 +9,13 @@ let
 
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
-    pkgs.runCommand
-      "${name}-${replaceStrings [" "] [""] what}-checked"
-      { buildInputs = [ cfg.package ]; } ''
-    ln -s ${file} $out
-    promtool ${what} $out
-  '';
+    if cfg.checkConfig then
+      pkgs.runCommand
+        "${name}-${replaceStrings [" "] [""] what}-checked"
+        { buildInputs = [ cfg.package ]; } ''
+      ln -s ${file} $out
+      promtool ${what} $out
+    '' else file;
 
   # Pretty-print JSON to a file
   writePrettyJSON = name: x:
@@ -599,6 +600,20 @@ in {
       description = ''
         The URL under which Prometheus is externally reachable (for example,
         if Prometheus is served via a reverse proxy).
+      '';
+    };
+
+    checkConfig = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Check configuration with <literal>promtool
+        check</literal>. The call to <literal>promtool</literal> is
+        subject to sandboxing by Nix. When credentials are stored in
+        external files (<literal>password_file</literal>,
+        <literal>bearer_token_file</literal>, etc), they will not be
+        visible to <literal>promtool</literal> and it will report
+        errors, despite a correct configuration.
       '';
     };
   };

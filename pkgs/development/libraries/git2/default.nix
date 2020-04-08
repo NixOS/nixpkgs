@@ -5,17 +5,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
-  version = "0.28.4";
+  version = "0.99.0";
   # keep the version in sync with python3.pkgs.pygit2 and libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "171b25aym4q88bidc4c76y4l6jmdwifm3q9zjqsll0wjhlkycfy1";
+    sha256 = "0qxzv49ip378g1n7hrbifb9c6pys2kj1hnxcafmbb94gj3pgd9kg";
   };
 
-  cmakeFlags = [ "-DTHREADSAFE=ON" ];
+  cmakeFlags = [
+    "-DTHREADSAFE=ON"
+    "-DUSE_HTTP_PARSER=system"
+  ];
 
   nativeBuildInputs = [ cmake python3 pkgconfig ];
 
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The Git linkable library";
-    homepage = https://libgit2.github.com/;
+    homepage = "https://libgit2.github.com/";
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; all;
   };

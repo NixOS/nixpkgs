@@ -137,5 +137,22 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             # Ensure the two output paths (ls and hello) are in the layer
             "docker run bulk-layer ls /bin/hello",
         )
+
+    with subtest("Ensure correct behavior when no store is needed"):
+        # This check tests two requirements simultaneously
+        #  1. buildLayeredImage can build images that don't need a store.
+        #  2. Layers of symlinks are eliminated by the customization layer.
+        #
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.no-store-paths}'"
+        )
+
+        # Busybox will not recognize argv[0] and print an error message with argv[0],
+        # but it confirms that the custom-true symlink is present.
+        docker.succeed("docker run --rm no-store-paths custom-true |& grep custom-true")
+
+        # This check may be loosened to allow an *empty* store rather than *no* store.
+        docker.succeed("docker run --rm no-store-paths ls /")
+        docker.fail("docker run --rm no-store-paths ls /nix/store")
   '';
 })

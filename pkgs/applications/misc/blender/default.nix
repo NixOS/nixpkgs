@@ -1,7 +1,7 @@
 { config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
-, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimageio2, openjpeg, python3Packages
+, libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
@@ -17,11 +17,11 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.82";
+  version = "2.82a";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "0rgw8nilvn6k6r7p28y2l1rwpami1cc8xz473jaahn7wa4ndyah0";
+    sha256 = "18zbdgas6qf2kmvvlimxgnq7y9kj7hdxcgixrs6fj50x40q01q2d";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
-      opencolorio openexr openimageio2 openjpeg python zlib fftw jemalloc
+      opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
@@ -122,7 +122,8 @@ stdenv.mkDerivation rec {
   # --python-expr is used to workaround https://developer.blender.org/T74304
   postInstall = ''
     wrapProgram $blenderExecutable \
-      --add-flags '--python-expr "import sys; sys.path.append(\"${python3Packages.numpy}/${python.sitePackages}\")"'
+      --prefix PYTHONPATH : ${python3Packages.numpy}/${python.sitePackages} \
+      --add-flags '--python-use-system-env'
   '';
 
   # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
@@ -136,7 +137,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "3D Creation/Animation/Publishing System";
-    homepage = https://www.blender.org;
+    homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     license = licenses.gpl2Plus;

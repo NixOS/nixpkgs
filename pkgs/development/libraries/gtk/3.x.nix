@@ -70,6 +70,11 @@ stdenv.mkDerivation rec {
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/1528
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/3c28751dee115e969a58a733f2f19e71062b9d2d.patch";
+      sha256 = "1rqrmymwd22dsiy7agjw13mcyic3by6020rxyaw7zslnmyzfiwc3";
+    })
     # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1002
     ./patches/01-build-Fix-path-handling-in-pkgconfig.patch
   ] ++ optionals stdenv.isDarwin [

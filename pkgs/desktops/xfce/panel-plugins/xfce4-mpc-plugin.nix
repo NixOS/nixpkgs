@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     xfconf gtk2 exo ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "MPD plugin for Xfce panel";
     platforms = platforms.linux;
     maintainers = [ ];

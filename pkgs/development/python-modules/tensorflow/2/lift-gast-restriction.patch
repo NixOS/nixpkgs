@@ -1,0 +1,11 @@
+diff --git a/tensorflow/tools/pip_package/setup.py b/tensorflow/tools/pip_package/setup.py
+index 992f2eae22..d9386f9b13 100644
+--- a/tensorflow/tools/pip_package/setup.py
++++ b/tensorflow/tools/pip_package/setup.py
+@@ -54,5 +54,5 @@ REQUIRED_PACKAGES = [
+     'enum34 >= 1.1.6;python_version<"3.4"',
+-    'gast == 0.2.2',
++    'gast >= 0.2.2',
+     'google_pasta >= 0.1.6',
+     'keras_applications >= 1.0.8',
+     'keras_preprocessing >= 1.0.5',

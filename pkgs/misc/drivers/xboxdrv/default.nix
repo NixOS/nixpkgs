@@ -13,8 +13,8 @@ in stdenv.mkDerivation {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ scons libX11 libusb1 boost glib dbus-glib ];
+  nativeBuildInputs = [ pkgconfig scons.py2 ];
+  buildInputs = [ libX11 libusb1 boost glib dbus-glib ];
   dontUseSconsInstall = true;
 
   meta = with stdenv.lib; {

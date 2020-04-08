@@ -1,5 +1,5 @@
 { stdenv
-, buildDune2Package
+, buildDunePackage
 , dune-configurator
 , fetchFromGitHub
 , alcotest
@@ -11,10 +11,10 @@
 , npy
 }:
 
-buildDune2Package rec {
+buildDunePackage rec {
   pname = "owl";
 
-  inherit (owl-base) version src meta;
+  inherit (owl-base) version src meta useDune2;
 
   checkInputs = [ alcotest ];
   buildInputs = [ dune-configurator ];

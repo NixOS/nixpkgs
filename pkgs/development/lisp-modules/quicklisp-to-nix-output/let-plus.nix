@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''let-plus'';
-  version = ''20171130-git'';
+  version = ''20191130-git'';
 
   parasites = [ "let-plus/tests" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."alexandria" args."anaphora" args."lift" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/let-plus/2017-11-30/let-plus-20171130-git.tgz'';
-    sha256 = ''1v8rp3ab6kp6v5kl58gi700wjs4qgmkxxkmhx2a1i6b2z934xkx7'';
+    url = ''http://beta.quicklisp.org/archive/let-plus/2019-11-30/let-plus-20191130-git.tgz'';
+    sha256 = ''0zj0fgb7lvczgpz4jq8q851p77kma7ikn7hd2jk2c37iv4nmz29p'';
   };
 
   packageName = "let-plus";
@@ -20,10 +20,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM let-plus DESCRIPTION Destructuring extension of LET*. SHA256
-    1v8rp3ab6kp6v5kl58gi700wjs4qgmkxxkmhx2a1i6b2z934xkx7 URL
-    http://beta.quicklisp.org/archive/let-plus/2017-11-30/let-plus-20171130-git.tgz
-    MD5 cd92097d436a513e7d0eac535617ca08 NAME let-plus FILENAME let-plus DEPS
+    0zj0fgb7lvczgpz4jq8q851p77kma7ikn7hd2jk2c37iv4nmz29p URL
+    http://beta.quicklisp.org/archive/let-plus/2019-11-30/let-plus-20191130-git.tgz
+    MD5 1b8d1660ed67852ea31cad44a6fc15d0 NAME let-plus FILENAME let-plus DEPS
     ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
      (NAME lift FILENAME lift))
-    DEPENDENCIES (alexandria anaphora lift) VERSION 20171130-git SIBLINGS NIL
+    DEPENDENCIES (alexandria anaphora lift) VERSION 20191130-git SIBLINGS NIL
     PARASITES (let-plus/tests)) */

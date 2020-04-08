@@ -1,10 +1,9 @@
 { stdenv, lib, fetchurl, writeText, php, makeWrapper }:
-
 let
-  version = "2.2.0";
+  version = "2.4.0";
 
   completion = fetchurl {
-    url    = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
+    url = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
     sha256 = "15d330x6d3fizrm6ckzmdknqg6wjlx5fr87bmkbd5s6a1ihs0g24";
   };
 
@@ -15,14 +14,14 @@ let
     [Phar]
     phar.readonly = Off
   '';
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wp-cli";
   inherit version;
 
   src = fetchurl {
-    url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${pname}-${version}.phar";
-    sha256 = "0s03jbsjwvkcbyss6rvpgw867hiwvk5p4n1qznkghyzi94j8mvki";
+    url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${pname}-${version}.phar";
+    sha256 = "0h5mjxrw4z3648v4wb4pvapz2a1mlmbszgggg4b7bvrrxn3cr78k";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -45,9 +44,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A command line interface for WordPress";
-    homepage    = https://wp-cli.org;
-    license     = licenses.mit;
+    homepage = "https://wp-cli.org";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, ocaml, findlib, dune, js_of_ocaml-compiler
-, js_of_ocaml, ppx_deriving
+, js_of_ocaml, ppxlib
 }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
 	buildInputs = [ ocaml findlib dune ];
 
-	propagatedBuildInputs = [ js_of_ocaml ppx_deriving ];
+	propagatedBuildInputs = [ js_of_ocaml ppxlib ];
 
 	buildPhase = "dune build -p js_of_ocaml-ppx_deriving_json";
 }

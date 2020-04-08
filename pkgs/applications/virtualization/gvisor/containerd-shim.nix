@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, go-bindata }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   name = "gvisor-containerd-shim-${version}";

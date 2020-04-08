@@ -29,17 +29,13 @@ let
   };
 
   # Additional /etc/hosts entries for peers with an associated hostname
-  cjdnsExtraHosts = import (pkgs.runCommand "cjdns-hosts" {}
-    # Generate a builder that produces an output usable as a Nix string value
-    ''
-      exec >$out
-      echo \'\'
-      ${concatStringsSep "\n" (mapAttrsToList (k: v:
-          optionalString (v.hostname != "")
-            "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}")
-          (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
-      echo \'\'
-    '');
+  cjdnsExtraHosts = pkgs.runCommandNoCC "cjdns-hosts" {} ''
+    exec >$out
+    ${concatStringsSep "\n" (mapAttrsToList (k: v:
+        optionalString (v.hostname != "")
+          "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}")
+        (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
+  '';
 
   parseModules = x:
     x // { connectTo = mapAttrs (name: value: { inherit (value) password publicKey; }) x.connectTo; };
@@ -144,13 +140,15 @@ in
         connectTo = mkOption {
           type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
-          example = {
-            "192.168.1.1:27313" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
-              publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
-            };
-          };
+          example = literalExample ''
+            {
+              "192.168.1.1:27313" = {
+                hostname = "homer.hype";
+                password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+                publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+              };
+            }
+          '';
           description = ''
             Credentials for making UDP tunnels.
           '';
@@ -189,13 +187,15 @@ in
         connectTo = mkOption {
           type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
-          example = {
-            "01:02:03:04:05:06" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
-              publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
-            };
-          };
+          example = literalExample ''
+            {
+              "01:02:03:04:05:06" = {
+                hostname = "homer.hype";
+                password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+                publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+              };
+            }
+          '';
           description = ''
             Credentials for connecting look similar to UDP credientials
             except they begin with the mac address.
@@ -278,7 +278,7 @@ in
       };
     };
 
-    networking.extraHosts = mkIf cfg.addExtraHosts cjdnsExtraHosts;
+    networking.hostFiles = mkIf cfg.addExtraHosts [ cjdnsExtraHosts ];
 
     assertions = [
       { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );

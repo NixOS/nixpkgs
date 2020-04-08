@@ -2,9 +2,8 @@
 , python3Packages, substituteAll }:
 
 python3Packages.buildPythonApplication rec {
-  name = "trash-cli-${version}";
+  pname = "trash-cli";
   version = "0.17.1.14";
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";

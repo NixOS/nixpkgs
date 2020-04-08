@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
-  version = "4.8";
+  version = "4.9";
 
   src = fetchzip {
     url = "https://www.languagetool.org/download/${pname}-${version}.zip";
-    sha256 = "0xhzrrw52mqsv3n1rr98p8zi84i63gpcd104ahkkhhyzwvy9kprc";
+    sha256 = "05jqqamdvi5x35yy9bqw6wf7qagrm1r9488f7cfbbv764zfirz17";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://languagetool.org;
+    homepage = "https://languagetool.org";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [
       edwtjo

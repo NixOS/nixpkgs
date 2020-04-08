@@ -7,7 +7,7 @@
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
-, python2Packages, perl, pkgconfig, clang-tools
+, python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
@@ -21,9 +21,11 @@
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
+, libdrm ? null, wayland ? null, mesa_drivers ? null, libxkbcommon ? null # useOzone
 
 # package customization
 , useVaapi ? false
+, useOzone ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -104,8 +106,6 @@ let
             result
        else result;
 
-  llvm-clang-tools = clang-tools.override { inherit llvmPackages; };
-
   base = rec {
     name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) channel version;
@@ -131,7 +131,8 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional useVaapi libva
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
     patches = [
       ./patches/nix_plugin_paths_68.patch
@@ -148,6 +149,9 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
+    ] ++ optionals (versionRange "80" "82.0.4076.0") [
+      # fix race condition in the interaction with pulseaudio
+      (githubPatch "704dc99bd05a94eb61202e6127df94ddfd571e85" "0nzwzfwliwl0959j35l0gn94sbsnkghs3dh1b9ka278gi7q4648z")
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
@@ -216,8 +220,6 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
-    '' + optionalString (stdenv.lib.versionAtLeast version "82") ''
-      ln -s ${llvm-clang-tools}/bin/clang-format buildtools/linux64/clang-format
     '';
 
     gnFlags = mkGnFlags ({
@@ -244,7 +246,6 @@ let
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
-      enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
@@ -264,6 +265,16 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
+    } // optionalAttrs useOzone {
+      use_ozone = true;
+      ozone_platform_gbm = false;
+      use_xkbcommon = true;
+      use_glib = true;
+      use_gtk = true;
+      use_system_libwayland = true;
+      use_system_minigbm = true;
+      use_system_libdrm = true;
+      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
@@ -280,6 +291,11 @@ let
 
       runHook postConfigure
     '';
+
+    # Don't spam warnings about unknown warning options. This is useful because
+    # our Clang is always older than Chromium's and the build logs have a size
+    # of approx. 25 MB without this option (and this saves e.g. 66 %).
+    NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
       # Build paralelism: on Hydra the build was frequently running into memory

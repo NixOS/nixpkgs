@@ -16,8 +16,6 @@ let
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
-    buildDune2Package = buildDunePackage.override { dune = dune_2; };
-
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix {};
@@ -232,9 +230,9 @@ let
 
     dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
-    dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { buildDunePackage = buildDune2Package; };
+    dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { };
 
-    dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { buildDunePackage = buildDune2Package; };
+    dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
 
@@ -349,6 +347,11 @@ let
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
+    graphics =
+    if lib.versionOlder "4.09" ocaml.version
+    then callPackage ../development/ocaml-modules/graphics { }
+    else null;
+
     graphql = callPackage ../development/ocaml-modules/graphql { };
 
     graphql-cohttp = callPackage ../development/ocaml-modules/graphql/cohttp.nix { };
@@ -413,7 +416,9 @@ let
 
     js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
 
-    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {};
+    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {
+      ppxlib = ppxlib.override { version = "0.12.0"; };
+    };
 
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
@@ -609,6 +614,8 @@ let
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
     pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
+
+    ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
 
     ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
 
@@ -1196,10 +1203,6 @@ let
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-    unison = callPackage ../applications/networking/sync/unison {
-      enableX11 = config.unison.enableX11 or true;
-    };
-
     hol_light = callPackage ../applications/science/logic/hol_light { };
 
   })).overrideScope' liftJaneStreet;
@@ -1231,5 +1234,5 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_4_10;
 
-  ocamlPackages = ocamlPackages_4_07;
+  ocamlPackages = ocamlPackages_4_09;
 }

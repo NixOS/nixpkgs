@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ums";
-  version = "6.2.2";
+  version = "9.1.0";
   
   src = fetchurl {
-    url = "mirror://sourceforge/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${pname}-${version}" + "-Java8.tgz";
-    sha256 = "1qa999la9hixy0pdj9phjvr6lwqycgdvm94nc1606vz0ivf95b15";
+    url = "mirror://sourceforge/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${pname}-${version}" + ".tgz";
+    sha256 = "07wprjpwqids96v5q5fhwcxqlg8jp1vy585vl2nqbfi1vf5v294s";
     name = "${pname}-${version}.tgz";
   };
 
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     cp -a . $out/
     mkdir $out/bin
     mv $out/documentation /$out/doc
+
+    # ums >= 9.0.0 ships its own JRE in the package. if we remove it, the `UMS.sh`
+    # script will correctly fall back to the JRE specified by JAVA_HOME
+    rm -rf $out/linux/jre-x64 $out/linux/jre-x86
 
     makeWrapper "$out/UMS.sh" "$out/bin/ums" \
       --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ libzen libmediainfo] }" \
