@@ -540,6 +540,8 @@ let
 
     mirage-flow = callPackage ../development/ocaml-modules/mirage-flow { };
 
+    mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
