@@ -16,8 +16,6 @@ stdenv.mkDerivation (common // rec {
     sha256 = "15l6w6lxays7qmsv0ci2ry53asb9an9dh7l7fc13256k085qcg68";
   };
 
-  patches = [ ./patches/fix_locale_dir.patch ];
-
   meta = with stdenv.lib.maintainers; common.meta // {
     maintainers = common.meta.maintainers ++ [ skeidel ];
   };

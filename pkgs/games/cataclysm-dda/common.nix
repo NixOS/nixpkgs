@@ -21,6 +21,11 @@ let
 
     postPatch = ''
       patchShebangs .
+
+      # Locale patch required for Darwin builds, see:
+      # https://github.com/NixOS/nixpkgs/pull/74064#issuecomment-560083970
+      sed -i src/translations.cpp \
+          -e 's@#elif (defined(__linux__) || (defined(MACOSX) && !defined(TILES)))@#elif 1@'
     '';
 
     makeFlags = [

@@ -18,11 +18,6 @@ stdenv.mkDerivation (common // rec {
     sha256 = "0ww2q5gykxm802z1kffmnrfahjlx123j1gfszklpsv0b1fccm1ab";
   };
 
-  patches = [
-    # Locale patch required for Darwin builds, see: https://github.com/NixOS/nixpkgs/pull/74064#issuecomment-560083970
-    ./patches/fix_locale_dir_git.patch
-  ];
-
   makeFlags = common.makeFlags ++ [
     "VERSION=git-${version}-${substring 0 8 src.rev}"
   ];
