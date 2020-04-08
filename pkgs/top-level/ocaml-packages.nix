@@ -829,6 +829,8 @@ let
 
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
+    randomconv = callPackage ../development/ocaml-modules/randomconv { };
+
     re = callPackage ../development/ocaml-modules/re { };
 
     react = callPackage ../development/ocaml-modules/react { };
