@@ -114,6 +114,7 @@ in {
     flitBuildHook
     pipBuildHook
     pipInstallHook
+    propagateWrapperArgsHook
     pytestCheckHook
     pythonCatchConflictsHook
     pythonImportsCheckHook

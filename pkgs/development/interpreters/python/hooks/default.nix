@@ -63,6 +63,12 @@ in rec {
       };
     } ./pip-install-hook.sh) {};
 
+  propagateWrapperArgsHook = callPackage ({ }:
+    makeSetupHook {
+      name = "propagate-wrapper-args";
+      deps = [ ];
+    } ./propagate-wrapper-args.sh) {};
+
   pytestCheckHook = callPackage ({ pytest }:
     makeSetupHook {
       name = "pytest-check-hook";
