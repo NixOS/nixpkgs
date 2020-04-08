@@ -88,6 +88,9 @@ in rec {
 
     , patches ? []
 
+    # Experimental; enable only if prepared to debug.
+    , __structuredAttrs ? false
+
     , ... } @ attrs:
 
     let
@@ -210,6 +213,7 @@ in rec {
 
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
+          inherit __structuredAttrs;
 
           inherit strictDeps;
 
