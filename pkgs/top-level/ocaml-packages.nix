@@ -214,6 +214,8 @@ let
 
     dispatch =  callPackage ../development/ocaml-modules/dispatch { };
 
+    dns =  callPackage ../development/ocaml-modules/dns { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
