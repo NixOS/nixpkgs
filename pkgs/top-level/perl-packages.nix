@@ -16722,7 +16722,12 @@ let
       sha256 = "1y1kn4929k299fbf6sw9lxcsdlq9fvq777p6yrzk591rr9xhkx8h";
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/starman
+    '';
+
     doCheck = false; # binds to various TCP ports
     meta = {
       homepage = https://github.com/miyagawa/Starman;
