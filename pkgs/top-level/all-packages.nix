@@ -16269,6 +16269,11 @@ in
     pulseaudio = pulseaudioFull;
   };
 
+  pulseaudio-module-xrdp = callPackage ../applications/audio/pulseaudio-module-xrdp {
+    # pulseaudio-modules-xrdp is most likely to be used with pulseaudioFull
+    pulseaudio = pulseaudioFull;
+  };
+
   bluez = bluez5;
 
   inherit (python3Packages) bedup;
@@ -19503,6 +19508,8 @@ in
   inherit (xorg) xlsfonts;
 
   xrdp = callPackage ../applications/networking/remote/xrdp { };
+
+  xorgxrdp = callPackage ../applications/networking/remote/xrdp/xorgxrdp.nix { };
 
   freerdp = callPackage ../applications/networking/remote/freerdp {
     inherit libpulseaudio;

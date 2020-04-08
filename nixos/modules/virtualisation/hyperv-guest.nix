@@ -22,6 +22,18 @@ in {
           Server 2008 R2 or earlier.
         '';
       };
+
+      enchanchedSessionMode = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable enchanched session mode.";
+      };
+
+      x11 = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable x11 graphics.";
+      };
     };
   };
 
@@ -31,8 +43,20 @@ in {
         "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"
       ];
 
+      initrd.availableKernelModules = [
+        "sd_mod" "sr_mod"
+      ];
+
       kernelParams = [
         "video=hyperv_fb:${cfg.videoMode} elevator=noop"
+      ];
+
+      kernelModules = [
+        "hv_sock"
+      ];
+
+      blacklistedKernelModules = [
+        "vmw_vsock_vmci_transport"
       ];
     };
 
@@ -52,6 +76,31 @@ in {
         SUBSYSTEM=="cpu", ACTION=="add", DEVPATH=="/devices/system/cpu/cpu[0-9]*", TEST=="online", ATTR{online}="1"
       '';
     });
+
+    services.xserver = mkIf cfg.x11 {
+      enable = mkDefault true;
+      modules = [ pkgs.xorg.xf86videofbdev ];
+      videoDrivers = mkOverride 50 [ "hyperv_fb" ];
+    };
+
+    services.xrdp = mkIf cfg.enchanchedSessionMode {
+      enable = mkDefault true;
+      port = mkDefault "vsock://-1:3389";
+      globals = {
+        security_layer = mkDefault "rdp";
+        bitmap_compression = mkDefault false;
+        bulk_compression = mkDefault false;
+        new_cursor = mkDefault false;
+      };
+    };
+
+    hardware.pulseaudio = {
+      extraModules = mkIf cfg.enchanchedSessionMode [ pkgs.pulseaudio-module-xrdp ];
+      extraConfig = ''
+        load-module module-xrdp-sink
+        load-module module-xrdp-source
+      '';
+    };
 
     systemd = {
       packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
