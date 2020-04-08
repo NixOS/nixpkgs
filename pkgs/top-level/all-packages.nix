@@ -4929,7 +4929,8 @@ in
   inherit (callPackages ../development/libraries/libwebsockets { })
     libwebsockets_3_1
     libwebsockets_3_2
-    libwebsockets;
+    libwebsockets_4_0;
+  libwebsockets = libwebsockets_3_2;
 
   lidarr = callPackage ../servers/lidarr { };
 
