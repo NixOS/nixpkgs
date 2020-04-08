@@ -11,7 +11,18 @@ else
     __structuredAttrs=
 fi
 
-: ${outputs:=out}
+# Set up shell-style variables for outputs.
+#
+# Output names are identifiers and values are store paths,
+# so they're all space-free and this style works cleanly.
+if [ -n "$__structuredAttrs" ]; then
+    for outputName in "${!outputs[@]}"; do
+        eval export\ "$outputName"="${outputs[$outputName]}"
+    done
+    export outputs="${!outputs[*]}"
+else
+    : ${outputs:=out}
+fi
 
 
 ######################################################################
