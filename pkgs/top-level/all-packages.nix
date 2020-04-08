@@ -12963,6 +12963,8 @@ in
 
   malcontent = callPackage ../development/libraries/malcontent { };
 
+  malcontent-ui = callPackage ../development/libraries/malcontent/ui.nix { };
+
   libmanette = callPackage ../development/libraries/libmanette { };
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
