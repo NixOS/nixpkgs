@@ -88,7 +88,8 @@ in rec {
 
     , patches ? []
 
-    # Experimental; enable only if prepared to debug.
+    # Experimental.  For simple packages mostly just works,
+    # but for anything complex, be prepared to debug if enabling.
     , __structuredAttrs ? false
 
     , ... } @ attrs:
