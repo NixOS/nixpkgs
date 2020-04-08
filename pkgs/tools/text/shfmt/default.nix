@@ -14,6 +14,8 @@ buildGoModule rec {
   modSha256 = "080k8d5rp8kyg0x7vjxm758b9ya9z336yd4rcqws7yhqawxiv55z";
   subPackages = ["cmd/shfmt"];
 
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";
     description = "A shell parser and formatter";
