@@ -6217,10 +6217,6 @@ in
 
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
-  relfs = callPackage ../tools/filesystems/relfs {
-    inherit (gnome2) gnome_vfs GConf;
-  };
-
   remarkjs = callPackage ../development/web/remarkjs { };
 
   alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
@@ -18523,11 +18519,6 @@ in
 
   bb =  callPackage ../applications/misc/bb { };
 
-  beast = callPackage ../applications/audio/beast {
-    inherit (gnome2) libgnomecanvas libart_lgpl;
-    guile = guile_1_8;
-  };
-
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
@@ -20290,7 +20281,6 @@ in
 
   libreoffice-args = {
     inherit (perlPackages) ArchiveZip IOCompress;
-    inherit (gnome2) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
     fontsConf = makeFontsConf {
       fontDirectories = [
@@ -20333,9 +20323,7 @@ in
     portaudio = portaudio2014;
   };
 
-  lingot = callPackage ../applications/audio/lingot {
-    inherit (gnome2) libglade;
-  };
+  lingot = callPackage ../applications/audio/lingot { };
 
   linuxband = callPackage ../applications/audio/linuxband { };
 
