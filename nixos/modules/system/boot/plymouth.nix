@@ -47,6 +47,14 @@ in
         '';
       };
 
+      font = mkOption {
+        default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
+        type = types.path;
+        description = ''
+          Splash font label
+        '';
+      };
+
       theme = mkOption {
         default = "breeze";
         type = types.str;
@@ -113,8 +121,12 @@ in
 
       mkdir -p $out/lib/plymouth/renderers
       # module might come from a theme
-      cp ${themesEnv}/lib/plymouth/{text,details,$moduleName}.so $out/lib/plymouth
+      cp ${themesEnv}/lib/plymouth/{text,details,label-ft,$moduleName}.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
+
+      # copy font
+      mkdir -p $out/share/plymouth
+      cp ${cfg.font} $out/share/plymouth/label.ttf
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
@@ -154,6 +166,7 @@ in
       ln -s $extraUtils/share/plymouth/logo.png /etc/plymouth/logo.png
       ln -s $extraUtils/share/plymouth/themes /etc/plymouth/themes
       ln -s $extraUtils/lib/plymouth /etc/plymouth/plugins
+      ln -s $extraUtils/share/plymouth/label.ttf /etc/plymouth/label.ttf
 
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
       plymouth show-splash
@@ -161,6 +174,9 @@ in
 
     boot.initrd.postMountCommands = ''
       plymouth update-root-fs --new-root-dir="$targetRoot"
+
+      # not needed anymore
+      rm /etc/plymouth/label.ttf
     '';
 
     # `mkBefore` to ensure that any custom prompts would be visible.
