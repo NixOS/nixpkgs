@@ -189,7 +189,7 @@ let
         in
           symlinkJoin {
             name = "php-with-extensions-${version}";
-            inherit (php) version dev;
+            inherit (php) version;
             nativeBuildInputs = [ makeWrapper ];
             passthru = {
               inherit buildEnv withExtensions enabledExtensions;
