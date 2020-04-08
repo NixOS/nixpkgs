@@ -1415,4 +1415,9 @@ self: super: {
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
+  # amqp-utils depends on amqp >= 0.19
+  amqp-utils = super.amqp-utils.override {
+    amqp = dontCheck super.amqp_0_19_1;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
