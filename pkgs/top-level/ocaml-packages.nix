@@ -234,6 +234,8 @@ let
 
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
+    duration =  callPackage ../development/ocaml-modules/duration { };
+
     earley = callPackage ../development/ocaml-modules/earley { };
 
     earlybird = callPackage ../development/ocaml-modules/earlybird { };
