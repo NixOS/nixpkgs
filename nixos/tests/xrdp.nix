@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     server = { pkgs, ... }: {
       imports = [ ./common/user-account.nix ];
       services.xrdp.enable = true;
-      services.xrdp.defaultWindowManager = "${pkgs.xterm}/bin/xterm";
+      services.xserver.desktopManager.xterm.enable = true;
       networking.firewall.allowedTCPPorts = [ 3389 ];
     };
 
@@ -17,7 +17,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       test-support.displayManager.auto.user = "alice";
       environment.systemPackages = [ pkgs.freerdp ];
       services.xrdp.enable = true;
-      services.xrdp.defaultWindowManager = "${pkgs.icewm}/bin/icewm";
     };
   };
 
