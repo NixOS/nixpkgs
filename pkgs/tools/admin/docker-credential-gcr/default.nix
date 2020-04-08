@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "docker-credential-gcr";
-  version = "1.4.3";
+  version = "2.0.1";
 
   goPackagePath = "github.com/GoogleCloudPlatform/docker-credential-gcr";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     rev = "v${version}";
-    sha256 = "1xb88xjyyrdmjcgfv7fqdkv1ip3dpzsdif5vm7vkqvn83s5wj5df";
+    sha256 = "0zazbfjbwclkz848vsyb6zhn95gngwrdhivaiw0m9f8a9xm4bp9r";
   };
 
   meta = with stdenv.lib; {
