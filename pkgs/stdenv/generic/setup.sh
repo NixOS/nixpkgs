@@ -876,6 +876,13 @@ unpackPhase() {
         srcs="$src"
     fi
 
+    local -a srcsArray
+    if [ -n "$__structuredAttrs" ]; then
+        srcsArray=( "${srcs[@]}" )
+    else
+        srcsArray=( $srcs )
+    fi
+
     # To determine the source directory created by unpacking the
     # source archives, we record the contents of the current
     # directory, then look below which directory got added.  Yeah,
@@ -888,7 +895,7 @@ unpackPhase() {
     done
 
     # Unpack all source archives.
-    for i in $srcs; do
+    for i in "${srcsArray[@]}"; do
         unpackFile "$i"
     done
 
