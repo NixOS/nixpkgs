@@ -5185,6 +5185,8 @@ in
 
   monit = callPackage ../tools/system/monit { };
 
+  monolith = callPackage ../tools/backup/monolith { };
+
   moreutils = callPackage ../tools/misc/moreutils {
     docbook-xsl = docbook_xsl;
   };
