@@ -748,10 +748,10 @@ auth required pam_succeed_if.so uid >= 1000 quiet
       </listitem>
       <listitem>
        <para>
-        Deploy a newer version of Hydra to activate the DB optimizations. You can choose from
-        either <package>hydra-unstable</package> (latest <literal>master</literal> compiled
-        against <package>nixUnstable</package>) and <package>hydra-flakes</package> (latest
-        version with flake-support).
+        Deploy a newer version of Hydra to activate the DB optimizations. This can be done by
+        using <package>hydra-unstable</package>. This package already includes
+        <link xlink:href="https://github.com/nixos/rfcs/pull/49">flake-support</link> and is
+        therefore compiled against <package>pkgs.nixFlakes</package>.
         <warning>
          <para>
           If your <link linkend="opt-system.stateVersion">stateVersion</link> is set to
