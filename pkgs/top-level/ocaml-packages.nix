@@ -538,6 +538,8 @@ let
 
     mirage-device = callPackage ../development/ocaml-modules/mirage-device { };
 
+    mirage-flow = callPackage ../development/ocaml-modules/mirage-flow { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
