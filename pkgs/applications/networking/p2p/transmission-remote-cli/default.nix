@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.7.1";
 
   src = fetchurl {
-    url = "https://github.com/fagga/transmission-remote-cli/archive/v${version}.tar.gz";
+    url =
+      "https://github.com/fagga/transmission-remote-cli/archive/v${version}.tar.gz";
     sha256 = "1y0hkpcjf6jw9xig8yf484hbhy63nip0pkchx401yxj81m25l4z9";
   };
 
@@ -17,10 +18,11 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Curses interface for the Transmission BitTorrent daemon";
-    homepage = https://github.com/fagga/transmission-remote-cli;
+    homepage = "https://github.com/fagga/transmission-remote-cli";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ snglth ];
   };
 }

@@ -22146,6 +22146,8 @@ in
 
   tree-from-tags = callPackage ../applications/audio/tree-from-tags { };
 
+  tremc = callPackage ../applications/networking/p2p/tremc {};
+
   tdrop = callPackage ../applications/misc/tdrop { };
 
   tre-command = callPackage ../tools/system/tre-command {};
