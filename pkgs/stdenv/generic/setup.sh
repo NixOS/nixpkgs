@@ -945,7 +945,14 @@ unpackPhase() {
 patchPhase() {
     runHook prePatch
 
-    for i in ${patches:-}; do
+    local -a patchesArray
+    if [ -n "$__structuredAttrs" ]; then
+        patchesArray=( ${patches:+"${patches[@]}"} )
+    else
+        patchesArray=( ${patches:-} )
+    fi
+
+    for i in "${patchesArray[@]}"; do
         header "applying patch $i" 3
         local uncompress=cat
         case "$i" in
