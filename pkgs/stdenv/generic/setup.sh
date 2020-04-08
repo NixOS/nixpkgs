@@ -1307,7 +1307,7 @@ distPhase() {
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.
         # shellcheck disable=SC2086
-        cp -pvd ${tarballs:-*.tar.gz} "$out/tarballs"
+        cp -pvd ${tarballs[*]:-*.tar.gz} "$out/tarballs"
     fi
 
     runHook postDist
