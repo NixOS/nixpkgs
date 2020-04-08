@@ -1,0 +1,35 @@
+From d0c6281f0a9ecf31931f6eb3e663ee9f7bca35da Mon Sep 17 00:00:00 2001
+From: Fabian Vogt <fvogt@suse.com>
+Date: Thu, 21 Jan 2016 10:39:21 +0100
+Subject: [PATCH v3 1/4] ply-label: Don't crash if label plugin fails
+
+The label plugin's create_control function can return NULL if allocation
+failed, for example, but ply-label.c ignores that and uses the NULL control,
+causing various SEGVs.
+---
+ src/libply-splash-graphics/ply-label.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/libply-splash-graphics/ply-label.c b/src/libply-splash-graphics/ply-label.c
+index cfc8098..836059c 100644
+--- a/src/libply-splash-graphics/ply-label.c
++++ b/src/libply-splash-graphics/ply-label.c
+@@ -125,6 +125,15 @@ ply_label_load_plugin (ply_label_t *label)
+ 
+         label->control = label->plugin_interface->create_control ();
+ 
++        if (label->control == NULL) {
++                ply_save_errno ();
++                label->plugin_interface = NULL;
++                ply_close_module (label->module_handle);
++                label->module_handle = NULL;
++                ply_restore_errno ();
++                return false;
++        }
++
+         if (label->text != NULL)
+                 label->plugin_interface->set_text_for_control (label->control,
+                                                                label->text);
+-- 
+2.11.0
+

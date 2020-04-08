@@ -1,0 +1,113 @@
+From 2932570460af0b47584cea2bde537476147d1f36 Mon Sep 17 00:00:00 2001
+From: Fabian Vogt <fvogt@suse.com>
+Date: Fri, 20 Jan 2017 14:02:30 +0100
+Subject: [PATCH v3 4/4] Add HiDPI support to label-ft plugin
+
+FreeType allows us to specify horizontal and vertical resolutions,
+so do just that.
+As we only know the scale factor in the drawing function, the current
+setting is saved to avoid unnecessary calls to FT_Set_Char_Size.
+---
+ src/plugins/controls/label-ft/plugin.c | 51 ++++++++++++++++++++++++++++------
+ 1 file changed, 42 insertions(+), 9 deletions(-)
+
+diff --git a/src/plugins/controls/label-ft/plugin.c b/src/plugins/controls/label-ft/plugin.c
+index 7872d8b..6d186e2 100644
+--- a/src/plugins/controls/label-ft/plugin.c
++++ b/src/plugins/controls/label-ft/plugin.c
+@@ -56,6 +56,11 @@ struct _ply_label_plugin_control
+         FT_Library             library;
+         FT_Face                face;
+ 
++        unsigned long          size;
++        /* If size is not in px, scaling for HiDPI is applied. */
++        bool                   size_in_px;
++        uint32_t               cur_scale;
++
+         char                  *text;
+         float                  red;
+         float                  green;
+@@ -85,6 +90,32 @@ query_fc_match ()
+         return fc_match_out;
+ }
+ 
++/* If size_in_px is false, this adjusts for DPI. */
++static bool
++set_font_size (ply_label_plugin_control_t *label,
++               unsigned long size,
++               bool size_in_px,
++               uint32_t scale)
++{
++        if (label->size == size && label->size_in_px == size_in_px && label->cur_scale == scale)
++                return true;
++
++        if (label->size_in_px) {
++                if (FT_Set_Pixel_Sizes (label->face, 0, size) != 0)
++                        return false;
++        }
++        else {
++                if (FT_Set_Char_Size (label->face, FT_PX_TO_GRID(size), 0, 100 * scale, 0) != 0)
++                        return false;
++        }
++
++        label->size = size;
++        label->size_in_px = size_in_px;
++        label->cur_scale = scale;
++
++        return true;
++}
++
+ static ply_label_plugin_control_t *
+ create_control (void)
+ {
+@@ -122,9 +153,8 @@ create_control (void)
+                 }
+         }
+ 
+-        /* 12pt/100dpi as default */
+-        error = FT_Set_Char_Size (label->face, FT_PX_TO_GRID(12), 0, 100, 0);
+-        if (error) {
++        /* 12pt as default */
++        if (!set_font_size (label, 12, false, 1)) {
+                 FT_Done_Face (label->face);
+                 FT_Done_FreeType (label->library);
+                 free (label);
+@@ -279,6 +309,7 @@ draw_control (ply_label_plugin_control_t *label,
+         const char     *cur_c;
+         uint32_t       *target;
+         ply_rectangle_t target_size;
++        uint32_t        scale;
+ 
+         if (label->is_hidden)
+                 return;
+@@ -290,6 +321,12 @@ draw_control (ply_label_plugin_control_t *label,
+             || label->area.y + (long) label->area.height < y)
+             return;
+ 
++        /* The display scale could have changed. */
++        scale = ply_pixel_buffer_get_device_scale (pixel_buffer);
++
++        /* This could fail, but it's better to draw with wrong scaling than not at all. */
++        set_font_size (label, label->size, label->size_in_px, scale);
++
+         slot = label->face->glyph;
+ 
+         cur_c = label->text;
+@@ -394,12 +431,8 @@ set_font_for_control (ply_label_plugin_control_t *label,
+                 size_in_pixels = true;
+         }
+ 
+-        if (size_in_pixels)
+-                FT_Set_Pixel_Sizes (label->face, 0, size);
+-        else
+-                FT_Set_Char_Size (label->face, FT_PX_TO_GRID(size), 0, 100, 0);
+-
+-        /* Ignore errors, to keep the current size. */
++        /* If this fails, the current size is kept */
++        set_font_size (label, size, size_in_pixels, label->cur_scale);
+ 
+         trigger_redraw (label, true);
+ }
+-- 
+2.11.0
+
