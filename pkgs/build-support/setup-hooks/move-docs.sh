@@ -5,10 +5,17 @@
 preFixupHooks+=(_moveToShare)
 
 _moveToShare() {
-    forceShare=${forceShare:=man doc info}
+    if [ -n "$__structuredAttrs" ]; then
+        if [ -z "${forceShare-}" ]; then
+            forceShare=( man doc info )
+        fi
+    else
+        forceShare=( ${forceShare:-man doc info} )
+    fi
+
     if [ -z "$forceShare" -o -z "$out" ]; then return; fi
 
-    for d in $forceShare; do
+    for d in "${forceShare[@]}"; do
         if [ -d "$out/$d" ]; then
             if [ -d "$out/share/$d" ]; then
                 echo "both $d/ and share/$d/ exist!"
@@ -20,4 +27,3 @@ _moveToShare() {
         fi
     done
 }
-
