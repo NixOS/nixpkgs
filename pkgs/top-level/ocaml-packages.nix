@@ -534,6 +534,8 @@ let
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
+    mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
