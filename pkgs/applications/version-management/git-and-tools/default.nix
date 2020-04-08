@@ -189,6 +189,8 @@ let
 
   qgit = qt5.callPackage ./qgit { };
 
+  scmpuff = callPackage ./scmpuff { };
+
   stgit = callPackage ./stgit { };
 
   subgit = callPackage ./subgit { };
