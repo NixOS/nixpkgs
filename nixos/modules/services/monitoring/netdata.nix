@@ -154,6 +154,7 @@ in {
         ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
         ExecReload = "${pkgs.utillinux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         TimeoutStopSec = 60;
+        Restart = "on-failure";
         # User and group
         User = cfg.user;
         Group = cfg.group;
