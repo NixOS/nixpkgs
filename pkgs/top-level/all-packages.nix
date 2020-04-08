@@ -9041,6 +9041,8 @@ in
 
   mkcl = callPackage ../development/compilers/mkcl {};
 
+  mlkit = callPackage ../development/compilers/mlkit {};
+
   inherit (callPackage ../development/compilers/mlton {})
     mlton20130715
     mlton20180207Binary
