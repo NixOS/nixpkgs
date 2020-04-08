@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, libxslt, docbook_xsl
+{ lib, stdenv, fetchFromGitLab
+, pkgconfig, autoreconfHook, libxslt, docbook_xsl, intltool
 , gtk3, udev, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "plymouth";
-  version = "0.9.4";
+  version = "2020-04-07";
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/plymouth/releases/${pname}-${version}.tar.xz";
-    sha256 = "0l8kg7b2vfxgz9gnrn0v2w4jvysj2cirp0nxads5sy05397pl6aa";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "plymouth";
+    repo = "plymouth";
+    rev = "6ca4b5b24d02242e85a3a5a4727aa195d4008210";
+    sha256 = "1l25wqr6wwbiy7ivnl766prj1ndfc9xdprw9ya7i67yhrdi429cz";
   };
 
   nativeBuildInputs = [
     pkgconfig autoreconfHook
-    libxslt docbook_xsl
+    libxslt docbook_xsl intltool
   ];
 
   buildInputs = [
@@ -22,11 +26,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i \
-      -e "s#\$(\$PKG_CONFIG --variable=systemdsystemunitdir systemd)#$out/etc/systemd/system#g" \
       -e "s#plymouthplugindir=.*#plymouthplugindir=/etc/plymouth/plugins/#" \
       -e "s#plymouththemedir=.*#plymouththemedir=/etc/plymouth/themes#" \
       -e "s#plymouthpolicydir=.*#plymouthpolicydir=/etc/plymouth/#" \
+      -e "s#plymouthconfdir=.*#plymouthconfdir=/etc/plymouth/#" \
       configure.ac
+
+    sed -i "s#%{_localstatedir}/run/plymouth#%{_plymouthruntimedir}#" scripts/plymouth.spec
+    sed -i "s#plymouthdrundir = .*#plymouthdrundir = \$(plymouthruntimedir)#" src/Makefile.am
   '';
 
   configurePlatforms = [ "host" ];
@@ -34,6 +41,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    "--with-runtimedir=/run"
     "--with-systemdunitdir=${placeholder "out"}/etc/systemd/system"
 
     "--with-logo=/etc/plymouth/logo.png"
@@ -46,15 +54,17 @@ stdenv.mkDerivation rec {
     "--without-rhgb-compat-link"
     "--without-system-root-install"
 
+    "--enable-drm"
     "--enable-gtk"
     "--enable-pango"
     "--enable-tracing"
-    "--enable-gdm-transition"
+    "--enable-documentation"
     "--enable-systemd-integration"
     "ac_cv_path_SYSTEMD_ASK_PASSWORD_AGENT=${lib.getBin systemd}/bin/systemd-tty-ask-password-agent"
   ];
 
   installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
     "plymouthd_confdir=$(out)/etc/plymouth"
     "plymouthd_defaultsdir=$(out)/share/plymouth"
   ];
