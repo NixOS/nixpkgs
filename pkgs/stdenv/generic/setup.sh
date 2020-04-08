@@ -1278,14 +1278,18 @@ genericBuild() {
         return
     fi
 
-    if [ -z "${phases:-}" ]; then
-        phases="${prePhases:-} unpackPhase patchPhase ${preConfigurePhases:-} \
-            configurePhase ${preBuildPhases:-} buildPhase checkPhase \
-            ${preInstallPhases:-} installPhase ${preFixupPhases:-} fixupPhase installCheckPhase \
-            ${preDistPhases:-} distPhase ${postPhases:-}";
+    if [ -z "${phases[*]:-}" ]; then
+        phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
+            configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
+            ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
+            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}";
     fi
 
-    for curPhase in $phases; do
+    # The use of ${phases[*]} gives the correct behavior both with and
+    # without structured attrs.  This relies on the fact that each
+    # phase name is space-free, which it must be because it's the name
+    # of either a shell variable or a shell function.
+    for curPhase in ${phases[*]}; do
         if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
         if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
         if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
