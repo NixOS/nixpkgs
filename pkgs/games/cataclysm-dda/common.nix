@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, CoreFoundation
+{ stdenv, pkgconfig, gettext, ncurses, CoreFoundation
 , tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
 , debug, runtimeShell
 }:
@@ -12,7 +12,7 @@ let
   tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
     ++ optionals stdenv.isDarwin [ Cocoa ];
 
-  common = {
+  common = stdenv.mkDerivation {
     pname = "cataclysm-dda";
 
     nativeBuildInputs = [ pkgconfig ];
@@ -51,6 +51,11 @@ let
     # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
     enableParallelBuilding = false;
 
+    passthru = {
+      isTiles = tiles;
+      isCurses = !tiles;
+    };
+
     meta = with stdenv.lib; {
       description = "A free, post apocalyptic, zombie infested rogue-like";
       longDescription = ''
@@ -84,13 +89,6 @@ let
   };
 
   utils = {
-    fetchFromCleverRaven = { rev, sha256 }:
-    fetchFromGitHub {
-      owner = "CleverRaven";
-      repo = "Cataclysm-DDA";
-      inherit rev sha256;
-    };
-
     installXDGAppLauncher = ''
       launcher="$out/share/applications/cataclysm-dda.desktop"
       install -D -m 444 data/xdg/*cataclysm-dda.desktop -T "$launcher"
@@ -113,4 +111,4 @@ let
   };
 in
 
-{ inherit common utils; }
+common

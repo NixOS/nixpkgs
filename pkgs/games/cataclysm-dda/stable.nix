@@ -9,19 +9,14 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    pname = common.pname + "-git";
-    version = "2019-11-22";
+    version = "0.E-2";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
-      rev = "a6c8ece992bffeae3788425dd4b3b5871e66a9cd";
-      sha256 = "0ww2q5gykxm802z1kffmnrfahjlx123j1gfszklpsv0b1fccm1ab";
+      rev = version;
+      sha256 = "15l6w6lxays7qmsv0ci2ry53asb9an9dh7l7fc13256k085qcg68";
     };
-
-    makeFlags = common.makeFlags ++ [
-      "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
-    ];
 
     passthru = common.passthru // {
       pkgs = pkgs.override { build = self; };
@@ -29,7 +24,7 @@ let
     };
 
     meta = with lib.maintainers; common.meta // {
-      maintainers = common.meta.maintainers ++ [ rardiol ];
+      maintainers = common.meta.maintainers ++ [ skeidel ];
     };
   });
 in

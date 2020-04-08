@@ -1,22 +1,42 @@
-{ stdenv, callPackage, CoreFoundation
-, tiles ? true, Cocoa
-, debug ? false
-}:
+{ newScope, darwin }:
 
 let
-  inherit (callPackage ./common.nix { inherit tiles CoreFoundation Cocoa debug; }) common utils;
-  inherit (utils) fetchFromCleverRaven;
+  callPackage = newScope self;
+
+  stable = rec {
+    tiles = callPackage ./stable.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+    };
+
+    curses = tiles.override { tiles = false; };
+  };
+
+  git = rec {
+    tiles = callPackage ./git.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+    };
+
+    curses = tiles.override { tiles = false; };
+  };
+
+  lib = callPackage ./lib.nix {};
+
+  pkgs = callPackage ./pkgs {};
+
+  self = {
+    inherit
+    callPackage
+    stable
+    git;
+
+    inherit (lib)
+    buildMod
+    buildSoundPack
+    buildTileSet
+    wrapCDDA;
+
+    inherit pkgs;
+  };
 in
 
-stdenv.mkDerivation (common // rec {
-  version = "0.E-2";
-
-  src = fetchFromCleverRaven {
-    rev = version;
-    sha256 = "15l6w6lxays7qmsv0ci2ry53asb9an9dh7l7fc13256k085qcg68";
-  };
-
-  meta = with stdenv.lib.maintainers; common.meta // {
-    maintainers = common.meta.maintainers ++ [ skeidel ];
-  };
-})
+self
