@@ -542,6 +542,8 @@ let
 
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
+    mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
