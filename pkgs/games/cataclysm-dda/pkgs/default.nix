@@ -9,6 +9,7 @@ let
     };
 
     tileset = {
+      UndeadPeople = callPackage ./tilesets/UndeadPeople {};
     };
   };
 
