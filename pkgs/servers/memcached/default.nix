@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cyrus_sasl, libevent}:
+{stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "1.6.3";
@@ -26,5 +26,8 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];
     platforms = platforms.linux ++ platforms.darwin;
+  };
+  passthru.tests = {
+    smoke-tests = nixosTests.memcached;
   };
 }
