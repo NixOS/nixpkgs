@@ -536,6 +536,8 @@ let
 
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
+    mirage-device = callPackage ../development/ocaml-modules/mirage-device { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
