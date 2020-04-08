@@ -216,6 +216,8 @@ let
 
     dns =  callPackage ../development/ocaml-modules/dns { };
 
+    dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
