@@ -22,25 +22,10 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "440.64";
-      sha256_64bit = "0xbm1dh95kz8h4d62pql2wmvw2gbgc7iif2bkixbnqijl4dryg71";
-      settingsSha256 = "1vdir8a8cky4kmipqsbyjhjn0aqbwgzsxq73hafikrp5n4nbclfh";
-      persistencedSha256 = "0lcnila7xyl5r87c88sq2fn5k6ylmdf1bk2wcvm6aw5x6pmnrkgi";
-
-      patches = [
-        (fetchpatch {
-          url = "https://raw.githubusercontent.com/Frogging-Family/nvidia-all/master/patches/linux-version.diff";
-          sha256 = "0c7ildivgv0ncic43mlj92jn2pf5plw5nbw5minb8lp23glkfm84";
-          stripLen = 2;
-          extraPrefix = "kernel/";
-        })
-        (fetchpatch {
-          url = "https://raw.githubusercontent.com/Frogging-Family/nvidia-all/master/patches/kernel-5.6.patch";
-          sha256 = "1i0lj1jzwbpzd9vf424aylacwidqxa990qbi12jxxfvabbjq5fhi";
-          stripLen = 2;
-          extraPrefix = "kernel/";
-        })
-      ];
+      version = "440.82";
+      sha256_64bit = "13km9800skyraa0s312fc4hwyw5pzb0jfkrv1yg6anppyan1bm7d";
+      settingsSha256 = "15psxvd65wi6hmxmd2vvsp2v0m07axw613hb355nh15r1dpkr3ma";
+      persistencedSha256 = "13izz9p2kg9g38gf57g3s2sw7wshp1i9m5pzljh9v82c4c22x1fw";
     }
     else legacy_390;
 
