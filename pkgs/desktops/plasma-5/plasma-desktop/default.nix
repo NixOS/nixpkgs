@@ -34,7 +34,7 @@ mkDerivation {
   postPatch = ''
     sed '1i#include <cmath>' -i kcms/touchpad/src/backends/x11/synapticstouchpad.cpp
   '';
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-I${lib.getDev xorgserver}/include/xorg"
     ''-DNIXPKGS_HWCLOCK=\"${lib.getBin utillinux}/sbin/hwclock\"''
   ];

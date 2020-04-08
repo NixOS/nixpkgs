@@ -40,8 +40,8 @@ common = rec { # attributes common to both builds
     ncurses openssl zlib pcre libiconv curl
   ] ++ optionals stdenv.hostPlatform.isLinux [ libaio systemd libkrb5 ]
     ++ optionals stdenv.hostPlatform.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ]
-    ++ optional (!stdenv.hostPlatform.isDarwin && withStorageToku) [ jemalloc450 ]
-    ++ optional (!stdenv.hostPlatform.isDarwin && !withStorageToku) [ jemalloc ];
+    ++ optional (!stdenv.hostPlatform.isDarwin && withStorageToku) jemalloc450
+    ++ optional (!stdenv.hostPlatform.isDarwin && !withStorageToku) jemalloc;
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -202,6 +202,6 @@ server = stdenv.mkDerivation (common // {
     wrapProgram $out/bin/mytop --set PATH ${makeBinPath [ less ncurses ]}
   '';
 
-  CXXFLAGS = optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+  env.CXXFLAGS = optionalString stdenv.hostPlatform.isi686 "-fpermissive";
 });
 in mariadb
