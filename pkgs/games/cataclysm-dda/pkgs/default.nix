@@ -13,6 +13,8 @@ let
     };
   };
 
+  pkgs' = lib.mapAttrs (_: mod: lib.filterAttrs availableForBuild mod) pkgs;
+
   availableForBuild = _: mod:
   if isNull build then
     true
@@ -22,4 +24,4 @@ let
     mod.forCurses;
 in
 
-lib.mapAttrs (_: mod: lib.filterAttrs availableForBuild mod) pkgs
+lib.makeExtensible (_: pkgs')
