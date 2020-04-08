@@ -24,6 +24,7 @@ let
   configFile = pkgs.writeText "plymouthd.conf" ''
     [Daemon]
     ShowDelay=0
+    DeviceTimeout=8
     Theme=${cfg.theme}
     ${cfg.extraConfig}
   '';
