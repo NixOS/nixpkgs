@@ -4851,6 +4851,8 @@ in
 
   now-cli = callPackage ../development/web/now-cli {};
 
+  np2kai = callPackage ../misc/emulators/np2kai { };
+
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
   kea = callPackage ../tools/networking/kea { };
