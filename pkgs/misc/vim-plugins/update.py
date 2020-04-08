@@ -15,12 +15,14 @@ import json
 import os
 import subprocess
 import sys
+import time
 import traceback
 import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime
+from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union, Any, Callable
@@ -38,17 +40,12 @@ DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
 DEPRECATED = ROOT.joinpath("deprecated.json")
 
-import time
-from functools import wraps
-
 
 def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
     """Retry calling the decorated function using an exponential backoff.
-
     http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/
     original from: http://wiki.python.org/moin/PythonDecoratorLibrary#Retry
     (BSD licensed)
-
     :param ExceptionToCheck: the exception on which to retry
     :param tries: number of times to try (not retry) before giving up
     :param delay: initial delay between retries in seconds
@@ -76,9 +73,12 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
 
 class Repo:
-    def __init__(self, owner: str, name: str, alias: Optional[str]) -> None:
+    def __init__(
+        self, owner: str, name: str, branch: str, alias: Optional[str]
+    ) -> None:
         self.owner = owner
         self.name = name
+        self.branch = branch
         self.alias = alias
         self.redirect: Dict[str, str] = {}
 
@@ -92,7 +92,7 @@ class Repo:
     def has_submodules(self) -> bool:
         try:
             urllib.request.urlopen(
-                self.url("blob/master/.gitmodules"), timeout=10
+                self.url(f"blob/{self.branch}/.gitmodules"), timeout=10
             ).close()
         except urllib.error.HTTPError as e:
             if e.code == 404:
@@ -103,7 +103,7 @@ class Repo:
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
-        commit_url = self.url("commits/master.atom")
+        commit_url = self.url(f"commits/{self.branch}.atom")
         with urllib.request.urlopen(commit_url, timeout=10) as req:
             self.check_for_redirect(commit_url, req)
             xml = req.read()
@@ -220,9 +220,13 @@ def get_current_plugins() -> List[Plugin]:
 
 
 def prefetch_plugin(
-    user: str, repo_name: str, alias: Optional[str], cache: "Optional[Cache]" = None
+    user: str,
+    repo_name: str,
+    branch: str,
+    alias: Optional[str],
+    cache: "Optional[Cache]" = None,
 ) -> Tuple[Plugin, Dict[str, str]]:
-    repo = Repo(user, repo_name, alias)
+    repo = Repo(user, repo_name, branch, alias)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit] if cache else None
@@ -284,17 +288,20 @@ def check_results(
         sys.exit(1)
 
 
-def parse_plugin_line(line: str) -> Tuple[str, str, Optional[str]]:
+def parse_plugin_line(line: str) -> Tuple[str, str, str, Optional[str]]:
+    branch = "master"
+    alias = None
     name, repo = line.split("/")
-    try:
+    if " as " in repo:
         repo, alias = repo.split(" as ")
-        return (name, repo, alias.strip())
-    except ValueError:
-        # no alias defined
-        return (name, repo.strip(), None)
+        alias = alias.strip()
+    if "@" in repo:
+        repo, branch = repo.split("@")
+
+    return (name.strip(), repo.strip(), branch.strip(), alias)
 
 
-def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, Optional[str]]]:
+def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, str, Optional[str]]]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
@@ -361,12 +368,12 @@ class Cache:
 
 
 def prefetch(
-    args: Tuple[str, str, str], cache: Cache
+    args: Tuple[str, str, str, Optional[str]], cache: Cache
 ) -> Tuple[str, str, Union[Exception, Plugin], dict]:
-    assert len(args) == 3
-    owner, repo, alias = args
+    assert len(args) == 4
+    owner, repo, branch, alias = args
     try:
-        plugin, redirect = prefetch_plugin(owner, repo, alias, cache)
+        plugin, redirect = prefetch_plugin(owner, repo, branch, alias, cache)
         cache[plugin.commit] = plugin
         return (owner, repo, plugin, redirect)
     except Exception as e:
@@ -386,7 +393,6 @@ def generate_nix(plugins: List[Tuple[str, str, Plugin]], outfile: str):
         f.write(
             """
 { lib, buildVimPluginFrom2Nix, fetchFromGitHub, overrides ? (self: super: {}) }:
-
 let
   packages = ( self:
 {"""
