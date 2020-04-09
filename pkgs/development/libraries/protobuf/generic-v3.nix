@@ -35,6 +35,10 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
   buildInputs = [ zlib ];
   configureFlags = if buildProtobuf == null then [] else [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
 
+  # Enable a release build without "-g"
+  # see https://github.com/protocolbuffers/protobuf/issues/6941
+  CXXFLAGS="-O2 -std=c++11 -DNDEBUG";
+
   enableParallelBuilding = true;
 
   doCheck = true;
