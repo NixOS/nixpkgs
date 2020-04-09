@@ -8420,4 +8420,10 @@
     github = "cpcloud";
     githubId = 417981;
   };
+  syd = {
+    name = "Tom Sydney Kerckhove";
+    email = "syd@cs-syd.eu";
+    github = "NorfairKing";
+    githubId = 3521180;
+  };
 }

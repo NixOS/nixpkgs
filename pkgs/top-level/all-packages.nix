@@ -25790,6 +25790,9 @@ in
   mfcl3770cdwlpr = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw/default.nix { }).driver;
   mfcl3770cdwcupswrapper = (callPackage ../misc/cups/drivers/brother/mfcl3770cdw/default.nix { }).cupswrapper;
 
+  mfc6490cwlpr = (callPackage ../misc/cups/drivers/brother/mfc6490cw/default.nix { }).driver;
+  mfc6490cwcupswrapper = (callPackage ../misc/cups/drivers/brother/mfc6490cw/default.nix { }).cupswrapper;
+
   mfcl8690cdwcupswrapper = callPackage ../misc/cups/drivers/mfcl8690cdwcupswrapper { };
   mfcl8690cdwlpr = callPackage ../misc/cups/drivers/mfcl8690cdwlpr { };
 
