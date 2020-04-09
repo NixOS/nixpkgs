@@ -2662,6 +2662,8 @@ in {
 
   urllib3 = callPackage ../development/python-modules/urllib3 {};
 
+  varint =  callPackage ../development/python-modules/varint {};
+
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
   dropbox = callPackage ../development/python-modules/dropbox {};
