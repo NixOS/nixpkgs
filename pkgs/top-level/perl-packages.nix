@@ -3239,6 +3239,19 @@ let
     };
   };
 
+  ConvertUU = buildPerlPackage rec {
+    pname = "Convert-UU";
+    version = "0.5201";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AN/ANDK/${pname}-${version}.tar.gz";
+      sha256 = "92329ce1c32b5952c48e1223db018c8c58ceafef03bfa0fd4817cd89c355a3bd";
+    };
+    meta = {
+      description = "Perl module for uuencode and uudecode";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   constantboolean = buildPerlModule {
     pname = "constant-boolean";
     version = "0.02";
