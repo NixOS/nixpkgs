@@ -1,6 +1,7 @@
 { stdenv, runtimeShell, pkgconfig, gettext, ncurses, CoreFoundation
 , tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
 , debug
+, useXdgDir
 }:
 
 let
@@ -50,7 +51,8 @@ stdenv.mkDerivation {
   '';
 
   makeFlags = [
-    "PREFIX=$(out)" "USE_HOME_DIR=1" "LANGUAGES=all"
+    "PREFIX=$(out)" "LANGUAGES=all"
+    (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
   ] ++ optionals (!debug) [
     "RELEASE=1"
   ] ++ optionals tiles [
