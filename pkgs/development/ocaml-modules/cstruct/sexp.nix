@@ -4,12 +4,12 @@ if !lib.versionAtLeast (cstruct.version or "1") "3"
 then cstruct
 else
 
-buildDunePackage {
+buildDunePackage rec {
 	pname = "cstruct-sexp";
 	inherit (cstruct) version src meta;
 
 	doCheck = true;
-	buildInputs = [ alcotest ];
+	checkInputs = lib.optional doCheck alcotest;
 
 	propagatedBuildInputs = [ cstruct sexplib ];
 }
