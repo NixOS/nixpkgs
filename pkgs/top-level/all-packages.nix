@@ -19786,7 +19786,9 @@ in
 
   heme = callPackage ../applications/editors/heme { };
 
-  herbstluftwm = callPackage ../applications/window-managers/herbstluftwm { };
+  herbstluftwm = callPackage ../applications/window-managers/herbstluftwm {
+    asciidoc = asciidoc-full;
+  };
 
   hercules = callPackage ../applications/virtualization/hercules { };
 
