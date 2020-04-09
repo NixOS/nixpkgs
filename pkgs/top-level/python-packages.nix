@@ -1204,6 +1204,8 @@ in {
 
   pylev = callPackage ../development/python-modules/pylev { };
 
+  pylxd = callPackage ../development/python-modules/pylxd { };
+
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
