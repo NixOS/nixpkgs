@@ -11802,6 +11802,21 @@ let
     };
   };
 
+  ModuleCompile = buildPerlPackage rec {
+    pname = "Module-Compile";
+    version = "0.37";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IN/INGY/${pname}-${version}.tar.gz";
+      sha256 = "18e6c4c4d2d5e39c21dde60a64424eed547e1d234ecc73a35278ea08161a8078";
+    };
+    propagatedBuildInputs = [ CaptureTiny DigestSHA1 ];
+    meta = {
+      homepage = "https://github.com/ingydotnet/module-compile-pm";
+      description = "Perl Module Compilation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ModuleCPANTSAnalyse = buildPerlPackage {
      pname = "Module-CPANTS-Analyse";
      version = "1.01";
