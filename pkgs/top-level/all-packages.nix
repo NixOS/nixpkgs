@@ -16555,6 +16555,8 @@ in
 
   restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
 
+  restinio = callPackage ../development/libraries/restinio { };
+
   restya-board = callPackage ../servers/web-apps/restya-board { };
 
   rethinkdb = callPackage ../servers/nosql/rethinkdb {

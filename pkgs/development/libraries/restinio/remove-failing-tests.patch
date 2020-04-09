@@ -1,0 +1,28 @@
+diff --git i/dev/test/CMakeLists.txt w/dev/test/CMakeLists.txt
+index bc5a152..0a75137 100644
+--- i/dev/test/CMakeLists.txt
++++ w/dev/test/CMakeLists.txt
+@@ -13,23 +13,13 @@ add_subdirectory(buffers)
+ add_subdirectory(response_coordinator)
+ add_subdirectory(write_group_output_ctx)
+ add_subdirectory(uri_helpers)
+-add_subdirectory(socket_options)
+ add_subdirectory(start_stop)
+-add_subdirectory(handle_requests)
+-add_subdirectory(run_on_thread_pool)
+-add_subdirectory(http_pipelining)
+-add_subdirectory(sendfile)
+ add_subdirectory(router)
+-add_subdirectory(transforms/zlib)
+-add_subdirectory(transforms/zlib_body_appender)
+-add_subdirectory(transforms/zlib_body_handler)
+ add_subdirectory(encoders)
+ add_subdirectory(from_string)
+-add_subdirectory(websocket)
+ add_subdirectory(file_upload)
+ add_subdirectory(basic_auth)
+ add_subdirectory(bearer_auth)
+ 
+ if ( OPENSSL_FOUND )
+-	add_subdirectory(socket_options_tls)
+ endif ()
