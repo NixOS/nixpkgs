@@ -8,8 +8,6 @@ with lib;
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
-  isoImage.edition = "plasma5";
-
   services.xserver = {
     desktopManager.plasma5 = {
       enable = true;
