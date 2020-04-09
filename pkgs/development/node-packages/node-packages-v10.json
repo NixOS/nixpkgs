@@ -58,6 +58,7 @@
 , "create-react-native-app"
 , "csslint"
 , "dat"
+, {"dat-fox-helper": "git://github.com/sammacbeth/dat-fox-helper#v0.2.1 "}
 , "dhcp"
 , "dnschain"
 , "dockerfile-language-server-nodejs"
