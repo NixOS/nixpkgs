@@ -25811,6 +25811,8 @@ in
 
   dsseries = callPackage ../applications/graphics/sane/backends/dsseries { };
 
+  sane-airscan = callPackage ../applications/graphics/sane/backends/airscan { };
+
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
