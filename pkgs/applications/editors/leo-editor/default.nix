@@ -1,6 +1,6 @@
-{ stdenv, python3, fetchFromGitHub, makeWrapper, makeDesktopItem }:
+{ lib, mkDerivation, python3, fetchFromGitHub, makeWrapper, wrapQtAppsHook, makeDesktopItem }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "leo-editor";
   version = "6.2";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper python3 ];
+  nativeBuildInputs = [ wrapQtAppsHook makeWrapper python3 ];
   propagatedBuildInputs = with python3.pkgs; [ pyqt5 docutils ];
 
   desktopItem = makeDesktopItem {
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Leo";
     genericName = "Text Editor";
-    categories = stdenv.lib.concatStringsSep ";" [
+    categories = lib.concatStringsSep ";" [
       "Application" "Development" "IDE" "QT"
     ];
     startupNotify = "false";
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    mimeType = lib.concatStringsSep ";" [
       "text/plain" "text/asp" "text/x-c" "text/x-script.elisp" "text/x-fortran"
       "text/html" "application/inf" "text/x-java-source" "application/x-javascript"
       "application/javascript" "text/ecmascript" "application/x-ksh" "text/x-script.ksh"
@@ -53,9 +53,11 @@ stdenv.mkDerivation rec {
     makeWrapper ${python3.interpreter} $out/bin/leo \
       --set PYTHONPATH "$PYTHONPATH:$out/share/leo-editor" \
       --add-flags "-O $out/share/leo-editor/launchLeo.py"
+
+    wrapQtApp $out/bin/leo
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://leoeditor.com";
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
