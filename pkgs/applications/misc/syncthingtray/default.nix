@@ -20,14 +20,14 @@
 }:
 
 mkDerivation rec {
-  version = "0.10.7";
+  version = "0.10.8";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "0qix22wblakpxwqy63378p5rksnx2ik9gfw0c6za19mzhx7gwln8";
+    sha256 = "1g27v109m0ar090b340x6lsrzfp85hskcr3kapc2rgdhaa0mygpd";
   };
 
   buildInputs = [ qtbase cpp-utilities qtutilities ]
