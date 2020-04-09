@@ -804,6 +804,20 @@ let
     };
   };
 
+  AstroFITSHeader = buildPerlModule rec {
+    pname = "Astro-FITS-Header";
+    version = "3.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${pname}-${version}.tar.gz";
+      sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
+    };
+    meta = {
+      homepage = "http://github.com/timj/perl-Astro-FITS-Header/tree/master";
+      description = "Object-oriented interface to FITS HDUs";
+      license = stdenv.lib.licenses.free;
+    };
+  };
+
   AudioScan = buildPerlPackage {
     pname = "Audio-Scan";
     version = "1.01";
