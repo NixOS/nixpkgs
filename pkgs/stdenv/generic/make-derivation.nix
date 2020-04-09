@@ -103,6 +103,7 @@ in rec {
     assert lib.isList (attrs.installTargets or []);
     assert !(attrs ? CFLAGS);
     assert !(attrs ? CXXFLAGS);
+    assert !(attrs ? LDFLAGS);
     assert !(attrs ? NIX_LDFLAGS);
     assert !(attrs ? NIX_CFLAGS_COMPILE);
     assert !(attrs ? NIX_CFLAGS_LINK);
