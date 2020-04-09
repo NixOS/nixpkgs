@@ -8212,6 +8212,8 @@ in
 
   scry = callPackage ../development/tools/scry {};
 
+  dasm = callPackage ../development/compilers/dasm/default.nix { };
+
   dbmate = callPackage ../development/tools/database/dbmate { };
 
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
