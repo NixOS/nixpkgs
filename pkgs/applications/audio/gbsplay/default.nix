@@ -11,13 +11,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libpulseaudio ];
-  
-  configureFlagsArray =
+
+  configureFlags =
    [ "--without-test" "--without-contrib" "--disable-devdsp"
      "--enable-pulse" "--disable-alsa" "--disable-midi"
      "--disable-nas" "--disable-dsound" "--disable-i18n" ];
 
-  makeFlagsArray = [ "tests=" ];
+  makeFlags = [ "tests=" ];
 
   meta = with stdenv.lib; {
     description = "gameboy sound player";
