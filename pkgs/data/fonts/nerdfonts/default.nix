@@ -1,23 +1,55 @@
-{ stdenv, fetchFromGitHub, which, withFont ? "" }:
+{ stdenv
+, fetchurl
+, lib
+, unzip
+# To select only certain fonts, put a list of strings to `fonts`: every key in
+# ./shas.nix is an optional font
+, fonts ? []
+}:
+
+let
+  # both of these files are generated via ./update.sh
+  version = import ./version.nix;
+  fontsShas = import ./shas.nix;
+  knownFonts = builtins.attrNames fontsShas;
+  selectedFonts = if (fonts == []) then
+    knownFonts
+  else
+    let unknown = lib.subtractLists knownFonts fonts; in
+    if (unknown != []) then
+      throw "Unknown font(s): ${lib.concatStringsSep " " unknown}"
+    else
+      fonts
+  ;
+  selectedFontsShas = lib.attrsets.genAttrs selectedFonts (
+    fName:
+    fontsShas."${fName}"
+  );
+  srcs = lib.attrsets.mapAttrsToList (
+    fName:
+    fSha:
+    (fetchurl {
+      url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.zip";
+      sha256 = fSha;
+    })
+  ) selectedFontsShas;
+in
 
 stdenv.mkDerivation rec {
-  version = "2.1.0";
+  inherit version;
+  inherit srcs;
   pname = "nerdfonts";
-  src = fetchFromGitHub {
-    owner = "ryanoasis";
-    repo = "nerd-fonts";
-    rev = version;
-    sha256 = "1la79y16k9rwcl2zsxk73c0kgdms2ma43kpjfqnq5jlbfdj0niwg";
-  };
-  dontPatchShebangs = true;
-  buildInputs = [ which ];
-  patchPhase = ''
-    patchShebangs install.sh
-    sed -i -e 's|font_dir="\$HOME/.local/share/fonts|font_dir="$out/share/fonts/truetype|g' install.sh
+  nativeBuildInputs = [
+    unzip
+  ];
+  sourceRoot = ".";
+  buildPhase = ''
+    echo "selected fonts are ${toString selectedFonts}"
+    ls *.otf *.ttf
   '';
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    ./install.sh ${withFont}
+    find -name \*.otf -exec mkdir -p $out/share/fonts/opentype/NerdFonts \; -exec mv {} $out/share/fonts/opentype/NerdFonts \;
+    find -name \*.ttf -exec mkdir -p $out/share/fonts/truetype/NerdFonts \; -exec mv {} $out/share/fonts/truetype/NerdFonts \;
   '';
 
   meta = with stdenv.lib; {
