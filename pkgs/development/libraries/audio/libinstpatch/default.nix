@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libinstpatch";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "swami";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ksilyszcm7mwb6m8qyrgalvh4h2vkyz7wzj0xczcqkj15bcl4lw";
+    sha256 = "1v7mv43xxwrzi3agrc60agcw46jaidr8ql9kkm1w4jxkf4c6z6dz";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.swamiproject.org/;
+    homepage = "http://www.swamiproject.org/";
     description = "MIDI instrument patch files support library";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
