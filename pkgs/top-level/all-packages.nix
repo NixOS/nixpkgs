@@ -6360,7 +6360,7 @@ in
 
   s3fs = callPackage ../tools/filesystems/s3fs { };
 
-  s3cmd = callPackage ../tools/networking/s3cmd { };
+  s3cmd = python3Packages.callPackage ../tools/networking/s3cmd { };
 
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
