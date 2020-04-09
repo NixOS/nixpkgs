@@ -2153,6 +2153,8 @@ in
 
   rav1e = callPackage ../tools/video/rav1e { };
 
+  razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
+
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
   riot-desktop = callPackage ../applications/networking/instant-messengers/riot/riot-desktop.nix { };
@@ -5707,7 +5709,7 @@ in
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
   page = callPackage ../tools/misc/page { };
-  
+
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
