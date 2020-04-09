@@ -25,7 +25,7 @@ mkDerivation rec {
     desktopName = "Leo";
     genericName = "Text Editor";
     categories = lib.concatStringsSep ";" [
-      "Application" "Development" "IDE" "QT"
+      "Application" "Development" "IDE"
     ];
     startupNotify = "false";
     mimeType = lib.concatStringsSep ";" [
