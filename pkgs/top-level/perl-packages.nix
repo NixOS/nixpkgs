@@ -6699,6 +6699,20 @@ let
     };
   };
 
+  ExtUtilsF77 = buildPerlPackage rec {
+    pname = "ExtUtils-F77";
+    version = "1.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KG/KGB/${pname}-${version}.tar.gz";
+      sha256 = "634715969c1650be815b3f11c151444e8793ebd6b6d92ce8654d56d6f893a6a9";
+    };
+    buildInputs = [ FileWhich pkgs.gfortran ];
+    meta = {
+      description = "A simple interface to F77 libs";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ExtUtilsHelpers = buildPerlPackage {
     pname = "ExtUtils-Helpers";
     version = "0.026";
