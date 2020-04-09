@@ -975,6 +975,8 @@ in {
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
+  nsenter = callPackage ../development/python-modules/nsenter { };
+
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
