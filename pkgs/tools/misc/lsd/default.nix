@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
@@ -13,10 +17,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "13g0p6zh2b1z005lszll098d4lv62dzsxwhl76bianzrydif61lr";
 
-  preFixup = ''
-    install -Dm644 -t $out/share/zsh/site-functions/ target/release/build/lsd-*/out/_lsd
-    install -Dm644 -t $out/share/fish/vendor_completions.d/ target/release/build/lsd-*/out/lsd.fish
-    install -Dm644 -t $out/share/bash-completion/completions/ target/release/build/lsd-*/out/lsd.bash
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion target/release/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
   '';
 
   meta = with stdenv.lib; {
