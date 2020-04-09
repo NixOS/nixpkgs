@@ -5,7 +5,7 @@
 
 let
   common = callPackage ./common.nix {
-    inherit tiles CoreFoundation Cocoa debug;
+    inherit CoreFoundation tiles Cocoa debug;
   };
 
   self = common.overrideAttrs (common: rec {
@@ -23,8 +23,9 @@ let
       withMods = wrapCDDA self;
     };
 
-    meta = with lib.maintainers; common.meta // {
-      maintainers = common.meta.maintainers ++ [ skeidel ];
+    meta = common.meta // {
+      maintainers = with lib.maintainers;
+      common.meta.maintainers ++ [ skeidel ];
     };
   });
 in
