@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "shaarli-material";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "kalvn";
     repo = "Shaarli-Material";
     rev = "v${version}";
-    sha256 = "161kf7linyl2l2d7y60v96xz3fwa572fqm1vbm58mjgkzkfndhrv";
+    sha256 = "1lx2yqsl9j4gxfz9h5vfrwk17vf726snari08q55rz52qgpy9kcl";
   };
 
   patchPhase = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     broken = true;
     description = "A theme base on Google's Material Design for Shaarli, the superfast delicious clone";
     license = licenses.mit;
-    homepage = https://github.com/kalvn/Shaarli-Material;
+    homepage = "https://github.com/kalvn/Shaarli-Material";
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
