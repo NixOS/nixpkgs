@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, jq }:
 
 let
 
@@ -287,15 +287,14 @@ rec {
     let
       args = removeAttrs args_ [ "name" "postBuild" ]
         // {
-          inherit preferLocalBuild allowSubstitutes;
-          passAsFile = [ "paths" ];
+          inherit preferLocalBuild allowSubstitutes paths;
         }; # pass the defaults
     in runCommand name args
       ''
         mkdir -p $out
-        for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir -silent $i $out
-        done
+        while IFS= read path; do
+          ${lndir}/bin/lndir -silent $path $out
+        done < <(${jq}/bin/jq -r <.attrs.json '.paths[]')
         ${postBuild}
       '';
 
