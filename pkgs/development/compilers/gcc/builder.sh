@@ -214,6 +214,8 @@ preInstall() {
 postInstall() {
     # Move runtime libraries to $lib.
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "$lib"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll" "$lib"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.a" "$lib"
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "$lib"
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "$lib"
     moveToOutput "share/gcc-*/python" "$lib"
