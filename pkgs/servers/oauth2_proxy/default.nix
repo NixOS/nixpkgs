@@ -15,6 +15,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
+  doCheck = true;
+
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
   buildFlagsArray = ("-ldflags=-X main.VERSION=${version}");
 
