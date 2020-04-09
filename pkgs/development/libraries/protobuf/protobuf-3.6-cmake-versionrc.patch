@@ -1,0 +1,13 @@
+diff --git a/cmake/protoc.cmake b/cmake/protoc.cmake
+index 9bf6f5a92..6c579f61e 100644
+--- a/cmake/protoc.cmake
++++ b/cmake/protoc.cmake
+@@ -2,6 +2,8 @@ set(protoc_files
+   ${protobuf_source_dir}/src/google/protobuf/compiler/main.cc
+ )
+ 
++configure_file(${protobuf_source_dir}/cmake/version.rc.in ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
++
+ set(protoc_rc_files
+   ${CMAKE_CURRENT_BINARY_DIR}/version.rc
+ )

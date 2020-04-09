@@ -1,0 +1,13 @@
+diff --git a/cmake/install.cmake b/cmake/install.cmake
+index 9b2ae93cf..cef1f5c00 100644
+--- a/cmake/install.cmake
++++ b/cmake/install.cmake
+@@ -137,7 +137,7 @@ install(EXPORT protobuf-targets
+   NAMESPACE protobuf::
+   COMPONENT protobuf-export)
+ 
+-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/
++install(DIRECTORY ${CMAKE_INSTALL_CMAKEDIR}/
+   DESTINATION "${CMAKE_INSTALL_CMAKEDIR}"
+   COMPONENT protobuf-export
+   PATTERN protobuf-targets.cmake EXCLUDE
