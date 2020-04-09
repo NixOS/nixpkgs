@@ -53,7 +53,7 @@ buildGoPackage rec {
     homepage = https://runc.io/;
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester saschagrunert ];
+    maintainers = with maintainers; [ offline ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }
