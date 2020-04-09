@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ SDL2 ];
   
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   meta = {
     description = "An open-source Atari 2600 VCS emulator";
