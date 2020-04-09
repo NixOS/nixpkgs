@@ -925,6 +925,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  pynwb = callPackage ../development/python-modules/pynwb { };
+
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
