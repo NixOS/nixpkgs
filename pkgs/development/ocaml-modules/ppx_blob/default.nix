@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, alcotest, ocaml-migrate-parsetree }:
+{ lib, fetchurl, buildDunePackage, ocaml, alcotest, ocaml-migrate-parsetree }:
 
 buildDunePackage rec {
   pname = "ppx_blob";
@@ -11,7 +11,7 @@ buildDunePackage rec {
 
   checkInputs = lib.optional doCheck alcotest;
   buildInputs = [ ocaml-migrate-parsetree ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.03";
 
   meta = with lib; {
     homepage = "https://github.com/johnwhitington/ppx_blob";
