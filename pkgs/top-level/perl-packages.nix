@@ -2754,6 +2754,22 @@ let
     };
   };
 
+  CLIHelpers = buildPerlPackage {
+    pname = "CLI-Helpers";
+    version = "1.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BL/BLHOTSKY/CLI-Helpers-1.8.tar.gz";
+      sha256 = "1hgiynpy7q4gbx1d9pwnzdzil36k13vjxhscalj710ikcddvjz92";
+    };
+    buildInputs = [ PodCoverageTrustPod TestPerlCritic ];
+    propagatedBuildInputs = [ CaptureTiny RefUtil SubExporter TermReadKey YAML ];
+    meta = {
+      homepage = "https://github.com/reyjrar/CLI-Helpers";
+      description = "Subroutines for making simple command line scripts";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   Clipboard = buildPerlModule {
     pname = "Clipboard";
     version = "0.22";
