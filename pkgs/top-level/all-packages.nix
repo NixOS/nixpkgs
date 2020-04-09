@@ -17753,6 +17753,8 @@ in
 
   freepats = callPackage ../data/misc/freepats { };
 
+  g15daemon = callPackage ../os-specific/linux/g15daemon {};
+
   gentium = callPackage ../data/fonts/gentium {};
 
   gentium-book-basic = callPackage ../data/fonts/gentium-book-basic {};
