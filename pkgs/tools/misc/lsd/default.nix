@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = https://github.com/Peltoche/lsd;
     description = "The next gen ls command";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ filalex77 marsam ];
   };
 }
