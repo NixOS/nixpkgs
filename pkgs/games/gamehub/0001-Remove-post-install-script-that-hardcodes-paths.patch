@@ -1,0 +1,11 @@
+diff --git a/meson.build b/meson.build
+index 25f3e1a..18b43bd 100644
+--- a/meson.build
++++ b/meson.build
+@@ -36,4 +36,5 @@ subdir('src')
+ subdir('src')
+ subdir('po')
+
+-meson.add_install_script('meson/post_install.py')
++# This does not work for nixos; it hard-codes paths
++# meson.add_install_script('meson/post_install.py')
