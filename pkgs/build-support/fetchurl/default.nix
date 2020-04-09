@@ -10,12 +10,14 @@ let
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
   mirrorsFile =
-    buildPackages.runCommandNoCCLocal "mirrors-list" {
+    stdenvNoCC.mkDerivation {
+      name = "mirrors-list";
       env = stdenvNoCC.lib.mapAttrs (k: m: toString m) mirrors;
-    } ''
-      # !!! this is kinda hacky.
-      set | grep -E '^[a-zA-Z]+=.*://' > $out
-    '';
+      buildCommand = ''
+        # !!! this is kinda hacky.
+        set | grep -E '^[a-zA-Z]+=.*://' > $out
+      '';
+    };
 
   # Names of the master sites that are mirrored (i.e., "sourceforge",
   # "gnu", etc.).
