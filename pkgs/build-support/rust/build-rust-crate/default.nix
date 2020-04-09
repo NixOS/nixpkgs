@@ -13,14 +13,30 @@ let
       then "macos"
       else stdenv.hostPlatform.parsed.kernel.name;
 
-    # Create rustc arguments to link against the given list of dependencies and
-    # renames
+    # Create rustc arguments to link against the given list of dependencies
+    # and renames.
+    #
+    # See docs for crateRenames below.
     mkRustcDepArgs = dependencies: crateRenames:
       lib.concatMapStringsSep " " (dep:
         let
-          extern = lib.replaceStrings ["-"] ["_"] dep.libName;
+          normalizeName = lib.replaceStrings ["-"] ["_"];
+          extern = normalizeName dep.libName;
+          # Find a choice that matches in name and optionally version.
+          findMatchOrUseExtern = choices:
+            lib.findFirst (choice:
+              (!(choice ? version)
+                 || choice.version == dep.version or ""))
+            { rename = extern; }
+            choices;
           name = if lib.hasAttr dep.crateName crateRenames then
-            lib.strings.replaceStrings ["-"] ["_"] crateRenames.${dep.crateName}
+            let choices = crateRenames.${dep.crateName};
+            in
+            normalizeName (
+              if builtins.isList choices
+              then (findMatchOrUseExtern choices).rename
+              else choices
+            )
           else
             extern;
         in (if lib.any (x: x == "lib" || x == "rlib") dep.crateType then
@@ -92,12 +108,45 @@ in
    #
    # Example:
    #
+   # `crateRenames` supports two formats.
+   #
+   # The simple version is an attrset that maps the
+   # `crateName`s of the dependencies to their alternative
+   # names.
+   #
    # ```nix
    # {
    #   my_crate_name = "my_alternative_name";
    #   # ...
    # }
    # ```
+   #
+   # The extended version is also keyed by the `crateName`s but allows
+   # different names for different crate versions:
+   #
+   # ```nix
+   # {
+   #   my_crate_name = [
+   #       { version = "1.2.3"; rename = "my_alternative_name01"; }
+   #       { version = "3.2.3"; rename = "my_alternative_name03"; }
+   #   ]
+   #   # ...
+   # }
+   # ```
+   #
+   # This roughly corresponds to the following snippet in Cargo.toml:
+   #
+   # ```toml
+   # [dependencies]
+   # my_alternative_name01 = { package = "my_crate_name", version = "0.1" }
+   # my_alternative_name03 = { package = "my_crate_name", version = "0.3" }
+   # ```
+   #
+   # Dependencies which use the lib target name as extern name, do not need
+   # to be specified in the crateRenames, even if their crate name differs.
+   #
+   # Including multiple versions of a crate is very popular during
+   # ecosystem transitions, e.g. from futures 0.1 to futures 0.3.
    , crateRenames
    # A list of extra options to pass to rustc.
    #
@@ -172,6 +221,7 @@ stdenv.mkDerivation (rec {
 
     src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
     name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
+    version = crate.version;
     depsBuildBuild = [ rust stdenv.cc cargo jq ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies = map lib.getLib dependencies_;
