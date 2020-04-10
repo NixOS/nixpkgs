@@ -254,7 +254,11 @@ in
         }
       ];
 
-      environment.systemPackages = [ pkgs.iptables ];
+      environment.systemPackages = let
+        iptables = if config.networking.nftables.enable
+                   then pkgs.iptables-nftables-compat
+                   else pkgs.iptables;
+      in [ iptables ];
 
       boot = {
         kernelModules = [ "nf_nat_ftp" ];
