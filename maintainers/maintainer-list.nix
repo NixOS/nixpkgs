@@ -4703,6 +4703,12 @@
     githubId = 136037;
     name = "Matthew Maurer";
   };
+  maxeaubrey = {
+    email = "maxeaubrey@gmail.com";
+    github = "maxeaubrey";
+    githubId = 35892750;
+    name = "Maxine Aubrey";
+  };
   mbakke = {
     email = "mbakke@fastmail.com";
     github = "mbakke";
