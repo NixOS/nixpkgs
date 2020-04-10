@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The full set of Faba monochrome panel icons";
-    homepage = https://snwh.org/moka;
+    homepage = "https://snwh.org/moka";
     license = licenses.gpl3;
     # moka-icon-theme dependency is restricted to linux
     platforms = platforms.linux;

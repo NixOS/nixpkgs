@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://rakshasa.github.io/rtorrent/;
+    homepage = "https://rakshasa.github.io/rtorrent/";
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
 
     platforms = platforms.unix;

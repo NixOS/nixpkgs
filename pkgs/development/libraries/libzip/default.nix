@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.nih.at/libzip;
+    homepage = "https://www.nih.at/libzip";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     platforms = platforms.unix;

@@ -27,7 +27,7 @@ stdenv.mkDerivation  {
 
   meta = with stdenv.lib; {
     description = "A MIDI file player that teaches you how to play the piano";
-    homepage = http://pianobooster.sourceforge.net;
+    homepage = "http://pianobooster.sourceforge.net";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

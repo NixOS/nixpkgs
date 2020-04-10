@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Parameterization framework for parameterized model creation and handling";
-    homepage = https://github.com/sods/paramz;
+    homepage = "https://github.com/sods/paramz";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

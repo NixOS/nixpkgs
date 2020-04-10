@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Cross-platform multitrack audio recording and audio editing suite";
-    homepage = http://traverso-daw.org/;
+    homepage = "http://traverso-daw.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.all;
     maintainers = with maintainers; [ coconnor ];

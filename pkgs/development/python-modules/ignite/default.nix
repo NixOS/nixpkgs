@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High-level training library for PyTorch";
-    homepage = https://pytorch.org/ignite;
+    homepage = "https://pytorch.org/ignite";
     license = licenses.bsd3;
     maintainers = [ maintainers.bcdarwin ];
   };

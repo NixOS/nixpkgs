@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package to control BlinkStick USB devices";
-    homepage = https://pypi.python.org/pypi/BlinkStick/;
+    homepage = "https://pypi.python.org/pypi/BlinkStick/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ np ];
   };

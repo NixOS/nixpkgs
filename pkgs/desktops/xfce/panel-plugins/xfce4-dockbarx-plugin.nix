@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/TiZ-EX1/xfce4-dockbarx-plugin;
+    homepage = "https://github.com/TiZ-EX1/xfce4-dockbarx-plugin";
     description = "A plugins to embed DockbarX into xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;

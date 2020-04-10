@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "A pretty system information tool written in POSIX sh";
-    homepage = https://github.com/dylanaraps/pfetch;
+    homepage = "https://github.com/dylanaraps/pfetch";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ equirosa ];

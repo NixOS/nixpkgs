@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Fast, Extensible Progress Meter";
-    homepage = https://github.com/tqdm/tqdm;
+    homepage = "https://github.com/tqdm/tqdm";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fridh ];
   };

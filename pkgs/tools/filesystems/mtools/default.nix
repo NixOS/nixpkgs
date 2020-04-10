@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/mtools/;
+    homepage = "https://www.gnu.org/software/mtools/";
     description = "Utilities to access MS-DOS disks";
     platforms = platforms.unix;
     license = licenses.gpl3;

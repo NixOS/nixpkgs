@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A python interface to the libmagic file type identification library";
-    homepage = https://github.com/ahupp/python-magic;
+    homepage = "https://github.com/ahupp/python-magic";
     license = lib.licenses.mit;
   };
 }

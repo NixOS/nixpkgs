@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Calculates NTLM Authentication codes";
-    homepage = https://github.com/jborean93/ntlm-auth;
+    homepage = "https://github.com/jborean93/ntlm-auth";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ elasticdog ];
     platforms = platforms.all;

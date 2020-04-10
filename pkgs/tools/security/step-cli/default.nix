@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "A zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";
-    homepage = https://smallstep.com/cli/;
+    homepage = "https://smallstep.com/cli/";
     license = licenses.asl20;
     maintainers = with maintainers; [ xfix ];
     platforms = platforms.linux ++ platforms.darwin;

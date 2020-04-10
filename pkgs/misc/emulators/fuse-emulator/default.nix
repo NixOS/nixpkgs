@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = http://fuse-emulator.sourceforge.net/;
+    homepage = "http://fuse-emulator.sourceforge.net/";
     description = "ZX Spectrum emulator";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

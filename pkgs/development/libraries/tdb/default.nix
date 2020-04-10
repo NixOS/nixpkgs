@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       and uses locking internally to keep writers from trampling on each
       other. TDB is also extremely small.
     '';
-    homepage = https://tdb.samba.org/;
+    homepage = "https://tdb.samba.org/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
   };

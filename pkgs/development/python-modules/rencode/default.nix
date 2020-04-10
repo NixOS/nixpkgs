@@ -19,7 +19,7 @@ buildPythonPackage {
   buildInputs = [ cython ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/aresch/rencode;
+    homepage = "https://github.com/aresch/rencode";
     description = "Fast (basic) object serialization similar to bencode";
     license = licenses.gpl3;
   };

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "BZRTP is an opensource implementation of ZRTP keys exchange protocol";
-    homepage = https://github.com/BelledonneCommunications/bzrtp;
+    homepage = "https://github.com/BelledonneCommunications/bzrtp";
     license = licenses.lgpl21;
     platforms = platforms.all;
   };

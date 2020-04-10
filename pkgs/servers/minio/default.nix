@@ -22,7 +22,7 @@ buildGoModule rec {
   ''];
 
   meta = with stdenv.lib; {
-    homepage = https://www.minio.io/;
+    homepage = "https://www.minio.io/";
     description = "An S3-compatible object storage server";
     maintainers = with maintainers; [ eelco bachp ];
     platforms = platforms.unix;

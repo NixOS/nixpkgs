@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pattern matching and various utilities for file systems paths";
-    homepage = https://github.com/gorakhargosh/pathtools;
+    homepage = "https://github.com/gorakhargosh/pathtools";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
   };

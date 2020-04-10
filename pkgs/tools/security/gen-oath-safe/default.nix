@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${path}
     '';
   meta = with stdenv.lib; {
-    homepage = https://github.com/mcepl/gen-oath-safe;
+    homepage = "https://github.com/mcepl/gen-oath-safe";
     description = "Script for generating HOTP/TOTP keys (and QR code)";
     platforms =  platforms.unix;
     license = licenses.mit;

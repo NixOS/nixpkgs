@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kkos/oniguruma;
+    homepage = "https://github.com/kkos/oniguruma";
     description = "Regular expressions library";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];

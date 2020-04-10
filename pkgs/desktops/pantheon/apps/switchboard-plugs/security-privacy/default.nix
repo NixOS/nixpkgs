@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Security & Privacy Plug";
-    homepage = https://github.com/elementary/switchboard-plug-security-privacy;
+    homepage = "https://github.com/elementary/switchboard-plug-security-privacy";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

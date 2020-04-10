@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Vimwiki markdown plugin";
-    homepage = https://github.com/WnP/vimwiki_markdown;
+    homepage = "https://github.com/WnP/vimwiki_markdown";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
   };

@@ -26,7 +26,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Qt application to control the JACK sound server daemon";
-    homepage = http://qjackctl.sourceforge.net/;
+    homepage = "http://qjackctl.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A prototype-based dynamic object-oriented programming language, environment, and virtual machine";
-    homepage = http://selflanguage.org/;
+    homepage = "http://selflanguage.org/";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.doublec ];
     platforms = with stdenv.lib.platforms; linux;

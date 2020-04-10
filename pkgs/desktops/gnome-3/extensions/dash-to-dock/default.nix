@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "A dock for the Gnome Shell";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
-    homepage = https://micheleg.github.io/dash-to-dock/;
+    homepage = "https://micheleg.github.io/dash-to-dock/";
   };
 }

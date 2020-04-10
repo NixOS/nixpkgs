@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://www.pokerth.net;
+    homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ obadz yegortimoshenko ];

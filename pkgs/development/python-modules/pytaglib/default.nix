@@ -50,7 +50,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/supermihi/pytaglib;
+    homepage = "https://github.com/supermihi/pytaglib";
     description = "Python 2.x/3.x bindings for the Taglib audio metadata library";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.mrkkrp ];

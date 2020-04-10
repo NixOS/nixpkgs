@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.mopidy.com/;
+    homepage = "https://www.mopidy.com/";
     description = ''
       An extensible music server that plays music from local disk, Spotify,
       SoundCloud, Google Play Music, and more

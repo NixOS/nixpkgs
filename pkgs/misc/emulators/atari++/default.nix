@@ -17,7 +17,7 @@ stdenv.mkDerivation rec{
   '';
 
   meta = {
-    homepage = http://www.xl-project.com/;
+    homepage = "http://www.xl-project.com/";
     description = "An enhanced, cycle-accurated Atari emulator";
     longDescription = ''
       The Atari++ Emulator is a Unix based emulator of the Atari eight

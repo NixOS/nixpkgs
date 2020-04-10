@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jbardin/scp.py;
+    homepage = "https://github.com/jbardin/scp.py";
     description = "SCP module for paramiko";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ xnaveira ];

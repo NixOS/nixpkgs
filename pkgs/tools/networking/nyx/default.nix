@@ -18,7 +18,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line monitor for Tor";
-    homepage = https://nyx.torproject.org/;
+    homepage = "https://nyx.torproject.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ offline ];
   };

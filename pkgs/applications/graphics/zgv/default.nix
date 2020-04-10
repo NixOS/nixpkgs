@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.svgalib.org/rus/zgv/;
+    homepage = "http://www.svgalib.org/rus/zgv/";
     description = "Picture viewer with a thumbnail-based selector";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

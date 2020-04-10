@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.haskell.org/hugs;
+    homepage = "https://www.haskell.org/hugs";
     description = "Haskell interpreter";
     maintainers = with maintainers; [ joachifm ];
     license = licenses.bsd3;

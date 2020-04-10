@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       network are rewarded with better service.
     '';
 
-    homepage = https://gnunet.org/;
+    homepage = "https://gnunet.org/";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.gnu ++ platforms.linux;

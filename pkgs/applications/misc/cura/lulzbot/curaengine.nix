@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A powerful, fast and robust engine for processing 3D models into 3D printing instruction";
-    homepage = https://code.alephobjects.com/source/curaengine-lulzbot/;
+    homepage = "https://code.alephobjects.com/source/curaengine-lulzbot/";
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];

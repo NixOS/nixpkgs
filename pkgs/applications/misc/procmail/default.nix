@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Mail processing and filtering utility";
-    homepage = http://www.procmail.org/;
+    homepage = "http://www.procmail.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];

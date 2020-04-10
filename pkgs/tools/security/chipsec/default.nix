@@ -33,7 +33,7 @@ pythonPackages.buildPythonApplication rec {
       Mac OS X and UEFI shell.
     '';
     license = licenses.gpl2;
-    homepage = https://github.com/chipsec/chipsec;
+    homepage = "https://github.com/chipsec/chipsec";
     maintainers = with maintainers; [ johnazoidberg ];
     platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
   };

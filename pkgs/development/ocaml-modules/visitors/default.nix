@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = https://gitlab.inria.fr/fpottier/visitors;
+    homepage = "https://gitlab.inria.fr/fpottier/visitors";
     license = licenses.lgpl21;
     description = "An OCaml syntax extension (technically, a ppx_deriving plugin) which generates object-oriented visitors for traversing and transforming data structures";
     inherit (ocaml.meta) platforms;

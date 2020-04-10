@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Core user interface for the GNOME 3 desktop";
-    homepage = https://wiki.gnome.org/Projects/GnomeShell;
+    homepage = "https://wiki.gnome.org/Projects/GnomeShell";
     license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

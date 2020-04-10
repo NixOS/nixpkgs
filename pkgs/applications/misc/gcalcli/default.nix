@@ -30,7 +30,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "CLI for Google Calendar";
-    homepage = https://github.com/insanum/gcalcli;
+    homepage = "https://github.com/insanum/gcalcli";
     license = licenses.mit;
     maintainers = with maintainers; [ nocoolnametom ];
     inherit version;

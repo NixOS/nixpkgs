@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       when the sun sets, and then changes it back its colder temperature
       when the sun rises.
     '';
-    homepage = https://justgetflux.com/;
+    homepage = "https://justgetflux.com/";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.paholg ];

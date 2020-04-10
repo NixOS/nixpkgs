@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   meta = with stdenv.lib; {
     description = "Userland libraries for interfacing with Raspberry Pi hardware";
-    homepage = https://github.com/raspberrypi/userland;
+    homepage = "https://github.com/raspberrypi/userland";
     license = licenses.bsd3;
     platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ tkerber ];

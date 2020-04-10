@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gitlab.com/o9000/tint2;
+    homepage = "https://gitlab.com/o9000/tint2";
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
     license = licenses.gpl2;
     platforms = platforms.linux;

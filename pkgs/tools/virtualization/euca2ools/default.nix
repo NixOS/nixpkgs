@@ -15,7 +15,7 @@ in buildPythonApplication {
   propagatedBuildInputs = [ boto m2crypto ];
 
   meta = {
-    homepage = https://github.com/eucalyptus/euca2ools;
+    homepage = "https://github.com/eucalyptus/euca2ools";
     description = "Tools for interacting with Amazon EC2/S3-compatible cloud computing services";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

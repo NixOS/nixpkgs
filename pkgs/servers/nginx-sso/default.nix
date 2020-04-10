@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "SSO authentication provider for the auth_request nginx module";
-    homepage = https://github.com/Luzifer/nginx-sso;
+    homepage = "https://github.com/Luzifer/nginx-sso";
     license = licenses.asl20;
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.unix;

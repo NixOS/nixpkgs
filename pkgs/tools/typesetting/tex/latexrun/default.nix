@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation {
 
   meta = with stdenvNoCC.lib; {
     description = "A 21st century LaTeX wrapper";
-    homepage = https://github.com/aclements/latexrun;
+    homepage = "https://github.com/aclements/latexrun";
     license = licenses.mit;
     maintainers = [ maintainers.lucus16 ];
     platforms = platforms.all;

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother MFC-J6510DW CUPS wrapper driver";
     license = with licenses; gpl2;
     platforms = with platforms; linux;

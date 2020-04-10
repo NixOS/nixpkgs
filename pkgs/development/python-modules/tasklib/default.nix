@@ -27,7 +27,7 @@ in buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = https://github.com/robgolding/tasklib;
+    homepage = "https://github.com/robgolding/tasklib";
     description = "A library for interacting with taskwarrior databases";
     maintainers = with maintainers; [ arcnmx ];
     platforms = platforms.all;

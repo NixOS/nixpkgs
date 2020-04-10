@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mod manager for Kerbal Space Program";
-    homepage = https://github.com/KSP-CKAN/CKAN;
+    homepage = "https://github.com/KSP-CKAN/CKAN";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.Baughn ];
     platforms = stdenv.lib.platforms.all;

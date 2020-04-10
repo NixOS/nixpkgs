@@ -41,7 +41,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/openstack/sqlalchemy-migrate;
+    homepage = "https://github.com/openstack/sqlalchemy-migrate";
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];

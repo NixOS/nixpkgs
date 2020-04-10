@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
          for computational linguistics and natural language processing.
       '';
 
-    homepage = https://wordnet.princeton.edu/;
+    homepage = "https://wordnet.princeton.edu/";
     license = {
       fullName = "WordNet 3.0 license";
       url = https://wordnet.princeton.edu/license-and-commercial-use;

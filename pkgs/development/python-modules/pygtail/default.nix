@@ -20,6 +20,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library for reading log file lines that have not been read";
     license = licenses.gpl2Plus;
-    homepage = https://github.com/bgreenlee/pygtail;
+    homepage = "https://github.com/bgreenlee/pygtail";
   };
 }

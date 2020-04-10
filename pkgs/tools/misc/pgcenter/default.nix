@@ -16,7 +16,7 @@ buildGoModule rec {
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
-    homepage = https://pgcenter.org/;
+    homepage = "https://pgcenter.org/";
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];

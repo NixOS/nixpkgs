@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;{
     description = "User-space tools for LinuxPPS";
-    homepage = http://linuxpps.org/;
+    homepage = "http://linuxpps.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ sorki ];

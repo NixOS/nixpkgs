@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = {
-    homepage = https://www.gnu.org/software/libunistring/;
+    homepage = "https://www.gnu.org/software/libunistring/";
 
     description = "Unicode string library";
 

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
-    homepage = https://github.com/sunng87/cargo-release;
+    homepage = "https://github.com/sunng87/cargo-release";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.all;

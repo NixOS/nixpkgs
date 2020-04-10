@@ -58,7 +58,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Mature programmer's text editor (Java based)";
-    homepage = http://www.jedit.org;
+    homepage = "http://www.jedit.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.vbgl ];

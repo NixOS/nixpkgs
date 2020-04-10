@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://upower.freedesktop.org/;
+    homepage = "https://upower.freedesktop.org/";
     description = "A D-Bus service for power management";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   installTargets = [ "install" "install.man" ];
 
   meta = {
-    homepage = http://www.fnurt.net/larswm;
+    homepage = "http://www.fnurt.net/larswm";
     description = "9wm-like tiling window manager";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;

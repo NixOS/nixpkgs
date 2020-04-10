@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "Comonads for Idris";
-    homepage = https://github.com/vmchale/comonad;
+    homepage = "https://github.com/vmchale/comonad";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ jonafato ];
     platforms = platforms.linux;
-    homepage = https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator;
+    homepage = "https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator";
     broken = versionAtLeast gnome3.gnome-shell.version "3.26";
   };
 }

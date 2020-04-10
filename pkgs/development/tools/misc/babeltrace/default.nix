@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command-line tool and library to read and convert LTTng tracefiles";
-    homepage = https://www.efficios.com/babeltrace;
+    homepage = "https://www.efficios.com/babeltrace";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

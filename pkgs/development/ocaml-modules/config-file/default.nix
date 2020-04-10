@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://config-file.forge.ocamlcore.org/;
+    homepage = "http://config-file.forge.ocamlcore.org/";
     platforms = ocaml.meta.platforms or [];
     description = "An OCaml library used to manage the configuration file(s) of an application";
     license = stdenv.lib.licenses.lgpl2Plus;

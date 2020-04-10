@@ -17,7 +17,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Generate requirements.txt file for any project based on imports";
-    homepage = https://github.com/bndr/pipreqs;
+    homepage = "https://github.com/bndr/pipreqs";
     license = licenses.asl20;
     maintainers = with maintainers; [ psyanticy ];
   };

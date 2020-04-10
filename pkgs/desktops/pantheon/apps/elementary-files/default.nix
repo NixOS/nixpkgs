@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File browser designed for elementary OS";
-    homepage = https://github.com/elementary/files;
+    homepage = "https://github.com/elementary/files";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   
   meta = {
     description = "Lift documents in nroff markups to XML-DocBook";
-    homepage = http://www.catb.org/esr/doclifter;
+    homepage = "http://www.catb.org/esr/doclifter";
     license = "BSD";
     platforms = stdenv.lib.platforms.unix;
   };

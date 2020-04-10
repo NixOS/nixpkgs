@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = http://gallium.inria.fr/~fpottier/fix/;
+    homepage = "http://gallium.inria.fr/~fpottier/fix/";
     description = "A simple OCaml module for computing the least solution of a system of monotone equations";
     license = licenses.cecill-c;
     maintainers = [ maintainers.vbgl ];

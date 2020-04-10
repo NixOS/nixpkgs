@@ -81,7 +81,7 @@ EOF
       a host of other features.
     '';
     license = "MIT-like";
-    homepage = http://www.zsh.org/;
+    homepage = "http://www.zsh.org/";
     maintainers = with stdenv.lib.maintainers; [ pSub ];
     platforms = stdenv.lib.platforms.unix;
   };

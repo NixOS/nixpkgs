@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python library for building configuration shells";
-    homepage = https://github.com/open-iscsi/configshell-fb;
+    homepage = "https://github.com/open-iscsi/configshell-fb";
     license = licenses.asl20;
   };
 }

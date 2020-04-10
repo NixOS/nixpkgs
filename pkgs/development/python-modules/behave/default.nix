@@ -44,7 +44,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/behave/behave;
+    homepage = "https://github.com/behave/behave";
     description = "behaviour-driven development, Python style";
     license = licenses.bsd2;
     maintainers = with maintainers; [ alunduil ];

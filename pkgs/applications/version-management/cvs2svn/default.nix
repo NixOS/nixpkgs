@@ -29,7 +29,7 @@ python2Packages.buildPythonApplication  rec {
 
   meta = with lib; {
     description = "A tool to convert CVS repositories to Subversion repositories";
-    homepage = http://cvs2svn.tigris.org/;
+    homepage = "http://cvs2svn.tigris.org/";
     maintainers = [ maintainers.makefu ];
     platforms = platforms.unix;
     license = licenses.asl20;

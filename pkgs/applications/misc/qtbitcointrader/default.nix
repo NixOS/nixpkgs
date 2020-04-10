@@ -28,7 +28,7 @@ mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Bitcoin trading client";
-    homepage = https://centrabit.com/;
+    homepage = "https://centrabit.com/";
     license = licenses.gpl3;
     platforms = qt5.qtbase.meta.platforms;
     maintainers = [ maintainers.ehmry ];

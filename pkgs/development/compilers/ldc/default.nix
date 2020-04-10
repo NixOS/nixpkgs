@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The LLVM-based D compiler";
-    homepage = https://github.com/ldc-developers/ldc;
+    homepage = "https://github.com/ldc-developers/ldc";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
     license = with licenses; [ bsd3 boost mit ncsa gpl2Plus ];
     maintainers = with maintainers; [ ThomasMader ];

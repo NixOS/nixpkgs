@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.qlandkarte.org/;
+    homepage = "http://www.qlandkarte.org/";
     description = "Garmin Device Drivers for QlandkarteGT";
     license = licenses.gpl2;
     maintainers = with maintainers; [ sikmir ];

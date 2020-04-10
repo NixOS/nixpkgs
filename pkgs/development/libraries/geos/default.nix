@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
-    homepage = http://geos.refractions.net/;
+    homepage = "http://geos.refractions.net/";
     license = licenses.lgpl21;
   };
 }

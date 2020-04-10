@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Application for generating 3D structures by specifying a design grammar";
-    homepage = http://structuresynth.sourceforge.net;
+    homepage = "http://structuresynth.sourceforge.net";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.gpl3;
     platforms = platforms.linux;

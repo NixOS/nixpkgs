@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bitprophet/alabaster;
+    homepage = "https://github.com/bitprophet/alabaster";
     description = "A Sphinx theme";
     license = licenses.bsd3;
   };

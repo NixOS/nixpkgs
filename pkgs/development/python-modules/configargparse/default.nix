@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A drop-in replacement for argparse";
-    homepage = https://github.com/zorro3/ConfigArgParse;
+    homepage = "https://github.com/zorro3/ConfigArgParse";
     license = licenses.mit;
     maintainers = [ maintainers.willibutz ];
   };

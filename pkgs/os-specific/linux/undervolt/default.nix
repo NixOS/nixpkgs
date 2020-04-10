@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/georgewhewell/undervolt/;
+    homepage = "https://github.com/georgewhewell/undervolt/";
     description = "A program for undervolting Intel CPUs on Linux";
 
     longDescription = ''

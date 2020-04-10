@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
-    homepage = https://github.com/elementary/cmake-modules;
+    homepage = "https://github.com/elementary/cmake-modules";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.samdroid-apps ];
   };

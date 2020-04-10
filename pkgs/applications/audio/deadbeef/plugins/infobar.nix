@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     broken = true; # crashes DeaDBeeF and is abandoned (https://bitbucket.org/dsimbiriatin/deadbeef-infobar/issues/38/infobar-causes-deadbeef-180-to-crash)
     description = "DeaDBeeF Infobar Plugin";
-    homepage = https://bitbucket.org/dsimbiriatin/deadbeef-infobar;
+    homepage = "https://bitbucket.org/dsimbiriatin/deadbeef-infobar";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;

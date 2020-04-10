@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Easy thumbnails for Django";
-    homepage = https://github.com/SmileyChris/easy-thumbnails;
+    homepage = "https://github.com/SmileyChris/easy-thumbnails";
     license = lib.licenses.bsd3;
   };
 

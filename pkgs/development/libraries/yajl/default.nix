@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       YAJL is a small event-driven (SAX-style) JSON parser written in ANSI
       C, and a small validating JSON generator.
     '';
-    homepage = http://lloyd.github.com/yajl/;
+    homepage = "http://lloyd.github.com/yajl/";
     license = stdenv.lib.licenses.isc;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ maggesi ];

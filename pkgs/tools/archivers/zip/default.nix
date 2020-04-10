@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";
-    homepage = http://www.info-zip.org;
+    homepage = "http://www.info-zip.org";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
     maintainers = [ ];

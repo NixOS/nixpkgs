@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://x42.github.io/libltc/;
+    homepage = "http://x42.github.io/libltc/";
     description = "POSIX-C Library for handling Linear/Logitudinal Time Code (LTC)";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;

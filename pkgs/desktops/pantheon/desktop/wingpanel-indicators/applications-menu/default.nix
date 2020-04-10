@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight and stylish app launcher for Pantheon";
-    homepage = https://github.com/elementary/applications-menu;
+    homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.craftychess.com/;
+    homepage = "http://www.craftychess.com/";
     description = "Chess program developed by Dr. Robert M. Hyatt";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.unix;

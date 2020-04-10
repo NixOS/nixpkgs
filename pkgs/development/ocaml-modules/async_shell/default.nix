@@ -14,7 +14,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ async_p4 core_p4 core_extended_p4 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async_shell;
+    homepage = "https://github.com/janestreet/async_shell";
     description = "Shell helpers for Async";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

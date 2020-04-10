@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gnome theme, based upon Adwaita-Maia dark skin";
-    homepage = https://github.com/madmaxms/theme-obsidian-2;
+    homepage = "https://github.com/madmaxms/theme-obsidian-2";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

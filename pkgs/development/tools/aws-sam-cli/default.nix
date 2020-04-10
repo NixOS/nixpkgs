@@ -72,7 +72,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/awslabs/aws-sam-cli;
+    homepage = "https://github.com/awslabs/aws-sam-cli";
     description = "CLI tool for local development and testing of Serverless applications";
     license = licenses.asl20;
     maintainers = with maintainers; [ andreabedini lo1tuma ];

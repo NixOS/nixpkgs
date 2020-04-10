@@ -17,7 +17,7 @@ in python2Packages.buildPythonApplication {
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = http://scons.org/;
+    homepage = "http://scons.org/";
     description = "An improved, cross-platform substitute for Make";
     license = licenses.mit;
     longDescription = ''

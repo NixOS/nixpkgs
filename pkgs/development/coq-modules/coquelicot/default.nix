@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   installPhase = "./remake install";
 
   meta = {
-    homepage = http://coquelicot.saclay.inria.fr/;
+    homepage = "http://coquelicot.saclay.inria.fr/";
     description = "A Coq library for Reals";
     license = stdenv.lib.licenses.lgpl3;
     maintainers = [ stdenv.lib.maintainers.vbgl ];

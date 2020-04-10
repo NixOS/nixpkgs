@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Event loop library";
-    homepage = http://liboop.ofb.net/;
+    homepage = "http://liboop.ofb.net/";
     license = "LGPL";
     platforms = stdenv.lib.platforms.linux;
   };

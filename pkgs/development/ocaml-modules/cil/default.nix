@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   prefixKey = "-prefix=";
 
   meta = with stdenv.lib; {
-    homepage = http://kerneis.github.io/cil/;
+    homepage = "http://kerneis.github.io/cil/";
     description = "A front-end for the C programming language that facilitates program analysis and transformation";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple modal hotkey daemon for OSX";
-    homepage = https://github.com/koekeishiya/khd;
+    homepage = "https://github.com/koekeishiya/khd";
     downloadPage = https://github.com/koekeishiya/khd/releases;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 ];

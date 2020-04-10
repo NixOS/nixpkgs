@@ -22,7 +22,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";
-    homepage = https://tilt.dev/;
+    homepage = "https://tilt.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ anton-dessiatov ];
   };

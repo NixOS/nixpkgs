@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Gnome shell extension designed to replace the standard menu found in Gnome 3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dkabot ];
-    homepage = https://gitlab.com/LinxGem33/Arc-Menu;
+    homepage = "https://gitlab.com/LinxGem33/Arc-Menu";
   };
 }

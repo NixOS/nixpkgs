@@ -61,7 +61,7 @@ stdenv.mkDerivation {
          matching the quality of other approaches, such as plane-wave
          and all-electron methods.
       '';
-    homepage = https://www.quantum-espresso.org/;
+    homepage = "https://www.quantum-espresso.org/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.costrouc ];

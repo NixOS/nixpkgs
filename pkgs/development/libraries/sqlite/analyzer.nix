@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A tool that shows statistics about SQLite databases";
     downloadPage = http://sqlite.org/download.html;
-    homepage = https://www.sqlite.org;
+    homepage = "https://www.sqlite.org";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ pesterhazy ];
     platforms = platforms.unix;

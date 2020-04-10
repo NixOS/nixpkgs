@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       the AppSocket protocol and has the scheme socket://. LPRng also supports
       this protocol and the syntax is lp=remotehost%9100 in /etc/printcap.
     '';
-    homepage = http://p910nd.sourceforge.net/;
+    homepage = "http://p910nd.sourceforge.net/";
     downloadPage = https://sourceforge.net/projects/p910nd/;
     license = licenses.gpl2;
     platforms = platforms.linux;

@@ -89,7 +89,7 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Vino;
+    homepage = "https://wiki.gnome.org/Projects/Vino";
     description = "GNOME desktop sharing server";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

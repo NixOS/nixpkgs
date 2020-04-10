@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       and icons to use the solarized theme with a solarized green accent color.
       This theme supports both the dark and light theme, just as Numix proper.
     '';
-    homepage = https://github.com/Ferdi265/numix-solarized-gtk-theme;
+    homepage = "https://github.com/Ferdi265/numix-solarized-gtk-theme";
     downloadPage = https://github.com/Ferdi265/numix-solarized-gtk-theme/releases;
     license = licenses.gpl3;
     platforms = platforms.linux;

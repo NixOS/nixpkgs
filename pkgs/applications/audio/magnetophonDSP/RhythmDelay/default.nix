@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tap a rhythm into your delay! For jack and lv2";
-    homepage = https://github.com/magnetophon/RhythmDelay;
+    homepage = "https://github.com/magnetophon/RhythmDelay";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
   };

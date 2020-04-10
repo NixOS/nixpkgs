@@ -62,7 +62,7 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
 
   meta = {
-    homepage = https://gstreamer.freedesktop.org;
+    homepage = "https://gstreamer.freedesktop.org";
 
     description = "Python bindings for GStreamer";
 

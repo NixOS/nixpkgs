@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME CSS2 parsing and manipulation toolkit";
-    homepage = https://gitlab.gnome.org/GNOME/libcroco;
+    homepage = "https://gitlab.gnome.org/GNOME/libcroco";
     license = licenses.lgpl2;
     platforms = platforms.unix;
   };

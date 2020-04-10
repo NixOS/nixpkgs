@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ nettle gnutls libev protobufc guile geoip libseccomp gperf readline lz4 libgssglue ronn pam ];
 
   meta = with stdenv.lib; {
-    homepage = https://gitlab.com/openconnect/ocserv;
+    homepage = "https://gitlab.com/openconnect/ocserv";
     license = licenses.gpl2;
     description = "This program is openconnect VPN server (ocserv), a server for the openconnect VPN client.";
     maintainers = with maintainers; [ ];

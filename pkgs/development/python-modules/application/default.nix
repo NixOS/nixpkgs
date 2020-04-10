@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Basic building blocks for python applications";
-    homepage = https://github.com/AGProjects/python-application;
+    homepage = "https://github.com/AGProjects/python-application";
     license = licenses.lgpl2Plus;
   };
 }

@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
 	meta = with stdenv.lib; {
 		description = "A relational filesystem on top of FUSE";
-    homepage = http://relfs.sourceforge.net;
+    homepage = "http://relfs.sourceforge.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

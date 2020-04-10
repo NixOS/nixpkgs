@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python client library for the Plaid API and Link";
-    homepage = https://github.com/plaid/plaid-python;
+    homepage = "https://github.com/plaid/plaid-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bhipple ];
   };

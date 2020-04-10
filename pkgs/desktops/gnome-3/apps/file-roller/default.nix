@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/FileRoller;
+    homepage = "https://wiki.gnome.org/Apps/FileRoller";
     description = "Archive manager for the GNOME desktop environment";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

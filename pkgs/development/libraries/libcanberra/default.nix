@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       portable.
     '';
 
-    homepage = http://0pointer.de/lennart/projects/libcanberra/;
+    homepage = "http://0pointer.de/lennart/projects/libcanberra/";
 
     license = stdenv.lib.licenses.lgpl2Plus;
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fast and lightweight 2D game physics library";
-    homepage = http://chipmunk2d.net/;
+    homepage = "http://chipmunk2d.net/";
     license = licenses.mit;
     platforms = platforms.unix; # supports Windows and MacOS as well, but those require more work
   };

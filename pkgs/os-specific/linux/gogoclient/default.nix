@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://ipv6.ernet.in/Tunnel_broker;
+    homepage = "https://ipv6.ernet.in/Tunnel_broker";
     description = "Client to connect to the Freenet6 IPv6 tunnel broker service";
     maintainers = [ maintainers.bluescreen303 ];
     license = licenses.bsd3;

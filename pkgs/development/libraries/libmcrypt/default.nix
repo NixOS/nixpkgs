@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Replacement for the old crypt() package and crypt(1) command, with extensions";
-    homepage = http://mcrypt.sourceforge.net;
+    homepage = "http://mcrypt.sourceforge.net";
     license = "GPL";
     platforms = platforms.all;
   };

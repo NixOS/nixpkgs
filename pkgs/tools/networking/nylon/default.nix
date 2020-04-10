@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   buildInputs = [ libevent ];
 
   meta = with stdenv.lib; {
-    homepage = http://monkey.org/~marius/nylon;
+    homepage = "http://monkey.org/~marius/nylon";
     description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ edwtjo ];

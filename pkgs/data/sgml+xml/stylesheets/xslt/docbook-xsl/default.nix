@@ -63,7 +63,7 @@ let
         '';
 
       meta = {
-        homepage = http://wiki.docbook.org/topic/DocBookXslStylesheets;
+        homepage = "http://wiki.docbook.org/topic/DocBookXslStylesheets";
         description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
         maintainers = [ lib.maintainers.eelco ];
         platforms = lib.platforms.all;

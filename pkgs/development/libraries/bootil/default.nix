@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Garry Newman's personal utility library";
-    homepage = https://github.com/garrynewman/bootil;
+    homepage = "https://github.com/garrynewman/bootil";
     # License unsure - see https://github.com/garrynewman/bootil/issues/21
     license = stdenv.lib.licenses.free;
     maintainers = [ stdenv.lib.maintainers.abigailbuccaneer ];

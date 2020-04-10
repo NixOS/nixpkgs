@@ -31,6 +31,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python library for working with RDF, a simple yet powerful language for representing information";
-    homepage = http://www.rdflib.net/;
+    homepage = "http://www.rdflib.net/";
   };
 }

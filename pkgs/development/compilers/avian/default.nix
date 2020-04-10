@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       to provide a useful subset of Java’s features, suitable for
       building self-contained applications.
     '';
-    homepage = https://readytalk.github.io/avian/;
+    homepage = "https://readytalk.github.io/avian/";
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.earldouglas ];

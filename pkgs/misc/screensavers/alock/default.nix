@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Arkq/alock;
+    homepage = "https://github.com/Arkq/alock";
     description = "Simple screen lock application for X server";
     longDescription = ''
       alock locks the X server until the user enters a password

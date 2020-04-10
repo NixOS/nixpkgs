@@ -30,7 +30,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A daemon for keeping the system timezone up-to-date based on the current location";
-    homepage = https://github.com/Stebalien/localtime;
+    homepage = "https://github.com/Stebalien/localtime";
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

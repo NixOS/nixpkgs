@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A meta-build system that generates NinjaBuild files";
-    homepage = https://gn.googlesource.com/gn;
+    homepage = "https://gn.googlesource.com/gn";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ stesie matthewbauer ];

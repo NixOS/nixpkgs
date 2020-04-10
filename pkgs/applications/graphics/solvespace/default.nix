@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.edef ];
     platforms = platforms.linux;
-    homepage = http://solvespace.com;
+    homepage = "http://solvespace.com";
   };
 }

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Code coverage measurement for python";
-    homepage = http://nedbatchelder.com/code/coverage/;
+    homepage = "http://nedbatchelder.com/code/coverage/";
     license = lib.licenses.bsd3;
   };
 }

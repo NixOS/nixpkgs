@@ -53,7 +53,7 @@ buildDunePackage rec {
   dontStrip = true;
 
   meta = {
-    homepage = https://github.com/ocaml-community/sedlex;
+    homepage = "https://github.com/ocaml-community/sedlex";
     description = "An OCaml lexer generator for Unicode";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.marsam ];

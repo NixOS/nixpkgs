@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The GL Vendor-Neutral Dispatch library";
-    homepage = https://github.com/NVIDIA/libglvnd;
+    homepage = "https://github.com/NVIDIA/libglvnd";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Markdown notes editor and manager designed for elementary OS"
     + stdenv.lib.optionalString withPantheon " - built with Contractor support";
-    homepage = https://github.com/Philip-Scott/Notes-up;
+    homepage = "https://github.com/Philip-Scott/Notes-up";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak worldofpeace ];
     platforms = platforms.linux;

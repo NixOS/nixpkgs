@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.pixelbeat.org/programs/dvd-vr/;
+    homepage = "https://www.pixelbeat.org/programs/dvd-vr/";
     downloadPage = https://www.pixelbeat.org/programs/dvd-vr/;
     description = "A utility to identify and optionally copy recordings from a DVD-VR format disc";
     license = licenses.gpl2;

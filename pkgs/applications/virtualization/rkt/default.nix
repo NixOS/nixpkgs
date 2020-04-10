@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast, composable, and secure App Container runtime for Linux";
-    homepage = https://github.com/coreos/rkt;
+    homepage = "https://github.com/coreos/rkt";
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge steveej ];
     platforms = [ "x86_64-linux" ];

@@ -63,7 +63,7 @@ mkDerivation rec {
                 "-DUSE_SYSTEM_QUAZIP=ON"];
 
   meta = with stdenv.lib; {
-    homepage = https://nomacs.org;
+    homepage = "https://nomacs.org";
     description = "Qt-based image viewer";
     maintainers = [maintainers.ahmedtd];
     license = licenses.gpl3Plus;

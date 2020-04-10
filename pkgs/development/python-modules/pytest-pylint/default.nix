@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "pytest plugin to check source code with pylint";
-    homepage = https://github.com/carsongee/pytest-pylint;
+    homepage = "https://github.com/carsongee/pytest-pylint";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

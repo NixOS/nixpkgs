@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Coq support library for Gappa";
     license = stdenv.lib.licenses.lgpl21;
-    homepage = http://gappa.gforge.inria.fr/;
+    homepage = "http://gappa.gforge.inria.fr/";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (coq.meta) platforms;
   };

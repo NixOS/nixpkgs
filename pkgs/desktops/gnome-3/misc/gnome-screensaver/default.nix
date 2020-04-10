@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Component of Gnome Flashback that provides screen locking";
-    homepage = https://wiki.gnome.org/Projects/GnomeScreensaver;
+    homepage = "https://wiki.gnome.org/Projects/GnomeScreensaver";
     license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

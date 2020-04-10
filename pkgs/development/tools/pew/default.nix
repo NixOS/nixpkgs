@@ -25,7 +25,7 @@ with python3Packages; buildPythonApplication rec {
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/berdario/pew;
+      homepage = "https://github.com/berdario/pew";
       description = "Tools to manage multiple virtualenvs written in pure python";
       license = licenses.mit;
       platforms = platforms.all;

@@ -32,7 +32,7 @@ mkDerivation rec {
       Synergy was a commercialized reimplementation of the original
       CosmoSynergy written by Chris Schoeneman.
     '';
-    homepage = https://github.com/debauchee/barrier;
+    homepage = "https://github.com/debauchee/barrier";
     downloadPage = https://github.com/debauchee/barrier/releases;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.phryneas ];

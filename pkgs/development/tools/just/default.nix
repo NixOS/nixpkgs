@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A handy way to save and run project-specific commands";
-    homepage = https://github.com/casey/just;
+    homepage = "https://github.com/casey/just";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd ];
     platforms = platforms.all;

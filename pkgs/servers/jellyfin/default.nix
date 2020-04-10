@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
 
   meta =  with stdenv.lib; {
     description = "The Free Software Media System";
-    homepage = https://jellyfin.github.io/;
+    homepage = "https://jellyfin.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ nyanloutre minijackson ];
   };

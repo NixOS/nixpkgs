@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An extensible text editor based on Scintilla with Lua scripting";
-    homepage = http://foicica.com/textadept;
+    homepage = "http://foicica.com/textadept";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin mirrexagon ];
     platforms = platforms.linux;

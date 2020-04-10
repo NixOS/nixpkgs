@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lX11";
 
   meta = {
-    homepage = http://icculus.org/smpeg/;
+    homepage = "http://icculus.org/smpeg/";
     description = "MPEG decoding library";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

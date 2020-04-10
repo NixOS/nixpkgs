@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A language and IDE for electronic arts";
-    homepage = https://processing.org;
+    homepage = "https://processing.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

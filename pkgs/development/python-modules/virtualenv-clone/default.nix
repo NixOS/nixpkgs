@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/edwardgeorge/virtualenv-clone;
+    homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
     license = licenses.mit;
   };

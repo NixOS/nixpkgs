@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = https://savannah.nongnu.org/projects/davfs2;
+    homepage = "https://savannah.nongnu.org/projects/davfs2";
     description = "Mount WebDAV shares like a typical filesystem";
     license = stdenv.lib.licenses.gpl3Plus;
 

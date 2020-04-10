@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = https://linphone.org/technical-corner/belle-sip;
+    homepage = "https://linphone.org/technical-corner/belle-sip";
     description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
     license = licenses.gpl2;
     platforms = platforms.all;

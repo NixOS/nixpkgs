@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/miguelmarco/libhomfly/;
+    homepage = "https://github.com/miguelmarco/libhomfly/";
     description = "Library to compute the homfly polynomial of knots and links";
     license = licenses.unlicense;
     maintainers = with maintainers; [ timokau ];

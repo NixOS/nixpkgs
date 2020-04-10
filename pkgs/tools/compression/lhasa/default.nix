@@ -14,7 +14,7 @@ stdenv.mkDerivation {
       the tool is a library, so that it can be reused for other purposes.
     '';
     license = stdenv.lib.licenses.isc;
-    homepage = http://fragglet.github.io/lhasa;
+    homepage = "http://fragglet.github.io/lhasa";
     maintainers = with stdenv.lib; [ maintainers.sander ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };

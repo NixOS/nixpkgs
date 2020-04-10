@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
                   wxGTK30 soundtouch miniupnpc mbedtls curl lzo sfml ];
 
   meta = with lib; {
-    homepage = https://dolphin-emu.org/;
+    homepage = "https://dolphin-emu.org/";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ashkitten ];

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.libvirt.org/;
+    homepage = "http://www.libvirt.org/";
     description = "libvirt Python bindings";
     license = licenses.lgpl2;
     maintainers = [ maintainers.fpletz ];

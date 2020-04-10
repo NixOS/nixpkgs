@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       A multimedia packager, called MP4Box,
       And some server tools included in MP4Box and MP42TS applications.
     '';
-    homepage = https://gpac.wp.imt.fr;
+    homepage = "https://gpac.wp.imt.fr";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ bluescreen303 mgdelacroix ];
     platforms = platforms.linux;

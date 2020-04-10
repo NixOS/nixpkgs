@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A database of common MIME types";
-    homepage = http://freedesktop.org/wiki/Software/shared-mime-info;
+    homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.mimame ];

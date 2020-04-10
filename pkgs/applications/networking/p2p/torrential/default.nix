@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Download torrents in style with this speedy, minimalist torrent client for elementary OS";
-    homepage = https://github.com/davidmhewitt/torrential;
+    homepage = "https://github.com/davidmhewitt/torrential";
     maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.jool.mx/;
+    homepage = "https://www.jool.mx/";
     description = "Fairly compliant SIIT and Stateful NAT64 for Linux - kernel modules";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];

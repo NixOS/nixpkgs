@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "a C runtime library for AVR microcontrollers";
-    homepage = https://savannah.nongnu.org/projects/avr-libc/;
+    homepage = "https://savannah.nongnu.org/projects/avr-libc/";
     license = licenses.bsd3;
     platforms = [ "avr-none" ];
     maintainers = with maintainers; [ mguentner ];

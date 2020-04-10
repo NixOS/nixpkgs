@@ -43,7 +43,7 @@ stdenv.mkDerivation rec{
 
   meta = with lib; {
     description = "A linter for Clojure code that sparks joy.";
-    homepage = https://github.com/borkdude/clj-kondo;
+    homepage = "https://github.com/borkdude/clj-kondo";
     license = licenses.epl10;
     platforms = graalvm8.meta.platforms;
     maintainers = with maintainers; [ jlesquembre bandresen ];

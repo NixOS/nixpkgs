@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Java-based solution for accessing, manipulating, and outputting XML data from Java code";
-    homepage = http://www.jdom.org;
+    homepage = "http://www.jdom.org";
     platforms = platforms.unix;
     license = licenses.bsdOriginal;
   };

@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A collection of small bash scripts for heavy terminal users";
-    homepage = https://github.com/alexanderepstein/Bash-Snippets;
+    homepage = "https://github.com/alexanderepstein/Bash-Snippets";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.unix;

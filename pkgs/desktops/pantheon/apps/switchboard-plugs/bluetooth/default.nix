@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Bluetooth Plug";
-    homepage = https://github.com/elementary/switchboard-plug-bluetooth;
+    homepage = "https://github.com/elementary/switchboard-plug-bluetooth";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

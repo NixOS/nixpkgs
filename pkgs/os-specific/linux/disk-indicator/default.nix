@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/MeanEYE/Disk-Indicator;
+    homepage = "https://github.com/MeanEYE/Disk-Indicator";
     description = "A program that will turn a LED into a hard disk indicator";
     longDescription = ''
       Small program for Linux that will turn your Scroll, Caps or Num Lock LED

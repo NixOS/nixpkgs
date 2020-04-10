@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       scanbd can use all sane-backends or some special backends from the (old)
       scanbuttond project. 
     '';
-    homepage = http://scanbd.sourceforge.net/;
+    homepage = "http://scanbd.sourceforge.net/";
     downloadPage = https://sourceforge.net/projects/scanbd/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

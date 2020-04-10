@@ -12,7 +12,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ uutf re ];
 
   meta = with lib; {
-    homepage = http://ocsigen.org/tyxml/;
+    homepage = "http://ocsigen.org/tyxml/";
     description = "A library that makes it almost impossible for your OCaml programs to generate wrong XML output, using static typing";
     license = licenses.lgpl21;
     maintainers = with maintainers; [

@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
+    homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21;
     platforms = platforms.linux;

@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       Nexuiz project with years of development between them, and it
       aims to become the best possible open-source FPS of its kind.
     '';
-    homepage = http://www.xonotic.org;
+    homepage = "http://www.xonotic.org";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ astsmtl zalakain ];
     platforms = stdenv.lib.platforms.linux;

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "GUI tool for avrdude";
-    homepage = http://avr8-burn-o-mat.aaabbb.de/avr8_burn_o_mat_avrdude_gui_en.html;
+    homepage = "http://avr8-burn-o-mat.aaabbb.de/avr8_burn_o_mat_avrdude_gui_en.html";
     license = stdenv.lib.licenses.gpl3;
     platforms = platforms.all;
   };

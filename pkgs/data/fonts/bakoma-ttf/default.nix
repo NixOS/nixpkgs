@@ -15,6 +15,6 @@ fetchzip {
 
   meta = {
     description = "TrueType versions of the Computer Modern and AMS TeX Fonts";
-    homepage = http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/;
+    homepage = "http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/";
   };
 }

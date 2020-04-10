@@ -29,7 +29,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A graphical implementation of the Shogi board game, also known as Japanese Chess";
-    homepage = http://johncheetham.com/projects/gshogi/;
+    homepage = "http://johncheetham.com/projects/gshogi/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.ciil ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl_1_0_2 pcsclite ];
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/p/globalplatform/wiki/Home/;
+    homepage = "https://sourceforge.net/p/globalplatform/wiki/Home/";
     description = "Library for interacting with smart card devices";
     license = licenses.gpl3;
     platforms = platforms.linux;

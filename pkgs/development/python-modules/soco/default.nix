@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = http://python-soco.com/;
+    homepage = "http://python-soco.com/";
     description = "A CLI and library to control Sonos speakers";
     license = lib.licenses.mit;
   };

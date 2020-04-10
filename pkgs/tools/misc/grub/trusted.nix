@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";
-    homepage = https://github.com/Sirrix-AG/TrustedGRUB2;
+    homepage = "https://github.com/Sirrix-AG/TrustedGRUB2";
     license = licenses.gpl3Plus;
     platforms = platforms.gnu ++ platforms.linux;
   };

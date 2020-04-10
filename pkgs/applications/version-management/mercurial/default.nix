@@ -56,7 +56,7 @@ in python3Packages.buildPythonApplication rec {
   meta = {
     inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = https://www.mercurial-scm.org;
+    homepage = "https://www.mercurial-scm.org";
     downloadPage = https://www.mercurial-scm.org/release/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];

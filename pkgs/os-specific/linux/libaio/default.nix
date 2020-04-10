@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for asynchronous I/O in Linux";
-    homepage = http://lse.sourceforge.net/io/aio.html;
+    homepage = "http://lse.sourceforge.net/io/aio.html";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ ];

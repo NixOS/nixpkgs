@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool and library for managing Microsoft Windows Dynamic Disks";
-    homepage = https://github.com/mdbooth/libldm;
+    homepage = "https://github.com/mdbooth/libldm";
     maintainers = with maintainers; [ jensbin ];
     license = licenses.gpl3;
     platforms = platforms.linux;

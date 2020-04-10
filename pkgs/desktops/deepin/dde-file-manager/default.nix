@@ -251,7 +251,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File manager and desktop module for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/dde-file-manager;
+    homepage = "https://github.com/linuxdeepin/dde-file-manager";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

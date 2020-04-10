@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python framework for building Desktop applications";
-    homepage = https://github.com/Ultimaker/Uranium;
+    homepage = "https://github.com/Ultimaker/Uranium";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar gebner ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://telepathy.freedesktop.org/components/telepathy-gabble/;
+    homepage = "https://telepathy.freedesktop.org/components/telepathy-gabble/";
     description = "Jabber/XMPP connection manager for the Telepathy framework";
     license = licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;

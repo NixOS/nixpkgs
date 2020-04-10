@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       it is, in its new avatar “Shantz XWinWrap”.
     '';
     license = licenses.hpnd;
-    homepage = https://shantanugoel.com/2008/09/03/shantz-xwinwrap/;
+    homepage = "https://shantanugoel.com/2008/09/03/shantz-xwinwrap/";
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.linux;
   };

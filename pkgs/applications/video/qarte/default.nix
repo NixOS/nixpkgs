@@ -33,7 +33,7 @@ in mkDerivation {
   '';
 
   meta = {
-    homepage = https://launchpad.net/qarte;
+    homepage = "https://launchpad.net/qarte";
     description = "A recorder for Arte TV Guide and Arte Concert";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ vbgl ];

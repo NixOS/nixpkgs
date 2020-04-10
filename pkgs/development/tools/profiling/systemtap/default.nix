@@ -40,7 +40,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   inherit stapBuild kernelBuildDir;
   buildInputs = [ makeWrapper ];
   meta = {
-    homepage = https://sourceware.org/systemtap/;
+    homepage = "https://sourceware.org/systemtap/";
     repositories.git = url;
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;

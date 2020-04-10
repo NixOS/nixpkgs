@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An extensible editor for OpenStreetMap";
-    homepage = https://josm.openstreetmap.de/;
+    homepage = "https://josm.openstreetmap.de/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;

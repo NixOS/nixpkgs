@@ -29,7 +29,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   meta = with lib; {
-    homepage = https://github.com/thebigmunch/google-music-proto;
+    homepage = "https://github.com/thebigmunch/google-music-proto";
     description = "Sans-I/O wrapper of Google Music API calls";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

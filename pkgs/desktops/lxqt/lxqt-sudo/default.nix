@@ -29,7 +29,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "GUI frontend for sudo/su";
-    homepage = https://github.com/lxqt/lxqt-sudo;
+    homepage = "https://github.com/lxqt/lxqt-sudo";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

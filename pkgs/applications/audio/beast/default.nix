@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A music composition and modular synthesis application";
-    homepage = http://beast.gtk.org;
+    homepage = "http://beast.gtk.org";
     license = with licenses; [ gpl2 lgpl21 ];
     broken = true;
   };

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pnpnpn/retry-decorator;
+    homepage = "https://github.com/pnpnpn/retry-decorator";
     description = "Retry Decorator for python functions";
     license = licenses.mit;
   };

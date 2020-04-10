@@ -24,7 +24,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt5 Configuration Tool";
-    homepage = https://www.opendesktop.org/content/show.php?content=168066;
+    homepage = "https://www.opendesktop.org/content/show.php?content=168066";
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ ralith ];

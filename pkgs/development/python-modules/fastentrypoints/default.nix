@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Makes entry_points specified in setup.py load more quickly";
-    homepage = https://github.com/ninjaaron/fast-entry_points;
+    homepage = "https://github.com/ninjaaron/fast-entry_points";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nixy ];
   };

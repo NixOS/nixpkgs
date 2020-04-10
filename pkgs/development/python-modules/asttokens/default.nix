@@ -24,7 +24,7 @@ buildPythonPackage rec {
   checkInputs = [ coverage nose ];
 
   meta = with lib; {
-    homepage = https://github.com/gristlabs/asttokens;
+    homepage = "https://github.com/gristlabs/asttokens";
     description = "Annotate Python AST trees with source text and token information";
     license = licenses.asl20;
     platforms = platforms.all;

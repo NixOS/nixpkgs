@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
   meta = with lib; {
     description = "Pure effects for Python";
-    homepage = https://github.com/python-effect/effect;
+    homepage = "https://github.com/python-effect/effect";
     license = licenses.mit;
   };
 }

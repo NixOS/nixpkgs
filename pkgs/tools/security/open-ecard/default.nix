@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Client side implementation of the eCard-API-Framework (BSI
       TR-03112) and related international standards, such as ISO/IEC 24727";
-    homepage = https://www.openecard.org/;
+    homepage = "https://www.openecard.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ sephalon ];
     platforms = platforms.linux;

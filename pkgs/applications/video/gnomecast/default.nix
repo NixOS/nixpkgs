@@ -22,7 +22,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A native Linux GUI for Chromecasting local files";
-    homepage = https://github.com/keredson/gnomecast;
+    homepage = "https://github.com/keredson/gnomecast";
     license = with licenses; [ gpl3 ];
   };
 }

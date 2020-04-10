@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = http://furius.ca/beancount/;
+    homepage = "http://furius.ca/beancount/";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
         A double-entry bookkeeping computer language that lets you define

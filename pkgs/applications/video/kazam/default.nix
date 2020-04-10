@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A screencasting program created with design in mind";
-    homepage = https://code.launchpad.net/kazam;
+    homepage = "https://code.launchpad.net/kazam";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];

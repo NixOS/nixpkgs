@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.minizinc.org/;
+    homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
 
     longDescription = ''

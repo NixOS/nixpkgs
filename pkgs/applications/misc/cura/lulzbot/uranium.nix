@@ -29,7 +29,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "A Python framework for building Desktop applications";
-    homepage = https://code.alephobjects.com/diffusion/U/;
+    homepage = "https://code.alephobjects.com/diffusion/U/";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];

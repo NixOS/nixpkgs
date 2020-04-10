@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Beej’s Guide to Network Programming";
-    homepage = https://beej.us/guide/bgnet/;
+    homepage = "https://beej.us/guide/bgnet/";
     license = lib.licenses.unfree;
 
     maintainers = with lib.maintainers; [ Profpatsch ];

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.linphone.org/;
+    homepage = "https://www.linphone.org/";
     description = "Open source SIP phone for voice/video calls and instant messaging";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

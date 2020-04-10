@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
       It is the core base of a complete business solution providing
       modularity, scalability and security.
     '';
-    homepage = http://www.tryton.org/;
+    homepage = "http://www.tryton.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ johbo udono ];
   };

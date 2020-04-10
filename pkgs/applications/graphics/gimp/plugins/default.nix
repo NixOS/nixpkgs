@@ -56,7 +56,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     hardeningDisable = [ "format" ];
     meta = with stdenv.lib; {
       description = "The GIMP Animation Package";
-      homepage = https://www.gimp.org;
+      homepage = "https://www.gimp.org";
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
       # falls inside "free".
       license = with licenses; [ gpl3 free ];
@@ -189,7 +189,7 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
     meta = {
       description = "GIMP plugin to correct lens distortion using the lensfun library and database";
 
-      homepage = http://lensfun.sebastiankraft.net/;
+      homepage = "http://lensfun.sebastiankraft.net/";
 
       license = stdenv.lib.licenses.gpl3Plus;
       maintainers = [ ];

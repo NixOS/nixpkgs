@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       programming (which is both efficient and syntactically affordable in
       C++11).
     '';
-    homepage = https://fcppt.org;
+    homepage = "https://fcppt.org";
     license = licenses.boost;
     maintainers = with maintainers; [ pmiddend ];
     platforms = platforms.linux;

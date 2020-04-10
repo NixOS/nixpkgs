@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Store data using OCaml notation";
-    homepage = https://forge.ocamlcore.org/projects/odn/;
+    homepage = "https://forge.ocamlcore.org/projects/odn/";
     license = licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [

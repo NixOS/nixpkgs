@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://pam-mount.sourceforge.net/;
+    homepage = "http://pam-mount.sourceforge.net/";
     description = "PAM module to mount volumes for a user session";
     maintainers = [ maintainers.tstrobel ];
     license = with licenses; [ gpl2 gpl3 lgpl21 lgpl3 ];

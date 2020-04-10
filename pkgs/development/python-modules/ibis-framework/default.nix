@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Productivity-centric Python Big Data Framework";
-    homepage = https://github.com/ibis-project/ibis;
+    homepage = "https://github.com/ibis-project/ibis";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

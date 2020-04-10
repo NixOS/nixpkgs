@@ -104,7 +104,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Unified Linux Driver for Samsung printers and scanners";
-    homepage = http://www.bchemnet.com/suldr;
+    homepage = "http://www.bchemnet.com/suldr";
     downloadPage = http://www.bchemnet.com/suldr/driver/;
     license = licenses.unfree;
 

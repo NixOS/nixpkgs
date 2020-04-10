@@ -56,7 +56,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://github.com/sieren/QSyncthingTray/;
+    homepage = "https://github.com/sieren/QSyncthingTray/";
     description = "A Traybar Application for Syncthing written in C++";
     longDescription = ''
         A cross-platform status bar for Syncthing.

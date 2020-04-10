@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://android.googlesource.com/platform/external/minijail/;
+    homepage = "https://android.googlesource.com/platform/external/minijail/";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [pcarrier];

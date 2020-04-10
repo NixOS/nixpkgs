@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;{
     description = "Belcard is a C++ library to manipulate VCard standard format";
-    homepage = https://github.com/BelledonneCommunications/belcard;
+    homepage = "https://github.com/BelledonneCommunications/belcard";
     license = licenses.lgpl21;
     platforms = platforms.all;
   };

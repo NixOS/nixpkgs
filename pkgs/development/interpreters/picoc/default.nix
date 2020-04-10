@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       very sparing of data space. This means it can work well in small embedded
       devices.
     '';
-    homepage = https://github.com/zsaleeba/picoc;
+    homepage = "https://github.com/zsaleeba/picoc";
     downloadPage = https://code.google.com/p/picoc/downloads/list;
     license = licenses.bsd3;
     platforms = platforms.linux;

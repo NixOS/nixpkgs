@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       Library was meant to be an alternative to the official libmatroska library.
       It is written in plain C, and intended to be very portable.
     '';
-    homepage = https://github.com/saintdev/libmkv;
+    homepage = "https://github.com/saintdev/libmkv";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.wmertens ];
     platforms = stdenv.lib.platforms.unix;

@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "UI for Parity. Fast, light, robust Ethereum implementation";
-    homepage = http://parity.io;
+    homepage = "http://parity.io";
     license = licenses.gpl3;
     maintainers = [ maintainers.sorpaas ];
     platforms = platforms.linux;

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison flex ];
 
   meta = {
-    homepage = http://pcalc.sourceforge.net/;
+    homepage = "http://pcalc.sourceforge.net/";
     description = "Programmer's calculator";
     license = licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ftrvxmtrx ];

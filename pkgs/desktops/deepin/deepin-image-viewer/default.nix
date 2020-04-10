@@ -45,7 +45,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Image Viewer for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-image-viewer;
+    homepage = "https://github.com/linuxdeepin/deepin-image-viewer";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     badPlatforms = [ "aarch64-linux" ]; # See https://github.com/NixOS/nixpkgs/pull/46463#issuecomment-420274189

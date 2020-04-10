@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   installPhase   = "ocaml setup.ml -install";
 
   meta = with stdenv.lib; {
-    homepage = http://oasis.forge.ocamlcore.org/;
+    homepage = "http://oasis.forge.ocamlcore.org/";
     description = "Configure, build and install system for OCaml projects";
     license = licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];

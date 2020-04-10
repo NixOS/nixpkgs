@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Modular patch bay for Jack and ALSA systems";
-    homepage = http://non.tuxfamily.org;
+    homepage = "http://non.tuxfamily.org";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

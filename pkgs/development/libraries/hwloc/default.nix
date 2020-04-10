@@ -80,7 +80,7 @@ in stdenv.mkDerivation {
 
     # https://www.open-mpi.org/projects/hwloc/license.php
     license = licenses.bsd3;
-    homepage = https://www.open-mpi.org/projects/hwloc/;
+    homepage = "https://www.open-mpi.org/projects/hwloc/";
     maintainers = with maintainers; [ fpletz markuskowa ];
     platforms = platforms.all;
   };

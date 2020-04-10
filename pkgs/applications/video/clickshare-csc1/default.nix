@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.barco.com/de/support/clickshare-csc-1/drivers;
+    homepage = "https://www.barco.com/de/support/clickshare-csc-1/drivers";
     downloadPage = https://www.barco.com/de/Support/software/R33050020;
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = lib.licenses.unfree;

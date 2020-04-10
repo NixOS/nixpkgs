@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The not-so trivial database";
-    homepage = https://tdb.samba.org/;
+    homepage = "https://tdb.samba.org/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
   };

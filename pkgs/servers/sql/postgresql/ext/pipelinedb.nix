@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High-performance time-series aggregation for PostgreSQL";
-    homepage = https://www.pipelinedb.com/;
+    homepage = "https://www.pipelinedb.com/";
     license = licenses.asl20;
     platforms = postgresql.meta.platforms;
     maintainers = [ maintainers.marsam ];

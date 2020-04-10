@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp automake autoconf libtool openssl glib ];
   
   meta = {
-    homepage = https://github.com/falsovsky/FiSH-irssi;
+    homepage = "https://github.com/falsovsky/FiSH-irssi";
     license = stdenv.lib.licenses.unfree; # I can't find any mention of license
     maintainers = with stdenv.lib.maintainers; [viric];
   };

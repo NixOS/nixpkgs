@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Music notation and composition software";
-    homepage = https://musescore.org/;
+    homepage = "https://musescore.org/";
     license = licenses.gpl2;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ yurrriq ];

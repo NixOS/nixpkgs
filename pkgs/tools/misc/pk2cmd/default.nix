@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   buildInputs = [ libusb makeWrapper ];
 
   meta = {
-    homepage = https://www.microchip.com/pickit2;
+    homepage = "https://www.microchip.com/pickit2";
     license = stdenv.lib.licenses.unfree; #MicroChip-PK2
     description = "Microchip PIC programming software for the PICKit2 programmer";
   };

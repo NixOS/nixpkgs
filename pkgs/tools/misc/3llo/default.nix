@@ -25,7 +25,7 @@ bundlerApp {
   meta = with lib; {
     description = "Trello interactive CLI on terminal";
     license = licenses.mit;
-    homepage = https://github.com/qcam/3llo;
+    homepage = "https://github.com/qcam/3llo";
     maintainers = with maintainers; [ ];
   };
 }

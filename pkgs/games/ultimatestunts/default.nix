@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.ultimatestunts.nl/;
+    homepage = "http://www.ultimatestunts.nl/";
     description = "Remake of the popular racing DOS-game Stunts";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];

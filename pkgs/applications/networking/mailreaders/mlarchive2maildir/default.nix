@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/flokli/mlarchive2maildir;
+    homepage = "https://github.com/flokli/mlarchive2maildir";
     description = "Imports mail from (pipermail) archives into a maildir";
     license = licenses.mit;
     maintainers = with maintainers; [ andir flokli ];

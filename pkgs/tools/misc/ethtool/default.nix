@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utility for controlling network drivers and hardware";
-    homepage = https://www.kernel.org/pub/software/network/ethtool/;
+    homepage = "https://www.kernel.org/pub/software/network/ethtool/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

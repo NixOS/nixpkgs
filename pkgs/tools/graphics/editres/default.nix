@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
-    homepage = https://cgit.freedesktop.org/xorg/app/editres/;
+    homepage = "https://cgit.freedesktop.org/xorg/app/editres/";
     description = "A dynamic resource editor for X Toolkit applications";
     license = licenses.mit;
     platforms = platforms.linux;

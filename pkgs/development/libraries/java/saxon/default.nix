@@ -28,7 +28,7 @@ let
 
       meta = with stdenv.lib; {
         inherit description license;
-        homepage = http://saxon.sourceforge.net/;
+        homepage = "http://saxon.sourceforge.net/";
         maintainers = with maintainers; [ rvl ];
         platforms = platforms.all;
       };

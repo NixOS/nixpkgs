@@ -17,7 +17,7 @@ in fetchzip {
   sha256 = "11jd50cqiq2s0z39rclg73iiw2j5yzgs1glfs9psw5wbbisgysmr";
 
   meta = with lib; {
-    homepage = https://adobe-fonts.github.io/source-sans-pro/;
+    homepage = "https://adobe-fonts.github.io/source-sans-pro/";
     description = "A set of OpenType fonts designed by Adobe for UIs";
     license = licenses.ofl;
     platforms = platforms.all;

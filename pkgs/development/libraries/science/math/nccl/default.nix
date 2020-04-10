@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
-    homepage = https://developer.nvidia.com/nccl;
+    homepage = "https://developer.nvidia.com/nccl";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mdaiter orivej ];

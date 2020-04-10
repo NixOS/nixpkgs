@@ -39,7 +39,7 @@ let
       };
       meta = with stdenv.lib; {
         description = "Hunspell dictionary for ${shortDescription} from rla";
-        homepage = https://github.com/sbosio/rla-es;
+        homepage = "https://github.com/sbosio/rla-es";
         license = with licenses; [ gpl3 lgpl3 mpl11 ];
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
@@ -121,7 +121,7 @@ let
       meta = with stdenv.lib; {
         inherit longDescription;
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = https://www.dicollecte.org/home.php?prj=fr;
+        homepage = "https://www.dicollecte.org/home.php?prj=fr";
         license = licenses.mpl20;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
@@ -150,7 +150,7 @@ let
       readmeFile = "README_" + dictFileName + ".txt";
       meta = with stdenv.lib; {
         description = "Hunspell dictionary for ${shortDescription} from Wordlist";
-        homepage = http://wordlist.aspell.net/;
+        homepage = "http://wordlist.aspell.net/";
         license = licenses.bsd3;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
@@ -177,7 +177,7 @@ let
       readmeFile = dictFileName + "_README.txt";
       meta = with stdenv.lib; {
         description = "Hunspell dictionary for ${shortDescription}";
-        homepage = https://sourceforge.net/projects/linguistico/;
+        homepage = "https://sourceforge.net/projects/linguistico/";
         license = licenses.gpl3;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
@@ -218,7 +218,7 @@ let
       '';
 
       meta = with stdenv.lib; {
-        homepage = http://xuxen.eus/;
+        homepage = "http://xuxen.eus/";
         description = shortDescription;
         longDescription = longDescription;
         license = licenses.gpl2;
@@ -255,7 +255,7 @@ let
       '';
 
       meta = with stdenv.lib; {
-        homepage = https://www.j3e.de/ispell/igerman98/index_en.html;
+        homepage = "https://www.j3e.de/ispell/igerman98/index_en.html";
         description = shortDescription;
         license = with licenses; [ gpl2 gpl3 ];
         maintainers = with maintainers; [ timor ];
@@ -284,7 +284,7 @@ let
         cp -a ${sourceRoot}/* .
       '';
       meta = with stdenv.lib; {
-        homepage = https://wiki.documentfoundation.org/Development/Dictionaries;
+        homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
         description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
         license = license;
         maintainers = with maintainers; [ vlaci ];
@@ -716,7 +716,7 @@ in rec {
 
     meta = with stdenv.lib; {
       description = "Hunspell dictionary for Ukrainian (Ukraine) from LibreOffice";
-      homepage = https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/;
+      homepage = "https://extensions.libreoffice.org/extensions/ukrainian-spelling-dictionary-and-thesaurus/";
       license = licenses.mpl20;
       maintainers = with maintainers; [ dywedir ];
       platforms = platforms.all;

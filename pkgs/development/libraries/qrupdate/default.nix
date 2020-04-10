@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Library for fast updating of qr and cholesky decompositions";
-    homepage = https://sourceforge.net/projects/qrupdate/;
+    homepage = "https://sourceforge.net/projects/qrupdate/";
     license = licenses.gpl3;
     platforms = platforms.unix;
   };

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Interface to scripting languages, including JSR-223";
-    homepage = http://commons.apache.org/proper/commons-bsf/;
+    homepage = "http://commons.apache.org/proper/commons-bsf/";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
   };

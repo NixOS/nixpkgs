@@ -51,7 +51,7 @@ let
 
     meta = {
       description = "a well known password manager";
-      homepage = https://www.enpass.io/;
+      homepage = "https://www.enpass.io/";
       license = lib.licenses.unfree;
       platforms = [ "x86_64-linux" "i686-linux"];
     };

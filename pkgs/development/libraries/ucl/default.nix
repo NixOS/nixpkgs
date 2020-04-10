@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-std=c90";
 
   meta = {
-    homepage = http://www.oberhumer.com/opensource/ucl/;
+    homepage = "http://www.oberhumer.com/opensource/ucl/";
     description = "Portable lossless data compression library";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

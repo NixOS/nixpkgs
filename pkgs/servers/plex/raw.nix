@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   dontAutoPatchelf = true;
 
   meta = with stdenv.lib; {
-    homepage = https://plex.tv/;
+    homepage = "https://plex.tv/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [

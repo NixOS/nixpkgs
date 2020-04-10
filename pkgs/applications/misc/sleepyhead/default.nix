@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://sleepyhead.jedimark.net/;
+    homepage = "https://sleepyhead.jedimark.net/";
     description = "Review and explore data produced by CPAP and related machines";
     longDescription = ''
       SleepyHead is cross platform, opensource sleep tracking program for reviewing CPAP and Oximetry data, which are devices used in the treatment of Sleep Disorders like Obstructive Sleep Apnea.

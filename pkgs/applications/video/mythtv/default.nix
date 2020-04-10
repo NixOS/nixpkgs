@@ -37,7 +37,7 @@ mkDerivation rec {
     ++ stdenv.lib.optionals (!enableXnvctrl) [  "--disable-xnvctrl" ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.mythtv.org/;
+    homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
     license = licenses.gpl2;
     platforms = platforms.linux;

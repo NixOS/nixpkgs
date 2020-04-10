@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Cross platform, open source library for generating PDF files";
-    homepage = http://libharu.org/;
+    homepage = "http://libharu.org/";
     license = stdenv.lib.licenses.zlib;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.unix;

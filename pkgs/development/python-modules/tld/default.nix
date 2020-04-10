@@ -30,7 +30,7 @@ python.pkgs.buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/barseghyanartur/tld;
+    homepage = "https://github.com/barseghyanartur/tld";
     description = "Extracts the top level domain (TLD) from the URL given";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ genesis ];

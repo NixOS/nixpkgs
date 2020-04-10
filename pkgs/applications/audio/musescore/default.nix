@@ -31,7 +31,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Music notation and composition software";
-    homepage = https://musescore.org/;
+    homepage = "https://musescore.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ vandenoever ];
     platforms = platforms.linux;

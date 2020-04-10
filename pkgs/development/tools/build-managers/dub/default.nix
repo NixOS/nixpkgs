@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Package and build manager for D applications and libraries";
-    homepage = http://code.dlang.org/;
+    homepage = "http://code.dlang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ ThomasMader ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];

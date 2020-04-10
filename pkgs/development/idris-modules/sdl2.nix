@@ -29,7 +29,7 @@ build-idris-package rec {
 
   meta = {
     description = "SDL2 binding for Idris";
-    homepage = https://github.com/steshaw/idris-sdl2;
+    homepage = "https://github.com/steshaw/idris-sdl2";
     maintainers = with lib.maintainers; [
       brainrape
       steshaw

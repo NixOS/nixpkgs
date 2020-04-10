@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Quick-n-dirty BSD licensed clone of the GNU libc backtrace facility";
     license = licenses.bsd2;
-    homepage = https://www.freshports.org/devel/libexecinfo;
+    homepage = "https://www.freshports.org/devel/libexecinfo";
     maintainers = with maintainers; [ dtzWill ];
   };
 }

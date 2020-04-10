@@ -43,7 +43,7 @@ in stdenvNoCC.mkDerivation rec {
 
   meta = with stdenvNoCC.lib; {
     description = "Cursors Based on Bibata";
-    homepage = https://github.com/KaizIqbal/Bibata_Extra_Cursor;
+    homepage = "https://github.com/KaizIqbal/Bibata_Extra_Cursor";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill ];

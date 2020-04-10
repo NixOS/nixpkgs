@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   checkTarget = "testall";
 
   meta = {
-    homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
+    homepage = "http://www.xs4all.nl/~mmzeeman/ocaml/";
     description = "An ocaml wrapper for the Expat XML parsing library";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.roconnor ];

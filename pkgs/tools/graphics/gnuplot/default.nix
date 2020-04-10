@@ -59,7 +59,7 @@ in
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = http://www.gnuplot.info/;
+    homepage = "http://www.gnuplot.info/";
     description = "A portable command-line driven graphing utility for many platforms";
     platforms = platforms.linux ++ platforms.darwin;
     license = {

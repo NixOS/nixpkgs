@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/yoriyuki/Camomile/tree/master/Camomile;
+    homepage = "https://github.com/yoriyuki/Camomile/tree/master/Camomile";
     description = "A comprehensive Unicode library for OCaml";
     license = stdenv.lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];

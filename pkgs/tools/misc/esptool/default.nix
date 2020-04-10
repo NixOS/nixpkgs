@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "ESP8266 and ESP32 serial bootloader utility";
-    homepage = https://github.com/espressif/esptool;
+    homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2;
     maintainers = with maintainers; [ dezgeg dotlambda ];
     platforms = platforms.linux;

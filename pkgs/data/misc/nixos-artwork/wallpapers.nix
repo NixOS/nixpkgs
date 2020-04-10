@@ -24,7 +24,7 @@ _EOF
 
       meta = with stdenv.lib; {
         inherit description;
-        homepage = https://github.com/NixOS/nixos-artwork;
+        homepage = "https://github.com/NixOS/nixos-artwork";
         license = licenses.free;
         platforms = platforms.all;
       };

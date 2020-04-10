@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-D__LIB=lib" ];
 
   meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/cgit/devel/pahole/pahole.git/;
+    homepage = "https://git.kernel.org/cgit/devel/pahole/pahole.git/";
     description = "Pahole and other DWARF utils";
     license = licenses.gpl2;
 

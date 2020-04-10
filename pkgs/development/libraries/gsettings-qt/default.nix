@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Qt/QML bindings for GSettings";
-    homepage = https://launchpad.net/gsettings-qt;
+    homepage = "https://launchpad.net/gsettings-qt";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

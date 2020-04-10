@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Fuzzy string matching for Python";
-    homepage = https://github.com/seatgeek/fuzzywuzzy;
+    homepage = "https://github.com/seatgeek/fuzzywuzzy";
     license = licenses.gpl2;
     maintainers = with maintainers; [ earvstedt ];
   };

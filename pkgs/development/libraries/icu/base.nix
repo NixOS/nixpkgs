@@ -44,7 +44,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Unicode and globalization support library";
-      homepage = http://site.icu-project.org/;
+      homepage = "http://site.icu-project.org/";
       maintainers = with maintainers; [ raskin ];
       platforms = platforms.all;
     };

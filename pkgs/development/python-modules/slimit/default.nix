@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "JavaScript minifier";
-    homepage = https://slimit.readthedocs.org/;
+    homepage = "https://slimit.readthedocs.org/";
     license = licenses.mit;
   };
 }

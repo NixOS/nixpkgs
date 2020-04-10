@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Janet programming language";
-    homepage = https://janet-lang.org/;
+    homepage = "https://janet-lang.org/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ andrewchambers ];

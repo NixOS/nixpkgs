@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An abstract syntax tree for Python with inference support";
-    homepage = https://github.com/PyCQA/astroid;
+    homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ nand0p ];

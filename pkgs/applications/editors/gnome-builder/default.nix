@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
       currently recommend running gnome-builder inside a nix-shell with
       appropriate dependencies loaded.
     '';
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://wiki.gnome.org/Apps/Builder";
     license = licenses.gpl3Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

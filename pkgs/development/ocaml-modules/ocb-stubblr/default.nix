@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "OCamlbuild plugin for C stubs";
-    homepage = https://github.com/pqwy/ocb-stubblr;
+    homepage = "https://github.com/pqwy/ocb-stubblr";
     license = stdenv.lib.licenses.isc;
     inherit (ocaml.meta) platforms;
     maintainers = [ stdenv.lib.maintainers.vbgl ];

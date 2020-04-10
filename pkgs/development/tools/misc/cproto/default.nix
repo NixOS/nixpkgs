@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool to generate C function prototypes from C source code";
-    homepage = https://invisible-island.net/cproto/;
+    homepage = "https://invisible-island.net/cproto/";
     license = licenses.publicDomain;
     platforms = platforms.linux;
   };

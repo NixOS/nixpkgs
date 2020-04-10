@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmnl libnfnetlink ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.netfilter.org/projects/libnetfilter_queue/;
+    homepage = "http://www.netfilter.org/projects/libnetfilter_queue/";
     description = "Userspace API to packets queued by the kernel packet filter";
     license = licenses.gpl2;
     platforms = platforms.linux;

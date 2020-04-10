@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/pyreport;
+    homepage = "https://pypi.python.org/pypi/pyreport";
     license = licenses.bsd0;
     description = "Pyreport makes notes out of a python script";
   };

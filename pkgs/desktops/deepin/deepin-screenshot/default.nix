@@ -52,7 +52,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Easy-to-use screenshot tool for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-screenshot;
+    homepage = "https://github.com/linuxdeepin/deepin-screenshot";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo flokli ];

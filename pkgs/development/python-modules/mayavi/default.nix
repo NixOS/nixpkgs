@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "3D visualization of scientific data in Python";
-    homepage = https://github.com/enthought/mayavi;
+    homepage = "https://github.com/enthought/mayavi";
     maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
   };

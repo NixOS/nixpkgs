@@ -84,7 +84,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "Load testing software for Web applications to realistically simulate user activity and analyze server behavior";
 
-    homepage = https://www.neotys.com/product/overview-neoload.html;
+    homepage = "https://www.neotys.com/product/overview-neoload.html";
 
     # https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
     license = stdenv.lib.licenses.unfree;

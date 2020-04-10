@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A MASM-compatible x86 assembler";
-    homepage = http://jwasm.github.io/;
+    homepage = "http://jwasm.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.darwin ++ platforms.linux;

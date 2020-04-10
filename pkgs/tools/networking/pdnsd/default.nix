@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Permanent DNS caching";
-    homepage = http://members.home.nl/p.a.rombouts/pdnsd;
+    homepage = "http://members.home.nl/p.a.rombouts/pdnsd";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [viric];

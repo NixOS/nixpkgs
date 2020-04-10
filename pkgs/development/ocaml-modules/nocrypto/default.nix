@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) installPhase;
 
   meta = {
-    homepage = https://github.com/mirleft/ocaml-nocrypto;
+    homepage = "https://github.com/mirleft/ocaml-nocrypto";
     description = "Simplest possible crypto to support TLS";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

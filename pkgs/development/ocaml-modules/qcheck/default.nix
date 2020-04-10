@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "QuickCheck inspired property-based testing for OCaml";
-    homepage = https://github.com/c-cube/qcheck/;
+    homepage = "https://github.com/c-cube/qcheck/";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
     platforms = ocaml.meta.platforms or [];

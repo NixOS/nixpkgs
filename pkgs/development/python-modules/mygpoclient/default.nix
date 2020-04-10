@@ -25,7 +25,7 @@ buildPythonPackage rec {
         The mygpoclient library allows developers to utilize a Pythonic interface
         to the gpodder.net web services.
     '';
-    homepage = https://github.com/gpodder/mygpoclient;
+    homepage = "https://github.com/gpodder/mygpoclient";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ skeidel ];
   };

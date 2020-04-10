@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       simultaneous scan jobs, image transformation jobs (deskew, binarize,
       crop, etc), PDF and PNG output.
     '';
-    homepage = http://swingsane.com/;
+    homepage = "http://swingsane.com/";
     license = licenses.asl20;
     platforms = platforms.all;
   };

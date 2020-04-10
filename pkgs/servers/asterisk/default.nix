@@ -72,7 +72,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Software implementation of a telephone private branch exchange (PBX)";
-      homepage = https://www.asterisk.org/;
+      homepage = "https://www.asterisk.org/";
       license = licenses.gpl2;
       maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
     };

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
       FreePOPs is an extensible pop3 server. Its main purpose is to provide
       a pop3 interface to a webmail.
     '';
-    homepage = http://www.freepops.org/;
+    homepage = "http://www.freepops.org/";
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ pierron ];
     broken = true;

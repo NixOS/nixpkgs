@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/libtirpc/;
+    homepage = "https://sourceforge.net/projects/libtirpc/";
     description = "The transport-independent Sun RPC implementation (TI-RPC)";
     license = licenses.bsd3;
     platforms = platforms.linux;

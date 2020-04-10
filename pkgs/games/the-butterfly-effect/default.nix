@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A physics-based game vaguely similar to Incredible Machine";
-    homepage = http://the-butterfly-effect.org/;
+    homepage = "http://the-butterfly-effect.org/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;

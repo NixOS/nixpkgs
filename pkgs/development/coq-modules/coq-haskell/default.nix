@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jwiegley/coq-haskell;
+    homepage = "https://github.com/jwiegley/coq-haskell";
     description = "A library for formalizing Haskell types and functions in Coq";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

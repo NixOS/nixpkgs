@@ -13,7 +13,7 @@ buildPerlPackage {
   buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey ];
   meta = {
     description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
-    homepage = http://www.percona.com/software/percona-toolkit;
+    homepage = "http://www.percona.com/software/percona-toolkit";
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ izorkin ];
   };

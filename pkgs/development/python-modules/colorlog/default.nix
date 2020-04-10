@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Log formatting with colors";
-    homepage = https://github.com/borntyping/python-colorlog;
+    homepage = "https://github.com/borntyping/python-colorlog";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

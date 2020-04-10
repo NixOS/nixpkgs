@@ -17,7 +17,7 @@ fetchzip {
   sha256 = "07kl82ngby55khvzsvn831ddpc0q8djgz2y6gsjixkyjfdk2xjjm";
 
   meta = with stdenv.lib; {
-    homepage = http://www.paratype.ru/public/;
+    homepage = "http://www.paratype.ru/public/";
     description = "An open Paratype font";
 
     license = "Open Paratype license";

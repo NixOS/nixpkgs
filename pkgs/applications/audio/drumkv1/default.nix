@@ -15,7 +15,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "An old-school drum-kit sampler synthesizer with stereo fx";
-    homepage = http://drumkv1.sourceforge.net/;
+    homepage = "http://drumkv1.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

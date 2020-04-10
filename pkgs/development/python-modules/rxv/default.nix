@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automation Library for Yamaha RX-V473, RX-V573, RX-V673, RX-V773 receivers";
-    homepage = https://github.com/wuub/rxv;
+    homepage = "https://github.com/wuub/rxv";
     license = licenses.mit;
     maintainers = with maintainers; [ flyfloh ];
   };

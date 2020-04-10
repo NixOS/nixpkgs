@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "MacBook automatic light sensor daemon";
-    homepage = https://github.com/poliva/lightum;
+    homepage = "https://github.com/poliva/lightum";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     platforms = stdenv.lib.platforms.linux;

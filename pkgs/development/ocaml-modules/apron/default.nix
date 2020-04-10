@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = stdenv.lib.licenses.lgpl21;
-    homepage = http://apron.cri.ensmp.fr/library/;
+    homepage = "http://apron.cri.ensmp.fr/library/";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     description = "Numerical abstract domain library";
     inherit (ocaml.meta) platforms;

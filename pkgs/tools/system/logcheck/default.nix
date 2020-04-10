@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       Logcheck helps spot problems and security violations in your logfiles automatically and will send the results to you by e-mail.
       Logcheck was part of the Abacus Project of security tools, but this version has been rewritten.
     '';
-    homepage = https://salsa.debian.org/debian/logcheck;
+    homepage = "https://salsa.debian.org/debian/logcheck";
     license = licenses.gpl2;
     maintainers = [ maintainers.bluescreen303 ];
   };

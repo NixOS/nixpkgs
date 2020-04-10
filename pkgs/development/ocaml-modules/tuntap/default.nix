@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Bindings to the UNIX tuntap facility";
     license = stdenv.lib.licenses.isc;
-    homepage = https://github.com/mirage/ocaml-tuntap;
+    homepage = "https://github.com/mirage/ocaml-tuntap";
     inherit (ocaml.meta) platforms;
   };
 

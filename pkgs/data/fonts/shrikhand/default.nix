@@ -12,7 +12,7 @@ in fetchzip {
   sha256 = "0s54k9cs1g2yz6lwg5gakqb12vg5qkfdz3pc8mh7mib2s6q926hs";
 
   meta = with lib; {
-    homepage = https://jonpinhorn.github.io/shrikhand/;
+    homepage = "https://jonpinhorn.github.io/shrikhand/";
     description = "A vibrant and playful typeface for both Latin and Gujarati writing systems";
     maintainers = with maintainers; [ sternenseemann ];
     platforms = platforms.all;

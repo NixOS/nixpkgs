@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.pcre.org/;
+    homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
     license = stdenv.lib.licenses.bsd3;
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An extendable open source continuous integration server";
-    homepage = https://jenkins-ci.org;
+    homepage = "https://jenkins-ci.org";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ coconnor fpletz earldouglas ];

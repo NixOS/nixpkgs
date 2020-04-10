@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/AsamK/signal-cli;
+    homepage = "https://github.com/AsamK/signal-cli";
     description = "Command-line and dbus interface for communicating with the Signal messaging service";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ivan erictapen ];

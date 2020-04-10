@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://www.openssl.org/;
+    homepage = "https://www.openssl.org/";
     description = "A cryptographic library that implements the SSL and TLS protocols";
     platforms = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.cstrahan ];

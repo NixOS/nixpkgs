@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = http://pymssql.org/en/stable/;
+    homepage = "http://pymssql.org/en/stable/";
     description = "A simple database interface for Python that builds on top
       of FreeTDS to provide a Python DB-API (PEP-249) interface to Microsoft
       SQL Server";

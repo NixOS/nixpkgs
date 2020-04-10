@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       It drives the braille display, and provides complete screen review functionality.
       Some speech capability has also been incorporated.
     '';
-    homepage = http://www.brltty.com/;
+    homepage = "http://www.brltty.com/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bramd ];
     platforms = stdenv.lib.platforms.all;

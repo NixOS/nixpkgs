@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Allows you to compose wallpapers ('root pixmaps') for X";
-    homepage = https://thegraveyard.org/hsetroot.html;
+    homepage = "https://thegraveyard.org/hsetroot.html";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.henrytill ];
     platforms = platforms.unix;

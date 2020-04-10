@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";
-    homepage = https://github.com/rwengine/openrw;
+    homepage = "https://github.com/rwengine/openrw";
     license = licenses.gpl3;
     longDescription = ''
       OpenRW is an open source re-implementation of Rockstar Games' Grand Theft

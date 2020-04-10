@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/Plymouth;
+    homepage = "http://www.freedesktop.org/wiki/Software/Plymouth";
     description = "A graphical boot animation";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

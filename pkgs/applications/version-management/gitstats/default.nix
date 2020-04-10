@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://gitstats.sourceforge.net/;
+    homepage = "http://gitstats.sourceforge.net/";
     description = "Git history statistics generator";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

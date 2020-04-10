@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Media Meta Data retrieval framework";
-    homepage = https://sourceforge.net/projects/mmpython/;
+    homepage = "https://sourceforge.net/projects/mmpython/";
     license = licenses.gpl2;
   };
 

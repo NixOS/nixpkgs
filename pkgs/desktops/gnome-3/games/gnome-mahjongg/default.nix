@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Mahjongg;
+    homepage = "https://wiki.gnome.org/Apps/Mahjongg";
     description = "Disassemble a pile of tiles by removing matching pairs";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

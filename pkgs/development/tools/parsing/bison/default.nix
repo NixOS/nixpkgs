@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails
 
   meta = {
-    homepage = https://www.gnu.org/software/bison/;
+    homepage = "https://www.gnu.org/software/bison/";
     description = "Yacc-compatible parser generator";
     license = stdenv.lib.licenses.gpl3Plus;
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simulator daemon for autonomous sailing boats";
-    homepage = https://github.com/sails-simulator/sailsd;
+    homepage = "https://github.com/sails-simulator/sailsd";
     license = licenses.gpl3;
     longDescription = ''
       Sails is a simulator designed to test the AI of autonomous sailing

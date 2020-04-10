@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Small CLI utility to scan DVB and ATSC transmissions";
-    homepage = http://wirbel.htpc-forum.de/w_scan/index_en.html;
+    homepage = "http://wirbel.htpc-forum.de/w_scan/index_en.html";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ] ;
     license = stdenv.lib.licenses.gpl2;

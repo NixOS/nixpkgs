@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "git static site generator";
-    homepage = https://git.codemadness.org/stagit/;
+    homepage = "https://git.codemadness.org/stagit/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ jb55 ];

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
-    homepage = https://github.com/meejah/txtorcon;
+    homepage = "https://github.com/meejah/txtorcon";
     maintainers = with lib.maintainers; [ jluttine ];
     # Currently broken on Python 2.7. See
     # https://github.com/NixOS/nixpkgs/issues/71826

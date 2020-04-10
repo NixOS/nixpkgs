@@ -12,7 +12,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ pyserial pyudev ];
 
   meta = with lib; {
-    homepage = https://github.com/dhylands/rshell;
+    homepage = "https://github.com/dhylands/rshell";
     description = "Remote Shell for MicroPython";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];

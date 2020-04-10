@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ SDL SDL_mixer zlib ];
      
   meta = {
-     homepage = http://karimmi.de/cuyo;
+     homepage = "http://karimmi.de/cuyo";
      description = "Stacking blocks game, with different rules for each level";
      license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

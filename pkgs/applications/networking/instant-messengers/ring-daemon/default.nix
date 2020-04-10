@@ -140,7 +140,7 @@ stdenv.mkDerivation {
       graphical user interfaces and even scripts to control the daemon from the
       shell.
     '';
-    homepage = https://ring.cx;
+    homepage = "https://ring.cx";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch ];
     platforms = platforms.linux;

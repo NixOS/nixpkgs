@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "CLI utility to find duplicate files";
-    homepage = http://www.virkki.com/dupd;
+    homepage = "http://www.virkki.com/dupd";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
   };

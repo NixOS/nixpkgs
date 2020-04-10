@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/intel/gmmlib;
+    homepage = "https://github.com/intel/gmmlib";
     license = licenses.mit;
     description = "Intel Graphics Memory Management Library";
     platforms = [ "x86_64-linux" ];

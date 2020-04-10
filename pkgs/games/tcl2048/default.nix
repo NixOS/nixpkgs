@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/dbohdan/2048.tcl;
+    homepage = "https://github.com/dbohdan/2048.tcl";
     description = "The game of 2048 implemented in Tcl";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

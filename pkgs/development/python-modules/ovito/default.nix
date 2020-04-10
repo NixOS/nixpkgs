@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Scientific visualization and analysis software for atomistic simulation data";
-    homepage = https://www.ovito.org;
+    homepage = "https://www.ovito.org";
     license = licenses.gpl3;
     maintainers = [ maintainers.costrouc ];
     # ensures not built on hydra

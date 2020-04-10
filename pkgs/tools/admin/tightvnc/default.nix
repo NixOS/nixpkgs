@@ -69,7 +69,7 @@ stdenv.mkDerivation {
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://vnc-tight.sourceforge.net/;
+    homepage = "http://vnc-tight.sourceforge.net/";
     description = "Improved version of VNC";
 
     longDescription = ''

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Modern XMPP IRC gateway";
     platforms = platforms.unix;
-    homepage = https://lab.louiz.org/louiz/biboumi;
+    homepage = "https://lab.louiz.org/louiz/biboumi";
     license = licenses.zlib;
     maintainers = [ maintainers.woffs ];
   };

@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://dianne.skoll.ca/projects/remind/;
+    homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [raskin kovirobi];

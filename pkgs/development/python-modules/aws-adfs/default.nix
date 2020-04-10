@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line tool to ease aws cli authentication against ADFS";
-    homepage = https://github.com/venth/aws-adfs;
+    homepage = "https://github.com/venth/aws-adfs";
     license = licenses.psfl;
     maintainers = [ maintainers.bhipple ];
   };

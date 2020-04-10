@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Fill the cup to inhibit auto suspend and screensaver";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
-    homepage = https://github.com/eonpatapon/gnome-shell-extension-caffeine;
+    homepage = "https://github.com/eonpatapon/gnome-shell-extension-caffeine";
   };
 }

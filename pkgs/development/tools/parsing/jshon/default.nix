@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    homepage = http://kmkeen.com/jshon;
+    homepage = "http://kmkeen.com/jshon";
     description = "JSON parser designed for maximum convenience within the shell";
     license = licenses.free;
     platforms = platforms.all;

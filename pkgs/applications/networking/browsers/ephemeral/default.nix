@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The always-incognito web browser";
-    homepage = https://github.com/cassidyjames/ephemeral;
+    homepage = "https://github.com/cassidyjames/ephemeral";
     maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;

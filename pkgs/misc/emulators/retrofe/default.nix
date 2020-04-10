@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A frontend for arcade cabinets and media PCs";
-    homepage = http://retrofe.com;
+    homepage = "http://retrofe.com";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];
     platforms = with platforms; linux;

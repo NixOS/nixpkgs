@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Extract, clean, transform, hyphenate and metadata for ISBNs";
-    homepage = https://github.com/xlcnd/isbnlib;
+    homepage = "https://github.com/xlcnd/isbnlib";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -41,7 +41,7 @@ let generic = { major, version, src }:
         finds structures that satisfy them. Structures are displayed graphically,
         and their appearance can be customized for the domain at hand.
       '';
-      homepage = http://alloytools.org/;
+      homepage = "http://alloytools.org/";
       downloadPage = http://alloytools.org/download.html;
       license = licenses.mit;
       platforms = platforms.linux;

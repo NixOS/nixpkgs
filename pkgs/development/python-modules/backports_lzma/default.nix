@@ -29,7 +29,7 @@ if !(pythonOlder "3.3") then null else buildPythonPackage rec {
 
   meta = {
     description = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files";
-    homepage = https://github.com/peterjc/backports.lzma;
+    homepage = "https://github.com/peterjc/backports.lzma";
     license = lib.licenses.bsd3;
   };
 }

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
   meta = {
-    homepage = https://www.cyrusimap.org/sasl;
+    homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
     license = licenses.bsdOriginal;

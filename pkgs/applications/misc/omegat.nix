@@ -32,7 +32,7 @@ stdenv.mkDerivation {
       tool with fuzzy matching, translation memory, keyword search, glossaries, and
       translation leveraging into updated projects.
     '';
-    homepage = http://www.omegat.org/;
+    homepage = "http://www.omegat.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ t184256 ];
     platforms = [ "i686-linux" "x86_64-linux" ];

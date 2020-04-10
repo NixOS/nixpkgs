@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/travitch/whole-program-llvm;
+    homepage = "https://github.com/travitch/whole-program-llvm";
     description = "A wrapper script to build whole-program LLVM bitcode files";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 dtzWill ];

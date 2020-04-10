@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib;{
     description = "Audibilization and Visualization of Sorting Algorithms";
-    homepage = http://panthema.net/2013/sound-of-sorting/;
+    homepage = "http://panthema.net/2013/sound-of-sorting/";
     license = with licenses; gpl3;
     maintainers = with maintainers; [ AndersonTorres ];
   };

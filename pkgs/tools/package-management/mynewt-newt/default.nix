@@ -27,7 +27,7 @@ buildGoModule rec {
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
-    homepage = https://mynewt.apache.org/;
+    homepage = "https://mynewt.apache.org/";
     description = "Build and package management tool for embedded development.";
     longDescription = ''
       Apache Newt is a smart build and package management tool,

@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
         - play cooperatively controlling the same business
         - observe as spectators
     '';
-    homepage = https://www.openttd.org/;
+    homepage = "https://www.openttd.org/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jcumming the-kenny fpletz ];

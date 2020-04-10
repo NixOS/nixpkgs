@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mobile broadband service provider database";
-    homepage = https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders;
+    homepage = "https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders";
     license = licenses.publicDomain;
     maintainers = [ ];
     platforms = platforms.all;

@@ -187,7 +187,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.qemu.org/;
+    homepage = "http://www.qemu.org/";
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco ];

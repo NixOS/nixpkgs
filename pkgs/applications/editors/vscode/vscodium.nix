@@ -49,7 +49,7 @@ in
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences
       '';
-      homepage = https://github.com/VSCodium/vscodium;
+      homepage = "https://github.com/VSCodium/vscodium";
       downloadPage = https://github.com/VSCodium/vscodium/releases;
       license = licenses.mit;
       maintainers = with maintainers; [ synthetica ];

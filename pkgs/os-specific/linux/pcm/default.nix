@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Processor counter monitor";
-    homepage = https://www.intel.com/software/pcm;
+    homepage = "https://www.intel.com/software/pcm";
     license = licenses.bsd3;
     maintainers = with maintainers; [ roosemberth ];
     platforms = [ "x86_64-linux" ];

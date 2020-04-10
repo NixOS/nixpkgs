@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   installTargets = [ "install" "install.man" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sigmavirus24/x11-ssh-askpass;
+    homepage = "https://github.com/sigmavirus24/x11-ssh-askpass";
     description = "Lightweight passphrase dialog for OpenSSH or other open variants of SSH";
     license = licenses.mit;
     platforms = platforms.unix;

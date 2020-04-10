@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
       a multitude of file types. rga wraps the awesome ripgrep and enables it
       to search in pdf, docx, sqlite, jpg, movie subtitles (mkv, mp4), etc.
     '';
-    homepage = https://github.com/phiresky/ripgrep-all;
+    homepage = "https://github.com/phiresky/ripgrep-all";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ zaninime ma27 ];
     platforms = platforms.all;

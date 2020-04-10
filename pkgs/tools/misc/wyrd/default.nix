@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       flashy GUI dialogs. Rather, Wyrd is designed to make you more
       efficient at editing your reminder files directly.
     '';
-    homepage = http://pessimization.com/software/wyrd/;
+    homepage = "http://pessimization.com/software/wyrd/";
     downloadPage = http://pessimization.com/software/wyrd/;
     license = licenses.gpl2;
     maintainers = [ maintainers.prikhi ];

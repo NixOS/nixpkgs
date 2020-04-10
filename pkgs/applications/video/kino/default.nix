@@ -88,7 +88,7 @@ stdenv.mkDerivation {
 
   meta = {
       description = "Non-linear DV editor for GNU/Linux";
-      homepage = http://www.kinodv.org/;
+      homepage = "http://www.kinodv.org/";
       license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

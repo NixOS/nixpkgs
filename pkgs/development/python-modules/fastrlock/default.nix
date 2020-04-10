@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/scoder/fastrlock;
+    homepage = "https://github.com/scoder/fastrlock";
     description = "A fast RLock implementation for CPython";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];

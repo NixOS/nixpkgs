@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Display unicode character properties";
-    homepage = https://github.com/garabik/unicode;
+    homepage = "https://github.com/garabik/unicode";
     license = licenses.gpl3;
     maintainers = [ maintainers.woffs ];
     platforms = platforms.all;

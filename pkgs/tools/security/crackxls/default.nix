@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/GavinSmith0123/crackxls2003/;
+    homepage = "https://github.com/GavinSmith0123/crackxls2003/";
     description = "Used to break the encryption on old Microsoft Excel and Microsoft Word files";
     platforms = platforms.linux;
     license = licenses.gpl3;

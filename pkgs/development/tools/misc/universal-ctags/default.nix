@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A maintained ctags implementation";
-    homepage = https://ctags.io/;
+    homepage = "https://ctags.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     # universal-ctags is preferred over emacs's ctags

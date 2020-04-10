@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description =
       "Accelerate Complex C++ Applications on Heterogeneous Compute Systems using Open Standards";
-    homepage = https://www.codeplay.com/products/computesuite/computecpp;
+    homepage = "https://www.codeplay.com/products/computesuite/computecpp";
     license = licenses.unfree;
     maintainers = with maintainers; [ davidtwco ];
     platforms = [ "x86_64-linux" ];

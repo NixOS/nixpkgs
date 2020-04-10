@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   patches = [./malloc.patch];
 
   meta = {
-    homepage = https://replace.richardlloyd.org.uk/;
+    homepage = "https://replace.richardlloyd.org.uk/";
     description = "A tool to replace verbatim strings";
     platforms = stdenv.lib.platforms.unix;
   };

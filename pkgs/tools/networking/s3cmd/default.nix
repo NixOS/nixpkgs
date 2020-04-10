@@ -14,7 +14,7 @@ python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python2Packages; [ python_magic dateutil ];
 
   meta = with stdenv.lib; {
-    homepage = http://s3tools.org/;
+    homepage = "http://s3tools.org/";
     description = "A command-line tool to manipulate Amazon S3 buckets";
     license = licenses.gpl2;
     maintainers = [ maintainers.spwhitt ];

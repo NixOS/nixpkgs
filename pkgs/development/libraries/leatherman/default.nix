@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/puppetlabs/leatherman/;
+    homepage = "https://github.com/puppetlabs/leatherman/";
     description = "A collection of C++ and CMake utility libraries";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];

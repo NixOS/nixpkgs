@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     isExecutable = true;
     libraryHaskellDepends = [ base containers mtl parsec syb ];
     executableHaskellDepends = [ base ];
-    homepage = https://github.com/plclub/lngen;
+    homepage = "https://github.com/plclub/lngen";
     description = "Tool for generating Locally Nameless definitions and proofs in Coq, working together with Ott";
     license = stdenv.lib.licenses.mit;
   };
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/plclub/metalib;
+    homepage = "https://github.com/plclub/metalib";
     license = licenses.mit;
     maintainers = [ maintainers.jwiegley ];
     platforms = coq.meta.platforms;

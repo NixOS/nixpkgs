@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Highly dynamic multi-platform foreign function call interface library";
-    homepage = https://www.dyncall.org;
+    homepage = "https://www.dyncall.org";
     license = licenses.isc;
     maintainers = with maintainers; [ dtzWill ];
   };

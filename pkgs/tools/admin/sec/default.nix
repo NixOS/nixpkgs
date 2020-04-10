@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://simple-evcorr.github.io;
+    homepage = "https://simple-evcorr.github.io";
     license = stdenv.lib.licenses.gpl2;
     description = "Simple Event Correlator";
     maintainers = [ stdenv.lib.maintainers.tv ];

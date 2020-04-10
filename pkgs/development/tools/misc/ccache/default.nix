@@ -71,7 +71,7 @@ let ccache = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
-    homepage = http://ccache.samba.org/;
+    homepage = "http://ccache.samba.org/";
     downloadPage = https://ccache.samba.org/download.html;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

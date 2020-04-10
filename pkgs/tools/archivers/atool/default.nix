@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   configureScript = "${bash}/bin/bash configure";
 
   meta = {
-    homepage = https://www.nongnu.org/atool;
+    homepage = "https://www.nongnu.org/atool";
     description = "Archive command line helper";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl3;

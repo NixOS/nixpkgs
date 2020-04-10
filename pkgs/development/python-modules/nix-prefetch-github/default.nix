@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Prefetch sources from github";
-    homepage = https://github.com/seppeljordan/nix-prefetch-github;
+    homepage = "https://github.com/seppeljordan/nix-prefetch-github";
     license = licenses.gpl3;
     maintainers = with maintainers; [ seppeljordan ];
   };

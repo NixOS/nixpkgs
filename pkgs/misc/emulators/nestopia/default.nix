@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://0ldsk00l.ca/nestopia/;
+    homepage = "http://0ldsk00l.ca/nestopia/";
     description = "NES emulator with a focus on accuracy";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

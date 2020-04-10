@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = !isPy3k;
 
   meta = {
-    homepage = https://github.com/erezsh/plyplus;
+    homepage = "https://github.com/erezsh/plyplus";
     description = "A general-purpose parser built on top of PLY";
     maintainers = with lib.maintainers; [ twey ];
     license = lib.licenses.mit;

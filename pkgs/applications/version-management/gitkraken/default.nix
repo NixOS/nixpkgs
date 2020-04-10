@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.gitkraken.com/;
+    homepage = "https://www.gitkraken.com/";
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
     license = licenses.unfree;
     platforms = platforms.linux;

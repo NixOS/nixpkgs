@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   installPhase = "make install-system";
 
   meta = with stdenv.lib; {
-    homepage = http://plugin.org.uk;
+    homepage = "http://plugin.org.uk";
     description = "LV2 version of Steve Harris' SWH plugins";
     longDescription = ''
       SWH plugins include:

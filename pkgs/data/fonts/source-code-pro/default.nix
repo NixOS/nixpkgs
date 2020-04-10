@@ -18,7 +18,7 @@ in fetchzip {
     description = "A set of monospaced OpenType fonts designed for coding environments";
     maintainers = with lib.maintainers; [ relrod ];
     platforms = with lib.platforms; all;
-    homepage = https://adobe-fonts.github.io/source-code-pro/;
+    homepage = "https://adobe-fonts.github.io/source-code-pro/";
     license = lib.licenses.ofl;
   };
 }

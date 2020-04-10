@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
      longDescription = ''
        Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
      '';
-     homepage = https://babluboy.github.io/bookworm/;
+     homepage = "https://babluboy.github.io/bookworm/";
      license = licenses.gpl3Plus;
      platforms = platforms.linux;
    };

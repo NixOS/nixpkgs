@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Alternative MSN protocol plug-in for Pidgin IM";
-    homepage = https://github.com/felipec/msn-pecan;
+    homepage = "https://github.com/felipec/msn-pecan";
     platforms = stdenv.lib.platforms.linux;
   };
 

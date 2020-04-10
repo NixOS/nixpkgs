@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A static code analysis tool for Crystal";
-    homepage = https://crystal-ameba.github.io;
+    homepage = "https://crystal-ameba.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ kimburgess ];
   };

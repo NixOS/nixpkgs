@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
   passthru.updateScript = gnome3.updateScript { packageName = pname; };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/GNOME-LaTeX;
+    homepage = "https://wiki.gnome.org/Apps/GNOME-LaTeX";
     description = "A LaTeX editor for the GNOME desktop";
     maintainers = [ maintainers.manveru ];
     license = licenses.gpl3Plus;

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "RAW converter and digital photo processing software";
-    homepage = http://www.rawtherapee.com/;
+    homepage = "http://www.rawtherapee.com/";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ jcumming mahe the-kenny ];
     platforms = with stdenv.lib.platforms; linux;

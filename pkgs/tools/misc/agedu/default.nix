@@ -27,7 +27,7 @@ stdenv.mkDerivation {
        agedu uses this information to tell you which files waste disk space when
        you haven't used them since a long time.
     '';
-    homepage = https://www.chiark.greenend.org.uk/~sgtatham/agedu/;
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/agedu/";
     license = licenses.mit;
     maintainers = with maintainers; [ symphorien ];
     platforms = platforms.linux;

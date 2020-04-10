@@ -162,7 +162,7 @@ let
       ''; # */
 
     meta = {
-      homepage = https://www.perl.org/;
+      homepage = "https://www.perl.org/";
       description = "The standard implementation of the Perl 5 programmming language";
       license = licenses.artistic1;
       maintainers = [ maintainers.eelco ];

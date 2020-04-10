@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
-    homepage = https://github.com/elementary/terminal;
+    homepage = "https://github.com/elementary/terminal";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

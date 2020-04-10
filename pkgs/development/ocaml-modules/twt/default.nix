@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    homepage = http://people.csail.mit.edu/mikelin/ocaml+twt/;
+    homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
     description = "“The Whitespace Thing” for OCaml";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];

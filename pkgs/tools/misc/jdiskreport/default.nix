@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.jgoodies.com/freeware/jdiskreport/;
+    homepage = "http://www.jgoodies.com/freeware/jdiskreport/";
     description = "A graphical utility to visualize disk usage";
     license = licenses.unfreeRedistributable; #TODO freedist, libs under BSD-3
     platforms = [ "x86_64-linux" ];

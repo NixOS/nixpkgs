@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       (merge, sort etc.) the dictionaries formatted for SKK Japanese
       input method.
     '';
-    homepage = https://github.com/skk-dev/skktools;
+    homepage = "https://github.com/skk-dev/skktools";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

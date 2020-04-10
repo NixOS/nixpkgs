@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Containerized Data Analytics";
-    homepage = https://github.com/pachyderm/pachyderm;
+    homepage = "https://github.com/pachyderm/pachyderm";
     license = licenses.asl20;
     maintainers = with maintainers; [offline];
   };

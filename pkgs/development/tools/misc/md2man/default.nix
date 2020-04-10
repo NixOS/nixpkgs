@@ -18,7 +18,7 @@ buildGoPackage rec {
   meta = {
     description = "Go tool to convert markdown to man pages";
     license = licenses.mit;
-    homepage = https://github.com/cpuguy83/go-md2man;
+    homepage = "https://github.com/cpuguy83/go-md2man";
     maintainers = with maintainers; [offline];
     platforms = platforms.unix;
   };

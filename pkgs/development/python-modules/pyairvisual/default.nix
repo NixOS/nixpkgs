@@ -25,6 +25,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A thin Python wrapper for the AirVisual API";
     license = licenses.mit;
-    homepage = https://github.com/bachya/pyairvisual;
+    homepage = "https://github.com/bachya/pyairvisual";
   };
 }

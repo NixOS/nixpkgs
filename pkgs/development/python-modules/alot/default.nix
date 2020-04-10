@@ -66,7 +66,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pazz/alot;
+    homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
     license = licenses.gpl3;
     platforms = platforms.linux;

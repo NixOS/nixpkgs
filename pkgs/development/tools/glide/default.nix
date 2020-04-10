@@ -19,7 +19,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://glide.sh;
+    homepage = "https://glide.sh";
     description = "Package management for Go";
     license = licenses.mit;
     maintainers = [ maintainers.rushmorem ];

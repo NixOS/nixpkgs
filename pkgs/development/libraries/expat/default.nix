@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.libexpat.org/;
+    homepage = "http://www.libexpat.org/";
     description = "A stream-oriented XML parser library written in C";
     platforms = platforms.all;
     license = licenses.mit; # expat version

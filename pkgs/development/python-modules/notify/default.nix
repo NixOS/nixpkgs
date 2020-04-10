@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Python bindings for libnotify";
-    homepage = http://www.galago-project.org/;
+    homepage = "http://www.galago-project.org/";
     license = licenses.lgpl3;
   };
 

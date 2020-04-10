@@ -117,7 +117,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Go-lang bindings for dde-daemon";
-    homepage = https://github.com/linuxdeepin/dde-api;
+    homepage = "https://github.com/linuxdeepin/dde-api";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

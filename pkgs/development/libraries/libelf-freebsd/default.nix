@@ -27,7 +27,7 @@ stdenv.mkDerivation (rec {
   meta = {
     description = "Essential compilation tools and libraries for building and analyzing ELF based program images";
 
-    homepage = https://sourceforge.net/p/elftoolchain/wiki/Home/;
+    homepage = "https://sourceforge.net/p/elftoolchain/wiki/Home/";
 
     license = stdenv.lib.licenses.bsd2;
 

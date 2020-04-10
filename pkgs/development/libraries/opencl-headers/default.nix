@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Khronos OpenCL headers version ${version}";
-    homepage = https://www.khronos.org/registry/cl/;
+    homepage = "https://www.khronos.org/registry/cl/";
     license = licenses.mit;
     platforms = platforms.unix;
   };

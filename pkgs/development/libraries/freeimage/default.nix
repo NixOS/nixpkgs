@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Open Source library for accessing popular graphics image file formats";
-    homepage = http://freeimage.sourceforge.net/;
+    homepage = "http://freeimage.sourceforge.net/";
     license = "GPL";
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; unix;

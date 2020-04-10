@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GNU MIX Development Kit (MDK)";
-    homepage = https://www.gnu.org/software/mdk/;
+    homepage = "https://www.gnu.org/software/mdk/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };

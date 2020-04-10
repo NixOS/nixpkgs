@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://devel.tlrmx.org/audio/bitmeter/;
+    homepage = "http://devel.tlrmx.org/audio/bitmeter/";
     description = "Also known as jack bitscope. Useful to detect denormals";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

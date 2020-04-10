@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
        and try to boil down Scala’s types into a smaller set of more fundamental constructs.
        The theory behind these constructs is researched in DOT, a calculus for dependent object types.
     '';
-    homepage = http://dotty.epfl.ch/;
+    homepage = "http://dotty.epfl.ch/";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [maintainers.karolchmist maintainers.virusdave];

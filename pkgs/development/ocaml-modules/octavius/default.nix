@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
 	meta = {
 		description = "Ocamldoc comment syntax parser";
-		homepage = https://github.com/ocaml-doc/octavius;
+		homepage = "https://github.com/ocaml-doc/octavius";
 		license = stdenv.lib.licenses.isc;
 		maintainers = [ stdenv.lib.maintainers.vbgl ];
 		inherit (ocaml.meta) platforms;

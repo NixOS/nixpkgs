@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkgconfig docbook_xsl git ];
   
   meta = with stdenv.lib; {
-    homepage = https://github.com/Grumbel/sdl-jstest;
+    homepage = "https://github.com/Grumbel/sdl-jstest";
     description = "Simple SDL joystick test application for the console";
     license = licenses.gpl3;
     platforms = platforms.linux;

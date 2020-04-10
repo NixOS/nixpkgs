@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkPhase = ''pytest >/dev/null || pytest'';
 
   meta = {
-   homepage = https://github.com/jpvanhal/inflection;
+   homepage = "https://github.com/jpvanhal/inflection";
    description = "A port of Ruby on Rails inflector to Python";
    maintainers = with lib.maintainers; [ NikolaMandic ilya-kolpakov ];
    license = lib.licenses.mit;

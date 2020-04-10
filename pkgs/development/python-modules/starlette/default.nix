@@ -59,7 +59,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://www.starlette.io/;
+    homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

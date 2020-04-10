@@ -17,7 +17,7 @@ python3Packages.buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
 
   meta = with stdenv.lib; {
-    homepage = https://amanusk.github.io/s-tui/;
+    homepage = "https://amanusk.github.io/s-tui/";
     description = "Stress-Terminal UI monitoring tool";
     license = licenses.gpl2;
     maintainers = with maintainers; [ infinisil ];

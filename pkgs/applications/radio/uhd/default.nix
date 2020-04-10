@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
       USRP devices are designed and sold by Ettus Research, LLC and its parent
       company, National Instruments.
     '';
-    homepage = https://uhd.ettus.com/;
+    homepage = "https://uhd.ettus.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz tomberek ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation  rec {
 
   meta = with stdenv.lib; {
     description = "A simple but fully featured LV2 host for Jack";
-    homepage = http://drobilla.net/software/jalv;
+    homepage = "http://drobilla.net/software/jalv";
     license = licenses.isc;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

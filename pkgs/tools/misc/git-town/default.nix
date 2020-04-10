@@ -17,7 +17,7 @@
 
     meta = with stdenv.lib; {
       description = "Generic, high-level git support for git-flow workflows";
-      homepage = http://www.git-town.com/;
+      homepage = "http://www.git-town.com/";
       maintainers = [ maintainers.allonsy ];
       license = licenses.mit;
     };

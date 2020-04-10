@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mpris2 Client for Plasma5";
-    homepage = https://github.com/audoban/PlayBar2;
+    homepage = "https://github.com/audoban/PlayBar2";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pjones ];

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   meta = { 
     description = "Serial line sniffer";
-    homepage = http://slsnif.sourceforge.net/;
+    homepage = "http://slsnif.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

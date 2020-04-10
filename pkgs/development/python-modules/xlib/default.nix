@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Fully functional X client library for Python programs";
-    homepage = http://python-xlib.sourceforge.net/;
+    homepage = "http://python-xlib.sourceforge.net/";
     license = licenses.gpl2Plus;
   };
 

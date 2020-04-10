@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://yapsy.sourceforge.net/;
+    homepage = "http://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
     license = licenses.bsd0;
   };

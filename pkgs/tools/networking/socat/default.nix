@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A utility for bidirectional data transfer between two independent data channels";
-    homepage = http://www.dest-unreach.org/socat/;
+    homepage = "http://www.dest-unreach.org/socat/";
     repositories.git = git://repo.or.cz/socat.git;
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2;

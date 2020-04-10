@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "An icon taskbar for Gnome Shell";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mounium ];
-    homepage = https://github.com/jderose9/dash-to-panel;
+    homepage = "https://github.com/jderose9/dash-to-panel";
   };
 }

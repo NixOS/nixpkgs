@@ -44,7 +44,7 @@ assert enableQt -> qwt != null;
   NIX_CFLAGS_COMPILE="-Wno-unused";
 
   meta = with stdenv.lib; {
-    homepage = https://www.cgsecurity.org/wiki/Main_Page;
+    homepage = "https://www.cgsecurity.org/wiki/Main_Page";
     downloadPage = https://www.cgsecurity.org/wiki/TestDisk_Download;
     description = "Testdisk / Photorec - Data recovery utilities";
     longDescription = ''

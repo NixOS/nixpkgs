@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = http://cernlib.web.cern.ch;
+    homepage = "http://cernlib.web.cern.ch";
     description = "Legacy collection of libraries and modules for data analysis in high energy physics";
     broken = stdenv.isDarwin;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

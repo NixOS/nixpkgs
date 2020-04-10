@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/celery/py-amqp;
+    homepage = "https://github.com/celery/py-amqp";
     description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
     license = licenses.lgpl21;
   };

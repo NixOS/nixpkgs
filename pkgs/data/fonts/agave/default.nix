@@ -17,7 +17,7 @@ in fetchurl {
 
   meta = with lib; {
     description = "truetype monospaced typeface designed for X environments";
-    homepage = https://b.agaric.net/page/agave;
+    homepage = "https://b.agaric.net/page/agave";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

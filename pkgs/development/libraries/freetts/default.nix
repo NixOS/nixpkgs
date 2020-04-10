@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       Can be used in combination with KDE accessibility.
     '';
     license = "GPL";
-    homepage = http://freetts.sourceforge.net;
+    homepage = "http://freetts.sourceforge.net";
     maintainers = [ lib.maintainers.sander ];
   };
 }

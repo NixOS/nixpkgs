@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Golang security checker";
-    homepage = https://github.com/securego/gosec;
+    homepage = "https://github.com/securego/gosec";
     license = licenses.asl20 ;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

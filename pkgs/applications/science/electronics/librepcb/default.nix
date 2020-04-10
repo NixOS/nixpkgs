@@ -31,7 +31,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "A free EDA software to develop printed circuit boards";
-    homepage = https://librepcb.org/;
+    homepage = "https://librepcb.org/";
     maintainers = with maintainers; [ luz ];
     license = licenses.gpl3;
     platforms = platforms.linux;

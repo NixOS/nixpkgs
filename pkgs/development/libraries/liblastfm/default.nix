@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/lastfm/liblastfm;
+    homepage = "https://github.com/lastfm/liblastfm";
     repositories.git = git://github.com/lastfm/liblastfm.git;
     description = "Official LastFM library";
     inherit (qt4.meta) platforms;

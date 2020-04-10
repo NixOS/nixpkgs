@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   passthru.grubTarget = "";
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/grub;
+    homepage = "https://www.gnu.org/software/grub";
     description = "GRand Unified Bootloader";
     license = licenses.gpl2;
     platforms = platforms.linux;

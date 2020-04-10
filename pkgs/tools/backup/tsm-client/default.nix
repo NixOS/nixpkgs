@@ -53,7 +53,7 @@
 let
 
   meta = {
-    homepage = https://www.ibm.com/us-en/marketplace/data-protection-and-recovery;
+    homepage = "https://www.ibm.com/us-en/marketplace/data-protection-and-recovery";
     downloadPage = https://www-01.ibm.com/support/docview.wss?uid=swg21239415;
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.unfree;

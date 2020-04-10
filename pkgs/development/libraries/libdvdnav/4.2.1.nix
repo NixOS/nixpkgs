@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://dvdnav.mplayerhq.hu/;
+    homepage = "http://dvdnav.mplayerhq.hu/";
     description = "A library that implements DVD navigation features such as DVD menus";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.wmertens ];

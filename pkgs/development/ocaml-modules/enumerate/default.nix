@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://ocaml.janestreet.com/;
+    homepage = "https://ocaml.janestreet.com/";
     description = "Quotation expanders for enumerating finite types";
     license = stdenv.lib.licenses.asl20;
     platforms = ocaml.meta.platforms or [];

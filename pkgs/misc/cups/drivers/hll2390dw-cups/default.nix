@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother HL-L2390DW combined print driver";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "Type-safe physical computations and unit conversions in Idris";
-    homepage = https://github.com/timjb/quantities;
+    homepage = "https://github.com/timjb/quantities";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ imuli ];
   };

@@ -6,7 +6,7 @@ fetchzip {
 
   meta = with stdenv.lib; {
     description = "Library to Instrument Executable Formats";
-    homepage = https://lief.quarkslab.com/;
+    homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.lassulus ];

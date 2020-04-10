@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://subsonic.org;
+    homepage = "http://subsonic.org";
     description = "Personal media streamer";
     license = licenses.unfree;
     maintainers = with maintainers; [ telotortium ];

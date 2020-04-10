@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "A partial implementation of Protocol Buffers in Idris";
-    homepage = https://github.com/artagnon/idris-protobuf;
+    homepage = "https://github.com/artagnon/idris-protobuf";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
   };

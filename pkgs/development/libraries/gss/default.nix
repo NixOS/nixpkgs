@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/gss/;
+    homepage = "https://www.gnu.org/software/gss/";
     description = "Generic Security Service";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bjg ];

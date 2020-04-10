@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python implementation of the parquet format";
-    homepage = https://github.com/dask/fastparquet;
+    homepage = "https://github.com/dask/fastparquet";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

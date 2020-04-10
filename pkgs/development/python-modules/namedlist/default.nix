@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Similar to namedtuple, but instances are mutable";
-    homepage = https://bitbucket.org/ericvsmith/namedlist;
+    homepage = "https://bitbucket.org/ericvsmith/namedlist";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ivan ];
   };

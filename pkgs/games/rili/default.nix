@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ SDL SDL_mixer ];
 
   meta = {
-    homepage = http://ri-li.sourceforge.net;
+    homepage = "http://ri-li.sourceforge.net";
     license = stdenv.lib.licenses.gpl2Plus;
     description = "A children's train game";
     longDescription = ''

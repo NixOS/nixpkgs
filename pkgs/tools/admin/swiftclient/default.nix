@@ -24,7 +24,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/openstack/python-swiftclient;
+    homepage = "https://github.com/openstack/python-swiftclient";
     description = "Python bindings to the OpenStack Object Storage API";
     license = licenses.asl20;
     maintainers = with maintainers; [ c0deaddict ];

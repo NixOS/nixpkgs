@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Multi-algo CPUMiner";
-    homepage = https://github.com/wolf9466/cpuminer-multi;
+    homepage = "https://github.com/wolf9466/cpuminer-multi";
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
     # does not build on i686 https://github.com/lucasjones/cpuminer-multi/issues/27

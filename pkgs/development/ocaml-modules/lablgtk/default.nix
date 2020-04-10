@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       maggesi roconnor vbgl
     ];
-    homepage = http://lablgtk.forge.ocamlcore.org/;
+    homepage = "http://lablgtk.forge.ocamlcore.org/";
     description = "An OCaml interface to GTK";
     license = licenses.lgpl21Plus;
   };

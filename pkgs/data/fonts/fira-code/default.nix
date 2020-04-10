@@ -16,7 +16,7 @@ in fetchzip {
   sha256 = "0kg9lrrjr6wrd4r96y0rnslnaw2276558a369qdvalwb3q1gi8d2";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tonsky/FiraCode;
+    homepage = "https://github.com/tonsky/FiraCode";
     description = "Monospace font with programming ligatures";
     longDescription = ''
       Fira Code is a monospace font extending the Fira Mono font with

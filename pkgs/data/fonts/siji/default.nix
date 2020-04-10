@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "bdf" "otb" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/stark/siji;
+    homepage = "https://github.com/stark/siji";
     description = "An iconic bitmap font based on Stlarch with additional glyphs";
     license = licenses.gpl2;
     platforms = platforms.all;

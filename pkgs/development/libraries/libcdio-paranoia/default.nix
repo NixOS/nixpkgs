@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       access. By doing this, cdparanoia runs on platforms other than GNU/Linux.
     '';
     license = licenses.gpl3;
-    homepage = https://github.com/rocky/libcdio-paranoia;
+    homepage = "https://github.com/rocky/libcdio-paranoia";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ ];
   };

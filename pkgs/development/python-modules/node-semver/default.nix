@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/podhmo/python-semver;
+    homepage = "https://github.com/podhmo/python-semver";
     description = "A port of node-semver";
     license = licenses.mit;
     platforms = platforms.all;

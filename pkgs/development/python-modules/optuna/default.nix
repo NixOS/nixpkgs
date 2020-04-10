@@ -85,7 +85,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A hyperparameter optimization framework";
-    homepage = https://optuna.org/;
+    homepage = "https://optuna.org/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

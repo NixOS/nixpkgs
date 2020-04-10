@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Constructive Solid Geometry library";
-    homepage = http://www.opencsg.org/;
+    homepage = "http://www.opencsg.org/";
     platforms = platforms.unix;
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;

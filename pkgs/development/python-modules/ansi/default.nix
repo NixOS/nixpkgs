@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ANSI cursor movement and graphics";
-    homepage = https://github.com/tehmaze/ansi/;
+    homepage = "https://github.com/tehmaze/ansi/";
     license = licenses.mit;
   };
 }

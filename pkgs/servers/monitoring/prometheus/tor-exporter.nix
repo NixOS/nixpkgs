@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Prometheus exporter that exposes metrics from a Tor daemon";
-    homepage = https://github.com/atx/prometheus-tor_exporter;
+    homepage = "https://github.com/atx/prometheus-tor_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.unix;

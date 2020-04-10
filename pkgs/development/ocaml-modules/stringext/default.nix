@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/rgrinberg/stringext;
+    homepage = "https://github.com/rgrinberg/stringext";
     platforms = ocaml.meta.platforms or [];
     description = "Extra string functions for OCaml";
     license = stdenv.lib.licenses.mit;

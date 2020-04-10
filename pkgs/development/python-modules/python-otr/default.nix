@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A pure python implementation of OTR";
-    homepage = https://github.com/AGProjects/otr;
+    homepage = "https://github.com/AGProjects/otr";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ edwtjo ];

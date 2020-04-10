@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
       interface. Munin can help analyze resource trends and 'what just happened
       to kill our performance?' problems.
     '';
-    homepage = http://munin-monitoring.org/;
+    homepage = "http://munin-monitoring.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.domenkozar maintainers.bjornfor ];
     platforms = platforms.linux;

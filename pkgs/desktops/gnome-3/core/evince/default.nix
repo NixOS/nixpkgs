@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Evince;
+    homepage = "https://wiki.gnome.org/Apps/Evince";
     description = "GNOME's document viewer";
 
     longDescription = ''

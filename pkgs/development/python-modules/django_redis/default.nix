@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Full featured redis cache backend for Django";
-    homepage = https://github.com/niwibe/django-redis;
+    homepage = "https://github.com/niwibe/django-redis";
     license = licenses.bsd3;
   };
 }

@@ -15,7 +15,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/huwwp/cryptop;
+    homepage = "https://github.com/huwwp/cryptop";
     description = "Command line Cryptocurrency Portfolio";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ bhipple ];

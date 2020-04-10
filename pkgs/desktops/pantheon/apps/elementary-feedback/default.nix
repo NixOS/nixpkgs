@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GitHub Issue Reporter designed for elementary OS";
-    homepage = https://github.com/elementary/feedback;
+    homepage = "https://github.com/elementary/feedback";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

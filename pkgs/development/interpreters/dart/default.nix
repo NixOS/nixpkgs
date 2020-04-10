@@ -79,7 +79,7 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = {
-    homepage = https://www.dartlang.org/;
+    homepage = "https://www.dartlang.org/";
     maintainers = with maintainers; [ grburst ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Implementation of the Sender Policy Framework for SMTP authorization";
-    homepage = https://www.libspf2.org;
+    homepage = "https://www.libspf2.org";
     license = with licenses; [ lgpl21Plus bsd2 ];
     maintainers = with maintainers; [ pacien ];
     platforms = platforms.all;

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--program-transform-name=s/^l//" ];
 
   meta = with stdenv.lib; {
-    homepage = https://ohse.de/uwe/software/lrzsz.html;
+    homepage = "https://ohse.de/uwe/software/lrzsz.html";
     description = "Communication package providing the XMODEM, YMODEM ZMODEM file transfer protocols";
     license = licenses.gpl2;
     platforms = platforms.unix;

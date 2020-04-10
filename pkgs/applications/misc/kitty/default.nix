@@ -122,7 +122,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kovidgoyal/kitty;
+    homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.darwin ++ platforms.linux;

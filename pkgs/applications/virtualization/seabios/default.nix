@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       It can run in an emulator or it can run natively on X86 hardware with the use of coreboot.
       SeaBIOS is the default BIOS for QEMU and KVM.
     '';
-    homepage = http://www.seabios.org;
+    homepage = "http://www.seabios.org";
     license = licenses.lgpl3;
     maintainers = [ maintainers.tstrobel ];
     platforms = [ "i686-linux" "x86_64-linux" ];

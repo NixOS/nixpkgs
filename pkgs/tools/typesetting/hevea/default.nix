@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A quite complete and fast LATEX to HTML translator";
-    homepage = http://pauillac.inria.fr/~maranget/hevea/;
+    homepage = "http://pauillac.inria.fr/~maranget/hevea/";
     license = licenses.qpl;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;

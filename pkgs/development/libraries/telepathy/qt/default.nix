@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Telepathy Qt bindings";
-    homepage = https://telepathy.freedesktop.org/components/telepathy-qt/;
+    homepage = "https://telepathy.freedesktop.org/components/telepathy-qt/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

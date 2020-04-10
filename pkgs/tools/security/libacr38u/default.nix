@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
       The package is based on the debian package libacr38u.
     '';
-    homepage = https://www.acs.com.hk;
+    homepage = "https://www.acs.com.hk";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; unix;

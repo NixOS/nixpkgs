@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Comprehensive Emacs integration with Oddmuse wikis";
-    homepage = http://emacswiki.org/emacs/Yaoddmuse;
+    homepage = "http://emacswiki.org/emacs/Yaoddmuse";
     platforms = stdenv.lib.platforms.all;
   };
 }

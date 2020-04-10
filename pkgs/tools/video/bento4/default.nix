@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Full-featured MP4 format and MPEG DASH library and tools";
-    homepage = http://bento4.com;
+    homepage = "http://bento4.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ makefu ];
     broken = stdenv.isAarch64;

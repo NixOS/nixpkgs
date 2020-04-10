@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/mnauw/git-remote-hg;
+    homepage = "https://github.com/mnauw/git-remote-hg";
     description = "Semi-official Mercurial bridge from Git project";
     license = licenses.gpl2;
     maintainers = [ ];

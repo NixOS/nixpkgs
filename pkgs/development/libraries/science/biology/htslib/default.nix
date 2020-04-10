@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A C library for reading/writing high-throughput sequencing data";
     license = licenses.mit;
-    homepage = http://www.htslib.org/;
+    homepage = "http://www.htslib.org/";
     platforms = platforms.unix;
     maintainers = [ maintainers.mimame ];
   };

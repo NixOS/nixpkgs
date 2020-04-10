@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://openavproductions.com/sorcer/;
+    homepage = "http://openavproductions.com/sorcer/";
     description = "A wavetable LV2 plugin synth, targeted at the electronic / dubstep genre";
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];

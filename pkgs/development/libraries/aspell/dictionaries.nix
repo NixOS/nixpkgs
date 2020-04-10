@@ -909,7 +909,7 @@ in rec {
     installPhase = "aspell-install en-computers";
 
     meta = {
-      homepage = https://mrsatterly.com/spelling.html;
+      homepage = "https://mrsatterly.com/spelling.html";
     };
   };
 
@@ -936,7 +936,7 @@ in rec {
     installPhase = "aspell-install en_US-science en_GB-science";
 
     meta = {
-      homepage = http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/;
+      homepage = "http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
     };
 
   };

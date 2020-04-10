@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ tesseract ];
 
   meta = {
-    homepage = https://github.com/ruediger/VobSub2SRT;
+    homepage = "https://github.com/ruediger/VobSub2SRT";
     description = "Converts VobSub subtitles into SRT subtitles";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.unix;

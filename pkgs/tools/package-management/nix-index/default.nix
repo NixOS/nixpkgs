@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A files database for nixpkgs";
-    homepage = https://github.com/bennofs/nix-index;
+    homepage = "https://github.com/bennofs/nix-index";
     license = with licenses; [ bsd3 ];
     maintainers = [ maintainers.bennofs ];
     platforms = platforms.all;

@@ -127,7 +127,7 @@ mkDerivation rec {
 
   meta = with lib;
     { description = "Set of integrated tools for the R language";
-      homepage = https://www.rstudio.com/;
+      homepage = "https://www.rstudio.com/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ ehmry changlinli ciil ];
       platforms = platforms.linux;

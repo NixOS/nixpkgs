@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Library for reading, writing, and manipulating ID3v1 and ID3v2 tags";
-    homepage = http://id3lib.sourceforge.net;
+    homepage = "http://id3lib.sourceforge.net";
     platforms = platforms.unix;
     license = licenses.lgpl2;
   };

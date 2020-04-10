@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple library-based package manager";
-    homepage = https://www.archlinux.org/pacman/;
+    homepage = "https://www.archlinux.org/pacman/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mt-caret ];

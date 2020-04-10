@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Bluetooth Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-bluetooth;
+    homepage = "https://github.com/elementary/wingpanel-indicator-bluetooth";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

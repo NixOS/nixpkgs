@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/drkjam/netaddr/;
+    homepage = "https://github.com/drkjam/netaddr/";
     description = "A network address manipulation library for Python";
     license = licenses.mit;
   };

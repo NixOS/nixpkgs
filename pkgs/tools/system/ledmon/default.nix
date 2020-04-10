@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/intel/ledmon;
+    homepage = "https://github.com/intel/ledmon";
     description = "Enclosure LED Utilities";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 ];

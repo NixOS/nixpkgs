@@ -65,7 +65,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
       Based on QtWebEngine and Python 3. Fully customizable in Python.
     '';
-    homepage = https://webmacs.readthedocs.io/en/latest/;
+    homepage = "https://webmacs.readthedocs.io/en/latest/";
     changelog = https://github.com/parkouss/webmacs/blob/master/CHANGELOG.md;
     license = licenses.gpl3;
     maintainers = with maintainers; [ jacg ];

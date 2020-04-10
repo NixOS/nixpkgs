@@ -42,7 +42,7 @@ buildPythonPackage rec {
       to do lots of things, you're probably outside the use cases. Either
       trust those users, or don't.
     '';
-    homepage = https://github.com/mozilla/bleach;
+    homepage = "https://github.com/mozilla/bleach";
     downloadPage = https://github.com/mozilla/bleach/releases;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ prikhi ];

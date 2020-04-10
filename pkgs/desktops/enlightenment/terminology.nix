@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Powerful terminal emulator based on EFL";
-    homepage = https://www.enlightenment.org/about-terminology;
+    homepage = "https://www.enlightenment.org/about-terminology";
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];

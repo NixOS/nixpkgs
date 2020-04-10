@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Reader for AES SOFA files to get better HRTFs";
-    homepage = https://github.com/hoene/libmysofa;
+    homepage = "https://github.com/hoene/libmysofa";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];

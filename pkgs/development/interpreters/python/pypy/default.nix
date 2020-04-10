@@ -151,7 +151,7 @@ in with passthru; stdenv.mkDerivation rec {
   enableParallelBuilding = true;  # almost no parallelization without STM
 
   meta = with stdenv.lib; {
-    homepage = http://pypy.org/;
+    homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

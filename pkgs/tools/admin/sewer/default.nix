@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [ pyopenssl requests tldextract ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/komuw/sewer;
+    homepage = "https://github.com/komuw/sewer";
     description = "ACME client";
     license = licenses.mit;
     maintainers = with maintainers; [ kevincox ];

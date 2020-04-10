@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A desktop application for creating diagrams";
-    homepage = https://about.draw.io/;
+    homepage = "https://about.draw.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ danieldk ];
     platforms = [ "x86_64-linux" ];

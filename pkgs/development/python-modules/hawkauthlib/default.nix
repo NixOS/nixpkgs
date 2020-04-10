@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests webob ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mozilla-services/hawkauthlib;
+    homepage = "https://github.com/mozilla-services/hawkauthlib";
     description = "Hawk Access Authentication protocol";
     license = licenses.mpl20;
   };

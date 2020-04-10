@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Read and write ZIP files - backport of the zipfile module from Python 3.6";
-    homepage = https://gitlab.com/takluyver/zipfile36;
+    homepage = "https://gitlab.com/takluyver/zipfile36";
     license = lib.licenses.psfl;
     maintainers = lib.maintainers.fridh;
   };

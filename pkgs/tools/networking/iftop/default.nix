@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       bandwidth usage by pairs of hosts.
     '';
     license = licenses.gpl2Plus;
-    homepage = http://ex-parrot.com/pdw/iftop/;
+    homepage = "http://ex-parrot.com/pdw/iftop/";
     platforms = platforms.unix;
     maintainers = [ ];
   };

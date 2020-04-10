@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ocamllabs/ocaml-ctypes;
+    homepage = "https://github.com/ocamllabs/ocaml-ctypes";
     description = "Library for binding to C libraries using pure OCaml";
     license = licenses.mit;
     maintainers = [ maintainers.ericbmerritt ];

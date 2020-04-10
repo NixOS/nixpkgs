@@ -16,7 +16,7 @@ buildPythonPackage rec {
   checkPhase = "pytest tests";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/boltons;
+    homepage = "https://github.com/mahmoud/boltons";
     description = "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
     longDescription = ''
       Boltons is a set of over 220 BSD-licensed, pure-Python utilities

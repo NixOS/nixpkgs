@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A flexible scheduler for your i3bar blocks";
-    homepage = https://github.com/vivien/i3blocks;
+    homepage = "https://github.com/vivien/i3blocks";
     license = licenses.gpl3;
     platforms = with platforms; freebsd ++ linux;
   };

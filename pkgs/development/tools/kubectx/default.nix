@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fast way to switch between clusters and namespaces in kubectl!";
     license = licenses.asl20;
-    homepage = https://github.com/ahmetb/kubectx;
+    homepage = "https://github.com/ahmetb/kubectx";
     maintainers = with maintainers; [ periklis ];
     platforms = with platforms; unix;
   };

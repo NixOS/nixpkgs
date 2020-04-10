@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://multitran.sourceforge.net/;
+    homepage = "http://multitran.sourceforge.net/";
     description = "Multitran lib: enchanced locale facets";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

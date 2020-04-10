@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       and has a lot of bugs fixed. It is based upon an older version of joe
       because these behave better overall.
     '';
-    homepage = http://mirbsd.de/jupp;
+    homepage = "http://mirbsd.de/jupp";
     license = licenses.gpl1;
     maintainers = with maintainers; [ AndersonTorres ];
   };

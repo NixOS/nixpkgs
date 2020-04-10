@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
-    homepage = https://selfoss.aditu.de;
+    homepage = "https://selfoss.aditu.de";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar regnat ];
     platforms = platforms.all;

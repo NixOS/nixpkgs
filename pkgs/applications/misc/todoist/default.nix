@@ -16,7 +16,7 @@ buildGoModule rec {
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sachaos/todoist;
+    homepage = "https://github.com/sachaos/todoist";
     description = "Todoist CLI Client";
     license = licenses.mit;
     platforms = platforms.unix;

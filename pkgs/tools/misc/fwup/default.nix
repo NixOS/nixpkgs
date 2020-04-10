@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Configurable embedded Linux firmware update creator and runner";
-    homepage = https://github.com/fhunleth/fwup;
+    homepage = "https://github.com/fhunleth/fwup";
     license = licenses.asl20;
     maintainers = [ maintainers.georgewhewell ];
     platforms = platforms.all;

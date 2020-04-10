@@ -24,7 +24,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Communication library between internal components for Ultimaker software";
-    homepage = https://code.alephobjects.com/source/arcus/;
+    homepage = "https://code.alephobjects.com/source/arcus/";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];

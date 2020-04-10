@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://pytest-relaxed.readthedocs.io/;
+    homepage = "https://pytest-relaxed.readthedocs.io/";
     description = "Relaxed test discovery/organization for pytest";
     license = licenses.bsd0;
     maintainers = [ maintainers.costrouc ];

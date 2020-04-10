@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.penguin.cz/~utx/amr;
+    homepage = "http://www.penguin.cz/~utx/amr";
     description = "AMR Wide-Band Codec";
     # The wrapper code is free, but not the libraries from 3gpp.
     # It's a source code reference implementation with patents and licenses on

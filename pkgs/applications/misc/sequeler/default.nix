@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
       editor with language recognition, and visualize SELECT results in a
       Gtk.Grid Widget.
     '';
-    homepage = https://github.com/Alecaddd/sequeler;
+    homepage = "https://github.com/Alecaddd/sequeler";
     license = licenses.gpl3;
     maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
     platforms = platforms.linux;

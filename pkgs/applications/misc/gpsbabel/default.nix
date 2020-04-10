@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       process data that may (or may not be) placed on a map, such as
       waypoints, tracks, and routes.
     '';
-    homepage = http://www.gpsbabel.org/;
+    homepage = "http://www.gpsbabel.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;

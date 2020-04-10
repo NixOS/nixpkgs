@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
                   pkgconfig autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = http://mediatomb.cc;
+    homepage = "http://mediatomb.cc";
     repositories.git = git://mediatomb.git.sourceforge.net/gitroot/mediatomb/mediatomb;
     description = "UPnP MediaServer with a web user interface";
     license = licenses.gpl2;

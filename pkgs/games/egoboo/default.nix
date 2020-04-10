@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "3D dungeon crawling adventure";
 
-    homepage = http://www.freedink.org/;
+    homepage = "http://www.freedink.org/";
     license = stdenv.lib.licenses.gpl2Plus;
 
     # I take it out of hydra as it does not work as well as I'd like

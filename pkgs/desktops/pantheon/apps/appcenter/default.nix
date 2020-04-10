@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/elementary/appcenter;
+    homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

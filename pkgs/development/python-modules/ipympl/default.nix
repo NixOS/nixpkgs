@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Matplotlib Jupyter Extension";
-    homepage = https://github.com/matplotlib/jupyter-matplotlib;
+    homepage = "https://github.com/matplotlib/jupyter-matplotlib";
     maintainers = with maintainers; [ jluttine ];
     license = licenses.bsd3;
   };

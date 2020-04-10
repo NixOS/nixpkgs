@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps.";
-    homepage = https://github.com/bazelbuild/buildtools;
+    homepage = "https://github.com/bazelbuild/buildtools";
     license = licenses.asl20;
     maintainers = with maintainers; [ elasticdog uri-canva marsam ];
     platforms = platforms.all;

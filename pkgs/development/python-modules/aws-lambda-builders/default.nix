@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/awslabs/aws-lambda-builders;
+    homepage = "https://github.com/awslabs/aws-lambda-builders";
     description = "A tool to compile, build and package AWS Lambda functions";
     longDescription = ''
       Lambda Builders is a Python library to compile, build and package

@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Web server log file analysis program";
-    homepage = http://www.webalizer.org;
+    homepage = "http://www.webalizer.org";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

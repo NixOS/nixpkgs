@@ -23,7 +23,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Advanced SSH config - Regex, aliases, gateways, includes and dynamic hosts";
-    homepage = https://github.com/moul/advanced-ssh-config;
+    homepage = "https://github.com/moul/advanced-ssh-config";
     license = licenses.mit;
     maintainers = with maintainers; [ zzamboni ];
     platforms = with platforms; linux ++ darwin;

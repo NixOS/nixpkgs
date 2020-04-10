@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake4Hook ];
 
   meta = {
-    homepage = http://navipowm.sourceforge.net/;
+    homepage = "http://navipowm.sourceforge.net/";
     description = "Car navigation system";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ];

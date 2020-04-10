@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Download files using requests and save them to a target path";
-    homepage = https://www.github.com/takluyver/requests_download;
+    homepage = "https://www.github.com/takluyver/requests_download";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.fridh ];
   };

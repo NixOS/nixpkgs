@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/thebigmunch/google-music-scripts;
+    homepage = "https://github.com/thebigmunch/google-music-scripts";
     description = "A CLI utility for interacting with Google Music";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

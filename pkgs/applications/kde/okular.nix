@@ -19,7 +19,7 @@ mkDerivation {
     qtdeclarative qtsvg threadweaver kcrash
   ] ++ lib.optional (!stdenv.isAarch64) chmlib;
   meta = with lib; {
-    homepage = http://www.kde.org;
+    homepage = "http://www.kde.org";
     license = with licenses; [ gpl2 lgpl21 fdl12 bsd3 ];
     maintainers = with maintainers; [ ttuegel ];
     platforms = lib.platforms.linux;

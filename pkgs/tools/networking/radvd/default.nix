@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdaemon ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.litech.org/radvd/;
+    homepage = "http://www.litech.org/radvd/";
     description = "IPv6 Router Advertisement Daemon";
     platforms = platforms.linux;
     license = licenses.bsdOriginal;

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A simple monadic parser combinator OCaml library";
     license = stdenv.lib.licenses.lgpl21Plus;
-    homepage = https://github.com/cakeplus/mparser;
+    homepage = "https://github.com/cakeplus/mparser";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };

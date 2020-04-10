@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://users.aalto.fi/~pat/cliquer.html;
+    homepage = "https://users.aalto.fi/~pat/cliquer.html";
     downloadPage = src.meta.homepage; # autocliquer
     description = "Routines for clique searching";
     longDescription = ''

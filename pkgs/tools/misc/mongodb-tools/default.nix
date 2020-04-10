@@ -52,7 +52,7 @@ in buildGoPackage {
   '';
 
   meta = {
-    homepage = https://github.com/mongodb/mongo-tools;
+    homepage = "https://github.com/mongodb/mongo-tools";
     description = "Tools for the MongoDB";
     license = lib.licenses.asl20;
   };

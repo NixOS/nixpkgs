@@ -35,7 +35,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Integrates krunner with pass the unix standard password manager (https://www.passwordstore.org/)";
-    homepage = https://github.com/akermu/krunner-pass;
+    homepage = "https://github.com/akermu/krunner-pass";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ysndr ];
     platforms = platforms.unix;

@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   meta =  with stdenv.lib; {
     description = "Photo viewer and organizer designed for elementary OS";
-    homepage = https://github.com/elementary/photos;
+    homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

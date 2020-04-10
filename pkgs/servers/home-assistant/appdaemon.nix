@@ -63,7 +63,7 @@ in python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Sandboxed python execution environment for writing automation apps for Home Assistant";
-    homepage = https://github.com/home-assistant/appdaemon;
+    homepage = "https://github.com/home-assistant/appdaemon";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg dotlambda ];
   };

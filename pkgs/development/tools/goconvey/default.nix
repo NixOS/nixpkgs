@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Go testing in the browser. Integrates with `go test`. Write behavioral tests in Go.";
-    homepage = https://github.com/smartystreets/goconvey;
+    homepage = "https://github.com/smartystreets/goconvey";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
     license = stdenv.lib.licenses.mit;
   };

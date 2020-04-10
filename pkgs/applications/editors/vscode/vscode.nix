@@ -46,7 +46,7 @@ in
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences
       '';
-      homepage = https://code.visualstudio.com/;
+      homepage = "https://code.visualstudio.com/";
       downloadPage = https://code.visualstudio.com/Updates;
       license = licenses.unfree;
       maintainers = with maintainers; [ eadwu synthetica ];

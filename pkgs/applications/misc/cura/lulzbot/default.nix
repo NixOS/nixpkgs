@@ -74,7 +74,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
-    homepage = https://code.alephobjects.com/diffusion/CURA/;
+    homepage = "https://code.alephobjects.com/diffusion/CURA/";
     license = licenses.agpl3;  # a partial relicense to LGPL has happened, but not certain that all AGPL bits are expunged
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];

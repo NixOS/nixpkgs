@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       OpenMSX is an emulator for the MSX home computer system. Its goal is
       to emulate all aspects of the MSX with 100% accuracy.
     '';
-    homepage = https://openmsx.org;
+    homepage = "https://openmsx.org";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };

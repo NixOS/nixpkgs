@@ -13,7 +13,7 @@ fetchzip {
   sha256 = "0q4si9pnbif36154sv49kzc7ygivgflv81nzmblpz3b2p77g9956";
 
   meta = {
-    homepage = http://junicode.sourceforge.net/;
+    homepage = "http://junicode.sourceforge.net/";
     description = "A Unicode font for medievalists";
     license = lib.licenses.gpl2Plus;
   };

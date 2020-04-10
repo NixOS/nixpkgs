@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Decentralised and censorship-resistant network";
-    homepage = https://freenetproject.org/;
+    homepage = "https://freenetproject.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.doublec ];
     platforms = with stdenv.lib.platforms; linux;

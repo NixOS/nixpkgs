@@ -21,7 +21,7 @@ buildPythonPackage rec {
   buildInputs = [ webtest ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mozilla-services/pyramid_hawkauth;
+    homepage = "https://github.com/mozilla-services/pyramid_hawkauth";
     description = "A Pyramid authentication plugin for HAWK";
     license = licenses.mpl20;
   };

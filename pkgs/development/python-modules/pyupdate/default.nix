@@ -21,7 +21,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     # This description is terrible, but it's what upstream uses.
     description = "Package to update stuff";
-    homepage = https://github.com/ludeeus/pyupdate;
+    homepage = "https://github.com/ludeeus/pyupdate";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

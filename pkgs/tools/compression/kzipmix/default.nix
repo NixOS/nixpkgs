@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A tool that aggressively optimizes the sizes of Zip archives";
     license = stdenv.lib.licenses.unfree;
-    homepage = http://advsys.net/ken/utils.htm;
+    homepage = "http://advsys.net/ken/utils.htm";
     maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

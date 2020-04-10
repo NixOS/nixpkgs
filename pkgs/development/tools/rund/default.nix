@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A compiler-wrapper that runs and caches D programs";
-    homepage = https://github.com/dragon-lang/rund;
+    homepage = "https://github.com/dragon-lang/rund";
     license = lib.licenses.boost;
     maintainers = with maintainers; [ jonathanmarler ];
     platforms = stdenv.lib.platforms.unix;

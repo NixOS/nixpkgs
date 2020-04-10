@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Base58 and Base58Check implementation";
-    homepage = https://github.com/keis/base58;
+    homepage = "https://github.com/keis/base58";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];
   };

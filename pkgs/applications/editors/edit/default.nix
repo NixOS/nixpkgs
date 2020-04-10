@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A relaxing mix of Vi and ACME";
-    homepage = http://c9x.me/edit;
+    homepage = "http://c9x.me/edit";
     license = licenses.publicDomain;
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.linux;

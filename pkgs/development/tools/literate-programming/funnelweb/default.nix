@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     version = "3.20";
     description = "A simple, reliable literate-programming macro preprocessor";
-    homepage = http://www.ross.net/funnelweb/;
+    homepage = "http://www.ross.net/funnelweb/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];

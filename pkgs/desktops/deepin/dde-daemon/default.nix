@@ -125,7 +125,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Daemon for handling Deepin Desktop Environment session settings";
-    homepage = https://github.com/linuxdeepin/dde-daemon;
+    homepage = "https://github.com/linuxdeepin/dde-daemon";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

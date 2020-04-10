@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "GPGPU algorithms for PyCUDA and PyOpenCL";
-    homepage = https://github.com/fjarri/reikna;
+    homepage = "https://github.com/fjarri/reikna";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.fridh ];
 

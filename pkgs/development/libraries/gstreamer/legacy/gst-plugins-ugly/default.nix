@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://gstreamer.freedesktop.org;
+    homepage = "https://gstreamer.freedesktop.org";
 
     description = "‘Ugly’ (potentially patent-encumbered) plug-ins for GStreamer";
 

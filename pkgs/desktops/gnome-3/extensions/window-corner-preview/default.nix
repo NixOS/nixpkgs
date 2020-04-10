@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "GNOME Shell extension showing a video preview on the corner of the screen";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];
-    homepage = https://github.com/medenagan/window-corner-preview;
+    homepage = "https://github.com/medenagan/window-corner-preview";
   };
 }

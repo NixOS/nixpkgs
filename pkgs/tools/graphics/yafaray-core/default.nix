@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     meta = with stdenv.lib; {
       description = "A free, open source raytracer";
-      homepage = http://www.yafaray.org;
+      homepage = "http://www.yafaray.org";
       maintainers = with maintainers; [ hodapp ];
       license = licenses.lgpl21;
       platforms = platforms.linux;

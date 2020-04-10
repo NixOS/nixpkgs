@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       editor and also easily configurable during runtime. Vimb is mostly
       keyboard driven and does not detract you from your daily work.
     '';
-    homepage = https://fanglingsu.github.io/vimb/;
+    homepage = "https://fanglingsu.github.io/vimb/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [];
     platforms = with stdenv.lib.platforms; linux;

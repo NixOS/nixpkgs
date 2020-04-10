@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Filesystem benchmark tool based on load patterns";
-    homepage = https://dbench.samba.org/;
+    homepage = "https://dbench.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

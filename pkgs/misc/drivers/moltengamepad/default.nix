@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jgeumlek/MoltenGamepad;
+    homepage = "https://github.com/jgeumlek/MoltenGamepad";
     description = "Flexible Linux input device translator, geared for gamepads";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

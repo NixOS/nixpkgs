@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Nemiver;
+    homepage = "https://wiki.gnome.org/Apps/Nemiver";
     description = "Easy to use standalone C/C++ debugger";
     license = licenses.gpl2;
     platforms = platforms.linux;

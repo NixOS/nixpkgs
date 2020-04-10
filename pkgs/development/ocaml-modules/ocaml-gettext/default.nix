@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OCaml Bindings to gettext";
-    homepage = https://forge.ocamlcore.org/projects/ocaml-gettext;
+    homepage = "https://forge.ocamlcore.org/projects/ocaml-gettext";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = ocaml.meta.platforms or [];

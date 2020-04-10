@@ -19,7 +19,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Utilities for use with console mail clients, like mutt";
-    homepage = https://www.blacktrash.org/hg/muttils;
+    homepage = "https://www.blacktrash.org/hg/muttils";
     license = licenses.gpl2Plus;
   };
 

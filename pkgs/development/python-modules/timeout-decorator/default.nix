@@ -11,6 +11,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Timeout decorator";
     license = licenses.mit;
-    homepage = https://github.com/pnpnpn/timeout-decorator;
+    homepage = "https://github.com/pnpnpn/timeout-decorator";
   };
 }

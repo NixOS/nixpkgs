@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Spotify for the terminal written in Rust";
-    homepage = https://github.com/Rigellute/spotify-tui;
+    homepage = "https://github.com/Rigellute/spotify-tui";
     changelog = "https://github.com/Rigellute/spotify-tui/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jwijenbergh ];

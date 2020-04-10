@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       functions. You can check balance of your SIM card, send or receive SMS
       messages, control mobile traffic consumption and more.
     '';
-    homepage = https://linuxonly.ru/page/modem-manager-gui;
+    homepage = "https://linuxonly.ru/page/modem-manager-gui";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ahuzik ];
     platforms = platforms.linux;

@@ -21,7 +21,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A command-line tool to manage multiple git repos";
-    homepage = https://github.com/nosarthur/gita;
+    homepage = "https://github.com/nosarthur/gita";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
   };

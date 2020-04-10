@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.org/project/NoseJS/;
+    homepage = "https://pypi.org/project/NoseJS/";
     description = "A Nose plugin for integrating JavaScript tests into a Python test suite";
     license = licenses.free;
   };

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/wikibusiness/aiohttp-remotes;
+    homepage = "https://github.com/wikibusiness/aiohttp-remotes";
     description = "A set of useful tools for aiohttp.web server";
     license = licenses.mit;
     maintainers = [ maintainers.qyliss ];

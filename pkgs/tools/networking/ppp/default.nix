@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://ppp.samba.org/;
+    homepage = "https://ppp.samba.org/";
     description = "Point-to-point implementation for Linux and Solaris";
     license = with licenses; [ bsdOriginal publicDomain gpl2 lgpl2 ];
     platforms = platforms.linux;

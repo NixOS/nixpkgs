@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mock objects for Python";
-    homepage = http://python-mock.sourceforge.net/;
+    homepage = "http://python-mock.sourceforge.net/";
     license = licenses.bsd2;
   };
 

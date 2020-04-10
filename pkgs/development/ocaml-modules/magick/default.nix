@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   installTargets = [ "find_install" ];
 
   meta = {
-    homepage = http://www.linux-nantes.org/~fmonnier/OCaml/ImageMagick/;
+    homepage = "http://www.linux-nantes.org/~fmonnier/OCaml/ImageMagick/";
     description = "ImageMagick Binding for OCaml";
     license = stdenv.lib.licenses.mit;
     platforms = imagemagick.meta.platforms;

@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.axoloti.com;
+    homepage = "http://www.axoloti.com";
     description = ''
       Sketching embedded digital audio algorithms.
 

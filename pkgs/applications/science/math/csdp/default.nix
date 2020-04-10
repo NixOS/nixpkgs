@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://projects.coin-or.org/Csdp;
+    homepage = "https://projects.coin-or.org/Csdp";
     license = lib.licenses.cpl10;
     maintainers = [ lib.maintainers.roconnor ];
     description = "A C Library for Semidefinite Programming";

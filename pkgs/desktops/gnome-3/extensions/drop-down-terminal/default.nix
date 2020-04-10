@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Configurable drop down terminal shell";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ericdallo ];
-    homepage = https://github.com/zzrough/gs-extensions-drop-down-terminal;
+    homepage = "https://github.com/zzrough/gs-extensions-drop-down-terminal";
   };
 }

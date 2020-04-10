@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
-    homepage = http://mmottl.github.io/lacaml;
+    homepage = "http://mmottl.github.io/lacaml";
     description = "OCaml bindings for BLAS and LAPACK";
     license = licenses.lgpl21Plus;
     platforms = ocaml.meta.platforms or [];

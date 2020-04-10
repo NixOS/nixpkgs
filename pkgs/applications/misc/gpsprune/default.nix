@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
-    homepage = https://activityworkshop.net/software/gpsprune/;
+    homepage = "https://activityworkshop.net/software/gpsprune/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;

@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Compiler for Ethereum smart contract language Solidity";
-    homepage = https://github.com/ethereum/solidity;
+    homepage = "https://github.com/ethereum/solidity";
     license = licenses.gpl3;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ dbrock akru lionello sifmelcara ];

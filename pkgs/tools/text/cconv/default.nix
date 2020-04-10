@@ -13,7 +13,7 @@ let version = "0.6.3"; in
   
   meta = with stdenv.lib; {
     description = "A iconv based simplified-traditional chinese conversion tool";
-    homepage = https://github.com/xiaoyjy/cconv;
+    homepage = "https://github.com/xiaoyjy/cconv";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.redfish64 ];

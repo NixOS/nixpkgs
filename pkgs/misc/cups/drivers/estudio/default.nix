@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       TOSHIBA e-STUDIO6540C, TOSHIBA e-STUDIO6550C, TOSHIBA e-STUDIO6560C,
       TOSHIBA e-STUDIO6570C and TOSHIBA e-STUDIO7506AC.
     '';
-    homepage = http://business.toshiba.com/support/downloads/index.html;
+    homepage = "http://business.toshiba.com/support/downloads/index.html";
     license = licenses.unfree;
     maintainers = [ maintainers.jpotier ];
   };

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother MFC-J470DW CUPS wrapper driver";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

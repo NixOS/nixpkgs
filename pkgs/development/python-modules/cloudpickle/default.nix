@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Extended pickling support for Python objects";
-    homepage = https://github.com/cloudpipe/cloudpickle;
+    homepage = "https://github.com/cloudpipe/cloudpickle";
     license = with licenses; [ bsd3 ];
   };
 }

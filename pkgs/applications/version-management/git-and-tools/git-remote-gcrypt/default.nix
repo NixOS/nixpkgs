@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://spwhitton.name/tech/code/git-remote-gcrypt;
+    homepage = "https://spwhitton.name/tech/code/git-remote-gcrypt";
     description = "A git remote helper for GPG-encrypted remotes";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ellis montag451 ];

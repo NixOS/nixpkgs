@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       Ogg is flexible file storage and streaming format that supports
       plethora of codecs. Open format free for anyone to use.
     '';
-    homepage = https://xiph.org/ogg/;
+    homepage = "https://xiph.org/ogg/";
     license = licenses.bsd3;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;

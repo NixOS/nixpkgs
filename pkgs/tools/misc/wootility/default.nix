@@ -23,7 +23,7 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 
   meta = with lib; {
-    homepage = https://wooting.io/wootility;
+    homepage = "https://wooting.io/wootility";
     description = "Wootility is customization and management software for Wooting keyboards.";
     platforms = [ "x86_64-linux" ];
     license = "unknown";

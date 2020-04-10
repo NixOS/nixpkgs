@@ -23,7 +23,7 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://duplicacy.com;
+    homepage = "https://duplicacy.com";
     description = "A new generation cloud backup tool";
     platforms = platforms.linux ++ platforms.darwin;
     license = lib.licenses.unfree;

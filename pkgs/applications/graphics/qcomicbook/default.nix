@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/stolowski/QComicBook;
+    homepage = "https://github.com/stolowski/QComicBook";
     description = "Comic book reader in Qt5";
     license = licenses.gpl2;
 

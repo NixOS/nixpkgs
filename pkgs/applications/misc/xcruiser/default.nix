@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       It constructs a virtually 3-D formed universe from a directory
       tree and allows you to "cruise" within a visualized filesystem.
     '';
-    homepage = http://xcruiser.sourceforge.net/;
+    homepage = "http://xcruiser.sourceforge.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux;

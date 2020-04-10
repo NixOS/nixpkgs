@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "XML Pipes and Filters - command line tools for manipulating and querying XML data";
-    homepage = http://www.cs.uu.nl/wiki/bin/view/Martin/XmlPipesAndFilters;
+    homepage = "http://www.cs.uu.nl/wiki/bin/view/Martin/XmlPipesAndFilters";
     platforms = stdenv.lib.platforms.unix;
   };
 }

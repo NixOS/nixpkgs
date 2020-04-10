@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Extensible i3status wrapper";
     license = licenses.bsd3;
-    homepage = https://github.com/ultrabug/py3status;
+    homepage = "https://github.com/ultrabug/py3status";
     maintainers = with maintainers; [ ];
   };
 }

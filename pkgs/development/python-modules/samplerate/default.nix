@@ -28,7 +28,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cournape/samplerate;
+    homepage = "https://github.com/cournape/samplerate";
     description = "High quality sampling rate convertion from audio data in numpy arrays";
     license = licenses.gpl2;
   };

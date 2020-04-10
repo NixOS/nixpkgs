@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "Automatically change the GTK theme to dark variant when Night Light activates";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonafato ];
-    homepage = https://git.romainvigier.fr/Romain/nightthemeswitcher-gnome-shell-extension;
+    homepage = "https://git.romainvigier.fr/Romain/nightthemeswitcher-gnome-shell-extension";
   };
 }

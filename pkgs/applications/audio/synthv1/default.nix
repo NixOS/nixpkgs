@@ -15,7 +15,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An old-school 4-oscillator subtractive polyphonic synthesizer with stereo fx";
-    homepage = https://synthv1.sourceforge.io/;
+    homepage = "https://synthv1.sourceforge.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

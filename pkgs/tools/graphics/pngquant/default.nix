@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng zlib lcms2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://pngquant.org/;
+    homepage = "https://pngquant.org/";
     description = "A tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
     platforms = platforms.unix;
     license = licenses.gpl3;

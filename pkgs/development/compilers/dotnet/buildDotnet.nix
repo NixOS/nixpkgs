@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
     '';
 
     meta = with stdenv.lib; {
-        homepage = https://dotnet.github.io/;
+        homepage = "https://dotnet.github.io/";
         description = builtins.getAttr type descriptions;
         platforms = [ "x86_64-linux" ];
         maintainers = with maintainers; [ kuznero ];

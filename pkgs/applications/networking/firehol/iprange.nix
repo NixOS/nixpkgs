@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "manage IP ranges";
-    homepage = https://github.com/firehol/iprange;
+    homepage = "https://github.com/firehol/iprange";
     license = licenses.gpl2;
     maintainers = with maintainers; [ geistesk ];
   };

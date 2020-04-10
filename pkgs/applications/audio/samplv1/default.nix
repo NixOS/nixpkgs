@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An old-school all-digital polyphonic sampler synthesizer with stereo fx";
-    homepage = http://samplv1.sourceforge.net/;
+    homepage = "http://samplv1.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

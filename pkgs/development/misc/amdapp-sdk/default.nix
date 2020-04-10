@@ -100,7 +100,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "AMD Accelerated Parallel Processing (APP) SDK, with OpenCL 1.2 support";
-    homepage = https://developer.amd.com/amd-accelerated-parallel-processing-app-sdk/;
+    homepage = "https://developer.amd.com/amd-accelerated-parallel-processing-app-sdk/";
     license = licenses.amd;
     maintainers = [ maintainers.offline ];
     platforms = [ "i686-linux" "x86_64-linux" ];

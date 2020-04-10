@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A top-like utility for showing stats of virtualized domains";
-    homepage = https://people.redhat.com/~rjones/virt-top/;
+    homepage = "https://people.redhat.com/~rjones/virt-top/";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = platforms.linux;

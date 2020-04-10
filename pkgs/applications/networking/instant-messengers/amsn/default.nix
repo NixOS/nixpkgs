@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Instant messaging (MSN Messenger clone)";
-    homepage = http://amsn-project.net;
+    homepage = "http://amsn-project.net";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
   };

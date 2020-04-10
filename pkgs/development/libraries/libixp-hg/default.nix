@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip txt2tags ];
 
   meta = {
-    homepage = http://repo.cat-v.org/libixp/; # see also https://libs.suckless.org/deprecated/libixp
+    homepage = "http://repo.cat-v.org/libixp/; # see also https://libs.suckless.org/deprecated/libix"p
     description = "Portable, simple C-language 9P client and server libary";
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];
     license = stdenv.lib.licenses.mit;

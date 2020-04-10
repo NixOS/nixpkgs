@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://openil.sourceforge.net/;
+    homepage = "http://openil.sourceforge.net/";
     description = "An image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";
     license = licenses.lgpl2;
     platforms = platforms.mesaPlatforms;

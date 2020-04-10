@@ -17,7 +17,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Sharing solution for files, calendars, contacts and more";
-      homepage = https://nextcloud.com;
+      homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
       license = licenses.agpl3Plus;
       platforms = with platforms; unix;

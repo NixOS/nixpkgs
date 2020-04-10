@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "VoIP library for Telegram clients";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    homepage = https://github.com/telegramdesktop/libtgvoip;
+    homepage = "https://github.com/telegramdesktop/libtgvoip";
     maintainers = with maintainers; [ ilya-fedin ];
   };
 }

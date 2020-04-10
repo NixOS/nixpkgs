@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.libertyzero.com/GEncfsM/;
+    homepage = "http://www.libertyzero.com/GEncfsM/";
     downloadPage = https://launchpad.net/gencfsm/;
     description = "EncFS manager and mounter with GNOME3 integration";
     license = licenses.gpl2Plus;

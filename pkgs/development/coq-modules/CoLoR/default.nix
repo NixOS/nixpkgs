@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://color.inria.fr/;
+    homepage = "http://color.inria.fr/";
     description = "CoLoR is a library of formal mathematical definitions and proofs of theorems on rewriting theory and termination whose correctness has been mechanically checked by the Coq proof assistant.";
     maintainers = with maintainers; [ jpas jwiegley ];
     platforms = coq.meta.platforms;

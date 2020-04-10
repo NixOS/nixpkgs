@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A rogue-like game with nice graphical interface";
-    homepage = http://adom.de/;
+    homepage = "http://adom.de/";
     license = licenses.unfreeRedistributable;
     maintainers = [maintainers.smironov];
 

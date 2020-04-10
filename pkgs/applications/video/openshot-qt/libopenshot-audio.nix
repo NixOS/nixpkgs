@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    homepage = http://openshot.org/;
+    homepage = "http://openshot.org/";
     description = "High-quality sound editing library";
     longDescription = ''
       OpenShot Audio Library (libopenshot-audio) is a program that allows the

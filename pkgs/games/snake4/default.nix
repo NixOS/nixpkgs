@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A game starring a fruit-eating snake";
-    homepage = https://shh.thathost.com/pub-unix/html/snake4.html;
+    homepage = "https://shh.thathost.com/pub-unix/html/snake4.html";
     license = licenses.artistic1;
     platforms = platforms.linux;
   };

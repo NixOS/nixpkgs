@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://rd.slavepianos.org/?t=hsc3;
+    homepage = "http://rd.slavepianos.org/?t=hsc3";
     description = "hsc3 mode package for Emacs";
     platforms = stdenv.lib.platforms.unix;
   };

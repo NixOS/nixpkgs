@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       The General Algebraic Modeling System is a high-level modeling system for mathematical optimization.
       GAMS is designed for modeling and solving linear, nonlinear, and mixed-integer optimization problems.
     '';
-    homepage = https://www.gams.com/;
+    homepage = "https://www.gams.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.Scriptkiddi ];
     platforms = platforms.linux;

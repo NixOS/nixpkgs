@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple service to ensure uptime of essential processes";
-    homepage = https://github.com/elementary/cerbere;
+    homepage = "https://github.com/elementary/cerbere";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = with stdenv.lib.platforms; linux ++ cygwin ++ darwin;
-    homepage = http://jedi.ks.uiuc.edu/~johns/tachyon/;
+    homepage = "http://jedi.ks.uiuc.edu/~johns/tachyon/";
   };
 }

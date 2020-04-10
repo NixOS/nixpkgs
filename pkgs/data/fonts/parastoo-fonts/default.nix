@@ -17,7 +17,7 @@ in fetchFromGitHub {
   sha256 = "10jbii6rskcy4akjl5yfcqv4mfwk3nqnx36l6sbxks43va9l04f4";
 
   meta = with lib; {
-    homepage = https://github.com/rastikerdar/parastoo-font;
+    homepage = "https://github.com/rastikerdar/parastoo-font";
     description = "A Persian (Farsi) Font - فونت ( قلم ) فارسی پرستو";
     license = licenses.ofl;
     platforms = platforms.all;

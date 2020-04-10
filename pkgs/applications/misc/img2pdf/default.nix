@@ -19,7 +19,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Convert images to PDF via direct JPEG inclusion";
-    homepage = https://gitlab.mister-muffin.de/josch/img2pdf;
+    homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";
     license = licenses.lgpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.veprbl ];

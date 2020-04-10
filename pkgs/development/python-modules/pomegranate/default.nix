@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
-    homepage = https://github.com/jmschrei/pomegranate;
+    homepage = "https://github.com/jmschrei/pomegranate";
     license = licenses.mit;
     maintainers = with maintainers; [ rybern ];
   };

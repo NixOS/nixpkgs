@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A small but very powerful text-based mail client";
-    homepage = http://www.mutt.org;
+    homepage = "http://www.mutt.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ the-kenny rnhmjoj ];

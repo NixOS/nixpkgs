@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = {
-    homepage = http://crd-legacy.lbl.gov/~xiaoye/SuperLU/;
+    homepage = "http://crd-legacy.lbl.gov/~xiaoye/SuperLU/";
     license = http://crd-legacy.lbl.gov/~xiaoye/SuperLU/License.txt;
     description = "A library for the solution of large, sparse, nonsymmetric systems of linear equations";
     platforms = stdenv.lib.platforms.unix;

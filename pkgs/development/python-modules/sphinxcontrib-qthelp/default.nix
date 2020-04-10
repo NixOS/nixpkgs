@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "sphinxcontrib-qthelp is a sphinx extension which outputs QtHelp document.";
-    homepage = http://sphinx-doc.org/;
+    homepage = "http://sphinx-doc.org/";
     license = licenses.bsd0;
   };
 

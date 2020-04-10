@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   installPhase = "./remake install";
 
   meta = {
-    homepage = http://gappa.gforge.inria.fr/;
+    homepage = "http://gappa.gforge.inria.fr/";
     description = "Verifying and formally proving properties on numerical programs dealing with floating-point or fixed-point arithmetic";
     license = with stdenv.lib.licenses; [ cecill20 gpl2 ];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

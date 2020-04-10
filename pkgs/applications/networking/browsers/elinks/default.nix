@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Full-featured text-mode web browser";
-    homepage = http://elinks.or.cz;
+    homepage = "http://elinks.or.cz";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

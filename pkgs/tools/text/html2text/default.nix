@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Convert HTML to plain text";
-    homepage = http://www.mbayer.de/html2text/;
+    homepage = "http://www.mbayer.de/html2text/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.eikek ];

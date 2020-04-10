@@ -62,7 +62,7 @@ buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   meta = with stdenv.lib; {
-    homepage = http://doc.devpi.net;
+    homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];

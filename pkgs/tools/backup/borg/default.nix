@@ -63,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
-    homepage = https://www.borgbackup.org;
+    homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
     maintainers = with maintainers; [ flokli dotlambda globin ];

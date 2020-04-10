@@ -145,7 +145,7 @@ in stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     description = "Sophisticated text editor for code, markup and prose";
-    homepage = https://www.sublimetext.com/;
+    homepage = "https://www.sublimetext.com/";
     maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];

@@ -70,7 +70,7 @@ let
       '';
 
       meta = {
-        homepage = http://www.weechat.org/;
+        homepage = "http://www.weechat.org/";
         description = "A fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package

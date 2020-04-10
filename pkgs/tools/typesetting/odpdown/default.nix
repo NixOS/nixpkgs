@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/thorstenb/odpdown;
+    homepage = "https://github.com/thorstenb/odpdown";
     repositories.git = https://github.com/thorstenb/odpdown.git;
     description = "Create nice-looking slides from your favourite text editor";
     longDescription = ''

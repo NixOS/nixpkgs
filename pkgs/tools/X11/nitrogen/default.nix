@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       multi-head with Xinerama. Wallpapers are browsable with a convenient GUI,
       and settings are stored in a human-readable config file.
     '';
-    homepage = https://github.com/l3ib/nitrogen;
+    homepage = "https://github.com/l3ib/nitrogen";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.auntie ];

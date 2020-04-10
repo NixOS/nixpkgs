@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The universal database tool";
-    homepage = https://www.dbvis.com/;
+    homepage = "https://www.dbvis.com/";
     license = stdenv.lib.licenses.unfree;
   };
 }

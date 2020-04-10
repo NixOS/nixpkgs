@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       of gaming devices in Linux, and makes the Linux gaming
       experience just a little bit nicer.
     '';
-    homepage = http://qjoypad.sourceforge.net;
+    homepage = "http://qjoypad.sourceforge.net";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;

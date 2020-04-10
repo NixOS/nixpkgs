@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A pluggable transport proxy";
-    homepage = https://www.torproject.org/projects/obfsproxy;
+    homepage = "https://www.torproject.org/projects/obfsproxy";
     repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
     maintainers = with maintainers; [ phreedom thoughtpolice ];
   };

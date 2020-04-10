@@ -24,7 +24,7 @@ fetchzip {
 
   meta = {
     description = "TrueType fonts from Microsoft Windows Vista For Simplified Chinese (Microsoft YaHei)";
-    homepage = https://www.microsoft.com/typography/fonts/family.aspx?FID=350;
+    homepage = "https://www.microsoft.com/typography/fonts/family.aspx?FID=350";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.ChengCat ];
 

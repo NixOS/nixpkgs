@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
-    homepage = https://github.com/joeyespo/grip;
+    homepage = "https://github.com/joeyespo/grip";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };

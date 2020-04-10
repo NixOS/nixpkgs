@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "REPL for the Nim programming language";
-    homepage = https://github.com/wheineman/nrpl;
+    homepage = "https://github.com/wheineman/nrpl";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; linux ++ darwin;

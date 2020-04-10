@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MPRIS plugin for mpv";
-    homepage = https://github.com/hoyon/mpv-mpris;
+    homepage = "https://github.com/hoyon/mpv-mpris";
     license = licenses.mit;
     maintainers = with maintainers; [ jfrankenau ];
   };

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "";
-    homepage = http://retroshare.sourceforge.net/;
+    homepage = "http://retroshare.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];

@@ -54,7 +54,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with stdenv.lib; {
     description = "Real-time logfile analyzer to get advanced statistics";
-    homepage = http://awstats.org;
+    homepage = "http://awstats.org";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

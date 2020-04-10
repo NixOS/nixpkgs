@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "ion-3-20090110";
   meta = {
     description = "Tiling tabbed window manager designed with keyboard users in mind";
-    homepage = http://modeemi.fi/~tuomov/ion;
+    homepage = "http://modeemi.fi/~tuomov/ion";
     platforms = with stdenv.lib.platforms; linux;
     license = stdenv.lib.licenses.lgpl21;
   };

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://zakalwe.fi/~shd/foss/cksfv/;
+    homepage = "http://zakalwe.fi/~shd/foss/cksfv/";
     description = "A tool for verifying files against a SFV checksum file";
     platforms = platforms.all;
     license = licenses.gpl2;

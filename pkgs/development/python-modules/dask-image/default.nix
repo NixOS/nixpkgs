@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ dask numpy toolz scipy pims ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-image;
+    homepage = "https://github.com/dask/dask-image";
     description = "Distributed image processing";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];

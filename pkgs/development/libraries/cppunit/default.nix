@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://freedesktop.org/wiki/Software/cppunit/;
+    homepage = "https://freedesktop.org/wiki/Software/cppunit/";
     description = "C++ unit testing framework";
     license = licenses.lgpl21;
     platforms = platforms.linux ++ platforms.darwin;

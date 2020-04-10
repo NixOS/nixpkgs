@@ -60,7 +60,7 @@ stdenv.mkDerivation {
       A fork of pantheon greeter that positions elements in a central and
       vertigal manner and adds a blur effect to the background
     '';
-    homepage = https://github.com/nick92/Enso-OS;
+    homepage = "https://github.com/nick92/Enso-OS";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [

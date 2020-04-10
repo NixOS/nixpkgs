@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Program that connects stdin and stdout to a server somewhere on the network, through a standard HTTPS proxy";
-    homepage = http://proxytunnel.sourceforge.net/download.php;
+    homepage = "http://proxytunnel.sourceforge.net/download.php";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

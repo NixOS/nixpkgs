@@ -86,7 +86,7 @@ in mkDerivation rec {
 
   meta = {
     description = "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
-    homepage = https://drawpile.net/;
+    homepage = "https://drawpile.net/";
     downloadPage = https://drawpile.net/download/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];

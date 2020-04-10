@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails with "permission denied"
 
   meta = {
-    homepage = http://gts.sourceforge.net/;
+    homepage = "http://gts.sourceforge.net/";
     license = stdenv.lib.licenses.lgpl2Plus;
     description = "GNU Triangulated Surface Library";
 

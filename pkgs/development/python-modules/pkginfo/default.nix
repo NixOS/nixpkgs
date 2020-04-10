@@ -12,7 +12,7 @@ buildPythonPackage rec {
   doCheck = false; # I don't know why, but with doCheck = true it fails.
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/pkginfo;
+    homepage = "https://pypi.python.org/pypi/pkginfo";
     license = licenses.mit;
     description = "Query metadatdata from sdists / bdists / installed packages";
 

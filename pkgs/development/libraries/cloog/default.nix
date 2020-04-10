@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       effective code.
     '';
 
-    homepage = http://www.cloog.org/;
+    homepage = "http://www.cloog.org/";
 
     license = stdenv.lib.licenses.gpl2Plus;
 

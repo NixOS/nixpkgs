@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Web video downloader";
-    homepage = http://quvi.sf.net;
+    homepage = "http://quvi.sf.net";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ ];

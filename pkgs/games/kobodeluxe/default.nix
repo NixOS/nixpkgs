@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   patches = [ ./glibc29.patch ];
 
   meta = {
-    homepage = http://olofson.net/kobodl/;
+    homepage = "http://olofson.net/kobodl/";
     description = "Enhanced version of Akira Higuchi's game XKobo  for Un*x systems with X11";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.cs.ox.ac.uk/projects/fdr/;
+    homepage = "https://www.cs.ox.ac.uk/projects/fdr/";
     description = "The CSP refinement checker";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;

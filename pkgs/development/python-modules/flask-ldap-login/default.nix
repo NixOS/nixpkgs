@@ -28,7 +28,7 @@ buildPythonPackage rec {
   checkPhase = "nosetests -d";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ContinuumIO/flask-ldap-login;
+    homepage = "https://github.com/ContinuumIO/flask-ldap-login";
     description = "User session management for Flask";
     license = licenses.mit;
     platforms = platforms.all;

@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
   meta = {
-    homepage = http://pauillac.inria.fr/~xleroy/software.html;
+    homepage = "http://pauillac.inria.fr/~xleroy/software.html";
     description = "A library of cryptographic primitives for OCaml";
     platforms = ocaml.meta.platforms or [];
     maintainers = [

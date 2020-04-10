@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
       description = "Virtual Tunnels over TCP/IP with traffic shaping, compression and encryption";
-      homepage = http://vtun.sourceforge.net/;
+      homepage = "http://vtun.sourceforge.net/";
       license = licenses.gpl2;
       platforms = platforms.linux;
       maintainers = with maintainers; [ pSub ];

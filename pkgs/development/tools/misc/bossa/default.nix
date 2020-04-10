@@ -45,7 +45,7 @@ stdenv.mkDerivation {
       Atmel's SAM-BA software. BOSSA is an acronym for Basic Open
       Source SAM-BA Application to reflect that goal.
     '';
-    homepage = http://www.shumatech.com/web/products/bossa;
+    homepage = "http://www.shumatech.com/web/products/bossa";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

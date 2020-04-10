@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ''; # */
 
   meta = {
-    homepage = http://exult.sourceforge.net/;
+    homepage = "http://exult.sourceforge.net/";
     description = "A reimplementation of the Ultima VII game engine";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;

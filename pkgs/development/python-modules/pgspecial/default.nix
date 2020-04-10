@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Meta-commands handler for Postgres Database";
-    homepage = https://pypi.python.org/pypi/pgspecial;
+    homepage = "https://pypi.python.org/pypi/pgspecial";
     license = licenses.bsd3;
   };
 }

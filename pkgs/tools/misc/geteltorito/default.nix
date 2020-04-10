@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Extract the initial/default boot image from a CD image if existent";
-    homepage = https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/;
+    homepage = "https://userpages.uni-koblenz.de/~krienke/ftp/noarch/geteltorito/";
     maintainers = [ maintainers.Profpatsch ];
     license = licenses.gpl2;
   };

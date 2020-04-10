@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   outputs = [ "bin" "dev" "out" "man" ];
 
   meta = {
-    homepage = http://jpegclub.org/jpegtran/;
+    homepage = "http://jpegclub.org/jpegtran/";
     description = "Experimental lossless crop 'n' drop (cut & paste) patches for libjpeg";
     license = stdenv.lib.licenses.free;
   };

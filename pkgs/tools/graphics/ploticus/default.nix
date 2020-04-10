@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       over colors, styles, options and details.'';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
-    homepage = http://ploticus.sourceforge.net/;
+    homepage = "http://ploticus.sourceforge.net/";
     platforms = with platforms; linux;
   };
 }

@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       multiple GB/s per core, typically reaching RAM speed limits on
       multi-core systems.
     '';
-    homepage = https://lz4.github.io/lz4/;
+    homepage = "https://lz4.github.io/lz4/";
     license = with licenses; [ bsd2 gpl2Plus ];
     platforms = platforms.all;
   };

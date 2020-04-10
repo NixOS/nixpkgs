@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A tool to find out the processes doing the most IO";
-    homepage = http://guichaz.free.fr/iotop;
+    homepage = "http://guichaz.free.fr/iotop";
     license = licenses.gpl2;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lrt";
 
   meta = with stdenv.lib; {
-    homepage = http://0pointer.de/blog/projects/rtkit;
+    homepage = "http://0pointer.de/blog/projects/rtkit";
     description = "A daemon that hands out real-time priority to processes";
     license = with licenses; [ gpl3 bsd0 ]; # lib is bsd license
     platforms = platforms.linux;

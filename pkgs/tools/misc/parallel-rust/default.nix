@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A command-line CPU load balancer written in Rust";
-    homepage = https://github.com/mmstick/parallel;
+    homepage = "https://github.com/mmstick/parallel";
     license = licenses.mit;
     maintainers = [];
     platforms = platforms.all;

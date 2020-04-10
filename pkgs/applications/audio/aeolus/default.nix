@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Synthetized (not sampled) pipe organ emulator";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

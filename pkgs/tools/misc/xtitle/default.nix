@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
    meta = {
      description = "Outputs X window titles";
-     homepage = https://github.com/baskerville/xtitle;
+     homepage = "https://github.com/baskerville/xtitle";
      maintainers = [ stdenv.lib.maintainers.meisternu ];
      license = "Custom";
      platforms = stdenv.lib.platforms.linux;

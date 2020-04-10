@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Curses-like terminal wrapper, with colored strings!";
-    homepage = https://github.com/bpython/curtsies;
+    homepage = "https://github.com/bpython/curtsies";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
   };

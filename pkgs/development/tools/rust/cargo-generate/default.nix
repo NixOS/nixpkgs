@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "cargo, make me a project";
-    homepage = https://github.com/ashleygwilliams/cargo-generate;
+    homepage = "https://github.com/ashleygwilliams/cargo-generate";
     license = licenses.asl20;
     maintainers = [ maintainers.turbomack ];
     platforms = platforms.all;

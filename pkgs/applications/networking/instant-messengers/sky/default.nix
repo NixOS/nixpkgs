@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Lync & Skype for business on linux
     '';
-    homepage = https://tel.red/;
+    homepage = "https://tel.red/";
     license = licenses.unfree;
     maintainers = [ maintainers.Scriptkiddi ];
     platforms = platforms.unix;

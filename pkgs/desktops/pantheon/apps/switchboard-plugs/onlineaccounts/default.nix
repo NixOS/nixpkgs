@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Online Accounts Plug";
-    homepage = https://github.com/elementary/switchboard-plug-onlineaccounts;
+    homepage = "https://github.com/elementary/switchboard-plug-onlineaccounts";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

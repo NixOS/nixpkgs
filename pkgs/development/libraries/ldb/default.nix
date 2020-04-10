@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A LDAP-like embedded database";
-    homepage = https://ldb.samba.org/;
+    homepage = "https://ldb.samba.org/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
   };

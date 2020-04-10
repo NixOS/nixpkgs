@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight pure-python rpc client for deluge";
-    homepage = https://github.com/JohnDoee/deluge-client;
+    homepage = "https://github.com/JohnDoee/deluge-client";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

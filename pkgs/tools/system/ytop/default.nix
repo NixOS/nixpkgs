@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A TUI system monitor written in Rust";
-    homepage = https://github.com/cjbassi/ytop;
+    homepage = "https://github.com/cjbassi/ytop";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;

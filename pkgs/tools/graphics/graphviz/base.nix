@@ -80,7 +80,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://graphviz.org;
+    homepage = "https://graphviz.org";
     description = "Graph visualization tools";
     license = licenses.epl10;
     platforms = platforms.unix;

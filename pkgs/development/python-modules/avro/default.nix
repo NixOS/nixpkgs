@@ -12,6 +12,6 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A serialization and RPC framework";
-    homepage = https://pypi.python.org/pypi/avro/;
+    homepage = "https://pypi.python.org/pypi/avro/";
   };
 }

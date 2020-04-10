@@ -82,7 +82,7 @@ stdenv.mkDerivation {
       network are rewarded with better service.
     '';
 
-    homepage = https://gnunet.org/;
+    homepage = "https://gnunet.org/";
 
     license = licenses.agpl3Plus;
 

@@ -184,7 +184,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";
-    homepage = http://airflow.apache.org/;
+    homepage = "http://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc maintainers.ingenieroariel ];
   };

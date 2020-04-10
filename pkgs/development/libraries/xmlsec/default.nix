@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.aleksey.com/xmlsec;
+    homepage = "http://www.aleksey.com/xmlsec";
     downloadPage = https://www.aleksey.com/xmlsec/download.html;
     description = "XML Security Library in C based on libxml2";
     license = stdenv.lib.licenses.mit;

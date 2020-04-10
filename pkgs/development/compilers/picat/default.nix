@@ -33,7 +33,7 @@ stdenv.mkDerivation {
       Picat is a simple, and yet powerful, logic-based multi-paradigm
       programming language aimed for general-purpose applications.
     '';
-    homepage = http://picat-lang.org/;
+    homepage = "http://picat-lang.org/";
     license = stdenv.lib.licenses.mpl20;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.earldouglas ];

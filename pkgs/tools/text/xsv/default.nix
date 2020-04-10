@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A fast CSV toolkit written in Rust";
-    homepage = https://github.com/BurntSushi/xsv;
+    homepage = "https://github.com/BurntSushi/xsv";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = [ maintainers.jgertm ];
     platforms = platforms.all;

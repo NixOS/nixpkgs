@@ -15,7 +15,7 @@ fetchzip {
 
   meta = with lib; {
     description = "luculent font";
-    homepage = http://www.eastfarthing.com/luculent/;
+    homepage = "http://www.eastfarthing.com/luculent/";
     license = licenses.ofl;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

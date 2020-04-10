@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.kermitproject.org/ck90.html;
+    homepage = "http://www.kermitproject.org/ck90.html";
     description = "Portable Scriptable Network and Serial Communication Software";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];

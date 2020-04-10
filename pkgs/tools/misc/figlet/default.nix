@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Program for making large letters out of ordinary text";
-    homepage = http://www.figlet.org/;
+    homepage = "http://www.figlet.org/";
     license = stdenv.lib.licenses.afl21;
     platforms = stdenv.lib.platforms.unix;
   };

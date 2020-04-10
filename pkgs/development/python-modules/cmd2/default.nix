@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Enhancements for standard library's cmd module";
-    homepage = https://github.com/python-cmd2/cmd2;
+    homepage = "https://github.com/python-cmd2/cmd2";
     maintainers = with maintainers; [ teto ];
   };
 }

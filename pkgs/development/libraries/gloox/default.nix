@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A portable high-level Jabber/XMPP library for C++";
-    homepage = http://camaya.net/gloox;
+    homepage = "http://camaya.net/gloox";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

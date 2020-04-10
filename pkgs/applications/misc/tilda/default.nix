@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Gtk based drop down terminal for Linux and Unix";
-    homepage = https://github.com/lanoxx/tilda/;
+    homepage = "https://github.com/lanoxx/tilda/";
     license = licenses.gpl3;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

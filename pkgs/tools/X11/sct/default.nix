@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase = "install -Dt $out/bin sct";
 
   meta = with stdenv.lib; {
-    homepage = https://www.tedunangst.com/flak/post/sct-set-color-temperature;
+    homepage = "https://www.tedunangst.com/flak/post/sct-set-color-temperature";
     description = "A minimal utility to set display colour temperature";
     maintainers = [ maintainers.raskin ];
     license = licenses.publicDomain;

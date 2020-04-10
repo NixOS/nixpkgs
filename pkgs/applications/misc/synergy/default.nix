@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";
-    homepage = http://synergy-project.org/;
+    homepage = "http://synergy-project.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ aszlig enzime ];
     platforms = platforms.all;

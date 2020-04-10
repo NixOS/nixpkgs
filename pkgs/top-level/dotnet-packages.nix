@@ -558,7 +558,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         FSharp.Compiler.Service project. It is intended to be used as a backend
         service for rich editing or 'intellisense' features for editors.
         '';
-      homepage = https://github.com/fsharp/FSharp.AutoComplete;
+      homepage = "https://github.com/fsharp/FSharp.AutoComplete";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -709,7 +709,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = with stdenv.lib; {
       description = "A tool to help visualize git revisions and branches";
-      homepage = https://github.com/crc8/GitVersionTree;
+      homepage = "https://github.com/crc8/GitVersionTree";
       license = licenses.gpl2;
       maintainers = with maintainers; [ obadz ];
       platforms = platforms.all;
@@ -733,7 +733,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
-      homepage = https://numerics.mathdotnet.com/;
+      homepage = "https://numerics.mathdotnet.com/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -763,7 +763,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A generic framework for creating extensible applications";
-      homepage = https://www.mono-project.com/Mono.Addins;
+      homepage = "https://www.mono-project.com/Mono.Addins";
       longDescription = ''
         A generic framework for creating extensible applications,
         and for creating libraries which extend those applications.
@@ -854,7 +854,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A callback-based program option parser for C#";
-      homepage = http://www.ndesk.org/Options;
+      homepage = "http://www.ndesk.org/Options";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -949,7 +949,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A declarative CLI argument/XML configuration parser for F# applications";
-      homepage = https://nessos.github.io/UnionArgParser/;
+      homepage = "https://nessos.github.io/UnionArgParser/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

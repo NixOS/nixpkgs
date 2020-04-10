@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A computer opponent for the board game Blokus";
-    homepage = https://pentobi.sourceforge.io;
+    homepage = "https://pentobi.sourceforge.io";
     license = licenses.gpl3;
     maintainers = [ maintainers.genesis ];
     platforms = platforms.linux;

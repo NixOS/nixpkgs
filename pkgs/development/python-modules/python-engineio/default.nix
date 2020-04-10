@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Engine.IO server";
-    homepage = https://github.com/miguelgrinberg/python-engineio/;
+    homepage = "https://github.com/miguelgrinberg/python-engineio/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.mic92 ];

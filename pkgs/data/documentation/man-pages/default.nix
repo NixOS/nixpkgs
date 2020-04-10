@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linux development manual pages";
-    homepage = https://www.kernel.org/doc/man-pages/;
+    homepage = "https://www.kernel.org/doc/man-pages/";
     repositories.git = http://git.kernel.org/pub/scm/docs/man-pages/man-pages;
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;

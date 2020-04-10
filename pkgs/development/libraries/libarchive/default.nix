@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       compressions formats including (but not limited to) tar, shar, cpio, zip, and
       compressed with gzip, bzip2, lzma, xz, ...
     '';
-    homepage = http://libarchive.org;
+    homepage = "http://libarchive.org";
     license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; all;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];

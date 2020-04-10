@@ -55,7 +55,7 @@ let
     enableParallelBuilding = true;
 
     meta = {
-      homepage = http://www.ffmpeg.org/;
+      homepage = "http://www.ffmpeg.org/";
       description = "A complete, cross-platform solution to record, convert and stream audio and video";
     };
   };
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ raspberrypifw ffmpeg pcre boost freetype zlib ];
 
   meta = {
-    homepage = https://github.com/huceke/omxplayer;
+    homepage = "https://github.com/huceke/omxplayer";
     description = "Commandline OMX player for the Raspberry Pi";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.arm;

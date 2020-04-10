@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
          HTML output.
       '';
 
-    homepage = http://ltp.sourceforge.net/coverage/lcov.php;
+    homepage = "http://ltp.sourceforge.net/coverage/lcov.php";
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = with maintainers; [ dezgeg ];

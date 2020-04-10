@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to handle UPnP IGD port mapping";
-    homepage = http://www.gupnp.org/;
+    homepage = "http://www.gupnp.org/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

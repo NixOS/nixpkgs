@@ -10,7 +10,7 @@ let
   };
 
   meta = with stdenv.lib; {
-    homepage = http://qpid.apache.org;
+    homepage = "http://qpid.apache.org";
     repositories.git = git://git.apache.org/qpid.git;
     repositories.svn = http://svn.apache.org/repos/asf/qpid;
     description = "An AMQP message broker and a C++ messaging API";

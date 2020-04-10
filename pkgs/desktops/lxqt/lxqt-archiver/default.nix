@@ -32,7 +32,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Archive tool for the LXQt desktop environment";
-    homepage = https://github.com/lxqt/lxqt-archiver/;
+    homepage = "https://github.com/lxqt/lxqt-archiver/";
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ jchw ];

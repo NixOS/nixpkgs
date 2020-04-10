@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Yet another zen simulation; A simple find-the-kitten game";
-    homepage = http://robotfindskitten.org/;
+    homepage = "http://robotfindskitten.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

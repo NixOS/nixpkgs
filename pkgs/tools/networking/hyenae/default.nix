@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "";
-    homepage = https://sourceforge.net/projects/hyenae/;
+    homepage = "https://sourceforge.net/projects/hyenae/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

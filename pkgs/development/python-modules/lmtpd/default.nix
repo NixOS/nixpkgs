@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/moggers87/lmtpd;
+    homepage = "https://github.com/moggers87/lmtpd";
     description = "LMTP counterpart to smtpd in the Python standard library";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];

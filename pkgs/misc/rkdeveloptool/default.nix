@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ libusb1 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rockchip-linux/rkdeveloptool;
+    homepage = "https://github.com/rockchip-linux/rkdeveloptool";
     description = "A tool from Rockchip to communicate with Rockusb devices";
     license = licenses.gpl2;
     maintainers = [ maintainers.lopsided98 ];

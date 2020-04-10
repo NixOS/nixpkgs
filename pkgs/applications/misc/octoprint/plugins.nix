@@ -39,7 +39,7 @@ let
 
       meta = with stdenv.lib; {
         description = "OctoPrint plugin for the Micro 3D printer";
-        homepage = https://github.com/donovan6000/M33-Fio;
+        homepage = "https://github.com/donovan6000/M33-Fio";
         license = licenses.gpl3;
         maintainers = with maintainers; [ abbradar ];
       };
@@ -60,7 +60,7 @@ let
 
       meta = with stdenv.lib; {
         description = "Publish printer status MQTT";
-        homepage = https://github.com/OctoPrint/OctoPrint-MQTT;
+        homepage = "https://github.com/OctoPrint/OctoPrint-MQTT";
         license = licenses.agpl3;
         maintainers = with maintainers; [ peterhoeg ];
       };
@@ -79,7 +79,7 @@ let
 
       meta = with stdenv.lib; {
         description = "Show printers status in window title";
-        homepage = https://github.com/MoonshineSG/OctoPrint-TitleStatus;
+        homepage = "https://github.com/MoonshineSG/OctoPrint-TitleStatus";
         license = licenses.agpl3;
         maintainers = with maintainers; [ abbradar ];
       };
@@ -98,7 +98,7 @@ let
 
       meta = with stdenv.lib; {
         description = "A simple stl viewer tab for OctoPrint";
-        homepage = https://github.com/jneilliii/Octoprint-STLViewer;
+        homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
         license = licenses.agpl3;
         maintainers = with maintainers; [ abbradar ];
       };

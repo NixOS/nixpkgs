@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ lv2 python2 ];
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/fomp/;
+    homepage = "http://drobilla.net/software/fomp/";
     description = "An LV2 port of the MCP, VCO, FIL, and WAH plugins by Fons Adriaensen";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

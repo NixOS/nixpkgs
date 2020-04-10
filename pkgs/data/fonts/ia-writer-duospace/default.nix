@@ -18,7 +18,7 @@ in fetchFromGitHub {
 
   meta = with lib; {
     description = "iA Writer Duospace Typeface";
-    homepage = https://ia.net/topics/in-search-of-the-perfect-writing-font;
+    homepage = "https://ia.net/topics/in-search-of-the-perfect-writing-font";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ maintainers.marsam ];

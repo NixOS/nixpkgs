@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = https://www.nongnu.org/m17n/;
+    homepage = "https://www.nongnu.org/m17n/";
     description = "Multilingual text processing library (libotf)";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    homepage = https://erratique.ch/software/fmt;
+    homepage = "https://erratique.ch/software/fmt";
     license = stdenv.lib.licenses.isc;
     description = "OCaml Format pretty-printer combinators";
     inherit (ocaml.meta) platforms;

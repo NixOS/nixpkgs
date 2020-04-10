@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://ocaml-http.forge.ocamlcore.org/;
+    homepage = "http://ocaml-http.forge.ocamlcore.org/";
     platforms = ocaml.meta.platforms or [];
     description = "Do it yourself (OCaml) HTTP daemon";
     license = licenses.lgpl2;

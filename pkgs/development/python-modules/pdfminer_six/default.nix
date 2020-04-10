@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "fork of PDFMiner using six for Python 2+3 compatibility";
-    homepage = https://github.com/pdfminer/pdfminer.six;
+    homepage = "https://github.com/pdfminer/pdfminer.six";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy marsam ];
   };

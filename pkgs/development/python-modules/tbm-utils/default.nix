@@ -29,7 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ attrs pendulum pprintpp wrapt ];
 
   meta = {
-    homepage = https://github.com/thebigmunch/tbm-utils;
+    homepage = "https://github.com/thebigmunch/tbm-utils";
     license = with lib.licenses; [ mit ];
     description = "A commonly-used set of utilities";
   };

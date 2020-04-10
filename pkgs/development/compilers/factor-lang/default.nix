@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://factorcode.org;
+    homepage = "https://factorcode.org";
     license = licenses.bsd2;
     description = "A concatenative, stack-based programming language";
 

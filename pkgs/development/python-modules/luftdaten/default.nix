@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for interacting with luftdaten.info";
-    homepage = https://github.com/fabaff/python-luftdaten;
+    homepage = "https://github.com/fabaff/python-luftdaten";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

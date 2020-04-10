@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Securely transfer data between computers";
-    homepage = https://github.com/warner/magic-wormhole;
+    homepage = "https://github.com/warner/magic-wormhole";
     license = licenses.mit;
     # Currently broken on Python 2.7. See
     # https://github.com/NixOS/nixpkgs/issues/71826

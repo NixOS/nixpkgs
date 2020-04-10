@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SELinux binary policy manipulation library";
-    homepage = http://userspace.selinuxproject.org;
+    homepage = "http://userspace.selinuxproject.org";
     platforms = platforms.linux;
     maintainers = [ maintainers.phreedom ];
     license = stdenv.lib.licenses.gpl2;

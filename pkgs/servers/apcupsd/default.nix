@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Daemon for controlling APC UPSes";
-    homepage = http://www.apcupsd.com/;
+    homepage = "http://www.apcupsd.com/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

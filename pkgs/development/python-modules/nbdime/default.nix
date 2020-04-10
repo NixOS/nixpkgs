@@ -61,7 +61,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    homepage = https://github.com/jupyter/nbdime;
+    homepage = "https://github.com/jupyter/nbdime";
     description = "Tools for diffing and merging of Jupyter notebooks.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tbenst ];

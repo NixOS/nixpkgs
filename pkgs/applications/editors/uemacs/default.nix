@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/cgit/editors/uemacs/uemacs.git;
+    homepage = "https://git.kernel.org/cgit/editors/uemacs/uemacs.git";
     description = "Torvalds Micro-emacs fork";
     longDescription = ''
       uEmacs/PK 4.0 is a full screen editor based on MicroEMACS 3.9e

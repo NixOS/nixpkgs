@@ -33,7 +33,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://code.launchpad.net/~mriedesel/poppler-python/main;
+    homepage = "https://code.launchpad.net/~mriedesel/poppler-python/main";
     description = "Python bindings for poppler-glib, unofficial branch including bug fixes, and removal of gtk dependencies";
     license = licenses.gpl2;
   };

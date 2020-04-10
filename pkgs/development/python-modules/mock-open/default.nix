@@ -15,7 +15,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = lib.optional (pythonOlder "3.3") mock;
 
   meta = with lib; {
-    homepage = https://github.com/nivbend/mock-open;
+    homepage = "https://github.com/nivbend/mock-open";
     description = "A better mock for file I/O";
     license = licenses.mit;
   };

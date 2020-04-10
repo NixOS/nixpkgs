@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://www.pykka.org;
+    homepage = "http://www.pykka.org";
     description = "A Python implementation of the actor model";
     license = licenses.asl20;
     maintainers = [];

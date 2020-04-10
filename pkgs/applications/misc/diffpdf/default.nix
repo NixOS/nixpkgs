@@ -50,7 +50,7 @@ mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://www.qtrac.eu/diffpdfc.html;
+    homepage = "http://www.qtrac.eu/diffpdfc.html";
     description = "Tool for diffing pdf files visually or textually";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];

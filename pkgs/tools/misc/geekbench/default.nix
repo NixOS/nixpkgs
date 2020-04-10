@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform benchmark";
-    homepage = https://geekbench.com/;
+    homepage = "https://geekbench.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.michalrus ];
     platforms = [ "x86_64-linux" ];

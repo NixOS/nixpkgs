@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://mgba.io;
+    homepage = "https://mgba.io";
     description = "A modern GBA emulator with a focus on accuracy";
 
     longDescription = ''

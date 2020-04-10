@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OpenStreetMap editor";
-    homepage = http://merkaartor.be/;
+    homepage = "http://merkaartor.be/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };

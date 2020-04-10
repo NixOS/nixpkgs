@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://tcpcrypt.org/;
+    homepage = "http://tcpcrypt.org/";
     description = "Fast TCP encryption";
     platforms = platforms.all;
     license = licenses.bsd2;

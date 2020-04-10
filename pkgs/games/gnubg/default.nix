@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib;
     { description = "World class backgammon application";
-      homepage = http://www.gnubg.org/;
+      homepage = "http://www.gnubg.org/";
       license = licenses.gpl3;
       maintainers = [ maintainers.ehmry ];
       platforms = platforms.linux;

@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://leoeditor.com;
+    homepage = "http://leoeditor.com";
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
     license = licenses.mit;

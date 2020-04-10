@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
   meta = {
     maintainers = [ stdenv.lib.maintainers.cleverca22 ];
     description = "A graphical user interface to programs that play the board game Go and support the Go Text Protocol such as GNU Go";
-    homepage = http://gogui.sourceforge.net/;
+    homepage = "http://gogui.sourceforge.net/";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl3;
   };

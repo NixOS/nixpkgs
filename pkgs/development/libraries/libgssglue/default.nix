@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.citi.umich.edu/projects/nfsv4/linux/;
+    homepage = "http://www.citi.umich.edu/projects/nfsv4/linux/";
     description = "Exports a gssapi interface which calls other random gssapi libraries";
     license = licenses.bsd3;
     platforms = platforms.linux;

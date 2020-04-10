@@ -27,7 +27,7 @@ buildGoModule rec {
   meta = with stdenv.lib; {
     description = "A CLI to provide enhanced history for your ZSH shell";
     license = licenses.mit;
-    homepage = https://github.com/b4b4r07/history;
+    homepage = "https://github.com/b4b4r07/history";
     platforms = platforms.unix;
     maintainers = with maintainers; [ kampka ];
   };

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = https://ocaml.janestreet.com/;
+    homepage = "https://ocaml.janestreet.com/";
     description = "Support library for OCaml preprocessor type conversions";
     license = licenses.asl20;
     branch = "108";

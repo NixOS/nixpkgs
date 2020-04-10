@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ljanyst/carddav-util;
+    homepage = "https://github.com/ljanyst/carddav-util";
     description = "A CardDAV import/export utility";
     platforms = platforms.unix;
     license = licenses.isc;

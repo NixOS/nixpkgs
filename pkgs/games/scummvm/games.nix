@@ -52,7 +52,7 @@ let
       '';
 
       meta = with stdenv.lib; {
-        homepage = https://www.scummvm.org;
+        homepage = "https://www.scummvm.org";
         license = licenses.free; # refer to the readme for exact wording
         maintainers = with maintainers; [ peterhoeg ];
         inherit description;

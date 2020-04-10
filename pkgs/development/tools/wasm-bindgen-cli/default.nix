@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" pname ];
 
   meta = with lib; {
-    homepage = https://rustwasm.github.io/docs/wasm-bindgen/;
+    homepage = "https://rustwasm.github.io/docs/wasm-bindgen/";
     license = licenses.asl20;
     description = "Facilitating high-level interactions between wasm modules and JavaScript";
     maintainers = with maintainers; [ ma27 ];

@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://uberwriter.github.io/uberwriter/;
+    homepage = "http://uberwriter.github.io/uberwriter/";
     description = "A distraction free Markdown editor for GNU/Linux";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Python CBOR (de)serializer with extensive tag support";
-    homepage = https://github.com/agronholm/cbor2;
+    homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
     maintainers = with maintainers; [ taneb ];
   };

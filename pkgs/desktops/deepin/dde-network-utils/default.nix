@@ -45,7 +45,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Deepin network utils";
-    homepage = https://github.com/linuxdeepin/dde-network-utils;
+    homepage = "https://github.com/linuxdeepin/dde-network-utils";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

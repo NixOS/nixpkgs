@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.f-prot.com;
+    homepage = "http://www.f-prot.com";
     description = "A popular proprietary antivirus program";
     license = licenses.unfree;
     maintainers = [ maintainers.phreedom ];

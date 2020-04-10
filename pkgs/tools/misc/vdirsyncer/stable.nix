@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/pimutils/vdirsyncer;
+    homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
     license = licenses.mit;
     maintainers = with maintainers; [ loewenheim ];

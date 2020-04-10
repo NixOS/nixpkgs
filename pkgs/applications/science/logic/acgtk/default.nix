@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
-    homepage = https://acg.loria.fr/;
+    homepage = "https://acg.loria.fr/";
     description = "A toolkit for developing ACG signatures and lexicon";
     license = licenses.cecill20;
     inherit (ocamlPackages.ocaml.meta) platforms;

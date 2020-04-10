@@ -14,7 +14,7 @@ fetchzip {
 
   meta = with lib; {
     description = "DejaVu fonts with additional symbols used by VDR";
-    homepage = http://andreas.vdr-developer.org/fonts/;
+    homepage = "http://andreas.vdr-developer.org/fonts/";
     platforms = platforms.all;
     maintainers = with maintainers; [ ck3d ];
 

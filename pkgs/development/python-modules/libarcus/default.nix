@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Communication library between internal components for Ultimaker software";
-    homepage = https://github.com/Ultimaker/libArcus;
+    homepage = "https://github.com/Ultimaker/libArcus";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar gebner ];

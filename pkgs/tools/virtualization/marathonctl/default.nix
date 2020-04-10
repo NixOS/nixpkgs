@@ -16,7 +16,7 @@ buildGoPackage {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/shoenig/marathonctl;
+    homepage = "https://github.com/shoenig/marathonctl";
     description = "CLI tool for Marathon";
     platforms = platforms.all;
     license = licenses.mit;

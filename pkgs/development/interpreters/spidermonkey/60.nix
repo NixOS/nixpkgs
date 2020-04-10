@@ -75,7 +75,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
-    homepage = https://developer.mozilla.org/en/SpiderMonkey;
+    homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.linux;

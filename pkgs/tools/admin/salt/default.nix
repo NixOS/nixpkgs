@@ -41,7 +41,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://saltstack.com/;
+    homepage = "https://saltstack.com/";
     description = "Portable, distributed, remote execution and configuration management system";
     maintainers = with maintainers; [ aneeshusa ];
     license = licenses.asl20;

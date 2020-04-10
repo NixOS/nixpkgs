@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command Line Interface Formulation Framework";
-    homepage = https://docs.openstack.org/cliff/latest/;
+    homepage = "https://docs.openstack.org/cliff/latest/";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

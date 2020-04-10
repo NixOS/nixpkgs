@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Capture the outcome of Python function calls.";
-    homepage = https://github.com/python-trio/outcome;
+    homepage = "https://github.com/python-trio/outcome";
     license = with lib.licenses; [ mit asl20 ];
     maintainers = with lib.maintainers; [ catern ];
   };

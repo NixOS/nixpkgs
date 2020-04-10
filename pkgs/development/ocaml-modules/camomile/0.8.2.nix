@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://camomile.sourceforge.net/;
+    homepage = "http://camomile.sourceforge.net/";
     description = "A comprehensive Unicode library for OCaml";
     license = stdenv.lib.licenses.lgpl21;
     branch = "0.8.2";

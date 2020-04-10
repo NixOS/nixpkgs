@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Linux Libertine Fonts";
-    homepage = http://linuxlibertine.sf.net;
+    homepage = "http://linuxlibertine.sf.net";
     maintainers = [ maintainers.volth ];
     license = licenses.ofl;
   };

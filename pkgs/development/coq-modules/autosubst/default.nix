@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.ps.uni-saarland.de/autosubst/;
+    homepage = "https://www.ps.uni-saarland.de/autosubst/";
     description = "Automation for de Bruijn syntax and substitution in Coq";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

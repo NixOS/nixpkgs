@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Command-line bibliography manager";
-    homepage = https://github.com/pubs/pubs;
+    homepage = "https://github.com/pubs/pubs";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ gebner ];
   };

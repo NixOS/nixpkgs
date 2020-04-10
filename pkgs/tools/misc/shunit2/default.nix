@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kward/shunit2;
+    homepage = "https://github.com/kward/shunit2";
     description = "A xUnit based unit test framework for Bourne based shell scripts.";
     maintainers = with maintainers; [ cdepillabout utdemir ];
     license = licenses.asl20;

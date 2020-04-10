@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "VTE based, highly customizable terminal emulator";
-    homepage = http://www.calno.com/evilvte;
+    homepage = "http://www.calno.com/evilvte";
     license = licenses.gpl2;
     maintainers = [ maintainers.bodil ];
     platforms = platforms.linux;

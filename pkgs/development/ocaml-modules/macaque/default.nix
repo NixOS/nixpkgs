@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Macros for Caml Queries";
-    homepage = https://github.com/ocsigen/macaque;
+    homepage = "https://github.com/ocsigen/macaque";
     license = licenses.lgpl2;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ vbgl ];

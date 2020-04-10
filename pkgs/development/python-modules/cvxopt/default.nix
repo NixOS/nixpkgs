@@ -52,7 +52,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = http://cvxopt.org/;
+    homepage = "http://cvxopt.org/";
     description = "Python Software for Convex Optimization";
     longDescription = ''
       CVXOPT is a free software package for convex optimization based on the

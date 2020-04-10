@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       Aumix adjusts an audio mixer from X, the console, a terminal,
       the command line or a script.
     '';
-    homepage = http://www.jpj.net/~trevor/aumix.html;
+    homepage = "http://www.jpj.net/~trevor/aumix.html";
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ ];

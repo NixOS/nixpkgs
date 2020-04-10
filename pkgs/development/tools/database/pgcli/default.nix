@@ -37,7 +37,7 @@ buildPythonApplication rec {
       Rich command-line interface for PostgreSQL with auto-completion and
       syntax highlighting.
     '';
-    homepage = https://pgcli.com;
+    homepage = "https://pgcli.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dywedir ];
   };

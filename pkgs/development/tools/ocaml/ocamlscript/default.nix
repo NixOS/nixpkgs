@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = http://martin.jambon.free.fr/ocamlscript.html;
+    homepage = "http://martin.jambon.free.fr/ocamlscript.html";
     license = licenses.boost;
     platforms = ocaml.meta.platforms or [];
     description = "Natively-compiled OCaml scripts";

@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/caseman/noise;
+    homepage = "https://github.com/caseman/noise";
     description = "Native-code and shader implementations of Perlin noise";
     license = licenses.mit;
     platforms = platforms.all;

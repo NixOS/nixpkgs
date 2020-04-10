@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/timidity/;
+    homepage = "https://sourceforge.net/projects/timidity/";
     license = licenses.gpl2;
     description = "A software MIDI renderer";
     maintainers = [ maintainers.marcweber ];

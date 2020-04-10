@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Cython interface to the hidapi from https://github.com/signal11/hidapi";
-    homepage = https://github.com/trezor/cython-hidapi;
+    homepage = "https://github.com/trezor/cython-hidapi";
     # license can actually be either bsd3 or gpl3
     # see https://github.com/trezor/cython-hidapi/blob/master/LICENSE-orig.txt
     license = licenses.bsd3;

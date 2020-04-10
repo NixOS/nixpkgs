@@ -17,7 +17,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Byzantine-Fault Tolerant State Machines. Or Blockchain, for short.";
-    homepage = https://tendermint.com/;
+    homepage = "https://tendermint.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ alexfmpe ];
     platforms = platforms.linux ++ platforms.darwin;

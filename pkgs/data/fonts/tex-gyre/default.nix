@@ -23,7 +23,7 @@ let
     inherit outputHash;
 
     meta = with stdenv.lib; {
-      homepage = http://www.gust.org.pl/projects/e-foundry/tex-gyre;
+      homepage = "http://www.gust.org.pl/projects/e-foundry/tex-gyre";
       # "The TeX Gyre fonts are licensed under the GUST Font License (GFL),
       # which is a free license, legally equivalent to the LaTeX Project Public
       # License (LPPL), version 1.3c or later." - GUST website

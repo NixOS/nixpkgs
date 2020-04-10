@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.bsd3;
-    homepage = http://www.leoprover.org/;
+    homepage = "http://www.leoprover.org/";
   };
 }

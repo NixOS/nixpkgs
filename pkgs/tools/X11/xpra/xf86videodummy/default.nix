@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Dummy driver for Xorg with xpra patches";
-    homepage = https://xpra.org/trac/wiki/Xdummy;
+    homepage = "https://xpra.org/trac/wiki/Xdummy";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ numinit ];

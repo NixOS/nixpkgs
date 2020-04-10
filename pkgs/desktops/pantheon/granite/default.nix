@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       Granite is a companion library for GTK and GLib. Among other things, it provides complex widgets and convenience functions
       designed for use in apps built for elementary OS.
     '';
-    homepage = https://github.com/elementary/granite;
+    homepage = "https://github.com/elementary/granite";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
