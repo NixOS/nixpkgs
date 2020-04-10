@@ -90,7 +90,9 @@ in self // {
           --add-flags $out/data/$pname
       '';
 
-    } // extraArgs) // {
-      meta = alephone.meta // meta;
-    };
+      meta = alephone.meta // {
+        license = stdenv.lib.licenses.free;
+        hydraPlatforms = [ ];
+      } // meta;
+    });
 }
