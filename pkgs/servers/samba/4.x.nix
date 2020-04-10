@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
          else "--without-ad-dc")
     ++ optionals enableKerberos [
     "--with-system-mitkrb5"
-    "--with-system-mitkdc=${krb5Full}"
+    "--with-system-mitkdc=${krb5Full}/bin/krb5kdc"
   ] ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
