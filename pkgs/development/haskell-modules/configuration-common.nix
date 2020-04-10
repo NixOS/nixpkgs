@@ -45,18 +45,6 @@ self: super: {
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
-  # https://github.com/koalaman/shellcheck/issues/1778
-  ShellCheck = overrideCabal super.ShellCheck (drv: {
-    patches = [
-      # cabal 3.0 support
-      ( pkgs.fetchpatch {
-        url = "https://github.com/koalaman/shellcheck/commit/2c026f1ec7c205c731ff2a0ccd85365f37245.patch";
-        sha256 = "0z6yf350ngr6rwfkvdy670c476fgzj8a0n4ppdm1xr8r1lij7sfz";
-        excludes = [ "Dockerfile" ];
-      })
-    ];
-  });
-
   # Tests are failing
   # https://github.com/bos/statistics/issues/123
   statistics = dontCheck super.statistics;
