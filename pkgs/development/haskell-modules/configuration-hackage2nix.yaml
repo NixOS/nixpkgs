@@ -3539,6 +3539,7 @@ broken-packages:
   - church-maybe
   - cielo
   - cil
+  - cimple
   - cinvoke
   - cio
   - cipher-blowfish
@@ -6386,6 +6387,7 @@ broken-packages:
   - ideas
   - ideas-math
   - ideas-math-types
+  - ideas-statistics
   - idempotent
   - identicon-style-squares
   - identifiers
@@ -7707,6 +7709,7 @@ broken-packages:
   - neural
   - neural-network-blashs
   - neural-network-hmatrix
+  - neuron
   - newhope
   - newports
   - newsletter
@@ -10367,6 +10370,7 @@ broken-packages:
   - vty-ui
   - vty-ui-extras
   - vulkan
+  - VulkanMemoryAllocator
   - waargonaut
   - wacom-daemon
   - waddle
