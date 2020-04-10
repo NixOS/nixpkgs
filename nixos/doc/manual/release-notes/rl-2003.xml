@@ -293,16 +293,6 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
    </listitem>
    <listitem>
      <para>
-       <filename>./services/networking/ntp/chrony.nix</filename>
-     </para>
-   </listitem>
-   <listitem>
-     <para>
-       <filename>./services/networking/ntp/ntpd.nix</filename>
-     </para>
-   </listitem>
-   <listitem>
-     <para>
        <filename>./services/networking/ntp/openntpd.nix</filename>
      </para>
    </listitem>
