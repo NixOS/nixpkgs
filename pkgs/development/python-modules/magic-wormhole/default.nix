@@ -23,18 +23,18 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01fr4bi6kc6fz9n3c4qq892inrc3nf6p2djy65yvm7xkvdxncydf";
+    sha256 = "0q41j99718y7m95zg1vaybnsp31lp6lhyqkbv4yqz5ys6jixh3qv";
   };
 
   buildInputs = [ glibcLocales ];
   propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize txtorcon ];
   checkInputs = [ mock magic-wormhole-transit-relay magic-wormhole-mailbox-server ];
 
-  postPatch = ''
+  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
   '';
 
@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Securely transfer data between computers";
-    homepage = https://github.com/warner/magic-wormhole;
+    homepage = "https://github.com/warner/magic-wormhole";
     license = licenses.mit;
     # Currently broken on Python 2.7. See
     # https://github.com/NixOS/nixpkgs/issues/71826
