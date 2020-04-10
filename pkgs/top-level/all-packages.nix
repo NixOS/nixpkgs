@@ -11972,7 +11972,12 @@ in
   hwloc = callPackage ../development/libraries/hwloc {};
 
   inherit (callPackage ../development/tools/misc/hydra { })
-    hydra-migration hydra-unstable hydra-flakes;
+    hydra-migration hydra-unstable;
+
+  hydra-flakes = throw ''
+    Flakes support has been merged into Hydra's master. Please use
+    `pkgs.hydra-unstable` now.
+  '';
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
@@ -25401,6 +25406,8 @@ in
   brscan4 = callPackage ../applications/graphics/sane/backends/brscan4 { };
 
   dsseries = callPackage ../applications/graphics/sane/backends/dsseries { };
+
+  sane-airscan = callPackage ../applications/graphics/sane/backends/airscan { };
 
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 

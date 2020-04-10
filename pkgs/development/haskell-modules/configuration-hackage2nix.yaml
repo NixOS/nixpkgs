@@ -69,6 +69,9 @@ core-packages:
 default-package-overrides:
   # pandoc-2.9 does not accept the 0.3 version yet
   - doclayout < 0.3
+  # latest version does not support pandoc 2.8, remove once 2.9
+  # is available in LTS
+  - pandoc-crossref ==0.3.4.2
   # LTS Haskell 14.23
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
@@ -2916,7 +2919,6 @@ broken-packages:
   - AMI
   - ampersand
   - amqp-conduit
-  - amqp-utils
   - analyze
   - analyze-client
   - anansi-pandoc
@@ -7832,7 +7834,6 @@ broken-packages:
   - pan-os-syslog
   - panda
   - pandoc-citeproc-preamble
-  - pandoc-crossref
   - pandoc-include
   - pandoc-include-code
   - pandoc-japanese-filters

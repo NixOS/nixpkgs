@@ -73,7 +73,7 @@ in rec {
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
         (onFullSupported "nixos.tests.gnome3")
         (onFullSupported "nixos.tests.gnome3-xorg")
-        (onFullSupported "nixos.tests.hibernate")
+        (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")

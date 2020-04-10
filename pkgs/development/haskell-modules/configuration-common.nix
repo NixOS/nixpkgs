@@ -348,7 +348,6 @@ self: super: {
   optional = dontCheck super.optional;
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
-  pandoc-crossref = dontCheck super.pandoc-crossref;  # (most likely change when no longer 0.3.2.1) https://github.com/lierdakil/pandoc-crossref/issues/199
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -1415,5 +1414,10 @@ self: super: {
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
+
+  # amqp-utils depends on amqp >= 0.19
+  amqp-utils = super.amqp-utils.override {
+    amqp = dontCheck super.amqp_0_19_1;
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

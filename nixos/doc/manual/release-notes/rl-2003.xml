@@ -397,6 +397,17 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
   <itemizedlist>
    <listitem>
     <para>
+     The <package>dhcpcd</package> package <link xlink:href="https://roy.marples.name/archives/dhcpcd-discuss/0002621.html">
+     does not request IPv4 addresses for tap and bridge interfaces anymore by default</link>.
+     In order to still get an address on a bridge interface, one has to disable
+     <literal>networking.useDHCP</literal> and explicitly enable
+     <literal>networking.interfaces.&lt;name&gt;.useDHCP</literal> on
+     every interface, that should get an address via DHCP. This way, dhcpcd
+     is configured in an explicit way about which interface to run on.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       GnuPG is now built without support for a graphical passphrase entry
       by default. Please enable the <literal>gpg-agent</literal> user service
       via the NixOS option <literal>programs.gnupg.agent.enable</literal>.
@@ -998,10 +1009,10 @@ auth required pam_succeed_if.so uid >= 1000 quiet
       </listitem>
       <listitem>
        <para>
-        Deploy a newer version of Hydra to activate the DB optimizations. You can choose from
-        either <package>hydra-unstable</package> (latest <literal>master</literal> compiled
-        against <package>nixUnstable</package>) and <package>hydra-flakes</package> (latest
-        version with flake-support).
+        Deploy a newer version of Hydra to activate the DB optimizations. This can be done by
+        using <package>hydra-unstable</package>. This package already includes
+        <link xlink:href="https://github.com/nixos/rfcs/pull/49">flake-support</link> and is
+        therefore compiled against <package>pkgs.nixFlakes</package>.
         <warning>
          <para>
           If your <link linkend="opt-system.stateVersion">stateVersion</link> is set to
