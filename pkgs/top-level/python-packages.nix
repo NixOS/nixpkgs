@@ -3288,6 +3288,8 @@ in {
 
   pytools = callPackage ../development/python-modules/pytools { };
 
+  python-constraint = callPackage ../development/python-modules/python-constraint { };
+
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
 
   python-lzo = callPackage ../development/python-modules/python-lzo {
