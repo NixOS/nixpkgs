@@ -181,9 +181,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
     done
     linkopts=()
     host_linkopts=()
-    for flag in $NIX_LD_FLAGS; do
-      linkopts+=( "--linkopt=$flag" )
-      host_linkopts+=( "--host_linkopt=$flag" )
+    for flag in $NIX_LDFLAGS; do
+      linkopts+=( "--linkopt=-Wl,$flag" )
+      host_linkopts+=( "--host_linkopt=-Wl,$flag" )
     done
 
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
