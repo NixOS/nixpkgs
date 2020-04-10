@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, cmake, pkgconfig, glib, libX11, libXext, libXinerama, libXrandr, asciidoc }:
+{ stdenv, fetchurl, cmake, pkgconfig, glib, libX11, libXext, libXinerama, libXrandr
+, withDoc ? stdenv.buildPlatform == stdenv.targetPlatform, asciidoc ? null }:
+
+# Doc generation is disabled by default when cross compiling because asciidoc
+# does not cross compile for now
+
+assert withDoc -> asciidoc != null;
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
@@ -11,19 +17,19 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+  ] ++ stdenv.lib.optionals withDoc [
     "doc"
     "man"
   ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc"
-  ];
+  ] ++ stdenv.lib.optional (!withDoc) "-DWITH_DOCUMENTATION=OFF";
 
   nativeBuildInputs = [
     cmake
     pkgconfig
-    asciidoc
-  ];
+  ] ++ stdenv.lib.optional withDoc asciidoc;
 
   buildInputs = [
     glib
