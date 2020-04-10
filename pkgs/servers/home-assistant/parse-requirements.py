@@ -36,7 +36,9 @@ PKG_PREFERENCES = {
     # Use python3Packages.youtube-dl-light instead of python3Packages.youtube-dl
     "youtube-dl": "youtube-dl-light",
     "tensorflow-bin": "tensorflow",
+    "tensorflow-bin_2": "tensorflow",
     "tensorflowWithoutCuda": "tensorflow",
+    "tensorflow-build_2": "tensorflow",
 }
 
 
@@ -79,7 +81,8 @@ def parse_components(version: str = "master"):
 # Recursively get the requirements of a component and its dependencies
 def get_reqs(components, component):
     requirements = set(components[component]["requirements"])
-    for dependency in components[component]["dependencies"]:
+    deps = components[component].get("dependencies", [])
+    for dependency in deps:
         requirements.update(get_reqs(components, dependency))
     return requirements
 
