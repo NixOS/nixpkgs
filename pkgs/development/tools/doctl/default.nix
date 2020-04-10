@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "doctl";
@@ -14,6 +14,16 @@ buildGoPackage rec {
     -X ${goPackagePath}.Minor=${lib.versions.minor version}
     -X ${goPackagePath}.Patch=${lib.versions.patch version}
     -X ${goPackagePath}.Label=release
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    export HOME=$(mktemp -d) # attempts to write to /homeless-shelter
+    for shell in bash fish zsh; do
+      $bin/bin/doctl completion $shell > doctl.$shell
+      installShellCompletion doctl.$shell
+    done
   '';
 
   src = fetchFromGitHub {
