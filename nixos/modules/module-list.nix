@@ -46,6 +46,7 @@
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/digitalbitbox.nix
+  ./hardware/dell-command-configure.nix
   ./hardware/device-tree.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
