@@ -103,6 +103,7 @@ in
     }];
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
+    networking.firewall.package = mkDefault pkgs.iptables-nftables-compat;
     systemd.services.nftables = {
       description = "nftables firewall";
       before = [ "network-pre.target" ];
