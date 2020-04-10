@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchgit, isPy3k
+{ buildPythonPackage, lib, fetchgit, fetchpatch, isPy3k
 , git, makeWrapper, sassc, hyperkitty, postorius, whoosh
 , django
 }:
@@ -14,6 +14,13 @@ buildPythonPackage rec {
     sha256 = "124cxr4vfi1ibgxygk4l74q4fysx0a6pga1kk9p5wq2yvzwg9z3n";
     leaveDotGit = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/qyliss/mailman-web/commit/fab30e23a1622bfa653c61b96a7ad9810926280c.patch";
+      sha256 = "1qn88nlvf9n1amql9d7v91fzdasxa78bvzi9adwqbhciw1azf84a";
+    })
+  ];
 
   # This is just so people installing from pip also get uwsgi
   # installed, AFAICT.
@@ -36,7 +43,5 @@ buildPythonPackage rec {
     description = "Django project for Mailman 3 web interface";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peti qyliss ];
-    # mailman-web requires django < 2.2
-    broken = versionOlder "2.2" django.version;
   };
 }
