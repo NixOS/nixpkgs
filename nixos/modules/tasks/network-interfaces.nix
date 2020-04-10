@@ -977,6 +977,17 @@ in
         '';
       })) ++ [
         {
+          assertion = cfg.useDHCP -> cfg.bridges == {};
+          message = ''
+            There are the bridges [ ${builtins.toString (builtins.attrNames cfg.bridges)} ] configured while `networking.useDHCP` is enabled.
+            dhcpcd doesn't give IPv4 addresses to bridges by default anymore,
+            so you have to set `networking.useDHCP = false` and then whitelist
+            every interface you need DHCP on with
+            `networking.interfaces.<name?>.useDHCP = true`.
+          '';
+        }
+      ] ++ [
+        {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
           message = "Invalid value given to the networking.hostId option.";
         }
