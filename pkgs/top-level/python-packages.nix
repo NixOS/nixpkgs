@@ -5526,6 +5526,8 @@ in {
 
   readchar = callPackage ../development/python-modules/readchar { };
 
+  retworkx = callPackage ../development/python-modules/retworkx { };
+
   rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
     python2 = python;
   }));
