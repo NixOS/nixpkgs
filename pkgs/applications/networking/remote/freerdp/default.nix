@@ -4,6 +4,7 @@
 , libxkbcommon, libxkbfile
 , wayland
 , gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc
+, libusb1
 , libpulseaudio ? null
 , cups ? null
 , pcsclite ? null
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.0.0-rc4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "FreeRDP";
     rev    = version;
-    sha256 = "0546i0m2d4nz5jh84ngwzpcm3c43fp987jk6cynqspsmvapab6da";
+    sha256 = "0d2559v0z1jnq6jlrvsgdf8p6gd27m8kwdnxckl1x0ygaxs50bqc";
   };
 
   # outputs = [ "bin" "out" "dev" ];
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     gstreamer gst-plugins-base gst-plugins-good libunwind orc
     libX11 libXcursor libXdamage libXext libXi libXinerama libXrandr libXrender libXv
     libxkbcommon libxkbfile
-    wayland
+    wayland libusb1
   ] ++ optional stdenv.isLinux systemd;
 
   nativeBuildInputs = [
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.freerdp.com/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg lheckemann ];
     platforms = platforms.unix;
   };
 }
