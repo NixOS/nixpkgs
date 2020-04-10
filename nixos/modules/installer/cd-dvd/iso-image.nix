@@ -417,8 +417,17 @@ in
       '';
     };
 
+    isoImage.edition = mkOption {
+      default = "";
+      description = ''
+        Specifies which edition string to use in the volume ID of the generated
+        ISO image.
+      '';
+    };
+
     isoImage.volumeID = mkOption {
-      default = "NIXOS_BOOT_CD";
+      # nixos-$EDITION-$RELEASE-$ARCH
+      default = "nixos${optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}"}-${config.system.nixos.release}-${pkgs.stdenv.hostPlatform.uname.processor}";
       description = ''
         Specifies the label or volume ID of the generated ISO image.
         Note that the label is used by stage 1 of the boot process to
@@ -515,6 +524,19 @@ in
   };
 
   config = {
+    assertions = [
+      {
+        assertion = !(stringLength config.isoImage.volumeID > 32);
+        # https://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor
+        # Volume Identifier can only be 32 bytes
+        message = let
+          length = stringLength config.isoImage.volumeID;
+          howmany = toString length;
+          toomany = toString (length - 32);
+        in
+        "isoImage.volumeID ${config.isoImage.volumeID} is ${howmany} characters. That is ${toomany} characters longer than the limit of 32.";
+      }
+    ];
 
     boot.loader.grub.version = 2;
 
