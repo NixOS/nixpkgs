@@ -147,6 +147,10 @@ in
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
 
+  wrapWithRuntimeDeps = callPackage ../build-support/neowrap.nix { }; # not actually a package
+
+  somthing-else = wrapWithRuntimeDeps mutt { };
+
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
