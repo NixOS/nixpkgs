@@ -21421,6 +21421,8 @@ in
 
   qtchan = libsForQt5.callPackage ../applications/networking/browsers/qtchan { };
 
+  qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
+
   qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
