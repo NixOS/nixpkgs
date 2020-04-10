@@ -2,7 +2,16 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, pkgs
+, procps
+, chardet
+, pytz
+, python-dateutil
+, python-gnupg
+, feedparser
+, sqlalchemy
+, pysocks
+, mock
+, cryptography
 }:
 
 buildPythonPackage rec {
@@ -17,10 +26,28 @@ buildPythonPackage rec {
 
   patchPhase = ''
     sed -i 's/version=version/version="${version}"/' setup.py
-  '';
-  buildInputs = [ pkgs.git ];
 
-  doCheck = false;
+    # Unix's test suite assumes /bin/ls and /boot exists
+    sed -i 's|/bin/ls|ls|' plugins/Unix/test.py
+    sed -i 's|boot|bin|' plugins/Unix/test.py
+  '';
+
+  checkInputs = [
+    procps
+    chardet
+    pytz
+    python-dateutil
+    python-gnupg
+    feedparser
+    sqlalchemy
+    pysocks
+    mock
+    cryptography
+  ];
+
+  checkPhase = ''
+    python scripts/supybot-test --no-network test --plugins-dir=./plugins/
+  '';
 
   meta = with lib; {
     description = "A modified version of Supybot, an IRC bot";
