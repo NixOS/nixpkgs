@@ -20676,6 +20676,8 @@ in
 
   marp = callPackage ../applications/office/marp { };
 
+  mastodon-bot = callPackage ../applications/networking/mastodon-bot { };
+
   magnetico = callPackage ../applications/networking/p2p/magnetico {
     # Version 2019-08-14 fails to build with go 1.13 due to missing go.sum
     buildGoModule = buildGo112Module;
