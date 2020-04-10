@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pkgconfig, libao, json_c, libgcrypt, ffmpeg, curl }:
 
 stdenv.mkDerivation rec {
-  name = "pianobar-2019.02.14";
+  name = "pianobar-2020.04.05";
 
   src = fetchurl {
     url = "http://6xq.net/projects/pianobar/${name}.tar.bz2";
-    sha256 = "07z21vmlqpmvb3294r384iqbx972rwcx6chrdlkfv4hlnc9h7gf0";
+    sha256 = "1034f9ilj9xjw12d6n4vadhl5jzrx0jv8gq1w0rg9hfc55mkn5vc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
