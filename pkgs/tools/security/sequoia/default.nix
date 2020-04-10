@@ -9,16 +9,16 @@ assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1l6isis0ddb0b306z3cv2f5qz2bhw5pmf42shnrxzg7778dnmwhw";
+    sha256 = "0iwzi2ylrwz56s77cd4vcf89ig6ipy4w6kp2pfwqvd2d00x54dhk";
   };
 
-  cargoSha256 = "0cfi42wx93yc9yib9lpxl6ph991ra39yfhw1lr16z2qzzbzj2b1j";
+  cargoSha256 = "0jsmvs6hr9mhapz3a74wpfgkjkq3w10014j3z30bm659mxqrknha";
 
   nativeBuildInputs = [
     pkgconfig

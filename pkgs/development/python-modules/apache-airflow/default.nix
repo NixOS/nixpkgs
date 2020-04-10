@@ -145,6 +145,7 @@ buildPythonPackage rec {
       --replace "dill>=0.2.2, <0.3" "dill" \
       --replace "configparser>=3.5.0, <3.6.0" "configparser" \
       --replace "jinja2>=2.7.3, <=2.10.0" "jinja2" \
+      --replace "colorlog==4.0.2" "colorlog" \
       --replace "funcsigs==1.0.0" "funcsigs" \
       --replace "flask-swagger==0.2.13" "flask-swagger" \
       --replace "python-daemon>=2.1.1, <2.2" "python-daemon" \

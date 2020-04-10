@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = with ocamlPackages; [ ocaml findlib ocaml_extlib ocaml_libvirt ocaml_gettext curses csv xml-light ];
+  buildInputs = with ocamlPackages; [ ocaml findlib ocaml_extlib ocaml_libvirt gettext-stub curses csv xml-light ];
 
   buildPhase = "make opt";
 

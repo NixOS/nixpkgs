@@ -2,12 +2,12 @@ Index: kcmutils-5.33.0/src/kcmoduleloader.cpp
 ===================================================================
 --- kcmutils-5.33.0.orig/src/kcmoduleloader.cpp
 +++ kcmutils-5.33.0/src/kcmoduleloader.cpp
-@@ -96,7 +96,7 @@ KCModule *KCModuleLoader::loadModule(con
-             KPluginLoader loader(KPluginLoader::findPlugin(QLatin1String("kcms/") + mod.service()->library()));
-             KPluginFactory* factory = loader.factory();
-             if (!factory) {
--                qWarning() << "Error loading plugin:" << loader.errorString();
-+                qWarning() << "Error loading KCM plugin" << mod.service()->library() << loader.errorString();
-             } else {
-                 KQuickAddons::ConfigModule *cm = factory->create<KQuickAddons::ConfigModule >();
-                 if (!cm) {
+@@ -95,7 +95,7 @@ KCModule *KCModuleLoader::loadModule(const KCModuleInfo &mod, ErrorReporting rep
+         KPluginLoader loader(KPluginLoader::findPlugin(QLatin1String("kcms/") + mod.service()->library()));
+         KPluginFactory* factory = loader.factory();
+         if (!factory) {
+-            qWarning() << "Couldn't load plugin:" << loader.errorString();
++            qWarning() << "Error loading KCM plugin" << mod.service()->library() << loader.errorString();
+         } else {
+             std::unique_ptr<KQuickAddons::ConfigModule> cm(factory->create<KQuickAddons::ConfigModule>(nullptr, args2));
+             if (!cm) {

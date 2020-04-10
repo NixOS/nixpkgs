@@ -1,6 +1,5 @@
 { stdenv
-, fetchFromGitHub
-, fetchpatch
+, fetchFromGitHub 
 , pantheon
 , pkgconfig
 , meson
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0y8lfrrkzcj8nw94jqawbxr4jz41ac0z539kkr3n3x0qmx72md2y";
+    sha256 = "0a0pqrpmrdd5pch30lizr9righlc7165z7krmnaxrzd0fvfkbr2h";
   };
 
   passthru = {
@@ -52,14 +51,6 @@ stdenv.mkDerivation rec {
     libical
     libsoup
     wingpanel
-  ];
-
-  patches = [
-    # Add support for libecal-2.0
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/3ccd05d611e6dd5274a03f061ba1b5e13d6fe0cf.patch";
-      sha256 = "011q9b4pjmk4fpq5zscl5r8m4n3jiyx464023h4j7zf8r1070jz6";
-    })
   ];
 
   postPatch = ''

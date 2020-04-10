@@ -10,20 +10,21 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.20.3";
+  version = "0.36.0";
   pname = "azure-storage";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "06bmw6k2000kln5jwk5r9bgcalqbyvqirmdh9gq4s6nb4fv3c0jb";
+    sha256 = "0pyasfxkin6j8j00qmky7d9cvpxgis4fi9bscgclj6yrpvf14qpv";
   };
 
   propagatedBuildInputs = [ azure-common dateutil requests ]
                             ++ pkgs.lib.optionals (!isPy3k) [ futures ];
 
-  postInstall = ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
+  postPatch = ''
+    rm azure_bdist_wheel.py
+    substituteInPlace setup.cfg \
+      --replace "azure-namespace-package = azure-nspkg" ""
   '';
 
   meta = with pkgs.lib; {

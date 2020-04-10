@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.7.12";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "scarface-4711";
     repo = "denonavr";
     rev = version;
-    sha256 = "1i7r0f8ldxpy9vkwjla6rfkaq37071d36zfhb1dwm9jgp6ggi34m";
+    sha256 = "12g9w5674fmyf3f4plbhvpxpyhzw32pzwl0hvwswzrc2823xl6vx";
   };
 
   propagatedBuildInputs = [ requests ];

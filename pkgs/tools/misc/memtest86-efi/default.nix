@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "memtest86-efi";
-  version = "8.2";
+  version = "8.3";
 
   src = fetchzip {
-    # TODO: The latest version of memtest86 is actually 8.2, but the
+    # TODO: We're using the previous version of memtest86 because the
     # company developing memtest86 has stopped providing a versioned download
     # link for the latest version:
     #
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     # binaries that we make sure to version, then we could probably keep up
     # with the latest versions released by the company.
     url = "https://www.memtest86.com/downloads/memtest86-${version}-usb.zip";
-    sha256 = "1x1wjssr4nnbnfan0pi7ni2dfwnm3288kq584hkfqcyza8xdx03i";
+    sha256 = "0aldz7rvnfnzb4h447q10k9c9p5ghwzdyn7f6g5lrxiv5vxf3x96";
     stripRoot = false;
   };
 

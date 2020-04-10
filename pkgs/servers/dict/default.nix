@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dictd";
-  version = "1.12.1";
+  version = "1.13.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/dict/dictd-${version}.tar.gz";
-    sha256 = "0min6v60b6z5mrymyjfwzx8nv6rdm8pd8phlwl6v2jl5vkngcdx2";
+    sha256 = "1r413a78sa3mcrgddgdj1za34dj6mnd4dg66csqv2yz8fypm3fpf";
   };
 
   buildInputs = [ libmaa zlib ];

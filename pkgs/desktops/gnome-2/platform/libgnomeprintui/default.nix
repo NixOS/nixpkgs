@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk2, gettext, intltool, libgnomecanvas, libgnomeprint, gnome_icon_theme}:
+{stdenv, fetchurl, pkgconfig, gtk2, gettext, intltool, libgnomecanvas, libgnomeprint, gnome-icon-theme}:
 
 stdenv.mkDerivation {
   name = "libgnomeprintui-2.18.6";
@@ -9,5 +9,5 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 gettext intltool libgnomecanvas libgnomeprint gnome_icon_theme];
+  buildInputs = [ gtk2 gettext intltool libgnomecanvas libgnomeprint gnome-icon-theme];
 }

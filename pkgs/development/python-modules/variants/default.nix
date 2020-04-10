@@ -1,10 +1,13 @@
 { buildPythonPackage
+, isPy27
 , fetchPypi
 , pytestrunner
 , setuptools_scm
+, singledispatch
 , pytest
 , lib
 }:
+
 buildPythonPackage rec {
   pname = "variants";
   version = "0.2.0";
@@ -21,8 +24,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-  ];
-  
+  ] ++ lib.optionals isPy27 [ singledispatch ];
+
   meta = with lib; {
     description = "Library providing syntactic sugar for creating variant forms of a canonical function";
     homepage = "https://github.com/python-variants/variants";

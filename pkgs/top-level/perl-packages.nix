@@ -3239,6 +3239,19 @@ let
     };
   };
 
+  ConvertUU = buildPerlPackage rec {
+    pname = "Convert-UU";
+    version = "0.5201";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AN/ANDK/${pname}-${version}.tar.gz";
+      sha256 = "92329ce1c32b5952c48e1223db018c8c58ceafef03bfa0fd4817cd89c355a3bd";
+    };
+    meta = {
+      description = "Perl module for uuencode and uudecode";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   constantboolean = buildPerlModule {
     pname = "constant-boolean";
     version = "0.02";
@@ -6695,6 +6708,20 @@ let
       sha256 = "165y1cjirbq64w39svkz82cb5jjqkjm8f4c0wqi2lk6050hzf3vq";
     };
     meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ExtUtilsF77 = buildPerlPackage rec {
+    pname = "ExtUtils-F77";
+    version = "1.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KG/KGB/${pname}-${version}.tar.gz";
+      sha256 = "634715969c1650be815b3f11c151444e8793ebd6b6d92ce8654d56d6f893a6a9";
+    };
+    buildInputs = [ FileWhich pkgs.gfortran ];
+    meta = {
+      description = "A simple interface to F77 libs";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11821,6 +11848,21 @@ let
     };
   };
 
+  ModuleCompile = buildPerlPackage rec {
+    pname = "Module-Compile";
+    version = "0.37";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IN/INGY/${pname}-${version}.tar.gz";
+      sha256 = "18e6c4c4d2d5e39c21dde60a64424eed547e1d234ecc73a35278ea08161a8078";
+    };
+    propagatedBuildInputs = [ CaptureTiny DigestSHA1 ];
+    meta = {
+      homepage = "https://github.com/ingydotnet/module-compile-pm";
+      description = "Perl Module Compilation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ModuleCPANTSAnalyse = buildPerlPackage {
      pname = "Module-CPANTS-Analyse";
      version = "1.01";
@@ -16722,7 +16764,12 @@ let
       sha256 = "1y1kn4929k299fbf6sw9lxcsdlq9fvq777p6yrzk591rr9xhkx8h";
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/starman
+    '';
+
     doCheck = false; # binds to various TCP ports
     meta = {
       homepage = https://github.com/miyagawa/Starman;
@@ -17388,11 +17435,11 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "6.1.0";
+    version = "6.2.0";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
-      rev = "v${version}";
-      sha256 = "00w4fmki7ff7i9bi39w2w15mvv38b5ifwk3zib90ny536r3n63sb";
+      rev = "799b243230163ff4f8dde6293da8a0e31e7c900e";
+      sha256 = "1k38d1ycx3ibgfzcr1iym7cvpwvygh6a2i5548m4qjb47vfi12rz";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

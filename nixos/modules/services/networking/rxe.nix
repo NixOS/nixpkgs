@@ -17,7 +17,7 @@ in {
         example = [ "eth0" ];
         description = ''
           Enable RDMA on the listed interfaces. The corresponding virtual
-          RDMA interfaces will be named rxe_<interface>.
+          RDMA interfaces will be named rxe_&lt;interface&gt;.
           UDP port 4791 must be open on the respective ethernet interfaces.
         '';
       };

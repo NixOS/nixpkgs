@@ -19,7 +19,7 @@ buildGoPackage {
 
   meta = with stdenv.lib; {
     description = "Migration tool for ipfs repositories";
-    homepage = https://ipfs.io/;
+    homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ elitak ];

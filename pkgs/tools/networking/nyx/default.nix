@@ -1,6 +1,6 @@
-{ lib, pythonPackages }:
+{ lib, python3Packages }:
 
-with pythonPackages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "nyx";

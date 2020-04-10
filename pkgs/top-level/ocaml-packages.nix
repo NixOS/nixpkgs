@@ -587,6 +587,8 @@ let
 
     ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
+    gettext-stub = callPackage ../development/ocaml-modules/ocaml-gettext/stub.nix { };
+
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
 
     ocaml_http = callPackage ../development/ocaml-modules/http { };

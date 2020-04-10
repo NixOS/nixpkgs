@@ -1,15 +1,15 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
+, fetchPypi
 }:
 
 buildPythonPackage rec {
-  version = "1.17.2"; # note: `conan` package may require a hardcoded one
+  version = "1.17.4"; # note: `conan` package may require a hardcoded one
   pname = "patch-ng";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "02nadk70sk51liv0qav88kx8rzfdjc1x52023zayanz44kkcjl2i";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1kja1nn08w0k8k6j4kad48k581hh9drvjjb8x60v9j13sxdvqyk2";
   };
 
   meta = with stdenv.lib; {

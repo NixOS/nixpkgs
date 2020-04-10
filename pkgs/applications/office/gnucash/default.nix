@@ -25,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "3.8b";
+  version = "3.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "0dvzm3bib7jcj685sklpzyy9mrak9mxyvih2k9fk4sl3v21wlphg";
+    sha256 = "1zxrgrjbs13vgr002rvl734w9f7zzxfq4xxmyhj777dwgkfds0ld";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://www.gnucash.org/;
+    homepage = "http://www.gnucash.org/";
 
     maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
