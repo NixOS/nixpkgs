@@ -5608,6 +5608,10 @@ in {
 
   safe = callPackage ../development/python-modules/safe { };
 
+  sane = disabledIf (!isPy3k) (callPackage ../development/python-modules/sane {
+    inherit (pkgs) saneBackends;
+  });
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
