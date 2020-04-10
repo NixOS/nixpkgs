@@ -1,20 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, boost, brigand, catch2 }:
-
+{ stdenv, fetchFromGitHub, cmake, boost, catch2, metal }:
 stdenv.mkDerivation rec {
   pname = "fcppt";
-  version = "3.2.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "freundlich";
     repo = "fcppt";
     rev = version;
-    sha256 = "09mah52m3lih2n0swpsh8qb72yzl4nixaq99xp7wxyxxprhf4bpa";
+    sha256 = "045cmn4sym6ria96l4fsc1vrs8l4xrl1gzkmja82f4ddj8qkji2f";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost catch2 ];
+  buildInputs = [ boost catch2 metal ];
 
-  cmakeFlags = [ "-DENABLE_EXAMPLES=false" "-DENABLE_CATCH=true" "-DENABLE_TEST=true" "-DBrigand_INCLUDE_DIR=${brigand}/include" ];
+  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=false" "-DENABLE_BOOST=true" "-DENABLE_EXAMPLES=true" "-DENABLE_CATCH=true" "-DENABLE_TEST=true" ];
 
   enableParallelBuilding = true;
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
       programming (which is both efficient and syntactically affordable in
       C++11).
     '';
-    homepage = https://fcppt.org;
+    homepage = "https://fcppt.org";
     license = licenses.boost;
     maintainers = with maintainers; [ pmiddend ];
     platforms = platforms.linux;
