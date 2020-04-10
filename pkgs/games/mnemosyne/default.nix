@@ -17,13 +17,14 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [ anki ];
 
   propagatedBuildInputs = with python.pkgs; [
+    cheroot
+    cherrypy
     googletrans
     gtts
-    pyqtwebengine
-    pyqt5
     matplotlib
-    cherrypy
-    cheroot
+    pyopengl
+    pyqt5
+    pyqtwebengine
     webob
   ];
 
