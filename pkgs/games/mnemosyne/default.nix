@@ -12,7 +12,7 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "0lx70vl3pa3c42lr59s459b2bqi7fm0c80lsm06l34ggfwdadq24";
   };
 
-  nativeBuildInputs = with python.pkgs; [ wrapPython pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = with python.pkgs; [ pyqtwebengine.wrapQtAppsHook ];
 
   buildInputs = [ anki ];
 
@@ -43,9 +43,9 @@ python.pkgs.buildPythonApplication rec {
 
   dontWrapQtApps = true;
 
-  preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-  '';
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+  ];
 
   meta = {
     homepage = https://mnemosyne-proj.org/;
