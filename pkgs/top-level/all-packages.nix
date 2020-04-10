@@ -871,6 +871,8 @@ in
 
   cue = callPackage ../development/tools/cue { };
 
+  dell-command-configure = callPackage ../tools/system/dell-command-configure { };
+
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
 
