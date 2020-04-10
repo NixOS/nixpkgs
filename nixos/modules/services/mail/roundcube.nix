@@ -7,6 +7,7 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
+  phpWithPspell = pkgs.php.withExtensions (e: [ e.pspell ] ++ pkgs.php.enabledExtensions);
 in
 {
   options.services.roundcube = {
@@ -85,6 +86,15 @@ in
       '';
     };
 
+    dicts = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExample "with pkgs.aspellDicts; [ en fr de ]";
+      description = ''
+        List of aspell dictionnaries for spell checking. If empty, spell checking is disabled.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -109,6 +119,11 @@ in
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
       $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
       $config['mime_types'] = '${pkgs.nginx}/conf/mime.types';
+      $config['enable_spellcheck'] = ${if cfg.dicts == [] then "false" else "true"};
+      # by default, spellchecking uses a third-party cloud services
+      $config['spellcheck_engine'] = 'pspell';
+      $config['spellcheck_languages'] = array(${lib.concatMapStringsSep ", " (dict: let p = builtins.parseDrvName dict.shortName; in "'${p.name}' => '${dict.fullName}'") cfg.dicts});
+
       ${cfg.extraConfig}
     '';
 
@@ -172,6 +187,8 @@ in
         "pm.max_requests" = 500;
         "catch_workers_output" = true;
       };
+      phpPackage = phpWithPspell;
+      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
@@ -199,7 +216,7 @@ in
             ${psql} <<< 'TRUNCATE TABLE session;'
           fi
 
-          ${pkgs.php}/bin/php ${cfg.package}/bin/update.sh
+          ${phpWithPspell}/bin/php ${cfg.package}/bin/update.sh
         '';
         serviceConfig = {
           Type = "oneshot";
