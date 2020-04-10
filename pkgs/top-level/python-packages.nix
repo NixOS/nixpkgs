@@ -3376,6 +3376,8 @@ in {
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
+  setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
+
   sievelib = callPackage ../development/python-modules/sievelib { };
 
   watchdog = callPackage ../development/python-modules/watchdog { };
