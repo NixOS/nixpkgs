@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
      license = licenses.bsl11;
      platforms = platforms.linux;
      maintainers = with maintainers; [ izorkin ];
+     broken = true;
  };
 }
