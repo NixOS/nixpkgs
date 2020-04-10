@@ -91,9 +91,6 @@ sub hasCPUFeature {
 }
 
 
-# Detect the number of CPU cores.
-my $cpus = scalar (grep {/^processor\s*:/} (split '\n', $cpuinfo));
-
 
 # Determine CPU governor to use
 if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
@@ -562,7 +559,6 @@ my $hwConfig = <<EOF;
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
-  nix.maxJobs = lib.mkDefault $cpus;
 ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 

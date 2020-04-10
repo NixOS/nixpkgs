@@ -3239,6 +3239,12 @@
     githubId = 4458;
     name = "Ivan Kozik";
   };
+  ivan-timokhin = {
+    email = "nixpkgs@ivan.timokhin.name";
+    name = "Ivan Timokhin";
+    github = "ivan-timokhin";
+    githubId = 9802104;
+  };
   ivan-tkatchev = {
     email = "tkatchev@gmail.com";
     name = "Ivan Tkatchev";
@@ -5600,6 +5606,12 @@
     githubId = 101514;
     name = "Orivej Desh";
   };
+  oro = {
+    email = "marco@orovecchia.at";
+    github = "oro";
+    githubId = 357005;
+    name = "Marco Orovecchia";
+  };
   osener = {
     email = "ozan@ozansener.com";
     github = "osener";
@@ -6526,6 +6538,12 @@
     github = "rzetterberg";
     githubId = 766350;
     name = "Richard Zetterberg";
+  };
+  s1341 = {
+    email = "s1341@shmarya.net";
+    name = "Shmarya Rubenstein";
+    github = "s1341";
+    githubId = 5682183;
   };
   samdoshi = {
     email = "sam@metal-fish.co.uk";
@@ -8203,6 +8221,11 @@
       fingerprint = "85F8 E850 F8F2 F823 F934  535B EC50 6589 9AEA AF4C";
     }];
   };
+  yvesf = {
+    email = "yvesf+nix@xapek.org";
+    github = "yvesf";
+    name = "Yves Fischer";
+  };
   yvt = {
     email = "i@yvt.jp";
     github = "yvt";
@@ -8402,5 +8425,11 @@
     email = "47071325+ymeister@users.noreply.github.com";
     github = "ymeister";
     githubId = 47071325;
+  };
+  cpcloud = {
+    name = "Phillip Cloud";
+    email = "417981+cpcloud@users.noreply.github.com";
+    github = "cpcloud";
+    githubId = 417981;
   };
 }

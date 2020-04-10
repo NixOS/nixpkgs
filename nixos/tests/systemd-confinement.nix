@@ -3,14 +3,14 @@ import ./make-test.nix {
 
   machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
-      #!${pkgs.stdenv.shell}
+      #!${pkgs.runtimeShell}
       export PATH=${lib.escapeShellArg "${pkgs.coreutils}/bin"}
-      ${lib.escapeShellArg pkgs.stdenv.shell} 2>&1
+      ${lib.escapeShellArg pkgs.runtimeShell} 2>&1
       echo "exit-status:$?"
     '';
 
     testClient = pkgs.writeScriptBin "chroot-exec" ''
-      #!${pkgs.stdenv.shell} -e
+      #!${pkgs.runtimeShell} -e
       output="$(echo "$@" | nc -NU "/run/test$(< /teststep).sock")"
       ret="$(echo "$output" | sed -nre '$s/^exit-status:([0-9]+)$/\1/p')"
       echo "$output" | head -n -1

@@ -38,10 +38,14 @@ stdenv.mkDerivation rec {
     })
 
     # Install pygobject overrides to our prefix instead of python3 one.
-    # https://github.com/fedora-modularity/libmodulemd/pull/467
+    # https://github.com/fedora-modularity/libmodulemd/pull/469
     (fetchpatch {
-      url = "https://github.com/fedora-modularity/libmodulemd/commit/516cb64fd1488716a188add2715c8b3296960bd6.patch";
-      sha256 = "ZWagkqKkD9CIkcYsKLtC0+qjLp80wH3taivUCn8jQbY=";
+      url = "https://github.com/fedora-modularity/libmodulemd/commit/f72a4bea092f4d84cfc48a3e820eb10270e828d0.patch";
+      sha256 = "7/76N9ZQ7qv/DjsaMCL+YWPDzarH1JWW4Sg5HzBJLuc=";
+    })
+    (fetchpatch {
+      url = "https://github.com/fedora-modularity/libmodulemd/commit/021ab08006b5cf601ce153174fdf403b910b8273.patch";
+      sha256 = "JibEmxMiTmu3ShhWLIWfMCtu3c30UcHqXmX9b+2VZXw=";
     })
   ];
 
@@ -65,8 +69,14 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddeveloper_build=false"
-    "-Dpygobject_override_dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
+    "-Dgobject_overrides_dir_py3=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
+
+  postFixup = ''
+    # Python overrides depend our own typelibs and other packages
+    mkdir -p "$py/nix-support"
+    echo "$out ${python3.pkgs.pygobject3} ${python3.pkgs.six}" > "$py/nix-support/propagated-build-inputs"
+  '';
 
   meta = with stdenv.lib; {
     description = "C Library for manipulating module metadata files";

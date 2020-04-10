@@ -30,7 +30,7 @@ let
   phpOptionsStr = toKeyValue phpOptions;
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
-    #! ${pkgs.stdenv.shell}
+    #! ${pkgs.runtimeShell}
     cd ${cfg.package}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then

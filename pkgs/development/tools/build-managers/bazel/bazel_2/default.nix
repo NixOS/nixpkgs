@@ -258,20 +258,20 @@ stdenv.mkDerivation rec {
 
     in (if !stdenv.hostPlatform.isDarwin then {
       # `extracted` doesn’t work on darwin
-      shebang = callPackage ./shebang-test.nix { inherit runLocal extracted bazelTest distDir; };
+      shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; };
     } else {}) // {
-      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; };
-      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
-      java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
-      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest distDir; };
-      pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest distDir; };
+      bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; };
+      cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
+      java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
+      protobuf = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; };
+      pythonBinPath = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; };
 
-      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+      bashToolsWithNixHacks = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
 
-      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
-      javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
-      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
-      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+      cppWithNixHacks = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
+      javaWithNixHacks = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
+      protobufWithNixHacks = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
 
       # downstream packages using buildBazelPackage
       # fixed-output hashes of the fetch phase need to be spot-checked manually

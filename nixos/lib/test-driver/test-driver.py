@@ -387,7 +387,7 @@ class Machine:
             if state != require_state:
                 raise Exception(
                     "Expected unit ‘{}’ to to be in state ".format(unit)
-                    + "'active' but it is in state ‘{}’".format(state)
+                    + "'{}' but it is in state ‘{}’".format(require_state, state)
                 )
 
     def execute(self, command: str) -> Tuple[int, str]:

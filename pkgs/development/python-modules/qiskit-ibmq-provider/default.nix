@@ -8,15 +8,25 @@
 , requests
 , requests_ntlm
 , websockets
+  # Visualization inputs
+, ipykernel
+, ipyvuetify
+, ipywidgets
+, matplotlib
+, nbconvert
+, nbformat
+, plotly
+, pyperclip
+, seaborn
   # check inputs
 , pytestCheckHook
-, vcrpy
 , pproxy
+, vcrpy
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.5.0";
+  version = "0.6.0";
 
   disabled = pythonOlder "3.6";
 
@@ -24,7 +34,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "1jhgsfspmry0qk7jkcryn4225j2azys3rm99agk6mh0jzwrvx4am";
+    sha256 = "0arbhwaa2kx04jbrj6hk3vvn92wdk6lrr9zx36pr6p22r0yyxnj9";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +44,16 @@ buildPythonPackage rec {
     requests
     requests_ntlm
     websockets
+    # Visualization/Jupyter inputs
+    ipykernel
+    ipyvuetify
+    ipywidgets
+    matplotlib
+    nbconvert
+    nbformat
+    plotly
+    pyperclip
+    seaborn
   ];
 
   # websockets seems to be pinned b/c in v8+ it drops py3.5 support. Not an issue here (usually py3.7+, and disabled for older py3.6)
@@ -43,18 +63,24 @@ buildPythonPackage rec {
   '';
 
   # Most tests require credentials to run on IBMQ
-  checkInputs = [ pytestCheckHook vcrpy pproxy ];
+  checkInputs = [
+    pytestCheckHook
+    pproxy
+    vcrpy
+  ];
   dontUseSetuptoolsCheck = true;
+
   pythonImportsCheck = [ "qiskit.providers.ibmq" ];
-  disabledTests = [ "test_old_api_url" "test_non_auth_url" "test_non_auth_url_with_hub" ];  # tests require internet connection
-  # skip tests that require IBMQ credentials, vs failing.
-  preCheck = ''
-    pushd /build/source  # run pytest from /build vs $out
-    substituteInPlace test/decorators.py --replace "Exception('Could not locate valid credentials.')" "SkipTest('No IBMQ Credentials provided for tests')"
-  '';
-  postCheck = ''
-    popd
-  '';
+  # These disabled tests require internet connection, aren't skipped elsewhere
+  disabledTests = [
+    "test_old_api_url"
+    "test_non_auth_url"
+    "test_non_auth_url_with_hub"
+  ];
+
+  # Skip tests that rely on internet access (mostly to IBM Quantum Experience cloud).
+  # Options defined in qiskit.terra.test.testing_options.py::get_test_options
+  QISKIT_TESTS = "skip_online";
 
   meta = with lib; {
     description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";

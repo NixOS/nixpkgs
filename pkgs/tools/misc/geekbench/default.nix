@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geekbench";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-    sha256 = "1hqqwk5hbqgrxfqlcbgk6rv3a71k65psxcqa6hw41y9jymnm3dp3";
+    sha256 = "1wjyn3fkc2zgj0xrd73kidrg1d1wqmil278ak36wf87685w4n0b1";
   };
 
   dontConfigure = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform benchmark";
-    homepage = https://geekbench.com/;
+    homepage = "https://geekbench.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.michalrus ];
     platforms = [ "x86_64-linux" ];

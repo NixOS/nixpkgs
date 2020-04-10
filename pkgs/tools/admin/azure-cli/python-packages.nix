@@ -111,6 +111,9 @@ let
         '';
       };
 
+      azure-batch = overrideAzureMgmtPackage super.azure-batch "8.0.0" "zip"
+        "1j8nibnics9vakhqiwnjv7bwril7mfyz1svcvvsrb9a4wbdd12wi";
+
       azure-mgmt-policyinsights = overrideAzureMgmtPackage super.azure-mgmt-policyinsights "0.4.0" "zip"
         "1b69rz9wm0jvc54vx3b7h633x8gags51xwxrkp6myar40jggxw6g";
 

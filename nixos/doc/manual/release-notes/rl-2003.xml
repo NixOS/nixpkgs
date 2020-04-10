@@ -75,6 +75,24 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
 </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The testing driver implementation in NixOS is now in Python <filename>make-test-python.nix</filename>.
+     This was done by Jacek Galowicz (<link xlink:href="https://github.com/tfc">@tfc</link>), and with the
+     collaboration of Julian Stecklina (<link xlink:href="https://github.com/blitz">@blitz</link>) and
+     Jana Traue (<link xlink:href="https://github.com/jtraue">@jtraue</link>). All documentation has been updated to use this
+     testing driver, and a vast majority of the 286 tests in NixOS were ported to python driver. In 20.09 the Perl driver implementation,
+     <filename>make-test.nix</filename>, is slated for removal. This should give users of the NixOS integration framework
+     a transitory period to rewrite their tests to use the Python implementation. Users of the Perl driver will see
+     this warning everytime they use it:
+<screen>
+<prompt>$ </prompt>warning: Perl VM tests are deprecated and will be removed for 20.09.
+Please update your tests to use the python test driver.
+See https://github.com/NixOS/nixpkgs/pull/71684 for details.
+</screen>
+     API compatibility is planned to be kept for at least the next release with the perl driver.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -127,6 +145,17 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     The <package>dhcpcd</package> package <link xlink:href="https://roy.marples.name/archives/dhcpcd-discuss/0002621.html">
+     does not request IPv4 addresses for tap and bridge interfaces anymore by default</link>.
+     In order to still get an address on a bridge interface, one has to disable
+     <literal>networking.useDHCP</literal> and explicitly enable
+     <literal>networking.interfaces.&lt;name&gt;.useDHCP</literal> on
+     every interface, that should get an address via DHCP. This way, dhcpcd
+     is configured in an explicit way about which interface to run on.
+    </para>
+   </listitem>
    <listitem>
     <para>
       GnuPG is now built without support for a graphical passphrase entry
@@ -730,10 +759,10 @@ auth required pam_succeed_if.so uid >= 1000 quiet
       </listitem>
       <listitem>
        <para>
-        Deploy a newer version of Hydra to activate the DB optimizations. You can choose from
-        either <package>hydra-unstable</package> (latest <literal>master</literal> compiled
-        against <package>nixUnstable</package>) and <package>hydra-flakes</package> (latest
-        version with flake-support).
+        Deploy a newer version of Hydra to activate the DB optimizations. This can be done by
+        using <package>hydra-unstable</package>. This package already includes
+        <link xlink:href="https://github.com/nixos/rfcs/pull/49">flake-support</link> and is
+        therefore compiled against <package>pkgs.nixFlakes</package>.
         <warning>
          <para>
           If your <link linkend="opt-system.stateVersion">stateVersion</link> is set to

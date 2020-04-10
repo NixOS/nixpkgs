@@ -33,11 +33,9 @@ in python.pkgs.buildPythonApplication rec {
     protobuf
   ];
 
+  # remove all version pinning (E.g tornado==5.1.1 -> tornado)
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "protobuf==3.10.0" "protobuf~=3.10" \
-      --replace "paho-mqtt==1.4.0" "paho-mqtt~=1.4" \
-      --replace "tornado==5.1.1" "tornado~=5.1"
+    sed -i -e "s/==[0-9.]*//" setup.py
   '';
 
   makeWrapperArgs = [
@@ -49,11 +47,14 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   # Platformio will try to access the network
-  doCheck = false;
+  # Instead, run the executable
+  checkPhase = ''
+    $out/bin/esphome --help > /dev/null
+  '';
 
   meta = with lib; {
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
-    homepage = https://esphome.io/;
+    homepage = "https://esphome.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda globin ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -117,7 +117,7 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar
-    ];
+    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools;
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
@@ -149,9 +149,6 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (versionRange "80" "82.0.4076.0") [
-      # fix race condition in the interaction with pulseaudio
-      (githubPatch "704dc99bd05a94eb61202e6127df94ddfd571e85" "0nzwzfwliwl0959j35l0gn94sbsnkghs3dh1b9ka278gi7q4648z")
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
@@ -284,7 +281,7 @@ let
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
-      ${gn}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1

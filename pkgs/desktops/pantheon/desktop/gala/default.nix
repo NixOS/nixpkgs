@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugins-dir.patch
+    ./use-new-notifications-default.patch
   ];
 
   postPatch = ''

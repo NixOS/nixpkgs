@@ -17,6 +17,7 @@ let
     nativeBuildInputs = [ cmake ];
 
     cmakeFlags = [ "-DLWS_WITH_PLUGINS=ON" ];
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
 
     meta = with stdenv.lib; {
       description = "Light, portable C library for websockets";
@@ -39,9 +40,12 @@ rec {
   };
 
   libwebsockets_3_2 = generic {
-    version = "3.2.0";
-    sha256 = "0ac5755h3w1pl6cznqbvg63dwkqy544fqlhvqyp7s11hgs7jx6l8";
+    version = "3.2.2";
+    sha256 = "0m1kn4p167jv63zvwhsvmdn8azx3q7fkk8qc0fclwyps2scz6dna";
   };
 
-  libwebsockets = libwebsockets_3_2;
+  libwebsockets_4_0 = generic {
+    version = "4.0.1";
+    sha256 = "1pf7km0w5q7dqlwcwqizdpfqgg10prfq8g2c093f5nghwsfv8mmf";
+  };
 }

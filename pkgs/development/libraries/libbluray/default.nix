@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fontconfig, autoreconfHook
+{ stdenv, fetchurl, pkgconfig, fontconfig, autoreconfHook, DiskArbitration
 , withJava ? false, jdk ? null, ant ? null
 , withAACS ? false, libaacs ? null
 , withBDplus ? false, libbdplus ? null
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
                 ++ optional withJava jdk
                 ++ optional withMetadata libxml2
                 ++ optional withFonts freetype
+                ++ optional stdenv.isDarwin DiskArbitration
                 ;
 
   propagatedBuildInputs = optional withAACS libaacs;

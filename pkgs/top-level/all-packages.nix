@@ -4520,8 +4520,6 @@ in
 
   krop = callPackage ../applications/graphics/krop { };
 
-  elisa = libsForQt5.callPackage ../applications/audio/elisa { };
-
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
   kube-router = callPackage ../applications/networking/cluster/kube-router { };
@@ -4931,7 +4929,8 @@ in
   inherit (callPackages ../development/libraries/libwebsockets { })
     libwebsockets_3_1
     libwebsockets_3_2
-    libwebsockets;
+    libwebsockets_4_0;
+  libwebsockets = libwebsockets_3_2;
 
   lidarr = callPackage ../servers/lidarr { };
 
@@ -5185,6 +5184,8 @@ in
   moneyplex = callPackage ../applications/office/moneyplex { };
 
   monit = callPackage ../tools/system/monit { };
+
+  monolith = callPackage ../tools/backup/monolith { };
 
   moreutils = callPackage ../tools/misc/moreutils {
     docbook-xsl = docbook_xsl;
@@ -5705,6 +5706,8 @@ in
 
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
+  page = callPackage ../tools/misc/page { };
+  
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
@@ -6219,10 +6222,6 @@ in
 
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
-  relfs = callPackage ../tools/filesystems/relfs {
-    inherit (gnome2) gnome_vfs GConf;
-  };
-
   remarkjs = callPackage ../development/web/remarkjs { };
 
   alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
@@ -6360,7 +6359,7 @@ in
 
   s3fs = callPackage ../tools/filesystems/s3fs { };
 
-  s3cmd = callPackage ../tools/networking/s3cmd { };
+  s3cmd = python3Packages.callPackage ../tools/networking/s3cmd { };
 
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
@@ -7748,6 +7747,8 @@ in
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
+  zplug = callPackage ../shells/zsh/zplug { };
+
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
   zsh-bd = callPackage ../shells/zsh/zsh-bd { };
@@ -7759,6 +7760,8 @@ in
   zsh-history-substring-search = callPackage ../shells/zsh/zsh-history-substring-search { };
 
   zsh-navigation-tools = callPackage ../tools/misc/zsh-navigation-tools { };
+
+  zsh-nix-shell = callPackage ../shells/zsh/zsh-nix-shell { };
 
   zsh-syntax-highlighting = callPackage ../shells/zsh/zsh-syntax-highlighting { };
 
@@ -9874,6 +9877,8 @@ in
   bazel-watcher = callPackage ../development/tools/bazel-watcher {
     go = go_1_12;
   };
+
+  bazel-gazelle = callPackage ../development/tools/bazel-gazelle { };
 
   bazelisk = callPackage ../development/tools/bazelisk { };
 
@@ -12096,7 +12101,12 @@ in
   hwloc = callPackage ../development/libraries/hwloc {};
 
   inherit (callPackage ../development/tools/misc/hydra { })
-    hydra-migration hydra-unstable hydra-flakes;
+    hydra-migration hydra-unstable;
+
+  hydra-flakes = throw ''
+    Flakes support has been merged into Hydra's master. Please use
+    `pkgs.hydra-unstable` now.
+  '';
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
@@ -12390,7 +12400,9 @@ in
 
   libblocksruntime = callPackage ../development/libraries/libblocksruntime { };
 
-  libbluray = callPackage ../development/libraries/libbluray { };
+  libbluray = callPackage ../development/libraries/libbluray {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration;
+  };
 
   libbs2b = callPackage ../development/libraries/audio/libbs2b { };
 
@@ -12962,6 +12974,8 @@ in
 
   malcontent = callPackage ../development/libraries/malcontent { };
 
+  malcontent-ui = callPackage ../development/libraries/malcontent/ui.nix { };
+
   libmanette = callPackage ../development/libraries/libmanette { };
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
@@ -13312,6 +13326,7 @@ in
   libviper = callPackage ../development/libraries/libviper { };
 
   libvpx = callPackage ../development/libraries/libvpx { };
+  libvpx_1_8 = callPackage ../development/libraries/libvpx/1_8.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
   libvterm-neovim = callPackage ../development/libraries/libvterm-neovim { };
@@ -16410,6 +16425,8 @@ in
 
   gmailieer = callPackage ../applications/networking/gmailieer {};
 
+  gmailctl = callPackage ../applications/networking/gmailctl {};
+
   gpm = callPackage ../servers/gpm {
     ncurses = null;  # Keep curses disabled for lack of value
   };
@@ -16861,7 +16878,7 @@ in
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
-    inherit (callPackage ../os-specific/linux/zfs {
+    inherit (callPackages ../os-specific/linux/zfs {
       configFile = "kernel";
       inherit kernel;
      }) zfsStable zfsUnstable;
@@ -17500,7 +17517,7 @@ in
 
   zenmonitor = callPackage ../os-specific/linux/zenmonitor { };
 
-  inherit (callPackage ../os-specific/linux/zfs {
+  inherit (callPackages ../os-specific/linux/zfs {
     configFile = "user";
   }) zfsStable zfsUnstable;
 
@@ -17741,6 +17758,8 @@ in
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   freepats = callPackage ../data/misc/freepats { };
+
+  g15daemon = callPackage ../os-specific/linux/g15daemon {};
 
   gentium = callPackage ../data/fonts/gentium {};
 
@@ -18519,11 +18538,6 @@ in
   bazaarTools = callPackage ../applications/version-management/bazaar/tools.nix { };
 
   bb =  callPackage ../applications/misc/bb { };
-
-  beast = callPackage ../applications/audio/beast {
-    inherit (gnome2) libgnomecanvas libart_lgpl;
-    guile = guile_1_8;
-  };
 
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
@@ -19823,7 +19837,9 @@ in
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
-  jackline = callPackage ../applications/networking/instant-messengers/jackline { };
+  jackline = callPackage ../applications/networking/instant-messengers/jackline {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_08;
+  };
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
@@ -20117,7 +20133,7 @@ in
       recurseIntoAttrs (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
-    akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
+    akonadi akregator ark dolphin dragon elisa ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
     keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular spectacle;
@@ -20274,7 +20290,7 @@ in
 
   legit = gitAndTools.legit;
 
-  leo-editor = callPackage ../applications/editors/leo-editor { };
+  leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
 
   libowfat = callPackage ../development/libraries/libowfat { };
 
@@ -20285,7 +20301,6 @@ in
 
   libreoffice-args = {
     inherit (perlPackages) ArchiveZip IOCompress;
-    inherit (gnome2) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
     fontsConf = makeFontsConf {
       fontDirectories = [
@@ -20328,9 +20343,7 @@ in
     portaudio = portaudio2014;
   };
 
-  lingot = callPackage ../applications/audio/lingot {
-    inherit (gnome2) libglade;
-  };
+  lingot = callPackage ../applications/audio/lingot { };
 
   linuxband = callPackage ../applications/audio/linuxband { };
 
@@ -21334,6 +21347,8 @@ in
     guiSupport = false;
   };
 
+  qcad = libsForQt5.callPackage ../applications/misc/qcad { };
+
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
@@ -21629,6 +21644,8 @@ in
   shadowfox = callPackage ../tools/networking/shadowfox { };
 
   shfmt = callPackage ../tools/text/shfmt { };
+
+  shortwave = callPackage ../applications/audio/shortwave { };
 
   shotgun = callPackage ../tools/graphics/shotgun {};
 
@@ -22154,6 +22171,8 @@ in
   };
 
   tudu = callPackage ../applications/office/tudu { };
+
+  tut = callPackage ../applications/misc/tut { };
 
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
@@ -24806,6 +24825,8 @@ in
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
+  fparser = callPackage ../applications/science/electronics/fparser { };
+
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_0;
   };
@@ -25087,6 +25108,8 @@ in
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
   brightnessctl = callPackage ../misc/brightnessctl { };
+
+  cached-nix-shell = callPackage ../tools/nix/cached-nix-shell {};
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
@@ -25793,6 +25816,8 @@ in
   brscan4 = callPackage ../applications/graphics/sane/backends/brscan4 { };
 
   dsseries = callPackage ../applications/graphics/sane/backends/dsseries { };
+
+  sane-airscan = callPackage ../applications/graphics/sane/backends/airscan { };
 
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 

@@ -1,7 +1,7 @@
 { buildPythonApplication, lib, fetchFromGitHub, fetchpatch
 , wrapGAppsHook, gobject-introspection, gnome-desktop, libnotify, libgnome-keyring, pango
 , gdk-pixbuf, atk, webkitgtk, gst_all_1
-, evdev, pyyaml, pygobject3, requests, pillow
+, dbus-python, evdev, pyyaml, pygobject3, requests, pillow
 , xrandr, pciutils, psmisc, glxinfo, vulkan-tools, xboxdrv, pulseaudio, p7zip, xgamma
 , libstrangle, wine, fluidsynth, xorgserver
 }:
@@ -31,21 +31,14 @@ let
 
 in buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    sha256 = "0i4i6g3pys1vf2q1pbs1fkywgapj4qfxrjrvim98hzw9al4l06y9";
+    sha256 = "1g093g0difnkjmnm91p20issdsxn9ri4c56zzddj5wfrbmhwdfag";
   };
-
-  patches = [(
-    fetchpatch {
-      url = "https://github.com/lutris/lutris/pull/2558.patch";
-      sha256 = "1wbsplri5ii06gzv6mzhiic61zkgsp9bkjkaknkd83203p0i9b2d";
-    }
-  )];
 
   buildInputs = [
     wrapGAppsHook gobject-introspection gnome-desktop libnotify libgnome-keyring pango
@@ -57,7 +50,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    evdev pyyaml pygobject3 requests pillow
+    evdev pyyaml pygobject3 requests pillow dbus-python
   ];
 
   preCheck = "export HOME=$PWD";

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmanette";
-  version = "0.2.3";
+  version = "0.2.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zxh7jn2zg7hivmal5zxam6fxvjsd1w6hlw0m2kysk76b8anbw60";
+    sha256 = "T+Ckvta0w65ySdNBAxwnsy+Nng/7UzfXHLzscWA2LPc=";
   };
 
   nativeBuildInputs = [

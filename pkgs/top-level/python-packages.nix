@@ -923,6 +923,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  python-baseconv = callPackage ../development/python-modules/python-baseconv { };
+
   pycognito = callPackage ../development/python-modules/pycognito { };
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
@@ -1211,6 +1213,8 @@ in {
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 
   pymsgbox = callPackage ../development/python-modules/pymsgbox { };
+
+  pynanoleaf = callPackage ../development/python-modules/pynanoleaf { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
 
@@ -2660,6 +2664,8 @@ in {
 
   urllib3 = callPackage ../development/python-modules/urllib3 {};
 
+  varint =  callPackage ../development/python-modules/varint {};
+
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
   dropbox = callPackage ../development/python-modules/dropbox {};
@@ -2975,6 +2981,24 @@ in {
 
   latexcodec = callPackage ../development/python-modules/latexcodec {};
 
+  libmodulemd = pipe pkgs.libmodulemd [
+    toPythonModule
+
+    (p: p.overrideAttrs (super: {
+      meta = super.meta // {
+        outputsToInstall = [ "py" ];
+        # The package always builds python3 bindings
+        broken = (super.meta.broken or false) || !isPy3k;
+      };
+    }))
+
+    (p: p.override {
+      python3 = python;
+    })
+
+    (p: p.py)
+  ];
+
   libselinux = pipe pkgs.libselinux [
     toPythonModule
 
@@ -3096,6 +3120,10 @@ in {
   osqp = callPackage ../development/python-modules/osqp { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
+
+  pam = callPackage ../development/python-modules/pam {
+    inherit (pkgs) pam;
+  };
 
   pamela = callPackage ../development/python-modules/pamela { };
 
@@ -3655,6 +3683,8 @@ in {
 
   flask-restplus = callPackage ../development/python-modules/flask-restplus { };
 
+  flask-reverse-proxy-fix = callPackage ../development/python-modules/flask-reverse-proxy-fix { };
+
   flask_script = callPackage ../development/python-modules/flask-script { };
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
@@ -4039,6 +4069,10 @@ in {
       callPackage ../development/python-modules/ipython { };
 
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
+
+  ipyvue = callPackage ../development/python-modules/ipyvue { };
+
+  ipyvuetify = callPackage ../development/python-modules/ipyvuetify { };
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
@@ -6458,6 +6492,8 @@ in {
 
   graph_nets = callPackage ../development/python-modules/graph_nets { };
 
+  graspy = callPackage ../development/python-modules/graspy { };
+
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
   pyspotify = callPackage ../development/python-modules/pyspotify { };
@@ -6862,6 +6898,8 @@ in {
     callPackage ../development/python-modules/more-itertools/2.7.nix { }
   else callPackage ../development/python-modules/more-itertools { };
 
+  morphys = callPackage ../development/python-modules/morphys { };
+
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
 
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
@@ -7126,8 +7164,6 @@ in {
 
   gast = callPackage ../development/python-modules/gast { };
 
-  IBMQuantumExperience = callPackage ../development/python-modules/ibmquantumexperience { };
-
   ibis = callPackage ../development/python-modules/ibis { };
 
   ibis-framework = callPackage ../development/python-modules/ibis-framework { };
@@ -7135,6 +7171,8 @@ in {
   qiskit = callPackage ../development/python-modules/qiskit { };
 
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
+
+  qiskit-aqua = callPackage ../development/python-modules/qiskit-aqua { };
 
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
 
