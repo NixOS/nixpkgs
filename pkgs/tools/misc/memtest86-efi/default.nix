@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "8.3";
 
   src = fetchzip {
-    # TODO: The latest version of memtest86 is actually 8.3, but the
+    # TODO: We're using the previous version of memtest86 because the
     # company developing memtest86 has stopped providing a versioned download
     # link for the latest version:
     #
