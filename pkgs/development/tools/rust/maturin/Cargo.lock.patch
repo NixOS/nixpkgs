@@ -1,0 +1,13 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 09ecb81..c37c646 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -733,7 +733,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ 
+ [[package]]
+ name = "maturin"
+-version = "0.8.0-beta.1"
++version = "0.8.0"
+ dependencies = [
+  "base64 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
+  "bytesize 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
