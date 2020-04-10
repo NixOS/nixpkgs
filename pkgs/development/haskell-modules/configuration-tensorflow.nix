@@ -14,22 +14,21 @@ let
 
   setSourceRoot = dir: drv: drv.overrideAttrs (_oldAttrs: {sourceRoot = "source/${dir}";});
 
-  proto-lens = self.proto-lens_0_2_2_0;
-  proto-lens-protoc = self.proto-lens-protoc_0_2_2_3;
-  proto-lens-protobuf-types = self.proto-lens-protobuf-types_0_2_2_0;
+  proto-lens = self.proto-lens;
+  proto-lens-protoc = self.proto-lens-protoc;
+  proto-lens-protobuf-types = self.proto-lens-protobuf-types;
   mainland-pretty = self.mainland-pretty_0_6_2;
 in
 {
-  proto-lens_0_2_2_0 = appendPatch super.proto-lens_0_2_2_0 ./patches/proto-lens-0.2.2.0.patch;
+  proto-lens = appendPatch super.proto-lens ./patches/proto-lens-0.2.2.0.patch;
   proto-lens-descriptors = doJailbreak (super.proto-lens-descriptors.override {
     inherit proto-lens;
     lens-labels = self.lens-labels_0_1_0_2;
   });
-  proto-lens-protoc_0_2_2_3 = appendPatch (addBuildDepend (super.proto-lens-protoc_0_2_2_3.override {
+  proto-lens-protoc = appendPatch (addBuildDepend (super.proto-lens-protoc.override {
     inherit proto-lens;
-    haskell-src-exts = self.haskell-src-exts_1_19_1;
   }) self.semigroups) ./patches/proto-lens-protoc-0.2.2.3.patch;
-  proto-lens-protobuf-types_0_2_2_0 = doJailbreak (super.proto-lens-protobuf-types_0_2_2_0.override {
+  proto-lens-protobuf-types = doJailbreak (super.proto-lens-protobuf-types.override {
     inherit proto-lens proto-lens-protoc;
   });
 

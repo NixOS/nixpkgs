@@ -45,18 +45,6 @@ self: super: {
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
-  # https://github.com/koalaman/shellcheck/issues/1778
-  ShellCheck = overrideCabal super.ShellCheck (drv: {
-    patches = [
-      # cabal 3.0 support
-      ( pkgs.fetchpatch {
-        url = "https://github.com/koalaman/shellcheck/commit/2c026f1ec7c205c731ff2a0ccd85365f37245.patch";
-        sha256 = "0z6yf350ngr6rwfkvdy670c476fgzj8a0n4ppdm1xr8r1lij7sfz";
-        excludes = [ "Dockerfile" ];
-      })
-    ];
-  });
-
   # Tests are failing
   # https://github.com/bos/statistics/issues/123
   statistics = dontCheck super.statistics;
@@ -716,10 +704,19 @@ self: super: {
     '';
   });
 
-  # The standard libraries are compiled separately
-  idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck super.idris)
-  );
+  # The standard libraries are compiled separately.
+  # The megaparsec-7 override is needed because https://github.com/idris-lang/Idris-dev/issues/4826 declares that
+  # idris1 has no plans to migrate to megaparsec-8.
+  # The idris-lang/Idris-dev#4808 patch is for GHC 8.8 compatibility, and can likely be removed with the next release.
+  idris = generateOptparseApplicativeCompletion "idris" (doJailbreak (dontCheck
+    (appendPatches
+      (super.idris.override { megaparsec = self.megaparsec_7_0_5; }) [
+        (pkgs.fetchpatch {
+          url = "https://github.com/idris-lang/Idris-dev/pull/4808.diff";
+          sha256 = "060ib1rczy34ip8xf3bv1pf28655f6s0bvvij19jhh5dpcr0pf71";
+          excludes = [ ".travis.yml" "Makefile" "appveyor.yml" ];
+        })
+      ])));
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -1465,7 +1462,9 @@ self: super: {
     vty = self.vty_5_28_2;
   });
 
+  # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
+  persistent-postgresql = dontCheck super.persistent-postgresql;
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
   # https://github.com/robdockins/edison/pull/16
