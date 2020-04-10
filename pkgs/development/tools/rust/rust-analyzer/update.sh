@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nix-prefetch-github nodePackages.node2nix
+#!nix-shell -i bash -p curl jq nix-prefetch nodePackages.node2nix
 set -euo pipefail
 cd "$(dirname "$0")"
 owner=rust-analyzer
@@ -13,7 +13,7 @@ rev=$(
     jq 'map(select(.prerelease | not)) | .[0].tag_name' --raw-output
 )
 old_rev=$(sed -nE 's/.*\brev = "(.*)".*/\1/p' ./default.nix)
-if grep -q '0000000000000000000000000000000000000000000000000000' ./default.nix; then
+if grep -q 'cargoSha256 = ""' ./default.nix; then
     old_rev='broken'
 fi
 if [[ "$rev" == "$old_rev" ]]; then
@@ -22,10 +22,11 @@ if [[ "$rev" == "$old_rev" ]]; then
 fi
 echo "$old_rev -> $rev"
 
-sha256=$(nix-prefetch-github --prefetch "$owner" "$repo" --rev "$rev" | jq '.sha256' --raw-output)
+sha256=$(nix-prefetch -f "$nixpkgs" rust-analyzer-unwrapped.src --rev "$rev")
+# Clear cargoSha256 to avoid inconsistency.
 sed -e "s/rev = \".*\"/rev = \"$rev\"/" \
     -e "s/sha256 = \".*\"/sha256 = \"$sha256\"/" \
-    -e "s/cargoSha256 = \".*\"/cargoSha256 = \"0000000000000000000000000000000000000000000000000000\"/" \
+    -e "s/cargoSha256 = \".*\"/cargoSha256 = \"\"/" \
     --in-place ./default.nix
 node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/code"
 
@@ -33,17 +34,13 @@ node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/cod
 req_vscode_ver="$(jq '.engines.vscode' "$node_src/package.json" --raw-output)"
 req_vscode_ver="${req_vscode_ver#^}"
 cur_vscode_ver="$(nix eval --raw -f "$nixpkgs" vscode.version)"
-if [[ "$(nix eval "(builtins.compareVersions \"$req_vscode_ver\" \"$cur_vscode_ver\")")" != "-1" ]]; then
+if [[ "$(nix eval "(builtins.compareVersions \"$req_vscode_ver\" \"$cur_vscode_ver\")")" -gt 0 ]]; then
     echo "vscode $cur_vscode_ver is incompatible with the extension requiring ^$req_vscode_ver"
     exit 1
 fi
 
-echo "Prebuilding nix"
-cargo_sha256=$({
-    ! nix-build "$nixpkgs" -A rust-analyzer-unwrapped --no-out-link 2>&1
-} | tee /dev/stderr | sed -nE 's/\s*got:\s*sha256:(\w+)/\1/p' | head -n1)
-echo "cargoSha256: $cargo_sha256"
-[[ "$cargo_sha256" ]]
+echo "Prebuilding for cargoSha256"
+cargo_sha256=$(nix-prefetch "{ sha256 }: (import $nixpkgs {}).rust-analyzer-unwrapped.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
 sed "s/cargoSha256 = \".*\"/cargoSha256 = \"$cargo_sha256\"/" \
     --in-place ./default.nix
 
