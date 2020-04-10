@@ -6452,6 +6452,10 @@ in {
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
+  sane = callPackage ../development/python-modules/sane {
+    inherit (pkgs) saneBackends;
+  };
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   samplerate = callPackage ../development/python-modules/samplerate { };
