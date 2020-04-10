@@ -327,7 +327,7 @@
     "hive" = ps: with ps; [ ]; # missing inputs: pyhiveapi
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "homeassistant" = ps: with ps; [ ];
-    "homekit" = ps: with ps; [ ]; # missing inputs: HAP-python
+    "homekit" = ps: with ps; [ HAP-python];
     "homekit_controller" = ps: with ps; [ ]; # missing inputs: aiohomekit[IP]
     "homematic" = ps: with ps; [ pyhomematic];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip

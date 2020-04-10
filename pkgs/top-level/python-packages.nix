@@ -795,6 +795,8 @@ in {
 
   handout = callPackage ../development/python-modules/handout { };
 
+  HAP-python = callPackage ../development/python-modules/HAP-python { };
+
   helper = callPackage ../development/python-modules/helper { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
