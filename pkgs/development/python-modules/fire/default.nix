@@ -16,8 +16,10 @@ buildPythonPackage rec {
 
   checkInputs = [ hypothesis mock python-Levenshtein pytest ];
 
+  # ignore test which asserts exact usage statement, default behavior
+  # changed in python3.8. This can likely be remove >=0.3.1
   checkPhase = ''
-    py.test
+    py.test -k 'not testInitRequiresFlag'
   '';
 
   meta = with stdenv.lib; {
