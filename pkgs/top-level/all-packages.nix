@@ -26417,4 +26417,6 @@ in
 
   btcdeb = callPackage ../applications/blockchains/btcdeb {};
 
+  jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
+
 }
