@@ -1,9 +1,10 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig
 , alsaLib, ffmpeg, glib, openssl, pcre, zlib
-, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama, libXrandr, libXrender, libXv
+, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama, libXrandr, libXrender, libXv, libXtst
 , libxkbcommon, libxkbfile
 , wayland
 , gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc
+, libxslt
 , libusb1
 , libpulseaudio ? null
 , cups ? null
@@ -41,9 +42,10 @@ stdenv.mkDerivation rec {
   buildInputs = with lib; [
     alsaLib cups ffmpeg glib openssl pcre pcsclite libpulseaudio zlib
     gstreamer gst-plugins-base gst-plugins-good libunwind orc
-    libX11 libXcursor libXdamage libXext libXi libXinerama libXrandr libXrender libXv
+    libX11 libXcursor libXdamage libXext libXi libXinerama libXrandr libXrender libXv libXtst
     libxkbcommon libxkbfile
     wayland libusb1
+    libxslt
   ] ++ optional stdenv.isLinux systemd;
 
   nativeBuildInputs = [
