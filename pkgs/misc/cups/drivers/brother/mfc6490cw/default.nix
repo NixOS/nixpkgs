@@ -28,7 +28,7 @@ in rec {
       url = "https://download.brother.com/welcome/dlf006180/${model}lpr-${version}.i386.deb";
       sha256 = "1p33aal3dv3r03v9nbafrzx2bhij34hrsg2d71kwm738a8n18vnj";
     };
-    name = "${model}drv-${version}";
+    name = "${model}lpr-${version}";
 
     nativeBuildInputs = [ dpkg makeWrapper ];
 
@@ -80,12 +80,12 @@ in rec {
     # of the ppd file.
     installPhase = ''
       basedir=${driver}/${reldir}
-      dir=$out/${reldir}
-      file=$dir/cupswrapper/cupswrapper${model}
+      dir="$out/${reldir}"
+      file="$dir/cupswrapper/cupswrapper${model}"
       echo "Substituting $file"
-      mkdir -p $out/share/cups/model
-      mkdir -p $out/lib/cups/filter
-      substituteInPlace $file \
+      mkdir -p "$out/share/cups/model"
+      mkdir -p "$out/lib/cups/filter"
+      substituteInPlace "$file" \
         --replace '/usr/local/Brother/''${device_model}/''${printer_model}/lpd/filter''${printer_model}' "$basedir/${filterFile}" \
         --replace /usr/share/cups/model "$out/share/cups/model" \
         --replace /usr/share/ppd "$out/share/ppd" \
@@ -95,12 +95,12 @@ in rec {
         --replace /usr/lib64/cups/backend "$out/lib64/cups/backend" \
         --replace '/usr/local/Brother/''${device_model}/''${printer_model}' "$dir" \
         --replace '/usr/bin/psnup' '${psutils}/bin/psnup'
-      wrapProgram $file \
+      wrapProgram "$file" \
         --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils gnugrep gnused ghostscript]}
       echo "We expect something like \"lpinfo: not found\", this can be ignored."
       $file
       lpdwrapperfile="$out/lib/cups/filter/brlpdwrapper${model}"
-      wrapProgram $lpdwrapperfile \
+      wrapProgram "$lpdwrapperfile" \
         --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils gnugrep gnused psutils ghostscript ]}
     '';
 
