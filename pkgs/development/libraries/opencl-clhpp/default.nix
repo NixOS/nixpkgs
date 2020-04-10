@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ opencl-headers ];
 
-  preConfigure = ''
-    cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out/include -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF"
-  '';
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=OFF"
+    "-DBUILD_TESTS=OFF"
+  ];
 
   meta = with stdenv.lib; {
     description = "OpenCL Host API C++ bindings";
