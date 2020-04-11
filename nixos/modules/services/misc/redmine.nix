@@ -44,7 +44,7 @@ let
 
     require '${cfg.stateDir}/config/environment'
     Redmine::Utils::relative_url_root = '${cfg.prefix}'
-    ${optionalString (!cfg.serverAccessLog) ''
+    ${optionalString (cfg.server == "webrick" && !cfg.serverAccessLog) ''
       WEBrick::Config::HTTP[:AccessLog] = [ ]
     ''}
     map '${cfg.prefix}' do
@@ -96,6 +96,12 @@ in
         type = types.str;
         default = "redmine";
         description = "Group under which Redmine is ran.";
+      };
+
+      server = mkOption {
+        type = types.enum [ "webrick" "puma" ];
+        default = "webrick";
+        description = "Ruby HTTP server which runs Redmine.";
       };
 
       listen = {
@@ -401,9 +407,15 @@ in
         SyslogIdentifier = "redmine";
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
+      } // optionalAttrs (cfg.server == "webrick") {
         ExecStart="${bundle} exec rails server webrick -e production"
                   + " -b '${cfg.listen.address}' -p ${toString cfg.listen.port}"
                   + " -c '${configRu}' -P '${cfg.stateDir}/redmine.pid'";
+      } // optionalAttrs (cfg.server == "puma") {
+        ExecStart="${bundle} exec puma -e production"
+                  + " -b 'tcp://${cfg.listen.address}:${toString cfg.listen.port}'"
+                  + (optionalString cfg.serverAccessLog " -v")
+                  + " '${configRu}'";
       };
 
     };
