@@ -266,9 +266,24 @@ in
         use-substitutes = ${if cfg.useSubstitutes then "1" else "0"}
       '';
 
-    environment.systemPackages = [ cfg.package ];
-
-    environment.variables = hydraEnv;
+    environment.systemPackages = [
+      cfg.package
+      (pkgs.stdenv.mkDerivation {
+        name = "hydra-wrappers";
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        buildCommand = ''
+          mkdir -p $out/bin
+          for b in ${cfg.package}/bin/*; do
+            makeWrapper "$b" "$out/bin/''${b##*/}" ${
+              toString (mapAttrsToList
+                (name: value: ''--set-default ${name} "${value}"'') hydraEnv)
+            }
+          done
+        '';
+        meta.priority = (cfg.package.meta.priority or 0) - 1;
+        # favor these wrappers over the originals
+      })
+    ];
 
     nix.extraOptions = ''
       keep-outputs = true
