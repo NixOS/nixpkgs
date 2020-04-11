@@ -408,7 +408,7 @@ fi
 
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
-# current directory (for "build" and "test").
+# current directory (for "build").
 if [ -z "$rollback" ]; then
     echo "building the system configuration..." >&2
     if [ "$action" = switch -o "$action" = boot ]; then
@@ -422,12 +422,21 @@ if [ -z "$rollback" ]; then
         fi
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
-    elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
+    elif [ "$action" = build ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
             nix build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
             pathToConfig="$(readlink -f ./result)"
+        fi
+    elif [ "$action" = test -o "$action" = dry-build -o "$action" = dry-activate ]; then
+        if [[ -z $flake ]]; then
+            pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system -k "${extraBuildFlags[@]}")"
+        else
+            outLink=$tmpDir/result
+            nix build "$flake#$flakeAttr.config.system.build.toplevel" \
+              "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
+            pathToConfig="$(readlink -f $outLink)"
         fi
     elif [ "$action" = build-vm ]; then
         if [[ -z $flake ]]; then
@@ -460,7 +469,7 @@ else # [ -n "$rollback" ]
             sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
         )
         pathToConfig="$profile"-${systemNumber}-link
-        if [ -z "$targetHost" ]; then
+        if [ -z "$targetHost" -a "$action" = build ]; then
             ln -sT "$pathToConfig" ./result
         fi
     else
