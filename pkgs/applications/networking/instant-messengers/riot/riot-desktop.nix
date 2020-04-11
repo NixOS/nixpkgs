@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
-, electron_7, riot-web, gtk3
-, wrapGAppsHook, glib
+, electron_7, riot-web
 }:
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
@@ -27,14 +26,7 @@ in mkYarnPackage rec {
   packageJSON = ./riot-desktop-package.json;
   yarnNix = ./riot-desktop-yarndeps.nix;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-
-  extraBuildInputs = [
-    glib
-    gtk3
-  ];
-
-  dontWrapGApps = true;
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     # resources
@@ -54,13 +46,10 @@ in mkYarnPackage rec {
     # desktop item
     mkdir -p "$out/share"
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
-  '';
 
-  postFixup = ''
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
-      --add-flags "$out/share/riot/electron" \
-      "''${gappsWrapperArgs[@]}"
+      --add-flags "$out/share/riot/electron"
   '';
 
   # Do not attempt generating a tarball for riot-web again.
