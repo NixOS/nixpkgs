@@ -741,6 +741,8 @@ in {
 
   glob2 = callPackage ../development/python-modules/glob2 { };
 
+  globre = callPackage ../development/python-modules/globre { };
+
   glom = callPackage ../development/python-modules/glom { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
