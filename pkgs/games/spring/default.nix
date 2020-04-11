@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = https://springrts.com/;
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar ];
+    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar maintainers.sorki ];
     platforms = platforms.linux;
   };
 }
