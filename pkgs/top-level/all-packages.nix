@@ -19717,6 +19717,8 @@ in
     inherit (darwin) IOKit;
   };
 
+  gpsbabel-gui = libsForQt5.callPackage ../applications/misc/gpsbabel/gui.nix { };
+
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
   gpsd = callPackage ../servers/gpsd { };
