@@ -4,7 +4,7 @@
 , cmake
 , numba
 , numpy
-, pytest
+, pytestCheckHook
 , rapidjson
 }:
 
@@ -23,10 +23,8 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [ pytest numba ];
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [ pytestCheckHook numba ];
+  dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
     description = "Manipulate JSON-like data with NumPy-like idioms";
