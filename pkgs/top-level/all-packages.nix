@@ -22327,6 +22327,7 @@ in
     jre = openjdk11;
   };
 
+  prevo-data = callPackage ../applications/misc/prevo/data.nix { };
   prevo-tools = callPackage ../applications/misc/prevo/tools.nix { };
 
   ptex = callPackage ../development/libraries/ptex {};
