@@ -7855,8 +7855,8 @@
     githubId = 7953163;
     name = "Vika Shleina";
     keys = [{
-      longkeyid = "rsa4096/0x5402B9B5497BACDB";
-      fingerprint = "A03C D09C 36CF D9F6 1ADF  AF11 5402 B9B5 497B ACDB";
+      longkeyid = "rsa2048/0x4F62CD07CE64796A";
+      fingerprint = "B3C0 DA1A C18B 82E8 CA8B  B1D1 4F62 CD07 CE64 796A";
     }];
   };
   vinymeuh = {
