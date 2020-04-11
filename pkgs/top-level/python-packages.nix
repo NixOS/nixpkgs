@@ -3231,6 +3231,8 @@ in {
     inherit (pkgs) lzo;
   };
 
+  pxml = callPackage ../development/python-modules/pxml { };
+
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
