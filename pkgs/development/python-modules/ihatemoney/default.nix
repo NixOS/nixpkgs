@@ -33,13 +33,13 @@
 
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "4.1";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "spiral-project";
     repo = pname;
     rev = version;
-    sha256 = "1ai7v2i2rvswzv21nwyq51fvp8lr2x2cl3n34p11br06kc1pcmin";
+    sha256 = "02mxhf41c95gfp2wi74li2xli7sblm075w5z5ywkrh0pc1v02mgp";
   };
 
   propagatedBuildInputs = [
