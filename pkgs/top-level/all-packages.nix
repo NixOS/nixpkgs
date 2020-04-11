@@ -828,6 +828,8 @@ in
 
   certigo = callPackage ../tools/admin/certigo { };
 
+  catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
+
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
   chipsec = callPackage ../tools/security/chipsec {
