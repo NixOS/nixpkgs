@@ -184,7 +184,6 @@ let
 
       # needed for ss
       INET_DIAG         = yes;
-      INET_TCP_DIAG     = option module;
       INET_UDP_DIAG     = module;
       INET_RAW_DIAG     = whenAtLeast "4.14" module;
       INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
