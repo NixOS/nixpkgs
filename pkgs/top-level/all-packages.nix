@@ -19296,12 +19296,20 @@ in
   inherit (callPackage ../applications/radio/gnuradio {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
   })
+    ### 3.7 ###
     # wrapped versions
     gnuradio3_7
     gnuradio3_7-full
     gnuradio3_7-with-packages # with all available plugins wrapped as well
-    # Please use this one as a library
+    # Please use these as a libraries
     gnuradio3_7-no-gui
+    ### 3.8 ###
+    # wrapped versions
+    gnuradio3_8
+    gnuradio3_8-full
+    gnuradio3_8-with-packages # with all available plugins wrapped as well
+    # Please use these as a libraries
+    gnuradio3_8-no-gui
   ;
   # for backwards compatibility
   gnuradio = gnuradio3_7;
