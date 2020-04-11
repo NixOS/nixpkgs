@@ -1,4 +1,4 @@
-{ haskell, haskellPackages, lib, lndir, runCommand, writeText }:
+{ dhall, haskell, lib, lndir, runCommand, writeText }:
 
 { name
 
@@ -34,18 +34,9 @@
 }:
 
 let
-  # `buildDhallPackage` requires version 1.25.0 or newer of the Haskell
-  # interpreter for Dhall.  Given that the default version is 1.24.0 we choose
-  # the latest available version instead until the default is upgraded.
-  #
   # HTTP support is disabled in order to force that HTTP dependencies are built
   # using Nix instead of using Dhall's support for HTTP imports.
-  dhall =
-    haskell.lib.justStaticExecutables
-      (haskell.lib.appendConfigureFlag
-        haskellPackages.dhall_1_29_0
-        "-f-with-http"
-      );
+  dhallNoHTTP = haskell.lib.appendConfigureFlag dhall "-f-with-http";
 
   file = writeText "${name}.dhall" code;
 
@@ -69,13 +60,13 @@ in
 
     mkdir -p $out/${cacheDhall}
 
-    ${dhall}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
+    ${dhallNoHTTP}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
 
-    SHA_HASH=$(${dhall}/bin/dhall hash <<< $out/${sourceFile})
+    SHA_HASH=$(${dhallNoHTTP}/bin/dhall hash <<< $out/${sourceFile})
 
     HASH_FILE="''${SHA_HASH/sha256:/1220}"
 
-    ${dhall}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
+    ${dhallNoHTTP}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
 
     echo "missing $SHA_HASH" > $out/binary.dhall
 
