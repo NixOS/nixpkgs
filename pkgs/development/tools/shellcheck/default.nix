@@ -40,10 +40,6 @@ let
       install -Dm644 shellcheck.1 $man/share/man/man1/shellcheck.1
       mkdir $out
     '';
-
-    # just some file copying
-    preferLocalBuild = true;
-    allowSubstitutes = false;
   };
 
 in
