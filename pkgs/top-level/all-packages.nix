@@ -5500,6 +5500,8 @@ in
 
   nylon = callPackage ../tools/networking/nylon { };
 
+  nym = callPackage ../applications/networking/nym { };
+
   nzbget = callPackage ../tools/networking/nzbget { };
 
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
