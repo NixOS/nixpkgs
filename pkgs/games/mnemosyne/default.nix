@@ -37,8 +37,9 @@ python.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   postInstall = ''
-    mkdir -p $out/share
+    mkdir -p $out/share/applications
     mv $out/${python.sitePackages}/$out/share/locale $out/share
+    mv mnemosyne.desktop $out/share/applications
     rm -r $out/${python.sitePackages}/nix
   '';
 
