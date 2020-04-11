@@ -1,6 +1,6 @@
 # Update script: pkgs/development/tools/rust/rust-analyzer/update.sh
-{ lib, pkgs, stdenv, nodejs, vscode-utils, jq, rust-analyzer
-, setDefaultRaLspServerPath ? true
+{ lib, stdenv, vscode-utils, jq, rust-analyzer, nodePackages_10_x
+, setDefaultServerPath ? true
 }:
 
 let
@@ -10,10 +10,10 @@ let
   # Follow the unstable version of rust-analyzer, since the extension is not stable yet.
   inherit (rust-analyzer) version;
 
-  vsix = (import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  }).package.override {
+  build-deps = nodePackages_10_x."rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps";
+  # FIXME: Making a new derivation to link `node_modules` and run `npm run package`
+  # will cause a build failure.
+  vsix = build-deps.override {
     src = "${rust-analyzer.src}/editors/code";
     outputs = [ "vsix" "out" ];
 
@@ -30,10 +30,10 @@ in vscode-utils.buildVscodeExtension {
   src = "${vsix}/${pname}.zip";
   vscodeExtUniqueId = "${publisher}.${pname}";
 
-  nativeBuildInputs = lib.optional setDefaultRaLspServerPath jq;
+  nativeBuildInputs = lib.optional setDefaultServerPath jq;
 
-  postFixup = lib.optionalString setDefaultRaLspServerPath ''
-    package_json="$out/share/vscode/extensions/${publisher}.${pname}/package.json"
+  postFixup = lib.optionalString setDefaultServerPath ''
+    package_json="$out/${publisher}.${pname}/package.json"
     jq '.contributes.configuration.properties."rust-analyzer.serverPath".default = $s' \
       --arg s "${rust-analyzer}/bin/rust-analyzer" \
       $package_json >$package_json.new
