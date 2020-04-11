@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     ];
 
   sourceRoot = ".";
-  dontMakeSourcesWritable = true;
 
   outputs = [ "out" "bin" "man" "dev" ];
   propagatedBuildOutputs = [];

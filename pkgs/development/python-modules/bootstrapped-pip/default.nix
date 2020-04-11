@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
 
   srcs = [ wheel.src pip.src setuptools.src ];
   sourceRoot = ".";
-  dontMakeSourcesWritable = true;
 
   dontUseSetuptoolsBuild = true;
   dontUsePipInstall = true;

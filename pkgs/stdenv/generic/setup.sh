@@ -862,6 +862,11 @@ unpackPhase() {
         fi
     done
 
+    if [ "$sourceRoot" == "." ]; then
+      mkdir source
+      cd source
+    fi
+
     # Unpack all source archives.
     for i in "${srcs[@]}"; do
         unpackFile "$i"
@@ -895,6 +900,11 @@ unpackPhase() {
     if [ -z "$sourceRoot" ]; then
         echo "unpacker appears to have produced no directories"
         exit 1
+    fi
+
+    if [ "$sourceRoot" == "." ]; then
+      cd ..
+      sourceRoot=source
     fi
 
     echo "source root is $sourceRoot"
