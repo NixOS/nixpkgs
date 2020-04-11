@@ -132,6 +132,9 @@ in
             chdir = "${pkg}/${pkg.pythonModule.sitePackages}/ihatemoney";
             env = [ "IHATEMONEY_SETTINGS_FILE_PATH=${configFile}" ];
             pythonPackages = self: [ self.ihatemoney ];
+            # workaround for https://github.com/unbit/uwsgi/issues/1126
+            # probably fixed in uwsgi 2.0.19 https://github.com/unbit/uwsgi/commit/d0444450a195f218456a2149d9c2066afa0ae52a
+            wsgi-disable-file-wrapper = true;
           } // cfg.uwsgiConfig;
         };
       };
