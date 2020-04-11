@@ -292,7 +292,7 @@ rec {
     in runCommand name args
       ''
         mkdir -p $out
-        while IFS= read path; do
+        while IFS= read -r -d $'\0' path; do
           ${lndir}/bin/lndir -silent $path $out
         done < <(${jq}/bin/jq -r <.attrs.json '.paths[]')
         ${postBuild}
