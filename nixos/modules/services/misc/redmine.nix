@@ -71,6 +71,10 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "redmine" "port" ] [ "services" "redmine" "listen" "port" ])
+  ];
+
   options = {
     services.redmine = {
       enable = mkEnableOption "Redmine";
@@ -94,10 +98,19 @@ in
         description = "Group under which Redmine is ran.";
       };
 
-      port = mkOption {
-        type = types.int;
-        default = 3000;
-        description = "Port on which Redmine is ran.";
+      listen = {
+        address = mkOption {
+          type = types.str;
+          default = "0.0.0.0";
+          example = "127.0.0.1";
+          description = "Address on which the Redmine HTTP server listens.";
+        };
+
+        port = mkOption {
+          type = types.int;
+          default = 3000;
+          description = "Port on which the Redmine HTTP server listens.";
+        };
       };
 
       prefix = mkOption {
@@ -388,7 +401,8 @@ in
         SyslogIdentifier = "redmine";
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
-        ExecStart="${bundle} exec rails server webrick -e production -p ${toString cfg.port}"
+        ExecStart="${bundle} exec rails server webrick -e production"
+                  + " -b '${cfg.listen.address}' -p ${toString cfg.listen.port}"
                   + " -c '${configRu}' -P '${cfg.stateDir}/redmine.pid'";
       };
 
