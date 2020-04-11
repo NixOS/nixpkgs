@@ -9,6 +9,8 @@
 , tqdm
 , six
 , h5py
+, arviz
+, packaging
 , pytest
 , nose
 , parameterized
@@ -37,6 +39,8 @@ buildPythonPackage rec {
     tqdm
     six
     h5py
+    arviz
+    packaging
   ];
 
   checkInputs = [
