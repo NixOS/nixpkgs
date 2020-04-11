@@ -24,6 +24,21 @@
     </para>
    </listitem>
    <listitem>
+    <para>Core version changes:</para>
+    <para>gcc: 8.3.0 -&gt; 9.2.0</para>
+    <para>glibc: 2.27 -&gt; 2.30</para>
+    <para>linux: 4.19 -&gt; 5.4</para>
+    <para>mesa: 19.1.5 -&gt; 19.3.3</para>
+    <para>openssl: 1.0.2u -&gt; 1.1.1d</para>
+   </listitem>
+   <listitem>
+    <para>Desktop version changes:</para>
+    <para>plasma5: 5.16.5 -&gt; 5.17.5</para>
+    <para>kdeApplications: 19.08.2 -&gt; 19.12.3</para>
+    <para>gnome3: 3.32 -&gt; 3.34</para>
+    <para>pantheon: 5.0 -&gt; 5.1.3</para>
+   </listitem>
+   <listitem>
     <para>
      Linux kernel is updated to branch 5.4 by default (from 4.19).
      Users of Intel GPUs may prefer to explicitly set branch to 4.19 to avoid some regressions.
@@ -41,6 +56,24 @@
      Before you'd be greeted by a tty and asked to enter <command>systemctl start display-manager</command>.
      It is now possible to disable the display-manager from running by selecting the <literal>Disable display-manager</literal>
      quirk in the boot menu.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     GNOME 3 has been upgraded to 3.34. Please take a look at their
+     <link xlink:href="https://help.gnome.org/misc/release-notes/3.34">Release Notes</link>
+     for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     If you enable the Pantheon Desktop Manager via
+     <xref linkend="opt-services.xserver.desktopManager.pantheon.enable" />, we now default to also use
+     <link xlink:href="https://blog.elementary.io/say-hello-to-the-new-greeter/">
+      Pantheon's newly designed greeter
+     </link>.
+      Contrary to NixOS's usual update policy, Pantheon will receive updates during the cycle of
+      NixOS 20.03 when backwards compatible.
     </para>
    </listitem>
    <listitem>
@@ -255,22 +288,7 @@ See https://github.com/NixOS/nixpkgs/pull/71684 for details.
    </listitem>
    <listitem>
      <para>
-       <filename>./services/networking/dnscrypt-proxy2.nix</filename>
-     </para>
-   </listitem>
-   <listitem>
-     <para>
        <filename>./services/networking/go-shadowsocks2.nix</filename>
-     </para>
-   </listitem>
-   <listitem>
-     <para>
-       <filename>./services/networking/ntp/chrony.nix</filename>
-     </para>
-   </listitem>
-   <listitem>
-     <para>
-       <filename>./services/networking/ntp/ntpd.nix</filename>
      </para>
    </listitem>
    <listitem>
@@ -882,6 +900,25 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      The <option>services.dnscrypt-proxy</option> module has been removed
      as it used the deprecated version of dnscrypt-proxy. We've added
      <xref linkend="opt-services.dnscrypt-proxy2.enable"/> to use the supported version.
+     This module supports configuration via the Nix attribute set
+     <xref linkend="opt-services.dnscrypt-proxy2.settings" />, or by passing a TOML configuration file via
+     <xref linkend="opt-services.dnscrypt-proxy2.configFile" />.
+<programlisting>
+# Example configuration:
+services.dnscrypt-proxy2.enable = true;
+services.dnscrypt-proxy2.settings = {
+  listen_addresses = [ "127.0.0.1:43" ];
+  sources.public-resolvers = {
+    urls = [ "https://download.dnscrypt.info/resolvers-list/v2/public-resolvers.md" ];
+    cache_file = "public-resolvers.md";
+    minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+    refresh_delay = 72;
+  };
+};
+
+services.dnsmasq.enable = true;
+services.dnsmasq.servers = [ "127.0.0.1#43" ];
+</programlisting>
     </para>
    </listitem>
    <listitem>
