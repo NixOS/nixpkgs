@@ -809,13 +809,21 @@ auth required pam_succeed_if.so uid >= 1000 quiet
    <listitem>
     <para>
      The nginx web server previously started its master process as root
-     privileged, then ran worker processes as a less privileged identity user.
+     privileged, then ran worker processes as a less privileged identity user
+     (the <literal>nginx</literal> user).
      This was changed to start all of nginx as a less privileged user (defined by
      <literal>services.nginx.user</literal> and
      <literal>services.nginx.group</literal>). As a consequence, all files that
      are needed for nginx to run (included configuration fragments, SSL
      certificates and keys, etc.) must now be readable by this less privileged
      user/group.
+    </para>
+    <para>
+     To continue to use the old approach, you can configure:
+      <programlisting>
+services.nginx.appendConfig = let cfg = config.services.nginx; in ''user ${cfg.user} ${cfg.group};'';
+systemd.services.nginx.serviceConfig.User = lib.mkForce "root";
+      </programlisting>
     </para>
    </listitem>
    <listitem>
