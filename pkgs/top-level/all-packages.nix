@@ -21163,6 +21163,8 @@ in
     jre = openjdk11;
   };
 
+  prevo-tools = callPackage ../applications/misc/prevo/tools.nix { };
+
   ptex = callPackage ../development/libraries/ptex {};
 
   qbec = callPackage ../applications/networking/cluster/qbec { };
