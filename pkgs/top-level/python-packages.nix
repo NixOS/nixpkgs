@@ -134,6 +134,8 @@ in {
 
   pynamodb = callPackage ../development/python-modules/pynamodb { };
 
+  aadict = callPackage ../development/python-modules/aadict { };
+
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
