@@ -148,55 +148,61 @@ let
 
   generic' = { version, sha256, self, selfWithExtensions, ... }@args:
     let
-      php = generic (builtins.removeAttrs args [ "self" "selfWithExtensions" ]);
+      filteredArgs = builtins.removeAttrs args [ "self" "selfWithExtensions" ];
+      php = generic filteredArgs;
 
       php-packages = (callPackage ../../../top-level/php-packages.nix {
         php = self;
         phpWithExtensions = selfWithExtensions;
       });
 
-      buildEnv = { extensions ? (_: []), extraConfig ? "" }:
-        let
-          getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
-          enabledExtensions = extensions php-packages.extensions;
+      buildEnv = lib.makeOverridable (
+        { extensions ? (_: []), extraConfig ? "", ... }@innerArgs:
+          let
+            filteredInnerArgs = builtins.removeAttrs innerArgs [ "extensions" "extraConfig" ];
+            allArgs = filteredArgs // filteredInnerArgs;
+            php = generic allArgs;
 
-          # Generate extension load configuration snippets from the
-          # extension parameter. This is an attrset suitable for use
-          # with textClosureList, which is used to put the strings in
-          # the right order - if a plugin which is dependent on
-          # another plugin is placed before its dependency, it will
-          # fail to load.
-          extensionTexts =
-            lib.listToAttrs
-              (map (ext:
-                let
-                  extName = getExtName ext;
-                  type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
-                in
-                  lib.nameValuePair extName {
-                    text = "${type}=${ext}/lib/php/extensions/${extName}.so";
-                    deps = lib.optionals (ext ? internalDeps)
-                      (map getExtName ext.internalDeps);
-                  })
-                enabledExtensions);
+            getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
+            enabledExtensions = extensions php-packages.extensions;
 
-          extNames = map getExtName enabledExtensions;
-          extraInit = writeText "custom-php.ini" ''
+            # Generate extension load configuration snippets from the
+            # extension parameter. This is an attrset suitable for use
+            # with textClosureList, which is used to put the strings in
+            # the right order - if a plugin which is dependent on
+            # another plugin is placed before its dependency, it will
+            # fail to load.
+            extensionTexts =
+              lib.listToAttrs
+                (map (ext:
+                  let
+                    extName = getExtName ext;
+                    type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
+                  in
+                    lib.nameValuePair extName {
+                      text = "${type}=${ext}/lib/php/extensions/${extName}.so";
+                      deps = lib.optionals (ext ? internalDeps)
+                        (map getExtName ext.internalDeps);
+                    })
+                  enabledExtensions);
+
+            extNames = map getExtName enabledExtensions;
+            extraInit = writeText "custom-php.ini" ''
             ${lib.concatStringsSep "\n"
               (lib.textClosureList extensionTexts extNames)}
             ${extraConfig}
           '';
-        in
-          symlinkJoin {
-            name = "php-with-extensions-${version}";
-            inherit (php) version;
-            nativeBuildInputs = [ makeWrapper ];
-            passthru = {
-              inherit buildEnv withExtensions enabledExtensions;
-              inherit (php-packages) packages extensions;
-            };
-            paths = [ php ];
-            postBuild = ''
+          in
+            symlinkJoin {
+              name = "php-with-extensions-${version}";
+              inherit (php) version;
+              nativeBuildInputs = [ makeWrapper ];
+              passthru = {
+                inherit buildEnv withExtensions enabledExtensions;
+                inherit (php-packages) packages extensions;
+              };
+              paths = [ php ];
+              postBuild = ''
               cp ${extraInit} $out/lib/custom-php.ini
 
               wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
@@ -205,7 +211,7 @@ let
                  wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
               fi
             '';
-          };
+            });
 
       withExtensions = extensions: buildEnv { inherit extensions; };
     in
