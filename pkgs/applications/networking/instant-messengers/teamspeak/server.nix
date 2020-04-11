@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoPatchelfHook }:
+{ stdenv, fetchurl, autoPatchelfHook, writeScript }:
 
 let
   arch = if stdenv.is64bit then "amd64" else "x86";
@@ -26,6 +26,29 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin/
     ln -s $out/lib/teamspeak/ts3server $out/bin/ts3server
     ln -s $out/lib/teamspeak/tsdns/tsdnsserver $out/bin/tsdnsserver
+  '';
+
+  passthru.updateScript = writeScript "update-teampeak-server" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused
+
+    set -eu -o pipefail
+
+    version=$( \
+        curl -s "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/" \
+        | grep softwareVersion \
+        | sed -E -e 's/^.*<span itemprop="softwareVersion">([^<]+)<\/span>.*$/\1/' \
+    )
+
+    versionOld=$(nix-instantiate --eval --strict -A "teamspeak_server.version")
+
+    nixFile=pkgs/applications/networking/instant-messengers/teamspeak/server.nix
+
+    update-source-version teamspeak_server "$version" --system=i686-linux
+
+    sed -i -e "s/version = \"$version\";/version = $versionOld;/" "$nixFile"
+
+    update-source-version teamspeak_server "$version" --system=x86_64-linux
   '';
 
   meta = with stdenv.lib; {
