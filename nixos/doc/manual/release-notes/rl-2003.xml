@@ -41,8 +41,6 @@
    <listitem>
     <para>
      Linux kernel is updated to branch 5.4 by default (from 4.19).
-     Users of Intel GPUs may prefer to explicitly set branch to 4.19 to avoid some regressions.
-     <programlisting>boot.kernelPackages = pkgs.linuxPackages_4_19;</programlisting>
     </para>
    </listitem>
    <listitem>
