@@ -383,19 +383,28 @@ stdenv.mkDerivation ({
       mv tmp "$d"
     done
 
-    listDynamicLinks () {
+    makeDynamicLinks () {
       for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
         for lib in "$d/"*.{dylib,so} ; do
+          # When '*.{dylib,so}' does not match anything, '*.{dylib,so}' becomes '*.dylink or *.so' including '*'
+          # [ -f "$lib" ] checks if the matched path is available.
           if [ -f "$lib" ] ; then
-            echo "$lib"
+            local linkPath="$dynamicLinksDir/$(basename "$lib")"
+            if [ -e "$linkPath" ]; then
+              # link already exists! but maybe that's OK
+              if [ ! -l "$linkPath" ] || [ "$(readlink "$linkPath")" != "$lib" ]; then
+                echo >&2 "error: failed to create symbolic link $linkPath: file exists"
+                exit 1
+              fi
+            else
+              ln -s "$lib" "$linkPath"
+            fi
           fi
         done
       done
     }
 
-    for lib in $(listDynamicLinks | sort | uniq) ; do
-      ln -s "$lib" "$dynamicLinksDir"
-    done
+    makeDynamicLinks
 
     # Edit the local package DB to reference the links directory.
     for f in "$packageConfDir/"*.conf; do
