@@ -383,17 +383,24 @@ stdenv.mkDerivation ({
       mv tmp "$d"
     done
 
+    # This function makes the links of shared libraries this package uses,
+    # and it avoids creating duplicate links for the same file.
+    # $packageConfDir has conf files for each haskell package this package uses.
+    # There are the links of shared libraries in dynamic-library-dirs of $packageConfDir.
+    # The links are duplicated in some haskell packages.
     makeDynamicLinks () {
       for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
         for lib in "$d/"*.{dylib,so} ; do
-          # When '*.{dylib,so}' does not match anything, '*.{dylib,so}' becomes '*.dylink or *.so' including '*'
+          # When '*.{dylib,so}' does not match anything, '*.{dylib,so}' becomes '*.dylib or *.so' including '*'
           # [ -f "$lib" ] checks if the matched path is available.
           if [ -f "$lib" ] ; then
             local linkPath="$dynamicLinksDir/$(basename "$lib")"
             if [ -e "$linkPath" ]; then
               # link already exists! but maybe that's OK
-              if [ ! -L "$linkPath" ] || [ "$(readlink "$linkPath")" != "$lib" ]; then
+              if [ ! -L "$linkPath" ] || [ "$(readlink -f "$linkPath")" != "$(readlink -f "$lib")" ]; then
                 echo >&2 "error: failed to create symbolic link $linkPath: file exists"
+                echo >&2 "       source file: $lib : $(readlink -f "$lib")"
+                echo >&2 "       destination link: $linkPath : $(readlink -f "$linkPath")"
                 exit 1
               fi
             else
