@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
+  env.LDFLAGS = lib.optionalString stdenv.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
   configureFlags = [
      "--disable-csharp" "--with-xz"

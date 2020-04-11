@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-  LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  env.LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preConfigure = ''
     cp ${automake}/share/automake*/config.{sub,guess} config
