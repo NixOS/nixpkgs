@@ -602,6 +602,7 @@
   ./services/networking/dnsdist.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
+  ./services/networking/electrum-personal-server.nix
   ./services/networking/epmd.nix
   ./services/networking/eternal-terminal.nix
   ./services/networking/fakeroute.nix

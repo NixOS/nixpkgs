@@ -19029,6 +19029,8 @@ in
 
   electrum-ltc = callPackage ../applications/misc/electrum/ltc.nix { };
 
+  electrum-personal-server = callPackage ../applications/misc/electrum-personal-server { };
+
   elementary-planner = callPackage ../applications/office/elementary-planner { };
 
   elinks = callPackage ../applications/networking/browsers/elinks { };
