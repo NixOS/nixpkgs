@@ -1,4 +1,4 @@
-{ stdenv, lib, haskellPackages, haskell }:
+{ stdenv, lib, haskellPackages, haskell, pandoc }:
 
 # this wraps around the haskell package
 # and puts the documentation into place
@@ -24,9 +24,15 @@ let
 
     inherit src;
 
+    nativeBuildInputs = [ pandoc ];
+
     outputs = [ "bin" "man" "doc" "out" ];
 
-    phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+    phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
+
+    buildPhase = ''
+      pandoc -s -f markdown-smart -t man shellcheck.1.md -o shellcheck.1
+    '';
 
     installPhase = ''
       install -Dm755 ${bin}/bin/shellcheck $bin/bin/shellcheck
