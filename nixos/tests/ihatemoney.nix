@@ -1,5 +1,11 @@
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
 let
-  f = backend: import ./make-test-python.nix ({ pkgs, ... }: {
+  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
+  f = backend: makeTest {
     name = "ihatemoney-${backend}";
     machine = { lib, ... }: {
       services.ihatemoney = {
@@ -48,7 +54,7 @@ let
 
       assert "ihatemoney" in machine.succeed("curl http://localhost:8000")
     '';
-  });
+  };
 in {
   ihatemoney-sqlite = f "sqlite";
   ihatemoney-postgresql = f "postgresql";
