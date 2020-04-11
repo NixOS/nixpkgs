@@ -1,7 +1,8 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, dbus, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "rtkit-0.11";
+  pname = "rtkit";
+  version = "0.11";
 
   src = fetchurl {
     url = "http://0pointer.de/public/${name}.tar.xz";
