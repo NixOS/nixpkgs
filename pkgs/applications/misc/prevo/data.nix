@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       This package provides the ReVo database for the prevo command line application.
     '';
     homepage = "https://github.com/bpeel/revo";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.das-g ];
     platforms = platforms.linux;
   };

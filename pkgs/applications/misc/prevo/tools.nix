@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       database for this application or for the Android app of the same name.
     '';
     homepage = "https://github.com/bpeel/prevodb";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.das-g ];
     platforms = platforms.linux;
   };
