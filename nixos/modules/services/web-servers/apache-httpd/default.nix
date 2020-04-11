@@ -453,7 +453,13 @@ in
         type = types.str;
         default = "wwwrun";
         description = ''
-          User account under which httpd runs.
+          User account under which httpd children processes run.
+
+          If you require the main httpd process to run as
+          <literal>root</literal> add the following configuration:
+          <programlisting>
+          systemd.services.httpd.serviceConfig.User = lib.mkForce "root";
+          </programlisting>
         '';
       };
 
@@ -461,7 +467,7 @@ in
         type = types.str;
         default = "wwwrun";
         description = ''
-          Group under which httpd runs.
+          Group under which httpd children processes run.
         '';
       };
 
@@ -724,7 +730,7 @@ in
           ExecStart = "@${pkg}/bin/httpd httpd -f ${httpdConf}";
           ExecStop = "${pkg}/bin/httpd -f ${httpdConf} -k graceful-stop";
           ExecReload = "${pkg}/bin/httpd -f ${httpdConf} -k graceful";
-          User = "root";
+          User = cfg.user;
           Group = cfg.group;
           Type = "forking";
           PIDFile = "${runtimeDir}/httpd.pid";
@@ -732,6 +738,7 @@ in
           RestartSec = "5s";
           RuntimeDirectory = "httpd httpd/runtime";
           RuntimeDirectoryMode = "0750";
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
       };
 
