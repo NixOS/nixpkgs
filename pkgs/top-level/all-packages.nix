@@ -20844,6 +20844,8 @@ in
     i3GapsSupport = false;
   };
 
+  polyphone = libsForQt5.callPackage ../applications/audio/polyphone { };
+
   ptex = callPackage ../development/libraries/ptex {};
 
   qbec = callPackage ../applications/networking/cluster/qbec { };
