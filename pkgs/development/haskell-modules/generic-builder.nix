@@ -399,8 +399,10 @@ stdenv.mkDerivation ({
               # link already exists! but maybe that's OK
               if [ ! -L "$linkPath" ] || [ "$(readlink -f "$linkPath")" != "$(readlink -f "$lib")" ]; then
                 echo >&2 "error: failed to create symbolic link $linkPath: file exists"
-                echo >&2 "       source file: $lib : $(readlink -f "$lib")"
-                echo >&2 "       destination link: $linkPath : $(readlink -f "$linkPath")"
+                echo >&2 "       source link: $lib"
+                echo >&2 "       source following link recursively: $(readlink -f "$lib")"
+                echo >&2 "       existing link: $linkPath"
+                echo >&2 "       existing following link recursively: $(readlink -f "$linkPath")"
                 exit 1
               fi
             else
