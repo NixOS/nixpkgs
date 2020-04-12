@@ -4703,6 +4703,12 @@
     githubId = 136037;
     name = "Matthew Maurer";
   };
+  maxdamantus = {
+    email = "maxdamantus@gmail.com";
+    github = "Maxdamantus";
+    githubId = 502805;
+    name = "Max Zerzouri";
+  };
   mbakke = {
     email = "mbakke@fastmail.com";
     github = "mbakke";
