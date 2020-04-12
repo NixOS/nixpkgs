@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://cli.heroku.com";
     description = "Everything you need to get started using Heroku";
-    maintainers = with lib.maintainers; [ aflatter mirdhyn peterhoeg ];
+    maintainers = with lib.maintainers; [ aflatter mirdhyn peterhoeg marsam ];
     license = lib.licenses.mit;
     platforms = with lib.platforms; unix;
   };
