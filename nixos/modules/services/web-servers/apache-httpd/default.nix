@@ -657,7 +657,7 @@ in
     services.httpd.phpOptions =
       ''
         ; Needed for PHP's mail() function.
-        sendmail_path = sendmail -t -i
+        sendmail_path = ${pkgs.system-sendmail}/bin/sendmail -t -i
 
         ; Don't advertise PHP
         expose_php = off
@@ -708,9 +708,7 @@ in
         wants = concatLists (map (hostOpts: [ "acme-${hostOpts.hostName}.service" "acme-selfsigned-${hostOpts.hostName}.service" ]) vhostsACME);
         after = [ "network.target" "fs.target" ] ++ map (hostOpts: "acme-selfsigned-${hostOpts.hostName}.service") vhostsACME;
 
-        path =
-          [ pkg pkgs.coreutils pkgs.gnugrep ]
-          ++ optional cfg.enablePHP pkgs.system-sendmail; # Needed for PHP's mail() function.
+        path = [ pkg pkgs.coreutils pkgs.gnugrep ];
 
         environment =
           optionalAttrs cfg.enablePHP { PHPRC = phpIni; }
