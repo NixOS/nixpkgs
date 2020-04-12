@@ -20,21 +20,10 @@ let
   patchedSource = stdenv.mkDerivation (source // rec {
     phases = [ "unpackPhase" "patchPhase" "installPhase" ];
     patches = [ ./yarn_fix_http_node.patch ] ++ lib.optionals ldap [ ./ldap.patch ] ++ lib.optionals sendmail [ ./sendmail.patch ];
-    installPhase = let
-      # Peertube supports several languages, but they take a very long
-      # time to build. The build script accepts --light which builds
-      # only English, and --light-fr which only builds English + French.
-      # This small hack permits to builds only English + A chosen
-      # language depending on the value of "light"
-      # Default (null) is to build every language
-      lightFix = if light == true || light == null then "" else ''
-        sed -i -e "s/fr-FR/${light}/g" -e "s/--light-fr/--light-language/" $out/scripts/build/client.sh
-      '';
-    in ''
+    installPhase = ''
       mkdir $out
       cp -a . $out/
-      ${lightFix}
-      '';
+    '';
   });
   serverPatchedPackage = runCommand "server-package" {} ''
     mkdir -p $out
