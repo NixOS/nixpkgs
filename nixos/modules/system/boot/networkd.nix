@@ -100,6 +100,12 @@ let
     (assertValueOneOf "Mode" ["private" "vepa" "bridge" "passthru"])
   ];
 
+  checkIpvlan = checkUnitConfig "IPVLAN" [
+    (assertOnlyFields ["Mode" "Flags"])
+    (assertValueOneOf "Mode" ["L2" "L3" "L3S"])
+    (assertValueOneOf "Flags" ["bridge" "private" "vepa"])
+  ];
+
   checkVxlan = checkUnitConfig "VXLAN" [
     (assertOnlyFields [
       "Id" "Remote" "Local" "TOS" "TTL" "MacLearning" "FDBAgeingSec"
@@ -471,6 +477,18 @@ let
       '';
     };
 
+    ipvlanConfig = mkOption {
+      default = {};
+      example = { Mode = "L2"; Flags = "bridge"; };
+      type = types.addCheck (types.attrsOf unitOption) checkIpvlan;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPVLAN]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vxlanConfig = mkOption {
       default = {};
       example = { Id = "4"; };
@@ -786,6 +804,16 @@ let
       '';
     };
 
+    ipvlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of ipvlan interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vxlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -894,6 +922,11 @@ let
             ${attrsToSection def.macvlanConfig}
 
           ''}
+          ${optionalString (def.ipvlanConfig != { }) ''
+            [IPVLAN]
+            ${attrsToSection def.ipvlanConfig}
+
+          ''}
           ${optionalString (def.vxlanConfig != { }) ''
             [VXLAN]
             ${attrsToSection def.vxlanConfig}
@@ -969,6 +1002,7 @@ let
           ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
           ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
           ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
+          ${concatStringsSep "\n" (map (s: "IPVLAN=${s}") def.ipvlan)}
           ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
           ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
           ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
