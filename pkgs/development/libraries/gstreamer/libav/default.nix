@@ -37,6 +37,12 @@ stdenv.mkDerivation rec {
     libav
   ];
 
+  passthru = {
+    propagateEnv = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+    };
+  };
+
   meta = with lib; {
     description = "FFmpeg/libav plugin for GStreamer";
     homepage = "https://gstreamer.freedesktop.org";

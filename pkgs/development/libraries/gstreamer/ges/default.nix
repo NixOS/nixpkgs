@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
     sed -i -r -e 's/p(bad|good) = .*/p\1 = pbase/' tests/check/meson.build
   '';
 
+  passthru = {
+    propagateEnv = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Library for creation of audio/video non-linear editors";
     homepage = "https://gstreamer.freedesktop.org";

@@ -135,6 +135,9 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails, wants DRI access for OpenGL
 
   passthru = {
+    propagateEnv = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+    };
     # Downstream `gst-*` packages depending on `gst-plugins-base`
     # have meson build options like 'gl' etc. that depend
     # on these features being built in `-base`.

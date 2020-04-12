@@ -100,6 +100,12 @@ stdenv.mkDerivation rec {
     moveToOutput "share/bash-completion" "$dev"
   '';
 
+  passthru = {
+    propagateEnv = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+    };
+  };
+
   setupHook = ./setup-hook.sh;
 
   meta = with lib ;{

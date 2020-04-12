@@ -21,7 +21,15 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "0xalg4dvaqb396h4s6gzxnplgv1lcvsczmmrlhyrj0kfj10amhsj";
   };
 
-  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
+  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook ];
+
+  propagatedBuildInputs = with pythonPackages; [
+    qt5.qtbase
+    pyqt5
+    mutagen
+    chromaprint
+    discid
+  ]
     ++ stdenv.lib.optionals (pyqt5.multimediaEnabled) [
       qt5.qtmultimedia.bin
       gst_all_1.gstreamer
@@ -31,13 +39,6 @@ in pythonPackages.buildPythonApplication rec {
       gst_all_1.gst-plugins-good
     ]
   ;
-
-  propagatedBuildInputs = with pythonPackages; [
-    pyqt5
-    mutagen
-    chromaprint
-    discid
-  ];
 
   prePatch = ''
     # Pesky unicode punctuation.

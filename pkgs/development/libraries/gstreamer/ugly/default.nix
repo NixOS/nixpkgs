@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
     DiskArbitration
   ]);
 
+  passthru = {
+    propagateEnv = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+    };
+  };
+
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing

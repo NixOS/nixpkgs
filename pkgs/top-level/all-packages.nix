@@ -19751,7 +19751,7 @@ in
 
   gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
 
-  guvcview = callPackage ../os-specific/linux/guvcview { };
+  guvcview = wrapGApps (callPackage ../os-specific/linux/guvcview { }) {  };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
@@ -21195,6 +21195,15 @@ in
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
   picard = callPackage ../applications/audio/picard { };
+
+  picard-newly-unwrapped = (picard.override {
+    qt5 = qt5 // {
+      wrapQtAppsHook = null;
+    };
+  }).overrideAttrs(oldAttrs: {
+    preFixup = "";
+  });
+  picard-newly-wrapped = wrapGeneric picard-newly-unwrapped {};
 
   picocom = callPackage ../tools/misc/picocom {
     inherit (darwin.apple_sdk.frameworks) IOKit;

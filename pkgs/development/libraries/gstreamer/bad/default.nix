@@ -278,6 +278,12 @@ in stdenv.mkDerivation rec {
   # that trip up clang with format security enabled.
   hardeningDisable = [ "format" ];
 
+  passthru = {
+    propagateEnv = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+    };
+  };
+
   doCheck = false; # fails 20 out of 58 tests, expensive
 
   meta = with stdenv.lib; {

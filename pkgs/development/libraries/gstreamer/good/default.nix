@@ -136,6 +136,12 @@ stdenv.mkDerivation rec {
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
 
+  passthru = {
+    propagateEnv = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "GStreamer Good Plugins";
     homepage = "https://gstreamer.freedesktop.org";

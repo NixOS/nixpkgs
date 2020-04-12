@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ];
 
+  passthru = {
+    propagateEnv = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
