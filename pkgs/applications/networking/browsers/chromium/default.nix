@@ -12,11 +12,11 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
-, useVaapi ? false # test video on radeon, before enabling this
+, useVaapi ? true
 , useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
-, commandLineArgs ? ""
+, commandLineArgs ? "--disable-accelerated-video-decode --disable-accelerated-video-encode"
 }:
 
 let

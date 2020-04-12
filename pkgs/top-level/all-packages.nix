@@ -18718,6 +18718,8 @@ in
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
+  chromium-vaapi = chromium.override { commandLineArgs = ""; };
+
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
