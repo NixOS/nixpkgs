@@ -76,6 +76,10 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
     };
+    propagateEnv = {
+      GDK_PIXBUF_MODULE_FILE = "%out%/lib/${gdk-pixbuf.moduleDir}/loaders.cache";
+      GI_TYPELIB_PATH = "%out%/lib/girepository-1.0";
+    };
   };
 
   meta = with stdenv.lib; {

@@ -120,6 +120,9 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
     };
+    propagateEnv = {
+      GIO_EXTRA_MODULES = "%out%/lib/gio/modules"
+    };
   };
 
   meta = with stdenv.lib; {

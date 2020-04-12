@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "gsettings-desktop-schemas"; };
     propagateEnv = {
       XDG_DATA_DIRS = "%out%/share/gsettings-schemas/${pname}-${version}";
+      GI_TYPELIB_PATH = "%out%/lib/girepository-1.0";
     };
   };
 

@@ -54,6 +54,9 @@ in stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
     };
+    propagateEnv = {
+      GI_TYPELIB_PATH = "%out%/lib/girepository-1.0";
+    };
   };
 
   meta = with stdenv.lib; {

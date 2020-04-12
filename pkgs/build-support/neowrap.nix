@@ -1,6 +1,7 @@
 { lib
-, buildEnv
+, symlinkJoin
 , jq
+, makeWrapper
 }:
 
 pkgList:
@@ -11,9 +12,9 @@ let
   }:
   let
     # Where we keep information about every environmental variable and the
-    # separator between it's values
+    # separator between it's values, the default value used is `:`
     encyclopedia_of_separators = {
-      XDG_DATA_DIRS = ":";
+      # XDG_DATA_DIRS = ":";
     };
     # recursive function that goes deep through the dependency graph of a given
     # list of packages and creates a list of all buildInputs they all depend
@@ -61,21 +62,22 @@ let
       key:
       value:
       (let 
-        sep = encyclopedia_of_separators.${key};
+        sep = encyclopedia_of_separators.${key} or ":";
       in 
         "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
       )
     ) envInfoFolded;
-    # makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
+    makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
   in
-  buildEnv {
+  symlinkJoin {
     name = "runtime-env";
     paths = pkgList;
 
-    buildInputs = [ jq ];
+    buildInputs = [ jq makeWrapper ];
     postBuild = ''
-      printf '%s\n' '${builtins.concatStringsSep " " makeWrapperArgs_}'
-      exit 1
+      for i in $out/bin/*; do
+        wrapProgram "$i" ${(builtins.concatStringsSep " " makeWrapperArgs_)}
+      done
     '';
   };
 in
