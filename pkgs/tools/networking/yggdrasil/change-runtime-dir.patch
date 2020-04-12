@@ -1,0 +1,12 @@
+diff -ruN a/src/defaults/defaults_linux.go b/src/defaults/defaults_linux.go
+--- a/src/defaults/defaults_linux.go	2019-06-17 10:23:09.495613784 -0700
++++ b/src/defaults/defaults_linux.go	2019-07-01 10:17:11.295669440 -0700
+@@ -7,7 +7,7 @@
+ func GetDefaults() platformDefaultParameters {
+ 	return platformDefaultParameters{
+ 		// Admin
+-		DefaultAdminListen: "unix:///var/run/yggdrasil.sock",
++		DefaultAdminListen: "unix:///var/run/yggdrasil/yggdrasil.sock",
+ 
+ 		// Configuration (used for yggdrasilctl)
+ 		DefaultConfigFile: "/etc/yggdrasil.conf",
