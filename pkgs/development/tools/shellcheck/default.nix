@@ -16,13 +16,12 @@ let
     in drv' // { meta = meta' // overrideFn meta'; };
 
   bin = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
-  src = haskellPackages.ShellCheck.src;
 
   shellcheck = stdenv.mkDerivation {
     pname = "shellcheck";
     version = bin.version;
 
-    inherit src;
+    inherit (haskellPackages.ShellCheck) meta src;
 
     nativeBuildInputs = [ pandoc ];
 
