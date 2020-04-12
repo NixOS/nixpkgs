@@ -1,92 +1,100 @@
-commit 45a9e4a7b1badbea15d74bd8b3990303a424dfa6
+commit ffb4a59047a014d6bb050b67a2fc7bc116be4682
 Author: Ismaël Bouya <ismael.bouya@normalesup.org>
 Date:   Tue Feb 12 18:47:53 2019 +0100
 
     Add LDAP authentication
 
 diff --git a/config/default.yaml b/config/default.yaml
-index e16b8c35..eac0dd3f 100644
+index 3260c62fc..dcce721b9 100644
 --- a/config/default.yaml
 +++ b/config/default.yaml
-@@ -33,6 +33,9 @@ redis:
+@@ -51,6 +51,19 @@ redis:
    auth: null
    db: 0
  
-+ldap:
-+  enable: false
++auth:
++  local:
++    enabled: true
++  ldap:
++    enabled: true
++    url: ldap://localhost:389/dc=example,dc=com
++    insecure_tls: false
++    bind_dn: cn=admin,dc=example,dc=com
++    bind_password: adminPass
++    base: dc=example,dc=com
++    mail_entry: "mail"
++    user_filter: "(|(email=%username%)(uid=%username%))"
 +
  smtp:
    hostname: null
    port: 465
 diff --git a/config/production.yaml.example b/config/production.yaml.example
-index 661eac0d..bb5ac251 100644
+index 30cd2ffe0..c56691bf4 100644
 --- a/config/production.yaml.example
 +++ b/config/production.yaml.example
-@@ -33,6 +33,17 @@ redis:
+@@ -51,6 +51,19 @@ redis:
    auth: null
    db: 0
  
-+ldap:
-+  enable: true
-+  # Disallow non-ldap users (it also disables root!)
-+  ldap_only: true
-+  url: ldap://localhost:389/dc=example,dc=com
-+  bind_dn: cn=admin,dc=example,dc=com
-+  bind_password: adminPass
-+  base: dc=example,dc=com
-+  mail_entry: "mail"
-+  user_filter: "(|(email=%username%)(uid=%username%))"
++auth:
++  local:
++    enabled: true
++  ldap:
++    enabled: true
++    url: ldap://localhost:389/dc=example,dc=com
++    insecure_tls: false
++    bind_dn: cn=admin,dc=example,dc=com
++    bind_password: adminPass
++    base: dc=example,dc=com
++    mail_entry: "mail"
++    user_filter: "(|(email=%username%)(uid=%username%))"
 +
  # SMTP server to send emails
  smtp:
    hostname: null
 diff --git a/package.json b/package.json
-index 0cf39c7e..fd1ce3ea 100644
+index 49d9faf97..31eccf797 100644
 --- a/package.json
 +++ b/package.json
-@@ -125,6 +125,7 @@
+@@ -112,6 +112,7 @@
+     "iso-639-3": "^1.0.1",
      "js-yaml": "^3.5.4",
-     "jsonld": "^1.0.1",
-     "jsonld-signatures": "https://github.com/Chocobozzz/jsonld-signatures#rsa2017",
+     "jsonld": "~2.0.1",
 +    "ldapjs": "^1.0.2",
      "lodash": "^4.17.10",
+     "lru-cache": "^5.1.1",
      "magnet-uri": "^5.1.4",
-     "memoizee": "^0.4.14",
-diff --git a/server/initializers/constants.ts b/server/initializers/constants.ts
-index 6f3ebb9a..fb21df37 100644
---- a/server/initializers/constants.ts
-+++ b/server/initializers/constants.ts
-@@ -16,7 +16,7 @@ let config: IConfig = require('config')
- 
- // ---------------------------------------------------------------------------
- 
--const LAST_MIGRATION_VERSION = 325
-+const LAST_MIGRATION_VERSION = 326
- 
- // ---------------------------------------------------------------------------
- 
-@@ -177,6 +177,16 @@ const CONFIG = {
+diff --git a/server/initializers/config.ts b/server/initializers/config.ts
+index 7fd77f3e8..45a667826 100644
+--- a/server/initializers/config.ts
++++ b/server/initializers/config.ts
+@@ -34,6 +34,21 @@ const CONFIG = {
      AUTH: config.has('redis.auth') ? config.get<string>('redis.auth') : null,
      DB: config.has('redis.db') ? config.get<number>('redis.db') : null
    },
-+  LDAP: {
-+    ENABLE: config.has('ldap.enable') ? config.get<boolean>('ldap.enable') : false,
-+    LDAP_ONLY: config.has('ldap.ldap_only') ? config.get<boolean>('ldap.ldap_only') : false,
-+    URL: config.has('ldap.url') ? config.get<string>('ldap.url') : null,
-+    BIND_DN: config.has('ldap.bind_dn') ? config.get<string>('ldap.bind_dn') : null,
-+    BIND_PASSWORD: config.has('ldap.bind_password') ? config.get<string>('ldap.bind_password') : null,
-+    BASE: config.has('ldap.base') ? config.get<string>('ldap.base') : null,
-+    MAIL_ENTRY: config.has('ldap.mail_entry') ? config.get<string>('ldap.mail_entry') : 'mail',
-+    USER_FILTER: config.has('ldap.user_filter') ? config.get<string>('ldap.user_filter') : '(|(email=%username%)(uid=%username%))'
++  AUTH: {
++    LOCAL: {
++      ENABLED: config.has('auth.local.enabled') ? config.get<boolean>('auth.local.enabled') : true,
++    },
++    LDAP: {
++      ENABLED: config.has('auth.ldap.enabled') ? config.get<boolean>('auth.ldap.enabled') : false,
++      URL: config.has('auth.ldap.url') ? config.get<string>('auth.ldap.url') : null,
++      INSECURE_TLS: config.has('auth.ldap.insecure_tls') ? config.get<boolean>('auth.ldap.insecure_tls') : false,
++      BIND_DN: config.has('auth.ldap.bind_dn') ? config.get<string>('auth.ldap.bind_dn') : null,
++      BIND_PASSWORD: config.has('auth.ldap.bind_password') ? config.get<string>('auth.ldap.bind_password') : null,
++      BASE: config.has('auth.ldap.base') ? config.get<string>('auth.ldap.base') : null,
++      MAIL_ENTRY: config.has('auth.ldap.mail_entry') ? config.get<string>('auth.ldap.mail_entry') : 'mail',
++      USER_FILTER: config.has('auth.ldap.user_filter') ? config.get<string>('auth.ldap.user_filter') : null
++    },
 +  },
    SMTP: {
      HOSTNAME: config.get<string>('smtp.hostname'),
      PORT: config.get<number>('smtp.port'),
-diff --git a/server/initializers/migrations/0326-user-ldap-dn.ts b/server/initializers/migrations/0326-user-ldap-dn.ts
+diff --git a/server/initializers/migrations/0375-user-ldap-dn.ts b/server/initializers/migrations/0375-user-ldap-dn.ts
 new file mode 100644
-index 00000000..a9d68124
+index 000000000..a9d68124b
 --- /dev/null
-+++ b/server/initializers/migrations/0326-user-ldap-dn.ts
++++ b/server/initializers/migrations/0375-user-ldap-dn.ts
 @@ -0,0 +1,26 @@
 +import * as Sequelize from 'sequelize'
 +
@@ -114,48 +122,151 @@ index 00000000..a9d68124
 +  up,
 +  down
 +}
+diff --git a/server/lib/ldap.ts b/server/lib/ldap.ts
+new file mode 100644
+index 000000000..e6601e5cb
+--- /dev/null
++++ b/server/lib/ldap.ts
+@@ -0,0 +1,89 @@
++import * as express from 'express'
++import { createClient, Client, parseFilter } from 'ldapjs'
++import { logger } from '../helpers/logger'
++import { CONFIG } from '../initializers/config'
++
++class Ldap {
++
++  private static instance: Ldap
++  private initialized = false
++  private client: Client
++  private prefix: string
++
++  private constructor () {}
++
++  init () {
++    // Already initialized
++    if (this.initialized === true) return
++    this.initialized = true
++
++    this.client = createClient(Ldap.getLdapClientOptions())
++  }
++
++  static getLdapClientOptions () {
++    return Object.assign({}, {
++      url: CONFIG.AUTH.LDAP.URL,
++      reconnect: true,
++      tlsOptions: { rejectUnauthorized: !CONFIG.AUTH.LDAP.INSECURE_TLS }
++    })
++  }
++
++  getClient () {
++    this.init()
++    return this.client
++  }
++
++  findUser (username: string) {
++    const filter = parseFilter(CONFIG.AUTH.LDAP.USER_FILTER)
++    filter.forEach(function (element) {
++      if (element.value === '%username%') element.value = username
++    })
++    const opts = {
++      filter,
++      scope: 'sub',
++      attributes: [ CONFIG.AUTH.LDAP.MAIL_ENTRY, 'dn' ]
++    }
++
++    const client = this.getClient()
++
++    return new Promise(function (resolve, reject) {
++      client.bind(CONFIG.AUTH.LDAP.BIND_DN, CONFIG.AUTH.LDAP.BIND_PASSWORD, function (err) {
++        if (err) reject(err)
++        let entries = []
++        client.search(CONFIG.AUTH.LDAP.BASE, opts, function (err, search) {
++          if (err) reject(err)
++          search.on('searchEntry', function (entry) {
++            entries.push(entry.object)
++          })
++          search.on('end', function (result) {
++            if (entries.length === 1) {
++              resolve(entries[0])
++            } else {
++              reject("No user found corresponding to this username")
++            }
++          })
++        })
++      })
++    })
++  }
++
++  checkUser (dn: string, password: string) {
++    const client = this.getClient()
++    return new Promise(function (resolve, reject) {
++      client.bind(dn, password, function (err) {
++        resolve(!err)
++      })
++    })
++  }
++
++
++  static get Instance () {
++    return this.instance || (this.instance = new this())
++  }
++}
++
++// ---------------------------------------------------------------------------
++
++export {
++  Ldap
++}
 diff --git a/server/lib/oauth-model.ts b/server/lib/oauth-model.ts
-index 2cd2ae97..3f14b216 100644
+index 086856f41..ab10effd0 100644
 --- a/server/lib/oauth-model.ts
 +++ b/server/lib/oauth-model.ts
-@@ -66,7 +66,13 @@ function getRefreshToken (refreshToken: string) {
+@@ -9,6 +9,7 @@ import { Transaction } from 'sequelize'
+ import { CONFIG } from '../initializers/config'
+ import * as LRUCache from 'lru-cache'
+ import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
++import { MUserDefault } from '@server/typings/models'
+ 
+ type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
+ 
+@@ -74,7 +75,13 @@ function getRefreshToken (refreshToken: string) {
  async function getUser (usernameOrEmail: string, password: string) {
    logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
  
 -  const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
-+  let user
-+  if (CONFIG.LDAP.ENABLE) {
++  let user : MUserDefault
++  if (CONFIG.AUTH.LDAP.ENABLED) {
 +    user = await UserModel.findOrCreateLDAPUser(usernameOrEmail)
 +  }
-+  if (!user && (!CONFIG.LDAP.ENABLE || !CONFIG.LDAP.LDAP_ONLY)) {
++  if (!user && CONFIG.AUTH.LOCAL.ENABLED) {
 +    user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
 +  }
    if (!user) return null
  
    const passwordMatch = await user.isPasswordMatch(password)
 diff --git a/server/models/account/user.ts b/server/models/account/user.ts
-index 017a9665..a4d0145c 100644
+index 4c2c5e278..0b38f7cb2 100644
 --- a/server/models/account/user.ts
 +++ b/server/models/account/user.ts
-@@ -1,3 +1,4 @@
-+import * as ldap from 'ldapjs'
- import * as Sequelize from 'sequelize'
+@@ -1,4 +1,5 @@
+ import { FindOptions, literal, Op, QueryTypes, where, fn, col } from 'sequelize'
++import { Ldap } from '../../lib/ldap'
  import {
    AfterDestroy,
-@@ -42,8 +43,9 @@ import { VideoChannelModel } from '../video/video-channel'
- import { AccountModel } from './account'
+   AfterUpdate,
+@@ -50,7 +51,9 @@ import { AccountModel } from './account'
  import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
  import { values } from 'lodash'
--import { NSFW_POLICY_TYPES } from '../../initializers'
-+import { CONFIG, NSFW_POLICY_TYPES } from '../../initializers'
+ import { DEFAULT_THEME_NAME, DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
++import { CONFIG } from '../../initializers/config'
  import { clearCacheByUserId } from '../../lib/oauth-model'
-+import { createUserAccountAndChannel } from '../../lib/user'
++import { createUserAccountAndChannelAndPlaylist } from '../../lib/user'
  import { UserNotificationSettingModel } from './user-notification-setting'
  import { VideoModel } from '../video/video'
  import { ActorModel } from '../activitypub/actor'
-@@ -111,6 +113,11 @@ export class UserModel extends Model<UserModel> {
+@@ -149,6 +152,11 @@ export class UserModel extends Model<UserModel> {
    @Column(DataType.STRING(400))
-   email: string
+   pendingEmail: string
  
 +  @AllowNull(true)
 +  @Default(null)
@@ -164,8 +275,8 @@ index 017a9665..a4d0145c 100644
 +
    @AllowNull(true)
    @Default(null)
-   @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean'))
-@@ -354,6 +361,90 @@ export class UserModel extends Model<UserModel> {
+   @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean', true))
+@@ -440,6 +448,48 @@ export class UserModel extends Model<UserModel> {
      return UserModel.findOne(query)
    }
  
@@ -179,114 +290,61 @@ index 017a9665..a4d0145c 100644
 +    return UserModel.findOne(query)
 +  }
 +
-+  static findOrCreateLDAPUser (username: string) {
-+    let userInfos
-+
-+    return Promise.resolve(UserModel.findLDAPUser(username))
-+      .then((_userInfos) => {
-+        userInfos = _userInfos
-+        return UserModel.loadByLdapDn(userInfos['dn'])
-+      })
-+      .then((user) => {
-+        if (user) {
-+          return user
-+        } else {
-+          return UserModel.createLDAPUser(username, userInfos)
-+        }
-+      })
-+      .catch(() => { return null })
-+  }
-+
-+  static findLDAPUser (username: string) {
-+    const client = ldap.createClient({
-+      url: CONFIG.LDAP.URL
-+    })
-+    const filter = ldap.parseFilter(CONFIG.LDAP.USER_FILTER)
-+    filter.forEach(function (element) {
-+      if (element.value === '%username%') element.value = username
-+    })
-+    const opts = {
-+      filter,
-+      scope: 'sub',
-+      attributes: [ CONFIG.LDAP.MAIL_ENTRY, 'dn' ]
++  static async findOrCreateLDAPUser (username: string) {
++    try {
++      const userInfos = await Ldap.Instance.findUser(username)
++      const user = await UserModel.loadByLdapDn(userInfos['dn'])
++      if (user) {
++        return user
++      } else {
++        return await UserModel.createLDAPUser(username, userInfos)
++      }
++    } catch (e) {
++      return null
 +    }
++  }
 +
-+    return new Promise(function (resolve, reject) {
-+      client.bind(CONFIG.LDAP.BIND_DN, CONFIG.LDAP.BIND_PASSWORD, function (err) {
-+        if (err) reject()
-+        let entries = []
-+        client.search(CONFIG.LDAP.BASE, opts, function (err, search) {
-+          if (err) reject()
-+          search.on('searchEntry', function (entry) {
-+            entries.push(entry.object)
-+          })
-+          search.on('end', function (result) {
-+            if (entries.length === 1) {
-+              resolve(entries[0])
-+            } else {
-+              reject()
-+            }
-+          })
-+        })
-+      })
++  static async createLDAPUser (username: string, userInfos: {}) {
++    const userToCreate = new UserModel({
++      username,
++      password: 'SomeInvalidPassword',
++      email: userInfos[CONFIG.AUTH.LDAP.MAIL_ENTRY],
++      ldapDn: userInfos['dn'],
++      nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
++      autoPlayVideo: true,
++      role: UserRole.USER,
++      videoQuota: CONFIG.USER.VIDEO_QUOTA,
++      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
++      emailVerified: true,
++      adminFlags: UserAdminFlag.NONE
 +    })
++    const { user } = await createUserAccountAndChannelAndPlaylist({ userToCreate })
++    return user
 +  }
 +
-+  static createLDAPUser (username: string, userInfos: {}) {
-+    return Promise.resolve(userInfos)
-+      .then((userInfos) => {
-+        const userToCreate = new UserModel({
-+          username: username,
-+          password: 'SomeInvalidPassword',
-+          email: userInfos[CONFIG.LDAP.MAIL_ENTRY],
-+          ldapDn: userInfos['dn'],
-+          nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-+          autoPlayVideo: true,
-+          role: UserRole.USER,
-+          videoQuota: CONFIG.USER.VIDEO_QUOTA,
-+          videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
-+          emailVerified: true
-+        })
-+
-+        return createUserAccountAndChannel(userToCreate)
-+      })
-+      .then(({ user }) => { return user })
-+  }
-+
-   static loadByUsernameAndPopulateChannels (username: string) {
+   static loadForMeAPI (username: string): Bluebird<MUserNotifSettingChannelDefault> {
      const query = {
        where: {
-@@ -516,8 +607,22 @@ export class UserModel extends Model<UserModel> {
-     return hasUserRight(this.role, right)
+@@ -627,7 +677,11 @@ export class UserModel extends Model<UserModel> {
    }
  
-+  static checkLDAPUser (dn: string, password: string) {
-+    const client = ldap.createClient({ url: CONFIG.LDAP.URL })
-+
-+    return new Promise(function (resolve, reject) {
-+      client.bind(dn, password, function (err) {
-+        resolve(!err)
-+      })
-+    })
-+  }
-+
    isPasswordMatch (password: string) {
 -    return comparePassword(password, this.password)
 +    if (this.ldapDn === null) {
 +      return comparePassword(password, this.password)
 +    } else {
-+      return UserModel.checkLDAPUser(this.ldapDn, password)
++      return Ldap.Instance.checkUser(this.ldapDn, password)
 +    }
    }
  
-   toFormattedJSON (): User {
+   toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
 diff --git a/yarn.lock b/yarn.lock
-index 1e759af1..1eb61a9f 100644
+index 76ce7ed27..f087746df 100644
 --- a/yarn.lock
 +++ b/yarn.lock
-@@ -674,6 +674,11 @@ asap@^2.0.0:
-   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
-   integrity sha1-5QNHYR1+aQlDIIu9r+vLwvuGbUY=
+@@ -616,6 +616,11 @@ arraybuffer.slice@~0.0.7:
+   resolved "https://registry.yarnpkg.com/arraybuffer.slice/-/arraybuffer.slice-0.0.7.tgz#3bbc4275dd584cc1b10809b89d4e8b63a69e7675"
+   integrity sha512-wGUIVQXuehL5TCqQun8OW81jGzAWycqzFF8lFp+GOM5BXLYj3bKNsYC4daB7n6XjCqxQA/qgTJ+8ANR3acjrog==
  
 +asn1@0.2.3:
 +  version "0.2.3"
@@ -296,7 +354,7 @@ index 1e759af1..1eb61a9f 100644
  asn1@~0.2.3:
    version "0.2.4"
    resolved "https://registry.yarnpkg.com/asn1/-/asn1-0.2.4.tgz#8d2475dfab553bb33e77b54e59e880bb8ce23136"
-@@ -681,6 +686,11 @@ asn1@~0.2.3:
+@@ -623,6 +628,11 @@ asn1@~0.2.3:
    dependencies:
      safer-buffer "~2.1.0"
  
@@ -308,7 +366,7 @@ index 1e759af1..1eb61a9f 100644
  assert-plus@1.0.0, assert-plus@^1.0.0:
    version "1.0.0"
    resolved "https://registry.yarnpkg.com/assert-plus/-/assert-plus-1.0.0.tgz#f12e0f3c5d77b0b1cdd9146942e4e96c1e4dd525"
-@@ -779,6 +789,13 @@ backo2@1.0.2:
+@@ -692,6 +702,13 @@ backo2@1.0.2:
    resolved "https://registry.yarnpkg.com/backo2/-/backo2-1.0.2.tgz#31ab1ac8b129363463e35b3ebb69f4dfcfba7947"
    integrity sha1-MasayLEpNjRj41s+u2n038+6eUc=
  
@@ -322,9 +380,9 @@ index 1e759af1..1eb61a9f 100644
  balanced-match@^1.0.0:
    version "1.0.0"
    resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
-@@ -1186,6 +1203,16 @@ bull@^3.4.2:
-     semver "^5.6.0"
-     uuid "^3.2.1"
+@@ -1001,6 +1018,16 @@ bull@^3.4.2:
+     util.promisify "^1.0.0"
+     uuid "^3.3.3"
  
 +bunyan@^1.8.3:
 +  version "1.8.12"
@@ -339,32 +397,32 @@ index 1e759af1..1eb61a9f 100644
  busboy@^0.2.11:
    version "0.2.14"
    resolved "https://registry.yarnpkg.com/busboy/-/busboy-0.2.14.tgz#6c2a622efcf47c57bbbe1e2a9c37ad36c7925453"
-@@ -1966,7 +1993,7 @@ d@1:
-   dependencies:
-     es5-ext "^0.10.9"
+@@ -1619,7 +1646,7 @@ d@1, d@^1.0.1:
+     es5-ext "^0.10.50"
+     type "^1.0.1"
  
 -dashdash@^1.12.0:
 +dashdash@^1.12.0, dashdash@^1.14.0:
    version "1.14.1"
    resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
    integrity sha1-hTz6D3y+L+1d4gMmuN1YEDX24vA=
-@@ -2292,6 +2319,13 @@ double-ended-queue@^2.1.0-0:
+@@ -1845,6 +1872,13 @@ double-ended-queue@^2.1.0-0:
    resolved "https://registry.yarnpkg.com/double-ended-queue/-/double-ended-queue-2.1.0-0.tgz#103d3527fd31528f40188130c841efdd78264e5c"
    integrity sha1-ED01J/0xUo9AGIEwyEHv3XgmTlw=
  
 +dtrace-provider@~0.8:
-+  version "0.8.7"
-+  resolved "https://registry.yarnpkg.com/dtrace-provider/-/dtrace-provider-0.8.7.tgz#dc939b4d3e0620cfe0c1cd803d0d2d7ed04ffd04"
-+  integrity sha1-3JObTT4GIM/gwc2APQ0tftBP/QQ=
++  version "0.8.8"
++  resolved "https://registry.yarnpkg.com/dtrace-provider/-/dtrace-provider-0.8.8.tgz#2996d5490c37e1347be263b423ed7b297fb0d97e"
++  integrity sha512-b7Z7cNtHPhH9EJhNNbbeqTcXB8LGFFZhq1PGgEvpeHlzd36bhbdTWoE/Ba/YguqpBSlAPKnARWhVlhunCMwfxg==
 +  dependencies:
-+    nan "^2.10.0"
++    nan "^2.14.0"
 +
  duplexer3@^0.1.4:
    version "0.1.4"
    resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"
-@@ -2864,6 +2898,11 @@ extglob@^2.0.4:
-     snapdragon "^0.8.1"
-     to-regex "^3.0.1"
+@@ -2228,6 +2262,11 @@ extend@^3.0.0, extend@~3.0.0, extend@~3.0.2:
+   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
+   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
  
 +extsprintf@1.2.0:
 +  version "1.2.0"
@@ -374,7 +432,7 @@ index 1e759af1..1eb61a9f 100644
  extsprintf@1.3.0:
    version "1.3.0"
    resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"
-@@ -3350,6 +3389,17 @@ glob@7.1.2:
+@@ -2567,6 +2606,17 @@ glob@7.1.3:
      once "^1.3.0"
      path-is-absolute "^1.0.0"
  
@@ -389,12 +447,12 @@ index 1e759af1..1eb61a9f 100644
 +    once "^1.3.0"
 +    path-is-absolute "^1.0.0"
 +
- glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2, glob@~7.1.1, glob@~7.1.2:
-   version "7.1.3"
-   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.3.tgz#3960832d3f1574108342dafd3a67b332c0969df1"
-@@ -4522,6 +4572,30 @@ lcid@^2.0.0:
+ glob@^7.0.3, glob@^7.1.1, glob@^7.1.3:
+   version "7.1.6"
+   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
+@@ -3356,6 +3406,30 @@ latest-version@^3.0.0:
    dependencies:
-     invert-kv "^2.0.0"
+     package-json "^4.0.0"
  
 +ldap-filter@0.2.2:
 +  version "0.2.2"
@@ -420,33 +478,30 @@ index 1e759af1..1eb61a9f 100644
 +  optionalDependencies:
 +    dtrace-provider "~0.8"
 +
- leven@^2.1.0:
-   version "2.1.0"
-   resolved "https://registry.yarnpkg.com/leven/-/leven-2.1.0.tgz#c2e7a9f772094dee9d34202ae8acce4687875580"
-@@ -5186,7 +5260,7 @@ minimalistic-assert@^1.0.1:
-   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
-   integrity sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==
+ libxmljs@0.19.7:
+   version "0.19.7"
+   resolved "https://registry.yarnpkg.com/libxmljs/-/libxmljs-0.19.7.tgz#96c2151b0b73f33dd29917edec82902587004e5a"
+@@ -3724,7 +3798,7 @@ mimic-response@^2.0.0:
+   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-2.0.0.tgz#996a51c60adf12cb8a87d7fb8ef24c2f3d5ebb46"
+   integrity sha512-8ilDoEapqA4uQ3TwS0jakGONKXVJqpy+RpM+3b7pLdOjghCrEiGp9SRkFbUHAmZW9vdnrENWHjaweIoTIJExSQ==
  
--minimatch@3.0.4, minimatch@^3.0.4, minimatch@~3.0.2:
-+"minimatch@2 || 3", minimatch@3.0.4, minimatch@^3.0.4, minimatch@~3.0.2:
+-minimatch@3.0.4, minimatch@^3.0.4:
++"minimatch@2 || 3", minimatch@3.0.4, minimatch@^3.0.4:
    version "3.0.4"
    resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
    integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
-@@ -5299,6 +5373,11 @@ moment-timezone@^0.5.14, moment-timezone@^0.5.23:
-   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
-   integrity sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
+@@ -3825,7 +3899,7 @@ moment-timezone@^0.5.21, moment-timezone@^0.5.25:
+   dependencies:
+     moment ">= 2.9.0"
  
-+moment@^2.10.6:
-+  version "2.24.0"
-+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
-+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
-+
- morgan@^1.5.3:
-   version "1.9.1"
-   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
-@@ -5394,6 +5473,15 @@ mute-stream@~0.0.4:
-   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
-   integrity sha1-MHXOk7whuPq0PhvE2n6BFe0ee6s=
+-"moment@>= 2.9.0", moment@^2.24.0:
++"moment@>= 2.9.0", moment@^2.10.6, moment@^2.24.0:
+   version "2.24.0"
+   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+@@ -3898,6 +3972,15 @@ mute-stream@~0.0.4:
+   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
+   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
  
 +mv@~2:
 +  version "2.1.1"
@@ -457,10 +512,10 @@ index 1e759af1..1eb61a9f 100644
 +    ncp "~2.0.0"
 +    rimraf "~2.4.0"
 +
- nan@2.11.1, nan@^2.10.0, nan@^2.11.1, nan@^2.9.2:
-   version "2.11.1"
-   resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.1.tgz#90e22bccb8ca57ea4cd37cc83d3819b52eea6766"
-@@ -5431,6 +5519,11 @@ ncp@1.0.x:
+ nan@2.14.0, nan@^2.14.0, nan@~2.14.0:
+   version "2.14.0"
+   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
+@@ -3913,6 +3996,11 @@ ncp@1.0.x:
    resolved "https://registry.yarnpkg.com/ncp/-/ncp-1.0.1.tgz#d15367e5cb87432ba117d2bf80fdf45aecfb4246"
    integrity sha1-0VNn5cuHQyuhF9K/gP30Wuz7QkY=
  
@@ -470,9 +525,9 @@ index 1e759af1..1eb61a9f 100644
 +  integrity sha1-GVoh1sRuNh0vsSgbo4uR6d9727M=
 +
  needle@^2.2.1:
-   version "2.2.4"
-   resolved "https://registry.yarnpkg.com/needle/-/needle-2.2.4.tgz#51931bff82533b1928b7d1d69e01f1b00ffd2a4e"
-@@ -6520,6 +6613,11 @@ prebuild-install@^5.2.0:
+   version "2.4.0"
+   resolved "https://registry.yarnpkg.com/needle/-/needle-2.4.0.tgz#6833e74975c444642590e15a750288c5f939b57c"
+@@ -4597,6 +4685,11 @@ prebuild-install@^5.3.3:
      tunnel-agent "^0.6.0"
      which-pm-runs "^1.0.0"
  
@@ -481,12 +536,12 @@ index 1e759af1..1eb61a9f 100644
 +  resolved "https://registry.yarnpkg.com/precond/-/precond-0.2.3.tgz#aa9591bcaa24923f1e0f4849d240f47efc1075ac"
 +  integrity sha1-qpWRvKokkj8eD0hJ0kD0fvwQdaw=
 +
- prelude-ls@~1.1.2:
-   version "1.1.2"
-   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
-@@ -7141,6 +7239,13 @@ rimraf@2, rimraf@2.x.x, rimraf@^2.2.8, rimraf@^2.4.2, rimraf@^2.5.2, rimraf@^2.5
+ prepend-http@^1.0.1:
+   version "1.0.4"
+   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
+@@ -5032,6 +5125,13 @@ rimraf@^3.0.0:
    dependencies:
-     glob "^7.0.5"
+     glob "^7.1.3"
  
 +rimraf@~2.4.0:
 +  version "2.4.5"
@@ -495,24 +550,24 @@ index 1e759af1..1eb61a9f 100644
 +  dependencies:
 +    glob "^6.0.1"
 +
- run-async@^0.1.0:
-   version "0.1.0"
-   resolved "https://registry.yarnpkg.com/run-async/-/run-async-0.1.0.tgz#c8ad4a5e110661e402a7d21b530e009f25f8e389"
-@@ -7197,6 +7302,11 @@ safe-buffer@5.1.2, safe-buffer@^5.0.0, safe-buffer@^5.0.1, safe-buffer@^5.1.0, s
-   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
-   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
+ run-parallel-limit@^1.0.3:
+   version "1.0.5"
+   resolved "https://registry.yarnpkg.com/run-parallel-limit/-/run-parallel-limit-1.0.5.tgz#c29a4fd17b4df358cb52a8a697811a63c984f1b7"
+@@ -5069,6 +5169,11 @@ safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@^5.1.2,
+   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.0.tgz#b74daec49b1148f88c64b68d49b1e815c1f2f519"
+   integrity sha512-fZEwUGbVl7kouZs1jCdMLdt95hdIv0ZeHg6L7qPeciMZhZ+/gdesW4wgTARkrFWEpspjEATAzUGPG8N2jJiwbg==
  
 +safe-json-stringify@~1:
 +  version "1.2.0"
 +  resolved "https://registry.yarnpkg.com/safe-json-stringify/-/safe-json-stringify-1.2.0.tgz#356e44bc98f1f93ce45df14bcd7c01cda86e0afd"
 +  integrity sha512-gH8eh2nZudPQO6TytOvbxnuhYBOvDBBLW52tz5q6X58lJcd/tkmqFR+5Z9adS8aJtURSXWThWy/xJtJwixErvg==
 +
- safe-regex@^1.1.0:
-   version "1.1.0"
-   resolved "https://registry.yarnpkg.com/safe-regex/-/safe-regex-1.1.0.tgz#40a3669f3b077d1e943d44629e157dd48023bf2e"
-@@ -8857,7 +8967,14 @@ vary@~1.0.1:
-   resolved "https://registry.yarnpkg.com/vary/-/vary-1.0.1.tgz#99e4981566a286118dfb2b817357df7993376d10"
-   integrity sha1-meSYFWaihhGN+yuBc1ffeZM3bRA=
+ "safer-buffer@>= 2.1.2 < 3", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
+   version "2.1.2"
+   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
+@@ -6337,7 +6442,14 @@ vary@^1, vary@~1.1.2:
+   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
+   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
  
 -verror@1.10.0:
 +vasync@^1.6.4:
@@ -526,7 +581,7 @@ index 1e759af1..1eb61a9f 100644
    version "1.10.0"
    resolved "https://registry.yarnpkg.com/verror/-/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"
    integrity sha1-OhBcoXBTr1XW4nDB+CiGguGNpAA=
-@@ -8866,6 +8983,13 @@ verror@1.10.0:
+@@ -6346,6 +6458,13 @@ verror@1.10.0:
      core-util-is "1.0.2"
      extsprintf "^1.2.0"
  
@@ -537,6 +592,6 @@ index 1e759af1..1eb61a9f 100644
 +  dependencies:
 +    extsprintf "1.2.0"
 +
- videostream@^2.5.1:
-   version "2.6.0"
-   resolved "https://registry.yarnpkg.com/videostream/-/videostream-2.6.0.tgz#7f0b2b84bc457c12cfe599aa2345f5cc06241ab6"
+ videostream@^3.2.0:
+   version "3.2.1"
+   resolved "https://registry.yarnpkg.com/videostream/-/videostream-3.2.1.tgz#643688ad4bfbf37570d421e3196b7e0ad38eeebc"

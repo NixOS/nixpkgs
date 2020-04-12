@@ -1,14 +1,14 @@
-commit 677374d59c6aa2cb8145da3cd9c17fe05fd9b149
+commit 486964fad93334a52fb05e7d0497ecac3eb684fe
 Author: Ismaël Bouya <ismael.bouya@normalesup.org>
 Date:   Wed Feb 13 12:16:27 2019 +0100
 
     Add sendmail
 
 diff --git a/config/production.yaml.example b/config/production.yaml.example
-index bb5ac251..4583f1f5 100644
+index c56691bf4..8abdfb2a7 100644
 --- a/config/production.yaml.example
 +++ b/config/production.yaml.example
-@@ -46,6 +46,8 @@ ldap:
+@@ -66,6 +66,8 @@ auth:
  
  # SMTP server to send emails
  smtp:
@@ -17,12 +17,12 @@ index bb5ac251..4583f1f5 100644
    hostname: null
    port: 465 # If you use StartTLS: 587
    username: null
-diff --git a/server/initializers/constants.ts b/server/initializers/constants.ts
-index fb21df37..c551b4f9 100644
---- a/server/initializers/constants.ts
-+++ b/server/initializers/constants.ts
-@@ -188,6 +188,8 @@ const CONFIG = {
-     USER_FILTER: config.has('ldap.user_filter') ? config.get<string>('ldap.user_filter') : '(|(email=%username%)(uid=%username%))'
+diff --git a/server/initializers/config.ts b/server/initializers/config.ts
+index 45a667826..c1c15f05b 100644
+--- a/server/initializers/config.ts
++++ b/server/initializers/config.ts
+@@ -50,6 +50,8 @@ const CONFIG = {
+     },
    },
    SMTP: {
 +    TRANSPORT: config.has('smtp.transport') ? config.get<string>('smtp.transport') : 'smtp',
@@ -31,10 +31,10 @@ index fb21df37..c551b4f9 100644
      PORT: config.get<number>('smtp.port'),
      USERNAME: config.get<string>('smtp.username'),
 diff --git a/server/lib/emailer.ts b/server/lib/emailer.ts
-index f384a254..ec6e249b 100644
+index 7484524a4..512c5c068 100644
 --- a/server/lib/emailer.ts
 +++ b/server/lib/emailer.ts
-@@ -27,33 +27,41 @@ class Emailer {
+@@ -40,33 +40,41 @@ class Emailer {
      this.initialized = true
  
      if (Emailer.isEnabled()) {
@@ -99,7 +99,7 @@ index f384a254..ec6e249b 100644
      } else {
        if (!isTestInstance()) {
          logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
-@@ -62,11 +70,17 @@ class Emailer {
+@@ -75,11 +83,17 @@ class Emailer {
    }
  
    static isEnabled () {

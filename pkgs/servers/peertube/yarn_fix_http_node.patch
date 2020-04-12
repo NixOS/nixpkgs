@@ -1,0 +1,26 @@
+diff --git a/yarn.lock b/yarn.lock
+index 76ce7ed27..f087746df 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -2787,7 +2837,7 @@ http-errors@~1.7.2:
+ 
+ "http-node@github:feross/http-node#webtorrent":
+   version "1.2.0"
+-  resolved "https://codeload.github.com/feross/http-node/tar.gz/342ef8624495343ffd050bd0808b3750cf0e3974"
++  resolved "https://codeload.github.com/feross/http-node/tar.gz/342ef8624495343ffd050bd0808b3750cf0e3974#33fa312d37f0000b17acdb1a5086565400419a13"
+   dependencies:
+     chrome-net "^3.3.3"
+     freelist "^1.0.3"
+diff --git a/client/yarn.lock b/client/yarn.lock
+index 0855a2570..50f592f76 100644
+--- a/client/yarn.lock
++++ b/client/yarn.lock
+@@ -5164,7 +5164,7 @@ http-errors@~1.7.2:
+ 
+ "http-node@github:feross/http-node#webtorrent":
+   version "1.2.0"
+-  resolved "https://codeload.github.com/feross/http-node/tar.gz/342ef8624495343ffd050bd0808b3750cf0e3974"
++  resolved "https://codeload.github.com/feross/http-node/tar.gz/342ef8624495343ffd050bd0808b3750cf0e3974#33fa312d37f0000b17acdb1a5086565400419a13"
+   dependencies:
+     chrome-net "^3.3.3"
+     freelist "^1.0.3"
