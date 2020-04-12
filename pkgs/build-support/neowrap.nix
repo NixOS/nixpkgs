@@ -36,6 +36,20 @@ let
       pkg:
       (builtins.hasAttr "propagateEnv" pkg)
     ) allInputs;
+    envInfo = map (
+      pkg:
+      (lib.attrsets.mapAttrs (
+        name:
+        value:
+        # TODO: make this work with other outputs as well
+        builtins.replaceStrings
+        [ "%out%" ]
+        [ "${pkg.out}" ]
+        value
+      ) pkg.propagateEnv)
+    ) envPkgs;
+    envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
+    # envInfoFolded = lib.attrsets.foldAttrs (n: a: [n] ++ a) [] envInfo;
   in
   buildEnv {
     name = "runtime-env";
@@ -43,7 +57,7 @@ let
 
     buildInputs = [ jq ];
     postBuild = ''
-      printf '%s\n' ${builtins.concatStringsSep " " envPkgs}
+      printf '%s\n' ${builtins.concatStringsSep " " envInfo_}
       exit 1
     '';
   };
