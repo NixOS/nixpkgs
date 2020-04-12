@@ -13,10 +13,18 @@ let
     extraMakeWrapperArgs ? ""
   }:
   let
-    # Where we keep information about every environmental variable and the
-    # separator between it's values, the default value used is `:`
-    encyclopedia_of_separators = {
-      # XDG_DATA_DIRS = ":";
+    # Where we keep general knowledge about known to be used environmental variables
+    encyclopedia = {
+      # Here we write the separator string between values of every env var, the
+      # default is ":"
+      separators = {
+        # XDG_DATA_DIRS = ":";
+      };
+      # If we want the wrapping to also include an environmental variable in
+      # out, we list here for every env var what path to add to the wrapper's args
+      wrapOut = {
+        XDG_DATA_DIRS = "$out/share";
+      };
     };
     # recursive function that goes deep through the dependency graph of a given
     # list of packages and creates a list of all buildInputs they all depend
@@ -89,8 +97,8 @@ let
       key:
       value:
       (let 
-        sep = encyclopedia_of_separators.${key} or ":";
-      in 
+        sep = encyclopedia.separators.${key} or ":"; # default separator used for most wrappings
+      in
         "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
       )
     ) envInfoFolded;
