@@ -268,6 +268,8 @@ in {
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
 
+  pciutils = super.pciutils.override { shared = false; };
+
   python27 = super.python27.override { static = true; };
   python36 = super.python36.override { static = true; };
   python37 = super.python37.override { static = true; };
