@@ -1,9 +1,11 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
+, perl, gmp, autoconf, autogen, automake, libidn, libiconv
 , unbound, dns-root-data, gettext, cacert, utillinux
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
+, p11Support ? true, p11-kit
+, libtool
 }:
 
 assert guileBindings -> guile != null;
@@ -27,7 +29,8 @@ stdenv.mkDerivation {
     sha256 = "0qwxsfizynly0ns537vnhnlm5lh03la4vbsmz675n0n7vqd7ac2n";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputs = [ "bin" "dev" "out" ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ "man" "devdoc" ];
   # Not normally useful docs.
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
@@ -64,11 +67,14 @@ stdenv.mkDerivation {
     "--with-guile-site-dir=\${out}/share/guile/site"
     "--with-guile-site-ccache-dir=\${out}/share/guile/site"
     "--with-guile-extension-dir=\${out}/share/guile/site"
+  ] ++ lib.optional stdenv.hostPlatform.isMusl [ "--disable-doc"
+  ] ++ lib.optional (!p11Support) [ "--without-p11-kit"
   ];
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn p11-kit zlib gmp autogen libunistring unbound gettext libiconv ]
+  buildInputs = [ lzo lzip libtasn1 libidn zlib gmp autogen libunistring unbound gettext libiconv ]
+    ++ lib.optional (p11Support) p11-kit
     ++ lib.optional (isDarwin && withSecurity) Security
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile;
@@ -77,7 +83,8 @@ stdenv.mkDerivation {
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools utillinux ];
 
-  propagatedBuildInputs = [ nettle ];
+  propagatedBuildInputs = [ nettle 
+    autoconf automake libtool ];
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` broke tests with:
