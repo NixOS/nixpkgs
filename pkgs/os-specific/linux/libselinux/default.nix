@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "2.9";
   inherit (libsepol) se_release se_url;
 
-  outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
+  outputs = [ "bin" "out" "dev" "man" ] ++ optional (!stdenv.hostPlatform.isMusl && enablePython) "py";
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libselinux-${version}.tar.gz";
@@ -43,7 +43,11 @@ stdenv.mkDerivation rec {
     "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
   ];
 
-  installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
+  installTargets = [ "install" ] ++ optional (!stdenv.hostPlatform.isMusl && enablePython) "install-pywrap";
+
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
+    ./static.patch
+  ];
 
   meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux core library";

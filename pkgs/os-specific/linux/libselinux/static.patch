@@ -1,0 +1,45 @@
+diff -Nur a/Makefile b/Makefile
+--- a/Makefile	2019-03-15 10:32:30.000000000 +0000
++++ b/Makefile	2020-04-12 15:47:01.191052556 +0000
+@@ -42,7 +42,14 @@
+ 
+ all install relabel clean distclean indent:
+ 	@for subdir in $(SUBDIRS); do \
+-		(cd $$subdir && $(MAKE) $@) || exit 1; \
++		(cd $$subdir && (\
++			if [ -f Makefile.static ]; then \
++				echo "going static";\
++				$(MAKE) -f Makefile.static $@-static;\
++			else \
++				$(MAKE) $@;\
++		       	fi)\
++		) || exit 1; \
+ 	done
+ 
+ swigify: all
+diff -Nur a/src/Makefile.static b/src/Makefile.static
+--- a/src/Makefile.static	1970-01-01 00:00:00.000000000 +0000
++++ b/src/Makefile.static	2020-04-12 19:12:42.544815230 +0000
+@@ -0,0 +1,9 @@
++include Makefile
++
++all-static: $(LIBA) $(LIBPC)
++
++install-static: all-static
++	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
++	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)
++	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
++	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
+
+diff -Nur a/utils/Makefile b/utils/Makefile
+--- a/utils/Makefile	2019-03-15 10:32:30.000000000 +0000
++++ b/utils/Makefile	2020-04-12 16:42:34.525010814 +0000
+@@ -45,7 +45,7 @@
+ 
+ override CFLAGS += -I../include -D_GNU_SOURCE $(DISABLE_FLAGS) $(PCRE_CFLAGS)
+ override LDFLAGS += -L../src
+-override LDLIBS += -lselinux
++override LDLIBS += ../src/libselinux.a $(LIBSEPOLA) $(PCRE_LDLIBS)
+ PCRE_LDLIBS ?= -lpcre
+ 
+ ifeq ($(ANDROID_HOST),y)
