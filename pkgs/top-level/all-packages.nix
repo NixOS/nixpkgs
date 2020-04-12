@@ -662,7 +662,7 @@ in
   arandr = callPackage ../tools/X11/arandr { };
 
   arandr-newly-unwrapped = arandr.override { wrapGAppsHook = null; };
-  arandr-newly-wrapped = wrapGeneric [ arandr-newly-unwrapped ] { };
+  arandr-newly-wrapped = wrapGApps arandr-newly-unwrapped { };
 
   inherit (callPackages ../servers/nosql/arangodb {
     stdenv = gcc8Stdenv;
@@ -22277,7 +22277,15 @@ in
 
   wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
 
-  wrapGeneric = callPackage ../build-support/neowrap.nix { }; # not actually a package
+  wrapGeneric = callPackage ../build-support/neowrap.nix {};
+  wrapGApps = wrapGeneric.override {
+    extraPkgsByOverride = [
+      dconf
+      librsvg
+      pango
+      atk
+    ];
+  };
 
   neovim-unwrapped = callPackage ../applications/editors/neovim {
     lua =

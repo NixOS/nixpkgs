@@ -2,12 +2,14 @@
 , symlinkJoin
 , jq
 , makeWrapper
+, extraPkgsByOverride ? []
 }:
 
 pkgList:
 
 let
   wrapper = {
+    extraPkgs ? [],
     extraMakeWrapperArgs ? ""
   }:
   let
@@ -36,7 +38,8 @@ let
           pkgsFound
       ) pkgs;
     # allInputs = builtins.trace "allinputs is ${builtins.toJSON (getAllInputs pkgList [])}" (getAllInputs pkgList []);
-    allInputs = lib.lists.flatten (getAllInputs pkgList []);
+    allPkgs = (lib.lists.flatten pkgList) ++ extraPkgsByOverride ++ extraPkgs;
+    allInputs = lib.lists.flatten (getAllInputs allPkgs []);
     # filter out of all the inputs the packages with the propagateEnv attribute
     envPkgs = builtins.filter (
       pkg:
