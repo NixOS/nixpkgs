@@ -1,0 +1,24 @@
+diff -Nur a/Makefile.static b/Makefile.static
+--- a/Makefile.static	1970-01-01 00:00:00.000000000 +0000
++++ b/Makefile.static	2020-04-12 14:32:40.701684751 +0000
+@@ -0,0 +1,9 @@
++all:
++	$(MAKE) -f Makefile.static -C src all-static
++	$(MAKE) -C utils all
++
++install:
++	$(MAKE) -C include install
++	$(MAKE) -f Makefile.static -C src install-static
++	$(MAKE) -C utils install
++	$(MAKE) -C man install
+diff -Nur a/src/Makefile.static b/src/Makefile.static
+--- a/src/Makefile.static	1970-01-01 00:00:00.000000000 +0000
++++ b/src/Makefile.static	2020-04-12 14:30:00.131285362 +0000
+@@ -0,0 +1,7 @@
++include Makefile
++
++all-static: $(LIBA)
++
++install-static: all-static
++	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
++	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)

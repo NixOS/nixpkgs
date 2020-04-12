@@ -23,9 +23,15 @@ stdenv.mkDerivation rec {
     "MAN3DIR=$(man)/share/man/man3"
     "MAN8DIR=$(man)/share/man/man8"
     "SHLIBDIR=$(out)/lib"
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl [
+    "-f" "Makefile.static"
   ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
+    ./static.patch
+  ];
 
   passthru = { inherit se_release se_url; };
 
