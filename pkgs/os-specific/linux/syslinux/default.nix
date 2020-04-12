@@ -1,14 +1,16 @@
-{ stdenv, fetchFromRepoOrCz, fetchurl, nasm, perl, python3, libuuid, mtools, makeWrapper }:
+{ stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "syslinux-2019-02-07";
+  pname = "syslinux";
+  version = "unstable-20190207";
 
   # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
   # Same issue here https://www.syslinux.org/archives/2019-February/026330.html
-  src = fetchFromRepoOrCz {
-    repo = "syslinux";
+  src = fetchgit {
+    url = "https://repo.or.cz/syslinux";
     rev = "b40487005223a78c3bb4c300ef6c436b3f6ec1f7";
-    sha256 = "1qrxl1114sr2i2791z9rf8v53g200aq30f08808d7i8qnmgvxl2w";
+    sha256 = "1acf6byx7i6vz8hq6mra526g8mf7fmfhid211y8nq0v6px7d3aqs";
+    fetchSubmodules = true;
   };
 
   patches = let
@@ -20,9 +22,9 @@ stdenv.mkDerivation {
       url = mkURL "fa1349f1" "0002-gfxboot-menu-label.patch";
       sha256 = "06ifgzbpjj4picpj17zgprsfi501zf4pp85qjjgn29i5rs291zni";
     })
-    (fetchurl {
-      url = mkURL "477e56d2" "0005-gnu-efi-version-compatibility.patch";
-      sha256 = "041568b4abb79wynyps1n04lg4fr26rc3sbjncz99pp0mbz0ajlm";
+    (fetchpatch {
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/0005-gnu-efi-version-compatibility.patch?h=packages/syslinux";
+      sha256 = "0fbqz56hj8az8ws26m39hyp3l5fvcbzvzdddqz3x6n56hzdpz1p6";
     })
     (fetchurl {
       # mbr.bin: too big (452 > 440)
@@ -48,6 +50,10 @@ stdenv.mkDerivation {
     # fix tests
     substituteInPlace tests/unittest/include/unittest/unittest.h \
       --replace /usr/include/ ""
+
+    # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
+    mkdir gnu-efi/inc/ia32/gnu
+    touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
   nativeBuildInputs = [ nasm perl python3 ];
@@ -61,12 +67,9 @@ stdenv.mkDerivation {
   makeFlags = [
     "BINDIR=$(out)/bin"
     "SBINDIR=$(out)/sbin"
-    "LIBDIR=$(out)/lib"
-    "INCDIR=$(out)/include"
     "DATADIR=$(out)/share"
     "MANDIR=$(out)/share/man"
     "PERL=perl"
-    "bios"
   ];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
