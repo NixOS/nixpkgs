@@ -12,14 +12,14 @@ let
   );
 
   ver1 = "120";
-  ver2 = "2";
-  ver3 = "2";
+  ver2 = "4";
+  ver3 = "1";
   version =   "${ver1}.${ver2}.${ver3}";
   ver_dash =  "${ver1}-${ver2}-${ver3}";
 
   binary_src = fetchurl {
     url = "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
-    sha256 = "1yi6rwbrnfd65qfz63cncw2n56pbypvg6cllwh71mgvs6x2c28kz";
+    sha256 = "0yw7vjvmczp022mgk35swwhpbiszpz91mwsgicxglwivgc30vvic";
   };
 
 
@@ -28,8 +28,8 @@ let
     (pakName: attrs: mkPak (attrs // {inherit pakName;}))
   {
     pak64 = {
-      srcPath = "120-2/simupak64-120-2";
-      sha256 = "1s310pssar4s1nf6gi9cizbx4m75avqm2qk039ha5rk8jk4lzkmk";
+      srcPath = "121-0/simupak64-121-0";
+      sha256 = "1k335kh8dhm1hdn5iwn3sdgnrlpk0rqxmmgqgqcwsi09cmw45m5c";
     };
     "pak64.japan" = {
       # No release for 120.2 yet!
@@ -38,12 +38,12 @@ let
     };
 
     pak128 = {
-      srcPath = "pak128%20for%20ST%20120.2.2%20%282.7%2C%20minor%20changes%29/pak128";
-      sha256 = "1x6g6yfv1hvjyh3ciccly1i2k2n2b63dw694gdg4j90a543rmclg";
+      srcPath = "pak128%20for%20ST%20120.4.1%20%282.8.1%2C%20priority%20signals%20%2B%20bugfix%29/pak128";
+      sha256 = "0z01y7r0rz7q79vr17bbnkgcbjjrimphy1dwb1pgbiv4klz7j5xw";
     };
     "pak128.britain" = {
-      srcPath = "pak128.Britain%20for%20120-1/pak128.Britain.1.17-120-1";
-      sha256 = "1nviwqizvch9n3n826nmmi7c707dxv0727m7lhc1n2zsrrxcxlr5";
+      srcPath = "pak128.Britain%20for%20120-1/pak128.Britain.1.18-120-3";
+      sha256 = "1kyb0s54kysvdr0zdln9106yx75d71j4lbw3v87k3i440cj3r1d3";
     };
     "pak128.cs" = { # note: it needs pak128 to work
       url = "mirror://sourceforge/simutrans/Pak128.CS/pak128.cz_v.0.2.1.zip";
@@ -51,8 +51,8 @@ let
     };
     "pak128.german" = {
       url = "mirror://sourceforge/simutrans/PAK128.german/"
-        + "PAK128.german_0.10.x_for_ST_120.x/PAK128.german_0.10.3_for_ST_120.x.zip";
-      sha256 = "1379zcviyf3v0wsli33sqa509k6zlw6fkk57vahc44mrnhka5fpb";
+        + "pak128.german_1.2_for_ST_121.0/PAK128.german_1.2_for_ST_121-0.zip";
+      sha256 = "1jxjckz4b02yv1mv1zc3pmajpq740dfnlvhr0x762lbrybymvagi";
     };
 
     /* This release contains accented filenames that prevent unzipping.
@@ -83,6 +83,7 @@ let
         toStrip=`find . -iname '*.pak' | head -n 1 | sed 's|\./\(.*\)/[^/]*$|\1|'`
         echo "Detected path '$toStrip' to strip"
         mv ./"$toStrip"/* .
+        rm -f "$toStrip/.directory" #pak128.german had this
         rmdir -p "$toStrip"
       '';
     };
@@ -114,7 +115,7 @@ let
 
     sourceRoot = ".";
 
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
 
     configurePhase = let
@@ -164,7 +165,6 @@ let
       license = with licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ kkallio vcunat phile314 ];
       platforms = with platforms; linux; # TODO: ++ darwin;
-      broken = true;
     };
   };
 
