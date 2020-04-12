@@ -41,9 +41,9 @@ let
       "mime" "autoindex" "negotiation" "dir"
       "alias" "rewrite"
       "unixd" "slotmem_shm" "socache_shmcb"
-      "mpm_${cfg.multiProcessingModule}"
+      "mpm_${cfg.mpm}"
     ]
-    ++ (if cfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
+    ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableHttp2 "http2"
     ++ optional enableSSL "ssl"
     ++ optional enableUserDir "userdir"
@@ -264,7 +264,7 @@ let
 
     PidFile ${runtimeDir}/httpd.pid
 
-    ${optionalString (cfg.multiProcessingModule != "prefork") ''
+    ${optionalString (cfg.mpm != "prefork") ''
       # mod_cgid requires this.
       ScriptSock ${runtimeDir}/cgisock
     ''}
@@ -349,6 +349,7 @@ in
   imports = [
     (mkRemovedOptionModule [ "services" "httpd" "extraSubservices" ] "Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.")
     (mkRemovedOptionModule [ "services" "httpd" "stateDir" ] "The httpd module now uses /run/httpd as a runtime directory.")
+    (mkRenamedOptionModule [ "services" "httpd" "multiProcessingModule" ] [ "services" "httpd" "mpm" ])
 
     # virtualHosts options
     (mkRemovedOptionModule [ "services" "httpd" "documentRoot" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
@@ -544,20 +545,19 @@ in
         '';
       };
 
-      multiProcessingModule = mkOption {
+      mpm = mkOption {
         type = types.enum [ "event" "prefork" "worker" ];
-        default = "prefork";
+        default = "event";
         example = "worker";
         description =
           ''
             Multi-processing module to be used by Apache. Available
-            modules are <literal>prefork</literal> (the default;
-            handles each request in a separate child process),
-            <literal>worker</literal> (hybrid approach that starts a
-            number of child processes each running a number of
-            threads) and <literal>event</literal> (a recent variant of
-            <literal>worker</literal> that handles persistent
-            connections more efficiently).
+            modules are <literal>prefork</literal> (handles each
+            request in a separate child process), <literal>worker</literal>
+            (hybrid approach that starts a number of child processes
+            each running a number of threads) and <literal>event</literal>
+            (the default; a recent variant of <literal>worker</literal>
+            that handles persistent connections more efficiently).
           '';
       };
 
