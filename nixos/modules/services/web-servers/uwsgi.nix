@@ -20,10 +20,11 @@ let
 
   buildCfg = name: c:
     let
-      plugins =
+      plugins' =
         if any (n: !any (m: m == n) cfg.plugins) (c.plugins or [])
         then throw "`plugins` attribute in uWSGI configuration contains plugins not in config.services.uwsgi.plugins"
         else c.plugins or cfg.plugins;
+      plugins = unique plugins';
 
       hasPython = v: filter (n: n == "python${v}") plugins != [];
       hasPython2 = hasPython "2";
@@ -222,7 +223,7 @@ in {
     };
 
     services.uwsgi.package = pkgs.uwsgi.override {
-      inherit (cfg) plugins;
+      plugins = unique cfg.plugins;
     };
   };
 }
