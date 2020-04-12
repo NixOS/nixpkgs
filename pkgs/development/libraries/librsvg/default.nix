@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
     };
     propagateEnv = {
-      GDK_PIXBUF_MODULE_FILE = "%out%/${gdk-pixbuf.moduleDir}/loaders.cache";
+      GDK_PIXBUF_MODULE_FILE = "%out%/${gdk-pixbuf.cacheFile}";
       GI_TYPELIB_PATH = "%out%/lib/girepository-1.0";
     };
   };

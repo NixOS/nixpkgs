@@ -22282,7 +22282,7 @@ in
     extraPkgsByOverride = [
       dconf
       librsvg
-      pango
+      gdk-pixbuf
       atk
     ];
   };

@@ -45,16 +45,40 @@ let
       pkg:
       (builtins.hasAttr "propagateEnv" pkg)
     ) allInputs;
+    # Given a package, it's outputs and an envStr such as found in the values
+    # of passthru's `propagateEnv`, it replaces all occurences of %<outname>%
+    # from envStr according to the pkg.outputs
+    replaceAllOutputs = {
+      pkg,
+      envStr,
+      outputs,
+      outname ? "out",
+    }:
+      let
+        outname = builtins.elemAt outputs 0;
+      in
+      if (builtins.length outputs) == 0 then
+        envStr
+      else
+        replaceAllOutputs {
+          inherit pkg;
+          outputs = lib.lists.subtractLists [outname] outputs;
+          envStr = builtins.replaceStrings
+            [ "%${outname}%" ]
+            [ "${pkg.${outname}}" ]
+          envStr;
+        }
+    ;
     envInfo = map (
       pkg:
       (lib.attrsets.mapAttrs (
         name:
         value:
-        # TODO: make this work with other outputs as well
-        builtins.replaceStrings
-        [ "%out%" ]
-        [ "${pkg.out}" ]
-        value
+        replaceAllOutputs {
+          inherit pkg;
+          outputs = pkg.outputs;
+          envStr = value;
+        }
       ) pkg.propagateEnv)
     ) envPkgs;
     # envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;

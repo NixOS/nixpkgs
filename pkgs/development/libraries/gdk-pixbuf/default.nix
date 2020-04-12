@@ -98,6 +98,7 @@ in stdenv.mkDerivation rec {
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
     moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
+    cacheFile = "lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     propagateEnv = {
       GI_TYPELIB_PATH = "%out%/lib/girepository-1.0";
     };
