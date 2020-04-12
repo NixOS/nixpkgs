@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cppcheck, libmrss }:
+{ stdenv, fetchFromGitHub, cppcheck, libmrss, libiconv }:
 
 stdenv.mkDerivation {
   pname = "rsstail";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "flok99";
   };
 
-  buildInputs = [ libmrss ];
+  buildInputs = [ libmrss ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
   checkInputs = [ cppcheck ];
 
   postPatch = ''
@@ -31,6 +31,6 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.vanheusden.com/rsstail/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
