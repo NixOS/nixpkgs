@@ -21,7 +21,8 @@ let
         # XDG_DATA_DIRS = ":";
       };
       # If we want the wrapping to also include an environmental variable in
-      # out, we list here for every env var what path to add to the wrapper's args
+      # out, we list here for every env var what path to add to the wrapper's
+      # args.  You can put a list as a value as well.
       wrapOut = {
         XDG_DATA_DIRS = "$out/share";
       };
@@ -92,16 +93,26 @@ let
     # envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
     envInfoFolded = lib.attrsets.foldAttrs (n: a: [n] ++ a) [] envInfo;
     # envInfoFolded_ = builtins.trace "envInfoFolded is ${(builtins.toJSON envInfoFolded)}" envInfoFolded;
-    # TODO: add here also this build's $out /share (e.g) to $out
+    # Where we add stuff according to encyclopedia.wrapOut
+    envInfoWithLocal = lib.attrsets.mapAttrs (
+      name:
+      values:
+      if builtins.hasAttr name encyclopedia.wrapOut then
+        values ++ (lib.lists.flatten encyclopedia.wrapOut.${name})
+      else
+        values
+    ) envInfoFolded;
+    # envInfoWithLocal_ = builtins.trace "envInfoWithLocal is ${(builtins.toJSON envInfoWithLocal)}" envInfoWithLocal;
     makeWrapperArgs = lib.attrsets.mapAttrsToList (
       key:
       value:
-      (let 
+      (let
+        # TODO: make sure this works with any separator according to encyclopedia.separators
         sep = encyclopedia.separators.${key} or ":"; # default separator used for most wrappings
       in
         "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
       )
-    ) envInfoFolded;
+    ) envInfoWithLocal;
     makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
   in
   symlinkJoin {
