@@ -69,7 +69,7 @@ addEntry "NixOS - Default" $defaultConfig ""
 
 # Add all generations of the system profile to the menu, in reverse
 # (most recent to least recent) order.
-for link in $((ls -d $defaultConfig/fine-tune/* ) | sort -n); do
+for link in $((ls -d $defaultConfig/specialisation/* ) | sort -n); do
     date=$(stat --printf="%y\n" $link | sed 's/\..*//')
     addEntry "NixOS - variation" $link ""
 done
