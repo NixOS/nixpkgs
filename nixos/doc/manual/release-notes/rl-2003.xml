@@ -935,6 +935,15 @@ services.dnsmasq.servers = [ "127.0.0.1#43" ];
    </listitem>
    <listitem>
     <para>
+      Haskell <varname>env</varname> and <varname>shellFor</varname> dev shell environments now organized dependencies the same way as regular builds.
+      In particular, rather than receiving all the different lists of dependencies master together as one big lists, and then partitioning into Haskell and non-Hakell dependencies, they work from the original many different dependency parameters and don't need to algorithmically partition anything.
+    </para>
+    <para>
+      This means that if you incorrectly categorize a dependency, e.g. non-Haskell library dependency as a <varname>buildDepends</varname> or run-time Haskell dependency as a <varname>setupDepends</varname>, whereas things would have worked before they may not work now.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The <package>gcc-snapshot</package>-package has been removed. It's marked as broken for &gt;2 years and used to point
      to a fairly old snapshot  from the <package>gcc7</package>-branch.
     </para>
