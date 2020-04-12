@@ -5920,6 +5920,17 @@ let
     };
   };
 
+  vim-which-key = buildVimPluginFrom2Nix {
+    pname = "vim-which-key";
+    version = "2020-03-16";
+    src = fetchFromGitHub {
+      owner = "liuchengxu";
+      repo = "vim-which-key";
+      rev = "4b70b443ba5838b165f90e26f9ed628d7d05e11d";
+      sha256 = "197rp20hngrq7qdlii0ai4vb81dlilah0q1wlil8hv3qcf4az7qr";
+    };
+  };
+
   vim-wordy = buildVimPluginFrom2Nix {
     pname = "vim-wordy";
     version = "2019-11-22";
