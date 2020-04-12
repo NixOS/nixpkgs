@@ -19,6 +19,13 @@ buildRustPackage rec {
 
   patches = [
     (fetchpatch {
+      # https://github.com/ogham/exa/pull/516
+      name = "include-symlinks-to-dirs-when-grouping-dirs";
+      url = "https://github.com/ogham/exa/pull/516/commits/69a7e53ee3ef664d575a4047af3c2a7cca2095ee.patch";
+      sha256 = "0553n1vh1dmlq60b86zi6azmfdad7p940gwcc3d3aav37v1bbqgj";
+    })
+
+    (fetchpatch {
       # https://github.com/ogham/exa/pull/584
       name = "fix-panic-on-broken-symlink-in-git-repository.patch";
       url = "https://github.com/ogham/exa/pull/584/commits/a7a8e99cf3a15992afb2383435da0231917ffb54.patch";
