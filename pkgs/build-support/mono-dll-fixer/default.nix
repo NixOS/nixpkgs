@@ -1,8 +1,15 @@
-{stdenv, perl}:
+{ stdenv, perl }:
 
 stdenv.mkDerivation {
   name = "mono-dll-fixer";
-  builder = ./builder.sh;
-  dllFixer = ./dll-fixer.pl;
-  inherit perl;
+
+  src = ./dll-fixer.pl;
+  dontUnpack = true;
+
+  buildInputs = [ perl ];
+
+  installPhase = ''
+    cp $src $out
+    chmod +x $out
+  '';
 }
