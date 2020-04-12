@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isStatic [
+    "--disable-flto"
   ];
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
