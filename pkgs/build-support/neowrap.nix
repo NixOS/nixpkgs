@@ -1,6 +1,5 @@
 { lib
 , symlinkJoin
-, jq
 , makeWrapper
 , extraPkgsByOverride ? []
 }:
@@ -113,16 +112,16 @@ let
         "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
       )
     ) envInfoWithLocal;
-    makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
+    # makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
   in
   symlinkJoin {
     name = "runtime-env";
     paths = pkgList;
 
-    buildInputs = [ jq makeWrapper ];
+    buildInputs = [ makeWrapper ];
     postBuild = ''
       for i in $out/bin/*; do
-        wrapProgram "$i" ${(builtins.concatStringsSep " " makeWrapperArgs_)}
+        wrapProgram "$i" ${(builtins.concatStringsSep " " makeWrapperArgs)}
       done
     '';
   };
