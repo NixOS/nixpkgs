@@ -1,0 +1,21 @@
+diff -Nur a/gio/gdbusmessage.c b/gio/gdbusmessage.c
+--- a/gio/gdbusmessage.c	2020-03-11 12:21:39.000000000 +0000
++++ b/gio/gdbusmessage.c	2020-04-12 19:22:00.580827616 +0000
+@@ -3396,7 +3396,7 @@
+ /* ---------------------------------------------------------------------------------------------------- */
+ 
+ static gchar *
+-flags_to_string (GType flags_type, guint value)
++gflags_to_string (GType flags_type, guint value)
+ {
+   GString *s;
+   GFlagsClass *klass;
+@@ -3497,7 +3497,7 @@
+   s = _g_dbus_enum_to_string (G_TYPE_DBUS_MESSAGE_TYPE, message->type);
+   g_string_append_printf (str, "%*sType:    %s\n", indent, "", s);
+   g_free (s);
+-  s = flags_to_string (G_TYPE_DBUS_MESSAGE_FLAGS, message->flags);
++  s = gflags_to_string (G_TYPE_DBUS_MESSAGE_FLAGS, message->flags);
+   g_string_append_printf (str, "%*sFlags:   %s\n", indent, "", s);
+   g_free (s);
+   g_string_append_printf (str, "%*sVersion: %d\n", indent, "", message->major_protocol_version);

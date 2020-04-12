@@ -60,6 +60,9 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
+    ./fixup-musl-error.patch
+    ./musl_flags_to_string.patch
+    ./optional-deps.patch
   ] ++ [
     ./schema-override-variable.patch
 

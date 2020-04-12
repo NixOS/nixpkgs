@@ -1,0 +1,52 @@
+diff -Nur a/gio/meson.build b/gio/meson.build
+--- a/gio/meson.build	2020-04-12 19:22:33.627946786 +0000
++++ b/gio/meson.build	2020-04-12 19:35:51.519334523 +0000
+@@ -796,7 +796,7 @@
+   install : true,
+   include_directories : [configinc, gioinc],
+   #  '$(gio_win32_res_ldflag)',
+-  dependencies : [libz_dep, libdl_dep, libmount_dep, libglib_dep,
++  dependencies : [libz_dep, libdl_dep, libmount_dep, libblkid_dep, libuuid_dep, libglib_dep,
+                   libgobject_dep, libgmodule_dep, selinux_dep, xattr_dep,
+                   platform_deps, network_libs],
+   c_args : gio_c_args,
+diff -Nur a/meson.build b/meson.build
+--- a/meson.build	2020-04-12 19:22:33.628946790 +0000
++++ b/meson.build	2020-04-12 19:35:33.803250290 +0000
+@@ -1933,6 +1933,16 @@
+   libmount_dep = dependency('mount', version : '>=2.23', required : get_option('libmount'))
+   glib_conf.set('HAVE_LIBMOUNT', libmount_dep.found())
+ endif
++libblkid_dep = []
++if host_system == 'linux'
++  libblkid_dep = dependency('blkid', version : '>=2.23', required : get_option('libblkid'))
++  glib_conf.set('HAVE_LIBBLKID', libblkid_dep.found())
++endif
++libuuid_dep = []
++if host_system == 'linux'
++  libuuid_dep = dependency('uuid', version : '>=2.23', required : get_option('libuuid'))
++  glib_conf.set('HAVE_LIBUUID', libuuid_dep.found())
++endif
+ 
+ if host_system == 'windows'
+   winsock2 = cc.find_library('ws2_32')
+diff -Nur a/meson_options.txt b/meson_options.txt
+--- a/meson_options.txt	2020-04-12 19:22:33.628946790 +0000
++++ b/meson_options.txt	2020-04-12 19:39:16.143307410 +0000
+@@ -39,6 +39,16 @@
+        value : 'auto',
+        description : 'build with libmount support')
+ 
++option('libblkid',
++       type : 'feature',
++       value : 'auto',
++       description : 'build with libblkid support')
++
++option('libuuid',
++       type : 'feature',
++       value : 'auto',
++       description : 'build with libuuid support')
++
+ option('internal_pcre',
+        type : 'boolean',
+        value : false,

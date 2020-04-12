@@ -1,0 +1,39 @@
+diff -Nur a/meson.build b/meson.build
+--- a/meson.build	2020-04-12 19:03:14.161765543 +0000
++++ b/meson.build	2020-04-12 19:03:38.321852667 +0000
+@@ -1343,7 +1343,7 @@
+           f (&i);
+           return 0;
+         }''',
+-        args: ['-Werror'],
++        args: [],
+         name : 'GCC size_t typedef is short'),
+     'int': g_sizet_compatibility['int'] and cc.compiles(
+         '''#include <stddef.h>
+@@ -1353,7 +1353,7 @@
+           f (&i);
+           return 0;
+         }''',
+-        args: ['-Werror'],
++        args: [],
+         name : 'GCC size_t typedef is int'),
+     'long': g_sizet_compatibility['long'] and cc.compiles(
+         '''#include <stddef.h>
+@@ -1363,7 +1363,7 @@
+           f (&i);
+           return 0;
+         }''',
+-        args: ['-Werror'],
++        args: [],
+         name : 'GCC size_t typedef is long'),
+     'long long': g_sizet_compatibility['long long'] and cc.compiles(
+         '''#include <stddef.h>
+@@ -1373,7 +1373,7 @@
+           f (&i);
+           return 0;
+         }''',
+-        args: ['-Werror'],
++        args: [],
+         name : 'GCC size_t typedef is long long'),
+   }
+ endif
