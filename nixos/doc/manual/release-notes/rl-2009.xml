@@ -261,6 +261,25 @@ environment.systemPackages = [
 </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The httpd web server previously started its main process as root
+     privileged, then ran worker processes as a less privileged identity user.
+     This was changed to start all of httpd as a less privileged user (defined by
+     <xref linkend="opt-services.httpd.user"/> and
+     <xref linkend="opt-services.httpd.group"/>). As a consequence, all files that
+     are needed for httpd to run (included configuration fragments, SSL
+     certificates and keys, etc.) must now be readable by this less privileged
+     user/group.
+    </para>
+    <para>
+     The default value for <xref linkend="opt-services.httpd.mpm"/>
+     has been changed from <literal>prefork</literal> to <literal>event</literal>. Along with
+     this change the default value for
+     <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.http2</link>
+     has been set to <literal>true</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
