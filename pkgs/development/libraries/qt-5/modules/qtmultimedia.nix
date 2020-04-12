@@ -13,4 +13,10 @@ qtModule {
   outputs = [ "bin" "dev" "out" ];
   qmakeFlags = [ "GST_VERSION=1.0" ];
   NIX_LDFLAGS = optionalString (stdenv.isDarwin) "-lobjc";
+  passthru = {
+    propagateEnv = {
+      QT_PLUGIN_PATH = "%bin%/${qtbase.qtPluginPrefix}";
+      QML2_PLUGIN_PATH = "%bin%/${qtbase.qtQmlPrefix}";
+    };
+  };
 }

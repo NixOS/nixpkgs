@@ -23,4 +23,10 @@ qtModule {
     "bin/qmlscene"
     "bin/qmltestrunner"
   ];
+  passthru = {
+    propagateEnv = {
+      QT_PLUGIN_PATH = "%bin%/${qtbase.qtPluginPrefix}";
+      QML2_PLUGIN_PATH = "%bin%/${qtbase.qtQmlPrefix}";
+    };
+  };
 }

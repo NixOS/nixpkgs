@@ -35,7 +35,7 @@ let
     if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
   name = "qtbase-${version}";
   inherit qtCompatVersion src version;
@@ -161,6 +161,12 @@ stdenv.mkDerivation {
   qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
   qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
+  passthru = {
+    propagateEnv = {
+      QT_PLUGIN_PATH = "%bin%/${qtPluginPrefix}";
+      # QML2_PLUGIN_PATH = "%bin%/${qtQmlPrefix}";
+    };
+  };
 
   setOutputFlags = false;
   preConfigure = ''
