@@ -30,7 +30,7 @@ opcache extension shipped with PHP is available at
 `php.extensions.opcache` and the third-party ImageMagick extension at
 `php.extensions.imagick`.
 
-The different versions of PHP that nixpkgs provides is located under
+The different versions of PHP that nixpkgs provides are located under
 attributes named based on major and minor version number; e.g.,
 `php74` is PHP 7.4 with commonly used extensions installed,
 `php74base` is the same PHP runtime without extensions.
@@ -39,28 +39,31 @@ attributes named based on major and minor version number; e.g.,
 
 A PHP package with specific extensions enabled can be built using
 `php.withExtensions`. This is a function which accepts an anonymous
-function as its only argument; the function should take one argument,
-the set of all extensions, and return a list of wanted extensions. For
-example, a PHP package with the opcache and ImageMagick extensions
-enabled:
+function as its only argument; the function should accept two named
+parameters: `enabled` - a list of currently enabled extensions and
+`all` - the set of all extensions, and return a list of wanted
+extensions. For example, a PHP package with all default extensions and
+ImageMagick enabled:
 
 ```nix
-php.withExtensions (e: with e; [ imagick opcache ])
+php.withExtensions ({ enabled, all }:
+  enabled ++ [ all.imagick ])
 ```
 
-Note that this will give you a package with _only_ opcache and
-ImageMagick, none of the other extensions which are enabled by default
-in the `php` package will be available.
-
-To enable building on a previous PHP package, the currently enabled
-extensions are made available in its `enabledExtensions`
-attribute. For example, to generate a package with all default
-extensions enabled, except opcache, but with ImageMagick:
+To exclude some, but not all, of the default extensions, you can
+filter the `enabled` list like this:
 
 ```nix
-php.withExtensions (e:
-  (lib.filter (e: e != php.extensions.opcache) php.enabledExtensions)
-  ++ [ e.imagick ])
+php.withExtensions ({ enabled, all }:
+  (lib.filter (e: e != php.extensions.opcache) enabled)
+  ++ [ all.imagick ])
+```
+
+To build your list of extensions from the ground up, you can simply
+ignore `enabled`:
+
+```nix
+php.withExtensions ({ all, ... }: with all; [ opcache imagick ])
 ```
 
 If you want a PHP build with extra configuration in the `php.ini`
@@ -73,7 +76,7 @@ and ImageMagick extensions enabled, and `memory_limit` set to `256M`:
 
 ```nix
 php.buildEnv {
-  extensions = e: with e; [ imagick opcache ];
+  extensions = { all, ... }: with all; [ imagick opcache ];
   extraConfig = "memory_limit=256M";
 }
 ```
@@ -85,7 +88,7 @@ follows:
 
 ```nix
 let
-  myPhp = php.withExtensions (e: with e; [ imagick opcache ]);
+  myPhp = php.withExtensions ({ all, ... }: with all; [ opcache imagick ]);
 in {
   services.phpfpm.pools."foo".phpPackage = myPhp;
 };
@@ -94,7 +97,7 @@ in {
 ```nix
 let
   myPhp = php.buildEnv {
-    extensions = e: with e; [ imagick opcache ];
+    extensions = { all, ... }: with all; [ imagick opcache ];
     extraConfig = "memory_limit=256M";
   };
 in {
@@ -105,8 +108,8 @@ in {
 ##### Example usage with `nix-shell`
 
 This brings up a temporary environment that contains a PHP interpreter
-with the extensions `imagick` and `opcache` enabled.
+with the extensions `imagick` and `opcache` enabled:
 
 ```sh
-nix-shell -p 'php.buildEnv { extensions = e: with e; [ imagick opcache ]; }'
+nix-shell -p 'php.withExtensions ({ all, ... }: with all; [ imagick opcache ])'
 ```

@@ -43,8 +43,16 @@ let
           phpWithExtensions = self.withExtensions defaultPhpExtensions;
         });
 
-        mkBuildEnv = prevArgs: lib.makeOverridable (
-          { extensions ? (_: []), extraConfig ? "", ... }@innerArgs:
+        # buildEnv wraps php to provide additional extensions and
+        # configuration. Its usage is documented in
+        # doc/languages-frameworks/php.section.md.
+        #
+        # Create a buildEnv with earlier overridden values and
+        # extensions functions in its closure. This is necessary for
+        # consecutive calls to buildEnv and overrides to work as
+        # expected.
+        mkBuildEnv = prevArgs: prevExtensionFunctions: lib.makeOverridable (
+          { extensions ? ({...}: []), extraConfig ? "", ... }@innerArgs:
             let
               allArgs = args // prevArgs // innerArgs;
               filteredArgs = builtins.removeAttrs allArgs [ "extensions" "extraConfig" ];
@@ -54,8 +62,15 @@ let
                 inherit php phpWithExtensions;
               });
 
+              allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
+              enabledExtensions =
+                builtins.foldl'
+                  (state: f:
+                    f { enabled = state; all = php-packages.extensions; })
+                  []
+                  allExtensionFunctions;
+
               getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
-              enabledExtensions = extensions php-packages.extensions;
 
               # Generate extension load configuration snippets from the
               # extension parameter. This is an attrset suitable for use
@@ -89,9 +104,8 @@ let
                 inherit (php) version;
                 nativeBuildInputs = [ makeWrapper ];
                 passthru = {
-                  buildEnv = mkBuildEnv allArgs;
-                  withExtensions = mkWithExtensions allArgs;
-                  inherit enabledExtensions;
+                  buildEnv = mkBuildEnv allArgs allExtensionFunctions;
+                  withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   inherit (php-packages) packages extensions;
                 };
                 paths = [ php ];
@@ -108,8 +122,8 @@ let
             in
               phpWithExtensions);
 
-        mkWithExtensions = prevArgs: extensions:
-          mkBuildEnv prevArgs { inherit extensions; };
+        mkWithExtensions = prevArgs: prevExtensionFunctions: extensions:
+          mkBuildEnv prevArgs prevExtensionFunctions { inherit extensions; };
 
         pcre' = if (lib.versionAtLeast version "7.3") then pcre2 else pcre;
       in
@@ -218,9 +232,8 @@ let
           outputs = [ "out" "dev" ];
 
           passthru = {
-            enabledExtensions = [];
-            buildEnv = mkBuildEnv {};
-            withExtensions = mkWithExtensions {};
+            buildEnv = mkBuildEnv {} [];
+            withExtensions = mkWithExtensions {} [];
             inherit (php-packages) packages extensions;
           };
 
@@ -258,7 +271,7 @@ let
     inherit defaultPhpExtensions;
   });
 
-  defaultPhpExtensions = extensions: with extensions; ([
+  defaultPhpExtensions = { all, ... }: with all; ([
     bcmath calendar curl ctype dom exif fileinfo filter ftp gd
     gettext gmp iconv intl json ldap mbstring mysqli mysqlnd opcache
     openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql
@@ -266,8 +279,8 @@ let
     tokenizer xmlreader xmlwriter zip zlib
   ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
 
-  defaultPhpExtensionsWithHash = extensions:
-    (defaultPhpExtensions extensions) ++ [ extensions.hash ];
+  defaultPhpExtensionsWithHash = { all, ... }:
+    (defaultPhpExtensions { inherit all; }) ++ [ all.hash ];
 
   php74 = php74base.withExtensions defaultPhpExtensions;
   php73 = php73base.withExtensions defaultPhpExtensionsWithHash;

@@ -135,18 +135,23 @@
    </listitem>
    <listitem>
      <para>
-       Since this release there's an easy way to customize your PHP install to get a much smaller
-       base PHP with only wanted extensions enabled. See the following snippet installing a smaller PHP
-       with the extensions <literal>imagick</literal>, <literal>opcache</literal> and
+       Since this release there's an easy way to customize your PHP
+       install to get a much smaller base PHP with only wanted
+       extensions enabled. See the following snippet installing a
+       smaller PHP with the extensions <literal>imagick</literal>,
+       <literal>opcache</literal>, <literal>pdo</literal> and
        <literal>pdo_mysql</literal> loaded:
 
        <programlisting>
 environment.systemPackages = [
-(pkgs.php.buildEnv { extensions = pp: with pp; [
-    imagick
-    opcache
-    pdo_mysql
-  ]; })
+  (pkgs.php.withExtensions
+    ({ all, ... }: with all; [
+      imagick
+      opcache
+      pdo
+      pdo_mysql
+    ])
+  )
 ];</programlisting>
 
        The default <literal>php</literal> attribute hasn't lost any extensions -
