@@ -707,6 +707,17 @@ let
     };
   };
 
+  coc-nvim = buildVimPluginFrom2Nix {
+    pname = "coc-nvim";
+    version = "2020-04-10";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "coc.nvim";
+      rev = "09853cf2808904ed6eb93b207b5cec8dd69bfa34";
+      sha256 = "0i5jciwparwx1zgisa6l40xmamafl6syykb2hc953q1hfl24z9a5";
+    };
+  };
+
   colorizer = buildVimPluginFrom2Nix {
     pname = "colorizer";
     version = "2018-06-16";

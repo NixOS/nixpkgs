@@ -337,6 +337,7 @@ neoclide/coc-vimtex
 neoclide/coc-wxml
 neoclide/coc-yaml
 neoclide/coc-yank
+neoclide/coc.nvim@release
 neoclide/denite-extra
 neoclide/denite-git
 neoclide/vim-easygit
