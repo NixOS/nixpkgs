@@ -1782,11 +1782,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videoamdgpu = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-amdgpu-19.0.1";
+    name = "xf86-video-amdgpu-19.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-amdgpu-19.0.1.tar.bz2";
-      sha256 = "1mf6s7i423b2xyl469kwnakrpp5fr41sm8hh7vli5jxdd8crg8da";
+      url = "mirror://xorg/individual/driver/xf86-video-amdgpu-19.1.0.tar.bz2";
+      sha256 = "0pgy4ihnja0vm8504qw7qxh3pdpa3p9k6967nz15m6b1mvha83jg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
