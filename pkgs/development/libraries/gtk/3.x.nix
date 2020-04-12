@@ -189,6 +189,9 @@ stdenv.mkDerivation rec {
       packageName = "gtk+";
       attrPath = "gtk3";
     };
+    propagateEnv = {
+      XDG_DATA_DIRS = "%out%/share/gsettings-schemas/${pname}-${version}";
+    };
   };
 
   meta = {

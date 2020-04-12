@@ -147,10 +147,6 @@ in
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
 
-  wrapWithRuntimeDeps = callPackage ../build-support/neowrap.nix { }; # not actually a package
-
-  somthing-else = wrapWithRuntimeDeps mutt { };
-
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
@@ -664,6 +660,9 @@ in
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
+
+  arandr-newly-unwrapped = arandr.override { wrapGAppsHook = null; };
+  arandr-newly-wrapped = wrapWithEnv [ arandr-newly-unwrapped ] { };
 
   inherit (callPackages ../servers/nosql/arangodb {
     stdenv = gcc8Stdenv;
@@ -22277,6 +22276,8 @@ in
   vimpc = callPackage ../applications/audio/vimpc { };
 
   wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
+
+  wrapWithEnv = callPackage ../build-support/neowrap.nix { }; # not actually a package
 
   neovim-unwrapped = callPackage ../applications/editors/neovim {
     lua =

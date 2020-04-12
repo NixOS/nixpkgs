@@ -10,6 +10,11 @@ let
     extraMakeWrapperArgs ? ""
   }:
   let
+    # Where we keep information about every environmental variable and the
+    # separator between it's values
+    encyclopedia_of_separators = {
+      XDG_DATA_DIRS = ":";
+    };
     # recursive function that goes deep through the dependency graph of a given
     # list of packages and creates a list of all buildInputs they all depend
     # on. The 2nd argument pkgsFound is used internally and it's expected to be
@@ -48,8 +53,20 @@ let
         value
       ) pkg.propagateEnv)
     ) envPkgs;
-    envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
-    # envInfoFolded = lib.attrsets.foldAttrs (n: a: [n] ++ a) [] envInfo;
+    # envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
+    envInfoFolded = lib.attrsets.foldAttrs (n: a: [n] ++ a) [] envInfo;
+    # envInfoFolded_ = builtins.trace "envInfoFolded is ${(builtins.toJSON envInfoFolded)}" envInfoFolded;
+    # TODO: add here also this build's $out /share (e.g) to $out
+    makeWrapperArgs = lib.attrsets.mapAttrsToList (
+      key:
+      value:
+      (let 
+        sep = encyclopedia_of_separators.${key};
+      in 
+        "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
+      )
+    ) envInfoFolded;
+    # makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
   in
   buildEnv {
     name = "runtime-env";
@@ -57,7 +74,7 @@ let
 
     buildInputs = [ jq ];
     postBuild = ''
-      printf '%s\n' ${builtins.concatStringsSep " " envInfo_}
+      printf '%s\n' '${builtins.concatStringsSep " " makeWrapperArgs_}'
       exit 1
     '';
   };

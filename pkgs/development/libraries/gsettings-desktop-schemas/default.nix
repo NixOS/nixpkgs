@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "gsettings-desktop-schemas"; };
+    propagateEnv = {
+      XDG_DATA_DIRS = "%out%/share/gsettings-schemas/${pname}-${version}";
+    };
   };
 
   # meson installs the schemas to share/glib-2.0/schemas
