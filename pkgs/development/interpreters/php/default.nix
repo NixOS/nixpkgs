@@ -43,12 +43,12 @@ let
           phpWithExtensions = self.withExtensions defaultPhpExtensions;
         });
 
-        buildEnv = lib.makeOverridable (
+        mkBuildEnv = prevArgs: lib.makeOverridable (
           { extensions ? (_: []), extraConfig ? "", ... }@innerArgs:
             let
-              filteredInnerArgs = builtins.removeAttrs innerArgs [ "extensions" "extraConfig" ];
-              allArgs = args // filteredInnerArgs;
-              php = generic allArgs;
+              allArgs = args // prevArgs // innerArgs;
+              filteredArgs = builtins.removeAttrs allArgs [ "extensions" "extraConfig" ];
+              php = generic filteredArgs;
 
               php-packages = (callPackage ../../../top-level/php-packages.nix {
                 inherit php phpWithExtensions;
@@ -89,7 +89,9 @@ let
                 inherit (php) version;
                 nativeBuildInputs = [ makeWrapper ];
                 passthru = {
-                  inherit buildEnv withExtensions enabledExtensions;
+                  buildEnv = mkBuildEnv allArgs;
+                  withExtensions = mkWithExtensions allArgs;
+                  inherit enabledExtensions;
                   inherit (php-packages) packages extensions;
                 };
                 paths = [ php ];
@@ -106,7 +108,8 @@ let
             in
               phpWithExtensions);
 
-        withExtensions = extensions: buildEnv { inherit extensions; };
+        mkWithExtensions = prevArgs: extensions:
+          mkBuildEnv prevArgs { inherit extensions; };
 
         pcre' = if (lib.versionAtLeast version "7.3") then pcre2 else pcre;
       in
@@ -216,7 +219,8 @@ let
 
           passthru = {
             enabledExtensions = [];
-            inherit buildEnv withExtensions;
+            buildEnv = mkBuildEnv {};
+            withExtensions = mkWithExtensions {};
             inherit (php-packages) packages extensions;
           };
 
