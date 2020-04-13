@@ -4,6 +4,7 @@ mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
   version = "1.9.5";
+  odd-unstable = false;
 
   sha256 = "1h14sywvk9l06p3z1cpb79911j8w2wqbk03ldknjkia2rfymjk06";
 
