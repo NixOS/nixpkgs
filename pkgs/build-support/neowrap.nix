@@ -25,6 +25,11 @@ let
       wrapOut = {
         XDG_DATA_DIRS = "$out/share";
       };
+      # If you want an environment variable have a single value and that's it,
+      # put it here:
+      singleValue = [
+        "GDK_PIXBUF_MODULE_FILE"
+      ];
     };
     # recursive function that goes deep through the dependency graph of a given
     # list of packages and creates a list of all buildInputs they all depend
@@ -109,7 +114,16 @@ let
         # TODO: make sure this works with any separator according to encyclopedia.separators
         sep = encyclopedia.separators.${key} or ":"; # default separator used for most wrappings
       in
-        "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
+        if builtins.elem key encyclopedia.singleValue then
+          if (builtins.length value) > 1 then
+            abort "neowrap.nix: there are two derivations in all of the \
+            inputs of: ${builtins.toJSON allPkgs} that set ${key} to a value via a passthru, this \
+            needs to be fixed via the passthrus of the derivations from this list: ${builtins.toJSON envPkgs}"
+          else
+            # Should this be "--set" ?
+            "--set-default ${key} ${builtins.elemAt value 0}"
+        else
+          "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
       )
     ) envInfoWithLocal;
     # makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
