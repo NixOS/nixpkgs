@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+
+    # this changes the executable name
+    # from 'com.github.babluboy.bookworm' to 'bookworm'
+    sed -i "s/    meson.project_name(),/    'bookworm',/g" meson.build;
   '';
 
   # These programs are expected in PATH from the source code and scripts
