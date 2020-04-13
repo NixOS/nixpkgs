@@ -7995,9 +7995,6 @@ in
     };
   };
 
-  llvm-polly = throw "clang is now built with polly-plugin by default";
-  clang-polly = throw "clang is now built with polly-plugin by default";
-
   clang_10 = llvmPackages_10.clang;
   clang_9  = llvmPackages_9.clang;
   clang_8  = llvmPackages_8.clang;
