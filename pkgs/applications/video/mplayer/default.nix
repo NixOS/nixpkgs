@@ -139,7 +139,6 @@ stdenv.mkDerivation rec {
   configureFlags = with stdenv.lib; [
     "--enable-freetype"
     (if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig")
-    (if x11Support then "--enable-x11 --enable-gl" else "--disable-x11 --disable-gl")
     (if xineramaSupport then "--enable-xinerama" else "--disable-xinerama")
     (if xvSupport then "--enable-xv" else "--disable-xv")
     (if alsaSupport then "--enable-alsa" else "--disable-alsa")
@@ -150,21 +149,22 @@ stdenv.mkDerivation rec {
     (if bluraySupport then "--enable-bluray" else "--disable-bluray")
     (if amrSupport then "--enable-libopencore_amrnb" else "--disable-libopencore_amrnb")
     (if cacaSupport then "--enable-caca" else "--disable-caca")
-    (if lameSupport then "--enable-mp3lame --disable-mp3lame-lavc" else "--disable-mp3lame --enable-mp3lame-lavc")
     (if speexSupport then "--enable-speex" else "--disable-speex")
     (if theoraSupport then "--enable-theora" else "--disable-theora")
-    (if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc")
     (if jackaudioSupport then "" else "--disable-jack")
     (if pulseSupport then "--enable-pulse" else "--disable-pulse")
     "--disable-xanim"
     "--disable-ivtv"
-    "--disable-xvid --disable-xvid-lavc"
+    "--disable-xvid" "--disable-xvid-lavc"
     "--disable-ossaudio"
     "--disable-ffmpeg_a"
     "--yasm=${buildPackages.yasm}/bin/yasm"
     # Note, the `target` vs `host` confusion is intensional.
     "--target=${stdenv.hostPlatform.config}"
-  ] ++ optional
+  ] ++ (if x11Support then [ "--enable-x11" "--enable-gl" ] else [ "--disable-x11" "--disable-gl" ])
+    ++ (if lameSupport then [ "--enable-mp3lame" "--disable-mp3lame-lavc" ] else [ "--disable-mp3lame" "--enable-mp3lame-lavc" ])
+    ++ (if x264Support then [ "--enable-x264" "--disable-x264-lavc" ] else [ "--disable-x264" "--enable-x264-lavc" ])
+    ++ optional
          (useUnfreeCodecs && codecs != null && !crossBuild)
          "--codecsdir=${codecs}"
     ++ optional
