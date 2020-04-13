@@ -8490,7 +8490,14 @@ in
 
   inherit (haskellPackages) ghc;
 
-  cabal-install = haskell.lib.justStaticExecutables haskellPackages.cabal-install;
+  cabal-install = with haskell.lib; overrideCabal (justStaticExecutables haskellPackages.cabal-install) (drv: {
+    executableToolDepends = [ makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/cabal \
+        --prefix PATH : ${lib.makeBinPath [ binutils-unwrapped ]}
+    '';
+    }
+  );
 
   stack = haskell.lib.justStaticExecutables haskellPackages.stack;
   hlint = haskell.lib.justStaticExecutables haskellPackages.hlint;
