@@ -10,6 +10,5 @@ buildDunePackage {
 
 	minimumOCamlVersion = "4.03";
 
-	buildInputs = [ sexplib ppx_tools_versioned ];
-	propagatedBuildInputs = [ cstruct ];
+	propagatedBuildInputs = [ cstruct ppx_tools_versioned sexplib ];
 }
