@@ -1,6 +1,7 @@
 import ./make-test-python.nix (
   { pkgs, ... }: let
     domain = "whatever.example.com";
+    password = "false;foo;exit;withspecialcharacters";
   in
     {
       name = "iodine";
@@ -21,7 +22,7 @@ import ./make-test-python.nix (
               services.iodine.server = {
                 enable = true;
                 ip = "10.53.53.1/24";
-                passwordFile = "${builtins.toFile "password" "foo"}";
+                passwordFile = "${builtins.toFile "password" password}";
                 inherit domain;
               };
 
@@ -41,7 +42,7 @@ import ./make-test-python.nix (
               server = domain;
             };
             systemd.tmpfiles.rules = [
-              "f /root/pw 0666 root root - foo"
+              "f /root/pw 0666 root root - ${password}"
             ];
             environment.systemPackages = [
               pkgs.nagiosPluginsOfficial
