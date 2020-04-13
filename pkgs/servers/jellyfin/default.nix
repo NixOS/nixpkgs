@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, sqlite, makeWrapper, dotnetCorePackages, ffmpeg,
-  fontconfig, freetype }:
+  fontconfig, freetype, nixosTests }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -48,6 +48,10 @@ in stdenv.mkDerivation rec {
       ]}:$out/opt/jellyfin/runtimes/${runtimeDir}/native/" \
       --add-flags "$out/opt/jellyfin/jellyfin.dll --ffmpeg ${ffmpeg}/bin/ffmpeg"
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.jellyfin;
+  };
 
   meta =  with stdenv.lib; {
     description = "The Free Software Media System";
