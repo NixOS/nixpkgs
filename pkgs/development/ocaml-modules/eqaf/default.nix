@@ -3,11 +3,11 @@
 buildDunePackage rec {
   minimumOCamlVersion = "4.03";
   pname = "eqaf";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchurl {
     url = "https://github.com/mirage/eqaf/releases/download/v${version}/eqaf-v${version}.tbz";
-    sha256 = "1wkkmw8q2ml7ifpg0g06y0sclq0zvjf6dpsi36dnci7f230q3vsq";
+    sha256 = "068r231ia87mpqpaqzqb9sjfj6yaqrwvcls2p173aa4qg38xvsq9";
   };
 
   meta = {
