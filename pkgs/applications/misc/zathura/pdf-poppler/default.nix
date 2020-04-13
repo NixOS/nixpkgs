@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig zathura_core ];
   buildInputs = [ poppler girara ];
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-poppler/";

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];
   buildInputs = [ libspectre zathura_core girara ];
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-ps/";

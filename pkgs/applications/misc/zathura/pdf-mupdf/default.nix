@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     zathura_core girara mupdf cairo
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";

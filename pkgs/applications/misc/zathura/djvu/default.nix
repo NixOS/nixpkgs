@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig ];
   buildInputs = [ djvulibre gettext zathura_core gtk girara ];
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with stdenv.lib; {
     homepage = "https://pwmt.org/projects/zathura-djvu/";
