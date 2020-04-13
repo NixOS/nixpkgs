@@ -3711,6 +3711,8 @@ in {
 
   flask_testing = callPackage ../development/python-modules/flask-testing { };
 
+  flask-versioned = callPackage ../development/python-modules/flask-versioned { };
+
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
   wtforms = callPackage ../development/python-modules/wtforms { };
