@@ -72,7 +72,7 @@ let
           inherit pkg;
           outputs = lib.lists.subtractLists [outname] outputs;
           envStr = builtins.replaceStrings
-            [ "%${outname}%" ]
+            [ "@${outname}@" ]
             [ "${pkg.${outname}}" ]
           envStr;
         }

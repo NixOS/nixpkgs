@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
     };
     propagateEnv = {
-      GIO_EXTRA_MODULES = "%lib%/lib/gio/modules";
+      GIO_EXTRA_MODULES = "@lib@/lib/gio/modules";
     };
   };
 

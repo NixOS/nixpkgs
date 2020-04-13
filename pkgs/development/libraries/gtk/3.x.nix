@@ -190,8 +190,8 @@ stdenv.mkDerivation rec {
       attrPath = "gtk3";
     };
     propagateEnv = {
-      XDG_DATA_DIRS = "%out%/share/gsettings-schemas/${pname}-${version}";
-      GI_TYPELIB_PATH = "%out%/lib/girepository-1.0";
+      XDG_DATA_DIRS = "@out@/share/gsettings-schemas/${pname}-${version}";
+      GI_TYPELIB_PATH = "@out@/lib/girepository-1.0";
     };
   };
 

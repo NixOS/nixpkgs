@@ -280,7 +280,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     propagateEnv = {
-      GST_PLUGIN_SYSTEM_PATH_1_0 = "%out%/lib/gstreamer-1.0";
+      GST_PLUGIN_SYSTEM_PATH_1_0 = "@out@/lib/gstreamer-1.0";
     };
   };
 

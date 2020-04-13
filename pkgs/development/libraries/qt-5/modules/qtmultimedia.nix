@@ -15,8 +15,8 @@ qtModule {
   NIX_LDFLAGS = optionalString (stdenv.isDarwin) "-lobjc";
   passthru = {
     propagateEnv = {
-      QT_PLUGIN_PATH = "%bin%/${qtbase.qtPluginPrefix}";
-      QML2_IMPORT_PATH = "%bin%/${qtbase.qtQmlPrefix}";
+      QT_PLUGIN_PATH = "@bin@/${qtbase.qtPluginPrefix}";
+      QML2_IMPORT_PATH = "@bin@/${qtbase.qtQmlPrefix}";
     };
   };
 }

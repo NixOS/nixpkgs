@@ -163,8 +163,8 @@ stdenv.mkDerivation rec {
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
   passthru = {
     propagateEnv = {
-      QT_PLUGIN_PATH = "%bin%/${qtPluginPrefix}";
-      # QML2_IMPORT_PATH = "%bin%/${qtQmlPrefix}";
+      QT_PLUGIN_PATH = "@bin@/${qtPluginPrefix}";
+      # QML2_IMPORT_PATH = "@bin@/${qtQmlPrefix}";
     };
   };
 

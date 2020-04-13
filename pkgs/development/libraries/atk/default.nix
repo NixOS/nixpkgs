@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
     };
     propagateEnv = {
-      GI_TYPELIB_PATH = "%out%/lib/girepository-1.0";
+      GI_TYPELIB_PATH = "@out@/lib/girepository-1.0";
     };
   };
 
