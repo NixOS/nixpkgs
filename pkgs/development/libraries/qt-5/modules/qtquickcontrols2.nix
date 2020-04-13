@@ -1,4 +1,4 @@
-{ qtModule, qtdeclarative }:
+{ qtModule, qtdeclarative, qtbase }:
 
 qtModule {
   name = "qtquickcontrols2";
