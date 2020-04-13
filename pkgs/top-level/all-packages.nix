@@ -22206,6 +22206,8 @@ in
   uefitoolPackages = recurseIntoAttrs (callPackage ../tools/system/uefitool/variants.nix {});
   uefitool = uefitoolPackages.new-engine;
 
+  ungoogled-chromium = callPackage ../applications/networking/browsers/ungoogled-chromium (config.chromium or {});
+
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
   unison = callPackage ../applications/networking/sync/unison {
