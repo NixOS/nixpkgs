@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec{
   pname = "wpsoffice";
-  version = "11.1.0.9080";
+  version = "11.1.0.9505";
 
   src = fetchurl {
-    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9080/wps-office_11.1.0.9080.XA_amd64.deb";
-    sha256 = "1731e9aea22ef4e558ad66b1373d863452b4f570aecf09d448ae28a821333454";
+    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9505/wps-office_11.1.0.9505.XA_amd64.deb";
+    sha256 = "1bvaxwd3npw3kswk7k1p6mcbfg37x0ym4sp6xis6ykz870qivqk5";
   };
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
