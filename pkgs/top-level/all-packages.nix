@@ -14198,6 +14198,8 @@ in
 
   readosm = callPackage ../development/libraries/readosm { };
 
+  kissfft = callPackage ../development/libraries/kissfft { };
+
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
     haskellLib = haskell.lib;
   };
@@ -14225,6 +14227,8 @@ in
   lv2 = callPackage ../development/libraries/audio/lv2 { };
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
+
+  qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
 
   qradiolink = callPackage ../applications/radio/qradiolink { };
 
@@ -18415,9 +18419,7 @@ in
 
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 
-  ardour = callPackage ../applications/audio/ardour {
-    inherit (gnome2) libgnomecanvas libgnomecanvasmm;
-  };
+  ardour = callPackage ../applications/audio/ardour { };
 
   arelle = with python3Packages; toPythonApplication arelle;
 
