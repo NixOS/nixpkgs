@@ -135,7 +135,7 @@ EOF
 
   qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
     then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
-    else optional enableProprietaryCodecs "-- -proprietary-codecs";
+    else optionals enableProprietaryCodecs [ "--" "-proprietary-codecs" ];
 
   propagatedBuildInputs = [
     # Image formats
