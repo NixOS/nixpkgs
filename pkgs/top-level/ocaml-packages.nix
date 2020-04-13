@@ -538,6 +538,8 @@ let
 
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
+    mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
+
     mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
 
     mirage-crypto-pk = callPackage ../development/ocaml-modules/mirage-crypto/pk.nix { };
