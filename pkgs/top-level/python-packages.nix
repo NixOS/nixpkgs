@@ -5180,6 +5180,8 @@ in {
 
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
+  pyrad = callPackage ../development/python-modules/pyrad { };
+
   pyrr = callPackage ../development/python-modules/pyrr { };
 
   pysha3 = callPackage ../development/python-modules/pysha3 { };
