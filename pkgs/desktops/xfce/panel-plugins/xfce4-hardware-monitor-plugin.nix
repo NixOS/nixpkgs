@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2, gtkmm2,
-  libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors
+  libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors, xfce
 }:
 
 stdenv.mkDerivation rec {
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://goodies.xfce.org/projects/panel-plugins/${pname}";
     description = "Hardware monitor plugin for the XFCE4 panel";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }
