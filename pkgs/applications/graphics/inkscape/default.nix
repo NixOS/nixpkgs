@@ -120,9 +120,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    license = "GPL";
-    homepage = "https://www.inkscape.org";
     description = "Vector graphics editor";
+    homepage = "https://www.inkscape.org";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.jtojnar ];
     platforms = platforms.all;
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits
