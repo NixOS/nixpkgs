@@ -681,6 +681,11 @@ mapAliases ({
   clang_35 = llvm_4;
   clang_4 = llvm_4;
 
+  # added 2019-04-13
+  # *-polly pointed to llvmPackages_latest
+  llvm-polly = throw "clang is now built with polly-plugin by default";
+  clang-polly = throw "clang is now built with polly-plugin by default";
+
   /* Cleanup before 20.09 */
   oraclejdk8psu = throw ''
     The *psu versions of oraclejdk aren't provided by upstream anymore and were therefore removed!
