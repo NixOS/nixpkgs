@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage }:
+{ lib, fetchurl, buildDunePackage, cstruct, bigarray-compat }:
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.03";
@@ -9,6 +9,8 @@ buildDunePackage rec {
     url = "https://github.com/mirage/eqaf/releases/download/v${version}/eqaf-v${version}.tbz";
     sha256 = "068r231ia87mpqpaqzqb9sjfj6yaqrwvcls2p173aa4qg38xvsq9";
   };
+
+  propagatedBuildInputs = [ cstruct bigarray-compat ];
 
   meta = {
     description = "Constant time equal function to avoid timing attacks in OCaml";
