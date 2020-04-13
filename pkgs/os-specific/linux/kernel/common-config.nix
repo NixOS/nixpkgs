@@ -178,6 +178,10 @@ let
       NF_TABLES_BRIDGE            = mkMerge [ (whenBetween "4.19" "5.3" yes)
                                               (whenAtLeast "5.3" module) ];
 
+      # needed for `dropwatch`
+      # Builtin-only since https://github.com/torvalds/linux/commit/f4b6bcc7002f0e3a3428bac33cf1945abff95450
+      NET_DROP_MONITOR = yes;
+
       # needed for ss
       INET_DIAG         = yes;
       INET_TCP_DIAG     = module;
