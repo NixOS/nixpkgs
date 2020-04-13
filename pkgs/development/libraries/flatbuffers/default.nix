@@ -18,7 +18,9 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake ];
   enableParallelBuilding = true;
 
-  doCheck = true;
+  cmakeFlags = [ "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}" ];
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "test";
 
   meta = {
