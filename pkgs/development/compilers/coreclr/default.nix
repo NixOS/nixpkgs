@@ -3,7 +3,6 @@
 , fetchpatch
 , which
 , cmake
-, clang
 , llvmPackages
 , libunwind
 , gettext
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     which
     cmake
-    clang
+    llvmPackages.clang
   ];
 
   buildInputs = [
