@@ -1031,6 +1031,11 @@ in
         message = ''
           Temporary addresses are only needed when IPv6 is enabled.
         '';
+      })) ++ (forEach interfaces (i: {
+        assertion = (i.virtual && i.virtualType == "tun") -> i.macAddress == null;
+        message = ''
+          Setting a MAC Address for tun device ${i.name} isn't supported.
+        '';
       })) ++ [
         {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
