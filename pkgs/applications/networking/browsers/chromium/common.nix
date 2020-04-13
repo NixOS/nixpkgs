@@ -25,8 +25,13 @@
 , libdrm ? null, wayland ? null, mesa_drivers ? null, libxkbcommon ? null # useOzone
 
 # package customization
-, useVaapi ? false
 , useOzone ? false
+, useVaapi ? !(useOzone || stdenv.isAarch64) # Built if supported, but disabled in the wrapper
+# VA-API TODOs:
+# - Ozone: M81 fails to build due to "ozone_platform_gbm = false"
+#   - Possible solutions: Write a patch to fix the build (wrong gn dependencies)
+#     or build with minigbm
+# - AArch64: Causes serious regressions (https://github.com/NixOS/nixpkgs/pull/85253#issuecomment-614405879)
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -129,10 +134,10 @@ let
       libXScrnSaver libXcursor libXtst libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
-    ] ++ optional gnomeKeyringSupport libgnome-keyring3
+    ] ++ optional useVaapi libva
+      ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional useVaapi libva
       ++ optional pulseSupport libpulseaudio
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
@@ -151,9 +156,9 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) [
-      # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
-      ./patches/vaapi-fix.patch
+    ] ++ optionals (useVaapi) [ # Improvements for the VA-API build:
+      ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
+      ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
     ];
 
     postPatch = ''
