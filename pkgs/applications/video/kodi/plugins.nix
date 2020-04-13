@@ -508,14 +508,14 @@ let self = rec {
 
   vfs-sftp = mkKodiABIPlugin rec {
     namespace = "vfs.sftp";
-    version = "1.0.5";
+    version = "1.0.6";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "10l2rwim574012vzjrkr0b153gk5q81fq48p47mijk294l7g100d";
+      sha256 = "044kkzcpzvbyih4vys33r4hqw38xa82snmvl4qj1r80wnszc8af1";
     };
 
     meta = with stdenv.lib; {
@@ -530,14 +530,14 @@ let self = rec {
 
   vfs-libarchive = mkKodiABIPlugin rec {
     namespace = "vfs.libarchive";
-    version = "1.0.6";
+    version = "1.0.7";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "1gz39i97n8xgbja8miqligmhxsvmqimlxx75xr9v0r9lfxp7135f";
+      sha256 = "01qhv095h5j67ispm4iw18pd3kl7a0mnjkgm92al9qqiyif8lzgh";
     };
 
     meta = with stdenv.lib; {

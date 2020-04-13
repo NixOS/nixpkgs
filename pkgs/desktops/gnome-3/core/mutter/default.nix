@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.36.0";
+  version = "3.36.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18lvj158w6gwc6xpvn699v8ykh1r5szry7sqascl6f1i8g628v2x";
+    sha256 = "09fqs9805d07c60a2ibskqffsb5wn72l8grwzb9fic5sl574b0im";
   };
 
   mesonFlags = [
@@ -120,13 +120,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
-    })
-
-    # Fix crash when opening submenus from «always on visible workspace» windows
-    # https://gitlab.gnome.org/GNOME/mutter/issues/1083
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/7e32cc05ce2e5b3931ddcf46ce9ead603a0de39e.patch";
-      sha256 = "5ZzOMizucfrSnHNYjHIUObLHCvAIjrE6fY/CxLp4c7k=";
     })
   ];
 

@@ -567,9 +567,7 @@ in
 
   acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; };
 
-  amass = callPackage ../tools/networking/amass {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  amass = callPackage ../tools/networking/amass { };
 
   afew = callPackage ../applications/networking/mailreaders/afew { };
 
@@ -827,6 +825,8 @@ in
   calls = callPackage ../applications/networking/calls { };
 
   certigo = callPackage ../tools/admin/certigo { };
+
+  catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
 
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
@@ -2104,6 +2104,8 @@ in
   pixiecore = callPackage ../tools/networking/pixiecore {};
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
+
+  pyrit = callPackage ../tools/security/pyrit {};
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
 
@@ -4652,6 +4654,10 @@ in
 
   medfile = callPackage ../development/libraries/medfile { };
 
+  meilisearch = callPackage ../servers/search/meilisearch {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+  };
+
   memtester = callPackage ../tools/system/memtester { };
 
   mhonarc = perlPackages.MHonArc;
@@ -5112,6 +5118,8 @@ in
 
   mgba = libsForQt5.callPackage ../misc/emulators/mgba { };
 
+  microcom = callPackage ../applications/misc/microcom { };
+
   midisheetmusic = callPackage ../applications/audio/midisheetmusic { };
 
   mikutter = callPackage ../applications/networking/instant-messengers/mikutter { };
@@ -5391,9 +5399,7 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
- nomad = callPackage ../applications/networking/cluster/nomad {
-    buildGoPackage = buildGo112Package;
-  };
+ nomad = callPackage ../applications/networking/cluster/nomad { };
 
   notable = callPackage ../applications/misc/notable { };
 
@@ -5707,7 +5713,7 @@ in
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
   page = callPackage ../tools/misc/page { };
-  
+
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
@@ -7097,6 +7103,8 @@ in
 
   txtw = callPackage ../tools/misc/txtw { };
 
+  tydra = callPackage ../tools/misc/tydra { };
+
   u9fs = callPackage ../servers/u9fs { };
 
   ua = callPackage ../tools/networking/ua { };
@@ -7995,8 +8003,6 @@ in
       useMacosReexportHack = true;
     };
   };
-  llvm-polly = llvmPackages_latest.llvm-polly;
-  clang-polly = llvmPackages_latest.clang.override { cc = llvmPackages_latest.clang-polly-unwrapped; };
 
   clang_10 = llvmPackages_10.clang;
   clang_9  = llvmPackages_9.clang;
@@ -8793,7 +8799,7 @@ in
     stdenv = gcc7Stdenv;
   });
 
-  llvmPackages_latest = llvmPackages_9; # llvmPackages_10: when out of RC
+  llvmPackages_latest = llvmPackages_10;
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -9038,6 +9044,7 @@ in
   scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
   scala = scala_2_13;
 
+  metal = callPackage ../development/libraries/metal { };
   metals = callPackage ../development/tools/metals { };
   scalafix = callPackage ../development/tools/scalafix { };
   scalafmt = callPackage ../development/tools/scalafmt { };
@@ -10344,9 +10351,7 @@ in
 
   help2man = callPackage ../development/tools/misc/help2man { };
 
-  heroku = callPackage ../development/tools/heroku {
-    nodejs = nodejs-10_x;
-  };
+  heroku = callPackage ../development/tools/heroku { };
 
   ccloud-cli = callPackage ../development/tools/ccloud-cli { };
 
@@ -12070,6 +12075,12 @@ in
     libusb = libusb1;
   };
 
+  highfive = callPackage ../development/libraries/highfive { };
+
+  highfive-mpi = appendToName "mpi" (highfive.override {
+    hdf5 = hdf5-mpi;
+  });
+
   hiredis = callPackage ../development/libraries/hiredis { };
 
   hiredis-vip = callPackage ../development/libraries/hiredis-vip { };
@@ -12111,6 +12122,8 @@ in
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
+
+  hydra-check = with python3.pkgs; toPythonApplication hydra-check;
 
   hyena = callPackage ../development/libraries/hyena { };
 
@@ -14191,6 +14204,8 @@ in
 
   readosm = callPackage ../development/libraries/readosm { };
 
+  kissfft = callPackage ../development/libraries/kissfft { };
+
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
     haskellLib = haskell.lib;
   };
@@ -14218,6 +14233,8 @@ in
   lv2 = callPackage ../development/libraries/audio/lv2 { };
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
+
+  qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
 
   qradiolink = callPackage ../applications/radio/qradiolink { };
 
@@ -16618,11 +16635,6 @@ in
         kernelPatches.request_key_helper_updated
         kernelPatches.cpu-cgroup-v2."4.4"
         kernelPatches.modinst_arg_list_too_long
-        # https://github.com/NixOS/nixpkgs/issues/42755
-        # Remove these xen-netfront patches once they're included in
-        # upstream! Fixes https://github.com/NixOS/nixpkgs/issues/42755
-        kernelPatches.xen-netfront_fix_mismatched_rtnl_unlock
-        kernelPatches.xen-netfront_update_features_after_registering_netdev
       ];
   };
 
@@ -16691,7 +16703,6 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.modinst_arg_list_too_long
       ];
   };
 
@@ -17157,9 +17168,7 @@ in
 
   go-tools = callPackage ../development/tools/go-tools { };
 
-  gotools = callPackage ../development/tools/gotools {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  gotools = callPackage ../development/tools/gotools { };
 
   gotop = callPackage ../tools/system/gotop { };
 
@@ -18416,9 +18425,7 @@ in
 
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 
-  ardour = callPackage ../applications/audio/ardour {
-    inherit (gnome2) libgnomecanvas libgnomecanvasmm;
-  };
+  ardour = callPackage ../applications/audio/ardour { };
 
   arelle = with python3Packages; toPythonApplication arelle;
 
@@ -19718,6 +19725,8 @@ in
     inherit (darwin) IOKit;
   };
 
+  gpsbabel-gui = libsForQt5.callPackage ../applications/misc/gpsbabel/gui.nix { };
+
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
   gpsd = callPackage ../servers/gpsd { };
@@ -20843,6 +20852,8 @@ in
     i3Support = true;
     i3GapsSupport = false;
   };
+
+  polyphone = libsForQt5.callPackage ../applications/audio/polyphone { };
 
   ptex = callPackage ../development/libraries/ptex {};
 
@@ -23972,10 +23983,6 @@ in
     lua = lua5_2;
   };
 
-  worldofgoo_demo = worldofgoo.override {
-    demo = true;
-  };
-
   worldofgoo = callPackage ../games/worldofgoo { };
 
   xboard =  callPackage ../games/xboard { };
@@ -26293,9 +26300,7 @@ in
 
   dsniff = callPackage ../tools/networking/dsniff {};
 
-  wal-g = callPackage ../tools/backup/wal-g {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  wal-g = callPackage ../tools/backup/wal-g { };
 
   tlwg = callPackage ../data/fonts/tlwg { };
 

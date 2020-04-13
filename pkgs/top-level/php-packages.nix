@@ -939,7 +939,7 @@ in
       # pdo_firebird (7.4, 7.3, 7.2)
       { name = "pdo_mysql";
         internalDeps = with php.extensions; [ pdo mysqlnd ];
-        configureFlags = [ "--with-pdo-mysql=mysqlnd" ];
+        configureFlags = [ "--with-pdo-mysql=mysqlnd" "PHP_MYSQL_SOCK=/run/mysqld/mysqld.sock" ];
         doCheck = false; }
       # pdo_oci (7.4, 7.3, 7.2)
       { name = "pdo_odbc";

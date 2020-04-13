@@ -24,6 +24,8 @@
 	"iA-Writer" = "0clksrxw6xcv5c1pbd8rl2rc3r15iak1qv8v6bn0j2mccjcss64z";
 	"IBMPlexMono" = "0xkfkpnkkrvjfiv624l7lpmfji107y7645w6ah47ijyg47yxkmsg";
 	"Inconsolata" = "14gbwc0k3d1j496w6pv9kry1pglswzd0armsdb0g1mqgzfdf1ci1";
+	"InconsolataGo" = "0c6yhx242d82dalyjas42qniy0jagqs47cfsfarwmzar6zg3lj5m";
+	"InconsolataLGC" = "1746nl1rz4hscfgbmd8642wq3z1wizvfjb50y3yyjsc1ixc1f0pd";
 	"Iosevka" = "1qqd4xh98vxb99rh2a2qv9gjclilhaw84pyqdpbx225qhvw9xlkb";
 	"JetBrainsMono" = "1kc8fyk1aczxkmn8dzv1gy6xfi2jywgahd8np576v2dn8kx16844";
 	"Lekton" = "0mny5j9bns9104wg2wmabdw0sl80c7i3dzp4j5mxh8jybx929d3i";
@@ -45,5 +47,6 @@
 	"Terminus" = "0g2ybs225fwxmvwfnanc32jc2lfnag3agmliv1vrb5mxyqzm53gj";
 	"Tinos" = "077n4k6yh4qbirfkl02zqn3057kymspr10zcbfkf4ldvifa36pjd";
 	"Ubuntu" = "1lzdrgb8vk5dwicxhvkgbain5phf88g3zgv5ya2ihh052xsl3qih";
+	"UbuntuMono" = "0wa8ri7f3g8vwd194q812qh8nzplnmhl5ak0yhgilmm44s46ad0h";
 	"VictorMono" = "18z92kwggfqwrd5m09yda55hcb4b159278lps6f9hr8icwki6v9q";
 }

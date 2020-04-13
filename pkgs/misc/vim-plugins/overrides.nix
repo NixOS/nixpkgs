@@ -11,6 +11,7 @@
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 , nodePackages
+, dasht
 
 # coc-go dependency
 , go
@@ -196,19 +197,6 @@ self: super: {
     pname = "coc-metals";
     version = nodePackages.coc-metals.version;
     src = "${nodePackages.coc-metals}/lib/node_modules/coc-metals";
-  };
-
-  # Only official releases contains the required index.js file
-  # NB: Make sure you pick a rev from the release branch!
-  coc-nvim = buildVimPluginFrom2Nix rec {
-    pname = "coc-nvim";
-    version = "2020-01-05";
-    src = fetchFromGitHub {
-      owner = "neoclide";
-      repo = "coc.nvim";
-      rev = "984779f2f825626aa9d441746d8b4ee079137c65";
-      sha256 = "0w7qnhi7wikr789h3w5p59l8wd81czpvbzbdanf8klf9ap4ma3yg";
-    };
   };
 
   coc-pairs = buildVimPluginFrom2Nix {
@@ -528,6 +516,13 @@ self: super: {
 
   vim-codefmt = super.vim-codefmt.overrideAttrs(old: {
     dependencies = with super; [ vim-maktaba ];
+  });
+
+  vim-dasht = super.vim-dasht.overrideAttrs(old: {
+    preFixup = ''
+      substituteInPlace $out/share/vim-plugins/vim-dasht/autoload/dasht.vim \
+        --replace "['dasht']" "['${dasht}/bin/dasht']"
+    '';
   });
 
   vim-easytags = super.vim-easytags.overrideAttrs(old: {

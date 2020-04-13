@@ -36,6 +36,8 @@ let params = {
 param = params.${coq.coq-version};
 in
 
+let hasWarning = stdenv.lib.versionAtLeast coq.ocamlPackages.ocaml.version "4.08"; in
+
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-dpdgraph-${param.version}";
   src = fetchFromGitHub {
@@ -48,6 +50,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ coq ]
   ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ocamlgraph ]);
+
+  # dpd_compute.ml uses deprecated Pervasives.compare
+  # Versions prior to 0.6.5 do not have the WARN_ERR build flag
+  preConfigure = stdenv.lib.optionalString hasWarning ''
+    substituteInPlace Makefile.in --replace "-warn-error +a " ""
+  '';
+
+  buildFlags = stdenv.lib.optional hasWarning "WARN_ERR=";
 
   preInstall = ''
     mkdir -p $out/bin

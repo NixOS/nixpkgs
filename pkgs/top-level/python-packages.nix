@@ -795,6 +795,8 @@ in {
 
   handout = callPackage ../development/python-modules/handout { };
 
+  HAP-python = callPackage ../development/python-modules/HAP-python { };
+
   helper = callPackage ../development/python-modules/helper { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
@@ -1126,6 +1128,8 @@ in {
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
+
+  py-multihash = callPackage ../development/python-modules/py-multihash { };
 
   py-radix = callPackage ../development/python-modules/py-radix { };
 
@@ -1618,6 +1622,8 @@ in {
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
   aioftp = callPackage ../development/python-modules/aioftp { };
+
+  aioharmony = callPackage ../development/python-modules/aioharmony { };
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
@@ -4003,6 +4009,8 @@ in {
   hydra = callPackage ../development/python-modules/hydra { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
+
+  hydra-check = callPackage ../development/python-modules/hydra-check { };
 
   colored = callPackage ../development/python-modules/colored { };
 

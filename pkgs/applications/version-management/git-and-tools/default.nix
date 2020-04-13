@@ -167,15 +167,15 @@ let
 
   gita = python3Packages.callPackage ./gita {};
 
+  gitbatch = callPackage ./gitbatch { };
+
   gitflow = callPackage ./gitflow { };
 
   gitstatus = callPackage ./gitstatus { };
 
   grv = callPackage ./grv { };
 
-  hub = callPackage ./hub {
-    inherit (darwin) Security;
-  };
+  hub = callPackage ./hub { };
 
   lab = callPackage ./lab { };
 

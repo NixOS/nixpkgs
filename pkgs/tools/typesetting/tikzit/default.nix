@@ -2,13 +2,13 @@
 
 mkDerivation {
   pname = "tikzit";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "tikzit";
     repo = "tikzit";
-    rev = "v2.1.4";
-    sha256 = "121pgl2cdkksw48mjg6hzk7324ax6iw6fq7q3v1kdgwm8rwxm1fl";
+    rev = "v2.1.5";
+    sha256 = "1xrx7r8b6nb912k91pkdwaz2gijfq6lzssyqxard0591h2mycbcg";
   };
 
   nativeBuildInputs = [ qmake qttools flex bison ];
