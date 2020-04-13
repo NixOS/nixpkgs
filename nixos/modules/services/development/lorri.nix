@@ -42,6 +42,6 @@ in {
       };
     };
 
-    environment.systemPackages = [ pkgs.lorri ];
+    environment.systemPackages = [ pkgs.lorri pkgs.direnv ];
   };
 }
