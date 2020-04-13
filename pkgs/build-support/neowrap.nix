@@ -47,7 +47,7 @@ let
       ) pkgs;
     allPkgs = (lib.lists.flatten pkgList) ++ extraPkgsByOverride ++ extraPkgs;
     allInputs = lib.lists.unique (lib.lists.flatten (getAllInputs allPkgs []));
-    allInputs_ = builtins.trace "${builtins.toJSON allInputs}" allInputs;
+    # allInputs_ = builtins.trace "${builtins.toJSON allInputs}" allInputs;
     # filter out of all the inputs the packages with the propagateEnv attribute
     envPkgs = builtins.filter (
       pkg:
@@ -89,9 +89,9 @@ let
         }
       ) pkg.propagateEnv)
     ) envPkgs;
-    envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
+    # envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
     envInfoFolded = lib.attrsets.foldAttrs (n: a: [n] ++ a) [] envInfo;
-    envInfoFolded_ = builtins.trace "envInfoFolded is ${(builtins.toJSON envInfoFolded)}" envInfoFolded;
+    # envInfoFolded_ = builtins.trace "envInfoFolded is ${(builtins.toJSON envInfoFolded)}" envInfoFolded;
     # Where we add stuff according to encyclopedia.wrapOut
     envInfoWithLocal = lib.attrsets.mapAttrs (
       name:
@@ -101,7 +101,7 @@ let
       else
         values
     ) envInfoFolded;
-    envInfoWithLocal_ = builtins.trace "envInfoWithLocal is ${(builtins.toJSON envInfoWithLocal)}" envInfoWithLocal;
+    # envInfoWithLocal_ = builtins.trace "envInfoWithLocal is ${(builtins.toJSON envInfoWithLocal)}" envInfoWithLocal;
     makeWrapperArgs = lib.attrsets.mapAttrsToList (
       key:
       value:
@@ -112,7 +112,7 @@ let
         "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
       )
     ) envInfoWithLocal;
-    makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
+    # makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
   in
   symlinkJoin {
     name = "runtime-env";
@@ -121,7 +121,7 @@ let
     buildInputs = [ makeWrapper ];
     postBuild = ''
       for i in $out/bin/*; do
-        wrapProgram "$i" ${(builtins.concatStringsSep " " makeWrapperArgs_)}
+        wrapProgram "$i" ${(builtins.concatStringsSep " " makeWrapperArgs)}
       done
     '';
   };
