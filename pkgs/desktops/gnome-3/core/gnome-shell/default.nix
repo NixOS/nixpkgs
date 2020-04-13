@@ -65,7 +65,10 @@ in stdenv.mkDerivation rec {
 
     # Install bash-completions to correct prefix.
     # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1194
-    ./fix-bash-completion.patch
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/9f1ad5d86ddbabaa840eb2860279d53f4e635453.patch";
+      sha256 = "f8MDFbfg9D7ORF84Ld9GIvf0xRCYuSszo3QLMji2VaE=";
+    })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
     # aware of the location to hardcode in the generated GIR file.
