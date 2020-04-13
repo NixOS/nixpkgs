@@ -28,7 +28,7 @@ buildPythonPackage rec {
   dontUseSetuptoolsCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/git.sr.ht;
+    homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Shared support code for sr.ht source control services.";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

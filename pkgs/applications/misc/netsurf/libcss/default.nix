@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE= "-Wno-error=implicit-fallthrough";
 
   meta = with stdenv.lib; {
-    homepage = http://www.netsurf-browser.org/;
+    homepage = "http://www.netsurf-browser.org/";
     description = "Cascading Style Sheets library for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

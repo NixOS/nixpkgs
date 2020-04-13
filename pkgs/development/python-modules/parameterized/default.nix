@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Parameterized testing with any Python test framework";
-    homepage = https://pypi.python.org/pypi/parameterized;
+    homepage = "https://pypi.python.org/pypi/parameterized";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ma27 ];
   };

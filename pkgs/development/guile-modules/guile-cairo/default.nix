@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       maintained graphics library with all of the benefits of Scheme: memory
       management, exceptions, macros, and a dynamic programming environment.
     '';
-    homepage = https://www.nongnu.org/guile-cairo/;
+    homepage = "https://www.nongnu.org/guile-cairo/";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.linux;

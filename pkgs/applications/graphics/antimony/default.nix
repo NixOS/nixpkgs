@@ -44,7 +44,7 @@ in
 
     meta = with stdenv.lib; {
       description = "A computer-aided design (CAD) tool from a parallel universe";
-      homepage    = https://github.com/mkeeter/antimony;
+      homepage    = "https://github.com/mkeeter/antimony";
       license     = licenses.mit;
       maintainers = with maintainers; [ rnhmjoj ];
       platforms   = platforms.linux;

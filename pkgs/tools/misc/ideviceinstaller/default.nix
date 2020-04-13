@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig usbmuxd libimobiledevice libzip ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/ideviceinstaller;
+    homepage = "https://github.com/libimobiledevice/ideviceinstaller";
     description = "List/modify installed apps of iOS devices";
     longDescription = ''
       ideviceinstaller is a tool to interact with the installation_proxy

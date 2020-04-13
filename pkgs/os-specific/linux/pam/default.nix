@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with stdenv.lib; {
-    homepage = http://www.linux-pam.org/;
+    homepage = "http://www.linux-pam.org/";
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = platforms.linux;
     license = licenses.bsd3;

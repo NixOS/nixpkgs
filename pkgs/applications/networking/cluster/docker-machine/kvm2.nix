@@ -13,7 +13,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/kubernetes/minikube/blob/master/docs/drivers.md;
+    homepage = "https://github.com/kubernetes/minikube/blob/master/docs/drivers.md";
     description = "KVM2 driver for docker-machine.";
     license = licenses.asl20;
     maintainers = with maintainers; [ tadfisher atkinschang ];

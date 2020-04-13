@@ -6,7 +6,7 @@ in stdenv.mkDerivation {
   pname = "gpg-mdp";
   inherit version;
   meta = {
-    homepage = https://tamentis.com/projects/mdp/;
+    homepage = "https://tamentis.com/projects/mdp/";
     license = [stdenv.lib.licenses.isc];
     description = "Manage your passwords with GnuPG and a text editor";
   };

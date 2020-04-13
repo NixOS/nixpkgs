@@ -36,7 +36,7 @@ mkDerivation rec {
        COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
        with a graphical and command-line interface.
     '';
-    homepage = https://colmap.github.io/index.html;
+    homepage = "https://colmap.github.io/index.html";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lebastr ];

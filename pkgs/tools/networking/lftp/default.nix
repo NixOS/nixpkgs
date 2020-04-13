@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A file transfer program supporting a number of network protocols";
-    homepage = https://lftp.tech/;
+    homepage = "https://lftp.tech/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

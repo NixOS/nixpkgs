@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "setowner=" ];
 
   meta = with stdenv.lib; {
-    homepage = ftp://ftp.altlinux.org/pub/people/legion/kbd/;
+    homepage = "ftp://ftp.altlinux.org/pub/people/legion/kbd/";
     description = "Linux keyboard utilities and keyboard maps";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

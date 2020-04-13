@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Datetimes for Humans";
-    homepage = https://github.com/kennethreitz/maya;
+    homepage = "https://github.com/kennethreitz/maya";
     license = licenses.mit;
   };
 }

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       e.g. for YouCompleteMe.  You just enter your development nix-shell
       and run `bear make`.  It's not perfect, but it gets a long way.
     '';
-    homepage = https://github.com/rizsotto/Bear;
+    homepage = "https://github.com/rizsotto/Bear";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.babariviere ];

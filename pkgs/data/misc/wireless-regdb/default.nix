@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Wireless regulatory database for CRDA";
-    homepage = http://wireless.kernel.org/en/developers/Regulatory/;
+    homepage = "http://wireless.kernel.org/en/developers/Regulatory/";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];

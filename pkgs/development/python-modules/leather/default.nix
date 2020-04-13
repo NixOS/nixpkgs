@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
-    homepage = http://leather.rtfd.io;
+    homepage = "http://leather.rtfd.io";
     description = "Python charting library";
     license = licenses.mit;
     platforms = platforms.all;

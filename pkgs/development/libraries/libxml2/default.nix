@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit version; pythonSupport = pythonSupport; };
 
   meta = {
-    homepage = http://xmlsoft.org/;
+    homepage = "http://xmlsoft.org/";
     description = "An XML parsing library for C";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

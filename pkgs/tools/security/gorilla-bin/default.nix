@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Password Gorilla is a Tk based password manager";
-    homepage = https://github.com/zdia/gorilla/wiki;
+    homepage = "https://github.com/zdia/gorilla/wiki";
     maintainers = [ stdenv.lib.maintainers.namore ];
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;

@@ -1441,7 +1441,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Generate Nix expressions to build NPM packages";
-      homepage = https://github.com/svanderburg/node2nix;
+      homepage = "https://github.com/svanderburg/node2nix";
       license = "MIT";
     };
     production = true;

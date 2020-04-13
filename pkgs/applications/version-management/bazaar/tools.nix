@@ -13,7 +13,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Bazaar plugins";
-    homepage = http://wiki.bazaar.canonical.com/BzrTools;
+    homepage = "http://wiki.bazaar.canonical.com/BzrTools";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
-    homepage = https://github.com/tpm2-software/tpm2-tss;
+    homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ delroth ];

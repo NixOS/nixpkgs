@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
       command! This script is very easy to add to and can easily be extended.
     '';
     license = licenses.gpl3;
-    homepage = https://github.com/KittyKatt/screenFetch;
+    homepage = "https://github.com/KittyKatt/screenFetch";
     maintainers = with maintainers; [ relrod ];
     platforms = platforms.all;
   };

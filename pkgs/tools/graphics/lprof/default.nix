@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = mirror://sourceforge/lprof/lprof/lprof-1.11.4/lprof-1.11.4.1.tar.gz;
+    url = "mirror://sourceforge/lprof/lprof/lprof-1.11.4/lprof-1.11.4.1.tar.gz";
     sha256 = "0q8x24fm5yyvm151xrl3l03p7hvvciqnkbviprfnvlr0lyg9wsrn";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Little CMS ICC profile construction set";
-    homepage = https://sourceforge.net/projects/lprof;
+    homepage = "https://sourceforge.net/projects/lprof";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

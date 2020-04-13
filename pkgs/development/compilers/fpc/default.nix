@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free Pascal Compiler from a source distribution";
-    homepage = https://www.freepascal.org;
+    homepage = "https://www.freepascal.org";
     maintainers = [ maintainers.raskin ];
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;

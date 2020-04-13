@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Audio Processing Technology codec (aptX)";
     license = licenses.lgpl21Plus;
-    homepage = https://github.com/pali/libopenaptx;
+    homepage = "https://github.com/pali/libopenaptx";
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];
   };

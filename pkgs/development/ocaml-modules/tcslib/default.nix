@@ -17,7 +17,7 @@ buildOasisPackage rec {
   propagatedBuildInputs = [ ocaml_extlib num ];
 
   meta = {
-    homepage = https://github.com/tcsprojects/tcslib;
+    homepage = "https://github.com/tcsprojects/tcslib";
     description = "A multi-purpose library for OCaml";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mgttlinger ];

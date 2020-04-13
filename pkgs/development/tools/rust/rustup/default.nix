@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "The Rust toolchain installer";
-    homepage = https://www.rustup.rs/;
+    homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.mic92 ];
     platforms = platforms.all;

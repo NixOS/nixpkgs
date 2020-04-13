@@ -17,7 +17,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A MIDI network gateway application that sends and receives MIDI data (ALSA Sequencer and/or JACK MIDI) over the network";
-    homepage = http://qmidinet.sourceforge.net/;
+    homepage = "http://qmidinet.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

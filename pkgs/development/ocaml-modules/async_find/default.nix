@@ -14,7 +14,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ async_p4 core_p4 sexplib_p4 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async_find;
+    homepage = "https://github.com/janestreet/async_find";
     description = "Directory traversal with Async";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

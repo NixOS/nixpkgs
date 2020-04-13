@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fast block device synchronizing tool";
-    homepage = https://github.com/TargetHolding/bdsync;
+    homepage = "https://github.com/TargetHolding/bdsync";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];

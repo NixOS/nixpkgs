@@ -29,7 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   meta = with lib; {
-    homepage    = https://f1ash.github.io/qt-virt-manager;
+    homepage    = "https://f1ash.github.io/qt-virt-manager";
     description = "Desktop user interface for managing virtual machines (QT)";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing

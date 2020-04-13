@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A helpful tool that lets you debug what part of your API is causing you issues";
-    homepage = https://github.com/jeremyvaartjes/ping;
+    homepage = "https://github.com/jeremyvaartjes/ping";
     maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;

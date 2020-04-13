@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Swell%20Foop;
+    homepage = "https://wiki.gnome.org/Apps/Swell%20Foop";
     description = "Puzzle game, previously known as Same GNOME";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;

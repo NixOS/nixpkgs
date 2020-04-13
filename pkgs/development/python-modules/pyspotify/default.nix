@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage    = http://pyspotify.mopidy.com;
+    homepage    = "http://pyspotify.mopidy.com";
     description = "A Python interface to Spotify’s online music streaming service";
     license     = licenses.unfree;
     maintainers = with maintainers; [ lovek323 ];

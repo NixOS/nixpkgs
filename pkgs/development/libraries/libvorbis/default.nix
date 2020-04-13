@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Vorbis audio compression reference implementation";
-    homepage = https://xiph.org/vorbis/;
+    homepage = "https://xiph.org/vorbis/";
     license = licenses.bsd3;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;

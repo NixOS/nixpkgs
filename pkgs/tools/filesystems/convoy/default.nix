@@ -17,7 +17,7 @@ buildGoPackage rec {
   buildInputs = [lvm2];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rancher/convoy;
+    homepage = "https://github.com/rancher/convoy";
     description = "A Docker volume plugin, managing persistent container volumes.";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline ];

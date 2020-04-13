@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An X-windows application that will let it snow on the root, in between and on windows";
-    homepage = http://janswaal.home.xs4all.nl/Xsnow/;
+    homepage = "http://janswaal.home.xs4all.nl/Xsnow/";
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.robberer ];
   };

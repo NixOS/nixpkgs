@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A program that manages graphical display servers and handles graphical user logins";
-    homepage = https://wiki.gnome.org/Projects/GDM;
+    homepage = "https://wiki.gnome.org/Projects/GDM";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

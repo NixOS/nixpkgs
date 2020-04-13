@@ -38,7 +38,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with stdenv.lib; {
     description = "Client for updating dynamic DNS service entries";
-    homepage    = https://sourceforge.net/p/ddclient/wiki/Home/;
+    homepage    = "https://sourceforge.net/p/ddclient/wiki/Home/";
     license     = licenses.gpl2Plus;
     # Mostly since `iproute` is Linux only.
     platforms   = platforms.linux;

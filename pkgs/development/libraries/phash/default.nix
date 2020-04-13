@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [maintainers.imalsogreg];
     platforms = platforms.all;
-    homepage = http://www.phash.org;
+    homepage = "http://www.phash.org";
     downloadPage = "https://github.com/clearscene/pHash";
     updateWalker = true;
   };

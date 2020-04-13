@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";
-    homepage = https://arrow.apache.org/;
+    homepage = "https://arrow.apache.org/";
     license = lib.licenses.asl20;
     platforms = platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];

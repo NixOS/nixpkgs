@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A multiprocessing distributed task queue for Django";
-    homepage = https://django-q.readthedocs.org;
+    homepage = "https://django-q.readthedocs.org";
     license = licenses.mit;
   };
 }

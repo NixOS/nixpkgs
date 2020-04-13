@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
-    homepage = https://rpyc.readthedocs.org;
+    homepage = "https://rpyc.readthedocs.org";
     license = licenses.mit;
   };
 

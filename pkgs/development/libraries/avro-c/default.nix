@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A C library which implements parts of the Avro Specification";
-    homepage = https://avro.apache.org/;
+    homepage = "https://avro.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ lblasc ];
     platforms = platforms.all;

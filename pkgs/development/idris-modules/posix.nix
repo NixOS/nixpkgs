@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "System POSIX bindings for Idris.";
-    homepage = https://github.com/idris-hackers/idris-posix;
+    homepage = "https://github.com/idris-hackers/idris-posix";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

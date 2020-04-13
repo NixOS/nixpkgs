@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0chrgwm97y1a3gj218x25yqk1y1h74a6gzyxjdm023msvs58nkni";
 
   meta = with lib; {
-    homepage = https://crates.io/crates/taizen;
+    homepage = "https://crates.io/crates/taizen";
     license = licenses.mit;
     description = "curses based mediawiki browser";
     maintainers = with maintainers; [ ma27 ];

@@ -269,8 +269,8 @@ let
             + stdenv.lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
         license = stdenv.lib.licenses.gpl2;
-        homepage = https://www.kernel.org/;
-        repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
+        homepage = "https://www.kernel.org/";
+        repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = [
           maintainers.thoughtpolice
         ];

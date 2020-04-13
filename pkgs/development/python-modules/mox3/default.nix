@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Mock object framework for Python";
-    homepage = https://docs.openstack.org/mox3/latest/;
+    homepage = "https://docs.openstack.org/mox3/latest/";
     license = licenses.asl20;
   };
 

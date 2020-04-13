@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple PDF text extraction";
-    homepage = https://github.com/jalan/pdftotext;
+    homepage = "https://github.com/jalan/pdftotext";
     license = licenses.mit;
     maintainers = with maintainers; [ earvstedt ];
   };

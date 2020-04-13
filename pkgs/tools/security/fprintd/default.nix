@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://fprint.freedesktop.org/;
+    homepage = "https://fprint.freedesktop.org/";
     description = "D-Bus daemon that offers libfprint functionality over the D-Bus interprocess communication bus";
     license = licenses.gpl2;
     platforms = platforms.linux;

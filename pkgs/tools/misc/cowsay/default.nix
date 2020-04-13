@@ -27,7 +27,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     description = "A program which generates ASCII pictures of a cow with a message";
-    homepage = https://en.wikipedia.org/wiki/Cowsay;
+    homepage = "https://en.wikipedia.org/wiki/Cowsay";
     license = licenses.gpl1;
     platforms = platforms.all;
     maintainers = [ maintainers.rob ];

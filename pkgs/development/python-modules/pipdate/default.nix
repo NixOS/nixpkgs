@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "pip update helpers";
-    homepage = https://github.com/nschloe/pipdate;
+    homepage = "https://github.com/nschloe/pipdate";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

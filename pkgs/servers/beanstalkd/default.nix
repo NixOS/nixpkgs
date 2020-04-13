@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   meta = with stdenv.lib; {
-    homepage = http://kr.github.io/beanstalkd/;
+    homepage = "http://kr.github.io/beanstalkd/";
     description = "A simple, fast work queue";
     license = licenses.mit;
     maintainers = [ maintainers.zimbatm ];

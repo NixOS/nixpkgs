@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Practical Machine Learning for NLP in Python";
-    homepage = https://github.com/explosion/thinc;
+    homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu danieldk sdll ];
     };

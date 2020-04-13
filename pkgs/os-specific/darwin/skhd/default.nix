@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple hotkey daemon for macOS";
-    homepage = https://github.com/koekeishiya/skhd;
+    homepage = "https://github.com/koekeishiya/skhd";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 periklis ];
     license = licenses.mit;

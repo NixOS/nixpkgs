@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   pname = "lightdm-enso-os-greeter";
 
   src = fetchgit {
-    url = https://github.com/nick92/Enso-OS;
+    url = "https://github.com/nick92/Enso-OS";
     rev = "ed48330bfd986072bd82ac542ed8f8a7365c6427";
     sha256 = "11jm181jq1vbn83h235avpdxz7pqq6prqyzki5yryy53mkj4kgxz";
   };
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
       A fork of pantheon greeter that positions elements in a central and
       vertigal manner and adds a blur effect to the background
     '';
-    homepage = https://github.com/nick92/Enso-OS;
+    homepage = "https://github.com/nick92/Enso-OS";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [

@@ -25,7 +25,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     description = "Command line interface for Amazon Glacier";
-    homepage    = https://github.com/uskudnik/amazon-glacier-cmd-interface;
+    homepage    = "https://github.com/uskudnik/amazon-glacier-cmd-interface";
     license     = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.lovek323 ];
   };

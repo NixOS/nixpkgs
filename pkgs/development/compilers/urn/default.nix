@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://urn-lang.com;
+    homepage = "https://urn-lang.com";
     description = "Yet another Lisp variant which compiles to Lua";
     license = licenses.bsd3;
     maintainers = with maintainers; [ CrazedProgrammer ];

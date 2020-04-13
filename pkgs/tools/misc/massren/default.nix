@@ -16,7 +16,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Easily rename multiple files using your text editor";
     license = licenses.mit;
-    homepage = https://github.com/laurent22/massren;
+    homepage = "https://github.com/laurent22/massren";
     maintainers = with maintainers; [ andrew-d ];
   };
 }

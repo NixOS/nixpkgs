@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/patjak/bcwc_pcie;
+    homepage = "https://github.com/patjak/bcwc_pcie";
     description = "Linux driver for the Facetime HD (Broadcom 1570) PCIe webcam";
     license = licenses.gpl2;
     maintainers = with maintainers; [ womfoo grahamc kraem ];

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Kubernetes python client";
-    homepage = https://github.com/kubernetes-client/python;
+    homepage = "https://github.com/kubernetes-client/python";
     license = licenses.asl20;
     maintainers = with maintainers; [ lsix ];
   };

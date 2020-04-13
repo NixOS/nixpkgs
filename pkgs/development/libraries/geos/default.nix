@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
-    homepage = https://trac.osgeo.org/geos;
+    homepage = "https://trac.osgeo.org/geos";
     license = licenses.lgpl21;
   };
 }

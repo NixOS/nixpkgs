@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
   meta = with stdenv.lib; {
-    homepage = https://dushistov.github.io/sdcv/;
+    homepage = "https://dushistov.github.io/sdcv/";
     description = "Console version of StarDict";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;

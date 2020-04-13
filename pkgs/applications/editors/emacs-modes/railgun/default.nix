@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Propel yourself through a rails project with the power of magnets";
-    homepage = https://github.com/mbriggs/railgun.el;
+    homepage = "https://github.com/mbriggs/railgun.el";
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Cheese;
+    homepage = "https://wiki.gnome.org/Apps/Cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     maintainers = teams.gnome.members;
     license = licenses.gpl3;

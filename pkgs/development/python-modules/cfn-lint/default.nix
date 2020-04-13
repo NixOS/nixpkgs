@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
-    homepage = https://github.com/aws-cloudformation/cfn-python-lint;
+    homepage = "https://github.com/aws-cloudformation/cfn-python-lint";
     license = licenses.mit;
   };
 }

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.isDarwin [ "MemUsageWBackendTest" "MemUsageTest" ];
 
   meta = with lib; {
-    homepage = http://www.sqlalchemy.org/;
+    homepage = "http://www.sqlalchemy.org/";
     description = "A Python SQL toolkit and Object Relational Mapper";
     license = licenses.mit;
   };

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Pass extension that generates memorable passwords";
-    homepage = https://github.com/congma/pass-genphrase;
+    homepage = "https://github.com/congma/pass-genphrase";
     license = licenses.gpl3;
     maintainers = with maintainers; [ seqizz ];
     platforms = platforms.unix;

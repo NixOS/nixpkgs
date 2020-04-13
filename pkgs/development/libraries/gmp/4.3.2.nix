@@ -64,7 +64,7 @@ let self = stdenv.mkDerivation rec {
          asymptotically faster algorithms.
       '';
 
-    homepage = https://gmplib.org/;
+    homepage = "https://gmplib.org/";
     license = stdenv.lib.licenses.lgpl3Plus;
 
     maintainers = [ ];

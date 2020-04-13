@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     branch = "5.0";
-    homepage = https://bitbucket.org/camlspotter/camlimages;
+    homepage = "https://bitbucket.org/camlspotter/camlimages";
     description = "OCaml image processing library";
     license = licenses.gpl2;
     maintainers = [ maintainers.vbgl maintainers.mt-caret ];

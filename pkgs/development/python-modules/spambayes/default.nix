@@ -15,6 +15,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
-    homepage = http://spambayes.sourceforge.net/;
+    homepage = "http://spambayes.sourceforge.net/";
   };
 }

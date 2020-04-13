@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Data load and catalog system";
-    homepage = https://github.com/ContinuumIO/intake;
+    homepage = "https://github.com/ContinuumIO/intake";
     license = licenses.bsd2;
     maintainers = [ maintainers.costrouc ];
   };

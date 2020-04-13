@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   meta = with stdenv.lib; {
-    homepage = https://instead.syscall.ru/wiki/en/instead-launcher;
+    homepage = "https://instead.syscall.ru/wiki/en/instead-launcher";
     description = "Install and play games from INSTEAD repository";
     license = licenses.gpl2;
     platforms = platforms.linux;

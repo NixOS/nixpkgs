@@ -45,7 +45,7 @@ let
     enableParallelBuilding = true;
 
     meta = with lib; {
-      homepage = https://www.arangodb.com;
+      homepage = "https://www.arangodb.com";
       description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
       license = licenses.asl20;
       platforms = platforms.linux;

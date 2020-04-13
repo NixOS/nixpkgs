@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for property based testing";
-    homepage = https://github.com/HypothesisWorks/hypothesis;
+    homepage = "https://github.com/HypothesisWorks/hypothesis";
     license = licenses.mpl20;
   };
 }

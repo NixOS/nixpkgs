@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Thermal Daemon";
-    homepage = https://01.org/linux-thermal-daemon;
+    homepage = "https://01.org/linux-thermal-daemon";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];

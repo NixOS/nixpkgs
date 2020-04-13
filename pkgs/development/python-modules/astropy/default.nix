@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";
-    homepage = https://www.astropy.org;
+    homepage = "https://www.astropy.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ kentjames ];

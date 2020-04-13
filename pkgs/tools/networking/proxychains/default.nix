@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Proxifier for SOCKS proxies";
-    homepage = http://proxychains.sourceforge.net;
+    homepage = "http://proxychains.sourceforge.net";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };

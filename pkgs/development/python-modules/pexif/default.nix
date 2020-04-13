@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A module for editing JPEG EXIF data";
-    homepage = http://www.benno.id.au/code/pexif/;
+    homepage = "http://www.benno.id.au/code/pexif/";
     license = licenses.mit;
   };
 

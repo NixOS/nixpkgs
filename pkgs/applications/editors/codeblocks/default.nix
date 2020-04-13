@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
         It is designed to be very extensible and fully configurable.
         Finally, an IDE with all the features you need, having a consistent look, feel and operation across platforms.
       '';
-    homepage = http://www.codeblocks.org;
+    homepage = "http://www.codeblocks.org";
     license = licenses.gpl3;
   };
 }

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = https://premake.github.io;
+    homepage = "https://premake.github.io";
     description = "A simple build configuration and project generation tool using lua";
     license = stdenv.lib.licenses.bsd3;
     platforms = platforms.darwin ++ platforms.linux;

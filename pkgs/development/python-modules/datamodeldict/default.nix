@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/usnistgov/DataModelDict/;
+    homepage = "https://github.com/usnistgov/DataModelDict/";
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

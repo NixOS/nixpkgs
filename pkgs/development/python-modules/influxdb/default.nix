@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python client for InfluxDB";
-    homepage = https://github.com/influxdb/influxdb-python;
+    homepage = "https://github.com/influxdb/influxdb-python";
     license = licenses.mit;
   };
 

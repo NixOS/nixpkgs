@@ -32,7 +32,7 @@ stdenv.mkDerivation (rec {
     maintainers = [ stdenv.lib.maintainers.teh ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://google.github.io/flatbuffers/;
+    homepage = "https://google.github.io/flatbuffers/";
   };
 } // stdenv.lib.optionalAttrs stdenv.hostPlatform.isMusl {
   # Remove when updating to the next version.

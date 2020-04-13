@@ -103,7 +103,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://wicd.net/;
+    homepage = "http://wicd.net/";
     description = "A wiredless and wired network manager";
     longDescription=''
       A complete network connection manager

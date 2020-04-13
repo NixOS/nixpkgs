@@ -42,7 +42,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PolicyKit agent for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/dde-polkit-agent;
+    homepage = "https://github.com/linuxdeepin/dde-polkit-agent";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

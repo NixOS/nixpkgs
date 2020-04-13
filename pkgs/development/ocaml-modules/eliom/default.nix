@@ -39,7 +39,7 @@ stdenv.mkDerivation rec
   setupHook = [ ./setup-hook.sh ];
 
   meta = {
-    homepage = http://ocsigen.org/eliom/;
+    homepage = "http://ocsigen.org/eliom/";
     description = "OCaml Framework for programming Web sites and client/server Web applications";
 
     longDescription =''Eliom is a framework for programming Web sites

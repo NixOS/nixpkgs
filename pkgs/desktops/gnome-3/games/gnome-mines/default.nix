@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Mines;
+    homepage = "https://wiki.gnome.org/Apps/Mines";
     description = "Clear hidden mines from a minefield";
     maintainers = teams.gnome.members;
     license = licenses.gpl3;

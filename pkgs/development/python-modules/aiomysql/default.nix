@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "MySQL driver for asyncio";
-    homepage = https://github.com/aio-libs/aiomysql;
+    homepage = "https://github.com/aio-libs/aiomysql";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

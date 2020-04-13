@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Spins down external disks after a period of idle time";
-    homepage = http://hd-idle.sourceforge.net/;
+    homepage = "http://hd-idle.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rycee ];

@@ -36,6 +36,6 @@ buildPythonPackage rec {
   meta = {
     description = "A built-package format for Python";
     license = with lib.licenses; [ mit ];
-    homepage = https://bitbucket.org/pypa/wheel/;
+    homepage = "https://bitbucket.org/pypa/wheel/";
   };
 }

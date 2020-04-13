@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The GNOME Terminal Emulator";
-    homepage = https://wiki.gnome.org/Apps/Terminal;
+    homepage = "https://wiki.gnome.org/Apps/Terminal";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;

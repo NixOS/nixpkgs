@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Realtek SDIO Wi-Fi driver";
-    homepage = https://github.com/hadess/rtl8723bs;
+    homepage = "https://github.com/hadess/rtl8723bs";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     broken = (! versionOlder kernel.version "4.12"); # Now in kernel staging drivers

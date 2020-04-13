@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Default settings and configuration files for elementary";
-    homepage = https://github.com/elementary/default-settings;
+    homepage = "https://github.com/elementary/default-settings";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

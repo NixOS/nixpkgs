@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
       file differences. This is similar to diff and patch, but it is targeted
       for binary files and does not generate human readable output.
     '';
-    homepage = http://xdelta.org/;
+    homepage = "http://xdelta.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

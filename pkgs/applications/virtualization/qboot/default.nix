@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A simple x86 firmware for booting Linux";
-    homepage = https://github.com/bonzini/qboot;
+    homepage = "https://github.com/bonzini/qboot";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];
     platforms = ["x86_64-linux" "i686-linux"];

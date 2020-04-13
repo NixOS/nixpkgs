@@ -80,7 +80,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.syslinux.org/;
+    homepage = "http://www.syslinux.org/";
     description = "A lightweight bootloader";
     license = licenses.gpl2;
     maintainers = [ maintainers.samueldr ];

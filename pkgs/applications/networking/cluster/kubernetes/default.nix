@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
-    homepage = https://kubernetes.io;
+    homepage = "https://kubernetes.io";
     maintainers = with maintainers; [johanot offline saschagrunert];
     platforms = platforms.unix;
   };

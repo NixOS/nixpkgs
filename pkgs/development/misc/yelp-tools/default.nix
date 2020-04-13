@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Yelp/Tools;
+    homepage = "https://wiki.gnome.org/Apps/Yelp/Tools";
     description = "Small programs that help you create, edit, manage, and publish your Mallard or DocBook documentation";
     maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl2;

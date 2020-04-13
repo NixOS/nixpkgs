@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = http://airbnb.github.io/chronos;
+    homepage    = "http://airbnb.github.io/chronos";
     license     = licenses.asl20;
     description = "Fault tolerant job scheduler for Mesos which handles dependencies and ISO8601 based schedules";
     maintainers = with maintainers; [ offline ];

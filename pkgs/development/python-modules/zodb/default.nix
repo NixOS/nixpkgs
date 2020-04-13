@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
     meta = with stdenv.lib; {
       description = "Zope Object Database: object database and persistence";
-      homepage = https://pypi.python.org/pypi/ZODB;
+      homepage = "https://pypi.python.org/pypi/ZODB";
       license = licenses.zpl21;
       maintainers = with maintainers; [ goibhniu ];
     };

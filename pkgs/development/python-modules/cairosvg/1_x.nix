@@ -29,7 +29,7 @@ buildPythonPackage rec {
   # '';
 
   meta = with stdenv.lib; {
-    homepage = https://cairosvg.org;
+    homepage = "https://cairosvg.org";
     license = licenses.lgpl3;
     description = "SVG converter based on Cairo";
     maintainers = with maintainers; [ jluttine ];

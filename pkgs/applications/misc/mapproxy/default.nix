@@ -57,7 +57,7 @@ buildPythonApplication rec {
   doCheck = false;
   meta = with lib; {
   description = "MapProxy is an open source proxy for geospatial data";
-  homepage = https://mapproxy.org/;
+  homepage = "https://mapproxy.org/";
   license = licenses.asl20;
   maintainers = with maintainers; [ rakesh4g ];
   };

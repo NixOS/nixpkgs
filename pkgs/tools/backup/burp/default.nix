@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "BURP - BackUp and Restore Program";
-    homepage    = https://burp.grke.org;
+    homepage    = "https://burp.grke.org";
     license     = licenses.agpl3;
     maintainers = with maintainers; [ tokudan ];
     platforms   = platforms.all;

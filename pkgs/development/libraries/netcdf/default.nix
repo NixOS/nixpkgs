@@ -47,9 +47,9 @@ in stdenv.mkDerivation rec {
   meta = {
       description = "Libraries for the Unidata network Common Data Format";
       platforms = stdenv.lib.platforms.unix;
-      homepage = https://www.unidata.ucar.edu/software/netcdf/;
+      homepage = "https://www.unidata.ucar.edu/software/netcdf/";
       license = {
-        url = https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html;
+        url = "https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html";
       };
   };
 }

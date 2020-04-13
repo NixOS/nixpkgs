@@ -27,7 +27,7 @@ buildGoModule rec {
       language. It runs on Linux, BSDs, macOS and Windows. Despite its pre-1.0
       status, it is already suitable for most daily interactive use.
     '';
-    homepage = https://elv.sh/;
+    homepage = "https://elv.sh/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra AndersonTorres ];
     platforms = with platforms; linux ++ darwin;

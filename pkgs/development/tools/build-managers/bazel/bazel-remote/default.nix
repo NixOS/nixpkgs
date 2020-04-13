@@ -81,7 +81,7 @@ buildBazelPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/buchgr/bazel-remote;
+    homepage = "https://github.com/buchgr/bazel-remote";
     description = "A remote HTTP/1.1 cache for Bazel.";
     license = licenses.asl20;
     maintainers = [ maintainers.uri-canva ];

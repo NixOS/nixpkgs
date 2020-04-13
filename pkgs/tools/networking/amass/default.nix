@@ -1,7 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
-, Security
+, lib
 }:
 
 buildGoModule rec {
@@ -19,15 +18,13 @@ buildGoModule rec {
 
   outputs = [ "out" "wordlists" ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   postInstall = ''
     mkdir -p $wordlists
     cp -R $src/examples/wordlists/*.txt $wordlists
     gzip $wordlists/*.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "In-Depth DNS Enumeration and Network Mapping";
     longDescription = ''
       The OWASP Amass tool suite obtains subdomain names by scraping data

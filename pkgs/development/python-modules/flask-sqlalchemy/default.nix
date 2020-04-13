@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "SQLAlchemy extension for Flask";
-    homepage = http://flask-sqlalchemy.pocoo.org/;
+    homepage = "http://flask-sqlalchemy.pocoo.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };

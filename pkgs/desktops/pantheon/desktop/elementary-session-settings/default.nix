@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Session settings for elementary";
-    homepage = https://github.com/elementary/session-settings;
+    homepage = "https://github.com/elementary/session-settings";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

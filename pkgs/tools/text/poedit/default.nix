@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform gettext catalogs (.po files) editor";
-    homepage = https://www.poedit.net/;
+    homepage = "https://www.poedit.net/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ domenkozar genesis ];

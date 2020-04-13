@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/tulir/telethon-session-sqlalchemy;
+    homepage = "https://github.com/tulir/telethon-session-sqlalchemy";
     description = "SQLAlchemy backend for Telethon session storage";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];

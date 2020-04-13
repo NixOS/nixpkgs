@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An interpreter of K, APL-like programming language";
-    homepage = https://github.com/kevinlawler/kona/;
+    homepage = "https://github.com/kevinlawler/kona/";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
     license = licenses.isc;

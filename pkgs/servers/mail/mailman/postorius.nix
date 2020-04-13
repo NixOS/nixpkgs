@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://www.gnu.org/software/mailman/;
+    homepage = "https://www.gnu.org/software/mailman/";
     description = "Web-based user interface for managing GNU Mailman";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ globin peti ];

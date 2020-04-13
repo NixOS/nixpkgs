@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ./no-mkdir-localstatedir.patch
     (fetchpatch {
       name ="CVE-2017-6519-CVE-2018-100084.patch";
-      url = https://github.com/lathiat/avahi/commit/e111def44a7df4624a4aa3f85fe98054bffb6b4f.patch;
+      url = "https://github.com/lathiat/avahi/commit/e111def44a7df4624a4aa3f85fe98054bffb6b4f.patch";
       sha256 = "06n7b7kz6xcc35c7xjfc1kj3k2llyjgi09nhy0ci32l1bhacjw0q";
     })
   ];
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "mDNS/DNS-SD implementation";
-    homepage    = http://avahi.org;
+    homepage    = "http://avahi.org";
     license     = licenses.lgpl2Plus;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ lovek323 globin ];

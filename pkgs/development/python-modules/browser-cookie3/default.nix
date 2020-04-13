@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Loads cookies from your browser into a cookiejar object";
     maintainers = with maintainers; [ borisbabic ];
-    homepage = https://github.com/borisbabic/browser_cookie3;
+    homepage = "https://github.com/borisbabic/browser_cookie3";
     license = licenses.gpl3;
   };
 }

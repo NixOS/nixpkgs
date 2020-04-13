@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for serializing any arbitrary object graph into JSON";
-    homepage = http://jsonpickle.github.io/;
+    homepage = "http://jsonpickle.github.io/";
     license = lib.licenses.bsd3;
   };
 

@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Line-by-line profiler";
-    homepage = https://github.com/rkern/line_profiler;
+    homepage = "https://github.com/rkern/line_profiler";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

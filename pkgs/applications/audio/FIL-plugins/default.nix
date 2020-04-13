@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       This should make this plugin a good candidate for use in systems that allow automation of plugin control ports, such as Ardour, or for stage use.
     '';
     version = version;
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

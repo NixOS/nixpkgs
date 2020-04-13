@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
       D-Feet can be used to inspect D-Bus interfaces of running programs
       and invoke methods on those interfaces.
     '';
-    homepage = https://wiki.gnome.org/Apps/DFeet;
+    homepage = "https://wiki.gnome.org/Apps/DFeet";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ ktosiek ];

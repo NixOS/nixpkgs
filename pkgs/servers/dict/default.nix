@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dict protocol server and client";
-    homepage    = http://www.dict.org;
+    homepage    = "http://www.dict.org";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms   = platforms.linux;

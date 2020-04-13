@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       scdoc is a simple man page generator written for POSIX systems written in
       C99.
     '';
-    homepage = https://git.sr.ht/~sircmpwn/scdoc;
+    homepage = "https://git.sr.ht/~sircmpwn/scdoc";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

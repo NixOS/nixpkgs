@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   buildInputs = [ pkgconfig cmake ispc tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ];
   meta = with stdenv.lib; {
     description = "High performance ray tracing kernels from Intel"; 
-    homepage = https://embree.github.io/;
+    homepage = "https://embree.github.io/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.asl20;
     platforms = platforms.linux;

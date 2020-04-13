@@ -223,14 +223,13 @@ mkDerivation rec {
     cp linphone.desktop $out/share/applications/
     cp -r ../assets/icons $out/share/
     mkdir -p $out/share/belr/grammars
-    ln -s ${belcard}/share/belr/grammars/* $out/share/belr/grammars/
     ln -s ${liblinphone}/share/belr/grammars/* $out/share/belr/grammars/
     mkdir -p $out/share/linphone
     ln -s ${liblinphone}/share/linphone/* $out/share/linphone/
   '';
 
   meta = with lib; {
-    homepage = https://www.linphone.org/;
+    homepage = "https://www.linphone.org/";
     description = "Open source SIP phone for voice/video calls and instant messaging";
     license = licenses.gpl3;
     platforms = platforms.linux;

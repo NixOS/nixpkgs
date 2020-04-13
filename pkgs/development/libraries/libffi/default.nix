@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       interface.  A layer must exist above libffi that handles type
       conversions for values passed between the two languages.
     '';
-    homepage = http://sourceware.org/libffi/;
+    homepage = "http://sourceware.org/libffi/";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A software framework that allows research manipulation of Biblical texts";
-    homepage = http://www.crosswire.org/sword/;
+    homepage = "http://www.crosswire.org/sword/";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = [ maintainers.piotr maintainers.AndersonTorres ];

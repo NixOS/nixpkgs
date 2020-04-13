@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of Python libraries that assist in calling the SoftLayer API.";
-    homepage = https://github.com/softlayer/softlayer-python;
+    homepage = "https://github.com/softlayer/softlayer-python";
     license = licenses.mit;
   };
 }

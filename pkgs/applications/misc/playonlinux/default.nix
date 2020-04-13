@@ -103,7 +103,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "GUI for managing Windows programs under linux";
-    homepage = https://www.playonlinux.com/;
+    homepage = "https://www.playonlinux.com/";
     license = licenses.gpl3;
     maintainers = [ maintainers.a1russell ];
     platforms = [ "x86_64-linux" "i686-linux" ];

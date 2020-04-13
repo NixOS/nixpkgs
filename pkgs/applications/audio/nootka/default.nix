@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Application for practicing playing musical scores and ear training";
-    homepage = https://nootka.sourceforge.io/;
+    homepage = "https://nootka.sourceforge.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Just Another Gibbs Sampler";
     license     = licenses.gpl2;
-    homepage    = http://mcmc-jags.sourceforge.net;
+    homepage    = "http://mcmc-jags.sourceforge.net";
     maintainers = [ maintainers.andres ];
     platforms = platforms.unix;
   };

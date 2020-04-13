@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/nirvdrum/svn2git;
+    homepage = "https://github.com/nirvdrum/svn2git";
     description = "Tool for importing Subversion repositories into git";
     license = stdenv.lib.licenses.mit;
 

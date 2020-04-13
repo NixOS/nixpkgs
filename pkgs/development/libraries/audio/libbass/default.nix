@@ -57,7 +57,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Shareware audio library";
-      homepage = https://www.un4seen.com/;
+      homepage = "https://www.un4seen.com/";
       license = licenses.unfreeRedistributable;
       platforms = builtins.attrNames bass.so;
     };

@@ -39,6 +39,6 @@ buildPythonPackage rec {
     '';
     license = licenses.bsd2;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/python-babel/flask-babel;
+    homepage = "https://github.com/python-babel/flask-babel";
   };
 }

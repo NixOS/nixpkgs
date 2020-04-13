@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fast password cracker";
-    homepage    = https://hashcat.net/hashcat/;
+    homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ kierdavis zimbatm ];

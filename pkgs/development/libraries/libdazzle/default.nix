@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       for those libraries. In other cases, our design isn't quite generic
       enough to work for everyone.
     '';
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://wiki.gnome.org/Apps/Builder";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

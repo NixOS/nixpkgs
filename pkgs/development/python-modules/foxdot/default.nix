@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Live coding music with SuperCollider";
-    homepage = https://foxdot.org/;
+    homepage = "https://foxdot.org/";
     license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ mrmebelman ];
   };

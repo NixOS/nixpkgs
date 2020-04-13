@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "KDE Connect implementation for Gnome Shell";
-    homepage = https://github.com/andyholmes/gnome-shell-extension-gsconnect/wiki;
+    homepage = "https://github.com/andyholmes/gnome-shell-extension-gsconnect/wiki";
     license = licenses.gpl2;
     maintainers = with maintainers; [ etu ];
     platforms = platforms.linux;

@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
-    homepage = http://www.vtk.org/;
+    homepage = "http://www.vtk.org/";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
     platforms = with stdenv.lib.platforms; unix;

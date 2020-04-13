@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool for manipulating BibTeX bibliographies";
-    homepage = http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html;
+    homepage = "http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.rycee ];

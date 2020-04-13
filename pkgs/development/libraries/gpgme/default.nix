@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://gnupg.org/software/gpgme/index.html;
+    homepage = "https://gnupg.org/software/gpgme/index.html";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       transparent user experience.
     '';
     homepage = "https://github.com/graysky2/profile-sync-daemon";
-    downloadPage = https://github.com/graysky2/profile-sync-daemon/releases;
+    downloadPage = "https://github.com/graysky2/profile-sync-daemon/releases";
     license = licenses.mit;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;

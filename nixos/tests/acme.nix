@@ -91,52 +91,50 @@ in import ./make-test-python.nix {
 
       security.acme.server = "https://acme-v02.api.letsencrypt.org/dir";
 
-      nesting.clone = [
-        ({pkgs, ...}: {
-          systemd.targets."acme-finished-b.example.com" = {};
-          systemd.services."acme-b.example.com" = {
-            wants = [ "acme-finished-b.example.com.target" ];
-            before = [ "acme-finished-b.example.com.target" ];
-            after = [ "nginx.service" ];
-          };
-          services.nginx.virtualHosts."b.example.com" = {
-            enableACME = true;
-            forceSSL = true;
-            locations."/".root = pkgs.runCommand "docroot" {} ''
-              mkdir -p "$out"
-              echo hello world > "$out/index.html"
-            '';
-          };
-        })
-        ({pkgs, config, nodes, lib, ...}: {
-          security.acme.certs."example.com" = {
-            domain = "*.example.com";
-            dnsProvider = "exec";
-            dnsPropagationCheck = false;
-            credentialsFile = with pkgs; writeText "wildcard.env" ''
-              EXEC_PATH=${dnsScript { inherit writeScript bash curl; dnsAddress = nodes.dnsserver.config.networking.primaryIPAddress; }}
-            '';
-            user = config.services.nginx.user;
-            group = config.services.nginx.group;
-          };
-          systemd.targets."acme-finished-example.com" = {};
-          systemd.services."acme-example.com" = {
-            wants = [ "acme-finished-example.com.target" ];
-            before = [ "acme-finished-example.com.target" "nginx.service" ];
-            wantedBy = [ "nginx.service" ];
-          };
-          services.nginx.virtualHosts."c.example.com" = {
-            forceSSL = true;
-            sslCertificate = config.security.acme.certs."example.com".directory + "/cert.pem";
-            sslTrustedCertificate = config.security.acme.certs."example.com".directory + "/full.pem";
-            sslCertificateKey = config.security.acme.certs."example.com".directory + "/key.pem";
-            locations."/".root = pkgs.runCommand "docroot" {} ''
-              mkdir -p "$out"
-              echo hello world > "$out/index.html"
-            '';
-          };
-        })
-      ];
+      specialisation.second-cert.configuration = {pkgs, ...}: {
+        systemd.targets."acme-finished-b.example.com" = {};
+        systemd.services."acme-b.example.com" = {
+          wants = [ "acme-finished-b.example.com.target" ];
+          before = [ "acme-finished-b.example.com.target" ];
+          after = [ "nginx.service" ];
+        };
+        services.nginx.virtualHosts."b.example.com" = {
+          enableACME = true;
+          forceSSL = true;
+          locations."/".root = pkgs.runCommand "docroot" {} ''
+            mkdir -p "$out"
+            echo hello world > "$out/index.html"
+          '';
+        };
+      };
+      specialisation.dns-01.configuration = {pkgs, config, nodes, lib, ...}: {
+        security.acme.certs."example.com" = {
+          domain = "*.example.com";
+          dnsProvider = "exec";
+          dnsPropagationCheck = false;
+          credentialsFile = with pkgs; writeText "wildcard.env" ''
+            EXEC_PATH=${dnsScript { inherit writeScript bash curl; dnsAddress = nodes.dnsserver.config.networking.primaryIPAddress; }}
+          '';
+          user = config.services.nginx.user;
+          group = config.services.nginx.group;
+        };
+        systemd.targets."acme-finished-example.com" = {};
+        systemd.services."acme-example.com" = {
+          wants = [ "acme-finished-example.com.target" ];
+          before = [ "acme-finished-example.com.target" "nginx.service" ];
+          wantedBy = [ "nginx.service" ];
+        };
+        services.nginx.virtualHosts."c.example.com" = {
+          forceSSL = true;
+          sslCertificate = config.security.acme.certs."example.com".directory + "/cert.pem";
+          sslTrustedCertificate = config.security.acme.certs."example.com".directory + "/full.pem";
+          sslCertificateKey = config.security.acme.certs."example.com".directory + "/key.pem";
+          locations."/".root = pkgs.runCommand "docroot" {} ''
+            mkdir -p "$out"
+            echo hello world > "$out/index.html"
+          '';
+        };
+      };
     };
 
     client = {nodes, lib, ...}: {
@@ -196,7 +194,7 @@ in import ./make-test-python.nix {
 
       with subtest("Can add another certificate for nginx service"):
           webserver.succeed(
-              "/run/current-system/fine-tune/child-1/bin/switch-to-configuration test"
+              "/run/current-system/specialisation/second-cert/bin/switch-to-configuration test"
           )
           webserver.wait_for_unit("acme-finished-b.example.com.target")
           client.succeed(
@@ -208,7 +206,7 @@ in import ./make-test-python.nix {
               "${switchToNewServer}"
           )
           webserver.succeed(
-              "/run/current-system/fine-tune/child-2/bin/switch-to-configuration test"
+              "/run/current-system/specialisation/dns-01/bin/switch-to-configuration test"
           )
           webserver.wait_for_unit("acme-finished-example.com.target")
           client.succeed(

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fix for Intel CPU throttling issues";
-    homepage = https://github.com/erpalma/throttled;
+    homepage = "https://github.com/erpalma/throttled";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michaelpj ];

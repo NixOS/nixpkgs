@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   patches = [ ./f2fs-tools-cross-fix.patch ];
 
   meta = with stdenv.lib; {
-    homepage = http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/;
+    homepage = "http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/";
     description = "Userland tools for the f2fs filesystem";
     license = licenses.gpl2;
     platforms = platforms.linux;

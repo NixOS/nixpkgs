@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Mutter/RemoteDesktop;
+    homepage = "https://wiki.gnome.org/Projects/Mutter/RemoteDesktop";
     description = "GNOME Remote Desktop server";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

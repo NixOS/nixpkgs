@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A modern and easy-to-use crypto library";
-    homepage = http://doc.libsodium.org/;
+    homepage = "http://doc.libsodium.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;

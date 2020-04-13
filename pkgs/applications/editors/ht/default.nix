@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "File editor/viewer/analyzer for executables";
-    homepage = http://hte.sourceforge.net;
+    homepage = "http://hte.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

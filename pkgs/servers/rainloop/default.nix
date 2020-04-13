@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, dataPath ? "/etc/rainloop" }: let
+{ stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
       pname = "rainloop${stdenv.lib.optionalString (edition != "") "-${edition}"}";
@@ -16,11 +16,23 @@
         sha256 = sha256;
       };
 
+      includeScript = pkgs.writeText "include.php" ''
+        <?php
+
+        /**
+         * @return string
+         */
+        function __get_custom_data_full_path()
+        {
+          return '${dataPath}'; // custom data folder path
+        }
+      '';
+
       installPhase = ''
         mkdir $out
         cp -r rainloop/* $out
         rm -rf $out/data
-        ln -s ${dataPath} $out/data
+        cp ${includeScript} $out/include.php
       '';
 
       meta = with stdenv.lib; {

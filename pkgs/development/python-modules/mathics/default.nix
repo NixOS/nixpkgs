@@ -42,7 +42,7 @@ if (stdenv.lib.versionOlder django.version "1.8") ||
 
   meta = with stdenv.lib; {
     description = "A general-purpose computer algebra system";
-    homepage = http://www.mathics.org;
+    homepage = "http://www.mathics.org";
     license = licenses.gpl3;
     maintainers = [ maintainers.benley ];
   };

@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://wiredtiger.com/;
+    homepage = "http://wiredtiger.com/";
     description = "";
     license = licenses.gpl2;
     platforms = intersectLists platforms.unix platforms.x86_64;

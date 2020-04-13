@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A generator library for concise, unambiguous and URL-safe UUIDs";
-    homepage = https://github.com/stochastic-technologies/shortuuid/;
+    homepage = "https://github.com/stochastic-technologies/shortuuid/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zagy ];
   };

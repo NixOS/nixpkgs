@@ -10,19 +10,19 @@
 
 buildGoModule rec {
   pname   = "minikube";
-  version = "1.8.1";
+  version = "1.9.2";
   # for -ldflags
-  commit  = "cbda04cf6bbe65e987ae52bb393c10099ab62014";
+  commit  = "1b78a7b8a99ad6a3c62b8d22f57120d614d17935";
 
   goPackagePath = "k8s.io/minikube";
   subPackages   = [ "cmd/minikube" ];
-  modSha256     = "1wyz8aq291lx614ilqrcgzdc8rjxbd6v3rv1fy6r2m6snyysycfn";
+  modSha256     = "1pxs6myszgma3rzz0nhfjbnylv6m0xzlinvmlg0c4ijvkkzxg3v5";
 
   src = fetchFromGitHub {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "1nf0n701rw3anp8j7k3f553ipqwpzzxci41zsi0il4l35dpln5g0";
+    sha256 = "025v45427d885qkjjg7ig8fgrvjalnf1lajsj0cnbwbih2m69svg";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
@@ -58,7 +58,7 @@ buildGoModule rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/kubernetes/minikube;
+    homepage    = "https://github.com/kubernetes/minikube";
     description = "A tool that makes it easy to run Kubernetes locally";
     license     = licenses.asl20;
     maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang ];

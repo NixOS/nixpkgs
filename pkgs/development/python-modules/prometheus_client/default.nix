@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Prometheus instrumentation library for Python applications";
-    homepage = https://github.com/prometheus/client_python;
+    homepage = "https://github.com/prometheus/client_python";
     license = licenses.asl20;
   };
 }

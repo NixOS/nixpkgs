@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       (ogmdemux) or creation of (ogmmerge) OGG media streams. Includes dvdxchap
       tool for extracting chapter information from DVD.
     '';
-    homepage = https://www.bunkus.org/videotools/ogmtools/;
+    homepage = "https://www.bunkus.org/videotools/ogmtools/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

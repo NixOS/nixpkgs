@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.libtom.net/LibTomCrypt/;
+    homepage = "https://www.libtom.net/LibTomCrypt/";
     description = "A fairly comprehensive, modular and portable cryptographic toolkit";
     license = with licenses; [ publicDomain wtfpl ];
     platforms = platforms.linux;

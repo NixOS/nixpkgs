@@ -71,7 +71,7 @@ with python3.pkgs; buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Private cmdline bookmark manager";
-    homepage = https://github.com/jarun/Buku;
+    homepage = "https://github.com/jarun/Buku";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ matthiasbeyer infinisil ];

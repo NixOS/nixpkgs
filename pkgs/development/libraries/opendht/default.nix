@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C++11 Kademlia distributed hash table implementation";
-    homepage    = https://github.com/savoirfairelinux/opendht;
+    homepage    = "https://github.com/savoirfairelinux/opendht";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch thoughtpolice ];
     platforms   = platforms.linux;

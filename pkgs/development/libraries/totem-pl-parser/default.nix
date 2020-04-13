@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Videos;
+    homepage = "https://wiki.gnome.org/Apps/Videos";
     description = "Simple GObject-based library to parse and save a host of playlist formats";
     maintainers = teams.gnome.members;
     license = licenses.lgpl2;

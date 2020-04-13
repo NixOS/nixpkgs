@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Converts input programs with first-order variables to equivalent ground programs";
-    homepage = http://potassco.sourceforge.net/;
+    homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;
     maintainers = [ maintainers.hakuch ];
     license = licenses.gpl3Plus;

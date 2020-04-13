@@ -29,7 +29,7 @@ buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";
-    homepage = https://github.com/sondr3/git-ignore;
+    homepage = "https://github.com/sondr3/git-ignore";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.sondr3 ];

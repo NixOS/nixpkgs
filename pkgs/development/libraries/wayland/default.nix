@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
       and other interactions that must go through the compositor (but not
       rendering).
     '';
-    homepage    = https://wayland.freedesktop.org/;
+    homepage    = "https://wayland.freedesktop.org/";
     license     = lib.licenses.mit; # Expat version
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ primeos codyopel ];
