@@ -5786,6 +5786,8 @@ in {
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
+  sqlsoup = callPackage ../development/python-modules/sqlsoup { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
