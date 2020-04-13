@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pam, kerberos }:
 
 stdenv.mkDerivation rec {
-  name = "pam-krb5-4.8";
+  name = "pam-krb5-4.9";
 
   src = fetchurl {
     url = "https://archives.eyrie.org/software/kerberos/${name}.tar.gz";
-    sha256 = "0j96jfaxzkj1ifc3qxagjmaxvgda7ndqaaxx2ka018is9f5lbfrs";
+    sha256 = "0kzz6mjkzw571pkv684vyczhl874f6p7lih3dj7s764gxdxnv4y5";
   };
 
   buildInputs = [ pam kerberos ];

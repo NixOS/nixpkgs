@@ -10349,9 +10349,7 @@ in
 
   help2man = callPackage ../development/tools/misc/help2man { };
 
-  heroku = callPackage ../development/tools/heroku {
-    nodejs = nodejs-10_x;
-  };
+  heroku = callPackage ../development/tools/heroku { };
 
   ccloud-cli = callPackage ../development/tools/ccloud-cli { };
 
@@ -23977,10 +23975,6 @@ in
 
   widelands = callPackage ../games/widelands {
     lua = lua5_2;
-  };
-
-  worldofgoo_demo = worldofgoo.override {
-    demo = true;
   };
 
   worldofgoo = callPackage ../games/worldofgoo { };
