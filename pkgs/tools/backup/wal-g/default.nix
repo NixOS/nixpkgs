@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, brotli, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub, brotli }:
 
 buildGoModule rec {
   pname = "wal-g";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   modSha256 = "0kwl5gwc5gc0cq2gldg13nvswp9wd90xiv1qb3g8yxcczywkpmrm";
 
-  buildInputs = [ brotli ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ brotli ];
 
   doCheck = true;
 

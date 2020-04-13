@@ -567,9 +567,7 @@ in
 
   acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; };
 
-  amass = callPackage ../tools/networking/amass {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  amass = callPackage ../tools/networking/amass { };
 
   afew = callPackage ../applications/networking/mailreaders/afew { };
 
@@ -5711,7 +5709,7 @@ in
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
   page = callPackage ../tools/misc/page { };
-  
+
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
@@ -17160,9 +17158,7 @@ in
 
   go-tools = callPackage ../development/tools/go-tools { };
 
-  gotools = callPackage ../development/tools/gotools {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  gotools = callPackage ../development/tools/gotools { };
 
   gotop = callPackage ../tools/system/gotop { };
 
@@ -26294,9 +26290,7 @@ in
 
   dsniff = callPackage ../tools/networking/dsniff {};
 
-  wal-g = callPackage ../tools/backup/wal-g {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  wal-g = callPackage ../tools/backup/wal-g { };
 
   tlwg = callPackage ../data/fonts/tlwg { };
 
