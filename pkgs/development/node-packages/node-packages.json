@@ -100,6 +100,7 @@
 , "jsdoc"
 , "jshint"
 , "json"
+, "json2csv"
 , "json-diff"
 , "json-refs"
 , "json-server"
