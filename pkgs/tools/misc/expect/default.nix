@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, makeWrapper }:
+{ stdenv, fetchurl, tcl, makeWrapper, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "5.45.4";
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ tcl ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
-    sed -i "s,/bin/stty,$(type -p stty),g" configure
+  postPatch = ''
+    sed -i "s,/bin/stty,$(type -p stty),g" configure.in
   '';
 
   configureFlags = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for automating interactive applications";
-    homepage = http://expect.sourceforge.net/;
+    homepage = "http://expect.sourceforge.net/";
     license = "Expect";
     platforms = platforms.unix;
   };

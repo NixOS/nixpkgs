@@ -14,7 +14,8 @@ in
 
 # TODO: loop over targetPrefixed binaries too
 stdenv.mkDerivation {
-  name = "${targetPrefix}cctools-binutils-darwin";
+  pname = "${targetPrefix}cctools-binutils-darwin";
+  inherit (cctools) version;
   outputs = [ "out" "info" "man" ];
   buildCommand = ''
     mkdir -p $out/bin $out/include

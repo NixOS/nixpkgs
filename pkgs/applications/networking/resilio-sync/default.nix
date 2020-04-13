@@ -9,13 +9,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "resilio-sync";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "https://download-cdn.resilio.com/${version}/linux-${arch}/resilio-sync_${arch}.tar.gz";
     sha256 = {
-      x86_64-linux = "114k7dsxn7lzv6mjq9alsqxypvkah4lmjn5w6brbvgd6m6pdwslz";
-      i686-linux   = "1dh0hxbd33bs51xib3qwxw58h9j30v0dc10b4x4rwkbgsj11nc83";
+      x86_64-linux = "1c1yksjag58p7yjm72iiz82p2r01lq7kxvq7z5phmq5z6gxdg4a8";
+      i686-linux   = "167baz9fzmzk50jffzvgmgyw1zw3955r3cb73z23qvw8zqzdqydc";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Automatically sync files via secure, distributed technology";
-    homepage    = https://www.resilio.com/;
+    homepage    = "https://www.resilio.com/";
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];

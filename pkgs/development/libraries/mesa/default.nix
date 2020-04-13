@@ -27,7 +27,7 @@
 with stdenv.lib;
 
 let
-  version = "19.2.1";
+  version = "20.0.2";
   branch  = versions.major version;
 in
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "4cc53ca1a8d12c6ff0e5ea44a5213c05c88447ab50d7e28bb350cd29199f01e9";
+    sha256 = "0vz8k07d23qdwy67fnna9y0ynnni0m8lgswcmdm60l4mcv5z2m5a";
   };
 
   prePatch = "patchShebangs .";
@@ -191,8 +191,18 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    description = "An open source implementation of OpenGL";
-    homepage = https://www.mesa3d.org/;
+    description = "An open source 3D graphics library";
+    longDescription = ''
+      The Mesa project began as an open-source implementation of the OpenGL
+      specification - a system for rendering interactive 3D graphics. Over the
+      years the project has grown to implement more graphics APIs, including
+      OpenGL ES (versions 1, 2, 3), OpenCL, OpenMAX, VDPAU, VA API, XvMC, and
+      Vulkan.  A variety of device drivers allows the Mesa libraries to be used
+      in many different environments ranging from software emulation to
+      complete hardware acceleration for modern GPUs.
+    '';
+    homepage = "https://www.mesa3d.org/";
+    changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ vcunat ];

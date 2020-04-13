@@ -8,7 +8,7 @@
 , mysqlSupport ? false, libmysqlclient ? null
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, libGLU_combined ? null, libXmu ? null
+, libGL ? null, libGLU ? null, libXmu ? null
 , xlibsWrapper, xorgproto, zlib, libjpeg, libpng, which
 }:
 
@@ -17,7 +17,7 @@ assert xrenderSupport -> xftSupport && libXrender != null;
 assert xrandrSupport -> libXrandr != null;
 assert cursorSupport -> libXcursor != null;
 assert mysqlSupport -> libmysqlclient != null;
-assert openglSupport -> libGLU_combined != null && libXmu != null;
+assert openglSupport -> libGL != null && libGLU != null && libXmu != null;
 
 stdenv.mkDerivation {
   name = "qt-3.3.8";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = http://download.qt.io/archive/qt/3/qt-x11-free-3.3.8.tar.bz2;
+    url = "http://download.qt.io/archive/qt/3/qt-x11-free-3.3.8.tar.bz2";
     sha256 = "0jd4g3bwkgk2s4flbmgisyihm7cam964gzb3pawjlkhas01zghz8";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     (mk xftSupport "xft")
   ] ++ stdenv.lib.optionals openglSupport [
     "-dlopen-opengl"
-    "-L${libGLU_combined}/lib" "-I${libGLU_combined}/include"
+    "-L${libGL}/lib" "-I${libGLU}/include"
     "-L${libXmu.out}/lib" "-I${libXmu.dev}/include"
   ] ++ stdenv.lib.optionals xrenderSupport [
     "-L${libXrender.out}/lib" "-I${libXrender.dev}/include"

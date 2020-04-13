@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, gnome3, glib, deepin-gtk-theme,
+{ stdenv, fetchFromGitHub, python3, dconf, glib, deepin-gtk-theme,
   deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.dconf
+    dconf
     deepin-gtk-theme
     deepin-icon-theme
     deepin-sound-theme
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "GSettings deepin desktop-wide schemas";
-    homepage = https://github.com/linuxdeepin/deepin-desktop-schemas;
+    homepage = "https://github.com/linuxdeepin/deepin-desktop-schemas";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

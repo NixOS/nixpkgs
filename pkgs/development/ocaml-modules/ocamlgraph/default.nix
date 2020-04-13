@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, lablgtk}:
+{stdenv, fetchurl, ocaml, findlib, lablgtk ? null}:
 
 stdenv.mkDerivation rec {
   pname = "ocamlgraph";
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's@$(DESTDIR)$(OCAMLLIB)/ocamlgraph@$(DESTDIR)/lib/ocaml/${ocaml.version}/site-lib/ocamlgraph@' Makefile.in
     sed -i 's@OCAMLFINDDEST := -destdir $(DESTDIR)@@' Makefile.in
-    sed -i 's@+lablgtk2@${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2 -I ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/stublibs@' configure Makefile.in editor/Makefile
+    ${stdenv.lib.optionalString (lablgtk != null)
+      "sed -i 's@+lablgtk2@${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2 -I ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/stublibs@' configure Makefile.in editor/Makefile"}
   '';
 
   createFindlibDestdir = true;
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://ocamlgraph.lri.fr/;
+    homepage = "http://ocamlgraph.lri.fr/";
     description = "Graph library for Objective Caml";
     license = stdenv.lib.licenses.gpl2Oss;
     platforms = ocaml.meta.platforms or [];

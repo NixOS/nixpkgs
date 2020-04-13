@@ -12,6 +12,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   imports = [
     (mkRemovedOptionModule
       ["services" "gnome3" "gnome-settings-daemon" "package"]

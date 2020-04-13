@@ -18,7 +18,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Themes, graphics and icons for LXQt";
-    homepage = https://github.com/lxqt/lxqt-themes;
+    homepage = "https://github.com/lxqt/lxqt-themes";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

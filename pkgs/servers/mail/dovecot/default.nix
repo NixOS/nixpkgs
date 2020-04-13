@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.8";
+  name = "dovecot-2.3.10";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "0jdng27hqqagjy6v7ymd0xflbv5dbc1rhh450nk39ar6pw1qsxy5";
+    sha256 = "1ibiz3k2flablkcqbkvfzsjnq5b5kxximhcrplflsjl57mr88ca7";
   };
 
   enableParallelBuilding = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # Make dovecot look for plugins in /etc/dovecot/modules
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
-    ./2.2.x-module_dir.patch
+    ./2.3.x-module_dir.patch
   ];
 
   configureFlags = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withSQLite "--with-sqlite";
 
   meta = {
-    homepage = https://dovecot.org/;
+    homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz globin ];
     platforms = stdenv.lib.platforms.unix;

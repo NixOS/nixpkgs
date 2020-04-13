@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "3.34.1";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/simple-scan/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0glzskxdc7p9z7nwcakqc7qzij4l79adlvvb2cj5fmis731zw9yq";
+    sha256 = "0bprm9gfnlrs0k8jvy9pqm1rjq47z5pgahqjjj1i7q2k4a8g09vl";
   };
 
   buildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       XSANE uses. This means that all existing scanners will work and the
       interface is well tested.
     '';
-    homepage = https://gitlab.gnome.org/GNOME/simple-scan;
+    homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
     license = licenses.gpl3Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

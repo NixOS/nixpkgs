@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python report uploader for Codecov";
-    homepage = https://codecov.io/;
+    homepage = "https://codecov.io/";
     license = stdenv.lib.licenses.asl20;
   };
 }

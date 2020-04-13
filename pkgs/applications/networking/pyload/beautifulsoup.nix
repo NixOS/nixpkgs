@@ -13,7 +13,7 @@ pythonPackages.buildPythonPackage {
   doCheck = false;
 
   meta = {
-    homepage = http://www.crummy.com/software/BeautifulSoup/;
+    homepage = "http://www.crummy.com/software/BeautifulSoup/";
     license = "bsd";
     description = "Undemanding HTML/XML parser";
   };

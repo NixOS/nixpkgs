@@ -38,12 +38,12 @@ let
   inherit (stdenv) buildPlatform hostPlatform;
 
   inherit (stdenv.lib) fix' extends makeOverridable;
-  inherit (haskellLib) overrideCabal getBuildInputs;
+  inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
-    inherit (self) buildHaskellPackages ghc shellFor;
+    inherit (self) buildHaskellPackages ghc ghcWithHoogle ghcWithPackages;
     inherit (self.buildHaskellPackages) jailbreak-cabal;
     hscolour = overrideCabal self.buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
@@ -124,7 +124,7 @@ let
       sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
     in buildPackages.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      nativeBuildInputs = [ buildPackages.cabal2nix ];
+      nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
       preferLocalBuild = true;
       allowSubstitutes = false;
       phases = ["installPhase"];
@@ -181,7 +181,10 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #    '... foo = self.callHackage "foo" "1.5.3" {}; ...'
     callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
 
-    # callHackageDirect :: Text -> Text -> AttrSet -> HaskellPackage
+    # callHackageDirect
+    #   :: { pkg :: Text, ver :: Text, sha256 :: Text }
+    #   -> AttrSet
+    #   -> HaskellPackage
     #
     # This function does not depend on all-cabal-hashes and therefore will work
     # for any version that has been released on hackage as opposed to only
@@ -255,6 +258,8 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # packages themselves. Using nix-shell on this derivation will
     # give you an environment suitable for developing the listed
     # packages with an incremental tool like cabal-install.
+    # In addition to the "packages" arg and "withHoogle" arg, anything that
+    # can be passed into stdenv.mkDerivation can be included in the input attrset
     #
     #     # default.nix
     #     with import <nixpkgs> {};
@@ -265,9 +270,11 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #     })
     #
     #     # shell.nix
+    #     let pkgs = import <nixpkgs> {} in
     #     (import ./.).shellFor {
     #       packages = p: [p.frontend p.backend p.common];
     #       withHoogle = true;
+    #       buildInputs = [ pkgs.python ];
     #     }
     #
     #     -- cabal.project
@@ -277,49 +284,41 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #       common/
     #
     #     bash$ nix-shell --run "cabal new-build all"
+    #     bash$ nix-shell --run "python"
     shellFor = { packages, withHoogle ? false, ... } @ args:
       let
-        selected = packages self;
+        combinedPackageFor = packages:
+          let
+            selected = packages self;
 
-        packageInputs = map getBuildInputs selected;
+            pname = if pkgs.lib.length selected == 1
+              then (pkgs.lib.head selected).name
+              else "packages";
 
-        name = if pkgs.lib.length selected == 1
-          then "ghc-shell-for-${(pkgs.lib.head selected).name}"
-          else "ghc-shell-for-packages";
+            # If `packages = [ a b ]` and `a` depends on `b`, don't build `b`,
+            # because cabal will end up ignoring that built version, assuming
+            # new-style commands.
+            combinedPackages = pkgs.lib.filter
+              (input: pkgs.lib.all (p: input.outPath or null != p.outPath) selected);
 
-        # If `packages = [ a b ]` and `a` depends on `b`, don't build `b`,
-        # because cabal will end up ignoring that built version, assuming
-        # new-style commands.
-        haskellInputs = pkgs.lib.filter
-          (input: pkgs.lib.all (p: input.outPath != p.outPath) selected)
-          (pkgs.lib.concatMap (p: p.haskellBuildInputs) packageInputs);
-        systemInputs = pkgs.lib.concatMap (p: p.systemBuildInputs) packageInputs;
+            # Returns an attrset containing a combined list packages' inputs for each
+            # stage of the build process
+            packageInputs = pkgs.lib.zipAttrsWith
+              (_: pkgs.lib.concatMap combinedPackages)
+              (map (p: p.getCabalDeps) selected);
 
-        withPackages = if withHoogle then self.ghcWithHoogle else self.ghcWithPackages;
-        ghcEnv = withPackages (p: haskellInputs);
-        nativeBuildInputs = pkgs.lib.concatMap (p: p.nativeBuildInputs) selected;
+            genericBuilderArgs = {
+              inherit pname;
+              version = "0";
+              license = null;
+            } // packageInputs;
 
-        ghcCommand' = if ghc.isGhcjs or false then "ghcjs" else "ghc";
-        ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
-        ghcCommandCaps= pkgs.lib.toUpper ghcCommand';
+          in self.mkDerivation genericBuilderArgs;
 
-        mkDrvArgs = builtins.removeAttrs args ["packages" "withHoogle"];
-      in pkgs.stdenv.mkDerivation (mkDrvArgs // {
-        name = mkDrvArgs.name or name;
-
-        buildInputs = systemInputs ++ mkDrvArgs.buildInputs or [];
-        nativeBuildInputs = [ ghcEnv ] ++ nativeBuildInputs ++ mkDrvArgs.nativeBuildInputs or [];
-        phases = ["installPhase"];
-        installPhase = "echo $nativeBuildInputs $buildInputs > $out";
-        LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = pkgs.lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
-        "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
-        "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
-        # TODO: is this still valid?
-        "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
-        "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
-          then "${ghcEnv}/lib/HaLVM-${ghc.version}"
-          else "${ghcEnv}/lib/${ghcCommand}-${ghc.version}";
+        mkDerivationArgs = builtins.removeAttrs args [ "packages" "withHoogle" ];
+      in ((combinedPackageFor packages).envFunc { inherit withHoogle; }).overrideAttrs (old: mkDerivationArgs // {
+        nativeBuildInputs = old.nativeBuildInputs ++ mkDerivationArgs.nativeBuildInputs or [];
+        buildInputs = old.buildInputs ++ mkDerivationArgs.buildInputs or [];
       });
 
     ghc = ghc // {

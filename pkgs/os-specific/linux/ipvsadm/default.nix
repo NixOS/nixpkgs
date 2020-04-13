@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ipvsadm";
-  version = "1.30";
+  version = "1.31";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/ipvsadm/${pname}-${version}.tar.xz";
-    sha256 = "033srm20n3114aci3b6cwxnkm7n68k09di2aziiryg27vxq3smwm";
+    sha256 = "1nyzpv1hx75k9lh0vfxfhc0p2fpqaqb38xpvs8sn88m1nljmw2hs";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linux Virtual Server support programs";
-    homepage = http://www.linuxvirtualserver.org/software/ipvs.html;
+    homepage = "http://www.linuxvirtualserver.org/software/ipvs.html";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

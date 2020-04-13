@@ -3,7 +3,7 @@
 , cmake
 , ninja
 , pkgconfig
-, opencv
+, opencv3
 , openexr
 , graphicsmagick
 , fftw
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    opencv
+    opencv3
     openexr
     graphicsmagick
   ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open and full-featured framework for image processing";
-    homepage = http://gmic.eu/;
+    homepage = "http://gmic.eu/";
     license = licenses.cecill20;
     platforms = platforms.unix;
   };

@@ -24,6 +24,8 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  pythonNamespaces = [ "azure.mgmt" ];
+
   # has no tests
   doCheck = false;
 

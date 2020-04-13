@@ -14,11 +14,11 @@ agda.mkDerivation (self: rec {
   sourceDirectories = [ "Categories" "Graphs" ];
 
   meta = {
-    homepage = https://github.com/copumpkin/categories;
+    homepage = "https://github.com/copumpkin/categories";
     description = "Categories parametrized by morphism equality, in Agda";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     broken = true; # doesn't work due to new agdastdlib, see #9471
   };
 })

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, libjack2, libGLU_combined, pkgconfig }:
+{ stdenv, fetchurl, SDL, libjack2, libGLU, libGL, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "jack_oscrolloscope";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL libjack2 libGLU_combined ];
+  buildInputs = [ SDL libjack2 libGLU libGL ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; { 
     description = "A simple waveform viewer for JACK";
-    homepage = http://das.nasophon.de/jack_oscrolloscope;
+    homepage = "http://das.nasophon.de/jack_oscrolloscope";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = stdenv.lib.platforms.linux;

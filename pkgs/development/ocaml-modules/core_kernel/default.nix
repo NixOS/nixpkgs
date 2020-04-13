@@ -22,7 +22,7 @@ buildOcaml rec {
                             typerep_p4 variantslib_p4 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/core_kernel;
+    homepage = "https://github.com/janestreet/core_kernel";
     description = "Jane Street Capital's standard library overlay (kernel)";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

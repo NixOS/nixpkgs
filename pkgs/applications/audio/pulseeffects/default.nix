@@ -46,13 +46,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.6.8";
+  version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "09crsg73mvqdknvh6lczwx16x73zb2vb3m53bsapqiaq4lmwy3qr";
+    sha256 = "1yga25da5bpg12zkikp6dn4wqhn9f7r10awvjzfcz8s6w9xlz6rx";
   };
 
   nativeBuildInputs = [
@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
-    homepage = https://github.com/wwmm/pulseeffects;
+    homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

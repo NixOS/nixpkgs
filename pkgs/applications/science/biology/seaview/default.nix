@@ -1,12 +1,12 @@
 { stdenv, fetchurl, coreutils, fltk, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "4.7";
+  version = "5.0.2";
   pname = "seaview";
 
   src = fetchurl {
     url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${version}.tar.gz";
-    sha256 = "0fhyq7dcn0izhwcfin9ajsr7kmmsqm9f1np1rmhzg4digfwqb29n";
+    sha256 = "0bad0nd18a36g6ysx28j68rbnwqn33ra8inx2lv2igqqcs6i5kif";
   };
 
   buildInputs = [ fltk libjpeg ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
           Gouy M., Guindon S. & Gascuel O. (2010) SeaView version 4 : a multiplatform graphical user interface for sequence alignment and phylogenetic tree building. Molecular Biology and Evolution 27(2):221-224.
     '';
-    homepage = http://doua.prabi.fr/software/seaview;
+    homepage = "http://doua.prabi.fr/software/seaview";
     license = licenses.gpl3;
     maintainers = [ maintainers.iimog ];
     platforms = platforms.linux;

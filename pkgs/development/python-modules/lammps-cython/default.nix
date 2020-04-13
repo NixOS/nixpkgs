@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pythonic Wrapper to LAMMPS using cython";
-    homepage = https://gitlab.com/costrouc/lammps-cython;
+    homepage = "https://gitlab.com/costrouc/lammps-cython";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ costrouc ];
   };

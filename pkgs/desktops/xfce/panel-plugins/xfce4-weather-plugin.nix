@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk, libxml2, libsoup, upower,
+{ stdenv, fetchurl, pkgconfig, intltool, gtk2, libxml2, libsoup, upower,
 libxfce4ui, libxfce4util, xfce4-panel, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  buildInputs = [ gtk libxml2 libsoup upower libxfce4ui libxfce4util
+  buildInputs = [ gtk2 libxml2 libsoup upower libxfce4ui libxfce4util
    xfce4-panel hicolor-icon-theme ];
 
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "Weather plugin for the Xfce desktop environment";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

@@ -33,9 +33,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "View and edit tags for various audio files";
-    homepage = https://wiki.gnome.org/Apps/EasyTAG;
+    homepage = "https://wiki.gnome.org/Apps/EasyTAG";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

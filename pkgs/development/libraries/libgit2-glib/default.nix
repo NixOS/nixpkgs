@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgit2-glib";
-  version = "0.28.0.1";
+  version = "0.99.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0a0g7aw66rfgnqr4z7fgbk5zzcjq66m4rp8v4val3a212941h0g7";
+    sha256 = "1pmrcnsa7qdda73c3dxf47733mwprmj5ljpw3acxbj6r8k27anp0";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A glib wrapper library around the libgit2 git access library";
-    homepage = https://wiki.gnome.org/Projects/Libgit2-glib;
+    homepage = "https://wiki.gnome.org/Projects/Libgit2-glib";
     license = licenses.lgpl21;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

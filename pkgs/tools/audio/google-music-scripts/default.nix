@@ -1,17 +1,22 @@
 { lib, python3 }:
 
-python3.pkgs.buildPythonApplication rec {
-  pname = "google-music-scripts";
-  version = "4.0.1";
+with python3.pkgs;
 
-  src = python3.pkgs.fetchPypi {
+buildPythonApplication rec {
+  pname = "google-music-scripts";
+  version = "4.3.0";
+
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "5b2e9fdde8781a6d226984f0b61add2415a3804123ceeecb20fcc8527de9389d";
+    sha256 = "0dykjhqklbpqr1lvls0bgf6xkwvslj37lx4q8522hjbs150pwjmq";
   };
 
-  patches = [ ./loguru.patch ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "audio-metadata>=0.8,<0.9" "audio-metadata"
+  '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     appdirs
     audio-metadata
     google-music
@@ -24,10 +29,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # No tests
-  doCheck = false;
+  checkPhase = ''
+    $out/bin/gms --help >/dev/null
+  '';
 
   meta = with lib; {
-    homepage = https://github.com/thebigmunch/google-music-scripts;
+    homepage = "https://github.com/thebigmunch/google-music-scripts";
     description = "A CLI utility for interacting with Google Music";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

@@ -70,14 +70,14 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"
+    export CMAKE_PREFIX_PATH="''${CMAKE_PREFIX_PATH-}:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"
   '';
 
   postInstall = ''rm $out/bin/i-score.sh'';
 
   meta = {
     description = "An interactive sequencer for the intermedia arts";
-    homepage = http://i-score.org/;
+    homepage = "http://i-score.org/";
     license = stdenv.lib.licenses.cecill20;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

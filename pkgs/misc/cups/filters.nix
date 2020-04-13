@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "cups-filters";
-  version = "1.25.11";
+  version = "1.25.12";
 
   src = fetchurl {
     url = "https://openprinting.org/download/cups-filters/${pname}-${version}.tar.xz";
-    sha256 = "0ni8krr4rf5833livn9401cd41gspjvxj0iiqnc1rfg3x90i0fxh";
+    sha256 = "1kv25011iyzvd33n5zmmn1z2p6pzk26hmmw6qvjjnx8p3sp7raqn";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   doCheck = false; # fails 4 out of 6 tests
 
   meta = {
-    homepage = http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters;
+    homepage = "http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters";
     description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

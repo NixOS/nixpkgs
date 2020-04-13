@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
-, openal, freealut, libGLU_combined, libvorbis, libogg, gettext, curl, freetype
-, fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet }:
+, openal, freealut, libGLU, libGL, libvorbis, libogg, gettext, curl, freetype
+, fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet, harfbuzz }:
 
 let
   dir = "stk-code";
 
 in stdenv.mkDerivation rec {
   pname = "supertuxkart";
-  version = "1.0";
+  version = "1.1";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "supertuxkart";
       repo   = "stk-code";
       rev    = version;
-      sha256 = "03mrnzrvfdgjc687n718f5zsray6vbdlv4irzy2mfi78bz3bkjll";
+      sha256 = "01vxxl94583ixswzmi4caz8dk64r56pn3zxh7v63zml60yfvxbvp";
       name   = dir;
     })
     (fetchsvn {
@@ -29,8 +29,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libX11 libXrandr
-    openal freealut libGLU_combined libvorbis libogg zlib freetype
-    curl fribidi bluez libjpeg libpng enet
+    openal freealut libGLU libGL libvorbis libogg zlib freetype
+    curl fribidi bluez libjpeg libpng enet harfbuzz
   ];
 
   enableParallelBuilding = true;
@@ -49,9 +49,9 @@ in stdenv.mkDerivation rec {
       characters and items for you to try, similar in spirit to Mario
       Kart.
     '';
-    homepage = https://supertuxkart.net/;
+    homepage = "https://supertuxkart.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pyrolagus fuuzetsu peterhoeg ];
+    maintainers = with maintainers; [ pyrolagus peterhoeg ];
     platforms = with platforms; linux;
   };
 }

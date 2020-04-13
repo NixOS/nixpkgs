@@ -26,7 +26,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "A client side encrypted pastebin";
-    homepage = https://0bin.net/;
+    homepage = "https://0bin.net/";
     license = licenses.wtfpl;
   };
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig, libusb1, libconfuse
 , cppSupport ? true, boost ? null
-, pythonSupport ? true, python ? null, swig ? null
+, pythonSupport ? true, python3 ? null, swig ? null
 , docSupport ? true, doxygen ? null
 }:
 
 assert cppSupport -> boost != null;
-assert pythonSupport -> python != null && swig != null;
+assert pythonSupport -> python3 != null && swig != null;
 assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = with stdenv.lib; [ libconfuse ]
     ++ optionals cppSupport [ boost ]
-    ++ optionals pythonSupport [ python swig ]
+    ++ optionals pythonSupport [ python3 swig ]
     ++ optionals docSupport [ doxygen ];
 
   preBuild = stdenv.lib.optionalString docSupport ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to talk to FTDI chips using libusb";
-    homepage = https://www.intra2net.com/en/developer/libftdi/;
+    homepage = "https://www.intra2net.com/en/developer/libftdi/";
     license = with licenses; [ lgpl2 gpl2 ];
     platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];

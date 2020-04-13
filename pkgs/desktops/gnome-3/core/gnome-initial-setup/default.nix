@@ -28,7 +28,7 @@
 , polkit
 , webkitgtk
 , systemd
-, networkmanagerapplet
+, libnma
 , tzdata
 , yelp
 , libgnomekbd
@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "3.34.1";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18dzx9z9bcfqfn1jivzm9m5lkcij1c9y8x77zlpxj733dgpi07z7";
+    sha256 = "1sfn6bdz8snc2qmi3nzb07vlkdhy9s1ipwxxj0v2i36a7n0gv6ci";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     pango
     polkit
     webkitgtk
-    networkmanagerapplet
+    libnma
   ];
 
   patches = [
@@ -85,10 +85,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dregion-page=true"
     "-Dcheese=disabled"
-    "-Dsoftware-sources=disabled"
     "-Dibus=disabled"
+    "-Dparental_controls=disabled"
     "-Dvendor-conf-file=${./vendor.conf}"
   ];
 

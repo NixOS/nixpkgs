@@ -13,7 +13,7 @@
 
 let
   pname = "setuptools";
-  version = "41.4.0";
+  version = "45.2.0";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0asxfnsi56r81lm48ynqbfkmm3kvw2jwrlf2l9azn5w6xm30jvp5";
+      sha256 = "003iflm3ifjab3g1bnmhpwx1v3vpl4w90vwcvn8jf9449302d0md";
       name = "${pname}-${version}-source";
     };
 
@@ -66,7 +66,7 @@ in buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
-    homepage = https://pypi.python.org/pypi/setuptools;
+    homepage = "https://pypi.python.org/pypi/setuptools";
     license = with licenses; [ psfl zpl20 ];
     platforms = python.meta.platforms;
     priority = 10;

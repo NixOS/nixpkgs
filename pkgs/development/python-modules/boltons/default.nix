@@ -2,21 +2,21 @@
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "19.1.0";
+  version = "20.1.0";
 
   # No tests in PyPi Tarball
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
     rev = version;
-    sha256 = "0b55wly0ksviyl3a4dmih9vzd7bj3p10gr6la4722cs9cx4128q5";
+    sha256 = "0mbxc2n10mlmpbwhg0byddl1i0s6rlrr6z9xm8zzmkv62136irqh";
   };
 
   checkInputs = [ pytest ];
   checkPhase = "pytest tests";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/boltons;
+    homepage = "https://github.com/mahmoud/boltons";
     description = "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
     longDescription = ''
       Boltons is a set of over 220 BSD-licensed, pure-Python utilities

@@ -30,7 +30,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://www.ubnt.com/;
+      homepage = "http://www.ubnt.com/";
       description = "Controller for Ubiquiti UniFi access points";
       license = licenses.unfree;
       platforms = platforms.unix;
@@ -49,7 +49,7 @@ in {
   };
 
   unifiStable = generic {
-    version = "5.11.39";
-    sha256 = "0v1gnvdazxa3bcbq8hl6796yw0mxzki2xn4s5im5k5ngmfmnswyj";
+    version = "5.12.35";
+    sha256 = "0ln8x7yisanbx1afclhffa0f3fk0sgh7dpj548xyhn5mgpwbj4i2";
   };
 }

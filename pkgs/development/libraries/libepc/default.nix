@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Easy Publish and Consume Library";
-    homepage = https://wiki.gnome.org/Projects/libepc;
+    homepage = "https://wiki.gnome.org/Projects/libepc";
     license = licenses.lgpl21Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

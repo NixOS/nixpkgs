@@ -1,7 +1,7 @@
 { stdenv, fetchurl, texinfo, libXext, xorgproto, libX11
 , libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc
-, libXxf86vm, openal, libGLU_combined }:
+, libXxf86vm, openal, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "allegro";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     texinfo libXext xorgproto libX11 libXpm libXt libXcursor
     alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
-    libXxf86vm openal libGLU_combined
+    libXxf86vm openal libGLU libGL
   ];
 
   hardeningDisable = [ "format" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A game programming library";
-    homepage = https://liballeg.org/;
+    homepage = "https://liballeg.org/";
     license = licenses.free; # giftware
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

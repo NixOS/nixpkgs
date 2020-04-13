@@ -11,13 +11,17 @@ stdenv.mkDerivation {
   setSourceRoot = ''
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=unused-result"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=address-of-packed-member"
+  ];
   nativeBuildInputs = [ bison flex ];
   patches = [ ./nix.patch ];
   enableParallelBuilding = true;
   meta = {
     description = "Quick, precise tests for entire TCP/UDP/IPv4/IPv6 network stacks";
-    homepage = https://github.com/google/packetdrill;
+    homepage = "https://github.com/google/packetdrill";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ dmjio cleverca22 ];

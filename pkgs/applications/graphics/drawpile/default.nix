@@ -60,11 +60,11 @@ let
 
 in mkDerivation rec {
   pname = "drawpile";
-  version = "2.1.13";
+  version = "2.1.17";
 
   src = fetchurl {
     url = "https://drawpile.net/files/src/drawpile-${version}.tar.gz";
-    sha256 = "0r56hkzjdlg4615zvrjv60i3f06pv7ssh6bs6jb46qs8wbsawsxf";
+    sha256 = "11lhn1mymhqk9g5sh384xhj3qw8h9lv88pr768y9q6kg3sl7nzzf";
   };
 
   nativeBuildInputs = [
@@ -86,8 +86,8 @@ in mkDerivation rec {
 
   meta = {
     description = "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
-    homepage = https://drawpile.net/;
-    downloadPage = https://drawpile.net/download/;
+    homepage = "https://drawpile.net/";
+    downloadPage = "https://drawpile.net/download/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;

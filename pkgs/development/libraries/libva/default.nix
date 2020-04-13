@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   name = "libva-${lib.optionalString minimal "minimal-"}${version}";
-  version = "2.5.0";
+  version = "2.6.1";
 
   # update libva-utils and vaapiIntel as well
   src = fetchFromGitHub {
     owner  = "01org";
     repo   = "libva";
     rev    = version;
-    sha256 = "0pys6blkh8ayxmxgfh7qrjzzcrzzn14z5d8q4a34ffqk90b6r93z";
+    sha256 = "1x34kf38p5rf52bf54ljr9f7knnbilm7kbszqnfk3lzsqrfc7r2g";
   };
 
   outputs = [ "dev" "out" ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "VAAPI library: Video Acceleration API";
-    homepage = http://www.freedesktop.org/wiki/Software/vaapi;
+    homepage = "http://www.freedesktop.org/wiki/Software/vaapi";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

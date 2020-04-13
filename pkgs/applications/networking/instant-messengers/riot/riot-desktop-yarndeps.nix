@@ -610,11 +610,11 @@
       };
     }
     {
-      name = "minimist___minimist_1.2.0.tgz";
+      name = "minimist___minimist_1.2.2.tgz";
       path = fetchurl {
-        name = "minimist___minimist_1.2.0.tgz";
-        url  = "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz";
-        sha1 = "a35008b20f41383eec1fb914f4cd5df79a264284";
+        name = "minimist___minimist_1.2.2.tgz";
+        url  = "https://registry.yarnpkg.com/minimist/-/minimist-1.2.2.tgz";
+        sha1 = "b00a00230a1108c48c169e69a291aafda3aacd63";
       };
     }
     {

@@ -1,39 +1,38 @@
-{ stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
 
-  cmake,
-  gzip,
-  makeWrapper,
-  ncurses,
-  pkgconfig,
-  python3,
+, cmake
+, gzip
+, installShellFiles
+, makeWrapper
+, ncurses
+, pkgconfig
+, python3
 
-  expat,
-  fontconfig,
-  freetype,
-  libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  libxcb,
-  libxkbcommon,
-  wayland,
-  xdg_utils,
+, expat
+, fontconfig
+, freetype
+, libGL
+, libX11
+, libXcursor
+, libXi
+, libXrandr
+, libXxf86vm
+, libxcb
+, libxkbcommon
+, wayland
+, xdg_utils
 
   # Darwin Frameworks
-  AppKit,
-  CoreGraphics,
-  CoreServices,
-  CoreText,
-  Foundation,
-  OpenGL }:
-
-with rustPlatform;
-
+, AppKit
+, CoreGraphics
+, CoreServices
+, CoreText
+, Foundation
+, OpenGL
+}:
 let
   rpathLibs = [
     expat
@@ -50,22 +49,24 @@ let
     libxkbcommon
     wayland
   ];
-in buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.3.3";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
-    owner = "jwilm";
+    owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h9zid7bi19qga3a8a2d4x3ma9wf1njmj74s4xnw7nzqqf3dh750";
+    sha256 = "133d8vm7ihlvgw8n1jghhh35h664h0f52h6gci54f11vl6c1spws";
   };
 
-  cargoSha256 = "1rxb5ljgvn881jkxm8772kf815mmp08ci7sqmn2x1jwdcrphhxr1";
+  cargoSha256 = "07gq63qd11zz229b8jp9wqggz39qfpzd223z1zk1xch7rhqq0pn4";
 
   nativeBuildInputs = [
     cmake
     gzip
+    installShellFiles
     makeWrapper
     ncurses
     pkgconfig
@@ -73,11 +74,19 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-    ++ lib.optionals stdenv.isDarwin [ AppKit CoreGraphics CoreServices CoreText Foundation OpenGL ];
+  ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    CoreGraphics
+    CoreServices
+    CoreText
+    Foundation
+    OpenGL
+  ];
 
   outputs = [ "out" "terminfo" ];
+
   postPatch = ''
-    substituteInPlace alacritty_terminal/src/config/mouse.rs \
+    substituteInPlace alacritty/src/config/mouse.rs \
       --replace xdg-open ${xdg_utils}/bin/xdg-open
   '';
 
@@ -88,24 +97,26 @@ in buildRustPackage rec {
 
     install -D target/release/alacritty $out/bin/alacritty
 
-  '' + (if stdenv.isDarwin then ''
-    mkdir $out/Applications
-    cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
-  '' else ''
-    install -D extra/linux/alacritty.desktop -t $out/share/applications/
-    install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
-  '') + ''
+  '' + (
+    if stdenv.isDarwin then ''
+      mkdir $out/Applications
+      cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
+    '' else ''
+      install -D extra/linux/Alacritty.desktop -t $out/share/applications/
+      install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
+      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+    ''
+  ) + ''
 
-    install -D extra/completions/_alacritty -t "$out/share/zsh/site-functions/"
-    install -D extra/completions/alacritty.bash -t "$out/etc/bash_completion.d/"
-    install -D extra/completions/alacritty.fish -t "$out/share/fish/vendor_completions.d/"
+    installShellCompletion --zsh extra/completions/_alacritty
+    installShellCompletion --bash extra/completions/alacritty.bash
+    installShellCompletion --fish extra/completions/alacritty.fish
 
     install -dm 755 "$out/share/man/man1"
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
 
     install -dm 755 "$terminfo/share/terminfo/a/"
-    tic -x -o "$terminfo/share/terminfo" extra/alacritty.info
+    tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
@@ -114,11 +125,11 @@ in buildRustPackage rec {
 
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
-    description = "GPU-accelerated terminal emulator";
-    homepage = https://github.com/jwilm/alacritty;
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ mic92 ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
+  meta = with lib; {
+    description = "A cross-platform, GPU-accelerated terminal emulator";
+    homepage = "https://github.com/alacritty/alacritty";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ filalex77 mic92 cole-h ];
+    platforms = platforms.unix;
   };
 }

@@ -3,17 +3,25 @@
 let
   params = {
     "8.8" = {
+      version = "1.1";
       sha256 = "0ms086wp4jmrzyglb8wymchzyflflk01nsfsk4r6qv8rrx81nx9h";
+      buildInputs = [ coq.ocamlPackages.camlp5 ];
     };
     "8.9" = {
-      sha256 = "0hmqwsry8ldg4g4hhwg4b84dgzibpdrg1wwsajhlyqfx3fb3n3b5";
+      version = "1.1.1";
+      sha256 = "1knjmz4hr8vlp103j8n4fyb2lfxysnm512gh3m2kp85n6as6fvb9";
+      buildInputs = [ coq.ocamlPackages.camlp5 ];
+    };
+    "8.10" = {
+      version = "1.1.1";
+      sha256 = "0b6r7bsygl1axbqybkhkr7zlwcd51ski5ql52994klrrxvjd58df";
     };
   };
   param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation rec {
-  version = "1.1";
+  inherit (param) version;
   name = "coq${coq.coq-version}-coqhammer-${version}";
 
   src = fetchFromGitHub {
@@ -31,8 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ coq ] ++ (with coq.ocamlPackages; [
-    ocaml findlib camlp5
-  ]);
+    ocaml findlib
+  ]) ++ (param.buildInputs or []);
 
   preInstall = ''
     mkdir -p $out/bin

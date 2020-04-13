@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, libGLU_combined }:
+{ stdenv, fetchurl, autoreconfHook, libGL, libGLU }:
 
 let version = "1.0"; in
 
@@ -12,12 +12,12 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libGLU_combined ];
+  buildInputs = [ libGL libGLU ];
 
   meta = {
     description = "A patent-free S3TC compatible implementation";
-    homepage = https://github.com/divVerent/s2tc;
-    repositories.git = https://github.com/divVerent/s2tc.git;
+    homepage = "https://github.com/divVerent/s2tc";
+    repositories.git = "https://github.com/divVerent/s2tc.git";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.cpages ];

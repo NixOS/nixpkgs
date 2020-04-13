@@ -3,7 +3,7 @@
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
 , enableMuPDF ? true, mupdf
-, enableJPEG2K ? true, jasper
+, enableJPEG2K ? false, jasper ? null  # disabled by default, jasper has unfixed CVE
 , enableDJVU ? true, djvulibre
 , enableGOCR ? false, gocr # Disabled by default due to crashes
 , enableTesseract ? true, leptonica, tesseract4
@@ -65,9 +65,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_C_FLAGS=-I${src}/include_mod" ];
 
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   installPhase = ''
     install -D -m 755 k2pdfopt $out/bin/k2pdfopt
@@ -75,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
-    homepage = http://www.willus.com/k2pdfopt;
+    homepage = "http://www.willus.com/k2pdfopt";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bosu danielfullmer ];

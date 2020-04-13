@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Ultra-low delay audio codec";
-    homepage    = http://www.celt-codec.org/;
+    homepage    = "http://www.celt-codec.org/";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ codyopel raskin ];
     platforms   = platforms.unix;

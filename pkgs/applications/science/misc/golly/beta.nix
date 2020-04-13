@@ -1,5 +1,5 @@
 {stdenv, fetchgit
-, wxGTK, perl, python2, zlib, libGLU_combined, libX11
+, wxGTK, perl, python2, zlib, libGLU, libGL, libX11
 , automake, autoconf
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [autoconf automake];
 
   buildInputs = [
-    wxGTK perl python2 zlib libGLU_combined libX11
+    wxGTK perl python2 zlib libGLU libGL libX11
   ];
 
   # Link against Python explicitly as it is needed for scripts

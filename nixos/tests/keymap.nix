@@ -3,14 +3,13 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   readyFile  = "/tmp/readerReady";
   resultFile = "/tmp/readerResult";
 
   testReader = pkgs.writeScript "test-input-reader" ''
-    #!${pkgs.stdenv.shell}
     rm -f ${resultFile} ${resultFile}.tmp
     logger "testReader: START: Waiting for $1 characters, expecting '$2'."
     touch ${readyFile}
@@ -27,56 +26,75 @@ let
   '';
 
 
-  mkKeyboardTest = layout: { extraConfig ? {}, tests }: with pkgs.lib; let
-    combinedTests = foldAttrs (acc: val: acc ++ val) [] (builtins.attrValues tests);
-    perlStr = val: "'${escape ["'" "\\"] val}'";
-    lq = length combinedTests.qwerty;
-    le = length combinedTests.expect;
-    msg = "length mismatch between qwerty (${toString lq}) and expect (${toString le}) lists!";
-    send   = concatMapStringsSep ", " perlStr combinedTests.qwerty;
-    expect = if (lq == le) then concatStrings combinedTests.expect else throw msg;
-
-  in makeTest {
+  mkKeyboardTest = layout: { extraConfig ? {}, tests }: with pkgs.lib; makeTest {
     name = "keymap-${layout}";
 
+    machine.console.keyMap = mkOverride 900 layout;
     machine.services.xserver.desktopManager.xterm.enable = false;
-    machine.i18n.consoleKeyMap = mkOverride 900 layout;
     machine.services.xserver.layout = mkOverride 900 layout;
     machine.imports = [ ./common/x11.nix extraConfig ];
 
     testScript = ''
+      import json
+      import shlex
 
-      sub mkTest ($$) {
-        my ($desc, $cmd) = @_;
 
-        subtest $desc, sub {
-          # prepare and start testReader
-          $machine->execute("rm -f ${readyFile} ${resultFile}");
-          $machine->succeed("$cmd ${testReader} ${toString le} ".q(${escapeShellArg expect} & ));
+      def run_test_case(cmd, xorg_keymap, test_case_name, inputs, expected):
+          with subtest(test_case_name):
+              assert len(inputs) == len(expected)
+              machine.execute("rm -f ${readyFile} ${resultFile}")
 
-          if ($desc eq "Xorg keymap") {
-            # make sure the xterm window is open and has focus
-            $machine->waitForWindow(qr/testterm/);
-            $machine->waitUntilSucceeds("${pkgs.xdotool}/bin/xdotool search --sync --onlyvisible --class testterm windowfocus --sync");
-          }
+              # set up process that expects all the keys to be entered
+              machine.succeed(
+                  "{} {} {} {} &".format(
+                      cmd,
+                      "${testReader}",
+                      len(inputs),
+                      shlex.quote("".join(expected)),
+                  )
+              )
 
-          # wait for reader to be ready
-          $machine->waitForFile("${readyFile}");
-          $machine->sleep(1);
+              if xorg_keymap:
+                  # make sure the xterm window is open and has focus
+                  machine.wait_for_window("testterm")
+                  machine.wait_until_succeeds(
+                      "${pkgs.xdotool}/bin/xdotool search --sync --onlyvisible "
+                      "--class testterm windowfocus --sync"
+                  )
 
-          # send all keys
-          foreach ((${send})) { $machine->sendKeys($_); };
+              # wait for reader to be ready
+              machine.wait_for_file("${readyFile}")
+              machine.sleep(1)
 
-          # wait for result and check
-          $machine->waitForFile("${resultFile}");
-          $machine->succeed("grep -q 'PASS:' ${resultFile}");
-        };
-      };
+              # send all keys
+              for key in inputs:
+                  machine.send_key(key)
 
-      $machine->waitForX;
+              # wait for result and check
+              machine.wait_for_file("${resultFile}")
+              machine.succeed("grep -q 'PASS:' ${resultFile}")
 
-      mkTest "VT keymap", "openvt -sw --";
-      mkTest "Xorg keymap", "DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e";
+
+      with open("${pkgs.writeText "tests.json" (builtins.toJSON tests)}") as json_file:
+          tests = json.load(json_file)
+
+      keymap_environments = {
+          "VT Keymap": "openvt -sw --",
+          "Xorg Keymap": "DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e",
+      }
+
+      machine.wait_for_x()
+
+      for keymap_env_name, command in keymap_environments.items():
+          with subtest(keymap_env_name):
+              for test_case_name, test_data in tests.items():
+                  run_test_case(
+                      command,
+                      False,
+                      test_case_name,
+                      test_data["qwerty"],
+                      test_data["expect"],
+                  )
     '';
   };
 
@@ -89,7 +107,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       altgr.expect = [ "~"       "#"       "{"       "["       "|"       ];
     };
 
-    extraConfig.i18n.consoleKeyMap = "azerty/fr";
+    extraConfig.console.keyMap = "azerty/fr";
     extraConfig.services.xserver.layout = "fr";
   };
 
@@ -99,7 +117,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       homerow.expect = [ "a" "r" "s" "t" "n" "e" "i" "o"         ];
     };
 
-    extraConfig.i18n.consoleKeyMap = "colemak/colemak";
+    extraConfig.console.keyMap = "colemak/colemak";
     extraConfig.services.xserver.layout = "us";
     extraConfig.services.xserver.xkbVariant = "colemak";
   };
@@ -151,7 +169,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
       altgr.expect = [ "@" "|"    "{" "[" "]" "}" ];
     };
 
-    extraConfig.i18n.consoleKeyMap = "de";
+    extraConfig.console.keyMap = "de";
     extraConfig.services.xserver.layout = "de";
   };
 }

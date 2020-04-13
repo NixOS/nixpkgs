@@ -9,7 +9,7 @@
 , qtwebengine
 
 , akonadi-contacts
-, kcalcore
+, kcalendarcore
 , kconfigwidgets
 , kcoreaddons
 , kdoctools
@@ -26,7 +26,7 @@
 , exiv2
 , ffmpeg
 , flex
-, jasper
+, jasper ? null, withJpeg2k ? false  # disable JPEG2000 support, jasper has unfixed CVE
 , lcms2
 , lensfun
 , libgphoto2
@@ -70,7 +70,6 @@ mkDerivation rec {
     exiv2
     ffmpeg
     flex
-    jasper
     lcms2
     lensfun
     libgphoto2
@@ -90,7 +89,7 @@ mkDerivation rec {
     qtwebengine
 
     akonadi-contacts
-    kcalcore
+    kcalendarcore
     kconfigwidgets
     kcoreaddons
     kfilemetadata
@@ -103,7 +102,8 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ];
+  ]
+  ++ lib.optionals withJpeg2k [ jasper ];
 
   enableParallelBuilding = true;
 
@@ -125,7 +125,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Photo Management Program";
     license = licenses.gpl2;
-    homepage = https://www.digikam.org;
+    homepage = "https://www.digikam.org";
     maintainers = with maintainers; [ the-kenny ];
     platforms = platforms.linux;
   };

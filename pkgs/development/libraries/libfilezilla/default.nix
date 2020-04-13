@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libfilezilla";
-  version = "0.18.2";
+  version = "0.19.3";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1j9da9xi2k4nw97m14mpp7h39rh03br0gmjj9ff819l6nhlnkn20";
+    sha256 = "0fml6whdbfcwc8nfjhvrnidkscv6q2x988zf3alfjl2mdpw4jgd4";
   };
 
   nativeBuildInputs = [ pkgconfig ];

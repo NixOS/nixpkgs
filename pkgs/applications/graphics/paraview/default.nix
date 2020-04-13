@@ -1,9 +1,5 @@
-{
-stdenv, fetchFromGitHub, cmake, makeWrapper
-,qtbase, qttools, python, libGLU_combined
-,libXt, qtx11extras, qtxmlpatterns
-, mkDerivation
-}:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, qtbase , qttools, python
+, libGLU, libGL , libXt, qtx11extras, qtxmlpatterns , mkDerivation }:
 
 mkDerivation rec {
   pname = "paraview";
@@ -30,7 +26,7 @@ mkDerivation rec {
   # libraries.  These reside in build/lib, and are not found by
   # default.
   preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
   '';
 
   enableParallelBuilding = true;
@@ -43,7 +39,7 @@ mkDerivation rec {
   buildInputs = [
     python
     python.pkgs.numpy
-    libGLU_combined
+    libGLU libGL
     libXt
     qtbase
     qtx11extras
@@ -53,20 +49,20 @@ mkDerivation rec {
 
   # Paraview links into the Python library, resolving symbolic links on the way,
   # so we need to put the correct sitePackages (with numpy) back on the path
-  postInstall = ''
-    wrapProgram $out/bin/paraview \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-    wrapProgram $out/bin/pvbatch \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-    wrapProgram $out/bin/pvpython \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+  preFixup = ''
+    wrapQtApp $out/bin/paraview \
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+    wrapQtApp $out/bin/pvbatch \
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+    wrapQtApp $out/bin/pvpython \
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
   '';
 
-  meta = {
-    homepage = http://www.paraview.org/;
+  meta = with stdenv.lib; {
+    homepage = "http://www.paraview.org/";
     description = "3D Data analysis and visualization application";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [guibert];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.free;
+    maintainers = with maintainers; [ guibert ];
+    platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook }:
+{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper }:
 
 with lib;
 
@@ -17,12 +17,13 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cp * $out/bin/
+    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '';
 
-  buildInputs = optionals stdenv.isLinux [ autoPatchelfHook ];
+  buildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
 
   meta = {
-    homepage = https://pulumi.io/;
+    homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     license = with licenses; [ asl20 ];
     platforms = builtins.attrNames data.pulumiPkgs;

@@ -1,30 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
-, qt5, libsForQt5, hunspell
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
+, qtscript, poppler, hunspell
 , withLua ? true, lua
 , withPython ? true, python3 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "texworks";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "TeXworks";
     repo = "texworks";
     rev = "release-${version}";
-    sha256 = "1ljfl784z7dmh6f1qacqhc6qhcaqdzw033yswbvpvkkck0lsk2mr";
+    sha256 = "1lw1p4iyzxypvjhnav11g6rwf6gx7kyzwy2iprvv8zzpqcdkjp2z";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qt5.qtscript libsForQt5.poppler hunspell ]
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ qtscript poppler hunspell ]
                 ++ lib.optional withLua lua
                 ++ lib.optional withPython python3;
 
   cmakeFlags = lib.optional withLua "-DWITH_LUA=ON"
                ++ lib.optional withPython "-DWITH_PYTHON=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple TeX front-end program inspired by TeXShop";
-    homepage = http://www.tug.org/texworks/;
+    homepage = "http://www.tug.org/texworks/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = with platforms; linux;

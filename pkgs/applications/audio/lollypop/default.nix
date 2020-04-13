@@ -12,6 +12,10 @@
 , desktop-file-utils
 , totem-pl-parser
 , gobject-introspection
+, glib-networking
+, gdk-pixbuf
+, glib
+, pango
 , wrapGAppsHook
 , lastFMSupport ? true
 , youtubeSupport ? true
@@ -19,7 +23,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.2.5";
+  version = "1.2.32";
 
   format = "other";
   doCheck = false;
@@ -28,7 +32,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "148p3ab7nnfz13hgjkx1cf2ahq9mgl72csrl35xy6d0nkfqbfr8r";
+    sha256 = "03x6qihd349pq5lmgahb77sys60g16v5v6qkdlzf8k88451k8p7n";
   };
 
   nativeBuildInputs = [
@@ -42,6 +46,9 @@ python3.pkgs.buildPythonApplication rec  {
   ];
 
   buildInputs = with gst_all_1; [
+    gdk-pixbuf
+    glib
+    glib-networking
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -50,6 +57,7 @@ python3.pkgs.buildPythonApplication rec  {
     gstreamer
     gtk3
     libsoup
+    pango
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
 
@@ -79,15 +87,15 @@ python3.pkgs.buildPythonApplication rec  {
   # argument
   dontWrapGApps = true;
 
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = with lib; {
-    description = "A modern music player for GNOME";
-    homepage = https://wiki.gnome.org/Apps/Lollypop;
-    license = licenses.gpl3Plus;
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
+    description = "A modern music player for GNOME";
+    homepage = "https://wiki.gnome.org/Apps/Lollypop";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;
   };

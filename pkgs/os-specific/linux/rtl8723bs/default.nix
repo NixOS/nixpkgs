@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nukeReferences ];
 
-  makeFlags = concatStringsSep " " [
+  makeFlags = [
     "ARCH=${stdenv.hostPlatform.platform.kernelArch}" # Normally not needed, but the Makefile sets ARCH in a broken way.
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" # Makefile uses $(uname -r); breaks us.
   ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Realtek SDIO Wi-Fi driver";
-    homepage = https://github.com/hadess/rtl8723bs;
+    homepage = "https://github.com/hadess/rtl8723bs";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     broken = (! versionOlder kernel.version "4.12"); # Now in kernel staging drivers

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, SDL2, libGLU_combined, openal, luajit
+, SDL2, libGLU, libGL, openal, luajit
 , libdevil, freetype, physfs
 , libmodplug, mpg123, libvorbis, libogg
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    SDL2 libGLU_combined openal luajit
+    SDL2 libGLU libGL openal luajit
     libdevil freetype physfs libmodplug mpg123 libvorbis libogg
   ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
 
   meta = {
-    homepage = http://love2d.org;
+    homepage = "http://love2d.org";
     description = "A Lua-based 2D game engine/scripting language";
     license = stdenv.lib.licenses.zlib;
 

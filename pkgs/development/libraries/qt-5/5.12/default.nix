@@ -54,6 +54,7 @@ let
       optionals stdenv.isDarwin [
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
         ./qtbase.patch.d/0002-qtbase-mac.patch
+        ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
@@ -66,6 +67,18 @@ let
         ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0011-qtbase-assert.patch
         ./qtbase.patch.d/0012-fix-header_module.patch
+        # https://bugreports.qt.io/browse/QTBUG-81715
+        # remove after updating to qt > 5.12.7
+        (fetchpatch {
+          name = "fix-qt5_make_output_file-cmake-macro.patch";
+          url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=8a3fde00bf53d99e9e4853e8ab97b0e1bcf74915";
+          sha256 = "1gpcbdpyazdxnmldvhsf3pfwr2gjvi08x3j6rxf543rq01bp6cpx";
+        })
+        (fetchpatch {
+          name = "QTBUG-78937.patch";
+          url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=67a9c600ad14ee44501a6df3509daa8234b97606";
+          sha256 = "1jiky1w9j8rka78r4q0yabb8w2l5j6csdjysynz7gs1ry4xjfdxd";
+        })
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
@@ -78,15 +91,6 @@ let
         name = "fix-build-with-pulseaudio-13.0.patch";
         url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
-      })
-      # patch for CVE-2019-13720, can be removed when it is included in the next upstream release
-      # https://bugreports.qt.io/browse/QTBUG-1019226
-      (fetchpatch {
-        name = "qtwebengine-CVE-2019-13720.patch";
-        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=d6e5fc10";
-        sha256 = "0ywc12m196pr6xn7l5xbascihygkjj4pbcgcn9wxvi5ssdr6z46z";
-        extraPrefix = "src/3rdparty/";
-        stripLen = 1;
       })
     ]
       ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
@@ -151,6 +155,7 @@ let
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
+      qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};

@@ -1,0 +1,13 @@
+diff --git a/internal/config/config.go b/internal/config/config.go
+index 037c9602..3d5409dc 100644
+--- a/internal/config/config.go
++++ b/internal/config/config.go
+@@ -185,7 +185,7 @@ func checkExecutable(path string) error {
+ 		return err
+ 	}
+ 
+-	if fi.Mode()&0755 < 0755 {
++	if fi.Mode()&0555 < 0555 {
+ 		return fmt.Errorf("not executable: %v", path)
+ 	}
+ 

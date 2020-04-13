@@ -11,13 +11,13 @@ buildDunePackage rec {
     sha256 = "0j2sg50byn0ppmf6l36ksip7zx1d3gv7sc4hbbxs2rmx39jr7vxh";
   };
 
-  buildInputs = lib.optionals doCheck [ mdx qtest ];
+  buildInputs = lib.optionals doCheck [ mdx.bin qtest ];
   propagatedBuildInputs = [ result ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.04";
 
   meta = {
-    homepage = https://github.com/c-cube/sequence;
+    homepage = "https://github.com/c-cube/sequence";
     description = "Simple sequence (iterator) datatype and combinators";
     longDescription = ''
       Simple sequence datatype, intended to transfer a finite number of

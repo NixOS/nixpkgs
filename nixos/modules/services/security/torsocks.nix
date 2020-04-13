@@ -112,10 +112,9 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.torsocks (wrapTorsocks "torsocks-faster" cfg.fasterServer) ];
 
-    environment.etc =
-      [ { source = pkgs.writeText "torsocks.conf" (configFile cfg.server);
-          target = "tor/torsocks.conf";
-        }
-      ];
+    environment.etc."tor/torsocks.conf" =
+      {
+        source = pkgs.writeText "torsocks.conf" (configFile cfg.server);
+      };
   };
 }

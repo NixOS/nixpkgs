@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";
-    homepage = http://xc3sprog.sourceforge.net/;
+    homepage = "http://xc3sprog.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

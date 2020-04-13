@@ -15,14 +15,21 @@ stdenv.mkDerivation {
   buildInputs = [ libxml2 ];
 
   prePatch = ''
-    substituteInPlace uvcdynctrl/CMakeLists.txt \
-      --replace "/etc/udev" "$out/etc/udev" \
-      --replace "/lib/udev" "$out/lib/udev"
+    local fixup_list=(
+      uvcdynctrl/CMakeLists.txt
+      uvcdynctrl/udev/rules/80-uvcdynctrl.rules
+      uvcdynctrl/udev/scripts/uvcdynctrl
+    )
+    for f in "''${fixup_list[@]}"; do
+      substituteInPlace "$f" \
+        --replace "/etc/udev" "$out/etc/udev" \
+        --replace "/lib/udev" "$out/lib/udev"
+    done
   '';
 
   meta = with stdenv.lib; {
     description = "A simple interface for devices supported by the linux UVC driver";
-    homepage = http://guvcview.sourceforge.net;
+    homepage = "http://guvcview.sourceforge.net";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;

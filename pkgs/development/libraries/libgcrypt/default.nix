@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
 
-  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ];
+  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ]
+   ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-asm";
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
@@ -47,11 +48,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/libgcrypt/;
+    homepage = "https://www.gnu.org/software/libgcrypt/";
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];
-    repositories.git = git://git.gnupg.org/libgcrypt.git;
+    repositories.git = "git://git.gnupg.org/libgcrypt.git";
   };
 }

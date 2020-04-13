@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig
+{ stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkgconfig
 , CoreFoundation, IOKit, libossp_uuid
-, curl, libcap,  libuuid, lm_sensors, zlib
+, curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
 , withIpmi ? (!stdenv.isDarwin), freeipmi
@@ -11,13 +11,17 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  version = "1.18.1";
+let
+  go-d-plugin = callPackage ./go.d.plugin.nix {};
+in stdenv.mkDerivation rec {
+  version = "1.21.0";
   pname = "netdata";
 
-  src = fetchurl {
-    url = "https://github.com/netdata/netdata/releases/download/v${version}/netdata-v${version}.tar.gz";
-    sha256 = "08g5jp63k8y5gbg8v9hxj75q0533c6cyzpjml9z1g5h2h4zaik1r";
+  src = fetchFromGitHub {
+    owner = "netdata";
+    repo = "netdata";
+    rev = "v${version}";
+    sha256 = "08gxwxvg816hj7sxsb8s97ny2562xri9nx0w2zx7xsssp22grawk";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -34,19 +38,26 @@ stdenv.mkDerivation rec {
     ./no-files-in-etc-and-var.patch
   ];
 
-  NIX_CFLAGS_COMPILE = optional withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
+  NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
-  postInstall = optionalString (!stdenv.isDarwin) ''
+  postInstall = ''
+    ln -s ${go-d-plugin.bin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
+    ln -s ${go-d-plugin.bin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
+  '' + optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
        $out/libexec/netdata/plugins.d/apps.plugin.org
+    mv $out/libexec/netdata/plugins.d/perf.plugin \
+       $out/libexec/netdata/plugins.d/perf.plugin.org
+    mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
+       $out/libexec/netdata/plugins.d/slabinfo.plugin.org
     ${optionalString withIpmi ''
       mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
          $out/libexec/netdata/plugins.d/freeipmi.plugin.org
     ''}
   '';
 
-  preConfigure =  optionalString (!stdenv.isDarwin) ''
+  preConfigure = optionalString (!stdenv.isDarwin) ''
     substituteInPlace collectors/python.d.plugin/python_modules/third_party/lm_sensors.py \
       --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
@@ -62,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Real-time performance monitoring tool";
-    homepage = https://my-netdata.io/;
+    homepage = "https://my-netdata.io/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];

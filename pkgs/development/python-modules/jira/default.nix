@@ -30,6 +30,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "This library eases the use of the JIRA REST API from Python.";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ globin ma27 ];
+    maintainers = with maintainers; [ globin ];
   };
 }

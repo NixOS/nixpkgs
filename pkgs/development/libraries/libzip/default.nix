@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libzip";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
-    sha256 = "05ay8cbm882br0ir2cmzrvdq8q5mr1bnf53l4305xzigpd54lsdy";
+    sha256 = "120xgf7cgjmz9d3yp10lks6lhkgxqb4skbmbiiwf46gx868qxsq6";
   };
 
   # Fix pkgconfig file paths
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.nih.at/libzip;
+    homepage = "https://www.nih.at/libzip";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     platforms = platforms.unix;

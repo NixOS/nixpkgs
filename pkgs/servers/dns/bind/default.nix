@@ -10,11 +10,11 @@ assert enablePython -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.14.7";
+  version = "9.14.11";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/bind9/${version}/${pname}-${version}.tar.gz";
-    sha256 = "07998nx0yv3xy8c62b1ira9qygsgvpljwcgb47ypzxq8b57gb86f";
+    sha256 = "1v4y9308w0gd98gjzni4cgxmh8g1s37lbnnkyhsn70xs3xki5b4c";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # requires root and the net
 
   meta = with stdenv.lib; {
-    homepage = https://www.isc.org/downloads/bind/;
+    homepage = "https://www.isc.org/downloads/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
 

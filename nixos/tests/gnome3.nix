@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "gnome3";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = pkgs.gnome3.maintainers;
@@ -24,41 +24,53 @@ import ./make-test.nix ({ pkgs, ...} : {
       virtualisation.memorySize = 1024;
     };
 
-  testScript = let
+  testScript = { nodes, ... }: let
     # Keep line widths somewhat managable
-    bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus";
+    user = nodes.machine.config.users.users.alice;
+    uid = toString user.uid;
+    bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";
     gdbus = "${bus} gdbus";
+    su = command: "su - ${user.name} -c '${command}'";
+
     # Call javascript in gnome shell, returns a tuple (success, output), where
     # `success` is true if the dbus call was successful and output is what the
     # javascript evaluates to.
     eval = "call --session -d org.gnome.Shell -o /org/gnome/Shell -m org.gnome.Shell.Eval";
+
     # False when startup is done
-    startingUp = "${gdbus} ${eval} Main.layoutManager._startingUp";
+    startingUp = su "${gdbus} ${eval} Main.layoutManager._startingUp";
+
+    # Start gnome-terminal
+    gnomeTerminalCommand = su "${bus} gnome-terminal";
+
     # Hopefully gnome-terminal's wm class
-    wmClass = "${gdbus} ${eval} global.display.focus_window.wm_class";
+    wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
   in ''
-      # wait for gdm to start
-      $machine->waitForUnit("display-manager.service");
+      with subtest("Login to GNOME with GDM"):
+          # wait for gdm to start
+          machine.wait_for_unit("display-manager.service")
+          # wait for the wayland server
+          machine.wait_for_file("/run/user/${uid}/wayland-0")
+          # wait for alice to be logged in
+          machine.wait_for_unit("default.target", "${user.name}")
+          # check that logging in has given the user ownership of devices
+          assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
 
-      # wait for alice to be logged in
-      $machine->waitForUnit("default.target","alice");
+      with subtest("Wait for GNOME Shell"):
+          # correct output should be (true, 'false')
+          machine.wait_until_succeeds(
+              "${startingUp} | grep -q 'true,..false'"
+          )
 
-      # Check that logging in has given the user ownership of devices.
-      $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
-
-      # Wait for the wayland server
-      $machine->waitForFile("/run/user/1000/wayland-0");
-
-      # Wait for gnome shell, correct output should be "(true, 'false')"
-      $machine->waitUntilSucceeds("su - alice -c '${startingUp} | grep -q true,..false'");
-
-      # open a terminal
-      $machine->succeed("su - alice -c '${bus} gnome-terminal'");
-      # and check it's there
-      $machine->waitUntilSucceeds("su - alice -c '${wmClass} | grep -q gnome-terminal-server'");
-
-      # wait to get a nice screenshot
-      $machine->sleep(20);
-      $machine->screenshot("screen");
+      with subtest("Open Gnome Terminal"):
+          machine.succeed(
+              "${gnomeTerminalCommand}"
+          )
+          # correct output should be (true, '"gnome-terminal-server"')
+          machine.wait_until_succeeds(
+              "${wmClass} | grep -q 'gnome-terminal-server'"
+          )
+          machine.sleep(20)
+          machine.screenshot("screen")
     '';
 })

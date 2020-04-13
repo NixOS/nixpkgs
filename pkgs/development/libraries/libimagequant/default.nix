@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libimagequant";
-  version = "2.12.5";
+  version = "2.12.6";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = pname;
     rev = version;
-    sha256 = "0cp68w04ja5pv77ssfafsn958w9hh9zb8crrlb5j3gsrcmdc032k";
+    sha256 = "00w7fny3xf14cfyhbdnmqyh9ddqdh1irvgzxd35a2z65kp7vnvj0";
   };
 
   preConfigure = ''

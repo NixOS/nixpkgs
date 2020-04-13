@@ -111,14 +111,15 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    users.users = optional (cfg.user == "infinoted")
-      { name = "infinoted";
-        description = "Infinoted user";
-        group = cfg.group;
-        isSystemUser = true;
+    users.users = optionalAttrs (cfg.user == "infinoted")
+      { infinoted = {
+          description = "Infinoted user";
+          group = cfg.group;
+          isSystemUser = true;
+        };
       };
-    users.groups = optional (cfg.group == "infinoted")
-      { name = "infinoted";
+    users.groups = optionalAttrs (cfg.group == "infinoted")
+      { infinoted = { };
       };
 
     systemd.services.infinoted =

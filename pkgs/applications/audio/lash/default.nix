@@ -18,11 +18,7 @@ stdenv.mkDerivation  rec {
   buildInputs = [ alsaLib gtk2 libjack2 libxml2 makeWrapper
     pkgconfig readline ];
   propagatedBuildInputs = [ libuuid ];
-  NIX_LDFLAGS = [
-    "-lm"
-    "-lpthread"
-    "-luuid"
-  ];
+  NIX_LDFLAGS = "-lm -lpthread -luuid";
 
   postInstall = ''
     for i in lash_control lash_panel
@@ -35,7 +31,7 @@ stdenv.mkDerivation  rec {
     longDescription = ''
       Session management system for GNU/Linux audio applications.
     '';
-    homepage = https://www.nongnu.org/lash;
+    homepage = "https://www.nongnu.org/lash";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

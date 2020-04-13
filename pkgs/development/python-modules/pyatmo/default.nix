@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "2.3.2";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c76740e5adbf8b14d8f41d4f84ce23c0e8e738b18b926dc60858c35bf2fa8f2";
+    sha256 = "8fbcc3a88f8c51d190b697c80515e67530143de71f89cc6ecf99bbf2cbf3ef30";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple API to access Netatmo weather station data";
     license = licenses.mit;
-    homepage = https://github.com/jabesq/netatmo-api-python;
+    homepage = "https://github.com/jabesq/netatmo-api-python";
     maintainers = with maintainers; [ delroth ];
   };
 }

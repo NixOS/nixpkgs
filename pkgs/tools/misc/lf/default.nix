@@ -15,8 +15,8 @@ buildGoModule rec {
 
   # TODO: Setting buildFlags probably isn't working properly. I've tried a few
   # variants, e.g.:
-  # - buildFlags = "-ldflags \"-s -w -X 'main.gVersion=${version}'\"";
-  # - buildFlags = "-ldflags \\\"-X ${goPackagePath}/main.gVersion=${version}\\\"";
+  # - buildFlags = [ "-ldflags" "\"-s" "-w"" ""-X 'main.gVersion=${version}'\"" ];
+  # - buildFlags = [ "-ldflags" "\\\"-X" "${goPackagePath}/main.gVersion=${version}\\\"" ];
   # Override the build phase (to set buildFlags):
   buildPhase = ''
     runHook preBuild
@@ -37,7 +37,7 @@ buildGoModule rec {
       the missing features are deliberately omitted since it is better if they
       are handled by external tools.
     '';
-    homepage = https://godoc.org/github.com/gokcehan/lf;
+    homepage = "https://godoc.org/github.com/gokcehan/lf";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

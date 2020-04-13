@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CSS selectors for Python ElementTree";
-    homepage = https://github.com/Kozea/cssselect2;
+    homepage = "https://github.com/Kozea/cssselect2";
     license = licenses.bsd3;
   };
 }

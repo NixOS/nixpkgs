@@ -1,7 +1,27 @@
-{ lib, mkDerivation, fetchurl, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
-, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, removeReferencesTo
+{ lib
+, mkDerivation
+, fetchurl
+, poppler_utils
+, pkgconfig
+, libpng
+, imagemagick
+, libjpeg
+, fontconfig
+, podofo
+, qtbase
+, qmake
+, icu
+, sqlite
+, hunspell
+, hyphen
+, unrarSupport ? false
+, chmlib
+, python2Packages
+, libusb1
+, libmtp
+, xdg_utils
+, makeDesktopItem
+, removeReferencesTo
 }:
 
 let
@@ -10,11 +30,11 @@ let
 in
 mkDerivation rec {
   pname = "calibre";
-  version = "3.48.0";
+  version = "4.12.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "034m89h7j2088p324i1kya33dfldmqyynjxk3w98xiqkz7q2hi82";
+    sha256 = "144vl5p0adcywcqaarrriq5zd8q5i934yfjg9himiq1vdp9vy4fi";
   };
 
   patches = [
@@ -44,17 +64,50 @@ mkDerivation rec {
   CALIBRE_PY3_PORT = builtins.toString pypkgs.isPy3k;
 
   buildInputs = [
-    poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
-  ] ++ (with pypkgs; [
-    apsw cssselect css-parser dateutil dnspython html5-parser lxml markdown netifaces pillow
-    python pyqt5_with_qtwebkit sip
-    regex msgpack beautifulsoup4 html2text
-    # the following are distributed with calibre, but we use upstream instead
-    odfpy
-  ]) ++ lib.optionals (!pypkgs.isPy3k) (with pypkgs; [
-    mechanize
-  ]);
+    poppler_utils
+    libpng
+    imagemagick
+    libjpeg
+    fontconfig
+    podofo
+    qtbase
+    chmlib
+    icu
+    hunspell
+    hyphen
+    sqlite
+    libusb1
+    libmtp
+    xdg_utils
+  ] ++ (
+    with pypkgs; [
+      apsw
+      cssselect
+      css-parser
+      dateutil
+      dnspython
+      feedparser
+      html5-parser
+      lxml
+      markdown
+      netifaces
+      pillow
+      python
+      pyqt5
+      sip
+      regex
+      msgpack
+      beautifulsoup4
+      html2text
+      pyqtwebengine
+      # the following are distributed with calibre, but we use upstream instead
+      odfpy
+    ]
+  ) ++ lib.optionals (!pypkgs.isPy3k) (
+    with pypkgs; [
+      mechanize
+    ]
+  );
 
   installPhase = ''
     runHook preInstall
@@ -113,6 +166,7 @@ mkDerivation rec {
   disallowedReferences = [ podofo.dev ];
 
   calibreDesktopItem = makeDesktopItem {
+    fileValidation = false; # fails before substitution
     name = "calibre-gui";
     desktopName = "calibre";
     exec = "@out@/bin/calibre --detach %F";
@@ -159,6 +213,7 @@ mkDerivation rec {
   };
 
   ebookEditDesktopItem = makeDesktopItem {
+    fileValidation = false; # fails before substitution
     name = "calibre-edit-book";
     desktopName = "Edit E-book";
     genericName = "E-book Editor";
@@ -171,6 +226,7 @@ mkDerivation rec {
   };
 
   ebookViewerDesktopItem = makeDesktopItem {
+    fileValidation = false; # fails before substitution
     name = "calibre-ebook-viewer";
     desktopName = "E-book Viewer";
     genericName = "E-book Viewer";

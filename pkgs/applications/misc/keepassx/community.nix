@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools, darwin
 
 , curl
 , glibcLocales
@@ -7,7 +7,6 @@
 , libargon2
 , libgcrypt
 , libgpgerror
-, libmicrohttpd
 , libsodium
 , libyubikey
 , pkg-config
@@ -34,13 +33,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    sha256 = "053z6mzcn22w3vkf09i7kdi5p0c6zcd9g62v3p5i3yhd14cgviqr";
+    sha256 = "0z5bd17qaq7zpv96gw6qwv6rb4xx7xjq86ss6wm5zskcrraf7r7n";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
@@ -93,7 +92,6 @@ stdenv.mkDerivation rec {
     libargon2
     libgcrypt
     libgpgerror
-    libmicrohttpd
     libsodium
     libyubikey
     pkg-config
@@ -105,7 +103,8 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
-  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
+  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
+  ++ stdenv.lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
 
   preFixup = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
@@ -115,9 +114,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Password manager to store your passwords safely and auto-type them into your everyday websites and applications";
     longDescription = "A community fork of KeePassX, which is itself a port of KeePass Password Safe. The goal is to extend and improve KeePassX with new features and bugfixes to provide a feature-rich, fully cross-platform and modern open-source password manager. Accessible via native cross-platform GUI, CLI, and browser integration with the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser).";
-    homepage = https://keepassxc.org/;
+    homepage = "https://keepassxc.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jonafato ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

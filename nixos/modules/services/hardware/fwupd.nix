@@ -53,7 +53,7 @@ in {
 
       blacklistPlugins = mkOption {
         type = types.listOf types.str;
-        default = [ "test" ];
+        default = [];
         example = [ "udev" ];
         description = ''
           Allow blacklisting specific plugins
@@ -74,7 +74,7 @@ in {
         default = false;
         description = ''
           Whether to enable test remote. This is used by
-          <link xlink:href="https://github.com/hughsie/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
+          <link xlink:href="https://github.com/fwupd/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
         '';
       };
 
@@ -91,6 +91,9 @@ in {
 
   ###### implementation
   config = mkIf cfg.enable {
+    # Disable test related plug-ins implicitly so that users do not have to care about them.
+    services.fwupd.blacklistPlugins = cfg.package.defaultBlacklistedPlugins;
+
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = {
@@ -115,10 +118,6 @@ in {
     services.udev.packages = [ cfg.package ];
 
     systemd.packages = [ cfg.package ];
-
-    systemd.tmpfiles.rules = [
-      "d /var/lib/fwupd 0755 root root -"
-    ];
   };
 
   meta = {

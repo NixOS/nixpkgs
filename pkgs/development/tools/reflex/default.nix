@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "A small tool to watch a directory and rerun a command when certain files change";
-    homepage = https://github.com/cespare/reflex;
+    homepage = "https://github.com/cespare/reflex";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ nicknovitski ];

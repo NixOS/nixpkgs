@@ -7,8 +7,8 @@ let
     echo "attempting to fetch configuration from EC2 user data..."
 
     export HOME=/root
-    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.gnused config.system.build.nixos-rebuild]}:$PATH
-    export NIX_PATH=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
+    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.git pkgs.gnutar pkgs.gzip pkgs.gnused config.system.build.nixos-rebuild]}:$PATH
+    export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
     userData=/etc/ec2-metadata/user-data
 
@@ -18,9 +18,9 @@ let
       # that as the channel.
       if sed '/^\(#\|SSH_HOST_.*\)/d' < "$userData" | grep -q '\S'; then
         channels="$(grep '^###' "$userData" | sed 's|###\s*||')"
-        printf "%s" "$channels" | while read channel; do
+        while IFS= read -r channel; do
           echo "writing channel: $channel"
-        done
+        done < <(printf "%s\n" "$channels")
 
         if [[ -n "$channels" ]]; then
           printf "%s" "$channels" > /root/.nix-channels
@@ -48,7 +48,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     after = [ "multi-user.target" ];
     requires = [ "network-online.target" ];
- 
+
     restartIfChanged = false;
     unitConfig.X-StopOnRemoval = false;
 
@@ -58,4 +58,3 @@ in {
     };
   };
 }
-

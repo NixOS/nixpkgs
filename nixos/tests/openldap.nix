@@ -1,4 +1,4 @@
-import ./make-test.nix {
+import ./make-test-python.nix {
   name = "openldap";
 
   machine = { pkgs, ... }: {
@@ -24,8 +24,10 @@ import ./make-test.nix {
   };
 
   testScript = ''
-    $machine->waitForUnit('openldap.service');
-    $machine->succeed('systemctl status openldap.service');
-    $machine->succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"');
+    machine.wait_for_unit("openldap.service")
+    machine.succeed(
+        "systemctl status openldap.service",
+        'ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"',
+    )
   '';
 }

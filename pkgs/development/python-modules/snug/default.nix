@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tiny toolkit for writing reusable interactions with web APIs";
     license = licenses.mit;
-    homepage = https://snug.readthedocs.io/en/latest/;
+    homepage = "https://snug.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ mredaelli ];
   };
 

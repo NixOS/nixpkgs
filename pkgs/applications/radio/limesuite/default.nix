@@ -4,7 +4,7 @@
 } :
 
 let
-  version = "19.04.0";
+  version = "20.01.0";
 
 in stdenv.mkDerivation {
   pname = "limesuite";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     owner = "myriadrf";
     repo = "LimeSuite";
     rev = "v${version}";
-    sha256 = "1lrjrli0ny25qwg8bw1bvbdb18hf7ffqj4ziibkgzscv3w5v0s45";
+    sha256 = "01z4idcby2lm34bbnpbp400ski7p61jjiir6sy6dalnvsl52m7vx";
   };
 
   enableParallelBuilding = true;
@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Driver and GUI for LMS7002M-based SDR platforms";
-    homepage = https://github.com/myriadrf/LimeSuite;
+    homepage = "https://github.com/myriadrf/LimeSuite";
     license = licenses.asl20;
     maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.linux;

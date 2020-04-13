@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jdepend";
-  version = "2.9.1";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "clarkware";
     repo = "jdepend";
     rev = version;
-    sha256 = "1sxkgj4k4dhg8vb772pvisyzb8x0gwvlfqqir30ma4zvz3rfz60p";
+    sha256 = "1lxf3j9vflky7a2py3i59q7cwd1zvjv2b88l3za39vc90s04dz6k";
   };
 
   nativeBuildInputs = [ ant jdk ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Traverses Java class file directories and generates design quality metrics for each Java package";
-    homepage = http://www.clarkware.com/software/JDepend.html;
+    homepage = "http://www.clarkware.com/software/JDepend.html";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

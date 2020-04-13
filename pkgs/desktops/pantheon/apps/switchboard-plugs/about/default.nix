@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "2.6.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "12ysymk5y2k49yh3rzmra7jmimxrd54gz2f4ssc9i8w06xj5djp7";
+    sha256 = "1cjhip0abc0y5w6cqnjcgi48bfrackp45gz7955l66hxhnm5wyw6";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard About Plug";
-    homepage = https://github.com/elementary/switchboard-plug-about;
+    homepage = "https://github.com/elementary/switchboard-plug-about";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

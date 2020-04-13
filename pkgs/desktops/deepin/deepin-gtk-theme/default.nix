@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin GTK Theme";
-    homepage = https://github.com/linuxdeepin/deepin-gtk-theme;
+    homepage = "https://github.com/linuxdeepin/deepin-gtk-theme";
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

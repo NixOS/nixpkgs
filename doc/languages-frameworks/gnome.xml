@@ -74,7 +74,7 @@
 preFixup = ''
   for f in $(find $out/bin/ $out/libexec/ -type f -executable); do
     wrapProgram "$f" \
-      --prefix GIO_EXTRA_MODULES : "${getLib gnome3.dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${getLib dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$out/share" \
       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
       --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
@@ -102,7 +102,7 @@ preFixup = ''
     </listitem>
     <listitem xml:id="ssec-gnome-hooks-dconf">
      <para>
-      <package>gnome3.dconf.lib</package> is a dependency of <package>wrapGAppsHook</package>, which then also adds it to the <envar>GIO_EXTRA_MODULES</envar> variable.
+      <package>dconf.lib</package> is a dependency of <package>wrapGAppsHook</package>, which then also adds it to the <envar>GIO_EXTRA_MODULES</envar> variable.
      </para>
     </listitem>
     <listitem xml:id="ssec-gnome-hooks-hicolor-icon-theme">
@@ -199,9 +199,9 @@ python3.pkgs.buildPythonApplication {
   dontWrapGApps = true;
 
   # Arguments to be passed to `makeWrapper`, only used by buildPython*
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 }
 </programlisting>
       And for a QT app like:
@@ -219,9 +219,9 @@ mkDerivation {
   dontWrapGApps = true;
 
   # Arguments to be passed to `makeWrapper`, only used by qt5’s mkDerivation
-  qtWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 }
 </programlisting>
      </para>
@@ -233,7 +233,7 @@ mkDerivation {
     </term>
     <listitem>
      <para>
-      You can rely on applications depending on the library set the necessary environment variables but that it often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
+      You can rely on applications depending on the library setting the necessary environment variables but that is often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
       <itemizedlist>
        <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext">
         <para>

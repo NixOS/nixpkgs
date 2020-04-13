@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       Desktop Environment, it's totally desktop independent and only
       requires pure GTK.
     '';
-    homepage = https://wiki.lxde.org/en/LXTask;
+    homepage = "https://wiki.lxde.org/en/LXTask";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

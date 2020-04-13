@@ -8,18 +8,29 @@
 with lib;
 
 let
-
-  cfg = config.networking.defaultMailServer;
+  cfg = config.services.ssmtp;
 
 in
-
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "directDelivery" ] [ "services" "ssmtp" "enable" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "hostName" ] [ "services" "ssmtp" "hostName" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "domain" ] [ "services" "ssmtp" "domain" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "root" ] [ "services" "ssmtp" "root" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "useTLS" ] [ "services" "ssmtp" "useTLS" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "useSTARTTLS" ] [ "services" "ssmtp" "useSTARTTLS" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authUser" ] [ "services" "ssmtp" "authUser" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPass" ] [ "services" "ssmtp" "authPass" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPassFile" ] [ "services" "ssmtp" "authPassFile" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "setSendmail" ] [ "services" "ssmtp" "setSendmail" ])
+  ];
 
   options = {
 
-    networking.defaultMailServer = {
+    services.ssmtp = {
 
-      directDelivery = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -29,7 +40,7 @@ in
           <command>sendmail</command> or <command>postfix</command> on
           your machine, set this option to <literal>true</literal>, and
           set the option
-          <option>networking.defaultMailServer.hostName</option> to the
+          <option>services.ssmtp.hostName</option> to the
           host name of your preferred mail server.
         '';
       };
@@ -129,9 +140,9 @@ in
   };
 
 
-  config = mkIf cfg.directDelivery {
+  config = mkIf cfg.enable {
 
-    networking.defaultMailServer.authPassFile = mkIf (cfg.authPass != "")
+    services.ssmtp.authPassFile = mkIf (cfg.authPass != "")
       (mkDefault (toString (pkgs.writeTextFile {
         name = "ssmtp-authpass";
         text = cfg.authPass;

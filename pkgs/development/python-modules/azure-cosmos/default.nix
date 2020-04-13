@@ -1,5 +1,6 @@
 { buildPythonPackage
 , lib
+, python
 , fetchPypi
 , six
 , requests
@@ -15,6 +16,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six requests ];
+
+  pythonNamespaces = [ "azure" ];
 
   # requires an active Azure Cosmos service
   doCheck = false;

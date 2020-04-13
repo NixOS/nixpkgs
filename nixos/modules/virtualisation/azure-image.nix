@@ -2,27 +2,38 @@
 
 with lib;
 let
-  diskSize = 2048;
+  cfg = config.virtualisation.azureImage;
 in
 {
-  system.build.azureImage = import ../../lib/make-disk-image.nix {
-    name = "azure-image";
-    postVM = ''
-      ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/disk.vhd
-    '';
-    configFile = ./azure-config-user.nix;
-    format = "raw";
-    inherit diskSize;
-    inherit config lib pkgs;
-  };
-
   imports = [ ./azure-common.nix ];
+  
+  options = {
+    virtualisation.azureImage.diskSize = mkOption {
+      type = with types; int;
+      default = 2048;
+      description = ''
+        Size of disk image. Unit is MB.
+      '';
+    };
+  };
+  config = {
+    system.build.azureImage = import ../../lib/make-disk-image.nix {
+      name = "azure-image";
+      postVM = ''
+        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/disk.vhd
+        rm $diskImage
+      '';
+      configFile = ./azure-config-user.nix;
+      format = "raw";
+      inherit (cfg) diskSize;
+      inherit config lib pkgs;
+    };
 
-  # Azure metadata is available as a CD-ROM drive.
-  fileSystems."/metadata".device = "/dev/sr0";
+    # Azure metadata is available as a CD-ROM drive.
+    fileSystems."/metadata".device = "/dev/sr0";
 
-  systemd.services.fetch-ssh-keys =
-    { description = "Fetch host keys and authorized_keys for root user";
+    systemd.services.fetch-ssh-keys = {
+      description = "Fetch host keys and authorized_keys for root user";
 
       wantedBy = [ "sshd.service" "waagent.service" ];
       before = [ "sshd.service" "waagent.service" ];
@@ -54,6 +65,6 @@ in
       serviceConfig.RemainAfterExit = true;
       serviceConfig.StandardError = "journal+console";
       serviceConfig.StandardOutput = "journal+console";
-     };
-
+    };
+  };
 }

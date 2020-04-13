@@ -33,12 +33,15 @@ python3Packages.buildPythonApplication rec {
   ] ++ stdenv.lib.optionals isPy27 [ mock ];
 
   # test_genconfig.py needs devpi-server on PATH
+  # root_passwd_hash tries to write to store
   checkPhase = ''
-    PATH=$PATH:$out/bin pytest ./test_devpi_server --slow -rfsxX
+    PATH=$PATH:$out/bin HOME=$TMPDIR pytest \
+      ./test_devpi_server --slow -rfsxX \
+      -k 'not root_passwd_hash_option'
   '';
 
   meta = with stdenv.lib;{
-    homepage = http://doc.devpi.net;
+    homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

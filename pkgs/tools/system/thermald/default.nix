@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thermald";
-  version = "1.9";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "1ajhivl9jifcf12nbk281yayk7666v65m249aclyli0bz1kh8cfs";
+    sha256 = "0iagc3jqpnh6q2fa1gx4wx6r8qg0556j60xr159zqg95djr4dv99";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -27,11 +27,15 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    ];
+  ];
+
+  postInstall = ''
+    cp ./data/thermal-conf.xml $out/etc/thermald/
+  '';
 
   meta = with stdenv.lib; {
     description = "Thermal Daemon";
-    homepage = https://01.org/linux-thermal-daemon;
+    homepage = "https://01.org/linux-thermal-daemon";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Provides a function install() which makes the mock module";
-    homepage = https://github.com/jaraco/backports.unittest_mock;
+    homepage = "https://github.com/jaraco/backports.unittest_mock";
     license = licenses.mit;
   };
 }

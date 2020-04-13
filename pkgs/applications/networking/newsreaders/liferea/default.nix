@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A GTK-based news feed aggregator";
-    homepage = http://lzone.de/liferea/;
+    homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ vcunat romildo ];
     platforms = platforms.linux;

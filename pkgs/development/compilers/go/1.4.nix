@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pcre ];
-  propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
+  depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
 
   hardeningDisable = [ "all" ];
 
@@ -61,7 +61,9 @@ stdenv.mkDerivation rec {
 
     sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
-    sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
+    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
+    # that run outside a nix server
+    sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
 
     # Find the loader dynamically
     LOADER="$(find ${lib.getLib libc}/lib -name ld-linux\* | head -n 1)"
@@ -153,7 +155,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     branch = "1.4";
-    homepage = http://golang.org/;
+    homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan ];

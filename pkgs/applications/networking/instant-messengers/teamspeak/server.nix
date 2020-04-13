@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, autoPatchelfHook }:
+{ stdenv, fetchurl, autoPatchelfHook, writeScript }:
 
 let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.9.1";
+  version = "3.12.1";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "0vzi0prnqhjxrwlghwgii0rsmml6aa3qk3yv227g9wz5m3b9f10a"
-      else "1nn0fh4s5rmnn27djbsk21jaah1kxyvap9qaf5p4r7cydwr1bzm6";
+      then "1dxbnk12ry6arn1p38hpv5jfak55pmfmxkkl7aihn3sp1aizpgyg"
+      else "0nfzx7pbzd95a7v08g29l84sc0lnv9fx8vz3mrmzhs0xqn9gxdkq";
   };
 
   buildInputs = [ stdenv.cc.cc ];
@@ -28,12 +28,35 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/teamspeak/tsdns/tsdnsserver $out/bin/tsdnsserver
   '';
 
-  meta = {
+  passthru.updateScript = writeScript "update-teampeak-server" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused
+
+    set -eu -o pipefail
+
+    version=$( \
+        curl -s "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/" \
+        | grep softwareVersion \
+        | sed -E -e 's/^.*<span itemprop="softwareVersion">([^<]+)<\/span>.*$/\1/' \
+    )
+
+    versionOld=$(nix-instantiate --eval --strict -A "teamspeak_server.version")
+
+    nixFile=pkgs/applications/networking/instant-messengers/teamspeak/server.nix
+
+    update-source-version teamspeak_server "$version" --system=i686-linux
+
+    sed -i -e "s/version = \"$version\";/version = $versionOld;/" "$nixFile"
+
+    update-source-version teamspeak_server "$version" --system=x86_64-linux
+  '';
+
+  meta = with stdenv.lib; {
     description = "TeamSpeak voice communication server";
-    homepage = https://teamspeak.com/;
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.arobyn ];
+    homepage = "https://teamspeak.com/";
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ arobyn gerschtli ];
   };
 }
 

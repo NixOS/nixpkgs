@@ -64,10 +64,9 @@ in
 
   config = mkIf config.services.memcached.enable {
 
-    users.users = optional (cfg.user == "memcached") {
-      name = "memcached";
-      description = "Memcached server user";
-      isSystemUser = true;
+    users.users = optionalAttrs (cfg.user == "memcached") {
+      memcached.description = "Memcached server user";
+      memcached.isSystemUser = true;
     };
 
     environment.systemPackages = [ memcached ];

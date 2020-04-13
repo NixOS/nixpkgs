@@ -1,21 +1,46 @@
 { stdenv
-, mkDerivation
+, a2jmidid
+, coreutils
 , lib
+, libjack2
+, fetchpatch
 , fetchzip
+, jack_capture
 , pkgconfig
+, pulseaudioFull
 , qtbase
 , makeWrapper
-, python3Packages
+, mkDerivation
+, python3
 }:
+#ladish missing, claudia can't work.
+#pulseaudio needs fixes (patchShebangs .pa ...)
+#desktop needs icons and exec fixing.
 
- mkDerivation rec {
-  version = "0.9.0";
+mkDerivation rec {
+  version = "0.9.1";
   pname = "cadence";
 
   src = fetchzip {
     url = "https://github.com/falkTX/Cadence/archive/v${version}.tar.gz";
-    sha256 = "08vcggypkdfr70v49innahs5s11hi222dhhnm5wcqzdgksphqzwx";
+    sha256 = "07z8grnnpkd0nf3y3r6qjlk1jlzrbhdrp9mnhrhhmws54p1bhl20";
   };
+
+  patches = [
+    # Fix installation without DESTDIR
+    (fetchpatch {
+      url = "https://github.com/falkTX/Cadence/commit/1fd3275e7daf4b75f59ef1f85a9e2e93bd5c0731.patch";
+      sha256 = "0q791jsh8vmjg678dzhbp1ykq8xrrlxl1mbgs3g8if1ccj210vd8";
+    })
+  ];
+
+  postPatch = ''
+      libjackso=$(realpath ${lib.makeLibraryPath [libjack2]}/libjack.so.0);
+      substituteInPlace ./src/jacklib.py --replace libjack.so.0 $libjackso
+      substituteInPlace ./src/cadence.py --replace "/usr/bin/pulseaudio" \
+        "${lib.makeBinPath[pulseaudioFull]}/pulseaudio"
+      substituteInPlace ./c++/jackbridge/JackBridge.cpp --replace libjack.so.0 $libjackso
+  '';
 
   nativeBuildInputs = [
     pkgconfig
@@ -23,15 +48,17 @@
 
   buildInputs = [
     qtbase
+    jack_capture
+    pulseaudioFull
+    ((python3.withPackages (ps: with ps; [
+          pyqt5
+          dbus-python
+        ])))
   ];
 
   makeFlags = [
-    "PREFIX=''"
-    "DESTDIR=${placeholder "out"}"
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
-    pyqt5_with_qtwebkit
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/etc"
   ];
 
   dontWrapQtApps = true;
@@ -56,14 +83,15 @@
     };
   in lib.mapAttrsToList (script: source: ''
     rm -f ${script}
-    makeWrapper ${python3Packages.python.interpreter} ${script} \
-      --set PYTHONPATH "$PYTHONPATH:${outRef}/share/cadence" \
-      ''${qtWrapperArgs[@]} \
-      --add-flags "-O ${source}"
+    makeQtWrapper ${source} ${script} \
+      --prefix PATH : "${lib.makeBinPath [
+        jack_capture # cadence-render
+        pulseaudioFull # cadence, cadence-session-start
+        ]}"
   '') scriptAndSource;
 
   meta = {
-    homepage = https://github.com/falkTX/Cadence/;
+    homepage = "https://github.com/falkTX/Cadence/";
     description = "Collection of tools useful for audio production";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ genesis worldofpeace ];

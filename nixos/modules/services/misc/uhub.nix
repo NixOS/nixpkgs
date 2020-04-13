@@ -41,31 +41,31 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-	description = "Whether to enable the uhub ADC hub.";
+        description = "Whether to enable the uhub ADC hub.";
       };
 
       port = mkOption {
         type = types.int;
         default = 1511;
-	description = "TCP port to bind the hub to.";
+        description = "TCP port to bind the hub to.";
       };
 
       address = mkOption {
         type = types.str;
         default = "any";
-	description = "Address to bind the hub to.";
+        description = "Address to bind the hub to.";
       };
 
       enableTLS = mkOption {
         type = types.bool;
         default = false;
-	description = "Whether to enable TLS support.";
+        description = "Whether to enable TLS support.";
       };
 
       hubConfig = mkOption {
         type = types.lines;
         default = "";
-	description = "Contents of uhub configuration file.";
+        description = "Contents of uhub configuration file.";
       };
 
       aclConfig = mkOption {
@@ -77,11 +77,11 @@ in
       plugins = {
 
         authSqlite = {
-	  enable = mkOption {
+          enable = mkOption {
             type = types.bool;
             default = false;
             description = "Whether to enable the Sqlite authentication database plugin";
-	  };
+          };
           file = mkOption {
             type = types.path;
             example = "/var/db/uhub-users";
@@ -161,14 +161,8 @@ in
   config = mkIf cfg.enable {
 
     users = {
-      users = singleton {
-        name = "uhub";
-        uid = config.ids.uids.uhub;
-      };
-      groups = singleton {
-        name = "uhub";
-        gid = config.ids.gids.uhub;
-      };
+      users.uhub.uid = config.ids.uids.uhub;
+      groups.uhub.gid = config.ids.gids.uhub;
     };
 
     systemd.services.uhub = {

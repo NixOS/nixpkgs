@@ -6,7 +6,10 @@ let
   cfg = config.programs.dconf;
 
   mkDconfProfile = name: path:
-    { source = path; target = "dconf/profile/${name}"; };
+    {
+      name = "dconf/profile/${name}";
+      value.source = path; 
+    };
 
 in
 {
@@ -29,16 +32,16 @@ in
   ###### implementation
 
   config = mkIf (cfg.profiles != {} || cfg.enable) {
-    environment.etc = optionals (cfg.profiles != {})
-      (mapAttrsToList mkDconfProfile cfg.profiles);
+    environment.etc = optionalAttrs (cfg.profiles != {})
+      (mapAttrs' mkDconfProfile cfg.profiles);
 
-    services.dbus.packages = [ pkgs.gnome3.dconf ];
+    services.dbus.packages = [ pkgs.dconf ];
 
     # For dconf executable
-    environment.systemPackages = [ pkgs.gnome3.dconf ];
+    environment.systemPackages = [ pkgs.dconf ];
 
     # Needed for unwrapped applications
-    environment.variables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.gnome3.dconf.lib}/lib/gio/modules" ];
+    environment.variables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.dconf.lib}/lib/gio/modules" ];
   };
 
 }

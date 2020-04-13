@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 with lib;
 
@@ -18,17 +18,16 @@ with lib;
   };
 
   testScript = ''
-    subtest "machine with iftop enabled", sub {
-      $withIftop->waitForUnit("default.target");
-      # limit to eth1 (eth0 is the test driver's control interface)
-      # and don't try name lookups
-      $withIftop->succeed("su -l alice -c 'iftop -t -s 1 -n -i eth1'");
-    };
-    subtest "machine without iftop", sub {
-      $withoutIftop->waitForUnit("default.target");
-      # check that iftop is there but user alice lacks capabilities
-      $withoutIftop->succeed("iftop -t -s 1 -n -i eth1");
-      $withoutIftop->fail("su -l alice -c 'iftop -t -s 1 -n -i eth1'");
-    };
+    with subtest("machine with iftop enabled"):
+        withIftop.wait_for_unit("default.target")
+        # limit to eth1 (eth0 is the test driver's control interface)
+        # and don't try name lookups
+        withIftop.succeed("su -l alice -c 'iftop -t -s 1 -n -i eth1'")
+
+    with subtest("machine without iftop"):
+        withoutIftop.wait_for_unit("default.target")
+        # check that iftop is there but user alice lacks capabilitie
+        withoutIftop.succeed("iftop -t -s 1 -n -i eth1")
+        withoutIftop.fail("su -l alice -c 'iftop -t -s 1 -n -i eth1'")
   '';
 })

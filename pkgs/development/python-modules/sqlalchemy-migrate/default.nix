@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   # See: https://review.openstack.org/#/c/608382/
   patches = [ (fetchpatch {
-    url = https://github.com/openstack/sqlalchemy-migrate/pull/18.patch;
+    url = "https://github.com/openstack/sqlalchemy-migrate/pull/18.patch";
     sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
   }) ];
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/openstack/sqlalchemy-migrate;
+    homepage = "https://github.com/openstack/sqlalchemy-migrate";
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];

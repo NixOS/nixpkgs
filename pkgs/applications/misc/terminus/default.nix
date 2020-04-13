@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   meta = with lib; {
     description = "A terminal for a more modern age";
-    homepage    = https://eugeny.github.io/terminus/;
+    homepage    = "https://eugeny.github.io/terminus/";
     maintainers = with maintainers; [ jlesquembre ];
     license     = licenses.mit;
     platforms   = [ "x86_64-linux" ];

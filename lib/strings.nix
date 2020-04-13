@@ -244,7 +244,7 @@ rec {
      Also note that Nix treats strings as a list of bytes and thus doesn't
      handle unicode.
 
-     Type: stringtoCharacters :: string -> [string]
+     Type: stringToCharacters :: string -> [string]
 
      Example:
        stringToCharacters ""
@@ -473,6 +473,23 @@ rec {
   versionAtLeast = v1: v2: !versionOlder v1 v2;
 
   /* This function takes an argument that's either a derivation or a
+     derivation's "name" attribute and extracts the name part from that
+     argument.
+
+     Example:
+       getName "youtube-dl-2016.01.01"
+       => "youtube-dl"
+       getName pkgs.youtube-dl
+       => "youtube-dl"
+  */
+  getName = x:
+   let
+     parse = drv: (builtins.parseDrvName drv).name;
+   in if isString x
+      then parse x
+      else x.pname or (parse x.name);
+
+  /* This function takes an argument that's either a derivation or a
      derivation's "name" attribute and extracts the version part from that
      argument.
 
@@ -661,4 +678,36 @@ rec {
        => "1.0"
   */
   fileContents = file: removeSuffix "\n" (builtins.readFile file);
+
+
+  /* Creates a valid derivation name from a potentially invalid one.
+
+     Type: sanitizeDerivationName :: String -> String
+
+     Example:
+       sanitizeDerivationName "../hello.bar # foo"
+       => "-hello.bar-foo"
+       sanitizeDerivationName ""
+       => "unknown"
+       sanitizeDerivationName pkgs.hello
+       => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
+  */
+  sanitizeDerivationName = string: lib.pipe string [
+    # Get rid of string context. This is safe under the assumption that the
+    # resulting string is only used as a derivation name
+    builtins.unsafeDiscardStringContext
+    # Strip all leading "."
+    (x: builtins.elemAt (builtins.match "\\.*(.*)" x) 0)
+    # Split out all invalid characters
+    # https://github.com/NixOS/nix/blob/2.3.2/src/libstore/store-api.cc#L85-L112
+    # https://github.com/NixOS/nix/blob/2242be83c61788b9c0736a92bb0b5c7bbfc40803/nix-rust/src/store/path.rs#L100-L125
+    (builtins.split "[^[:alnum:]+._?=-]+")
+    # Replace invalid character ranges with a "-"
+    (concatMapStrings (s: if lib.isList s then "-" else s))
+    # Limit to 211 characters (minus 4 chars for ".drv")
+    (x: substring (lib.max (stringLength x - 207) 0) (-1) x)
+    # If the result is empty, replace it with "unknown"
+    (x: if stringLength x == 0 then "unknown" else x)
+  ];
+
 }

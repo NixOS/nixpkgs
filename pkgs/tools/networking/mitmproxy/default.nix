@@ -27,7 +27,7 @@ buildPythonPackage rec {
       # https://github.com/mitmproxy/mitmproxy/issues/3459
       # TODO: remove on next update
       name = "wsproto-0.13.patch";
-      url = https://github.com/mitmproxy/mitmproxy/commit/70777a1b6ed64af9cafcdef223a8a260ecc96864.patch;
+      url = "https://github.com/mitmproxy/mitmproxy/commit/70777a1b6ed64af9cafcdef223a8a260ecc96864.patch";
       sha256 = "1ddxdr7js510kzyq3gyks4k5k1n8zb1i9amxw7wzmi1dcg8kqw9a";
       # We strip these bounds anyway
       excludes = [ "setup.py" ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
       # https://github.com/mitmproxy/mitmproxy/issues/3403
       # TODO: remove on next update
       name = "dont-call-fixtures.patch";
-      url = https://github.com/mitmproxy/mitmproxy/commit/ce28721458c8cc71de86513a5110676e9763041b.patch;
+      url = "https://github.com/mitmproxy/mitmproxy/commit/ce28721458c8cc71de86513a5110676e9763041b.patch";
       sha256 = "05pljr28lx7l1xgswqr9sz8dnhvc7npzh8xg2p9hignf159kd54d";
       # Irrelevant in nixpkgs
       excludes = [ "setup.py" "setup.cfg" "release/docker/*" ];
@@ -76,7 +76,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Man-in-the-middle proxy";
-    homepage    = https://mitmproxy.org/;
+    homepage    = "https://mitmproxy.org/";
     license     = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
   };

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "LOCAL_ROOT=$(out)/share/polipo/www" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.pps.jussieu.fr/~jch/software/polipo/;
+    homepage = "http://www.pps.jussieu.fr/~jch/software/polipo/";
     description = "A small and fast caching web proxy";
     license = licenses.mit;
     maintainers = with maintainers; [ phreedom ehmry ];

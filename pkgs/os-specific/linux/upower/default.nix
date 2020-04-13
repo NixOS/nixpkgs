@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = https://gitlab.freedesktop.org/upower/upower/uploads/93cfe7c8d66ed486001c4f3f55399b7a/upower-0.99.11.tar.xz;
+    url = "https://gitlab.freedesktop.org/upower/upower/uploads/93cfe7c8d66ed486001c4f3f55399b7a/upower-0.99.11.tar.xz";
     sha256 = "1vxxvmz2cxb1qy6ibszaz5bskqdy9nd9fxspj9fv3gfmrjzzzdb4";
   };
 
@@ -52,16 +52,18 @@ stdenv.mkDerivation {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemdutildir=${placeholder "out"}/lib/systemd"
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "--sysconfdir=/etc"
   ];
 
   doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"
 
   installFlags = [
     "historydir=$(TMPDIR)/foo"
+    "sysconfdir=${placeholder "out"}/etc"
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://upower.freedesktop.org/;
+    homepage = "https://upower.freedesktop.org/";
     description = "A D-Bus service for power management";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

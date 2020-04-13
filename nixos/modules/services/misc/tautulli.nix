@@ -6,6 +6,10 @@ let
   cfg = config.services.tautulli;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "plexpy" ] [ "services" "tautulli" ])
+  ];
+
   options = {
     services.tautulli = {
       enable = mkEnableOption "Tautulli Plex Monitor";

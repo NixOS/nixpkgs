@@ -15,6 +15,24 @@ let
       (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
+  zshStartupNotes = ''
+    # Note that generated /etc/zprofile and /etc/zshrc files do a lot of
+    # non-standard setup to make zsh usable with no configuration by default.
+    #
+    # Which means that unless you explicitly meticulously override everything
+    # generated, interactions between your ~/.zshrc and these files are likely
+    # to be rather surprising.
+    #
+    # Note however, that you can disable loading of the generated /etc/zprofile
+    # and /etc/zshrc (you can't disable loading of /etc/zshenv, but it is
+    # designed to not set anything surprising) by setting `no_global_rcs` option
+    # in ~/.zshenv:
+    #
+    #   echo setopt no_global_rcs >> ~/.zshenv
+    #
+    # See "STARTUP/SHUTDOWN FILES" section of zsh(1) for more info.
+  '';
+
 in
 
 {
@@ -69,6 +87,10 @@ in
 
       promptInit = mkOption {
         default = ''
+          # Note that to manually override this in ~/.zshrc you should run `prompt off`
+          # before setting your PS1 and etc. Otherwise this will likely to interact with
+          # your ~/.zshrc configuration in unexpected ways as the default prompt sets
+          # a lot of different prompt variables.
           autoload -U promptinit && promptinit && prompt walters && setopt prompt_sp
         '';
         description = ''
@@ -100,7 +122,8 @@ in
         ];
         example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
         description = ''
-          Configure zsh options.
+          Configure zsh options. See
+          <citerefentry><refentrytitle>zshoptions</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
         '';
       };
 
@@ -139,14 +162,21 @@ in
         # This file is read for all shells.
 
         # Only execute this file once per shell.
-        # But don't clobber the environment of interactive non-login children!
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
-        export __ETC_ZSHENV_SOURCED=1
+        __ETC_ZSHENV_SOURCED=1
 
         if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
             . ${config.system.build.setEnvironment}
         fi
 
+        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
+
+        # Tell zsh how to find installed completions.
+        for p in ''${(z)NIX_PROFILES}; do
+            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+        done
+
+        # Setup custom shell init stuff.
         ${cfge.shellInit}
 
         ${cfg.shellInit}
@@ -161,11 +191,14 @@ in
       ''
         # /etc/zprofile: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for login shells.
+        #
+        ${zshStartupNotes}
 
         # Only execute this file once per shell.
         if [ -n "$__ETC_ZPROFILE_SOURCED" ]; then return; fi
         __ETC_ZPROFILE_SOURCED=1
 
+        # Setup custom login shell init stuff.
         ${cfge.loginShellInit}
 
         ${cfg.loginShellInit}
@@ -180,38 +213,44 @@ in
       ''
         # /etc/zshrc: DO NOT EDIT -- this file has been generated automatically.
         # This file is read for interactive shells.
+        #
+        ${zshStartupNotes}
 
         # Only execute this file once per shell.
         if [ -n "$__ETC_ZSHRC_SOURCED" -o -n "$NOSYSZSHRC" ]; then return; fi
         __ETC_ZSHRC_SOURCED=1
 
-        . /etc/zinputrc
+        ${optionalString (cfg.setOptions != []) ''
+          # Set zsh options.
+          setopt ${concatStringsSep " " cfg.setOptions}
+        ''}
 
-        # Don't export these, otherwise other shells (bash) will try to use same histfile
+        # Setup command line history.
+        # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
         SAVEHIST=${toString cfg.histSize}
         HISTSIZE=${toString cfg.histSize}
         HISTFILE=${cfg.histFile}
 
-        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
+        # Configure sane keyboard defaults.
+        . /etc/zinputrc
 
-        # Tell zsh how to find installed completions
-        for p in ''${(z)NIX_PROFILES}; do
-            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
-        done
+        ${optionalString cfg.enableGlobalCompInit ''
+          # Enable autocompletion.
+          autoload -U compinit && compinit
+        ''}
 
-        ${optionalString cfg.enableGlobalCompInit "autoload -U compinit && compinit"}
-
+        # Setup custom interactive shell init stuff.
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
 
-        ${optionalString (cfg.setOptions != []) "setopt ${concatStringsSep " " cfg.setOptions}"}
-
+        # Setup aliases.
         ${zshAliases}
 
+        # Setup prompt.
         ${cfg.promptInit}
 
-        # Need to disable features to support TRAMP
+        # Disable some features to support TRAMP.
         if [ "$TERM" = dumb ]; then
             unsetopt zle prompt_cr prompt_subst
             unset RPS1 RPROMPT

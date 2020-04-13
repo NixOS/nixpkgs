@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "nzbget";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aanderse flokli ];
@@ -15,12 +15,16 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $server->waitForUnit("nzbget.service");
-    $server->waitForUnit("network.target");
-    $server->waitForOpenPort(6789);
-    $server->succeed("curl -s -u nzbget:tegbzn6789 http://127.0.0.1:6789 | grep -q 'This file is part of nzbget'");
-    $server->succeed("${pkgs.nzbget}/bin/nzbget -n -o ControlIP=127.0.0.1 -o ControlPort=6789 -o ControlPassword=tegbzn6789 -V");
+    server.wait_for_unit("nzbget.service")
+    server.wait_for_unit("network.target")
+    server.wait_for_open_port(6789)
+    assert "This file is part of nzbget" in server.succeed(
+        "curl -s -u nzbget:tegbzn6789 http://127.0.0.1:6789"
+    )
+    server.succeed(
+        "${pkgs.nzbget}/bin/nzbget -n -o Control_iP=127.0.0.1 -o Control_port=6789 -o Control_password=tegbzn6789 -V"
+    )
   '';
 })

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "19.34.13959";
+  version = "20.02.15268";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "1m54w5p5pilrkmlmqgvgrsm3d5dqfdr4jai5siq5ccsqj4gnv1wz";
+    sha256 = "138gi92w85bn6haw5x38k39pgiyvvzfhiwpvz6hqlx2j03n8cs2k";
   };
 
   # Build script tries to write the ICD to /etc
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/intel/compute-runtime;
+    homepage    = "https://github.com/intel/compute-runtime";
     description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond.";
     license     = licenses.mit;
     platforms   = platforms.linux;

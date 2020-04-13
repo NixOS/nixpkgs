@@ -1,8 +1,8 @@
 {
   stdenv, fetchzip,
 
+  iptables ? null,
   iproute ? null,
-  libmnl ? null,
   makeWrapper ? null,
   openresolv ? null,
   procps ? null,
@@ -13,17 +13,18 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "0.0.20191012";
+  version = "1.0.20200319";
 
   src = fetchzip {
-    url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "0nwcx7m5cpp4h1bclswiqq1jzj08xzpxmq5s4rcfqmrp59cmwgrs";
+    url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
+    sha256 = "0g9vlngg9dnh7qqfhaycw35fq8ij5hfz6p1cykh4ncjgr93i7rbx";
   };
 
-  sourceRoot = "source/src/tools";
+  outputs = [ "out" "man" ];
+
+  sourceRoot = "source/src";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = optional stdenv.isLinux libmnl;
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute openresolv]}
+      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute iptables openresolv]}
     done
   '' + optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
@@ -50,10 +51,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools for the WireGuard secure network tunnel";
-    downloadPage = "https://git.zx2c4.com/WireGuard/refs/";
+    downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ma27 ];
+    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ma27 xwvvvvwx ];
     platforms = platforms.unix;
   };
 }

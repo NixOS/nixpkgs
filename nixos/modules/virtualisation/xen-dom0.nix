@@ -9,6 +9,11 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "xen" "qemu" ] "You don't need this option anymore, it will work without it.")
+    (mkRenamedOptionModule [ "virtualisation" "xen" "qemu-package" ] [ "virtualisation" "xen" "package-qemu" ])
+  ];
+
   ###### interface
 
   options = {
@@ -228,26 +233,19 @@ in
 
 
     environment.etc =
-      [ { source = "${cfg.package}/etc/xen/xl.conf";
-          target = "xen/xl.conf";
-        }
-        { source = "${cfg.package}/etc/xen/scripts";
-          target = "xen/scripts";
-        }
-        { text = ''
-            source ${cfg.package}/etc/default/xendomains
+      {
+        "xen/xl.conf".source = "${cfg.package}/etc/xen/xl.conf";
+        "xen/scripts".source = "${cfg.package}/etc/xen/scripts";
+        "default/xendomains".text = ''
+          source ${cfg.package}/etc/default/xendomains
 
-            ${cfg.domains.extraConfig}
-          '';
-          target = "default/xendomains";
-        }
-      ]
-      ++ lib.optionals (builtins.compareVersions cfg.package.version "4.10" >= 0) [
+          ${cfg.domains.extraConfig}
+        '';
+      }
+      // optionalAttrs (builtins.compareVersions cfg.package.version "4.10" >= 0) {
         # in V 4.10 oxenstored requires /etc/xen/oxenstored.conf to start
-        { source = "${cfg.package}/etc/xen/oxenstored.conf";
-          target = "xen/oxenstored.conf";
-        }
-      ];
+        "xen/oxenstored.conf".source = "${cfg.package}/etc/xen/oxenstored.conf";
+      };
 
     # Xen provides udev rules.
     services.udev.packages = [ cfg.package ];

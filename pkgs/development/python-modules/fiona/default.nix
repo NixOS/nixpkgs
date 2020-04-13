@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "Fiona";
-  version = "1.8.9.post2";
+  version = "1.8.13.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "210fb038b579fab38f35ddbdd31b9725f4d5099b3edfd4b87c983e5d47b79983";
+    sha256 = "00366f2j21b5r4r8310sadf7jjhdr44s0381dhjqkw2nzpwjnhqs";
   };
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OGR's neat, nimble, no-nonsense API for Python";
-    homepage = http://toblerity.org/fiona/;
+    homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

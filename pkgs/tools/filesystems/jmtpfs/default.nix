@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A FUSE filesystem for MTP devices like Android phones";
-    homepage = https://github.com/JasonFerrara/jmtpfs;
+    homepage = "https://github.com/JasonFerrara/jmtpfs";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.coconnor ];

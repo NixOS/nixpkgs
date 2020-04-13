@@ -27,6 +27,8 @@ mkDerivation rec {
     cd build
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-address-of-packed-member" ]; # Don't litter logs with these warnings
+
   qmakeFlags = [
     # Default install tries to copy Qt files into package
     "CONFIG+=QGC_DISABLE_BUILD_SETUP"

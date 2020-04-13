@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
-, xz, pam, acl, libuuid, m4, utillinux, libffi
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
+, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
@@ -15,17 +15,31 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-stdenv.mkDerivation {
-  version = "243";
+let gnupg-minimal = gnupg.override {
+  enableMinimal = true;
+  guiSupport = false;
+  pcsclite = null;
+  sqlite = null;
+  pinentry = null;
+  adns = null;
+  gnutls = null;
+  libusb = null;
+  openldap = null;
+  readline = null;
+  zlib = null;
+  bzip2 = null;
+};
+in stdenv.mkDerivation {
+  version = "243.7";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "NixOS";
+    owner = "nixos";
     repo = "systemd";
-    rev = "d25cf413c6bff1b5a9d216a8830e3a90c9cad1de";
-    sha256 = "0ilvrnh3m7g0yflxl16fk52gkb1z0fwwk9ba5gs4005nzpl0c7i0";
+    rev = "e7d881488292fc8bdf96acd12767eca1bd65adae";
+    sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -41,7 +55,7 @@ stdenv.mkDerivation {
       (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
     ];
   buildInputs =
-    [ linuxHeaders libcap kmod xz pam acl
+    [ linuxHeaders libcap curl.dev kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
       libmicrohttpd pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
@@ -67,6 +81,7 @@ stdenv.mkDerivation {
     "-Ddebug-shell=${bashInteractive}/bin/bash"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
+    "-Dimportd=true"
     "-Dlz4=true"
     "-Dhostnamed=true"
     "-Dnetworkd=true"
@@ -77,7 +92,7 @@ stdenv.mkDerivation {
     "-Dlocaled=true"
     "-Dresolve=true"
     "-Dsplit-usr=false"
-    "-Dlibcurl=false"
+    "-Dlibcurl=true"
     "-Dlibidn=false"
     "-Dlibidn2=true"
     "-Dquotacheck=false"
@@ -144,6 +159,14 @@ stdenv.mkDerivation {
       patchShebangs $dir
     done
 
+    # absolute paths to gpg & tar
+    substituteInPlace src/import/pull-common.c \
+      --replace '"gpg"' '"${gnupg-minimal}/bin/gpg"'
+    for file in src/import/{{export,import,pull}-tar,import-common}.c; do
+      substituteInPlace $file \
+        --replace '"tar"' '"${gnutar}/bin/tar"'
+    done
+
     substituteInPlace src/journal/catalog.c \
       --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
@@ -157,18 +180,18 @@ stdenv.mkDerivation {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE =
-    [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+  NIX_CFLAGS_COMPILE = toString [
+    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
+    # lead to a cyclic dependency.
+    "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    # Set the release_agent on /sys/fs/cgroup/systemd to the
+    # currently running systemd (/run/current-system/systemd) so
+    # that we don't use an obsolete/garbage-collected release agent.
+    "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-      "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
-    ];
+    "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+  ];
 
   doCheck = false; # fails a bunch of tests
 
@@ -235,11 +258,11 @@ stdenv.mkDerivation {
   passthru.interfaceVersion = 2;
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/systemd;
+    homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ eelco andir mic92 ];
+    maintainers = with maintainers; [ andir eelco flokli mic92 ];
   };
 }

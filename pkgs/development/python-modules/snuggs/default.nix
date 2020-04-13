@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "S-expressions for Numpy";
     license = licenses.mit;
-    homepage = https://github.com/mapbox/snuggs;
+    homepage = "https://github.com/mapbox/snuggs";
     maintainers = with maintainers; [ mredaelli ];
   };
 }

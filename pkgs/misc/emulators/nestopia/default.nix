@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, SDL2, alsaLib, gtk3
-, makeWrapper, libGLU_combined, libarchive, libao, unzip, xdg_utils
+, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg_utils
 , epoxy, gdk-pixbuf, gnome3, wrapGAppsHook
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     epoxy
     gtk3
     gdk-pixbuf
-    libGLU_combined
+    libGLU libGL
     libarchive
     libao
     unzip
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://0ldsk00l.ca/nestopia/;
+    homepage = "http://0ldsk00l.ca/nestopia/";
     description = "NES emulator with a focus on accuracy";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

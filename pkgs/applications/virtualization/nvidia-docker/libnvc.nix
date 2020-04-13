@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libelf libcap libseccomp ];
 
   meta = {
-    homepage = https://github.com/NVIDIA/libnvidia-container;
+    homepage = "https://github.com/NVIDIA/libnvidia-container";
     description = "NVIDIA container runtime library";
     license = licenses.bsd3;
     platforms = platforms.linux;

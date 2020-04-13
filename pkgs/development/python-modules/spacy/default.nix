@@ -3,55 +3,45 @@
 , fetchPypi
 , pythonOlder
 , pytest
-, preshed
-, ftfy
-, numpy
-, murmurhash
-, plac
-, ujson
-, dill
-, requests
-, thinc
-, regex
-, cymem
-, pathlib
-, msgpack
-, msgpack-numpy
-, jsonschema
 , blis
-, wasabi
-, srsly
+, catalogue
+, cymem
+, jsonschema
+, murmurhash
+, numpy
+, pathlib
+, plac
+, preshed
+, requests
 , setuptools
+, srsly
+, thinc
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "193r7rrqxfj4jqzk4aqgbycficzmc606vkc4ffc46zs3myhlf6sa";
+    sha256 = "1fgm1zlw8mjhmk64skxs79ymhcningml13y9c9fy7rj1b1yadwzh";
   };
 
   propagatedBuildInputs = [
-   numpy
-   murmurhash
-   cymem
-   preshed
-   thinc
-   plac
-   ujson
-   dill
-   requests
-   regex
-   ftfy
-   msgpack
-   msgpack-numpy
-   jsonschema
    blis
-   wasabi
-   srsly
+   catalogue
+   cymem
+   jsonschema
+   murmurhash
+   numpy
+   plac
+   preshed
+   requests
    setuptools
+   srsly
+   thinc
+   wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
@@ -65,7 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
-    homepage = https://github.com/explosion/spaCy;
+    homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk sdll ];
     };

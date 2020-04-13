@@ -1,53 +1,53 @@
 { stdenv, fetchurl }:
 
 let
-  # last commit on the directory containing the fonts in the upstream repository
-  commit = "883939708704a19a295e0652036369d22469e8dc";
+  # Latest commit touching the robotomono tree
+  commit = "5338537ef835a3d9ccf8faf386399f13a30605e2";
 in
 stdenv.mkDerivation {
   pname = "roboto-mono";
-  version = "2016-01-11";
+  version = "2.002-20190125";
 
   srcs = [
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-Regular.ttf";
-      sha256 = "0r6g1xydy824xbbjilq6pvrv8611ga3q1702v5jj1ly5np6gpddz";
+      sha256 = "1f96r4by67hzqpr4p2wkrfnpj9b7x9qrmwns0312w2l2rnp2qajx";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-Bold.ttf";
-      sha256 = "0x9qnrbd7hin873wjzrl6798bvakixd86qdw0z5b4sm56f7fjl32";
+      sha256 = "10wg4dchdq4s89r9pd4h8y5l1bf8mix32pksph2wafyr3815kfnm";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-Italic.ttf";
-      sha256 = "17aia6hgpjvvrl79y0f67ncr5y1nhyxj0dzqwdg3dycsa4kij59q";
+      sha256 = "1cayhm3wj36q748xd0zdgrhm4pz7wnrskrlf7khxx2s41m3win5b";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-BoldItalic.ttf";
-      sha256 = "05gqfnps6qzxgyxrrmkmw0by3j88lf88v67n8jgi2chhhm0sw40q";
+      sha256 = "04238dxizdlhnnnyzhnqckxf8ciwlnwyzxby6qgpyg232abx0n2z";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-Medium.ttf";
-      sha256 = "0ww96qd0cyj3waxf7a98hyd4cp8snajjvjmbhr66zilql8ylfzk0";
+      sha256 = "00rh49d0dbycbkjgd2883w7iqzd6hcry08ycjipsvk091p5nq6qy";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-MediumItalic.ttf";
-      sha256 = "1n2cvvcpwm68lazfh3s3xhj4mrc01x84mi2ackwf8ahd95fk9p5y";
+      sha256 = "0fxl6lblj7anhqmhplnpvjwckjh4g8m6r9jykxdrvpl5hk8mr65b";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-Light.ttf";
-      sha256 = "0na2sxz3n1km1ryz002spfa65d91fm48x0qcda2ac0rly7dgaqjf";
+      sha256 = "1h8rbc2p70fabkplsafzah1wcwy92qc1wzkmc1cnb4yq28gxah4a";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-LightItalic.ttf";
-      sha256 = "171fr8wsbmvfllsbmb9pcdax2qfzhbqzyxfn5bcrz9kx5k9x6198";
+      sha256 = "08y2qngwy61mc22f8i00gshgmcf7hwmfxh1f4j824svy4n16zhsc";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-Thin.ttf";
-      sha256 = "0pv54afyprajb16ksm5vklc1q76iv72v427wgamqzrzyvxgn6ymj";
+      sha256 = "0fmij9zlfjiyf0vb8n8gvrwi35l830zpmkbhcy1xgx0m8za6mmmy";
     })
     (fetchurl {
       url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotomono/RobotoMono-ThinItalic.ttf";
-      sha256 = "1ziyysl09z24l735y940g92rqhn9v4npwqzajj9m1kn0xz21r1aw";
+      sha256 = "0mpwdhjnsk8311nw8fqzy1b7v0wzb4pw639ply1j38a0vibrsmn7";
     })
   ];
 
@@ -65,10 +65,10 @@ stdenv.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "1rd3qql779dn9nl940hf988lvv4gfy5llgrlfqq0db0c22b2yfng";
+  outputHash = "0fkx2z97k29n1392bf76iwdyz44yp86hmqah7ai6bikzlia38qa0";
 
-  meta = {
-    homepage = https://www.google.com/fonts/specimen/Roboto+Mono;
+  meta = with stdenv.lib; {
+    homepage = "https://www.google.com/fonts/specimen/Roboto+Mono";
     description = "Google Roboto Mono fonts";
     longDescription = ''
       Roboto Mono is a monospaced addition to the Roboto type family. Like
@@ -81,8 +81,8 @@ stdenv.mkDerivation {
       wider glyphs are adjusted for weight. Curved caps like 'C' and 'O'
       take on the straighter sides from Roboto Condensed.
     '';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
   };
 }

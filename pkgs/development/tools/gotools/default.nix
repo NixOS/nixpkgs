@@ -1,15 +1,17 @@
-{ stdenv, go, buildGoModule, fetchgit }:
+{ stdenv, go, buildGoModule, fetchgit, Security }:
 
 buildGoModule rec {
   pname = "gotools-unstable";
-  version = "2019-09-05";
-  rev = "6b3d1c9ba8bf7ce410f6b490852ec54953383362";
+  version = "2019-11-14";
+  rev = "4191b8cbba092238a318a71cdff48b20b4e1e5d8";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "0a2xjx9hqkash7fd2qv9hd93wcqdbfrmsdzjd91dwvnk48j61daf";
+    sha256 = "16m62m303j4wqfjr1401xpqpb9m11bs6qc2dhf6x2za2d9pycish";
   };
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   # Build of golang.org/x/tools/gopls fails with:
   #   can't load package: package golang.org/x/tools/gopls: unknown import path "golang.org/x/tools/gopls": cannot find module providing package golang.org/x/tools/gopls
@@ -40,9 +42,8 @@ buildGoModule rec {
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''
     mkdir -p $out/nix-support
-    substituteAll ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook.tmp
-    cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
-    rm $out/nix-support/setup-hook.tmp
+    substitute ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook \
+      --subst-var-by bin $out
   '';
 
   # Do not copy this without a good reason for enabling

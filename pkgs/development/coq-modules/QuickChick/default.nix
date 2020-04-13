@@ -25,6 +25,12 @@ let params =
       rev = "v${version}";
       sha256 = "1c34v1k37rk7v0xk2czv5n79mbjxjrm6nh3llg2mpfmdsqi68wf3";
     };
+
+    "8.10" = rec {
+      version = "1.2.0";
+      rev = "v${version}";
+      sha256 = "1xs4mr3rdb0g44736jb40k370hw3maxdk12jiq1w1dl3q5gfrhah";
+    };
   };
   param = params.${coq.coq-version};
 in
@@ -59,7 +65,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/QuickChick/QuickChick;
+    homepage = "https://github.com/QuickChick/QuickChick";
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

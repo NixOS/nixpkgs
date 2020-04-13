@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Complete set of free CAD tools and portable libraries for VLSI design";
-    homepage = http://www-asim.lip6.fr/recherche/alliance/;
+    homepage = "http://www-asim.lip6.fr/recherche/alliance/";
     license = with licenses; gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;

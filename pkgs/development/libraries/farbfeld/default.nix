@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng libjpeg ];
   nativeBuildInputs = [ makeWrapper ];
 
-  installFlags = "PREFIX=/ DESTDIR=$(out)";
+  installFlags = [ "PREFIX=/" "DESTDIR=$(out)" ];
   postInstall = ''
     wrapProgram "$out/bin/2ff" --prefix PATH : "${file}/bin"
   '';

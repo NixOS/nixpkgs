@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
     sha256 = "0936ix7lfwsamssap58b265zid7x2m97azrr2qpjcln3xysd16lg";
   };
 
+  bootstrapper = ./rebar3-nix-bootstrap;
+
   buildInputs = [ erlang tree ];
 
   postPatch = ''
@@ -114,7 +116,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/rebar/rebar3;
+    homepage = "https://github.com/rebar/rebar3";
     description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
 
     longDescription = ''

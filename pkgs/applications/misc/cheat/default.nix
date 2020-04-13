@@ -1,24 +1,31 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ stdenv, fetchFromGitHub
+, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "cheat";
-  version = "3.0.3";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
-    owner = "chrisallenlane";
+    owner = "cheat";
     repo = "cheat";
     rev = version;
-    sha256 = "19w1admdcgld9vlc4fsyc5d9bi6rmwhr2x2ji43za2vjlk34hnnx";
+    sha256 = "0jbqflkcfdrinx1lk45klm8ml0n4cgp43nzls1376cd3hfayby1y";
   };
 
   subPackages = [ "cmd/cheat" ];
 
-  modSha256 = "189cqnfl403f4lk7g9v68mwk93ciglqli639dk4x9091lvn5gq5q";
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion scripts/cheat.{bash,fish,zsh}
+  '';
+
+  modSha256 = "1is19qca5wgzya332rmpk862nnivxzgxchkllv629f5fwwdvdgmg";
 
   meta = with stdenv.lib; {
     description = "Create and view interactive cheatsheets on the command-line";
     maintainers = with maintainers; [ mic92 ];
     license = with licenses; [ gpl3 mit ];
-    homepage = "https://github.com/chrisallenlane/cheat";
+    inherit (src.meta) homepage;
   };
 }

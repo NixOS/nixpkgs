@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
     sed -i -e 's:/share/gocode:/share/go:' Makefile
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "GoLang DBus factory for the Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/go-dbus-factory;
+    homepage = "https://github.com/linuxdeepin/go-dbus-factory";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

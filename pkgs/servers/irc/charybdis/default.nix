@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "IRCv3 server designed to be highly scalable";
-    homepage    = https://github.com/charybdis-ircd/charybdis;
+    homepage    = "https://github.com/charybdis-ircd/charybdis";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lassulus fpletz ];
     platforms   = platforms.unix;

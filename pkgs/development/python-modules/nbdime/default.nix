@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "1.0.6";
+  version = "2.0.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00nywb69kp9i0wl5mczgwqc5db8v70ihr9cjbwqppd2jkx4vf34j";
+    sha256 = "0pbi22mc5al29pvsw7bhai2d58i8n77gv09r7avr1wap6ni7jvw9";
   };
 
   checkInputs = [
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    homepage = https://github.com/jupyter/nbdime;
+    homepage = "https://github.com/jupyter/nbdime";
     description = "Tools for diffing and merging of Jupyter notebooks.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tbenst ];

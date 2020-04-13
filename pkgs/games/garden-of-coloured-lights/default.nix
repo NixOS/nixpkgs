@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Old-school vertical shoot-em-up / bullet hell";
-    homepage = http://garden.sourceforge.net/drupal/;
+    homepage = "http://garden.sourceforge.net/drupal/";
     maintainers = with maintainers; [ Profpatsch ];
     license = licenses.gpl3;
   };

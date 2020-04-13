@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1dwq9rqswgnnglhrgcpvrp6shn3pb4x8f8f23x84sqakb430idp7";
+    sha256 = "1rgbw2kfcq7cdpvl6sy6r6d4iprm1j2n3knbnbxy8sylfc83bwri";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -48,26 +48,18 @@ stdenv.mkDerivation rec {
     libgee
     polkit
     switchboard
+    lightlocker
     zeitgeist
-  ];
-
-  patches = [
-    ./hardcode-gsettings.patch
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
-
-    substituteInPlace src/Views/LockPanel.vala \
-      --subst-var-by LIGHTLOCKER_GSETTINGS_PATH ${glib.getSchemaPath lightlocker}
-    substituteInPlace src/Views/FirewallPanel.vala \
-      --subst-var-by SWITCHBOARD_SEC_PRIV_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with stdenv.lib; {
     description = "Switchboard Security & Privacy Plug";
-    homepage = https://github.com/elementary/switchboard-plug-security-privacy;
+    homepage = "https://github.com/elementary/switchboard-plug-security-privacy";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

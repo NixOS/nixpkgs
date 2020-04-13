@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
+, isPy3k
 , msrestazure
 , azure-common
 , azure-mgmt-nspkg
@@ -21,6 +23,8 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-nspkg
   ];
+
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests
   doCheck = false;

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , requests, cryptography, pybrowserid, hawkauthlib, six
-, grequests, mock, responses, unittest2 }:
+, grequests, mock, responses, pytest }:
 
 buildPythonPackage rec {
   pname = "PyFxA";
@@ -21,12 +21,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    grequests mock responses unittest2
+    grequests mock responses pytest
   ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
     description = "Firefox Accounts client library for Python";
-    homepage = https://github.com/mozilla/PyFxA;
+    homepage = "https://github.com/mozilla/PyFxA";
     license = licenses.mpl20;
   };
 }

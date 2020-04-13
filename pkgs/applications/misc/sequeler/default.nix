@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16vc3v9qls9fxg9h8fsi67z68s4acl5hj14gbcrnqm7mf3kmk3aw";
+    sha256 = "0ki8dganj6hmvg5qwdlc3y0a4pdmx7454np790yf5wnqb6ixb6gv";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gettext wrapGAppsHook python3 desktop-file-utils ];
@@ -29,6 +29,12 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Friendly SQL Client";
     longDescription = ''
@@ -37,7 +43,7 @@ in stdenv.mkDerivation rec {
       editor with language recognition, and visualize SELECT results in a
       Gtk.Grid Widget.
     '';
-    homepage = https://github.com/Alecaddd/sequeler;
+    homepage = "https://github.com/Alecaddd/sequeler";
     license = licenses.gpl3;
     maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
     platforms = platforms.linux;

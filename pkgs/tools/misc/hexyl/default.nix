@@ -2,18 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname   = "hexyl";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1n2q5a6697bxvl0askywhad2x560cajv456gxihdqqmmyq2vf63h";
+    sha256 = "0blq81zpmzldngk9ymcg56syspjp1g1ziap4z69idv05mfkf6sp3";
   };
 
-  cargoSha256 = "1wcpbqlglf9r0xhfjmyym8bnd4pgrsf9lrmb14hn1ml5zlshpd7p";
+  cargoSha256 = "09kccd1brcbvzimm05dyybwrkganqxdkjrvzgcf1l93xs1z2h94b";
 
   meta = with stdenv.lib; {
+    changelog = "https://github.com/sharkdp/hexyl/releases/tag/v${version}";
     description = "A command-line hex viewer";
     longDescription = ''
       `hexyl` is a simple hex viewer for the terminal. It uses a colored
@@ -21,7 +22,7 @@ rustPlatform.buildRustPackage rec {
       printable ASCII characters, ASCII whitespace characters, other ASCII
       characters and non-ASCII).
     '';
-    homepage    = https://github.com/sharkdp/hexyl;
+    homepage    = "https://github.com/sharkdp/hexyl";
     license     = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir ];
     platforms   = platforms.linux ++ platforms.darwin;

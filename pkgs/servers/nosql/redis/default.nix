@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, lua, jemalloc }:
+{ stdenv, fetchurl, lua, jemalloc, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.6";
+  version = "5.0.8";
   pname = "redis";
 
   src = fetchurl {
     url = "http://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "1cr2dn9ilhj52snmlz38fw30gdlgbxq2sadyspawahp1cw988936";
+    sha256 = "1msfxr97aflk5zdgq8xvdbsgmzb906x0vdc1v6l2ccs35z2fmizk";
   };
 
   # Cross-compiling fixes
@@ -23,14 +23,17 @@ stdenv.mkDerivation rec {
   # Note: this enables libc malloc as a temporary fix for cross-compiling.
   # Due to hardcoded configure flags in jemalloc, we can't cross-compile vendored jemalloc properly, and so we're forced to use libc allocator.
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
-  makeFlags = "PREFIX=$(out)" + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " AR=${stdenv.cc.targetPrefix}ar RANLIB=${stdenv.cc.targetPrefix}ranlib MALLOC=libc";
+  makeFlags = [ "PREFIX=$(out)" ]
+    ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ];
 
   enableParallelBuilding = true;
 
   doCheck = false; # needs tcl
 
+  passthru.tests.redis = nixosTests.redis;
+
   meta = with stdenv.lib; {
-    homepage = https://redis.io;
+    homepage = "https://redis.io";
     description = "An open source, advanced key-value store";
     license = licenses.bsd3;
     platforms = platforms.unix;

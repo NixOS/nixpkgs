@@ -29,8 +29,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton {
-      name = "tcpcryptd";
+    users.users.tcpcryptd = {
       uid = config.ids.uids.tcpcryptd;
       description = "tcpcrypt daemon user";
     };

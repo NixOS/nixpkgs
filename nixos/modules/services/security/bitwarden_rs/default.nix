@@ -18,14 +18,32 @@ let
         else key + toUpper x) "" parts;
     in if builtins.match "[A-Z0-9_]+" name != null then name else partsToEnvVar parts;
 
-  configFile = pkgs.writeText "bitwarden_rs.env" (concatMapStrings (s: s + "\n") (
-    (concatLists (mapAttrsToList (name: value:
-      if value != null then [ "${nameToEnvVar name}=${if isBool value then boolToString value else toString value}" ] else []
-    ) cfg.config))));
+  # Due to the different naming schemes allowed for config keys,
+  # we can only check for values consistently after converting them to their corresponding environment variable name.
+  configEnv =
+    let
+      configEnv = listToAttrs (concatLists (mapAttrsToList (name: value:
+        if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
+      ) cfg.config));
+    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+      WEB_VAULT_FOLDER = "${pkgs.bitwarden_rs-vault}/share/bitwarden_rs/vault";
+    } // configEnv;
+
+  configFile = pkgs.writeText "bitwarden_rs.env" (concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
+
+  bitwarden_rs = pkgs.bitwarden_rs.override { inherit (cfg) dbBackend; };
 
 in {
   options.services.bitwarden_rs = with types; {
     enable = mkEnableOption "bitwarden_rs";
+
+    dbBackend = mkOption {
+      type = enum [ "sqlite" "mysql" "postgresql" ];
+      default = "sqlite";
+      description = ''
+        Which database backend bitwarden_rs will be using.
+      '';
+    };
 
     backupDir = mkOption {
       type = nullOr str;
@@ -56,23 +74,20 @@ in {
         even though foo2 would have been converted to FOO_2.
         This allows working around any potential future conflicting naming conventions.
 
-        Based on the attributes passed to this config option a environment file will be generated
+        Based on the attributes passed to this config option an environment file will be generated
         that is passed to bitwarden_rs's systemd service.
 
         The available configuration options can be found in
-        <link xlink:href="https://github.com/dani-garcia/bitwarden_rs/blob/1.8.0/.env.template">the environment template file</link>.
+        <link xlink:href="https://github.com/dani-garcia/bitwarden_rs/blob/${bitwarden_rs.version}/.env.template">the environment template file</link>.
       '';
-      apply = config: optionalAttrs config.webVaultEnabled {
-        webVaultFolder = "${pkgs.bitwarden_rs-vault}/share/bitwarden_rs/vault";
-      } // config;
     };
   };
 
   config = mkIf cfg.enable {
-    services.bitwarden_rs.config = {
-      dataFolder = "/var/lib/bitwarden_rs";
-      webVaultEnabled = mkDefault true;
-    };
+    assertions = [ {
+      assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
+      message = "Backups for database backends other than sqlite will need customization";
+    } ];
 
     users.users.bitwarden_rs = {
       inherit group;
@@ -87,7 +102,7 @@ in {
         User = user;
         Group = group;
         EnvironmentFile = configFile;
-        ExecStart = "${pkgs.bitwarden_rs}/bin/bitwarden_rs";
+        ExecStart = "${bitwarden_rs}/bin/bitwarden_rs";
         LimitNOFILE = "1048576";
         LimitNPROC = "64";
         PrivateTmp = "true";
@@ -109,6 +124,7 @@ in {
       path = with pkgs; [ sqlite ];
       serviceConfig = {
         SyslogIdentifier = "backup-bitwarden_rs";
+        Type = "oneshot";
         User = mkDefault user;
         Group = mkDefault group;
         ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";

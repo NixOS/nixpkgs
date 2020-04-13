@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... } : {
 
   name = "mxisd";
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -19,13 +19,12 @@ import ./make-test.nix ({ pkgs, ... } : {
   };
 
   testScript = ''
-    startAll;
-    $server_mxisd->waitForUnit("mxisd.service");
-    $server_mxisd->waitForOpenPort(8090);
-    $server_mxisd->succeed("curl -Ssf \"http://127.0.0.1:8090/_matrix/identity/api/v1\"");
-    $server_ma1sd->waitForUnit("mxisd.service");
-    $server_ma1sd->waitForOpenPort(8090);
-    $server_ma1sd->succeed("curl -Ssf \"http://127.0.0.1:8090/_matrix/identity/api/v1\"")
-
+    start_all()
+    server_mxisd.wait_for_unit("mxisd.service")
+    server_mxisd.wait_for_open_port(8090)
+    server_mxisd.succeed("curl -Ssf 'http://127.0.0.1:8090/_matrix/identity/api/v1'")
+    server_ma1sd.wait_for_unit("mxisd.service")
+    server_ma1sd.wait_for_open_port(8090)
+    server_ma1sd.succeed("curl -Ssf 'http://127.0.0.1:8090/_matrix/identity/api/v1'")
   '';
 })

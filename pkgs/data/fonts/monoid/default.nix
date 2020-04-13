@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, python, fontforge }:
+{ stdenv, fetchFromGitHub, python2 }:
+# Python 3 support requires https://github.com/larsenwork/monoid/pull/233 to be merged
 
 stdenv.mkDerivation {
   pname = "monoid";
@@ -11,7 +12,11 @@ stdenv.mkDerivation {
     sha256 = "07h5q6cn6jjpmxp9vyag1bxx481waz344sr2kfs7d37bba8yjydj";
   };
 
-  nativeBuildInputs = [ python fontforge ];
+  nativeBuildInputs = [
+    (python2.withPackages (pp: with pp; [
+      fontforge
+    ]))
+  ];
 
   buildPhase = ''
     local _d=""
@@ -29,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://larsenwork.com/monoid;
+    homepage = "http://larsenwork.com/monoid";
     description = "Customisable coding font with alternates, ligatures and contextual positioning";
     license = [ licenses.ofl licenses.mit ];
     platforms = platforms.all;

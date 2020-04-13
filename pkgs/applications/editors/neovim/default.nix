@@ -2,7 +2,6 @@
 , libuv, lua, ncurses, pkgconfig
 , unibilium, xsel, gperf
 , libvterm-neovim
-, withJemalloc ? true, jemalloc
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc)
@@ -21,13 +20,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.4.2";
+    version = "0.4.3";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "13w446plvgl219lhj29jyimhiqvs1y1byrz4qpdmxgyddmx9xqss";
+      sha256 = "03p7pic7hw9yxxv7fbgls1f42apx3lik2k6mpaz1a109ngyc5kaj";
     };
 
     patches = [
@@ -50,8 +49,7 @@ in
       ncurses
       neovimLuaEnv
       unibilium
-    ] ++ optional withJemalloc jemalloc
-      ++ optional stdenv.isDarwin libiconv
+    ] ++ optional stdenv.isDarwin libiconv
       ++ optionals doCheck [ glibcLocales procps ]
     ;
 
@@ -92,16 +90,11 @@ in
     hardeningDisable = [ "fortify" ];
 
     preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-      export DYLD_LIBRARY_PATH=${jemalloc}/lib
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
     postInstall = stdenv.lib.optionalString stdenv.isLinux ''
       sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
-    '' + stdenv.lib.optionalString (withJemalloc && stdenv.isDarwin) ''
-      install_name_tool -change libjemalloc.1.dylib \
-                ${jemalloc}/lib/libjemalloc.1.dylib \
-                $out/bin/nvim
     '';
 
     # export PATH=$PWD/build/bin:${PATH}
@@ -119,14 +112,14 @@ in
           modifications to the core source
         - Improve extensibility with a new plugin architecture
       '';
-      homepage    = https://www.neovim.io;
+      homepage    = "https://www.neovim.io";
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.
       # Contributions committed after b17d96 are licensed under Apache 2.0 unless
       # those contributions were copied from Vim (identified in the commit logs
       # by the vim-patch token). See LICENSE for details."
       license = with licenses; [ asl20 vim ];
-      maintainers = with maintainers; [ manveru rvolosatovs ];
+      maintainers = with maintainers; [ manveru rvolosatovs ma27 ];
       platforms   = platforms.unix;
     };
   }

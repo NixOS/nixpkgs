@@ -6,37 +6,43 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage = pkgs.php73;
-  phpPackages = pkgs.php73Packages;
+  phpPackage =
+    let
+      base = pkgs.php74;
+    in
+      base.buildEnv {
+        extensions = e: with e;
+          base.enabledExtensions ++ [
+            apcu redis memcached imagick
+          ];
+        extraConfig = phpOptionsStr;
+      };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
 
-  phpOptionsExtensions = ''
-    ${optionalString cfg.caching.apcu "extension=${phpPackages.apcu}/lib/php/extensions/apcu.so"}
-    ${optionalString cfg.caching.redis "extension=${phpPackages.redis}/lib/php/extensions/redis.so"}
-    ${optionalString cfg.caching.memcached "extension=${phpPackages.memcached}/lib/php/extensions/memcached.so"}
-    extension=${phpPackages.imagick}/lib/php/extensions/imagick.so
-    zend_extension = opcache.so
-    opcache.enable = 1
-  '';
   phpOptions = {
     upload_max_filesize = cfg.maxUploadSize;
     post_max_size = cfg.maxUploadSize;
     memory_limit = cfg.maxUploadSize;
   } // cfg.phpOptions;
-  phpOptionsStr = phpOptionsExtensions + (toKeyValue phpOptions);
+  phpOptionsStr = toKeyValue phpOptions;
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
-    #! ${pkgs.stdenv.shell}
-    cd ${pkgs.nextcloud}
-    exec /run/wrappers/bin/sudo -u nextcloud \
-      NEXTCLOUD_CONFIG_DIR="${cfg.home}/config" \
+    #! ${pkgs.runtimeShell}
+    cd ${cfg.package}
+    sudo=exec
+    if [[ "$USER" != nextcloud ]]; then
+      sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR'
+    fi
+    export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
+    $sudo \
       ${phpPackage}/bin/php \
-      -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
   '';
+
+  inherit (config.system) stateVersion;
 
 in {
   options.services.nextcloud = {
@@ -58,7 +64,12 @@ in {
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable if there is a TLS terminating proxy in front of nextcloud.";
+      description = "Use https for generated links.";
+    };
+    package = mkOption {
+      type = types.package;
+      description = "Which package to use for the Nextcloud instance.";
+      relatedPackages = [ "nextcloud17" "nextcloud18" ];
     };
 
     maxUploadSize = mkOption {
@@ -225,6 +236,15 @@ in {
         '';
       };
 
+      trustedProxies = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Trusted proxies, to provide if the nextcloud installation is being
+          proxied to secure against e.g. spoofing.
+        '';
+      };
+
       overwriteProtocol = mkOption {
         type = types.nullOr (types.enum [ "http" "https" ]);
         default = null;
@@ -296,10 +316,40 @@ in {
         }
       ];
 
-      warnings = optional (cfg.poolConfig != null) ''
-        Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
-        Please migrate your configuration to config.services.nextcloud.poolSettings.
-      '';
+      warnings = []
+        ++ (optional (cfg.poolConfig != null) ''
+          Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
+          Please migrate your configuration to config.services.nextcloud.poolSettings.
+        '')
+        ++ (optional (versionOlder cfg.package.version "18") ''
+          A legacy Nextcloud install (from before NixOS 20.03) may be installed.
+
+          You're currently deploying an older version of Nextcloud. This may be needed
+          since Nextcloud doesn't allow major version upgrades that skip multiple
+          versions (i.e. an upgrade from 16 is possible to 17, but not 16 to 18).
+
+          It is assumed that Nextcloud will be upgraded from version 16 to 17.
+
+           * If this is a fresh install, there will be no upgrade to do now.
+
+           * If this server already had Nextcloud installed, first deploy this to your
+             server, and wait until the upgrade to 17 is finished.
+
+          Then, set `services.nextcloud.package` to `pkgs.nextcloud18` to upgrade to
+          Nextcloud version 18.
+        '');
+
+      services.nextcloud.package = with pkgs;
+        mkDefault (
+          if pkgs ? nextcloud
+            then throw ''
+              The `pkgs.nextcloud`-attribute has been removed. If it's supposed to be the default
+              nextcloud defined in an overlay, please set `services.nextcloud.package` to
+              `pkgs.nextcloud`.
+            ''
+          else if versionOlder stateVersion "20.03" then nextcloud17
+          else nextcloud18
+        );
     }
 
     { systemd.timers.nextcloud-cron = {
@@ -348,6 +398,7 @@ in {
               ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_pwd(),"}
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
+              'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
             ];
           '';
           occInstallCmd = let
@@ -390,9 +441,10 @@ in {
         in {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-nextcloud.service" ];
+          path = [ occ ];
           script = ''
             chmod og+x ${cfg.home}
-            ln -sf ${pkgs.nextcloud}/apps ${cfg.home}/
+            ln -sf ${cfg.package}/apps ${cfg.home}/
             mkdir -p ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps
             ln -sf ${overrideConfig} ${cfg.home}/config/override.config.php
 
@@ -414,11 +466,12 @@ in {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${pkgs.nextcloud}/cron.php";
+          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           serviceConfig.Type = "oneshot";
           serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+          serviceConfig.User = "nextcloud";
           startAt = cfg.autoUpdateApps.startAt;
         };
       };
@@ -427,7 +480,7 @@ in {
         pools.nextcloud = {
           user = "nextcloud";
           group = "nginx";
-          phpOptions = phpOptionsExtensions + phpOptionsStr;
+          phpOptions = phpOptionsStr;
           phpPackage = phpPackage;
           phpEnv = {
             NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
@@ -455,7 +508,7 @@ in {
         enable = true;
         virtualHosts = {
           ${cfg.hostName} = {
-            root = pkgs.nextcloud;
+            root = cfg.package;
             locations = {
               "= /robots.txt" = {
                 priority = 100;
@@ -517,10 +570,11 @@ in {
                 add_header X-Robots-Tag none;
                 add_header X-Download-Options noopen;
                 add_header X-Permitted-Cross-Domain-Policies none;
+                add_header X-Frame-Options sameorigin;
                 add_header Referrer-Policy no-referrer;
                 access_log off;
               '';
-              "~ \\.(?:png|html|ttf|ico|jpg|jpeg)$".extraConfig = ''
+              "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
                 try_files $uri /index.php$request_uri;
                 access_log off;
               '';
@@ -531,6 +585,7 @@ in {
               add_header X-Robots-Tag none;
               add_header X-Download-Options noopen;
               add_header X-Permitted-Cross-Domain-Policies none;
+              add_header X-Frame-Options sameorigin;
               add_header Referrer-Policy no-referrer;
               add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
               error_page 403 /core/templates/403.php;

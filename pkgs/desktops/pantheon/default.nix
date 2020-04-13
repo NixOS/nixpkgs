@@ -3,37 +3,6 @@
 
 lib.makeScope pkgs.newScope (self: with self; {
 
-  apps = [
-    elementary-calculator elementary-calendar
-    elementary-camera elementary-code elementary-files
-    elementary-music elementary-photos elementary-screenshot-tool
-    elementary-terminal elementary-videos switchboard-with-plugs
-  ];
-
-  artwork = [
-    elementary-gtk-theme
-    elementary-icon-theme
-    elementary-sound-theme
-    elementary-wallpapers
-  ];
-
-  desktop = [
-    elementary-default-settings
-    elementary-session-settings
-    elementary-shortcut-overlay
-    gala
-    wingpanel-with-indicators
-  ];
-
-  services = [
-    cerbere
-    elementary-capnet-assist
-    elementary-settings-daemon
-    elementary-dpms-helper
-    pantheon-agent-geoclue2
-    pantheon-agent-polkit
-  ];
-
   switchboardPlugs = [
     switchboard-plug-a11y switchboard-plug-about
     switchboard-plug-applications switchboard-plug-bluetooth
@@ -54,11 +23,13 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-session wingpanel-indicator-sound
   ];
 
+  nixpkgs-github-update = callPackage ./nixpkgs_github_update { };
+
   updateScript = callPackage ./update.nix { };
 
   maintainers = with pkgs.stdenv.lib.maintainers; [ worldofpeace ];
 
-  mutter = pkgs.gnome3.mutter328;
+  mutter = pkgs.gnome3.mutter334;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -75,6 +46,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-camera = callPackage ./apps/elementary-camera { };
 
   elementary-code = callPackage ./apps/elementary-code { };
+
+  elementary-dock = callPackage ./apps/elementary-dock { };
 
   elementary-files = callPackage ./apps/elementary-files { };
 
@@ -128,18 +101,20 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### SERVICES
 
-  cerbere = callPackage ./services/cerbere { };
-
   contractor = callPackage ./services/contractor { };
 
   elementary-capnet-assist = callPackage ./services/elementary-capnet-assist { };
 
   elementary-dpms-helper = callPackage ./services/elementary-dpms-helper { };
 
+  elementary-notifications = callPackage ./services/elementary-notifications { };
+
   # We're using ubuntu and elementary's patchset due to reasons
   # explained here -> https://github.com/elementary/greeter/issues/92#issuecomment-376215614
   # Take note of "I am holding off on "fixing" this bug for as long as possible."
-  elementary-settings-daemon = callPackage ./services/elementary-settings-daemon { };
+  elementary-settings-daemon = callPackage ./services/elementary-settings-daemon {
+    inherit (gnome3) gnome-desktop;
+  };
 
   pantheon-agent-geoclue2 = callPackage ./services/pantheon-agent-geoclue2 { };
 
@@ -155,9 +130,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-keyboard = callPackage ./desktop/wingpanel-indicators/keyboard { };
 
-  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network {
-    inherit (gnome3) networkmanagerapplet;
-  };
+  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network { };
 
   wingpanel-indicator-nightlight = callPackage ./desktop/wingpanel-indicators/nightlight { };
 
@@ -193,9 +166,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   switchboard-plug-mouse-touchpad = callPackage ./apps/switchboard-plugs/mouse-touchpad { };
 
-  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network {
-    inherit (gnome3) networkmanagerapplet;
-  };
+  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network { };
 
   switchboard-plug-notifications = callPackage ./apps/switchboard-plugs/notifications { };
 
@@ -232,5 +203,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   ### ALIASES
 
   inherit (pkgs) vala; # added 2019-10-10
+
+  cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1.";
 
 })

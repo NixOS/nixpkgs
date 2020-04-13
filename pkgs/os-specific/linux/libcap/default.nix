@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
   '';
 
-  installFlags = "RAISE_SETFCAP=no";
+  installFlags = [ "RAISE_SETFCAP=no" ];
 
   postInstall = ''
     rm "$lib"/lib/*.a

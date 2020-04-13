@@ -17,7 +17,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/monochromegane/the_platinum_searcher;
+    homepage = "https://github.com/monochromegane/the_platinum_searcher";
     description = "A code search tool similar to ack and the_silver_searcher(ag).";
     platforms = platforms.all;
     license = licenses.mit;

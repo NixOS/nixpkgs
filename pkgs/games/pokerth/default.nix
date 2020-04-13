@@ -6,7 +6,7 @@ with stdenv.lib;
 
 let
   hiDPI = fetchpatch {
-    url = https://github.com/pokerth/pokerth/commit/ad8c9cabfb85d8293720d0f14840278d38b5feeb.patch;
+    url = "https://github.com/pokerth/pokerth/commit/ad8c9cabfb85d8293720d0f14840278d38b5feeb.patch";
     sha256 = "192x3lqvd1fanasb95shdygn997qfrpk1k62k1f4j3s5chkwvjig";
   };
 
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     "pokerth.pro"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
+  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
 
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://www.pokerth.net;
+    homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ obadz yegortimoshenko ];

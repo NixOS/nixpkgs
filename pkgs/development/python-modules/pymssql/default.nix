@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pymssql";
-  version = "2.1.4";
+  version = "3.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yvs3azd8dkf40lybr9wvswvf4hbxn5ys9ypansmbbb328dyn09j";
+    sha256 = "4d0ed31c76983d723c0c979b18e2273623621e630ca4901f17a86128aca13f84";
   };
 
   buildInputs = [cython setuptools-git];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = http://pymssql.org/en/stable/;
+    homepage = "http://pymssql.org/en/stable/";
     description = "A simple database interface for Python that builds on top
       of FreeTDS to provide a Python DB-API (PEP-249) interface to Microsoft
       SQL Server";

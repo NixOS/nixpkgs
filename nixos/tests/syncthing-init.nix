@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, pkgs, ... }: let
+import ./make-test-python.nix ({ lib, pkgs, ... }: let
 
   testId = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
 
@@ -22,13 +22,11 @@ in {
   };
 
   testScript = ''
-    my $config;
-
-    $machine->waitForUnit("syncthing-init.service");
-    $config = $machine->succeed("cat /var/lib/syncthing/.config/syncthing/config.xml");
+    machine.wait_for_unit("syncthing-init.service")
+    config = machine.succeed("cat /var/lib/syncthing/.config/syncthing/config.xml")
    
-    $config =~ /${testId}/ or die;
-    $config =~ /testFolder/ or die;
+    assert "testFolder" in config
+    assert "${testId}" in config
   '';
 })
 

@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "caddy";
-  version = "1.0.3";
+  version = "1.0.5";
 
   goPackagePath = "github.com/caddyserver/caddy";
 
@@ -12,9 +12,9 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n7i9w4vva5x5wry7gzkyfylk39x40ykv7ypf1ca3zbbk7w5x6mw";
+    sha256 = "0jrhwmr6gggppskg5h450wybzkv17iq69dgw36hd1dp56q002i7g";
   };
-  modSha256 = "0np0mbs0mrn8scqa0dgvi7ya1707b3883prdaf1whsqrcr71ig8q";
+  modSha256 = "1gc0xvsihr4zp7hkrdfrplvzkaphz1y4q53rgwn2jhd8s98l57an";
 
   preBuild = ''
     cat << EOF > caddy/main.go
@@ -28,9 +28,9 @@ buildGoModule rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://caddyserver.com;
+    homepage = "https://caddyserver.com";
     description = "Fast, cross-platform HTTP/2 web server with automatic HTTPS";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem fpletz zimbatm ];
+    maintainers = with maintainers; [ rushmorem fpletz zimbatm filalex77 ];
   };
 }

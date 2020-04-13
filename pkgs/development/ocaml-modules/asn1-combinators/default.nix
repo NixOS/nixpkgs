@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ounit topkg ];
+  buildInputs = [ findlib ounit topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ result cstruct zarith ] ++ param.propagatedBuildInputs;
 
   buildPhase = "${topkg.run} build --tests true";
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   checkPhase = "${topkg.run} test";
 
   meta = {
-    homepage = https://github.com/mirleft/ocaml-asn1-combinators;
+    homepage = "https://github.com/mirleft/ocaml-asn1-combinators";
     description = "Combinators for expressing ASN.1 grammars in OCaml";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mle";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "mle";
     rev = "v${version}";
-    sha256 = "15i5lzcp0zar2zh34ky9m6pvvi41zgdrl3hmylpgsqnnj4r87vqc";
+    sha256 = "16dbwfdd6sqqn7jfaxd5wdy8y9ghbihnz6bgn3xhqcww8rj1sia1";
   };
 
   # Fix location of Lua 5.3 header and library

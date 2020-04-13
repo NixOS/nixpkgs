@@ -31,12 +31,12 @@ pipShellHook() {
     echo "Finished executing pipShellHook"
 }
 
-if [ -z "$dontUsePipBuild" ] && [ -z "$buildPhase" ]; then
+if [ -z "${dontUsePipBuild-}" ] && [ -z "${buildPhase-}" ]; then
     echo "Using pipBuildPhase"
     buildPhase=pipBuildPhase
 fi
 
-if [ -z "$shellHook" ]; then
+if [ -z "${shellHook-}" ]; then
     echo "Using pipShellHook"
     shellHook=pipShellHook
 fi

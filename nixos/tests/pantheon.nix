@@ -1,9 +1,10 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 {
   name = "pantheon";
+
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ worldofpeace ];
+    maintainers = pkgs.pantheon.maintainers;
   };
 
   machine = { ... }:
@@ -21,35 +22,38 @@ import ./make-test.nix ({ pkgs, ...} :
 
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
+    bob = nodes.machine.config.users.users.bob;
   in ''
-    startAll;
+    machine.wait_for_unit("display-manager.service")
 
-    # Wait for display manager to start
-    $machine->waitForText(qr/${user.description}/);
-    $machine->screenshot("lightdm");
+    with subtest("Test we can see usernames in elementary-greeter"):
+        machine.wait_for_text("${user.description}")
+        # OCR was struggling with this one.
+        # machine.wait_for_text("${bob.description}")
+        machine.screenshot("elementary_greeter_lightdm")
 
-    # Log in
-    $machine->sendChars("${user.password}\n");
-    $machine->waitForFile("/home/alice/.Xauthority");
-    $machine->succeed("xauth merge ~alice/.Xauthority");
+    with subtest("Login with elementary-greeter"):
+        machine.send_chars("${user.password}\n")
+        machine.wait_for_x()
+        machine.wait_for_file("${user.home}/.Xauthority")
+        machine.succeed("xauth merge ${user.home}/.Xauthority")
 
-    # Check if "pantheon-shell" components actually start
-    $machine->waitUntilSucceeds("pgrep gala");
-    $machine->waitForWindow(qr/gala/);
-    $machine->waitUntilSucceeds("pgrep wingpanel");
-    $machine->waitForWindow("wingpanel");
-    $machine->waitUntilSucceeds("pgrep plank");
-    $machine->waitForWindow(qr/plank/);
+    with subtest("Check that logging in has given the user ownership of devices"):
+        machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
-    # Check that logging in has given the user ownership of devices.
-    $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
+    # TODO: DBus API could eliminate this? Pantheon uses Bamf.
+    with subtest("Check if pantheon session components actually start"):
+        machine.wait_until_succeeds("pgrep gala")
+        machine.wait_for_window("gala")
+        machine.wait_until_succeeds("pgrep wingpanel")
+        machine.wait_for_window("wingpanel")
+        machine.wait_until_succeeds("pgrep plank")
+        machine.wait_for_window("plank")
 
-    # Open elementary terminal
-    $machine->execute("su - alice -c 'DISPLAY=:0.0 io.elementary.terminal &'");
-    $machine->waitForWindow(qr/io.elementary.terminal/);
-
-    # Take a screenshot of the desktop
-    $machine->sleep(20);
-    $machine->screenshot("screen");
+    with subtest("Open elementary terminal"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.terminal &'")
+        machine.wait_for_window("io.elementary.terminal")
+        machine.sleep(20)
+        machine.screenshot("screen")
   '';
 })

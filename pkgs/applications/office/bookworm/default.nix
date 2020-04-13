@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk
+{ stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk, libgee
 , gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     pantheon.elementary-icon-theme
     pantheon.granite
     glib
-    gnome3.libgee
+    libgee
     gtk3
     html2text
     poppler
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
      longDescription = ''
        Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
      '';
-     homepage = https://babluboy.github.io/bookworm/;
+     homepage = "https://babluboy.github.io/bookworm/";
      license = licenses.gpl3Plus;
      platforms = platforms.linux;
    };

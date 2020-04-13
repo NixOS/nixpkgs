@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "xca";
-  version = "2.1.2";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner  = "chris2511";
     repo   = "xca";
     rev    = "RELEASE.${version}";
-    sha256 = "0slfqmz0b01lwmrv4h78hmrsdrhcyc7sjzsxcw05ylgmhvdq3dw9";
+    sha256 = "0na2816lkfkkvssh9kmf5vwy6x8kd4x7h138jzy61wrvs69vhnbi";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "An x509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
-    homepage    = https://hohnstaedt.de/xca/;
+    homepage    = "https://hohnstaedt.de/xca/";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ offline peterhoeg ];
     platforms   = platforms.all;

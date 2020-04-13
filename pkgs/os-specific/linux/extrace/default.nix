@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0acspj3djspfvgr3ng5b61qws6v2md6b0lc5qkby10mqnfpkvq85";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     install -dm755 "$out/share/licenses/extrace/"
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/leahneukirchen/extrace;
+    homepage = "https://github.com/leahneukirchen/extrace";
     description = "Trace exec() calls system-wide";
     license = with licenses; [ gpl2 bsd2 ];
     platforms = platforms.linux;

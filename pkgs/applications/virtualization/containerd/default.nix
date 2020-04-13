@@ -4,20 +4,23 @@ with lib;
 
 buildGoPackage rec {
   pname = "containerd";
-  version = "1.2.6";
+  version = "1.2.13";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
+    sha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
   };
 
   goPackagePath = "github.com/containerd/containerd";
   outputs = [ "bin" "out" "man" ];
 
-  buildInputs = [ btrfs-progs go-md2man utillinux ];
-  buildFlags = "VERSION=v${version}";
+  nativeBuildInputs = [ go-md2man utillinux ];
+
+  buildInputs = [ btrfs-progs ];
+
+  buildFlags = [ "VERSION=v${version}" ];
 
   BUILDTAGS = []
     ++ optional (btrfs-progs == null) "no_btrfs";
@@ -45,7 +48,7 @@ buildGoPackage rec {
   '';
 
   meta = {
-    homepage = https://containerd.io/;
+    homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline vdemeester ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU_combined, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
+{ stdenv, fetchurl, libGLU, libGL, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
 , speex, libvorbis, libogg, boost, fribidi, bsdiff
 , fetchpatch
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./header-order.patch ./public-buildproject.patch
     (fetchpatch {
-	  url = https://bitbucket.org/giszmo/glob2/commits/c9dc715624318e4fea4abb24e04f0ebdd9cd8d2a/raw;
+	  url = "https://bitbucket.org/giszmo/glob2/commits/c9dc715624318e4fea4abb24e04f0ebdd9cd8d2a/raw";
 	  sha256 = "0017xg5agj3dy0hx71ijdcrxb72bjqv7x6aq7c9zxzyyw0mkxj0k";
 	})
   ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ sconsPackages.scons_3_0_1 ];
-  buildInputs = [ libGLU_combined SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
+  buildInputs = [ libGLU libGL SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
 
   postConfigure = ''
     sconsFlags+=" BINDIR=$out/bin"
@@ -41,9 +41,7 @@ stdenv.mkDerivation rec {
     sconsFlags+=" DATADIR=$out/share/globulation2/glob2"
   '';
 
-  NIX_LDFLAGS = [
-    "-lboost_system"
-  ];
+  NIX_LDFLAGS = "-lboost_system";
 
   meta = with stdenv.lib; {
     description = "RTS without micromanagement";

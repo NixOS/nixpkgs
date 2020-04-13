@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library for managing a hosts file. It enables adding and removing entries, or importing them from a file or URL";
-    homepage = https://github.com/jonhadfield/python-hosts;
+    homepage = "https://github.com/jonhadfield/python-hosts";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

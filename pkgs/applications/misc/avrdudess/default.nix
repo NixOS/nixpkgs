@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "GUI for AVRDUDE (AVR microcontroller programmer)";
-    homepage = https://github.com/zkemble/AVRDUDESS;
+    homepage = "https://github.com/zkemble/AVRDUDESS";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcab";
-  version = "1.3";
+  version = "1.4";
 
   outputs = [ "bin" "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1rv81b37d5ya7xpfdxrfk173jjcwabxyng7vafgwyl5myv44qc0h";
+    sha256 = "13q43iqld4l50yra45lhvkd376pn6qpk7rkx374zn8y9wsdzm9b7";
   };
 
   patches = [

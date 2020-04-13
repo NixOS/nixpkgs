@@ -86,16 +86,16 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == "octoprint") (singleton
-      { name = "octoprint";
+    users.users = optionalAttrs (cfg.user == "octoprint") {
+      octoprint = {
         group = cfg.group;
         uid = config.ids.uids.octoprint;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "octoprint") (singleton
-      { name = "octoprint";
-        gid = config.ids.gids.octoprint;
-      });
+    users.groups = optionalAttrs (cfg.group == "octoprint") {
+      octoprint.gid = config.ids.gids.octoprint;
+    };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"

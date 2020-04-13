@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Multi-format archive and compression library";
-    homepage = https://libarchive.org/;
+    homepage = "https://libarchive.org/";
     license = licenses.bsd0;
     broken = true;
   };

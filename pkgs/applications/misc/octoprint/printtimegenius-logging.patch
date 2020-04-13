@@ -1,0 +1,17 @@
+diff --git a/setup.py b/setup.py
+index 6a6610e..cc45902 100644
+--- a/setup.py
++++ b/setup.py
+@@ -35,9 +35,9 @@ plugin_license = "AGPLv3"
+ # Any additional requirements besides OctoPrint should be listed here
+ # For now, require the working release, which is only 1.3.9rc1.
+ plugin_requires = ["OctoPrint>=1.3.9rc1", "psutil", "sarge"]
+-from sys import version_info
+-if version_info[0] < 3:
+-    plugin_requires.append("logging")
++#from sys import version_info
++#if version_info[0] < 3:
++#    plugin_requires.append("logging")
+ 
+ ### --------------------------------------------------------------------------------------------------------------------
+ ### More advanced options that you usually shouldn't have to touch follow after this point

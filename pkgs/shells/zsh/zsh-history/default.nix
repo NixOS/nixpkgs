@@ -1,19 +1,15 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests }:
 
 buildGoModule rec {
   pname = "zsh-history";
-  version = "2019-10-07";
+  version = "2019-12-10";
 
   src = fetchFromGitHub {
     owner = "b4b4r07";
     repo = "history";
-    rev = "a08ad2dcffc852903ae54b0c5704b8a085009ef7";
-    sha256 = "0r3p04my40dagsq1dssnk583qrlcps9f7ajp43z7mq73q3hrya5s";
+    rev = "8da016bd91b0c2eb53c9980f00eee6abdbb097e2";
+    sha256 = "13n643ik1zjvpk8h9458yd9ffahhbdnigmbrbmpn7b7g23wqqsi3";
   };
-
-  patches = [
-    ./0001-Fix-path-marshalling-when-saveing-config.patch
-  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,8 +25,12 @@ buildGoModule rec {
   meta = with lib; {
     description = "A CLI to provide enhanced history for your ZSH shell";
     license = licenses.mit;
-    homepage = https://github.com/b4b4r07/history;
+    homepage = "https://github.com/b4b4r07/history";
     platforms = platforms.unix;
     maintainers = with maintainers; [ kampka ];
+  };
+
+  passthru.tests = {
+    zsh-history-shell-integration = nixosTests.zsh-history;
   };
 }

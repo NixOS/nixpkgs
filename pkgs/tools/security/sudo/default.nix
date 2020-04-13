@@ -5,14 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.28";
+  pname = "sudo";
+  version = "1.8.31p1";
 
   src = fetchurl {
-    urls =
-      [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
-        "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
-      ];
-    sha256 = "188k3w67aflbmi4b5z23pxrvzfcfndi22b84w86gzjh8b9sglaci";
+    url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
+    sha256 = "1n0mdmgcs92af34xxsnsh1arrngymhdmwd9srjgjbk65q7xzsg67";
   };
 
   prePatch = ''
@@ -48,7 +46,7 @@ stdenv.mkDerivation rec {
       #define _PATH_MV "${coreutils}/bin/mv"
     EOF
     makeFlags="install_uid=$(id -u) install_gid=$(id -g)"
-    installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy"
+    installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy DESTDIR=/"
     '';
 
   nativeBuildInputs = [ groff ];
@@ -74,9 +72,9 @@ stdenv.mkDerivation rec {
       providing an audit trail of the commands and their arguments.
       '';
 
-    homepage = https://www.sudo.ws/;
+    homepage = "https://www.sudo.ws/";
 
-    license = https://www.sudo.ws/sudo/license.html;
+    license = "https://www.sudo.ws/sudo/license.html";
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
 

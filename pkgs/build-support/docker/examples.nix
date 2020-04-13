@@ -117,7 +117,12 @@ rec {
       pkgs.nix
     ];
     config = {
-      Env = [ "NIX_PAGER=cat" ];
+      Env = [
+        "NIX_PAGER=cat"
+        # A user is required by nix
+        # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
+        "USER=nobody"
+      ];
     };
   };
 
@@ -231,7 +236,48 @@ rec {
     name = "another-layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
-    contents = [ pkgs.hello ];
   };
 
+  # 15. Create a layered image with only 2 layers
+  two-layered-image = pkgs.dockerTools.buildLayeredImage {
+    name = "two-layered-image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    contents = [ pkgs.bash pkgs.hello ];
+    maxLayers = 2;
+  };
+
+  # 16. Create a layered image with more packages than max layers.
+  # coreutils and hello are part of the same layer
+  bulk-layer = pkgs.dockerTools.buildLayeredImage {
+    name = "bulk-layer";
+    tag = "latest";
+    contents = with pkgs; [
+      coreutils hello
+    ];
+    maxLayers = 2;
+  };
+
+  # 17. Create a "layered" image without nix store layers. This is not
+  # recommended, but can be useful for base images in rare cases.
+  no-store-paths = pkgs.dockerTools.buildLayeredImage {
+    name = "no-store-paths";
+    tag = "latest";
+    extraCommands = ''
+      chmod a+w bin
+
+      # This removes sharing of busybox and is not recommended. We do this
+      # to make the example suitable as a test case with working binaries.
+      cp -r ${pkgs.pkgsStatic.busybox}/* .
+    '';
+    contents = [
+      # This layer has no dependencies and its symlinks will be dereferenced
+      # when creating the customization layer.
+      (pkgs.runCommand "layer-to-flatten" {} ''
+        mkdir -p $out/bin
+        ln -s /bin/true $out/bin/custom-true
+      ''
+      )
+    ];
+  };
 }

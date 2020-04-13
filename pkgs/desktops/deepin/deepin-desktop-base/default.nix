@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ln -s ../lib/deepin/desktop-version $out/etc/deepin-version
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       - login screen background image
       - language information
     '';
-    homepage = https://github.com/linuxdeepin/deepin-desktop-base;
+    homepage = "https://github.com/linuxdeepin/deepin-desktop-base";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

@@ -706,6 +706,14 @@
       };
     }
     {
+      name = "_babel_runtime___runtime_7.6.3.tgz";
+      path = fetchurl {
+        name = "_babel_runtime___runtime_7.6.3.tgz";
+        url  = "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.3.tgz";
+        sha1 = "935122c74c73d2240cafd32ddb5fc2a6cd35cf1f";
+      };
+    }
+    {
       name = "_babel_template___template_7.4.4.tgz";
       path = fetchurl {
         name = "_babel_template___template_7.4.4.tgz";
@@ -890,11 +898,11 @@
       };
     }
     {
-      name = "_material_ui_icons___icons_4.4.3.tgz";
+      name = "_material_ui_icons___icons_4.5.1.tgz";
       path = fetchurl {
-        name = "_material_ui_icons___icons_4.4.3.tgz";
-        url  = "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.4.3.tgz";
-        sha1 = "5d4346ddbb2673a1b57ebc78fd6d50bcd88711db";
+        name = "_material_ui_icons___icons_4.5.1.tgz";
+        url  = "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.5.1.tgz";
+        sha1 = "6963bad139e938702ece85ca43067688018f04f8";
       };
     }
     {
@@ -1226,11 +1234,11 @@
       };
     }
     {
-      name = "_types_notifyjs___notifyjs_3.0.0.tgz";
+      name = "_types_notifyjs___notifyjs_3.0.1.tgz";
       path = fetchurl {
-        name = "_types_notifyjs___notifyjs_3.0.0.tgz";
-        url  = "https://registry.yarnpkg.com/@types/notifyjs/-/notifyjs-3.0.0.tgz";
-        sha1 = "a57126a90be2827d511d00a0615816cd5ca8a740";
+        name = "_types_notifyjs___notifyjs_3.0.1.tgz";
+        url  = "https://registry.yarnpkg.com/@types/notifyjs/-/notifyjs-3.0.1.tgz";
+        sha1 = "eba3bec10e44309df4aba31a73bfd26a562bc755";
       };
     }
     {

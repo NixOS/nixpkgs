@@ -1,12 +1,9 @@
---- a/mscore/CMakeLists.txt
-+++ b/mscore/CMakeLists.txt
-@@ -660,22 +660,6 @@ if (MINGW)
- else (MINGW)
-
-    if ( NOT MSVC )
--## install qwebengine core
+--- a/main/CMakeLists.txt
++++ b/main/CMakeLists.txt
+@@ -220,16 +219,0 @@ else (MINGW)
+-      ## install qwebengine core
 -      if (NOT APPLE AND USE_WEBENGINE)
--         install(FILES
+-         install(PROGRAMS
 -            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess
 -            DESTINATION bin
 -            )
@@ -20,6 +17,3 @@
 -            )
 -      endif(NOT APPLE AND USE_WEBENGINE)
 -
-       target_link_libraries(mscore
-          ${ALSA_LIB}
-          ${QT_LIBRARIES}

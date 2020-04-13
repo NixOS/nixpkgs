@@ -5,11 +5,11 @@ Subject: [PATCH 01/12] qtbase-mkspecs-mac
 
 ---
  mkspecs/common/mac.conf               |   2 +-
- mkspecs/features/mac/default_post.prf | 201 --------------------------
- mkspecs/features/mac/default_pre.prf  |  58 --------
- mkspecs/features/mac/sdk.mk           |  25 ----
- mkspecs/features/mac/sdk.prf          |  61 --------
- 5 files changed, 1 insertion(+), 346 deletions(-)
+ mkspecs/features/mac/default_post.prf | 202 ----------------------------------
+ mkspecs/features/mac/default_pre.prf  |  58 ----------
+ mkspecs/features/mac/sdk.mk           |  25 -----
+ mkspecs/features/mac/sdk.prf          |  61 ----------
+ 5 files changed, 1 insertion(+), 347 deletions(-)
 
 diff --git a/mkspecs/common/mac.conf b/mkspecs/common/mac.conf
 index b77494ec9b..470c38e772 100644
@@ -25,10 +25,10 @@ index b77494ec9b..470c38e772 100644
  
  QMAKE_LFLAGS_REL_RPATH  =
 diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index 26bd3e2e98..b80ec1e801 100644
+index 993f4d56a9..b80ec1e801 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
-@@ -68,207 +68,6 @@ qt {
+@@ -68,208 +68,6 @@ qt {
      }
  }
  
@@ -61,21 +61,22 @@ index 26bd3e2e98..b80ec1e801 100644
 -        qmake_pkginfo_typeinfo.value = "????"
 -    QMAKE_MAC_XCODE_SETTINGS += qmake_pkginfo_typeinfo
 -
--    !isEmpty(VERSION) {
--        l = $$split(VERSION, '.') 0 0  # make sure there are at least three
--        VER_MAJ = $$member(l, 0, 0)
--        VER_MIN = $$member(l, 1, 1)
--        VER_PAT = $$member(l, 2, 2)
--        unset(l)
+-    bundle_version = $$VERSION
+-    isEmpty(bundle_version): bundle_version = 1.0.0
 -
--        qmake_full_version.name = QMAKE_FULL_VERSION
--        qmake_full_version.value = $${VER_MAJ}.$${VER_MIN}.$${VER_PAT}
--        QMAKE_MAC_XCODE_SETTINGS += qmake_full_version
+-    l = $$split(bundle_version, '.') 0 0  # make sure there are at least three
+-    VER_MAJ = $$member(l, 0, 0)
+-    VER_MIN = $$member(l, 1, 1)
+-    VER_PAT = $$member(l, 2, 2)
+-    unset(l)
 -
--        qmake_short_version.name = QMAKE_SHORT_VERSION
--        qmake_short_version.value = $${VER_MAJ}.$${VER_MIN}
--        QMAKE_MAC_XCODE_SETTINGS += qmake_short_version
--    }
+-    qmake_full_version.name = QMAKE_FULL_VERSION
+-    qmake_full_version.value = $${VER_MAJ}.$${VER_MIN}.$${VER_PAT}
+-    QMAKE_MAC_XCODE_SETTINGS += qmake_full_version
+-
+-    qmake_short_version.name = QMAKE_SHORT_VERSION
+-    qmake_short_version.value = $${VER_MAJ}.$${VER_MIN}
+-    QMAKE_MAC_XCODE_SETTINGS += qmake_short_version
 -
 -    !isEmpty(QMAKE_XCODE_DEBUG_INFORMATION_FORMAT) {
 -        debug_information_format.name = DEBUG_INFORMATION_FORMAT

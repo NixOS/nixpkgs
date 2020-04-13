@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.povray.org/;
+    homepage = "http://www.povray.org/";
     description = "Persistence of Vision Raytracer";
     license = licenses.free;
     platforms = platforms.linux;

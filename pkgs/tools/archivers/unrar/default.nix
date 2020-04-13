@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unrar";
-  version = "5.8.3";
+  version = "5.9.2";
 
   src = fetchurl {
     url = "https://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    sha256 = "19lizlsbblkcdyc81jycp5k8kf5d8h2hlgfy16zb1g2vixf6i49m";
+    sha256 = "19nsxdvf9ll99hvgzq6f89ymxhwki224lygjdabrg8ghikqvmlvk";
   };
 
   postPatch = ''
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     make lib
   '';
 
+  outputs = [ "out" "dev" ];
+
   installPhase = ''
     install -Dt "$out/bin" unrar
 
@@ -30,14 +32,15 @@ stdenv.mkDerivation rec {
         $out/share/doc/unrar
 
     install -Dm755 libunrar.so $out/lib/libunrar.so
-    install -D dll.hpp $out/include/unrar/dll.hpp
+
+    install -Dt $dev/include/unrar/ *.hpp
   '';
 
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
     description = "Utility for RAR archives";
-    homepage = http://www.rarlab.com/;
+    homepage = "https://www.rarlab.com/";
     license = licenses.unfreeRedistributable;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;

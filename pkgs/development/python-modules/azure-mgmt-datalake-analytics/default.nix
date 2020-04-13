@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
+, isPy3k
 , msrestazure
 , azure-common
 , azure-mgmt-datalake-nspkg
@@ -21,6 +23,8 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-datalake-nspkg
   ];
+
+  pythonNamespaces = [ "azure.mgmt.datalake" ];
 
   # has no tests
   doCheck = false;

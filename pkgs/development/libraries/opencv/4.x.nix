@@ -9,13 +9,13 @@
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
 , enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
-, enableJPEG2K    ? true, jasper
+, enableJPEG2K    ? false, jasper  # disable jasper by default (many CVE)
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas
 , enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false) &&
-                    stdenv.hostPlatform.isx86_64, cudatoolkit
+                    stdenv.hostPlatform.isx86_64, cudatoolkit, nvidia-optical-flow-sdk
 
 , enableUnfree    ? false
 , enableIpp       ? false
@@ -166,6 +166,7 @@ stdenv.mkDerivation {
   # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
   # what appears to be some stray headers in dnn/misc/tensorflow
   # in contrib when generating the Python bindings:
+  patches = lib.optional enableCuda ./cuda_opt_flow.patch;
   postPatch = ''
     sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
     sed -i -e 's|if len(decls) == 0:|if len(decls) == 0 or "opencv2/" not in hdr:|' ./modules/python/src2/gen2.py
@@ -213,7 +214,7 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optional enableCuda cudatoolkit
+    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ]
     ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
@@ -221,7 +222,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkgconfig unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
@@ -249,6 +250,7 @@ stdenv.mkDerivation {
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+    "-DNVIDIA_OPTICAL_FLOW_1_0_HEADERS_PATH=${nvidia-optical-flow-sdk}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
@@ -286,7 +288,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
-    homepage = https://opencv.org/;
+    homepage = "https://opencv.org/";
     license = with licenses; if enableUnfree then unfree else bsd3;
     maintainers = with maintainers; [mdaiter basvandijk];
     platforms = with platforms; linux ++ darwin;

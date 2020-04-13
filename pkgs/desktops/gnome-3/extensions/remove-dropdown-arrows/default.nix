@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Remove dropdown arrows from GNOME Shell Menus";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonafato ];
-    homepage = https://github.com/mpdeimos/gnome-shell-remove-dropdown-arrows;
+    homepage = "https://github.com/mpdeimos/gnome-shell-remove-dropdown-arrows";
   };
 }

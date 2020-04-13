@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A distributed stream processing framework";
-    homepage = https://flink.apache.org;
-    downloadPage = https://flink.apache.org/downloads.html;
+    homepage = "https://flink.apache.org";
+    downloadPage = "https://flink.apache.org/downloads.html";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ mbode ];
-    repositories.git = git://git.apache.org/flink.git;
+    repositories.git = "git://git.apache.org/flink.git";
   };
 }

@@ -5,6 +5,6 @@
 fetchFromGitHub {
   owner  = "moretea";
   repo   = "yarn2nix";
-  rev    = "3f2dbb08724bf8841609f932bfe1d61a78277232";
-  sha256 = "142av7dwviapsnahgj8r6779gs2zr17achzhr8b97s0hsl08dcl2";
+  rev    = "9e7279edde2a4e0f5ec04c53f5cd64440a27a1ae";
+  sha256 = "0zz2lrwn3y3rb8gzaiwxgz02dvy3s552zc70zvfqc0zh5dhydgn7";
 }

@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.1.0";
+  version = "1.1.3";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "rasterio";
     rev = version;
-    sha256 = "0xa9jazsgsf7is4dbf2bbnfga8q8nmqy0qq4i7jj3riiccwlm6xw";
+    sha256 = "0i081bkmv7qw24ivmdh92ma6x0hnjlf8jgj6rp2c3rb8hjzmi452";
   };
 
   checkInputs = [ boto3 pytest pytestcov packaging hypothesis ] ++ lib.optional (!isPy3k) mock;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
     license = licenses.bsd3;
-    homepage = https://rasterio.readthedocs.io/en/latest/;
+    homepage = "https://rasterio.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ mredaelli ];
   };
 }

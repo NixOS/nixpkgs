@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ erlang rebar opencl-headers ocl-icd ];
-  
+
   buildPhase = ''
     rebar compile
   '';
@@ -26,9 +26,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tonyrog/cl;
+    homepage = "https://github.com/tonyrog/cl";
     description = "OpenCL binding for Erlang";
     license = licenses.mit;
+    # https://github.com/tonyrog/cl/issues/39
+    broken = stdenv.isAarch64;
     platforms = platforms.linux;
   };
 }

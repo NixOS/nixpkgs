@@ -47,7 +47,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://www.openprinting.org/driver/epson-201207w;
+      homepage = "https://www.openprinting.org/driver/epson-201207w";
       description = "Epson printer driver (L110, L210, L300, L350, L355, L550, L555)";
       longDescription = ''
         This software is a filter program used with the Common UNIX Printing

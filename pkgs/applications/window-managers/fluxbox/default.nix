@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       fast, desktop experience. It is written in C++ and licensed
       under MIT license.
     '';
-    homepage = http://fluxbox.org/;
+    homepage = "http://fluxbox.org/";
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

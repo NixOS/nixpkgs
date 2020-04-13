@@ -89,7 +89,7 @@ let
     };
 
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
+  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
@@ -97,20 +97,25 @@ let
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
-              map (up: "${up}/${urlName}.tar.xz") urlPrefixes
-            );
+        lib.concatMap
+          (up: [
+            "${up}/${urlName}.r${toString revision}.tar.xz"
+            "${up}/${urlName}.tar.xz" # TODO To be removed for telive 2020
+          ])
+          urlPrefixes);
 
-      # Upstream refuses to distribute stable tarballs,
-      # so we host snapshots on IPFS or on our own servers.
-      # Common packages should get served from the binary cache anyway.
-      # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
+      # The tarballs on CTAN mirrors for the current release are constantly
+      # receiving updates, so we can't use those directly. Stable snapshots
+      # need to be used instead. Ideally, for the release branches of NixOS we
+      # should be switching to the tlnet-final versions
+      # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
-        # Mirror hosted by @veprbl
-        http://146.185.144.154/texlive-2019
+        # tlnet-final snapshot
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
+        "ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
 
-        # TODO: Upgrade to the final snapshot of the packages before 20.03
-        #http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive
-        #ftp://tug.org/texlive/historic/2019/tlnet-final/archive
+        # Daily snapshots hosted by one of the texlive release managers
+        #https://texlive.info/tlnet-archive/2019/10/19/tlnet/archive
       ];
 
       src = fetchurl { inherit urls sha512; };

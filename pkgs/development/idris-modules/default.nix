@@ -177,6 +177,8 @@
 
     test = callPackage ./test.nix {};
 
+    tf-random = callPackage ./tfrandom.nix {};
+
     tlhydra = callPackage ./tlhydra.nix {};
 
     tomladris = callPackage ./tomladris.nix {};

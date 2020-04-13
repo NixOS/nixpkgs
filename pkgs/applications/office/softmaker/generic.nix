@@ -96,6 +96,10 @@ in stdenv.mkDerivation rec {
       done
     done
 
+    # freeoffice 973 misses the 96x96 application icons, giving broken symbolic links
+    # remove broken symbolic links
+    find $out -xtype l -ls -exec rm {} \;
+
     # Add desktop items
     ${desktopItems.planmaker.buildCommand}
     ${desktopItems.presentations.buildCommand}

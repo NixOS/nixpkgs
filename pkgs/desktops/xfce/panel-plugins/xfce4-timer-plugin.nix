@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel
-, libxfce4ui, libxfcegui4, xfconf, gtk, hicolor-icon-theme }:
+, libxfce4ui, xfconf, gtk2, hicolor-icon-theme }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -13,18 +13,19 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel libxfcegui4 xfconf
-    gtk hicolor-icon-theme ];
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel xfconf
+    gtk2 hicolor-icon-theme ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "A simple XFCE panel plugin that lets the user run an alarm at a specified time or at the end of a specified countdown period";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = [ ];
+    broken = true;
   };
 }

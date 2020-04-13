@@ -44,6 +44,9 @@ with lib;
     pkgs.bvi # binary editor
     pkgs.joe
 
+    # Include some version control tools.
+    pkgs.git
+
     # Firefox for reading the manual.
     pkgs.firefox
 

@@ -14,6 +14,9 @@
   plasma-framework, qtsensors, libcap, libdrm
 }:
 
+# TODO (ttuegel): investigate qmlplugindump failure
+# TODO (ttuegel): investigate gbm dependency
+
 mkDerivation {
   name = "kwin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -30,7 +33,10 @@ mkDerivation {
     libcap libdrm
   ];
   outputs = [ "bin" "dev" "out" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./0001-follow-symlinks.patch
+    ./0002-xwayland.patch
+  ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];

@@ -14,7 +14,7 @@
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
-, guiSupport        ? config.vim.gui or "gtk3"
+, guiSupport        ? config.vim.gui or (if stdenv.isDarwin then "gtk2" else "gtk3")
 , luaSupport        ? config.vim.lua or true
 , perlSupport       ? config.vim.perl or false      # Perl interpreter
 , pythonSupport     ? config.vim.python or true     # Python interpreter
@@ -145,7 +145,12 @@ in stdenv.mkDerivation rec {
       cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
     '';
 
+  preInstall = ''
+    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
+  '';
+
   postInstall = ''
+    ln -s $out/bin/vim $out/bin/vi
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
       "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
@@ -177,9 +182,5 @@ in stdenv.mkDerivation rec {
     rewrap gvimdiff -gd
   '';
 
-  preInstall = ''
-    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
-  '';
-
-  dontStrip = 1;
+  dontStrip = true;
 }

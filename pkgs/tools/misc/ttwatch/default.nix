@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ryanbinns/ttwatch;
+    homepage = "https://github.com/ryanbinns/ttwatch";
     description = "Linux TomTom GPS Watch Utilities";
     maintainers = with maintainers; [ dotlambda ];
     license = licenses.mit;

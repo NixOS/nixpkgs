@@ -1,26 +1,20 @@
 { stdenv
 , mkDerivation
-, fetchFromGitHub
+, fetchgit
 , autoreconfHook
 , pkgconfig
 , qtbase
-, qtscript
 }:
 
 mkDerivation {
   pname = "ofono-phonesim";
-  version = "unstable-2014-04-22";
+  version = "unstable-2019-11-18";
 
-  src = fetchFromGitHub {
-    owner = "jpakkane";
-    repo = "ofono-phonesim";
-    rev = "baa41f04e6a86c5289d7185cad8a6f08a5c3ed0a";
-    sha256 = "0ywalvvf3dfbn81ml21gji1n2hywh2nmakynakjzyyskcqjn2wiz";
+  src = fetchgit {
+    url = "git://git.kernel.org/pub/scm/network/ofono/phonesim.git";
+    rev = "adf231a84cd3708b825dc82c56e841dd7e3b4541";
+    sha256 = "sha256:1840914sz46l8h2jwa0lymw6dvgj72wq9bhp3k4v4rk6masbf6hp";
   };
-
-  patches = [
-    ./qt5-compat.patch
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -29,7 +23,6 @@ mkDerivation {
 
   buildInputs = [
     qtbase
-    qtscript
   ];
 
   makeFlags = [
@@ -39,7 +32,7 @@ mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Phone Simulator for modem testing";
-    homepage = https://github.com/jpakkane/ofono-phonesim;
+    homepage = "https://01.org/ofono";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

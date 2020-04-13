@@ -5,10 +5,10 @@
 
 mkDerivation rec {
   pname = "clipgrab";
-  version = "3.8.5";
+  version = "3.8.11";
 
   src = fetchurl {
-    sha256 = "0jfjnzwvz4ynlld0ih7f7d575s5w2dag0hvb02c6qan7xm5jdhv9";
+    sha256 = "0jpfdmyzjasq4x1xvk7b1cmhhq6fz6ydvvbwz2wclph367x496xk";
     # The .tar.bz2 "Download" link is a binary blob, the source is the .tar.gz!
     url = "https://download.clipgrab.org/${pname}-${version}.tar.gz";
   };
@@ -49,7 +49,7 @@ mkDerivation rec {
       Dailymotion and many other online video sites. It converts downloaded
       videos to MPEG4, MP3 or other formats in just one easy step.
     '';
-    homepage = https://clipgrab.org/;
+    homepage = "https://clipgrab.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

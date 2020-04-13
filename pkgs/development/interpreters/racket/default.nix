@@ -46,7 +46,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "7.4"; # always change at once with ./minimal.nix
+  version = "7.6"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
       inherit sha256;
     }
   )) {
-    inherit ;name = "${pname}-${version}";
-    sha256 = "07rf8sakwssl0gn9g4d3ls2cr10zlhghz0pscrh0jc6mnprrb10i";
+    name = "${pname}-${version}";
+    sha256 = "0yagy7qrnz96gwafnj3whh2vs54788k1ci3vkm100h68gsw638b8";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -102,10 +102,10 @@ stdenv.mkDerivation rec {
       libraries support applications from web servers and databases to
       GUIs and charts.
     '';
-    homepage = http://racket-lang.org/;
-    license = licenses.lgpl3;
+    homepage = "https://racket-lang.org/";
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
     broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };
 }

@@ -2,14 +2,14 @@
 , pkgconfig, qtbase, cmake, zlib, kmod }:
 
 mkDerivation rec {
-  version = "0.3.2";
+  version = "0.4.2";
   pname = "ckb-next";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
     rev = "v${version}";
-    sha256 = "0ri5n7r1vhsgk6s64abvqcdrs5fmlwprw0rxiwfy0j8a9qcic1dr";
+    sha256 = "1mkx1psw5xnpscdfik1kpzsnfhhkn3571i7acr9gxyjr27sckplc";
   };
 
   buildInputs = [
@@ -25,11 +25,13 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DINSTALL_DIR_ANIMATIONS=libexec"
+    "-DUDEV_RULE_DIRECTORY=lib/udev/rules.d"
+    "-DFORCE_INIT_SYSTEM=systemd"
+    "-DDISABLE_UPDATER=1"
   ];
 
   patches = [
     ./install-dirs.patch
-    ./systemd-service.patch
     (substituteAll {
       name = "ckb-next-modprobe.patch";
       src = ./modprobe.patch;
@@ -39,7 +41,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";
-    homepage = https://github.com/ckb-next/ckb-next;
+    homepage = "https://github.com/ckb-next/ckb-next";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ kierdavis ];

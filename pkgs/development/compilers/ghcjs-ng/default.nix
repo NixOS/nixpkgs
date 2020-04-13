@@ -1,4 +1,5 @@
 { stdenv
+, pkgsHostHost
 , callPackage
 , fetchgit
 , ghcjsSrcJson ? null
@@ -14,7 +15,6 @@
 , pkgconfig
 , gcc
 , lib
-, nodePackages
 , ghcjsDepOverrides ? (_:_:{})
 , haskell
 }:
@@ -46,7 +46,7 @@ let
 
     enableShared = true;
 
-    socket-io = nodePackages."socket.io";
+    socket-io = pkgsHostHost.nodePackages."socket.io";
 
     # Relics of the old GHCJS build system
     stage1Packages = [];

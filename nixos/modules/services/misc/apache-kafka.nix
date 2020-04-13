@@ -124,14 +124,13 @@ in {
 
     environment.systemPackages = [cfg.package];
 
-    users.users = singleton {
-      name = "apache-kafka";
+    users.users.apache-kafka = {
       uid = config.ids.uids.apache-kafka;
       description = "Apache Kafka daemon user";
       home = head cfg.logDirs;
     };
 
-    systemd.tmpfiles.rules = map (logDir: "d '${logDir} 0700 apache-kafka - - -") cfg.logDirs;
+    systemd.tmpfiles.rules = map (logDir: "d '${logDir}' 0700 apache-kafka - - -") cfg.logDirs;
 
     systemd.services.apache-kafka = {
       description = "Apache Kafka Daemon";

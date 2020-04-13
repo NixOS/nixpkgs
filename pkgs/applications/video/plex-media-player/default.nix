@@ -65,6 +65,6 @@ in mkDerivation rec {
     description = "Streaming media player for Plex";
     license = licenses.gpl2;
     maintainers = with maintainers; [ kylewlacy ];
-    homepage = https://plex.tv;
+    homepage = "https://plex.tv";
   };
 }

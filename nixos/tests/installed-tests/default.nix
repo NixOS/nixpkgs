@@ -29,36 +29,51 @@ let
 
       # Extra flags to pass to gnome-desktop-testing-runner.
     , testRunnerFlags ? ""
-    }:
-    makeTest rec {
-      name = tested.name;
 
-      meta = {
-        maintainers = tested.meta.maintainers;
-      };
+      # Extra attributes to pass to makeTest.
+      # They will be recursively merged into the attrset created by this function.
+    , ...
+    }@args:
+    makeTest
+      (recursiveUpdate
+        rec {
+          name = tested.name;
 
-      machine = { ... }: {
-        imports = [
-          testConfig
-        ] ++ optional withX11 ../common/x11.nix;
+          meta = {
+            maintainers = tested.meta.maintainers;
+          };
 
-        environment.systemPackages = with pkgs; [ gnome-desktop-testing ];
+          machine = { ... }: {
+            imports = [
+              testConfig
+            ] ++ optional withX11 ../common/x11.nix;
 
-      };
+            environment.systemPackages = with pkgs; [ gnome-desktop-testing ];
 
-      testScript =
-        optionalString withX11 ''
-          machine.wait_for_x()
-        '' +
-        optionalString (preTestScript != "") ''
-          ${preTestScript}
-        '' +
-        ''
-          machine.succeed(
-              "gnome-desktop-testing-runner ${testRunnerFlags} -d '${tested.installedTests}/share'"
-          )
-        '';
-    };
+          };
+
+          testScript =
+            optionalString withX11 ''
+              machine.wait_for_x()
+            '' +
+            optionalString (preTestScript != "") ''
+              ${preTestScript}
+            '' +
+            ''
+              machine.succeed(
+                  "gnome-desktop-testing-runner ${testRunnerFlags} -d '${tested.installedTests}/share'"
+              )
+            '';
+        }
+
+        (removeAttrs args [
+          "tested"
+          "testConfig"
+          "preTestScript"
+          "withX11"
+          "testRunnerFlags"
+        ])
+      );
 
 in
 
@@ -73,8 +88,11 @@ in
   glib-networking = callInstalledTest ./glib-networking.nix {};
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
   graphene = callInstalledTest ./graphene.nix {};
+  ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
+  glib-testing = callInstalledTest ./glib-testing.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};
+  malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

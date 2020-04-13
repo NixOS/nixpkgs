@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, fetchFromGitHub, rustPlatform, Security }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
-  version = "1.21.1";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "mmstick";
-    repo = "cargo-deb";
-    rev = "v${version}";
-    sha256 = "10b25a0cnrd2bhf38yqc32l06vp6sdlfcpa6n9718yipp7b60cq2";
+    repo = pname;
+    rev = "367910e0020de93f45c175c92a37a53ee401978f";
+    sha256 = "1s0xv818rlafdzpb70c1ldv5iq3hh2jxj7g3l6p7v20q1wx0nnvv";
   };
 
-  buildInputs = with stdenv; lib.optionals isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "182ayprs2awmz7lzqkhawrmpfjla3jcj58q8g8c908gchkh05kns";
+  cargoSha256 = "0ffzq2gm0f56vyfkmdzxfs5z1xsdj2kcsyc1fdrk4k1cylqn2f47";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate Debian packages from information in Cargo.toml";
     homepage = "https://github.com/mmstick/cargo-deb";
     license = licenses.mit;

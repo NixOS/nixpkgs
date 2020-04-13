@@ -1,0 +1,74 @@
+diff --git a/main.go b/main.go
+index 62908bb7bb..0527222887 100644
+--- a/main.go
++++ b/main.go
+@@ -1,5 +1,5 @@
+ //go:generate go run pkg/codegen/cleanup/main.go
+-//go:generate /bin/rm -rf pkg/generated
++//go:generate rm -rf pkg/generated
+ //go:generate go run pkg/codegen/main.go
+ //go:generate go fmt pkg/deploy/zz_generated_bindata.go
+ //go:generate go fmt pkg/static/zz_generated_bindata.go
+diff --git a/scripts/build b/scripts/build
+index 72d3c07ece..3e5455b262 100755
+--- a/scripts/build
++++ b/scripts/build
+@@ -10,7 +10,8 @@ PKG_CONTAINERD="github.com/containerd/containerd"
+ PKG_RANCHER_CONTAINERD="github.com/rancher/containerd"
+ PKG_CRICTL="github.com/kubernetes-sigs/cri-tools"
+ 
+-buildDate=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
++# Deterministic build date
++buildDate="$(date -d "$(git log -1 --format=%ai)" -u "+%Y-%m-%dT%H:%M:%SZ")"
+ 
+ VENDOR_PREFIX="${PKG}/vendor/"
+ VERSIONFLAGS="
+@@ -82,17 +83,7 @@ cleanup() {
+ }
+ 
+ INSTALLBIN=$(pwd)/bin
+-if [ ! -x ${INSTALLBIN}/cni ]; then
+-(
+-    echo Building cni
+-    TMPDIR=$(mktemp -d)
+-    trap cleanup EXIT
+-    WORKDIR=$TMPDIR/src/github.com/containernetworking/plugins
+-    git clone -b $VERSION_CNIPLUGINS https://github.com/rancher/plugins.git $WORKDIR
+-    cd $WORKDIR
+-    GOPATH=$TMPDIR CGO_ENABLED=0 go build -tags "$TAGS" -ldflags "$LDFLAGS $STATIC" -o $INSTALLBIN/cni
+-)
+-fi
++# skip building cni, use our separately built one
+ # echo Building agent
+ # CGO_ENABLED=1 go build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC" -o bin/k3s-agent ./cmd/agent/main.go
+ echo Building server
+@@ -108,9 +99,8 @@ ln -s containerd ./bin/ctr
+ #CGO_ENABLED=1 go build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC_SQLITE" -o bin/ctr ./cmd/ctr/main.go
+ # echo Building containerd
+ # CGO_ENABLED=0 go build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC" -o bin/containerd ./cmd/containerd/
+-echo Building runc
+-make EXTRA_LDFLAGS="-w -s" BUILDTAGS="apparmor seccomp" -C ./vendor/github.com/opencontainers/runc static
+-cp -f ./vendor/github.com/opencontainers/runc/runc ./bin/runc
++
++# skip building runc; use our packaged one
+ 
+ echo Building containerd-shim
+ make -C ./vendor/github.com/containerd/containerd bin/containerd-shim
+diff --git a/scripts/package-cli b/scripts/package-cli
+index 4c66ce32df..6d1e0c03cb 100755
+--- a/scripts/package-cli
++++ b/scripts/package-cli
+@@ -55,10 +55,10 @@ LDFLAGS="
+     -X github.com/rancher/k3s/pkg/version.GitCommit=${COMMIT:0:8}
+     -w -s
+ "
+-STATIC="-extldflags '-static'"
+ if [ "$DQLITE" = "true" ]; then
+     DQLITE_TAGS="dqlite"
+ fi
+-CGO_ENABLED=0 go build -tags "$DQLITE_TAGS" -ldflags "$LDFLAGS $STATIC" -o ${CMD_NAME} ./cmd/k3s/main.go
++go build -tags "$DQLITE_TAGS" -ldflags "$LDFLAGS" -o ${CMD_NAME} ./cmd/k3s/main.go
+ 
+-./scripts/build-upload ${CMD_NAME} ${COMMIT}
++# for nixos, don't upload it
++# ./scripts/build-upload ${CMD_NAME} ${COMMIT}

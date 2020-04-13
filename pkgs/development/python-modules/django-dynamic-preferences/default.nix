@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "django-dynamic-preferences";
-  version = "1.7.1";
+  version = "1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z2dndkpypk4pvb0byh5a771vgp50vn8g1rbk5r3sml6dm4wcn7s";
+    sha256 = "1v7mf48gb2qmmks3ifnhkh0vfd7hpvx5v81ypc9cqy35n3ir0q4a";
   };
 
   propagatedBuildInputs = [ six django persisting-theory ]; 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/EliotBerriot/django-dynamic-preferences;
+    homepage = "https://github.com/EliotBerriot/django-dynamic-preferences";
     description = "Dynamic global and instance settings for your django project";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];

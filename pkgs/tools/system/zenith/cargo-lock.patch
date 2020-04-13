@@ -1,0 +1,13 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 3f4eec6..2f565c6 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1297,7 +1297,7 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+ 
+ [[package]]
+ name = "zenith"
+-version = "0.8.0"
++version = "0.8.1"
+ dependencies = [
+  "battery",
+  "bincode",

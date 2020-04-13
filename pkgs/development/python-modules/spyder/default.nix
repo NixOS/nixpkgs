@@ -1,25 +1,28 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels, qtpy, pyzmq, chardet
-, pyqtwebengine
+  spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
+, pyqtwebengine, atomicwrites, pyxdg, diff-match-patch
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "3.3.6";
+  version = "4.1.2";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z7qw1h3rhca12ycv8xrzw6z2gf81v0j6lfq9kpwh472w4vk75v1";
+    sha256 = "0qyisrs9xkzx4hbyin9nasvl10qk7jlxrmyasxycz4zwnvzfvxzf";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
+    intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine
+    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
+    atomicwrites pyxdg diff-match-patch
   ];
 
   # There is no test for spyder
@@ -32,7 +35,7 @@ buildPythonPackage rec {
     comment = "Scientific Python Development Environment";
     desktopName = "Spyder";
     genericName = "Python IDE";
-    categories = "Application;Development;Editor;IDE;";
+    categories = "Application;Development;IDE;";
   };
 
   postPatch = ''
@@ -42,17 +45,22 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
   '';
 
-  # Create desktop item
   postInstall = ''
+    # add Python libs to env so Spyder subprocesses
+    # created to run compute kernels don't fail with ImportErrors
+    wrapProgram $out/bin/spyder3 --prefix PYTHONPATH : "$PYTHONPATH"
+
+    # Create desktop item
     mkdir -p $out/share/icons
     cp spyder/images/spyder.svg $out/share/icons
     cp -r $desktopItem/share/applications/ $out/share
   '';
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   meta = with stdenv.lib; {
     description = "Scientific python development environment";

@@ -1,21 +1,38 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, libobjc, IOKit }:
+{ stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.7";
-
-  goPackagePath = "github.com/ethereum/go-ethereum";
-
-  # Fix for usb-related segmentation faults on darwin
-  propagatedBuildInputs =
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+  version = "1.9.12";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07110dj91wmkpwz7iy0lmxx3y9wjxjrhk3rhkfdil74cxm0wkkn2";
+    sha256 = "143imiphyzk3009cfnqj7q013pb1wva13zq63byfj3d204b58cg6";
   };
+
+  modSha256 = "15a8if5gx361nrqgv201jy8saq1ir1g18rpqzdmavg4ic75si5x1";
+
+  subPackages = [
+    "cmd/abigen"
+    "cmd/bootnode"
+    "cmd/checkpoint-admin"
+    "cmd/clef"
+    "cmd/devp2p"
+    "cmd/ethkey"
+    "cmd/evm"
+    "cmd/faucet"
+    "cmd/geth"
+    "cmd/p2psim"
+    "cmd/puppeth"
+    "cmd/rlpdump"
+    "cmd/utils"
+    "cmd/wnode"
+  ];
+
+  # Fix for usb-related segmentation faults on darwin
+  propagatedBuildInputs =
+    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   meta = with stdenv.lib; {
     homepage = "https://geth.ethereum.org/";

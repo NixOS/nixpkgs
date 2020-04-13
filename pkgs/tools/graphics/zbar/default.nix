@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Disable assertions which include -dev QtBase file paths.
-  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+  NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
   configureFlags = [
     "--without-python"
@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ delroth raskin ];
     platforms = platforms.unix;
     license = licenses.lgpl21;
-    homepage = https://github.com/mchehab/zbar;
+    homepage = "https://github.com/mchehab/zbar";
   };
 }

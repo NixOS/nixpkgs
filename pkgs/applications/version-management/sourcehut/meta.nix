@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "metasrht";
-  version = "0.37.0";
+  version = "0.41.10";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     rev = version;
-    sha256 = "1jf3h2v27cbam8bwiw3x35319pzp0r651p8mfhw150jvskyvmkmr";
+    sha256 = "1srzrajgwq85kjryxykj708m2c98r6a84x4k4a5grwznqw3mwm6p";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/meta.sr.ht;
+    homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

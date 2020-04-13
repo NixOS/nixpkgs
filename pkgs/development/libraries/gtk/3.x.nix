@@ -48,7 +48,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.12";
+  version = "3.24.14";
 
   outputs = [ "out" "dev" ] ++ optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "10xyyhlfb0yk4hglngxh2zsv9xrxkqv343df8h01dvagc6jyp10k";
+    sha256 = "120yz5gxqbv7sgdbcy4i0b6ixm8jpjzialdrqs0gv15q7bwnjk8w";
   };
 
   patches = [
@@ -69,6 +69,11 @@ stdenv.mkDerivation rec {
       name = "Xft-setting-fallback-compute-DPI-properly.patch";
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
+    })
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/1528
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/3c28751dee115e969a58a733f2f19e71062b9d2d.patch";
+      sha256 = "1rqrmymwd22dsiy7agjw13mcyic3by6020rxyaw7zslnmyzfiwc3";
     })
     # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1002
     ./patches/01-build-Fix-path-handling-in-pkgconfig.patch
@@ -88,10 +93,7 @@ stdenv.mkDerivation rec {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  NIX_CFLAGS_COMPILE = [
-    "-DG_ENABLE_DEBUG"
-    "-DG_DISABLE_CAST_CHECKS"
-  ];
+  NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
     files=(
@@ -118,8 +120,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     sassc
-    setupHooks
-  ] ++ optionals withGtkDoc [
+  ] ++ setupHooks ++ optionals withGtkDoc [
     docbook_xml_dtd_43
     docbook_xsl
     gtk-doc
@@ -202,7 +203,7 @@ stdenv.mkDerivation rec {
       proprietary software with GTK without any license fees or
       royalties.
     '';
-    homepage = https://www.gtk.org/;
+    homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin vcunat lethalman worldofpeace ];
     platforms = platforms.all;

@@ -5,19 +5,26 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.740";
+  version = "0.770";
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1bm40nx9g1n4nj1309cijnh0ns4qbhym3agyl537nc4vxw3paqla";
+  };
+
+  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
 
   # Tests not included in pip package.
   doCheck = false;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "48c8bc99380575deb39f5d3400ebb6a8a1cb5cc669bbba4d3bb30f904e0a0e7d";
-  };
-
-  disabled = !isPy3k;
-
-  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
+  pythonImportsCheck = [
+    "mypy"
+    "mypy.types"
+    "mypy.api"
+    "mypy.fastparse"
+    "mypy.report"
+  ];
 
   meta = with stdenv.lib; {
     description = "Optional static typing for Python";

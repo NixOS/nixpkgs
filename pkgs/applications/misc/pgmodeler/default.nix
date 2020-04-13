@@ -4,13 +4,13 @@
 
 mkDerivation rec {
   pname = "pgmodeler";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "15isnbli9jj327r6sj7498nmhgf1mzdyhc1ih120ibw4900aajiv";
+    sha256 = "1wkvg20krfwkziz7skgmwlinx07jm5nl3455payg5brv69zf60kl";
   };
 
   enableParallelBuilding = true;
@@ -24,7 +24,7 @@ mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A database modeling tool for PostgreSQL";
     longDescription = ''pgModeler (PostgreSQL Database Modeler) is an open source database modeling tool designed for PostgreSQL.'';
-    homepage = https://pgmodeler.io/;
+    homepage = "https://pgmodeler.io/";
     license = licenses.gpl3;
     maintainers = [ maintainers.esclear ];
     platforms = platforms.linux;

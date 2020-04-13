@@ -5,7 +5,7 @@
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, kerberos
+, kerberos, libdrm, mesa
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -58,7 +58,7 @@ let
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    kerberos
+    kerberos libdrm mesa
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
@@ -133,7 +133,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A freeware web browser developed by Google";
-    homepage = https://www.google.com/chrome/browser/;
+    homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
     maintainers = [ maintainers.msteen ];
     platforms = [ "x86_64-linux" ];

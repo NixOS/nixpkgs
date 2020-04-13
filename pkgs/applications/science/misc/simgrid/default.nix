@@ -18,14 +18,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.24";
+  version = "3.25";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r9zgfx5npjw4mk0ywxx07jyi1m1b1i06j0m60n3dsrz75492x6m";
+    sha256 = "019fgryfwpcrkv1f3271v7qxk0mfw2w990vgnk1cqhmr9i1f17gs";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
@@ -54,28 +54,28 @@ stdenv.mkDerivation rec {
   #
   # For more information see:
   # https://simgrid.org/doc/3.22/Installing_SimGrid.html#simgrid-compilation-options)
-  cmakeFlags= ''
-    -Denable_documentation=${optionOnOff buildDocumentation}
-    -Denable_java=${optionOnOff buildJavaBindings}
-    -Denable_fortran=${optionOnOff fortranSupport}
-    -Denable_model-checking=${optionOnOff modelCheckingSupport}
-    -Denable_ns3=off
-    -Denable_lua=off
-    -Denable_lib_in_jar=off
-    -Denable_maintainer_mode=off
-    -Denable_mallocators=on
-    -Denable_debug=on
-    -Denable_smpi=on
-    -Denable_smpi_ISP_testsuite=${optionOnOff moreTests}
-    -Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}
-    -Denable_compile_warnings=${optionOnOff debug}
-    -Denable_compile_optimizations=${optionOnOff (!debug)}
-    -Denable_lto=${optionOnOff (!debug)}
-  '';
-  # -Denable_lua=${optionOnOff luaSupport}
-  # -Denable_smpi_papi=${optionOnOff moreTests}
+  cmakeFlags = [
+    "-Denable_documentation=${optionOnOff buildDocumentation}"
+    "-Denable_java=${optionOnOff buildJavaBindings}"
+    "-Denable_fortran=${optionOnOff fortranSupport}"
+    "-Denable_model-checking=${optionOnOff modelCheckingSupport}"
+    "-Denable_ns3=off"
+    "-Denable_lua=off"
+    "-Denable_lib_in_jar=off"
+    "-Denable_maintainer_mode=off"
+    "-Denable_mallocators=on"
+    "-Denable_debug=on"
+    "-Denable_smpi=on"
+    "-Denable_smpi_ISP_testsuite=${optionOnOff moreTests}"
+    "-Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}"
+    "-Denable_compile_warnings=${optionOnOff debug}"
+    "-Denable_compile_optimizations=${optionOnOff (!debug)}"
+    "-Denable_lto=${optionOnOff (!debug)}"
+    # "-Denable_lua=${optionOnOff luaSupport}"
+    # "-Denable_smpi_papi=${optionOnOff moreTests}"
+  ];
 
-  makeFlags = optionalString debug "VERBOSE=1";
+  makeFlags = optional debug "VERBOSE=1";
 
   # Some Perl scripts are called to generate test during build which
   # is before the fixupPhase, so do this manualy here:
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
       scheduling on distributed computing platforms ranging from simple
       network of workstations to Computational Grids.
     '';
-    homepage = https://simgrid.org/;
+    homepage = "https://simgrid.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ mickours mpoquet ];
     platforms = ["x86_64-linux"];

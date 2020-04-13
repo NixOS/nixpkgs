@@ -41,11 +41,11 @@ let generic = { major, version, src }:
         finds structures that satisfy them. Structures are displayed graphically,
         and their appearance can be customized for the domain at hand.
       '';
-      homepage = http://alloytools.org/;
-      downloadPage = http://alloytools.org/download.html;
+      homepage = "http://alloytools.org/";
+      downloadPage = "http://alloytools.org/download.html";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ aminb ];
+      maintainers = with maintainers; [ notbandali ];
     };
   };
 
@@ -59,14 +59,14 @@ in rec {
     };
   };
 
-  alloy5 = let version = "5.0.0.1"; in generic {
+  alloy5 = let version = "5.1.0"; in generic {
     major = "5";
     inherit version;
     src = fetchurl {
-      sha256 = "0kz6i9av9ksjk62lx0dxx8xr542iqvbqd14m1f9h8xpf72c25xw4";
-      url = "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v${version}/Alloy-${version}.jar";
+      sha256 = "02k9khs4k5nc86x9pp5k3vcb0kiwdgcin46mlap4fycnr673xd53";
+      url = "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v${version}/org.alloytools.alloy.dist.jar";
     };
   };
 
-  alloy = alloy4;
+  alloy = alloy5;
 }

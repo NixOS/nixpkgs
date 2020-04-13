@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
   NIX_LDFLAGS = "-lgcc_s";
 
   prePatch = ''
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   passthru.mysqlVersion = "5.6";
 
   meta = with stdenv.lib; {
-    homepage = https://www.percona.com;
+    homepage = "https://www.percona.com";
     description = "a free, fully compatible, enhanced, open source drop-in replacement for MySQL that provides superior performance, scalability and instrumentation";
     platforms = platforms.linux;
     license = licenses.gpl2;

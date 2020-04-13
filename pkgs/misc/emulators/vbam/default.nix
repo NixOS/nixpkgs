@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , ffmpeg
 , gettext
-, libGLU_combined
+, libGLU, libGL
 , openal
 , pkgconfig
 , SDL2
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cairo
     ffmpeg
     gettext
-    libGLU_combined
+    libGLU libGL
     openal
     SDL2
     sfml
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "A merge of the original Visual Boy Advance forks";
     license = licenses.gpl2;
     maintainers = with maintainers; [ lassulus ];
-    homepage = http://vba-m.com/;
+    homepage = "https://vba-m.com/";
     platforms = stdenv.lib.platforms.linux;
     badPlatforms = [ "aarch64-linux" ];
   };

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "atinout-${version}";
   version = "0.9.2-alpha";
 
-  NIX_CFLAGS_COMPILE = [ "-Werror=implicit-fallthrough=0" ];
+  NIX_CFLAGS_COMPILE = "-Werror=implicit-fallthrough=0";
   LANG = "C.UTF-8";
   nativeBuildInputs = [ ronn mount ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://atinout.sourceforge.net;
+    homepage = "http://atinout.sourceforge.net";
     description = "Tool for talking to modems";
     platforms = platforms.unix;
     license = licenses.gpl3;

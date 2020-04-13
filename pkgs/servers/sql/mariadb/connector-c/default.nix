@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fetchpatch
+{ stdenv, fetchurl, cmake
 , curl, openssl, zlib
 , libiconv
 , version, sha256, ...
@@ -17,13 +17,6 @@ stdenv.mkDerivation {
     ];
     inherit sha256;
   };
-
-  patches = stdenv.lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      url = "https://github.com/MariaDB/mariadb-connector-c/commit/ee91b2c98a63acb787114dee4f2694e154630928.patch";
-      sha256 = "05mlyv20kzn9bax4byv2ph1cf42541fcl1zcqzbfwqmynnisvdah";
-    })
-  ];
 
   cmakeFlags = [
     "-DMARIADB_UNIX_ADDR=/run/mysqld/mysqld.sock"
@@ -48,6 +41,7 @@ stdenv.mkDerivation {
     ln -sv mariadb $out/lib/mysql
     ln -sv mariadb $out/include/mysql
     ln -sv mariadb_version.h $out/include/mariadb/mysql_version.h
+    ln -sv libmariadb.pc $out/lib/pkgconfig/mysqlclient.pc
   '';
 
   meta = {

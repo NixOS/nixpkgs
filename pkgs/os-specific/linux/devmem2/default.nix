@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Simple program to read/write from/to any location in memory";
-    homepage = http://lartmaker.nl/lartware/port/;
+    homepage = "http://lartmaker.nl/lartware/port/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];

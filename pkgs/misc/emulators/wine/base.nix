@@ -58,7 +58,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.libGLU_combined pkgs.mesa.osmesa pkgs.libdrm ]
+  ++ lib.optionals openglSupport [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
@@ -68,15 +68,20 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ])
   ++ [ pkgs.xorg.libX11 pkgs.perl ]));
 
+  patches = [
+    # Also look for root certificates at $NIX_SSL_CERT_FILE
+    ./cert-path.patch
+  ];
+
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
-  NIX_LDFLAGS = map (path: "-rpath " + path) (
+  NIX_LDFLAGS = toString (map (path: "-rpath " + path) (
       map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ buildInputs)
       # libpulsecommon.so is linked but not found otherwise
       ++ lib.optionals supportFlags.pulseaudioSupport (map (x: "${lib.getLib x}/lib/pulseaudio")
           (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
-    );
+    ));
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.

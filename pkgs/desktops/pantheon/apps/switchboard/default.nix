@@ -17,18 +17,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "2.3.7";
+  version = "2.3.9";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "160aar5dqd019vn28cm0d0ijj1i6mwpqkl7a1l4lpasw12drxwxz";
+    sha256 = "0gq2gi14ywmhhlq3vablzqjzxq2ms60l9b10splzsf3zd7k2dqz2";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Extensible System Settings app for Pantheon";
-    homepage = https://github.com/elementary/switchboard;
+    homepage = "https://github.com/elementary/switchboard";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

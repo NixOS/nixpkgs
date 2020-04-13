@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "rssguard";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =  [ qtwebengine qttools ];
-  nativeBuildInputs = [ qmake wrapGAppsHook ];
+  nativeBuildInputs = [ qmake wrapGAppsHook wrapQtAppsHook ];
   qmakeFlags = [ "CONFIG+=release" ];
 
   meta = with stdenv.lib; {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       developed using Qt framework and with online feed synchronization support
       for ownCloud/Nextcloud.
     '';
-    homepage = https://github.com/martinrotter/rssguard;
+    homepage = "https://github.com/martinrotter/rssguard";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];

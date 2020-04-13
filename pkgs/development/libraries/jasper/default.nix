@@ -37,10 +37,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.ece.uvic.ca/~frodo/jasper/;
+    homepage = "https://www.ece.uvic.ca/~frodo/jasper/";
     description = "JPEG2000 Library";
     platforms = platforms.unix;
     license = licenses.jasper;
     maintainers = with maintainers; [ pSub ];
+    knownVulnerabilities = [
+      "Numerous CVE unsolved upstream"
+      "See: https://github.com/NixOS/nixpkgs/pull/57681#issuecomment-475857499"
+      "See: https://github.com/mdadams/jasper/issues/208"
+    ];
   };
 }

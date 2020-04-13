@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage
+{ lib, fetchurl, buildDunePackage
 , alcotest, git, mtime, nocrypto
 , angstrom, astring, cstruct, decompress, digestif, encore, duff, fmt
 , fpath, hex, ke, logs, lru, ocaml_lwt, ocamlgraph, ocplib-endian, uri, rresult
@@ -6,13 +6,11 @@
 
 buildDunePackage rec {
   pname = "git";
-	version = "2.1.0";
+	version = "2.1.2";
 
-	src = fetchFromGitHub {
-		owner = "mirage";
-		repo = "ocaml-git";
-		rev = version;
-		sha256 = "0v55zkwgml6i5hp0kzynbi58z6j15k3qgzg06b3h8pdbv5fwd1jp";
+	src = fetchurl {
+		url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
+		sha256 = "0yyclsh255k7pvc2fcsdi8k2fcrr0by2nz6g3sqnwlimjyp7mz5j";
 	};
 
 	propagatedBuildInputs = [ angstrom astring cstruct decompress digestif encore duff fmt fpath hex ke logs lru ocaml_lwt ocamlgraph ocplib-endian uri rresult ];
@@ -23,6 +21,6 @@ buildDunePackage rec {
 		description = "Git format and protocol in pure OCaml";
 		license = lib.licenses.isc;
 		maintainers = [ lib.maintainers.vbgl ];
-		inherit (src.meta) homepage;
+		homepage = "https://github.com/mirage/ocaml-git";
 	};
 }

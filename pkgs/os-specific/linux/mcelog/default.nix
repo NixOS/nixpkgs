@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mcelog";
-  version = "165";
+  version = "168";
 
   src = fetchFromGitHub {
     owner  = "andikleen";
     repo   = "mcelog";
     rev    = "v${version}";
-    sha256 = "1g242qz3jj7amgar497bbd8krljspwy89g1r32wz3fdpkn9m1w8s";
+    sha256 = "0mcmmjvvc80nk20n4dknimv0jzvdkj1ajgyq33b2i4v6xq0bz1pb";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       including bad page offlining and automatic cache error handling. All
       errors are logged to /var/log/mcelog or syslog or the journal.
     '';
-    homepage = http://mcelog.org/;
+    homepage = "http://mcelog.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

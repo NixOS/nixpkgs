@@ -36,6 +36,7 @@
 { <xref linkend="opt-services.xserver.enable"/> = true;
   <xref linkend="opt-services.xserver.displayManager.sddm.enable"/> = true;
   <xref linkend="opt-services.xserver.desktopManager.plasma5.enable"/> = true;
+  <xref linkend="opt-environment.systemPackages"/> = [ pkgs.vim ];
 }
 </programlisting>
   Note that both <filename>configuration.nix</filename> and

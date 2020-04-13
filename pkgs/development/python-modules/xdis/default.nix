@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "4.1.2";
+  version = "4.2.4";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     rev = version;
-    sha256 = "0icqhafsnmcs6628cg3jjgq0d3x835nqmhljcz93yi457hfqd2lp";
+    sha256 = "0nq6ijmj48c2dk75vmb040wgvr4y7wyjxrcm2dyvcwfk2h6phwri";
   };
 
   checkInputs = [ pytest ];
@@ -25,8 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python cross-version byte-code disassembler and marshal routines";
-    homepage = https://github.com/rocky/python-xdis/;
+    homepage = "https://github.com/rocky/python-xdis/";
     license = licenses.gpl2;
   };
-
 }

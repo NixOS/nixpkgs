@@ -29,13 +29,13 @@ stdenv.mkDerivation {
 
   preBuild = "cd squashfs-tools";
 
-  installFlags = "INSTALL_DIR=\${out}/bin";
+  installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
   makeFlags = [ "XZ_SUPPORT=1" "ZSTD_SUPPORT=1" ]
     ++ stdenv.lib.optional lz4Support "LZ4_SUPPORT=1";
 
   meta = {
-    homepage = http://squashfs.sourceforge.net/;
+    homepage = "http://squashfs.sourceforge.net/";
     description = "Tool for creating and unpacking squashfs filesystems";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2Plus;

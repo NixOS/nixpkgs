@@ -1,13 +1,12 @@
 diff --git a/Makefile b/Makefile
-index 85862fb8..ed52c5ec 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -841,7 +841,7 @@ endif
+@@ -867,7 +867,7 @@ install-includedir:
+ 	$(INSTALL_DIR) "$(DESTDIR)$(includedir)"
  
- ICON_SIZES=16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512
- 
--install: all $(if $(BUILD_DOCS),install-doc) install-datadir install-localstatedir \
-+install: all $(if $(BUILD_DOCS),install-doc) install-datadir \
+ install: all $(if $(BUILD_DOCS),install-doc) \
+-	install-datadir install-localstatedir install-includedir \
++	install-datadir install-includedir \
  	$(if $(INSTALL_BLOBS),$(edk2-decompressed)) \
  	recurse-install
  ifneq ($(TOOLS),)

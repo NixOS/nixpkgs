@@ -26,7 +26,17 @@ let
 
     "riscv32-linux" "riscv64-linux"
 
-    "aarch64-none" "avr-none" "arm-none" "i686-none" "x86_64-none" "powerpc-none" "msp430-none" "riscv64-none" "riscv32-none"
+    "arm-none" "armv6l-none" "aarch64-none"
+    "avr-none"
+    "i686-none" "x86_64-none"
+    "powerpc-none"
+    "msp430-none"
+    "riscv64-none" "riscv32-none"
+    "vc4-none"
+
+    "js-ghcjs"
+
+    "aarch64-genode" "x86_64-genode"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -45,6 +55,8 @@ in {
   x86_64  = filterDoubles predicates.isx86_64;
   mips    = filterDoubles predicates.isMips;
   riscv   = filterDoubles predicates.isRiscV;
+  vc4     = filterDoubles predicates.isVc4;
+  js      = filterDoubles predicates.isJavaScript;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
@@ -58,6 +70,7 @@ in {
   unix    = filterDoubles predicates.isUnix;
   wasi    = filterDoubles predicates.isWasi;
   windows = filterDoubles predicates.isWindows;
+  genode  = filterDoubles predicates.isGenode;
 
   embedded = filterDoubles predicates.isNone;
 

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python framework that makes developing APIs as simple as possible, but no simpler";
-    homepage = https://github.com/timothycrosley/hug;
+    homepage = "https://github.com/timothycrosley/hug";
     license = licenses.mit;
   };
 

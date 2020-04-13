@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/xorg62/tty-clock;
+    homepage = "https://github.com/xorg62/tty-clock";
     license = licenses.free;
     description = "Digital clock in ncurses";
     platforms = platforms.all;

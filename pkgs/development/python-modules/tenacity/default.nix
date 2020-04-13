@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "5.1.1";
+  version = "6.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4eb168dbf55ed2cae27e7c6b2bd48ab54dabaf294177d998330cf59f294c112";
+    sha256 = "72f397c2bb1887e048726603f3f629ea16f88cb3e61e4ed3c57e98582b8e3571";
   };
 
   nativeBuildInputs = [ pbr setuptools_scm ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/jd/tenacity;
+    homepage = "https://github.com/jd/tenacity";
     description = "Retrying library for Python";
     license = licenses.asl20;
     maintainers = with maintainers; [ jakewaksbaum ];

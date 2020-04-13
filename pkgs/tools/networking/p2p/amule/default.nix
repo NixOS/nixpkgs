@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    homepage = "https://amule.org/";
+    homepage = "https://github.com/amule-project/amule";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom ];
     platforms = platforms.unix;

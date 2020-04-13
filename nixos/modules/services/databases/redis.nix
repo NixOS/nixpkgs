@@ -32,6 +32,13 @@ let
   '';
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
+    (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
+    (mkRemovedOptionModule [ "services" "redis" "dbFilename" ] "The redis module now uses /var/lib/redis/dump.rdb as database dump location.")
+    (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
+    (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
+  ];
 
   ###### interface
 
@@ -143,8 +150,18 @@ in
       requirePass = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "Password for database (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)";
+        description = ''
+          Password for database (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE).
+          Use requirePassFile to store it outside of the nix store in a dedicated file.
+        '';
         example = "letmein!";
+      };
+
+      requirePassFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = "File with password for the database.";
+        example = "/run/keys/redis-password";
       };
 
       appendOnly = mkOption {
@@ -185,6 +202,10 @@ in
   ###### implementation
 
   config = mkIf config.services.redis.enable {
+    assertions = [{
+      assertion = cfg.requirePass != null -> cfg.requirePassFile == null;
+      message = "You can only set one services.redis.requirePass or services.redis.requirePassFile";
+    }];
     boot.kernel.sysctl = (mkMerge [
       { "vm.nr_hugepages" = "0"; }
       ( mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; } )
@@ -201,21 +222,26 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    systemd.services.redis =
-      { description = "Redis Server";
+    systemd.services.redis = {
+      description = "Redis Server";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/redis-server ${redisConfig}";
-          RuntimeDirectory = "redis";
-          StateDirectory = "redis";
-          Type = "notify";
-          User = "redis";
-        };
+      preStart = ''
+        install -m 600 ${redisConfig} /run/redis/redis.conf
+      '' + optionalString (cfg.requirePassFile != null) ''
+        password=$(cat ${escapeShellArg cfg.requirePassFile})
+        echo "requirePass $password" >> /run/redis/redis.conf
+      '';
+
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/redis-server /run/redis/redis.conf";
+        RuntimeDirectory = "redis";
+        StateDirectory = "redis";
+        Type = "notify";
+        User = "redis";
       };
-
+    };
   };
-
 }

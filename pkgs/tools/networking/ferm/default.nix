@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables }:
+{ stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "2.4.1";
@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests.ferm = nixosTests.ferm;
+
   meta = {
-    homepage = http://ferm.foo-projects.org/;
+    homepage = "http://ferm.foo-projects.org/";
     description = "Tool to maintain complex firewalls";
     longDescription = ''
       ferm is a tool to maintain complex firewalls, without having the trouble to

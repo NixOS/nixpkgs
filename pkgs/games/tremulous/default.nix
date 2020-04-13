@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libGLU_combined, libX11, SDL, openal, runtimeShell }:
+{ stdenv, fetchurl, unzip, libGLU, libGL, libX11, SDL, openal, runtimeShell }:
 stdenv.mkDerivation rec {
   pname = "tremulous";
   version = "1.1.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     url = "http://releases.mercenariesguild.net/tremded/mg_tremded_source_1.01.tar.gz";
     sha256 = "1njrqlhzjvy9myddzkagszwdcf3m4h08wip888w2rmbshs6kz6ql";
   };
-  buildInputs = [ unzip libGLU_combined libX11 SDL openal ];
+  buildInputs = [ unzip libGLU libGL libX11 SDL openal ];
   unpackPhase = ''
     unzip $src1
     cd tremulous
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cd ..
   '';
   patches = [ ./parse.patch ];
-  patchFlags = "-p 0";
+  patchFlags = [ "-p" "0" ];
   NIX_LD_FLAGS = ''
     -rpath ${stdenv.cc}/lib
     -rpath ${stdenv.cc}/lib64
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       after death. Other structures provide automated base defense (to some
       degree), healing functions and much more...
     '';
-    homepage = http://www.tremulous.net;
+    homepage = "http://www.tremulous.net";
     license = with licenses; [
       gpl2
       cc-by-sa-25 /* media */

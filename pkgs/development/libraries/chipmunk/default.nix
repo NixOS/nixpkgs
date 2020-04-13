@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, freeglut, libGLU_combined, glfw2, glew, libX11, xorgproto
+{ stdenv, fetchurl, cmake, freeglut, libGLU, libGL, glfw2, glew, libX11, xorgproto
 , libXi, libXmu
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs =
-    [ freeglut libGLU_combined glfw2 glew libX11 xorgproto libXi libXmu ];
+    [ freeglut libGLU libGL glfw2 glew libX11 xorgproto libXi libXmu ];
 
   postInstall = ''
     mkdir -p $out/bin
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fast and lightweight 2D game physics library";
-    homepage = http://chipmunk2d.net/;
+    homepage = "http://chipmunk2d.net/";
     license = licenses.mit;
     platforms = platforms.unix; # supports Windows and MacOS as well, but those require more work
   };

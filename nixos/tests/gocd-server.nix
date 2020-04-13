@@ -2,7 +2,7 @@
 #   1. GoCD server starts
 #   2. GoCD server responds
 
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 {
   name = "gocd-server";
@@ -10,19 +10,19 @@ import ./make-test.nix ({ pkgs, ...} :
     maintainers = [ swarren83 ];
   };
 
-nodes = {
-  gocd_server =
-    { ... }:
-    {
-      virtualisation.memorySize = 2046;
-      services.gocd-server.enable = true;
-    };
-};
+  nodes = {
+    server =
+      { ... }:
+      {
+        virtualisation.memorySize = 2046;
+        services.gocd-server.enable = true;
+      };
+  };
 
   testScript = ''
-    $gocd_server->start;
-    $gocd_server->waitForUnit("gocd-server");
-    $gocd_server->waitForOpenPort("8153");
-    $gocd_server->waitUntilSucceeds("curl -s -f localhost:8153/go");
+    server.start()
+    server.wait_for_unit("gocd-server")
+    server.wait_for_open_port(8153)
+    server.wait_until_succeeds("curl -s -f localhost:8153/go")
   '';
 })

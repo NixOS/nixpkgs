@@ -4,10 +4,46 @@
                  except Exception:
                      pass
 
--        os.environ['PATH'] = "%s:%s" % (
+-        os.environ[u'PATH'] = u"%s:%s" % (
 -            os.path.abspath(build_scripts_cmd.build_dir),
--            os.environ.get('PATH'))
+-            os.environ.get(u'PATH'))
 -
          test.run(self)
 
      def run_tests(self):
+--- a/testing/functional/__init__.py
++++ b/testing/functional/__init__.py
+@@ -107,7 +107,7 @@ class FunctionalTestCase(DuplicityTestCase):
+         if basepython is not None:
+             cmd_list.extend([basepython])
+             cmd_list.extend([u"-m", u"coverage", u"run", u"--source=duplicity", u"-p"])
+-        cmd_list.extend([u"../bin/duplicity"])
++        cmd_list.extend([u"duplicity"])
+         cmd_list.extend(options)
+         cmd_list.extend([u"-v0"])
+         cmd_list.extend([u"--no-print-statistics"])
+--- a/testing/functional/test_log.py
++++ b/testing/functional/test_log.py
+@@ -47,9 +47,9 @@ class LogTest(FunctionalTestCase):
+         # Run actual duplicity command (will fail, because no arguments passed)
+         basepython = os.environ.get(u'TOXPYTHON', None)
+         if basepython is not None:
+-            os.system(u"{} ../bin/duplicity --log-file={} >/dev/null 2>&1".format(basepython, self.logfile))
++            os.system(u"{} duplicity --log-file={} >/dev/null 2>&1".format(basepython, self.logfile))
+         else:
+-            os.system(u"../bin/duplicity --log-file={} >/dev/null 2>&1".format(self.logfile))
++            os.system(u"duplicity --log-file={} >/dev/null 2>&1".format(self.logfile))
+ 
+         # The format of the file should be:
+         # """ERROR 2
+--- a/testing/functional/test_rdiffdir.py
++++ b/testing/functional/test_rdiffdir.py
+@@ -38,7 +38,7 @@ class RdiffdirTest(FunctionalTestCase):
+ 
+     def run_rdiffdir(self, argstring):
+         u"""Run rdiffdir with given arguments"""
+-        self.run_cmd(u"../bin/rdiffdir " + argstring)
++        self.run_cmd(u"rdiffdir " + argstring)
+ 
+     def run_cycle(self, dirname_list):
+         u"""Run diff/patch cycle on directories in dirname_list"""

@@ -18,6 +18,7 @@ let
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
     ignorePerms = folder.ignorePerms;
+    versioning = folder.versioning;
   }) (filterAttrs (
     _: folder:
     folder.enable
@@ -111,12 +112,12 @@ in {
               addresses = [ "tcp://192.168.0.10:51820" ];
             };
           };
-          type = types.attrsOf (types.submodule ({ config, ... }: {
+          type = types.attrsOf (types.submodule ({ name, ... }: {
             options = {
 
               name = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   Name of the device
                 '';
@@ -168,13 +169,15 @@ in {
           description = ''
             folders which should be shared by syncthing.
           '';
-          example = {
-            "/home/user/sync" = {
-              id = "syncme";
-              devices = [ "bigbox" ];
-            };
-          };
-          type = types.attrsOf (types.submodule ({ config, ... }: {
+          example = literalExample ''
+            {
+              "/home/user/sync" = {
+                id = "syncme";
+                devices = [ "bigbox" ];
+              };
+            }
+          '';
+          type = types.attrsOf (types.submodule ({ name, ... }: {
             options = {
 
               enable = mkOption {
@@ -189,7 +192,7 @@ in {
 
               path = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The path to the folder which should be shared.
                 '';
@@ -197,7 +200,7 @@ in {
 
               id = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The id of the folder. Must be the same on all devices.
                 '';
@@ -205,7 +208,7 @@ in {
 
               label = mkOption {
                 type = types.str;
-                default = config._module.args.name;
+                default = name;
                 description = ''
                   The label of the folder.
                 '';
@@ -219,6 +222,69 @@ in {
                   in the <literal>declarative.devices</literal> attribute.
                 '';
               };
+
+              versioning = mkOption {
+                default = null;
+                description = ''
+                  How to keep changed/deleted files with syncthing.
+                  There are 4 different types of versioning with different parameters.
+                  See https://docs.syncthing.net/users/versioning.html
+                '';
+                example = [
+                  {
+                    versioning = {
+                      type = "simple";
+                      params.keep = "10";
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "trashcan";
+                      params.cleanoutDays = "1000";
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "staggered";
+                      params = {
+                        cleanInterval = "3600";
+                        maxAge = "31536000";
+                        versionsPath = "/syncthing/backup";
+                      };
+                    };
+                  }
+                  {
+                    versioning = {
+                      type = "external";
+                      params.versionsPath = pkgs.writers.writeBash "backup" ''
+                        folderpath="$1"
+                        filepath="$2"
+                        rm -rf "$folderpath/$filepath"
+                      '';
+                    };
+                  }
+                ];
+                type = with types; nullOr (submodule {
+                  options = {
+                    type = mkOption {
+                      type = enum [ "external" "simple" "staggered" "trashcan" ];
+                      description = ''
+                        Type of versioning.
+                        See https://docs.syncthing.net/users/versioning.html
+                      '';
+                    };
+                    params = mkOption {
+                      type = attrsOf (either str path);
+                      description = ''
+                        Parameters for versioning. Structure depends on versioning.type.
+                        See https://docs.syncthing.net/users/versioning.html
+                      '';
+                    };
+                  };
+                });
+              };
+
+
 
               rescanInterval = mkOption {
                 type = types.int;
@@ -420,6 +486,24 @@ in {
               -gui-address=${cfg.guiAddress} \
               -home=${cfg.configDir}
           '';
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProtectControlGroups = true;
+          ProtectHostname = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          CapabilityBoundingSet = [
+            "~CAP_SYS_PTRACE" "~CAP_SYS_ADMIN"
+            "~CAP_SETGID" "~CAP_SETUID" "~CAP_SETPCAP"
+            "~CAP_SYS_TIME" "~CAP_KILL"
+          ];
         };
       };
       syncthing-init = mkIf (

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Library to read freedesktop.org menu files";
-    homepage = https://blog.lxde.org/tag/menu-cache/;
+    homepage = "https://blog.lxde.org/tag/menu-cache/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.ttuegel ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -36,11 +36,11 @@ mkDerivation rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Easy to use calculator for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-calculator;
+    homepage = "https://github.com/linuxdeepin/deepin-calculator";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

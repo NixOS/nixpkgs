@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "1j3p09j8rpdkp8v4d4mz224ddakkvhzchvccm9qryrqc2fq4022v";
   };
 
-  buildInputs = [ go-bindata bash ];
+  nativeBuildInputs = [ go-bindata bash ];
 
   buildPhase = ''
     runHook preBuild
@@ -31,7 +31,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://traefik.io;
+    homepage = "https://traefik.io";
     description = "A modern reverse proxy";
     license = licenses.mit;
     maintainers = with maintainers; [ hamhut1066 vdemeester ];

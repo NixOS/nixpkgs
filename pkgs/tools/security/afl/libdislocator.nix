@@ -1,11 +1,11 @@
 { stdenv, afl}:
 
 stdenv.mkDerivation {
-  version = (builtins.parseDrvName afl.name).version;
+  version = stdenv.lib.getVersion afl;
   pname = "libdislocator";
 
   src = afl.src;
-  sourceRoot = "${afl.name}/libdislocator";
+  sourceRoot = "${afl.src.name}/libdislocator";
 
   makeFlags = [ "PREFIX=$(out)" ];
 

@@ -2,6 +2,9 @@
 { python
 , callPackage
 , makeSetupHook
+, disabledIf
+, isPy3k
+, ensureNewerSourcesForZipFilesHook
 }:
 
 let
@@ -10,6 +13,27 @@ let
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in rec {
+
+  eggBuildHook = callPackage ({ }:
+    makeSetupHook {
+      name = "egg-build-hook.sh";
+      deps = [ ];
+    } ./egg-build-hook.sh) {};
+
+  eggInstallHook = callPackage ({ setuptools }:
+    makeSetupHook {
+      name = "egg-install-hook.sh";
+      deps = [ setuptools ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./egg-install-hook.sh) {};
+
+  eggUnpackHook = callPackage ({ }:
+    makeSetupHook {
+      name = "egg-unpack-hook.sh";
+      deps = [ ];
+    } ./egg-unpack-hook.sh) {};
 
   flitBuildHook = callPackage ({ flit }:
     makeSetupHook {
@@ -65,10 +89,26 @@ in rec {
       };
     } ./python-imports-check-hook.sh) {};
 
+  pythonNamespacesHook = callPackage ({}:
+    makeSetupHook {
+      name = "python-namespaces-hook.sh";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-namespaces-hook.sh) {};
+
   pythonRemoveBinBytecodeHook = callPackage ({ }:
     makeSetupHook {
       name = "python-remove-bin-bytecode-hook";
     } ./python-remove-bin-bytecode-hook.sh) {};
+
+  pythonRemoveTestsDirHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-remove-tests-dir-hook";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-remove-tests-dir-hook.sh) {};
 
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {
@@ -87,6 +127,15 @@ in rec {
         inherit pythonCheckInterpreter setuppy;
       };
     } ./setuptools-check-hook.sh) {};
+
+  venvShellHook = disabledIf (!isPy3k) (callPackage ({ }:
+    makeSetupHook {
+      name = "venv-shell-hook";
+      deps = [ ensureNewerSourcesForZipFilesHook ];
+      substitutions = {
+        inherit pythonInterpreter;
+    };
+  } ./venv-shell-hook.sh) {});
 
   wheelUnpackHook = callPackage ({ wheel }:
     makeSetupHook {

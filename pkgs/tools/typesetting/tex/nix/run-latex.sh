@@ -47,6 +47,7 @@ runLaTeX() {
     if fgrep -q \
         -e "LaTeX Warning: Label(s) may have changed." \
         -e "Rerun to get citations correct." \
+        -e "Please rerun LaTeX." \
         "$tmpFile"; then
         runNeeded=1
     fi

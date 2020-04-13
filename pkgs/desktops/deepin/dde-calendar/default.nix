@@ -37,11 +37,11 @@ mkDerivation rec {
       -e "s,/usr/bin/deepin-desktop-ts-convert,deepin-desktop-ts-convert,"
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Calendar for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/dde-calendar;
+    homepage = "https://github.com/linuxdeepin/dde-calendar";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

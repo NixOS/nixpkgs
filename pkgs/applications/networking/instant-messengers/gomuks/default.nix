@@ -1,25 +1,40 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, makeDesktopItem }:
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "2019-06-28";
+  version = "2020-03-20";
 
   goPackagePath = "maunium.net/go/gomuks";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
-    rev = "37df8eb454088e61db7a14f382851205bc1806ad";
-    sha256 = "1hr15d9sbq6mddaxv3pwz86qp1hhzssgrvakfpc49xl4h04dq33g";
+    rev = "bce30e32a049b3ee76081c8d3881a3820b0e7341";
+    sha256 = "0f7i88vrvl1xl4hmjplq3wwihqwijbgxy6nk5fkvc8pfmm5hsjcs";
   };
 
-  modSha256 = "1qrqgzzsxqvmy4m9shypa94bzw34mc941jhmyccip9grk9fzsxws";
+  modSha256 = "10w0bjhnf6bbqx5jbgfv2jxxyqswzx25p64kkjmvh5qamjzpbjz2";
+
+  postInstall = ''
+    cp -r ${
+      makeDesktopItem {
+        name = "net.maunium.gomuks.desktop";
+        exec = "@out@/bin/gomuks";
+        terminal = "true";
+        desktopName = "Gomuks";
+        genericName = "Matrix client";
+        categories = "Network;Chat";
+        comment = meta.description;
+      }
+    }/* $out/
+    substituteAllInPlace $out/share/applications/*
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ tilpner ];
+    maintainers = with maintainers; [ tilpner emily ];
     platforms = platforms.unix;
   };
 }

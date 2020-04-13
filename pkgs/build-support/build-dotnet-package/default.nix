@@ -29,9 +29,9 @@ attrsOrig @
       configurePhase = ''
         runHook preConfigure
 
-        [ -z "$dontPlacateNuget" ] && placate-nuget.sh
-        [ -z "$dontPlacatePaket" ] && placate-paket.sh
-        [ -z "$dontPatchFSharpTargets" ] && patch-fsharp-targets.sh
+        [ -z "''${dontPlacateNuget-}" ] && placate-nuget.sh
+        [ -z "''${dontPlacatePaket-}" ] && placate-paket.sh
+        [ -z "''${dontPatchFSharpTargets-}" ] && patch-fsharp-targets.sh
 
         runHook postConfigure
       '';
@@ -69,7 +69,7 @@ attrsOrig @
 
         cp -rv ${arrayToShell outputFiles} "''${outputFilesArray[@]}" "$target"
 
-        if [ -z "$dontRemoveDuplicatedDlls" ]
+        if [ -z "''${dontRemoveDuplicatedDlls-}" ]
         then
           pushd "$out"
           remove-duplicated-dlls.sh

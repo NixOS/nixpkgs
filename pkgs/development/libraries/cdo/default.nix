@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       Supported data formats are GRIB 1/2, netCDF 3/4, SERVICE, EXTRA and IEG.
       There are more than 600 operators available.
     '';
-    homepage = https://code.mpimet.mpg.de/projects/cdo/;
+    homepage = "https://code.mpimet.mpg.de/projects/cdo/";
     license = licenses.gpl2;
     maintainers = [ maintainers.ltavard ];
     platforms = with platforms; linux ++ darwin;

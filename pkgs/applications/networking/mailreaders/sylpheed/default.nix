@@ -21,13 +21,11 @@ stdenv.mkDerivation rec {
     ++ optionals gpgSupport [ gpgme ]
     ++ optionals sslSupport [ openssl ];
 
-  configureFlags = [
-    (optional gpgSupport "--enable-gpgme")
-    (optional sslSupport "--enable-ssl")
-  ];
+  configureFlags = optional gpgSupport "--enable-gpgme"
+    ++ optional sslSupport "--enable-ssl";
 
   meta = {
-    homepage = http://sylpheed.sraoss.jp/en/;
+    homepage = "http://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -3,19 +3,19 @@
 stdenv.mkDerivation rec {
   name = "pws-${(import ./gemset.nix).pws.version}";
 
-  env = bundlerEnv {
-    name = "${name}-gems";
-
-    inherit ruby;
-
-    gemdir = ./.;
-  };
-
   buildInputs = [ makeWrapper ];
 
   phases = ["installPhase"];
 
-  installPhase = ''
+  installPhase = let
+    env = bundlerEnv {
+      name = "${name}-gems";
+
+      inherit ruby;
+
+      gemdir = ./.;
+    };
+  in ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/pws $out/bin/pws \
       --set PATH '"${xsel}/bin/:$PATH"'
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line password safe";
-    homepage    = https://github.com/janlelis/pws;
+    homepage    = "https://github.com/janlelis/pws";
     license     = licenses.mit;
     maintainers = with maintainers; [ swistak35 nicknovitski ];
     platforms   = platforms.unix;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, glib, pkgconfig, libGLU_combined, wxGTK, libX11, xorgproto
+{ stdenv, fetchurl, gtk2, glib, pkgconfig, libGLU, libGL, wxGTK, libX11, xorgproto
 , runtimeShell }:
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 glib libGLU_combined wxGTK libX11 xorgproto ];
+  buildInputs = [ gtk2 glib libGLU libGL wxGTK libX11 xorgproto ];
 
   preBuild = ''
     sed -e '

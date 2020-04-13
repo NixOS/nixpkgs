@@ -1,11 +1,11 @@
-{ stdenv, version, fetch, cmake, python, llvm, libcxxabi }:
+{ stdenv, version, fetch, cmake, python3, llvm, libcxxabi }:
 with stdenv.lib;
 stdenv.mkDerivation {
   pname = "compiler-rt";
   inherit version;
   src = fetch "compiler-rt" "0ipd4jdxpczgr2w6lzrabymz6dhzj69ywmyybjjc1q397zgrvziy";
 
-  nativeBuildInputs = [ cmake python llvm ];
+  nativeBuildInputs = [ cmake python3 llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   configureFlags = [
@@ -16,7 +16,8 @@ stdenv.mkDerivation {
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
-  ] ++ optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch;
+  ] ++ optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
+    ++ optional (stdenv.hostPlatform.libc == "glibc") ./compiler-rt-sys-ustat.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra

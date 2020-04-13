@@ -16,13 +16,13 @@ in
 stdenv.mkDerivation rec {
 
   pname = "EventStore";
-  version = "5.0.2";
+  version = "5.0.7";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     rev = "oss-v${version}";
-    sha256 = "0hjc64lmi9x1sq8zk24iag14k424l72g1n4z7wf7gaygd07kx9k8";
+    sha256 = "0yvprql73g4lc88b6kp1kk8h64az2hn4am5hc4gyiaxfavaww3ci";
   };
 
   buildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://geteventstore.com/;
+    homepage = "https://geteventstore.com/";
     description = "Event sourcing database with processing logic in JavaScript";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];

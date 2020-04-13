@@ -33,7 +33,9 @@ in buildGoPackage rec {
 
   goPackagePath = "github.com/openshift/origin";
 
-  buildInputs = [ which rsync go-bindata kerberos clang ];
+  buildInputs = [ kerberos ];
+
+  nativeBuildInputs = [ which rsync go-bindata clang ];
 
   patchPhase = ''
     patchShebangs ./hack
@@ -79,7 +81,7 @@ in buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
-    homepage = http://www.openshift.org;
+    homepage = "http://www.openshift.org";
     maintainers = with maintainers; [offline bachp moretea];
     platforms = platforms.unix;
   };

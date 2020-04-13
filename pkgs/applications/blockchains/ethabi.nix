@@ -1,10 +1,8 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "ethabi";
-  version = "7.0.0";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
@@ -13,13 +11,11 @@ buildRustPackage rec {
     sha256 = "1gqd3vwsvv1wvi659qcdywgmh41swblpwmmxb033k8irw581dwq4";
   };
 
-  cargoSha256 = "0zkdai31jf8f5syklaxq43ydjvp5xclr8pd6y1q6vkwjz6z49hzm";
-
-  cargoBuildFlags = ["--features cli"];
+  cargoSha256 = "1hx8qw51rl7sn9jmnclw0hc4rx619hf78hpaih5mvny3k0zgiwpm";
 
   meta = with stdenv.lib; {
     description = "Ethereum function call encoding (ABI) utility";
-    homepage = https://github.com/ethcore/ethabi/;
+    homepage = "https://github.com/ethcore/ethabi/";
     maintainers = [ maintainers.dbrock ];
     license = licenses.gpl3;
     inherit version;

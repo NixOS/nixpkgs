@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "vale";
-  version = "1.7.1";
+  version = "2.0.0";
 
   subPackages = [ "." ];
 
@@ -10,13 +10,15 @@ buildGoPackage rec {
     owner  = "errata-ai";
     repo   = "vale";
     rev    = "v${version}";
-    sha256 = "1qi3brjppiymk6as0xic2n3bhq8g8qw1z8d9a24w60x9gp52yq5m";
+    sha256 = "068973ayd883kzkxl60lpammf3icjz090nw07kfccvhcf24x07bh";
   };
 
   goPackagePath = "github.com/errata-ai/vale";
 
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
   meta = with stdenv.lib; {
-    homepage = https://errata-ai.github.io/vale/;
+    homepage = "https://errata-ai.gitbook.io/vale/";
     description = "A syntax-aware linter for prose built with speed and extensibility in mind";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];

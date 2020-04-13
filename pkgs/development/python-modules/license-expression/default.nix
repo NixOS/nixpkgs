@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "license-expression";
     rev = "v${version}";
-    sha256 = "15dk3j5sr8iypzqqa8wa12b2a84f6ssbfvam1c1vzz00y2y5v3ic";
+    sha256 = "0bbd7d90z58p9sd01b00g0vfd9bmwzksjb7pc8833s2jpja9mxz1";
   };
   postPatch = "patchShebangs ./configure";
 

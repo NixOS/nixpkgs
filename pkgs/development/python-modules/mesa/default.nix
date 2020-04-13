@@ -4,7 +4,8 @@
 
 buildPythonPackage rec {
   pname = "mesa";
-  version = "0.8.6";
+  # contains several fixes for networkx 2.4 bump
+  version = "unstable-2019-12-09";
 
   # According to their docs, this library is for Python 3+.
   disabled = isPy27;
@@ -12,8 +13,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "projectmesa";
     repo = "mesa";
-    rev = "v${version}";
-    sha256 = "0d8c636zhswxd91ldlmdxxlyym2fj3bk1iqmpc1jp3hg7vvc7w03";
+    rev = "86b343b42630e94d939029ff2cc609ff04ed40e9";
+    sha256 = "1y41s1vd89vcsm4aia18ayfff4w2af98lwn5l9fcwp157li985vw";
   };
 
   checkInputs = [ pytest ];

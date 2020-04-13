@@ -61,18 +61,18 @@ in
     configureFlags = let
       isCross = stdenv.hostPlatform != stdenv.buildPlatform;
       host = stdenv.hostPlatform.platform;
-      isArm = stdenv.hostPlatform.isArm;
+      isAarch32 = stdenv.hostPlatform.isAarch32;
     in sharedConfigureFlags ++ [
       "--without-dtrace"
     ] ++ (optionals isCross [
       "--cross-compiling"
       "--without-intl"
       "--without-snapshot"
-    ]) ++ (optionals (isCross && isArm && hasAttr "fpu" host.gcc) [
+    ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" host.gcc) [
       "--with-arm-fpu=${host.gcc.fpu}"
-    ]) ++ (optionals (isCross && isArm && hasAttr "float-abi" host.gcc) [
+    ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" host.gcc) [
       "--with-arm-float-abi=${host.gcc.float-abi}"
-    ]) ++ (optionals (isCross && isArm) [
+    ]) ++ (optionals (isCross && isAarch32) [
       "--dest-cpu=arm"
     ]) ++ extraConfigFlags;
 
@@ -139,7 +139,7 @@ in
 
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
-      homepage = https://nodejs.org;
+      homepage = "https://nodejs.org";
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu gilligan cko ];
       platforms = platforms.linux ++ platforms.darwin;

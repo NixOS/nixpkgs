@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL2, SDL2_image, libGLU_combined, cmake, physfs, boost, zip, zlib
+{stdenv, fetchurl, SDL2, SDL2_image, libGLU, libGL, cmake, physfs, boost, zip, zlib
 , pkgconfig, unzip}:
 stdenv.mkDerivation rec {
   version = "1.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [SDL2 SDL2_image libGLU_combined cmake physfs boost zip zlib
+  buildInputs = [SDL2 SDL2_image libGLU libGL cmake physfs boost zip zlib
     unzip];
 
   preConfigure=''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
-    homepage = http://blobby.sourceforge.net/;
+    homepage = "http://blobby.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/blobby/files/Blobby%20Volley%202%20%28Linux%29/";
     inherit version;
   };

@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0lgjl969c7s31nszh6d4pr1vsxfdsizplsihvd8r02mm1mlxmsda";
+    sha256 = "0nla8qgn5gb1g2gn7c47m9zw42sarjd0030x3h5kckapsbaxknhp";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -52,8 +52,6 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
@@ -61,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Sound Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-sound;
+    homepage = "https://github.com/elementary/wingpanel-indicator-sound";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

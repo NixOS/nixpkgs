@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication {
   buildInputs = [ perl ];
 
   meta = {
-    homepage = https://www.phildev.net/pius/;
+    homepage = "https://www.phildev.net/pius/";
 
     description = "PGP Individual UID Signer (PIUS), quickly and easily sign UIDs on a set of PGP keys";
 
@@ -36,6 +36,6 @@ python3Packages.buildPythonApplication {
     license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu kierdavis ];
+    maintainers = with stdenv.lib.maintainers; [ kierdavis ];
   };
 }

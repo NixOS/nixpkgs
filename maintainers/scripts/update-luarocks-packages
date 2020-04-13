@@ -19,7 +19,7 @@ export LUAROCKS_CONFIG="$NIXPKGS_PATH/maintainers/scripts/luarocks-config.lua"
 
 # 10 is a pretty arbitrary number of simultaneous jobs, but it is generally
 # impolite to hit a webserver with *too* many simultaneous connections :)
-PARALLEL_JOBS=10
+PARALLEL_JOBS=1
 
 exit_trap() {
     local lc="$BASH_COMMAND" rc=$?

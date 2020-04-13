@@ -23,7 +23,7 @@ let
     guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
     miniInit = ''
-      #!${pkgs.stdenv.shell} -xe
+      #!${pkgs.runtimeShell} -xe
       export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
       mkdir -p /run/dbus
@@ -80,7 +80,7 @@ let
       touch /mnt-root/boot-done
       hostname "${vmName}"
       mkdir -p /nix/store
-      unshare -m ${escapeShellArg pkgs.stdenv.shell} -c '
+      unshare -m ${escapeShellArg pkgs.runtimeShell} -c '
         mount -t vboxsf nixstore /nix/store
         exec "$stage2Init"
       '
@@ -356,7 +356,7 @@ let
       virtualisation.qemu.options =
         if useKvmNestedVirt then ["-cpu" "kvm64,vmx=on"] else [];
       virtualisation.virtualbox.host.enable = true;
-      services.xserver.displayManager.auto.user = "alice";
+      test-support.displayManager.auto.user = "alice";
       users.users.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
       in lib.mkIf enableHardening (lib.singleton "vboxusers");

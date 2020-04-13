@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake boost gmp clang llvm sqlite python
                   ocamlPackages.apron mpfr ppl doxygen graphviz ];
 
-  cmakeFlags = "-DAPRON_ROOT=${ocamlPackages.apron}";
+  cmakeFlags = [ "-DAPRON_ROOT=${ocamlPackages.apron}" ];
 
   postBuild = "make doc";
 
   meta = with lib; {
-    homepage = https://github.com/NASA-SW-VnV/ikos;
+    homepage = "https://github.com/NASA-SW-VnV/ikos";
     description = "Static analyzer for C/C++ based on the theory of Abstract Interpretation";
     license = licenses.nasa13;
     maintainers = with maintainers; [ atnnn ];

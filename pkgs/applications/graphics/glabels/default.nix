@@ -1,6 +1,6 @@
 { stdenv, fetchurl, barcode, gnome3, autoreconfHook
 , gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book, gsettings-desktop-schemas
-, intltool, itstool, makeWrapper, pkgconfig
+, intltool, itstool, makeWrapper, pkgconfig, yelp-tools
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper intltool ];
   buildInputs = [
-    barcode gtk3 gtk-doc gnome3.yelp-tools
+    barcode gtk3 gtk-doc yelp-tools
     gnome3.gnome-common gsettings-desktop-schemas
     itstool libxml2 librsvg libe-book libtool
   ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Create labels and business cards";
-    homepage = https://glabels.org/;
+    homepage = "https://glabels.org/";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.nico202 ];

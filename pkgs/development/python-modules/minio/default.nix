@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "5.0.1";
+  version = "5.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f7ba1ca0750dfca3302cb03b14a92bf5f1c755ff84f9ba268079bf582e0f735";
+    sha256 = "1p6gnbapwzpg7h0wv52fn4dd3dlhxl5qziadkiqjl8xaz8yp3vys";
   };
 
   disabled = !isPy3k;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
-    homepage = https://github.com/minio/minio-py;
+    homepage = "https://github.com/minio/minio-py";
     maintainers = with maintainers; [ peterromfeldhk ];
     license = licenses.asl20;
   };

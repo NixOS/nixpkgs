@@ -65,7 +65,7 @@ in
     boot.initrd = {
       luks = {
         devices =
-          map (dev: { name = dev.encrypted.label; device = dev.encrypted.blkDev; } ) keylessEncDevs;
+          builtins.listToAttrs (map (dev: { name = dev.encrypted.label; value = { device = dev.encrypted.blkDev; }; }) keylessEncDevs);
         forceLuksSupportInInitrd = true;
       };
       postMountCommands =

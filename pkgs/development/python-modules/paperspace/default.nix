@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python API for Paperspace Cloud";
-    homepage    = https://paperspace.com;
+    homepage    = "https://paperspace.com";
     license     = licenses.isc;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];

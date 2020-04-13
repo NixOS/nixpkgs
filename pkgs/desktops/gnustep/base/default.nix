@@ -3,12 +3,13 @@
 , cups
 , fetchurl
 , gmp, gnutls
-, libffi, libbfd
+, libffi, binutils-unwrapped
 , libjpeg, libtiff, libpng, giflib, libungif
 , libxml2, libxslt, libiconv
 , libobjc, libgcrypt
 , icu
 , pkgconfig, portaudio
+, libiberty
 }:
 let
   version = "1.26.0";
@@ -24,14 +25,16 @@ gsmakeDerivation {
     aspell audiofile
     cups
     gmp gnutls
-    libffi libbfd
+    libffi binutils-unwrapped
     libjpeg libtiff libpng giflib libungif
     libxml2 libxslt libiconv
     libobjc libgcrypt
     icu
     portaudio
+    libiberty
   ];
   patches = [ ./fixup-paths.patch ];
+
   meta = {
     description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
   };

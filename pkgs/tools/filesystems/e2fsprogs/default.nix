@@ -1,12 +1,12 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, shared ? true }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.45.4";
+  version = "1.45.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0jsclghxfzj9qmdd3qqk0gdmkrgjv2gakf8qz9dba37qkj1nk776";
+    sha256 = "1n8ffss5044j9382rlvmhyr1f6kmnfjfbv6q4jbbh8gfdwpjmrwi";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     if stdenv.isLinux then [
-      "--enable-elf-shlibs"
+      # It seems that the e2fsprogs is one of the few packages that cannot be
+      # build with shared and static libs.
+      (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
       "--enable-symlink-install"
       "--enable-relative-symlinks"
       "--with-crond-dir=no"
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://e2fsprogs.sourceforge.net/;
+    homepage = "http://e2fsprogs.sourceforge.net/";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = licenses.gpl2;
     platforms = platforms.unix;

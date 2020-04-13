@@ -12,6 +12,7 @@ let
   cfgSnapFlags = cfgSnapshots.flags;
   cfgScrub = config.services.zfs.autoScrub;
   cfgTrim = config.services.zfs.trim;
+  cfgZED = config.services.zfs.zed;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
@@ -87,9 +88,24 @@ let
     }
   '';
 
+  zedConf = generators.toKeyValue {
+    mkKeyValue = generators.mkKeyValueDefault {
+      mkValueString = v:
+        if isInt           v then toString v
+        else if isString   v then "\"${v}\""
+        else if true  ==   v then "1"
+        else if false ==   v then "0"
+        else if isList     v then "\"" + (concatStringsSep " " v) + "\""
+        else err "this value is" (toString v);
+    } "=";
+  } cfgZED.settings;
 in
 
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "boot" "zfs" "enableLegacyCrypto" ] "The corresponding package was removed from nixpkgs.")
+  ];
 
   ###### interface
 
@@ -312,6 +328,32 @@ in
         '';
       };
     };
+
+    services.zfs.zed.settings = mkOption {
+      type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
+      example = literalExample ''
+        {
+          ZED_DEBUG_LOG = "/tmp/zed.debug.log";
+
+          ZED_EMAIL_ADDR = [ "root" ];
+          ZED_EMAIL_PROG = "mail";
+          ZED_EMAIL_OPTS = "-s '@SUBJECT@' @ADDRESS@";
+
+          ZED_NOTIFY_INTERVAL_SECS = 3600;
+          ZED_NOTIFY_VERBOSE = false;
+
+          ZED_USE_ENCLOSURE_LEDS = true;
+          ZED_SCRUB_AFTER_RESILVER = false;
+        }
+      '';
+      description = ''
+        ZFS Event Daemon /etc/zfs/zed.d/zed.rc content
+
+        See
+        <citerefentry><refentrytitle>zed</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+        for details on ZED and the scripts in /etc/zfs/zed.d to find the possible variables
+      '';
+    };
   };
 
   ###### implementation
@@ -389,8 +431,33 @@ in
         zfsSupport = true;
       };
 
-      environment.etc."zfs/zed.d".source = "${packages.zfsUser}/etc/zfs/zed.d/";
-      environment.etc."zfs/zpool.d".source = "${packages.zfsUser}/etc/zfs/zpool.d/";
+      services.zfs.zed.settings = {
+        ZED_EMAIL_PROG = mkDefault "${pkgs.mailutils}/bin/mail";
+        PATH = lib.makeBinPath [ packages.zfsUser pkgs.utillinux pkgs.gawk pkgs.gnused pkgs.gnugrep pkgs.coreutils pkgs.curl ];
+      };
+
+      environment.etc = genAttrs
+        (map
+          (file: "zfs/zed.d/${file}")
+          [
+            "all-syslog.sh"
+            "pool_import-led.sh"
+            "resilver_finish-start-scrub.sh"
+            "statechange-led.sh"
+            "vdev_attach-led.sh"
+            "zed-functions.sh"
+            "data-notify.sh"
+            "resilver_finish-notify.sh"
+            "scrub_finish-notify.sh"
+            "statechange-notify.sh"
+            "vdev_clear-led.sh"
+          ]
+        )
+        (file: { source = "${packages.zfsUser}/etc/${file}"; })
+      // {
+        "zfs/zed.d/zed.rc".text = zedConf;
+        "zfs/zpool.d".source = "${packages.zfsUser}/etc/zfs/zpool.d/";
+      };
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
@@ -412,6 +479,7 @@ in
         createImportService = pool:
           nameValuePair "zfs-import-${pool}" {
             description = "Import ZFS pool \"${pool}\"";
+            # we need systemd-udev-settle until https://github.com/zfsonlinux/zfs/pull/4943 is merged
             requires = [ "systemd-udev-settle.service" ];
             after = [ "systemd-udev-settle.service" "systemd-modules-load.service" ];
             wantedBy = (getPoolMounts pool) ++ [ "local-fs.target" ];
@@ -557,7 +625,11 @@ in
         after = [ "zfs-import.target" ];
         path = [ packages.zfsUser ];
         startAt = cfgTrim.interval;
-        serviceConfig.ExecStart = "${pkgs.runtimeShell} -c 'zpool list -H -o name | xargs --no-run-if-empty -n1 zpool trim'";
+        # By default we ignore errors returned by the trim command, in case:
+        # - HDDs are mixed with SSDs
+        # - There is a SSDs in a pool that is currently trimmed.
+        # - There are only HDDs and we would set the system in a degraded state
+        serviceConfig.ExecStart = ''${pkgs.runtimeShell} -c 'for pool in $(zpool list -H -o name); do zpool trim $pool;  done || true' '';
       };
     })
   ];

@@ -40,6 +40,6 @@
  export IBUS_DATAROOTDIR=@datarootdir@
  export IBUS_LOCALEDIR=@localedir@
  export IBUS_LIBEXECDIR=${libexecdir}
--exec @PYTHON@ @prefix@/share/ibus/setup/main.py $@
+-exec ${PYTHON:-@PYTHON@} @prefix@/share/ibus/setup/main.py $@
 +exec @pythonInterpreter@ @prefix@/share/ibus/setup/main.py $@
  

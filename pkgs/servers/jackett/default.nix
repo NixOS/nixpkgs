@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jackett";
-  version = "0.11.751";
+  version = "0.14.365";
 
   src = fetchurl {
     url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
-    sha256 = "09y9pck35pj2g89936zallxr3hanmbgp8jc42nj2js68l0z64qz3";
+    sha256 = "0xvlknjhc75km12d8li50ifqpfyl6whymb6gd7ccwyd9lv9xxm27";
   };
 
   buildInputs = [ makeWrapper ];
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "API Support for your favorite torrent trackers.";
-    homepage = https://github.com/Jackett/Jackett/;
+    homepage = "https://github.com/Jackett/Jackett/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo nyanloutre ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

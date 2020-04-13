@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin }:
+{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin, enableStatic ? false }:
 /*
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
@@ -7,17 +7,18 @@ let
   # Release notes and download URLs are here:
   # https://registrationcenter.intel.com/en/products/
   version = "${year}.${spot}.${rel}";
-  year = "2019";
 
   # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
   # https://github.com/matthewbauer/undmg/issues/4
-  spot = if stdenvNoCC.isDarwin then "3" else "5";
-  rel = if stdenvNoCC.isDarwin then "199" else "281";
+  year = if stdenvNoCC.isDarwin then "2019" else "2020";
+  spot = if stdenvNoCC.isDarwin then "3" else "1";
+  rel = if stdenvNoCC.isDarwin then "199" else "217";
 
   rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
 
   # Intel openmp uses its own versioning, but shares the spot release patch.
-  openmp-ver = "19.0.${spot}-${rel}-19.0.${spot}-${rel}";
+  openmp = if stdenvNoCC.isDarwin then "19.0" else "19.1";
+  openmp-ver = "${openmp}.${spot}-${rel}-${openmp}.${spot}-${rel}";
 
 in stdenvNoCC.mkDerivation {
   pname = "mkl";
@@ -31,8 +32,8 @@ in stdenvNoCC.mkDerivation {
       })
     else
       (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15816/l_mkl_${version}.tgz";
-        sha256 = "0zkk4rrq7g44acxaxhpd2053r66w169mww6917an0lxhd52fm5cr";
+        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16533/l_mkl_${version}.tgz";
+        sha256 = "0v86hrqg15mbc78m9qk8dbkaaq3mlwashgbf9n79kxpl1gilnah8";
       });
 
   nativeBuildInputs = if stdenvNoCC.isDarwin
@@ -46,12 +47,28 @@ in stdenvNoCC.mkDerivation {
       tar xzvf $f
     done
   '' else ''
-    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
-    rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
+    # Common stuff
     rpmextract rpm/intel-mkl-core-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-common-c-${rpm-ver}.noarch.rpm
+    rpmextract rpm/intel-mkl-common-f-${rpm-ver}.noarch.rpm
+
+    # Dynamic libraries
+    rpmextract rpm/intel-mkl-cluster-rt-${rpm-ver}.x86_64.rpm
     rpmextract rpm/intel-mkl-core-rt-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-f-rt-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-rt-${rpm-ver}.x86_64.rpm
+
+    # Intel OpenMP runtime
     rpmextract rpm/intel-openmp-${openmp-ver}.x86_64.rpm
-  '';
+  '' + (if enableStatic then ''
+    # Static libraries
+    rpmextract rpm/intel-mkl-cluster-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-${rpm-ver}.x86_64.rpm
+    rpmextract rpm/intel-mkl-gnu-f-${rpm-ver}.x86_64.rpm
+  '' else ''
+    # Take care of installing dynamic-only PkgConfig files during the installPhase
+  ''
+  );
 
   installPhase = ''
     for f in $(find . -name 'mkl*.pc') ; do
@@ -80,16 +97,21 @@ in stdenvNoCC.mkDerivation {
       cp -r compilers_and_libraries_${version}/mac/mkl/bin/pkgconfig/* $out/lib/pkgconfig
   '' else ''
       mkdir -p $out/lib
+      cp license.txt $out/lib/
 
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/include $out/
 
+      mkdir -p $out/lib/pkgconfig
+  '') +
+    (if enableStatic then ''
       cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/* $out/lib/
-      cp license.txt $out/lib/
-
-      mkdir -p $out/lib/pkgconfig
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/* $out/lib/pkgconfig
-  '');
+    '' else ''
+      cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/*.so* $out/lib/
+      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/*.so* $out/lib/
+      cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/*dynamic*.pc $out/lib/pkgconfig
+    '');
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
   # larger updated load commands do not fit. Use install_name_tool
@@ -115,7 +137,7 @@ in stdenvNoCC.mkDerivation {
       choice of compilers, languages, operating systems, and linking and
       threading models.
     '';
-    homepage = https://software.intel.com/en-us/mkl;
+    homepage = "https://software.intel.com/en-us/mkl";
     license = licenses.issl;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ bhipple ];

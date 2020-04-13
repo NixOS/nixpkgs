@@ -1,0 +1,10 @@
+diff --git a/tests/simple/meson.build b/tests/simple/meson.build
+index 2c735d80a..ae4d50f2a 100644
+--- a/tests/simple/meson.build
++++ b/tests/simple/meson.build
+@@ -1,5 +1,4 @@
+ testnames = [
+-  'backend-file',
+   'buffer-cast',
+   'buffer-changes',
+   'buffer-extract',

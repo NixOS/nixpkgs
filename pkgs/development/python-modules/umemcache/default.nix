@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
-    homepage = https://github.com/esnme/ultramemcache;
+    homepage = "https://github.com/esnme/ultramemcache";
     license = licenses.bsdOriginal;
   };
 }

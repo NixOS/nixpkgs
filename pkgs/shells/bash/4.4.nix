@@ -41,9 +41,10 @@ stdenv.mkDerivation rec {
     -DSSH_SOURCE_BASHRC
   '';
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" "-T" ];
 
   patches = upstreamPatches
+    ++ [ ./pgrp-pipe-4.4.patch ]
     ++ optional stdenv.hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch
     # https://lists.gnu.org/archive/html/bug-bash/2016-10/msg00006.html
     ++ optional stdenv.hostPlatform.isMusl (fetchurl {
@@ -106,7 +107,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/bash/;
+    homepage = "https://www.gnu.org/software/bash/";
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
         (if interactive then " (for interactive use)" else "");

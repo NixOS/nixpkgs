@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       and others) for finding and fixing bugs in systems code.
     '';
 
-    homepage = http://coccinelle.lip6.fr/;
+    homepage = "http://coccinelle.lip6.fr/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

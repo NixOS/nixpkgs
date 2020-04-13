@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cognitiveservices";
-  version = "5.0.0";
+  version = "6.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1m7v3rfkvmdgghrpz15fm8pvmmhi40lcwfxdm2kxh7mx01r5l906";
+    sha256 = "d03641336f4b2ec561112655c93ee80bc28d8e8daa45a57abc36169bd19c07a0";
   };
 
   propagatedBuildInputs = [

@@ -25,15 +25,13 @@ stdenv.mkDerivation rec {
 
   # Filesystem resize functions were reintroduced in parted 3.1 due to no other available free alternatives
   # but in a sepparate library -> libparted-fs-resize --- that's why the added LDFLAG
-  makeFlags = ''
-    LDFLAGS=-lparted-fs-resize
-  '';
+  makeFlags = [ "LDFLAGS=-lparted-fs-resize" ];
 
   propagatedBuildInputs = [ parted utillinux ];
 
   meta = with stdenv.lib; {
     description = "The FAT16/FAT32 non-destructive resizer";
-    homepage = https://sourceforge.net/projects/fatresize;
+    homepage = "https://sourceforge.net/projects/fatresize";
     platforms = platforms.linux;
     license = licenses.gpl2;
   };

@@ -23,6 +23,8 @@ let
     restrict -6 ::1
 
     ${toString (map (server: "server " + server + " iburst\n") cfg.servers)}
+
+    ${cfg.extraConfig}
   '';
 
   ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup ${toString cfg.extraFlags}";
@@ -81,6 +83,17 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          fudge 127.127.1.0 stratum 10
+        '';
+        description = ''
+          Additional text appended to <filename>ntp.conf</filename>.
+        '';
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
@@ -104,9 +117,8 @@ in
 
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
 
-    users.users = singleton
-      { name = ntpUser;
-        uid = config.ids.uids.ntp;
+    users.users.${ntpUser} =
+      { uid = config.ids.uids.ntp;
         description = "NTP daemon user";
         home = stateDir;
       };

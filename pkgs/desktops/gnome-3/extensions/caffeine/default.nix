@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, glib, gettext, bash, gnome3 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-caffeine";
-  version = "unstable-2019-04-02";
+  pname = "gnome-shell-extension-caffeine-unstable";
+  version = "2020-03-13";
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
     repo = "gnome-shell-extension-caffeine";
-    rev = "a6b37dee108cddf50a0f0a19f0101854a75bf173";
-    sha256 = "1j3q12j36v97551sjb0c8qc8zr7a7gmxibygczryfdfmwjzp6icl";
+    rev = "f25fa5cd586271f080c2304d0ad1273b55e864f5";
+    sha256 = "12a76g1ydw677pjnj00r3vw31k4xybc63ynqzx3s4g0wi6lipng7";
   };
 
   uuid = "caffeine@patapon.info";
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     description = "Fill the cup to inhibit auto suspend and screensaver";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
-    homepage = https://github.com/eonpatapon/gnome-shell-extension-caffeine;
-    broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Doesn't support 3.34
+    homepage = "https://github.com/eonpatapon/gnome-shell-extension-caffeine";
   };
 }

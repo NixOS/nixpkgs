@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
   ''
   rm -rf $out/var/run
   wrapProgram $out/bin/ocsigenserver \
-    --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH:${mkpath ssl "ssl"}:${mkpath ocamlnet "netsys"}:${mkpath ocamlnet "netstring"}:${mkpath ocaml_pcre "pcre"}:${mkpath ocaml_sqlite3 "sqlite3"}"
+    --suffix CAML_LD_LIBRARY_PATH : "${mkpath ssl "ssl"}:${mkpath ocamlnet "netsys"}:${mkpath ocamlnet "netstring"}:${mkpath ocaml_pcre "pcre"}:${mkpath ocaml_sqlite3 "sqlite3"}"
   '';
 
   dontPatchShebangs = true;
 
   meta = {
-    homepage = http://ocsigen.org/ocsigenserver/;
+    homepage = "http://ocsigen.org/ocsigenserver/";
     description = "A full featured Web server";
     longDescription =''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.

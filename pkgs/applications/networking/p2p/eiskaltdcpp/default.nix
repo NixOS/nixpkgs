@@ -39,26 +39,26 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = ''
-    -DUSE_ASPELL=ON
-    -DUSE_QT_QML=ON
-    -DFREE_SPACE_BAR_C=ON
-    -DUSE_MINIUPNP=ON
-    -DLOCAL_MINIUPNP=ON
-    -DDBUS_NOTIFY=ON
-    -DUSE_JS=ON
-    -DPERL_REGEX=ON
-    -DUSE_CLI_XMLRPC=ON
-    -DWITH_SOUNDS=ON
-    -DLUA_SCRIPT=ON
-    -DWITH_LUASCRIPTS=ON
-  '';
+  cmakeFlags = [
+    "-DUSE_ASPELL=ON"
+    "-DUSE_QT_QML=ON"
+    "-DFREE_SPACE_BAR_C=ON"
+    "-DUSE_MINIUPNP=ON"
+    "-DLOCAL_MINIUPNP=ON"
+    "-DDBUS_NOTIFY=ON"
+    "-DUSE_JS=ON"
+    "-DPERL_REGEX=ON"
+    "-DUSE_CLI_XMLRPC=ON"
+    "-DWITH_SOUNDS=ON"
+    "-DLUA_SCRIPT=ON"
+    "-DWITH_LUASCRIPTS=ON"
+  ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A cross-platform program that uses the Direct Connect and ADC protocols";
-    homepage = https://github.com/eiskaltdcpp/eiskaltdcpp;
+    homepage = "https://github.com/eiskaltdcpp/eiskaltdcpp";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

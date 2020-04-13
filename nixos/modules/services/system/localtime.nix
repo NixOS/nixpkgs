@@ -35,6 +35,10 @@ in {
     # Install the systemd unit.
     systemd.packages = [ pkgs.localtime.out ];
 
+    users.users.localtimed = {
+      description = "Taskserver user";
+    };
+
     systemd.services.localtime = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig.Restart = "on-failure";

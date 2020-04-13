@@ -1,7 +1,8 @@
-{ stdenv, substituteAll, fetchFromGitHub, python3Packages, glfw, libunistring,
+{ stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
+  installShellFiles,
   which, dbus,
   Cocoa,
   CoreGraphics,
@@ -12,8 +13,6 @@
   libcanberra,
   libicns,
   libpng,
-  librsvg,
-  optipng,
   python3,
   zlib,
 }:
@@ -21,14 +20,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.14.6";
+  version = "0.17.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1rb5ys9xsdhd2qa3kz5gqzz111c6b14za98va6hlglk69wqlmb51";
+    sha256 = "0xiwz89ynhh8aj0c9jbqfsxf129hnzs0gz4bzcparnjisq2sh3cq";
   };
 
   buildInputs = [
@@ -45,7 +44,7 @@ buildPythonApplication rec {
     python3
     zlib
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    fontconfig glfw libunistring libcanberra libX11
+    fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus
   ];
@@ -55,8 +54,7 @@ buildPythonApplication rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
-    librsvg
-    optipng
+    installShellFiles
   ];
 
   propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
@@ -64,22 +62,24 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" ];
 
   patches = [
+    ./fix-paths.patch
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
     (substituteAll {
-      src = ./fix-paths.patch;
+      src = ./library-paths.patch;
       libstartup_notification = "${libstartup_notification}/lib/libstartup-notification-1.so";
+      libcanberra = "${libcanberra}/lib/libcanberra.so";
+      libEGL = "${stdenv.lib.getLib libGL}/lib/libEGL.so.1";
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     ./no-lto.patch
-    ./no-werror.patch
-    ./png2icns.patch
   ];
 
-  preConfigure  = stdenv.lib.optional (!stdenv.isDarwin) ''
-    substituteInPlace glfw/egl_context.c --replace "libEGL.so.1" "${stdenv.lib.getLib libGL}/lib/libEGL.so.1"
-  '';
+  # Causes build failure due to warning
+  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
 
   buildPhase = if stdenv.isDarwin then ''
     ${python.interpreter} setup.py kitty.app --update-check-interval=0
+    make man
   '' else ''
     ${python.interpreter} setup.py linux-package --update-check-interval=0
   '';
@@ -92,6 +92,8 @@ buildPythonApplication rec {
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
+
+    installManPage 'docs/_build/man/kitty.1'
     '' else ''
     cp -r linux-package/{bin,share,lib} $out
     ''}
@@ -103,6 +105,7 @@ buildPythonApplication rec {
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
     "$out/bin/kitty" + complete setup fish > "$out/share/fish/vendor_completions.d/kitty.fish"
     "$out/bin/kitty" + complete setup bash > "$out/share/bash-completion/completions/kitty.bash"
+    "$out/bin/kitty" + complete setup zsh > "$out/share/zsh/site-functions/_kitty"
   '';
 
   postInstall = ''
@@ -119,10 +122,10 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kovidgoyal/kitty;
+    homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs ma27 ];
+    maintainers = with maintainers; [ tex rvolosatovs ma27 Luflosi ];
   };
 }

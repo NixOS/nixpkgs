@@ -17,13 +17,13 @@ let
   });
 in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
-  version = "0.101";
+  version = "0.104";
 
   src = fetchFromGitHub {
     owner = "datawire";
     repo = "telepresence";
     rev = version;
-    sha256 = "1rxq22vcrw29682g7pdcwcjyifcg61z8y4my1di7yw731aldk274";
+    sha256 = "0fccbd54ryd9rcbhfh5lx8qcc3kx3k9jads918rwnzwllqzjf7sg";
   };
 
   buildInputs = [ makeWrapper ];
@@ -45,7 +45,7 @@ in pythonPackages.buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://www.telepresence.io/;
+    homepage = "https://www.telepresence.io/";
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ offline ];

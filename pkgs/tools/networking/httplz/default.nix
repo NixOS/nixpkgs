@@ -3,25 +3,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "thecoshman";
     repo = "http";
     rev = "v${version}";
-    sha256 = "1y9mlbympb19i3iw7s7jm7lvkpcl4w0sig6jnd4w3ykhkdhzh6di";
+    sha256 = "0i41hqig8v6w1qb6498239iix1rss0lznm5lcl9m3i439c2zv7pw";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [
-    openssl pkgconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security
   ];
 
   cargoBuildFlags = [ "--bin httplz" ];
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "1bxh7p2a04lpghqms8cx1f1cq5nbcx6cxh5ac7i72d5vzy4v07nl";
+  cargoSha256 = "13hk9m09jff3bxbixsjvksiir4j4mak4ckvlq45bx5d5lh8sapxl";
 
   postInstall = ''
     wrapProgram $out/bin/httplz \

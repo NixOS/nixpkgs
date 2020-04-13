@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
     --replace +camlp4 $out/lib/ocaml/${ocaml.version}/site-lib/camlp4
   '';
 
-  makeFlags = "all";
+  makeFlags = [ "all" ];
 
-  installTargets = "install install-META";
+  installTargets = [ "install" "install-META" ];
 
   dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "A software system for writing extensible parsers for programming languages";
-    homepage = https://github.com/ocaml/camlp4;
+    homepage = "https://github.com/ocaml/camlp4";
     platforms = ocaml.meta.platforms or [];
   };
 }

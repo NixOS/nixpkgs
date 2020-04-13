@@ -30,7 +30,7 @@ index bb7396d..39f681f 100755
  
  # check only disabled gpg
  # https://issues.apache.org/SpamAssassin/show_bug.cgi?id=5854
-@@ -1808,6 +1812,7 @@ Options:
+@@ -1808,7 +1812,7 @@ Options:
    --updatedir path        Directory to place updates, defaults to the
                            SpamAssassin site rules directory
                            (default: @@LOCAL_STATE_DIR@@/@@VERSION@@)
@@ -38,21 +38,6 @@ index bb7396d..39f681f 100755
    --refreshmirrors        Force the MIRRORED.BY file to be updated
    -D, --debug [area=n,...]  Print debugging messages
    -v, --verbose           Be verbose, like print updated channel names;
--- 
-diff --git a/lib/Mail/SpamAssassin/PerMsgStatus.pm b/lib/Mail/SpamAssassin/PerMsgStatus.pm
-index 6d8beaa..6ad87dc 100644
---- a/lib/Mail/SpamAssassin/PerMsgStatus.pm
-+++ b/lib/Mail/SpamAssassin/PerMsgStatus.pm
-@@ -389,7 +389,8 @@ sub check_timed {
-     if (!$self->{main}->have_plugin("check_main")) {
-       die "check: no loaded plugin implements 'check_main': cannot scan!\n".
-             "Check that the necessary '.pre' files are in the config directory.\n".
--              "At a minimum, v320.pre loads the Check plugin which is required.\n";
-+              "At a minimum, v320.pre loads the Check plugin which is required.\n".
-+              "NixOS: Since there is no '/etc/spamassassin' simply restart 'spamd.service' which on its behalf will run 'sa-learn --siteconfigpath=/nix/store/l4hr4yxk8mb4wbkha6vm6rh92pj19rj6-spamd-env ...' to update the /var/lib/spamassassin configs.\n";
-     }
-   }
- 
 -- 
 
 2.12.2

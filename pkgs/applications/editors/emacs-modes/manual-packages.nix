@@ -52,6 +52,19 @@
     };
   };
 
+  agda-input = self.trivialBuild {
+    pname = "agda-input";
+
+    inherit (external.Agda) src version;
+
+    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
+
+    meta = {
+      description = "Standalone package providing the agda-input method without building Agda.";
+      inherit (external.Agda.meta) homepage license;
+    };
+  };
+
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
 
@@ -113,9 +126,13 @@
   perl-completion =
     callPackage ./perl-completion { };
 
+  pod-mode = callPackage ./pod-mode { };
+
   railgun = callPackage ./railgun { };
 
   structured-haskell-mode = self.shm;
+
+  sv-kalender = callPackage ./sv-kalender { };
 
   thingatpt-plus = callPackage ./thingatpt-plus { };
 

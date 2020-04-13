@@ -18,7 +18,7 @@ state_dir=$HOME/amis/ec2-images
 home_region=eu-west-1
 bucket=nixos-amis
 
-regions=(eu-west-1 eu-west-2 eu-west-3 eu-central-1
+regions=(eu-west-1 eu-west-2 eu-west-3 eu-central-1 eu-north-1
          us-east-1 us-east-2 us-west-1 us-west-2
          ca-central-1
          ap-southeast-1 ap-southeast-2 ap-northeast-1 ap-northeast-2
@@ -211,11 +211,11 @@ upload_image() {
         log "Registering snapshot $snapshot_id as AMI"
 
         local block_device_mappings=(
-            "DeviceName=/dev/sda1,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp2}"
+            "DeviceName=/dev/xvda,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp2}"
         )
 
         local extra_flags=(
-            --root-device-name /dev/sda1
+            --root-device-name /dev/xvda
             --sriov-net-support simple
             --ena-support
             --virtualization-type hvm

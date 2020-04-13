@@ -12,15 +12,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "1.21.0";
+  version = "1.29.1";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "099qwla0yl76qw16lzdx33svyhx84p5gsa50ksy4828b18fy3bgb";
+    sha256 = "1ly5bwy0pwgvqigpaak8hnig5hksjwf0pzvj3mdv3j2f6f7ya2zz";
   };
+
+  postPatch = "substituteInPlace meson.build --replace 1.29.0 1.29.1";
 
   nativeBuildInputs = [
     meson

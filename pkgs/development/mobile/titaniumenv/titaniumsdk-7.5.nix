@@ -4,7 +4,7 @@ let
   # Gradle is a build system that bootstraps itself. This is what it actually
   # downloads in the bootstrap phase.
   gradleAllZip = fetchurl {
-    url = http://services.gradle.org/distributions/gradle-4.1-all.zip;
+    url = "http://services.gradle.org/distributions/gradle-4.1-all.zip";
     sha256 = "1rcrh263vq7a0is800y5z36jj97p67c6zpqzzfcbr7r0qaxb61sw";
   };
 
@@ -55,11 +55,11 @@ in
 stdenv.mkDerivation {
   name = "mobilesdk-7.5.1.GA";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = https://builds.appcelerator.com/mobile/7_5_X/mobilesdk-7.5.1.v20190124152315-linux.zip;
+    url = "https://builds.appcelerator.com/mobile/7_5_X/mobilesdk-7.5.1.v20190124152315-linux.zip";
     sha256 = "1ihyh6szl9a2gbdgv13msd3g7i3xi9ifmgsh6v562hqlfi4lixng";
   }
   else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = https://builds.appcelerator.com/mobile/7_5_X/mobilesdk-7.5.1.v20190124152315-osx.zip;
+    url = "https://builds.appcelerator.com/mobile/7_5_X/mobilesdk-7.5.1.v20190124152315-osx.zip";
     sha256 = "1whs1j7fkk2hxr4nxq50d7ic5wj83b1i1jl0p722sqbvkmgxssa2";
   }
   else throw "Platform: ${stdenv.system} not supported!";

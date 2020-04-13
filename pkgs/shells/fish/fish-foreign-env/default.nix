@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "fish-foreign-env";
-  version = "git-20170324";
+  version = "git-20200209";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";
     repo = "plugin-foreign-env";
-    rev = "baefbd690f0b52cb8746f3e64b326d82834d07c5";
-    sha256 = "0lwp6hy3kfk7xfx4xvbk1ir8zkzm7gfjbm4bf6xg1y6iw9jq9dnl";
+    rev = "dddd9213272a0ab848d474d0cbde12ad034e65bc";
+    sha256 = "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs";
   };
 
   installPhase = ''

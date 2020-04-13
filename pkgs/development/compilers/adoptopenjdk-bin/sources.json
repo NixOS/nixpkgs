@@ -4,68 +4,68 @@
       "jdk": {
         "hotspot": {
           "aarch64": {
-            "build": "11",
-            "sha256": "10e33e1862638e11a9158947b3d7b461727d8e396e378b171be1eb4dfe12f1ed",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.4_11.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "04b77f6754aed68528f39750c5cfd6a439190206aff216aa081d62a0e1a794fa",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.6_10.tar.gz",
+            "version": "11.0.6"
           },
           "armv6l": {
-            "build": "7",
-            "sha256": "3fbe418368e6d5888d0f15c4751139eb60d9785b864158a001386537fa46f67e",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.3%2B7/OpenJDK11U-jdk_arm_linux_hotspot_11.0.3_7.tar.gz",
-            "version": "11.0.3"
+            "build": "10",
+            "sha256": "ab5b76203e54fe7a5221535f6f407efa43153de029a746f60af3cffb7cb5080b",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jdk_arm_linux_hotspot_11.0.6_10.tar.gz",
+            "version": "11.0.6"
           },
           "armv7l": {
-            "build": "7",
-            "sha256": "3fbe418368e6d5888d0f15c4751139eb60d9785b864158a001386537fa46f67e",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.3%2B7/OpenJDK11U-jdk_arm_linux_hotspot_11.0.3_7.tar.gz",
-            "version": "11.0.3"
+            "build": "10",
+            "sha256": "ab5b76203e54fe7a5221535f6f407efa43153de029a746f60af3cffb7cb5080b",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jdk_arm_linux_hotspot_11.0.6_10.tar.gz",
+            "version": "11.0.6"
           },
           "packageType": "jdk",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "11",
-            "sha256": "90c33cf3f2ed0bd773f648815de7347e69cfbb3416ef3bf41616ab1c4aa0f5a8",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11/OpenJDK11U-jdk_x64_linux_hotspot_11.0.4_11.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "330d19a2eaa07ed02757d7a785a77bab49f5ee710ea03b4ee2fa220ddd0feffc",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jdk_x64_linux_hotspot_11.0.6_10.tar.gz",
+            "version": "11.0.6"
           }
         },
         "openj9": {
           "packageType": "jdk",
           "vmType": "openj9",
           "x86_64": {
-            "build": "11",
-            "sha256": "b1099cccc80a3f434728c9bc3b8a90395793b625f4680ca05267cf635143d64d",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11_openj9-0.15.1/OpenJDK11U-jdk_x64_linux_openj9_11.0.4_11_openj9-0.15.1.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "1530172ee98edd129954fcdca1bf725f7b30c8bfc3cdc381c88de96b7d19e690",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10_openj9-0.18.1/OpenJDK11U-jdk_x64_linux_openj9_11.0.6_10_openj9-0.18.1.tar.gz",
+            "version": "11.0.6"
           }
         }
       },
       "jre": {
         "hotspot": {
           "aarch64": {
-            "build": "11",
-            "sha256": "5f7b5c110fc0f344a549cb11784a6d76838061a2b6f654f7841f60e0cd286c6a",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11/OpenJDK11U-jre_aarch64_linux_hotspot_11.0.4_11.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "7ed04ed9ed7271528e7f03490f1fd7dfbbc2d391414bd6fe4dd80ec3bad76d30",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jre_aarch64_linux_hotspot_11.0.6_10.tar.gz",
+            "version": "11.0.6"
           },
           "packageType": "jre",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "11",
-            "sha256": "70d2cc675155476f1d8516a7ae6729d44681e4fad5a6fc8dfa65cab36a67b7e0",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11/OpenJDK11U-jre_x64_linux_hotspot_11.0.4_11.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "c5a4e69e2be0e3e5f5bb7c759960b20650967d0f571baad4a7f15b2c03bda352",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jre_x64_linux_hotspot_11.0.6_10.tar.gz",
+            "version": "11.0.6"
           }
         },
         "openj9": {
           "packageType": "jre",
           "vmType": "openj9",
           "x86_64": {
-            "build": "11",
-            "sha256": "c2601e7cb22af7a910e03883280cee805074656104d6d3dcaaf30e3bbb832690",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11_openj9-0.15.1/OpenJDK11U-jre_x64_linux_openj9_11.0.4_11_openj9-0.15.1.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "056e4b5f7166f5daa44f36b06c735913bda52831d2e77fa2ac371505c66d10c1",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10_openj9-0.18.1/OpenJDK11U-jre_x64_linux_openj9_11.0.6_10_openj9-0.18.1.tar.gz",
+            "version": "11.0.6"
           }
         }
       }
@@ -76,20 +76,20 @@
           "packageType": "jdk",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "11",
-            "sha256": "a50b211f475b9497311c9b65594764d7b852b1653f249582bb20fc3c302846a5",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11/OpenJDK11U-jdk_x64_mac_hotspot_11.0.4_11.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "b87102274d983bf6bb0aa6c2c623301d0ff5eb7f61043ffd04abb00f962c2dcd",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jdk_x64_mac_hotspot_11.0.6_10.tar.gz",
+            "version": "11.0.6"
           }
         },
         "openj9": {
           "packageType": "jdk",
           "vmType": "openj9",
           "x86_64": {
-            "build": "11",
-            "sha256": "7c09678d9c2d9dd0366693c6ab27bed39c76a23e7ac69b8a25c794e99dcf3ba7",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11_openj9-0.15.1/OpenJDK11U-jdk_x64_mac_openj9_11.0.4_11_openj9-0.15.1.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "9a5c5b3bb51a82e666c46b2d1bbafa8c2bbc3aae50194858c8f96c5d43a96f64",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10_openj9-0.18.1/OpenJDK11U-jdk_x64_mac_openj9_11.0.6_10_openj9-0.18.1.tar.gz",
+            "version": "11.0.6"
           }
         }
       },
@@ -98,20 +98,138 @@
           "packageType": "jre",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "11",
-            "sha256": "1647fded28d25e562811f7bce2092eb9c21d30608843b04250c023b40604ff26",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11/OpenJDK11U-jre_x64_mac_hotspot_11.0.4_11.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "ab3c2038a32c62843500109d2efb8f5dacdfa1de3cbb713c8226f26dc603cc33",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jre_x64_mac_hotspot_11.0.6_10.tar.gz",
+            "version": "11.0.6"
           }
         },
         "openj9": {
           "packageType": "jre",
           "vmType": "openj9",
           "x86_64": {
-            "build": "11",
-            "sha256": "1a8e84bae517a848aa5f25c7b04f26ab3a3bfffaa7fdf9be24e1f83325e46766",
-            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.4%2B11_openj9-0.15.1/OpenJDK11U-jre_x64_mac_openj9_11.0.4_11_openj9-0.15.1.tar.gz",
-            "version": "11.0.4"
+            "build": "10",
+            "sha256": "130850133d9701393352c2ce13ab541b4f900ff1f5ddf8257cda624968aada9f",
+            "url": "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10_openj9-0.18.1/OpenJDK11U-jre_x64_mac_openj9_11.0.6_10_openj9-0.18.1.tar.gz",
+            "version": "11.0.6"
+          }
+        }
+      }
+    }
+  },
+  "openjdk13": {
+    "linux": {
+      "jdk": {
+        "hotspot": {
+          "aarch64": {
+            "build": "33",
+            "sha256": "74f4110333ac4239564ed864b1d7d69b7af32af39efcfbde9816e1486cb5ae07",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jdk_aarch64_linux_hotspot_13_33.tar.gz",
+            "version": "13.0.0"
+          },
+          "armv6l": {
+            "build": "33",
+            "sha256": "477e1b8d26a220d6d570765e9e0a4a34dbb489fab63a420d0859d173efc59adb",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jdk_arm_linux_hotspot_13_33.tar.gz",
+            "version": "13.0.0"
+          },
+          "armv7l": {
+            "build": "33",
+            "sha256": "477e1b8d26a220d6d570765e9e0a4a34dbb489fab63a420d0859d173efc59adb",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jdk_arm_linux_hotspot_13_33.tar.gz",
+            "version": "13.0.0"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "33",
+            "sha256": "e562caeffa89c834a69a44242d802eae3523875e427f07c05b1902c152638368",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jdk_x64_linux_hotspot_13_33.tar.gz",
+            "version": "13.0.0"
+          }
+        },
+        "openj9": {
+          "packageType": "jdk",
+          "vmType": "openj9",
+          "x86_64": {
+            "build": "33",
+            "sha256": "68ebab0021c719694be8fc868478725a69c5c515cdb62e2933eefe87ba6437df",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33_openj9-0.16.0/OpenJDK13U-jdk_x64_linux_openj9_13_33_openj9-0.16.0.tar.gz",
+            "version": "13.0.0"
+          }
+        }
+      },
+      "jre": {
+        "hotspot": {
+          "aarch64": {
+            "build": "33",
+            "sha256": "2365b7fbba8d9125fb091933aad9f38f8cc1fbb0217cdec9ec75d2000f6d451a",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jre_aarch64_linux_hotspot_13_33.tar.gz",
+            "version": "13.0.0"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "33",
+            "sha256": "73800a0d7c4e81df408a8518d282aa2c001ce4ee15541574c639dfc3564f708f",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jre_x64_linux_hotspot_13_33.tar.gz",
+            "version": "13.0.0"
+          }
+        },
+        "openj9": {
+          "packageType": "jre",
+          "vmType": "openj9",
+          "x86_64": {
+            "build": "33",
+            "sha256": "2ee59be5062a81daa7be85be161cab6b245f9a2e2cbd4769ae9edefaac41e31d",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33_openj9-0.16.0/OpenJDK13U-jre_x64_linux_openj9_13_33_openj9-0.16.0.tar.gz",
+            "version": "13.0.0"
+          }
+        }
+      }
+    },
+    "mac": {
+      "jdk": {
+        "hotspot": {
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "33",
+            "sha256": "f948be96daba250b6695e22cb51372d2ba3060e4d778dd09c89548889783099f",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jdk_x64_mac_hotspot_13_33.tar.gz",
+            "version": "13.0.0"
+          }
+        },
+        "openj9": {
+          "packageType": "jdk",
+          "vmType": "openj9",
+          "x86_64": {
+            "build": "33",
+            "sha256": "583e0defd5c062550896ead7cac383be16f1a81d9b6492dfec26da9af5dcc1c0",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33_openj9-0.16.0/OpenJDK13U-jdk_x64_mac_openj9_13_33_openj9-0.16.0.tar.gz",
+            "version": "13.0.0"
+          }
+        }
+      },
+      "jre": {
+        "hotspot": {
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "33",
+            "sha256": "1c23efba7908de9a611a98e755602f45381a8f7c957adb3fc4012ab1369a352c",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33/OpenJDK13U-jre_x64_mac_hotspot_13_33.tar.gz",
+            "version": "13.0.0"
+          }
+        },
+        "openj9": {
+          "packageType": "jre",
+          "vmType": "openj9",
+          "x86_64": {
+            "build": "33",
+            "sha256": "33a60b78138d50cb02325156c7d1fcf588697749a4401f6c11a3cbefa3033127",
+            "url": "https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-13%2B33_openj9-0.16.0/OpenJDK13U-jre_x64_mac_openj9_13_33_openj9-0.16.0.tar.gz",
+            "version": "13.0.0"
           }
         }
       }
@@ -122,56 +240,104 @@
       "jdk": {
         "hotspot": {
           "aarch64": {
+            "build": "9",
+            "sha256": "35799a2fd4b467115aff1bc3a54853b5131ba9068e53e1ab0fbe5521a3f2ba83",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jdk_aarch64_linux_hotspot_8u232b09.tar.gz",
+            "version": "8.0.232"
+          },
+          "armv6l": {
+            "build": "9",
+            "sha256": "fdd9f61f1b2df74242da54ee3b3231b0123782a917e9673351276da439c7cab1",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jdk_arm_linux_hotspot_8u232b09.tar.gz",
+            "version": "8.0.232"
+          },
+          "armv7l": {
+            "build": "9",
+            "sha256": "fdd9f61f1b2df74242da54ee3b3231b0123782a917e9673351276da439c7cab1",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jdk_arm_linux_hotspot_8u232b09.tar.gz",
+            "version": "8.0.232"
+          },
+          "armv6l": {
             "build": "10",
-            "sha256": "652776586ede124189dc218174b5922cc97feac81021ad81905900b349a352d2",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_aarch64_linux_hotspot_8u222b10.tar.gz",
+            "sha256": "7b3d6ade8c25adca01095ba66642132d8c87a1a8caf3883850e34778453afcec",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_arm_linux_hotspot_8u222b10.tar.gz",
+            "version": "8.0.222"
+          },
+          "armv7l": {
+            "build": "10",
+            "sha256": "7b3d6ade8c25adca01095ba66642132d8c87a1a8caf3883850e34778453afcec",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_arm_linux_hotspot_8u222b10.tar.gz",
             "version": "8.0.222"
           },
           "packageType": "jdk",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "10",
-            "sha256": "37356281345b93feb4212e6267109b4409b55b06f107619dde4960e402bafa77",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_linux_hotspot_8u222b10.tar.gz",
-            "version": "8.0.222"
+            "build": "8",
+            "sha256": "f39b523c724d0e0047d238eb2bb17a9565a60574cf651206c867ee5fc000ab43",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u242b08.tar.gz",
+            "version": "8.0.242"
           }
         },
         "openj9": {
           "packageType": "jdk",
           "vmType": "openj9",
           "x86_64": {
-            "build": "10",
-            "sha256": "20cff719c6de43f8bb58c7f59e251da7c1fa2207897c9a4768c8c669716dc819",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10_openj9-0.15.1/OpenJDK8U-jdk_x64_linux_openj9_8u222b10_openj9-0.15.1.tar.gz",
-            "version": "8.0.222"
+            "build": "8",
+            "sha256": "ca785af638b24f9d4df896f5a9f557cc9f1e5fa5e2b1174d6b906e3fd5474c2e",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08_openj9-0.18.1/OpenJDK8U-jdk_x64_linux_openj9_8u242b08_openj9-0.18.1.tar.gz",
+            "version": "8.0.242"
           }
         }
       },
       "jre": {
         "hotspot": {
           "aarch64": {
+            "build": "9",
+            "sha256": "4540db665260fdc84ae2f191e21beec9168a70a4227718bee5edd317707e2fda",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jre_aarch64_linux_hotspot_8u232b09.tar.gz",
+            "version": "8.0.232"
+          },
+          "armv6l": {
+            "build": "9",
+            "sha256": "8ab786fc2fa0a282f5cf57f6040f1976c32c3c5e480e900ce5925de6543f6688",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jre_arm_linux_hotspot_8u232b09.tar.gz",
+            "version": "8.0.232"
+          },
+          "armv7l": {
+            "build": "9",
+            "sha256": "8ab786fc2fa0a282f5cf57f6040f1976c32c3c5e480e900ce5925de6543f6688",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jre_arm_linux_hotspot_8u232b09.tar.gz",
+            "version": "8.0.232"
+          },
+          "armv6l": {
             "build": "10",
-            "sha256": "dfaf5a121f7606c54bd6232793677a4267eddf65d29cde352b84d84edbccbb51",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_aarch64_linux_hotspot_8u222b10.tar.gz",
+            "sha256": "19de77b74812b90851816bdb991d6473488a10d3ac293c6accf46ae9b1f714a0",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_arm_linux_hotspot_8u222b10.tar.gz",
+            "version": "8.0.222"
+          },
+          "armv7l": {
+            "build": "10",
+            "sha256": "19de77b74812b90851816bdb991d6473488a10d3ac293c6accf46ae9b1f714a0",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_arm_linux_hotspot_8u222b10.tar.gz",
             "version": "8.0.222"
           },
           "packageType": "jre",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "10",
-            "sha256": "a418ce895c8bf3ca2e7b2f423f038b8b093941684c9430f2e40da0982e12b52d",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_x64_linux_hotspot_8u222b10.tar.gz",
-            "version": "8.0.222"
+            "build": "8",
+            "sha256": "5edfaefdbb0469d8b24d61c8aef80c076611053b1738029c0232b9a632fe2708",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jre_x64_linux_hotspot_8u242b08.tar.gz",
+            "version": "8.0.242"
           }
         },
         "openj9": {
           "packageType": "jre",
           "vmType": "openj9",
           "x86_64": {
-            "build": "10",
-            "sha256": "ae56994a7c8e8c19939c0c2ff8fe5a850eb2f23845c499aa5ede26deb3d5ad28",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10_openj9-0.15.1/OpenJDK8U-jre_x64_linux_openj9_8u222b10_openj9-0.15.1.tar.gz",
-            "version": "8.0.222"
+            "build": "8",
+            "sha256": "985d3134b64c6196d4c9ddbc87af0c62b0e643cef71b29f3d25a8c7811811745",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08_openj9-0.18.1/OpenJDK8U-jre_x64_linux_openj9_8u242b08_openj9-0.18.1.tar.gz",
+            "version": "8.0.242"
           }
         }
       }
@@ -182,20 +348,20 @@
           "packageType": "jdk",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "10",
-            "sha256": "9605fd00d2960934422437f601c7a9a1c5537309b9199d5bc75f84f20cd29a76",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_mac_hotspot_8u222b10.tar.gz",
-            "version": "8.0.222"
+            "build": "8",
+            "sha256": "06675b7d65bce0313ee1f2e888dd44267e8afeced75e0b39b5ad1f5fdff54e0b",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_mac_hotspot_8u242b08.tar.gz",
+            "version": "8.0.242"
           }
         },
         "openj9": {
           "packageType": "jdk",
           "vmType": "openj9",
           "x86_64": {
-            "build": "10",
-            "sha256": "df185e167756332163633a826b329db067f8a721f7d5d27f0b353a35fc415de0",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10_openj9-0.15.1/OpenJDK8U-jdk_x64_mac_openj9_8u222b10_openj9-0.15.1.tar.gz",
-            "version": "8.0.222"
+            "build": "8",
+            "sha256": "665dc9c8239b7270b007ab9dd7522570e2686e327d89caf57a6aa6e5c6450078",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08_openj9-0.18.1/OpenJDK8U-jdk_x64_mac_openj9_8u242b08_openj9-0.18.1.tar.gz",
+            "version": "8.0.242"
           }
         }
       },
@@ -204,20 +370,20 @@
           "packageType": "jre",
           "vmType": "hotspot",
           "x86_64": {
-            "build": "10",
-            "sha256": "b3ac2436534cea932ccf665b317dbf5ffc0ee065efca808b22b6c2d795ca1b90",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jre_x64_mac_hotspot_8u222b10.tar.gz",
-            "version": "8.0.222"
+            "build": "8",
+            "sha256": "fae3777e3441dc7384c339a9054aa7efc40cd2c501625a535c2d4648367ccca3",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jre_x64_mac_hotspot_8u242b08.tar.gz",
+            "version": "8.0.242"
           }
         },
         "openj9": {
           "packageType": "jre",
           "vmType": "openj9",
           "x86_64": {
-            "build": "10",
-            "sha256": "d5754413d7bc3a3233aaa7f8465451fbdabaf2a0c2a91743155bf135a3047ec8",
-            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10_openj9-0.15.1/OpenJDK8U-jre_x64_mac_openj9_8u222b10_openj9-0.15.1.tar.gz",
-            "version": "8.0.222"
+            "build": "8",
+            "sha256": "d4a924558ddda0aed671a67f71714b71c25871a7659fd4c505851cf5ee866de5",
+            "url": "https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08_openj9-0.18.1/OpenJDK8U-jre_x64_mac_openj9_8u242b08_openj9-0.18.1.tar.gz",
+            "version": "8.0.242"
           }
         }
       }

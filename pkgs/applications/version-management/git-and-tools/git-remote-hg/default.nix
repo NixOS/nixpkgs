@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  installFlags = "HOME=\${out} install-doc";
+  installFlags = [ "HOME=\${out}" "install-doc" ];
 
   postInstall = ''
     wrapProgram $out/bin/git-remote-hg \
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/mnauw/git-remote-hg;
+    homepage = "https://github.com/mnauw/git-remote-hg";
     description = "Semi-official Mercurial bridge from Git project";
     license = licenses.gpl2;
     maintainers = [ ];

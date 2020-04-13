@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook makeWrapper which ];
   buildInputs = [ python python.pkgs.setuptools z3.python erlang ];
 
-  buildFlags = "PWD=$(out)/lib/erlang/lib/cuter-${version} cuter_target";
+  buildFlags = [ "PWD=$(out)/lib/erlang/lib/cuter-${version}" "cuter_target" ];
   configurePhase = ''
     autoconf
     ./configure --prefix $out
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A concolic testing tool for the Erlang functional programming language";
     license = stdenv.lib.licenses.gpl3;
-    homepage = https://github.com/aggelgian/cuter;
+    homepage = "https://github.com/aggelgian/cuter";
     maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
     platforms = with stdenv.lib.platforms; unix;
   };

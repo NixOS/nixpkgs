@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://avf.sourceforge.net/;
+    homepage = "http://avf.sourceforge.net/";
     description = "Virtual filesystem that allows browsing of compressed files";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;

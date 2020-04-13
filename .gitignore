@@ -11,6 +11,7 @@ result-*
 .version-suffix
 
 .DS_Store
+.mypy_cache
 
 /pkgs/development/libraries/qt-5/*/tmp/
 /pkgs/desktops/kde-5/*/tmp/

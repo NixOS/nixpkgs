@@ -13,11 +13,17 @@ stdenv.mkDerivation {
     sha256 = "1ygzp8rjr8f1gs48mb1pz7psdgbfhlvr6kjdnmzbsqcml06zvrpr";
   };
 
+  # Fixup build with newer Linux headers.
+  postPatch = ''
+    sed '1i#include <linux/sockios.h>' -i \
+      slcanpty.c cansniffer.c canlogserver.c isotpdump.c isotpsniffer.c isotpperf.c
+  '';
+
   preConfigure = ''makeFlagsArray+=(PREFIX="$out")'';
 
   meta = with stdenv.lib; {
     description = "CAN userspace utilities and tools (for use with Linux SocketCAN)";
-    homepage = https://github.com/linux-can/can-utils;
+    homepage = "https://github.com/linux-can/can-utils";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

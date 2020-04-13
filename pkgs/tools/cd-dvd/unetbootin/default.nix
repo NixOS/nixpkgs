@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unetbootin";
-  version = "675";
+  version = "677";
 
   src = fetchFromGitHub {
     owner  = "unetbootin";
     repo   = "unetbootin";
     rev    = version;
-    sha256 = "0b7z2amsf6i7b56a5sfs5di1vh30h6ybcqg23d5gx5zgn3w38w4a";
+    sha256 = "1mk6179r2lz2d0pvln1anvf5p4l7vfrnnnlhgyx2dlx6pfacsspy";
   };
 
   setSourceRoot = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://unetbootin.sourceforge.net/;
+    homepage    = "http://unetbootin.sourceforge.net/";
     description = "A tool to create bootable live USB drives from ISO images";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;

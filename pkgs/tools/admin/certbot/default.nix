@@ -1,23 +1,27 @@
-{ stdenv, python37Packages, fetchFromGitHub, fetchurl, dialog, autoPatchelfHook, nginx, pebble }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
+, dialog, mock, gnureadline
+, pytest_xdist, pytest, dateutil
+}:
 
-
-python37Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "certbot";
-  version = "0.39.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1s32xg2ljz7ci78wc8rqkjvgrz7vprb7fkznrlf9a4blm55pp54c";
+    sha256 = "1nzp1l63f64qqp89y1vyd4lgfhykfp5dkr6iwfiyf273y7sjwpsa";
   };
 
   patches = [
-    ./0001-pebble_artifacts-hardcode-pebble-location.patch
     ./0001-Don-t-use-distutils.StrictVersion-that-cannot-handle.patch
   ];
 
-  propagatedBuildInputs = with python37Packages; [
+  propagatedBuildInputs = [
     ConfigArgParse
     acme
     configobj
@@ -25,27 +29,21 @@ python37Packages.buildPythonApplication rec {
     distro
     josepy
     parsedatetime
-    psutil
     pyRFC3339
     pyopenssl
     pytz
+    requests
     six
     zope_component
     zope_interface
   ];
 
-  buildInputs = [ dialog ] ++ (with python37Packages; [ mock gnureadline ]);
+  buildInputs = [ dialog mock gnureadline ];
 
-  checkInputs = with python37Packages; [
-    pytest_xdist
-    pytest
-    dateutil
-  ];
+  checkInputs = [ pytest_xdist pytest dateutil ];
 
-  postPatch = ''
-    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
-    substituteInPlace certbot/util.py --replace "sw_vers" "/usr/bin/sw_vers"
-    substituteInPlace certbot-ci/certbot_integration_tests/utils/pebble_artifacts.py --replace "@pebble@" "${pebble}/bin/pebble"
+  preBuild = ''
+    cd certbot
   '';
 
   postInstall = ''
@@ -55,21 +53,13 @@ python37Packages.buildPythonApplication rec {
     done
   '';
 
-  # tests currently time out, because they're trying to do network access
-  # Upstream issue: https://github.com/certbot/certbot/issues/7450
-  doCheck = false;
+  doCheck = true;
 
-  checkPhase = ''
-    PATH="$out/bin:${nginx}/bin:$PATH" pytest certbot-ci/certbot_integration_tests
-  '';
-
-  dontUseSetuptoolsCheck = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = src.meta.homepage;
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
-    maintainers = [ maintainers.domenkozar ];
-    license = licenses.asl20;
+    maintainers = with maintainers; [ domenkozar ];
+    license = with licenses; [ asl20 ];
   };
 }

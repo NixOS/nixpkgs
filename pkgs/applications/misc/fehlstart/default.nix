@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Small desktop application launcher with reasonable memory footprint";
-    homepage = https://gitlab.com/fehlstart/fehlstart;
+    homepage = "https://gitlab.com/fehlstart/fehlstart";
     license = licenses.gpl3;
     maintainers = [ maintainers.mounium ];
     platforms = platforms.all;

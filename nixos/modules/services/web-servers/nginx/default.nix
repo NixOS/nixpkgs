@@ -46,8 +46,17 @@ let
     }
   ''));
 
+  commonHttpConfig = ''
+      # The mime type definitions included with nginx are very incomplete, so
+      # we use a list of mime types from the mailcap package, which is also
+      # used by most other Linux distributions by default.
+      include ${pkgs.mailcap}/etc/nginx/mime.types;
+      include ${cfg.package}/conf/fastcgi.conf;
+      include ${cfg.package}/conf/uwsgi_params;
+  '';
+
   configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
-    user ${cfg.user} ${cfg.group};
+    pid /run/nginx/nginx.pid;
     error_log ${cfg.logError};
     daemon off;
 
@@ -61,12 +70,7 @@ let
 
     ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
     http {
-      # The mime type definitions included with nginx are very incomplete, so
-      # we use a list of mime types from the mailcap package, which is also
-      # used by most other Linux distributions by default.
-      include ${pkgs.mailcap}/etc/nginx/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
-      include ${cfg.package}/conf/uwsgi_params;
+      ${commonHttpConfig}
 
       ${optionalString (cfg.resolver.addresses != []) ''
         resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
@@ -79,7 +83,7 @@ let
         tcp_nopush on;
         tcp_nodelay on;
         keepalive_timeout 65;
-        types_hash_max_size 2048;
+        types_hash_max_size 4096;
       ''}
 
       ssl_protocols ${cfg.sslProtocols};
@@ -87,10 +91,17 @@ let
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
       ${optionalString (cfg.recommendedTlsSettings) ''
-        ssl_session_cache shared:SSL:42m;
-        ssl_session_timeout 23m;
-        ssl_ecdh_curve secp384r1;
-        ssl_prefer_server_ciphers on;
+        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+
+        ssl_session_timeout 1d;
+        ssl_session_cache shared:SSL:10m;
+        # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
+        ssl_session_tickets off;
+        # We don't enable insecure ciphers by default, so this allows
+        # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+        ssl_prefer_server_ciphers off;
+
+        # OCSP stapling
         ssl_stapling on;
         ssl_stapling_verify on;
       ''}
@@ -165,9 +176,7 @@ let
 
     ${optionalString (cfg.httpConfig != "") ''
     http {
-      include ${cfg.package}/conf/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
-      include ${cfg.package}/conf/uwsgi_params;
+      ${commonHttpConfig}
       ${cfg.httpConfig}
     }''}
 
@@ -177,6 +186,8 @@ let
   configPath = if cfg.enableReload
     then "/etc/nginx/nginx.conf"
     else configFile;
+
+  execCommand = "${cfg.package}/bin/nginx -c '${configPath}' -p '${cfg.stateDir}'";
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
@@ -366,12 +377,7 @@ in
 
       preStart =  mkOption {
         type = types.lines;
-        default = ''
-          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs
-          test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
-          test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
-          chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
-        '';
+        default = "";
         description = "
           Shell commands executed before the service's nginx is started.
         ";
@@ -490,8 +496,9 @@ in
 
       sslCiphers = mkOption {
         type = types.str;
-        default = "EECDH+aRSA+AESGCM:EDH+aRSA:EECDH+aRSA:+AES256:+AES128:+SHA1:!CAMELLIA:!SEED:!3DES:!DES:!RC4:!eNULL";
-        description = "Ciphers to choose from when negotiating tls handshakes.";
+        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
+        description = "Ciphers to choose from when negotiating TLS handshakes.";
       };
 
       sslProtocols = mkOption {
@@ -673,23 +680,36 @@ in
       }
     ];
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/logs' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
       wants = concatLists (map (vhostConfig: ["acme-${vhostConfig.serverName}.service" "acme-selfsigned-${vhostConfig.serverName}.service"]) acmeEnabledVhosts);
       after = [ "network.target" ] ++ map (vhostConfig: "acme-selfsigned-${vhostConfig.serverName}.service") acmeEnabledVhosts;
       stopIfChanged = false;
-      preStart =
-        ''
+      preStart = ''
         ${cfg.preStart}
-        ${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir} -t
-        '';
+        ${execCommand} -t
+      '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configPath} -p ${cfg.stateDir}";
+        ExecStart = execCommand;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
+        # User and group
+        User = cfg.user;
+        Group = cfg.group;
+        # Runtime directory and mode
+        RuntimeDirectory = "nginx";
+        RuntimeDirectoryMode = "0750";
+        # Capabilities
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
       };
     };
 
@@ -698,11 +718,18 @@ in
     };
 
     systemd.services.nginx-config-reload = mkIf cfg.enableReload {
-      wantedBy = [ "nginx.service" ];
+      wants = [ "nginx.service" ];
+      wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
+      # commented, because can cause extra delays during activate for this config:
+      #      services.nginx.virtualHosts."_".locations."/".proxyPass = "http://blabla:3000";
+      # stopIfChanged = false;
+      serviceConfig.Type = "oneshot";
+      serviceConfig.TimeoutSec = 60;
       script = ''
         if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
-          ${pkgs.systemd}/bin/systemctl reload nginx.service
+          ${execCommand} -t && \
+            ${pkgs.systemd}/bin/systemctl reload nginx.service
         fi
       '';
       serviceConfig.RemainAfterExit = true;
@@ -723,15 +750,16 @@ in
         listToAttrs acmePairs
     );
 
-    users.users = optionalAttrs (cfg.user == "nginx") (singleton
-      { name = "nginx";
+    users.users = optionalAttrs (cfg.user == "nginx") {
+      nginx = {
         group = cfg.group;
         uid = config.ids.uids.nginx;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "nginx") (singleton
-      { name = "nginx";
-        gid = config.ids.gids.nginx;
-      });
+    users.groups = optionalAttrs (cfg.group == "nginx") {
+      nginx.gid = config.ids.gids.nginx;
+    };
+
   };
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "148361pixrm94q6v04k13s1msa04bx9yc3djb0lxpa7dlw19vhcd";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=parentheses" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=parentheses";
 
   nativeBuildInputs = [ cmake doxygen ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C++ URI library";
-    homepage = https://cpp-netlib.org;
+    homepage = "https://cpp-netlib.org";
     license = stdenv.lib.licenses.boost;
     platforms = stdenv.lib.platforms.all;
   };

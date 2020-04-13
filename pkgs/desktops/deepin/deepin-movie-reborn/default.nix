@@ -58,11 +58,11 @@ mkDerivation rec {
       --replace "Exec=deepin-movie" "Exec=$out/bin/deepin-movie"
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin movie player";
-    homepage = https://github.com/linuxdeepin/deepin-movie-reborn;
+    homepage = "https://github.com/linuxdeepin/deepin-movie-reborn";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

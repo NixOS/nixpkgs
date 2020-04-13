@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       funding from the DOE. It is an open-source code, distributed freely
       under the terms of the GNU Public License (GPL).
       '';
-    homepage = http://lammps.sandia.gov;
+    homepage = "http://lammps.sandia.gov";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.costrouc ];

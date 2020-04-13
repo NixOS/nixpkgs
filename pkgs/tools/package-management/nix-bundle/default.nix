@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-bundle";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0klabmygbhzlwxja8p2w8fp8ip3xaa5ym9c15rp9qxzh03hfmdjx";
+    sha256 = "084m9hqm1nhwln2sbg8ck2v2dprvpldxxqmd1r8fcj3dmn4bysz0";
   };
 
   # coreutils, gnutar is actually needed by nix for bootstrap
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     description = "Create bundles from Nixpkgs attributes";
     license = licenses.mit;
-    homepage = https://github.com/matthewbauer/nix-bundle;
+    homepage = "https://github.com/matthewbauer/nix-bundle";
   };
 }

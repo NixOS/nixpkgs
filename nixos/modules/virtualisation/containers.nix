@@ -149,7 +149,7 @@ let
         --setenv PATH="$PATH" \
         ${optionalString cfg.ephemeral "--ephemeral"} \
         ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
-          ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"'' else ""
         } \
         ${if cfg.tmpfs != null && cfg.tmpfs != [] then
           ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}'' else ""
@@ -225,12 +225,6 @@ let
           fi
           ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
-
-        # Get the leader PID so that we can signal it in
-        # preStop. We can't use machinectl there because D-Bus
-        # might be shutting down. FIXME: in systemd 219 we can
-        # just signal systemd-nspawn to do a clean shutdown.
-        machinectl show "$INSTANCE" | sed 's/Leader=\(.*\)/\1/;t;d' > "/run/containers/$INSTANCE.pid"
       ''
   );
 
@@ -615,9 +609,11 @@ in
             bindMounts = mkOption {
               type = with types; loaOf (submodule bindMountOpts);
               default = {};
-              example = { "/home" = { hostPath = "/home/alice";
-                                      isReadOnly = false; };
-                        };
+              example = literalExample ''
+                { "/home" = { hostPath = "/home/alice";
+                              isReadOnly = false; };
+                }
+              '';
 
               description =
                 ''
@@ -715,14 +711,7 @@ in
 
       postStart = postStartScript dummyConfig;
 
-      preStop =
-        ''
-          pid="$(cat /run/containers/$INSTANCE.pid)"
-          if [ -n "$pid" ]; then
-            kill -RTMIN+4 "$pid"
-          fi
-          rm -f "/run/containers/$INSTANCE.pid"
-        '';
+      preStop = "machinectl poweroff $INSTANCE";
 
       restartIfChanged = false;
 

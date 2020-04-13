@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The official reference implementation for the PNG file format";
-    homepage = http://www.libpng.org/pub/png/libpng.html;
+    homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = licenses.libpng;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     branch = "1.2";
     platforms = platforms.unix;
   };

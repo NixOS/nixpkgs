@@ -36,12 +36,12 @@ setuptoolsShellHook() {
     echo "Finished executing setuptoolsShellHook"
 }
 
-if [ -z "$dontUseSetuptoolsBuild" ] && [ -z "$buildPhase" ]; then
+if [ -z "${dontUseSetuptoolsBuild-}" ] && [ -z "${buildPhase-}" ]; then
     echo "Using setuptoolsBuildPhase"
     buildPhase=setuptoolsBuildPhase
 fi
 
-if [ -z "$dontUseSetuptoolsShellHook" ] && [ -z "$shellHook" ]; then
+if [ -z "${dontUseSetuptoolsShellHook-}" ] && [ -z "${shellHook-}" ]; then
     echo "Using setuptoolsShellHook"
     shellHook=setuptoolsShellHook
 fi

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://pythonpaste.org/wsgiproxy/;
+    homepage = "http://pythonpaste.org/wsgiproxy/";
     description = "HTTP proxying tools for WSGI apps";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];

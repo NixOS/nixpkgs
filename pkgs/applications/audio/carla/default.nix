@@ -39,12 +39,15 @@ stdenv.mkDerivation rec {
     ++ optional withGtk2 gtk2
     ++ optional withGtk3 gtk3;
 
+  enableParallelBuilding = true;
+
   installFlags = [ "PREFIX=$(out)" ];
 
   dontWrapQtApps = true;
   postFixup = ''
     # Also sets program_PYTHONPATH and program_PATH variables
     wrapPythonPrograms
+    wrapPythonProgramsIn "$out/share/carla/resources" "$out $pythonPath"
 
     find "$out/share/carla" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
       patchPythonScript "$f"
@@ -56,10 +59,16 @@ stdenv.mkDerivation rec {
         --prefix PATH : "$program_PATH:${which}/bin" \
         --set PYTHONNOUSERSITE true
     done
+
+    find "$out/share/carla/resources" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
+      wrapQtApp "$f" \
+        --prefix PATH : "$program_PATH:${which}/bin" \
+        --set PYTHONNOUSERSITE true
+    done
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://kxstudio.sf.net/carla;
+    homepage = "http://kxstudio.sf.net/carla";
     description = "An audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3

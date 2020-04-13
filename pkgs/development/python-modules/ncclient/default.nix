@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b367354d1cd25b79b8798a0b4c1949590d890057f2a252e6e970a9ab744e009";
+    sha256 = "efdf3c868cd9f104d4e9fe4c233df78bfbbed4b3d78ba19dc27cec3cf6a63680";
   };
 
   checkInputs = [ nose rednose ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://ncclient.org/;
+    homepage = "https://github.com/ncclient/ncclient";
     description = "Python library for NETCONF clients";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];

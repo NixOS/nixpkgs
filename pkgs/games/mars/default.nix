@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, libGLU_combined, sfml, fribidi, taglib }:
+{ stdenv, fetchgit, cmake, libGLU, libGL, sfml, fribidi, taglib }:
 stdenv.mkDerivation rec {
   name = "mars-${version}-${rev}";
   version = "0.7.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     sha256 = "1r4c5gap1z2zsv4yjd34qriqkxaq4lb4rykapyzkkdf4g36lc3nh";
   };
-  buildInputs = [ cmake libGLU_combined sfml fribidi taglib ];
+  buildInputs = [ cmake libGLU libGL sfml fribidi taglib ];
   patches = [
     ./unbind_fix.patch
     ./fix-gluortho2d.patch
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     chmod +x "$out/bin/mars"
   '';
   meta = with stdenv.lib; {
-    homepage = http://mars-game.sourceforge.net/;
+    homepage = "http://mars-game.sourceforge.net/";
     description = "A game about fighting with ships in a 2D space setting";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.astsmtl ];

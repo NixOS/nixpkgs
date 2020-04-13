@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     fixPath $out /usr dpa-ext-gnomekeyring.pro gnomekeyringextention.cpp
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "GNOME keyring extension for dde-polkit-agent";
-    homepage = https://github.com/linuxdeepin/dpa-ext-gnomekeyring;
+    homepage = "https://github.com/linuxdeepin/dpa-ext-gnomekeyring";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

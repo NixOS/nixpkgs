@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GTK Manager for an Apple ipod";
-    homepage = http://gtkpod.sourceforge.net;
+    homepage = "http://gtkpod.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.skeidel ];

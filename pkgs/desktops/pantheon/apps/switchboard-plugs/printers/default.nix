@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-printers";
-  version = "2.1.6";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "05pkf3whh51gd9d0h2h4clgf7r3mvzl4ybas7834vhy19dzcbzmc";
+    sha256 = "0nnzwpfxkvgsw3g329926c3m7vci6vyb60qib7b9mpgicmsqnkvz";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -45,19 +45,9 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    # Fix build with latest vala.
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-printers/commit/3175c2ebf106145a95355d2571e0a2aa4834e884.patch";
-      sha256 = "1b2q48a1284037nz79vjcrz8g2qpsyg7s5rag6bfp03a1ijb7gw3";
-    })
-  ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
   meta = with stdenv.lib; {
     description = "Switchboard Printers Plug";
-    homepage = https://github.com/elementary/switchboard-plug-printers;
+    homepage = "https://github.com/elementary/switchboard-plug-printers";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

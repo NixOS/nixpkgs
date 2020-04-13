@@ -20,14 +20,14 @@ in
 {
   brotli = {
     src = let gitsrc = pkgs.fetchFromGitHub {
-      owner = "eustas";
+      owner = "google";
       repo = "ngx_brotli";
-      rev = "v0.1.2";
-      sha256 = "19r9igxm4hrzrhxajlxw2ccq0057h8ipkfiif725x0xqbxjskl6c";
+      rev = "e505dce68acc190cc5a1e780a3b0275e39f160ca";
+      sha256 = "00j48lffki62y1nmjyy81iklw5nlyzvrjy3z04qch4fp3p57hwla";
     }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
       cp -a ${gitsrc} $out
-      substituteInPlace $out/config \
-        --replace /usr/local ${lib.getDev pkgs.brotli}
+      substituteInPlace $out/filter/config \
+        --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
     '';
     inputs = [ pkgs.brotli ];
   };
@@ -80,10 +80,10 @@ in
 
   fastcgi-cache-purge = {
     src = fetchFromGitHub {
-      owner  = "FRiCKLE";
+      owner  = "nginx-modules";
       repo   = "ngx_cache_purge";
-      rev    = "2.3";
-      sha256 = "0ib2jrbjwrhvmihhnzkp4w87fxssbbmmmj6lfdwpm6ni8p9g60dw";
+      rev    = "2.5";
+      sha256 = "1f4kxagzvz10vqbcjwi57wink6xw3s1h7wlrrlrlpkmhfbf9704y";
     };
   };
 
@@ -256,6 +256,15 @@ in
       sha256 = "031q006bcv10dzxi3mzamqiyg14p48v0bzd5mrwz073pbf0ba2fl";
     };
     inputs = [ pkgs.pam ];
+  };
+
+  pinba = {
+    src = fetchFromGitHub {
+      owner = "tony2001";
+      repo = "ngx_http_pinba_module";
+      rev = "28131255d4797a7e2f82a6a35cf9fc03c4678fe6";
+      sha256 = "00fii8bjvyipq6q47xhjhm3ylj4rhzmlk3qwxmfpdn37j7bc8p8c";
+    };
   };
 
   push-stream ={

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui,
-libxfcegui4, xfconf, gtk, exo }:
+ xfconf, gtk2, exo }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -15,12 +15,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel
-    libxfcegui4 xfconf gtk exo ];
+    xfconf gtk2 exo ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "MPD plugin for Xfce panel";
     platforms = platforms.linux;
     maintainers = [ ];
+    broken = true;
   };
 }

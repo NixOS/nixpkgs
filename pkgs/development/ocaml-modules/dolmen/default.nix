@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 	buildInputs = [ ocaml findlib ocamlbuild ];
 	propagatedBuildInputs = [ menhir ];
 
-	makeFlags = "-C src";
+	makeFlags = [ "-C" "src" ];
 
 	createFindlibDestdir = true;
 

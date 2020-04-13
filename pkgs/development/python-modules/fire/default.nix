@@ -3,21 +3,23 @@
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
     rev = "v${version}";
-    sha256 = "1r6cmihafd7mb6j3mvgk251my6ckb0sqqj1l2ny2azklv175b38a";
+    sha256 = "0s5r6l39ck2scks54hmwwdf4lcihqqnqzjfx9lz2b67vxkajpwmc";
   };
 
   propagatedBuildInputs = [ six termcolor ] ++ stdenv.lib.optional isPy27 enum34;
 
   checkInputs = [ hypothesis mock python-Levenshtein pytest ];
 
+  # ignore test which asserts exact usage statement, default behavior
+  # changed in python3.8. This can likely be remove >=0.3.1
   checkPhase = ''
-    py.test
+    py.test -k 'not testInitRequiresFlag'
   '';
 
   meta = with stdenv.lib; {

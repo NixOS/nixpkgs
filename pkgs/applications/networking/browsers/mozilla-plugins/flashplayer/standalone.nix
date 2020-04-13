@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation {
   pname = "flashplayer-standalone";
-  version = "32.0.0.293";
+  version = "32.0.0.344";
 
   src = fetchurl {
     url =
@@ -60,9 +60,9 @@ stdenv.mkDerivation {
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "13mrknvl3yd8vrcs7mp6szz6f9ssfs72apzvc60f9qfwkhiwlg87"
+        "1ymsk07xmnanyv86r58ar1l4wgjarlq0fc111ajc76pp8dsxnfx8"
       else
-        "0isvmzyi4isxvxxc5ksplcqc5cafpvbrln3dddpms8zps2dxpyzi";
+        "0wiwpn4a0jxslw4ahalq74rksn82y0aqa3lrjr9qs7kdcak74vky";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Adobe Flash Player standalone executable";
-    homepage = https://www.adobe.com/support/flashplayer/debug_downloads.html;
+    homepage = "https://www.adobe.com/support/flashplayer/debug_downloads.html";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ taku0 ];
     platforms = [ "x86_64-linux" ];

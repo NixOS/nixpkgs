@@ -228,7 +228,7 @@ autoPatchelf() {
 # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
 # fixupOutput and the postFixup hook runs later.
 postFixupHooks+=('
-    if [ -z "$dontAutoPatchelf" ]; then
+    if [ -z "${dontAutoPatchelf-}" ]; then
         autoPatchelf -- $(for output in $outputs; do
             [ -e "${!output}" ] || continue
             echo "${!output}"

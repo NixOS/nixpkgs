@@ -1,48 +1,42 @@
-{ stdenv, libsodium, fetchFromGitHub, wget, pkgconfig, autoreconfHook, openssl, db62, boost
-, zlib, gtest, gmock, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent
-, libsnark, withGui }:
+{ stdenv, libsodium, fetchFromGitHub, wget, pkgconfig, autoreconfHook, openssl, db62, boost17x
+, zlib, gtest, gmock, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent }:
 
 let librustzcash = callPackage ./librustzcash {};
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "zcash" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.0.13";
+  pname = "zcash";
+  version = "2.1.1-1";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "05y7wxs66anxr5akbf05r36mmjfzqpwawn6vyh3jhpva51hzzzyz";
+    sha256 = "1g5zlfzfp31my8w8nlg5fncpr2y95iv9fm04x57sjb93rgmjdh5n";
   };
 
-  # Dependencies are underspecified: "make -C src gtest/zcash_gtest-test_merkletree.o"
-  # fails with "fatal error: test/data/merkle_roots.json.h: No such file or directory"
-  enableParallelBuilding = false;
-
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ gtest gmock gmp openssl wget db62 boost zlib
-                  protobuf libevent libsodium librustzcash libsnark ]
-                  ++ optionals stdenv.isLinux [ utillinux ]
-                  ++ optionals withGui [ qt4 qrencode ];
-
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib"
-                   ] ++ optionals withGui [ "--with-gui=qt4" ];
-
   patchPhase = ''
-    sed -i"" 's,-lboost_system-mt,-lboost_system,' configure.ac
     sed -i"" 's,-fvisibility=hidden,,g'            src/Makefile.am
   '';
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gtest gmock gmp openssl wget db62 boost17x zlib
+                  protobuf libevent libsodium librustzcash ]
+                  ++ optionals stdenv.isLinux [ utillinux ];
+
+  configureFlags = [ "--with-boost-libdir=${boost17x.out}/lib" ];
 
   postInstall = ''
     cp zcutil/fetch-params.sh $out/bin/zcash-fetch-params
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Peer-to-peer, anonymous electronic cash system";
-    homepage = https://z.cash/;
-    maintainers = with maintainers; [ rht ];
+    homepage = "https://z.cash/";
+    maintainers = with maintainers; [ rht tkerber ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

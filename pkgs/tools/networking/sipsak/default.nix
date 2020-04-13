@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sipwise/sipsak;
+    homepage = "https://github.com/sipwise/sipsak";
     description = "SIP Swiss army knife";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ sheenobu ];

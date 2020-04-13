@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "minidlna";
 
   nodes = {
@@ -29,11 +29,11 @@ import ./make-test.nix ({ pkgs, ... }: {
 
   testScript =
   ''
-    startAll;
-    $server->succeed("mkdir -p /tmp/stuff && chown minidlna: /tmp/stuff");
-    $server->waitForUnit("minidlna");
-    $server->waitForOpenPort("8200");
-    $server->succeed("curl --fail http://localhost:8200/");
-    $client->succeed("curl --fail http://server:8200/");
+    start_all()
+    server.succeed("mkdir -p /tmp/stuff && chown minidlna: /tmp/stuff")
+    server.wait_for_unit("minidlna")
+    server.wait_for_open_port("8200")
+    server.succeed("curl --fail http://localhost:8200/")
+    client.succeed("curl --fail http://server:8200/")
   '';
 })

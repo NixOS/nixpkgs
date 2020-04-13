@@ -116,6 +116,7 @@ in
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/emacs"
+        "/share/hunspell"
         "/share/nano"
         "/share/org"
         "/share/themes"

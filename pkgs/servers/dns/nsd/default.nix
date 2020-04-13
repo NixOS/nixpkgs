@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.2.2";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1ys608jyp5scc957q4brm094c97sxlwymina7d2nvzi51aa37cw3";
+    sha256 = "15qy25210j9nq2i3pm8rwphnc6b5gq83js10078fvw9hbmjps03s";
   };
 
   prePatch = ''
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.nlnetlabs.nl;
+    homepage = "http://www.nlnetlabs.nl";
     description = "Authoritative only, high performance, simple and open source name server";
     license = licenses.bsd3;
     platforms = platforms.unix;

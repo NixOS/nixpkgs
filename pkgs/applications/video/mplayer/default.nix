@@ -2,7 +2,7 @@
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
-, x11Support ? true, libX11 ? null, libXext ? null, libGLU_combined ? null
+, x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -32,7 +32,7 @@
 assert fontconfigSupport -> (fontconfig != null);
 assert (!fontconfigSupport) -> (freefont_ttf != null);
 assert fribidiSupport -> (fribidi != null);
-assert x11Support -> (libX11 != null && libXext != null && libGLU_combined != null);
+assert x11Support -> (libX11 != null && libXext != null && libGLU != null && libGL != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
 assert alsaSupport -> alsaLib != null;
@@ -58,7 +58,7 @@ let
 
   codecs_src =
     let
-      dir = http://www.mplayerhq.hu/MPlayer/releases/codecs/;
+      dir = "http://www.mplayerhq.hu/MPlayer/releases/codecs/";
       version = "20071007";
     in
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
-    ++ optionals x11Support [ libX11 libXext libGLU_combined ]
+    ++ optionals x11Support [ libX11 libXext libGLU libGL ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora
@@ -195,11 +195,11 @@ stdenv.mkDerivation rec {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  NIX_LDFLAGS = with stdenv.lib;
+  NIX_LDFLAGS = with stdenv.lib; toString (
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
-    ;
+  );
 
   installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
 
@@ -217,7 +217,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A movie player that supports many video formats";
-    homepage = http://mplayerhq.hu;
+    homepage = "http://mplayerhq.hu";
     license = "GPL";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

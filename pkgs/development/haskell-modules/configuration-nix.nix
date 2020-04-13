@@ -115,18 +115,18 @@ self: super: builtins.intersectAttrs super {
 
   hzk = overrideCabal super.hzk (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper";
+    configureFlags = [ "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" ];
   });
 
   haskakafka = overrideCabal super.haskakafka (drv: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+    configureFlags = [ "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka" ];
   });
 
   # library has hard coded directories that need to be removed. Reported upstream here https://github.com/haskell-works/hw-kafka-client/issues/32
   hw-kafka-client = dontCheck (overrideCabal super.hw-kafka-client (drv: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d -e /librdkafka/d hw-kafka-client.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+    configureFlags = [ "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka" ];
   }));
 
   # Foreign dependency name clashes with another Haskell package.
@@ -259,7 +259,7 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.libGLU_combined);
+  hsqml = dontCheck (addExtraLibraries (super.hsqml.override { qt5 = pkgs.qt5Full; }) [pkgs.libGLU pkgs.libGL]);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -282,26 +282,12 @@ self: super: builtins.intersectAttrs super {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general =
-    # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
-    let base = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
-    in if !pkgs.stdenv.isDarwin then base else overrideCabal base (
-      drv: {
-        preConfigure = ''
-          sed -i llvm-general.cabal \
-              -e 's,extra-libraries: stdc++,extra-libraries: c++,'
-        '';
-        configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
-        librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
-      }
-    );
-
   llvm-hs =
-    let llvmHsWithLlvm8 = super.llvm-hs.override { llvm-config = pkgs.llvm_8; };
+    let llvmHsWithLlvm9 = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
     in
     if pkgs.stdenv.isDarwin
     then
-      overrideCabal llvmHsWithLlvm8 (oldAttrs: {
+      overrideCabal llvmHsWithLlvm9 (oldAttrs: {
         # One test fails on darwin.
         doCheck = false;
         # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
@@ -312,7 +298,7 @@ self: super: builtins.intersectAttrs super {
           substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
         '';
       })
-    else llvmHsWithLlvm8;
+    else llvmHsWithLlvm9;
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -512,6 +498,9 @@ self: super: builtins.intersectAttrs super {
   # requires autotools to build
   secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
+  # requires libsecp256k1 in pkgconfig-depends
+  secp256k1-haskell = addPkgconfigDepend super.secp256k1-haskell pkgs.secp256k1;
+
   # tests require git and zsh
   hapistrano = addBuildTools super.hapistrano [ pkgs.buildPackages.git pkgs.buildPackages.zsh ];
 
@@ -543,6 +532,9 @@ self: super: builtins.intersectAttrs super {
       export PATH="$PWD/dist/build/intero:$PATH"
     '';
   });
+
+  # Break infinite recursion cycle with criterion and network-uri.
+  js-flot = dontCheck super.js-flot;
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
@@ -580,24 +572,48 @@ self: super: builtins.intersectAttrs super {
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
-  futhark = if pkgs.stdenv.isDarwin then super.futhark else with pkgs;
-    let path = stdenv.lib.makeBinPath [ gcc ];
-    in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
-      postInstall = ''
-        wrapProgram $out/bin/futhark \
-          --prefix PATH : "${path}" \
-          --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
-          --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
-          --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
-      '';
-    });
+  # * Compile manpages (which are in RST and are compiled with Sphinx).
+  #
+  # * Wrap so that binary can find GCC and OpenCL headers (dubious if
+  #   a good idea).
+  futhark = with pkgs;
+    let maybeWrap =
+          if pkgs.stdenv.isDarwin then ""
+          else
+            let path = stdenv.lib.makeBinPath [ gcc ];
+            in ''
+            wrapProgram $out/bin/futhark \
+              --prefix PATH : "${path}" \
+              --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
+              --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
+              --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
+            '';
+    in overrideCabal (addBuildTools super.futhark [makeWrapper python37Packages.sphinx])
+      (_drv: {
+        postBuild = (_drv.postBuild or "") + ''
+        make -C docs man
+        '';
 
-  # On Darwin, git-annex mis-detects options to `cp`, so we wrap the binary to
-  # ensure it uses Nixpkgs' coreutils.
+        postInstall = (_drv.postInstall or "") + ''
+        mkdir -p $out/share/man/man1
+        mv docs/_build/man/*.1 $out/share/man/man1/
+        ''
+        + maybeWrap;
+      });
+
   git-annex = with pkgs;
     if (!stdenv.isLinux) then
       let path = stdenv.lib.makeBinPath [ coreutils ];
       in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
+        # This is an instance of https://github.com/NixOS/nix/pull/1085
+        # Fails with:
+        #   gpg: can't connect to the agent: File name too long
+        postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+          substituteInPlace Test.hs \
+            --replace ', testCase "crypto" test_crypto' ""
+        '';
+        # On Darwin, git-annex mis-detects options to `cp`, so we wrap the
+        # binary to ensure it uses Nixpkgs' coreutils.
         postFixup = ''
           wrapProgram $out/bin/git-annex \
             --prefix PATH : "${path}"
@@ -636,4 +652,94 @@ self: super: builtins.intersectAttrs super {
   # need it during the build itself, too.
   cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
+
+  spago =
+    let
+      # Spago needs a patch for MonadFail changes.
+      # https://github.com/purescript/spago/pull/584
+      # This can probably be removed when a version after spago-0.14.0 is released.
+      spagoWithPatches = appendPatch super.spago (pkgs.fetchpatch {
+        url = "https://github.com/purescript/spago/pull/584/commits/898a8e48665e5a73ea03525ce2c973455ab9ac52.patch";
+        sha256 = "05gs1hjlcf60cr6728rhgwwgxp3ildly14v4l2lrh6ma2fljhyjy";
+      });
+
+      # Spago basically compiles with LTS-14, but it requires a newer version
+      # of directory.  This is to work around a bug only present on windows, so
+      # we can safely jailbreak spago and use the older directory package from
+      # LTS-14.
+      spagoWithOverrides = doJailbreak (spagoWithPatches.override {
+        # spago requires dhall-1.29.0.
+        dhall = self.dhall_1_29_0;
+      });
+
+      # This defines the version of the purescript-docs-search release we are using.
+      # This is defined in the src/Spago/Prelude.hs file in the spago source.
+      docsSearchVersion = "v0.0.8";
+
+      docsSearchAppJsFile = pkgs.fetchurl {
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
+        sha256 = "00pzi7pgjicpa0mg0al80gh2q1q2lqiyb3kjarpydlmn8dfjny7v";
+      };
+
+      purescriptDocsSearchFile = pkgs.fetchurl {
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
+        sha256 = "1hsi1hc4p1z2xbw82w2jxmmczw6mravli1r89vrkivb72sqdjya7";
+      };
+
+      spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
+        postUnpack = (drv.postUnpack or "") + ''
+          # The source for spago is pulled directly from GitHub.  It uses a
+          # package.yaml file with hpack, not a .cabal file.  In the package.yaml file,
+          # it uses defaults from the master branch of the hspec repo.  It will try to
+          # fetch these at build-time (but it will fail if running in the sandbox).
+          #
+          # The following line modifies the package.yaml to not pull in
+          # defaults from the hspec repo.
+          substituteInPlace "$sourceRoot/package.yaml" --replace 'defaults: hspec/hspec@master' ""
+
+          # Spago includes the following two files directly into the binary
+          # with Template Haskell.  They are fetched at build-time from the
+          # `purescript-docs-search` repo above.  If they cannot be fetched at
+          # build-time, they are pulled in from the `templates/` directory in
+          # the spago source.
+          #
+          # However, they are not actually available in the spago source, so they
+          # need to fetched with nix and put in the correct place.
+          # https://github.com/spacchetti/spago/issues/510
+          cp ${docsSearchAppJsFile} "$sourceRoot/templates/docs-search-app.js"
+          cp ${purescriptDocsSearchFile} "$sourceRoot/templates/purescript-docs-search"
+
+          # For some weird reason, on Darwin, the open(2) call to embed these files
+          # requires write permissions. The easiest resolution is just to permit that
+          # (doesn't cause any harm on other systems).
+          chmod u+w "$sourceRoot/templates/docs-search-app.js" "$sourceRoot/templates/purescript-docs-search"
+        '';
+      });
+
+      # Because of the problem above with pulling in hspec defaults to the
+      # package.yaml file, the tests are disabled.
+      spagoWithoutChecks = dontCheck spagoFixHpack;
+    in
+    spagoWithoutChecks;
+
+  # checks SQL statements at compile time, and so requires a running PostgreSQL
+  # database to run it's test suite
+  postgresql-typed = dontCheck super.postgresql-typed;
+
+  # mplayer-spot uses mplayer at runtime.
+  mplayer-spot =
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.mplayer ];
+    in overrideCabal (addBuildTool super.mplayer-spot pkgs.makeWrapper) (oldAttrs: {
+      postInstall = ''
+        wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
+      '';
+    });
+
+  # break infinite recursion with base-orphans
+  primitive = dontCheck super.primitive;
+
+  # dhall-1.29.0 tests access the network.  This override can be removed when
+  # dhall_1_29_0 is no longer used, since more recent versions of dhall don't
+  # access the network in checks.
+  dhall_1_29_0 = dontCheck super.dhall_1_29_0;
 }

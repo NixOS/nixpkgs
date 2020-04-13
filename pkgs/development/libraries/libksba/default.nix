@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnupg.org;
+    homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
     platforms = platforms.all;
     license = licenses.lgpl3;

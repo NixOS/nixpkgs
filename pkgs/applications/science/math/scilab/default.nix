@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withXaw3d) "--with-local-xaw"
   ;
 
-  makeFlags = "all";
+  makeFlags = [ "all" ];
 
   meta = {
-    homepage = http://www.scilab.org/;
+    homepage = "http://www.scilab.org/";
     description = "Scientific software package for numerical computations (Matlab lookalike)";
     # see http://www.scilab.org/legal
     license = "SciLab";

@@ -4,20 +4,23 @@
 , setuptools
 , nose
 , pkgs
-, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "pycdio";
   version = "2.1.0";
-  disabled = !isPy27;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "01b7vqqfry071p60sabydym7r3m3rxszyqpdbs1qi5rk2sfyblnn";
   };
 
-  prePatch = "sed -i -e '/DRIVER_BSDI/d' pycdio.py";
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace 'library_dirs=library_dirs' 'library_dirs=[dir.decode("utf-8") for dir in library_dirs]' \
+      --replace 'include_dirs=include_dirs' 'include_dirs=[dir.decode("utf-8") for dir in include_dirs]' \
+      --replace 'runtime_library_dirs=runtime_lib_dirs' 'runtime_library_dirs=[dir.decode("utf-8") for dir in runtime_lib_dirs]'
+  '';
 
   preConfigure = ''
     patchShebangs .
@@ -35,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/libcdio/;
+    homepage = "https://www.gnu.org/software/libcdio/";
     description = "Wrapper around libcdio (CD Input and Control library)";
     maintainers = with maintainers; [ rycee ];
     license = licenses.gpl3Plus;

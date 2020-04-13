@@ -6,7 +6,7 @@ addSGMLCatalogs () {
       fi
 }
 
-if test -z "$sgmlHookDone"; then
+if test -z "${sgmlHookDone-}"; then
     sgmlHookDone=1
 
     # Set http_proxy and ftp_proxy to a invalid host to prevent

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, libGLU_combined ? null # OpenGL (required for vwebp)
+, openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
 , pngSupport ? true, libpng ? null # PNG image format
 , jpegSupport ? true, libjpeg ? null # JPEG image format
 , tiffSupport ? true, libtiff ? null # TIFF image format
@@ -14,7 +14,7 @@
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 }:
 
-assert openglSupport -> ((freeglut != null) && (libGLU_combined != null));
+assert openglSupport -> freeglut != null && libGL != null && libGLU != null;
 assert pngSupport -> (libpng != null);
 assert jpegSupport -> (libjpeg != null);
 assert tiffSupport -> (libtiff != null);
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ ]
-    ++ optionals openglSupport [ freeglut libGLU_combined ]
+    ++ optionals openglSupport [ freeglut libGL libGLU ]
     ++ optional pngSupport libpng
     ++ optional jpegSupport libjpeg
     ++ optional tiffSupport libtiff
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools and library for the WebP image format";
-    homepage = https://developers.google.com/speed/webp/;
+    homepage = "https://developers.google.com/speed/webp/";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ codyopel ];

@@ -14,11 +14,11 @@ agda.mkDerivation (self: rec {
   sourceDirectories = [ "Data" ];
 
   meta = {
-    homepage = https://github.com/copumpkin/bitvector;
+    homepage = "https://github.com/copumpkin/bitvector";
     description = "Sequences of bits and common operations on them";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     broken = true;
   };
 })

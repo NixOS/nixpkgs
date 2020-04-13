@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkgconfig, autoreconfHook
 , libsndfile, libtool, makeWrapper, perlPackages
-, xorg, libcap, alsaLib, glib, gnome3
+, xorg, libcap, alsaLib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , speexdsp, systemd, webrtc-audio-processing
@@ -17,7 +17,7 @@
 
 , airtunesSupport ? false
 
-, bluetoothSupport ? false
+, bluetoothSupport ? true
 
 , remoteControlSupport ? false
 
@@ -108,17 +108,20 @@ stdenv.mkDerivation rec {
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
     sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
   ''
-    + ''moveToOutput lib/cmake "$dev" '';
+    + ''
+    moveToOutput lib/cmake "$dev"
+    rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+  '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
-     --prefix GIO_EXTRA_MODULES : "${lib.getLib gnome3.dconf}/lib/gio/modules"
+     --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
-    homepage    = http://www.pulseaudio.org/;
+    homepage    = "http://www.pulseaudio.org/";
     license     = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms   = lib.platforms.unix;

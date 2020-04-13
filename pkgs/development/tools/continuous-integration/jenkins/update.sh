@@ -4,7 +4,7 @@
 set -eu -o pipefail
 
 core_json="$(curl -s --fail --location https://updates.jenkins.io/stable/update-center.actual.json | jq .core)"
-oldVersion=$(nix-instantiate --eval -E "with import ./. {}; jenkins.version or (builtins.parseDrvName jenkins.name).version" | tr -d '"')
+oldVersion=$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion jenkins" | tr -d '"')
 
 version="$(jq -r .version <<<$core_json)"
 sha256="$(jq -r .sha256 <<<$core_json)"

@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--no-default-features --features \"${features}\"" ];
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "0xlcskddhy7xsiwj54gmn1xlgkfxb4dwrys7rbamfz1h8aa6ixjx";
+  cargoSha256 = "1vbb7r0dpmq8363i040bkhf279pz51c59kcq9v5qr34hs49ish8g";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]
@@ -65,13 +65,13 @@ rustPlatform.buildRustPackage rec {
 
   # Fix the build with mariadb, which otherwise shows "error adding symbols:
   # DSO missing from command line" errors for libz and libssl.
-  NIX_LDFLAGS = lib.optional mysqlSupport "-lz -lssl -lcrypto";
+  NIX_LDFLAGS = lib.optionalString mysqlSupport "-lz -lssl -lcrypto";
 
   meta = with lib; {
     description = "Database tool for working with Rust projects that use Diesel";
-    homepage = https://github.com/diesel-rs/diesel/tree/master/diesel_cli;
+    homepage = "https://github.com/diesel-rs/diesel/tree/master/diesel_cli";
     license = with licenses; [ mit asl20 ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with maintainers; [ ];
   };
 }

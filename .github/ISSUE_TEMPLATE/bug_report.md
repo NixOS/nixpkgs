@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 Add any other context about the problem here.
 
 **Metadata**
-Please run `nix run nixpkgs.nix-info -c nix-info -m` and paste the result.
+Please run `nix-shell -p nix-info --run "nix-info -m"` and paste the result.
 
 Maintainer information:
 ```yaml

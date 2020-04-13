@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, fetchurl, fetchpatch
-, curl, ed, pkgconfig, zlib, libX11
+, curl, ed, pkgconfig, freetype, zlib, libX11
 , SDL2, SDL2_image, SDL2_mixer
 }:
 
 stdenv.mkDerivation rec {
   pname = "redeclipse";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/redeclipse/base/releases/download/v${version}/redeclipse_${version}_nix.tar.bz2";
-    sha256 = "0j98zk7nivdsap4y50dlqnql17hdila1ikvps6vicwaqb3l4gaa8";
+    sha256 = "143i713ggbk607qr4n39pi0pn8d93x9x6fcbh8rc51jb9qhi8p5i";
   };
 
   buildInputs = [
-    libX11 zlib
+    libX11 freetype zlib
     SDL2 SDL2_image SDL2_mixer
   ];
 
@@ -22,15 +22,6 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [ "-C" "src/" "prefix=$(out)" ];
-
-  patches = [
-    # "remove gamma name hack" - Can't find `____gammaf128_r_finite` otherwise
-    # Is likely to be included in next release
-    (fetchpatch {
-       url = "https://github.com/red-eclipse/base/commit/b16b4963c1ad81bb9ef784bc4913a4c8ab5f1bb4.diff";
-       sha256 = "1bm07qrq60bbmbf5k9255qq115mcyfphfy2f7xl1yx40mb9ns65p";
-    })
-  ];
 
   enableParallelBuilding = true;
 

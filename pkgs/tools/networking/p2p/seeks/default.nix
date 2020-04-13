@@ -58,7 +58,7 @@ stdenv.mkDerivation {
 
     license = stdenv.lib.licenses.agpl3Plus;
 
-    homepage = http://www.seeks-project.info/;
+    homepage = "http://www.seeks-project.info/";
 
     maintainers = [
       stdenv.lib.maintainers.matejc

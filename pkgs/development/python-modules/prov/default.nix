@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python library for W3C Provenance Data Model (PROV)";
-    homepage = https://github.com/trungdong/prov;
+    homepage = "https://github.com/trungdong/prov";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];
   };

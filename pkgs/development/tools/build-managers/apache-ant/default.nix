@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   contrib = fetchurl {
-    url = mirror://sourceforge/ant-contrib/ant-contrib-1.0b3-bin.tar.bz2;
+    url = "mirror://sourceforge/ant-contrib/ant-contrib-1.0b3-bin.tar.bz2";
     sha256 = "96effcca2581c1ab42a4828c770b48d54852edf9e71cefc9ed2ffd6590571ad1";
   };
 
@@ -46,14 +46,14 @@ stdenv.mkDerivation {
       # JRE by looking for java.  The latter allows just the JRE to be
       # used with (say) ECJ as the compiler.  Finally, allow the GNU
       # JVM.
-      if [ -z "\$JAVA_HOME" ]; then
+      if [ -z "\''${JAVA_HOME-}" ]; then
           for i in javac java gij; do
               if p="\$(type -p \$i)"; then
                   export JAVA_HOME="\$(${coreutils}/bin/dirname \$(${coreutils}/bin/dirname \$(${coreutils}/bin/readlink -f \$p)))"
                   break
               fi
           done
-          if [ -z "\$JAVA_HOME" ]; then
+          if [ -z "\''${JAVA_HOME-}" ]; then
               echo "\$0: cannot find the JDK or JRE" >&2
               exit 1
           fi
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     ''; # */
 
   meta = {
-    homepage = http://ant.apache.org/;
+    homepage = "http://ant.apache.org/";
     description = "A Java-based build tool";
 
     longDescription = ''

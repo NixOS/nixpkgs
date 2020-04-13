@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A plugin that changes the default look and feel of py.test";
-    homepage = https://github.com/Frozenball/pytest-sugar;
+    homepage = "https://github.com/Frozenball/pytest-sugar";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

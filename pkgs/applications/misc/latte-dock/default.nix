@@ -3,11 +3,11 @@
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "0.8.9";
+  version = "0.9.10";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1kkpxa39crjpqgamrcpgp1mrcdg0aq9850yb6cf7lw7d3x2fdrxj";
+    sha256 = "11s9fslr33h3ic14ifr43jphf68jpny8jmhvmrrwcz6w0p3falzw";
     name = "${pname}-${version}.tar.xz";
   };
 
@@ -20,7 +20,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Dock-style app launcher based on Plasma frameworks";
-    homepage = https://github.com/psifidotos/Latte-Dock;
+    homepage = "https://github.com/psifidotos/Latte-Dock";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.benley maintainers.ysndr ];

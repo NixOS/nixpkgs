@@ -1,21 +1,47 @@
-{ stdenv, pkgconfig, fetchurl, buildPythonApplication
-, autoreconfHook, wrapGAppsHook, gobject-introspection
-, gettext, yelp-tools, itstool, libxmlxx3
-, python, pygobject3, gtk3, gnome3, substituteAll
-, at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
-, xkbcomp, procps, lsof, coreutils, gsettings-desktop-schemas
-, speechd, brltty, liblouis, setproctitle, gst_all_1, gst-python
+{ stdenv
+, pkgconfig
+, fetchurl
+, buildPythonApplication
+, autoreconfHook
+, wrapGAppsHook
+, gobject-introspection
+, gettext
+, yelp-tools
+, itstool
+, libxmlxx3
+, python
+, pygobject3
+, gtk3
+, gnome3
+, substituteAll
+, at-spi2-atk
+, at-spi2-core
+, pyatspi
+, dbus
+, dbus-python
+, pyxdg
+, xkbcomp
+, procps
+, lsof
+, coreutils
+, gsettings-desktop-schemas
+, speechd
+, brltty
+, liblouis
+, setproctitle
+, gst_all_1
+, gst-python
 }:
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "3.34.0";
+  version = "3.36.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "10h258cprsxzb2hz9wqrkzv1yrsm19ws46l6fsnspywza5wq0z4p";
+    sha256 = "07w3k0f791zd1pj9j6d27k7gk7c6hx112ngrdz18h573df5n9b61";
   };
 
   patches = [
@@ -29,19 +55,40 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook wrapGAppsHook pkgconfig libxmlxx3
-    gettext yelp-tools itstool gobject-introspection
+    autoreconfHook
+    wrapGAppsHook
+    pkgconfig
+    libxmlxx3
+    gettext
+    yelp-tools
+    itstool
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
-    pygobject3 pyatspi dbus-python pyxdg brltty liblouis speechd gst-python setproctitle
+    pygobject3
+    pyatspi
+    dbus-python
+    pyxdg
+    brltty
+    liblouis
+    speechd
+    gst-python
+    setproctitle
   ];
 
   strictDeps = false;
 
   buildInputs = [
-    python gtk3 at-spi2-atk at-spi2-core dbus gsettings-desktop-schemas
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    python
+    gtk3
+    at-spi2-atk
+    at-spi2-core
+    dbus
+    gsettings-desktop-schemas
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
 
   passthru = {
@@ -51,7 +98,7 @@ buildPythonApplication rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Orca;
+    homepage = "https://wiki.gnome.org/Projects/Orca";
     description = "Screen reader";
     longDescription = ''
       A free, open source, flexible and extensible screen reader that provides

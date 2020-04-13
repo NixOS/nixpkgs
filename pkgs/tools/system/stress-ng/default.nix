@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.10.08";
+  version = "0.11.07";
 
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1kkmznn0y5wxi7x9nlhzyfy933bv66113in4rf0raw6brymympaa";
+    sha256 = "1kyxkwn18y4161yyvxw3hd9xlzwlp270sn4gpnzvmr6rwxhr0nvh";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
 
   # Won't build on i686 because the binary will be linked again in the
   # install phase without checking the dependencies. This will prevent

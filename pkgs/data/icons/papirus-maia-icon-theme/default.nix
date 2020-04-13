@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Manjaro variation of Papirus icon theme";
-    homepage = https://github.com/Ste74/papirus-maia-icon-theme;
+    homepage = "https://github.com/Ste74/papirus-maia-icon-theme";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

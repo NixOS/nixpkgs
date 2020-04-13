@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   unpackPhase = ''
     unzip $src
     chmod +x displaylink-driver-${version}.run
-    ./displaylink-driver-${version}.run --target . --noexec
+    ./displaylink-driver-${version}.run --target . --noexec --nodiskspace
   '';
 
   patches = [ (substituteAll {

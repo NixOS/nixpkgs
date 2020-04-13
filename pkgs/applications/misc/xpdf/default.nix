@@ -1,20 +1,22 @@
-{ enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
-, stdenv, fetchurl, zlib, libpng, freetype ? null, t1lib ? null
-, cmake, qtbase ? null, qtsvg ? null, wrapQtAppsHook
+{ enableGUI ? true
+, enablePDFtoPPM ? true
+, enablePrinting ? true
+, stdenv, fetchzip, cmake, makeDesktopItem
+, zlib, libpng, cups ? null, freetype ? null
+, qtbase ? null, qtsvg ? null, wrapQtAppsHook
 }:
 
 assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
-assert useT1Lib -> t1lib != null;
+assert enablePrinting -> cups != null;
 
-assert !useT1Lib; # t1lib has multiple unpatched security vulnerabilities
+stdenv.mkDerivation rec {
+  pname = "xpdf";
+  version = "4.02";
 
-stdenv.mkDerivation {
-  name = "xpdf-4.00";
-
-   src = fetchurl {
-    url = http://www.xpdfreader.com/dl/xpdf-4.00.tar.gz;
-    sha256 = "1mhn89738vjva14xr5gblc2zrdgzmpqbbjdflqdmpqv647294ggz";
+  src = fetchzip {
+    url = "https://xpdfreader-dl.s3.amazonaws.com/${pname}-${version}.tar.gz";
+    sha256 = "0dzwq6fnk013wa4l5mjpvm4mms2mh5hbrxv4rhk2ab5ljbzz7b2w";
   };
 
   # Fix "No known features for CXX compiler", see
@@ -26,20 +28,33 @@ stdenv.mkDerivation {
     [ cmake ]
     ++ stdenv.lib.optional enableGUI wrapQtAppsHook;
 
-  cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON"];
+  cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON" "-DOPI_SUPPORT=ON"]
+    ++ stdenv.lib.optional (!enablePrinting) "-DXPDFWIDGET_PRINTING=OFF";
 
   buildInputs = [ zlib libpng ] ++
     stdenv.lib.optional enableGUI qtbase ++
-    stdenv.lib.optional useT1Lib t1lib ++
+    stdenv.lib.optional enablePrinting cups ++
     stdenv.lib.optional enablePDFtoPPM freetype;
-
-  # Debian uses '-fpermissive' to bypass some errors on char* constantness.
-  CXXFLAGS = "-O2 -fpermissive";
 
   hardeningDisable = [ "format" ];
 
+  desktopItem = makeDesktopItem {
+    name = "xpdf";
+    desktopName = "Xpdf";
+    comment = "Views Adobe PDF files";
+    icon = "xpdf";
+    exec = "xpdf %f";
+    categories = "Office;";
+    terminal = "false";
+  };
+
+  postInstall = ''
+    install -Dm644 ${desktopItem}/share/applications/xpdf.desktop $out/share/applications/xpdf.desktop
+    install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
+  '';
+
   meta = with stdenv.lib; {
-    homepage = https://www.xpdfreader.com;
+    homepage = "https://www.xpdfreader.com";
     description = "Viewer for Portable Document Format (PDF) files";
     longDescription = ''
       XPDF includes multiple tools for viewing and processing PDF files.
@@ -56,5 +71,13 @@ stdenv.mkDerivation {
     '';
     license = with licenses; [ gpl2 gpl3 ];
     platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+    knownVulnerabilities = [
+      "CVE-2018-7453: loop in PDF objects"
+      "CVE-2018-16369: loop in PDF objects"
+      "CVE-2019-9587: loop in PDF objects"
+      "CVE-2019-9588: loop in PDF objects"
+      "CVE-2019-16088: loop in PDF objects"
+    ];
   };
 }

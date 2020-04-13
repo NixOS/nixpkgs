@@ -65,6 +65,9 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
+  ];
 
   ###### interface
 
@@ -115,7 +118,7 @@ in
         type = types.package;
         default = pkgs.samba;
         defaultText = "pkgs.samba";
-        example = literalExample "pkgs.samba3";
+        example = literalExample "pkgs.samba4Full";
         description = ''
           Defines which package should be used for the samba server.
         '';
@@ -186,7 +189,7 @@ in
           See <command>man smb.conf</command> for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
-        example =
+        example = literalExample ''
           { public =
             { path = "/srv/public";
               "read only" = true;
@@ -194,7 +197,8 @@ in
               "guest ok" = "yes";
               comment = "Public samba share.";
             };
-          };
+          }
+        '';
       };
 
     };

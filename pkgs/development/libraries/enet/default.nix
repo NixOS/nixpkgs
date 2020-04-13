@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://enet.bespin.org/;
+    homepage = "http://enet.bespin.org/";
     description = "Simple and robust network communication layer on top of UDP";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

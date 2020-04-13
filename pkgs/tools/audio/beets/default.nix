@@ -6,6 +6,7 @@
 # Attributes needed for tests of the external plugins
 , callPackage, beets
 
+, enableAbsubmit       ? stdenv.lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms, essentia-extractor ? null
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
@@ -28,13 +29,16 @@
 
 # External plugins
 , enableAlternatives   ? false
+, enableCheck          ? false, liboggz ? null
 , enableCopyArtifacts  ? false
 
 , bashInteractive, bash-completion
 }:
 
+assert enableAbsubmit    -> essentia-extractor            != null;
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
+assert enableCheck       -> flac != null && mp3val != null && liboggz != null;
 assert enableConvert     -> ffmpeg != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
@@ -51,6 +55,7 @@ with stdenv.lib;
 
 let
   optionalPlugins = {
+    absubmit = enableAbsubmit;
     acousticbrainz = enableAcousticbrainz;
     badfiles = enableBadfiles;
     chroma = enableAcoustid;
@@ -75,12 +80,12 @@ let
   };
 
   pluginsWithoutDeps = [
-    "absubmit" "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates"
-    "edit" "embedart" "export" "filefilter" "freedesktop" "fromfilename"
-    "ftintitle" "fuzzy" "hook" "ihate" "importadded" "importfeeds" "info"
-    "inline" "ipfs" "lyrics" "mbcollection" "mbsubmit" "mbsync" "metasync"
-    "missing" "permissions" "play" "plexupdate" "random" "rewrite" "scrub"
-    "smartplaylist" "spotify" "the" "types" "zero"
+    "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
+    "export" "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy"
+    "hook" "ihate" "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
+    "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "permissions" "play"
+    "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
+    "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -103,6 +108,7 @@ let
 
   plugins = {
     alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
+    check = callPackage ./check-plugin.nix pluginArgs;
     copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
   };
 
@@ -129,7 +135,8 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.gst-python
     pythonPackages.pygobject3
     gobject-introspection
-  ] ++ optional enableAcoustid      pythonPackages.pyacoustid
+  ] ++ optional enableAbsubmit      essentia-extractor
+    ++ optional enableAcoustid      pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableKodiupdate
@@ -138,6 +145,7 @@ in pythonPackages.buildPythonApplication rec {
               || enableSubsonicupdate
               || enableAcousticbrainz)
                                     pythonPackages.requests
+    ++ optional enableCheck         plugins.check
     ++ optional enableConvert       ffmpeg
     ++ optional enableDiscogs       pythonPackages.discogs_client
     ++ optional enableGmusic        pythonPackages.gmusicapi
@@ -164,11 +172,19 @@ in pythonPackages.buildPythonApplication rec {
     nose
     rarfile
     responses
+    # Although considered as plugin dependencies, they are needed for the
+    # tests, for disabling them via an override makes the build fail. see:
+    # https://github.com/beetbox/beets/blob/v1.4.9/setup.py
+    pylast
+    mpd2
+    discogs_client
+    pyxdg
   ];
 
   patches = [
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
+    ./mutagen-1.43.patch
   ];
 
   postPatch = ''
@@ -242,9 +258,13 @@ in pythonPackages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
 
+  passthru = {
+    externalPlugins = plugins;
+  };
+
   meta = {
     description = "Music tagger and library organizer";
-    homepage = http://beets.io;
+    homepage = "http://beets.io";
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig domenkozar pjones ];
     platforms = platforms.linux;

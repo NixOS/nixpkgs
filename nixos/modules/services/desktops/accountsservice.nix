@@ -6,6 +6,10 @@ with lib;
 
 {
 
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   ###### interface
 
   options = {

@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Concurrent ML-like concurrency for Guile";
-    homepage = https://github.com/wingo/fibers;
+    homepage = "https://github.com/wingo/fibers";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.linux;

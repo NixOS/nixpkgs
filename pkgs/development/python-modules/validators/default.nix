@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bhla1l8gbks572zp4f254acz23822dz2mp122djxvp328i87b7h";
+    sha256 = "0bfe836a1af37bb266d71ec1e98b530c38ce11bc7fbe0c4c96ef7b1532d019e5";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Data Validation for Humans™";
-    homepage = https://github.com/kvesteri/validators;
+    homepage = "https://github.com/kvesteri/validators";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

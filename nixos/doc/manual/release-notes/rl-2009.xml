@@ -1,0 +1,272 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09">
+ <title>Release 20.09 (“Nightingale”, 2020.09/??)</title>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-highlights">
+  <title>Highlights</title>
+
+  <para>
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Support is planned until the end of April 2021, handing over to 21.03.
+    </para>
+   </listitem>
+   <listitem>
+    <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
+   </listitem>
+   <listitem>
+    <para>
+     PHP now defaults to PHP 7.4, updated from 7.3.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
+     and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
+     been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
+     in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
+     make use of these new options instead.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-new-services">
+  <title>New Services</title>
+
+  <para>
+   The following new services were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Grafana is now built without support for phantomjs by default. Phantomjs support has been
+     <link xlink:href="https://grafana.com/docs/grafana/latest/guides/whats-new-in-v6-4/">deprecated in Grafana</link>
+     and the <package>phantomjs</package> project is
+     <link xlink:href="https://github.com/ariya/phantomjs/issues/15344#issue-302015362">currently unmaintained</link>.
+     It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instanciation:
+<programlisting>{
+  services.grafana.package = pkgs.grafana.overrideAttrs (oldAttrs: rec {
+    phantomJsSupport = false;
+  });
+}</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <link linkend="opt-services.supybot.enable">supybot</link> module now uses <literal>/var/lib/supybot</literal>
+      as its default <link linkend="opt-services.supybot.stateDir">stateDir</link> path if <literal>stateVersion</literal>
+      is 20.09 or higher. It also enables number of
+      <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Sandboxing">systemd sandboxing options</link>
+      which may possibly interfere with some plugins. If this is the case you can disable the options through attributes in
+      <option>systemd.services.supybot.serviceConfig</option>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>security.duosec.skey</literal> option, which stored a secret in the
+      nix store, has been replaced by a new
+      <link linkend="opt-security.duosec.secretKeyFile">security.duosec.secretKeyFile</link>
+      option for better security.
+    </para>
+    <para>
+      <literal>security.duosec.ikey</literal> has been renamed to
+      <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The initrd SSH support now uses OpenSSH rather than Dropbear to
+     allow the use of Ed25519 keys and other OpenSSH-specific
+     functionality. Host keys must now be in the OpenSSH format, and at
+     least one pre-generated key must be specified.
+    </para>
+    <para>
+     If you used the <option>boot.initrd.network.ssh.host*Key</option>
+     options, you'll get an error explaining how to convert your host
+     keys and migrate to the new
+     <option>boot.initrd.network.ssh.hostKeys</option> option.
+     Otherwise, if you don't have any host keys set, you'll need to
+     generate some; see the <option>hostKeys</option> option
+     documentation for instructions.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       Since this release there's an easy way to customize your PHP install to get a much smaller
+       base PHP with only wanted extensions enabled. See the following snippet installing a smaller PHP
+       with the extensions <literal>imagick</literal>, <literal>opcache</literal> and
+       <literal>pdo_mysql</literal> loaded:
+
+       <programlisting>
+environment.systemPackages = [
+(pkgs.php.buildEnv { extensions = pp: with pp; [
+    imagick
+    opcache
+    pdo_mysql
+  ]; })
+];</programlisting>
+
+       The default <literal>php</literal> attribute hasn't lost any extensions -
+       the <literal>opcache</literal> extension was added there.
+
+       All upstream PHP extensions are available under <package><![CDATA[php.extensions.<name?>]]></package>.
+     </para>
+     <para>
+       The updated <literal>php</literal> attribute is now easily customizable to your liking
+       by using extensions instead of writing config files or changing configure flags.
+
+       Therefore we have removed the following configure flags:
+
+       <itemizedlist>
+         <title>PHP <literal>config</literal> flags that we don't read anymore:</title>
+         <listitem><para><literal>config.php.argon2</literal></para></listitem>
+         <listitem><para><literal>config.php.bcmath</literal></para></listitem>
+         <listitem><para><literal>config.php.bz2</literal></para></listitem>
+         <listitem><para><literal>config.php.calendar</literal></para></listitem>
+         <listitem><para><literal>config.php.curl</literal></para></listitem>
+         <listitem><para><literal>config.php.exif</literal></para></listitem>
+         <listitem><para><literal>config.php.ftp</literal></para></listitem>
+         <listitem><para><literal>config.php.gd</literal></para></listitem>
+         <listitem><para><literal>config.php.gettext</literal></para></listitem>
+         <listitem><para><literal>config.php.gmp</literal></para></listitem>
+         <listitem><para><literal>config.php.imap</literal></para></listitem>
+         <listitem><para><literal>config.php.intl</literal></para></listitem>
+         <listitem><para><literal>config.php.ldap</literal></para></listitem>
+         <listitem><para><literal>config.php.libxml2</literal></para></listitem>
+         <listitem><para><literal>config.php.libzip</literal></para></listitem>
+         <listitem><para><literal>config.php.mbstring</literal></para></listitem>
+         <listitem><para><literal>config.php.mysqli</literal></para></listitem>
+         <listitem><para><literal>config.php.mysqlnd</literal></para></listitem>
+         <listitem><para><literal>config.php.openssl</literal></para></listitem>
+         <listitem><para><literal>config.php.pcntl</literal></para></listitem>
+         <listitem><para><literal>config.php.pdo_mysql</literal></para></listitem>
+         <listitem><para><literal>config.php.pdo_odbc</literal></para></listitem>
+         <listitem><para><literal>config.php.pdo_pgsql</literal></para></listitem>
+         <listitem><para><literal>config.php.phpdbg</literal></para></listitem>
+         <listitem><para><literal>config.php.postgresql</literal></para></listitem>
+         <listitem><para><literal>config.php.readline</literal></para></listitem>
+         <listitem><para><literal>config.php.soap</literal></para></listitem>
+         <listitem><para><literal>config.php.sockets</literal></para></listitem>
+         <listitem><para><literal>config.php.sodium</literal></para></listitem>
+         <listitem><para><literal>config.php.sqlite</literal></para></listitem>
+         <listitem><para><literal>config.php.tidy</literal></para></listitem>
+         <listitem><para><literal>config.php.xmlrpc</literal></para></listitem>
+         <listitem><para><literal>config.php.xsl</literal></para></listitem>
+         <listitem><para><literal>config.php.zip</literal></para></listitem>
+         <listitem><para><literal>config.php.zlib</literal></para></listitem>
+       </itemizedlist>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+      Gollum received a major update to version 5.x and you may have to change
+      some links in your wiki when migrating from gollum 4.x. More information
+      can be found
+      <link xlink:href="https://github.com/gollum/gollum/wiki/5.0-release-notes#migrating-your-wiki">here</link>.
+     </para>
+   </listitem>
+
+   <listitem>
+    <para>
+      The NixOS options <literal>nesting.clone</literal> and
+      <literal>nesting.children</literal> have been deleted, and
+      replaced with named <xref linkend="opt-specialisation"/>
+      configurations.
+    </para>
+
+    <para>
+      Replace a <literal>nesting.clone</literal> entry with:
+
+<programlisting>{
+<link xlink:href="#opt-specialisation">specialisation.example-sub-configuration</link> = {
+  <link xlink:href="#opt-specialisation._name_.configuration">configuration</link> = {
+    ...
+  };
+};</programlisting>
+
+    </para>
+    <para>
+      Replace a <literal>nesting.children</literal> entry with:
+
+<programlisting>{
+<link xlink:href="#opt-specialisation">specialisation.example-sub-configuration</link> = {
+  <link xlink:href="#opt-specialisation._name_.inheritParentConfig">inheritParentConfig</link> = false;
+  <link xlink:href="#opt-specialisation._name_.configuration">configuration</link> = {
+    ...
+  };
+};</programlisting>
+    </para>
+
+    <para>
+     To switch to a specialised configuration at runtime you need to
+     run:
+<programlisting>
+# sudo /run/current-system/specialisation/example-sub-configuration/bin/switch-to-configuration test
+</programlisting>
+     Before you would have used:
+<programlisting>
+# sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
+</programlisting>
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-20.09-notable-changes">
+  <title>Other Notable Changes</title>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     The <package>notmuch</package> package move its emacs-related binaries and
+     emacs lisp files to a separate output. They're not part
+     of the default <literal>out</literal> output anymore - if you relied on the
+     <literal>notmuch-emacs-mua</literal> binary or the emacs lisp files, access them via
+     the <literal>notmuch.emacs</literal> output.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+</section>

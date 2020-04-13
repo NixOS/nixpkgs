@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ zeroc_mcpp bzip2 expat openssl lmdb ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=class-memaccess" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=class-memaccess -Wno-error=deprecated-copy";
 
   prePatch = lib.optional stdenv.isDarwin ''
     substituteInPlace Make.rules.Darwin \
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.zeroc.com/ice.html;
+    homepage = "http://www.zeroc.com/ice.html";
     description = "The internet communications engine";
     license = licenses.gpl2;
     platforms = platforms.unix;

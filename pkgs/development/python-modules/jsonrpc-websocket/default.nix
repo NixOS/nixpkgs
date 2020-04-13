@@ -1,20 +1,22 @@
 { stdenv, buildPythonPackage, fetchPypi
-, aiohttp, jsonrpc-base }:
+, aiohttp, jsonrpc-base, pep8 }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e74e490fefa3b8f33620fca98f7cd9a53fb765b9ed6f78360482a3f364230885";
+    sha256 = "029gxp6f06gmba7glxfdz5xfhs5kkqph7x78k38qqvdrmca4z450";
   };
+
+  nativeBuildInputs = [ pep8 ];
 
   propagatedBuildInputs = [ aiohttp jsonrpc-base ];
 
   meta = with stdenv.lib; {
     description = "A JSON-RPC websocket client library for asyncio";
-    homepage = https://github.com/armills/jsonrpc-websocket;
+    homepage = "https://github.com/armills/jsonrpc-websocket";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
   };

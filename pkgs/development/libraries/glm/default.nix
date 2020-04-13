@@ -27,9 +27,7 @@ stdenv.mkDerivation rec {
     cp ${gcc7PlatformPatch} glm/simd/platform.h
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.isDarwin [
-    "-DGLM_COMPILER=0"
-  ];
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-DGLM_COMPILER=0";
 
   postInstall = ''
     mkdir -p $doc/share/doc/glm
@@ -43,10 +41,10 @@ stdenv.mkDerivation rec {
       graphics software based on the OpenGL Shading Language (GLSL)
       specification and released under the MIT license.
     '';
-    homepage = http://glm.g-truc.net/;
+    homepage = "http://glm.g-truc.net/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Forward freedesktop.org Idle Inhibition Service calls to Xss";
-    homepage = https://github.com/timakro/xssproxy;
+    homepage = "https://github.com/timakro/xssproxy";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ benley ];
     platforms = stdenv.lib.platforms.unix;

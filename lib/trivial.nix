@@ -171,7 +171,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Markhor";
+  codeName = "Nightingale";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -191,7 +191,7 @@ rec {
     let
       revisionFile = "${toString ./..}/.git-revision";
       gitRepo      = "${toString ./..}/.git";
-    in if lib.pathIsDirectory gitRepo
+    in if lib.pathIsGitRepo gitRepo
        then lib.commitIdFromGitRepo gitRepo
        else if lib.pathExists revisionFile then lib.fileContents revisionFile
        else default;

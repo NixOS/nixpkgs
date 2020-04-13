@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple plaintext presentation tool";
-    homepage = https://tools.suckless.org/sent/;
+    homepage = "https://tools.suckless.org/sent/";
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

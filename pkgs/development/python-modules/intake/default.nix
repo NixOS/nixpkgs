@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.5.3";
+  version = "0.5.4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mbjr4xl4i523bg8k08s5986v2289fznd8cr3j3czn5adi8519j7";
+    sha256 = "81c3bdadbb81ec10c923b89e118c229d977a584ccbe27466f8fde41c0c274c3f";
   };
 
   checkInputs = [ pytest ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Data load and catalog system";
-    homepage = https://github.com/ContinuumIO/intake;
+    homepage = "https://github.com/ContinuumIO/intake";
     license = licenses.bsd2;
     maintainers = [ maintainers.costrouc ];
   };

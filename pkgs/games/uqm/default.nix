@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, libGLU_combined
+{ stdenv, lib, fetchurl, pkgconfig, libGLU, libGL
 , SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU_combined ];
+  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages
@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
         - to adapt the code so that people can more easily make their own
           spin-offs, thereby making zillions more people happy!
     '';
-    homepage = http://sc2.sourceforge.net/;
+    homepage = "http://sc2.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jcumming aszlig ];
     platforms = with lib.platforms; linux;

@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A go rewrite of envdir";
-    homepage = https://github.com/d10n/envdir;
+    homepage = "https://github.com/d10n/envdir";
     maintainers = with stdenv.lib.maintainers; [ edude03 ];
   };
 }

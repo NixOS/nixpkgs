@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure readline ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
     description = "A trivial wrapper around GNU readline, which gives Pure scripts access to the most important facilities of the readline interface";
-    homepage = http://puredocs.bitbucket.org/pure-readline.html;
+    homepage = "http://puredocs.bitbucket.org/pure-readline.html";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

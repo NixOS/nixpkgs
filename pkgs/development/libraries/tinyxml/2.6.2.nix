@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
+    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   buildInputs = [ unzip ];
   buildPhase = ''
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
-    homepage = http://www.grinninglizard.com/tinyxml/index.html;
+    homepage = "http://www.grinninglizard.com/tinyxml/index.html";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
   };

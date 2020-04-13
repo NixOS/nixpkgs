@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nlohmann_json";
-  version = "3.7.0";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${version}";
-    sha256 = "0v7xih4zjixxxfvkfbs7a8j9qcvpwlsv4vrkbyns3hc7b44nb8ap";
+    sha256 = "04rry1xzis71z5gj1ylcj8b4li5q18zxhcwaviwvi3hx0frzxl9w";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Header only C++ library for the JSON file format";
-    homepage = https://github.com/nlohmann/json;
+    homepage = "https://github.com/nlohmann/json";
     license = licenses.mit;
     platforms = platforms.all;
   };

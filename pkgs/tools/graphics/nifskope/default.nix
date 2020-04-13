@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, wrapQtAppsHook }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, wrapQtAppsHook, fetchpatch }:
 
 stdenv.mkDerivation {
   pname = "nifskope";
@@ -18,7 +18,12 @@ stdenv.mkDerivation {
       src = ./qttools-bins.patch;
       qttools = "${qttools.dev}/bin";
     })
-  ];
+    (fetchpatch {
+      name = "qt512-build-fix.patch";
+      url = "https://github.com/niftools/nifskope/commit/30954e7f01f3d779a2a1fd37d363e8a6ad560bd3.patch";
+      sha256 = "0d6xjj2mjjhdd7w1aig5f75jksjni16jyj0lxsz51pys6xqb6fpj";
+    })
+  ] ++ (stdenv.lib.optional stdenv.isAarch64 ./no-sse-on-arm.patch);
 
   buildInputs = [ qtbase qttools libGLU.dev ];
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
@@ -55,7 +60,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://niftools.sourceforge.net/wiki/NifSkope;
+    homepage = "http://niftools.sourceforge.net/wiki/NifSkope";
     description = "A tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = with maintainers; [ eelco ma27 ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, buildGoPackage, fetchFromGitHub, fuse, osxfuse, keybase }:
+{ stdenv, buildGoPackage, fetchFromGitHub, keybase }:
 
 buildGoPackage {
   pname = "kbfs";
@@ -6,16 +6,9 @@ buildGoPackage {
   inherit (keybase) src version;
 
   goPackagePath = "github.com/keybase/client";
-  subPackages = [ "go/kbfs/kbfsfuse" "go/kbfs/kbfsgit/git-remote-keybase" ];
+  subPackages = [ "go/kbfs/kbfsfuse" "go/kbfs/redirector" "go/kbfs/kbfsgit/git-remote-keybase" ];
 
   dontRenameImports = true;
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths-kbfs.patch;
-      fusermount = "${fuse}/bin/fusermount";
-    })
-  ];
 
   buildFlags = [ "-tags production" ];
 

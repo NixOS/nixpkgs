@@ -1,5 +1,5 @@
-  { stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
-  , lv2, pkgconfig, libGLU_combined }:
+{ stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
+, lv2, pkgconfig, libGLU, libGL }:
 
   stdenv.mkDerivation {
   version = "0.9.0";
@@ -15,7 +15,7 @@
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
     xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsaLib curl libjack2 pkgconfig libGLU_combined lv2
+    freetype alsaLib curl libjack2 pkgconfig libGLU libGL lv2
   ];
 
   CXXFLAGS = "-DHAVE_LROUND";
@@ -34,7 +34,7 @@
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://tytel.org/helm;
+    homepage = "http://tytel.org/helm";
     description = "A free, cross-platform, polyphonic synthesizer";
     longDescription = ''
       A free, cross-platform, polyphonic synthesizer.

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = "CAML_INCLUDES=${ocaml}/lib/ocaml/caml";
+  makeFlags = [ "CAML_INCLUDES=${ocaml}/lib/ocaml/caml" ];
 
   # see https://bugzilla.redhat.com/show_bug.cgi?id=435559
   dontStrip = true;
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
           than the iterative scaling techniques used in almost every
           other maxent package out there.  '';
 
-    homepage = http://www.umiacs.umd.edu/~hal/megam;
+    homepage = "http://www.umiacs.umd.edu/~hal/megam";
 
     license = "non-commercial";
 

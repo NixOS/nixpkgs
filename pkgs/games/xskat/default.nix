@@ -26,13 +26,13 @@ stdenv.mkDerivation {
       -e "s|.* BINDIR .*|   BINDIR = $out/bin|" \
       -e "s|.* MANPATH .*|  MANPATH = $out/man|"
   '';
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
   meta = {
     inherit (s) version;
     description = ''Famous german card game'';
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.free;
     longDescription = ''Play the german card game Skat against the AI or over IRC.'';
-    homepage = http://www.xskat.de/;
+    homepage = "http://www.xskat.de/";
   };
 }

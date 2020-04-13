@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program that counts lines of source code";
-    homepage = https://github.com/AlDanial/cloc;
+    homepage = "https://github.com/AlDanial/cloc";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu rycee ];
+    maintainers = with stdenv.lib.maintainers; [ rycee ];
   };
 }

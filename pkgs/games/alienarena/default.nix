@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
-, libvorbis, freetype, openal, libGLU_combined }:
+, libvorbis, freetype, openal, libGL }:
 
 stdenv.mkDerivation {
   name = "alienarena-7.65";
@@ -11,12 +11,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libjpeg libX11 curl libogg libvorbis
-                  freetype openal libGLU_combined libXxf86vm ];
+                  freetype openal libGL libXxf86vm ];
 
   patchPhase = ''
     substituteInPlace ./configure \
       --replace libopenal.so.1 ${openal}/lib/libopenal.so.1 \
-      --replace libGL.so.1 ${libGLU_combined}/lib/libGL.so.1
+      --replace libGL.so.1 ${libGL}/lib/libGL.so.1
   '';
 
   meta = with stdenv.lib; {
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       with a retro alien theme, while adding tons of original ideas to
       make the game quite unique.
     '';
-    homepage = http://red.planetarena.org;
+    homepage = "http://red.planetarena.org";
     # Engine is under GPLv2, everything else is under
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];

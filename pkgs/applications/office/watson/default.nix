@@ -20,7 +20,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ requests click arrow ];
 
   meta = with stdenv.lib; {
-    homepage = https://tailordev.github.io/Watson/;
+    homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
     license = licenses.mit;
     maintainers = with maintainers; [ mguentner nathyong ] ;

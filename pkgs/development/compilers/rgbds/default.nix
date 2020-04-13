@@ -6,18 +6,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rgbds";
-  version = "0.3.8";
+  version = "0.3.10";
   src = fetchFromGitHub {
     owner = "rednex";
     repo = "rgbds";
     rev = "v${version}";
-    sha256 = "0db37z886026svhj6qnc3wk56sndbnz1vi41gn2k3bl6ppbnjlpk";
+    sha256 = "0752fbffxgxyf3jw2iij88l05dqhppgcxy7dvk82hp4wdg4cflpq";
   };
   nativeBuildInputs = [ bison flex pkg-config libpng ];
-  installFlags = "PREFIX=\${out}";
+  installFlags = [ "PREFIX=\${out}" ];
 
   meta = with stdenv.lib; {
-    homepage = https://rednex.github.io/rgbds/;
+    homepage = "https://rednex.github.io/rgbds/";
     description = "A free assembler/linker package for the Game Boy and Game Boy Color";
     license = licenses.mit;
     longDescription =

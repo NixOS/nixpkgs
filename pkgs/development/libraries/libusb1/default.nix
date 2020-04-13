@@ -1,5 +1,6 @@
 { stdenv
-, fetchurl
+, fetchFromGitHub
+, autoreconfHook
 , pkgconfig
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , systemd ? null
@@ -10,31 +11,30 @@
 
 assert enableSystemd -> systemd != null;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "libusb";
   version = "1.0.23";
 
-  src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "13dd2a9x290d1q8nb1lqiaf36grcvns5ripk5k2xm0lajmpc04fv";
+  src = fetchFromGitHub {
+    owner = "libusb";
+    repo = "libusb";
+    rev = "v${version}";
+    sha256 = "0mxbpg01kgbk5nh6524b0m4xk7ywkyzmc3yhi5asqcsd3rbhjj98";
   };
 
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs =
     stdenv.lib.optional enableSystemd systemd ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
+  dontDisableStatic = withStatic;
+
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
-  configureFlags =
-    # We use `isLinux` here only to avoid mass rebuilds for Darwin, where
-    # disabling udev happens automatically. Remove `isLinux` at next big change!
-    stdenv.lib.optional (stdenv.isLinux && !enableSystemd) "--disable-udev";
-
-  preFixup = stdenv.lib.optionalString enableSystemd ''
-    sed 's,-ludev,-L${systemd.lib}/lib -ludev,' -i $out/lib/libusb-1.0.la
+  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+    sed 's,-ludev,-L${stdenv.lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
   meta = with stdenv.lib; {
@@ -48,8 +48,4 @@ stdenv.mkDerivation (rec {
     license = licenses.lgpl21Plus;
     maintainers = [ ];
   };
-} // stdenv.lib.optionalAttrs withStatic {
-  # Carefully added here to avoid a mass rebuild.
-  # Inline this the next time this package changes.
-  dontDisableStatic = withStatic;
-})
+}

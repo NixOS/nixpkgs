@@ -24,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.2714.1";
+  version = "1.0.3627";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "0ys03sv08fg8q06lb6k5088xirnwms4nzazxp3kbdjm973n7imxc";
+    sha256 = "1x9fjvf7rbhil09am2v9j2jhwysdvwgshf9zidbirjgfrqn573h8";
   };
 
   nativeBuildInputs = [ clang cmake bison flex llvm python ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/intel/intel-graphics-compiler;
+    homepage    = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     license     = licenses.mit;
     platforms   = platforms.all;

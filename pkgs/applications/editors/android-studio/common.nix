@@ -22,6 +22,7 @@
 , freetype
 , libpulseaudio
 , libGL
+, libuuid
 , libX11
 , libxcb
 , libXcomposite
@@ -115,6 +116,7 @@ let
           dbus
           expat
           libpulseaudio
+          libuuid
           libX11
           libxcb
           libXcomposite
@@ -183,8 +185,8 @@ in runCommand
         IntelliJ IDEA.
       '';
       homepage = if channel == "stable"
-        then https://developer.android.com/studio/index.html
-        else https://developer.android.com/studio/preview/index.html;
+        then "https://developer.android.com/studio/index.html"
+        else "https://developer.android.com/studio/preview/index.html";
       license = licenses.asl20;
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ primeos ];

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
-, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
+, gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
 , at-spi2-atk, libuuid, at-spi2-core }:
 
 let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.54.0.85";
+  version = "8.58.0.93";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -29,6 +29,7 @@ let
     gnome2.GConf
     gdk-pixbuf
     gtk3
+    libappindicator-gtk3
 
     gnome3.gnome-keyring
 
@@ -59,8 +60,11 @@ let
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "09k260g9qy4n8vy6wr2jb5mm27cvqyapmv8vj4ff2j72f3ad31vm";
+        urls = [
+          "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
+          "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
+        ];
+        sha256 = "1nqadil50z896jg0r202gw3xmm3diawn0pnh6n6nxn900f02avl3";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
@@ -107,7 +111,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Linux client for skype";
-    homepage = https://www.skype.com;
+    homepage = "https://www.skype.com";
     license = licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ panaeon jraygauthier ];
     platforms = [ "x86_64-linux" ];

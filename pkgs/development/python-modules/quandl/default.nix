@@ -10,12 +10,13 @@
 
 buildPythonPackage rec {
   pname = "quandl";
-  version = "3.4.6";
+  version = "3.5.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit version;
     pname = "Quandl";
-    sha256 = "15b58nj45bdax0aha6kwjz5pxj3bz8bs6ajwxqp9r89j13xxn94g";
+    sha256 = "0zpw0nwqr4g56l9z4my0fahfgpcmfx74acbmv6nfx1dmq5ggraf3";
   };
 
   doCheck = true;
@@ -40,16 +41,16 @@ buildPythonPackage rec {
     python-dateutil
     six
     more-itertools
-  ] ++ lib.optional (!isPy3k) [
+  ] ++ lib.optionals (!isPy3k) [
     pyOpenSSL
     ndg-httpsclient
     pyasn1
   ];
 
-  meta = {
-    homepage = "https://github.com/quandl/quandl-python";
+  meta = with lib; {
     description = "Quandl Python client library";
-    maintainers = [ lib.maintainers.ilya-kolpakov ];
-    license = lib.licenses.mit;
+    homepage = "https://github.com/quandl/quandl-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ilya-kolpakov ];
   };
 }

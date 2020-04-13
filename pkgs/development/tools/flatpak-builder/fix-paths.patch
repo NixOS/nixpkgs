@@ -1,6 +1,6 @@
 --- a/src/builder-context.c
 +++ b/src/builder-context.c
-@@ -763,7 +763,7 @@
+@@ -800,7 +800,7 @@ builder_context_enable_rofiles (BuilderContext *self,
    g_autoptr(GFile) rofiles_base = NULL;
    g_autoptr(GFile) rofiles_dir = NULL;
    g_autofree char *tmpdir_name = NULL;
@@ -11,7 +11,7 @@
                     (char *)flatpak_file_get_path_cached (self->app_dir),
 --- a/src/builder-git.c
 +++ b/src/builder-git.c
-@@ -44,7 +44,7 @@
+@@ -44,7 +44,7 @@ git (GFile   *dir,
    va_list ap;
  
    va_start (ap, error);
@@ -20,7 +20,7 @@
    va_end (ap);
  
    return res;
-@@ -58,7 +58,7 @@
+@@ -58,7 +58,7 @@ cp (GError **error,
    va_list ap;
  
    va_start (ap, error);
@@ -31,7 +31,7 @@
    return res;
 --- a/src/builder-source-archive.c
 +++ b/src/builder-source-archive.c
-@@ -430,7 +430,7 @@
+@@ -443,7 +443,7 @@ tar (GFile   *dir,
    va_list ap;
  
    va_start (ap, error);
@@ -40,7 +40,7 @@
    va_end (ap);
  
    return res;
-@@ -445,7 +445,7 @@
+@@ -458,7 +458,7 @@ unzip (GFile   *dir,
    va_list ap;
  
    va_start (ap, error);
@@ -49,7 +49,16 @@
    va_end (ap);
  
    return res;
-@@ -457,7 +457,7 @@
+@@ -470,7 +470,7 @@ un7z (GFile       *dir,
+       GError     **error)
+ {
+   gboolean res;
+-  const gchar *argv[] = { "7z",  "x", sevenz_path, NULL };
++  const gchar *argv[] = { "@sevenz@",  "x", sevenz_path, NULL };
+ 
+   res = flatpak_spawnv (dir, NULL, 0, error, argv);
+ 
+@@ -483,7 +483,7 @@ unrpm (GFile   *dir,
         GError **error)
  {
    gboolean res;
@@ -58,7 +67,7 @@
        "sh", /* shell's $0 */
        rpm_path, /* shell's $1 */
        NULL };
-@@ -604,7 +604,7 @@
+@@ -631,7 +631,7 @@ git (GFile   *dir,
    va_list ap;
  
    va_start (ap, error);
@@ -69,7 +78,7 @@
    return res;
 --- a/src/builder-source-bzr.c
 +++ b/src/builder-source-bzr.c
-@@ -124,7 +124,7 @@
+@@ -124,7 +124,7 @@ bzr (GFile   *dir,
    va_list ap;
  
    va_start (ap, error);
@@ -80,7 +89,7 @@
    return res;
 --- a/src/builder-source-patch.c
 +++ b/src/builder-source-patch.c
-@@ -215,15 +215,15 @@
+@@ -247,15 +247,15 @@ patch (GFile      *dir,
  
    args = g_ptr_array_new ();
    if (use_git) {
@@ -101,7 +110,7 @@
      g_ptr_array_add (args, (gchar *) extra_options[i]);
 --- a/src/builder-utils.c
 +++ b/src/builder-utils.c
-@@ -149,7 +149,7 @@
+@@ -149,7 +149,7 @@ strip (GError **error,
    va_list ap;
  
    va_start (ap, error);
@@ -110,7 +119,7 @@
    va_end (ap);
  
    return res;
-@@ -163,7 +163,7 @@
+@@ -163,7 +163,7 @@ eu_strip (GError **error,
    va_list ap;
  
    va_start (ap, error);
@@ -119,7 +128,7 @@
    va_end (ap);
  
    return res;
-@@ -177,7 +177,7 @@
+@@ -177,7 +177,7 @@ eu_elfcompress (GError **error,
    va_list ap;
  
    va_start (ap, error);

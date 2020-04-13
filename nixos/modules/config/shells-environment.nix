@@ -122,7 +122,7 @@ in
       description = ''
         Include ~/bin/ in $PATH.
       '';
-      default = true;
+      default = false;
       type = types.bool;
     };
 

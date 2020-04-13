@@ -1,24 +1,49 @@
-{ stdenv, autoreconfHook, pkgconfig, mediastreamer, openh264
-, fetchgit, cmake
+{ autoreconfHook
+, cmake
+, fetchFromGitLab
+, fetchpatch
+, mediastreamer
+, openh264
+, pkgconfig
+, stdenv
 }:
 
-stdenv.mkDerivation {
-  pname = "mediastreamer-openh264";
-  version = "0.0pre20160801";
+stdenv.mkDerivation rec {
+  pname = "msopenh264";
+  # Using master branch for linphone-desktop caused a chain reaction that many
+  # of its dependencies needed to use master branch too.
+  version = "unstable-2020-03-03";
 
-  src = fetchgit {
-    url = "git://git.linphone.org/msopenh264.git";
-    rev = "4cb4b134bf0f1538fd0c2c928eee2d5388115abc";
-    sha256 = "001km4xy1ifwbg1c19ncc75h867fzfcxy9pxvl4pxqb64169xc1k";
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
+    repo = pname;
+    rev = "2c3abf52824ad23a4caae7565ef158ef91767704";
+    sha256 = "140hs5lzpshzswvl39klcypankq3v2qck41696j22my7s4wsa0hr";
   };
 
   nativeBuildInputs = [ autoreconfHook cmake pkgconfig ];
   buildInputs = [ mediastreamer openh264 ];
 
+  # Do not build static libraries
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO"
+    "-DCMAKE_SKIP_INSTALL_RPATH=ON"
+  ];
+
+  # CMAKE_INSTALL_PREFIX has no effect so let's install manually. See:
+  # https://gitlab.linphone.org/BC/public/msopenh264/issues/1
+  installPhase = ''
+    mkdir -p $out/lib/mediastreamer/plugins
+    cp src/libmsopenh264.so $out/lib/mediastreamer/plugins/
+  '';
+
   meta = with stdenv.lib; {
     description = "H.264 encoder/decoder plugin for mediastreamer2";
-    homepage = http://www.linphone.org/technical-corner/mediastreamer2/overview;
+    homepage = "https://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

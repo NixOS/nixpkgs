@@ -48,7 +48,10 @@ in stdenv.mkDerivation rec {
     inherit desktopName;
     genericName = meta.description;
     categories = "Network;InstantMessaging;";
+    mimeType = "x-scheme-handler/discord";
   };
+
+  passthru.updateScript = ./update-discord.sh;
 
   meta = with stdenv.lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";

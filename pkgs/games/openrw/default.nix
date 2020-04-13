@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, sfml, libGLU_combined, bullet, glm, libmad, xlibsWrapper, openal
+{ stdenv, fetchgit, cmake, sfml, libGLU, libGL, bullet, glm, libmad, xlibsWrapper, openal
 , SDL2, boost, ffmpeg, Cocoa, OpenAL }:
 
 stdenv.mkDerivation {
@@ -15,12 +15,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    sfml libGLU_combined bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
+    sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with stdenv.lib; {
     description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";
-    homepage = https://github.com/rwengine/openrw;
+    homepage = "https://github.com/rwengine/openrw";
     license = licenses.gpl3;
     longDescription = ''
       OpenRW is an open source re-implementation of Rockstar Games' Grand Theft

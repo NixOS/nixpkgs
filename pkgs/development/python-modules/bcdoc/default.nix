@@ -15,7 +15,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/botocore/bcdoc;
+    homepage = "https://github.com/boto/bcdoc";
     license = licenses.asl20;
     description = "ReST document generation tools for botocore";
   };

@@ -1,21 +1,34 @@
---- a/mesonbuild/compilers/compilers.py
-+++ b/mesonbuild/compilers/compilers.py
-@@ -1202,8 +1202,10 @@
-             # In order to avoid relinking for RPATH removal, the binary needs to contain just
-             # enough space in the ELF header to hold the final installation RPATH.
-             paths = ':'.join(all_paths)
--            if len(paths) < len(install_rpath):
--                padding = 'X' * (len(install_rpath) - len(paths))
-+            store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), all_paths))
-+            extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
-+            if extra_space_needed > 0:
-+                padding = 'X' * extra_space_needed
-                 if not paths:
-                     paths = padding
-                 else:
+--- a/mesonbuild/linkers.py
++++ b/mesonbuild/linkers.py
+@@ -527,8 +527,10 @@ class GnuLikeDynamicLinkerMixin:
+         # In order to avoid relinking for RPATH removal, the binary needs to contain just
+         # enough space in the ELF header to hold the final installation RPATH.
+         paths = ':'.join(all_paths)
+-        if len(paths) < len(install_rpath):
+-            padding = 'X' * (len(install_rpath) - len(paths))
++        store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), all_paths))
++        extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
++        if extra_space_needed > 0:
++            padding = 'X' * extra_space_needed
+             if not paths:
+                 paths = padding
+             else:
+@@ -902,8 +904,10 @@ class SolarisDynamicLinker(PosixDynamicLinkerMixin, DynamicLinker):
+         # In order to avoid relinking for RPATH removal, the binary needs to contain just
+         # enough space in the ELF header to hold the final installation RPATH.
+         paths = ':'.join(all_paths)
+-        if len(paths) < len(install_rpath):
+-            padding = 'X' * (len(install_rpath) - len(paths))
++        store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), all_paths))
++        extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
++        if extra_space_needed > 0:
++            padding = 'X' * extra_space_needed
+             if not paths:
+                 paths = padding
+             else:
 --- a/mesonbuild/scripts/depfixer.py
 +++ b/mesonbuild/scripts/depfixer.py
-@@ -303,6 +303,14 @@
+@@ -303,6 +303,14 @@ class Elf(DataSizes):
              return
          self.bf.seek(rp_off)
          old_rpath = self.read_str()
@@ -30,7 +43,7 @@
          if len(old_rpath) < len(new_rpath):
              sys.exit("New rpath must not be longer than the old one.")
          # The linker does read-only string deduplication. If there is a
-@@ -316,6 +324,10 @@
+@@ -316,6 +324,10 @@ class Elf(DataSizes):
          if not new_rpath:
              self.remove_rpath_entry(entrynum)
          else:

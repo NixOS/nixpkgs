@@ -1,0 +1,79 @@
+diff -r ed17ce89119f src/nxt_capability.c
+--- a/src/nxt_capability.c      Fri Dec 06 17:02:23 2019 +0000
++++ b/src/nxt_capability.c      Mon Dec 09 23:23:00 2019 +0000
+@@ -93,6 +93,26 @@ nxt_capability_specific_set(nxt_task_t *
+     return NXT_OK;
+ }
+ 
++
++nxt_int_t
++nxt_capability_drop_all(nxt_task_t *task)
++{
++    struct __user_cap_header_struct hdr;
++    struct __user_cap_data_struct data[2];
++
++    hdr.version = nxt_capability_linux_get_version();
++    hdr.pid = nxt_pid;
++
++    nxt_memset(data, 0, sizeof(data));
++
++    if (nxt_slow_path(nxt_capset(&hdr, data) == -1)) {
++        nxt_alert(task, "failed to drop capabilities %E", nxt_errno);
++        return NXT_ERROR;
++    }
++
++    return NXT_OK;
++}
++
+ #else
+ 
+ static nxt_int_t
+diff -r ed17ce89119f src/nxt_capability.h
+--- a/src/nxt_capability.h      Fri Dec 06 17:02:23 2019 +0000
++++ b/src/nxt_capability.h      Mon Dec 09 23:23:00 2019 +0000
+@@ -14,4 +14,6 @@ typedef struct {
+ NXT_EXPORT nxt_int_t nxt_capability_set(nxt_task_t *task,
+     nxt_capabilities_t *cap);
+ 
++NXT_EXPORT nxt_int_t nxt_capability_drop_all(nxt_task_t *task);
++
+ #endif /* _NXT_CAPABILITY_INCLUDED_ */
+diff -r ed17ce89119f src/nxt_process.c
+--- a/src/nxt_process.c Fri Dec 06 17:02:23 2019 +0000
++++ b/src/nxt_process.c Mon Dec 09 23:23:00 2019 +0000
+@@ -264,7 +264,7 @@ cleanup:
+ static void
+ nxt_process_start(nxt_task_t *task, nxt_process_t *process)
+ {
+-    nxt_int_t                    ret, cap_setid;
++    nxt_int_t                    ret, cap_setid, drop_caps;
+     nxt_port_t                   *port, *main_port;
+     nxt_thread_t                 *thread;
+     nxt_runtime_t                *rt;
+@@ -285,9 +285,12 @@ nxt_process_start(nxt_task_t *task, nxt_
+ 
+     cap_setid = rt->capabilities.setid;
+ 
++    drop_caps = cap_setid;
++
+ #if (NXT_HAVE_CLONE_NEWUSER)
+-    if (!cap_setid && NXT_CLONE_USER(init->isolation.clone.flags)) {
++    if (NXT_CLONE_USER(init->isolation.clone.flags)) {
+         cap_setid = 1;
++        drop_caps = 0;
+     }
+ #endif
+ 
+@@ -301,6 +304,12 @@ nxt_process_start(nxt_task_t *task, nxt_
+         if (nxt_slow_path(ret != NXT_OK)) {
+             goto fail;
+         }
++
++#if (NXT_HAVE_LINUX_CAPABILITY)
++        if (drop_caps && nxt_capability_drop_all(task) != NXT_OK) {
++            goto fail;
++        }
++#endif
+     }
+ 
+     rt->type = init->type;

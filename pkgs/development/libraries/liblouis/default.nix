@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liblouis";
-  version = "3.11.0";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "1y0pypgxchxczdnjkblibbvvy4gdk2pf8dzpqmbf824c7zpy8z5r";
+    sha256 = "1srpafxdw4627lyv92cn8wd9zda3507qpp5s2z66bsln8jnb1mza";
   };
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open-source braille translator and back-translator";
-    homepage = http://liblouis.org/;
+    homepage = "http://liblouis.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = false;  # too many assumptions
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/hgsvn;
+    homepage = "https://pypi.python.org/pypi/hgsvn";
     description = "A set of scripts to work locally on Subversion checkouts using Mercurial";
     license = licenses.gpl2;
   };

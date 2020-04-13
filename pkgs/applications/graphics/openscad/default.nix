@@ -7,7 +7,7 @@
 , flex
 , eigen
 , boost
-, libGLU_combined
+, libGLU, libGL
 , glew
 , opencsg
 , cgal
@@ -44,7 +44,7 @@ mkDerivation rec {
     eigen boost glew opencsg cgal mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla
-  ] ++ stdenv.lib.optional stdenv.isLinux libGLU_combined
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ libGLU libGL ]
     ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
   ;
 
@@ -77,7 +77,7 @@ mkDerivation rec {
       machine parts but pretty sure is not what you are looking for when you are more
       interested in creating computer-animated movies.
     '';
-    homepage = http://openscad.org/;
+    homepage = "http://openscad.org/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers;

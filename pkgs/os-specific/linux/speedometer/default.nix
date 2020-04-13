@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Measure and display the rate of data across a network connection or data being stored in a file";
-    homepage = http://excess.org/speedometer/;
+    homepage = "http://excess.org/speedometer/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ Baughn ];

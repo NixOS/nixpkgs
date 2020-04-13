@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, xorg, freetype, fontconfig, libGLU_combined, glibc, makeWrapper }:
+{ fetchurl, stdenv, xorg, freetype, fontconfig, libGLU, libGL, glibc, makeWrapper }:
 
 let
   system = if stdenv.hostPlatform.system == "x86_64-linux" then "linux64" else "linux32";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       xorg.libXrender
       stdenv.cc.cc
       glibc
-      libGLU_combined
+      libGLU libGL
   ];
 
   installPhase = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = {
-    homepage = http://ocz.com/ssd-guru;
+    homepage = "http://ocz.com/ssd-guru";
     description = "SSD Management Tool for OCZ disks";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;

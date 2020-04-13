@@ -16,11 +16,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  NIX_CFLAGS_COMPILE = [ "-D_POSIX_C_SOURCE" ];
+  NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE";
 
   meta = {
     description = "A simple and lightweight volume icon that sits in your system tray";
-    homepage = https://github.com/Unia/gvolicon;
+    homepage = "https://github.com/Unia/gvolicon";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.bennofs ];

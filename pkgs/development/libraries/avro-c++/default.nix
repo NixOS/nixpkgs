@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A C++ library which implements parts of the Avro Specification";
-    homepage = https://avro.apache.org/;
+    homepage = "https://avro.apache.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ rasendubi ];
     platforms = stdenv.lib.platforms.all;

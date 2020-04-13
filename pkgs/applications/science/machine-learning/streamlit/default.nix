@@ -25,7 +25,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://streamlit.io/;
+    homepage = "https://streamlit.io/";
     description = "The fastest way to build custom ML tools";
     maintainers = with maintainers; [ yrashk ];
     license = licenses.asl20;

@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
     substituteInPlace libtool --replace stdc++ c++
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.isDarwin [
-    "-D_XOPEN_SOURCE" "-Wno-aligned-allocation-unavailable"
-  ];
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
+    "-D_XOPEN_SOURCE -Wno-aligned-allocation-unavailable";
 
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/gperftools/gperftools;
+    homepage = "https://github.com/gperftools/gperftools";
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
     platforms = with platforms; linux ++ darwin;
     license = licenses.bsd3;

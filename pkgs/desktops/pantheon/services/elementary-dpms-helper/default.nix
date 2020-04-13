@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -58,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Sets DPMS settings found in org.pantheon.dpms";
-    homepage = https://github.com/elementary/dpms-helper;
+    homepage = "https://github.com/elementary/dpms-helper";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ODBC driver manager for Unix";
-    homepage = http://www.unixodbc.org/;
+    homepage = "http://www.unixodbc.org/";
     license = licenses.lgpl2;
     platforms = platforms.unix;
   };

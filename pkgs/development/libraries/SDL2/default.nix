@@ -24,11 +24,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.10";
+  version = "2.0.12";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "0mqxp6w5jhbq6y1j690g9r3gpzwjxh4czaglw8x05l7hl49nqrdl";
+    sha256 = "0qy8wbqvfkb5ps8kxgaaf2zzpkjqbsw712hlp74znbn0jpv6i4il";
   };
 
   outputs = [ "out" "dev" ];
@@ -75,9 +75,21 @@ stdenv.mkDerivation rec {
     ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
     ++ optional stdenv.isDarwin "--disable-sdltest";
 
+  # We remove libtool .la files when static libs are requested,
+  # because they make the builds of downstream libs like `SDL_tff`
+  # fail with `cannot find -lXext, `-lXcursor` etc. linker errors
+  # because the `.la` files are not pruned if static libs exist
+  # (see https://github.com/NixOS/nixpkgs/commit/fd97db43bcb05e37f6bb77f363f1e1e239d9de53)
+  # and they also don't carry the necessary `-L` paths of their
+  # X11 dependencies.
+  # For static linking, it is better to rely on `pkg-config` `.pc`
+  # files.
   postInstall = ''
-    moveToOutput lib/libSDL2main.a "$dev"
-    rm $out/lib/*.a
+    if [ "$dontDisableStatic" -eq "1" ]; then
+      rm $out/lib/*.la
+    else
+      rm $out/lib/*.a
+    fi
     moveToOutput bin/sdl2-config "$dev"
   '';
 
@@ -110,7 +122,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";
-    homepage = http://www.libsdl.org/;
+    homepage = "http://www.libsdl.org/";
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];

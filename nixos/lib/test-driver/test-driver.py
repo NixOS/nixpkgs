@@ -1,14 +1,18 @@
 #! /somewhere/python3
 from contextlib import contextmanager, _GeneratorContextManager
+from queue import Queue, Empty
+from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
 from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
-import json
+import base64
+import codecs
 import os
+import pathlib
 import ptpython.repl
 import pty
-from queue import Queue, Empty
 import re
+import shlex
 import shutil
 import socket
 import subprocess
@@ -16,7 +20,6 @@ import sys
 import tempfile
 import time
 import unicodedata
-from typing import Tuple, TextIO, Any, Callable, Dict, Iterator, Optional, List
 
 CHAR_TO_KEY = {
     "A": "shift-a",
@@ -83,7 +86,7 @@ CHAR_TO_KEY = {
 
 # Forward references
 nr_tests: int
-nr_succeeded: int
+failed_tests: list
 log: "Logger"
 machines: "List[Machine]"
 
@@ -92,13 +95,19 @@ def eprint(*args: object, **kwargs: Any) -> None:
     print(*args, file=sys.stderr, **kwargs)
 
 
+def make_command(args: list) -> str:
+    return " ".join(map(shlex.quote, (map(str, args))))
+
+
 def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]:
     global log
     log.log("starting VDE switch for network {}".format(vlan_nr))
-    vde_socket = os.path.abspath("./vde{}.ctl".format(vlan_nr))
+    vde_socket = tempfile.mkdtemp(
+        prefix="nixos-test-vde-", suffix="-vde{}.ctl".format(vlan_nr)
+    )
     pty_master, pty_slave = pty.openpty()
     vde_process = subprocess.Popen(
-        ["vde_switch", "-s", vde_socket, "--dirmode", "0777"],
+        ["vde_switch", "-s", vde_socket, "--dirmode", "0700"],
         bufsize=1,
         stdin=pty_slave,
         stdout=subprocess.PIPE,
@@ -109,6 +118,7 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     fd.write("version\n")
     # TODO: perl version checks if this can be read from
     # an if not, dies. we could hang here forever. Fix it.
+    assert vde_process.stdout is not None
     vde_process.stdout.readline()
     if not os.path.exists(os.path.join(vde_socket, "ctl")):
         raise Exception("cannot start vde_switch")
@@ -133,7 +143,7 @@ def retry(fn: Callable) -> None:
 class Logger:
     def __init__(self) -> None:
         self.logfile = os.environ.get("LOGFILE", "/dev/null")
-        self.logfile_handle = open(self.logfile, "wb")
+        self.logfile_handle = codecs.open(self.logfile, "wb")
         self.xml = XMLGenerator(self.logfile_handle, encoding="utf-8")
         self.queue: "Queue[Dict[str, str]]" = Queue(1000)
 
@@ -216,7 +226,7 @@ class Machine:
             return path
 
         self.state_dir = create_dir("vm-state-{}".format(self.name))
-        self.shared_dir = create_dir("xchg-shared")
+        self.shared_dir = create_dir("shared-xchg")
 
         self.booted = False
         self.connected = False
@@ -290,10 +300,15 @@ class Machine:
 
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
+        answer = ""
         while True:
-            answer = self.monitor.recv(1024).decode()
+            undecoded_answer = self.monitor.recv(1024)
+            if not undecoded_answer:
+                break
+            answer += undecoded_answer.decode()
             if answer.endswith("(qemu) "):
-                return answer
+                break
+        return answer
 
     def send_monitor_command(self, command: str) -> str:
         message = ("{}\n".format(command)).encode()
@@ -302,8 +317,13 @@ class Machine:
         self.monitor.send(message)
         return self.wait_for_monitor_prompt()
 
-    def wait_for_unit(self, unit: str, user: Optional[str] = None) -> bool:
-        while True:
+    def wait_for_unit(self, unit: str, user: Optional[str] = None) -> None:
+        """Wait for a systemd unit to get into "active" state.
+        Throws exceptions on "failed" and "inactive" states as well as
+        after timing out.
+        """
+
+        def check_active(_: Any) -> bool:
             info = self.get_unit_info(unit, user)
             state = info["ActiveState"]
             if state == "failed":
@@ -319,8 +339,10 @@ class Machine:
                                 'unit "{}" is inactive and there ' "are no pending jobs"
                             ).format(unit)
                         )
-            if state == "active":
-                return True
+
+            return state == "active"
+
+        retry(check_active)
 
     def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
         status, lines = self.systemctl('--no-pager show "{}"'.format(unit), user)
@@ -365,7 +387,7 @@ class Machine:
             if state != require_state:
                 raise Exception(
                     "Expected unit ‘{}’ to to be in state ".format(unit)
-                    + "'active' but it is in state ‘{}’".format(state)
+                    + "'{}' but it is in state ‘{}’".format(require_state, state)
                 )
 
     def execute(self, command: str) -> Tuple[int, str]:
@@ -378,7 +400,7 @@ class Machine:
         status_code_pattern = re.compile(r"(.*)\|\!EOF\s+(\d+)")
 
         while True:
-            chunk = self.shell.recv(4096).decode()
+            chunk = self.shell.recv(4096).decode(errors="ignore")
             match = status_code_pattern.match(chunk)
             if match:
                 output += match[1]
@@ -411,18 +433,34 @@ class Machine:
                     )
 
     def wait_until_succeeds(self, command: str) -> str:
+        """Wait until a command returns success and return its output.
+        Throws an exception on timeout.
+        """
+        output = ""
+
+        def check_success(_: Any) -> bool:
+            nonlocal output
+            status, output = self.execute(command)
+            return status == 0
+
         with self.nested("waiting for success: {}".format(command)):
-            while True:
-                status, output = self.execute(command)
-                if status == 0:
-                    return output
+            retry(check_success)
+            return output
 
     def wait_until_fails(self, command: str) -> str:
+        """Wait until a command returns failure.
+        Throws an exception on timeout.
+        """
+        output = ""
+
+        def check_failure(_: Any) -> bool:
+            nonlocal output
+            status, output = self.execute(command)
+            return status != 0
+
         with self.nested("waiting for failure: {}".format(command)):
-            while True:
-                status, output = self.execute(command)
-                if status != 0:
-                    return output
+            retry(check_failure)
+            return output
 
     def wait_for_shutdown(self) -> None:
         if not self.booted:
@@ -443,25 +481,38 @@ class Machine:
         )
         return output
 
-    def wait_until_tty_matches(self, tty: str, regexp: str) -> bool:
+    def wait_until_tty_matches(self, tty: str, regexp: str) -> None:
+        """Wait until the visible output on the chosen TTY matches regular
+        expression. Throws an exception on timeout.
+        """
         matcher = re.compile(regexp)
+
+        def tty_matches(last: bool) -> bool:
+            text = self.get_tty_text(tty)
+            if last:
+                self.log(
+                    f"Last chance to match /{regexp}/ on TTY{tty}, "
+                    f"which currently contains: {text}"
+                )
+            return len(matcher.findall(text)) > 0
+
         with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
-            while True:
-                text = self.get_tty_text(tty)
-                if len(matcher.findall(text)) > 0:
-                    return True
+            retry(tty_matches)
 
     def send_chars(self, chars: List[str]) -> None:
         with self.nested("sending keys ‘{}‘".format(chars)):
             for char in chars:
                 self.send_key(char)
 
-    def wait_for_file(self, filename: str) -> bool:
+    def wait_for_file(self, filename: str) -> None:
+        """Waits until the file exists in machine's file system."""
+
+        def check_file(_: Any) -> bool:
+            status, _ = self.execute("test -e {}".format(filename))
+            return status == 0
+
         with self.nested("waiting for file ‘{}‘".format(filename)):
-            while True:
-                status, _ = self.execute("test -e {}".format(filename))
-                if status == 0:
-                    return True
+            retry(check_file)
 
     def wait_for_open_port(self, port: int) -> None:
         def port_is_open(_: Any) -> bool:
@@ -484,8 +535,8 @@ class Machine:
     def stop_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
         return self.systemctl("stop {}".format(jobname), user)
 
-    def wait_for_job(self, jobname: str) -> bool:
-        return self.wait_for_unit(jobname)
+    def wait_for_job(self, jobname: str) -> None:
+        self.wait_for_unit(jobname)
 
     def connect(self) -> None:
         if self.connected:
@@ -519,6 +570,68 @@ class Machine:
             os.unlink(tmp)
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
+
+    def copy_from_host_via_shell(self, source: str, target: str) -> None:
+        """Copy a file from the host into the guest by piping it over the
+        shell into the destination file. Works without host-guest shared folder.
+        Prefer copy_from_host for whenever possible.
+        """
+        with open(source, "rb") as fh:
+            content_b64 = base64.b64encode(fh.read()).decode()
+            self.succeed(
+                f"mkdir -p $(dirname {target})",
+                f"echo -n {content_b64} | base64 -d > {target}",
+            )
+
+    def copy_from_host(self, source: str, target: str) -> None:
+        """Copy a file from the host into the guest via the `shared_dir` shared
+        among all the VMs (using a temporary directory).
+        """
+        host_src = pathlib.Path(source)
+        vm_target = pathlib.Path(target)
+        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
+            shared_temp = pathlib.Path(shared_td)
+            host_intermediate = shared_temp / host_src.name
+            vm_shared_temp = pathlib.Path("/tmp/shared") / shared_temp.name
+            vm_intermediate = vm_shared_temp / host_src.name
+
+            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
+            if host_src.is_dir():
+                shutil.copytree(host_src, host_intermediate)
+            else:
+                shutil.copy(host_src, host_intermediate)
+            self.succeed("sync")
+            self.succeed(make_command(["mkdir", "-p", vm_target.parent]))
+            self.succeed(make_command(["cp", "-r", vm_intermediate, vm_target]))
+        # Make sure the cleanup is synced into VM
+        self.succeed("sync")
+
+    def copy_from_vm(self, source: str, target_dir: str = "") -> None:
+        """Copy a file from the VM (specified by an in-VM source path) to a path
+        relative to `$out`. The file is copied via the `shared_dir` shared among
+        all the VMs (using a temporary directory).
+        """
+        # Compute the source, target, and intermediate shared file names
+        out_dir = pathlib.Path(os.environ.get("out", os.getcwd()))
+        vm_src = pathlib.Path(source)
+        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
+            shared_temp = pathlib.Path(shared_td)
+            vm_shared_temp = pathlib.Path("/tmp/shared") / shared_temp.name
+            vm_intermediate = vm_shared_temp / vm_src.name
+            intermediate = shared_temp / vm_src.name
+            # Copy the file to the shared directory inside VM
+            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
+            self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
+            self.succeed("sync")
+            abs_target = out_dir / target_dir / vm_src.name
+            abs_target.parent.mkdir(exist_ok=True, parents=True)
+            # Copy the file from the shared directory outside VM
+            if intermediate.is_dir():
+                shutil.copytree(intermediate, abs_target)
+            else:
+                shutil.copy(intermediate, abs_target)
+        # Make sure the cleanup is synced into VM
+        self.succeed("sync")
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>
@@ -606,12 +719,15 @@ class Machine:
             + os.environ.get("QEMU_OPTS", "")
         )
 
-        environment = {
-            "QEMU_OPTS": qemu_options,
-            "SHARED_DIR": self.shared_dir,
-            "USE_TMPDIR": "1",
-        }
-        environment.update(dict(os.environ))
+        environment = dict(os.environ)
+        environment.update(
+            {
+                "TMPDIR": self.state_dir,
+                "SHARED_DIR": self.shared_dir,
+                "USE_TMPDIR": "1",
+                "QEMU_OPTS": qemu_options,
+            }
+        )
 
         self.process = subprocess.Popen(
             self.script,
@@ -627,8 +743,10 @@ class Machine:
         self.shell, _ = self.shell_socket.accept()
 
         def process_serial_output() -> None:
+            assert self.process.stdout is not None
             for _line in self.process.stdout:
-                line = _line.decode("unicode_escape").replace("\r", "").rstrip()
+                # Ignore undecodable bytes that may occur in boot menus
+                line = _line.decode(errors="ignore").replace("\r", "").rstrip()
                 eprint("{} # {}".format(self.name, line))
                 self.logger.enqueue({"msg": line, "machine": self.name})
 
@@ -660,18 +778,20 @@ class Machine:
         """Wait until it is possible to connect to the X server.  Note that
         testing the existence of /tmp/.X11-unix/X0 is insufficient.
         """
+
+        def check_x(_: Any) -> bool:
+            cmd = (
+                "journalctl -b SYSLOG_IDENTIFIER=systemd | "
+                + 'grep "Reached target Current graphical"'
+            )
+            status, _ = self.execute(cmd)
+            if status != 0:
+                return False
+            status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
+            return status == 0
+
         with self.nested("waiting for the X11 server"):
-            while True:
-                cmd = (
-                    "journalctl -b SYSLOG_IDENTIFIER=systemd | "
-                    + 'grep "Reached target Current graphical"'
-                )
-                status, _ = self.execute(cmd)
-                if status != 0:
-                    continue
-                status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
-                if status == 0:
-                    return
+            retry(check_x)
 
     def get_window_names(self) -> List[str]:
         return self.succeed(
@@ -749,7 +869,7 @@ def run_tests() -> None:
     if tests is not None:
         with log.nested("running the VM test script"):
             try:
-                exec(tests)
+                exec(tests, globals())
             except Exception as e:
                 eprint("error: {}".format(str(e)))
                 sys.exit(1)
@@ -763,21 +883,31 @@ def run_tests() -> None:
             machine.execute("sync")
 
     if nr_tests != 0:
-        log.log("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
+        nr_succeeded = nr_tests - len(failed_tests)
+        eprint("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
+        if len(failed_tests) > 0:
+            eprint(
+                "The following tests have failed:\n - {}".format(
+                    "\n - ".join(failed_tests)
+                )
+            )
+            sys.exit(1)
 
 
 @contextmanager
 def subtest(name: str) -> Iterator[None]:
     global nr_tests
-    global nr_succeeded
+    global failed_tests
 
     with log.nested(name):
         nr_tests += 1
         try:
             yield
-            nr_succeeded += 1
             return True
         except Exception as e:
+            failed_tests.append(
+                'Test "{}" failed with error: "{}"'.format(name, str(e))
+            )
             log.log("error: {}".format(str(e)))
 
     return False
@@ -786,7 +916,7 @@ def subtest(name: str) -> Iterator[None]:
 if __name__ == "__main__":
     log = Logger()
 
-    vlan_nrs = list(dict.fromkeys(os.environ["VLANS"].split()))
+    vlan_nrs = list(dict.fromkeys(os.environ.get("VLANS", "").split()))
     vde_sockets = [create_vlan(v) for v in vlan_nrs]
     for nr, vde_socket, _, _ in vde_sockets:
         os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket
@@ -799,7 +929,7 @@ if __name__ == "__main__":
     exec("\n".join(machine_eval))
 
     nr_tests = 0
-    nr_succeeded = 0
+    failed_tests = []
 
     @atexit.register
     def clean_up() -> None:
@@ -811,7 +941,7 @@ if __name__ == "__main__":
                 machine.process.kill()
 
             for _, _, process, _ in vde_sockets:
-                process.kill()
+                process.terminate()
         log.close()
 
     tic = time.time()

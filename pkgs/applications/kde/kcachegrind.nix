@@ -1,7 +1,8 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  karchive, ki18n, kio, perl, python, php, qttools,
+  karchive, ki18n, kio, perl, python, php, qttools
+  , kdbusaddons
 }:
 
 mkDerivation {
@@ -11,5 +12,5 @@ mkDerivation {
     maintainers = with lib.maintainers; [ orivej ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ karchive ki18n kio perl python php qttools ];
+  buildInputs = [ karchive ki18n kio perl python php qttools kdbusaddons ];
 }

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "1df61vw6v5bg2mys045682ggv058yqkqb67w7r2gz85crs04d5fw";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ result ];
 
   buildPhase = "${run} build";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit run; };
 
   meta = {
-    homepage = https://erratique.ch/software/topkg;
+    homepage = "https://erratique.ch/software/topkg";
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     description = "A packager for distributing OCaml software";

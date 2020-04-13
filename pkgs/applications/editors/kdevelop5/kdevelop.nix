@@ -10,11 +10,11 @@
 
 mkDerivation rec {
   pname = "kdevelop";
-  version = "5.4.3";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "0h07gdmg24d517im40b9kl1kzkkzwc9ig4crbl3y9iy0mbpm0hv8";
+    sha256 = "0438721v24pim5q0q54ivsws9a679fm7ymrm1nn9g1fv06qsm4d8";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ mkDerivation rec {
   # https://cgit.kde.org/kdevelop.git/commit/?id=716372ae2e8dff9c51e94d33443536786e4bd85b
   # required as nixos seems to be unable to find CLANG_BUILTIN_DIR
   cmakeFlags = [
-    "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${(builtins.parseDrvName llvmPackages.clang.name).version}/include"
+    "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${lib.getVersion llvmPackages.clang}/include"
   ];
 
   dontWrapQtApps = true;

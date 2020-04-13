@@ -3,7 +3,7 @@
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) any attrValues concatMapStringsSep flatten literalExample;
-  inherit (lib) mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+  inherit (lib) mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
 
   eachSite = config.services.wordpress;
   user = "wordpress";
@@ -127,7 +127,7 @@ let
             <note><para>These themes need to be packaged before use, see example.</para></note>
           '';
           example = ''
-            # For shits and giggles, let's package the responsive theme
+            # Let's package the responsive theme
             responsiveTheme = pkgs.stdenv.mkDerivation {
               name = "responsive-theme";
               # Download the theme from the wordpress site
@@ -209,18 +209,12 @@ let
         };
 
         virtualHost = mkOption {
-          type = types.submodule ({
-            options = import ../web-servers/apache-httpd/per-server-options.nix {
-              inherit lib;
-              forMainServer = false;
-            };
-          });
+          type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
           example = literalExample ''
             {
-              enableSSL = true;
               adminAddr = "webmaster@example.org";
-              sslServerCert = "/var/lib/acme/wordpress.example.org/full.pem";
-              sslServerKey = "/var/lib/acme/wordpress.example.org/key.pem";
+              forceSSL = true;
+              enableACME = true;
             }
           '';
           description = ''
@@ -304,41 +298,37 @@ in
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = mapAttrsToList (hostName: cfg:
-        (mkMerge [
-          cfg.virtualHost {
-            documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
-            extraConfig = ''
-              <Directory "${pkg hostName cfg}/share/wordpress">
-                <FilesMatch "\.php$">
-                  <If "-f %{REQUEST_FILENAME}">
-                    SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
-                  </If>
-                </FilesMatch>
+      virtualHosts = mapAttrs (hostName: cfg: mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
+        extraConfig = ''
+          <Directory "${pkg hostName cfg}/share/wordpress">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
 
-                # standard wordpress .htaccess contents
-                <IfModule mod_rewrite.c>
-                  RewriteEngine On
-                  RewriteBase /
-                  RewriteRule ^index\.php$ - [L]
-                  RewriteCond %{REQUEST_FILENAME} !-f
-                  RewriteCond %{REQUEST_FILENAME} !-d
-                  RewriteRule . /index.php [L]
-                </IfModule>
+            # standard wordpress .htaccess contents
+            <IfModule mod_rewrite.c>
+              RewriteEngine On
+              RewriteBase /
+              RewriteRule ^index\.php$ - [L]
+              RewriteCond %{REQUEST_FILENAME} !-f
+              RewriteCond %{REQUEST_FILENAME} !-d
+              RewriteRule . /index.php [L]
+            </IfModule>
 
-                DirectoryIndex index.php
-                Require all granted
-                Options +FollowSymLinks
-              </Directory>
+            DirectoryIndex index.php
+            Require all granted
+            Options +FollowSymLinks
+          </Directory>
 
-              # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
-              <Files wp-config.php>
-                Require all denied
-              </Files>
-            '';
-          }
-        ])
-      ) eachSite;
+          # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
+          <Files wp-config.php>
+            Require all denied
+          </Files>
+        '';
+      } ]) eachSite;
     };
 
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [

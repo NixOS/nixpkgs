@@ -40,11 +40,11 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugins for DDE";
-    homepage = https://github.com/linuxdeepin/qt5integration;
+    homepage = "https://github.com/linuxdeepin/qt5integration";
     license = with licenses; [ gpl3 lgpl2Plus bsd2 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
