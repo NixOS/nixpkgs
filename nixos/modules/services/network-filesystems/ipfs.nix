@@ -1,7 +1,12 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  inherit (pkgs) ipfs runCommand makeWrapper;
+  inherit (pkgs)
+    makeWrapper
+    runCommand
+    ipfs
+    utillinux
+  ;
 
   cfg = config.services.ipfs;
 
@@ -22,14 +27,14 @@ let
   wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; preferLocalBuild = true; } ''
     mkdir -p "$out/bin"
     makeWrapper "${ipfs}/bin/ipfs" "$out/bin/ipfs" \
-      --set IPFS_PATH ${cfg.dataDir} \
+      --set IPFS_PATH "${cfg.dataDir}" \
       --prefix PATH : /run/wrappers/bin
   '';
 
 
   commonEnv = {
     environment.IPFS_PATH = cfg.dataDir;
-    path = [ wrapped ];
+    path = [ wrapped utillinux ];
     serviceConfig.User = cfg.user;
     serviceConfig.Group = cfg.group;
   };
@@ -37,18 +42,28 @@ let
   baseService = recursiveUpdate commonEnv {
     wants = [ "ipfs-init.service" ];
     # NB: migration must be performed prior to pre-start, else we get the failure message!
-    preStart = optionalString cfg.autoMount ''
+    preStart = ''
+      install -m 0755 -o "${cfg.user}" -g "${cfg.group}" -d "${cfg.dataDir}"
+      ipfs repo fsck # last run of daemon may have left behind /api and /repo.lock, so clear them
+    '' + optionalString cfg.autoMount ''
+      # XXX Sometimes, the daemon stops or crashes without unmounting.
+      umount -l "${cfg.ipfsMountDir}" || true
+      umount -l "${cfg.ipnsMountDir}" || true
+      install -m 0755 -o "${cfg.user}" -g "${cfg.group}" -d "${cfg.ipfsMountDir}"
+      install -m 0755 -o "${cfg.user}" -g "${cfg.group}" -d "${cfg.ipnsMountDir}"
       ipfs --local config Mounts.FuseAllowOther --json true
       ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
       ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
     '' + concatStringsSep "\n" (collect
           isString
-          (mapAttrsRecursive
-            (path: value:
+          (mapAttrsRecursiveCond (value: ! value ? _type)
+            (path: value: let
+              value' = if value ? _type then value.content else value;
+            in
             # Using heredoc below so that the value is never improperly quoted
             ''
-              read value <<EOF
-              ${builtins.toJSON value}
+              read value <<'EOF'
+              ${builtins.toJSON value'}
               EOF
               ipfs --local config --json "${concatStringsSep "." path}" "$value"
             '')
@@ -192,6 +207,20 @@ in {
         default = true;
       };
 
+      initialConfig = mkOption {
+        type = types.nullOr types.attrs;
+        description = ''
+          Content of the initial configuration file, as an attrset that will
+          be converted into JSON.
+
+          This can be useful for tweaking the datastore mount points,
+          since they cannot be relocated without reinitializing the repo.
+          The config provided must have all the essential options; for instance, the
+          initialization will not generate a peer id keypair when an initial config is given.
+        '';
+        default = null;
+      };
+
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
@@ -205,6 +234,7 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    systemd.globalEnvironment.IPFS_PATH = cfg.dataDir;
     environment.systemPackages = [ wrapped ];
     programs.fuse = mkIf cfg.autoMount {
       userAllowOther = true;
@@ -240,9 +270,14 @@ in {
       before = [ "ipfs.service" "ipfs-offline.service" "ipfs-norouting.service" ];
 
       script = ''
-        if [[ ! -f ${cfg.dataDir}/config ]]; then
-          ipfs init ${optionalString cfg.emptyRepo "-e"} \
-            ${optionalString (! cfg.localDiscovery) "--profile=server"}
+        if [[ ! -f "${cfg.dataDir}/config" ]]; then
+          ipfs init ${optionalString cfg.emptyRepo "-e"} ${
+              optionalString (cfg.initialConfig != null)
+              "${pkgs.writeText "ipfs.config" (builtins.toJSON cfg.initialConfig)}"
+            } ${
+              optionalString (!cfg.localDiscovery)
+              "--profile=server"
+            }
         else
           ${if cfg.localDiscovery
             then "ipfs config profile apply local-discovery"
