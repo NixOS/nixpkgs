@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
+  preferLocalBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin
