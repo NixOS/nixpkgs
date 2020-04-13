@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib }:
+{ stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib, substituteAll }:
 
 llvmPackages.stdenv.mkDerivation rec {
   version = "0.6.0";
@@ -20,12 +20,12 @@ llvmPackages.stdenv.mkDerivation rec {
     zlib
   ];
 
-  patches = [ ./llvm10_polly.patch ];
-
-  postPatch = ''
-    export llvm_extras=-Wl,${llvmPackages.llvm}/lib/LLVMPolly.so
-    substituteAllInPlace CMakeLists.txt
-  '';
+  patches = [
+    (substituteAll {
+        src = ./llvm10_polly.patch;
+        llvm_extras = "-Wl,${llvmPackages.llvm}/lib/LLVMPolly.so";
+    })
+  ];
 
   preBuild = ''
     export HOME=$TMPDIR;
