@@ -719,6 +719,8 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
+    ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
+
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
