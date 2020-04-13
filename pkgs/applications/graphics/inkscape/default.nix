@@ -1,21 +1,53 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perlPackages, libXft
-, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
-, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
-, gsl, gtkspell2, cairo, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, potrace, cmake
-, librsvg, wrapGAppsHook
+{ stdenv
+, boehmgc
+, boost
+, cairo
+, cmake
+, fetchpatch
+, fetchurl
+, gettext
+, glib
+, glibmm
+, gsl
+, gtkmm2
+, gtkspell2
+, imagemagick
+, lcms
+, libcdr
+, libexif
+, libpng
+, librevenge
+, librsvg
+, libsigcxx
+, libvisio
+, libwpg
+, libXft
+, libxml2
+, libxslt
+, makeWrapper
+, perlPackages
+, pkg-config
+, poppler
+, popt
+, potrace
+, python2
+, wrapGAppsHook
+, zlib
 }:
-
 let
-  python2Env = python2.withPackages(ps: with ps;
-    [ numpy lxml scour ]);
+  python2Env = python2.withPackages
+    (ps: with ps; [
+      numpy
+      lxml
+      scour
+    ]);
 in
-
 stdenv.mkDerivation rec {
-  name = "inkscape-0.92.4";
+  pname = "inkscape";
+  version = "0.92.4";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${name}.tar.bz2";
+    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.bz2";
     sha256 = "0pjinhjibfsz1aywdpgpj3k23xrsszpj4a1ya5562dkv2yl2vv2p";
   };
 
@@ -53,19 +85,49 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env wrapGAppsHook ]
-    ++ (with perlPackages; [ perl XMLParser ]);
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    makeWrapper
+    python2Env
+    wrapGAppsHook
+  ] ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
+
   buildInputs = [
-    libXft libpng zlib popt boehmgc
-    libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
-    gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif potrace
-
+    boehmgc
+    boost
+    gettext
+    glib
+    glibmm
+    gsl
+    gtkmm2
+    imagemagick
+    lcms
+    libcdr
+    libexif
+    libpng
+    librevenge
     librsvg # for loading icons
-
-    python2Env perlPackages.perl
-  ] ++ stdenv.lib.optional (!stdenv.isDarwin) gtkspell2
-    ++ stdenv.lib.optional stdenv.isDarwin cairo;
+    libsigcxx
+    libvisio
+    libwpg
+    libXft
+    libxml2
+    libxslt
+    perlPackages.perl
+    poppler
+    popt
+    potrace
+    python2Env
+    zlib
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    gtkspell2
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    cairo
+  ];
 
   enableParallelBuilding = true;
 
