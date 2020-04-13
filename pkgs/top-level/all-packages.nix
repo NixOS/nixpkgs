@@ -15012,7 +15012,7 @@ in
   zmqpp = callPackage ../development/libraries/zmqpp { };
 
   zig = callPackage ../development/compilers/zig {
-    llvmPackages = llvmPackages_9;
+    llvmPackages = llvmPackages_10;
   };
 
   zimlib = callPackage ../development/libraries/zimlib { };
