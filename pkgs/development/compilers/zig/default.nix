@@ -41,7 +41,7 @@ llvmPackages.stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description =
-      "Programming languaged designed for robustness, optimality, and clarity";
+      "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     homepage = "https://ziglang.org/";
     license = licenses.mit;
     platforms = platforms.unix;
