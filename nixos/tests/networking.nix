@@ -471,7 +471,7 @@ let
 
         with subtest("Wait for networking to come up"):
             machine.start()
-            machine.wait_for_unit("network-online.target")
+            machine.wait_for_unit("network.target")
 
         with subtest("Test interfaces set up"):
             list = machine.succeed("ip tuntap list | sort").strip()
@@ -486,7 +486,8 @@ let
             """.format(
                 list, targetList
             )
-
+      '' # network-addresses-* only exist in scripted networking
+      + optionalString (!networkd) ''
         with subtest("Test interfaces clean up"):
             machine.succeed("systemctl stop network-addresses-tap0")
             machine.sleep(10)
