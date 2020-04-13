@@ -131,6 +131,7 @@ let
   symlinkJoin {
     name = "runtime-env";
     paths = pkgList;
+    passthru.unwrapped = pkgList;
 
     buildInputs = [ makeWrapper ];
     postBuild = ''

@@ -21194,9 +21194,9 @@ in
 
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
-  picard = callPackage ../applications/audio/picard { };
+  picard-oldy-wrapped = callPackage ../applications/audio/picard { };
 
-  picard-newly-unwrapped = (picard.override {
+  picard-newly-unwrapped = (picard-oldy-wrapped.override {
     qt5 = qt5 // {
       wrapQtAppsHook = null;
     };
