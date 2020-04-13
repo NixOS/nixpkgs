@@ -200,6 +200,7 @@ let
           useDHCP = false;
           interfaces.eth1 = {
             ipv4.addresses = mkOverride 0 [ ];
+            mtu = 1343;
             useDHCP = true;
           };
           interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
@@ -215,6 +216,9 @@ let
 
           with subtest("Wait until we have an ip address on each interface"):
               client.wait_until_succeeds("ip addr show dev eth1 | grep -q '192.168.1'")
+
+          with subtest("ensure MTU is set"):
+              assert "mtu 1343" in client.succeed("ip link show dev eth1")
 
           with subtest("Test vlan 1"):
               client.wait_until_succeeds("ping -c 1 192.168.1.1")
@@ -455,11 +459,14 @@ let
           ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
           virtual = true;
+          mtu = 1342;
+          macAddress = "02:de:ad:be:ef:01";
         };
         networking.interfaces.tun0 = {
           ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
           virtual = true;
+          mtu = 1343;
         };
       };
 
@@ -486,6 +493,10 @@ let
             """.format(
                 list, targetList
             )
+        with subtest("Test MTU and MAC Address are configured"):
+            assert "mtu 1342" in machine.succeed("ip link show dev tap0")
+            assert "mtu 1343" in machine.succeed("ip link show dev tun0")
+            assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
       '' # network-addresses-* only exist in scripted networking
       + optionalString (!networkd) ''
         with subtest("Test interfaces clean up"):
