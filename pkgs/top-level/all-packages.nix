@@ -7103,6 +7103,8 @@ in
 
   txtw = callPackage ../tools/misc/txtw { };
 
+  tydra = callPackage ../tools/misc/tydra { };
+
   u9fs = callPackage ../servers/u9fs { };
 
   ua = callPackage ../tools/networking/ua { };
