@@ -15,6 +15,7 @@
 , iso8601
 , pytz
 , hypothesis
+, ipaddress
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     six
+    ipaddress
   ] ++ stdenv.lib.optional (!isPyPy) cffi;
 
   checkInputs = [
