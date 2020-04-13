@@ -43,12 +43,6 @@ stdenv.mkDerivation rec {
   # will leave us under ARGMAX.
   strictDeps = true;
 
-  unpackPhase = ''
-    cp $src ${name}.tar.bz2
-    tar xvjf ${name}.tar.bz2 > /dev/null
-    cd ${name}
-  '';
-
   postPatch = ''
     patchShebangs share/extensions
     patchShebangs fix-roff-punct
