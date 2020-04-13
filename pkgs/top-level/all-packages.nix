@@ -18138,7 +18138,9 @@ in
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
-  coreclr = callPackage ../development/compilers/coreclr { };
+  coreclr = callPackage ../development/compilers/coreclr {
+    llvmPackages = llvmPackages_7;
+  };
 
   corefonts = callPackage ../data/fonts/corefonts { };
 
