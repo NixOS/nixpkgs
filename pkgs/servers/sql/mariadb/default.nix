@@ -104,7 +104,7 @@ common = rec { # attributes common to both builds
   meta = {
 
     description = "An enhanced, drop-in replacement for MySQL";
-    homepage    = https://mariadb.org/;
+    homepage    = "https://mariadb.org/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.all;
@@ -167,21 +167,20 @@ server = stdenv.mkDerivation (common // {
     "-DWITH_INNODB_DISALLOW_WRITES=ON"
     "-DWITHOUT_EXAMPLE=1"
     "-DWITHOUT_FEDERATED=1"
-  ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) [
+  ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32)
     "-DWITH_NUMA=ON"
-  ] ++ optional (!withStorageMroonga) [
+    ++ optional (!withStorageMroonga)
     "-DWITHOUT_MROONGA=1"
-  ] ++ optional (!withStorageRocks) [
+    ++ optional (!withStorageRocks)
     "-DWITHOUT_ROCKSDB=1"
-  ] ++ optional (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
+    ++ optional (!stdenv.hostPlatform.isDarwin && withStorageRocks)
     "-DWITH_ROCKSDB_JEMALLOC=ON"
-  ] ++ optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMusl || !withStorageToku) [
+    ++ optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMusl || !withStorageToku)
     "-DWITHOUT_TOKUDB=1"
-  ] ++ optional (!stdenv.hostPlatform.isDarwin && withStorageToku) [
+    ++ optional (!stdenv.hostPlatform.isDarwin && withStorageToku)
     "-DWITH_JEMALLOC=static"
-  ] ++ optional stdenv.hostPlatform.isDarwin [
-    "-DWITHOUT_OQGRAPH=1"
-  ];
+    ++ optional stdenv.hostPlatform.isDarwin
+    "-DWITHOUT_OQGRAPH=1";
 
   preConfigure = optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchShebangs scripts/mytop.sh
