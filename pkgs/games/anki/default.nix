@@ -47,7 +47,6 @@ let
         rev = rev-manual;
         sha256 = sha256-manual;
       };
-      phases = [ "unpackPhase" "patchPhase" "buildPhase" ];
       nativeBuildInputs = [ asciidoc ];
       patchPhase = ''
         # rsync isnt needed
@@ -67,6 +66,7 @@ let
             -i *.txt
         mkdir -p $out/share/doc/anki/html
       '';
+      dontInstall = true; # happens in buildPhase
     };
 
 in
@@ -91,13 +91,13 @@ buildPythonApplication rec {
       markdown jsonschema setuptools
     ]
       ++ lib.optional plotsSupport matplotlib
-      ++ lib.optional stdenv.isDarwin [ CoreAudio ]
+      ++ lib.optional stdenv.isDarwin CoreAudio
       ;
 
     checkInputs = [ pytest glibcLocales nose ];
 
     nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
-    buildInputs = [ lame mplayer libpulseaudio  ];
+    buildInputs = [ lame mplayer libpulseaudio ];
 
     patches = [
       # Disable updated version check.
