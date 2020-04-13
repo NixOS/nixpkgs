@@ -1192,11 +1192,6 @@ let
       then callPackage ../development/ocaml-modules/janestreet/async.nix {}
       else async_p4;
 
-    async_ssl =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_ssl
-      else callPackage ../development/ocaml-modules/janestreet/async_ssl.nix { };
-
     # Apps / from all-packages
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
