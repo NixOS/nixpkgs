@@ -44,7 +44,11 @@ buildPythonPackage rec {
   # Disable doctest plugin because times out
   checkPhase = ''
     substituteInPlace pytest.ini --replace "--doctest-modules" ""
-    pytest --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes ${stdenv.lib.optionalString stdenv.isDarwin "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
+    pytest \
+      --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes \
+      --deselect=cherrypy/test/test_tools.py::ToolTests::testCombinedTools \
+      ${stdenv.lib.optionalString stdenv.isDarwin
+        "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
   '';
 
   meta = with stdenv.lib; {
