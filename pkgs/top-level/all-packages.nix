@@ -4203,8 +4203,8 @@ in
   idevicerestore = callPackage ../tools/misc/idevicerestore { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
-            stdenv = llvmPackages.libcxxStdenv;
-            libcxx = llvmPackages.libcxx;
+            stdenv = llvmPackages_7.libcxxStdenv;
+            libcxx = llvmPackages_7.libcxx;
             boost = boost160.override { inherit stdenv; };
             avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
           })
@@ -8738,7 +8738,7 @@ in
   llvm_6  = llvmPackages_6.llvm;
   llvm_5  = llvmPackages_5.llvm;
 
-  llvmPackages = recurseIntoAttrs llvmPackages_7;
+  llvmPackages = recurseIntoAttrs llvmPackages_9;
 
   llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
     inherit (stdenvAdapters) overrideCC;
@@ -17603,7 +17603,9 @@ in
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
-  coreclr = callPackage ../development/compilers/coreclr { };
+  coreclr = callPackage ../development/compilers/coreclr {
+    llvmPackages = llvmPackages_7;
+  };
 
   corefonts = callPackage ../data/fonts/corefonts { };
 
