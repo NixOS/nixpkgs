@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python module to the newest version number of Home Assistant";
-    homepage = https://github.com/ludeeus/pyhaversion;
+    homepage = "https://github.com/ludeeus/pyhaversion";
     maintainers = [ maintainers.makefu ];
   };
 }

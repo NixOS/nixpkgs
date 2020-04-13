@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-        url = https://sourceforge.net/p/ext4magic/tickets/10/attachment/ext4magic-0.3.2-i_dir_acl.patch;
+        url = "https://sourceforge.net/p/ext4magic/tickets/10/attachment/ext4magic-0.3.2-i_dir_acl.patch";
         sha256 = "1accydd8kigid68yir2fbihm3r3x8ws3iyznp25snkx41w6y6x8c";
     })
     ./glibc-fix.patch
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
       It's much more effective and works much better than extundelete.
     '';
-    homepage = http://ext4magic.sourceforge.net/ext4magic_en.html;
+    homepage = "http://ext4magic.sourceforge.net/ext4magic_en.html";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.rkoe ];

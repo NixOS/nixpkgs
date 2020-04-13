@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ flask visitor dominate ];
 
   meta = with lib; {
-    homepage = https://github.com/mbr/flask-bootstrap;
+    homepage = "https://github.com/mbr/flask-bootstrap";
     description = "Ready-to-use Twitter-bootstrap for use in Flask.";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

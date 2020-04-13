@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
       to the space age...
     '';
 
-    homepage = http://www.freeciv.org; # http only
+    homepage = "http://www.freeciv.org"; # http only
     license = licenses.gpl2;
 
     maintainers = with maintainers; [ pierron ];

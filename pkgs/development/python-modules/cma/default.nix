@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CMA-ES, Covariance Matrix Adaptation Evolution Strategy for non-linear numerical optimization in Python";
-    homepage = https://github.com/CMA-ES/pycma;
+    homepage = "https://github.com/CMA-ES/pycma";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

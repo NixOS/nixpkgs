@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       Expose a SQLite database over the network and replicate it across a
       cluster of peers
     '';
-    homepage = https://github.com/CanonicalLtd/dqlite/;
+    homepage = "https://github.com/CanonicalLtd/dqlite/";
     license = licenses.asl20;
     maintainers = with maintainers; [ joko wucke13 ];
     platforms = platforms.unix;

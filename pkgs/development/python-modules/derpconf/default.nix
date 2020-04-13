@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "derpconf abstracts loading configuration files for your app";
-    homepage = https://github.com/globocom/derpconf;
+    homepage = "https://github.com/globocom/derpconf";
     license = licenses.mit;
   };
 }

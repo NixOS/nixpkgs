@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Pitch and note annotation of unaccompanied melody";
-    homepage = https://www.sonicvisualiser.org/tony/;
+    homepage = "https://www.sonicvisualiser.org/tony/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

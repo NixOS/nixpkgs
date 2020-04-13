@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       Code sizes are typically reduced by a factor of two to three when
       compared to an equivalent Java application.
     '';
-    homepage = https://www.scala-lang.org/;
+    homepage = "https://www.scala-lang.org/";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
     branch = "2.10";

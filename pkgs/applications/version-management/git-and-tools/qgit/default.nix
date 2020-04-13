@@ -17,7 +17,7 @@ mkDerivation rec {
 
   meta = with lib; {
     license = licenses.gpl2;
-    homepage = https://github.com/tibirna/qgit;
+    homepage = "https://github.com/tibirna/qgit";
     description = "Graphical front-end to Git";
     maintainers = with maintainers; [ peterhoeg markuskowa ];
     inherit (qtbase.meta) platforms;

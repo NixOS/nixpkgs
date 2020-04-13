@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Dynamic web and application server, designed to run applications in multiple languages.";
-    homepage    = https://unit.nginx.org/;
+    homepage    = "https://unit.nginx.org/";
     license     = licenses.asl20;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ izorkin ];

@@ -113,7 +113,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
-    homepage = https://www.ejabberd.im;
+    homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sander abbradar ajs124 ];
     broken = withElixir;

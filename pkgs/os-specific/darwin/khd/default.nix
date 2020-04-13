@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes build issues, remove with >3.0.0
     (fetchpatch {
-      url = https://github.com/koekeishiya/khd/commit/4765ae0b4c7d4ca56319dc92ff54393cd9e03fbc.patch;
+      url = "https://github.com/koekeishiya/khd/commit/4765ae0b4c7d4ca56319dc92ff54393cd9e03fbc.patch";
       sha256 = "0kvf5hxi5bf6pf125qib7wn7hys0ag66zzpp4srj1qa87lxyf7np";
     })
   ];
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple modal hotkey daemon for OSX";
-    homepage = https://github.com/koekeishiya/khd;
-    downloadPage = https://github.com/koekeishiya/khd/releases;
+    homepage = "https://github.com/koekeishiya/khd";
+    downloadPage = "https://github.com/koekeishiya/khd/releases";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 ];
     license = licenses.mit;

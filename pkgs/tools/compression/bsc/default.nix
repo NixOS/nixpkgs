@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High performance block-sorting data compression library";
-    homepage = http://libbsc.com/;
+    homepage = "http://libbsc.com/";
     # Later commits changed the licence to Apache2 (no release yet, though)
     license = with licenses; [ lgpl3Plus ];
     platforms = platforms.unix;

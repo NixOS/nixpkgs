@@ -12,7 +12,7 @@ with lib;
 let
   libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
 
-  homepage = http://www.bay12games.com/dwarves/;
+  homepage = "http://www.bay12games.com/dwarves/";
 
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
   # Other srcs are avilable like 32-bit mac & win, but I have only

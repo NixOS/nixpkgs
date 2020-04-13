@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pygobject3 ];
 
   meta = {
-    homepage = https://github.com/LEW21/pydbus;
+    homepage = "https://github.com/LEW21/pydbus";
     description = "Pythonic DBus library";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ gnidorah ];

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python implementation of the USBTMC instrument control protocol";
-    homepage = http://alexforencich.com/wiki/en/python-usbtmc/start;
+    homepage = "http://alexforencich.com/wiki/en/python-usbtmc/start";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
   };

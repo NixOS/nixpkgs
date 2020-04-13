@@ -81,7 +81,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Note editor designed to remain simple to use";
-    homepage = https://wiki.gnome.org/Apps/Notes;
+    homepage = "https://wiki.gnome.org/Apps/Notes";
     license = licenses.gpl3;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

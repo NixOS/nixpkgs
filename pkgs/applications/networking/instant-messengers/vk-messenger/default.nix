@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Simple and Convenient Messaging App for VK";
-    homepage = https://vk.com/messenger;
+    homepage = "https://vk.com/messenger";
     license = licenses.unfree;
     maintainers = [ maintainers.gnidorah ];
     platforms = ["i686-linux" "x86_64-linux"];

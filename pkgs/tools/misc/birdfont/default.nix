@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
-    homepage = https://birdfont.org;
+    homepage = "https://birdfont.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
   };

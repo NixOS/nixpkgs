@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype pango ];
 
   meta = with stdenv.lib; {
-    homepage = http://moinejf.free.fr/;
+    homepage = "http://moinejf.free.fr/";
     license = licenses.gpl3;
     description = "A command line program which converts ABC to music sheet in PostScript or SVG format";
     platforms = platforms.unix;

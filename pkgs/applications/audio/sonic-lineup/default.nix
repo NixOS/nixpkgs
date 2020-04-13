@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Comparative visualisation of related audio recordings";
-    homepage = https://www.sonicvisualiser.org/sonic-lineup/;
+    homepage = "https://www.sonicvisualiser.org/sonic-lineup/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.vandenoever ];
     platforms = platforms.linux;

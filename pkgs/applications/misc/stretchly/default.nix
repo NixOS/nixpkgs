@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
       seconds every 10 minutes. Every 30 minutes, it displays a window
       containing an idea for a longer 5 minute break.
     '';
-    homepage = https://hovancik.net/stretchly;
-    downloadPage = https://hovancik.net/stretchly/downloads/;
+    homepage = "https://hovancik.net/stretchly";
+    downloadPage = "https://hovancik.net/stretchly/downloads/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ cdepillabout ];
     platforms = platforms.linux;

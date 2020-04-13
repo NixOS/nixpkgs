@@ -59,7 +59,7 @@ self: super: {
   # https://github.com/jystic/hadoop-tools/issues/31
   hadoop-rpc =
     let patch = pkgs.fetchpatch
-          { url = https://github.com/shlevy/hadoop-tools/commit/f03a46cd15ce3796932c3382e48bcbb04a6ee102.patch;
+          { url = "https://github.com/shlevy/hadoop-tools/commit/f03a46cd15ce3796932c3382e48bcbb04a6ee102.patch";
             sha256 = "09ls54zy6gx84fmzwgvx18ssgm740cwq6ds70p0p125phi54agcp";
             stripLen = 1;
           };

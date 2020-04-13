@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PoW algorithm for Ethereum 1.0 based on Dagger-Hashimoto";
-    homepage = https://github.com/ethereum/ethash;
+    homepage = "https://github.com/ethereum/ethash";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p ];
     license = licenses.asl20;

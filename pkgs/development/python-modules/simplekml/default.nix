@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generate KML with as little effort as possible";
-    homepage =  https://readthedocs.org/projects/simplekml/;
+    homepage =  "https://readthedocs.org/projects/simplekml/";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ rvolosatovs ];
   };

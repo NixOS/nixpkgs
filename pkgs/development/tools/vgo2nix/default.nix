@@ -33,7 +33,7 @@ buildGoPackage {
 
   meta = with stdenv.lib; {
     description = "Convert go.mod files to nixpkgs buildGoPackage compatible deps.nix files";
-    homepage = https://github.com/adisbladis/vgo2nix;
+    homepage = "https://github.com/adisbladis/vgo2nix";
     license = licenses.mit;
     maintainers = with maintainers; [ adisbladis ];
   };

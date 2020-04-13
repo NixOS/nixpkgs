@@ -19,7 +19,7 @@ buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = ''The "Command Line Interactive Controller for Kubernetes"'';
-    homepage = https://github.com/databricks/click;
+    homepage = "https://github.com/databricks/click";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.mbode ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

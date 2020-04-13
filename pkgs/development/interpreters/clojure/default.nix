@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with stdenv.lib; {
     description = "A Lisp dialect for the JVM";
-    homepage = https://clojure.org/;
+    homepage = "https://clojure.org/";
     license = licenses.epl10;
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java

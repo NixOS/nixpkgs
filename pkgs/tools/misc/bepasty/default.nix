@@ -52,7 +52,7 @@ in with python.pkgs; buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/bepasty/bepasty-server;
+    homepage = "https://github.com/bepasty/bepasty-server";
     description = "Binary pastebin server";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.makefu ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       The old tool iwconfig, which uses Wireless Extensions interface, is
       deprecated and it's strongly recommended to switch to iw and nl80211.
     '';
-    homepage = https://wireless.wiki.kernel.org/en/users/Documentation/iw;
+    homepage = "https://wireless.wiki.kernel.org/en/users/Documentation/iw";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ viric primeos ];
     platforms = with stdenv.lib.platforms; linux;

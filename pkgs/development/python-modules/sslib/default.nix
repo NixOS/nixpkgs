@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jqueiroz/python-sslib;
+    homepage = "https://github.com/jqueiroz/python-sslib";
     description = "A Python3 library for sharing secrets";
     license = licenses.mit;
     maintainers = with maintainers; [ jqueiroz ];

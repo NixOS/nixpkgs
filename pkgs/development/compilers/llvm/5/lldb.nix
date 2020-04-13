@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";
-    homepage    = https://llvm.org/;
+    homepage    = "https://llvm.org/";
     license     = licenses.ncsa;
     platforms   = platforms.all;
   };

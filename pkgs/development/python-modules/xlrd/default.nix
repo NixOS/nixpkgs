@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.python-excel.org/;
+    homepage = "http://www.python-excel.org/";
     description = "Library for developers to extract data from Microsoft Excel (tm) spreadsheet files";
     license = licenses.bsd0;
   };

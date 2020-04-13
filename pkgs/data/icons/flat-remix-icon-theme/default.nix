@@ -26,7 +26,7 @@ stdenv.mkDerivation rec  {
 
   meta = with stdenv.lib; {
     description = "Flat remix is a pretty simple icon theme inspired on material design";
-    homepage = https://drasite.com/flat-remix;
+    homepage = "https://drasite.com/flat-remix";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ mschneider ];

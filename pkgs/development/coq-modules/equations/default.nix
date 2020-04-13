@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://mattam82.github.io/Coq-Equations/;
+    homepage = "https://mattam82.github.io/Coq-Equations/";
     description = "A plugin for Coq to add dependent pattern-matching";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

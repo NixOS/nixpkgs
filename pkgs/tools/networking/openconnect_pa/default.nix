@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   
   meta = with stdenv.lib; {
     description = "OpenConnect client extended to support Palo Alto Networks' GlobalProtect VPN";
-    homepage = https://github.com/dlenski/openconnect/;
+    homepage = "https://github.com/dlenski/openconnect/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ chessai ];
     platforms = platforms.linux;

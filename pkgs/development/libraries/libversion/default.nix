@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Advanced version string comparison library";
-    homepage = https://github.com/repology/libversion;
+    homepage = "https://github.com/repology/libversion";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ryantm ];
     platforms = platforms.unix;

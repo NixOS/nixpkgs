@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-rdbms";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7826601507878e77f5d5cd805c6ad1d6483c375b545d5e9e1694b5a6c5e12fe3";
+    sha256 = "1iz1pf28ajrzbq8nab1jbjbgfbv0g6ni036xayy6xylvga4l8czr";
   };
 
   propagatedBuildInputs = [

@@ -71,13 +71,13 @@ buildPythonPackage rec {
        # Not yet accepted: https://github.com/apache/airflow/pull/6562
      (fetchpatch {
        name = "avoid-warning-from-abc.collections";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch;
+       url = "https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch";
        sha256 = "0swpay1qlb7f9kgc56631s1qd9k82w4nw2ggvkm7jvxwf056k61z";
      })
        # Not yet accepted: https://github.com/apache/airflow/pull/6561
      (fetchpatch {
        name = "pendulum2-compatibility";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch;
+       url = "https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch";
        sha256 = "17hw8qyd4zxvib9zwpbn32p99vmrdz294r31gnsbkkcl2y6h9knk";
      })
   ];

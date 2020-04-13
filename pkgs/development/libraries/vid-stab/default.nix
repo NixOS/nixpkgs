@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Video stabilization library";
-    homepage    = http://public.hronopik.de/vid.stab/;
+    homepage    = "http://public.hronopik.de/vid.stab/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

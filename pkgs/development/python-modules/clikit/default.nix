@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/clikit;
+    homepage = "https://github.com/sdispater/clikit";
     description = "A group of utilities to build beautiful and testable command line interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

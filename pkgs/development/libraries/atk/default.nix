@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       control running applications.
     '';
 
-    homepage = http://library.gnome.org/devel/atk/;
+    homepage = "http://library.gnome.org/devel/atk/";
 
     license = stdenv.lib.licenses.lgpl2Plus;
 

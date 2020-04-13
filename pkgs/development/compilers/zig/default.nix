@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Programming languaged designed for robustness, optimality, and clarity";
-    homepage = https://ziglang.org/;
+    homepage = "https://ziglang.org/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.andrewrk ];

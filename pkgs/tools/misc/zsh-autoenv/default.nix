@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       It handles "enter" and "leave" events, nesting, and stashing of
       variables (overwriting and restoring).
     '';
-    homepage = https://github.com/Tarrasch/zsh-autoenv;
+    homepage = "https://github.com/Tarrasch/zsh-autoenv";
     platforms = stdenv.lib.platforms.all;
   };
 }

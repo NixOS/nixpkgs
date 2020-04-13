@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools for the Linux multipathing driver";
-    homepage = http://christophe.varoqui.free.fr/;
+    homepage = "http://christophe.varoqui.free.fr/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

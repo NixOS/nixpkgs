@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.kdbg.org/;
+    homepage = "http://www.kdbg.org/";
     description = ''
       A graphical user interface to gdb, the GNU debugger. It provides an
       intuitive interface for setting breakpoints, inspecting variables, and

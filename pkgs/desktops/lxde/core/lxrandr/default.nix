@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LXRandR is the standard screen manager of LXDE.";
-    homepage = https://lxde.org/;
+    homepage = "https://lxde.org/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ rawkode ];
     platforms = stdenv.lib.platforms.linux;

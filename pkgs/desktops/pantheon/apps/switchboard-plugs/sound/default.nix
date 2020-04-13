@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Sound Plug";
-    homepage = https://github.com/elementary/switchboard-plug-sound;
+    homepage = "https://github.com/elementary/switchboard-plug-sound";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Approximate grep for fast fuzzy string searching";
-    homepage = https://www.tgries.de/agrep/;
+    homepage = "https://www.tgries.de/agrep/";
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.linux;
   };

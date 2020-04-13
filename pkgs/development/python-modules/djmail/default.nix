@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Simple, powerfull and nonobstructive django email middleware";
-    homepage = https://github.com/bameda/djmail;
+    homepage = "https://github.com/bameda/djmail";
     license = lib.licenses.bsd3;
   };
 

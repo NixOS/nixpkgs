@@ -33,7 +33,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A pure python implementation of the Android ADB and Fastboot protocols";
-    homepage = https://github.com/JeffLIrion/python-adb/tree/adb-homeassistant;
+    homepage = "https://github.com/JeffLIrion/python-adb/tree/adb-homeassistant";
     license = licenses.asl20;
     maintainers = [ maintainers.makefu ];
   };

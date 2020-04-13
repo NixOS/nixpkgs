@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   ucdtxt = fetchurl {
-    url = http://www.unicode.org/Public/11.0.0/ucd/UnicodeData.txt;
+    url = "http://www.unicode.org/Public/11.0.0/ucd/UnicodeData.txt";
     sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
   };
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Display unicode character properties";
-    homepage = https://github.com/garabik/unicode;
+    homepage = "https://github.com/garabik/unicode";
     license = licenses.gpl3;
     maintainers = [ maintainers.woffs ];
     platforms = platforms.all;

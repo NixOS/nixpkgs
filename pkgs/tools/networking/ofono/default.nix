@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Infrastructure for building mobile telephony (GSM/UMTS) applications";
-    homepage = https://01.org/ofono;
+    homepage = "https://01.org/ofono";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

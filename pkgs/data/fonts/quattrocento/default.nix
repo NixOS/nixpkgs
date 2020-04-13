@@ -16,7 +16,7 @@ in fetchzip rec {
   sha256 = "0f8l19y61y20sszn8ni8h9kgl0zy1gyzychg22z5k93ip4h7kfd0";
 
   meta = with lib; {
-    homepage = http://www.impallari.com/quattrocento/;
+    homepage = "http://www.impallari.com/quattrocento/";
     description = "A classic, elegant, sober and strong serif typeface";
     license = licenses.ofl;
     platforms = platforms.all;

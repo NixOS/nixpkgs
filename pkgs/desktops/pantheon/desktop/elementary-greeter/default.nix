@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LightDM Greeter for Pantheon";
-    homepage = https://github.com/elementary/greeter;
+    homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

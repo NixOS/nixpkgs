@@ -175,7 +175,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Web content rendering engine, GTK port";
-    homepage = https://webkitgtk.org/;
+    homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
     hydraPlatforms = [];

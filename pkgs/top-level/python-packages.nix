@@ -795,6 +795,8 @@ in {
 
   handout = callPackage ../development/python-modules/handout { };
 
+  HAP-python = callPackage ../development/python-modules/HAP-python { };
+
   helper = callPackage ../development/python-modules/helper { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
@@ -1618,6 +1620,8 @@ in {
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
   aioftp = callPackage ../development/python-modules/aioftp { };
+
+  aioharmony = callPackage ../development/python-modules/aioharmony { };
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 

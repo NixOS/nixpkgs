@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy ];
 
   meta = with lib; {
-    homepage = https://github.com/mhe/pynrrd;
+    homepage = "https://github.com/mhe/pynrrd";
     description = "Simple pure-Python reader for NRRD files";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];

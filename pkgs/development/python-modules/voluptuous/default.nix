@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Voluptuous is a Python data validation library";
-    homepage = http://alecthomas.github.io/voluptuous/;
+    homepage = "http://alecthomas.github.io/voluptuous/";
     license = licenses.bsd3;
   };
 }

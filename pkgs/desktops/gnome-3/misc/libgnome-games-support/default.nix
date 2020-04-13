@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Small library intended for internal use by GNOME Games, but it may be used by others";
-    homepage = https://wiki.gnome.org/Apps/Games;
+    homepage = "https://wiki.gnome.org/Apps/Games";
     license = licenses.lgpl3;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

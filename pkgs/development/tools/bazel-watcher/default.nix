@@ -78,7 +78,7 @@ buildBazelPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bazelbuild/bazel-watcher;
+    homepage = "https://github.com/bazelbuild/bazel-watcher";
     description = "Tools for building Bazel targets when source files change.";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];

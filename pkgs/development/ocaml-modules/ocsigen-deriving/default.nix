@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta =  {
-    homepage = https://github.com/ocsigen/deriving;
+    homepage = "https://github.com/ocsigen/deriving";
     description = "Extension to OCaml for deriving functions from type declarations";
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];

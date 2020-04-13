@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
-    homepage    = http://live.gnome.org/GObjectIntrospection;
+    homepage    = "http://live.gnome.org/GObjectIntrospection";
     maintainers = with maintainers; [ lovek323 lethalman ];
     platforms   = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];

@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Open files by MIME-type or file name using regular expressions";
-    homepage = http://xyne.archlinux.ca/projects/mimeo/;
+    homepage = "http://xyne.archlinux.ca/projects/mimeo/";
     license = [ licenses.gpl2 ];
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;

@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/stumpwm/stumpwm-contrib;
+    homepage = "https://github.com/stumpwm/stumpwm-contrib";
     description = "STUMPwm Interactive SHell";
     license = licenses.gpl2;
     maintainers = [ maintainers.ebzzry ];

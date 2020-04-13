@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     description = "A Nintendo Entertainment System (NES) Emulator";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.scubed2 ];
-    homepage = http://www.fceux.com/;
+    homepage = "http://www.fceux.com/";
     platforms = stdenv.lib.platforms.linux;
   };
 }

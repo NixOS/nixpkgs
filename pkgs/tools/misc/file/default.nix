@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   makeFlags = stdenv.lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 
   meta = with stdenv.lib; {
-    homepage = https://darwinsys.com/file;
+    homepage = "https://darwinsys.com/file";
     description = "A program that shows the type of files";
     license = licenses.bsd2;
     platforms = platforms.all;

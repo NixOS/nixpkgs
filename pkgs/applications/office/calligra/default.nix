@@ -60,7 +60,7 @@ mkDerivation rec {
       Sheets for computations, Plan for planning, and Karbon for
       vector graphics.
     '';
-    homepage = https://www.calligra.org/;
+    homepage = "https://www.calligra.org/";
     maintainers = with maintainers; [ phreedom ebzzry zraexy ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2 ];

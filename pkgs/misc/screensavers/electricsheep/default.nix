@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
-    homepage = https://electricsheep.org/;
+    homepage = "https://electricsheep.org/";
     maintainers = with maintainers; [ nand0p fpletz ];
     platforms = platforms.linux;
     license = licenses.gpl1;

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python client library for the Lightning data visualization server";
-    homepage = http://lightning-viz.org;
+    homepage = "http://lightning-viz.org";
     license = licenses.mit;
   };
 

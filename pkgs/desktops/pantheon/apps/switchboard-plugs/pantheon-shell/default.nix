@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "2.8.2";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0l4js2gqvn8lmky5b3jjqw6mzxcv9i2gjqr1vka0z40px6vfzf0z";
+    sha256 = "0ypyppxx51l3r3fgxrvjdwnz33lpbfh1bf27fww9fx9520wixnx8";
   };
 
   passthru = {
@@ -42,13 +42,9 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    ./backgrounds.patch # Having https://github.com/elementary/switchboard-plug-pantheon-shell/issues/166 would make this patch uneeded
-  ];
-
   meta = with stdenv.lib; {
     description = "Switchboard Desktop Plug";
-    homepage = https://github.com/elementary/switchboard-plug-pantheon-shell;
+    homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

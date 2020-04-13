@@ -18,7 +18,7 @@ in fetchzip {
   meta = with lib; {
     # This font doesn't appear to have any official web site but this
     # one provides some good information and samples.
-    homepage = http://openfontlibrary.org/en/font/caladea;
+    homepage = "http://openfontlibrary.org/en/font/caladea";
     description = "A serif font metric-compatible with Microsoft Cambria";
     longDescription = ''
       Caladea is a free font that is metric-compatible with the

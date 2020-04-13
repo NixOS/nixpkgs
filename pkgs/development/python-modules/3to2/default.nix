@@ -25,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://bitbucket.org/amentajo/lib3to2;
+    homepage = "https://bitbucket.org/amentajo/lib3to2";
     description = "Refactors valid 3.x syntax into valid 2.x syntax, if a syntactical conversion is possible";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mt-caret ];

@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     inherit version;
     description = "Linear Algebra PACKage";
-    homepage = http://www.netlib.org/lapack/;
+    homepage = "http://www.netlib.org/lapack/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

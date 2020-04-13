@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Srim Automation of Tasks via Python";
-    homepage = https://gitlab.com/costrouc/pysrim;
+    homepage = "https://gitlab.com/costrouc/pysrim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ costrouc ];
   };

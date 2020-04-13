@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     meta = with stdenv.lib; {
       description = "Dump .torrent file information";
-      homepage = https://sourceforge.net/projects/dumptorrent/;
+      homepage = "https://sourceforge.net/projects/dumptorrent/";
       license = licenses.gpl2;
       maintainers = [ maintainers.zohl ];
       platforms = platforms.all;

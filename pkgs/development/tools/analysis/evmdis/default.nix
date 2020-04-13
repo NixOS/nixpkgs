@@ -13,7 +13,7 @@ buildGoPackage {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Arachnid/evmdis;
+    homepage = "https://github.com/Arachnid/evmdis";
     description = "Ethereum EVM disassembler";
     license = [ licenses.asl20 ];
     maintainers = with maintainers; [ asymmetric ];

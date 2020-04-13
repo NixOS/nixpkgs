@@ -18,6 +18,6 @@ buildPythonPackage rec {
   meta = {
     description = "Module for decorators, wrappers and monkey patching";
     license = lib.licenses.bsd2;
-    homepage = https://github.com/GrahamDumpleton/wrapt;
+    homepage = "https://github.com/GrahamDumpleton/wrapt";
   };
 }

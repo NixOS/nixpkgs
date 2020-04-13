@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://rxvt.sourceforge.net/;
+    homepage = "http://rxvt.sourceforge.net/";
     description = "Colour vt102 terminal emulator with less features and lower memory consumption";
     longDescription = ''
       rxvt (acronym for our extended virtual terminal) is a terminal

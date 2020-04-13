@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Traceback fiddling library. Allows you to pickle tracebacks.";
-    homepage = https://github.com/ionelmc/python-tblib;
+    homepage = "https://github.com/ionelmc/python-tblib";
     license = licenses.bsd2;
     maintainers = with maintainers; [ teh ];
   };

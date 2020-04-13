@@ -160,7 +160,7 @@ let
         passthru.home = graalvmXXX-ee;
 
         meta = with stdenv.lib; {
-          homepage = https://www.graalvm.org/;
+          homepage = "https://www.graalvm.org/";
           description = "High-Performance Polyglot VM";
           license = licenses.unfree;
           maintainers = with maintainers; [ volth hlolli ];

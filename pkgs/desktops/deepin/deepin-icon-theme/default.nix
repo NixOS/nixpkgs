@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Icons for the Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-icon-theme;
+    homepage = "https://github.com/linuxdeepin/deepin-icon-theme";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];

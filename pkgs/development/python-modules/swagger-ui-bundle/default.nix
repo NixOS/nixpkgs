@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "bundled swagger-ui pip package";
-    homepage = https://github.com/dtkav/swagger_ui_bundle;
+    homepage = "https://github.com/dtkav/swagger_ui_bundle";
     license = licenses.asl20;
     maintainers = with maintainers; [ elohmeier ];
   };

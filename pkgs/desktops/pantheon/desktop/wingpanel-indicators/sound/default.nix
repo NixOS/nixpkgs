@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Sound Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-sound;
+    homepage = "https://github.com/elementary/wingpanel-indicator-sound";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

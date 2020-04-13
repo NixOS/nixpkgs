@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The file manager for GNOME";
-    homepage = https://wiki.gnome.org/Apps/Files;
+    homepage = "https://wiki.gnome.org/Apps/Files";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;

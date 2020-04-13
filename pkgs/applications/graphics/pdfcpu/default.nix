@@ -17,7 +17,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "A PDF processor written in Go";
-    homepage = https://pdfcpu.io;
+    homepage = "https://pdfcpu.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.all;

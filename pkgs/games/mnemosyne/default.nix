@@ -12,18 +12,19 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "0dhvg9cxc6m6kzk75h363h1g0bl80cqz11cijh0zpz9f4w6lnqsq";
   };
 
-  nativeBuildInputs = with python.pkgs; [ wrapPython pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = with python.pkgs; [ pyqtwebengine.wrapQtAppsHook ];
 
   buildInputs = [ anki ];
 
   propagatedBuildInputs = with python.pkgs; [
+    cheroot
+    cherrypy
     googletrans
     gtts
-    pyqtwebengine
-    pyqt5
     matplotlib
-    cherrypy
-    cheroot
+    pyopengl
+    pyqt5
+    pyqtwebengine
     webob
   ];
 
@@ -36,16 +37,17 @@ python.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   postInstall = ''
-    mkdir -p $out/share
+    mkdir -p $out/share/applications
     mv $out/${python.sitePackages}/$out/share/locale $out/share
+    mv mnemosyne.desktop $out/share/applications
     rm -r $out/${python.sitePackages}/nix
   '';
 
   dontWrapQtApps = true;
 
-  preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-  '';
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+  ];
 
   meta = {
     homepage = "https://mnemosyne-proj.org/";

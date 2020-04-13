@@ -22,7 +22,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "File type identification using libmagic";
-    homepage = https://github.com/aliles/filemagic;
+    homepage = "https://github.com/aliles/filemagic";
     license = licenses.asl20;
     maintainers = with maintainers; [ earvstedt ];
   };

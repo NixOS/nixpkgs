@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "wxMSW-2.8.11";
 
   src = fetchurl {
-    url = mirror://sourceforge/wxwindows/wxWidgets-2.8.11.tar.gz;
+    url = "mirror://sourceforge/wxwindows/wxWidgets-2.8.11.tar.gz";
     sha256 = "0icxd21g18d42n1ygshkpw0jnflm03iqki6r623pb5hhd7fm2ksj";
   };
 

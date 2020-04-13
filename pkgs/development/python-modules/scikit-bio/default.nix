@@ -46,7 +46,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://scikit-bio.org/;
+    homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

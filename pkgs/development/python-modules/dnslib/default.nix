@@ -14,7 +14,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple library to encode/decode DNS wire-format packets";
     license = licenses.bsd2;
-    homepage = https://bitbucket.org/paulc/dnslib/;
+    homepage = "https://bitbucket.org/paulc/dnslib/";
     maintainers = with maintainers; [ delroth ];
   };
 }

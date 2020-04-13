@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
-    homepage = https://www.gplates.org;
+    homepage = "https://www.gplates.org";
     license = licenses.gpl2;
     platforms = platforms.all;
     broken = true;

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.styluslabs.com/;
+    homepage = "http://www.styluslabs.com/";
     description = "Write is a word processor for handwriting.";
     platforms = platforms.linux;
     license = stdenv.lib.licenses.unfree;

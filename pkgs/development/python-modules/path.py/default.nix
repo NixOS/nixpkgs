@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A module wrapper for os.path";
-    homepage = https://github.com/jaraco/path.py;
+    homepage = "https://github.com/jaraco/path.py";
     license = lib.licenses.mit;
   };
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = https://github.com/jaraco/path.py/commit/02eb16f0eb2cdc0015972ce963357aaa1cd0b84b.patch;
+      url = "https://github.com/jaraco/path.py/commit/02eb16f0eb2cdc0015972ce963357aaa1cd0b84b.patch";
       sha256 = "0bqa8vjwil7jn35a6984adcm24pvv3pjkhszv10qv6yr442d1mk9";
     })
   ];

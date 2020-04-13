@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HTML components for Dash";
-    homepage = https://dash.plot.ly/dash-html-components;
+    homepage = "https://dash.plot.ly/dash-html-components";
     license = licenses.mit;
     maintainers = [ maintainers.antoinerg ];
   };

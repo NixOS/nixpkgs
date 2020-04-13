@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "unstable-2020-04-04";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "366f0f6ffa59f7ee2583d000dd334cb764f9a2b8";
-    sha256 = "172r1k8m1saq80q6g2hxy4ajks8liaw9pl6lixasrzi2hsnrx53h";
+    rev = version;
+    sha256 = "0yvn1crylrdc9gq6gc7v4ynb5ii4n0c3bnswfq72p8cs3vvvvv24";
   };
 
   passthru = {
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.
     '';
-    homepage = https://github.com/elementary/wingpanel;
+    homepage = "https://github.com/elementary/wingpanel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

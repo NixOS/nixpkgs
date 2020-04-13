@@ -15,7 +15,7 @@ python2Packages.buildPythonApplication rec {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://dag.wieers.com/home-made/dstat/;
+    homepage = "http://dag.wieers.com/home-made/dstat/";
     description = "Versatile resource statistics tool";
     license = licenses.gpl2;
     platforms = platforms.linux;

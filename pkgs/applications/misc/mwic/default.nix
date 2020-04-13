@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://jwilk.net/software/mwic;
+    homepage = "http://jwilk.net/software/mwic";
     description = "spell-checker that groups possible misspellings and shows them in their contexts";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];

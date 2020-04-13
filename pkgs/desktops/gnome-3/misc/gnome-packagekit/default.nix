@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.freedesktop.org/software/PackageKit/;
+    homepage = "https://www.freedesktop.org/software/PackageKit/";
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
     license = licenses.gpl2;

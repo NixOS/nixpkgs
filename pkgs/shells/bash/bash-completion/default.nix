@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/scop/bash-completion;
+    homepage = "https://github.com/scop/bash-completion";
     description = "Programmable completion for the bash shell";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

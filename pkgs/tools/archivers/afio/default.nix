@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = {
-    homepage = http://members.chello.nl/~k.holtman/afio.html;
+    homepage = "http://members.chello.nl/~k.holtman/afio.html";
     description = "Fault tolerant cpio archiver targeting backups";
     platforms = stdenv.lib.platforms.all;
     /*

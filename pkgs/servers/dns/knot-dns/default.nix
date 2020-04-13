@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Authoritative-only DNS server from .cz domain registry";
-    homepage = https://knot-dns.cz;
+    homepage = "https://knot-dns.cz";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];

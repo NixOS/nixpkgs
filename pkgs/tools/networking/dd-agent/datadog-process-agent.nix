@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Live process collector for the DataDog Agent v6";
-    homepage    = https://www.datadoghq.com;
+    homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ domenkozar rvl ];

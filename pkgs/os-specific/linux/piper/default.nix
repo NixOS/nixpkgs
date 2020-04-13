@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "GTK frontend for ratbagd mouse config daemon";
-    homepage    = https://github.com/libratbag/piper;
+    homepage    = "https://github.com/libratbag/piper";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms   = platforms.linux;

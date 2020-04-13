@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An orthodox file manager";
-    homepage = https://github.com/elfmz/far2l;
+    homepage = "https://github.com/elfmz/far2l";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = platforms.all;

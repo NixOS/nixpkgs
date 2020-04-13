@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The personal, minimalist, super-fast, database free, bookmarking service";
     license = licenses.gpl3Plus;
-    homepage = https://github.com/shaarli/Shaarli;
+    homepage = "https://github.com/shaarli/Shaarli";
     maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
   };

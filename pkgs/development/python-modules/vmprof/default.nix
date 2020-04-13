@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A vmprof client";
     license = licenses.mit;
-    homepage = https://vmprof.readthedocs.org/;
+    homepage = "https://vmprof.readthedocs.org/";
     broken = true;
   };
 

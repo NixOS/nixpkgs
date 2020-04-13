@@ -48,7 +48,7 @@ let
     enableParallelBuilding = false;
 
     meta = with lib; {
-      homepage = https://github.com/ARM-software/arm-trusted-firmware;
+      homepage = "https://github.com/ARM-software/arm-trusted-firmware";
       description = "A reference implementation of secure world software for ARMv8-A";
       license = licenses.bsd3;
       maintainers = [ maintainers.lopsided98 ];

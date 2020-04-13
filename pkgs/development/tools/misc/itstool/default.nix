@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://itstool.org/;
+    homepage = "http://itstool.org/";
     description = "XML to PO and back again";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.all;

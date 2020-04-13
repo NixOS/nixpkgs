@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       dcm2niix is a designed to convert neuroimaging data from the
       DICOM format to the NIfTI format.
     '';
-    homepage = https://www.nitrc.org/projects/dcm2nii;
+    homepage = "https://www.nitrc.org/projects/dcm2nii";
     license = licenses.bsd3;
     maintainers = [ maintainers.ashgillman ];
     platforms = platforms.all;

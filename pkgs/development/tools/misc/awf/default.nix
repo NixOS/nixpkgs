@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       in a single window allowing to see the visual effect of the
       applied theme.
     '';
-    homepage = https://github.com/valr/awf;
+    homepage = "https://github.com/valr/awf";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ michalrus ];

@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://unarchiver.c3.cx/unarchiver;
+    homepage = "http://unarchiver.c3.cx/unarchiver";
     description = "An archive unpacker program";
     longDescription = ''
       The Unarchiver is an archive unpacker program with support for the popular \

@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Export Mesos metrics to Prometheus";
-    homepage = https://github.com/prometheus/mesos_exporter;
+    homepage = "https://github.com/prometheus/mesos_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;

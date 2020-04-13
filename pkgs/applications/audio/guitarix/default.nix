@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       clean-sounds, nice overdrive, fat distortion and a diversity of
       crazy sounds never heard before.
     '';
-    homepage = http://guitarix.sourceforge.net/;
+    homepage = "http://guitarix.sourceforge.net/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ astsmtl goibhniu ];
     platforms = platforms.linux;

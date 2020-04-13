@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A small library for C application development";
-    homepage = https://launchpad.net/libnih;
+    homepage = "https://launchpad.net/libnih";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

@@ -79,7 +79,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://www.qlandkarte.org/;
+    homepage = "http://www.qlandkarte.org/";
     description = ''
       QLandkarte GT is the ultimate outdoor aficionado's tool.
       It supports GPS maps in GeoTiff format as well as Garmin's img vector map format.

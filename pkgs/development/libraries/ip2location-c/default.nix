@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       weather, MCC, MNC, mobile brand name, elevation and usage type of
       any IP address or host name in the IP2Location databases.
     '';
-    homepage = http://www.ip2location.com/developers/c-7;
+    homepage = "http://www.ip2location.com/developers/c-7";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.linux;
   };

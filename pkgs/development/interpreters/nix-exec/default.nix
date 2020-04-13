@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Run programs defined in nix expressions";
-    homepage = https://github.com/shlevy/nix-exec;
+    homepage = "https://github.com/shlevy/nix-exec";
     license = stdenv.lib.licenses.mit;
     platforms = nix.meta.platforms;
     broken = true;

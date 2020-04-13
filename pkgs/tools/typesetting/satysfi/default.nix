@@ -62,7 +62,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/gfngfn/SATySFi;
+      homepage = "https://github.com/gfngfn/SATySFi";
       description = "A statically-typed, functional typesetting system";
       license = licenses.lgpl3;
       maintainers = [ maintainers.mt-caret maintainers.marsam ];

@@ -283,11 +283,11 @@ self: super: builtins.intersectAttrs super {
   caramia = dontCheck super.caramia;
 
   llvm-hs =
-    let llvmHsWithLlvm8 = super.llvm-hs.override { llvm-config = pkgs.llvm_8; };
+    let llvmHsWithLlvm9 = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
     in
     if pkgs.stdenv.isDarwin
     then
-      overrideCabal llvmHsWithLlvm8 (oldAttrs: {
+      overrideCabal llvmHsWithLlvm9 (oldAttrs: {
         # One test fails on darwin.
         doCheck = false;
         # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
@@ -298,7 +298,7 @@ self: super: builtins.intersectAttrs super {
           substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
         '';
       })
-    else llvmHsWithLlvm8;
+    else llvmHsWithLlvm9;
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;

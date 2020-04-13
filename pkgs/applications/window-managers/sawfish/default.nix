@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       All high-level WM functions are implemented in Lisp for future extensibility
       or redefinition.
     '';
-    homepage = http://sawfish.wikia.com;
+    homepage = "http://sawfish.wikia.com";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
   };

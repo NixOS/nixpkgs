@@ -14,7 +14,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ocp-indent ];
 
   meta = {
-    homepage = http://typerex.ocamlpro.com/ocp-index.html;
+    homepage = "http://typerex.ocamlpro.com/ocp-index.html";
     description = "A simple and light-weight documentation extractor for OCaml";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ vbgl ];

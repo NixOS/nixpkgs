@@ -49,7 +49,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://www.openprinting.org/driver/epson-201106w;
+      homepage = "https://www.openprinting.org/driver/epson-201106w";
       description = "Epson printer driver (BX535WD, BX630FW, BX635FWD, ME940FW, NX530, NX635, NX635, SX535WD, WorkForce 545, WorkForce 645";
       longDescription = ''
         This software is a filter program used with the Common UNIX Printing

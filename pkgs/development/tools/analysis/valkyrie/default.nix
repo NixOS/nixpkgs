@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake4Hook ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.valgrind.org/;
+    homepage = "http://www.valgrind.org/";
     description = "Qt4-based GUI for the Valgrind 3.6.x series";
     license = licenses.gpl2;
     platforms = platforms.linux;

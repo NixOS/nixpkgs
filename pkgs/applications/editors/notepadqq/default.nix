@@ -32,7 +32,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://notepadqq.com/;
+    homepage = "https://notepadqq.com/";
     description = "Notepad++-like editor for the Linux desktop";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -38,7 +38,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = https://albertlauncher.github.io/;
+    homepage    = "https://albertlauncher.github.io/";
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes synthetica ];

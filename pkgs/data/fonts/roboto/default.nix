@@ -15,7 +15,7 @@ in fetchzip {
   sha256 = "1s3c48wwvvwd3p4w3hfkri5v2c54j2bdxmd3bjv54klc5mrlh6z3";
 
   meta = {
-    homepage = https://github.com/google/roboto;
+    homepage = "https://github.com/google/roboto";
     description = "The Roboto family of fonts";
     longDescription = ''
       Google’s signature family of fonts, the default font on Android and

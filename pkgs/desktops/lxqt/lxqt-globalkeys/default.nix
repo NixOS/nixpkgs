@@ -28,7 +28,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "LXQt service for global keyboard shortcuts registration";
-    homepage = https://github.com/lxqt/lxqt-globalkeys;
+    homepage = "https://github.com/lxqt/lxqt-globalkeys";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

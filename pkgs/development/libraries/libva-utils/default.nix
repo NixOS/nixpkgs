@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "VAAPI tools: Video Acceleration API";
-    homepage = http://www.freedesktop.org/wiki/Software/vaapi;
+    homepage = "http://www.freedesktop.org/wiki/Software/vaapi";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

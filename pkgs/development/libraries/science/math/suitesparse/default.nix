@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "suitesparse";
-  version = "5.7.1";
+  version = "5.7.2";
 
   outputs = [ "out" "dev" "doc" ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${version}";
-    sha256 = "SA9SQKRDKUI1GilNMuCXljcvovLUwRKBUi/tiQ4dl5w=";
+    sha256 = "1imndff7yygjrbbrcscsmirdi8w0lkwj5dbhydxmf7lklwn4j3q6";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     "library"
   ];
 
-  # Likely fixed after 5.7.1
+  # Likely fixed after 5.7.2
   # https://github.com/DrTimothyAldenDavis/SuiteSparse/commit/f6daae26ee391e475e2295e77c839aa7c1a8b784
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     # The fixDarwinDylibNames in nixpkgs can't seem to fix all the libraries.

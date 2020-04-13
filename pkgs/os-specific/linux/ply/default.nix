@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "dynamic Tracing in Linux";
-    homepage = https://wkz.github.io/ply/;
+    homepage = "https://wkz.github.io/ply/";
     license = [ licenses.gpl2 ];
     maintainers = with maintainers; [ mic92 mbbx6spp ];
   };

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/wangp/bower;
+    homepage = "https://github.com/wangp/bower";
     description = "A curses terminal client for the Notmuch email system";
     maintainers = with maintainers; [ erictapen ];
     license = licenses.gpl3;

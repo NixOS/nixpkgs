@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+    homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture alsa-oss emulation";
 
     longDescription = ''

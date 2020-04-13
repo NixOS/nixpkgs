@@ -14,7 +14,7 @@ buildDunePackage rec {
   buildInputs = [ sqlite ];
 
   meta = with lib; {
-    homepage = http://mmottl.github.io/sqlite3-ocaml/;
+    homepage = "http://mmottl.github.io/sqlite3-ocaml/";
     description = "OCaml bindings to the SQLite 3 database access library";
     license = licenses.mit;
     maintainers = with maintainers; [

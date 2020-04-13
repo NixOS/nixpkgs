@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Backport of shutil.which";
     license = licenses.psfl;
-    homepage = https://github.com/mbr/shutilwhich;
+    homepage = "https://github.com/mbr/shutilwhich";
     maintainers = with maintainers; [ multun ];
   };
 }

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Meta build system";
-    homepage    = https://waf.io;
+    homepage    = "https://waf.io";
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ vrthra ];

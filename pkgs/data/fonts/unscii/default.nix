@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
     description = ''Bitmapped character-art-friendly Unicode fonts'';
     # Basically GPL2+ with font exception — because of the Unifont-augmented
     # version. The reduced version is public domain.
-    license = http://unifoundry.com/LICENSE.txt;
+    license = "http://unifoundry.com/LICENSE.txt";
     maintainers = [ stdenv.lib.maintainers.raskin ];
-    homepage = http://pelulamu.net/unscii/;
+    homepage = "http://pelulamu.net/unscii/";
   };
 }

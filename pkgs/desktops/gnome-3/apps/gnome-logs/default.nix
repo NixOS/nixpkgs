@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Logs;
+    homepage = "https://wiki.gnome.org/Apps/Logs";
     description = "A log viewer for the systemd journal";
     maintainers = teams.gnome.members;
     license = licenses.gpl3;

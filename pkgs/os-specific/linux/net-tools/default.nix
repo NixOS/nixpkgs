@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://net-tools.sourceforge.net/;
+    homepage = "http://net-tools.sourceforge.net/";
     description = "A set of tools for controlling the network subsystem in Linux";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

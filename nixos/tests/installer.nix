@@ -65,7 +65,7 @@ let
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, extraConfig
-                  , testCloneConfig
+                  , testSpecialisationConfig
                   }:
     let iface = if grubVersion == 1 then "ide" else "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -220,7 +220,7 @@ let
 
       # Tests for validating clone configuration entries in grub menu
     ''
-    + optionalString testCloneConfig ''
+    + optionalString testSpecialisationConfig ''
       # Reboot Machine
       machine = create_machine_named("clone-default-config")
       ${preBootCommands}
@@ -262,7 +262,7 @@ let
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
-    , testCloneConfig ? false
+    , testSpecialisationConfig ? false
     }:
     makeTest {
       inherit enableOCR;
@@ -337,7 +337,7 @@ let
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands
                 grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
-                testCloneConfig;
+                testSpecialisationConfig;
       };
     };
 
@@ -411,11 +411,11 @@ let
     grubUseEfi = true;
   };
 
-  clone-test-extraconfig = {
+  specialisation-test-extraconfig = {
     extraConfig = ''
       environment.systemPackages = [ pkgs.grub2 ];
       boot.loader.grub.configurationName = "Home";
-      nesting.clone = [ {
+      specialisation.work.configuration = {
         boot.loader.grub.configurationName = lib.mkForce "Work";
 
         environment.etc = {
@@ -424,9 +424,9 @@ let
               gitproxy = none for work.com
               ";
         };
-      } ];
+      };
     '';
-    testCloneConfig = true;
+    testSpecialisationConfig = true;
   };
 
 
@@ -440,7 +440,7 @@ in {
   simple = makeInstallerTest "simple" simple-test-config;
 
   # Test cloned configurations with the simple grub configuration
-  simpleClone = makeInstallerTest "simpleClone" (simple-test-config // clone-test-extraconfig);
+  simpleSpecialised = makeInstallerTest "simpleSpecialised" (simple-test-config // specialisation-test-extraconfig);
 
   # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
   simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot" {
@@ -467,7 +467,7 @@ in {
   simpleUefiGrub = makeInstallerTest "simpleUefiGrub" simple-uefi-grub-config;
 
   # Test cloned configurations with the uefi grub configuration
-  simpleUefiGrubClone = makeInstallerTest "simpleUefiGrubClone" (simple-uefi-grub-config // clone-test-extraconfig);
+  simpleUefiGrubSpecialisation = makeInstallerTest "simpleUefiGrubSpecialisation" (simple-uefi-grub-config // specialisation-test-extraconfig);
 
   # Same as the previous, but now with a separate /boot partition.
   separateBoot = makeInstallerTest "separateBoot" {

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       and featureful environment for reading, study, and research using
       modules from The SWORD Project and elsewhere.
     '';
-    homepage = http://www.xiphos.org/;
+    homepage = "http://www.xiphos.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

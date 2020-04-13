@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = with stdenv.lib; {
-    homepage = http://glotzerlab.engin.umich.edu/hoomd-blue/;
+    homepage = "http://glotzerlab.engin.umich.edu/hoomd-blue/";
     description = "HOOMD-blue is a general-purpose particle simulation toolkit";
     license = licenses.bsdOriginal;
     platforms = [ "x86_64-linux" ];

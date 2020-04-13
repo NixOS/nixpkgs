@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
-    homepage    = https://www.elastic.co/products/logstash;
+    homepage    = "https://www.elastic.co/products/logstash";
     license     = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ wjlroe offline basvandijk ];

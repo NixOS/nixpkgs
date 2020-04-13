@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";
-    homepage = https://libfive.com/;
+    homepage = "https://libfive.com/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.lgpl2;
     platforms = platforms.linux;

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       - Edit synchronized lyrics and event timing codes, import and
         export LRC files
     '';
-    homepage = http://kid3.sourceforge.net/;
+    homepage = "http://kid3.sourceforge.net/";
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

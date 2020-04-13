@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       be controlled using the ALSA sequencer. It's phat; it turns your
       computer into an effects box.
     '';
-    homepage = http://jack-rack.sourceforge.net/;
+    homepage = "http://jack-rack.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.astsmtl ];
     platforms = stdenv.lib.platforms.linux;

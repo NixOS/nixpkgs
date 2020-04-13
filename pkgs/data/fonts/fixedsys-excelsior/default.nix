@@ -8,9 +8,9 @@ in fetchurl rec {
   name = "fixedsys-excelsior-${version}";
 
   urls = [
-    http://www.fixedsysexcelsior.com/fonts/FSEX300.ttf
-    https://raw.githubusercontent.com/chrissimpkins/codeface/master/fonts/fixed-sys-excelsior/FSEX300.ttf
-    http://tarballs.nixos.org/sha256/6ee0f3573bc5e33e93b616ef6282f49bc0e227a31aa753ac76ed2e3f3d02056d
+    "http://www.fixedsysexcelsior.com/fonts/FSEX300.ttf"
+    "https://raw.githubusercontent.com/chrissimpkins/codeface/master/fonts/fixed-sys-excelsior/FSEX300.ttf"
+    "http://tarballs.nixos.org/sha256/6ee0f3573bc5e33e93b616ef6282f49bc0e227a31aa753ac76ed2e3f3d02056d"
   ];
   downloadToTemp = true;
   recursiveHash = true;
@@ -22,7 +22,7 @@ in fetchurl rec {
 
   meta = {
     description = "Pan-unicode version of Fixedsys, a classic DOS font.";
-    homepage = http://www.fixedsysexcelsior.com/;
+    homepage = "http://www.fixedsysexcelsior.com/";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.publicDomain;
     maintainers = [ stdenv.lib.maintainers.ninjatrappeur ];

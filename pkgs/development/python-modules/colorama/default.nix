@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tartley/colorama;
+    homepage = "https://github.com/tartley/colorama";
     license = licenses.bsd3;
     description = "Cross-platform colored terminal text";
   };

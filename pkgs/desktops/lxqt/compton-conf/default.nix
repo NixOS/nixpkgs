@@ -31,7 +31,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "GUI configuration tool for compton X composite manager";
-    homepage = https://github.com/lxqt/compton-conf;
+    homepage = "https://github.com/lxqt/compton-conf";
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

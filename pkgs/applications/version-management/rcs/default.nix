@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "format";
 
   meta = {
-    homepage = https://www.gnu.org/software/rcs/;
+    homepage = "https://www.gnu.org/software/rcs/";
     description = "Revision control system";
     longDescription =
       '' The GNU Revision Control System (RCS) manages multiple revisions of

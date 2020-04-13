@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       including bad page offlining and automatic cache error handling. All
       errors are logged to /var/log/mcelog or syslog or the journal.
     '';
-    homepage = http://mcelog.org/;
+    homepage = "http://mcelog.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

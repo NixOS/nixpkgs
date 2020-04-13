@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Server and user space API to deal with multimedia pipelines";
-    homepage = https://pipewire.org/;
+    homepage = "https://pipewire.org/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jtojnar ];

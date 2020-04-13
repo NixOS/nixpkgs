@@ -40,7 +40,7 @@ in appimageTools.wrapType2 rec {
       applications directly or from your own text editor. The notes are in
       Markdown format.
     '';
-    homepage = https://joplin.cozic.net/;
+    homepage = "https://joplin.cozic.net/";
     license = licenses.mit;
     maintainers = with maintainers; [ rafaelgg raquelgb ];
     platforms = [ "x86_64-linux" ];

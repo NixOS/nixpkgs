@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
     license = licenses.mit;
-    homepage = http://sat.inesc-id.pt/open-wbo/;
+    homepage = "http://sat.inesc-id.pt/open-wbo/";
   };
 }

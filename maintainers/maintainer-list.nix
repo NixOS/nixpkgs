@@ -4703,6 +4703,18 @@
     githubId = 136037;
     name = "Matthew Maurer";
   };
+  maxdamantus = {
+    email = "maxdamantus@gmail.com";
+    github = "Maxdamantus";
+    githubId = 502805;
+    name = "Max Zerzouri";
+  };
+  maxeaubrey = {
+    email = "maxeaubrey@gmail.com";
+    github = "maxeaubrey";
+    githubId = 35892750;
+    name = "Maxine Aubrey";
+  };
   mbakke = {
     email = "mbakke@fastmail.com";
     github = "mbakke";
@@ -5770,6 +5782,12 @@
     github = "peterromfeldhk";
     githubId = 5515707;
     name = "Peter Romfeld";
+  };
+  petersjt014 = {
+    email = "petersjt014@gmail.com";
+    github = "petersjt014";
+    githubId = 29493551;
+    name = "Josh Peters";
   };
   peti = {
     email = "simons@cryp.to";
@@ -7873,8 +7891,8 @@
     githubId = 7953163;
     name = "Vika Shleina";
     keys = [{
-      longkeyid = "rsa4096/0x5402B9B5497BACDB";
-      fingerprint = "A03C D09C 36CF D9F6 1ADF  AF11 5402 B9B5 497B ACDB";
+      longkeyid = "rsa2048/0x4F62CD07CE64796A";
+      fingerprint = "B3C0 DA1A C18B 82E8 CA8B  B1D1 4F62 CD07 CE64 796A";
     }];
   };
   vinymeuh = {

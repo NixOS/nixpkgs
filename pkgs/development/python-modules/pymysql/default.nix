@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Python MySQL Client";
-    homepage = https://github.com/PyMySQL/PyMySQL;
+    homepage = "https://github.com/PyMySQL/PyMySQL";
     license = licenses.mit;
     maintainers = [ maintainers.kalbasit ];
   };

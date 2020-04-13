@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sshuttle/sshuttle/;
+    homepage = "https://github.com/sshuttle/sshuttle/";
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the

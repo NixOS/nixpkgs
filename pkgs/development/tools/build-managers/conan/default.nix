@@ -94,7 +94,7 @@ in newPython.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://conan.io;
+    homepage = "https://conan.io";
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];

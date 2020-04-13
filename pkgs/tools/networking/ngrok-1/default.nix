@@ -30,6 +30,6 @@ buildGoPackage rec {
   buildFlags = [ "-tags release" ];
 
   meta = {
-    homepage = https://ngrok.com/;
+    homepage = "https://ngrok.com/";
   };
 }

@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Personal task manager for GNOME";
-    homepage = https://wiki.gnome.org/Apps/Todo;
+    homepage = "https://wiki.gnome.org/Apps/Todo";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

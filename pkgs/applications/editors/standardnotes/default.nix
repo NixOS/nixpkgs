@@ -50,7 +50,7 @@ in appimageTools.wrapType2 rec {
       Standard Notes is a private notes app that features unmatched simplicity,
       end-to-end encryption, powerful extensions, and open-source applications.
     '';
-    homepage = https://standardnotes.org;
+    homepage = "https://standardnotes.org";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mgregoire ];
     platforms = [ "i386-linux" "x86_64-linux" ];

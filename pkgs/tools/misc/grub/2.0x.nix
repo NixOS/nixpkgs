@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
          operating system (e.g., GNU).
       '';
 
-    homepage = https://www.gnu.org/software/grub/;
+    homepage = "https://www.gnu.org/software/grub/";
 
     license = licenses.gpl3Plus;
 

@@ -19,7 +19,7 @@ in mkDerivation rec {
   meta = with lib; {
     description = "Norton/Total Commander clone for KDE";
     license = licenses.gpl2;
-    homepage = http://www.krusader.org;
+    homepage = "http://www.krusader.org";
     maintainers = with maintainers; [ sander ];
   };
 

@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "a safe and secure chat client";
-    homepage = https://coy.im/;
+    homepage = "https://coy.im/";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

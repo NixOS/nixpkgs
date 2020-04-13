@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ canonicaljson unpaddedbase64 pynacl typing-extensions ];
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.org/project/signedjson/;
+    homepage = "https://pypi.org/project/signedjson/";
     description = "Sign JSON with Ed25519 signatures";
     license = licenses.asl20;
   };

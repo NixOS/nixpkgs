@@ -24,6 +24,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "library for testing asyncio code with pytest";
     license = licenses.asl20;
-    homepage = https://github.com/pytest-dev/pytest-asyncio;
+    homepage = "https://github.com/pytest-dev/pytest-asyncio";
   };
 }

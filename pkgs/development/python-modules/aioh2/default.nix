@@ -15,7 +15,7 @@ buildPythonPackage rec {
   doCheck = false; # https://github.com/decentfox/aioh2/issues/17
 
   meta = with lib; {
-    homepage = https://github.com/decentfox/aioh2;
+    homepage = "https://github.com/decentfox/aioh2";
     description = "HTTP/2 implementation with hyper-h2 on Python 3 asyncio";
     license = licenses.bsd3;
     maintainers = [ maintainers.qyliss ];

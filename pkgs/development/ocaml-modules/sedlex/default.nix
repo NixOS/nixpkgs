@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    homepage = https://github.com/ocaml-community/sedlex;
+    homepage = "https://github.com/ocaml-community/sedlex";
     description = "An OCaml lexer generator for Unicode";
     license = stdenv.lib.licenses.mit;
     inherit (ocaml.meta) platforms;

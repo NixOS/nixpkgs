@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "System Security Services Daemon";
-    homepage = https://fedorahosted.org/sssd/;
+    homepage = "https://fedorahosted.org/sssd/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.e-user ];

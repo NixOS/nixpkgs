@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python package for reading Adobe Photoshop PSD files";
-    homepage = https://github.com/kmike/psd-tools;
+    homepage = "https://github.com/kmike/psd-tools";
     license = lib.licenses.mit;
     broken = true; # missing packbits from nixpkgs
   };

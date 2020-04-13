@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://caml.inria.fr/ocaml;
+    homepage = "http://caml.inria.fr/ocaml";
     license = with licenses; [
       qpl /* compiler */
       lgpl2 /* library */

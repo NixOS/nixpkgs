@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An anti-bikeshedding Kotlin linter with built-in formatter";
-    homepage = https://ktlint.github.io/;
+    homepage = "https://ktlint.github.io/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ tadfisher ];
