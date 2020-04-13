@@ -2009,7 +2009,9 @@ in
 
   mididings = callPackage ../tools/audio/mididings { };
 
-  miniserve = callPackage ../tools/misc/miniserve { };
+  miniserve = callPackage ../tools/misc/miniserve {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
