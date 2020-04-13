@@ -9,6 +9,7 @@
 , pytest
 , pytest-relaxed
 , mock
+, enum34
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ invoke pytest mock pytest-relaxed ];
-  propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 ];
+  propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 enum34 ];
 
   __darwinAllowLocalNetworking = true;
 
