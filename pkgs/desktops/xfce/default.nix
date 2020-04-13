@@ -3,6 +3,14 @@
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
 
+  updateScript = callPackage ../../common-updater/update-script.nix { };
+
+  gitLister = url:
+    "${pkgs.common-updater-scripts}/bin/list-git-tags ${url}";
+
+  archiveLister = category: name:
+    "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions https://archive.xfce.org/src/${category}/${name}";
+
   mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
   automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;
