@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, groff, Security, utillinux }:
+{ stdenv, buildGoPackage, fetchFromGitHub, groff, utillinux }:
 
 buildGoPackage rec {
   pname = "hub";
@@ -17,7 +17,6 @@ buildGoPackage rec {
   };
 
   nativeBuildInputs = [ groff utillinux ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   postPatch = ''
     patchShebangs .

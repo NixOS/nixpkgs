@@ -173,9 +173,7 @@ let
 
   grv = callPackage ./grv { };
 
-  hub = callPackage ./hub {
-    inherit (darwin) Security;
-  };
+  hub = callPackage ./hub { };
 
   lab = callPackage ./lab { };
 
