@@ -421,6 +421,7 @@ in
   taskserver = handleTest ./taskserver.nix {};
   telegraf = handleTest ./telegraf.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
+  tigervnc = handleTest ./tigervnc.nix {};
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};

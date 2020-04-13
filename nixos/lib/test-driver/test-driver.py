@@ -499,7 +499,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
         """Wait until a command returns success and return its output.
         Throws an exception on timeout.
         """
@@ -511,7 +511,7 @@ class Machine:
             return status == 0
 
         with self.nested("waiting for success: {}".format(command)):
-            retry(check_success)
+            retry(check_success, timeout)
             return output
 
     def wait_until_fails(self, command: str) -> str:

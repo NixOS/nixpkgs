@@ -7,6 +7,7 @@
 , gnutls, pam, nettle
 , xterm, openssh, perl
 , makeWrapper
+, nixosTests
 }:
 
 with lib;
@@ -97,6 +98,8 @@ stdenv.mkDerivation rec {
     ++ xorg.xorgserver.nativeBuildInputs;
 
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
+
+  passthru.tests.tigervnc = nixosTests.vnc.testTigerVNC;
 
   meta = {
     homepage = "https://tigervnc.org/";
