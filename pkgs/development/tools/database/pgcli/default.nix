@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "2.2.0";
+  version = "3.0.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54138a31e6736a34c63b84a6d134c9292c9a73543cc0f66e80a0aaf79259d39b";
+    sha256 = "10j01bd031fys1vcihibsi5rrfd8w1kgahpcsbk4l07871c24829";
   };
 
   propagatedBuildInputs = [
