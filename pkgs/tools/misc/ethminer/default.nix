@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p ];
     license = licenses.gpl2;
+    # Doesn't build with gcc9, and if overlayed to use gcc8 stdenv fails on CUDA issues.
+    broken = true;
   };
 
 }
