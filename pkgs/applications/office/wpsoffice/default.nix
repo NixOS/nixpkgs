@@ -1,29 +1,38 @@
 { stdenv
+, mkDerivation
 , fetchurl
+, autoPatchelfHook
+, dpkg
+, wrapQtAppsHook
 , alsaLib
 , atk
+, bzip2
 , cairo
 , cups
 , dbus
-, dpkg
 , expat
+, ffmpeg_3
 , fontconfig
 , freetype
 , gdk-pixbuf
 , glib
+, gperftools
 , gtk2-x11
-, libICE
-, libX11
-, libXrender
 , libpng12
+, libtool
 , libuuid
+, libxml2
 , lzma
+, nspr
+, nss
+, openssl
 , pango
-, qt5
+, qt4
+, qtbase
 , sqlite
+, unixODBC
 , xorg
 , zlib
-, zotero
 }:
 
 stdenv.mkDerivation rec{
@@ -37,7 +46,13 @@ stdenv.mkDerivation rec{
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook dpkg ];
+  postUnpack = stdenv.lib.optionalString (version == "11.1.0.9505") ''
+    # distribution is missing libjsapiservice.so, so we should not let
+    # autoPatchelfHook fail on the following dead libraries
+    rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
+  '';
+
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapQtAppsHook ];
 
   meta = {
     description = "Office program originally named Kingsoft Office";
@@ -48,21 +63,23 @@ stdenv.mkDerivation rec{
     maintainers = [ stdenv.lib.maintainers.mlatus ];
   };
 
-  libPath = with xorg; stdenv.lib.makeLibraryPath [
+  buildInputs = with xorg; [
     alsaLib
     atk
+    bzip2
     cairo
-    cups
-    dbus.daemon.lib
+    dbus.lib
     expat
-    fontconfig
+    ffmpeg_3.out
     fontconfig.lib
     freetype
     gdk-pixbuf
     glib
+    gperftools
     gtk2-x11
     libICE
     libSM
+    libX11
     libX11
     libXScrnSaver
     libXcomposite
@@ -75,13 +92,20 @@ stdenv.mkDerivation rec{
     libXrender
     libXtst
     libpng12
+    libtool.lib
     libuuid
     libxcb
+    libxml2
     lzma
+    nspr
+    nss
+    openssl
     pango
+    qt4
+    qtbase
     sqlite
+    unixODBC
     zlib
-    zotero
   ];
 
   dontPatchELF = true;
@@ -90,18 +114,37 @@ stdenv.mkDerivation rec{
   # references to nix own build directory
   noAuditTmpdir = true;
 
+  unvendoredLibraries = [
+    # Have to use parts of the vendored qt4
+    #"Qt"
+    "SDL2"
+    "bz2"
+    "avcodec"
+    "avdevice"
+    "avformat"
+    "avutil"
+    "swresample"
+    "swscale"
+    "jpeg"
+    "png"
+    # File saving breaks unless we are using vendored llvmPackages_8.libcxx
+    #"c++"
+    "ssl" "crypto"
+    "nspr"
+    "nss"
+    "odbc"
+    "tcmalloc" # gperftools
+  ];
+
   installPhase = ''
     prefix=$out/opt/kingsoft/wps-office
     mkdir -p $out
     cp -r opt $out
     cp -r usr/* $out
-    # Avoid forbidden reference error due use of patchelf
-    rm -r *
+    for lib in $unvendoredLibraries; do
+      rm -v "$prefix/office6/lib$lib"*.so{,.*}
+    done
     for i in wps wpp et wpspdf; do
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --force-rpath --set-rpath "$(patchelf --print-rpath $prefix/office6/$i):${stdenv.cc.cc.lib}/lib64:${libPath}" \
-        $prefix/office6/$i
       substituteInPlace $out/bin/$i \
         --replace /opt/kingsoft/wps-office $prefix
     done
