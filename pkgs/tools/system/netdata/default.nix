@@ -41,8 +41,8 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
-    ln -s ${go-d-plugin.bin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
-    ln -s ${go-d-plugin.bin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
+    ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
+    ln -s ${go-d-plugin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
   '' + optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
