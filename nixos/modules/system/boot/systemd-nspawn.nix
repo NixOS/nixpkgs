@@ -79,9 +79,39 @@ let
           <manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
+
+      extraDrvConfig = mkOption {
+        type = types.nullOr types.package;
+        default = null;
+        description = ''
+          Extra config for an nspawn-unit that is generated via `nix-build`.
+          This is necessary since nspawn doesn't support overrides in
+          <literal>/etc/systemd/nspawn</literal> natively and sometimes a derivation
+          is needed for configs (e.g. to determine all needed store-paths to bind-mount
+          into a machine).
+        '';
+      };
     };
 
   };
+
+  makeUnit' = name: def:
+    if def.extraDrvConfig == null || !def.enable then makeUnit name def
+    else pkgs.runCommand "nspawn-${mkPathSafeName name}-custom"
+      { preferLocalBuild = true;
+        allowSubstitutes = false;
+      } (let
+        name' = shellEscape name;
+      in ''
+        if [ ! -f "${def.extraDrvConfig}" ]; then
+          echo "systemd.nspawn.${name}.extraDrvConfig is not a file!"
+          exit 1
+        fi
+
+        mkdir -p $out
+        cat ${makeUnit name def}/${name'} > $out/${name'}
+        cat ${def.extraDrvConfig} >> $out/${name'}
+      '');
 
   instanceToUnit = name: def:
     let base = {
@@ -96,7 +126,7 @@ let
         ${attrsToSection def.networkConfig}
       '';
     } // def;
-    in base // { unit = makeUnit name base; };
+    in base // { unit = makeUnit' name base; };
 
 in {
 
