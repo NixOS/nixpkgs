@@ -39,7 +39,7 @@ buildPythonPackage rec {
         ++ lib.optional ffmpegSupport ffmpeg_4
         ++ lib.optional rtmpSupport rtmpdump
         ++ lib.optional phantomjsSupport phantomjs2;
-    in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+    in [ "--prefix" "PATH" ":" (lib.makeBinPath packagesToBinPath) ];
 
   setupPyBuildFlags = [
     "build_lazy_extractors"
