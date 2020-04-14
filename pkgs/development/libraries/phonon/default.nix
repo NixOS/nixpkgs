@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    cmakeFlags+=" -DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs"
-    cmakeFlags+=" -DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix"
-    cmakeFlags+=" -DPHONON_QT_PLUGIN_INSTALL_DIR=''${!outputBin}/$qtPluginPrefix/designer"
+    cmakeFlags+=("-DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs")
+    cmakeFlags+=("-DPHONON_QT_IMPORTS_INSTALL_DIR=''${!outputBin}/$qtQmlPrefix")
+    cmakeFlags+=("-DPHONON_QT_PLUGIN_INSTALL_DIR=''${!outputBin}/$qtPluginPrefix/designer")
   '';
 
   postPatch = ''
