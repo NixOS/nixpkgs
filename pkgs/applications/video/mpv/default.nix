@@ -52,7 +52,7 @@
 , xvSupport          ? stdenv.isLinux, libXv         ? null
 , youtubeSupport     ? true,           youtube-dl    ? null
 , zimgSupport        ? true,           zimg          ? null
-, archiveSupport     ? false,          libarchive    ? null
+, archiveSupport     ? true,           libarchive    ? null
 , jackaudioSupport   ? false,          libjack2      ? null
 , openalSupport      ? true,           openalSoft    ? null
 , vapoursynthSupport ? false,          vapoursynth   ? null
