@@ -151,8 +151,7 @@ stdenv.mkDerivation rec{
     done
     for i in $out/share/applications/*;do
       substituteInPlace $i \
-        --replace /usr/bin $out/bin \
-        --replace /opt/kingsoft/wps-office $prefix
+        --replace /usr/bin $out/bin
     done
   '';
 
