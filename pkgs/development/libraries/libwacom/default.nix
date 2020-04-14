@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://linuxwacom.github.io/";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
+    maintainers = teams.freedesktop.members;
     license = licenses.mit;
   };
 }
