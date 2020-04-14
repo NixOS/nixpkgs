@@ -40,5 +40,7 @@ in
             cfg.lockerCommand
         ]);
     };
+
+    environment.systemPackages = [ pkgs.xss-lock ];
   };
 }
