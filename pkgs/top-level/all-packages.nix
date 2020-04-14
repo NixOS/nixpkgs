@@ -9032,6 +9032,8 @@ in
   rustracerd = callPackage ../development/tools/rust/racerd {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  inherit (callPackage ../development/tools/rust/rust-analyzer { })
+    rust-analyzer-unwrapped rust-analyzer;
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
