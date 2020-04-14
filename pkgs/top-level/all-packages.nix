@@ -24203,6 +24203,8 @@ in
 
   runc = callPackage ../applications/virtualization/runc {};
 
+  rutorrent = callPackage ../applications/networking/p2p/rutorrent {};
+
   uade123 = callPackage ../applications/audio/uade123 {};
 
   udevil = callPackage ../applications/misc/udevil {};
