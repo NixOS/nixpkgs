@@ -103,6 +103,10 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals isPy35 [
     # Backports support for LD_LIBRARY_PATH from 3.6
     ./3.5/ld_library_path.patch
+  ] ++ optionals (isPy35 || isPy36 || isPy37) [
+    # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
+    # See: https://bugs.python.org/issue11122
+    ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
   ] ++ optionals (isPy37 || isPy38) [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
