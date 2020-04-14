@@ -58,7 +58,7 @@ stdenv.mkDerivation rec{
   meta = {
     description = "Office program originally named Kingsoft Office";
     homepage = "http://wps-community.org/";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
     license = stdenv.lib.licenses.unfreeRedistributable;
     maintainers = [ stdenv.lib.maintainers.mlatus ];
