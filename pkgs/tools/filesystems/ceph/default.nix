@@ -93,7 +93,7 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.6";
+  version = "14.2.8";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -101,12 +101,11 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0qkyrb25r2a57n6k8ncb43x7hvhkmpi7abhfyi98mlz2lhmhzlm1";
+      sha256 = "0p7pjycqhxqg1mmix8ykx3xqq01d560p54iiidxps0rcvwfkyyki";
     };
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      ./0000-dont-check-cherrypy-version.patch
     ];
 
     nativeBuildInputs = [
