@@ -2,15 +2,15 @@
 
 buildDunePackage rec {
   pname = "angstrom";
-  version = "0.12.1";
+  version = "0.13.0";
 
-  minimumOCamlVersion = "4.03";
+  minimumOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner  = "inhabitedtype";
     repo   = pname;
     rev    = version;
-    sha256 = "0w0wavqzdy2hrh7cjyl9w72ad4vndhwhknwvyacvkwkja5wys5b2";
+    sha256 = "0vzbwd8j34iv7n6gwqq2mf25q7rqpnpxnifb9ssxhq55p5dd1kp4";
   };
 
   checkInputs = [ alcotest ];
