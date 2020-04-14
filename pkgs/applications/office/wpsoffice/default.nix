@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
+, wrapGAppsHook
 , wrapQtAppsHook
 , alsaLib
 , atk
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec{
     rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg wrapQtAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook wrapQtAppsHook ];
 
   meta = {
     description = "Office program originally named Kingsoft Office";
@@ -152,6 +153,22 @@ stdenv.mkDerivation rec{
       substituteInPlace $i \
         --replace /usr/bin $out/bin \
         --replace /opt/kingsoft/wps-office $prefix
+    done
+  '';
+
+  runtimeLibPath = stdenv.lib.makeLibraryPath [
+    cups.lib
+  ];
+
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+  postFixup = ''
+    for f in "$out"/bin/*; do
+      echo "Wrapping $f"
+      wrapProgram "$f" \
+        "''${gappsWrapperArgs[@]}" \
+        "''${qtWrapperArgs[@]}" \
+        --suffix LD_LIBRARY_PATH : "$runtimeLibPath"
     done
   '';
 }
