@@ -3,7 +3,7 @@
 
 buildPythonApplication rec {
   pname = "transifex-client";
-  version = "0.13.6";
+  version = "0.13.9";
 
   propagatedBuildInputs = [
     urllib3 requests python-slugify six setuptools
@@ -11,13 +11,13 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y6pprlmkmi7wfqr3k70sb913qa70p3i90q5mravrai7cr32y1w8";
+    sha256 = "0lgd77vrddvyn8afkxr7a7hblmp4k5sr0i9i1032xdih2bipdd9f";
   };
 
   prePatch = ''
     substituteInPlace requirements.txt --replace "urllib3<1.24" "urllib3>=1.24" \
       --replace "six==1.11.0" "six>=1.11.0" \
-      --replace "python-slugify==1.2.6" "python-slugify>=1.2.6"
+      --replace "python-slugify<2.0.0" "python-slugify>2.0.0"
   '';
 
   # Requires external resources
