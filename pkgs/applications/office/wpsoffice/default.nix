@@ -71,8 +71,8 @@ stdenv.mkDerivation rec{
     cairo
     dbus.lib
     expat
-    ffmpeg_3.out
-    fontconfig.lib
+    ffmpeg_3
+    fontconfig
     freetype
     gdk-pixbuf
     glib
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec{
     libXrender
     libXtst
     libpng12
-    libtool.lib
+    libtool
     libuuid
     libxcb
     libxml2
