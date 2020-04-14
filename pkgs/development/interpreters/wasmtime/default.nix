@@ -2,12 +2,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "v0.12.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "${pname}";
-    rev = "${version}";
+    rev = "v${version}";
     sha256 = "08dhk5s8rv41mjqbwfqwqmp6p6p9y7qc5yc76ljjd9l7j1phl7mr";
     fetchSubmodules = true;
   };
