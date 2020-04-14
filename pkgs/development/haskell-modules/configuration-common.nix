@@ -1501,4 +1501,7 @@ self: super: {
   # Fixed at head, but hasn't cut a release in awhile.
   darcs = doJailbreak super.darcs;
 
+  # Test suite requires running a database server. Testing is done upstream.
+  hasql-pool = dontCheck super.hasql-pool;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

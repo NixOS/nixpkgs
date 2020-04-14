@@ -5621,7 +5621,6 @@ broken-packages:
   - hasql-migration
   - hasql-notifications
   - hasql-optparse-applicative
-  - hasql-pool
   - hasql-postgres
   - hasql-postgres-options
   - hasql-simple
