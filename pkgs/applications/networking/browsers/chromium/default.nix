@@ -16,6 +16,7 @@
 , useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
+# disabled because it might break on radeon, enabled in `chromium-vaapi` variant.
 , commandLineArgs ? "--disable-accelerated-video-decode --disable-accelerated-video-encode"
 }:
 
