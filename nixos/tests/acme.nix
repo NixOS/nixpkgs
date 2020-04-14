@@ -48,10 +48,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
       security.acme.certs."standalone.test" = {
         webroot = "/var/lib/acme/acme-challenges";
       };
-      systemd.targets."acme-finished-standalone.test" = {};
-      systemd.services."acme-standalone.test" = {
-        wants = [ "acme-finished-standalone.test.target" ];
-        before = [ "acme-finished-standalone.test.target" ];
+      systemd.targets."acme-finished-standalone.test" = {
+        after = [ "acme-standalone.test.service" ];
+        wantedBy = [ "acme-standalone.test.service" ];
       };
       services.nginx.enable = true;
       services.nginx.virtualHosts."standalone.test" = {
@@ -68,10 +67,11 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
       # A target remains active. Use this to probe the fact that
       # a service fired eventhough it is not RemainAfterExit
-      systemd.targets."acme-finished-a.example.test" = {};
+      systemd.targets."acme-finished-a.example.test" = {
+        after = [ "acme-a.example.test.service" ];
+        wantedBy = [ "acme-a.example.test.service" ];
+      };
       systemd.services."acme-a.example.test" = {
-        wants = [ "acme-finished-a.example.test.target" ];
-        before = [ "acme-finished-a.example.test.target" ];
         after = [ "nginx.service" ];
       };
 
@@ -89,10 +89,11 @@ in import ./make-test-python.nix ({ lib, ... }: {
       security.acme.server = "https://acme.test/dir";
 
       specialisation.second-cert.configuration = {pkgs, ...}: {
-        systemd.targets."acme-finished-b.example.test" = {};
+        systemd.targets."acme-finished-b.example.test" = {
+          after = [ "acme-b.example.test.service" ];
+          wantedBy = [ "acme-b.example.test.service" ];
+        };
         systemd.services."acme-b.example.test" = {
-          wants = [ "acme-finished-b.example.test.target" ];
-          before = [ "acme-finished-b.example.test.target" ];
           after = [ "nginx.service" ];
         };
         services.nginx.virtualHosts."b.example.test" = {
@@ -115,10 +116,12 @@ in import ./make-test-python.nix ({ lib, ... }: {
           user = config.services.nginx.user;
           group = config.services.nginx.group;
         };
-        systemd.targets."acme-finished-example.test" = {};
+        systemd.targets."acme-finished-example.test" = {
+          after = [ "acme-example.test.service" ];
+          wantedBy = [ "acme-example.test.service" ];
+        };
         systemd.services."acme-example.test" = {
-          wants = [ "acme-finished-example.test.target" ];
-          before = [ "acme-finished-example.test.target" "nginx.service" ];
+          before = [ "nginx.service" ];
           wantedBy = [ "nginx.service" ];
         };
         services.nginx.virtualHosts."c.example.test" = {
