@@ -176,12 +176,12 @@ in
     };
 
     phpcs = mkDerivation rec {
-      version = "3.5.3";
+      version = "3.5.4";
       pname = "phpcs";
 
       src = pkgs.fetchurl {
         url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-        sha256 = "0y4nhsifj4pdmf5g1nnm4951yjgiqswyz7wmjxx6kqiqc7chlkml";
+        sha256 = "1lrybdxxig3yqd3i3nwji5jjn377p50sbpm4s4852dlsxz9qnlgs";
       };
 
       phases = [ "installPhase" ];
@@ -190,7 +190,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpcs/phpcs.phar
-        makeWrapper ${php}/bin/php $out/bin/phpcs \
+        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpcs \
           --add-flags "$out/libexec/phpcs/phpcs.phar"
       '';
 
