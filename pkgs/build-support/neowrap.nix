@@ -36,7 +36,7 @@ let
     # list of packages and creates a list of all buildInputs they all depend
     # on. The 2nd argument pkgsFound is used internally and it's expected to be
     # [] at the first call.
-    getAllInputs = 
+    getAllInputs =
       pkgs:
       pkgsFound:
       map (
@@ -83,7 +83,7 @@ let
           envStr;
         }
     ;
-    envInfo = map (
+    envInfo = lib.attrsets.foldAttrs (n: a: [n] ++ a) [] (map (
       pkg:
       # for every package in envPkgs, do the following for every env key and value
       (lib.attrsets.mapAttrs (
@@ -97,10 +97,8 @@ let
           envStr = value;
         }
       ) pkg.propagateEnv)
-    ) envPkgs;
+    ) envPkgs);
     # envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
-    envInfoFolded = lib.attrsets.foldAttrs (n: a: [n] ++ a) [] envInfo;
-    # envInfoFolded_ = builtins.trace "envInfoFolded is ${(builtins.toJSON envInfoFolded)}" envInfoFolded;
     # Where we add stuff according to encyclopedia.wrapOut
     envInfoWithLocal = lib.attrsets.mapAttrs (
       name:
@@ -109,7 +107,7 @@ let
         values ++ (lib.lists.flatten encyclopedia.wrapOut.${name})
       else
         values
-    ) envInfoFolded;
+    ) envInfo;
     # envInfoWithLocal_ = builtins.trace "envInfoWithLocal is ${(builtins.toJSON envInfoWithLocal)}" envInfoWithLocal;
     makeWrapperArgs = lib.attrsets.mapAttrsToList (
       key:
