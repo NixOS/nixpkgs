@@ -2,6 +2,7 @@
 , symlinkJoin
 , makeWrapper
 , lndir
+, pkgs
 , extraPkgsByOverride ? []
 }:
 
@@ -21,11 +22,13 @@ let
       XDG_DATA_DIRS = "link";
       # Tells the builder to simply link all the files of a package that
       # propagets this env var. Note that this may affect closure size of the
-      # result as every pkg's `out` is chosen unconditionally. Useful for
+      # result as every pkg's all outputs are used unconditionally. Useful for
       # python / other languages wrappings
       GI_TYPELIB_PATH = "linkPkg";
     },
     */
+    # TODO: Decide what to do when `linkPkg` is used here and the file
+    # nix-support/propagated-build-inputs has different values per package
     linkByEnv ? {},
   }:
   let
@@ -49,6 +52,8 @@ let
       linkPaths = {
         XDG_DATA_DIRS = "$out/share";
         GI_TYPELIB_PATH = "$out/lib/girepository-1.0";
+        QT_PLUGIN_PATH = "$out/${pkgs.qt5.qtbase.qtPluginPrefix}";
+        QML2_IMPORT_PATH = "$out/${pkgs.qt5.qtbase.qtQmlPrefix}";
       };
       # If you want an environment variable to have a single value and that's it,
       # put it here:
@@ -139,8 +144,7 @@ let
                 {
                   linkType = "pkg";
                   linkTo = "$out";
-                  # "out" is not always the default
-                  linkFrom = pkg.out;
+                  linkFrom = pkg;
                 }
             else
               abort "neowrap.nix: I was requested to symlink paths of propagated environment for env var `${name}` but I don't know where to put these files as they are not in my encyclopedia"

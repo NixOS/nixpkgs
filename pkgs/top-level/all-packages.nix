@@ -21197,14 +21197,15 @@ in
 
   picard-oldy-wrapped = callPackage ../applications/audio/picard { };
 
-  picard-newly-unwrapped = (picard-oldy-wrapped.override {
+  picard-newly-wrapped = wrapGeneric (
+    (picard-oldy-wrapped.override {
     qt5 = qt5 // {
       wrapQtAppsHook = null;
     };
-  }).overrideAttrs(oldAttrs: {
-    preFixup = "";
-  });
-  picard-newly-wrapped = wrapGeneric picard-newly-unwrapped {};
+    }).overrideAttrs(oldAttrs: {
+      preFixup = "";
+    })
+  ) { };
 
   picocom = callPackage ../tools/misc/picocom {
     inherit (darwin.apple_sdk.frameworks) IOKit;
