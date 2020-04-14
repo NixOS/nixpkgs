@@ -4,7 +4,52 @@
 
 let
   sources = {
-    "2-thenable-1.0.0" = {
+    "lumo-cljs-1.10.1" = {
+      name = "lumo-cljs";
+      packageName = "lumo-cljs";
+      version = "1.10.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lumo-cljs/-/lumo-cljs-1.10.1.tgz";
+        sha512 = "0nx9lc8azqx04kdvixzmib2nsdhm33zvmzn3q0cqxa6h65kdhfrb7716c4jgwpjvhfsgl9iwj313f1bwfzqwpjc2nik77q4n60k5a56";
+      };
+     };
+    "rss-parser-3.7.1" = {
+      name = "rss-parser";
+      packageName = "rss-parser";
+      version = "3.7.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/rss-parser/-/rss-parser-3.7.1.tgz";
+        sha512 = "1JKFzLHeteNandmlVBUWgLPmipFEllhdUQlmNvkXd6ju4VFOlGr0VmtlQaxzZoVysG2nbGb8eAtzNqQTxzQ+AQ==";
+      };
+    };
+     "esquery-1.1.0" = {
+      name = "esquery";
+      packageName = "esquery";
+      version = "1.1.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/esquery/-/esquery-1.1.0.tgz";
+        sha512 = "MxYW9xKmROWF672KqjO75sszsA8Mxhw06YFeS5VHlB98KDHbOSurm3ArsjO60Eaf3QmGMCP1yn+0JQkNLo/97Q==";
+      };
+    };
+     "deep-extend-0.5.1" = {
+      name = "deep-extend";
+      packageName = "deep-extend";
+      version = "0.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/deep-extend/-/deep-extend-0.5.1.tgz";
+        sha512 = "N8vBdOa+DF7zkRrDCsaOXoCs/E2fJfx9B9MrKnnSiHNh4ws7eSys6YQE4KvT1cecKmOASYQBhbKjeuDD9lT81w==";
+      };
+    };
+     "deasync-0.1.15" = {
+      name = "deasync";
+      packageName = "deasync";
+      version = "0.1.15";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/deasync/-/deasync-0.1.15.tgz";
+        sha512 = "pxMaCYu8cQIbGkA4Y1R0PLSooPIpH1WgFBLeJ+zLxQgHfkZG86ViJSmZmONSjZJ/R3NjwkMcIWZAzpLB2G9/CA==";
+      };
+    };
+     "2-thenable-1.0.0" = {
       name = "2-thenable";
       packageName = "2-thenable";
       version = "1.0.0";
@@ -19951,6 +19996,15 @@ let
         sha512 = "rGs3bVYHdyJpLqR0TUBnlcZ1O5O++Zs4bA0ajm+zr3WFCfiSLjGwoCBqFs18wzN+ZxahT9DkOK5nDf26iDsWjA==";
       };
     };
+    "gulp-eslint-3.0.1" = {
+      name = "gulp-eslint";
+      packageName = "gulp-eslint";
+      version = "3.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/gulp-eslint/-/gulp-eslint-3.0.1.tgz";
+        sha1 = "04e57e3e18c6974267c12cf6855dc717d4a313bd";
+      };
+    };
     "gulp-less-3.5.0" = {
       name = "gulp-less";
       packageName = "gulp-less";
@@ -27719,6 +27773,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/marky/-/marky-1.2.1.tgz";
         sha512 = "md9k+Gxa3qLH6sUKpeC2CNkJK/Ld+bEz5X96nYwloqphQE0CKCVEKco/6jxEZixinqNdz5RFi/KaCyfbMDMAXQ==";
+      };
+    };
+    "mastodon-api-1.3.0" = {
+      name = "mastodon-api";
+      packageName = "mastodon-api";
+      version = "1.3.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/mastodon-api/-/mastodon-api-1.3.0.tgz";
+        sha1 = "b3bcffcf51e005f754b7e86e44c2023d8e2c63d1";
       };
     };
     "match-casing-1.0.3" = {
@@ -36747,6 +36810,15 @@ let
         sha512 = "zz0pAkSPOXXm1viEwygWIPSPkcBYjW1xU5j/JBh5t9bGCJwa6f9+BJa6VaB2g+b55yVrmXzqkyLf4xaWYM0IkQ==";
       };
     };
+    "readline-1.3.0" = {
+      name = "readline";
+      packageName = "readline";
+      version = "1.3.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/readline/-/readline-1.3.0.tgz";
+        sha1 = "c580d77ef2cfc8752b132498060dc9793a7ac01c";
+      };
+    };
     "readline2-0.1.1" = {
       name = "readline2";
       packageName = "readline2";
@@ -44344,6 +44416,15 @@ let
         sha512 = "k3DeWv+GnKYcFaFLK87Ecum4AWxySB0lfzQaonlHKaoum7A2DlTkWw8mfgWtz4o8Hoa4Ab/ZdDitR74LhbOK8A==";
       };
     };
+    "tumblr-0.4.1" = {
+      name = "tumblr";
+      packageName = "tumblr";
+      version = "0.4.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/tumblr/-/tumblr-0.4.1.tgz";
+        sha1 = "ac9f4ba7bd04525d6bd8b087f85553c8ef19dc9e";
+      };
+    };
     "tunnel-0.0.6" = {
       name = "tunnel";
       packageName = "tunnel";
@@ -44414,6 +44495,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/twig/-/twig-1.15.0.tgz";
         sha512 = "kJkEbF4sTyZcaMAXffCjaUt6ZSD3v6qZQZd9b6mySvfuUIseTCJCvikphAJvrNJTDw7nZDfGorvTtUkzge1HPg==";
+      };
+    };
+    "twitter-1.7.1" = {
+      name = "twitter";
+      packageName = "twitter";
+      version = "1.7.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/twitter/-/twitter-1.7.1.tgz";
+        sha1 = "0762378f1dc1c050e48f666aca904e24b1a962f4";
       };
     };
     "txt-to-ast-3.0.3" = {
@@ -68526,6 +68616,291 @@ in
     production = true;
     bypassCache = true;
     reconstructLock = true;
+  };
+  # currently manually added, before merging this PR we'll
+  # auto-generate it from npmjs.org of course
+  mastodon-bot = nodeEnv.buildNodePackage {
+    name = "mastodon-bot";
+    packageName = "mastodon-bot";
+    version = "2020-04-13";
+    src = fetchgit {
+      url = "https://github.com/yogthos/mastodon-bot.git";
+      branchName = "master";
+      sha256 = "1z5sq5sdh1c3hh30kqdcrbpfbqfgbk9d52kp22sb7xrmgg02z04s";
+    };
+    dependencies = [
+      sources."acorn-5.7.4"
+      (sources."acorn-jsx-3.0.1" // {
+        dependencies = [
+          sources."acorn-3.3.0"
+        ];
+      })
+      sources."ajv-4.11.8"
+      sources."ajv-keywords-1.5.1"
+      sources."ansi-escapes-1.4.0"
+      sources."ansi-gray-0.1.1"
+      sources."ansi-regex-2.1.1"
+      sources."ansi-styles-2.2.1"
+      sources."ansi-wrap-0.1.0"
+      sources."argparse-1.0.10"
+      sources."array-differ-1.0.0"
+      sources."array-uniq-1.0.3"
+      sources."asn1-0.2.4"
+      sources."assert-plus-1.0.0"
+      sources."asynckit-0.4.0"
+      sources."aws-sign2-0.7.0"
+      sources."aws4-1.9.1"
+      sources."babel-code-frame-6.26.0"
+      sources."balanced-match-1.0.0"
+      sources."bcrypt-pbkdf-1.0.2"
+      sources."beeper-1.1.1"
+      sources."bindings-1.2.1"
+      sources."brace-expansion-1.1.11"
+      sources."buffer-from-1.1.1"
+      sources."bufferstreams-1.1.3"
+      sources."caller-path-0.1.0"
+      sources."callsites-0.2.0"
+      sources."caseless-0.12.0"
+      sources."chalk-1.1.3"
+      sources."circular-json-0.3.3"
+      sources."cli-cursor-1.0.2"
+      sources."cli-width-2.2.0"
+      sources."clone-1.0.4"
+      sources."clone-stats-0.0.1"
+      sources."co-4.6.0"
+      sources."code-point-at-1.1.0"
+      sources."color-support-1.1.3"
+      sources."combined-stream-1.0.8"
+      sources."concat-map-0.0.1"
+      sources."concat-stream-1.6.2"
+      sources."core-util-is-1.0.2"
+      sources."d-1.0.1"
+      sources."dashdash-1.14.1"
+      sources."dateformat-2.2.0"
+      sources."deasync-0.1.15"
+      sources."debug-2.6.9"
+      sources."deep-extend-0.5.1"
+      sources."deep-is-0.1.3"
+      sources."delayed-stream-1.0.0"
+      sources."doctrine-2.1.0"
+      (sources."duplexer2-0.0.2" // {
+        dependencies = [
+          sources."isarray-0.0.1"
+          sources."readable-stream-1.1.14"
+          sources."string_decoder-0.10.31"
+        ];
+      })
+      sources."ecc-jsbn-0.1.2"
+      sources."entities-1.1.2"
+      sources."es5-ext-0.10.53"
+      sources."es6-iterator-2.0.3"
+      sources."es6-map-0.1.5"
+      (sources."es6-set-0.1.5" // {
+        dependencies = [
+          sources."es6-symbol-3.1.1"
+        ];
+      })
+      sources."es6-symbol-3.1.3"
+      sources."es6-weak-map-2.0.3"
+      sources."escape-string-regexp-1.0.5"
+      sources."escope-3.6.0"
+      sources."eslint-3.19.0"
+      sources."espree-3.5.4"
+      sources."esprima-4.0.1"
+      sources."esquery-1.1.0"
+      sources."esrecurse-4.2.1"
+      sources."estraverse-4.3.0"
+      sources."esutils-2.0.3"
+      sources."event-emitter-0.3.5"
+      sources."exit-hook-1.1.1"
+      (sources."ext-1.4.0" // {
+        dependencies = [
+          sources."type-2.0.0"
+        ];
+      })
+      sources."extend-3.0.2"
+      sources."extsprintf-1.3.0"
+      sources."fancy-log-1.3.3"
+      sources."fast-deep-equal-3.1.1"
+      sources."fast-json-stable-stringify-2.1.0"
+      sources."fast-levenshtein-2.0.6"
+      sources."figures-1.7.0"
+      sources."file-entry-cache-2.0.0"
+      sources."flat-cache-1.3.4"
+      sources."forever-agent-0.6.1"
+      sources."form-data-2.3.3"
+      sources."fs.realpath-1.0.0"
+      sources."generate-function-2.3.1"
+      sources."generate-object-property-1.2.0"
+      sources."getpass-0.1.7"
+      sources."glob-7.1.6"
+      sources."globals-9.18.0"
+      sources."glogg-1.0.2"
+      sources."graceful-fs-4.2.3"
+      sources."gulp-eslint-3.0.1"
+      (sources."gulp-util-3.0.8" // {
+        dependencies = [
+          sources."minimist-1.2.5"
+          sources."object-assign-3.0.0"
+        ];
+      })
+      sources."gulplog-1.0.0"
+      sources."har-schema-2.0.0"
+      (sources."har-validator-5.1.3" // {
+        dependencies = [
+          sources."ajv-6.12.0"
+        ];
+      })
+      sources."has-ansi-2.0.0"
+      sources."has-gulplog-0.1.0"
+      sources."http-signature-1.2.0"
+      sources."ignore-3.3.10"
+      sources."imurmurhash-0.1.4"
+      sources."inflight-1.0.6"
+      sources."inherits-2.0.4"
+      sources."inquirer-0.12.0"
+      sources."interpret-1.2.0"
+      sources."is-fullwidth-code-point-1.0.0"
+      sources."is-my-ip-valid-1.0.0"
+      sources."is-my-json-valid-2.20.0"
+      sources."is-property-1.0.2"
+      sources."is-resolvable-1.1.0"
+      sources."is-typedarray-1.0.0"
+      sources."isarray-1.0.0"
+      sources."isstream-0.1.2"
+      sources."js-tokens-3.0.2"
+      sources."js-yaml-3.13.1"
+      sources."jsbn-0.1.1"
+      sources."json-schema-0.2.3"
+      sources."json-schema-traverse-0.4.1"
+      sources."json-stable-stringify-1.0.1"
+      sources."json-stringify-safe-5.0.1"
+      sources."jsonify-0.0.0"
+      sources."jsonpointer-4.0.1"
+      sources."jsprim-1.4.1"
+      sources."levn-0.3.0"
+      sources."lodash-4.17.15"
+      sources."lodash._basecopy-3.0.1"
+      sources."lodash._basetostring-3.0.1"
+      sources."lodash._basevalues-3.0.0"
+      sources."lodash._getnative-3.9.1"
+      sources."lodash._isiterateecall-3.0.9"
+      sources."lodash._reescape-3.0.0"
+      sources."lodash._reevaluate-3.0.0"
+      sources."lodash._reinterpolate-3.0.0"
+      sources."lodash._root-3.0.1"
+      sources."lodash.escape-3.2.0"
+      sources."lodash.isarguments-3.1.0"
+      sources."lodash.isarray-3.0.4"
+      sources."lodash.keys-3.1.2"
+      sources."lodash.restparam-3.6.1"
+      sources."lodash.template-3.6.2"
+      sources."lodash.templatesettings-3.1.1"
+      sources."lumo-cljs-1.10.1"
+      sources."mastodon-api-1.3.0"
+      sources."mime-1.6.0"
+      sources."mime-db-1.43.0"
+      sources."mime-types-2.1.26"
+      sources."minimatch-3.0.4"
+      sources."minimist-0.0.8"
+      sources."mkdirp-0.5.1"
+      sources."ms-2.0.0"
+      sources."multipipe-0.1.2"
+      sources."mute-stream-0.0.5"
+      sources."natural-compare-1.4.0"
+      sources."next-tick-1.0.0"
+      sources."node-addon-api-1.7.1"
+      sources."number-is-nan-1.0.1"
+      sources."oauth-0.9.15"
+      sources."oauth-sign-0.9.0"
+      sources."object-assign-4.1.1"
+      sources."once-1.4.0"
+      sources."onetime-1.1.0"
+      sources."optionator-0.8.3"
+      sources."os-homedir-1.0.2"
+      sources."parse-node-version-1.0.1"
+      sources."path-is-absolute-1.0.1"
+      sources."path-is-inside-1.0.2"
+      sources."path-parse-1.0.6"
+      sources."performance-now-2.1.0"
+      sources."pluralize-1.2.1"
+      sources."prelude-ls-1.1.2"
+      sources."process-nextick-args-2.0.1"
+      sources."progress-1.1.8"
+      sources."psl-1.7.0"
+      sources."punycode-2.1.1"
+      sources."qs-6.5.2"
+      sources."readable-stream-2.3.7"
+      sources."readline-1.3.0"
+      sources."readline2-1.0.1"
+      sources."rechoir-0.6.2"
+      sources."replace-ext-0.0.1"
+      sources."request-2.88.0"
+      sources."require-uncached-1.0.3"
+      sources."resolve-1.15.1"
+      sources."resolve-from-1.0.1"
+      sources."restore-cursor-1.0.1"
+      sources."rimraf-2.6.3"
+      sources."rss-parser-3.7.1"
+      sources."run-async-0.1.0"
+      sources."rx-lite-3.1.2"
+      sources."safe-buffer-5.1.2"
+      sources."safer-buffer-2.1.2"
+      sources."sax-1.2.4"
+      sources."shelljs-0.7.8"
+      sources."slice-ansi-0.0.4"
+      sources."sparkles-1.0.1"
+      sources."sprintf-js-1.0.3"
+      sources."sshpk-1.16.1"
+      sources."string-width-1.0.2"
+      sources."string_decoder-1.1.1"
+      sources."strip-ansi-3.0.1"
+      sources."strip-bom-3.0.0"
+      sources."strip-json-comments-2.0.1"
+      sources."supports-color-2.0.0"
+      (sources."table-3.8.3" // {
+        dependencies = [
+          sources."ansi-regex-3.0.0"
+          sources."is-fullwidth-code-point-2.0.0"
+          sources."string-width-2.1.1"
+          sources."strip-ansi-4.0.0"
+        ];
+      })
+      sources."text-table-0.2.0"
+      sources."through-2.3.8"
+      sources."through2-2.0.5"
+      sources."time-stamp-1.1.0"
+      (sources."tough-cookie-2.4.3" // {
+        dependencies = [
+          sources."punycode-1.4.1"
+        ];
+      })
+      sources."tumblr-0.4.1"
+      sources."tunnel-agent-0.6.0"
+      sources."tweetnacl-0.14.5"
+      sources."twitter-1.7.1"
+      sources."type-1.2.0"
+      sources."type-check-0.3.2"
+      sources."typedarray-0.0.6"
+      sources."uri-js-4.2.2"
+      sources."user-home-2.0.0"
+      sources."util-deprecate-1.0.2"
+      sources."uuid-3.4.0"
+      sources."verror-1.10.0"
+      sources."vinyl-0.5.3"
+      sources."word-wrap-1.2.3"
+      sources."wrappy-1.0.2"
+      sources."write-0.2.1"
+      sources."xml2js-0.4.23"
+      sources."xmlbuilder-11.0.1"
+      sources."xtend-4.0.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "A bot for mirroring Twitter/Tumblr accounts and RSS feeds on Mastodon";
+      homepage = "https://mastodon.social/@newsbot";
+      license = "MIT";
+    };
   };
   mathjax = nodeEnv.buildNodePackage {
     name = "mathjax";
