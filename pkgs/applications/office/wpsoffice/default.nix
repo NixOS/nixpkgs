@@ -1,9 +1,30 @@
-{ stdenv, fetchurl
-, libX11, glib, xorg, fontconfig, freetype
-, zlib, libpng12, libICE, libXrender, cups
-, alsaLib, atk, cairo, dbus, expat
-, gdk-pixbuf, gtk2-x11, lzma, pango, zotero
-, sqlite, libuuid, qt5, dpkg }:
+{ stdenv
+, fetchurl
+, alsaLib
+, atk
+, cairo
+, cups
+, dbus
+, dpkg
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gtk2-x11
+, libICE
+, libX11
+, libXrender
+, libpng12
+, libuuid
+, lzma
+, pango
+, qt5
+, sqlite
+, xorg
+, zlib
+, zotero
+}:
 
 stdenv.mkDerivation rec{
   pname = "wpsoffice";
@@ -28,40 +49,39 @@ stdenv.mkDerivation rec{
   };
 
   libPath = with xorg; stdenv.lib.makeLibraryPath [
-    libX11
-    libpng12
-    glib
-    libSM
-    libXext
-    fontconfig
-    zlib
-    freetype
-    libICE
-    cups
-    libXrender
-    libxcb
-
     alsaLib
     atk
     cairo
+    cups
     dbus.daemon.lib
     expat
+    fontconfig
     fontconfig.lib
+    freetype
     gdk-pixbuf
+    glib
     gtk2-x11
-    lzma
-    pango
-    zotero
-    sqlite
-    libuuid
+    libICE
+    libSM
+    libX11
+    libXScrnSaver
     libXcomposite
     libXcursor
     libXdamage
+    libXext
     libXfixes
     libXi
     libXrandr
-    libXScrnSaver
+    libXrender
     libXtst
+    libpng12
+    libuuid
+    libxcb
+    lzma
+    pango
+    sqlite
+    zlib
+    zotero
   ];
 
   dontPatchELF = true;
