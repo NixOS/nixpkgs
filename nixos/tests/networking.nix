@@ -200,6 +200,7 @@ let
           useDHCP = false;
           interfaces.eth1 = {
             ipv4.addresses = mkOverride 0 [ ];
+            mtu = 1343;
             useDHCP = true;
           };
           interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
@@ -215,6 +216,9 @@ let
 
           with subtest("Wait until we have an ip address on each interface"):
               client.wait_until_succeeds("ip addr show dev eth1 | grep -q '192.168.1'")
+
+          with subtest("ensure MTU is set"):
+              assert "mtu 1343" in client.succeed("ip link show dev eth1")
 
           with subtest("Test vlan 1"):
               client.wait_until_succeeds("ping -c 1 192.168.1.1")
@@ -455,11 +459,14 @@ let
           ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
           virtual = true;
+          mtu = 1342;
+          macAddress = "02:de:ad:be:ef:01";
         };
         networking.interfaces.tun0 = {
           ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
           ipv6.addresses = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
           virtual = true;
+          mtu = 1343;
         };
       };
 
@@ -471,7 +478,7 @@ let
 
         with subtest("Wait for networking to come up"):
             machine.start()
-            machine.wait_for_unit("network-online.target")
+            machine.wait_for_unit("network.target")
 
         with subtest("Test interfaces set up"):
             list = machine.succeed("ip tuntap list | sort").strip()
@@ -486,7 +493,12 @@ let
             """.format(
                 list, targetList
             )
-
+        with subtest("Test MTU and MAC Address are configured"):
+            assert "mtu 1342" in machine.succeed("ip link show dev tap0")
+            assert "mtu 1343" in machine.succeed("ip link show dev tun0")
+            assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
+      '' # network-addresses-* only exist in scripted networking
+      + optionalString (!networkd) ''
         with subtest("Test interfaces clean up"):
             machine.succeed("systemctl stop network-addresses-tap0")
             machine.sleep(10)
@@ -602,17 +614,17 @@ let
       };
 
       testScript = ''
-        targetIPv4Table = """
-        10.0.0.0/16 proto static scope link mtu 1500 
-        192.168.1.0/24 proto kernel scope link src 192.168.1.2 
-        192.168.2.0/24 via 192.168.1.1 proto static 
-        """.strip()
+        targetIPv4Table = [
+            "10.0.0.0/16 proto static scope link mtu 1500",
+            "192.168.1.0/24 proto kernel scope link src 192.168.1.2",
+            "192.168.2.0/24 via 192.168.1.1 proto static",
+        ]
 
-        targetIPv6Table = """
-        2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium
-        2001:1470:fffd:2098::/64 via fdfd:b3f0::1 proto static metric 1024 pref medium
-        fdfd:b3f0::/48 proto static metric 1024 pref medium
-        """.strip()
+        targetIPv6Table = [
+            "2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium",
+            "2001:1470:fffd:2098::/64 via fdfd:b3f0::1 proto static metric 1024 pref medium",
+            "fdfd:b3f0::/48 proto static metric 1024 pref medium",
+        ]
 
         machine.start()
         machine.wait_for_unit("network.target")
@@ -620,9 +632,9 @@ let
         with subtest("test routing tables"):
             ipv4Table = machine.succeed("ip -4 route list dev eth0 | head -n3").strip()
             ipv6Table = machine.succeed("ip -6 route list dev eth0 | head -n3").strip()
-            assert (
-                ipv4Table == targetIPv4Table
-            ), """
+            assert [
+                l.strip() for l in ipv4Table.splitlines()
+            ] == targetIPv4Table, """
               The IPv4 routing table does not match the expected one:
                 Result:
                   {}
@@ -631,9 +643,9 @@ let
               """.format(
                 ipv4Table, targetIPv4Table
             )
-            assert (
-                ipv6Table == targetIPv6Table
-            ), """
+            assert [
+                l.strip() for l in ipv6Table.splitlines()
+            ] == targetIPv6Table, """
               The IPv6 routing table does not match the expected one:
                 Result:
                   {}
