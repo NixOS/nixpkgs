@@ -192,8 +192,21 @@ rec {
      Example:
        (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
        (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
+
+     Placeholders will not be quoted as they are not actual values:
+       (showOption ["foo" "*" "bar"]) == "foo.*.bar"
+       (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
+
+     Unlike attributes, options can also start with numbers:
+       (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.2bwm.enable"
   */
-  showOption = parts: concatMapStringsSep "." escapeNixIdentifier parts;
+  showOption = parts:
+    let
+      escapeOptionPart = part:
+        if part == "*" || builtins.match "<.+>" part != null || builtins.match "[a-zA-Z0-9_][a-zA-Z0-9_'-]+" part != null
+        then part
+        else escapeNixIdentifier part;
+    in concatMapStringsSep "." escapeOptionPart parts;
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
   unknownModule = "<unknown-file>";
 
