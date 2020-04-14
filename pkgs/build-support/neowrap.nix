@@ -14,16 +14,19 @@ let
     extraMakeWrapperArgs ? "",
     # An attribute set that tells the builder how to handle links per file /
     # directory found in every key of propagateEnv. E.g:
-    link ? {
-      # TODO: use byEnvKey and byPath packages
+    /*** example value ***
+    linkByEnv = {
       # Tells the builder to link the files in every directory that propagates
-      # XDG_DATA_DIRS TODO: for e.g XDG_DATA_DIRS, use the value in
-      # encyclopedia.wrapOut to decide to where to actually link the files to.
+      # XDG_DATA_DIRS.
       XDG_DATA_DIRS = "link";
-      # Tells the builder to simply link all the files of a package that propagets this env var
+      # Tells the builder to simply link all the files of a package that
+      # propagets this env var. Note that this may affect closure size of the
+      # result as every pkg's `out` is chosen unconditionally. Useful for
+      # python / other languages wrappings
       GI_TYPELIB_PATH = "linkPkg";
     },
-    # link ? {}
+    */
+    linkByEnv ? {},
   }:
   let
     # Where we keep general knowledge about known to be used environmental variables
@@ -124,12 +127,21 @@ let
             envStr = value;
           };
         in
-          if builtins.hasAttr name link then
+          if builtins.hasAttr name linkByEnv then
             if builtins.hasAttr name encyclopedia.linkPaths then
-              {
-                linkTo = encyclopedia.linkPaths.${name};
-                linkFrom = real_value;
-              }
+              if linkByEnv.${name} == "link" then
+                {
+                  linkType = "normal";
+                  linkTo = encyclopedia.linkPaths.${name};
+                  linkFrom = real_value;
+                }
+              else # linkByEnv.${name} == "linkPkg"
+                {
+                  linkType = "pkg";
+                  linkTo = "$out";
+                  # "out" is not always the default
+                  linkFrom = pkg.out;
+                }
             else
               abort "neowrap.nix: I was requested to symlink paths of propagated environment for env var `${name}` but I don't know where to put these files as they are not in my encyclopedia"
           else
@@ -144,7 +156,7 @@ let
       (let
         sep = encyclopedia.separators.${key} or ":"; # default separator used for most wrappings
       in
-        # To filter out envInfo changed via the `link` argument
+        # To filter out envInfo changed via the `linkByEnv` argument
         if builtins.isString (builtins.elemAt value 0) then
           if builtins.elem key encyclopedia.singleValue then
             if (builtins.length value) > 1 then
@@ -155,8 +167,11 @@ let
           else
             "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
         else
-          # removed by lib.lists.remove at the beginning
-          "--prefix ${key} ${sep} ${(builtins.elemAt value 0).linkTo}"
+          # duplicates are removed by lib.lists.flatten at the beginning
+          if (builtins.elemAt value 0).linkType == "normal" then
+            "--prefix ${key} ${sep} ${(builtins.elemAt value 0).linkTo}"
+          else # (builtins.elemAt value 0).linkType == "pkg" then
+            "--prefix ${key} ${sep} ${encyclopedia.linkPaths.${key}}"
       )
     )
       # Before calculating makeWrapperArgs, we need to add values to env vars
@@ -183,7 +198,7 @@ let
         if builtins.isAttrs (builtins.elemAt values 0) then
           (map (
             v:
-            "mkdir -p ${v.linkTo} && lndir ${v.linkFrom} ${v.linkTo}"
+            "mkdir -p ${v.linkTo} && lndir -silent ${v.linkFrom} ${v.linkTo}"
           ) values)
         else
           # removed by lib.lists.flatten at the beginning
@@ -201,10 +216,10 @@ let
 
     buildInputs = [ makeWrapper lndir ];
     postBuild = ''
+      ${builtins.concatStringsSep "\n" linkCmds_}
       for i in $out/bin/*; do
         wrapProgram "$i" ${builtins.concatStringsSep " " makeWrapperArgs_}
       done
-      ${builtins.concatStringsSep "\n" linkCmds_}
     '';
   };
 in
