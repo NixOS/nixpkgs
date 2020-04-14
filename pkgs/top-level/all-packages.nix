@@ -659,10 +659,11 @@ in
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
-  arandr = callPackage ../tools/X11/arandr { };
+  arandr-oldy-wrapped = callPackage ../tools/X11/arandr { };
 
-  arandr-newly-unwrapped = arandr.override { wrapGAppsHook = null; };
-  arandr-newly-wrapped = wrapGApps arandr-newly-unwrapped { };
+  arandr-newly-wrapped = wrapGApps (arandr-oldy-wrapped.override {
+    wrapGAppsHook = null;
+  }) { };
 
   inherit (callPackages ../servers/nosql/arangodb {
     stdenv = gcc8Stdenv;
@@ -22286,7 +22287,7 @@ in
 
   wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
 
-  wrapGeneric = callPackage ../build-support/neowrap.nix {};
+  wrapGeneric = callPackage ../build-support/neowrap.nix { lndir = xorg.lndir; };
   wrapGApps = wrapGeneric.override {
     extraPkgsByOverride = [
       dconf

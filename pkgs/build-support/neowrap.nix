@@ -1,6 +1,7 @@
 { lib
 , symlinkJoin
 , makeWrapper
+, lndir
 , extraPkgsByOverride ? []
 }:
 
@@ -10,7 +11,19 @@ pkgList:
 let
   wrapper = {
     extraPkgs ? [],
-    extraMakeWrapperArgs ? ""
+    extraMakeWrapperArgs ? "",
+    # An attribute set that tells the builder how to handle links per file /
+    # directory found in every key of propagateEnv. E.g:
+    link ? {
+      # TODO: use byEnvKey and byPath packages
+      # Tells the builder to link the files in every directory that propagates
+      # XDG_DATA_DIRS TODO: for e.g XDG_DATA_DIRS, use the value in
+      # encyclopedia.wrapOut to decide to where to actually link the files to.
+      XDG_DATA_DIRS = "link";
+      # Tells the builder to simply link all the files of a package that propagets this env var
+      GI_TYPELIB_PATH = "linkPkg";
+    },
+    # link ? {}
   }:
   let
     # Where we keep general knowledge about known to be used environmental variables
@@ -22,9 +35,17 @@ let
       };
       # If we want the wrapping to also include an environmental variable in
       # out, we list here for every env var what path to add to the wrapper's
-      # args.  You can put a list as a value as well.
+      # values.
       wrapOut = {
         XDG_DATA_DIRS = "$out/share";
+      };
+      # If the `link` argument was supplied, we use the keys provided here as a
+      # dictionary that defines where to symlink the files that the caller
+      # wants to be symlinked as well, per env var. If a key shows up here and
+      # in wrapOut as well, it is expected they will have the same value.
+      linkPaths = {
+        XDG_DATA_DIRS = "$out/share";
+        GI_TYPELIB_PATH = "$out/lib/girepository-1.0";
       };
       # If you want an environment variable to have a single value and that's it,
       # put it here:
@@ -83,7 +104,12 @@ let
           envStr;
         }
     ;
-    envInfo = lib.attrsets.foldAttrs (n: a: [n] ++ a) [] (map (
+    # Where we calculate every env var's values. This also considers the `link`
+    # argument's value - if it was requested to `link` directories of certain
+    # env vars or paths, that's taken care of later, at `linkInfo`. The
+    # encyclopedia's `linkPaths` set is used if needed.
+    # envInfo = map (
+    envInfo = lib.attrsets.foldAttrs (n: a: lib.lists.unique ([n] ++ a)) [] (map (
       pkg:
       # for every package in envPkgs, do the following for every env key and value
       (lib.attrsets.mapAttrs (
@@ -91,55 +117,94 @@ let
         name:
         # env var value
         value:
-        replaceAllOutputs {
-          inherit pkg;
-          outputs = pkg.outputs;
-          envStr = value;
-        }
+        let
+          real_value = replaceAllOutputs {
+            inherit pkg;
+            outputs = pkg.outputs;
+            envStr = value;
+          };
+        in
+          if builtins.hasAttr name link then
+            if builtins.hasAttr name encyclopedia.linkPaths then
+              {
+                linkTo = encyclopedia.linkPaths.${name};
+                linkFrom = real_value;
+              }
+            else
+              abort "neowrap.nix: I was requested to symlink paths of propagated environment for env var `${name}` but I don't know where to put these files as they are not in my encyclopedia"
+          else
+            real_value
       ) pkg.propagateEnv)
     ) envPkgs);
-    # envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
-    # Where we add stuff according to encyclopedia.wrapOut
-    envInfoWithLocal = lib.attrsets.mapAttrs (
-      name:
-      values:
-      if builtins.hasAttr name encyclopedia.wrapOut then
-        values ++ (lib.lists.flatten encyclopedia.wrapOut.${name})
-      else
-        values
-    ) envInfo;
-    # envInfoWithLocal_ = builtins.trace "envInfoWithLocal is ${(builtins.toJSON envInfoWithLocal)}" envInfoWithLocal;
-    makeWrapperArgs = lib.attrsets.mapAttrsToList (
+    # ) envPkgs;
+    envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
+    makeWrapperArgs = lib.lists.flatten (lib.attrsets.mapAttrsToList (
       key:
       value:
       (let
-        # TODO: make sure this works with any separator according to encyclopedia.separators
         sep = encyclopedia.separators.${key} or ":"; # default separator used for most wrappings
       in
-        if builtins.elem key encyclopedia.singleValue then
-          if (builtins.length value) > 1 then
-            abort "neowrap.nix: there are two derivations in all of the \
-            inputs of: ${builtins.toJSON allPkgs} that set ${key} to a value via a passthru, this \
-            needs to be fixed via the passthrus of the derivations from this list: ${builtins.toJSON envPkgs}"
+        # To filter out envInfo changed via the `link` argument
+        if builtins.isString (builtins.elemAt value 0) then
+          if builtins.elem key encyclopedia.singleValue then
+            if (builtins.length value) > 1 then
+              abort "neowrap.nix: There is more then 1 derivation in all inputs of: ${builtins.toJSON allPkgs} that set ${key} to a value via a passthru. This env key, is defined in my encyclopedia as a single value key. Hence I don't know what value to use in wrapping."
+            else
+              # Should this be "--set" ?
+              "--set-default ${key} ${builtins.elemAt value 0}"
           else
-            # Should this be "--set" ?
-            "--set-default ${key} ${builtins.elemAt value 0}"
+            "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
         else
-          "--prefix ${key} ${sep} ${builtins.concatStringsSep sep value}"
+          # removed by lib.lists.remove at the beginning
+          "--prefix ${key} ${sep} ${(builtins.elemAt value 0).linkTo}"
       )
-    ) envInfoWithLocal;
-    # makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${(builtins.toJSON makeWrapperArgs)}" makeWrapperArgs;
+    )
+      # Before calculating makeWrapperArgs, we need to add values to env vars
+      # according to encyclopedia.wrapOut:
+      (lib.attrsets.mapAttrs (
+        name:
+        values:
+        if builtins.hasAttr name encyclopedia.wrapOut && builtins.isList values then
+          if builtins.elem encyclopedia.wrapOut.${name} values then
+            values
+          else
+            values ++ [encyclopedia.wrapOut.${name}]
+        else
+          values
+      ) envInfo)
+    );
+    makeWrapperArgs_ = builtins.trace "makeWrapperArgs is ${builtins.toJSON makeWrapperArgs}" makeWrapperArgs;
+    linkCmds = lib.lists.flatten (lib.attrsets.mapAttrsToList (
+      key:
+      values:
+      (let
+        sep = encyclopedia.separators.${key} or ":"; # default separator used for most wrappings
+      in
+        if builtins.isAttrs (builtins.elemAt values 0) then
+          (map (
+            v:
+            "mkdir -p ${v.linkTo} && lndir ${v.linkFrom} ${v.linkTo}"
+          ) values)
+        else
+          # removed by lib.lists.flatten at the beginning
+          []
+      )
+    )
+      envInfo
+    );
+    linkCmds_ = builtins.trace "linkCmds is ${builtins.toJSON linkCmds}" linkCmds;
   in
   symlinkJoin {
     name = "runtime-env";
     paths = pkgList;
     passthru.unwrapped = pkgList;
 
-    buildInputs = [ makeWrapper ];
+    buildInputs = [ makeWrapper lndir ];
     postBuild = ''
       for i in $out/bin/*; do
-        wrapProgram "$i" ${(builtins.concatStringsSep " " makeWrapperArgs)}
+        wrapProgram "$i" ${builtins.concatStringsSep " " makeWrapperArgs_}
       done
+      ${builtins.concatStringsSep "\n" linkCmds_}
     '';
   };
 in
