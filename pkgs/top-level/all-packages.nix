@@ -22552,7 +22552,7 @@ in
 
   worldengine-cli = python3Packages.worldengine;
 
-  wpsoffice = callPackage ../applications/office/wpsoffice {};
+  wpsoffice = libsForQt5.callPackage ../applications/office/wpsoffice {};
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
