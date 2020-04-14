@@ -60,11 +60,11 @@ rec {
 
     inherit docker-runc docker-containerd docker-proxy docker-tini;
 
-    DOCKER_BUILDTAGS = []
-      ++ optional (systemd != null) [ "journald" ]
+    env.DOCKER_BUILDTAGS = toString ([]
+      ++ optional (systemd != null) "journald"
       ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
       ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
-      ++ optional (libseccomp != null) "seccomp";
+      ++ optional (libseccomp != null) "seccomp");
 
    }) // {
     inherit version rev;
