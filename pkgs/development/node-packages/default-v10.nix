@@ -66,6 +66,25 @@ nodePackages // {
     nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package pkgs.purescript nodePackages.pulp ];
   });
 
+  mastodon-bot = nodePackages.mastodon-bot.override (drv: {
+    buildInputs = drv.buildInputs ++ [ pkgs.makeWrapper pkgs.lumo ];
+    dependencies = (builtins.filter (d: d.name != "lumo-cljs") drv.dependencies);
+    preRebuild = ''sed 's/.*lumo-cljs.*//' -i package.json'';
+    bypassCache = true;
+    reconstructLock = true;
+    postInstall = ''
+      # remove symlink to node_modules/.bin
+      rm $out/bin
+      mkdir $out/bin
+
+      # link to lumo executable
+      patchShebangs $out/lib/node_modules/.bin/mastodon-bot
+
+      # make sure the node modules are available to lumo
+      makeWrapper $out/lib/node_modules/.bin/mastodon-bot $out/bin/mastodon-bot --set NODE_PATH $out/lib/node_modules/mastodon-bot/node_modules
+    '';
+  });
+
   node-inspector = nodePackages.node-inspector.override {
     buildInputs = [ nodePackages.node-pre-gyp ];
   };

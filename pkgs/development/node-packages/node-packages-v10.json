@@ -113,6 +113,7 @@
 , {"lumo-build-deps": "../interpreters/clojurescript/lumo" }
 , "madoko"
 , "markdown-link-check"
+, "mastodon-bot"
 , "mathjax"
 , "meat"
 , "meguca"
