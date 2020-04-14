@@ -24246,6 +24246,12 @@ in
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
+  koboredux = callPackage ../games/koboredux { };
+
+  koboredux-free = callPackage ../games/koboredux {
+    useProprietaryAssets = false;
+  };
+
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
   lgogdownloader = callPackage ../games/lgogdownloader { };
