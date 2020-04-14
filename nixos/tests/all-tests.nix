@@ -303,6 +303,8 @@ in
   timezone = handleTest ./timezone.nix {};
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
+  # traefik test relies on docker-containers
+  traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
   transmission = handleTest ./transmission.nix {};
   trac = handleTest ./trac.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};

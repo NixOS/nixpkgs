@@ -1129,6 +1129,8 @@ in {
 
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
+  py-multihash = callPackage ../development/python-modules/py-multihash { };
+
   py-radix = callPackage ../development/python-modules/py-radix { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
@@ -4007,6 +4009,8 @@ in {
   hydra = callPackage ../development/python-modules/hydra { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
+
+  hydra-check = callPackage ../development/python-modules/hydra-check { };
 
   colored = callPackage ../development/python-modules/colored { };
 

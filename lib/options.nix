@@ -193,14 +193,7 @@ rec {
        (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
        (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
   */
-  showOption = parts: let
-    escapeOptionPart = part:
-      let
-        escaped = lib.strings.escapeNixString part;
-      in if escaped == "\"${part}\""
-         then part
-         else escaped;
-    in (concatStringsSep ".") (map escapeOptionPart parts);
+  showOption = parts: concatMapStringsSep "." escapeNixIdentifier parts;
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
   unknownModule = "<unknown-file>";
 
