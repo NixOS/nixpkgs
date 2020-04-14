@@ -200,6 +200,7 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
+  ./security/doas.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
   ./services/admin/oxidized.nix

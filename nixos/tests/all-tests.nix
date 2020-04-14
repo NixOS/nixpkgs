@@ -69,6 +69,7 @@ in
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
+  doas = handleTest ./doas.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
   oci-containers = handleTestOn ["x86_64-linux"] ./oci-containers.nix {};
   docker-edge = handleTestOn ["x86_64-linux"] ./docker-edge.nix {};
