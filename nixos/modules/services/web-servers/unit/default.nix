@@ -113,23 +113,30 @@ in {
         Group = cfg.group;
         # Capabilities
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
+        # Runtime directory and mode
+        RuntimeDirectory = "unit";
+        RuntimeDirectoryMode = "0750";
+        # Access write directories
+        ReadWritePaths = [ cfg.stateDir cfg.logDir ];
         # Security
         NoNewPrivileges = true;
         # Sandboxing
-        ProtectSystem = "full";
+        ProtectSystem = "strict";
         ProtectHome = true;
-        RuntimeDirectory = "unit";
-        RuntimeDirectoryMode = "0750";
         PrivateTmp = true;
         PrivateDevices = true;
         ProtectHostname = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
+        RestrictSUIDSGID = true;
         PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
       };
     };
 
