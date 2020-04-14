@@ -99,6 +99,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
           '';
         };
       };
+
       specialisation.dns-01.configuration = {pkgs, config, nodes, lib, ...}: {
         security.acme.certs."example.test" = {
           domain = "*.example.test";
@@ -127,6 +128,26 @@ in import ./make-test-python.nix ({ lib, ... }: {
             mkdir -p "$out"
             echo hello world > "$out/index.html"
           '';
+        };
+      };
+
+      # When nginx depends on a service that is slow to start up, requesting used to fail
+      # certificates fail.  Reproducer for https://github.com/NixOS/nixpkgs/issues/81842
+      specialisation.slow-startup.configuration = { pkgs, config, nodes, lib, ...}: {
+        systemd.services.my-slow-service = {
+          wantedBy = [ "multi-user.target" "nginx.service" ];
+          before = [ "nginx.service" ];
+          preStart = "sleep 5";
+          script = "${pkgs.python3}/bin/python -m http.server";
+        };
+        systemd.targets."acme-finished-d.example.com" = {
+          after = [ "acme-d.example.com.service" ];
+          wantedBy = [ "acme-d.example.com.service" ];
+        };
+        services.nginx.virtualHosts."d.example.com" = {
+          forceSSL = true;
+          enableACME = true;
+          locations."/".proxyPass = "http://localhost:8000";
         };
       };
     };
@@ -204,5 +225,15 @@ in import ./make-test-python.nix ({ lib, ... }: {
           client.succeed(
               "curl --cacert /tmp/ca.crt https://c.example.test/ | grep -qF 'hello world'"
           )
+
+      with subtest("Can request certificate of nginx when startup is delayed"):
+          webserver.succeed(
+              "${switchToNewServer}"
+          )
+          webserver.succeed(
+              "/run/current-system/specialisation/slow-startup/bin/switch-to-configuration test"
+          )
+          webserver.wait_for_unit("acme-finished-d.example.com.target")
+          client.succeed("curl --cacert /tmp/ca.crt https://d.example.com/")
     '';
 })
