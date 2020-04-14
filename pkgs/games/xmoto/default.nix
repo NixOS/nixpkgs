@@ -17,7 +17,12 @@ stdenv.mkDerivation rec {
     lua5 ode libxdg_basedir libxml2
   ];
 
-  CXXFLAGS = [ "-fpermissive" ];
+  CXXFLAGS = [
+    "-fpermissive"
+    # Build using the old C++ ABI to fix issue with missing text; the issue
+    # should be fixed in the next stable release (if that ever does happen)
+    "-D_GLIBCXX_USE_CXX11_ABI=0"
+  ];
 
   meta = with stdenv.lib; {
     description = "Obstacled race game";
