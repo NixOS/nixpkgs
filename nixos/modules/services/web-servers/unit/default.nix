@@ -91,18 +91,22 @@ in {
       description = "Unit App Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ curl ];
       preStart = ''
-        test -f '${cfg.stateDir}/conf.json' || rm -f '${cfg.stateDir}/conf.json'
+        [ ! -e '${cfg.stateDir}/conf.json' ] || rm -f '${cfg.stateDir}/conf.json'
       '';
       postStart = ''
-        curl -X PUT --data-binary '@${configFile}' --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
+        ${pkgs.curl}/bin/curl -X PUT --data-binary '@${configFile}' --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
       '';
       serviceConfig = {
+        Type = "forking";
+        PIDFile = "/run/unit/unit.pid";
         ExecStart = ''
           ${cfg.package}/bin/unitd --control 'unix:/run/unit/control.unit.sock' --pid '/run/unit/unit.pid' \
-                                   --log '${cfg.logDir}/unit.log' --state '${cfg.stateDir}' --no-daemon \
+                                   --log '${cfg.logDir}/unit.log' --state '${cfg.stateDir}' \
                                    --user ${cfg.user} --group ${cfg.group}
+        '';
+        ExecStop = ''
+          ${pkgs.curl}/bin/curl -X DELETE --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
         '';
         # User and group
         User = cfg.user;
