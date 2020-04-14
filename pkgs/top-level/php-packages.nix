@@ -203,12 +203,12 @@ in
     };
 
     phpstan = mkDerivation rec {
-      version = "0.12.14";
+      version = "0.12.18";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "JAq1/+bVhTgKRR7oFusqZ/yBOYewaOM38ZoiCjirsTg=";
+        sha256 = "0xf0q2z6rhpnbys53si05mddfyjn3wx5wc8zx5y6dv5fzw6z7rch";
       };
 
       phases = [ "installPhase" ];
@@ -217,7 +217,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpstan/phpstan.phar
-        makeWrapper ${php}/bin/php $out/bin/phpstan \
+        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpstan \
           --add-flags "$out/libexec/phpstan/phpstan.phar"
       '';
 
