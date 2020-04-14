@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     ++ optional glSupport libGL
     ; # TODO: maybe liblzo but what would it be for here?
 
-  configureFlags = if stdenv.isDarwin then [
+  configureFlags = (if stdenv.isDarwin then [
     "--disable-dependency-tracking"
     "--enable-quartz"
     "--enable-quartz-font"
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
     ++ optional xcbSupport "--enable-xcb"
     ++ optional glSupport "--enable-gl"
     ++ optional pdfSupport "--enable-pdf"
-  );
+  )) ++ optional (!x11Support) "--disable-xlib";
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
