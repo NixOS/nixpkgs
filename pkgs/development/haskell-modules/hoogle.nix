@@ -60,9 +60,11 @@ buildPackages.stdenv.mkDerivation {
 
   inherit docPackages;
 
-  passAsFile = ["buildCommand"];
-
   buildCommand = ''
+    source <(${buildPackages.jq}/bin/jq -r <.attrs.json '.buildScript')
+  '';
+
+  buildScript = ''
     ${lib.optionalString (packages != [] -> docPackages == [])
        ("echo WARNING: localHoogle package list empty, even though"
        + " the following were specified: "

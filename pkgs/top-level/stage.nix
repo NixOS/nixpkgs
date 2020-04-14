@@ -70,10 +70,13 @@ let
     };
 
   trivialBuilders = self: super:
-    import ../build-support/trivial-builders.nix {
-      inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.pkgsBuildHost.xorg) lndir;
-      inherit (self) runtimeShell; inherit (self.pkgsBuildHost) jq;
-    };
+    let
+      jq = self.pkgsBuildHost.jq.override { minimal = true; };
+    in
+      import ../build-support/trivial-builders.nix {
+        inherit lib; inherit (self) stdenv stdenvNoCC; inherit (self.pkgsBuildHost.xorg) lndir;
+        inherit (self) runtimeShell; inherit jq;
+      };
 
   stdenvBootstappingAndPlatforms = self: super: let
     withFallback = thisPkgs:

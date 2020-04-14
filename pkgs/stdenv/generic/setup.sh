@@ -1258,10 +1258,6 @@ showPhaseHeader() {
 
 
 genericBuild() {
-    if [ -f "${buildCommandPath:-}" ]; then
-        source "$buildCommandPath"
-        return
-    fi
     if [ -n "${buildCommand:-}" ]; then
         eval "$buildCommand"
         return

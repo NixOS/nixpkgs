@@ -2,10 +2,12 @@
 
 let
 
-  runCommand' = runLocal: stdenv: name: env: buildCommand:
+  runCommand' = runLocal: stdenv: name: env: buildScript:
     stdenv.mkDerivation ({
-      inherit name buildCommand;
-      passAsFile = [ "buildCommand" ];
+      inherit name buildScript;
+      buildCommand = ''
+        source <(${jq}/bin/jq -r <.attrs.json '.buildScript')
+      '';
     }
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
@@ -80,7 +82,6 @@ rec {
     }:
     runCommand name
       { inherit text executable;
-        passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
@@ -89,11 +90,7 @@ rec {
         n=$out${destination}
         mkdir -p "$(dirname "$n")"
 
-        if [ -e "$textPath" ]; then
-          mv "$textPath" "$n"
-        else
-          echo -n "$text" > "$n"
-        fi
+        cp <(${jq}/bin/jq -r <.attrs.json '.text') $n
 
         ${checkPhase}
 
@@ -221,7 +218,6 @@ rec {
     {
       inherit name code;
       executable = true;
-      passAsFile = ["code"];
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
@@ -229,7 +225,7 @@ rec {
     ''
     n=$out/bin/$name
     mkdir -p "$(dirname "$n")"
-    mv "$codePath" code.c
+    cp <(${jq}/bin/jq -r <.attrs.json '.code') code.c
     $CC -x c code.c -o "$n"
     '';
 
@@ -292,7 +288,7 @@ rec {
     in runCommand name args
       ''
         mkdir -p $out
-        while IFS= read -r -d $'\0' path; do
+        while IFS= read -r path; do
           ${lndir}/bin/lndir -silent $path $out
         done < <(${jq}/bin/jq -r <.attrs.json '.paths[]')
         ${postBuild}

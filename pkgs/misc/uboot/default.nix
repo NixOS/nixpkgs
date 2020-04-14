@@ -53,14 +53,12 @@ let
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ] ++ extraMakeFlags;
 
-    passAsFile = [ "extraConfig" ];
-
     configurePhase = ''
       runHook preConfigure
 
       make ${defconfig}
 
-      cat $extraConfigPath >> .config
+      cat <(${buildPackages.jq}/bin/jq -r <.attrs.json .extraConfig) >> .config
 
       runHook postConfigure
     '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, oniguruma }:
+{ stdenv, fetchurl, oniguruma, minimal ? false }:
 
 stdenv.mkDerivation rec {
   pname = "jq";
@@ -9,21 +9,27 @@ stdenv.mkDerivation rec {
     sha256="0wmapfskhzfwranf6515nzmm84r7kwljgfs7dg6bjgxakbicis2x";
   };
 
-  outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
+  outputs = if minimal then [ "out" ] else [ "bin" "doc" "man" "dev" "lib" "out" ];
 
-  buildInputs = [ oniguruma ];
+  buildInputs = stdenv.lib.optional (!minimal) oniguruma;
 
   configureFlags =
-    [
-    "--bindir=\${bin}/bin"
-    "--sbindir=\${bin}/bin"
-    "--datadir=\${doc}/share"
-    "--mandir=\${man}/share/man"
+    if minimal then [ "--with-oniguruma=no" "--enable-all-static" ]
+    else [
+      "--bindir=\${bin}/bin"
+      "--sbindir=\${bin}/bin"
+      "--datadir=\${doc}/share"
+      "--mandir=\${man}/share/man"
     ]
     # jq is linked to libjq:
     ++ stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  doInstallCheck = true;
+  preFixup = stdenv.lib.optionalString minimal ''
+    rm -r .libs $out/{include,share}
+    patchelf --shrink-rpath $out/bin/jq
+  '';
+
+  doInstallCheck = !minimal;
   installCheckTarget = "check";
 
   postInstallCheck = ''
