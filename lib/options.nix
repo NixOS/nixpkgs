@@ -200,13 +200,14 @@ rec {
      Unlike attributes, options can also start with numbers:
        (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.2bwm.enable"
   */
-  showOption = parts:
-    let
-      escapeOptionPart = part:
-        if part == "*" || builtins.match "<.+>" part != null || builtins.match "[a-zA-Z0-9_][a-zA-Z0-9_'-]+" part != null
-        then part
-        else escapeNixIdentifier part;
-    in concatMapStringsSep "." escapeOptionPart parts;
+  showOption = parts: let
+    escapeOptionPart = part:
+      let
+        escaped = lib.strings.escapeNixString part;
+      in if escaped == "\"${part}\""
+         then part
+         else escaped;
+    in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
   unknownModule = "<unknown-file>";
 
