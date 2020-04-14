@@ -108,11 +108,6 @@ in {
         ExecStop = ''
           ${pkgs.curl}/bin/curl -X DELETE --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
         '';
-        # User and group
-        User = cfg.user;
-        Group = cfg.group;
-        # Capabilities
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
         # Runtime directory and mode
         RuntimeDirectory = "unit";
         RuntimeDirectoryMode = "0750";
