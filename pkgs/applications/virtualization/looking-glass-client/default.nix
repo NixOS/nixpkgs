@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       step required to move away from dual booting with other operating systems
       for legacy programs that require high performance graphics.
     '';
-    homepage = https://looking-glass.hostfission.com/;
+    homepage = "https://looking-glass.hostfission.com/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.alexbakker ];
     platforms = [ "x86_64-linux" ];

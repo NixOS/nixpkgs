@@ -185,9 +185,16 @@ in runCommand
         IntelliJ IDEA.
       '';
       homepage = if channel == "stable"
-        then https://developer.android.com/studio/index.html
-        else https://developer.android.com/studio/preview/index.html;
-      license = licenses.asl20;
+        then "https://developer.android.com/studio/index.html"
+        else "https://developer.android.com/studio/preview/index.html";
+      license = with licenses; [ asl20 unfree ]; # The code is under Apache-2.0, but:
+      # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
+      # "Android Studio includes proprietary code subject to separate license,
+      # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)
+      # IDEA Community Edition (www.jetbrains.com/idea)."
+      # Also: For actual development the Android SDK is required and the Google
+      # binaries are also distributed as proprietary software (unlike the
+      # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ primeos ];
     };

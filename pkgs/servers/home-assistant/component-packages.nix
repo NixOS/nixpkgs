@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.107.7";
+  version = "0.108.2";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -16,7 +16,6 @@
     "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
     "alarm_control_panel" = ps: with ps; [ ];
     "alarmdecoder" = ps: with ps; [ alarmdecoder];
-    "alarmdotcom" = ps: with ps; [ ]; # missing inputs: pyalarmdotcom
     "alert" = ps: with ps; [ ];
     "alexa" = ps: with ps; [ aiohttp-cors];
     "almond" = ps: with ps; [ aiohttp-cors]; # missing inputs: pyalmond
@@ -84,6 +83,7 @@
     "bluetooth_tracker" = ps: with ps; [ bt_proximity]; # missing inputs: pybluez
     "bme280" = ps: with ps; [ ]; # missing inputs: i2csense smbus-cffi
     "bme680" = ps: with ps; [ ]; # missing inputs: bme680 smbus-cffi
+    "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
     "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
     "bom" = ps: with ps; [ ]; # missing inputs: bomradarloop
     "braviatv" = ps: with ps; [ bravia-tv getmac];
@@ -156,7 +156,7 @@
     "dialogflow" = ps: with ps; [ aiohttp-cors];
     "digital_ocean" = ps: with ps; [ digital-ocean];
     "digitalloggers" = ps: with ps; [ ]; # missing inputs: dlipower
-    "directv" = ps: with ps; [ ]; # missing inputs: directpy
+    "directv" = ps: with ps; [ ]; # missing inputs: directv
     "discogs" = ps: with ps; [ discogs_client];
     "discord" = ps: with ps; [ discordpy];
     "discovery" = ps: with ps; [ netdisco];
@@ -310,7 +310,7 @@
     "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
     "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
-    "harmony" = ps: with ps; [ ]; # missing inputs: aioharmony
+    "harmony" = ps: with ps; [ aioharmony];
     "hassio" = ps: with ps; [ aiohttp-cors];
     "haveibeenpwned" = ps: with ps; [ ];
     "hddtemp" = ps: with ps; [ ];
@@ -327,7 +327,7 @@
     "hive" = ps: with ps; [ ]; # missing inputs: pyhiveapi
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "homeassistant" = ps: with ps; [ ];
-    "homekit" = ps: with ps; [ ]; # missing inputs: HAP-python
+    "homekit" = ps: with ps; [ HAP-python];
     "homekit_controller" = ps: with ps; [ ]; # missing inputs: aiohomekit[IP]
     "homematic" = ps: with ps; [ pyhomematic];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
@@ -372,6 +372,7 @@
     "iota" = ps: with ps; [ ]; # missing inputs: pyota
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [ ]; # missing inputs: pyipma
+    "ipp" = ps: with ps; [ ]; # missing inputs: pyipp
     "iqvia" = ps: with ps; [ numpy]; # missing inputs: pyiqvia
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
     "islamic_prayer_times" = ps: with ps; [ ]; # missing inputs: prayer_times_calculator
@@ -431,7 +432,7 @@
     "london_underground" = ps: with ps; [ ]; # missing inputs: london-tube-status
     "loopenergy" = ps: with ps; [ ]; # missing inputs: pyloopenergy
     "lovelace" = ps: with ps; [ ];
-    "luci" = ps: with ps; [ ]; # missing inputs: openwrt-luci-rpc
+    "luci" = ps: with ps; [ openwrt-luci-rpc];
     "luftdaten" = ps: with ps; [ luftdaten];
     "lupusec" = ps: with ps; [ ]; # missing inputs: lupupy
     "lutron" = ps: with ps; [ ]; # missing inputs: pylutron
@@ -470,7 +471,7 @@
     "mikrotik" = ps: with ps; [ ]; # missing inputs: librouteros
     "mill" = ps: with ps; [ ]; # missing inputs: millheater
     "min_max" = ps: with ps; [ ];
-    "minecraft_server" = ps: with ps; [ getmac]; # missing inputs: mcstatus
+    "minecraft_server" = ps: with ps; [ aiodns getmac]; # missing inputs: mcstatus
     "minio" = ps: with ps; [ minio];
     "mitemp_bt" = ps: with ps; [ ]; # missing inputs: mitemp_bt
     "mjpeg" = ps: with ps; [ ];
@@ -481,7 +482,6 @@
     "mold_indicator" = ps: with ps; [ ];
     "monoprice" = ps: with ps; [ ]; # missing inputs: pymonoprice
     "moon" = ps: with ps; [ ];
-    "mopar" = ps: with ps; [ ]; # missing inputs: motorparts
     "mpchc" = ps: with ps; [ ];
     "mpd" = ps: with ps; [ mpd2];
     "mqtt" = ps: with ps; [ aiohttp-cors hbmqtt paho-mqtt];
@@ -500,7 +500,7 @@
     "n26" = ps: with ps; [ ]; # missing inputs: n26
     "nad" = ps: with ps; [ ]; # missing inputs: nad_receiver
     "namecheapdns" = ps: with ps; [ defusedxml];
-    "nanoleaf" = ps: with ps; [ ]; # missing inputs: pynanoleaf
+    "nanoleaf" = ps: with ps; [ pynanoleaf];
     "neato" = ps: with ps; [ pybotvac];
     "nederlandse_spoorwegen" = ps: with ps; [ ]; # missing inputs: nsapi
     "nello" = ps: with ps; [ ]; # missing inputs: pynello
@@ -512,7 +512,9 @@
     "netgear_lte" = ps: with ps; [ ]; # missing inputs: eternalegypt
     "netio" = ps: with ps; [ aiohttp-cors]; # missing inputs: pynetio
     "neurio_energy" = ps: with ps; [ ]; # missing inputs: neurio
+    "nexia" = ps: with ps; [ ]; # missing inputs: nexia
     "nextbus" = ps: with ps; [ ]; # missing inputs: py_nextbusnext
+    "nextcloud" = ps: with ps; [ ]; # missing inputs: nextcloudmonitor
     "nfandroidtv" = ps: with ps; [ ];
     "niko_home_control" = ps: with ps; [ ]; # missing inputs: niko-home-control
     "nilu" = ps: with ps; [ ]; # missing inputs: niluclient
@@ -588,6 +590,7 @@
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [ ]; # missing inputs: pocketcasts
     "point" = ps: with ps; [ aiohttp-cors]; # missing inputs: pypoint
+    "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
     "prezzibenzina" = ps: with ps; [ ]; # missing inputs: prezzibenzina-py
     "proliphix" = ps: with ps; [ ]; # missing inputs: proliphix
     "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client];
@@ -604,6 +607,7 @@
     "pushover" = ps: with ps; [ pushover-complete];
     "pushsafer" = ps: with ps; [ ];
     "pvoutput" = ps: with ps; [ ];
+    "pvpc_hourly_pricing" = ps: with ps; [ ]; # missing inputs: aiopvpc
     "pyload" = ps: with ps; [ ];
     "python_script" = ps: with ps; [ restrictedpython];
     "qbittorrent" = ps: with ps; [ ]; # missing inputs: python-qbittorrent
@@ -660,6 +664,7 @@
     "samsungtv" = ps: with ps; [ ]; # missing inputs: samsungctl[websocket] samsungtvws[websocket]
     "satel_integra" = ps: with ps; [ ]; # missing inputs: satel_integra
     "scene" = ps: with ps; [ ];
+    "schluter" = ps: with ps; [ ]; # missing inputs: py-schluter
     "scrape" = ps: with ps; [ beautifulsoup4];
     "script" = ps: with ps; [ ];
     "scsgate" = ps: with ps; [ ]; # missing inputs: scsgate
@@ -692,7 +697,7 @@
     "sky_hub" = ps: with ps; [ ];
     "skybeacon" = ps: with ps; [ ]; # missing inputs: pygatt[GATTTOOL]
     "skybell" = ps: with ps; [ ]; # missing inputs: skybellpy
-    "slack" = ps: with ps; [ ]; # missing inputs: slacker
+    "slack" = ps: with ps; [ ]; # missing inputs: slackclient
     "sleepiq" = ps: with ps; [ ]; # missing inputs: sleepyq
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
     "sma" = ps: with ps; [ ]; # missing inputs: pysma

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ dnspython greenlet monotonic six ] ++ lib.optional (pythonOlder "3.4") enum34;
 
   meta = with lib; {
-    homepage = https://pypi.python.org/pypi/eventlet/;
+    homepage = "https://pypi.python.org/pypi/eventlet/";
     description = "A concurrent networking library for Python";
   };
 

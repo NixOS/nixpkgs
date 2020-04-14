@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME session manager";
-    homepage = https://wiki.gnome.org/Projects/SessionManagement;
+    homepage = "https://wiki.gnome.org/Projects/SessionManagement";
     license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

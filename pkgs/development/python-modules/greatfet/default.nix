@@ -24,7 +24,7 @@ buildPythonPackage {
 
   meta = {
     description = "Hardware hacking with the greatfet";
-    homepage = https://greatscottgadgets.com/greatfet;
+    homepage = "https://greatscottgadgets.com/greatfet";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mog ];

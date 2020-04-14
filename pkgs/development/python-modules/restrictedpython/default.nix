@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/zopefoundation/RestrictedPython;
+    homepage = "https://github.com/zopefoundation/RestrictedPython";
     description = "A restricted execution environment for Python to run untrusted code";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ juaningan ];

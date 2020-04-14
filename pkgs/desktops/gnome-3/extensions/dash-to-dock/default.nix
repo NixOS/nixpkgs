@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     owner = "micheleg";
     repo = "dash-to-dock";
     # rev = "extensions.gnome.org-v" + version;
-    rev = "c58004802b2eedfde96966a4ec0151fea2a1bd98";
-    sha256 = "IjunykPFP2CbGcd8XVqhPuNUOUOOgDAQFIytLaoyqRg=";
+    rev = "8c94a8d6db47ebc1273e690f4e0ba5e592f7f268";
+    sha256 = "7nNfxAINqOIJCgYXYaPck2EJ1IOmzt6AkfDFknZ8GaI=";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "A dock for the Gnome Shell";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
-    homepage = https://micheleg.github.io/dash-to-dock/;
+    homepage = "https://micheleg.github.io/dash-to-dock/";
   };
 }

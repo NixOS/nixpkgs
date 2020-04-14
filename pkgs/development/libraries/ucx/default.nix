@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Unified Communication X library";
-    homepage = http://www.openucx.org;
+    homepage = "http://www.openucx.org";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];

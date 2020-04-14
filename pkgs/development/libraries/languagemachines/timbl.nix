@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "TiMBL implements several memory-based learning algorithms";
-    homepage    = https://github.com/LanguageMachines/timbl/;
+    homepage    = "https://github.com/LanguageMachines/timbl/";
     license     = licenses.gpl3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ roberth ];

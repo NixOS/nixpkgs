@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
          (e.g. IMAP, SMTP, etc.) to authenticate peers.
        '';
 
-    homepage = https://www.gnu.org/software/gsasl/;
+    homepage = "https://www.gnu.org/software/gsasl/";
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ shlevy ];

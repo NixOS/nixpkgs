@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/google/leveldb;
+    homepage = "https://github.com/google/leveldb";
     description = "Fast and lightweight key/value database library by Google";
     license = licenses.bsd3;
     platforms = platforms.all;

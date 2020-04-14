@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "KDE Plasma 5 widget for controlling Redshift";
-    homepage = https://github.com/kotelnik/plasma-applet-redshift-control;
+    homepage = "https://github.com/kotelnik/plasma-applet-redshift-control";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ benley zraexy ];

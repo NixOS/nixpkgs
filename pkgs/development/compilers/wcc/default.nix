@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/endrazine/wcc;
+    homepage = "https://github.com/endrazine/wcc";
     description = "Witchcraft compiler collection: tools to convert and script ELF files";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

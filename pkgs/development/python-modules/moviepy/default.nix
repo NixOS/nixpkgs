@@ -25,13 +25,13 @@ assert advancedProcessing -> (
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "1.0.1";
+  version = "1.0.2";
 
   disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vgi9k1r4f5s9hzfzlhmmc574n80aq713ahv8cnbj3jci070lnwx";
+    sha256 = "0ajw2xmcd962qw2kxxnbp08l5vgk5k78sls9bb227lw8aa51ln80";
   };
 
   # No tests, require network connection

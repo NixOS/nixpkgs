@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
-    homepage = https://github.com/ubuntu/yaru;
+    homepage = "https://github.com/ubuntu/yaru";
     license = with licenses; [ cc-by-sa-40 gpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.jD91mZM2 ];

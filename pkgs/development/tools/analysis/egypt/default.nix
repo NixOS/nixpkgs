@@ -25,7 +25,7 @@ perlPackages.buildPerlPackage rec {
       Egypt is simply a very small Perl script that glues these existing tools
       together.
     '';
-    homepage = http://www.gson.org/egypt/;
+    homepage = "http://www.gson.org/egypt/";
     license = with licenses; [ artistic1 gpl1Plus ];
     platforms = platforms.unix;
   };

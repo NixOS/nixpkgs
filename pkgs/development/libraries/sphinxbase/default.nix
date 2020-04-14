@@ -20,7 +20,7 @@ stdenv.mkDerivation (rec {
 
   meta = {
     description = "Support Library for Pocketsphinx";
-    homepage = http://cmusphinx.sourceforge.net;
+    homepage = "http://cmusphinx.sourceforge.net";
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ ];

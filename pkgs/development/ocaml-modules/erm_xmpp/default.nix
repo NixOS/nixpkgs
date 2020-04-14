@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/hannesm/xmpp;
+    homepage = "https://github.com/hannesm/xmpp";
     description = "OCaml based XMPP implementation (fork)";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ sternenseemann ];

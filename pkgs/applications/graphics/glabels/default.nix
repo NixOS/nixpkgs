@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Create labels and business cards";
-    homepage = https://glabels.org/;
+    homepage = "https://glabels.org/";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.nico202 ];

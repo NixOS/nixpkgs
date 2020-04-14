@@ -24,10 +24,23 @@
     </para>
    </listitem>
    <listitem>
+    <para>Core version changes:</para>
+    <para>gcc: 8.3.0 -&gt; 9.2.0</para>
+    <para>glibc: 2.27 -&gt; 2.30</para>
+    <para>linux: 4.19 -&gt; 5.4</para>
+    <para>mesa: 19.1.5 -&gt; 19.3.3</para>
+    <para>openssl: 1.0.2u -&gt; 1.1.1d</para>
+   </listitem>
+   <listitem>
+    <para>Desktop version changes:</para>
+    <para>plasma5: 5.16.5 -&gt; 5.17.5</para>
+    <para>kdeApplications: 19.08.2 -&gt; 19.12.3</para>
+    <para>gnome3: 3.32 -&gt; 3.34</para>
+    <para>pantheon: 5.0 -&gt; 5.1.3</para>
+   </listitem>
+   <listitem>
     <para>
      Linux kernel is updated to branch 5.4 by default (from 4.19).
-     Users of Intel GPUs may prefer to explicitly set branch to 4.19 to avoid some regressions.
-     <programlisting>boot.kernelPackages = pkgs.linuxPackages_4_19;</programlisting>
     </para>
    </listitem>
    <listitem>
@@ -41,6 +54,24 @@
      Before you'd be greeted by a tty and asked to enter <command>systemctl start display-manager</command>.
      It is now possible to disable the display-manager from running by selecting the <literal>Disable display-manager</literal>
      quirk in the boot menu.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     GNOME 3 has been upgraded to 3.34. Please take a look at their
+     <link xlink:href="https://help.gnome.org/misc/release-notes/3.34">Release Notes</link>
+     for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     If you enable the Pantheon Desktop Manager via
+     <xref linkend="opt-services.xserver.desktopManager.pantheon.enable" />, we now default to also use
+     <link xlink:href="https://blog.elementary.io/say-hello-to-the-new-greeter/">
+      Pantheon's newly designed greeter
+     </link>.
+      Contrary to NixOS's usual update policy, Pantheon will receive updates during the cycle of
+      NixOS 20.03 when backwards compatible.
     </para>
    </listitem>
    <listitem>
@@ -73,6 +104,24 @@ services.xserver.windowManager.default = "icewm";
 <programlisting>
 services.xserver.displayManager.defaultSession = "xfce+icewm";
 </programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The testing driver implementation in NixOS is now in Python <filename>make-test-python.nix</filename>.
+     This was done by Jacek Galowicz (<link xlink:href="https://github.com/tfc">@tfc</link>), and with the
+     collaboration of Julian Stecklina (<link xlink:href="https://github.com/blitz">@blitz</link>) and
+     Jana Traue (<link xlink:href="https://github.com/jtraue">@jtraue</link>). All documentation has been updated to use this
+     testing driver, and a vast majority of the 286 tests in NixOS were ported to python driver. In 20.09 the Perl driver implementation,
+     <filename>make-test.nix</filename>, is slated for removal. This should give users of the NixOS integration framework
+     a transitory period to rewrite their tests to use the Python implementation. Users of the Perl driver will see
+     this warning everytime they use it:
+<screen>
+<prompt>$ </prompt>warning: Perl VM tests are deprecated and will be removed for 20.09.
+Please update your tests to use the python test driver.
+See https://github.com/NixOS/nixpkgs/pull/71684 for details.
+</screen>
+     API compatibility is planned to be kept for at least the next release with the perl driver.
     </para>
    </listitem>
   </itemizedlist>
@@ -110,6 +159,241 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
      It was created so Geary could function properly outside of GNOME.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       <filename>./config/console.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./hardware/brillo.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./hardware/tuxedo-keyboard.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./programs/bandwhich.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./programs/bash-my-aws.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./programs/liboping.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./programs/traceroute.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/backup/sanoid.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/backup/syncoid.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/backup/zfs-replication.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/continuous-integration/buildkite-agents.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/databases/victoriametrics.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/desktops/gnome3/gnome-initial-setup.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/desktops/neard.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/games/openarena.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/hardware/fancontrol.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/mail/sympa.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/misc/freeswitch.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/misc/mame.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/monitoring/do-agent.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/monitoring/prometheus/xmpp-alerts.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/network-filesystems/orangefs/server.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/network-filesystems/orangefs/client.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/3proxy.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/corerad.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/go-shadowsocks2.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/ntp/openntpd.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/shorewall.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/shorewall6.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/spacecookie.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/trickster.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/v2ray.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/xandikos.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/networking/yggdrasil.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-apps/dokuwiki.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-apps/gotify-server.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-apps/grocy.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-apps/ihatemoney</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-apps/moinmoin.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-apps/trac.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-apps/trilium.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-apps/shiori.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/web-servers/ttyd.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/x11/picom.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/x11/hardware/digimend.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./services/x11/imwheel.nix</filename>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       <filename>./virtualisation/cri-o.nix</filename>
+     </para>
+   </listitem>
   </itemizedlist>
 
  </section>
@@ -127,6 +411,17 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     The <package>dhcpcd</package> package <link xlink:href="https://roy.marples.name/archives/dhcpcd-discuss/0002621.html">
+     does not request IPv4 addresses for tap and bridge interfaces anymore by default</link>.
+     In order to still get an address on a bridge interface, one has to disable
+     <literal>networking.useDHCP</literal> and explicitly enable
+     <literal>networking.interfaces.&lt;name&gt;.useDHCP</literal> on
+     every interface, that should get an address via DHCP. This way, dhcpcd
+     is configured in an explicit way about which interface to run on.
+    </para>
+   </listitem>
    <listitem>
     <para>
       GnuPG is now built without support for a graphical passphrase entry
@@ -603,6 +898,25 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      The <option>services.dnscrypt-proxy</option> module has been removed
      as it used the deprecated version of dnscrypt-proxy. We've added
      <xref linkend="opt-services.dnscrypt-proxy2.enable"/> to use the supported version.
+     This module supports configuration via the Nix attribute set
+     <xref linkend="opt-services.dnscrypt-proxy2.settings" />, or by passing a TOML configuration file via
+     <xref linkend="opt-services.dnscrypt-proxy2.configFile" />.
+<programlisting>
+# Example configuration:
+services.dnscrypt-proxy2.enable = true;
+services.dnscrypt-proxy2.settings = {
+  listen_addresses = [ "127.0.0.1:43" ];
+  sources.public-resolvers = {
+    urls = [ "https://download.dnscrypt.info/resolvers-list/v2/public-resolvers.md" ];
+    cache_file = "public-resolvers.md";
+    minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+    refresh_delay = 72;
+  };
+};
+
+services.dnsmasq.enable = true;
+services.dnsmasq.servers = [ "127.0.0.1#43" ];
+</programlisting>
     </para>
    </listitem>
    <listitem>
@@ -617,6 +931,15 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      Please note that this means that this means that the <package>oraclejdk</package> is now
      required. For further information please read the
      <link xlink:href="https://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/sqldev-relnotes-194-5908846.html">release notes</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Haskell <varname>env</varname> and <varname>shellFor</varname> dev shell environments now organized dependencies the same way as regular builds.
+      In particular, rather than receiving all the different lists of dependencies master together as one big lists, and then partitioning into Haskell and non-Hakell dependencies, they work from the original many different dependency parameters and don't need to algorithmically partition anything.
+    </para>
+    <para>
+      This means that if you incorrectly categorize a dependency, e.g. non-Haskell library dependency as a <varname>buildDepends</varname> or run-time Haskell dependency as a <varname>setupDepends</varname>, whereas things would have worked before they may not work now.
     </para>
    </listitem>
    <listitem>
@@ -691,7 +1014,7 @@ auth required pam_succeed_if.so uid >= 1000 quiet
     </para>
     <warning>
      <para>
-      Please note that if you're comming from <literal>19.03</literal> or older, you have
+      Please note that if you're coming from <literal>19.03</literal> or older, you have
       to manually upgrade to <literal>19.09</literal> first to upgrade your server
       to Nextcloud v16.
      </para>
@@ -730,10 +1053,10 @@ auth required pam_succeed_if.so uid >= 1000 quiet
       </listitem>
       <listitem>
        <para>
-        Deploy a newer version of Hydra to activate the DB optimizations. You can choose from
-        either <package>hydra-unstable</package> (latest <literal>master</literal> compiled
-        against <package>nixUnstable</package>) and <package>hydra-flakes</package> (latest
-        version with flake-support).
+        Deploy a newer version of Hydra to activate the DB optimizations. This can be done by
+        using <package>hydra-unstable</package>. This package already includes
+        <link xlink:href="https://github.com/nixos/rfcs/pull/49">flake-support</link> and is
+        therefore compiled against <package>pkgs.nixFlakes</package>.
         <warning>
          <para>
           If your <link linkend="opt-system.stateVersion">stateVersion</link> is set to
@@ -780,13 +1103,21 @@ auth required pam_succeed_if.so uid >= 1000 quiet
    <listitem>
     <para>
      The nginx web server previously started its master process as root
-     privileged, then ran worker processes as a less privileged identity user.
+     privileged, then ran worker processes as a less privileged identity user
+     (the <literal>nginx</literal> user).
      This was changed to start all of nginx as a less privileged user (defined by
      <literal>services.nginx.user</literal> and
      <literal>services.nginx.group</literal>). As a consequence, all files that
      are needed for nginx to run (included configuration fragments, SSL
      certificates and keys, etc.) must now be readable by this less privileged
      user/group.
+    </para>
+    <para>
+     To continue to use the old approach, you can configure:
+      <programlisting>
+services.nginx.appendConfig = let cfg = config.services.nginx; in ''user ${cfg.user} ${cfg.group};'';
+systemd.services.nginx.serviceConfig.User = lib.mkForce "root";
+      </programlisting>
     </para>
    </listitem>
    <listitem>
@@ -827,8 +1158,8 @@ auth required pam_succeed_if.so uid >= 1000 quiet
    </listitem>
    <listitem>
     <para>
-     Predicatbly named network-interfaces get renamed in stage-1. This means that it's possible
-     to use the proper interface name for e.g. dropbear-setups.
+     Predictably named network interfaces get renamed in stage-1. This means that it is possible
+     to use the proper interface name for e.g. Dropbear setups.
     </para>
     <para>
      For further reference, please read <link xlink:href="https://github.com/NixOS/nixpkgs/pull/68953">#68953</link> or the corresponding <link xlink:href="https://discourse.nixos.org/t/predictable-network-interface-names-in-initrd/4055">discourse thread</link>.

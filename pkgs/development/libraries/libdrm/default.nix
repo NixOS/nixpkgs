@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://dri.freedesktop.org/libdrm/;
+    homepage = "https://dri.freedesktop.org/libdrm/";
     description = "Library for accessing the kernel's Direct Rendering Manager";
     license = "bsd";
     platforms = lib.platforms.unix;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       multiple pods into one stream. This is the same as running "kubectl logs
       -f " but for multiple pods.
     '';
-    homepage = https://github.com/johanhaleby/kubetail;
+    homepage = "https://github.com/johanhaleby/kubetail";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.all;

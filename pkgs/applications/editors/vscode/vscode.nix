@@ -11,8 +11,8 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0i8dmh9w7xgzfjii4m116lavydpfpcp7fxs4bcykf0a779pzwv87";
-    x86_64-darwin = "0z0r0dmmzk3k095g7jbrrk9gl1jpb3cai973xrjw17ank1lddcjf";
+    x86_64-linux = "0q1fk5a4ymndnyxzps8960y1rl657q95i2rydbqyjl37y79wmllx";
+    x86_64-darwin = "02ybgp6v1ray4a867hihp2fvc872ilqla6z52qv90dfjx69g77ib";
   }.${system};
 in
   callPackage ./generic.nix rec {
@@ -21,7 +21,7 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.43.0";
+    version = "1.44.0";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -48,8 +48,8 @@ in
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences
       '';
-      homepage = https://code.visualstudio.com/;
-      downloadPage = https://code.visualstudio.com/Updates;
+      homepage = "https://code.visualstudio.com/";
+      downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
       maintainers = with maintainers; [ eadwu synthetica ];
       platforms = [ "x86_64-linux" "x86_64-darwin" ];

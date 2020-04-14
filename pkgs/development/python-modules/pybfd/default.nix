@@ -19,7 +19,7 @@ buildPythonPackage {
   LIBOPCODES_LIBRARY = "${libopcodes}/lib/libopcodes.so";
 
   meta = {
-    homepage = https://github.com/Groundworkstech/pybfd;
+    homepage = "https://github.com/Groundworkstech/pybfd";
     description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

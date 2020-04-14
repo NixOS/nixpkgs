@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
-    homepage = https://pypi.python.org/pypi/autopep8/;
+    homepage = "https://pypi.python.org/pypi/autopep8/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];

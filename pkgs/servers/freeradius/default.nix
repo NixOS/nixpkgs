@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "doc" ];
 
   meta = with stdenv.lib; {
-    homepage = https://freeradius.org/;
+    homepage = "https://freeradius.org/";
     description = "A modular, high performance free RADIUS suite";
     license = licenses.gpl2;
     maintainers = with maintainers; [ sheenobu willibutz fpletz lheckemann elseym ];

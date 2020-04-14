@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
-    homepage = https://wiki.gnome.org/Projects/GnomeKeyring;
+    homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
     license = licenses.gpl2;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

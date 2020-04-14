@@ -16,7 +16,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Collection of desktop applications for ALSA configuration";
-    homepage = https://gitlab.com/sebholt/qastools;
+    homepage = "https://gitlab.com/sebholt/qastools";
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

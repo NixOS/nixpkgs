@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Sudoku;
+    homepage = "https://wiki.gnome.org/Apps/Sudoku";
     description = "Test your logic skills in this number grid puzzle";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

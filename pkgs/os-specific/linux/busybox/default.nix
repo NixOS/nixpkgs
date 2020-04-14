@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
-    homepage = https://busybox.net/;
+    homepage = "https://busybox.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

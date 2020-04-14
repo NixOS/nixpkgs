@@ -20,12 +20,12 @@ let
   pname = "wire-desktop";
 
   version = {
-    x86_64-darwin = "3.15.3621";
+    x86_64-darwin = "3.16.3630";
     x86_64-linux = "3.16.2923";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-darwin = "13sgakb3zjlvqv6d6b264fc9x99swpl7s1dmnrgc5v3pgyaklr01";
+    x86_64-darwin = "1lnjn45bhd36n9xgx6xx9cggwivvkr2s6r4zai2dwg0aac1bywr5";
     x86_64-linux = "0c8jmlsg2gnxsvly04xj1al80nj52rg4czfdha58sg14x14lyspz";
   }.${system} or throwSystem;
 
@@ -121,7 +121,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/"
-      + "wrapper_macos_production%2F${version}/Wire.pkg";
+          + "macos%2F${version}/Wire.pkg";
       inherit sha256;
     };
 

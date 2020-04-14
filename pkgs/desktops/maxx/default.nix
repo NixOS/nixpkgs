@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A replica of IRIX Interactive Desktop";
-    homepage = https://www.facebook.com/maxxdesktop/;
+    homepage = "https://www.facebook.com/maxxdesktop/";
     license = {
       fullName = "The MaXX Interactive Desktop for Linux License Agreement";
-      url = http://maxxdesktop.arcadedaydream.com/Indigo-Releases/docs/license.html;
+      url = "http://maxxdesktop.arcadedaydream.com/Indigo-Releases/docs/license.html";
       free = false; # redistribution is only allowed to *some* hardware, etc.
     };
     maintainers = [ maintainers.gnidorah ];

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
          ‘--version’ output of other commands.
       '';
 
-    homepage = https://www.gnu.org/software/help2man/;
+    homepage = "https://www.gnu.org/software/help2man/";
 
     license = licenses.gpl3Plus;
     platforms = platforms.all;

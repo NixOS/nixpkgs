@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/prometheus/jmx_exporter;
+    homepage = "https://github.com/prometheus/jmx_exporter";
     description = "A process for exposing JMX Beans via HTTP for Prometheus consumption";
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];

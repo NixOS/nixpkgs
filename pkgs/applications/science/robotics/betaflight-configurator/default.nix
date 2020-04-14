@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       Various types of aircraft are supported by the tool and by Betaflight, e.g. 
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
-    homepage    = https://github.com/betaflight/betaflight/wiki;
+    homepage    = "https://github.com/betaflight/betaflight/wiki";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ wucke13 ];
     platforms   = platforms.linux;

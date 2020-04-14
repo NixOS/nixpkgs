@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python API for communicating with the memcached distributed memory object cache daemon";
-    homepage = http://www.tummy.com/Community/software/python-memcached/;
+    homepage = "http://www.tummy.com/Community/software/python-memcached/";
     license = licenses.psfl;
   };
 

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An XMPP library for C++, used by the Swift client";
-    homepage    = http://swift.im/swiften.html;
+    homepage    = "http://swift.im/swiften.html";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = [ maintainers.twey ];

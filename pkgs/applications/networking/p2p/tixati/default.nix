@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Torrent client";
-    homepage = http://www.tixati.com;
+    homepage = "http://www.tixati.com";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ volth ];

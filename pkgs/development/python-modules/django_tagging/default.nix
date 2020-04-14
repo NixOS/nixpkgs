@@ -16,6 +16,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "A generic tagging application for Django projects";
-    homepage = https://github.com/Fantomas42/django-tagging;
+    homepage = "https://github.com/Fantomas42/django-tagging";
   };
 }

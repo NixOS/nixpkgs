@@ -25,7 +25,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt implementation of freedesktop.org xdg specs";
-    homepage = https://github.com/lxqt/libqtxdg;
+    homepage = "https://github.com/lxqt/libqtxdg";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

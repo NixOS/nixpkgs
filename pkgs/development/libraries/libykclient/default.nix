@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Yubikey C client library";
-    homepage = https://developers.yubico.com/yubico-c-client;
+    homepage = "https://developers.yubico.com/yubico-c-client";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
   };

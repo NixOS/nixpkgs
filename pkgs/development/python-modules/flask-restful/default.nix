@@ -14,11 +14,11 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = https://github.com/flask-restful/flask-restful/commit/54979f0a49b2217babc53c5b65b5df10b6de8e05.patch;
+      url = "https://github.com/flask-restful/flask-restful/commit/54979f0a49b2217babc53c5b65b5df10b6de8e05.patch";
       sha256 = "11s6ag6l42g61ccg5jw9j1f26hwgjfa3sp890cbl5r4hy5ycpyr5";
     })
     (fetchpatch {
-      url = https://github.com/flask-restful/flask-restful/commit/f45e81a45ed03922fd225afe27006315811077e6.patch;
+      url = "https://github.com/flask-restful/flask-restful/commit/f45e81a45ed03922fd225afe27006315811077e6.patch";
       sha256 = "16avd369j5r08d1l23mwbba26zjwnmfqvfvnfz02am3gr5l6p3gl";
     })
   ];

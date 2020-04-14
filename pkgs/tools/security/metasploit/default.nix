@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Metasploit Framework - a collection of exploits";
-    homepage = https://github.com/rapid7/metasploit-framework/wiki;
+    homepage = "https://github.com/rapid7/metasploit-framework/wiki";
     platforms = platforms.unix;
     license = licenses.bsd3;
     maintainers = [ maintainers.makefu ];

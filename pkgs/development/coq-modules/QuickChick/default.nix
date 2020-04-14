@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/QuickChick/QuickChick;
+    homepage = "https://github.com/QuickChick/QuickChick";
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

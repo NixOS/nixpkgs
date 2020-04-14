@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A tool to create isolated Python environments";
-    homepage = http://www.virtualenv.org;
+    homepage = "http://www.virtualenv.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ goibhniu ];
   };

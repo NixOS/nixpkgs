@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://bitbucket.org/micktwomey/pyiso8601/;
+    homepage = "https://bitbucket.org/micktwomey/pyiso8601/";
     description = "Simple module to parse ISO 8601 dates";
     maintainers = with lib.maintainers; [ phreedom ];
   };

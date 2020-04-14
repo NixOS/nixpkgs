@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pep8 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/WoLpH/tissue;
+    homepage = "https://github.com/WoLpH/tissue";
     description = "Tissue - automated pep8 checker for nose";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ domenkozar ];

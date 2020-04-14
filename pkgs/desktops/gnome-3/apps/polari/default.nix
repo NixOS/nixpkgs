@@ -5,13 +5,13 @@
 
 let
   pname = "polari";
-  version = "3.36.0";
+  version = "3.36.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0wi7bpscm4rghlwljilsgrls5dy9p0b27k246a1vrdadjghc69l4";
+    sha256 = "1rmmq74g22qrmsg0mjvpzk5403kkpfw0iznvnwxfqbi0dfkamhn4";
   };
 
   patches = [
@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Polari;
+    homepage = "https://wiki.gnome.org/Apps/Polari";
     description = "IRC chat client designed to integrate with the GNOME desktop";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

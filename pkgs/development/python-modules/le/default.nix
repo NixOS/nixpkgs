@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ simplejson psutil ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rapid7/le;
+    homepage = "https://github.com/rapid7/le";
     description = "Logentries agent";
     license = licenses.mit;
   };

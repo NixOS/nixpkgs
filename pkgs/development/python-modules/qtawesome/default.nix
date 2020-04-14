@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Iconic fonts in PyQt and PySide applications";
-    homepage = https://github.com/spyder-ide/qtawesome;
+    homepage = "https://github.com/spyder-ide/qtawesome";
     license = licenses.mit;
     platforms = platforms.linux; # fails on Darwin
   };

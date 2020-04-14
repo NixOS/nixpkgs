@@ -46,7 +46,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://abcde.einval.com/wiki/;
+      homepage = "http://abcde.einval.com/wiki/";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ gebner ];
       description = "Command-line audio CD ripper";

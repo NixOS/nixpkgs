@@ -11,7 +11,7 @@ buildPythonPackage rec {
   patches = [
     # Fix dependency on typing. Remove with the next release
     (fetchpatch {
-      url = https://github.com/bpython/curtsies/commit/217b4f83e954837f8adc4c549c1f2f9f2bb272a7.patch;
+      url = "https://github.com/bpython/curtsies/commit/217b4f83e954837f8adc4c549c1f2f9f2bb272a7.patch";
       sha256 = "1d3zwx9c7i0drb4nvydalm9mr83jrvdm75ffgisri89h337hiffs";
     })
   ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Curses-like terminal wrapper, with colored strings!";
-    homepage = https://github.com/bpython/curtsies;
+    homepage = "https://github.com/bpython/curtsies";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
   };

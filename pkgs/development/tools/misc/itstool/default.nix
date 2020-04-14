@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ (python3.withPackages(ps: with ps; [ libxml2 ])) ];
 
   meta = {
-    homepage = http://itstool.org/;
+    homepage = "http://itstool.org/";
     description = "XML to PO and back again";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.all;

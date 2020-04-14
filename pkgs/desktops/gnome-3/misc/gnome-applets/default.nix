@@ -24,13 +24,13 @@
 
 let
   pname = "gnome-applets";
-  version = "3.36.0";
+  version = "3.36.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "096n0ji478hfdrbi8illsyvdsgxznxfayr826pr9jdgzg1s0x9xs";
+    sha256 = "1hlblnajjkvlcd45lxfdxscx7j51nwyvri5jci6ylgpaxlwwm1s8";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Applets for use with the GNOME panel";
-    homepage = https://wiki.gnome.org/Projects/GnomeApplets;
+    homepage = "https://wiki.gnome.org/Projects/GnomeApplets";
     license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

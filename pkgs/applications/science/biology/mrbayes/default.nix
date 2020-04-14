@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       MCMC) to approximate the posterior probabilities of trees.
     '';
     license     = "GPL2";
-    homepage    = http://mrbayes.csit.fsu.edu/;
+    homepage    = "http://mrbayes.csit.fsu.edu/";
     platforms = stdenv.lib.platforms.linux;
   };
 }

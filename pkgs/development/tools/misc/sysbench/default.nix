@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Modular, cross-platform and multi-threaded benchmark tool";
-    homepage = https://github.com/akopytov/sysbench;
+    homepage = "https://github.com/akopytov/sysbench";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

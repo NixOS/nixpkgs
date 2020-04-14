@@ -1,7 +1,6 @@
 { stdenv
 , autoreconfHook
 , fetchurl
-, fetchpatch
 , gettext
 , glib
 , gnome-bluetooth
@@ -31,7 +30,7 @@
 
 let
   pname = "gnome-flashback";
-  version = "3.36.0";
+  version = "3.36.1";
 
   # From data/sessions/Makefile.am
   requiredComponentsCommon = [
@@ -62,32 +61,8 @@ let
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "qwlTFs4wn6PpB7uZkpvnmECsSTa62OQMpgiIXoZoMRk=";
+      sha256 = "16gknn5mj29i8svlncarj92qi0swdlziggxpg9rryqslsy896a2x";
     };
-
-    patches = [
-      # Fix locking screen from log out dialogue
-      # https://gitlab.gnome.org/GNOME/gnome-flashback/issues/43
-      (fetchpatch {
-        url = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/commit/7b151e0a947e4b49e1cee80097c1f8946ba46af9.patch";
-        sha256 = "pJcJb6EGlInlWpLbbBajWydBtbiWK3AMHzsFQ26bmwA=";
-      })
-
-      # Hide GNOME Shell Extensions manager from menu
-      # https://gitlab.gnome.org/GNOME/gnome-flashback/issues/42
-      (fetchpatch {
-        url = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/commit/75f95379779c24d42d1e72cdcd4c16a9c6db7657.patch";
-        sha256 = "cwKZSQTFi0f/T1Ld6vJceQFHBsikOhkp//J1IY5aMKA=";
-      })
-      (fetchpatch {
-        url = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/commit/12cacf25b1190d9c9bba42f085e54895de7a076e.patch";
-        sha256 = "mx37kLs3x/e9RJCGN6z8/7b5Tz6yzxeN/14NFi8IWfA=";
-      })
-      (fetchpatch {
-        url = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/commit/7954376f32348028a3bdba0ea182b0000c4fcb0a.patch";
-        sha256 = "ZEQcg9OoIOIMh/yUYQ9R1Ky8DElteaDQrSdwFtA4Yno=";
-      })
-    ];
 
     # make .desktop Execs absolute
     postPatch = ''
@@ -214,7 +189,7 @@ let
 
     meta = with stdenv.lib; {
       description = "GNOME 2.x-like session for GNOME 3";
-      homepage = https://wiki.gnome.org/Projects/GnomeFlashback;
+      homepage = "https://wiki.gnome.org/Projects/GnomeFlashback";
       license = licenses.gpl2;
       maintainers = gnome3.maintainers;
       platforms = platforms.linux;

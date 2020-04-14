@@ -138,7 +138,7 @@ in
         assertion = cfg.hostKeys != [];
         message = ''
           You must now pre-generate the host keys for initrd SSH.
-          See the boot.inird.network.ssh.hostKeys documentation
+          See the boot.initrd.network.ssh.hostKeys documentation
           for instructions.
         '';
       }

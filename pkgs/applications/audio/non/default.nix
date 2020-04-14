@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Lightweight and lightning fast modular Digital Audio Workstation";
-    homepage = http://non.tuxfamily.org;
+    homepage = "http://non.tuxfamily.org";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

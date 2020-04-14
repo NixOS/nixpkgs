@@ -14,14 +14,14 @@ with stdenv.lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.20.0";
+  version = "1.21.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "0g7iv5w14wndl5iv2q81dppgwq09sm93vpnyq7p49nl7q1dsz1d6";
+    sha256 = "08gxwxvg816hj7sxsb8s97ny2562xri9nx0w2zx7xsssp22grawk";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -36,11 +36,6 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./no-files-in-etc-and-var.patch
-    # part of the next release
-    (fetchpatch {
-      url = "https://github.com/netdata/netdata/commit/5c992b7d92cf008ce91627efccf8644732db1f87.patch";
-      sha256 = "1nvbmhy5rir4kw77dhx1qr0l0wcspakr7z7ivva1ilz1aml8nbnm";
-    })
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
@@ -78,7 +73,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Real-time performance monitoring tool";
-    homepage = https://my-netdata.io/;
+    homepage = "https://my-netdata.io/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];

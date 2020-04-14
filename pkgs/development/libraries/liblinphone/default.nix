@@ -140,6 +140,15 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
+  # Some grammar files needed to be copied too from some dependencies. I suppose
+  # if one define a dependency in such a way that its share directory is found,
+  # then this copying would be unnecessary. Instead of actually copying these
+  # files, create a symlink.
+  postInstall = ''
+    mkdir -p $out/share/belr/grammars
+    ln -s ${belcard}/share/belr/grammars/* $out/share/belr/grammars/
+  '';
+
   meta = with stdenv.lib; {
     homepage = "https://www.linphone.org/technical-corner/liblinphone";
     description = "Library for SIP calls and instant messaging";

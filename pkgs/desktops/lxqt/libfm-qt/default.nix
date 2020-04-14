@@ -35,7 +35,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";
-    homepage = https://github.com/lxqt/libfm-qt;
+    homepage = "https://github.com/lxqt/libfm-qt";
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

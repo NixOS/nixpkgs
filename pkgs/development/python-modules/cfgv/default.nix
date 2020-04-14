@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Validate configuration and produce human readable error messages";
-    homepage = https://github.com/asottile/cfgv;
+    homepage = "https://github.com/asottile/cfgv";
     license = licenses.mit;
   };
 }

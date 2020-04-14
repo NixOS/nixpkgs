@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "A reverse proxy that provides authentication with Google, Github or other provider";
-    homepage = https://github.com/pusher/oauth2_proxy/;
+    homepage = "https://github.com/pusher/oauth2_proxy/";
     license = licenses.mit;
     maintainers = [ maintainers.yorickvp ];
   };

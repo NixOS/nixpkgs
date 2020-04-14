@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Daemon that displays passive pop-up notifications";
-    homepage = https://launchpad.net/notify-osd;
+    homepage = "https://launchpad.net/notify-osd";
     license = licenses.gpl3;
     maintainers = [ maintainers.imalison ];
     platforms = platforms.linux;

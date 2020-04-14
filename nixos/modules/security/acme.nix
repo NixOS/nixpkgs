@@ -301,7 +301,7 @@ in
                 # StateDirectory must be relative, and will be created under /var/lib by systemd
                 lpath = "acme/${cert}";
                 apath = "/var/lib/${lpath}";
-                spath = "/var/lib/acme/.lego";
+                spath = "/var/lib/acme/.lego/${cert}";
                 fileMode = if data.allowKeysForGroup then "640" else "600";
                 globalOpts = [ "-d" data.domain "--email" data.email "--path" "." "--key-type" data.keyType ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
@@ -330,7 +330,7 @@ in
                     User = data.user;
                     Group = data.group;
                     PrivateTmp = true;
-                    StateDirectory = "acme/.lego ${lpath}";
+                    StateDirectory = "acme/.lego/${cert} ${lpath}";
                     StateDirectoryMode = if data.allowKeysForGroup then "750" else "700";
                     WorkingDirectory = spath;
                     # Only try loading the credentialsFile if the dns challenge is enabled

@@ -3,13 +3,13 @@
 
 let
   pname = "libgnome-games-support";
-  version = "1.6.0.1";
+  version = "1.6.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0xifkj5dg4n3cy0hi76zy1ixyssxxpgy4yi4li7iq39cqbnkc9d8";
+    sha256 = "1gq8p38k92lsr6dbav6pgmw0adnzzhcs06jqdkr37p145vv6ls7v";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext vala ];
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Small library intended for internal use by GNOME Games, but it may be used by others";
-    homepage = https://wiki.gnome.org/Apps/Games;
+    homepage = "https://wiki.gnome.org/Apps/Games";
     license = licenses.lgpl3;
     maintainers = gnome3.maintainers;
     platforms = platforms.unix;

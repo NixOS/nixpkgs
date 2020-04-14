@@ -3,6 +3,14 @@
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
 , blas64 ? null
+# Multi-threaded applications must not call a threaded OpenBLAS
+# (the only exception is when an application uses OpenMP as its
+# *only* form of multi-threading). See
+#     https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+#     https://github.com/xianyi/OpenBLAS/issues/2543
+# This flag builds a single-threaded OpenBLAS using the flags
+# stated in thre.
+, singleThreaded ? false
 , buildPackages
 # Select a specific optimization target (other than the default)
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
@@ -146,7 +154,12 @@ stdenv.mkDerivation rec {
     NO_BINARY_MODE = if stdenv.isx86_64
         then toString (stdenv.hostPlatform != stdenv.buildPlatform)
         else stdenv.hostPlatform != stdenv.buildPlatform;
-  });
+  } // (stdenv.lib.optionalAttrs singleThreaded {
+    # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+    USE_THREAD = false;
+    USE_LOCKING = true; # available with openblas >= 0.3.7
+    USE_OPENMP = false; # openblas will refuse building with both USE_OPENMP=1 and USE_THREAD=0
+  }));
 
   doCheck = true;
   checkTarget = "tests";
@@ -168,7 +181,7 @@ EOF
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
-    homepage = https://github.com/xianyi/OpenBLAS;
+    homepage = "https://github.com/xianyi/OpenBLAS";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };

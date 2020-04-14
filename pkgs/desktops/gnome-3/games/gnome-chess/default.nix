@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Chess;
+    homepage = "https://wiki.gnome.org/Apps/Chess";
     description = "Play the classic two-player boardgame of chess";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

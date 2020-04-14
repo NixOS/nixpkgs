@@ -202,7 +202,7 @@ in
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
   ndppd = handleTest ./ndppd.nix {};
   neo4j = handleTest ./neo4j.nix {};
-  nesting = handleTest ./nesting.nix {};
+  specialisation = handleTest ./specialisation.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };
@@ -303,6 +303,8 @@ in
   timezone = handleTest ./timezone.nix {};
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
+  # traefik test relies on docker-containers
+  traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
   transmission = handleTest ./transmission.nix {};
   trac = handleTest ./trac.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};

@@ -24,7 +24,7 @@ assert enableInfluxDatabase -> influxdb != null;
 stdenv.mkDerivation {
   name = "dysnomia-0.9";
   src = fetchurl {
-    url = https://github.com/svanderburg/dysnomia/releases/download/dysnomia-0.9/dysnomia-0.9.tar.gz;
+    url = "https://github.com/svanderburg/dysnomia/releases/download/dysnomia-0.9/dysnomia-0.9.tar.gz";
     sha256 = "09pk2l3pss48kvm5wvskh842vakbzmjzxzfzyw1nkqnvni130ikl";
   };
 

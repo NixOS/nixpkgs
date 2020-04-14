@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/awslabs/aws-shell;
+    homepage = "https://github.com/awslabs/aws-shell";
     description = "An integrated shell for working with the AWS CLI";
     license = licenses.asl20;
     maintainers = [ ];

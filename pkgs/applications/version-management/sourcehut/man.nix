@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/man.sr.ht;
+    homepage = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     description = "Wiki service for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     description = "Git Object Database";
     maintainers = [ ];
-    homepage = https://github.com/gitpython-developers/gitdb;
+    homepage = "https://github.com/gitpython-developers/gitdb";
     license = lib.licenses.bsd3;
   };
 }

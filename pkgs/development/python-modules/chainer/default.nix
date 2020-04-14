@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A flexible framework of neural networks for deep learning";
-    homepage = https://chainer.org/;
+    homepage = "https://chainer.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
   };

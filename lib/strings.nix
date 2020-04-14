@@ -315,6 +315,21 @@ rec {
   */
   escapeNixString = s: escape ["$"] (builtins.toJSON s);
 
+  /* Quotes a string if it can't be used as an identifier directly.
+
+     Type: string -> string
+
+     Example:
+       escapeNixIdentifier "hello"
+       => "hello"
+       escapeNixIdentifier "0abc"
+       => "\"0abc\""
+  */
+  escapeNixIdentifier = s:
+    # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
+    if builtins.match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
+    then s else escapeNixString s;
+
   # Obsolete - use replaceStrings instead.
   replaceChars = builtins.replaceStrings or (
     del: new: s:

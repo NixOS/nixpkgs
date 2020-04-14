@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl db cyrus_sasl zlib ];
 
   meta = with stdenv.lib; {
-    homepage = http://isync.sourceforge.net/;
+    homepage = "http://isync.sourceforge.net/";
     description = "Free IMAP and MailDir mailbox synchronizer";
     license = licenses.gpl2Plus;
 

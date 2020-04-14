@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A virtual machine manager GUI for qemu";
-    homepage = https://github.com/tobimensch/aqemu;
+    homepage = "https://github.com/tobimensch/aqemu";
     license = licenses.gpl2;
     maintainers = with maintainers; [ hrdinka ];
     platforms = with platforms; linux;

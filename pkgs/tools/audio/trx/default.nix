@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple toolset for broadcasting live audio using RTP/UDP and Opus";
-    homepage = http://www.pogo.org.uk/~mark/trx/;
+    homepage = "http://www.pogo.org.uk/~mark/trx/";
     license = licenses.gpl2;
     maintainers = [ maintainers.hansjoergschurr ];
     platforms = platforms.linux;

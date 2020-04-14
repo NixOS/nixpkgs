@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "a size profiler for binaries";
-    homepage = https://github.com/google/bloaty;
+    homepage = "https://github.com/google/bloaty";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.dtzWill ];

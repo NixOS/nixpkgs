@@ -195,6 +195,58 @@ environment.systemPackages = [
        </itemizedlist>
      </para>
    </listitem>
+   <listitem>
+     <para>
+      Gollum received a major update to version 5.x and you may have to change
+      some links in your wiki when migrating from gollum 4.x. More information
+      can be found
+      <link xlink:href="https://github.com/gollum/gollum/wiki/5.0-release-notes#migrating-your-wiki">here</link>.
+     </para>
+   </listitem>
+
+   <listitem>
+    <para>
+      The NixOS options <literal>nesting.clone</literal> and
+      <literal>nesting.children</literal> have been deleted, and
+      replaced with named <xref linkend="opt-specialisation"/>
+      configurations.
+    </para>
+
+    <para>
+      Replace a <literal>nesting.clone</literal> entry with:
+
+<programlisting>{
+<link xlink:href="#opt-specialisation">specialisation.example-sub-configuration</link> = {
+  <link xlink:href="#opt-specialisation._name_.configuration">configuration</link> = {
+    ...
+  };
+};</programlisting>
+
+    </para>
+    <para>
+      Replace a <literal>nesting.children</literal> entry with:
+
+<programlisting>{
+<link xlink:href="#opt-specialisation">specialisation.example-sub-configuration</link> = {
+  <link xlink:href="#opt-specialisation._name_.inheritParentConfig">inheritParentConfig</link> = false;
+  <link xlink:href="#opt-specialisation._name_.configuration">configuration</link> = {
+    ...
+  };
+};</programlisting>
+    </para>
+
+    <para>
+     To switch to a specialised configuration at runtime you need to
+     run:
+<programlisting>
+# sudo /run/current-system/specialisation/example-sub-configuration/bin/switch-to-configuration test
+</programlisting>
+     Before you would have used:
+<programlisting>
+# sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
+</programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -207,7 +259,13 @@ environment.systemPackages = [
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     The <package>notmuch</package> package move its emacs-related binaries and
+     emacs lisp files to a separate output. They're not part
+     of the default <literal>out</literal> output anymore - if you relied on the
+     <literal>notmuch-emacs-mua</literal> binary or the emacs lisp files, access them via
+     the <literal>notmuch.emacs</literal> output.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

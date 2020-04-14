@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A watchdog that interrupts long running code";
-    homepage = https://bitbucket.org/evzijst/interruptingcow;
+    homepage = "https://bitbucket.org/evzijst/interruptingcow";
     license = licenses.mit;
     maintainers = with maintainers; [ benley ];
   };

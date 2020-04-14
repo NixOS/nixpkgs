@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
 , python3, buildPackages, nixosTests
+, enablePython ? true
 }:
 
 let
@@ -25,8 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
     libuuid keyutils kerberos tcp_wrappers
-    python3
-  ];
+  ] ++ lib.optional enablePython python3;
 
   enableParallelBuilding = true;
 
@@ -96,6 +96,9 @@ stdenv.mkDerivation rec {
         -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
         -e "s,/usr/sbin,$out/bin,g" \
         $out/etc/systemd/system/*
+    '' + lib.optionalString (!enablePython) ''
+      # Remove all scripts that require python (currently mountstats and nfsiostat)
+      grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
     '';
 
   # One test fails on mips.
@@ -120,7 +123,7 @@ stdenv.mkDerivation rec {
       daemons.
     '';
 
-    homepage = https://linux-nfs.org/;
+    homepage = "https://linux-nfs.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

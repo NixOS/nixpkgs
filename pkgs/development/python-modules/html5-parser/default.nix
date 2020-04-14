@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Fast C based HTML 5 parsing for python";
-    homepage = https://html5-parser.readthedocs.io;
+    homepage = "https://html5-parser.readthedocs.io";
     license = licenses.asl20;
   };
 }

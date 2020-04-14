@@ -14,7 +14,7 @@ buildPythonPackage {
   buildInputs = [ nose ];
 
   meta = {
-    homepage = https://github.com/gjhiggins/tempita;
+    homepage = "https://github.com/gjhiggins/tempita";
     description = "A very small text templating language";
     license = lib.licenses.mit;
   };

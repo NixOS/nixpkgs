@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.graphicsmagick.org;
+    homepage = "http://www.graphicsmagick.org";
     description = "Swiss army knife of image processing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Read resources from Python packages";
-    homepage = https://importlib-resources.readthedocs.io/;
+    homepage = "https://importlib-resources.readthedocs.io/";
     license = licenses.asl20;
   };
 }

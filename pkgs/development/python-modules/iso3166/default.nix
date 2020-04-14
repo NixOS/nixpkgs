@@ -19,7 +19,7 @@ buildPythonPackage {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/deactivated/python-iso3166;
+    homepage = "https://github.com/deactivated/python-iso3166";
     description = "Self-contained ISO 3166-1 country definitions";
     license = licenses.mit;
     maintainers = with maintainers; [ zraexy ];

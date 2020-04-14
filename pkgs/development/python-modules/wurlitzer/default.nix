@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Capture C-level output in context managers";
-    homepage = https://github.com/minrk/wurlitzer;
+    homepage = "https://github.com/minrk/wurlitzer";
     license = lib.licenses.mit;
   };
 }

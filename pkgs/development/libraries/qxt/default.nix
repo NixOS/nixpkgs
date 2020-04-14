@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   prefixKey = "-prefix ";
 
   meta = {
-    homepage = http://libqxt.org;
+    homepage = "http://libqxt.org";
     description = "An extension library for Qt";
     longDescription = ''
       An extension library for Qt providing a suite of cross-platform utility

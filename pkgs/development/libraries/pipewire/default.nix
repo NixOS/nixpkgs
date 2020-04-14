@@ -32,7 +32,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.1";
+  version = "0.3.2";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "DfUgXTSSCl+JszFEKwBha67nauQi4noR25m00auXDnA=";
+    sha256 = "U7lqvn2vMIxARNplzNX9H3Ztlfv1IH8LozJsq7JSEKs=";
   };
 
   nativeBuildInputs = [
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Server and user space API to deal with multimedia pipelines";
-    homepage = https://pipewire.org/;
+    homepage = "https://pipewire.org/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jtojnar ];

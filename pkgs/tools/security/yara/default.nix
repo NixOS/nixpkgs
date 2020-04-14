@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The pattern matching swiss knife for malware researchers";
-    homepage    = http://Virustotal.github.io/yara/;
+    homepage    = "http://Virustotal.github.io/yara/";
     license     = licenses.asl20;
     platforms   = stdenv.lib.platforms.all;
   };

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Repository manager for binary software components";
-    homepage = http://www.sonatype.org/nexus;
+    homepage = "http://www.sonatype.org/nexus";
     license = licenses.epl10;
     platforms = platforms.all;
     maintainers = with maintainers; [ aespinosa ironpinguin zaninime ];

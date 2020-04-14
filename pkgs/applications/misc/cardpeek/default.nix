@@ -20,7 +20,7 @@ in
     enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/L1L1/cardpeek;
+      homepage = "https://github.com/L1L1/cardpeek";
       description = "A tool to read the contents of ISO7816 smart cards";
       license = licenses.gpl3Plus;
       platforms = with platforms; linux ++ darwin;

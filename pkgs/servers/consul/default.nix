@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "consul";
-  version = "1.6.2";
+  version = "1.7.2";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/consul";
@@ -19,7 +19,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "0r9wqxhgspgypvp9xdv931r8g28gjg9njdignp84rrbxljix25my";
+    sha256 = "1q587d8aqfkwg4fymr56fnf038vkxbdqz5yilz96dzny27dhspj4";
   };
 
   preBuild = ''
@@ -28,7 +28,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tool for service discovery, monitoring and configuration";
-    homepage = https://www.consul.io/;
+    homepage = "https://www.consul.io/";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 ];

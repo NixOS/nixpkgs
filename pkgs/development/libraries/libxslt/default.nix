@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://xmlsoft.org/XSLT/;
+    homepage = "http://xmlsoft.org/XSLT/";
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;

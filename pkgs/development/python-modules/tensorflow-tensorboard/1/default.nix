@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "TensorFlow's Visualization Toolkit";
-    homepage = http://tensorflow.org;
+    homepage = "http://tensorflow.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ abbradar ];
   };

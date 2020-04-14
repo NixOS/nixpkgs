@@ -16,13 +16,13 @@
 
 let
   pname = "metacity";
-  version = "3.36.0";
+  version = "3.36.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1a06763x9hshymmq36w7c588q4rbzq0w5rkyam5l6yi8p75ic016";
+    sha256 = "08xkq5i6czvms0ygbj7ywzl70q1l0z44nfh6b43q8rmjwa9pdw0i";
   };
 
   patches = [
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Window manager used in Gnome Flashback";
-    homepage = https://wiki.gnome.org/Projects/Metacity;
+    homepage = "https://wiki.gnome.org/Projects/Metacity";
     license = licenses.gpl2;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

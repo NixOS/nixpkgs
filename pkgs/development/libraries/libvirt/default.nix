@@ -17,19 +17,19 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "1h7bmd7zgl64mwnxx4ji8l0mqmcbfxsx6kp1scyyfq2mwidihz0n";
+        sha256 = "1c8grqf751blsgs15wx2p05wvankdrady6290vwc85v94cgqij5f";
       }
     else
       fetchgit {
-        url = git://libvirt.org/libvirt.git;
+        url = "git://libvirt.org/libvirt.git";
         rev = "v${version}";
-        sha256 = "18sr3jvpxn45c4vrjzpa4qgnnfxxh95v6l6qk31zka3siv8rrwqx";
+        sha256 = "1wyihi8bhwsck9b7f3b8yhlz145sjdyyj3ykjiszrqnp0y99xxy2";
         fetchSubmodules = true;
       };
 
@@ -124,8 +124,8 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   meta = {
-    homepage = http://libvirt.org/;
-    repositories.git = git://libvirt.org/libvirt.git;
+    homepage = "http://libvirt.org/";
+    repositories.git = "git://libvirt.org/libvirt.git";
     description = ''
       A toolkit to interact with the virtualization capabilities of recent
       versions of Linux (and other OSes)

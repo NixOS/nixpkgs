@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
            Brother MFC-L2710DW
            Lenovo M7605D
       '';
-    homepage = https://github.com/pdewacht/brlaser;
+    homepage = "https://github.com/pdewacht/brlaser";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ StijnDW ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     This program uses bruteforce algorithm to find correct password. You can specify wich characters will be used in password generations.
     Warning: Please don't use this program for any illegal things!
     '';
-    homepage = https://github.com/jaredsburrows/Rarcrack;
+    homepage = "https://github.com/jaredsburrows/Rarcrack";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak ];
     platforms = with platforms; unix;

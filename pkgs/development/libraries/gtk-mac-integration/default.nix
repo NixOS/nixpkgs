@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
     license = licenses.lgpl21;
 
-    homepage = https://wiki.gnome.org/Projects/GTK/OSX/Integration;
+    homepage = "https://wiki.gnome.org/Projects/GTK/OSX/Integration";
 
     maintainers = [ maintainers.matthewbauer ];
     platforms = platforms.darwin;

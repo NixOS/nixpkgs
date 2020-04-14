@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl2Plus;
 
-    homepage = http://plib.sourceforge.net/;
+    homepage = "http://plib.sourceforge.net/";
     platforms = stdenv.lib.platforms.linux;
   };
 }

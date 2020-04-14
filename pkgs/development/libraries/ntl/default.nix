@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     '';
     # Upstream contact: maintainer is victorshoup on GitHub. Alternatively the
     # email listed on the homepage.
-    homepage = http://www.shoup.net/ntl/;
+    homepage = "http://www.shoup.net/ntl/";
     # also locally at "${src}/doc/tour-changes.html";
     changelog = "https://www.shoup.net/ntl/doc/tour-changes.html";
     maintainers = with maintainers; [ timokau ];

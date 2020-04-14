@@ -93,7 +93,7 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.7";
+  version = "14.2.8";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -101,12 +101,11 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0qiqhm6hvz299q54k3i4crnb5dhpq6xnn2yqih9pxn9van0dq1ln";
+      sha256 = "0p7pjycqhxqg1mmix8ykx3xqq01d560p54iiidxps0rcvwfkyyki";
     };
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      ./0000-dont-check-cherrypy-version.patch
     ];
 
     nativeBuildInputs = [
@@ -174,7 +173,7 @@ in rec {
     doCheck = false; # uses pip to install things from the internet
 
     meta = {
-      homepage = https://ceph.com/;
+      homepage = "https://ceph.com/";
       description = "Distributed storage system";
       license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
       maintainers = with maintainers; [ adev ak krav johanot ];
@@ -186,7 +185,7 @@ in rec {
 
   ceph-client = runCommand "ceph-client-${version}" {
      meta = {
-        homepage = https://ceph.com/;
+        homepage = "https://ceph.com/";
         description = "Tools needed to mount Ceph's RADOS Block Devices";
         license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
         maintainers = with maintainers; [ adev ak johanot krav ];

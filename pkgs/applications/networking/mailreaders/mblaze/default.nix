@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/chneukirchen/mblaze;
+    homepage = "https://github.com/chneukirchen/mblaze";
     description = "Unix utilities to deal with Maildir";
     license = licenses.cc0;
     platforms = platforms.all;

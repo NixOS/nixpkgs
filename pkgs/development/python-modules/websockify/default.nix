@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "WebSockets support for any application/server";
-    homepage = https://github.com/kanaka/websockify;
+    homepage = "https://github.com/kanaka/websockify";
     license = licenses.lgpl3;
   };
 

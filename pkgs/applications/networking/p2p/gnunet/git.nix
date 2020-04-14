@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   name = "gnunet-git-${rev}";
 
   src = fetchgit {
-    url =  https://gnunet.org/git/gnunet.git;
+    url =  "https://gnunet.org/git/gnunet.git";
     inherit rev;
     sha256 = "0gbw920m9v4b3425c0d1h7drgl2m1fni1bwjn4fwqnyz7kdqzsgl";
   };
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
       network are rewarded with better service.
     '';
 
-    homepage = https://gnunet.org/;
+    homepage = "https://gnunet.org/";
 
     license = licenses.agpl3Plus;
 

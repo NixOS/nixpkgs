@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
-    homepage    = http://nsjail.com/;
+    homepage    = "http://nsjail.com/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ bosu c0bw3b ];
     platforms   = platforms.linux;

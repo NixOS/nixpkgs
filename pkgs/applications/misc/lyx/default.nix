@@ -36,7 +36,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
-    homepage = http://www.lyx.org;
+    homepage = "http://www.lyx.org";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.vcunat ];
     platforms = platforms.linux;

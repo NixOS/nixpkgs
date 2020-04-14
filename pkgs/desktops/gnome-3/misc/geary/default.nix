@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.36.0";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jiaq+dwdARLaSnttY2chwJrclFjxrukuk80yT0LgvfY=";
+    sha256 = "07rhmzznfa4asx5gbmvnfpybd5czy7xmzk75xrk4r1qcnr24ml03";
   };
 
   nativeBuildInputs = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Geary;
+    homepage = "https://wiki.gnome.org/Apps/Geary";
     description = "Mail client for GNOME 3";
     maintainers = gnome3.maintainers;
     license = licenses.lgpl21Plus;

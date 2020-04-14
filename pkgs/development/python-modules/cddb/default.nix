@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://cddb-py.sourceforge.net/;
+    homepage = "http://cddb-py.sourceforge.net/";
     description = "CDDB and FreeDB audio CD track info access";
     license = licenses.gpl2Plus;
   };

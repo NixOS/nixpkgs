@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for text classification and representation learning";
-    homepage = https://fasttext.cc/;
+    homepage = "https://fasttext.cc/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.danieldk ];

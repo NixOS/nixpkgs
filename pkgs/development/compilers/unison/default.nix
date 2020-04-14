@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Modern, statically-typed purely functional language";
-    homepage = https://unisonweb.org/;
+    homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];
     maintainers = [ maintainers.virusdave ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];

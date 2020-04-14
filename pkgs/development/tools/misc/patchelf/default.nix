@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails 8 out of 24 tests, problems when loading libc.so.6
 
   meta = with stdenv.lib; {
-    homepage = https://nixos.org/patchelf.html;
+    homepage = "https://github.com/NixOS/patchelf/blob/master/README";
     license = licenses.gpl3;
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
     maintainers = [ maintainers.eelco ];

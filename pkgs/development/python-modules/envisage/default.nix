@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Framework for building applications whose functionalities can be extended by adding 'plug-ins'";
-    homepage = https://github.com/enthought/envisage;
+    homepage = "https://github.com/enthought/envisage";
     maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
   };

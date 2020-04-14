@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     - copy any menu object or whole menu
     - customize navigation using DVD scripting
     '';
-    homepage = http://www.dvdstyler.org/;
+    homepage = "http://www.dvdstyler.org/";
     license = with licenses; gpl2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;

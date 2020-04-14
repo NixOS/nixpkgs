@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "IRC client that runs as a daemon accepting notification requests";
-    homepage = https://gitlab.com/esr/irker;
+    homepage = "https://gitlab.com/esr/irker";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.unix;

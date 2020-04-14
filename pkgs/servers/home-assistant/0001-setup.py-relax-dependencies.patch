@@ -1,0 +1,46 @@
+From 80f39643bb4d25f8ffcbd92804844961b303f4d0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Thu, 9 Apr 2020 07:20:46 +0100
+Subject: [PATCH] setup.py: relax dependencies
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ setup.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index f53af0ee1..ff4227487 100755
+--- a/setup.py
++++ b/setup.py
+@@ -32,10 +32,10 @@ PROJECT_URLS = {
+ PACKAGES = find_packages(exclude=["tests", "tests.*"])
+ 
+ REQUIRES = [
+-    "aiohttp==3.6.1",
++    "aiohttp>=3.6.1",
+     "astral==1.10.1",
+     "async_timeout==3.0.1",
+-    "attrs==19.3.0",
++    "attrs>=19.3.0",
+     "bcrypt==3.1.7",
+     "certifi>=2019.11.28",
+     "ciso8601==2.1.3",
+@@ -47,9 +47,9 @@ REQUIRES = [
+     "pip>=8.0.3",
+     "python-slugify==4.0.0",
+     "pytz>=2019.03",
+-    "pyyaml==5.3.1",
+-    "requests==2.23.0",
+-    "ruamel.yaml==0.15.100",
++    "pyyaml>=5.2",
++    "requests>=2.22",
++    "ruamel.yaml>=0.15.100",
+     "voluptuous==0.11.7",
+     "voluptuous-serialize==2.3.0",
+ ]
+-- 
+2.25.1
+

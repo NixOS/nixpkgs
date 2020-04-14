@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Shared library with NFS-safe locking functions";
-    homepage = http://packages.debian.org/unstable/libs/liblockfile1;
+    homepage = "http://packages.debian.org/unstable/libs/liblockfile1";
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];

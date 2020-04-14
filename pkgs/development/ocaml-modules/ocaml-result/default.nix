@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/janestreet/result;
+    homepage = "https://github.com/janestreet/result";
     description = "Compatibility Result module";
     longDescription = ''
       Projects that want to use the new result type defined in OCaml >= 4.03

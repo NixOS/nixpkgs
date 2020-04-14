@@ -41,7 +41,7 @@ let
 
         meta = with stdenv.lib; {
           description = "Easiest way to get a production Kubernetes up and running";
-          homepage = https://github.com/kubernetes/kops;
+          homepage = "https://github.com/kubernetes/kops";
           license = licenses.asl20;
           maintainers = with maintainers; [ offline zimbatm kampka ];
           platforms = platforms.unix;

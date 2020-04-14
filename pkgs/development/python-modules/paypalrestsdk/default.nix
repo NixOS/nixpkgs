@@ -13,7 +13,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests six pyopenssl ];
 
   meta = {
-    homepage = https://developer.paypal.com/;
+    homepage = "https://developer.paypal.com/";
     description = "Python APIs to create, process and manage payment";
     license = "PayPal SDK License";
   };

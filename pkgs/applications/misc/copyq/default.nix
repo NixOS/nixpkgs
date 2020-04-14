@@ -21,7 +21,7 @@ mkDerivation rec {
   ] ++ lib.optional webkitSupport qtwebkit;
 
   meta = with lib; {
-    homepage    = https://hluk.github.io/CopyQ;
+    homepage    = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
     license     = licenses.gpl3;
     maintainers = [ maintainers.willtim ];

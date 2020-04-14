@@ -7,7 +7,7 @@
     revision = "23-android-wear-armeabi-v7a";
     displayName = "Android Wear ARM EABI v7a System Image";
     archives.all = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android-wear/armeabi-v7a-23_r06.zip;
+      url = "https://dl.google.com/android/repository/sys-img/android-wear/armeabi-v7a-23_r06.zip";
       sha1 = "0df5d34b1cdaaaa3805a2f06bb889901eabe2e71";
     };
   };
@@ -17,7 +17,7 @@
     revision = "23-android-wear-x86";
     displayName = "Android Wear Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android-wear/x86-23_r06.zip;
+      url = "https://dl.google.com/android/repository/sys-img/android-wear/x86-23_r06.zip";
       sha1 = "3b15c123f3f71459d5b60c1714d49c5d90a5525e";
     };
   };
@@ -27,7 +27,7 @@
     revision = "25-android-wear-armeabi-v7a";
     displayName = "Android Wear ARM EABI v7a System Image";
     archives.all = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android-wear/armeabi-v7a-25_r03.zip;
+      url = "https://dl.google.com/android/repository/sys-img/android-wear/armeabi-v7a-25_r03.zip";
       sha1 = "76d3568a4e08023047af7d13025a35c9bf1d7e5c";
     };
   };
@@ -37,7 +37,7 @@
     revision = "25-android-wear-x86";
     displayName = "Android Wear Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android-wear/x86-25_r03.zip;
+      url = "https://dl.google.com/android/repository/sys-img/android-wear/x86-25_r03.zip";
       sha1 = "693fce7b487a65491a4e88e9f740959688c9dbe6";
     };
   };
@@ -47,7 +47,7 @@
     revision = "26-android-wear-x86";
     displayName = "Android Wear Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android-wear/x86-26_r04.zip;
+      url = "https://dl.google.com/android/repository/sys-img/android-wear/x86-26_r04.zip";
       sha1 = "fbffa91b936ca18fcc1e0bab2b52a8b0835cbb1c";
     };
   };
@@ -57,7 +57,7 @@
     revision = "28-android-wear-x86";
     displayName = "Wear OS Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/android-wear/x86-28_r03.zip;
+      url = "https://dl.google.com/android/repository/sys-img/android-wear/x86-28_r03.zip";
       sha1 = "b80bd53ab69f19441714bff2e4d55931e6d3f7be";
     };
   };

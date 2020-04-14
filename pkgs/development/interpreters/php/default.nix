@@ -189,7 +189,7 @@ let
         in
           symlinkJoin {
             name = "php-with-extensions-${version}";
-            inherit (php) version dev;
+            inherit (php) version;
             nativeBuildInputs = [ makeWrapper ];
             passthru = {
               inherit buildEnv withExtensions enabledExtensions;
@@ -218,8 +218,8 @@ let
       });
 
   php72base = generic' {
-    version = "7.2.28";
-    sha256 = "18sjvl67z5a2x5s2a36g6ls1r3m4hbrsw52hqr2qsgfvg5dkm5bw";
+    version = "7.2.29";
+    sha256 = "08xry2fgqgg8s0ym1hh11wkbr36av3zq1bn4krbciw1b7x8gb8ga";
     self = php72base;
     selfWithExtensions = php72;
 
@@ -228,8 +228,8 @@ let
   };
 
   php73base = generic' {
-    version = "7.3.15";
-    sha256 = "0g84hws15s8gh8iq4h6q747dyfazx47vh3da3whz8d80x83ibgld";
+    version = "7.3.16";
+    sha256 = "0bh499v9dfgh9k51w4rird1slb9rh9whp5h37fb84c98d992s1xq";
     self = php73base;
     selfWithExtensions = php73;
 
@@ -238,8 +238,8 @@ let
   };
 
   php74base = generic' {
-    version = "7.4.3";
-    sha256 = "wVF7pJV4+y3MZMc6Ptx21PxQfEp6xjmYFYTMfTtMbRQ=";
+    version = "7.4.4";
+    sha256 = "17w2m4phhpj76x5fx67vgjrlkcczqvky3f5in1kjg2pch90qz3ih";
     self = php74base;
     selfWithExtensions = php74;
   };

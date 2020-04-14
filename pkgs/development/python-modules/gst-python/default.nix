@@ -9,6 +9,7 @@
 , gobject-introspection
 , gst-plugins-base
 , isPy3k
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -36,6 +37,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     gst-plugins-base
     pygobject3
+  ];
+
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    # Fix configure python lib detection in macOS. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/GStreamer/gst-python/commit/f98c206bdf01529f8ea395a719b10baf2bdf717f.patch";
+      sha256 = "04n4zrnfivgr7iaqw4sjlbd882s8halc2bbbhfxqf0sg2lqwmrxg";
+    })
   ];
 
   mesonFlags = [

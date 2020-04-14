@@ -174,7 +174,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    homepage = http://www.gitlab.com/;
+    homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin krav talyz ];
   } // (if gitlabEnterprise then

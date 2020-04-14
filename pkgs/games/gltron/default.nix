@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL libGLU libGL zlib libpng libvorbis libmikmod SDL_sound ];
 
   meta = {
-    homepage = http://www.gltron.org/;
+    homepage = "http://www.gltron.org/";
     description = "Game based on the movie Tron";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];

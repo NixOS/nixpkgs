@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
          info.
       '';
 
-    homepage = https://www.gnu.org/software/freeipmi/;
+    homepage = "https://www.gnu.org/software/freeipmi/";
     downloadPage = "https://www.gnu.org/software/freeipmi/download.html";
 
     license = stdenv.lib.licenses.gpl3Plus;

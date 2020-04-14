@@ -30,7 +30,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A utility for sending notifications, on demand and when commands finish";
-    homepage = http://ntfy.rtfd.org/;
+    homepage = "http://ntfy.rtfd.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jfrankenau kamilchm ];
   };

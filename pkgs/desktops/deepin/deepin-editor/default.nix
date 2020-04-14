@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple editor for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-editor;
+    homepage = "https://github.com/linuxdeepin/deepin-editor";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo worldofpeace ];

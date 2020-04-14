@@ -1,5 +1,5 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, traits, pyface, wxPython
+{ lib, fetchPypi, buildPythonPackage
+, traits, pyface, six
 }:
 
 buildPythonPackage rec {
@@ -11,14 +11,14 @@ buildPythonPackage rec {
     sha256 = "0kw1xy5ax6l0lzmk7pfzjw6qs0idv78k3118my7cbvw1n5iiff28";
   };
 
-  propagatedBuildInputs = [ traits pyface wxPython ];
+  propagatedBuildInputs = [ traits pyface six ];
 
   doCheck = false; # Needs X server
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/traitsui";
-    maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
   };
 }

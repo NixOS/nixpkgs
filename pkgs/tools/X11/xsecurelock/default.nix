@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "X11 screen lock utility with security in mind";
-    homepage = https://github.com/google/xsecurelock;
+    homepage = "https://github.com/google/xsecurelock";
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;

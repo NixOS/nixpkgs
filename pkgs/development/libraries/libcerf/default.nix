@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Complex error (erf), Dawson, Faddeeva, and Voigt function library";
-    homepage = https://jugit.fz-juelich.de/mlz/libcerf;
+    homepage = "https://jugit.fz-juelich.de/mlz/libcerf";
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.all;

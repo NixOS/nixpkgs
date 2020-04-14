@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Decorator and plugin to make nose focus on specific tests";
-    homepage = https://nose-focus.readthedocs.io/en/latest/;
+    homepage = "https://nose-focus.readthedocs.io/en/latest/";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ jluttine ];
   };

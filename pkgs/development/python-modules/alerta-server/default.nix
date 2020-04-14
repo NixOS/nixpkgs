@@ -22,7 +22,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5";
 
   meta = with stdenv.lib; {
-    homepage = https://alerta.io;
+    homepage = "https://alerta.io";
     description = "Alerta Monitoring System server";
     license = licenses.asl20;
   };

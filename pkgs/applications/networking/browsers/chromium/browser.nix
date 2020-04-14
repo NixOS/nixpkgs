@@ -76,7 +76,7 @@ mkChromiumDerivation (base: rec {
       the web. It has a minimalist user interface and provides the vast majority
       of source code for Google Chrome (which has some additional features).
     '';
-    homepage = https://www.chromium.org/;
+    homepage = "https://www.chromium.org/";
     maintainers = with maintainers; [ bendlas thefloweringash primeos ];
     # Overview of the maintainer roles:
     # nixos-unstable:

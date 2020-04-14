@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple XML editor based on qt libraries" ;
-    homepage = https://sourceforge.net/projects/qxmledit;
+    homepage = "https://sourceforge.net/projects/qxmledit";
     license = licenses.lgpl2;
     platforms = platforms.all;
   } ;

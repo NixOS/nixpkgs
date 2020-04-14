@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "0.0.19.1";
 
   src = fetchhg {
-    url = https://linuxonly@bitbucket.org/linuxonly/modem-manager-gui;
+    url = "https://linuxonly@bitbucket.org/linuxonly/modem-manager-gui";
     rev = "version ${version}";
     sha256 = "11iibh36567814h2bz41sa1072b86p1l13xyj670pwkh9k8kw8fd";
   };
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       functions. You can check balance of your SIM card, send or receive SMS
       messages, control mobile traffic consumption and more.
     '';
-    homepage = https://linuxonly.ru/page/modem-manager-gui;
+    homepage = "https://linuxonly.ru/page/modem-manager-gui";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ahuzik ];
     platforms = platforms.linux;

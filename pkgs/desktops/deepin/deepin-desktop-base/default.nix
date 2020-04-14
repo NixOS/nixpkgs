@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       - login screen background image
       - language information
     '';
-    homepage = https://github.com/linuxdeepin/deepin-desktop-base;
+    homepage = "https://github.com/linuxdeepin/deepin-desktop-base";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

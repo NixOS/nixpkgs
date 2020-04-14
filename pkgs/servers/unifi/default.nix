@@ -30,7 +30,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://www.ubnt.com/;
+      homepage = "http://www.ubnt.com/";
       description = "Controller for Ubiquiti UniFi access points";
       license = licenses.unfree;
       platforms = platforms.unix;

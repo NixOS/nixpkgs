@@ -39,12 +39,12 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.23.0";
+  version = "1.24.0";
   pname = "conan";
 
   src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "06jnmgvzdyxjpcmyj1804mlq6b842jvvbsngsamdy976sqws870g";
+    sha256 = "0nkh4f6plamijwcfw536ydm0i04y74qmkh5l1nanyb8p0c3z3x0y";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
@@ -94,7 +94,7 @@ in newPython.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://conan.io;
+    homepage = "https://conan.io";
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for the Apache Thrift RPC system";
-    homepage = http://thrift.apache.org/;
+    homepage = "http://thrift.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ hbunke ];
   };

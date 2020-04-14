@@ -82,7 +82,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://sourceware.org/lvm2/;
+    homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 bsd2 lgpl21 ];

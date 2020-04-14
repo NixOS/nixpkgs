@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       GnuPG components.  Both, server and client side functions are
       provided.
     '';
-    homepage = http://gnupg.org;
+    homepage = "http://gnupg.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.erictapen ];

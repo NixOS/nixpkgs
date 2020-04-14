@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Generate complex HTML+JS pages with Python";
-    homepage = https://github.com/python-visualization/branca;
+    homepage = "https://github.com/python-visualization/branca";
     license = with lib.licenses; [ mit ];
   };
 }

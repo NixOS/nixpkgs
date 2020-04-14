@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Distributed code review system for Git repos";
-    homepage = https://github.com/google/git-appraise;
+    homepage = "https://github.com/google/git-appraise";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.vdemeester ];

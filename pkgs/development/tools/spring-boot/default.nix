@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       by using java -jar or more traditional war deployments. We also provide 
       a command line tool that runs “spring scripts”.
     '';
-    homepage = https://spring.io/projects/spring-boot;
+    homepage = "https://spring.io/projects/spring-boot";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];

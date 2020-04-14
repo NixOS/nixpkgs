@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pillow blessings args ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kennethreitz/clint;
+    homepage = "https://github.com/kennethreitz/clint";
     description = "Python Command Line Interface Tools";
     license = licenses.isc;
     maintainers = with maintainers; [ domenkozar ];

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper for the Yandex MyStem 3.1 morpholocial analyzer of the Russian language";
-    homepage = https://github.com/nlpub/pymystem3;
+    homepage = "https://github.com/nlpub/pymystem3";
     license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];
   };

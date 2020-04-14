@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   postInstall = "mv $out/bin/lci $out/bin/lolcode-lci";
 
   meta = {
-    homepage = http://lolcode.org;
+    homepage = "http://lolcode.org";
     description = "An esoteric programming language";
     longDescription = ''
       LOLCODE is a funny esoteric  programming language, a bit Pascal-like,

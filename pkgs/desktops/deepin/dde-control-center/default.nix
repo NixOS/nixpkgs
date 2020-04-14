@@ -111,7 +111,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Control panel of Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/dde-control-center;
+    homepage = "https://github.com/linuxdeepin/dde-control-center";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo worldofpeace ];

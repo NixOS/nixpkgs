@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "OpenID library for Python";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/openid/python-openid/;
+    homepage = "https://github.com/openid/python-openid/";
   };
 }

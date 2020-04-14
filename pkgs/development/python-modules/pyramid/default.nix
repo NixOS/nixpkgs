@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "The Pyramid Web Framework, a Pylons project";
-    homepage = https://trypyramid.com/;
+    homepage = "https://trypyramid.com/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };

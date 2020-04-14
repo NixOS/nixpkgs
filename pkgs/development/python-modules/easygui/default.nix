@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Very simple, very easy GUI programming in Python";
-    homepage = https://github.com/robertlugg/easygui;
+    homepage = "https://github.com/robertlugg/easygui";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jfrankenau ];
   };

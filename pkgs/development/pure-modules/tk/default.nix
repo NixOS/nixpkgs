@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A basic interface between Pure and Tcl/Tk";
-    homepage = http://puredocs.bitbucket.org/pure-tk.html;
+    homepage = "http://puredocs.bitbucket.org/pure-tk.html";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

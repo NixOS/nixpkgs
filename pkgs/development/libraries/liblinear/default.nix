@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for large linear classification";
-    homepage = https://www.csie.ntu.edu.tw/~cjlin/liblinear/;
+    homepage = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/";
     license = licenses.bsd3;
     maintainers = [ maintainers.danieldk ];
     platforms = platforms.unix;

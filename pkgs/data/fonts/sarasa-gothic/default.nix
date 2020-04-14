@@ -17,7 +17,7 @@ in fetchurl {
 
   meta = with lib; {
     description = "SARASA GOTHIC is a Chinese & Japanese programming font based on Iosevka and Source Han Sans";
-    homepage = https://github.com/be5invis/Sarasa-Gothic;
+    homepage = "https://github.com/be5invis/Sarasa-Gothic";
     license = licenses.ofl;
     maintainers = [ maintainers.ChengCat ];
     platforms = platforms.all;

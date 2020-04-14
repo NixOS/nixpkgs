@@ -16,7 +16,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://pyfantom.ni.fr.eu.org/;
+    homepage = "http://pyfantom.ni.fr.eu.org/";
     description = "Wrapper for the LEGO Mindstorms Fantom Driver";
     license = licenses.gpl2;
   };

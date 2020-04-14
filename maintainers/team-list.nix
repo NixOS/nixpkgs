@@ -30,4 +30,13 @@ with lib.maintainers; {
     ];
     scope = "Maintain GNOME desktop environment and platform.";
   };
+
+  podman = {
+    members = [
+      saschagrunert
+      vdemeester
+      zowoq
+    ];
+    scope = "Maintain podman related packages.";
+  };
 }

@@ -87,7 +87,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
-    homepage = https://github.com/zalando/connexion/;
+    homepage = "https://github.com/zalando/connexion/";
     license = licenses.asl20;
     maintainers = with maintainers; [ elohmeier ];
   };

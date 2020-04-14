@@ -125,7 +125,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Deepin desktop-environment - Session UI module";
-    homepage = https://github.com/linuxdeepin/dde-session-ui;
+    homepage = "https://github.com/linuxdeepin/dde-session-ui";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Qt4 Bible study tool";
-    homepage = http://www.bibletime.info/;
+    homepage = "http://www.bibletime.info/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.piotr ];

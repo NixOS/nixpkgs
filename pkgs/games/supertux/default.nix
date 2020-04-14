@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Classic 2D jump'n run sidescroller game";
-    homepage = http://supertux.github.io/;
+    homepage = "http://supertux.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;

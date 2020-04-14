@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.fiction.net/blong/programs/mutt/;
+    homepage = "http://www.fiction.net/blong/programs/mutt/";
     description = "A program for testing if X is running";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;

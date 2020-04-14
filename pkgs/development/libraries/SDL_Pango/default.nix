@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ 
     (fetchpatch {
-      url = https://sources.debian.org/data/main/s/sdlpango/0.1.2-6/debian/patches/api_additions.patch;
+      url = "https://sources.debian.org/data/main/s/sdlpango/0.1.2-6/debian/patches/api_additions.patch";
       sha256 = "00p5ry5gd3ixm257p9i2c4jg0qj8ipk8nf56l7c9fma8id3zxyld";
     })
     ./fixes.patch
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Connects the Pango rendering engine to SDL";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    homepage = http://sdlpango.sourceforge.net/;
+    homepage = "http://sdlpango.sourceforge.net/";
     maintainers = with maintainers; [ puckipedia ];
   };
 }

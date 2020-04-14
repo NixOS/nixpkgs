@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Client for Netease Cloud Music service";
-    homepage = https://music.163.com;
+    homepage = "https://music.163.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.mlatus ];
     license = stdenv.lib.licenses.unfreeRedistributable;

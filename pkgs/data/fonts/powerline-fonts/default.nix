@@ -19,7 +19,7 @@ fetchFromGitHub {
   sha256 = "0r8p4z3db17f5p8jr7sv80nglmjxhg83ncfvwg1dszldswr0dhvr";
 
   meta = with lib; {
-    homepage = https://github.com/powerline/fonts;
+    homepage = "https://github.com/powerline/fonts";
     description = "Patched fonts for Powerline users";
     longDescription = ''
       Pre-patched and adjusted fonts for usage with the Powerline plugin.

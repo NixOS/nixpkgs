@@ -25,7 +25,7 @@ buildPythonPackage rec {
       multiprocessing. Process-based child processes can safely be created
       anywhere within your gevent-powered application.
     '';
-    homepage = http://gehrcke.de/gipc;
+    homepage = "http://gehrcke.de/gipc";
     license = licenses.mit;
   };
 

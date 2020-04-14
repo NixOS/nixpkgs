@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
-  buildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     urwid
     urwidtrees
     aiohttp
@@ -43,8 +43,10 @@ python3.pkgs.buildPythonApplication rec {
     pytest
   ];
 
+  # test_string__month_day_hour_minute_second fails on darwin
   checkPhase = ''
-    pytest tests
+    LC_ALL=en_US.utf8 pytest tests \
+      --deselect=tests/client_test/ttypes_test.py::TestTimestamp::test_string__month_day_hour_minute_second
   '';
 
   meta = with lib; {

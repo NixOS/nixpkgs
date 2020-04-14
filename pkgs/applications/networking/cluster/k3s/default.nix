@@ -1,7 +1,7 @@
 { stdenv, lib, makeWrapper, socat, iptables, iproute, bridge-utils
 , conntrack-tools, buildGoPackage, git, runc, libseccomp, pkgconfig
-, autoPatchelfHook, breakpointHook, ethtool, utillinux, ipset
-, fetchFromGitHub, fetchurl, fetchzip, fetchgit
+, ethtool, utillinux, ipset, fetchFromGitHub, fetchurl, fetchzip
+, fetchgit
 }:
 
 with lib;
@@ -64,10 +64,10 @@ let
     };
 
     meta = {
-      description = "k3s-cni-plugins";
+      description = "CNI plugins, as patched by rancher for k3s";
       license = licenses.asl20;
-      homepage = https://k3s.io;
-      maintainers = [];
+      homepage = "https://k3s.io";
+      maintainers = [ maintainers.euank ];
       platforms = platforms.linux;
     };
   };
@@ -76,7 +76,7 @@ let
   k3sRepo = fetchgit {
     url = "https://github.com/rancher/k3s";
     rev = "v${k3sVersion}";
-    leaveDotGit = true; # for version / build date below
+    leaveDotGit = true; # ./scripts/version.sh depends on git
     sha256 = "0qahyc0mf9glxj49va6d20mcncqg4svfic2iz8b1lqid5c4g68mm";
   };
   # Stage 1 of the k3s build:
@@ -110,8 +110,8 @@ let
 
     patches = [ ./patches/00-k3s.patch ];
 
-    nativeBuildInputs = [ pkgconfig autoPatchelfHook breakpointHook ];
-    buildInputs = [ git runc libseccomp ];
+    nativeBuildInputs = [ git pkgconfig ];
+    buildInputs = [ libseccomp ];
 
     buildPhase = ''
       pushd go/src/${goPackagePath}
@@ -135,8 +135,8 @@ let
     meta = {
       description = "The various binaries that get packaged into the final k3s binary.";
       license = licenses.asl20;
-      homepage = https://k3s.io;
-      maintainers = [];
+      homepage = "https://k3s.io";
+      maintainers = [ maintainers.euank ];
       platforms = platforms.linux;
     };
   };
@@ -150,8 +150,8 @@ let
 
     patches = [ ./patches/00-k3s.patch ];
 
-    nativeBuildInputs = [ pkgconfig autoPatchelfHook breakpointHook ];
-    buildInputs = [ git k3sBuildStage1 ];
+    nativeBuildInputs = [ git pkgconfig ];
+    buildInputs = [ k3sBuildStage1 k3sPlugins runc ];
 
     # In order to build the thick k3s binary (which is what
     # ./scripts/package-cli does), we need to get all the binaries that script
@@ -190,8 +190,8 @@ let
     meta = {
       description = "The k3s go binary which is used by the final wrapped output below.";
       license = licenses.asl20;
-      homepage = https://k3s.io;
-      maintainers = [];
+      homepage = "https://k3s.io";
+      maintainers = [ maintainers.euank ];
       platforms = platforms.linux;
     };
   };
@@ -228,8 +228,8 @@ stdenv.mkDerivation rec {
     meta = {
       description = "A lightweight Kubernetes distribution.";
       license = licenses.asl20;
-      homepage = https://k3s.io;
-      maintainers = with maintainers; [ euank ];
+      homepage = "https://k3s.io";
+      maintainers = [ maintainers.euank ];
       platforms = platforms.linux;
     };
 }

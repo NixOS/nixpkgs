@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, which
 , withPython2 ? false, python2
 , withPython3 ? true, python3, ncurses
-, withPHP72 ? false, php72
-, withPHP73 ? true, php73
+, withPHP72 ? false, php72base
+, withPHP73 ? true, php73base
 , withPerl528 ? false, perl528
 , withPerl530 ? true, perl530
 , withPerldevel ? false, perldevel
@@ -26,8 +26,8 @@ let
     config.php.fpm = false;
   };
 
-  php72-unit = php72.override phpConfig;
-  php73-unit = php73.override phpConfig;
+  php72-unit = php72base.override phpConfig;
+  php73-unit = php73base.override phpConfig;
 in stdenv.mkDerivation rec {
   version = "1.16.0";
   pname = "unit";
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Dynamic web and application server, designed to run applications in multiple languages.";
-    homepage    = https://unit.nginx.org/;
+    homepage    = "https://unit.nginx.org/";
     license     = licenses.asl20;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ izorkin ];

@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     rev = version;
-    sha256 = "1qc4piz18hfik32gj4v65ckwv516mppq2ac0jyqs21lhqfwbgv9w";
+    sha256 = "03hj7bkkj6kfqdk6ri2mp53wk4k7xpafxk01vgs6k9zg3rlnq7ny";
   };
 
   propagatedBuildInputs = [
@@ -69,8 +69,18 @@ buildPythonPackage rec {
   # data_numpyro, data_pyro, data_pystan, and plots.
   checkPhase = ''
     cd arviz/tests/
-    HOME=$TMPDIR pytest test_{data_cmdstan,data_emcee,data,data_tfp,\
-    diagnostics,plot_utils,rcparams,stats,stats_utils,utils}.py
+    export HOME=$TMPDIR
+    pytest \
+      base_tests/test_data.py \
+      base_tests/test_diagnostics.py \
+      base_tests/test_plot_utils.py \
+      base_tests/test_rcparams.py \
+      base_tests/test_stats.py \
+      base_tests/test_stats_utils.py \
+      base_tests/test_utils.py \
+      external_tests/test_data_cmdstan.py \
+      external_tests/test_data_emcee.py \
+      external_tests/test_data_tfp.py
   '';
 
   meta = with lib; {

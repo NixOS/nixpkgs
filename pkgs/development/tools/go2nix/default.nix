@@ -38,7 +38,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Go apps packaging for Nix";
-    homepage = https://github.com/kamilchm/go2nix;
+    homepage = "https://github.com/kamilchm/go2nix";
     license = licenses.mit;
     maintainers = with maintainers; [ kamilchm ];
   };

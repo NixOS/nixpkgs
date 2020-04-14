@@ -1,0 +1,41 @@
+From dfa4bcafec4425659a409550085417af3c5c787b Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Sat, 11 Apr 2020 12:38:38 +0200
+Subject: [PATCH] core: fix libgit ifdef to handle libgit2 v1.0 and onwards
+
+Conditional code for older libgit versions was removed in
+https://github.com/Subsurface-divelog/subsurface/pull/2737,
+but it's a non-trivial backport, and master currently isn't really ready
+for a release.
+
+So instead ship a patch fixing the one broken libgit2 conditional until
+a 4.10 release has been made.
+
+Note the inverted logic - the if branch now handles the old libgit
+condition, and the else branch the newer versions, consistent with how
+it's done in the rest of the subsurface codebase.
+---
+ core/git-access.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/core/git-access.c b/core/git-access.c
+index 3688cb90c..9997fc8fd 100644
+--- a/core/git-access.c
++++ b/core/git-access.c
+@@ -359,10 +359,10 @@ static int try_to_git_merge(git_repository *repo, git_reference **local_p, git_r
+ 	}
+ 
+ 	git_merge_init_options(&merge_options, GIT_MERGE_OPTIONS_VERSION);
+-#if !LIBGIT2_VER_MAJOR && LIBGIT2_VER_MINOR > 23
+-	merge_options.flags = GIT_MERGE_FIND_RENAMES;
+-#else
++#if !LIBGIT2_VER_MAJOR && LIBGIT2_VER_MINOR <= 22
+ 	merge_options.tree_flags = GIT_MERGE_TREE_FIND_RENAMES;
++#else
++	merge_options.flags = GIT_MERGE_FIND_RENAMES;
+ #endif
+ 	merge_options.file_favor = GIT_MERGE_FILE_FAVOR_UNION;
+ 	merge_options.rename_threshold = 100;
+-- 
+2.25.1
+

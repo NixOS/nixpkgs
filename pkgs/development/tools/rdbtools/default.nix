@@ -18,7 +18,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Parse Redis dump.rdb files, Analyze Memory, and Export Data to JSON";
-    homepage = https://github.com/sripathikrishnan/redis-rdb-tools;
+    homepage = "https://github.com/sripathikrishnan/redis-rdb-tools";
     license = licenses.mit;
     maintainers = with maintainers; [ offline ];
   };

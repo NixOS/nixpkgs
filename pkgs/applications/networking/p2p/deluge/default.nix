@@ -32,7 +32,7 @@ pythonPackages.buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://deluge-torrent.org;
+    homepage = "https://deluge-torrent.org";
     description = "Torrent client";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ domenkozar ebzzry ];
