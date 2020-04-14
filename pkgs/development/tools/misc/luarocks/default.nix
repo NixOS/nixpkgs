@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     lua -e "" || {
         luajit -e "" && {
             export LUA_SUFFIX=jit
-            configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
+            configureFlags+=("--lua-suffix=$LUA_SUFFIX")
         }
     }
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
-        configureFlags="$configureFlags --with-lua-include=$lua_inc"
+        configureFlags+=("--with-lua-include=$lua_inc")
     fi
   '';
 
