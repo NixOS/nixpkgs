@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
 , SDL, SDL_mixer, boost, curl, gsasl, libgcrypt, libircclient, protobuf, sqlite
+, wrapQtAppsHook
 , tinyxml2, target ? "client" }:
 
 with stdenv.lib;
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   buildInputs = [
     SDL
