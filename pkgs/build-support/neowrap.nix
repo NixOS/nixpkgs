@@ -4,6 +4,7 @@
 , extraPkgsByOverride ? []
 }:
 
+# A single pkg or a list of pkgs mainly packaged
 pkgList:
 
 let
@@ -25,7 +26,7 @@ let
       wrapOut = {
         XDG_DATA_DIRS = "$out/share";
       };
-      # If you want an environment variable have a single value and that's it,
+      # If you want an environment variable to have a single value and that's it,
       # put it here:
       singleValue = [
         "GDK_PIXBUF_MODULE_FILE"
@@ -52,7 +53,7 @@ let
       ) pkgs;
     allPkgs = (lib.lists.flatten pkgList) ++ extraPkgsByOverride ++ extraPkgs;
     allInputs = lib.lists.unique (lib.lists.flatten (getAllInputs allPkgs []));
-    # allInputs_ = builtins.trace "${builtins.toJSON allInputs}" allInputs;
+    # allInputs_ = builtins.trace "allInputs is: ${builtins.toJSON allInputs}" allInputs;
     # filter out of all the inputs the packages with the propagateEnv attribute
     envPkgs = builtins.filter (
       pkg:
@@ -84,8 +85,11 @@ let
     ;
     envInfo = map (
       pkg:
+      # for every package in envPkgs, do the following for every env key and value
       (lib.attrsets.mapAttrs (
+        # env var name
         name:
+        # env var value
         value:
         replaceAllOutputs {
           inherit pkg;
