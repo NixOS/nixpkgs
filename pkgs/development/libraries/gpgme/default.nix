@@ -49,6 +49,15 @@ stdenv.mkDerivation rec {
 
   postPatch =''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
+  ''
+  # Apply only on Darwin to save rebuilds on Linux
+     + lib.optionalString stdenv.isDarwin ''
+    sed -i "s/LD_LIBRARY_PATH/@shlibpath_var@/" lang/python/tests/Makefile.in
+    sed -i "s/ac_subst_vars='/ac_subst_vars='shlibpath_var\n/" configure
+  ''
+  # Disable python tests on Darwin as they use gpg (see configureFlags below)
+     + lib.optionalString stdenv.isDarwin ''
+    sed -i "s/SUBDIRS = \. tests/SUBDIRS = ./" lang/python/Makefile.in
   '';
 
   configureFlags = [
