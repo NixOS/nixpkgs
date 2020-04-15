@@ -93,9 +93,11 @@ in {
 
     services.rss2email.config.to = cfg.to;
 
-    systemd.tmpfiles.rules = [
-      "d /var/rss2email 0700 rss2email rss2email - -"
-    ];
+    system.activationScripts.rss2email = lib.stringAfter [ "users" ] ''
+      if [ -e /var/rss2email -a ! -e /var/lib/rss2email ]; then
+          mv /var/rss2email /var/lib/rss2email
+      fi
+    '';
 
     systemd.services.rss2email = let
       conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({
@@ -108,15 +110,16 @@ in {
     in
     {
       preStart = ''
-        cp ${conf} /var/rss2email/conf.cfg
-        if [ ! -f /var/rss2email/db.json ]; then
-          echo '{"version":2,"feeds":[]}' > /var/rss2email/db.json
+        cp -f ${conf} /var/lib/rss2email/conf.cfg
+        if [ ! -f /var/lib/rss2email/db.json ]; then
+          echo '{"version":2,"feeds":[]}' > /var/lib/rss2email/db.json
         fi
       '';
       path = [ pkgs.system-sendmail ];
       serviceConfig = {
+        StateDirectory = "rss2email";
         ExecStart =
-          "${pkgs.rss2email}/bin/r2e -c /var/rss2email/conf.cfg -d /var/rss2email/db.json run";
+          "${pkgs.rss2email}/bin/r2e -c /var/lib/rss2email/conf.cfg -d /var/lib/rss2email/db.json run";
         User = "rss2email";
       };
     };
