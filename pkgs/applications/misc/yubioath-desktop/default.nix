@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "yubioath-desktop";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
-    sha256 = "19ingk0ab88a22s04apcw8kx9xygxlbk8kp4xnb8pmf8z3k6l2gf";
+    sha256 = "1g0jd7mmch6a6n8k5pp3w27qd5cijnvzk05lwraf0i96m68h7x1k";
   };
 
   doCheck = false;
@@ -38,13 +38,13 @@ mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib"
 
       mkdir -p $out/share/applications
-      cp resources/yubioath-desktop.desktop \
-        $out/share/applications/yubioath-desktop.desktop
+      cp resources/com.yubico.yubioath.desktop \
+        $out/share/applications/com.yubico.yubioath.desktop
       mkdir -p $out/share/yubioath/icons
-      cp resources/icons/*.{icns,ico,png,xpm} $out/share/yubioath/icons
-      substituteInPlace $out/share/applications/yubioath-desktop.desktop \
+      cp resources/icons/*.{icns,ico,png,svg} $out/share/yubioath/icons
+      substituteInPlace $out/share/applications/com.yubico.yubioath.desktop \
         --replace 'Exec=yubioath-desktop' "Exec=$out/bin/yubioath-desktop" \
-        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/yubioath.png"
+        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/com.yubico.yubioath.png"
   '';
 
   meta = with stdenv.lib; {
