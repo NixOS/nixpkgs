@@ -23370,6 +23370,8 @@ in
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
 
+  tremc = callPackage ../applications/networking/p2p/tremc { };
+
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita {
