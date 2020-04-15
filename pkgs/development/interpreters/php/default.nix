@@ -238,8 +238,8 @@ let
   };
 
   php74base = generic' {
-    version = "7.4.4";
-    sha256 = "17w2m4phhpj76x5fx67vgjrlkcczqvky3f5in1kjg2pch90qz3ih";
+    version = "7.4.5";
+    sha256 = "0vrxy5ymfkpi2sxbnh6967nc4xnxcwlc27bivaa36g5nslrsbnir";
     self = php74base;
     selfWithExtensions = php74;
   };
