@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 bzip2 pango libintl ]
     ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
