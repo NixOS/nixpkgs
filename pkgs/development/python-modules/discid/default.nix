@@ -1,4 +1,4 @@
-{ stdenv, libdiscid, buildPythonPackage, fetchPypi }:
+{ stdenv, libdiscid, buildPythonPackage, fetchPypi, python }:
 
 buildPythonPackage rec {
   pname = "discid";
@@ -7,6 +7,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "1fc6kvnqwaz9lrs2qgsp8wh0nabf49010r0r53wnsmpmafy315nd";
+  };
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
   };
 
   patchPhase =

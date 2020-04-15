@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pkgconfig, glib, gobject-introspection,
+{ stdenv, fetchurl, buildPythonPackage, pkgconfig, glib, gobject-introspection, python,
 pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome3 }:
 
 buildPythonPackage rec {
@@ -27,6 +27,9 @@ buildPythonPackage rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}3";
+    };
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
     };
   };
 

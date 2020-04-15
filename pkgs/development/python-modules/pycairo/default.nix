@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, meson, ninja, buildPythonPackage, pytest, pkgconfig, cairo, xlibsWrapper, isPy33, isPy3k }:
+{ lib, fetchFromGitHub, meson, ninja, buildPythonPackage, pytest, python, pkgconfig, cairo, xlibsWrapper, isPy33, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pycairo";
@@ -25,6 +25,12 @@ buildPythonPackage rec {
     cairo
     xlibsWrapper
   ];
+
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   checkInputs = [ pytest ];
 

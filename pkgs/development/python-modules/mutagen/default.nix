@@ -8,6 +8,7 @@
 , pytest
 , setuptools
 , pkgs
+, python
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,12 @@ buildPythonPackage rec {
     pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis
   ];
   LC_ALL = "en_US.UTF-8";
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
+
 
   meta = with lib; {
     description = "Python multimedia tagging library";
