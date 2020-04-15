@@ -729,6 +729,16 @@ passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ]
     <title>Variables controlling the patch phase</title>
     <varlistentry>
      <term>
+      <varname>dontPatch</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the patch phase.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <varname>patches</varname>
      </term>
      <listitem>

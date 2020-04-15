@@ -71,7 +71,7 @@ stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";
-    homepage = "http://lldb.llvm.org";
+    homepage = "https://lldb.llvm.org";
     license = licenses.ncsa;
     platforms = platforms.all;
   };

@@ -356,5 +356,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-screensaver = throw "gnome-screensaver is deprecated. If you are using GNOME Flashback, it now has a built-in lock screen. If you are using it elsewhere, you can try xscreenlock or other alternatives."; # added 2020-03-19
 
+  maintainers = lib.teams.gnome.members;
+
   mutter328 = throw "Removed as Pantheon is upgraded to mutter334.";
 })

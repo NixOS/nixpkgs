@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
 
-  CXXFLAGS = "-fno-rtti";
+  env.CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";
-    homepage    = "http://llvm.org/";
+    homepage    = "https://llvm.org/";
     license     = licenses.ncsa;
     platforms   = platforms.all;
   };

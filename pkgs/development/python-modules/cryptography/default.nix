@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, isPy27
+, ipaddress
 , openssl
 , cryptography_vectors
 , darwin
@@ -35,9 +37,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     six
-    ipaddress
     enum34
-  ] ++ stdenv.lib.optional (!isPyPy) cffi;
+  ] ++ stdenv.lib.optional (!isPyPy) cffi
+  ++ stdenv.lib.optionals isPy27 [ ipaddress ];
 
   checkInputs = [
     cryptography_vectors
@@ -66,6 +68,8 @@ buildPythonPackage rec {
       supports Python 2.7, Python 3.5+, and PyPy 5.4+.
     '';
     homepage = "https://github.com/pyca/cryptography";
+    changelog = "https://cryptography.io/en/latest/changelog/#v"
+      + replaceStrings [ "." ] [ "-" ] version;
     license = with licenses; [ asl20 bsd3 psfl ];
     maintainers = with maintainers; [ primeos ];
   };
