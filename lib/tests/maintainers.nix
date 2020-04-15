@@ -30,7 +30,6 @@ let
       };
       keys = lib.mkOption {
         type = types.listOf (types.submodule {
-          options.longkeyid = lib.mkOption { type = types.str; };
           options.fingerprint = lib.mkOption { type = types.str; };
         });
         default = [];
