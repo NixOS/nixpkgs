@@ -2958,6 +2958,8 @@ in
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
+  drill = callPackage ../tools/networking/drill { };
+
   drone = callPackage ../development/tools/continuous-integration/drone { };
 
   drone-cli = callPackage ../development/tools/continuous-integration/drone-cli { };
