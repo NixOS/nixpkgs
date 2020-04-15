@@ -82,7 +82,10 @@ stdenv.mkDerivation rec {
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
-  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
+  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool"
+                     # The following flag is a temporary workaround for an upstream bug:
+                     #   https://github.com/racket/racket/issues/3046
+                     "--enable-useprefix" ]
                    ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
                    ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 
