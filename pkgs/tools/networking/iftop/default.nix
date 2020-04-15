@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, libpcap, automake}:
+{ stdenv, fetchurl, ncurses, libpcap, automake, nixosTests }:
 
 stdenv.mkDerivation {
   name = "iftop-1.0pre4";
@@ -17,6 +17,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ncurses libpcap];
+
+  passthru.tests = { inherit (nixosTests) iftop; };
 
   meta = with stdenv.lib; {
     description = "Display bandwidth usage on a network interface";
