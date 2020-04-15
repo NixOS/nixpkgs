@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = https://github.com/kyrus/python-junit-xml;
     maintainers = with maintainers; [ multun ];
     license = licenses.mit;
+    broken = true;
   };
 }

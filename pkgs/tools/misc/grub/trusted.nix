@@ -96,5 +96,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Sirrix-AG/TrustedGRUB2;
     license = licenses.gpl3Plus;
     platforms = platforms.gnu ++ platforms.linux;
+    broken = true;
   };
 }

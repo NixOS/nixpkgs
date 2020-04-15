@@ -34,5 +34,6 @@ buildPythonPackage rec {
     description = "Macros in Python: quasiquotes, case classes, LINQ and more";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

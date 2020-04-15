@@ -61,5 +61,6 @@ buildPythonPackage rec {
     description = "Snowflake Connector for Python";
     homepage = "https://www.snowflake.com/";
     license = licenses.asl20;
+    broken = true;
   };
 }

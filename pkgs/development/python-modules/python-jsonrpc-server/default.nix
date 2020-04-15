@@ -34,5 +34,6 @@ buildPythonPackage rec {
     description = "A Python 2 and 3 asynchronous JSON RPC server";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
+    broken = true;
   };
 }

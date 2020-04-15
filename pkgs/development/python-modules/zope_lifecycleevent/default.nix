@@ -21,6 +21,7 @@ buildPythonPackage rec {
     description = "Object life-cycle events";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
+    broken = true;
   };
 
 }

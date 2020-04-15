@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage =  https://github.com/SamuraiT/mecab-python3;
     license = with licenses; [ gpl2 lgpl21 bsd3 ]; # any of the three
     maintainers = with maintainers; [ ixxie ];
+    broken = true;
   };
 }

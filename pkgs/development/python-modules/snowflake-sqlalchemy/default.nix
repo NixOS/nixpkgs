@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Snowflake SQLAlchemy Dialect";
     homepage = "https://www.snowflake.net/";
     license = licenses.asl20;
+    broken = true;
   };
 }

@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = https://pypi.python.org/pypi/ZConfig;
     license = licenses.zpl20;
     maintainers = [ maintainers.goibhniu ];
+    broken = true;
   };
 }

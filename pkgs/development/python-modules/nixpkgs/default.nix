@@ -17,6 +17,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pbr ];
+  nativeBuidInputs = [ pythonix ];
   propagatedBuildInputs = [ pythonix ];
 
   meta = with stdenv.lib; {

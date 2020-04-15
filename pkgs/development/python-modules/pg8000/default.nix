@@ -23,6 +23,7 @@ buildPythonPackage rec {
     description = "PostgreSQL interface library, for asyncio";
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
+    broken = true;
   };
 
 }

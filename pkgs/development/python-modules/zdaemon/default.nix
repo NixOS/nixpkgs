@@ -23,6 +23,7 @@ buildPythonPackage rec {
     homepage = https://pypi.python.org/pypi/zdaemon;
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
+    broken = true;
   };
 
 }

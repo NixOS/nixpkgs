@@ -30,4 +30,6 @@ buildPackage {
     mv examples $doc/share/doc/nsss/examples
   '';
 
+  meta.broken = true;
+
 }

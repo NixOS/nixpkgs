@@ -36,4 +36,5 @@ in stdenv.mkDerivation {
     dfu-programmer
     dfu-util
   ];
+  meta.broken = true;
 }
