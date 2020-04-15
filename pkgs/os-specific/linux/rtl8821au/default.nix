@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "rtl8821AU, rtl8812AU and rtl8811AU chipset driver with firmware";
-    homepage = https://github.com/zebulon2/rtl8812au;
+    homepage = "https://github.com/zebulon2/rtl8812au";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ plchldr ];

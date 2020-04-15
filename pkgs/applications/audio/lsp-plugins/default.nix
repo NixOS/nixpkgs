@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
         - Delay Compensator Stereo - Verzögerungsausgleicher Stereo
         - Delay Compensator x2 Stereo - Verzögerungsausgleicher x2 Stereo
       '';
-      homepage = https://lsp-plug.in;
+      homepage = "https://lsp-plug.in";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
       platforms = platforms.linux;

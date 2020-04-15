@@ -30,11 +30,11 @@ let
 
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "0i4c5cdr5prbz54jinsinhvb60s5s5yskjzjg47zbw0if17sp26w";
+    sha256 = "0d78bn7s03nwnyc4ryznxaivbg55kvsb26q75p8747j3562s9p2b";
   };
 
   patches = [

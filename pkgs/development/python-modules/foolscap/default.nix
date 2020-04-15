@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://foolscap.lothar.com/;
+    homepage = "http://foolscap.lothar.com/";
     description = "Foolscap, an RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
       "Foolscap" is the name for the next-generation RPC protocol,

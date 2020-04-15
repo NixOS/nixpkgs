@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tiny but valid init for containers";
-    homepage = https://github.com/krallin/tini;
+    homepage = "https://github.com/krallin/tini";
     license = licenses.mit;
     platforms = platforms.linux;
   };

@@ -36,6 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "A suite of command-line tools for converting to and working with CSV";
     maintainers = with maintainers; [ vrthra ];
     license = licenses.mit;
-    homepage = https://github.com/wireservice/csvkit;
+    homepage = "https://github.com/wireservice/csvkit";
   };
 }

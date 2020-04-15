@@ -26,7 +26,7 @@ buildPythonPackage rec {
       parsing, generating, and processing HTML, XML or other textual
       content for output generation on the web.
     '';
-    homepage = https://genshi.edgewall.org/;
+    homepage = "https://genshi.edgewall.org/";
     license = licenses.bsd0;
   };
 }

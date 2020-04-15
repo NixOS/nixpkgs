@@ -42,6 +42,6 @@ buildEnv {
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.all;
-    homepage = https://github.com/NixOS/nixpkgs/;
+    homepage = "https://github.com/NixOS/nixpkgs/";
   };
 }

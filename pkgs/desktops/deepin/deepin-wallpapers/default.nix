@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Wallpapers for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-wallpapers;
+    homepage = "https://github.com/linuxdeepin/deepin-wallpapers";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

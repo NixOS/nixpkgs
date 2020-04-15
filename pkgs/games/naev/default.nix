@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "2D action/rpg space game";
-    homepage = http://www.naev.org;
+    homepage = "http://www.naev.org";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = stdenv.lib.platforms.linux;

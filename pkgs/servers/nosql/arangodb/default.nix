@@ -46,7 +46,7 @@ let
     env.NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast version "3.5") "-Wno-error";
 
     meta = with lib; {
-      homepage = https://www.arangodb.com;
+      homepage = "https://www.arangodb.com";
       description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
       license = licenses.asl20;
       platforms = platforms.linux;

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "DataDiff";
-    homepage = https://sourceforge.net/projects/datadiff/;
+    homepage = "https://sourceforge.net/projects/datadiff/";
     license = licenses.asl20;
   };
 

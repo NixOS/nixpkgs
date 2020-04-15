@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tiny LRU cache implementation and decorator";
-    homepage = http://www.repoze.org/;
+    homepage = "http://www.repoze.org/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };

@@ -53,7 +53,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A multi-platform GUI for pass, the standard unix password manager";
-    homepage = https://qtpass.org;
+    homepage = "https://qtpass.org";
     license = licenses.gpl3;
     maintainers = [ maintainers.hrdinka ];
     platforms = platforms.all;

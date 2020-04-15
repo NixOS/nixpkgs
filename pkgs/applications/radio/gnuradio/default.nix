@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
       environments to support both wireless communications research and
       real-world radio systems.
     '';
-    homepage = https://www.gnuradio.org;
+    homepage = "https://www.gnuradio.org";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz ];

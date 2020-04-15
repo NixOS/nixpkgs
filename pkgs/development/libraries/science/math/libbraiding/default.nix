@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/miguelmarco/libbraiding/;
+    homepage = "https://github.com/miguelmarco/libbraiding/";
     description = "C++ library for computations on braid groups";
     longDescription = ''
       A library to compute several properties of braids, including centralizer and conjugacy check.

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       a configurable image is shown, and a ring-shaped unlock-indicator gives feedback
       for every keystroke. After entering your password, the screen is unlocked again.
     '';
-    homepage = https://i3wm.org/i3lock/;
+    homepage = "https://i3wm.org/i3lock/";
     maintainers = with maintainers; [ malyn domenkozar ];
     license = licenses.bsd3;
     platforms = platforms.all;

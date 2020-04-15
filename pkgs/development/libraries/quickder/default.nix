@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Quick (and Easy) DER, a Library for parsing ASN.1";
-    homepage = https://github.com/vanrein/quick-der;
+    homepage = "https://github.com/vanrein/quick-der";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];

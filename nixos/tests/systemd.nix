@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     test-support.displayManager.auto.user = "alice";
 
     systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
-      #!${pkgs.stdenv.shell}
+      #!${pkgs.runtimeShell}
       PATH=${lib.makeBinPath (with pkgs; [ utillinux coreutils ])}
       mount -t 9p shared -o trans=virtio,version=9p2000.L /tmp/shared
       touch /tmp/shared/shutdown-test

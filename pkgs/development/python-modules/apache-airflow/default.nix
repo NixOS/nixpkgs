@@ -71,13 +71,13 @@ buildPythonPackage rec {
        # Not yet accepted: https://github.com/apache/airflow/pull/6562
      (fetchpatch {
        name = "avoid-warning-from-abc.collections";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch;
+       url = "https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch";
        sha256 = "0swpay1qlb7f9kgc56631s1qd9k82w4nw2ggvkm7jvxwf056k61z";
      })
        # Not yet accepted: https://github.com/apache/airflow/pull/6561
      (fetchpatch {
        name = "pendulum2-compatibility";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch;
+       url = "https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch";
        sha256 = "17hw8qyd4zxvib9zwpbn32p99vmrdz294r31gnsbkkcl2y6h9knk";
      })
   ];
@@ -145,6 +145,7 @@ buildPythonPackage rec {
       --replace "dill>=0.2.2, <0.3" "dill" \
       --replace "configparser>=3.5.0, <3.6.0" "configparser" \
       --replace "jinja2>=2.7.3, <=2.10.0" "jinja2" \
+      --replace "colorlog==4.0.2" "colorlog" \
       --replace "funcsigs==1.0.0" "funcsigs" \
       --replace "flask-swagger==0.2.13" "flask-swagger" \
       --replace "python-daemon>=2.1.1, <2.2" "python-daemon" \

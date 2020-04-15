@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "installedTests" ];
 
-  buildInputs = [ libxml2 bzip2 pango libintl ];
+  buildInputs = [ libxml2 bzip2 pango libintl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
@@ -77,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small library to render SVG images to Cairo surfaces";
-    homepage = https://wiki.gnome.org/Projects/LibRsvg;
+    homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

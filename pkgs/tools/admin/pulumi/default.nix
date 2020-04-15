@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   buildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
 
   meta = {
-    homepage = https://pulumi.io/;
+    homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     license = with licenses; [ asl20 ];
     platforms = builtins.attrNames data.pulumiPkgs;

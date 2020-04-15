@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for PortAudio";
-    homepage = https://people.csail.mit.edu/hubert/pyaudio/;
+    homepage = "https://people.csail.mit.edu/hubert/pyaudio/";
     license = licenses.mit;
   };
 

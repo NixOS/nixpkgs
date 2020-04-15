@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A host, service and network monitoring program";
-    homepage    = https://www.nagios.org/;
+    homepage    = "https://www.nagios.org/";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice relrod ];

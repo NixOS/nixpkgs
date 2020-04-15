@@ -50,7 +50,7 @@ in
     '';
 
     meta = with lib; {
-      homepage = https://www.ctcms.nist.gov/fipy/;
+      homepage = "https://www.ctcms.nist.gov/fipy/";
       description = "A Finite Volume PDE Solver Using Python";
       license = licenses.free;
       maintainers = with maintainers; [ costrouc wd15 ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Wayland C++ binding";
-    homepage = https://github.com/NilsBrause/waylandpp/;
+    homepage = "https://github.com/NilsBrause/waylandpp/";
     license = with licenses; [ bsd2 hpnd ];
     maintainers = with maintainers; [ minijackson ];
   };

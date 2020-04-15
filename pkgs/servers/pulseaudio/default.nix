@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";
-    homepage    = http://www.pulseaudio.org/;
+    homepage    = "http://www.pulseaudio.org/";
     license     = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms   = lib.platforms.unix;

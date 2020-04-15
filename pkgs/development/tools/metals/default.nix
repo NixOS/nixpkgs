@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://scalameta.org/metals/;
+    homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
     description = "Work-in-progress language server for Scala";
     maintainers = with maintainers; [ ceedubs tomahna ];

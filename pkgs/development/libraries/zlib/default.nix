@@ -114,7 +114,7 @@ stdenv.mkDerivation (rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://zlib.net;
+    homepage = "https://zlib.net";
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;

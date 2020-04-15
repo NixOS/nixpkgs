@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, sqlite, makeWrapper, dotnetCorePackages, ffmpeg,
-  fontconfig, freetype }:
+  fontconfig, freetype, nixosTests }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -18,12 +18,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "jellyfin";
-  version = "10.5.2";
+  version = "10.5.4";
 
   # Impossible to build anything offline with dotnet
   src = fetchurl {
     url = "https://github.com/jellyfin/jellyfin/releases/download/v${version}/jellyfin_${version}_portable.tar.gz";
-    sha256 = "0qfllpvaa0br5nqpsxyfij0xh0z9zwijaa521r7wg4636pkllyjr";
+    sha256 = "0jfqkbr5n5l7k3dpmjsy0bhvy4y1s6sccwcmcx239r6dhc7x0f9y";
   };
 
   buildInputs = [
@@ -49,9 +49,13 @@ in stdenv.mkDerivation rec {
       --add-flags "$out/opt/jellyfin/jellyfin.dll --ffmpeg ${ffmpeg}/bin/ffmpeg"
   '';
 
+  passthru.tests = {
+    smoke-test = nixosTests.jellyfin;
+  };
+
   meta =  with stdenv.lib; {
     description = "The Free Software Media System";
-    homepage = https://jellyfin.github.io/;
+    homepage = "https://jellyfin.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ nyanloutre minijackson ];
   };

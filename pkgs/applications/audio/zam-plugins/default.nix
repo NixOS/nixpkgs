@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.zamaudio.com/?p=976;
+    homepage = "http://www.zamaudio.com/?p=976";
     description = "A collection of LV2/LADSPA/VST/JACK audio plugins by ZamAudio";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];

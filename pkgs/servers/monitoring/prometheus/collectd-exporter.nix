@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Relay server for exporting metrics from collectd to Prometheus";
-    homepage = https://github.com/prometheus/collectd_exporter;
+    homepage = "https://github.com/prometheus/collectd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;

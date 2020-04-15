@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    homepage = https://gstreamer.freedesktop.org;
+    homepage = "https://gstreamer.freedesktop.org";
 
     description = "`Good' plug-ins for GStreamer";
 

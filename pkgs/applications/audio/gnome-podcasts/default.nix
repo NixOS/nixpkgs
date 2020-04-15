@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Listen to your favorite podcasts";
-    homepage = https://wiki.gnome.org/Apps/Podcasts;
+    homepage = "https://wiki.gnome.org/Apps/Podcasts";
     license = licenses.gpl3;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

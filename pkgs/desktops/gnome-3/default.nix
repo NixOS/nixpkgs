@@ -105,10 +105,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   mutter = callPackage ./core/mutter { };
 
-  # Needed for elementary's gala and greeter until they get around to adapting to all the API breaking changes in libmutter-3
-  # A more detailed explaination can be seen here https://decathorpe.com/2018/09/04/call-for-help-pantheon-on-fedora-29.html
-  # See Also: https://github.com/elementary/gala/issues/303
-  mutter328 = callPackage ./core/mutter/3.28.nix { };
+  # Needed for elementary's gala and greeter until 3.36 support has more bugfixes
+  # https://github.com/elementary/gala/issues/763
+  mutter334 = callPackage ./core/mutter/3.34 { };
 
   nautilus = callPackage ./core/nautilus { };
 
@@ -357,5 +356,5 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-screensaver = throw "gnome-screensaver is deprecated. If you are using GNOME Flashback, it now has a built-in lock screen. If you are using it elsewhere, you can try xscreenlock or other alternatives."; # added 2020-03-19
 
-  maintainers = lib.teams.gnome.members;
+  mutter328 = throw "Removed as Pantheon is upgraded to mutter334.";
 })

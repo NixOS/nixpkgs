@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsaLib gtk3 glib libnotify libX11 pcre ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/nicklan/pnmixer;
+    homepage = "https://github.com/nicklan/pnmixer";
     description = "ALSA volume mixer for the system tray";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       diagnostic monitoring and profiling of receivers and feeding
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
-    homepage = http://catb.org/gpsd/;
+    homepage = "http://catb.org/gpsd/";
     license = "BSD-style";
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor rasendubi ];

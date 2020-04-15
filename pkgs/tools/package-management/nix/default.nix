@@ -52,7 +52,7 @@ common =
               customMemoryManagement = false;
             }).overrideDerivation (args: {
               patches = args.patches or [] ++ [(fetchpatch {
-                url = https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch;
+                url = "https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch";
                 sha256 = "103phn6kyvs1yc7fibyin3lgxz699qakhw671kl207484im55id1";
               })];
             }));
@@ -137,7 +137,7 @@ common =
           a package, multi-user package management and easy setup of build
           environments.
         '';
-        homepage = https://nixos.org/;
+        homepage = "https://nixos.org/";
         license = stdenv.lib.licenses.lgpl2Plus;
         maintainers = [ stdenv.lib.maintainers.eelco ];
         platforms = stdenv.lib.platforms.unix;
@@ -176,10 +176,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.3";
+    name = "nix-2.3.4";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "332fffb8dfc33eab854c136ef162a88cec15b701def71fa63714d160831ba224";
+      sha256 = "1c626a0de0acc69830b1891ec4d3c96aabe673b2a9fd04cef84f2304d05ad00d";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -199,7 +199,7 @@ in rec {
     };
 
     crates = fetchurl {
-      url = https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz;
+      url = "https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz";
       sha256 = "a83785553bb4bc5b28220562153e201ec555a00171466ac08b716f0c97aee45a";
     };
 
@@ -218,7 +218,7 @@ in rec {
     };
 
     crates = fetchurl {
-      url = https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz;
+      url = "https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz";
       sha256 = "a83785553bb4bc5b28220562153e201ec555a00171466ac08b716f0c97aee45a";
     };
 

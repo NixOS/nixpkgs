@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Network Connectivity Tracking library for Desktop Applications";
-    homepage = https://launchpad.net/ntrack;
+    homepage = "https://launchpad.net/ntrack";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
   };

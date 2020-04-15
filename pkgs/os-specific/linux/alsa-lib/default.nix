@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.alsa-project.org/;
+    homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
 
     longDescription = ''

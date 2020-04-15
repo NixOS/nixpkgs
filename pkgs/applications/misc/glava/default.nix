@@ -82,7 +82,7 @@ in
       description = ''
         OpenGL audio spectrum visualizer
       '';
-      homepage = https://github.com/wacossusca34/glava;
+      homepage = "https://github.com/wacossusca34/glava";
       platforms = platforms.linux;
       license = licenses.gpl3;
       maintainers = with maintainers; [

@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "pngout-20150319";
 
   src = fetchurl {
-    url = http://static.jonof.id.au/dl/kenutils/pngout-20150319-linux.tar.gz;
+    url = "http://static.jonof.id.au/dl/kenutils/pngout-20150319-linux.tar.gz";
     sha256 = "0iwv941hgs2g7ljpx48fxs24a70m2whrwarkrb77jkfcd309x2h7";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A tool that aggressively optimizes the sizes of PNG images";
     license = stdenv.lib.licenses.unfree;
-    homepage = http://advsys.net/ken/utils.htm;
+    homepage = "http://advsys.net/ken/utils.htm";
     maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }

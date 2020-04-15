@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Speed up builtin gnome-shell animations";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ timbertson tiramiseb ];
-    homepage = http://gfxmonk.net/dist/0install/gnome-shell-impatience.xml;
+    homepage = "http://gfxmonk.net/dist/0install/gnome-shell-impatience.xml";
   };
 }

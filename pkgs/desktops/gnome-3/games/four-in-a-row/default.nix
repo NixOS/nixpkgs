@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Four-in-a-row;
+    homepage = "https://wiki.gnome.org/Apps/Four-in-a-row";
     description = "Make lines of the same color to win";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;

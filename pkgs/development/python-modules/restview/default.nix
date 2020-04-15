@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "ReStructuredText viewer";
-    homepage = https://mg.pov.lt/restview/;
+    homepage = "https://mg.pov.lt/restview/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ koral ];
   };

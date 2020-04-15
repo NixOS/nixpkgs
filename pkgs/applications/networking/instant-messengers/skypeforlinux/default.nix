@@ -111,7 +111,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Linux client for skype";
-    homepage = https://www.skype.com;
+    homepage = "https://www.skype.com";
     license = licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ panaeon jraygauthier ];
     platforms = [ "x86_64-linux" ];

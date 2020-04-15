@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Encipher HTTP Messages";
-    homepage = https://github.com/martinthomson/encrypted-content-encoding;
+    homepage = "https://github.com/martinthomson/encrypted-content-encoding";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

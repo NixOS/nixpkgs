@@ -133,7 +133,7 @@ stdenv.mkDerivation (foldl recursiveUpdate {} [ rec {
   '';
 
   meta = {
-    homepage = https://www.gnu.org/software/coreutils/;
+    homepage = "https://www.gnu.org/software/coreutils/";
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
 
     longDescription = ''

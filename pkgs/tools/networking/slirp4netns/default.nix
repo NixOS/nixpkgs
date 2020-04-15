@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rootless-containers/slirp4netns";
     description = "User-mode networking for unprivileged network namespaces";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej saschagrunert ];
+    maintainers = with maintainers; [ orivej ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

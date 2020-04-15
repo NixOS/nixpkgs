@@ -53,7 +53,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Persepolis Download Manager is a GUI for aria2.";
-    homepage = https://persepolisdm.github.io/;
+    homepage = "https://persepolisdm.github.io/";
     license = licenses.gpl3;
     maintainers = [ maintainers.linarcx ];
   };

@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Merging locate is an utility to index and quickly search for files";
-    homepage = https://pagure.io/mlocate;
+    homepage = "https://pagure.io/mlocate";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

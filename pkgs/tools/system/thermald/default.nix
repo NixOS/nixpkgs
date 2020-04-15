@@ -27,11 +27,15 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    ];
+  ];
+
+  postInstall = ''
+    cp ./data/thermal-conf.xml $out/etc/thermald/
+  '';
 
   meta = with stdenv.lib; {
     description = "Thermal Daemon";
-    homepage = https://01.org/linux-thermal-daemon;
+    homepage = "https://01.org/linux-thermal-daemon";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];

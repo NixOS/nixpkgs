@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) installPhase;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mirleft/ocaml-tls;
+    homepage = "https://github.com/mirleft/ocaml-tls";
     description = "TLS in pure OCaml";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sternenseemann ];

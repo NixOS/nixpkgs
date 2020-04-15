@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
-    homepage = https://github.com/koct9i/ioping;
+    homepage = "https://github.com/koct9i/ioping";
   };
 }

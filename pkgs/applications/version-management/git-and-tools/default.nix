@@ -68,6 +68,8 @@ let
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
 
+  git-cinnabar = callPackage ./git-cinnabar { };
+
   git-codeowners = callPackage ./git-codeowners { };
 
   git-codereview = callPackage ./git-codereview { };
@@ -165,15 +167,15 @@ let
 
   gita = python3Packages.callPackage ./gita {};
 
+  gitbatch = callPackage ./gitbatch { };
+
   gitflow = callPackage ./gitflow { };
 
   gitstatus = callPackage ./gitstatus { };
 
   grv = callPackage ./grv { };
 
-  hub = callPackage ./hub {
-    inherit (darwin) Security;
-  };
+  hub = callPackage ./hub { };
 
   lab = callPackage ./lab { };
 
@@ -186,6 +188,8 @@ let
   pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
   qgit = qt5.callPackage ./qgit { };
+
+  scmpuff = callPackage ./scmpuff { };
 
   stgit = callPackage ./stgit { };
 

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
        Language", by Al Aho, Brian Kernighan, and Peter Weinberger
        (Addison-Wesley, 1988, ISBN 0-201-07981-X).
     '';
-    homepage = https://www.cs.princeton.edu/~bwk/btl.mirror/;
+    homepage = "https://www.cs.princeton.edu/~bwk/btl.mirror/";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.konimex ];
     platforms = stdenv.lib.platforms.linux;

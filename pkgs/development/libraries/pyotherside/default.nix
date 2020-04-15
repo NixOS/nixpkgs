@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Asynchronous Python 3 Bindings for Qt 5";
-    homepage = https://thp.io/2011/pyotherside/;
+    homepage = "https://thp.io/2011/pyotherside/";
     license = licenses.isc;
     maintainers = [ maintainers.mic92 ];
   };

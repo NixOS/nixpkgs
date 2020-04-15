@@ -34,7 +34,7 @@ stdenv.mkDerivation  {
 
   meta = with stdenv.lib; {
     description = "Speech denoise lv2 plugin based on RNNoise library";
-    homepage = https://github.com/lucianodato/speech-denoiser;
+    homepage = "https://github.com/lucianodato/speech-denoiser";
     license = licenses.lgpl3;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

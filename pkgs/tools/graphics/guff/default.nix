@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;  {
     description = "A plot device";
-    homepage = https://github.com/silentbicycle/guff;
+    homepage = "https://github.com/silentbicycle/guff";
     license = licenses.isc;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;

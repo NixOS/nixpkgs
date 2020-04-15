@@ -127,7 +127,7 @@ in stdenv.mkDerivation {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = https://unity3d.com/;
+    homepage = "https://unity3d.com/";
     description = "Game development tool";
     longDescription = ''
       Popular development platform for creating 2D and 3D multiplatform games

@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "RDMA Core Userspace Libraries and Daemons";
-    homepage = https://github.com/linux-rdma/rdma-core;
+    homepage = "https://github.com/linux-rdma/rdma-core";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ markuskowa ];

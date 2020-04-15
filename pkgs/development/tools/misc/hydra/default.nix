@@ -1,4 +1,4 @@
-{ fetchFromGitHub, nixStable, nixUnstable, callPackage, nixFlakes }:
+{ fetchFromGitHub, nixStable, callPackage, nixFlakes, fetchpatch }:
 
 {
   # Package for phase-1 of the db migration for Hydra.
@@ -15,28 +15,24 @@
     migration = true;
   };
 
-  # Hydra from latest master (or flakes) branch. Contains breaking changes,
+  # Hydra from latest master branch. Contains breaking changes,
   # so when having an older version, `pkgs.hydra-migration` should be deployed first.
 
   hydra-unstable = callPackage ./common.nix {
-    version = "2020-03-24";
+    version = "2020-04-07";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "hydra";
-      rev = "12cc46cdb36321acd4c982429a86eb0f8f3cc969";
-      sha256 = "10ipxzdxr47c8w5jg69mbax2ykc7lb5fs9bbdd3iai9wzyfz17ln";
+      rev = "4cabb37ebdeade1435ad8ebf1913cdd603b9c452";
+      sha256 = "1ccy639x6yyrqqqqli7vlqm6pcvcq5dx1w3ckba77rl8pd5h31f7";
     };
-    nix = nixUnstable;
-  };
-
-  hydra-flakes = callPackage ./common.nix {
-    version = "2020-03-27";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "hydra";
-      rev = "a7540b141d085a7e78c21fda8e8c05907c659b34";
-      sha256 = "08fs7593w5zs8vh4c66gvrxk6s840pp6hj8nwf51wsa27kg5a943";
-    };
+    patches = [
+      # https://github.com/NixOS/hydra/pull/732
+      (fetchpatch {
+        url = "https://github.com/NixOS/hydra/commit/2f9d422172235297759f2b224fe0636cad07b6fb.patch";
+        sha256 = "0152nsqqc5d85qdygmwrsk88i9y6nk1b639fj2n042pjvr0kpz6k";
+      })
+    ];
     nix = nixFlakes;
   };
 }

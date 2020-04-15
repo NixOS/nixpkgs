@@ -46,7 +46,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Browserpass native client app";
-    homepage = https://github.com/browserpass/browserpass-native;
+    homepage = "https://github.com/browserpass/browserpass-native";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ rvolosatovs infinisil ];

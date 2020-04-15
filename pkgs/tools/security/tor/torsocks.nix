@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description      = "Wrapper to safely torify applications";
-    homepage         = https://github.com/dgoulet/torsocks;
-    repositories.git = https://git.torproject.org/torsocks.git;
+    homepage         = "https://github.com/dgoulet/torsocks";
+    repositories.git = "https://git.torproject.org/torsocks.git";
     license          = stdenv.lib.licenses.gpl2;
     platforms        = stdenv.lib.platforms.unix;
     maintainers      = with stdenv.lib.maintainers; [ phreedom thoughtpolice ];

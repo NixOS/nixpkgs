@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "JOSE protocol implementation in Python";
-    homepage = https://github.com/jezdez/josepy;
+    homepage = "https://github.com/jezdez/josepy";
     license = licenses.asl20;
     maintainers = with maintainers; [  ];
   };

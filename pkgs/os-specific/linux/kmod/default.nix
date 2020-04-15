@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.kernel.org/pub/linux/utils/kernel/kmod/;
+    homepage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
     description = "Tools for loading and managing Linux kernel modules";
     license = licenses.lgpl21;
     platforms = platforms.unix;

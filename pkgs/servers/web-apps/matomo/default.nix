@@ -100,7 +100,7 @@ let
         meta = with stdenv.lib; {
           description = "A real-time web analytics application";
           license = licenses.gpl3Plus;
-          homepage = https://matomo.org/;
+          homepage = "https://matomo.org/";
           platforms = platforms.all;
           maintainers = with maintainers; [ florianjacob kiwi ];
         };

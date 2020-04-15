@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "herwig";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "0r5iyai2j99pk9p36g4rp98bxm55zd1ik9kgm2zf5zgpvxfm8csr";
+    sha256 = "11m6xvardnk0i8x8b3dpwg4c4ncq0xmlfg2n5r5qmh6544pz7zyl";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A multi-purpose particle physics event generator";
-    homepage = https://herwig.hepforge.org/;
+    homepage = "https://herwig.hepforge.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;

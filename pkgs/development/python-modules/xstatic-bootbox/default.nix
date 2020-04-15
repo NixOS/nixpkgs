@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib;{
-    homepage = http://bootboxjs.com;
+    homepage = "http://bootboxjs.com";
     description = "Bootboxjs packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

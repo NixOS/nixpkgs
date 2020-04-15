@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/google/google-authenticator-libpam;
+    homepage = "https://github.com/google/google-authenticator-libpam";
     description = "Two-step verification, with pam module";
     license = licenses.asl20;
     maintainers = with maintainers; [ aneeshusa ];

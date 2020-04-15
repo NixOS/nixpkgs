@@ -24,7 +24,7 @@ mkDerivation rec {
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.
     '';
-    homepage = http://texstudio.sourceforge.net;
+    homepage = "http://texstudio.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ ajs124 cfouche ];

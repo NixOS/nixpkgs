@@ -64,7 +64,7 @@
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Accerciser;
+    homepage = "https://wiki.gnome.org/Apps/Accerciser";
     description = "Interactive Python accessibility explorer";
     maintainers = teams.gnome.members;
     license = licenses.bsd3;

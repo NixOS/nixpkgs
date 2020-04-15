@@ -3,7 +3,6 @@
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
 , pythonPackages
-, bash-completion
 , emacs
 , ruby
 , which, dtach, openssl, bash, gdb, man
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     doxygen                   # (optional) api docs
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
-    bash-completion           # (optional) dependency to install bash completion
   ] ++ optional withEmacs emacs;
 
   buildInputs = [
@@ -56,8 +54,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
+    "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
     "--infodir=${placeholder "info"}"
   ] ++ optional (!withEmacs) "--without-emacs"
+    ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
     ++ optional (isNull ruby) "--without-ruby";
 
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "V=1" ];
 
 
-  outputs = [ "out" "man" "info" ];
+  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional withEmacs "emacs";
 
   preCheck = let
     test-database = fetchurl {
@@ -86,11 +86,15 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-man" "install-info" ];
 
+  postInstall = stdenv.lib.optionalString withEmacs ''
+    moveToOutput bin/notmuch-emacs-mua $emacs
+  '';
+
   dontGzipMan = true; # already compressed
 
   meta = {
     description = "Mail indexer";
-    homepage    = https://notmuchmail.org/;
+    homepage    = "https://notmuchmail.org/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ flokli puckipedia the-kenny ];
     platforms   = platforms.unix;

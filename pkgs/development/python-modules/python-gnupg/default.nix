@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A wrapper for the Gnu Privacy Guard";
-    homepage    = https://pypi.python.org/pypi/python-gnupg;
+    homepage    = "https://pypi.python.org/pypi/python-gnupg";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.unix;

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Music Visualizer";
-    homepage = http://projectm.sourceforge.net/;
+    homepage = "http://projectm.sourceforge.net/";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
   };
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   };
 
   patch_gcc6 = fetchpatch {
-    url = https://raw.githubusercontent.com/gentoo/gentoo/45abd63abc6644b6e177c057b5b42d894dbf8e29/media-libs/libprojectm/files/libprojectm-2.1.0-fix-c++14.patch;
+    url = "https://raw.githubusercontent.com/gentoo/gentoo/45abd63abc6644b6e177c057b5b42d894dbf8e29/media-libs/libprojectm/files/libprojectm-2.1.0-fix-c++14.patch";
     sha256 = "1i50scxv1jlqvb3jm3sql89a7wqckxhlpvnhz20vvmm1kii6lrsn";
   };
 

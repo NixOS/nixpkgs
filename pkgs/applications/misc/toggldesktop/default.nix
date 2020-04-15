@@ -140,7 +140,7 @@ buildEnv {
 
   meta = with lib; {
     description = "Client for Toggl time tracking service";
-    homepage = https://github.com/toggl/toggldesktop;
+    homepage = "https://github.com/toggl/toggldesktop";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yegortimoshenko ];
     platforms = platforms.linux;

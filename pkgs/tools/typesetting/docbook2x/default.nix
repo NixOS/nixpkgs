@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       format.
     '';
     license = licenses.mit;
-    homepage = http://docbook2x.sourceforge.net/;
+    homepage = "http://docbook2x.sourceforge.net/";
     platforms = platforms.all;
   };
 }

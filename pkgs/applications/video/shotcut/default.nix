@@ -8,13 +8,13 @@ assert stdenv.lib.versionAtLeast mlt.version "6.18.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "20.02.17";
+  version = "20.04.01";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "0nsqlbapqgxccb7mnvxqw4hdddj944d4z5jxafpv0cwj7s3z8wj0";
+    sha256 = "10svbhsd5q8z1k055kcfibil97qifwzn3xmnf5b9sxa7ky4bkmqr";
   };
 
   patches = [ ./0001-encodedock.cpp-connect-to-VAAPI-via-DRM-not-X11.patch ];
@@ -60,7 +60,7 @@ mkDerivation rec {
       nixpkgs maintainer(s). If you wish to report any bugs upstream,
       please use the official build from shotcut.org instead.
     '';
-    homepage = https://shotcut.org;
+    homepage = "https://shotcut.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ goibhniu woffs peti ];
     platforms = platforms.linux;

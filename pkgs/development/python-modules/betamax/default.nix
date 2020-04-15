@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://betamax.readthedocs.org/en/latest/;
+    homepage = "https://betamax.readthedocs.org/en/latest/";
     description = "A VCR imitation for requests";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];

@@ -27,8 +27,8 @@ buildPythonPackage rec {
       either Py2 or Py3 code easily to support both Python 2 and 3 in a
       single clean Py3-style codebase, module by module.
     '';
-    homepage = https://python-future.org;
-    downloadPage = https://github.com/PythonCharmers/python-future/releases;
+    homepage = "https://python-future.org";
+    downloadPage = "https://github.com/PythonCharmers/python-future/releases";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ prikhi ];
   };

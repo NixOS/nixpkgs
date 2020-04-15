@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A python client for Etcd";
-    homepage = https://github.com/jplana/python-etcd;
+    homepage = "https://github.com/jplana/python-etcd";
     license = licenses.mit;
   };
 

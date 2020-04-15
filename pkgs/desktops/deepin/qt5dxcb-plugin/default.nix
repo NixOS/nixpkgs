@@ -47,7 +47,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugin for DDE";
-    homepage = https://github.com/linuxdeepin/qt5dxcb-plugin;
+    homepage = "https://github.com/linuxdeepin/qt5dxcb-plugin";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

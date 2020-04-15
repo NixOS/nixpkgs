@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     mv "$out"/bin/optipng{,.exe}
   '';
 
-  meta = {
-    homepage = http://optipng.sourceforge.net/;
+  meta = with stdenv.lib; {
+    homepage = "http://optipng.sourceforge.net/";
     description = "A PNG optimizer";
     license = licenses.zlib;
     platforms = platforms.unix;

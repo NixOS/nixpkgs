@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   patches = [ ./xml-document.patch ];
 
   meta = with stdenv.lib; {
-    homepage = http://gdome2.cs.unibo.it/;
+    homepage = "http://gdome2.cs.unibo.it/";
     description = "DOM C library developed for the Gnome project";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ prikhi roconnor ];

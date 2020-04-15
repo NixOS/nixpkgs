@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "USB traffic redirection protocol";
-    homepage = http://spice-space.org/page/UsbRedir;
+    homepage = "http://spice-space.org/page/UsbRedir";
     license = licenses.lgpl21;
 
     maintainers = [ maintainers.offline ];

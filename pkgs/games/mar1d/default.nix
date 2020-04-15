@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       original, however, the game still takes place in a two dimensional world.
       You must view the world as mario does, as a one dimensional line.
     '';
-    homepage = https://github.com/olynch/fp_mario;
+    homepage = "https://github.com/olynch/fp_mario";
     license = licenses.agpl3;
     maintainers = with maintainers; [ taeer ];
     platforms = platforms.linux;

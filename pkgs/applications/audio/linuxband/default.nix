@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A GUI front-end for MMA: Type in the chords, choose the groove and it will play an accompaniment";
-    homepage = http://linuxband.org/;
+    homepage = "http://linuxband.org/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

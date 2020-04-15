@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Universal data modeling for Python";
-    homepage = https://bitbucket.org/userzimmermann/python-modeled;
+    homepage = "https://bitbucket.org/userzimmermann/python-modeled";
     license = licenses.lgpl3;
     maintainers = [ maintainers.costrouc ];
   };

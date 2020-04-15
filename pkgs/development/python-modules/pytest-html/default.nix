@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-html";
-  version = "2.1.0";
+  version = "2.1.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14cy5iixi6i8i5r5xvvkhwk48zgxnb1ypbp0g1343mwfdihshic6";
+    sha256 = "1iap9rzxx9pkvz6im3px8xj37pb098lvvf9yiqh93qq5w68w6jka";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

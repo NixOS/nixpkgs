@@ -50,7 +50,7 @@ buildRustPackage rec {
           series also tracks a cover letter for the patch series,
           formats the series for email, and prepares pull requests.
     '';
-    homepage = https://github.com/git-series/git-series;
+    homepage = "https://github.com/git-series/git-series";
 
     license = licenses.mit;
     maintainers = with maintainers; [ edef vmandela ];

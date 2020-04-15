@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-session";
-  version = "2.2.7";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0qgb225ldg3qax370z3wvijxmm4bjfqds3r9aqqhlq30599xjhsb";
+    sha256 = "02inp8xdxfx8qxjdf2nazw46ahp1gv3skd922ma6kgx5w4wxh5l8";
   };
 
   passthru = {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Session Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-session;
+    homepage = "https://github.com/elementary/wingpanel-indicator-session";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

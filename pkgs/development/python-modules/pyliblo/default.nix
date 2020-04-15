@@ -19,7 +19,7 @@ buildPythonPackage rec {
   buildInputs = [ liblo cython ];
 
   meta = with stdenv.lib; {
-    homepage = http://das.nasophon.de/pyliblo/;
+    homepage = "http://das.nasophon.de/pyliblo/";
     description = "Python wrapper for the liblo OSC library";
     license = licenses.lgpl21;
   };

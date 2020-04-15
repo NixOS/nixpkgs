@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
       and the ability to perform transactions without downloading a copy
       of the blockchain.
     '';
-    homepage = https://www.electroncash.org/;
+    homepage = "https://www.electroncash.org/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ lassulus nyanloutre ];
     license = licenses.mit;

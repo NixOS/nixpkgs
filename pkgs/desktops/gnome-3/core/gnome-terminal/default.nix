@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.36.0.1";
+  version = "3.36.1.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1qj0zggig6iwahjvj9wcqpf9xj6aw6ar5pgnmrhbhc90cb7c2ccb";
+    sha256 = "0xm3g3kanfhs1q3xh3x58r55v8906806wvqjbg4c2xvdwyhhimzk";
   };
 
   buildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The GNOME Terminal Emulator";
-    homepage = https://wiki.gnome.org/Apps/Terminal;
+    homepage = "https://wiki.gnome.org/Apps/Terminal";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;

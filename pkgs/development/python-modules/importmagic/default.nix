@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Import Magic - automagically add, remove and manage imports";
-    homepage = https://github.com/alecthomas/importmagic;
+    homepage = "https://github.com/alecthomas/importmagic";
     license = licenses.bsd0;
   };
 

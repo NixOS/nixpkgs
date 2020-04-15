@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tiny screen magnifier for X11";
-    homepage = https://gitlab.com/amiloradovsky/magnify;
+    homepage = "https://gitlab.com/amiloradovsky/magnify";
     license = licenses.mit;  # or GPL2+, optionally
     maintainers = with maintainers; [ amiloradovsky ];
     platforms = platforms.all;

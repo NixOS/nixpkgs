@@ -409,7 +409,7 @@ $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
 # Find all the children of the current default configuration
 # Do not search for grand children
-my @links = sort (glob "$defaultConfig/fine-tune/*");
+my @links = sort (glob "$defaultConfig/specialisation/*");
 foreach my $link (@links) {
 
     my $entryName = "";
@@ -425,7 +425,8 @@ foreach my $link (@links) {
     if ($cfgName) {
         $entryName = $cfgName;
     } else {
-        $entryName = "($date - $version)";
+        my $linkname = basename($link);
+        $entryName = "($linkname - $date - $version)";
     }
     addEntry("NixOS - $entryName", $link);
 }

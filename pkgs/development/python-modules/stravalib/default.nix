@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for interacting with Strava v3 REST API";
-    homepage = https://github.com/hozn/stravalib;
+    homepage = "https://github.com/hozn/stravalib";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

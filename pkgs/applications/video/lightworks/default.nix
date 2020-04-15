@@ -65,14 +65,6 @@ let
     '';
 
     dontPatchELF = true;
-
-    meta = {
-      description = "Professional Non-Linear Video Editor";
-      homepage = "https://www.lwks.com/";
-      license = stdenv.lib.licenses.unfree;
-      maintainers = [ stdenv.lib.maintainers.antonxy ];
-      platforms = [ "x86_64-linux" ];
-    };
   };
 
 # Lightworks expects some files in /usr/share/lightworks
@@ -84,4 +76,12 @@ in buildFHSUserEnv {
   ];
 
   runScript = "lightworks";
+
+  meta = {
+    description = "Professional Non-Linear Video Editor";
+    homepage = "https://www.lwks.com/";
+    license = stdenv.lib.licenses.unfree;
+    maintainers = [ stdenv.lib.maintainers.antonxy ];
+    platforms = [ "x86_64-linux" ];
+  };
 }

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Dead-simple way to watch a directory";
-    homepage = https://github.com/Ceasar/easywatch;
+    homepage = "https://github.com/Ceasar/easywatch";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
   };

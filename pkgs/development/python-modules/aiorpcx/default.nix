@@ -20,6 +20,6 @@ buildPythonPackage rec {
   meta = {
     description = "Transport, protocol and framing-independent async RPC client and server implementation";
     license = lib.licenses.mit;
-    homepage = https://github.com/kyuupichan/aiorpcX;
+    homepage = "https://github.com/kyuupichan/aiorpcX";
   };
 }

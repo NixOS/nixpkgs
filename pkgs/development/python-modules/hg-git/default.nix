@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Push and pull from a Git server using Mercurial";
-    homepage = http://hg-git.github.com/;
+    homepage = "http://hg-git.github.com/";
     maintainers = with maintainers; [ koral ];
     license = stdenv.lib.licenses.gpl2;
   };

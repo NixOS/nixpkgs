@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1dwq9rqswgnnglhrgcpvrp6shn3pb4x8f8f23x84sqakb430idp7";
+    sha256 = "1rgbw2kfcq7cdpvl6sy6r6d4iprm1j2n3knbnbxy8sylfc83bwri";
   };
 
   passthru = {
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Security & Privacy Plug";
-    homepage = https://github.com/elementary/switchboard-plug-security-privacy;
+    homepage = "https://github.com/elementary/switchboard-plug-security-privacy";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

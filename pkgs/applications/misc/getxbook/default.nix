@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A collection of tools to download books from Google Books";
-    homepage    = https://njw.me.uk/getxbook/;
+    homepage    = "https://njw.me.uk/getxbook/";
     license     = licenses.isc;
     maintainers = with maintainers; [ obadz ];
     platforms   = platforms.all;

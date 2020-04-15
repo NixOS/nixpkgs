@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C library of programming buildings blocks";
-    homepage    = https://www.gtk.org/;
+    homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lovek323 raskin worldofpeace ];
     platforms   = platforms.unix;

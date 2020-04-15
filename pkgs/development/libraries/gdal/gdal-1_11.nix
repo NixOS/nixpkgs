@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Translator library for raster geospatial data formats";
-    homepage = https://www.gdal.org/;
+    homepage = "https://www.gdal.org/";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

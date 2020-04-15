@@ -6,30 +6,31 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage = pkgs.php73;
-  phpPackages = pkgs.php73Packages;
+  phpPackage =
+    let
+      base = pkgs.php74;
+    in
+      base.buildEnv {
+        extensions = e: with e;
+          base.enabledExtensions ++ [
+            apcu redis memcached imagick
+          ];
+        extraConfig = phpOptionsStr;
+      };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
 
-  phpOptionsExtensions = ''
-    ${optionalString cfg.caching.apcu "extension=${phpPackages.apcu}/lib/php/extensions/apcu.so"}
-    ${optionalString cfg.caching.redis "extension=${phpPackages.redis}/lib/php/extensions/redis.so"}
-    ${optionalString cfg.caching.memcached "extension=${phpPackages.memcached}/lib/php/extensions/memcached.so"}
-    extension=${phpPackages.imagick}/lib/php/extensions/imagick.so
-    zend_extension = opcache.so
-    opcache.enable = 1
-  '';
   phpOptions = {
     upload_max_filesize = cfg.maxUploadSize;
     post_max_size = cfg.maxUploadSize;
     memory_limit = cfg.maxUploadSize;
   } // cfg.phpOptions;
-  phpOptionsStr = phpOptionsExtensions + (toKeyValue phpOptions);
+  phpOptionsStr = toKeyValue phpOptions;
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
-    #! ${pkgs.stdenv.shell}
+    #! ${pkgs.runtimeShell}
     cd ${cfg.package}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then
@@ -38,7 +39,6 @@ let
     export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
     $sudo \
       ${phpPackage}/bin/php \
-      -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
   '';
 
@@ -322,12 +322,21 @@ in {
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
         ++ (optional (versionOlder cfg.package.version "18") ''
-          You're currently deploying an older version of Nextcloud. This may be needed
-          since Nextcloud doesn't allow major version upgrades across multiple versions (i.e. an
-          upgrade from 16 is possible to 17, but not to 18).
+          A legacy Nextcloud install (from before NixOS 20.03) may be installed.
 
-          Please deploy this to your server and wait until the migration is finished. After
-          that you can deploy to the latest Nextcloud version available.
+          You're currently deploying an older version of Nextcloud. This may be needed
+          since Nextcloud doesn't allow major version upgrades that skip multiple
+          versions (i.e. an upgrade from 16 is possible to 17, but not 16 to 18).
+
+          It is assumed that Nextcloud will be upgraded from version 16 to 17.
+
+           * If this is a fresh install, there will be no upgrade to do now.
+
+           * If this server already had Nextcloud installed, first deploy this to your
+             server, and wait until the upgrade to 17 is finished.
+
+          Then, set `services.nextcloud.package` to `pkgs.nextcloud18` to upgrade to
+          Nextcloud version 18.
         '');
 
       services.nextcloud.package = with pkgs;

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Setuptools command for uploading Sphinx documentation to PyPI";
-    homepage = https://bitbucket.org/jezdez/sphinx-pypi-upload/;
+    homepage = "https://bitbucket.org/jezdez/sphinx-pypi-upload/";
     license = licenses.bsd0;
   };
 

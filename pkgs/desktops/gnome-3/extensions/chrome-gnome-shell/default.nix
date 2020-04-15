@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME Shell integration for Chrome";
-    homepage = https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome;
+    homepage = "https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome";
     longDescription = ''
       To use the integration, install the <link xlink:href="https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome/Installation">browser extension</link>, and then set <option>services.gnome3.chrome-gnome-shell.enable</option> to <literal>true</literal>.
     '';

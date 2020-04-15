@@ -1,4 +1,5 @@
-{ channel, pname, version, sha256Hash, patches }:
+{ channel, pname, version, sha256Hash, patches
+, filename ? "flutter_linux_v${version}-${channel}.tar.xz" }:
 
 { bash, buildFHSUserEnv, cacert, coreutils, git, makeWrapper, runCommand, stdenv
 , fetchurl, alsaLib, dbus, expat, libpulseaudio, libuuid, libX11, libxcb
@@ -11,7 +12,7 @@ let
 
     src = fetchurl {
       url =
-        "https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/flutter_linux_v${version}-${channel}.tar.xz";
+        "https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/${filename}";
       sha256 = sha256Hash;
     };
 

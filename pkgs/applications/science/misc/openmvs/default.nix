@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
-    homepage = http://cdcseacave.github.io/openMVS/;
+    homepage = "http://cdcseacave.github.io/openMVS/";
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mdaiter ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The GNU Scientific Library, a large numerical library";
-    homepage = https://www.gnu.org/software/gsl/;
+    homepage = "https://www.gnu.org/software/gsl/";
     license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''

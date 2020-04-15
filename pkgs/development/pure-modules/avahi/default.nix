@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A digital audio interface for the Pure programming language";
-    homepage = http://puredocs.bitbucket.org/pure-avahi.html;
+    homepage = "http://puredocs.bitbucket.org/pure-avahi.html";
     license = stdenv.lib.licenses.lgpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

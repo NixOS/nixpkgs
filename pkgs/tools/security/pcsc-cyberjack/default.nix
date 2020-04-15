@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb, pcsclite }:
+{ stdenv, fetchurl, pkgconfig, libusb1, pcsclite }:
 
 stdenv.mkDerivation rec {
   pname = "pcsc-cyberjack";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "tools" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb pcsclite ];
+  buildInputs = [ libusb1 pcsclite ];
 
   configureFlags = [
     "--with-usbdropdir=${placeholder "out"}/pcsc/drivers"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "REINER SCT cyberJack USB chipcard reader user space driver";
-    homepage = https://www.reiner-sct.com/;
+    homepage = "https://www.reiner-sct.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ aszlig ];

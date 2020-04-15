@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A collection of tools for working with the OCI image format specification";
-    homepage = https://github.com/opencontainers/image-tools;
+    homepage = "https://github.com/opencontainers/image-tools";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nzhang-zh ];
   };

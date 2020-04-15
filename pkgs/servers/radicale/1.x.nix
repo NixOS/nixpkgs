@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = !pythonPackages.isPy3k;
 
   meta = with stdenv.lib; {
-    homepage = http://www.radicale.org/;
+    homepage = "http://www.radicale.org/";
     description = "CalDAV CardDAV server";
     longDescription = ''
       The Radicale Project is a complete CalDAV (calendar) and CardDAV

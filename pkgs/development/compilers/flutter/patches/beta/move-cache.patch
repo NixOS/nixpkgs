@@ -7,7 +7,7 @@ index 8e511eefd..fbc7d6ac3 100644
      final String gradlewBinaryName = Platform.isWindows ? 'gradlew.bat' : 'gradlew';
      final Directory tempDir = Directory.systemTemp.createTempSync('flutter_devicelab_shutdown_gradle.');
 -    recursiveCopy(Directory(path.join(flutterDirectory.path, 'bin', 'cache', 'artifacts', 'gradle_wrapper')), tempDir);
-+    recursiveCopy(Directory(path.join(homeDirPath, '.cache', 'flutter', 'artifacts', 'gradle_wrapper')), tempDir);
++    recursiveCopy(Directory(path.join(globals.fsUtils.homeDirPath, '.cache', 'flutter', 'artifacts', 'gradle_wrapper')), tempDir);
      copy(File(path.join(path.join(flutterDirectory.path, 'packages', 'flutter_tools'), 'templates', 'app', 'android.tmpl', 'gradle', 'wrapper', 'gradle-wrapper.properties')), Directory(path.join(tempDir.path, 'gradle', 'wrapper')));
      if (!Platform.isWindows) {
        await exec(
@@ -28,7 +28,7 @@ index 79b06949f..9040ba0a8 100644
        final Uri entryUri = globals.fs.path.toUri(font['asset'] as String);
        result.add(_Asset(
 -        baseDir: globals.fs.path.join(Cache.flutterRoot, 'bin', 'cache', 'artifacts', 'material_fonts'),
-+        baseDir: globals.fs.path.join(homeDirPath, '.cache', 'flutter', 'artifacts', 'material_fonts'),
++        baseDir: globals.fs.path.join(globals.fsUtils.homeDirPath, '.cache', 'flutter', 'artifacts', 'material_fonts'),
          relativeUri: Uri(path: entryUri.pathSegments.last),
          entryUri: entryUri,
        ));
@@ -41,14 +41,14 @@ index 715189938..5afb2a0db 100644
      }
      assert(_lock == null);
 +
-+    final Directory dir = globals.fs.directory(globals.fs.path.join(homeDirPath, '.cache', 'flutter'));
++    final Directory dir = globals.fs.directory(globals.fs.path.join(globals.fsUtils.homeDirPath, '.cache', 'flutter'));
 +    if (!dir.existsSync()) {
 +      dir.createSync(recursive: true);
-+      os.chmod(dir, '755');
++      globals.os.chmod(dir, '755');
 +    }
      final File lockFile =
 -        globals.fs.file(globals.fs.path.join(flutterRoot, 'bin', 'cache', 'lockfile'));
-+        globals.fs.file(globals.fs.path.join(homeDirPath, '.cache', 'flutter', 'lockfile'));
++        globals.fs.file(globals.fs.path.join(globals.fsUtils.homeDirPath, '.cache', 'flutter', 'lockfile'));
      try {
        _lock = lockFile.openSync(mode: FileMode.write);
      } on FileSystemException catch (e) {
@@ -57,7 +57,7 @@ index 715189938..5afb2a0db 100644
        return _fileSystem.directory(_fileSystem.path.join(_rootOverride.path, 'bin', 'cache'));
      } else {
 -      return _fileSystem.directory(_fileSystem.path.join(flutterRoot, 'bin', 'cache'));
-+      return _fileSystem.directory(_fileSystem.path.join(homeDirPath, '.cache', 'flutter'));
++      return _fileSystem.directory(_fileSystem.path.join(globals.fsUtils.homeDirPath, '.cache', 'flutter'));
      }
    }
  

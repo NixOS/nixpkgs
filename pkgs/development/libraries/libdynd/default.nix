@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "C++ dynamic ndarray library, with Python exposure.";
-    homepage = http://libdynd.org;
+    homepage = "http://libdynd.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

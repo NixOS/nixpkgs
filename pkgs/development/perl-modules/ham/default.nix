@@ -34,7 +34,7 @@ buildPerlPackage {
 
   meta = {
     description = "A tool to manage big projects consisting of multiple loosely-coupled git repositories";
-    homepage = https://github.com/kernkonzept/ham;
+    homepage = "https://github.com/kernkonzept/ham";
     license = "unknown"; # should be gpl2, but not quite sure
     maintainers = with lib.maintainers; [ aw ];
     platforms = lib.platforms.unix;

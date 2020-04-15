@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       Camlp5 is a preprocessor and pretty-printer for OCaml programs.
       It also provides parsing and printing tools.
     '';
-    homepage = https://camlp5.github.io/;
+    homepage = "https://camlp5.github.io/";
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [

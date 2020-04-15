@@ -138,7 +138,6 @@ honza/vim-snippets
 hotwatermorning/auto-git-diff
 hsanson/vim-android
 hsitz/VimOrganizer
-hynek/vim-python-pep8-indent
 iamcco/coc-spell-checker
 ianks/vim-tsx
 icymind/NeoSolarized
@@ -193,6 +192,7 @@ junegunn/vim-peekaboo
 junegunn/vim-plug
 junegunn/vim-slash
 justincampbell/vim-eighties
+justinj/vim-pico8-syntax
 justinmk/vim-dirvish
 justinmk/vim-sneak
 KabbAmine/vCoolor.vim
@@ -228,6 +228,7 @@ lervag/vimtex
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
 lilydjwg/colorizer
+liuchengxu/vim-which-key
 liuchengxu/vista.vim
 LnL7/vim-nix
 LucHermitte/lh-brackets
@@ -337,6 +338,7 @@ neoclide/coc-vimtex
 neoclide/coc-wxml
 neoclide/coc-yaml
 neoclide/coc-yank
+neoclide/coc.nvim@release
 neoclide/denite-extra
 neoclide/denite-git
 neoclide/vim-easygit
@@ -389,7 +391,6 @@ Raimondi/delimitMate
 rakr/vim-one
 rbgrouleff/bclose.vim
 reedes/vim-pencil
-justinj/vim-pico8-syntax
 reedes/vim-wordy
 rhysd/committia.vim
 rhysd/vim-grammarous
@@ -442,6 +443,7 @@ solarnz/arcanist.vim
 sonph/onehalf
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
+sunaku/vim-dasht
 svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls
@@ -451,7 +453,6 @@ ternjs/tern_for_vim
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
-tmhedberg/SimpylFold
 thinca/vim-ft-diff_fold
 thinca/vim-prettyprint
 thinca/vim-quickrun
@@ -461,6 +462,7 @@ thinca/vim-visualstar
 thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tikhomirov/vim-glsl
+tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux
 tmux-plugins/vim-tmux-focus-events
@@ -546,6 +548,7 @@ vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
 vim-syntastic/syntastic
 vim-utils/vim-husk
+Vimjas/vim-python-pep8-indent
 vimlab/split-term.vim
 vimoutliner/vimoutliner
 vimwiki/vimwiki

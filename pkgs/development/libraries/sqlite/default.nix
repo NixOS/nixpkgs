@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
-    downloadPage = https://sqlite.org/download.html;
+    downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ eelco np ];

@@ -15,7 +15,7 @@ in fetchzip {
   sha256 = "0ampp9vf9xw0sdppl4lb9i9h75ywljhdcqmzh45mx2x9m7h6xgg9";
 
   meta = {
-    homepage = http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html;
+    homepage = "http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html";
     description = "Helvetica Neue LT Std font";
     longDescription = ''
       Helvetica Neue Lt Std is one of the most highly rated and complete

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Arrange workspaces in a two dimensional grid with workspace thumbnails";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno ];
-    homepage =  https://github.com/mzur/gnome-shell-wsmatrix;
+    homepage =  "https://github.com/mzur/gnome-shell-wsmatrix";
   };
 }

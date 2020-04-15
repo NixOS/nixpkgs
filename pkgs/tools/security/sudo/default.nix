@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.sudo.ws/";
 
-    license = https://www.sudo.ws/sudo/license.html;
+    license = "https://www.sudo.ws/sudo/license.html";
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
 

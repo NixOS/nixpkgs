@@ -188,7 +188,7 @@ core = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Basic binaries for TeX Live";
-    homepage    = http://www.tug.org/texlive;
+    homepage    = "http://www.tug.org/texlive";
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ vcunat veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
@@ -383,7 +383,7 @@ pygmentex = python2Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.ctan.org/pkg/pygmentex;
+    homepage = "https://www.ctan.org/pkg/pygmentex";
     description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
     longDescription = ''
       PygmenTeX is a Python-based LaTeX package that can be used for

@@ -1,6 +1,7 @@
 { stdenv, fetchurl, buildPackages, perl, coreutils
 , withCryptodev ? false, cryptodev
 , enableSSL2 ? false
+, enableSSL3 ? false
 , static ? false
 }:
 
@@ -76,6 +77,7 @@ let
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
+      ++ stdenv.lib.optional enableSSL3 "enable-ssl3"
       ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
@@ -129,7 +131,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://www.openssl.org/;
+      homepage = "https://www.openssl.org/";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       platforms = platforms.all;
@@ -164,5 +166,4 @@ in {
     ];
     withDocs = true;
   };
-
 }

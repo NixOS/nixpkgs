@@ -29,7 +29,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Manage tmux workspaces from JSON and YAML";
-    homepage = https://tmuxp.git-pull.com/;
+    homepage = "https://tmuxp.git-pull.com/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

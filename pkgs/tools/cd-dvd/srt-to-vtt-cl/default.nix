@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Convert SRT files to VTT";
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo ];
-    homepage = https://github.com/nwoltman/srt-to-vtt-cl;
+    homepage = "https://github.com/nwoltman/srt-to-vtt-cl";
     platforms = platforms.linux;
   };
 }

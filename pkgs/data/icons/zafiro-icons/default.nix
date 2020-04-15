@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Icon pack flat with light colors";
-    homepage = https://github.com/zayronxio/Zafiro-icons;
+    homepage = "https://github.com/zayronxio/Zafiro-icons";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

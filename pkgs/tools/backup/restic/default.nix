@@ -33,7 +33,7 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://restic.net;
+    homepage = "https://restic.net";
     description = "A backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;

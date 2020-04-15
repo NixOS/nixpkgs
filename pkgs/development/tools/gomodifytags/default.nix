@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Go tool to modify struct field tags.";
-    homepage = https://github.com/fatih/gomodifytags;
+    homepage = "https://github.com/fatih/gomodifytags";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
     license = stdenv.lib.licenses.bsd3;
   };

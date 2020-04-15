@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A functional CLI language";
-    homepage = https://fsharp.org/;
+    homepage = "https://fsharp.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
     platforms = with stdenv.lib.platforms; unix;

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       programming language and an implementation of Java Web Start, originally
       based on the NetX project.
     '';
-    homepage = https://github.com/adoptopenjdk/icedtea-web;
+    homepage = "https://github.com/adoptopenjdk/icedtea-web";
     platforms = stdenv.lib.platforms.linux;
   };
 }

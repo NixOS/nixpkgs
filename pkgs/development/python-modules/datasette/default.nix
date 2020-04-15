@@ -85,7 +85,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An instant JSON API for your SQLite databases";
-    homepage = https://github.com/simonw/datasette;
+    homepage = "https://github.com/simonw/datasette";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

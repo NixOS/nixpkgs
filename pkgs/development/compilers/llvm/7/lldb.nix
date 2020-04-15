@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     "-DSKIP_DEBUGSERVER=ON"
   ];
 
-  CXXFLAGS = "-fno-rtti";
+  env.CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
   env.NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";
-    homepage    = https://llvm.org/;
+    homepage    = "http://llvm.org/";
     license     = licenses.ncsa;
     platforms   = platforms.all;
   };

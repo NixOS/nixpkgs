@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Compressed bitset library for C and C++";
-    homepage = http://roaringbitmap.org/;
+    homepage = "http://roaringbitmap.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

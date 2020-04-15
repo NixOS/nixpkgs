@@ -62,7 +62,7 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    homepage = https://common-lisp.net/project/ecl/;
+    homepage = "https://common-lisp.net/project/ecl/";
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

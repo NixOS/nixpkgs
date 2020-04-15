@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/cflow/;
+    homepage = "https://www.gnu.org/software/cflow/";
 
     maintainers = [ maintainers.vrthra ];
 

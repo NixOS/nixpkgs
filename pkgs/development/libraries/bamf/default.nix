@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       Removes the headache of applications matching
       into a simple DBus daemon and c wrapper library.
     '';
-    homepage = https://launchpad.net/bamf;
+    homepage = "https://launchpad.net/bamf";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;

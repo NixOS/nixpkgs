@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Focus and select windows in i3";
-    homepage = https://github.com/cornerman/i3-easyfocus;
+    homepage = "https://github.com/cornerman/i3-easyfocus";
     maintainers = with maintainers; [teto];
     license = licenses.gpl3;
     platforms = platforms.linux;

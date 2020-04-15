@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "avr8-burn-omat-2.1.2";
 
   src = fetchurl {
-    url = http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_2_1_2.zip;
+    url = "http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_2_1_2.zip";
     sha256 = "02k0fd0cd3y1yqip36wr3bkxbywp8913w4y7jdg6qwqxjnii58ln";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "GUI tool for avrdude";
-    homepage = http://avr8-burn-o-mat.aaabbb.de/avr8_burn_o_mat_avrdude_gui_en.html;
+    homepage = "http://avr8-burn-o-mat.aaabbb.de/avr8_burn_o_mat_avrdude_gui_en.html";
     license = stdenv.lib.licenses.gpl3;
     platforms = platforms.all;
   };

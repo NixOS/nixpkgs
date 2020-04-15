@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     hydraPlatforms = [];
     license = licenses.free;
-    downloadPage = http://tangramgames.dk/games/duckmarines;
+    downloadPage = "http://tangramgames.dk/games/duckmarines";
   };
 
 }

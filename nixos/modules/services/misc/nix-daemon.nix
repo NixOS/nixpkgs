@@ -92,13 +92,14 @@ in
 
       maxJobs = mkOption {
         type = types.either types.int (types.enum ["auto"]);
-        default = 1;
+        default = "auto";
         example = 64;
         description = ''
-          This option defines the maximum number of jobs that Nix will try
-          to build in parallel.  The default is 1.  You should generally
-          set it to the total number of logical cores in your system (e.g., 16
-          for two CPUs with 4 cores each and hyper-threading).
+          This option defines the maximum number of jobs that Nix will try to
+          build in parallel. The default is auto, which means it will use all
+          available logical cores. It is recommend to set it to the total
+          number of logical cores in your system (e.g., 16 for two CPUs with 4
+          cores each and hyper-threading).
         '';
       };
 
@@ -282,7 +283,7 @@ in
       trustedBinaryCaches = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ http://hydra.nixos.org/ ];
+        example = [ "http://hydra.nixos.org/" ];
         description = ''
           List of binary cache URLs that non-root users can use (in
           addition to those specified using

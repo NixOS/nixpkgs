@@ -26,7 +26,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
-    homepage = https://zaquestion.github.io/lab;
+    homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
     maintainers = with maintainers; [ marsam dtzWill ];
     platforms = platforms.all;

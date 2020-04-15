@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     pkgconfig curl cmake libzip ];
 
   meta = {
-    homepage = http://openlierox.net;
+    homepage = "http://openlierox.net";
     description = "Real-time game with Worms-like shooting";
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.linux;

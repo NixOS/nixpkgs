@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";
-    homepage = https://www.veracrypt.fr/;
+    homepage = "https://www.veracrypt.fr/";
     license = [ licenses.asl20 /* or */ "TrueCrypt License version 3.0" ];
     maintainers = with maintainers; [ dsferruzza ];
     platforms = platforms.linux;

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight and extensible STOMP messaging client";
-    homepage = https://bitbucket.org/hozn/stompclient;
+    homepage = "https://bitbucket.org/hozn/stompclient";
     license = licenses.asl20;
   };
 

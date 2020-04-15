@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Bayesian optimization toolbox in Python";
-    homepage = https://sheffieldml.github.io/GPyOpt;
+    homepage = "https://sheffieldml.github.io/GPyOpt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

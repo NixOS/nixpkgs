@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Viewer for .msg files (MS Outlook)";
-    homepage    = https://www.washington.edu/alpine/;
+    homepage    = "https://www.washington.edu/alpine/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.all;

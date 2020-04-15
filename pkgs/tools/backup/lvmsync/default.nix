@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimised synchronisation of LVM snapshots over a network";
-    homepage = https://theshed.hezmatt.org/lvmsync/;
+    homepage = "https://theshed.hezmatt.org/lvmsync/";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine nicknovitski ];

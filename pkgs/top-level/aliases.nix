@@ -322,6 +322,55 @@ mapAliases ({
   perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
   pg_tmp = ephemeralpg; # added 2018-01-16
+
+  php-embed = throw ''
+    php*-embed has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override { config.php.embed = true; config.php.apxs2 = false; })
+  ''; # added 2020-04-01
+  php72-embed = php-embed; # added 2020-04-01
+  php73-embed = php-embed; # added 2020-04-01
+  php74-embed = php-embed; # added 2020-04-01
+
+  phpPackages-embed = throw ''
+    php*Packages-embed has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override { config.php.embed = true; config.php.apxs2 = false; }).packages
+  ''; # added 2020-04-01
+  php74Packages-embed = phpPackages-embed;
+  php73Packages-embed = phpPackages-embed;
+  php72Packages-embed = phpPackages-embed;
+
+  php-unit = throw ''
+    php*-unit has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override {
+      config.php.embed = true;
+      config.php.apxs2 = false;
+      config.php.systemd = false;
+      config.php.phpdbg = false;
+      config.php.cgi = false;
+      config.php.fpm = false; })
+  ''; # added 2020-04-01
+  php72-unit = php-unit; # added 2020-04-01
+  php73-unit = php-unit; # added 2020-04-01
+  php74-unit = php-unit; # added 2020-04-01
+
+  phpPackages-unit = throw ''
+    php*Packages-unit has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override {
+      config.php.embed = true;
+      config.php.apxs2 = false;
+      config.php.systemd = false;
+      config.php.phpdbg = false;
+      config.php.cgi = false;
+      config.php.fpm = false; }).packages
+  ''; # added 2020-04-01
+  php74Packages-unit = phpPackages-unit;
+  php73Packages-unit = phpPackages-unit;
+  php72Packages-unit = phpPackages-unit;
+
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
   pidginlatexSF = pidgin-latex; # added 2014-11-02
@@ -628,6 +677,11 @@ mapAliases ({
   clang_39 = llvm_4;
   clang_35 = llvm_4;
   clang_4 = llvm_4;
+
+  # added 2019-04-13
+  # *-polly pointed to llvmPackages_latest
+  llvm-polly = throw "clang is now built with polly-plugin by default";
+  clang-polly = throw "clang is now built with polly-plugin by default";
 
   /* Cleanup before 20.09 */
   oraclejdk8psu = throw ''

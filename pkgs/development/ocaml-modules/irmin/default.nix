@@ -6,13 +6,13 @@
 buildDunePackage rec {
 
   pname = "irmin";
-  version = "2.0.0";
+  version = "2.1.0";
 
-  minimumOCamlVersion = "4.06";
+  minimumOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    sha256 = "09qffvgi5yrm3ghiywlbdhjly8xb5x5njnan213q8j033fzmf2dr";
+    sha256 = "1ji8r7zbdmhbk8r8w2hskd9z7pnvirzbhincfxndxgdaxbfkff5g";
   };
 
   propagatedBuildInputs = [ astring base64 digestif fmt jsonm logs ocaml_lwt ocamlgraph uri ];

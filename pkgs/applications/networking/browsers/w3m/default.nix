@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = {
-    homepage = http://w3m.sourceforge.net/;
+    homepage = "http://w3m.sourceforge.net/";
     description = "A text-mode web browser";
     maintainers = [ maintainers.cstrahan ];
     platforms = stdenv.lib.platforms.unix;

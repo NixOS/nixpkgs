@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "C++ implementation of the ps3netsrv server";
-    homepage = https://github.com/dirkvdb/ps3netsrv--;
+    homepage = "https://github.com/dirkvdb/ps3netsrv--";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ makefu ];

@@ -1031,6 +1031,11 @@ in
         message = ''
           Temporary addresses are only needed when IPv6 is enabled.
         '';
+      })) ++ (forEach interfaces (i: {
+        assertion = (i.virtual && i.virtualType == "tun") -> i.macAddress == null;
+        message = ''
+          Setting a MAC Address for tun device ${i.name} isn't supported.
+        '';
       })) ++ [
         {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
@@ -1140,38 +1145,7 @@ in
           ${cfg.localCommands}
         '';
       };
-    } // (listToAttrs (forEach interfaces (i:
-      let
-        deviceDependency = if (config.boot.isContainer || i.name == "lo")
-          then []
-          else [ (subsystemDevice i.name) ];
-      in
-      nameValuePair "network-link-${i.name}"
-      { description = "Link configuration of ${i.name}";
-        wantedBy = [ "network-interfaces.target" ];
-        before = [ "network-interfaces.target" ];
-        bindsTo = deviceDependency;
-        after = [ "network-pre.target" ] ++ deviceDependency;
-        path = [ pkgs.iproute ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-        script =
-          ''
-            echo "Configuring link..."
-          '' + optionalString (i.macAddress != null) ''
-            echo "setting MAC address to ${i.macAddress}..."
-            ip link set "${i.name}" address "${i.macAddress}"
-          '' + optionalString (i.mtu != null) ''
-            echo "setting MTU to ${toString i.mtu}..."
-            ip link set "${i.name}" mtu "${toString i.mtu}"
-          '' + ''
-            echo -n "bringing up interface... "
-            ip link set "${i.name}" up && echo "done" || (echo "failed"; exit 1)
-          '';
-      })));
-
+    };
     services.mstpd = mkIf needsMstpd { enable = true; };
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };

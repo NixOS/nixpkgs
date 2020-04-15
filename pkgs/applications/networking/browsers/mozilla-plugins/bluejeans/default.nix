@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   passthru.mozillaPlugin = "/lib/mozilla/plugins";
 
   meta = {
-    homepage = http://bluejeans.com;
+    homepage = "http://bluejeans.com";
     license = stdenv.lib.licenses.unfree;
     maintainers = with maintainers; [ ocharles kamilchm ];
     platforms = stdenv.lib.platforms.linux;

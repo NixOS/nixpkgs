@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A PostgreSQL/PostGIS extension that provides geospatial routing functionality";
-    homepage    = https://pgrouting.org/;
+    homepage    = "https://pgrouting.org/";
     maintainers = [ maintainers.steve-chavez ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.gpl2;

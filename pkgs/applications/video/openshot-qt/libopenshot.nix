@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_RUBY=OFF" ];
 
   meta = {
-    homepage = http://openshot.org/;
+    homepage = "http://openshot.org/";
     description = "Free, open-source video editor library";
     longDescription = ''
       OpenShot Library (libopenshot) is an open-source project dedicated to

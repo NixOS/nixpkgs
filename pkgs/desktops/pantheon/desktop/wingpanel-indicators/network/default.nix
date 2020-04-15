@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-network";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0fch27imk5x4nfx49cwcylkxd7m289rl9niy1vx5kjplhbhyhdq2";
+    sha256 = "17s5fixhwgalgjhrhnb3wh0hdzi17waqcdfw1fx8q4zs78hapjzg";
   };
 
   passthru = {
@@ -46,11 +46,9 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
-
   meta = with stdenv.lib; {
     description = "Network Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-network;
+    homepage = "https://github.com/elementary/wingpanel-indicator-network";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

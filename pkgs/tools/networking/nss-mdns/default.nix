@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       domain `.local'.
     '';
 
-    homepage = http://0pointer.de/lennart/projects/nss-mdns/;
+    homepage = "http://0pointer.de/lennart/projects/nss-mdns/";
     license = stdenv.lib.licenses.lgpl2Plus;
 
     # Supports both the GNU and FreeBSD NSS.

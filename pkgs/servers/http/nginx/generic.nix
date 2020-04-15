@@ -135,7 +135,7 @@ stdenv.mkDerivation {
 
   meta = if meta != null then meta else {
     description = "A reverse proxy and lightweight webserver";
-    homepage    = http://nginx.org;
+    homepage    = "http://nginx.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ];

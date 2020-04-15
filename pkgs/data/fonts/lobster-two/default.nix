@@ -70,7 +70,7 @@ in
     outputHash = "0if9l8pzwgfnbdjg5yblcy08dwn9yj3wzz29l0fycia46xlzd4ym";
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/librefonts/lobstertwo;
+      homepage = "https://github.com/librefonts/lobstertwo";
       description = "Script font with many ligatures";
       license = licenses.ofl;
       platforms = platforms.all;

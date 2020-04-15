@@ -5,7 +5,7 @@ stdenv.mkDerivation (rec {
   version = "6.2.0";
   meta = {
     description = "Citrix XenServer Tools";
-    homepage = http://citrix.com/English/ps2/products/product.asp?contentID=683148&ntref=hp_nav_US;
+    homepage = "http://citrix.com/English/ps2/products/product.asp?contentID=683148&ntref=hp_nav_US";
     maintainers = with stdenv.lib.maintainers; [ benwbooth ];
     platforms = stdenv.lib.platforms.linux;
     license = [ stdenv.lib.licenses.gpl2 stdenv.lib.licenses.lgpl21 ];

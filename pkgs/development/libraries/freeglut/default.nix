@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
       intended to be a full replacement for GLUT, and has only a few
       differences.
     '';
-    homepage = http://freeglut.sourceforge.net/;
+    homepage = "http://freeglut.sourceforge.net/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

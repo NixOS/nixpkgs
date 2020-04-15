@@ -17,7 +17,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    homepage = "https://click.palletsprojects.com/";
+    homepage = "http://click.pocoo.org/";
     description = "Create beautiful command line interfaces in Python";
     longDescription = ''
       A Python package for creating beautiful command line interfaces in a

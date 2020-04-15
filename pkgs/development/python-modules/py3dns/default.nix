@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python 3 DNS library";
-    homepage = https://launchpad.net/py3dns;
+    homepage = "https://launchpad.net/py3dns";
     license = licenses.psfl;
   };
 

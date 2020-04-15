@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = https://pypi.python.org/pypi/guessit;
+    homepage = "https://pypi.python.org/pypi/guessit";
     license = lib.licenses.lgpl3;
     description = "A library for guessing information from video files";
   };

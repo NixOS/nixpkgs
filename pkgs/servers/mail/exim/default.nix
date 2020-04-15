@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://exim.org/;
+    homepage = "http://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

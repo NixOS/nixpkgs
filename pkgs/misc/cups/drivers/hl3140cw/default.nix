@@ -69,7 +69,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother hl3140cw printer driver";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;

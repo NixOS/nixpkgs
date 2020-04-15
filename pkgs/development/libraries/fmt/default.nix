@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
       fmt (formerly cppformat) is an open-source formatting library. It can be
       used as a fast and safe alternative to printf and IOStreams.
     '';
-    homepage = http://fmtlib.net/;
-    downloadPage = https://github.com/fmtlib/fmt/;
+    homepage = "http://fmtlib.net/";
+    downloadPage = "https://github.com/fmtlib/fmt/";
     maintainers = [ maintainers.jdehaas ];
     license = licenses.bsd2;
     platforms = platforms.all;

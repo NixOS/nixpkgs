@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "jom-1.0.11";
 
   src = fetchgit {
-    url = git://gitorious.org/qt-labs/jom.git;
+    url = "git://gitorious.org/qt-labs/jom.git";
     rev = "c91a204b05f97eef3c73aaaba3036e20f79fd487";
     sha256 = "6d3ac84f83bb045213903d9d5340c0447c8fe41671d1dcdeae5c40b66d62ccbf";
   };
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://qt-project.org/wiki/jom;
+    homepage = "http://qt-project.org/wiki/jom";
     description = "Clone of nmake supporting multiple independent commands in parallel";
     license = stdenv.lib.licenses.gpl2Plus; # Explicitly, GPLv2 or GPLv3, but not later.
   };

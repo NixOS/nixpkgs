@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/spwhitt/nix-zsh-completions;
+    homepage = "https://github.com/spwhitt/nix-zsh-completions";
     description = "ZSH completions for Nix, NixOS, and NixOps";
     license = licenses.bsd3;
     platforms = platforms.all;

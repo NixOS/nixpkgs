@@ -161,7 +161,7 @@ in stdenv.mkDerivation (rec {
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = https://llvm.org/;
+    homepage    = "http://llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;

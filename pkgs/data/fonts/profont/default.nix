@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
-    homepage = https://tobiasjung.name/profont/;
+    homepage = "https://tobiasjung.name/profont/";
     description = "A monospaced font created to be a most readable font for programming";
     maintainers = with maintainers; [ myrl ];
     license = licenses.mit;

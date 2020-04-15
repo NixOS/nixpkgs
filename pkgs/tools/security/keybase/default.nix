@@ -32,7 +32,7 @@ buildGoPackage rec {
   buildFlags = [ "-tags production" ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.keybase.io/;
+    homepage = "https://www.keybase.io/";
     description = "The Keybase official command-line utility and service.";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ carlsverre np rvolosatovs filalex77 ];

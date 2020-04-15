@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-disk-utility";
-  version = "3.36.0";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-disk-utility/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00xi9m8vklwska1k3sdcfyba3mhwx7clrh522dgksn7v0ja9l1zl";
+    sha256 = "055l29z99f4ybgf2plz3biz1bwhlpsjpr0zk3aa6vg5w67r1h6vr";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://en.wikipedia.org/wiki/GNOME_Disks;
+    homepage = "https://en.wikipedia.org/wiki/GNOME_Disks";
     description = "A udisks graphical front-end";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;

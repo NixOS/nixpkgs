@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple, fast, no-nonsense to-do (task) list designed for elementary OS";
-    homepage = https://github.com/dahenson/agenda;
+    homepage = "https://github.com/dahenson/agenda";
     maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;

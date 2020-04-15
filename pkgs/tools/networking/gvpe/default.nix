@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A protected multinode virtual network";
-    homepage = http://software.schmorp.de/pkg/gvpe.html;
+    homepage = "http://software.schmorp.de/pkg/gvpe.html";
     maintainers = [ maintainers.raskin ];
     platforms = with platforms; linux ++ freebsd;
     license = licenses.gpl2;

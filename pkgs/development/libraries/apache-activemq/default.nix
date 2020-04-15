@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://activemq.apache.org/;
+    homepage = "http://activemq.apache.org/";
     description = "Messaging and Integration Patterns server written in Java";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;

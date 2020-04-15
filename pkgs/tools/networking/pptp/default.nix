@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PPTP client for Linux";
-    homepage = http://pptpclient.sourceforge.net/;
+    homepage = "http://pptpclient.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

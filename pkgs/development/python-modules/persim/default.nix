@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distances and representations of persistence diagrams";
-    homepage = https://persim.scikit-tda.org;
+    homepage = "https://persim.scikit-tda.org";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

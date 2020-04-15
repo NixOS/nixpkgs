@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Universal video capture API";
-    homepage = http://www.unicap-imaging.org/;
+    homepage = "http://www.unicap-imaging.org/";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

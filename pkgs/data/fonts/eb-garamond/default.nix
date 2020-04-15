@@ -16,7 +16,7 @@ in fetchzip rec {
   sha256 = "04jq4mpln85zzbla8ybsjw7vn9qr3r0snmk5zykrm24imq7ripv3";
 
   meta = with lib; {
-    homepage = http://www.georgduffner.at/ebgaramond/;
+    homepage = "http://www.georgduffner.at/ebgaramond/";
     description = "Digitization of the Garamond shown on the Egenolff-Berner specimen";
     maintainers = with maintainers; [ relrod rycee ];
     license = licenses.ofl;

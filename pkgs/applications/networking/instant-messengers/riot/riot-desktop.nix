@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
-, electron_7, riot-web, gtk3,
+, electron_7, riot-web
 }:
-
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
 # * the Yarn dependency expression must be updated with `./update-riot-desktop.sh <git release tag>`
@@ -27,7 +26,7 @@ in mkYarnPackage rec {
   packageJSON = ./riot-desktop-package.json;
   yarnNix = ./riot-desktop-yarndeps.nix;
 
-  nativeBuildInputs = [ makeWrapper gtk3 ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     # resources
@@ -50,8 +49,7 @@ in mkYarnPackage rec {
 
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
-      --add-flags "$out/share/riot/electron" \
-      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
+      --add-flags "$out/share/riot/electron"
   '';
 
   # Do not attempt generating a tarball for riot-web again.
@@ -80,7 +78,7 @@ in mkYarnPackage rec {
 
   meta = with stdenv.lib; {
     description = "A feature-rich client for Matrix.org";
-    homepage = https://about.riot.im/;
+    homepage = "https://about.riot.im/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pacien worldofpeace ];
     inherit (electron.meta) platforms;

@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A desktop wiki";
-    homepage = http://zim-wiki.org;
+    homepage = "http://zim-wiki.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790

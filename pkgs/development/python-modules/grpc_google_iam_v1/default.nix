@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "GRPC library for the google-iam-v1 service";
-    homepage = https://github.com/googleapis/googleapis;
+    homepage = "https://github.com/googleapis/googleapis";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

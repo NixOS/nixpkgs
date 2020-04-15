@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Display system informations in gnome shell status bar";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tiramiseb ];
-    homepage = https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet;
+    homepage = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet";
     # 3.36 support not yet ready
     # https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/564
     broken = stdenv.lib.versionAtLeast gnome3.gnome-shell.version "3.34";

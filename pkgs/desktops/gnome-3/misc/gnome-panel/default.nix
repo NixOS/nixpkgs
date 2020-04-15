@@ -22,7 +22,7 @@
 
 let
   pname = "gnome-panel";
-  version = "3.36.0";
+  version = "3.36.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "08x0xjrg36h6x5c68w5jf8gg57767p2m3ljgzyglx2ij0nfbpc8d";
+    sha256 = "1lxba8syy9gb50zxdk13gr1f62dfphwbb7njg6p26x9rvlkbf88y";
   };
 
   # make .desktop Exec absolute
@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Component of Gnome Flashback that provides panels and default applets for the desktop";
-    homepage = https://wiki.gnome.org/Projects/GnomePanel;
+    homepage = "https://wiki.gnome.org/Projects/GnomePanel";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

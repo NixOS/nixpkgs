@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Cython bindings for PARI";
     license = licenses.gpl2;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/defeo/cypari2;
+    homepage = "https://github.com/defeo/cypari2";
   };
 }

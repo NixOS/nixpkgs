@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "xaralx-0.7r1785";
 
   src = fetchurl {
-    url = http://downloads2.xara.com/opensource/XaraLX-0.7r1785.tar.bz2;
+    url = "http://downloads2.xara.com/opensource/XaraLX-0.7r1785.tar.bz2";
     sha256 = "05xbzq1i1vw2mdsv7zjqfpxfv3g1j0g5kks0gq6sh373xd6y8lyh";
   };
 

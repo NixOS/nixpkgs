@@ -5,7 +5,7 @@
 stdenv.mkDerivation {
   name = "python27-docs-pdf-a4-2.7.16";
   src = fetchurl {
-    url = http://docs.python.org/ftp/python/doc/2.7.16/python-2.7.16-docs-pdf-a4.tar.bz2;
+    url = "http://docs.python.org/ftp/python/doc/2.7.16/python-2.7.16-docs-pdf-a4.tar.bz2";
     sha256 = "14ml1ynrlbhg43737bdsb8k5y39wsffqj4iwhylhb8n8l5dplfdq";
   };
   installPhase = ''

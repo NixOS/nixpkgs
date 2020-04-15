@@ -7,6 +7,8 @@ with lib;
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
+  isoImage.edition = "gnome";
+
   services.xserver.desktopManager.gnome3.enable = true;
 
   # Wayland can be problematic for some hardware like Nvidia graphics cards.

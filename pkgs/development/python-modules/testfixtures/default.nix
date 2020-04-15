@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Simplistix/testfixtures;
+    homepage = "https://github.com/Simplistix/testfixtures";
     description = "A collection of helpers and mock objects for unit tests and doc tests";
     license = licenses.mit;
   };

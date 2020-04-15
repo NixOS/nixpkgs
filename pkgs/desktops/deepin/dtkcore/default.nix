@@ -47,7 +47,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Deepin tool kit core library";
-    homepage = https://github.com/linuxdeepin/dtkcore;
+    homepage = "https://github.com/linuxdeepin/dtkcore";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

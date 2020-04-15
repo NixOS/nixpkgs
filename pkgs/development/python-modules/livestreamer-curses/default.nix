@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ livestreamer ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/gapato/livestreamer-curses;
+    homepage = "https://github.com/gapato/livestreamer-curses";
     description = "Curses frontend for livestreamer";
     license = licenses.mit;
   };

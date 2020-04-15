@@ -19,7 +19,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     version = "9.10" ;
-    homepage = http://eweb.sf.net;
+    homepage = "http://eweb.sf.net";
     description = "An Asciidoc-based literate programming tool, written in Python";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

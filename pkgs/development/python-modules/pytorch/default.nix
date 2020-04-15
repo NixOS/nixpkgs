@@ -230,7 +230,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Open source, prototype-to-production deep learning platform";
-    homepage    = https://pytorch.org/;
+    homepage    = "https://pytorch.org/";
     license     = lib.licenses.bsd3;
     platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with lib.maintainers; [ teh thoughtpolice stites tscholak ]; # tscholak esp. for darwin-related builds

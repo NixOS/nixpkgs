@@ -67,7 +67,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.107.7";
+  hassVersion = "0.108.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -76,7 +76,7 @@ in with py.pkgs; buildPythonApplication rec {
   disabled = pythonOlder "3.5";
 
   patches = [
-    ./relax-deps.patch
+    ./0001-setup.py-relax-dependencies.patch
   ];
 
   inherit availableComponents;
@@ -86,7 +86,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1sr7vzsd4hpaix37bb10vbnnqs1v8ll2wb8m713qrvcp3crs6snk";
+    sha256 = "0v4i1ak7pkpycas0mzdmxgc42xgfymwx2b0a2a4h13c4z46pbs2l";
   };
 
   propagatedBuildInputs = [
@@ -99,23 +99,16 @@ in with py.pkgs; buildPythonApplication rec {
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue netdisco
-    hass-nabucasa defusedxml zeroconf
+    asynctest pytest pytest-aiohttp requests-mock hass-nabucasa netdisco pydispatcher
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp==3.6.1" "aiohttp" \
-      --replace "attrs==19.2.0" "attrs" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml"
-  '';
 
   checkPhase = ''
     # - components' dependencies are not included, so they cannot be tested
     # - test_merge_id_schema requires pyqwikswitch
+    # - test_loader.py tries to load not-packaged dependencies
     # - unclear why test_merge fails: assert merge_log_err.call_count != 0
     # - test_setup_safe_mode_if_no_frontend: requires dependencies for components we have not packaged
-    py.test --ignore tests/components -k "not test_setup_safe_mode_if_no_frontend and not test_merge_id_schema and not test_merge"
+    py.test --ignore tests/components --ignore tests/test_loader.py -k "not test_setup_safe_mode_if_no_frontend and not test_merge_id_schema and not test_merge"
 
     # Some basic components should be tested however
     py.test \
@@ -126,7 +119,7 @@ in with py.pkgs; buildPythonApplication rec {
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
   meta = with lib; {
-    homepage = https://home-assistant.io/;
+    homepage = "https://home-assistant.io/";
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin mic92 ];

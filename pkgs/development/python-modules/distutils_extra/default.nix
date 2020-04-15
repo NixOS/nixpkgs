@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/python-distutils-extra;
+    homepage = "https://launchpad.net/python-distutils-extra";
     description = "Enhancements to Python's distutils";
     license = licenses.gpl2;
   };

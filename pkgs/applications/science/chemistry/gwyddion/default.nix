@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   # it is disabled.
   patches = [ ./codegen.patch ];
   meta = {
-    homepage = http://gwyddion.net/;
+    homepage = "http://gwyddion.net/";
 
     description = "Scanning probe microscopy data visualization and analysis";
 

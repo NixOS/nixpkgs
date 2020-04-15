@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage {
 
       This relies on adb, make sure you have the required permissions/udev rules.
     '';
-    homepage = https://github.com/Genymobile/gnirehtet;
+    homepage = "https://github.com/Genymobile/gnirehtet";
     license = licenses.asl20;
     maintainers = with maintainers; [ symphorien ];
     platforms = platforms.unix;

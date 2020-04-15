@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "i3-compatible tiling Wayland compositor";
-    homepage    = https://swaywm.org;
+    homepage    = "https://swaywm.org";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ma27 ];

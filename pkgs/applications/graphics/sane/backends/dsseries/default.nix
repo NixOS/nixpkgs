@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother DSSeries SANE backend driver";
-    homepage = http://www.brother.com;
+    homepage = "http://www.brother.com";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ callahad ];
