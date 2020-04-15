@@ -25,6 +25,7 @@
 , fastparquet
 , testpath
 , nbconvert
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -81,5 +82,6 @@ buildPythonPackage rec {
     homepage = https://datashader.org;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    broken = isPy38;
   };
 }

@@ -17,5 +17,6 @@ python2Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

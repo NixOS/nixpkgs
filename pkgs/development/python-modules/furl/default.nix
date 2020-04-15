@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, flake8, six, orderedmultidict }:
+{ stdenv, buildPythonPackage, fetchPypi, flake8, six, orderedmultidict, isPy38 }:
 
 buildPythonPackage rec {
   pname = "furl";
@@ -18,5 +18,6 @@ buildPythonPackage rec {
     homepage = https://github.com/gruns/furl;
     license = licenses.publicDomain;
     maintainers = with maintainers; [ vanzef ];
+    broken = isPy38;
   };
 }

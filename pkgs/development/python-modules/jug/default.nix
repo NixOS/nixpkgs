@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchPypi, fetchpatch
 , nose, numpy
 , bottle, pyyaml, redis, six
-, zlib }:
+, zlib, isPy38
+}:
 
 buildPythonPackage rec {
   pname = "Jug";

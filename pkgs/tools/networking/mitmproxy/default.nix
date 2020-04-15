@@ -79,5 +79,6 @@ buildPythonPackage rec {
     homepage    = https://mitmproxy.org/;
     license     = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
+    broken = true;
   };
 }

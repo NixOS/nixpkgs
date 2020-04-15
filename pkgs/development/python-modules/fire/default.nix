@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
-, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
+, python-Levenshtein, pytest, termcolor, isPy27, enum34, isPy38 }:
 
 buildPythonPackage rec {
   pname = "fire";
@@ -42,5 +42,6 @@ buildPythonPackage rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ leenaars ];
+    broken = isPy38;
   };
 }

@@ -13,6 +13,7 @@ mkDerivation {
   meta = {
     license = with lib.licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = kdepimTeam;
+    broken = true;
   };
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [

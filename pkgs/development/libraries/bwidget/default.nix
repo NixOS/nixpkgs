@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "High-level widget set for Tcl/Tk";
     license = stdenv.lib.licenses.tcltk;
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

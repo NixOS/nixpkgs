@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage, fetchpatch, astroid, six, coverage
-, lazy-object-proxy, nose, wrapt
+, lazy-object-proxy, nose, wrapt, isPy38
 }:
 
 buildPythonPackage rec {
@@ -29,5 +29,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
+    broken = isPy38;
   };
 }

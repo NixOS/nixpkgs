@@ -19,5 +19,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Mopidy extension for playing music from SoundCloud";
     license = licenses.mit;
     maintainers = [ maintainers.spwhitt ];
+    broken = true;
   };
 }

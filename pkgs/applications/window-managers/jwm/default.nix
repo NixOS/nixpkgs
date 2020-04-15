@@ -6,7 +6,7 @@
 stdenv.mkDerivation rec {
   pname = "jwm";
   version = "1685";
-  
+
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];
+    broken = true;
   };
 }

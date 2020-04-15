@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     homepage = http://amsn-project.net;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
+    broken = true;
   };
 }

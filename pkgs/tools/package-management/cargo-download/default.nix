@@ -1,7 +1,7 @@
 { stdenv, lib, fetchgit, darwin, buildPlatform
 , buildRustCrate, buildRustCrateHelpers, defaultCrateOverrides }:
 
-((import ./Cargo.nix {
+(((import ./Cargo.nix {
   inherit lib buildPlatform buildRustCrate buildRustCrateHelpers fetchgit;
   cratesIO = import ./crates-io.nix { inherit lib buildRustCrate buildRustCrateHelpers; };
 }).cargo_download {}).override {
@@ -11,4 +11,8 @@
         darwin.apple_sdk.frameworks.Security;
     };
   };
-}
+}).overrideAttrs ({ meta ? {}, ... }: {
+  meta = meta // {
+    broken = true;
+  };
+})

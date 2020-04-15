@@ -122,7 +122,7 @@ let # packageJSON=./package.json;
     classp    = cljdeps.makeClasspaths {
                   extraClasspaths=["src/js" "src/cljs/bundled" "src/cljs/snapshot"];
                 };
-    
+
 
     getJarPath = jarName: (lib.findFirst (p: p.name == jarName) null cljdeps.packages).path.jar;
 
@@ -147,7 +147,7 @@ in stdenv.mkDerivation {
     # configure clojure-cli
     mkdir ./.cpcache
     export CLJ_CONFIG=`pwd`
-    export CLJ_CACHE=`pwd`/.cpcache 
+    export CLJ_CACHE=`pwd`/.cpcache
 
     # require more namespaces for cljs-bundle
     sed -i "s!ns lumo.core! \
@@ -155,7 +155,7 @@ in stdenv.mkDerivation {
                (:require ${requireDeps}) \
                (:require-macros [clojure.template :as temp] \
                                 [cljs.test :as test])!g" \
-              ./src/cljs/snapshot/lumo/core.cljs          
+              ./src/cljs/snapshot/lumo/core.cljs
 
     # Step 1: compile clojurescript with :none and :simple
     ${clojure}/bin/clojure -Scp ${classp} -e "${compileClojurescript true}"
@@ -204,7 +204,7 @@ in stdenv.mkDerivation {
     # Step 3: generate munged cache jsons
     ${clojure}/bin/clojure -Scp ${classp} -e "${cacheToJsons}"
     rm  ./target/cljs/core\$macros\.cljc\.cache\.json
-    
+
 
     # Step 4: Bunde javascript
     NODE_ENV=production node scripts/bundle.js
@@ -251,6 +251,7 @@ in stdenv.mkDerivation {
     license = stdenv.lib.licenses.epl10;
     maintainers = [ stdenv.lib.maintainers.hlolli ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }
 

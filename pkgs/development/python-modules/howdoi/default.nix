@@ -5,6 +5,7 @@
 , requests-cache
 , pygments
 , pyquery
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -27,5 +28,6 @@ buildPythonPackage rec {
     homepage = https://pypi.python.org/pypi/howdoi;
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = isPy38;
   };
 }

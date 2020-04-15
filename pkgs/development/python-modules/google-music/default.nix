@@ -5,6 +5,7 @@
 , protobuf
 , requests_oauthlib
 , tenacity
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -40,5 +41,6 @@ buildPythonPackage rec {
     description = "A Google Music API wrapper";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
+    broken = isPy38;
   };
 }
