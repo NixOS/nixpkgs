@@ -180,6 +180,8 @@ in
 
   colorz = callPackage ../tools/misc/colorz { };
 
+  colorpicker = callPackage ../tools/misc/colorpicker { };
+
   comedilib = callPackage ../development/libraries/comedilib {  };
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
