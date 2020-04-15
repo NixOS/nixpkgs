@@ -22,6 +22,14 @@ let
     mkdir -p $out/bin
     ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
   '';
+  # I'm not really sure how configure finds Nix Libsystem, but we get link errors when using
+  # Xcode 11.4 if we're compiling against Xcode's SDK but using Nix Libsystem. We can't just pass
+  # Libsystem's includes though as that causes other issues, particularly with availability macros.
+  # This is a horrible hack but let's just pass the header that's causing problems.
+  fakeLibsystemInclude = runCommand "macvim-libsystem-include-shim" {} ''
+    mkdir -p $out/include/sys/_types
+    ln -s ${darwin.Libsystem}/include/sys/_types/_fd_def.h $out/include/sys/_types
+  '';
 in
 
 stdenv.mkDerivation {
@@ -92,6 +100,8 @@ stdenv.mkDerivation {
     DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
     configureFlagsArray+=(
       "--with-developer-dir=$DEV_DIR"
+      # Also pass `-g -O` because configure would add those if we weren't setting CFLAGS.
+      "CFLAGS=-g -O -isystem ${fakeLibsystemInclude}/include"
     )
   ''
   # For some reason having LD defined causes PSMTabBarControl to fail at link-time as it
