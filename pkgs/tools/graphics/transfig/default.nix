@@ -34,7 +34,7 @@ stdenv.mkDerivation {
         cp tmpsed transfig/Imakefile
     }
 
-    for i in $patches; do
+    for i in "''${patches[@]}"; do
         header "applying patch $i" 3
         patch -p0 < $i
         stopNest
