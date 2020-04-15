@@ -18,7 +18,8 @@ mkXfceDerivation {
   category = "apps";
   pname = "xfdashboard";
   version = "0.7.5";
-  rev = "0.7.5";
+  rev-prefix = "";
+  odd-unstable = false;
 
   sha256 = "0d0kg90h3li41bs75z3xldljsglkz220pba39c54qznnzb8v8a2i";
 

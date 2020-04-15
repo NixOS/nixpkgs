@@ -1,6 +1,5 @@
 { stdenv
 , mkXfceDerivation
-, fetchFromGitHub
 , gtk3
 , thunar
 , exo
@@ -9,7 +8,7 @@
 , gettext
 }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "thunar-plugins";
   pname  = "thunar-archive-plugin";
   version = "0.4.0";
