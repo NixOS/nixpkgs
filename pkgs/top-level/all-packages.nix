@@ -6619,6 +6619,8 @@ in
     libpng = libpng12;
   };
 
+  sniffglue = callPackage ../tools/networking/sniffglue { };
+
   snort = callPackage ../applications/networking/ids/snort { };
 
   soapui = callPackage ../applications/networking/soapui { };
