@@ -130,8 +130,10 @@ let
       ) pkgs
     ;
     allPkgs = (lib.lists.flatten pkgList) ++ extraPkgsByOverride ++ extraPkgs;
+    # Useful for debugging, not evaluated if not used.
     allPkgs_ = builtins.trace "allPkgs is: ${builtins.toJSON allPkgs}" allPkgs;
     allInputs = lib.lists.unique (lib.lists.flatten (getAllInputs allPkgs []));
+    # Useful for debugging, not evaluated if not used.
     allInputs_ = builtins.trace "allInputs is: ${builtins.toJSON allInputs}" allInputs;
     # filter out of all the inputs the packages with the propagateEnv attribute
     envPkgs = builtins.filter (
@@ -141,6 +143,7 @@ let
       else
         false
     ) allInputs;
+    # Useful for debugging, not evaluated if not used.
     envPkgs_ = builtins.trace "envPkgs is: ${builtins.toJSON envPkgs}" envPkgs;
     # Given a package, it's outputs and an envStr such as found in the values
     # of passthru's `propagateEnv`, it replaces all occurences of %<outname>%
@@ -170,7 +173,6 @@ let
     # argument's value - if it was requested to `link` directories of certain
     # env vars or paths, that's taken care of later, at `linkInfo`. The
     # encyclopedia's `linkPaths` set is used if needed.
-    # envInfo = map (
     envInfo = lib.attrsets.foldAttrs (n: a: lib.lists.unique ([n] ++ a)) [] (map (
       pkg:
       # for every package in envPkgs, do the following for every env key and value
@@ -207,7 +209,7 @@ let
             real_value
       ) pkg.propagateEnv)
     ) envPkgs);
-    # ) envPkgs;
+    # Useful for debugging, not evaluated if not used.
     envInfo_ = builtins.trace "envInfo is ${(builtins.toJSON envInfo)}" envInfo;
     makeWrapperArgs = lib.lists.flatten (lib.attrsets.mapAttrsToList (
       key:
@@ -266,6 +268,7 @@ let
     )
       envInfo
     );
+    # Useful for debugging, not evaluated if not used.
     linkCmds_ = builtins.trace "linkCmds is ${builtins.toJSON linkCmds}" linkCmds;
   in
   symlinkJoin {
