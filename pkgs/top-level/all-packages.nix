@@ -661,9 +661,16 @@ in
 
   arandr-oldy-wrapped = callPackage ../tools/X11/arandr { };
 
-  arandr-newly-wrapped = wrapGApps (arandr-oldy-wrapped.override {
-    wrapGAppsHook = null;
-  }) { };
+  arandr-newly-wrapped = wrapGApps (
+    arandr-oldy-wrapped.override {
+      wrapGAppsHook = null;
+    }) {
+      wrapOut = {
+        XDG_DATA_DIRS = "$out/share";
+        PYTHONPATH = "$out/${python3.sitePackages}";
+      };
+    }
+  ;
 
   inherit (callPackages ../servers/nosql/arangodb {
     stdenv = gcc8Stdenv;
@@ -21219,12 +21226,17 @@ in
   picard-oldy-wrapped = callPackage ../applications/audio/picard { };
 
   picard-newly-wrapped = wrapGeneric (
-    (picard-oldy-wrapped.override {
+    picard-oldy-wrapped.override {
       qt5 = qt5 // {
         wrapQtAppsHook = null;
       };
-    })
-  ) { };
+    }) {
+      wrapOut = {
+        XDG_DATA_DIRS = "$out/share";
+        PYTHONPATH = "$out/${python3.sitePackages}";
+      };
+    }
+  ;
 
   picocom = callPackage ../tools/misc/picocom {
     inherit (darwin.apple_sdk.frameworks) IOKit;

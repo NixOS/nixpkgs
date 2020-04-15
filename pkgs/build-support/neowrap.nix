@@ -35,6 +35,16 @@ let
     # TODO: Decide what to do when `linkPkg` is used here and the file
     # nix-support/propagated-build-inputs has different values per package
     linkByEnv ? {},
+    # If we want the wrapping to also include an environmental variable in
+    # out, we list here for every env var what path to add to the wrapper's
+    # values.
+    /*** example value ***
+    wrapOut ? {
+      XDG_DATA_DIRS = "$out/share";
+      PYTHONPATH = "$out/${pkgs.python3.sitePackages}";
+    },
+    */
+    wrapOut ? {},
   }:
   let
     # Where we keep general knowledge about known to be used environmental variables
@@ -43,12 +53,6 @@ let
       # default is ":"
       separators = {
         # XDG_DATA_DIRS = ":";
-      };
-      # If we want the wrapping to also include an environmental variable in
-      # out, we list here for every env var what path to add to the wrapper's
-      # values.
-      wrapOut = {
-        XDG_DATA_DIRS = "$out/share";
       };
       # If the `link` argument was supplied, we use the keys provided here as a
       # dictionary that defines where to symlink the files that the caller
@@ -230,15 +234,15 @@ let
       )
     )
       # Before calculating makeWrapperArgs, we need to add values to env vars
-      # according to encyclopedia.wrapOut:
+      # according to the `wrapOut` argument:
       (lib.attrsets.mapAttrs (
         name:
         values:
-        if builtins.hasAttr name encyclopedia.wrapOut && builtins.isList values then
-          if builtins.elem encyclopedia.wrapOut.${name} values then
+        if builtins.hasAttr name wrapOut && builtins.isList values then
+          if builtins.elem wrapOut.${name} values then
             values
           else
-            values ++ [encyclopedia.wrapOut.${name}]
+            values ++ [wrapOut.${name}]
         else
           values
       ) envInfo)
