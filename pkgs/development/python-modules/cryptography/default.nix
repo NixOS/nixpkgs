@@ -17,7 +17,6 @@
 , iso8601
 , pytz
 , hypothesis
-, ipaddress
 , enum34
 }:
 
