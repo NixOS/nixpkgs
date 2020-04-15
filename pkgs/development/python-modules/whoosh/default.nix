@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, python }:
 
 buildPythonPackage rec {
   pname = "Whoosh";
@@ -19,6 +19,11 @@ buildPythonPackage rec {
     # FIXME: test_minimize_dfa fails on python 3.6
     py.test -k "not test_timelimit and not test_minimize_dfa"
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Fast, pure-Python full text indexing, search, and spell

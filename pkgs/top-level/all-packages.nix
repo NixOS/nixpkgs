@@ -21195,15 +21195,37 @@ in
 
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
+  test-new-py-env = wrapGeneric python3 {
+    linkByEnv = {
+      PYTHONPATH = "linkPkg";
+    };
+    extraPkgs = with python3.pkgs; [
+      # Not how when you use matplot with and without qt, the environment
+      # calculated in `result/bin/python` has QT_PLUGIN_PATH and other env
+      # vars.
+
+      # matplotlib
+      (matplotlib.override {
+        enableQt = true;
+      })
+    ];
+  };
+  test-old-py-env = python3.withPackages(ps: with ps; [
+    (matplotlib.override {
+      enableQt = true;
+    })
+  ]);
+
   picard-oldy-wrapped = callPackage ../applications/audio/picard { };
 
   picard-newly-wrapped = wrapGeneric (
     (picard-oldy-wrapped.override {
-    qt5 = qt5 // {
-      wrapQtAppsHook = null;
-    };
+      qt5 = qt5 // {
+        wrapQtAppsHook = null;
+      };
     }).overrideAttrs(oldAttrs: {
       preFixup = "";
+      dontWrapPythonPrograms = true;
     })
   ) { };
 

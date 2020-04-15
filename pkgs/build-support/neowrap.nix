@@ -26,6 +26,11 @@ let
       # python / other languages wrappings
       GI_TYPELIB_PATH = "linkPkg";
     },
+    /*** Another example value ***
+    linkByEnv ? {
+      QT_PLUGIN_PATH = "link";
+      QML2_IMPORT_PATH = "link";
+    },
     */
     # TODO: Decide what to do when `linkPkg` is used here and the file
     # nix-support/propagated-build-inputs has different values per package
@@ -54,11 +59,25 @@ let
         GI_TYPELIB_PATH = "$out/lib/girepository-1.0";
         QT_PLUGIN_PATH = "$out/${pkgs.qt5.qtbase.qtPluginPrefix}";
         QML2_IMPORT_PATH = "$out/${pkgs.qt5.qtbase.qtQmlPrefix}";
+        # Not using a strict version here as it may confuse someone digging
+        # into the results of this wrapper
+        PYTHONPATH = "$out/python-sitePackages";
       };
       # If you want an environment variable to have a single value and that's it,
       # put it here:
       singleValue = [
         "GDK_PIXBUF_MODULE_FILE"
+      ];
+      # To prevent a stack overflow when inspecting a derivation's inputs
+      # recursively, we use this list to tell the function that dives into the
+      # dependency graph, what packages should be skipped instantly.
+      skipDivingInto = with pkgs; [
+        gnu-efi iptables kexectools libapparmor libcap libidn2 libmicrohttpd
+        libnetfilter_conntrack libnftnl libseccomp pciutils systemd acl autogen
+        gnutls guile libevent p11-kit unbound xorg.libXext freetype xorg.libICE
+        libpng_apng kmod libgcrypt curl libkrb5 libssh2 nghttp2 libtool nettle
+        glib libselinux utillinux xorg.libX11 xorg.libxcb xorg.libXdmcp libxslt cracklib
+        linux-pam xorg.libXau libxml2 sqlite readline bison zlib libffi
       ];
     };
     # recursive function that goes deep through the dependency graph of a given
@@ -70,24 +89,48 @@ let
       pkgsFound:
       map (
         pkg:
-        if (builtins.typeOf pkg) == "set" then
-          if builtins.hasAttr "buildInputs" pkg || builtins.hasAttr "propagatedBuildInputs" pkg then
-            # builtins.trace "pkg is of type ${builtins.typeOf pkg} and it's ${builtins.toJSON pkg}, with inputs: ${builtins.toJSON (pkg.buildInputs ++ pkg.propagatedBuildInputs)}" (getAllInputs (pkg.buildInputs ++ pkg.propagatedBuildInputs) (pkgsFound ++ [ pkg ]))
-            (getAllInputs (pkg.buildInputs ++ pkg.propagatedBuildInputs) (pkgsFound ++ [ pkg ]))
-          else
-            pkgsFound ++ [ pkg ]
+        if builtins.isAttrs pkg then
+          let
+            inEncyclopedia = lib.lists.any (
+              knownPkg:
+              # From some reason, pkg == knownPkg doesn't work :/ don't know
+              # why... Never the less this should be good enough
+              pkg.name == knownPkg.name
+            ) encyclopedia.skipDivingInto;
+            inEncyclopedia_ = builtins.trace "${pkg.name} in Encyclopedia: ${builtins.toJSON inEncyclopedia}" inEncyclopedia;
+            diveCheck = (
+              if inEncyclopedia then
+                false
+              else
+                (pkg.buildInputs != [] || pkg.propagatedBuildInputs != [])
+            );
+          in
+            if diveCheck then
+              let
+                # deeperPkgs = builtins.trace "inspecting ${pkg.name}" pkg.buildInputs ++ pkg.propagatedBuildInputs;
+                deeperPkgs = pkg.buildInputs ++ pkg.propagatedBuildInputs;
+                currentPkgs = pkgsFound ++ pkgs;
+              in
+                (getAllInputs deeperPkgs currentPkgs)
+            else
+              pkgsFound ++ [ pkg ]
         else
-          # builtins.trace "pkg is not a set but a ${builtins.typeOf pkg} at ${builtins.toJSON pkg}, current pkgsFound is ${builtins.toJSON pkgsFound}" pkgsFound
-          pkgsFound
-      ) pkgs;
+          []
+      ) pkgs
+    ;
     allPkgs = (lib.lists.flatten pkgList) ++ extraPkgsByOverride ++ extraPkgs;
+    allPkgs_ = builtins.trace "allPkgs is: ${builtins.toJSON allPkgs}" allPkgs;
     allInputs = lib.lists.unique (lib.lists.flatten (getAllInputs allPkgs []));
-    # allInputs_ = builtins.trace "allInputs is: ${builtins.toJSON allInputs}" allInputs;
+    allInputs_ = builtins.trace "allInputs is: ${builtins.toJSON allInputs}" allInputs;
     # filter out of all the inputs the packages with the propagateEnv attribute
     envPkgs = builtins.filter (
       pkg:
-      (builtins.hasAttr "propagateEnv" pkg)
+      if builtins.isAttrs pkg then
+        (builtins.hasAttr "propagateEnv" pkg)
+      else
+        false
     ) allInputs;
+    envPkgs_ = builtins.trace "envPkgs is: ${builtins.toJSON envPkgs}" envPkgs;
     # Given a package, it's outputs and an envStr such as found in the values
     # of passthru's `propagateEnv`, it replaces all occurences of %<outname>%
     # from envStr according to the pkg.outputs
@@ -144,7 +187,8 @@ let
                 {
                   linkType = "pkg";
                   linkTo = "$out";
-                  linkFrom = pkg;
+                  # Should this be `pkg.dev` or simply `pkg` ?
+                  linkFrom = pkg.out;
                 }
             else
               abort "neowrap.nix: I was requested to symlink paths of propagated environment for env var `${name}` but I don't know where to put these files as they are not in my encyclopedia"
@@ -220,9 +264,9 @@ let
 
     buildInputs = [ makeWrapper lndir ];
     postBuild = ''
-      ${builtins.concatStringsSep "\n" linkCmds_}
+      ${builtins.concatStringsSep "\n" linkCmds}
       for i in $out/bin/*; do
-        wrapProgram "$i" ${builtins.concatStringsSep " " makeWrapperArgs_}
+        wrapProgram "$i" ${builtins.concatStringsSep " " makeWrapperArgs}
       done
     '';
   };

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm, pytest, python }:
 buildPythonPackage rec {
   pname = "python-dateutil";
   version = "2.8.1";
@@ -17,6 +17,11 @@ buildPythonPackage rec {
 
   # Requires fixing
   doCheck = false;
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Powerful extensions to the standard datetime module";

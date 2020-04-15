@@ -21,6 +21,11 @@ buildPythonPackage rec {
   checkPhase = lib.optionalString (isPy3k && stdenv.isDarwin) ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" '' + ''
     ${python.interpreter} test/alltests.py
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   # Create symlinks lacking a ".py" suffix, many programs depend on these names
   postFixup = ''

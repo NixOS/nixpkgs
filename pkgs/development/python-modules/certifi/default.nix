@@ -1,6 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, python
 }:
 
 buildPythonPackage rec {
@@ -10,6 +11,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "25b64c7da4cd7479594d035c08c2d809eb4aab3a26e5a990ea98cc450c320f1f";
+  };
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
   };
 
   meta = {

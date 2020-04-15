@@ -27,6 +27,12 @@ buildPythonPackage rec {
   # https://github.com/matplotlib/cycler/issues/31
   doCheck = false;
 
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
+
   meta = {
     description = "Composable style cycles";
     homepage = "https://github.com/matplotlib/cycler";

@@ -135,6 +135,12 @@ in buildPythonPackage rec {
     ${python.interpreter} -c "${imports}"
   '';
 
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
+
   doCheck = true;
 
   enableParallelBuilding = true;

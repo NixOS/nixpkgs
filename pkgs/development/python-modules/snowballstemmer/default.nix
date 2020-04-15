@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, PyStemmer, fetchPypi }:
+{ stdenv, python, buildPythonPackage, PyStemmer, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "snowballstemmer";
@@ -11,6 +11,12 @@ buildPythonPackage rec {
 
   # No tests included
   doCheck = false;
+
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   propagatedBuildInputs = [ PyStemmer ];
 

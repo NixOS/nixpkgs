@@ -3,6 +3,7 @@
 , isPy3k
 , fetchPypi
 , pytest
+, python
 , markupsafe }:
 
 buildPythonPackage rec {
@@ -24,6 +25,11 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest -v tests
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = "http://jinja.pocoo.org/";

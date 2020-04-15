@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-
+, python
 # pythonPackages
 , coverage
 }:
@@ -23,6 +23,11 @@ buildPythonPackage rec {
     coverage run --branch simple_unit_tests.py
     coverage run --branch unitTests.py
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/pyparsing/pyparsing";

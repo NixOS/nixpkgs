@@ -28,6 +28,11 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m unittest discover
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = with lib; {
     description = "Mock objects for Python";

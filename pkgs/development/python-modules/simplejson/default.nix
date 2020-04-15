@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , stdenv
 , pytest
+, python
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,11 @@ buildPythonPackage rec {
   checkPhase = ''
     PYTHONWARNINGS="ignore" pytest simplejson/tests
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = {
     description = "A simple, fast, extensible JSON encoder/decoder for Python";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
 , pytest, pytestrunner, hypothesis }:
 
 buildPythonPackage rec {
@@ -8,6 +8,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "1bpalpia6r5x1kknbk11p1fzph56fmmnp405ds8icksd3knr5aw4";
+  };
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
   };
 
   patches = [

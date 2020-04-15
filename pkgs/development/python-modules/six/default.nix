@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
 , pytest
 }:
 
@@ -18,6 +19,11 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test test_six.py
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   # To prevent infinite recursion with pytest
   doCheck = false;

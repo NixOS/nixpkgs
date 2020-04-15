@@ -7,6 +7,7 @@
 , mock
 , six
 , webencodings
+, python
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,11 @@ buildPythonPackage rec {
     rm html5lib/tests/test_stream.py
     py.test
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = {
     homepage = "https://github.com/html5lib/html5lib-python";

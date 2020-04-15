@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ stdenv, fetchPypi, buildPythonPackage, python
 , urllib3, idna, chardet, certifi
 , pytest }:
 
@@ -9,6 +9,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4";
+  };
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
   };
 
   nativeBuildInputs = [ pytest ];

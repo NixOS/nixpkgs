@@ -39,6 +39,11 @@ buildPythonPackage rec {
     sha256 = "19a28nsb0w4bs6k8rdfyk6vzrcwdpvhs2wq77rgpmww59yvndrz6";
   };
   LC_ALL = "en_US.UTF-8";
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   checkInputs = [ pytest ];
   buildInputs = [ simplejson mock glibcLocales html5lib ] ++ lib.optional (pythonOlder "3.4") enum34;

@@ -3,6 +3,7 @@
 , fetchPypi
 , stdenv
 , libcxx
+, python
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,11 @@ buildPythonPackage rec {
   
   # Does not include tests
   doCheck = false;
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = {
     description = "A fast implementation of the Cassowary constraint solver";

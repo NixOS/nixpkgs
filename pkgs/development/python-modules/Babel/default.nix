@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, pytz, pytest, freezegun, glibcLocales }:
+{ stdenv, python, lib, buildPythonPackage, fetchPypi, fetchpatch, pytz, pytest, freezegun, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "Babel";
@@ -29,6 +29,11 @@ buildPythonPackage rec {
       sha256 = "09yny8614knr8ngrrddmqzkxk70am135rccv2ncc6dji4xbqbfln";
     })
   ];
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   propagatedBuildInputs = [ pytz ];
 

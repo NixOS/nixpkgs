@@ -55,6 +55,11 @@ in buildPythonPackage rec {
   preBuild = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   pipInstallFlags = [ "--ignore-installed" ];
 

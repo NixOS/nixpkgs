@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, python
 , pygments }:
 
 buildPythonPackage rec {
@@ -14,6 +14,11 @@ buildPythonPackage rec {
 
   # No tests included
   doCheck = false;
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bitprophet/alabaster";

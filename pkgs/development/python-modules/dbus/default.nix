@@ -19,6 +19,12 @@ buildPythonPackage rec {
 
   disabled = isPyPy;
 
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus dbus-glib ]
     # My guess why it's sometimes trying to -lncurses.

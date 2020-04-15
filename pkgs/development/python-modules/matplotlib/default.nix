@@ -34,9 +34,7 @@ buildPythonPackage rec {
 
   XDG_RUNTIME_DIR = "/tmp";
 
-  nativeBuildInputs = [ pkgconfig ];
-
-  buildInputs = [ python which sphinx stdenv ]
+  nativeBuildInputs = [ pkgconfig python which sphinx stdenv ]
     ++ stdenv.lib.optional enableGhostscript ghostscript
     ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
 
@@ -47,6 +45,12 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ stdenv.lib.optionals enableQt [ pyqt5 ];
+
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   patches =
     [ ./basedirlist.patch ];

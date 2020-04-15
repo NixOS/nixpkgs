@@ -70,6 +70,9 @@ in buildPythonPackage rec {
   passthru = {
     blas = blas;
     inherit blasImplementation cfg;
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
   };
 
   # Disable test

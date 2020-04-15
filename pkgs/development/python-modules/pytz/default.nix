@@ -12,6 +12,11 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s pytz/tests
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   meta = with lib; {
     description = "World timezone definitions, modern and historical";

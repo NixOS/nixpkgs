@@ -37,6 +37,11 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m unittest discover *_test.py
   '';
+  passthru = {
+    propagateEnv = {
+      PYTHONPATH = "@out@/${python.sitePackages}";
+    };
+  };
 
   src = fetchPypi {
     inherit pname sha256 version;
