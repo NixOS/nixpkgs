@@ -14984,6 +14984,8 @@ in
 
   ydotool = callPackage ../tools/wayland/ydotool { };
 
+  ygor = callPackage ../development/libraries/ygor { };
+
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
   yubioath-desktop = libsForQt5.callPackage ../applications/misc/yubioath-desktop { };

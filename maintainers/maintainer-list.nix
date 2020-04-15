@@ -2988,6 +2988,12 @@
     githubId = 1498782;
     name = "Jesse Haber-Kucharsky";
   };
+  halclark = {
+    email = "gmail.com@hdeanclark";
+    github = "hdclark";
+    githubId = 934858;
+    name = "Haley Clark";
+  };
   hamhut1066 = {
     email = "github@hamhut1066.com";
     github = "moredhel";
