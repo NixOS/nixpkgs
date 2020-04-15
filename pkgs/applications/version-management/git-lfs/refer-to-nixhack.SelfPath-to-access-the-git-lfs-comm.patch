@@ -1,0 +1,201 @@
+From 4e5e54d32cfb0cf8335c28574dff448d0892546c Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Fri, 4 Oct 2019 21:25:43 -0700
+Subject: [PATCH] refer to nixhack.SelfPath to access the git lfs command
+
+---
+ commands/command_clone.go          |  3 ++-
+ commands/command_migrate_import.go |  3 ++-
+ lfs/attribute.go                   | 41 +++++++++++++++---------------
+ lfs/hook.go                        | 13 +++++-----
+ nixhacks/self_path.go              | 17 +++++++++++++
+ 5 files changed, 49 insertions(+), 28 deletions(-)
+ create mode 100644 nixhacks/self_path.go
+
+diff --git a/commands/command_clone.go b/commands/command_clone.go
+index a2db0ce9..413a1c1a 100644
+--- a/commands/command_clone.go
++++ b/commands/command_clone.go
+@@ -7,6 +7,7 @@ import (
+ 	"path/filepath"
+ 	"strings"
+ 
++	"github.com/git-lfs/git-lfs/nixhacks"
+ 	"github.com/git-lfs/git-lfs/subprocess"
+ 
+ 	"github.com/git-lfs/git-lfs/git"
+@@ -118,7 +119,7 @@ func postCloneSubmodules(args []string) error {
+ 	// Also good to call a new instance of git-lfs rather than do things
+ 	// inside this instance, since that way we get a clean env in that subrepo
+ 	cmd := subprocess.ExecCommand("git", "submodule", "foreach", "--recursive",
+-		"git lfs pull")
++		nixhacks.SelfPath+" pull")
+ 	cmd.Stderr = os.Stderr
+ 	cmd.Stdin = os.Stdin
+ 	cmd.Stdout = os.Stdout
+diff --git a/commands/command_migrate_import.go b/commands/command_migrate_import.go
+index 4fbeef8e..9d4e2d31 100644
+--- a/commands/command_migrate_import.go
++++ b/commands/command_migrate_import.go
+@@ -15,6 +15,7 @@ import (
+ 	"github.com/git-lfs/git-lfs/git/gitattr"
+ 	"github.com/git-lfs/git-lfs/git/githistory"
+ 	"github.com/git-lfs/git-lfs/lfs"
++	"github.com/git-lfs/git-lfs/nixhacks"
+ 	"github.com/git-lfs/git-lfs/tasklog"
+ 	"github.com/git-lfs/git-lfs/tools"
+ 	"github.com/git-lfs/gitobj"
+@@ -108,7 +109,7 @@ func migrateImportCommand(cmd *cobra.Command, args []string) {
+ 			ExitWithError(errors.Wrap(err, "fatal: unable to write commit"))
+ 		}
+ 
+-		if err := git.UpdateRef(ref, oid, "git lfs migrate import --no-rewrite"); err != nil {
++		if err := git.UpdateRef(ref, oid, nixhacks.SelfPath+" migrate import --no-rewrite"); err != nil {
+ 			ExitWithError(errors.Wrap(err, "fatal: unable to update ref"))
+ 		}
+ 
+diff --git a/lfs/attribute.go b/lfs/attribute.go
+index bbe6f521..76c1cb19 100644
+--- a/lfs/attribute.go
++++ b/lfs/attribute.go
+@@ -5,6 +5,7 @@ import (
+ 	"strings"
+ 
+ 	"github.com/git-lfs/git-lfs/git"
++	"github.com/git-lfs/git-lfs/nixhacks"
+ )
+ 
+ // Attribute wraps the structure and some operations of Git's conception of an
+@@ -51,24 +52,24 @@ func filterAttribute() *Attribute {
+ 	return &Attribute{
+ 		Section: "filter.lfs",
+ 		Properties: map[string]string{
+-			"clean":    "git-lfs clean -- %f",
+-			"smudge":   "git-lfs smudge -- %f",
+-			"process":  "git-lfs filter-process",
++			"clean":    nixhacks.SelfPath + " clean -- %f",
++			"smudge":   nixhacks.SelfPath + " smudge -- %f",
++			"process":  nixhacks.SelfPath + " filter-process",
+ 			"required": "true",
+ 		},
+ 		Upgradeables: map[string][]string{
+ 			"clean": []string{
+-				"git-lfs clean %f",
++				nixhacks.SelfPath + " clean %f",
+ 			},
+ 			"smudge": []string{
+-				"git-lfs smudge %f",
+-				"git-lfs smudge --skip %f",
+-				"git-lfs smudge --skip -- %f",
++				nixhacks.SelfPath + " smudge %f",
++				nixhacks.SelfPath + " smudge --skip %f",
++				nixhacks.SelfPath + " smudge --skip -- %f",
+ 			},
+ 			"process": []string{
+-				"git-lfs filter",
+-				"git-lfs filter --skip",
+-				"git-lfs filter-process --skip",
++				nixhacks.SelfPath + " filter",
++				nixhacks.SelfPath + " filter --skip",
++				nixhacks.SelfPath + " filter-process --skip",
+ 			},
+ 		},
+ 	}
+@@ -78,24 +79,24 @@ func skipSmudgeFilterAttribute() *Attribute {
+ 	return &Attribute{
+ 		Section: "filter.lfs",
+ 		Properties: map[string]string{
+-			"clean":    "git-lfs clean -- %f",
+-			"smudge":   "git-lfs smudge --skip -- %f",
+-			"process":  "git-lfs filter-process --skip",
++			"clean":    nixhacks.SelfPath + " clean -- %f",
++			"smudge":   nixhacks.SelfPath + " smudge --skip -- %f",
++			"process":  nixhacks.SelfPath + " filter-process --skip",
+ 			"required": "true",
+ 		},
+ 		Upgradeables: map[string][]string{
+ 			"clean": []string{
+-				"git-lfs clean -- %f",
++				nixhacks.SelfPath + " clean -- %f",
+ 			},
+ 			"smudge": []string{
+-				"git-lfs smudge %f",
+-				"git-lfs smudge --skip %f",
+-				"git-lfs smudge -- %f",
++				nixhacks.SelfPath + " smudge %f",
++				nixhacks.SelfPath + " smudge --skip %f",
++				nixhacks.SelfPath + " smudge -- %f",
+ 			},
+ 			"process": []string{
+-				"git-lfs filter",
+-				"git-lfs filter --skip",
+-				"git-lfs filter-process",
++				nixhacks.SelfPath + " filter",
++				nixhacks.SelfPath + " filter --skip",
++				nixhacks.SelfPath + " filter-process",
+ 			},
+ 		},
+ 	}
+diff --git a/lfs/hook.go b/lfs/hook.go
+index 8fd1adac..b7a608de 100644
+--- a/lfs/hook.go
++++ b/lfs/hook.go
+@@ -9,13 +9,14 @@ import (
+ 	"strings"
+ 
+ 	"github.com/git-lfs/git-lfs/config"
++	"github.com/git-lfs/git-lfs/nixhacks"
+ 	"github.com/git-lfs/git-lfs/tools"
+ 	"github.com/rubyist/tracerx"
+ )
+ 
+ var (
+ 	// The basic hook which just calls 'git lfs TYPE'
+-	hookBaseContent = "#!/bin/sh\ncommand -v git-lfs >/dev/null 2>&1 || { echo >&2 \"\\nThis repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting .git/hooks/{{Command}}.\\n\"; exit 2; }\ngit lfs {{Command}} \"$@\""
++	hookBaseContent = "#!/bin/sh\ncommand -v " + nixhacks.SelfPath + " >/dev/null 2>&1 || { echo >&2 \"\\nThis repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting .git/hooks/{{Command}}.\\n\"; exit 2; }\n" + nixhacks.SelfPath + " {{Command}} \"$@\""
+ )
+ 
+ // A Hook represents a githook as described in http://git-scm.com/docs/githooks.
+@@ -32,11 +33,11 @@ type Hook struct {
+ func LoadHooks(hookDir string, cfg *config.Configuration) []*Hook {
+ 	return []*Hook{
+ 		NewStandardHook("pre-push", hookDir, []string{
+-			"#!/bin/sh\ngit lfs push --stdin $*",
+-			"#!/bin/sh\ngit lfs push --stdin \"$@\"",
+-			"#!/bin/sh\ngit lfs pre-push \"$@\"",
+-			"#!/bin/sh\ncommand -v git-lfs >/dev/null 2>&1 || { echo >&2 \"\\nThis repository has been set up with Git LFS but Git LFS is not installed.\\n\"; exit 0; }\ngit lfs pre-push \"$@\"",
+-			"#!/bin/sh\ncommand -v git-lfs >/dev/null 2>&1 || { echo >&2 \"\\nThis repository has been set up with Git LFS but Git LFS is not installed.\\n\"; exit 2; }\ngit lfs pre-push \"$@\"",
++			"#!/bin/sh\n" + nixhacks.SelfPath + " push --stdin $*",
++			"#!/bin/sh\n" + nixhacks.SelfPath + " push --stdin \"$@\"",
++			"#!/bin/sh\n" + nixhacks.SelfPath + " pre-push \"$@\"",
++			"#!/bin/sh\ncommand -v " + nixhacks.SelfPath + " >/dev/null 2>&1 || { echo >&2 \"\\nThis repository has been set up with Git LFS but Git LFS is not installed.\\n\"; exit 0; }\n" + nixhacks.SelfPath + " pre-push \"$@\"",
++			"#!/bin/sh\ncommand -v " + nixhacks.SelfPath + " >/dev/null 2>&1 || { echo >&2 \"\\nThis repository has been set up with Git LFS but Git LFS is not installed.\\n\"; exit 2; }\n" + nixhacks.SelfPath + " pre-push \"$@\"",
+ 		}, cfg),
+ 		NewStandardHook("post-checkout", hookDir, []string{}, cfg),
+ 		NewStandardHook("post-commit", hookDir, []string{}, cfg),
+diff --git a/nixhacks/self_path.go b/nixhacks/self_path.go
+new file mode 100644
+index 00000000..c48564e6
+--- /dev/null
++++ b/nixhacks/self_path.go
+@@ -0,0 +1,17 @@
++package nixhacks
++
++import (
++	"fmt"
++	"os"
++)
++
++// SelfPath represents the about path to self.
++var SelfPath string
++
++func init() {
++	var err error
++	SelfPath, err = os.Executable()
++	if err != nil {
++		panic(fmt.Sprintf("error getting the path to the executable: %s", err))
++	}
++}
+-- 
+2.22.0
+

@@ -15,6 +15,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+   patches = [
+     ./refer-to-nixhack.SelfPath-to-access-the-git-lfs-comm.patch
+   ];
+
   meta = with stdenv.lib; {
     description = "Git extension for versioning large files";
     homepage    = "https://git-lfs.github.com/";
