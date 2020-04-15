@@ -6343,6 +6343,8 @@ in
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
+  rshijack = callPackage ../tools/networking/rshijack { };
+
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
