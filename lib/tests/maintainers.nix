@@ -1,8 +1,8 @@
 # to run these tests (and the others)
 # nix-build nixpkgs/lib/tests/release.nix
 { # The pkgs used for dependencies for the testing itself
-  pkgs
-, lib
+  pkgs ? import ../.. {}
+, lib ? pkgs.lib
 }:
 
 let
