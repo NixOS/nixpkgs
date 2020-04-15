@@ -451,7 +451,7 @@ in {
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
-      restartTriggers = [ configFile ];
+      restartTriggers = [ configFile overrideNameserversScript ];
 
       # useful binaries for user-specified hooks
       path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
