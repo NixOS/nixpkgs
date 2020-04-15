@@ -12,7 +12,9 @@
 , json-glib
 , libsoup
 , libgee
-, wrapGAppsHook }:
+, wrapGAppsHook
+, vala_0_40
+}:
 
 stdenv.mkDerivation rec {
   pname = "ping";
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    vala
+    vala_0_40
     pkgconfig
     python3
     wrapGAppsHook
