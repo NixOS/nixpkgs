@@ -4,6 +4,7 @@
 , pytest
 , scikitlearn
 , tensorflow
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -32,5 +33,6 @@ buildPythonPackage rec {
     description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
     homepage = "https://github.com/scikit-learn-contrib/imbalanced-learn";
     license = licenses.mit;
+    broken = isPy38;
   };
 }

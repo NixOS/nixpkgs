@@ -5,6 +5,7 @@
 , grpc_google_iam_v1
 , pytest
 , mock
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -28,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
+    broken = isPy38;
   };
 }

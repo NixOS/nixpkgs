@@ -33,5 +33,6 @@ in python2Packages.buildPythonApplication rec {
     homepage = "https://www.claudiokuenzler.com/nagios-plugins/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
+    broken = true;
   };
 }

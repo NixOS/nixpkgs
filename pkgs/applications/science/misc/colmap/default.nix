@@ -40,5 +40,6 @@ mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lebastr ];
+    broken = true;
   };
 }

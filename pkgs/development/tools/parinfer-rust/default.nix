@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.isc;
     maintainers = with maintainers; [ eraserhd ];
     platforms = platforms.all;
+    broken = true;
   };
 }

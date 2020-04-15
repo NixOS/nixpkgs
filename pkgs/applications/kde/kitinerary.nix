@@ -10,6 +10,7 @@ mkDerivation {
   meta = {
     license = with lib.licenses; [ lgpl21 ];
     maintainers = [ lib.maintainers.bkchr ];
+    broken = true;
   };
   nativeBuildInputs = [
     extra-cmake-modules

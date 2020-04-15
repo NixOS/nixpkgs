@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder, pyyaml
-, python-dateutil, requests, pymongo, raven, bcrypt, flask, pyjwt, flask-cors, psycopg2, pytz, flask-compress, jinja2
+, python-dateutil, requests, pymongo, raven, bcrypt, flask, pyjwt, flask-cors, psycopg2, pytz, flask-compress, jinja2, isPy38
 }:
 
 buildPythonPackage rec {
@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System server";
     license = licenses.asl20;
+    broken = isPy38;
   };
 }

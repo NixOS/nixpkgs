@@ -53,6 +53,7 @@
 , nose
 , python
 , isPy3k
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -187,5 +188,6 @@ buildPythonPackage rec {
     homepage = "http://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ingenieroariel ];
+    broken = true;
   };
 }

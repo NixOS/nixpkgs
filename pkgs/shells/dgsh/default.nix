@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     license = with licenses; asl20;
     maintainers = with maintainers; [ vrthra ];
     platforms = with platforms; all;
+    broken = true;
   };
 }

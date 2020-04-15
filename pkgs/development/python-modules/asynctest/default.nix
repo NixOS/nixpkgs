@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, python }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, python, isPy38 }:
 
 buildPythonPackage rec {
   pname = "asynctest";
@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Martiusweb/asynctest";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
+    broken = isPy38;
   };
 }

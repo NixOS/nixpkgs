@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = license;
     platforms = platforms.unix;
     maintainers = with maintainers; [ yrashk ];
+    broken = true;
   };
 }

@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/libgaminggear/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
+    broken = true;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2 }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2, isPy38 }:
 
 let
   testPath =
@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ets-labs/python-dependency-injector";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
+    broken = isPy38;
   };
 }

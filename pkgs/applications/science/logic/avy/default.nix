@@ -49,5 +49,6 @@ stdenv.mkDerivation {
     # See pkgs/applications/science/logic/glucose/default.nix
     # (The error is different due to glucose-fenv.patch, but the same)
     badPlatforms = [ "aarch64-linux" ];
+    broken = true;
   };
 }

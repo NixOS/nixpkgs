@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy38 }:
 
 buildPythonPackage rec {
   pname = "immutables";
@@ -15,5 +15,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MagicStack/immutables";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ catern ];
+    broken = isPy38;
   };
 }

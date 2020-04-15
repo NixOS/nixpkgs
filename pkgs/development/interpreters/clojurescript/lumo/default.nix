@@ -283,5 +283,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.epl10;
     maintainers = [ stdenv.lib.maintainers.hlolli ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    broken = true;
   };
 }

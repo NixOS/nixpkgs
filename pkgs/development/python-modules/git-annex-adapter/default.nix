@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, substituteAll
-, python, utillinux, pygit2, gitMinimal, git-annex
+, python, utillinux, pygit2, gitMinimal, git-annex, isPy38
 }:
 
 buildPythonPackage rec {
@@ -39,5 +39,6 @@ buildPythonPackage rec {
     description = "Call git-annex commands from Python";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    broken = isPy38;
   };
 }

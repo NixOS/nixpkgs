@@ -5,6 +5,7 @@
 , distributed
 , docrep
 , pytest
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -29,5 +30,6 @@ buildPythonPackage rec {
     description = "Deploy Dask on job schedulers like PBS, SLURM, and SGE";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    broken = isPy38;
   };
 }

@@ -10,6 +10,7 @@
 , shapely
 , six
 , stdenv
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -55,5 +56,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai rakesh4g ];
     platforms = platforms.linux;
+    broken = isPy38;
   };
 }

@@ -3,7 +3,9 @@
 , fetchFromGitHub
 , nose
 , can
-, canmatrix }:
+, canmatrix
+, isPy38
+}:
 
 buildPythonPackage {
   pname = "canopen";
@@ -40,5 +42,6 @@ buildPythonPackage {
     description = "CANopen stack implementation";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ sorki ];
+    broken = isPy38;
   };
 }

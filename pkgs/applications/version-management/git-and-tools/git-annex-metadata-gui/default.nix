@@ -23,5 +23,6 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ dotlambda ];
     license = licenses.gpl3Plus;
     platforms = with platforms; linux;
+    broken = true;
   };
 }

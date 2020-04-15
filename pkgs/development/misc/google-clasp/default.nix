@@ -15,5 +15,6 @@ in
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.michojel ];
     priority = 100;
+    broken = true;
   };
 }

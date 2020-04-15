@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ dmjio cleverca22 ];
+    broken = true;
   };
 }

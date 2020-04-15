@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
+    broken = true;
   };
 }

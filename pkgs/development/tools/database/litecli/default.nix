@@ -42,5 +42,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://litecli.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Scriptkiddi ];
+    broken = true;
   };
 }

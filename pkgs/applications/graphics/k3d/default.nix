@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;
+    broken = true;
   };
 }

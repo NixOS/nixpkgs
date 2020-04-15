@@ -1024,6 +1024,7 @@ luaexpat = buildLuarocksPackage {
     license = {
       fullName = "MIT/X11";
     };
+    broken = true;
   };
 };
 luaffi = buildLuarocksPackage {

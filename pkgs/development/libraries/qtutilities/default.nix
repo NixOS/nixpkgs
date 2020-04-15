@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ doronbehar ];
     platforms   = platforms.linux;
+    broken = true;
   };
 }

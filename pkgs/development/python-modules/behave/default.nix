@@ -2,7 +2,7 @@
 , buildPythonApplication, python, pythonOlder
 , mock, nose, pathpy, pyhamcrest, pytest_4
 , glibcLocales, parse, parse-type, six
-, traceback2
+, traceback2, isPy38
 }:
 
 buildPythonApplication rec {
@@ -48,5 +48,6 @@ buildPythonApplication rec {
     description = "behaviour-driven development, Python style";
     license = licenses.bsd2;
     maintainers = with maintainers; [ alunduil ];
+    broken = isPy38;
   };
 }

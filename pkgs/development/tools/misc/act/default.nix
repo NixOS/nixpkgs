@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/nektos/act";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
+    broken = true;
   };
 }

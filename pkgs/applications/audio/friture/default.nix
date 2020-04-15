@@ -41,5 +41,6 @@ in py.buildPythonApplication rec {
     license = licenses.gpl3;
     platforms = platforms.linux; # fails on Darwin
     maintainers = [ maintainers.laikq ];
+    broken = true;
   };
 }

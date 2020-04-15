@@ -3768,9 +3768,13 @@ in {
 
   folium = callPackage ../development/python-modules/folium { };
 
-  fontforge = toPythonModule (pkgs.fontforge.override {
+  fontforge = (toPythonModule (pkgs.fontforge.override {
     withPython = true;
     inherit python;
+  })).overrideAttrs (old: {
+    meta = old.meta // {
+      broken = isPy38;
+    };
   });
 
   fonttools = callPackage ../development/python-modules/fonttools { };

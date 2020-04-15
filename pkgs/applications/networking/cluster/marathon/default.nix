@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ kamilchm pradeepchhetri ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

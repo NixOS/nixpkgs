@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.bsd3;
     homepage = "http://www.leoprover.org/";
+    broken = true;
   };
 }

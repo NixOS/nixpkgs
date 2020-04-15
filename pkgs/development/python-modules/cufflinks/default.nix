@@ -9,6 +9,7 @@
 , pandas
 , six
 , statsmodels
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -44,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/santosjorge/cufflinks";
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];
+    broken = isPy38;
   };
 }

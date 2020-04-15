@@ -21,5 +21,6 @@ in stdenv.mkDerivation {
     homepage    = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jmettes ];
+    broken = true;
   };
 }

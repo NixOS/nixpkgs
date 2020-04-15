@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tex ];
+    broken = true;
   };
 }

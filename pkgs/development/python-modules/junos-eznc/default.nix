@@ -11,6 +11,7 @@
 , jinja2
 , pyyaml
 , nose
+, isPy38
 }:
 
 buildPythonPackage rec {
