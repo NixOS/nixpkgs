@@ -17905,6 +17905,8 @@ in
 
   libre-franklin = callPackage ../data/fonts/libre-franklin { };
 
+  line-awesome = callPackage ../data/fonts/line-awesome { };
+
   lmmath = callPackage ../data/fonts/lmmath {};
 
   lmodern = callPackage ../data/fonts/lmodern { };
