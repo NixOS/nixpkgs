@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs, nixosTests }:
 
 buildGoModule rec {
   pname = "documize-community";
@@ -16,6 +16,8 @@ buildGoModule rec {
   nativeBuildInputs = [ go-bindata go-bindata-assetfs ];
 
   subPackages = [ "edition/community.go" ];
+
+  passthru.tests = { inherit (nixosTests) documize; };
 
   postInstall = ''
     # `buildGoModule` calls `go install` (without `go build` first), so
