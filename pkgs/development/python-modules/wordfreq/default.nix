@@ -45,5 +45,6 @@ buildPythonPackage {
     homepage =  "https://github.com/LuminosoInsight/wordfreq/";
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
+    broken = true;
   };
 }

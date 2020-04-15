@@ -232,5 +232,6 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill timokau ];
     platforms = ["x86_64-linux" "i686-linux"];
+    broken = withPEPatterns;
   };
 }

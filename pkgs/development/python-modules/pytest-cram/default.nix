@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tbekolay/pytest-cram";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+    broken = true;
   };
 }

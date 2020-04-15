@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "http://roccat.sourceforge.net/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
+    broken = true;
   };
 }

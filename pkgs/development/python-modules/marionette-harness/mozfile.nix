@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://wiki.mozilla.org/Auto-tools/Projects/Mozbase";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raskin ];
+    broken = true;
   };
 }

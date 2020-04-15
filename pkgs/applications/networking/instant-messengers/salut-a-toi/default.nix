@@ -56,5 +56,6 @@ in
       platforms = platforms.linux;
       maintainers = [ maintainers.raskin ];
       license = licenses.gpl3Plus;
+      broken = true;
     };
   }

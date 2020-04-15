@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://python-docx.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.alexchapman ];
+    broken = true;
   };
 }

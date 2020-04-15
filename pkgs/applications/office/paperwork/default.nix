@@ -98,5 +98,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aszlig symphorien ];
     platforms = lib.platforms.linux;
+    broken = true;
   };
 }

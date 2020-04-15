@@ -18,5 +18,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nivbend/mock-open";
     description = "A better mock for file I/O";
     license = licenses.mit;
+    broken = true;
   };
 }

@@ -66,5 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ContinuumIO/intake";
     license = licenses.bsd2;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

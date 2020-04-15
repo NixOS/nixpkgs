@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/userzimmermann/robotframework-tools";
     license = licenses.gpl3;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

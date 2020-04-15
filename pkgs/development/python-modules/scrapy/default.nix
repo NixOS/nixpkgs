@@ -93,5 +93,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ drewkett marsam ];
     platforms = platforms.unix;
+    broken = true;
   };
 }

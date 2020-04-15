@@ -33,6 +33,7 @@ buildPythonPackage rec {
     description = "A Python library to create SVG drawings";
     homepage = "https://github.com/mozman/svgwrite";
     license = licenses.mit;
+    broken = true;
   };
 
 }

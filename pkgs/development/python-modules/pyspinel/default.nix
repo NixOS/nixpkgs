@@ -17,5 +17,6 @@ buildPythonPackage rec {
     description = "Interface to the OpenThread Network Co-Processor (NCP)";
     homepage = "https://github.com/openthread/pyspinel";
     maintainers = with lib.maintainers; [ gebner ];
+    broken = true;
   };
 }

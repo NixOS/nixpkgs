@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ludios/wpull";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ivan ];
+    broken = true;
   };
 }

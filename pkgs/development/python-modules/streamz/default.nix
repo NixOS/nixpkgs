@@ -62,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-streamz/streamz";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

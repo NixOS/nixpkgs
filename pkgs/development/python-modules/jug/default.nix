@@ -26,5 +26,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://jug.readthedocs.io/";
     maintainers = with maintainers; [ luispedro ];
+    broken = true;
   };
 }

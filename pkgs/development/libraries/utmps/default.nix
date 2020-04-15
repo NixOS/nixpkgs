@@ -28,4 +28,5 @@ buildPackage {
     mv doc $doc/share/doc/utmps/html
     mv examples $doc/share/doc/utmps/examples
   '';
+  meta.broken = true;
 }

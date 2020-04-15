@@ -75,5 +75,6 @@ buildPythonPackage rec {
     homepage = "http://getpelican.com/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ offline prikhi ];
+    broken = true;
   };
 }

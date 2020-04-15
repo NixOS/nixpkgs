@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://pysptk.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
+    broken = true;
   };
 }

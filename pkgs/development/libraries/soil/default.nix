@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     homepage  = "https://www.lonesock.net/soil.html";
     license   = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

@@ -60,5 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scikit-tda/scikit-tda";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

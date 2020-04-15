@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "http://www.pyside.org/docs/shiboken/";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    broken = true;
   };
 }

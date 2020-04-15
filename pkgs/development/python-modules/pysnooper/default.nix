@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cool-RR/PySnooper";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
+    broken = true;
   };
 }

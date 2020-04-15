@@ -22,5 +22,6 @@ buildPythonPackage rec {
       SQL Server";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ mredaelli ];
+    broken = true;
   };
 }

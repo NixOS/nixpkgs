@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://wiki.qt.io/PySide";
     maintainers = [ ];
     platforms = platforms.all;
+    broken = true;
   };
 }

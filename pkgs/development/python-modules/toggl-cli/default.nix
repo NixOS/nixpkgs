@@ -55,6 +55,7 @@ buildPythonPackage rec {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     license = licenses.mit;
     maintainers = [ maintainers.mmahut ];
+    broken = true;
   };
 }
 

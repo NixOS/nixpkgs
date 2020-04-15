@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Python profiler that supports multithreading and measuring CPU time";
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];
+    broken = true;
   };
 }

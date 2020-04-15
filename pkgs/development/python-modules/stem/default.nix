@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://stem.torproject.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ phreedom ];
+    broken = true;
   };
 }
