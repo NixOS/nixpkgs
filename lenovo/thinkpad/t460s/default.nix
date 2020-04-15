@@ -3,10 +3,7 @@
 {
   imports = [
     ../../../common/cpu/intel
+    ../../../common/pc/laptop/acpi_call.nix
     ../.
   ];
-
-  # TODO: boot loader
-  boot.loader.systemd-boot.enable = lib.mkDefault true;
-  boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
 }
