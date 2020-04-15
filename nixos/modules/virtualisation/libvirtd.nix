@@ -7,10 +7,8 @@ let
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
-    unix_sock_group = "libvirtd"
-    unix_sock_rw_perms = "0770"
-    auth_unix_ro = "none"
-    auth_unix_rw = "none"
+    auth_unix_ro = "polkit"
+    auth_unix_rw = "polkit"
     ${cfg.extraConfig}
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
@@ -269,5 +267,14 @@ in {
 
     systemd.sockets.libvirtd    .wantedBy = [ "sockets.target" ];
     systemd.sockets.libvirtd-tcp.wantedBy = [ "sockets.target" ];
+
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.libvirt.unix.manage" &&
+          subject.isInGroup("libvirtd")) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 }
