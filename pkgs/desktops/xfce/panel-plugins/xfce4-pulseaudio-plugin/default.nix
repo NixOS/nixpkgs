@@ -2,6 +2,7 @@
 , automakeAddFlags
 , dbus-glib
 , dbus
+, exo
 , gtk3
 , libpulseaudio
 , libnotify
@@ -16,8 +17,8 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
-  version = "0.4.2";
-  sha256 = "1s996mcniskq42vv7cb9i165pmrfp9c95p5f9rx14hqq8in9mvc5";
+  version = "0.4.3";
+  sha256 = "1rfw2w8gl95iawiy57qlvz958dqjc8bmxnc3dma4rqzm6g46jkgq";
 
   nativeBuildInputs = [
     automakeAddFlags
@@ -30,6 +31,7 @@ mkXfceDerivation {
   '';
 
   buildInputs = [
+    exo
     glib
     gtk3
     keybinder3
