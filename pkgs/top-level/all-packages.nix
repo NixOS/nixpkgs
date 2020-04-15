@@ -92,6 +92,8 @@ in
 
   common-updater-scripts = callPackage ../common-updater/scripts.nix { };
 
+  genericUpdater = callPackage ../common-updater/generic-updater.nix { };
+
   ### Push NixOS tests inside the fixed point
 
   nixosTests = import ../../nixos/tests/all-tests.nix {
