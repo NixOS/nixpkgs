@@ -1,4 +1,4 @@
-{ fetchFromGitHub, nixStable, callPackage, nixFlakes, fetchpatch }:
+{ fetchFromGitHub, nixStable, callPackage, nixFlakes, fetchpatch, nixosTests }:
 
 {
   # Package for phase-1 of the db migration for Hydra.
@@ -13,6 +13,11 @@
     };
     nix = nixStable;
     migration = true;
+
+    tests = {
+      db-migration = nixosTests.hydra-db-migration.mig;
+      basic = nixosTests.hydra.hydra-migration;
+    };
   };
 
   # Hydra from latest master branch. Contains breaking changes,
@@ -27,5 +32,9 @@
       sha256 = "1vs3lyfyafsl7wbpmycv7c3n9n2rkrswp65msb6q1iskgpvr96d5";
     };
     nix = nixFlakes;
+    tests = {
+      db-migration = nixosTests.hydra-db-migration.mig;
+      basic = nixosTests.hydra.hydra-unstable;
+    };
   };
 }
