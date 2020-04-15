@@ -77,7 +77,9 @@ let
         gnutls guile libevent p11-kit unbound xorg.libXext freetype xorg.libICE
         libpng_apng kmod libgcrypt curl libkrb5 libssh2 nghttp2 libtool nettle
         glib libselinux utillinux xorg.libX11 xorg.libxcb xorg.libXdmcp libxslt cracklib
-        linux-pam xorg.libXau libxml2 sqlite readline bison zlib libffi
+        linux-pam xorg.libXau libxml2 sqlite readline bison zlib libffi openssl ncurses
+        # Note we add perl itself here, not any library of it
+        perl xorg.xorgproto expat xz fontconfig xorg.libXfixes llvm
       ];
     };
     # recursive function that goes deep through the dependency graph of a given
@@ -91,24 +93,29 @@ let
         pkg:
         if builtins.isAttrs pkg then
           let
-            inEncyclopedia = lib.lists.any (
-              knownPkg:
-              # From some reason, pkg == knownPkg doesn't work :/ don't know
-              # why... Never the less this should be good enough
-              pkg.name == knownPkg.name
-            ) encyclopedia.skipDivingInto;
-            inEncyclopedia_ = builtins.trace "${pkg.name} in Encyclopedia: ${builtins.toJSON inEncyclopedia}" inEncyclopedia;
-            diveCheck = (
-              if inEncyclopedia then
-                false
-              else
-                (pkg.buildInputs != [] || pkg.propagatedBuildInputs != [])
-            );
+            inEncyclopedia =
+              inputPkg:
+              lib.lists.any (
+                knownPkg:
+                if builtins.isAttrs inputPkg then
+                  # builtins.trace "testing ${inputPkg.name} if in encyclopedia: ${builtins.toJSON (inputPkg.name == knownPkg.name)}" inputPkg.name == knownPkg.name
+                  inputPkg.name == knownPkg.name
+                else
+                  false
+                ) encyclopedia.skipDivingInto
+            ;
+            notInEncyclopedia = 
+              inputPkg:
+              !(inEncyclopedia inputPkg)
+            ;
+            hasInputs = pkg.buildInputs != [] || pkg.propagatedBuildInputs != [];
           in
-            if diveCheck then
+            if !(inEncyclopedia pkg) && hasInputs then
               let
-                # deeperPkgs = builtins.trace "inspecting ${pkg.name}" pkg.buildInputs ++ pkg.propagatedBuildInputs;
-                deeperPkgs = pkg.buildInputs ++ pkg.propagatedBuildInputs;
+                # From some reason, pkg == knownPkg doesn't work :/ don't know
+                # why... Never the less this should be good enough
+                deeperPkgs = builtins.filter notInEncyclopedia (pkg.buildInputs ++ pkg.propagatedBuildInputs);
+                deeperPkgs_ = builtins.trace "deeper is ${builtins.toJSON deeperPkgs}" deeperPkgs;
                 currentPkgs = pkgsFound ++ pkgs;
               in
                 (getAllInputs deeperPkgs currentPkgs)
