@@ -16,6 +16,7 @@
 , pytz
 , hypothesis
 , ipaddress
+, enum34
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     packaging
     six
     ipaddress
+    enum34
   ] ++ stdenv.lib.optional (!isPyPy) cffi;
 
   checkInputs = [
