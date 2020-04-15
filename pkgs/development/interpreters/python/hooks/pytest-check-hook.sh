@@ -19,7 +19,7 @@ function _concatSep {
 
 function _pytestComputeDisabledTestsString () {
     declare -a tests
-    local tests=($1)
+    local tests=("$@")
     local prefix="not "
     prefixed=( "${tests[@]/#/$prefix}" )
     result=$(_concatSep "and" prefixed)
@@ -32,7 +32,7 @@ function pytestCheckPhase() {
 
     # Compose arguments
     args=" -m pytest"
-    if [ -n "$disabledTests" ]; then
+    if [[ -n "${disabledTests[@]-}" ]]; then
         disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
       args+=" -k \""$disabledTestsString"\""
     fi
