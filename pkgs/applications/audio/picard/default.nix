@@ -45,6 +45,7 @@ in pythonPackages.buildPythonApplication rec {
     substituteInPlace setup.cfg --replace "‘" "'"
   '';
 
+  dontWrapPythonPrograms = (qt5.wrapQtAppsHook == null);
   # In order to spare double wrapping, we use:
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

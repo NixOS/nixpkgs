@@ -21223,9 +21223,6 @@ in
       qt5 = qt5 // {
         wrapQtAppsHook = null;
       };
-    }).overrideAttrs(oldAttrs: {
-      preFixup = "";
-      dontWrapPythonPrograms = true;
     })
   ) { };
 
