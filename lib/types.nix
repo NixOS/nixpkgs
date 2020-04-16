@@ -222,7 +222,10 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = warn "types.string is deprecated because it quietly concatenates strings. You probably want types.str instead."
+    string = warn ''
+        types.string is deprecated because it quietly concatenates strings.
+        See https://nixos.org/nixos/manual/#sec-option-types for alternatives.
+      ''
       (separatedString "");
 
     attrs = mkOptionType {
