@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
-, opencl-clhpp, ocl-icd, fftw, fftwFloat, mkl
+, opencl-clhpp, ocl-icd, fftw, fftwFloat
 , blas, lapack, boost, mesa, libGLU, libGL
 , freeimage, python, clfft, clblas
 , doxygen, buildDocs ? false
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     opencl-clhpp fftw fftwFloat
-    mkl
     blas lapack
     libGLU libGL
     mesa freeimage
