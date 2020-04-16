@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXrender, zlib
-, glib, gtk3, libXtst, jdk, gsettings-desktop-schemas
+, glib, gtk3, gtk2, libXtst, jdk, jdk8, gsettings-desktop-schemas
 , webkitgtk ? null  # for internal web browser
 , buildEnv, runCommand
 , callPackage
@@ -17,11 +17,12 @@ let
   year = "2020";
   month = "03";
   timestamp = "${year}${month}050155";
+  gtk = gtk3;
 in rec {
 
-  buildEclipse = import ./build-eclipse.nix {
+  buildEclipse = callPackage ./build-eclipse.nix {
     inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
-            jdk glib gtk3 libXtst gsettings-desktop-schemas webkitgtk
+            jdk glib gtk libXtst gsettings-desktop-schemas webkitgtk
             makeWrapper;
   };
 
@@ -63,19 +64,14 @@ in rec {
 
   ### Eclipse Scala SDK
 
-  eclipse-scala-sdk = buildEclipse {
-    name = "eclipse-scala-sdk-4.4.1";
-    description = "Eclipse IDE for Scala Developers";
-    src =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl { # tested
-          url = "https://downloads.typesafe.com/scalaide-pack/4.4.1-vfinal-luna-211-20160504/scala-SDK-4.4.1-vfinal-2.11-linux.gtk.x86_64.tar.gz";
-          sha256  = "4c2d1ac68384e12a11a851cf0fc7757aea087eba69329b21d539382a65340d27";
-        }
-      else
-        fetchurl { # untested
-          url = "https://downloads.typesafe.com/scalaide-pack/4.4.1-vfinal-luna-211-20160504/scala-SDK-4.4.1-vfinal-2.11-linux.gtk.x86.tar.gz";
-          sha256 = "35383cb09567187e14a30c15de9fd9aa0eef99e4bbb342396ce3acd11fb5cbac";
+  eclipse-scala-sdk =
+    buildEclipse.override { jdk = jdk8; gtk = gtk2; } {
+      name = "eclipse-scala-sdk-4.7.0";
+      description = "Eclipse IDE for Scala Developers";
+      src =
+        fetchurl {
+          url = "https://downloads.typesafe.com/scalaide-pack/4.7.0-vfinal-oxygen-212-20170929/scala-SDK-4.7.0-vfinal-2.12-linux.gtk.x86_64.tar.gz";
+          sha256  = "1n5w2a7mh9ajv6fxcas1gpgwb04pdxbr9v5dzr67gsz5bhahq4ya";
         };
   };
 
