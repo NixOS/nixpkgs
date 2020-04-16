@@ -14,13 +14,9 @@ stdenv.mkDerivation rec {
   version = "20200415.1";
 
   src = fetchFromGitHub {
-    owner = "hdclark";
-    repo = "ygor";
-
-    # Reminder: the sha256 hash can be computed via:
-    #  nix-prefetch-url --unpack "https://github.com/hdclark/ygor/archive/${rev}.tar.gz"
-    #
-    rev = "eeedfb6a8ac4092f7391f1f7530b72ff5cf3c1e9";
+    owner  = "hdclark";
+    repo   = "ygor";
+    rev    = "eeedfb6a8ac4092f7391f1f7530b72ff5cf3c1e9";
     sha256 = "1x0mcamy74bk4fbv27ainxar0wwx6k57i0x7vy0m4dcx56j0rl8j";
   };
 
