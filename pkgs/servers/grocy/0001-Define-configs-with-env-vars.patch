@@ -1,7 +1,7 @@
 From 931958d8f11cb55f2e88a178a3b828f3c537eba8 Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Fri, 6 Mar 2020 23:43:58 +0100
-Subject: [PATCH] Define configs with env vars
+Subject: [PATCH 1/2] Define configs with env vars
 
 ---
  app.php                      | 4 ++--
