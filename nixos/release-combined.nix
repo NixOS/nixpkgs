@@ -117,6 +117,7 @@ in rec {
         (onFullSupported "nixos.tests.openssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
+        (onFullSupported "nixos.tests.php.httpd")
         (onFullSupported "nixos.tests.php.pcre")
         (onFullSupported "nixos.tests.plasma5")
         (onFullSupported "nixos.tests.predictable-interface-names.predictableNetworkd")
