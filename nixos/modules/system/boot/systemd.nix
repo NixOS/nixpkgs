@@ -894,7 +894,10 @@ in
       "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
       "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
 
-      "tmpfiles.d/home.conf".source = "${systemd}/example/tmpfiles.d/home.conf";
+      # home.conf creates /srv (which we don't want), and /home, which
+      # is handled by NixOS anyway.
+      # "tmpfiles.d/home.conf".source = "${systemd}/example/tmpfiles.d/home.conf";
+
       "tmpfiles.d/journal-nocow.conf".source = "${systemd}/example/tmpfiles.d/journal-nocow.conf";
       "tmpfiles.d/portables.conf".source = "${systemd}/example/tmpfiles.d/portables.conf";
       "tmpfiles.d/static-nodes-permissions.conf".source = "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf";
