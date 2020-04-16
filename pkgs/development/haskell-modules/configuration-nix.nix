@@ -724,4 +724,13 @@ self: super: builtins.intersectAttrs super {
   # dhall_1_29_0 is no longer used, since more recent versions of dhall don't
   # access the network in checks.
   dhall_1_29_0 = dontCheck super.dhall_1_29_0;
+
+  cut-the-crap =
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg ];
+    in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
+      postInstall = ''
+        wrapProgram $out/bin/cut-the-crap \
+          --prefix PATH : "${path}"
+      '';
+    });
 }
