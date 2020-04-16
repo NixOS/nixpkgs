@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which
+{ stdenv, fetchFromGitHub, nixosTests, which
 , withPython2 ? false, python2
 , withPython3 ? true, python3, ncurses
 , withPHP72 ? false, php72
@@ -80,6 +80,8 @@ in stdenv.mkDerivation rec {
     ${optionalString withRuby_2_6   "./configure ruby   --module=ruby26   --ruby=${ruby_2_6}/bin/ruby"}
     ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
   '';
+
+  passthru.tests.unit-php = nixosTests.unit-php;
 
   meta = {
     description = "Dynamic web and application server, designed to run applications in multiple languages.";
