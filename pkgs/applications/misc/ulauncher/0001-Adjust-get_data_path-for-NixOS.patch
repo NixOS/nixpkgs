@@ -16,7 +16,7 @@ diff --git a/ulauncher/config.py b/ulauncher/config.py
 index f21014e..cc636e1 100644
 --- a/ulauncher/config.py
 +++ b/ulauncher/config.py
-@@ -50,15 +50,24 @@ def get_data_path():
+@@ -50,15 +50,13 @@ def get_data_path():
      is specified at installation time.
      """
  
@@ -29,27 +29,15 @@ index f21014e..cc636e1 100644
 -        raise ProjectPathNotFoundError(abs_data_path)
 -
 -    return abs_data_path
-+    paths = list(
-+        filter(
-+            os.path.exists,
-+            [
-+                os.path.join(dir, "ulauncher")
-+                for dir in xdg_data_dirs
-+                # Get path that isn't in the /nix/store so they don't get hardcoded into configs
-+                if not dir.startswith("/nix/store/")
-+                # Exclude .local/share/ulauncher which isn't what we want
-+                if not dir.startswith(xdg_data_home)
-+            ],
-+        )
-+    )
-+
-+    try:
-+        return paths[0]
-+    except:
-+        raise ProjectPathNotFoundError()
++    for xdir in xdg_data_dirs:
++        xdir = os.path.join(xdir, "ulauncher")
++        if (os.path.exists(xdir) and
++            xdir.startswith("/nix/store/") and
++            not xdir.startswith(xdg_data_home)):
++            return xdir
++    raise ProjectPathNotFoundError()
  
  
  def is_wayland():
 -- 
 2.25.1
-
