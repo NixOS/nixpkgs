@@ -76,7 +76,7 @@ in buildBazelPackage rec {
       rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
     '';
 
-    sha256 = "1bn7nhv5pag8fdm8l8nvgg3fzvhpy2yv9yl2slrb16lckxzha3v6";
+    sha256 = "1r804a3b68xpnp6slllcacnx0fimad7cmpjh13iil7avmxzzk7di";
   };
 
   buildAttrs = {
