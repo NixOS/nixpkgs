@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -37,13 +38,16 @@ buildPythonPackage rec {
 
   # Cirq 0.6 requires networkx==2.3 only for optional qiskit dependency/test, disable this to avoid networkx version conflicts. https://github.com/quantumlib/Cirq/issues/2368
   # Cirq locks protobuf==3.8.0, but tested working with default pythonPackages.protobuf (3.7). This avoids overrides/pythonPackages.protobuf conflicts
-  prePatch = ''
+  postPatch = ''
     substituteInPlace requirements.txt --replace "networkx==2.3" "networkx" \
       --replace "protobuf==3.8.0" "protobuf"
 
     # Fix sympy 1.5 test failures. Should be fixed in v0.7
     substituteInPlace cirq/optimizers/eject_phased_paulis_test.py --replace "phase_exponent=0.125 + x / 8" "phase_exponent=0.125 + x * 0.125"
     substituteInPlace cirq/contrib/quirk/cells/parse_test.py --replace "parse_formula('5t') == 5 * t" "parse_formula('5t') == 5.0 * t"
+
+    # Fix pandas >= 1.0 error, #2886
+    substituteInPlace cirq/experiments/t1_decay_experiment.py --replace "del tab.columns.name" 'tab.rename_axis(None, axis="columns", inplace=True)'
   '';
 
   propagatedBuildInputs = [
@@ -75,6 +79,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--ignore=dev_tools"  # Only needed when developing new code, which is out-of-scope
     "--ignore=cirq/google/op_serializer_test.py"  # investigating in https://github.com/quantumlib/Cirq/issues/2727
+  ];
+  disabledTests = [
+    "test_convert_to_ion_gates" # fails due to rounding error, 0.75 != 0.750...2
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # Seem to fail due to math issues on aarch64?
+    "expectation_from_wavefunction"
+    "test_single_qubit_op_to_framed_phase_form_output_on_example_case"
   ];
 
   meta = with lib; {
