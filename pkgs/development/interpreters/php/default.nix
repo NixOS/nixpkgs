@@ -46,7 +46,7 @@ let
       [ pcre' ]
 
       # Enable sapis
-      ++ lib.optional pearSupport [ libxml2.dev ]
+      ++ lib.optional pearSupport libxml2.dev
 
       # Misc deps
       ++ lib.optional apxs2Support apacheHttpd
@@ -72,7 +72,7 @@ let
       ++ lib.optional (!cgiSupport) "--disable-cgi"
       ++ lib.optional (!cliSupport) "--disable-cli"
       ++ lib.optional fpmSupport    "--enable-fpm"
-      ++ lib.optional pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
+      ++ lib.optionals pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
       ++ lib.optional (pearSupport && (lib.versionOlder version "7.4")) "--enable-libxml"
       ++ lib.optional pharSupport   "--enable-phar"
       ++ lib.optional phpdbgSupport "--enable-phpdbg"

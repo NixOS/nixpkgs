@@ -802,7 +802,7 @@ in
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-dom" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-libxml-dir=${libxml2.dev}"; }
       { name = "enchant";
         buildInputs = [ enchant1 ];
         configureFlags = [ "--with-enchant=${enchant1}" ];
@@ -840,7 +840,7 @@ in
       { name = "gettext";
         buildInputs = [ gettext ];
         postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
-        configureFlags = "--with-gettext=${gettext}"; }
+        configureFlags = [ "--with-gettext=${gettext}" ]; }
       { name = "gmp";
         buildInputs = [ gmp ];
         configureFlags = [ "--with-gmp=${gmp.dev}" ]; }
@@ -1011,7 +1011,7 @@ in
         doCheck = false; }
       { name = "xmlreader";
         buildInputs = [ libxml2 ];
-        configureFlags = [ "--enable-xmlreader CFLAGS=-I../.." ]
+        configureFlags = [ "--enable-xmlreader" "CFLAGS=-I../.." ]
           # Required to build on darwin.
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xmlrpc";
