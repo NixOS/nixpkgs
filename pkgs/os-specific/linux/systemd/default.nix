@@ -112,6 +112,7 @@ in stdenv.mkDerivation {
     "-Dhomed=false"
     "-Dhostnamed=true"
     "-Dnetworkd=true"
+    "-Dportabled=false"
     "-Dsysusers=false"
     "-Dtimedated=true"
     "-Dtimesyncd=true"
