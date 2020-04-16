@@ -4,7 +4,7 @@
 , curl, sqlite, openssl
 , libuuid, openh264, libv4l, libxkbfile, libXv, zlib, libXmu
 , libXtst, libXdamage, pam, libXfixes, libXrender, libjpeg_original
-, ffmpeg
+, ffmpeg_4
 }:
  let
    # Sky is linked to the libjpeg 8 version and checks for the version number in the code.
@@ -16,20 +16,20 @@
   });
 in
 stdenv.mkDerivation rec {
-  version_major = "2.1.7369";
+  version_major = "2.1.7520";
   version_minor = "1";
   version = version_major + "." + version_minor;
   pname = "sky";
   unpackCmd = "ar x $curSrc; tar -xf data.tar.xz";
   src = fetchurl {
-    url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+xenial_amd64.deb";
-    sha256 = "0b3j90km3rp5bgaklxw881g0gcy09mqzbhjdfrq4s2np026ql3d9";
+    url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+eoan_amd64.deb";
+    sha256 = "1pjybzks05vf9s49affwis5w80szizwvxmkgmgyfj7v707r1z5ia";
   };
   buildInputs = [ 
     file
     qt5.qtbase
     SDL
-    ffmpeg
+    ffmpeg_4
     sqlite
     openssl
     openh264
