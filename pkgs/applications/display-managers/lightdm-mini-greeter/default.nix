@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-mini-greeter";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "prikhi";
     repo = "lightdm-mini-greeter";
     rev = version;
-    sha256 = "1qi0bsqi8z2zv3303ww0kd7bciz6qx8na5bkvgrqlwyvq31czai5";
+    sha256 = "10hga7pmfyjdvj4xwm3djwrhk50brcpycj3p3c57pa0vnx4ill3s";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook ];
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ mnacamura prikhi ];
     platforms = platforms.linux;
+    changelog = "https://github.com/prikhi/lightdm-mini-greeter/blob/master/CHANGELOG.md";
   };
 }

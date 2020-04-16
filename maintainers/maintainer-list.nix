@@ -5302,6 +5302,12 @@
     githubId = 133448;
     name = "Mikołaj Siedlarek";
   };
+  msm = {
+    email = "msm@tailcall.net";
+    github = "msm-code";
+    githubId = 7026881;
+    name = "Jarosław Jedynak";
+  };
   mstarzyk = {
     email = "mstarzyk@gmail.com";
     github = "mstarzyk";
@@ -5713,6 +5719,16 @@
     github = "otwieracz";
     githubId = 108072;
     name = "Slawomir Gonet";
+  };
+  oxalica = {
+    email = "oxalicc@pm.me";
+    github = "oxalica";
+    githubId = 14816024;
+    name = "oxalica";
+    keys = [{
+      longkeyid = "rsa4096/0xCED392DE0C483D00";
+      fingerprint = "5CB0 E9E5 D5D5 71F5 7F54  0FEA CED3 92DE 0C48 3D00";
+    }];
   };
   oxij = {
     email = "oxij@oxij.org";

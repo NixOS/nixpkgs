@@ -1,16 +1,16 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq, stdlib-shims }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !stdenv.lib.versionAtLeast ocaml.version "4.05"
 then throw "fmt is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "0.8.6";
+  version = "0.8.8";
   pname = "ocaml${ocaml.version}-fmt";
 
   src = fetchurl {
     url = "https://erratique.ch/software/fmt/releases/fmt-${version}.tbz";
-    sha256 = "1jlw5izgvqw1adzqi87rp0383j0vj52wmacy3rqw87vxkf7a3xin";
+    sha256 = "1iy0rwknd302mr15328g805k210xyigxbija6fzqqfzyb43azvk4";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];

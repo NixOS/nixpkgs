@@ -1129,6 +1129,8 @@ in {
 
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
+  py-multibase = callPackage ../development/python-modules/py-multibase { };
+
   py-multihash = callPackage ../development/python-modules/py-multihash { };
 
   py-radix = callPackage ../development/python-modules/py-radix { };

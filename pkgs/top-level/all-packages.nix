@@ -1809,7 +1809,7 @@ in
 
   fzy = callPackage ../tools/misc/fzy { };
 
-  g2o = callPackage ../development/libraries/g2o { };
+  g2o = libsForQt5.callPackage ../development/libraries/g2o { };
 
   gbsplay = callPackage ../applications/audio/gbsplay { };
 
@@ -2009,7 +2009,9 @@ in
 
   mididings = callPackage ../tools/audio/mididings { };
 
-  miniserve = callPackage ../tools/misc/miniserve { };
+  miniserve = callPackage ../tools/misc/miniserve {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
@@ -4036,6 +4038,8 @@ in
   hardinfo = callPackage ../tools/system/hardinfo { };
 
   hcxtools = callPackage ../tools/security/hcxtools { };
+
+  hcxdumptool = callPackage ../tools/security/hcxdumptool { };
 
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
 
@@ -6201,6 +6205,8 @@ in
 
   richgo = callPackage ../development/tools/richgo {  };
 
+  rs = callPackage ../tools/text/rs { };
+
   rst2html5 = callPackage ../tools/text/rst2html5 { };
 
   rt = callPackage ../servers/rt { };
@@ -6742,7 +6748,10 @@ in
   sshpass = callPackage ../tools/networking/sshpass { };
 
   sslscan = callPackage ../tools/security/sslscan {
-    openssl = openssl_1_0_2.override { enableSSL2 = true; };
+    openssl = openssl_1_0_2.override {
+      enableSSL2 = true;
+      enableSSL3 = true;
+    };
   };
 
   sslmate = callPackage ../development/tools/sslmate { };
@@ -7160,6 +7169,8 @@ in
   urlscan = callPackage ../applications/misc/urlscan { };
 
   urlview = callPackage ../applications/misc/urlview {};
+
+  ursadb = callPackage ../servers/ursadb {};
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
@@ -9028,6 +9039,8 @@ in
   rustracerd = callPackage ../development/tools/rust/racerd {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  inherit (callPackage ../development/tools/rust/rust-analyzer { })
+    rust-analyzer-unwrapped rust-analyzer;
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -17812,6 +17825,8 @@ in
 
   hermit = callPackage ../data/fonts/hermit { };
 
+  humanity-icon-theme = callPackage ../data/icons/humanity-icon-theme { };
+
   hyperscrypt-font = callPackage ../data/fonts/hyperscrypt { };
 
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
@@ -17896,6 +17911,8 @@ in
   libre-caslon = callPackage ../data/fonts/libre-caslon { };
 
   libre-franklin = callPackage ../data/fonts/libre-franklin { };
+
+  line-awesome = callPackage ../data/fonts/line-awesome { };
 
   lmmath = callPackage ../data/fonts/lmmath {};
 
@@ -22542,7 +22559,7 @@ in
 
   worldengine-cli = python3Packages.worldengine;
 
-  wpsoffice = callPackage ../applications/office/wpsoffice {};
+  wpsoffice = libsForQt5.callPackage ../applications/office/wpsoffice {};
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
@@ -26289,7 +26306,7 @@ in
 
   xib2nib = callPackage ../development/tools/xib2nib {};
 
-  linode-cli = callPackage ../tools/virtualization/linode-cli { };
+  linode-cli = python3Packages.callPackage ../tools/virtualization/linode-cli {};
 
   hss = callPackage ../tools/networking/hss {};
 
@@ -26433,5 +26450,7 @@ in
   fluxboxlauncher = callPackage ../applications/misc/fluxboxlauncher {};
 
   btcdeb = callPackage ../applications/blockchains/btcdeb {};
+
+  jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
 }

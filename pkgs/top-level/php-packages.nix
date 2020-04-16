@@ -149,12 +149,12 @@ in
     };
 
     phpcbf = mkDerivation rec {
-      version = "3.5.3";
+      version = "3.5.4";
       pname = "phpcbf";
 
       src = pkgs.fetchurl {
         url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-        sha256 = "1mrsf9p6p64pyqyylnlxb2b7cirdfccch83g7yhfnka3znffq86v";
+        sha256 = "18x7fk59l821pivw1i2r868y78qgs0qk47b9il1smwi6plwyyflr";
       };
 
       phases = [ "installPhase" ];
@@ -163,7 +163,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpcbf/phpcbf.phar
-        makeWrapper ${php}/bin/php $out/bin/phpcbf \
+        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpcbf \
           --add-flags "$out/libexec/phpcbf/phpcbf.phar"
       '';
 
@@ -176,12 +176,12 @@ in
     };
 
     phpcs = mkDerivation rec {
-      version = "3.5.3";
+      version = "3.5.4";
       pname = "phpcs";
 
       src = pkgs.fetchurl {
         url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-        sha256 = "0y4nhsifj4pdmf5g1nnm4951yjgiqswyz7wmjxx6kqiqc7chlkml";
+        sha256 = "1lrybdxxig3yqd3i3nwji5jjn377p50sbpm4s4852dlsxz9qnlgs";
       };
 
       phases = [ "installPhase" ];
@@ -190,7 +190,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpcs/phpcs.phar
-        makeWrapper ${php}/bin/php $out/bin/phpcs \
+        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpcs \
           --add-flags "$out/libexec/phpcs/phpcs.phar"
       '';
 
@@ -203,12 +203,12 @@ in
     };
 
     phpstan = mkDerivation rec {
-      version = "0.12.14";
+      version = "0.12.18";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "JAq1/+bVhTgKRR7oFusqZ/yBOYewaOM38ZoiCjirsTg=";
+        sha256 = "0xf0q2z6rhpnbys53si05mddfyjn3wx5wc8zx5y6dv5fzw6z7rch";
       };
 
       phases = [ "installPhase" ];
@@ -217,7 +217,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpstan/phpstan.phar
-        makeWrapper ${php}/bin/php $out/bin/phpstan \
+        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpstan \
           --add-flags "$out/libexec/phpstan/phpstan.phar"
       '';
 

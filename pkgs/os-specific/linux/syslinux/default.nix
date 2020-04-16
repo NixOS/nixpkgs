@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];
 
-  stripDebugList = "bin sbin share/syslinux/com32";
+  stripDebugList = [ "bin" "sbin" "share/syslinux/com32" ];
 
   makeFlags = [
     "BINDIR=$(out)/bin"

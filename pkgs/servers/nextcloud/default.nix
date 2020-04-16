@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, nixosTests }:
 
 let
   generic = { version, sha256, insecure ? false }: stdenv.mkDerivation rec {
@@ -9,6 +9,8 @@ let
       url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
+
+    passthru.tests = nixosTests.nextcloud;
 
     installPhase = ''
       mkdir -p $out/

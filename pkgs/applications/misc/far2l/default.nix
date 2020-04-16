@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/far2l --argv0 $out/bin/far2l
   '';
 
-  stripDebugList = "bin share";
+  stripDebugList = [ "bin" "share" ];
 
   enableParallelBuilding = true;
 

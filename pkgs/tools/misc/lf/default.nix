@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "lf";
@@ -13,6 +13,8 @@ buildGoModule rec {
 
   modSha256 = "1c6c6qg8yrhdhqsnqj3jw3x2hi8vrhfm47cp9xlkfnjfrz3nk6jp";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   # TODO: Setting buildFlags probably isn't working properly. I've tried a few
   # variants, e.g.:
   # - buildFlags = [ "-ldflags" "\"-s" "-w"" ""-X 'main.gVersion=${version}'\"" ];
@@ -26,8 +28,9 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -D --mode=444 lf.1 $out/share/man/man1/lf.1
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
+    installManPage lf.1
+    installShellCompletion etc/lf.{zsh,fish}
   '';
 
   meta = with lib; {

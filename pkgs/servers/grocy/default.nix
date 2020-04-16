@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, unzip, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "grocy";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   patchFlags = [ "--binary" "-p1" ];
 
   dontBuild = true;
+
+  passthru.tests = { inherit (nixosTests) grocy; };
 
   installPhase = ''
     mkdir -p $out/

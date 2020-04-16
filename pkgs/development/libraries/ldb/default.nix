@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "--without-ldb-lmdb"
   ];
 
-  stripDebugList = "bin lib modules";
+  stripDebugList = [ "bin" "lib" "modules" ];
 
   meta = with stdenv.lib; {
     description = "A LDAP-like embedded database";

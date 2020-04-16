@@ -1,10 +1,10 @@
 { mkXfceDerivation, gtk3, glib, cmake, exo, garcon, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-whiskermenu-plugin";
   version = "2.4.3";
-  rev = "v${version}";
+  rev-prefix = "v";
   sha256 = "1cs3fps1bj0dd5az7fwrvw1xl3y621qk4dma3n73p7rr19j7fpsn";
 
   nativeBuildInputs = [ cmake ];

@@ -4,11 +4,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
 
   pname = "libtap";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchurl {
-    url = "https://web-cpan.shlomifish.org/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1ms1770cx8c6q3lhn1chkzy12vzmjgvlms7cqhd2d3260j2wwv5s";
+    url = "https://web-cpan.shlomifish.org/downloads/${pname}-${version}.tar.xz";
+    sha256 = "1ga7rqmppa8ady665736cx443icscqlgflkqmxd4xbkzypmdj9bk";
   };
 
   nativeBuildInputs = [ pkgconfig ];
