@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ eigen suitesparse libGLU qt5.qtbase libsForQt5.libqglviewer ];
 
+  # Silence noisy warning
+  CXXFLAGS = "-Wno-deprecated-copy";
+
   cmakeFlags = [
     # Detection script is broken
     "-DQGLVIEWER_INCLUDE_DIR=${libsForQt5.libqglviewer}/include/QGLViewer"

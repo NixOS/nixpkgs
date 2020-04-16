@@ -2716,6 +2716,8 @@ in {
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
 
+  googletrans = callPackage ../development/python-modules/googletrans { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
@@ -2731,6 +2733,8 @@ in {
   };
 
   gtimelog = callPackage ../development/python-modules/gtimelog { };
+
+  gtts = callPackage ../development/python-modules/gtts { };
 
   gurobipy = if stdenv.hostPlatform.system == "x86_64-darwin"
   then callPackage ../development/python-modules/gurobipy/darwin.nix {

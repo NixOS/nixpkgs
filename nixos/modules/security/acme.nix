@@ -306,13 +306,14 @@ in
                     User = data.user;
                     Group = data.group;
                     PrivateTmp = true;
-                    StateDirectory = "acme/.lego/${cert} ${lpath}";
+                    StateDirectory = "acme/.lego/${cert} acme/.lego/accounts ${lpath}";
                     StateDirectoryMode = if data.allowKeysForGroup then "750" else "700";
                     WorkingDirectory = spath;
                     # Only try loading the credentialsFile if the dns challenge is enabled
                     EnvironmentFile = if data.dnsProvider != null then data.credentialsFile else null;
                     ExecStart = pkgs.writeScript "acme-start" ''
                       #!${pkgs.runtimeShell} -e
+                      test -L ${spath}/accounts -o -d ${spath}/accounts || ln -s ../accounts ${spath}/accounts
                       ${pkgs.lego}/bin/lego ${renewOpts} || ${pkgs.lego}/bin/lego ${runOpts}
                     '';
                     ExecStartPost =
