@@ -297,12 +297,6 @@ in
                   wantedBy = mkIf (!config.boot.isContainer) [ "multi-user.target" ];
                   serviceConfig = {
                     Type = "oneshot";
-                    # With RemainAfterExit the service is considered active even
-                    # after the main process having exited, which means when it
-                    # gets changed, the activation phase restarts it, meaning
-                    # the permissions of the StateDirectory get adjusted
-                    # according to the specified group
-                    RemainAfterExit = true;
                     User = data.user;
                     Group = data.group;
                     PrivateTmp = true;
