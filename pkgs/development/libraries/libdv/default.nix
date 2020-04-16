@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   # This fixes an undefined symbol: _sched_setscheduler error on compile.
   # See the apple docs: http://cl.ly/2HeF bottom of the "Finding Imported Symbols" section
-  LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup";
+  env.LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup";
 
   configureFlags = [
     "--disable-asm"
