@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
 , pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, celery, alembic
-, importlib-metadata
+, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus_client
+, celery, alembic, importlib-metadata
 , sassc, nodejs
 , writeText }:
 
@@ -44,6 +44,7 @@ buildPythonPackage rec {
     cryptography
     beautifulsoup4
     sqlalchemy-utils
+    prometheus_client
 
     # Unofficial runtime dependencies?
     celery

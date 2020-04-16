@@ -1,7 +1,7 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
 , pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
-, sshpubkeys, weasyprint, prometheus_client }:
+, sshpubkeys, weasyprint }:
 
 buildPythonPackage rec {
   pname = "metasrht";
@@ -27,7 +27,6 @@ buildPythonPackage rec {
     pystache
     sshpubkeys
     weasyprint
-    prometheus_client
   ];
 
   patches = [
