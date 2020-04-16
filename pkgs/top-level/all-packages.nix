@@ -7498,6 +7498,8 @@ in
 
   uptimed = callPackage ../tools/system/uptimed { };
 
+  upwork = callPackage ../applications/misc/upwork { };
+
   urjtag = callPackage ../tools/misc/urjtag { };
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
