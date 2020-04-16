@@ -38,7 +38,7 @@ get_image_digest(){
         imageTag="latest"
     fi
 
-    skopeo inspect "docker://$imageName:$imageTag" | jq '.Digest' -r
+    skopeo --override-os ${os} --override-arch ${arch} inspect "docker://$imageName:$imageTag" | jq '.Digest' -r
 }
 
 get_name() {
