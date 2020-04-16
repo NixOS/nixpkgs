@@ -23590,7 +23590,7 @@ in
     lua = lua5_1;
   };
 
-  n2048 = callPackage ../games/n2048 {};
+  n2048 = callPackage ../games/n2048 { };
 
   naev = callPackage ../games/naev { };
 
@@ -23602,6 +23602,8 @@ in
   };
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
+  
+  netris = callPackage ../games/netris { };
 
   neverball = callPackage ../games/neverball { };
 
