@@ -18,13 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "0cqzxlzdbij26qgbbngqx6njcpcymkgvm29b7ipldgkssxp1mkkg";
+    sha256 ="194s9rjh3yd2c3rf3zwxsxr2lwqfswjazj39yiyccy0wcxmxpv34";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
