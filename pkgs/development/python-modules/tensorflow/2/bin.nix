@@ -19,7 +19,7 @@
 , opt-einsum
 , backports_weakref
 , tensorflow-estimator_2
-, tensorflow-tensorboard
+, tensorflow-tensorboard_2
 , cudaSupport ? false
 , cudatoolkit ? null
 , cudnn ? null
@@ -77,7 +77,7 @@ in buildPythonPackage {
     google-pasta
     wrapt
     tensorflow-estimator_2
-    tensorflow-tensorboard
+    tensorflow-tensorboard_2
     keras-applications
     keras-preprocessing
   ] ++ lib.optional (!isPy3k) mock
