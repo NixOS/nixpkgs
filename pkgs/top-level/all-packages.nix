@@ -14078,6 +14078,8 @@ in
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
+    accounts-qml-module = libsForQt5.callPackage ../development/libraries/accounts-qml-module { };
+
     alkimia = callPackage ../development/libraries/alkimia { };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };

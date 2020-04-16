@@ -8,7 +8,8 @@
   accounts-qt,
   signond,
   signon-plugin-oauth2,
-  signon-ui
+  signon-ui,
+  accounts-qml-module
 }:
 
 mkDerivation {
@@ -27,6 +28,7 @@ mkDerivation {
     signond
     signon-plugin-oauth2
     signon-ui
+    accounts-qml-module
   ];
 
   meta = with stdenv.lib; {

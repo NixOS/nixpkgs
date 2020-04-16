@@ -355,6 +355,7 @@ in
        kdeApplications.kaccounts-providers
        kdeApplications.kaccounts-integration
        kdeApplications.signon-kwallet-extension
+       libsForQt5.accounts-qml-module
        pkgs.kio-gdrive
        pkgs.telepathy-mission-control
        pkgs.telepathy-haze
