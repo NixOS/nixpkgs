@@ -1,9 +1,9 @@
 { lib
 , fetchFromGitHub
-, python3
+, python3Packages
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     urwid
     urwidtrees
     aiohttp
@@ -38,16 +38,22 @@ python3.pkgs.buildPythonApplication rec {
     setproctitle
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python3Packages; [
     asynctest
-    pytest
+    pytestCheckHook
   ];
 
-  # test_string__month_day_hour_minute_second fails on darwin
-  checkPhase = ''
-    LC_ALL=en_US.utf8 pytest tests \
-      --deselect=tests/client_test/ttypes_test.py::TestTimestamp::test_string__month_day_hour_minute_second
+  dontUseSetuptoolsCheck = true;
+
+  preCheck = ''
+    export LC_ALL=C
   '';
+
+  pytestFlagsArray = [
+    "tests"
+    # test_string__month_day_hour_minute_second fails on darwin
+    "--deselect=tests/client_test/ttypes_test.py::TestTimestamp::test_string__month_day_hour_minute_second"
+  ];
 
   meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
