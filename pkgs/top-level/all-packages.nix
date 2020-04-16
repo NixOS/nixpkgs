@@ -667,7 +667,7 @@ in
     }) {
       wrapOut = {
         XDG_DATA_DIRS = "$out/share";
-        PYTHONPATH = "$out/${python3.sitePackages}";
+        NIX_PYTHONPATH = "$out/${python3.sitePackages}";
       };
     }
   ;
@@ -21233,7 +21233,7 @@ in
     }) {
       wrapOut = {
         XDG_DATA_DIRS = "$out/share";
-        PYTHONPATH = "$out/${python3.sitePackages}";
+        NIX_PYTHONPATH = "$out/${python3.sitePackages}";
       };
     }
   ;

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   passthru = {
     propagateEnv = {
-      PYTHONPATH = "@out@/${python.sitePackages}";
+      NIX_PYTHONPATH = "@out@/${python.sitePackages}";
     };
   };
 

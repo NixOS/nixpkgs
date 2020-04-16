@@ -88,7 +88,7 @@ in buildPythonPackage rec {
   configurePhase = ''
     runHook preConfigure
 
-    export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
+    export NIX_PYTHONPATH=$NIX_PYTHONPATH:$out/${python.sitePackages}
 
     ${python.executable} configure.py  -w \
       --confirm-license \
@@ -106,7 +106,7 @@ in buildPythonPackage rec {
   postInstall = ''
     ln -s ${sip}/${python.sitePackages}/PyQt5/sip.* $out/${python.sitePackages}/PyQt5/
     for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
+      wrapProgram $i --prefix NIX_PYTHONPATH : "$NIX_PYTHONPATH"
     done
 
     # Let's make it a namespace package
@@ -137,7 +137,7 @@ in buildPythonPackage rec {
 
   passthru = {
     propagateEnv = {
-      PYTHONPATH = "@out@/${python.sitePackages}";
+      NIX_PYTHONPATH = "@out@/${python.sitePackages}";
     };
   };
 

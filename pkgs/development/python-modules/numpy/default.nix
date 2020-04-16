@@ -71,7 +71,7 @@ in buildPythonPackage rec {
     blas = blas;
     inherit blasImplementation cfg;
     propagateEnv = {
-      PYTHONPATH = "@out@/${python.sitePackages}";
+      NIX_PYTHONPATH = "@out@/${python.sitePackages}";
     };
   };
 

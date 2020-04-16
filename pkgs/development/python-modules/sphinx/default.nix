@@ -41,7 +41,7 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
   passthru = {
     propagateEnv = {
-      PYTHONPATH = "@out@/${python.sitePackages}";
+      NIX_PYTHONPATH = "@out@/${python.sitePackages}";
     };
   };
 

@@ -29,7 +29,7 @@ buildPythonPackage rec {
       attrPath = "python3.pkgs.${pname}3";
     };
     propagateEnv = {
-      PYTHONPATH = "@out@/${python.sitePackages}";
+      NIX_PYTHONPATH = "@out@/${python.sitePackages}";
     };
   };
 
