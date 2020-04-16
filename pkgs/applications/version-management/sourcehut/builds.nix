@@ -11,7 +11,7 @@ let
     pname = "builds-sr-ht-worker";
     goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
-    modSha256 = "1dwp87zsbh4a48q0pacssy329kchrd4sa47c5a1k8smbqn078424";
+    modSha256 = "10is7siscids9qz6jh9m1i17749dafqqkg4b3sslmxaxyn16yj97";
   };
 in buildPythonPackage rec {
   inherit version;
