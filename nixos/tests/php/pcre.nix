@@ -30,8 +30,8 @@ in import ../make-test-python.nix ({ ...}: {
     ''
       machine.wait_for_unit("httpd.service")
       # Ensure php evaluation by matching on the var_dump syntax
-      assert 'string(${toString (builtins.stringLength testString)}) "${testString}"' in machine.succeed(
-          "curl -vvv -s http://127.0.0.1:80/index.php"
-      )
+      response = machine.succeed("curl -vvv -s http://127.0.0.1:80/index.php")
+      expected = 'string(${toString (builtins.stringLength testString)}) "${testString}"'
+      assert expected in response, "Does not appear to be able to use subgroups."
     '';
 })
