@@ -7922,6 +7922,12 @@
     githubId = 895853;
     name = "Frank Doepper";
   };
+  wohanley = {
+    email = "me@wohanley.com";
+    github = "wohanley";
+    githubId = 1322287;
+    name = "William O'Hanley";
+  };
   womfoo = {
     email = "kranium@gikos.net";
     github = "womfoo";
