@@ -237,6 +237,38 @@ let
             '';
           };
 
+        createNetworkLink = i:
+        let
+          deviceDependency = if (config.boot.isContainer || i.name == "lo")
+            then []
+            else [ (subsystemDevice i.name) ];
+        in
+        nameValuePair "network-link-${i.name}"
+        { description = "Link configuration of ${i.name}";
+          wantedBy = [ "network-interfaces.target" ];
+          before = [ "network-interfaces.target" ];
+          bindsTo = deviceDependency;
+          after = [ "network-pre.target" ] ++ deviceDependency;
+          path = [ pkgs.iproute ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          script =
+            ''
+              echo "Configuring link..."
+            '' + optionalString (i.macAddress != null) ''
+              echo "setting MAC address to ${i.macAddress}..."
+              ip link set "${i.name}" address "${i.macAddress}"
+            '' + optionalString (i.mtu != null) ''
+              echo "setting MTU to ${toString i.mtu}..."
+              ip link set "${i.name}" mtu "${toString i.mtu}"
+            '' + ''
+              echo -n "bringing up interface... "
+              ip link set "${i.name}" up && echo "done" || (echo "failed"; exit 1)
+            '';
+        };
+
         createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
             bindsTo = [ "dev-net-tun.device" ];
@@ -508,6 +540,7 @@ let
           });
 
       in listToAttrs (
+           map createNetworkLink interfaces ++
            map configureAddrs interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs' createBridgeDevice cfg.bridges

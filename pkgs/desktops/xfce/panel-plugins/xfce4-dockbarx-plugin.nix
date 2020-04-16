@@ -2,9 +2,10 @@
 , dockbarx, gtk2, xfce, pythonPackages, wafHook }:
 
 stdenv.mkDerivation rec {
+  pname = "xfce4-dockbarx-plugin";
+  version = "${ver}-${rev}";
   ver = "0.5";
   rev = "a2dcb66";
-  name = "xfce4-dockbarx-plugin-${ver}-${rev}";
 
   src = fetchFromGitHub {
     owner = "TiZ-EX1";

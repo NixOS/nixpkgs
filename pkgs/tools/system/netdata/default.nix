@@ -14,14 +14,14 @@ with stdenv.lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.21.0";
+  version = "1.21.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "08gxwxvg816hj7sxsb8s97ny2562xri9nx0w2zx7xsssp22grawk";
+    sha256 = "0i0k64r8j1g02s2bi2gm0j47y52l3xli63w686ncpgmlhwmdfz65";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -41,8 +41,8 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''
-    ln -s ${go-d-plugin.bin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
-    ln -s ${go-d-plugin.bin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
+    ln -s ${go-d-plugin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
+    ln -s ${go-d-plugin}/bin/godplugin $out/libexec/netdata/plugins.d/go.d.plugin
   '' + optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \

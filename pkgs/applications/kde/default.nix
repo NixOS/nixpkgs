@@ -90,6 +90,7 @@ let
       kalarm = callPackage ./kalarm.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};
       kate = callPackage ./kate.nix {};
+      kbreakout = callPackage ./kbreakout.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcalc = callPackage ./kcalc.nix {};
       kcalutils = callPackage ./kcalutils.nix {};
@@ -146,6 +147,7 @@ let
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
+      kspaceduel = callPackage ./kspaceduel.nix {};
       ksudoku = callPackage ./ksudoku.nix {};
       ksystemlog = callPackage ./ksystemlog.nix {};
       ktnef = callPackage ./ktnef.nix {};

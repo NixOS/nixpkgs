@@ -28,6 +28,9 @@ assert enableShared || enableStatic;
 assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
+# Boost <1.69 can't be build with clang >8, because pth was removed
+assert with stdenv.lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
+
 with stdenv.lib;
 let
 

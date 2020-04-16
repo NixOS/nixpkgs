@@ -214,6 +214,10 @@ let
 
     dispatch =  callPackage ../development/ocaml-modules/dispatch { };
 
+    dns =  callPackage ../development/ocaml-modules/dns { };
+
+    dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -233,6 +237,8 @@ let
     dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { };
 
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
+
+    duration =  callPackage ../development/ocaml-modules/duration { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
 
@@ -530,6 +536,30 @@ let
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
+    mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
+
+    mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
+
+    mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
+
+    mirage-crypto-pk = callPackage ../development/ocaml-modules/mirage-crypto/pk.nix { };
+
+    mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
+
+    mirage-device = callPackage ../development/ocaml-modules/mirage-device { };
+
+    mirage-flow = callPackage ../development/ocaml-modules/mirage-flow { };
+
+    mirage-flow-combinators = callPackage ../development/ocaml-modules/mirage-flow/combinators.nix { };
+
+    mirage-flow-unix = callPackage ../development/ocaml-modules/mirage-flow/unix.nix { };
+
+    mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
+
+    mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
+
+    mirage-stack = callPackage ../development/ocaml-modules/mirage-stack { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
@@ -627,6 +657,8 @@ let
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
+    ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
+
     syslog = callPackage ../development/ocaml-modules/syslog { };
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
@@ -686,6 +718,8 @@ let
     owl = callPackage ../development/ocaml-modules/owl { };
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
+
+    ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
@@ -804,6 +838,10 @@ let
 
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
 
+    ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix {
+      ppxlib = ppxlib.override { version = "0.12.0"; };
+    };
+
     ppx_sqlexpr = callPackage ../development/ocaml-modules/sqlexpr/ppx.nix {};
 
     ppx_tools =
@@ -824,6 +862,8 @@ let
     qcheck = callPackage ../development/ocaml-modules/qcheck { };
 
     qtest = callPackage ../development/ocaml-modules/qtest { };
+
+    randomconv = callPackage ../development/ocaml-modules/randomconv { };
 
     re = callPackage ../development/ocaml-modules/re { };
 

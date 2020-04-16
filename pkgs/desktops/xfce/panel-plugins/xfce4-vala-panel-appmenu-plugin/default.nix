@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
     mv cmake/FallbackVersion.cmake.in cmake/FallbackVersion.cmake
   '';
 
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.gitLister src.meta.homepage;
+  };
+
   meta = with stdenv.lib; {
     description = "Global Menu applet for XFCE4";
     license = licenses.lgpl3;

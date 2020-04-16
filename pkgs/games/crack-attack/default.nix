@@ -13,7 +13,11 @@ stdenv.mkDerivation {
     ./crack-attack-1.1.14-glut.patch
   ];
 
-  configureFlags = [ "--enable-sound=yes" ];
+  configureFlags = [
+    "--enable-sound=yes"
+    "--prefix=${placeholder "out"}"
+    "--datadir=${placeholder "out"}/share"
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk2 freeglut SDL SDL_mixer libGLU libGL libXi libXmu ];

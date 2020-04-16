@@ -7,13 +7,12 @@
 , gettext
 }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-datetime-plugin";
   version = "0.8.0";
 
-  rev = "datetime-${version}";
-
+  rev-prefix = "datetime-";
   sha256 = "12drh7y70d70r93lpv43fkj5cbyl0vciz4a41nxrknrfbhxrvyah";
 
   nativeBuildInputs = [
