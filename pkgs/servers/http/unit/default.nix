@@ -29,14 +29,14 @@ let
   php72-unit = php72.override phpConfig;
   php73-unit = php73.override phpConfig;
 in stdenv.mkDerivation rec {
-  version = "1.16.0";
+  version = "1.17.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = version;
-    sha256 = "19gclqhwccpi7y4386ap33ycwhylv4s4kwfc6ik8scmc4pw3sj9l";
+    sha256 = "1q3659vw8rxv4fk7ljkjav8ga72sb3arljfxcqw8b080f9hvi7hh";
   };
 
   nativeBuildInputs = [ which ];
