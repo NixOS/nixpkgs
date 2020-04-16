@@ -1,7 +1,7 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
 , buildGoModule
-, srht, pygit2, scmsrht }:
+, srht, minio, pygit2, scmsrht }:
 
 let
   version = "0.50.3";
@@ -55,6 +55,7 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [
     srht
+    minio
     pygit2
     scmsrht
   ];
