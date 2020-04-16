@@ -18622,8 +18622,6 @@ in
     gtk = gtk3;
   };
 
-  bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
-
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
   blugon = callPackage ../applications/misc/blugon { };
@@ -19276,10 +19274,6 @@ in
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
 
-  fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid {
-    openssl = openssl_1_0_2;
-  };
-
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
   fsv = callPackage ../applications/misc/fsv { };
@@ -19732,10 +19726,6 @@ in
 
   google-play-music-desktop-player = callPackage ../applications/audio/google-play-music-desktop-player {
     inherit (gnome2) GConf;
-  };
-
-  google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
-    libpng = libpng12;
   };
 
   gosmore = callPackage ../applications/misc/gosmore { };
@@ -20672,8 +20662,6 @@ in
 
   motif = callPackage ../development/libraries/motif { };
 
-  mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
-
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
 
   easytag = callPackage ../applications/audio/easytag { };
@@ -20727,12 +20715,6 @@ in
   mplayer = callPackage ../applications/video/mplayer ({
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
-
-  MPlayerPlugin = browser:
-    callPackage ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
-      inherit browser;
-      # !!! should depend on MPlayer
-    };
 
   mpv = callPackage ../applications/video/mpv {
     inherit lua;
@@ -21042,8 +21024,6 @@ in
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
   nova-filters =  callPackage ../applications/audio/nova-filters { };
-
-  nspluginwrapper = callPackage ../applications/networking/browsers/mozilla-plugins/nspluginwrapper {};
 
   nvi = callPackage ../applications/editors/nvi { };
 
