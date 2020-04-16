@@ -4,7 +4,7 @@
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
 , guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb ? null , openldap ? null
+, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
 , pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
 null
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
-    readline libusb gnutls adns openldap zlib bzip2 sqlite
+    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
   ];
 
   patches = [
