@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, graalvm8 }:
+{ stdenv, fetchurl, graalvm8, glibcLocales }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.0.78";
+  version = "0.0.85";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "1m1nwdxjsc6bkdzkbsll316ly0c3qxaimjzyfph1220irjxnm7xf";
+    sha256 = "05w552ryc3hb2cj9ybcax1nml1jl77g7p42i2nzphm9j922ks0sz";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "01w990zk5qjrbnc846snh6na002kdyrlrfnqwg03ibx20g3mr7if";
+    sha256 = "0jrq1snha3204ikf45ncdqmq9hllq7z13kn35sksgj36ias4qby5";
   };
 
   dontUnpack = true;
-
-  buildInputs = [ graalvm8 ];
+  
+  LC_ALL = "en_US.UTF-8";
+  buildInputs = [ graalvm8 glibcLocales ];
 
   buildPhase = ''
     native-image \
