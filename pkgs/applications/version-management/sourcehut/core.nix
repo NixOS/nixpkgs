@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
-, pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus_client
+, pgpy, flask, bleach, misaka, humanize, html5lib, markdown, psycopg2, pygments
+, requests, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus_client
 , celery, alembic, importlib-metadata
 , sassc, nodejs
 , writeText }:
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     bleach
     misaka
     humanize
+    html5lib
     markdown
     psycopg2
     pygments
