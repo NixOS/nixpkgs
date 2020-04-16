@@ -12,7 +12,7 @@ let
 
   httpdConf = cfg.configFile;
 
-  php = cfg.phpPackage.override { apacheHttpd = pkg.dev; /* otherwise it only gets .out */ };
+  php = cfg.phpPackage.override { apacheHttpd = pkg; };
 
   phpMajorVersion = lib.versions.major (lib.getVersion php);
 
