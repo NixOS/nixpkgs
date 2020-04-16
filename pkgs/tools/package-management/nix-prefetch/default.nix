@@ -1,8 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, asciidoc, docbook_xml_dtd_45, git
-, docbook_xsl, libxml2, libxslt, coreutils, gawk, gnugrep, gnused, jq, nix
-, installShellFiles }:
+{ stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
+, docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
+, gnugrep, gnused, jq, nix }:
 
-let binPath = lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
+let
+  binPath = stdenv.lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
 
 in stdenv.mkDerivation rec {
   pname = "nix-prefetch";
@@ -12,7 +13,11 @@ in stdenv.mkDerivation rec {
     owner = "msteen";
     repo = "nix-prefetch";
     rev = version;
-    sha256 = "0sf910b1m8q6429pyxlvmmgylha9f2a1s3sq3vgqdnb1dparl34r";
+    sha256 = "15h6f743nn6sdq8l771sjxh92cyzqznkcs7szrc7nm066xvx8rd4";
+    # the stat call has to be in a subshell or we get the current date
+    extraPostFetch = ''
+      echo $(stat -c %Y $out) > $out/.timestamp
+    '';
   };
 
   postPatch = ''
@@ -42,7 +47,8 @@ in stdenv.mkDerivation rec {
   dontConfigure = true;
 
   buildPhase = ''
-    a2x -f manpage doc/nix-prefetch.1.asciidoc
+    a2x -a revdate=$(date --date=@$(cat $src/.timestamp) +%d/%m/%Y) \
+      -f manpage doc/nix-prefetch.1.asciidoc
   '';
 
   installPhase = ''
