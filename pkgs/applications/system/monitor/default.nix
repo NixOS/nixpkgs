@@ -62,6 +62,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Manage processes and monitor system resources";
+    longDescription = ''
+      Manage processes and monitor system resources.
+      To use the wingpanel indicator in this application, see the Pantheon
+      section in the NixOS manual.
+    '';
     homepage = "https://github.com/stsdc/monitor";
     maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
