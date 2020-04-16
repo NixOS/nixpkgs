@@ -20516,6 +20516,8 @@ in
     geoip = geoipWithDatabase;
   };
 
+  node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
+
   notion = callPackage ../applications/window-managers/notion { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
