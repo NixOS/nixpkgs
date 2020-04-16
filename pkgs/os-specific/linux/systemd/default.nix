@@ -109,6 +109,7 @@ in stdenv.mkDerivation {
     "-Dtests=false"
     "-Dimportd=true"
     "-Dlz4=true"
+    "-Dhomed=false"
     "-Dhostnamed=true"
     "-Dnetworkd=true"
     "-Dsysusers=false"
