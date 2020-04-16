@@ -20816,6 +20816,8 @@ in
     geoip = geoipWithDatabase;
   };
 
+  node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
+
   notion = callPackage ../applications/window-managers/notion { };
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
