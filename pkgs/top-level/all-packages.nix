@@ -21207,7 +21207,7 @@ in
       PYTHONPATH = "linkPkg";
     };
     extraPkgs = with python3.pkgs; [
-      # Not how when you use matplot with and without qt, the environment
+      # Note how when you use matplot with and without qt, the environment
       # calculated in `result/bin/python` has QT_PLUGIN_PATH and other env
       # vars.
 
@@ -21234,6 +21234,9 @@ in
       wrapOut = {
         XDG_DATA_DIRS = "$out/share";
         NIX_PYTHONPATH = "$out/${python3.sitePackages}";
+      };
+      linkByEnv = {
+        NIX_PYTHONPATH = "linkPkg";
       };
     }
   ;

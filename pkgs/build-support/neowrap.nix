@@ -189,22 +189,25 @@ let
           };
         in
           if builtins.hasAttr name linkByEnv then
-            if builtins.hasAttr name encyclopedia.linkPaths then
-              if linkByEnv.${name} == "link" then
+            if linkByEnv.${name} == "link" then
+              if builtins.hasAttr name encyclopedia.linkPaths then
                 {
                   linkType = "normal";
                   linkTo = encyclopedia.linkPaths.${name};
                   linkFrom = real_value;
                 }
-              else # linkByEnv.${name} == "linkPkg"
+              else 
+                abort "neowrap.nix: I was requested to symlink paths of propagated environment for env var `${name}` but I don't know where to put these files as they are not in my encyclopedia"
+            else
+              if linkByEnv.${name} != "linkPkg" then
+                abort "neowrap.nix: got an unknown value for a linkByenv env key: ${name}"
+              else
                 {
                   linkType = "pkg";
                   linkTo = "$out";
                   # Should this be `pkg.dev` or simply `pkg` ?
                   linkFrom = pkg.out;
                 }
-            else
-              abort "neowrap.nix: I was requested to symlink paths of propagated environment for env var `${name}` but I don't know where to put these files as they are not in my encyclopedia"
           else
             real_value
       ) pkg.propagateEnv)
@@ -232,7 +235,10 @@ let
           if (builtins.elemAt value 0).linkType == "normal" then
             "--prefix ${key} ${sep} ${(builtins.elemAt value 0).linkTo}"
           else # (builtins.elemAt value 0).linkType == "pkg" then
-            "--prefix ${key} ${sep} ${encyclopedia.linkPaths.${key}}"
+            if builtins.hasAttr key wrapOut || builtins.hasAttr key encyclopedia.linkPaths then
+              "--prefix ${key} ${sep} ${wrapOut.${key} or encyclopedia.linkPaths.${key}}"
+            else
+              abort "neowrap.nix: When requested to link packages of env var ${key}, I couldn't decide where to link them _to_, either set wrapOut.${key} to e.g $out/${key}, and that directory will be added to the values of ${key}, or add an entry to the encyclopedia.linkPaths attribute set"
       )
     )
       # Before calculating makeWrapperArgs, we need to add values to env vars
