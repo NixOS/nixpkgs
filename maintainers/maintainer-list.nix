@@ -5824,6 +5824,16 @@
     githubId = 131844;
     name = "Igor Pashev";
   };
+  patryk27 = {
+    email = "wychowaniec.patryk@gmail.com";
+    github = "Patryk27";
+    githubId = 3395477;
+    name = "Patryk Wychowaniec";
+    keys = [{
+      longkeyid = "rsa4096/0xF62547D075E09767";
+      fingerprint = "196A BFEC 6A1D D1EC 7594  F8D1 F625 47D0 75E0 9767";
+    }];
+  };
   patternspandemic = {
     email = "patternspandemic@live.com";
     github = "patternspandemic";
