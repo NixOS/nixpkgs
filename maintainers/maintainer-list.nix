@@ -8431,6 +8431,12 @@
     githubId = 250877;
     name = "Elmar Athmer";
   };
+  zakkor = {
+    email = "edward.dalbon@gmail.com";
+    github = "zakkor";
+    githubId = 6191421;
+    name = "Edward d'Albon";
+  };
   zef = {
     email = "zef@zef.me";
     name = "Zef Hemel";
