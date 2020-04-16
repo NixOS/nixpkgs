@@ -177,6 +177,9 @@ self: super: {
   # Test suite build depends on ancient tasty 0.11.x.
   cryptohash-sha512 = dontCheck super.cryptohash-sha512;
 
+  # Test suite depends on source code being available
+  simple-affine-space = dontCheck super.simple-affine-space;
+
   # https://github.com/kazu-yamamoto/simple-sendfile/issues/17
   simple-sendfile = dontCheck super.simple-sendfile;
 

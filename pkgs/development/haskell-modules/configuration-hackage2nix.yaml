@@ -4332,7 +4332,6 @@ broken-packages:
   - duet
   - dumb-cas
   - dump-core
-  - dunai
   - dunai-core
   - dunai-test
   - Dung
@@ -9190,7 +9189,6 @@ broken-packages:
   - simgi
   - simple
   - simple-actors
-  - simple-affine-space
   - simple-atom
   - simple-bluetooth
   - simple-c-value
