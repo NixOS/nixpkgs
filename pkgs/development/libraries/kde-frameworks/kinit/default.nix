@@ -20,7 +20,7 @@ mkDerivation {
     ./0003-kdeinit-extra-libs.patch
     ./0004-start_kdeinit-environ-hard-limit.patch
   ];
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     ''-DNIXPKGS_KF5_KIOCORE=\"${getLib kio}/lib/libKF5KIOCore.so.5\"''
     ''-DNIXPKGS_KF5_PARTS=\"${getLib kparts}/lib/libKF5Parts.so.5\"''
     ''-DNIXPKGS_KF5_PLASMA=\"${getLib plasma-framework}/lib/libKF5Plasma.so.5\"''
