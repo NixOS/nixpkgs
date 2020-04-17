@@ -3813,6 +3813,8 @@ in {
 
   mnemonic = callPackage ../development/python-modules/mnemonic { };
 
+  mne-python = callPackage ../development/python-modules/mne-python { };
+
   mnist = callPackage ../development/python-modules/mnist { };
 
   mocket = callPackage ../development/python-modules/mocket { };
