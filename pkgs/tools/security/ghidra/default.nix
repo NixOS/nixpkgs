@@ -25,9 +25,10 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
-    autoPatchelfHook
     unzip
-  ];
+  ] ++
+    # leave macOS binaries unpatched since autoPatchelfHook doesn't work there
+    (if stdenv.isDarwin then [] else [ autoPatchelfHook ]);
 
   buildInputs = [
     stdenv.cc.cc.lib
