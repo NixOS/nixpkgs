@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "python-mpv-jsonipc";
-  version = "1.1.6";
+  version = "1.1.8";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = "python-mpv-jsonipc";
     rev = "v${version}";
-    sha256 = "08bs6qrcf5fi72jijmr2w7zs6aa5976dwv04f11ajwhj6i8kfq35";
+    sha256 = "0f4nfzfka5n76n6dxmgcz0rkaws7a3jrgyh00va6lnfi7h6dsmx4";
   };
 
   # 'mpv-jsonipc' does not have any tests

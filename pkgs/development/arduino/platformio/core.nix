@@ -95,7 +95,7 @@ in buildPythonApplication rec {
   meta = with stdenv.lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
-    homepage = http://platformio.org;
+    homepage = "http://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
   };

@@ -93,7 +93,11 @@ rec {
             res set._definedNames
         else
           res;
-      result = { inherit options config; };
+      result = {
+        inherit options;
+        config = removeAttrs config [ "_module" ];
+        inherit (config) _module;
+      };
     in result;
 
   # collectModules :: (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
@@ -389,7 +393,7 @@ rec {
       let
         # Process mkMerge and mkIf properties.
         defs' = concatMap (m:
-          map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
+          map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
         ) defs;
 
         # Process mkOverride properties.
@@ -410,10 +414,9 @@ rec {
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
       if isDefined then
-        foldl' (res: def:
-          if type.check def.value then res
-          else throw "The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'."
-        ) (type.merge loc defsFinal) defsFinal
+        if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
+        else let firstInvalid = findFirst (def: ! type.check def.value) null defsFinal;
+        in throw "The option value `${showOption loc}' in `${firstInvalid.file}' is not of type `${type.description}'."
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)

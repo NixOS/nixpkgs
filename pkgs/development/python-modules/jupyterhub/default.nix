@@ -118,7 +118,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Serves multiple Jupyter notebook instances";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
   };

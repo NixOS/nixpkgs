@@ -1,8 +1,10 @@
-{ stdenv, buildDune2Package, fetchFromGitHub, stdlib-shims }:
+{ stdenv, buildDunePackage, fetchFromGitHub, stdlib-shims }:
 
-buildDune2Package rec {
+buildDunePackage rec {
   pname = "owl-base";
   version = "0.8.0";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner  = "owlbarn";

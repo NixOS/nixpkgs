@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       Boxes is a command line filter program that draws ASCII art boxes around
       your input text.
     '';
-    homepage = https://boxes.thomasjensen.com;
+    homepage = "https://boxes.thomasjensen.com";
     license = licenses.gpl2;
     maintainers = with maintainers; [ waiting-for-dev ];
     platforms = platforms.unix;

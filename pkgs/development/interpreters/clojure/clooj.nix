@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A lightweight IDE for Clojure";
-    homepage = https://github.com/arthuredelstein/clooj;
+    homepage = "https://github.com/arthuredelstein/clooj";
     license = stdenv.lib.licenses.bsd3;
   };
 }

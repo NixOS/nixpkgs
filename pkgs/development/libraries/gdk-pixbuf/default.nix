@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for image loading and manipulation";
-    homepage = http://library.gnome.org/devel/gdk-pixbuf/;
+    homepage = "http://library.gnome.org/devel/gdk-pixbuf/";
     maintainers = [ maintainers.eelco ];
     license = licenses.lgpl21;
     platforms = platforms.unix;

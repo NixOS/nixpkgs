@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/glamp/bashplotlib;
+    homepage = "https://github.com/glamp/bashplotlib";
     description = "Plotting in the terminal";
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.mit;

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/hackebrot/poyo;
+    homepage = "https://github.com/hackebrot/poyo";
     description = "A lightweight YAML Parser for Python";
     license = licenses.mit;
   };

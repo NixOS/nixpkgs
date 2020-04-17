@@ -41,7 +41,7 @@ let src = fetchFromGitHub {
     pname = "ppx_tools";
     meta = with stdenv.lib; {
       description = "Tools for authors of ppx rewriters";
-      homepage = http://www.lexifi.com/ppx_tools;
+      homepage = "https://www.lexifi.com/ppx_tools";
       license = licenses.mit;
       maintainers = with maintainers; [ vbgl ];
     };

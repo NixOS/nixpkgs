@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "4.0.1";
+  version = "4.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "145gjad415zjfp0ciq1b19i97ibavj8fki1vzhjppqz55k4704nk";
+    sha256 = "0c99q5dy6f275yg1f137ird08wmwc1z8wmvjickkf2mvyka31p9y";
   };
 
   propagatedBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A declarative statistical visualization library for Python.";
-    homepage = https://github.com/altair-viz/altair;
+    homepage = "https://github.com/altair-viz/altair";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     platforms = platforms.unix;

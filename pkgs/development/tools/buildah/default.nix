@@ -4,13 +4,13 @@
 
 buildGoPackage rec {
   pname = "buildah";
-  version = "1.14.2";
+  version = "1.14.8";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "buildah";
     rev    = "v${version}";
-    sha256 = "1475k8h1l8rbbs6hyq9gxksh9884l1674z77fmiyr5vzql5yf7ca";
+    sha256 = "187cvb3i5cwm7cwxmzpl2ca7900yb6v6b6cybyz5mnd5ccy5ff1q";
   };
 
   outputs = [ "bin" "man" "out" ];
@@ -39,6 +39,6 @@ buildGoPackage rec {
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch vdemeester saschagrunert ];
+    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
   };
 }

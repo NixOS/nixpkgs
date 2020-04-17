@@ -27,14 +27,15 @@ buildPythonPackage rec {
     google_auth requests_oauthlib
   ];
 
+  doCheck = isPy3k;
   checkPhase = ''
-    rm -fr tests/__pycache__/
+    rm -fr tests/__pycache__/ google
     py.test
   '';
 
   meta = with lib; {
     description = "Google Authentication Library: oauthlib integration";
-    homepage = https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib;
+    homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
     license = licenses.asl20;
     maintainers = with maintainers; [ terlar ];
   };

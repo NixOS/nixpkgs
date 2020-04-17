@@ -20,7 +20,7 @@ in
     services.xserver.desktopManager.session = [{
       name = "kodi";
       start = ''
-        ${pkgs.kodi}/bin/kodi --lircdev /run/lirc/lircd --standalone &
+        LIRC_SOCKET_PATH=/run/lirc/lircd ${pkgs.kodi}/bin/kodi --standalone &
         waitPID=$!
       '';
     }];

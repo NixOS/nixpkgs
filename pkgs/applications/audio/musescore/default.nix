@@ -6,11 +6,11 @@
 
 mkDerivation rec {
   pname = "musescore";
-  version = "3.2.3";
+  version = "3.4.2";
 
   src = fetchzip {
     url = "https://github.com/musescore/MuseScore/releases/download/v${version}/MuseScore-${version}.zip";
-    sha256 = "17mr0c8whw6vz86lp1j36rams4h8virc4z68fld0q3rpq6g05szs";
+    sha256 = "1laskvp40dncs12brkgvk7wl0qrvzy52rn7nf3b67ps1vmd130gp";
     stripRoot = false;
   };
 
@@ -31,10 +31,10 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Music notation and composition software";
-    homepage = https://musescore.org/;
+    homepage = "https://musescore.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ vandenoever ];
     platforms = platforms.linux;
-    repositories.git = https://github.com/musescore/MuseScore;
+    repositories.git = "https://github.com/musescore/MuseScore";
   };
 }

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isIbusEngine = true;
     description = "m17n engine for ibus";
-    homepage = https://github.com/ibus/ibus-m17n;
+    homepage = "https://github.com/ibus/ibus-m17n";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ericsagnes ];

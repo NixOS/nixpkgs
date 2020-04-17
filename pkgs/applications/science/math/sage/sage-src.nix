@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
     # Parallelize docubuild using subprocesses, fixing an isolation issue. See
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
     ./patches/sphinx-docbuild-subprocesses.patch
+
+    # Fix doctest failures with docutils 0.15:
+    # https://nix-cache.s3.amazonaws.com/log/dzmzrb2zvardsmpy7idg7djkizmkzdhs-sage-tests-8.9.drv
+    # https://trac.sagemath.org/ticket/28856#comment:19
+    ./patches/docutils-0.15.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
@@ -124,6 +129,13 @@ stdenv.mkDerivation rec {
       name = "sympy-1.5.patch";
       url = "https://git.sagemath.org/sage.git/patch/?h=c6d0308db15efd611211d26cfcbefbd180fc0831";
       sha256 = "0nwai2jr22h49km4hx3kwafs3mzsc5kwsv7mqwjf6ibwfx2bbgyq";
+    })
+
+    # https://trac.sagemath.org/ticket/29313 (patch from ArchLinux)
+    (fetchpatch {
+      name = "pari-2.11.3.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/sagemath-pari-2.11.3.patch?h=sagemath-git&id=02e1d58bd1cd70935d69a4990469d18be6bd2c43";
+      sha256 = "0z07444zvijyw96d11q7j81pvg7ysd6ycf1bbbjr6za9y74hv7d2";
     })
   ];
 

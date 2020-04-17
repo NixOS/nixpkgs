@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Pass extension that keeps the password store encrypted inside a tomb";
-    homepage = https://github.com/roddhjav/pass-tomb;
+    homepage = "https://github.com/roddhjav/pass-tomb";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher ];
     platforms = platforms.unix;

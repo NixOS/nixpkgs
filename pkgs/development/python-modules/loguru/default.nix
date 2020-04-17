@@ -16,7 +16,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ "test_rotation_and_retention" "test_rotation_and_retention_timed_file" "test_renaming" "test_await_complete_inheritance" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Delgan/loguru;
+    homepage = "https://github.com/Delgan/loguru";
     description = "Python logging made (stupidly) simple";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

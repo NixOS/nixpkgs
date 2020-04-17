@@ -11,6 +11,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = [ maintainers.vbgl ];
-    homepage = http://matio.sourceforge.net/;
+    homepage = "http://matio.sourceforge.net/";
   };
 }

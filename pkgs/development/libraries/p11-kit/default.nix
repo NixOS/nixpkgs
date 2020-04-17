@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       Provides a standard configuration setup for installing
       PKCS#11 modules in such a way that they're discoverable.
     '';
-    homepage = https://p11-glue.github.io/p11-glue/p11-kit.html;
+    homepage = "https://p11-glue.github.io/p11-glue/p11-kit.html";
     platforms = platforms.all;
     license = licenses.bsd3;
   };

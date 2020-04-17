@@ -38,24 +38,30 @@
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
+, graphene
+, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.34.4";
+  version = "3.36.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18hbw98p4h3d4qz57415smwmfg72s9a0nk8mb04ds1gn2lsm2d01";
+    sha256 = "09fqs9805d07c60a2ibskqffsb5wn72l8grwzb9fic5sl574b0im";
   };
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dwayland_eglstream=true"
-    "-Dxwayland-path=${xwayland}/bin/Xwayland"
+    "-Dprofiler=true"
+    "-Dxwayland_path=${xwayland}/bin/Xwayland"
+    # This should be auto detected, but it looks like it manages a false
+    # positive.
+    "-Dxwayland_initfd=disabled"
   ];
 
   propagatedBuildInputs = [
@@ -63,6 +69,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     libcap_ng
+    graphene
   ];
 
   nativeBuildInputs = [
@@ -102,21 +109,13 @@ stdenv.mkDerivation rec {
     xwayland
     zenity
     zenity
+    wayland-protocols
   ];
 
   patches = [
-    # Fix build with libglvnd provided headers
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/a444a4c5f58ea516ad3cd9d6ddc0056c3ca9bc90.patch";
-      sha256 = "0imy2j8af9477jliwdq4jc40yw1cifsjjf196gnmwxr9rkj0hbrd";
-    })
-
     # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
     # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
     ./drop-inheritable.patch
-
-    # TODO: submit upstream
-    ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
 
     (substituteAll {
       src = ./fix-paths.patch;

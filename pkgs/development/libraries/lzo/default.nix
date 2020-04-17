@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       while still decompressing at this very high speed.
     '';
 
-    homepage = http://www.oberhumer.com/opensource/lzo;
+    homepage = "http://www.oberhumer.com/opensource/lzo";
     license = licenses.gpl2Plus;
 
     platforms = platforms.all;

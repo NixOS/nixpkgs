@@ -98,13 +98,14 @@ in
             Set of AFP volumes to export.
             See <literal>man apf.conf</literal> for more information.
           '';
-        example =
+        example = literalExample ''
           { srv =
              { path = "/srv";
                "read only" = true;
                "hosts allow" = "10.1.0.0/16 10.2.1.100 2001:0db8:1234::/48";
              };
-          };
+          }
+        '';
       };
 
       extmap = mkOption {

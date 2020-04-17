@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://leiningen.org/;
+    homepage = "https://leiningen.org/";
     description = "Project automation for Clojure";
     license = stdenv.lib.licenses.epl10;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

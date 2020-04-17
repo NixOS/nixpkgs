@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          can be used within source code editors and IDEs.
       '';
 
-    homepage = https://libcheck.github.io/check/;
+    homepage = "https://libcheck.github.io/check/";
 
     license = licenses.lgpl2Plus;
     platforms = platforms.all;

@@ -52,7 +52,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "SDR transceiver application for analog and digital modes";
-    homepage = http://qradiolink.org/;
+    homepage = "http://qradiolink.org/";
     license = licenses.agpl3;
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;

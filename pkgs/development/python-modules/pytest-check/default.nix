@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "pytest plugin allowing multiple failures per test";
-    homepage = https://github.com/okken/pytest-check;
+    homepage = "https://github.com/okken/pytest-check";
     license = licenses.mit;
     maintainers = [ maintainers.flokli ];
   };

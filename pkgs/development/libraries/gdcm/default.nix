@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake, vtk, darwin }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
+  version = "3.0.5";
   pname = "gdcm";
 
   src = fetchurl {
     url = "mirror://sourceforge/gdcm/${pname}-${version}.tar.bz2";
-    sha256 = "0g46l7fjvn37sg29m0nb7wlnnpnxmlm9ryp7vam26ni02l73paid";
+    sha256 = "16d3sf81n4qhwbbx1d80jg6fhrla5paan384c4bbbqvbhm222yby";
   };
 
   dontUseCmakeBuildDir = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.
     '';
-    homepage = http://gdcm.sourceforge.net/;
+    homepage = "http://gdcm.sourceforge.net/";
     license = with licenses; [ bsd3 asl20 ];
     platforms = platforms.all;
   };

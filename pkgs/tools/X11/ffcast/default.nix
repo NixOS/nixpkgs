@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Run commands on rectangular screen regions";
-    homepage = https://github.com/lolilolicon/FFcast;
+    homepage = "https://github.com/lolilolicon/FFcast";
     license = licenses.gpl3;
     maintainers = [ maintainers.guyonvarch ];
     platforms = platforms.linux;

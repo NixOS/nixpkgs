@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Gnome CD/DVD Burner";
-    homepage = https://wiki.gnome.org/Apps/Brasero;
+    homepage = "https://wiki.gnome.org/Apps/Brasero";
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

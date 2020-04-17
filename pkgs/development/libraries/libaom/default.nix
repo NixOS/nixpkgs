@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AV1 Bitstream and Decoding Library";
-    homepage    = https://aomedia.org/av1-features/get-started/;
+    homepage    = "https://aomedia.org/av1-features/get-started/";
     maintainers = with maintainers; [ kiloreux ];
     platforms   = platforms.all;
     license = licenses.bsd2;

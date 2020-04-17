@@ -21,6 +21,8 @@ let
     "--config.file /tmp/alert-manager-substituted.yaml"
     "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
     "--log.level ${cfg.logLevel}"
+    "--storage.path /var/lib/alertmanager"
+    (toString (map (peer: "--cluster.peer ${peer}:9094") cfg.clusterPeers))
     ] ++ (optional (cfg.webExternalUrl != null)
       "--web.external-url ${cfg.webExternalUrl}"
     ) ++ (optional (cfg.logFormat != null)
@@ -120,6 +122,14 @@ in {
         '';
       };
 
+      clusterPeers = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Initial peers for HA cluster.
+        '';
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -155,13 +165,14 @@ in {
 
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
+        after    = [ "network-online.target" ];
         preStart = ''
            ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
                                                     -i "${alertmanagerYml}"
         '';
         serviceConfig = {
           Restart  = "always";
+          StateDirectory = "alertmanager";
           DynamicUser = true; # implies PrivateTmp
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = "/tmp";

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple script to deflicker images taken for timelapses";
-    homepage = https://github.com/cyberang3l/timelapse-deflicker;
+    homepage = "https://github.com/cyberang3l/timelapse-deflicker";
     license = licenses.gpl3;
     maintainers = with maintainers; [ valeriangalliat ];
     platforms = platforms.unix;

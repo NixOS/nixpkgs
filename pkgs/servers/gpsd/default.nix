@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
+    scons.py2 pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
     python2Packages.python
     python2Packages.wrapPython
   ];
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       diagnostic monitoring and profiling of receivers and feeding
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
-    homepage = http://catb.org/gpsd/;
+    homepage = "http://catb.org/gpsd/";
     license = "BSD-style";
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor rasendubi ];

@@ -89,10 +89,26 @@ in rec {
       };
     } ./python-imports-check-hook.sh) {};
 
+  pythonNamespacesHook = callPackage ({}:
+    makeSetupHook {
+      name = "python-namespaces-hook.sh";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-namespaces-hook.sh) {};
+
   pythonRemoveBinBytecodeHook = callPackage ({ }:
     makeSetupHook {
       name = "python-remove-bin-bytecode-hook";
     } ./python-remove-bin-bytecode-hook.sh) {};
+
+  pythonRemoveTestsDirHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-remove-tests-dir-hook";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-remove-tests-dir-hook.sh) {};
 
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {

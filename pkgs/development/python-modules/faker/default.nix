@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for generating fake user data";
-    homepage    = http://faker.rtfd.org;
+    homepage    = "http://faker.rtfd.org";
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

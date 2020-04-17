@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Stats for Python processes";
-    homepage = https://www.github.com/Cue/scales;
+    homepage = "https://www.github.com/Cue/scales";
     license = licenses.asl20;
   };
 

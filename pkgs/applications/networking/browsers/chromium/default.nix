@@ -1,6 +1,6 @@
 { newScope, config, stdenv, llvmPackages_9, llvmPackages_10
 , makeWrapper, ed
-, glib, gtk3, gnome3, gsettings-desktop-schemas
+, glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
 , gcc, nspr, nss, patchelfUnstable, runCommand
 , lib
@@ -13,6 +13,7 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , useVaapi ? false # test video on radeon, before enabling this
+, useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
@@ -31,9 +32,20 @@ let
 
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
-    mkChromiumDerivation = callPackage ./common.nix {
-      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useVaapi;
-    };
+    mkChromiumDerivation = callPackage ./common.nix ({
+      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useVaapi useOzone;
+      gnChromium = gn;
+    } // lib.optionalAttrs (channel == "dev") {
+      # TODO: Remove after we can update gn for the stable channel (backward incompatible changes):
+      gnChromium = gn.overrideAttrs (oldAttrs: {
+        version = "2020-03-23";
+        src = fetchgit {
+          url = "https://gn.googlesource.com/gn";
+          rev = "5ed3c9cc67b090d5e311e4bd2aba072173e82db9";
+          sha256 = "00y2d35wvqmx9glaqhfb62wdgbfpwr77v0934nnvh9ks71vnsjqy";
+        };
+      });
+    });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };
 

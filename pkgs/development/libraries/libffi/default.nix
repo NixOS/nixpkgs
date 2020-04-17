@@ -1,9 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , autoreconfHook
 
-# libffi is used in darwin and linux with glibc stdenv
-# we cannot run checks within it
-, doCheck ? stdenv.hostPlatform.isMusl, dejagnu
 }:
 
 stdenv.mkDerivation rec {
@@ -28,10 +25,6 @@ stdenv.mkDerivation rec {
     NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
   '';
 
-  checkInputs = [ dejagnu ];
-
-  inherit doCheck;
-
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform; # Don't run the native `strip' when cross-compiling.
 
   meta = with stdenv.lib; {
@@ -50,7 +43,7 @@ stdenv.mkDerivation rec {
       interface.  A layer must exist above libffi that handles type
       conversions for values passed between the two languages.
     '';
-    homepage = http://sourceware.org/libffi/;
+    homepage = "http://sourceware.org/libffi/";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;

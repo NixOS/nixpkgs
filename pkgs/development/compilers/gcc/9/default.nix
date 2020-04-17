@@ -43,7 +43,7 @@ with stdenv.lib;
 with builtins;
 
 let majorVersion = "9";
-    version = "${majorVersion}.2.0";
+    version = "${majorVersion}.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "01mj3yk7z49i49168hg2cg7qs4bsccrrnv7pjmbdlf8j2a7z0vpa";
+    sha256 = "1la2yy27ziasyf0jvzk58y1i5b5bq2h176qil550bxhifs39gqbi";
   };
 
   inherit patches;
@@ -246,7 +246,7 @@ stdenv.mkDerivation ({
   inherit (stdenv) is64bit;
 
   meta = {
-    homepage = https://gcc.gnu.org/;
+    homepage = "https://gcc.gnu.org/";
     license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");

@@ -17,7 +17,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A terminal emulator widget for Qt 5";
-    homepage = https://github.com/lxqt/qtermwidget;
+    homepage = "https://github.com/lxqt/qtermwidget";
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

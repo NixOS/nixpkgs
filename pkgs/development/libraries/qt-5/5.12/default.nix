@@ -74,6 +74,11 @@ let
           url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=8a3fde00bf53d99e9e4853e8ab97b0e1bcf74915";
           sha256 = "1gpcbdpyazdxnmldvhsf3pfwr2gjvi08x3j6rxf543rq01bp6cpx";
         })
+        (fetchpatch {
+          name = "QTBUG-78937.patch";
+          url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=67a9c600ad14ee44501a6df3509daa8234b97606";
+          sha256 = "1jiky1w9j8rka78r4q0yabb8w2l5j6csdjysynz7gs1ry4xjfdxd";
+        })
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
@@ -150,6 +155,7 @@ let
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
+      qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Fast drop-in replacement for decimal.py";
-    homepage    = http://www.bytereef.org/mpdecimal/;
+    homepage    = "http://www.bytereef.org/mpdecimal/";
     license     = licenses.bsd2;
     maintainers = [ maintainers.udono ];
   };

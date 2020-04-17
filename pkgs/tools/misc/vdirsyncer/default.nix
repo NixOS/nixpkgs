@@ -19,11 +19,9 @@ python3Packages.buildPythonApplication rec {
     name = "${name}-native";
     inherit src;
     sourceRoot = "source/rust";
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-    cargoSha256 = "1n1dxq3klsry5mmbfff2jv7ih8mr5zvpncrdgba6qs93wi77qi0y";
-    buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    cargoSha256 = "0cqy0s55pkg6hww86h7qip4xaidh6g8lcypdj84n2x374jq38c5d";
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -68,7 +66,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pimutils/vdirsyncer;
+    homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
     maintainers = with maintainers; [ matthiasbeyer gebner ];
     license = licenses.mit;

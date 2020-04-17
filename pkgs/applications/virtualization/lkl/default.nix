@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       extensively as possible with minimal effort and reduced maintenance
       overhead
     '';
-    homepage    = https://github.com/lkl/linux/;
+    homepage    = "https://github.com/lkl/linux/";
     platforms   = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ]; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
     maintainers = with maintainers; [ copumpkin ];

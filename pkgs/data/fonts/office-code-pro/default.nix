@@ -25,7 +25,7 @@ in fetchFromGitHub rec {
       Incorporated. The customizations were made specifically for text editors
       and coding environments, but are still very usable in other applications.
     '';
-    homepage = https://github.com/nathco/Office-Code-Pro;
+    homepage = "https://github.com/nathco/Office-Code-Pro";
     license = licenses.ofl;
     maintainers = [ maintainers.AndersonTorres ];
   };

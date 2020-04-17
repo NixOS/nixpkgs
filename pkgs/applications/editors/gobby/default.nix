@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = http://gobby.0x539.de/;
+    homepage = "http://gobby.0x539.de/";
     description = "A GTK-based collaborative editor supporting multiple documents in one session and a multi-user chat";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ maintainers.phreedom ];

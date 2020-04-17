@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Grilo;
+    homepage = "https://wiki.gnome.org/Projects/Grilo";
     description = "Framework that provides access to various sources of multimedia content, using a pluggable system";
     maintainers = gnome3.maintainers;
     license = licenses.lgpl2;

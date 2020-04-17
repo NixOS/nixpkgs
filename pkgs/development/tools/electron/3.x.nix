@@ -8,7 +8,7 @@ let
 
   meta = with stdenv.lib; {
     description = "Cross platform desktop application shell";
-    homepage = https://github.com/electron/electron;
+    homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     maintainers = with maintainers; [ travisbhartwell manveru ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];

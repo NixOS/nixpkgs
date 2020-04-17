@@ -21,7 +21,7 @@ buildOcaml rec {
   hasSharedObjects = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/re2;
+    homepage = "https://github.com/janestreet/re2";
     description = "OCaml bindings for RE2";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

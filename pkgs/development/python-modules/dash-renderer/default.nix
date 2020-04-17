@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "dash_renderer";
-  version = "1.2.4";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w6mpmvfj6nv5rdzikwc7wwhrgscbh50d0azzydhsa9jccxvkakl";
+    sha256 = "07nyajjc3209ha2nbvk43sh5bnslwb2hs9wn8q5dpfngsc96wr9g";
   };
 
   # No tests in archive

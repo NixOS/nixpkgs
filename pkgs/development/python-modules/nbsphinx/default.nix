@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter Notebook Tools for Sphinx";
-    homepage = https://nbsphinx.readthedocs.io/;
+    homepage = "https://nbsphinx.readthedocs.io/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

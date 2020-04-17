@@ -20,7 +20,7 @@ buildPythonApplication rec {
   meta = with stdenv.lib; {
     description     = "Starts a countdown to or from TIMESPEC";
     longDescription = "Countdown timer and stopwatch in your terminal";
-    homepage        = https://github.com/trehn/termdown;
+    homepage        = "https://github.com/trehn/termdown";
     license         = licenses.gpl3;
     platforms       = platforms.all;
   };

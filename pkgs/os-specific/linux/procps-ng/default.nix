@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '' else null;
 
   meta = {
-    homepage = https://gitlab.com/procps-ng/procps;
+    homepage = "https://gitlab.com/procps-ng/procps";
     description = "Utilities that give information about processes using the /proc filesystem";
     priority = 11; # less than coreutils, which also provides "kill" and "uptime"
     license = lib.licenses.gpl2;

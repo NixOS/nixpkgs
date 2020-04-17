@@ -1,34 +1,29 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, fetchpatch
-, wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland
+, libGL, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
 , libpng, ffmpeg_4
 }:
 
 stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "0c0q1p9yss5kx4430ik3n89drqpmm2bvgl8fjlf6prac1a7xzqn8";
+    sha256 = "0j2lh9vc92zhn44rjbia5aw3y1rpgfng1x1h17lcvj5m4i6vj0pc";
   };
 
   # $out for the library and $examples for the example programs (in examples):
   outputs = [ "out" "examples" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland ];
 
   buildInputs = [
-    wayland libGL wayland-protocols libinput libxkbcommon pixman
+    libGL wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
     libpng ffmpeg_4
-  ];
-
-  mesonFlags = [
-    "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
-    "-Dxcb-icccm=enabled" "-Dxcb-errors=enabled"
   ];
 
   postInstall = ''
@@ -51,7 +46,12 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A modular Wayland compositor library";
+    longDescription = ''
+      Pluggable, composable, unopinionated modules for building a Wayland
+      compositor; or about 50,000 lines of code you were going to write anyway.
+    '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/swaywm/wlroots/releases/tag/${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];

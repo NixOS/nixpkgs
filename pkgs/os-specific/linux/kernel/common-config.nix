@@ -16,10 +16,11 @@
 }:
 
 with stdenv.lib;
-
-  with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
+with stdenv.lib.kernel;
+with (stdenv.lib.kernel.whenHelpers version);
 
 let
+
 
   # configuration items have to be part of a subattrs
   flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));

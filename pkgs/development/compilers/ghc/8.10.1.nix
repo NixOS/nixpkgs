@@ -84,16 +84,18 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
+  # ld.gold is disabled for musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
+  # see #84670 and #49071 for more background.
+  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false) && !targetPlatform.isMusl;
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.10.0.20200123";
+  version = "8.10.1";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/8.10.1-rc1/ghc-${version}-src.tar.xz";
-    sha256 = "162s5g33s918i12qfcqdj5wanc10xg07g5lq3gpm5j7c1v0y1zrf";
+    url = "https://downloads.haskell.org/ghc/8.10.1/ghc-${version}-src.tar.xz";
+    sha256 = "1xgdl6ig5jzli3bg054vfryfkg0y6wggf68g66c32sr67bw0ffsf";
   };
 
   enableParallelBuilding = true;
@@ -149,15 +151,21 @@ stdenv.mkDerivation (rec {
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]
     ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optionals (libffi != null) ["--with-system-libffi" "--with-ffi-includes=${targetPackages.libffi.dev}/include" "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+  ] ++ stdenv.lib.optionals (libffi != null) [
+    "--with-system-libffi"
+    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
+    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
-    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include"
+    "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
-    "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
+    "--with-iconv-includes=${libiconv}/include"
+    "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
   ] ++ stdenv.lib.optionals useLdGold [
@@ -221,7 +229,7 @@ stdenv.mkDerivation (rec {
   };
 
   meta = {
-    homepage = http://haskell.org/ghc;
+    homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;

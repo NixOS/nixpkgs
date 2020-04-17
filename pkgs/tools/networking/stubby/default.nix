@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, getdns, doxygen, libyaml, darwin, cmake }:
+{ stdenv, fetchFromGitHub, getdns, doxygen, libyaml, darwin, cmake, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "stubby";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake libyaml ];
 
-  buildInputs = [ doxygen getdns ]
+  buildInputs = [ doxygen getdns systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
 
   meta = with stdenv.lib; {

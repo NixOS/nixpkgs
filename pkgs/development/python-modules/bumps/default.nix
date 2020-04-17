@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.reflectometry.org/danse/software.html;
+    homepage = "http://www.reflectometry.org/danse/software.html";
     description = "Data fitting with bayesian uncertainty analysis";
     maintainers = with maintainers; [ rprospero ];
     license = licenses.publicDomain;

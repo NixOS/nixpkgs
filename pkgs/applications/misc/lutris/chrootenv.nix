@@ -103,7 +103,7 @@ in buildFHSUserEnv {
 
     # WINE
     cups lcms2 mpg123 cairo unixODBC samba4 sane-backends openldap
-    ocl-icd utillinux
+    ocl-icd utillinux libkrb5
 
     # Winetricks
     fribidi

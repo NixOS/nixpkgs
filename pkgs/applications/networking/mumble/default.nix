@@ -20,7 +20,6 @@ let
     version = source.version;
 
     patches = (source.patches or [])
-      ++ optional jackSupport ./mumble-jack-support.patch
       ++ [ ./fix-rnnoise-argument.patch ];
 
     nativeBuildInputs = [ pkgconfig python qt5.qmake ]

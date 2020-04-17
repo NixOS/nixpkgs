@@ -2,7 +2,7 @@
 stdenv.mkDerivation {
   name = "fdr-4.2.3";
   src = fetchurl {
-    url = https://www.cs.ox.ac.uk/projects/fdr/downloads/fdr-3789-linux-x86_64.tar.gz;
+    url = "https://www.cs.ox.ac.uk/projects/fdr/downloads/fdr-3789-linux-x86_64.tar.gz";
     sha256 = "0n2yqichym5xdawlgk3r7yha88k7ycnx6585jfrcm7043sls1i88";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.cs.ox.ac.uk/projects/fdr/;
+    homepage = "https://www.cs.ox.ac.uk/projects/fdr/";
     description = "The CSP refinement checker";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;

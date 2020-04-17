@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://cs.uwaterloo.ca/~astorjoh/iml.html;
+    homepage = "https://cs.uwaterloo.ca/~astorjoh/iml.html";
     updateWalker = true;
   };
 }

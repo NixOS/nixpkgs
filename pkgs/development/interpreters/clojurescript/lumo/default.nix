@@ -279,7 +279,7 @@ stdenv.mkDerivation {
       Thanks to V8's custom startup snapshots, Lumo starts up instantaneously,
       making it the fastest Clojure REPL in existence.
     '';
-    homepage = https://github.com/anmonteiro/lumo;
+    homepage = "https://github.com/anmonteiro/lumo";
     license = stdenv.lib.licenses.epl10;
     maintainers = [ stdenv.lib.maintainers.hlolli ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

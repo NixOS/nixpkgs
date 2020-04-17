@@ -79,7 +79,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits.";
-    homepage = "http://github.com/quantumlib/cirq";
+    homepage = "https://github.com/quantumlib/cirq";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

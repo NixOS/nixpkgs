@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://math-classes.github.io;
+    homepage = "https://math-classes.github.io";
     description = "A library of abstract interfaces for mathematical structures in Coq.";
     maintainers = with maintainers; [ siddharthist jwiegley ];
     platforms = coq.meta.platforms;

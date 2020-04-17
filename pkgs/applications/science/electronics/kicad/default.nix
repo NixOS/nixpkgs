@@ -137,5 +137,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ evils kiwi berce ];
     # kicad's cross-platform, not sure what to fill in here
     platforms = with platforms; linux;
+  } // optionalAttrs with3d {
+    # We can't download the 3d models on Hydra - they are a ~1 GiB download and
+    # they occupy ~5 GiB in store.
+    hydraPlatforms = [];
   };
 }

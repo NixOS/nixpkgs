@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "howard-hinnant-date-unstable";
-  version = "2020-01-24";
+  version = "2020-03-09";
 
   src = fetchFromGitHub {
     owner = "HowardHinnant";
     repo = "date";
-    rev = "9a0ee2542848ab8625984fc8cdbfb9b5414c0082";
-    sha256 = "0yxsn0hj22n61bjywysxqgfv7hj5xvsl6isma95fl8xrimpny083";
+    rev = "4c1968b8f038483037cadfdbad3215ce21d934bb";
+    sha256 = "0dywrf18v1znfnz0gdxgi2ydax466zq34gc1vvg2k7vq17a30wq3";
   };
 
   patches = [

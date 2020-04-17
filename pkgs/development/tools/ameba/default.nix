@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ameba";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner  = "crystal-ameba";
     repo   = "ameba";
     rev    = "v${version}";
-    sha256 = "0zjv59f555q2w8ahrvmpdzasrifwjgr0mk6rly9yss4ab3rj8cy2";
+    sha256 = "0g68yijbm2j4ig536fwq49d1z7x2iv9kp4g3gjklf5zn1sbqhm12";
   };
 
   nativeBuildInputs = [ crystal shards ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A static code analysis tool for Crystal";
-    homepage = https://crystal-ameba.github.io;
+    homepage = "https://crystal-ameba.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ kimburgess ];
   };

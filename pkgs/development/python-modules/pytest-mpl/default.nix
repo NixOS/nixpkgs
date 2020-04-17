@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pytest plugin to help with testing figures output from Matplotlib";
-    homepage = https://github.com/matplotlib/pytest-mpl;
+    homepage = "https://github.com/matplotlib/pytest-mpl";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

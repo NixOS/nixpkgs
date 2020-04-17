@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Numerical Geometric Algebra Module";
-    homepage = https://clifford.readthedocs.io;
+    homepage = "https://clifford.readthedocs.io";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

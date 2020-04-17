@@ -4,7 +4,7 @@ pkgconfig}:
 stdenv.mkDerivation {
   name = "ultimate-stunts-0.7.6.1";
   src = fetchurl {
-    url = mirror://sourceforge/ultimatestunts/ultimatestunts-srcdata-0761.tar.gz;
+    url = "mirror://sourceforge/ultimatestunts/ultimatestunts-srcdata-0761.tar.gz";
     sha256 = "0rd565ml6l927gyq158klhni7myw8mgllhv0xl1fg9m8hlzssgrv";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.ultimatestunts.nl/;
+    homepage = "http://www.ultimatestunts.nl/";
     description = "Remake of the popular racing DOS-game Stunts";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];

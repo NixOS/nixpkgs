@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/coq-ext-lib/coq-ext-lib;
+    homepage = "https://github.com/coq-ext-lib/coq-ext-lib";
     description = "A collection of theories and plugins that may be useful in other Coq developments";
     maintainers = with maintainers; [ jwiegley ptival ];
     platforms = coq.meta.platforms;

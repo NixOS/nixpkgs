@@ -2,7 +2,7 @@
 , pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg_4, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, microsoft_gsl
+, tl-expected, microsoft_gsl, hunspell
 # TODO: Shouldn't be required:
 , pcre, xorg, utillinux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
 , xdg_utils
@@ -19,12 +19,12 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.9.14";
+  version = "2.0.1";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0jsss4b51ylf4qk58frvh2yap1s3cjf3isnlc273cc0fh5g1skc6";
+    sha256 = "0g3jw4can9gmp48s3b8s1w8n9xi54i142y74fszxf9jyq5drzlff";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg_4 openalSoft minizip libopus alsaLib libpulseaudio range-v3
-    tl-expected microsoft_gsl
+    tl-expected microsoft_gsl hunspell
     # TODO: Shouldn't be required:
     pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst
   ];
@@ -55,13 +55,9 @@ mkDerivation rec {
     # TODO: Officiall API credentials for Nixpkgs
     # (see: https://github.com/NixOS/nixpkgs/issues/55271):
     "-DTDESKTOP_API_TEST=ON"
-    "-DDESKTOP_APP_USE_GLIBC_WRAPS=OFF"
-    "-DDESKTOP_APP_USE_PACKAGED=ON"
     "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
     "-DDESKTOP_APP_USE_PACKAGED_VARIANT=OFF"
-    "-DDESKTOP_APP_DISABLE_CRASH_REPORTS=ON"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON"
-    "-DTDESKTOP_DISABLE_DESKTOP_FILE_GENERATION=ON"
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
@@ -90,8 +86,7 @@ mkDerivation rec {
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
       --prefix PATH : ${xdg_utils}/bin \
-      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR" \
-      --unset QT_QPA_PLATFORMTHEME # From the Arch wrapper
+      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
   '';
@@ -104,7 +99,8 @@ mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.linux;
-    homepage = https://desktop.telegram.org/;
+    homepage = "https://desktop.telegram.org/";
+    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v{version}";
     maintainers = with maintainers; [ primeos abbradar ];
   };
 }

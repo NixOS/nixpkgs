@@ -1,5 +1,4 @@
 { lib, stdenv, python, isLinux ? stdenv.isLinux }:
-
 let
   inherit (lib.strings) hasSuffix hasInfix splitString removeSuffix;
 
@@ -94,12 +93,10 @@ let
           if isLinux
           then chooseLinux files
           else chooseOSX files;
-
     in
       if (builtins.length filtered == 0)
       then []
       else choose (filtered);
-
 in
 {
   inherit selectWheel toWheelAttrs isPyVersionCompatible;

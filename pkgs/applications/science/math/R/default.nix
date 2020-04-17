@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.6.2";
+  name = "R-3.6.3";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0m69pfi0nxyriyb2yz74xfzaxwfkinnf9kpvf1rz727vvmfa8rdx";
+    sha256 = "13xaxwfbzj0bd6rn2n27z0n04lb93mcyq991w4vdbbg8v282jc49";
   };
 
   dontUseImakeConfigure = true;
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = http://www.r-project.org/;
+    homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     license = licenses.gpl2Plus;
 

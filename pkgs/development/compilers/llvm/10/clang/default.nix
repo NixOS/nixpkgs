@@ -1,7 +1,6 @@
 { stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
-, enablePolly ? false # TODO: get this info from llvm (passthru?)
 }:
 
 let
@@ -9,7 +8,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "1npwv0j6812q9jar79bb5m2j4lmvp11680in45nlma8czrs52w0v";
+    src = fetch "clang" "08fbxa2a0kr3ni35ckppj0kyvlcyaywrhpqwcdrdy0z900mhcnw8";
 
     unpackPhase = ''
       unpackFile $src
@@ -34,12 +33,12 @@ let
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ] ++ stdenv.lib.optionals enablePolly [
-      "-DWITH_POLLY=ON"
-      "-DLINK_POLLY_INTO_TOOLS=ON"
     ];
 
     patches = [
+      # 10.0.0 only, this should be present in 10.0.1
+      ./clang-extension-handling.patch
+
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./compiler-rt-baremetal.patch
@@ -96,7 +95,7 @@ let
 
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
-      homepage    = http://llvm.org/;
+      homepage    = "http://llvm.org/";
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };

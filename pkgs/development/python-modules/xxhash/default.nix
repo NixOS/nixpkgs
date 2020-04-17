@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ifduyue/python-xxhash;
+    homepage = "https://github.com/ifduyue/python-xxhash";
     description = "Python Binding for xxHash https://pypi.org/project/xxhash/";
     license = licenses.bsd2;
     maintainers = [ maintainers.teh ];

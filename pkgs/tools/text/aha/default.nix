@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       aha takes ANSI SGR-coloured input and produces W3C-conformant HTML code.
     '';
-    homepage = https://github.com/theZiz/aha;
+    homepage = "https://github.com/theZiz/aha";
     license = with licenses; [ lgpl2Plus mpl11 ];
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

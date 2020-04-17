@@ -32,7 +32,7 @@ let
               inherit plugins;
             } // removeAttrs c [ "type" "pythonPackages" ]
               // optionalAttrs (python != null) {
-                pythonpath = "${pythonEnv}/${python.sitePackages}";
+                pyhome = "${pythonEnv}";
                 env =
                   # Argh, uwsgi expects list of key-values there instead of a dictionary.
                   let env' = c.env or [];

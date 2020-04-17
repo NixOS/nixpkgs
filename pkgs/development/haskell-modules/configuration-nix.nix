@@ -283,11 +283,11 @@ self: super: builtins.intersectAttrs super {
   caramia = dontCheck super.caramia;
 
   llvm-hs =
-    let llvmHsWithLlvm8 = super.llvm-hs.override { llvm-config = pkgs.llvm_8; };
+    let llvmHsWithLlvm9 = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
     in
     if pkgs.stdenv.isDarwin
     then
-      overrideCabal llvmHsWithLlvm8 (oldAttrs: {
+      overrideCabal llvmHsWithLlvm9 (oldAttrs: {
         # One test fails on darwin.
         doCheck = false;
         # llvm-hs's Setup.hs file tries to add the lib/ directory from LLVM8 to
@@ -298,7 +298,7 @@ self: super: builtins.intersectAttrs super {
           substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
         '';
       })
-    else llvmHsWithLlvm8;
+    else llvmHsWithLlvm9;
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -498,6 +498,9 @@ self: super: builtins.intersectAttrs super {
   # requires autotools to build
   secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
+  # requires libsecp256k1 in pkgconfig-depends
+  secp256k1-haskell = addPkgconfigDepend super.secp256k1-haskell pkgs.secp256k1;
+
   # tests require git and zsh
   hapistrano = addBuildTools super.hapistrano [ pkgs.buildPackages.git pkgs.buildPackages.zsh ];
 
@@ -569,17 +572,34 @@ self: super: builtins.intersectAttrs super {
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
-  futhark = if pkgs.stdenv.isDarwin then super.futhark else with pkgs;
-    let path = stdenv.lib.makeBinPath [ gcc ];
-    in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
-      postInstall = ''
-        wrapProgram $out/bin/futhark \
-          --prefix PATH : "${path}" \
-          --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
-          --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
-          --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
-      '';
-    });
+  # * Compile manpages (which are in RST and are compiled with Sphinx).
+  #
+  # * Wrap so that binary can find GCC and OpenCL headers (dubious if
+  #   a good idea).
+  futhark = with pkgs;
+    let maybeWrap =
+          if pkgs.stdenv.isDarwin then ""
+          else
+            let path = stdenv.lib.makeBinPath [ gcc ];
+            in ''
+            wrapProgram $out/bin/futhark \
+              --prefix PATH : "${path}" \
+              --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
+              --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
+              --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
+            '';
+    in overrideCabal (addBuildTools super.futhark [makeWrapper python37Packages.sphinx])
+      (_drv: {
+        postBuild = (_drv.postBuild or "") + ''
+        make -C docs man
+        '';
+
+        postInstall = (_drv.postInstall or "") + ''
+        mkdir -p $out/share/man/man1
+        mv docs/_build/man/*.1 $out/share/man/man1/
+        ''
+        + maybeWrap;
+      });
 
   git-annex = with pkgs;
     if (!stdenv.isLinux) then
@@ -635,11 +655,19 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
+      # Spago needs a patch for MonadFail changes.
+      # https://github.com/purescript/spago/pull/584
+      # This can probably be removed when a version after spago-0.14.0 is released.
+      spagoWithPatches = appendPatch super.spago (pkgs.fetchpatch {
+        url = "https://github.com/purescript/spago/pull/584/commits/898a8e48665e5a73ea03525ce2c973455ab9ac52.patch";
+        sha256 = "05gs1hjlcf60cr6728rhgwwgxp3ildly14v4l2lrh6ma2fljhyjy";
+      });
+
       # Spago basically compiles with LTS-14, but it requires a newer version
       # of directory.  This is to work around a bug only present on windows, so
       # we can safely jailbreak spago and use the older directory package from
       # LTS-14.
-      spagoWithOverrides = doJailbreak (super.spago.override {
+      spagoWithOverrides = doJailbreak (spagoWithPatches.override {
         # spago requires dhall-1.29.0.
         dhall = self.dhall_1_29_0;
       });
@@ -710,4 +738,8 @@ self: super: builtins.intersectAttrs super {
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
 
+  # dhall-1.29.0 tests access the network.  This override can be removed when
+  # dhall_1_29_0 is no longer used, since more recent versions of dhall don't
+  # access the network in checks.
+  dhall_1_29_0 = dontCheck super.dhall_1_29_0;
 }

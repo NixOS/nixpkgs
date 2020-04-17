@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool thats prints debugging information from usb HID devices";
-    homepage = https://www.pjrc.com/teensy/hid_listen.html;
+    homepage = "https://www.pjrc.com/teensy/hid_listen.html";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tomsmeets ];
     platforms = platforms.linux;

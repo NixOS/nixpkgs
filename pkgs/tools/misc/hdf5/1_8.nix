@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
     license = stdenv.lib.licenses.free; # BSD-like
-    homepage = https://www.hdfgroup.org/HDF5/;
+    homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = stdenv.lib.platforms.unix;
     broken = (gfortran != null) && stdenv.isDarwin;
   };

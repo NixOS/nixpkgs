@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace sys-utils/eject.c \
-      --replace "/bin/umount" "$out/bin/umount"
+      --replace "/bin/umount" "$bin/bin/umount"
   '';
 
   # !!! It would be better to obtain the path to the mount helpers
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://www.kernel.org/pub/linux/utils/util-linux/;
+    homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "A set of system utilities for Linux";
     license = licenses.gpl2; # also contains parts under more permissive licenses
     platforms = platforms.linux;

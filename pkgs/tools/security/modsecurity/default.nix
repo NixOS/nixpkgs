@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source, cross-platform web application firewall (WAF)";
     license = licenses.asl20;
-    homepage = https://www.modsecurity.org/;
+    homepage = "https://www.modsecurity.org/";
     maintainers = with maintainers; [offline];
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };

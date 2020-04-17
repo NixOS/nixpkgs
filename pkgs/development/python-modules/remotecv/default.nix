@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "OpenCV worker for facial and feature recognition";
-    homepage = https://github.com/thumbor/remotecv/wiki;
+    homepage = "https://github.com/thumbor/remotecv/wiki";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
     broken = true; # no longer compatible with latest pillow

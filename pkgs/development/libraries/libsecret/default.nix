@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [
     pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
-    gobject-introspection vala gtk-doc
+    gobject-introspection vala gtk-doc glib
   ];
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for storing and retrieving passwords and other secrets";
-    homepage = https://wiki.gnome.org/Projects/Libsecret;
+    homepage = "https://wiki.gnome.org/Projects/Libsecret";
     license = stdenv.lib.licenses.lgpl21Plus;
     inherit (glib.meta) platforms maintainers;
   };

@@ -90,7 +90,7 @@ in
 
     meta = with stdenv.lib; {
       description = "Mattermost Desktop client";
-      homepage    = https://about.mattermost.com/;
+      homepage    = "https://about.mattermost.com/";
       license     = licenses.asl20;
       platforms   = [ "x86_64-linux" "i686-linux" ];
       maintainers = [ maintainers.joko ];

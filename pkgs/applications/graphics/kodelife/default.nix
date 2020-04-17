@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kodelife";
-  version = "0.8.8.110";
+  version = "0.9.0.129";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.zip";
     sha256 = {
-      aarch64-linux = "1lcpj1mgkvksq1d08ibh59y0dmdh7zm77wi5ziqhg3p5g9nxyasd";
-      armv7l-linux  = "0sljy06302x567jqw5lagbyhpc3j140jk4wccacxjrbb6hcx3l42";
-      x86_64-darwin = "1b058s9kny026q395nj99v8hggxkgv43nnjkmx1a2siajw0db94c";
-      x86_64-linux  = "1q77cpz4gflrvfz6dm6np8sqbwyr235gq7y4pzs4hnqbrdzd4nwl";
+      aarch64-linux = "0z2fqlf156348ha3zhv16kvqdx68fbwbzch2gzjm9x1na9n5k1ra";
+      armv7l-linux  = "1ppwgrmgl1j2ws9mhrscvvkamd69a6xw7x35df6d30cyj97r0mzy";
+      x86_64-darwin = "0f8vn6m3xzsiyxm2ka5wkbp63wvzrix6g1xrbpvcm3v2llmychkl";
+      x86_64-linux  = "035c1nlw0nim057sz3axpkcgkafqbm6gpr8hwr097vlrqll6w3dv";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
+  preferLocalBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin

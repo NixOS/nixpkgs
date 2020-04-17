@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.7";
+  version = "3.0.8";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "1ppf8jlpiclq3jprhx889y5lgf6lc2q4d8wy2zavzsxgnsqf67il";
+    sha256 = "0pkh74bfrgp1slv8wsv7lbmal2m7qkixwm5llpmfwaiv14njlp68";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/libical/libical;
+    homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;
     platforms = platforms.unix;

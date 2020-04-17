@@ -13,7 +13,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests six requests_oauthlib ];
 
   meta = with lib; {
-    homepage = https://github.com/tweepy/tweepy;
+    homepage = "https://github.com/tweepy/tweepy";
     description = "Twitter library for python";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

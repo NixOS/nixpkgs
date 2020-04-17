@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Suite of nonlinear differential/algebraic equation solvers";
-    homepage    = https://computation.llnl.gov/projects/sundials;
+    homepage    = "https://computation.llnl.gov/projects/sundials";
     platforms   = platforms.all;
     maintainers = with maintainers; [ flokli idontgetoutmuch ];
     license     = licenses.bsd3;

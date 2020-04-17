@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "libthumbor is the python extension to thumbor";
-    homepage = https://github.com/heynemann/libthumbor;
+    homepage = "https://github.com/heynemann/libthumbor";
     license = licenses.mit;
   };
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tonyrog/cl;
+    homepage = "https://github.com/tonyrog/cl";
     description = "OpenCL binding for Erlang";
     license = licenses.mit;
     # https://github.com/tonyrog/cl/issues/39

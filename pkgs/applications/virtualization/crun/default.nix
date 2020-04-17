@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "0.12.2.1";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "16hjkkr1fp542ycyp87pj626mzfrza5mcb82hhkp4a8m8bqmpzp4";
+    sha256 = "0c5acf916yv2zv3xjvxk1sa4h3n2wljc5hw61php7q37pbjc1ppn";
     fetchSubmodules = true;
   };
 
@@ -64,8 +64,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     inherit (src.meta) homepage;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

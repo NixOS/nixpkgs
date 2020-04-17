@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Lean Persistent Homology Library for Python";
-    homepage = https://ripser.scikit-tda.org;
+    homepage = "https://ripser.scikit-tda.org";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

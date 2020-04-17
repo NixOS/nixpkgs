@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "terragrunt";
-  version = "0.21.11";
+  version = "0.23.2";
 
   goPackagePath = "github.com/gruntwork-io/terragrunt";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "gruntwork-io";
     repo   = "terragrunt";
     rev    = "v${version}";
-    sha256 = "1w64skk67i0sxjd2mkyqh3nglc32wc7schk7h8fwszpa1rw4dfcn";
+    sha256 = "1r3q7faxys0h147cr9154pcix1qgj36v41ja9hhbggm4c7vig4s1";
   };
 
   goDeps = ./deps.nix;
@@ -29,7 +29,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A thin wrapper for Terraform that supports locking for Terraform state and enforces best practices.";
-    homepage = https://github.com/gruntwork-io/terragrunt/;
+    homepage = "https://github.com/gruntwork-io/terragrunt/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

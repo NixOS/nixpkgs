@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ alsaLib ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.parabola.me.uk/alsa/pmidi.html;
+    homepage = "http://www.parabola.me.uk/alsa/pmidi.html";
     description = "A straightforward command line program to play midi files through the ALSA sequencer";
     maintainers = with maintainers; [ lheckemann ];
     license = licenses.gpl2;

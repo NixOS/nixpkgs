@@ -3,6 +3,7 @@
 , fetchPypi
 , python
 , isPy3k
+, pythonNamespacesHook
 , msrestazure
 , azure-common
 , azure-mgmt-datalake-nspkg
@@ -24,11 +25,7 @@ buildPythonPackage rec {
     azure-mgmt-datalake-nspkg
   ];
 
-  postInstall = lib.optionalString isPy3k ''
-    rm $out/${python.sitePackages}/azure/__init__.py
-    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
-    rm $out/${python.sitePackages}/azure/mgmt/datalake/__init__.py
-  '';
+  pythonNamespaces = [ "azure.mgmt.datalake" ];
 
   # has no tests
   doCheck = false;

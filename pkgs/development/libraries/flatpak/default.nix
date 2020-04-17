@@ -36,7 +36,6 @@
 , desktop-file-utils
 , gtk3
 , fuse
-, malcontent
 , nixosTests
 , libsoup
 , lzma
@@ -55,14 +54,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.6.2";
+  version = "1.6.3";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "02k9p5n60gz2k85n805n9niic4miw0mfh0i7yk1vrc8vaa5h69wd";
+    sha256 = "17s8nqdxd4xdy7ag9bw06adxccha78jmlsa3zpqnl3qh92pg0hji";
   };
 
   patches = [
@@ -140,7 +139,6 @@ stdenv.mkDerivation rec {
     systemd
     xorg.libXau
     fuse
-    malcontent
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon

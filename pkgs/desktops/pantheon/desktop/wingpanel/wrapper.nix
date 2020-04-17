@@ -1,7 +1,8 @@
 { lib
 , wrapGAppsHook
 , glib
-, symlinkJoin
+, stdenv
+, xorg
 , wingpanel
 , wingpanelIndicators
 , switchboard-with-plugs
@@ -15,30 +16,44 @@ let
     if indicators == null then wingpanelIndicators
     else indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
 in
-symlinkJoin {
+stdenv.mkDerivation rec {
   name = "${wingpanel.name}-with-indicators";
+
+  src = null;
 
   paths = [
     wingpanel
   ] ++ selectedIndicators;
 
-  buildInputs = [
+  passAsFile = [ "paths" ];
+
+  nativeBuildInputs = [
     glib
     wrapGAppsHook
-  ] ++ (lib.forEach selectedIndicators (x: x.buildInputs))
+  ];
+
+  buildInputs = lib.forEach selectedIndicators (x: x.buildInputs)
     ++ selectedIndicators;
 
-  # We have to set SWITCHBOARD_PLUGS_PATH because wingpanel-applications-menu
-  # has a plugin to search switchboard settings
-  postBuild = ''
-    make_glib_find_gsettings_schemas
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+
+  installPhase = ''
+    mkdir -p $out
+    for i in $(cat $pathsPath); do
+      ${xorg.lndir}/bin/lndir -silent $i $out
+    done
+  '';
+
+  preFixup = ''
     gappsWrapperArgs+=(
       --set WINGPANEL_INDICATORS_PATH "$out/lib/wingpanel"
       --set SWITCHBOARD_PLUGS_PATH "${switchboard-with-plugs}/lib/switchboard"
     )
-
-    wrapGAppsHook
   '';
 
   inherit (wingpanel) meta;

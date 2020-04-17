@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1vf55ls3h20zpf0yxb206cijq8nkf89z2lmhccb4i1g2zajd31ix";
+    sha256 = "02g6x190lylng8d07pwx2bqcc71rq48f0dxh30mgndfii6k21qgs";
   };
 
   passthru = {
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugins-dir.patch
+    ./use-new-notifications-default.patch
   ];
 
   postPatch = ''
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta =  with stdenv.lib; {
     description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
-    homepage = https://github.com/elementary/gala;
+    homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

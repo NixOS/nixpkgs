@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
       description = "POP3 mail retrieval agent";
-      homepage = https://marlam.de/mpop;
+      homepage = "https://marlam.de/mpop";
       license = licenses.gpl3Plus;
       platforms = platforms.unix;
     };

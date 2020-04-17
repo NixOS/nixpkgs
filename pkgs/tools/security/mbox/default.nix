@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib;
     { description = "Lightweight sandboxing mechanism that any user can use without special privileges";
-      homepage = http://pdos.csail.mit.edu/mbox/;
+      homepage = "http://pdos.csail.mit.edu/mbox/";
       maintainers = with maintainers; [ ehmry ];
       license = licenses.bsd3;
       platforms = [ "x86_64-linux" ];

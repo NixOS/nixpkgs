@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.0.1";
+  version = "5.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fid6li95jx9c3v83v8c2c8lb03jgirkk9mjmck30yxcwmlxp6a2";
+    sha256 = "1ai1i0wydxfbdakqnrlpgdk4l2ps7gw0r9nihv9p2jgyqbl13kj3";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Python CBOR (de)serializer with extensive tag support";
-    homepage = https://github.com/agronholm/cbor2;
+    homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
     maintainers = with maintainers; [ taneb ];
   };

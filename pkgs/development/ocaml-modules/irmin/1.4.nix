@@ -18,7 +18,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = https://github.com/mirage/irmin;
+    homepage = "https://github.com/mirage/irmin";
     description = "Irmin, a distributed database that follows the same design principles as Git";
     license = licenses.isc;
     maintainers = [ maintainers.alexfmpe ];

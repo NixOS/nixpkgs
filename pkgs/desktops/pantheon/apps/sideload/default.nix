@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0camg34skiisfbf9s9awfkdkq72s9jhl4ipmax7dqr33n8a86hic";
+    sha256 = "1nnaq4vc0aag6pckxhrma5qv8al7i00rrlg95ac4iqqmivja7i92";
   };
 
   passthru = {
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/elementary/sideload;
+    homepage = "https://github.com/elementary/sideload";
     description = "Flatpak installer, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

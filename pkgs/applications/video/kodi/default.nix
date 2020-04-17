@@ -19,6 +19,7 @@
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
 , libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, lirc
 , dbusSupport ? true, dbus ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
@@ -30,6 +31,7 @@
 , vdpauSupport ? true, libvdpau ? null
 , useWayland ? false, wayland ? null, wayland-protocols ? null
 , waylandpp ?  null, libxkbcommon ? null
+, useGbm ? false, mesa ? null, libinput ? null
 }:
 
 assert dbusSupport  -> dbus != null;
@@ -43,15 +45,15 @@ assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
 let
-  kodiReleaseDate = "20191116";
-  kodiVersion = "18.5";
+  kodiReleaseDate = "20200301";
+  kodiVersion = "18.6";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "0pcrraj1ddzrd296br10yjnaxgb3iym74xzixcakaqhhp00f5hf6";
+    sha256 = "0rwymipn5hljy5xrslzmrljmj6f9wb191wi7gjw20wl6sv44d0bk";
   };
 
   cmakeProto = fetchurl {
@@ -168,6 +170,7 @@ in stdenv.mkDerivation {
       libcrossguid cwiid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs libXdmcp
       ffmpeg flatbuffers fmt fstrcmp rapidjson
+      lirc
       # libdvdcss libdvdnav libdvdread
     ]
     ++ lib.optional  dbusSupport     dbus
@@ -183,6 +186,11 @@ in stdenv.mkDerivation {
       wayland waylandpp
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
+    ]
+    ++ lib.optional useGbm [
+      libxkbcommon.dev
+      mesa.dev
+      libinput.dev
     ];
 
     nativeBuildInputs = [
@@ -194,15 +202,6 @@ in stdenv.mkDerivation {
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
     ] ++ lib.optionals useWayland [ wayland-protocols ];
 
-    patches = [
-      # Adds missing cassert includes, fixing builds. This will be unnecessary
-      # after 18.6 is released (which will contain this patch)
-      (fetchpatch {
-        url = "https://github.com/xbmc/xbmc/commit/d5947e6733fd564edb68df91fd6d389d9fb82319.patch";
-        sha256 = "1shlbsbfba3074wdyhl42vgin6jfzl7sy3zsvxaxkpx8g7my9jn2";
-      })
-    ];
-
     cmakeFlags = [
       "-Dlibdvdcss_URL=${libdvdcss.src}"
       "-Dlibdvdnav_URL=${libdvdnav.src}"
@@ -211,10 +210,12 @@ in stdenv.mkDerivation {
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
       "-DENABLE_OPTICAL=ON"
-      "-DLIRC_DEVICE=/run/lirc/lircd"
     ] ++ lib.optional useWayland [
       "-DCORE_PLATFORM_NAME=wayland"
       "-DWAYLAND_RENDER_SYSTEM=gl"
+    ] ++ lib.optional useGbm [
+      "-DCORE_PLATFORM_NAME=gbm"
+      "-DGBM_RENDER_SYSTEM=gles"
     ];
 
     enableParallelBuilding = true;
@@ -250,7 +251,7 @@ in stdenv.mkDerivation {
 
     meta = with stdenv.lib; {
       description = "Media center";
-      homepage    = https://kodi.tv/;
+      homepage    = "https://kodi.tv/";
       license     = licenses.gpl2;
       platforms   = platforms.linux;
       maintainers = with maintainers; [ domenkozar titanous edwtjo peterhoeg sephalon ];

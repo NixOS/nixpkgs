@@ -14,8 +14,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/dbcdk/morph";
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ go-bindata ];
+  nativeBuildInputs = [ makeWrapper go-bindata ];
 
   buildFlagsArray = ''
     -ldflags=

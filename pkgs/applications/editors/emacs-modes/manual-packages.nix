@@ -52,6 +52,19 @@
     };
   };
 
+  agda-input = self.trivialBuild {
+    pname = "agda-input";
+
+    inherit (external.Agda) src version;
+
+    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
+
+    meta = {
+      description = "Standalone package providing the agda-input method without building Agda.";
+      inherit (external.Agda.meta) homepage license;
+    };
+  };
+
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
 

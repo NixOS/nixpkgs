@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Native messaging host to integrate uGet Download Manager with web browsers";
-    homepage = https://github.com/ugetdm/uget-integrator;
+    homepage = "https://github.com/ugetdm/uget-integrator";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

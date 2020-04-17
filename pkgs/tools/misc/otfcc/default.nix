@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "otfcc";
-  version = "0.9.6";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "caryll";
     repo = "otfcc";
     rev = "v${version}";
-    sha256 = "1rnjfqqyc6d9nhlh8if9k37wk94mcwz4wf3k239v6idg48nrk10b";
+    sha256 = "1nrkzpqklfpqsccji4ans40rj88l80cv7dpxwx4g577xrvk13a0f";
   };
 
   nativeBuildInputs = [ premake5 ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimized OpenType builder and inspector";
-    homepage = https://github.com/caryll/otfcc;
+    homepage = "https://github.com/caryll/otfcc";
     license = licenses.asl20;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ jfrankenau ttuegel ];

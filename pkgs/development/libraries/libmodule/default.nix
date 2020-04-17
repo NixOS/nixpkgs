@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C simple and elegant implementation of an actor library";
-    homepage = https://github.com/FedeDP/libmodule;
+    homepage = "https://github.com/FedeDP/libmodule";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [

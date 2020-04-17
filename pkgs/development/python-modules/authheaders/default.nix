@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for the generation of email authentication headers";
-    homepage = https://github.com/ValiMail/authentication-headers;
+    homepage = "https://github.com/ValiMail/authentication-headers";
     license = lib.licenses.mit;
   };
 }

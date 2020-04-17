@@ -95,6 +95,16 @@ let
       '' + optionalString (configure != {}) ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim
+        # Some plugins assume that the home directory is accessible for
+        # initializing caches, temporary files, etc. Even if the plugin isn't
+        # actively used, it may throw an error as soon as Neovim is launched
+        # (e.g., inside an autoload script), causing manifest generation to
+        # fail. Therefore, let's create a fake home directory before generating
+        # the manifest, just to satisfy the needs of these plugins.
+        #
+        # See https://github.com/Yggdroot/LeaderF/blob/v1.21/autoload/lfMru.vim#L10
+        # for an example of this behavior.
+        export HOME="$(mktemp -d)"
         # Launch neovim with a vimrc file containing only the generated plugin
         # code. Pass various flags to disable temp file generation
         # (swap/viminfo) and redirect errors to stderr.

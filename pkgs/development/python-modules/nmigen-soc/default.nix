@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "System on Chip toolkit for nMigen";
-    homepage = https://github.com/nmigen/nmigen-soc;
+    homepage = "https://github.com/nmigen/nmigen-soc";
     license = licenses.bsd2;
     maintainers = with maintainers; [ emily ];
   };

@@ -609,9 +609,11 @@ in
             bindMounts = mkOption {
               type = with types; loaOf (submodule bindMountOpts);
               default = {};
-              example = { "/home" = { hostPath = "/home/alice";
-                                      isReadOnly = false; };
-                        };
+              example = literalExample ''
+                { "/home" = { hostPath = "/home/alice";
+                              isReadOnly = false; };
+                }
+              '';
 
               description =
                 ''

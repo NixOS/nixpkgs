@@ -1,21 +1,21 @@
-{ stdenv, kernel, fetchFromGitHub }:
+{ stdenv, kernel, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "0.1.5";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "ocerman";
     repo = "zenpower";
     rev = "v${version}";
-    sha256 = "1ay1q666bc7czgc95invw523c0ds2gj85wxypc3wi418vfaha5vy";
+    sha256 = "1fqqaj7fq49yi2yip518036w80r9w7mkxpbkrxqzlydpma1x9v5m";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  makeFlags = [ "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     install -D zenpower.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon/zenpower/"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ocerman/zenpower";
     license = licenses.gpl2;
     maintainers = with maintainers; [ alexbakker ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     broken = versionOlder kernel.version "4.14";
   };
 }

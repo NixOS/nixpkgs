@@ -8,7 +8,7 @@ with lib;
 let
   verMajor = "1";
   verMinor = "2";
-  verPatch = "1335";
+  verPatch = "5033";
   version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "2.1.2";
   gwtVer = "2.8.1";
@@ -26,7 +26,7 @@ mkDerivation rec {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "0jv1d4yznv2lzwp0fdf377vqpg0k2q4z9qvji4sj86fabj835lqd";
+    sha256 = "0f3p2anz9xay2859bxj3bvyj582igsp628qxsccpkgn0jifvi4np";
   };
 
   # Hack RStudio to only use the input R and provided libclang.
@@ -57,7 +57,7 @@ mkDerivation rec {
   dictionaries = largeDicts ++ otherDicts;
 
   mathJaxSrc = fetchurl {
-    url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
+    url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip";
     sha256 = "0wbcqb9rbfqqvvhqr1pbqax75wp8ydqdyhp91fbqfqp26xzjv6lk";
   };
 
@@ -127,7 +127,7 @@ mkDerivation rec {
 
   meta = with lib;
     { description = "Set of integrated tools for the R language";
-      homepage = https://www.rstudio.com/;
+      homepage = "https://www.rstudio.com/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ ehmry changlinli ciil ];
       platforms = platforms.linux;

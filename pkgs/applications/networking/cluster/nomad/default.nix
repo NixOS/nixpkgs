@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "nomad";
-  version = "0.10.2";
+  version = "0.11.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/nomad";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "1kv67rkqnxiz2dkmc1v1df6qx9j5j4h7cis00v2i15sl824g22jw";
+    sha256 = "0jg7h52wlgd2aslx13fs97j3b8g5xfgil3p2jsc4j95l7lmqn7bv";
   };
 
   # ui:
@@ -32,7 +32,7 @@ buildGoPackage rec {
  '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.nomadproject.io/;
+    homepage = "https://www.nomadproject.io/";
     description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
     platforms = platforms.unix;
     license = licenses.mpl20;

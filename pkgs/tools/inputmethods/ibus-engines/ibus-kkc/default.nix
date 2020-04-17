@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isIbusEngine = true;
     description  = "libkkc (Japanese Kana Kanji input method) engine for ibus";
-    homepage     = https://github.com/ueno/ibus-kkc;
+    homepage     = "https://github.com/ueno/ibus-kkc";
     license      = licenses.gpl2;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ vanzef ];

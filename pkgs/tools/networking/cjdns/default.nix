@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, nodejs, which, python27, utillinux }:
 
-let version = "20.5"; in
+let version = "20.6"; in
 stdenv.mkDerivation {
   name = "cjdns-"+version;
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "cjdelisle";
     repo = "cjdns";
     rev = "cjdns-v${version}";
-    sha256 = "13f174bmbyqna899naja4fzpma3yaw815ylksk8klcc3glg07v7b";
+    sha256 = "1d5rrnqb5dcmm5cg2ky1cgxz6ncb23n1j797j9zzw6xxdvkf3kgi";
   };
 
   buildInputs = [ which python27 nodejs ] ++
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cjdelisle/cjdns;
+    homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ehmry ];

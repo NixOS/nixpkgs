@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/mirage/ocaml-uri;
+    homepage = "https://github.com/mirage/ocaml-uri";
     platforms = ocaml.meta.platforms or [];
     description = "RFC3986 URI parsing library for OCaml";
     license = stdenv.lib.licenses.isc;

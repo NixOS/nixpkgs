@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, ninja, llvm_5, llvm_8, curl, tzdata
-, python, libconfig, lit, gdb, unzip, darwin, bash
+, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, runCommand, targetPackages
 , bootstrapVersion ? false
 , version ? "1.17.0"
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja makeWrapper unzip ]
     ++ stdenv.lib.optionals (!bootstrapVersion) [
-      bootstrapLdc python lit
+      bootstrapLdc lit lit.python
     ]
     ++ stdenv.lib.optional (!bootstrapVersion && stdenv.hostPlatform.isDarwin)
       # https://github.com/NixOS/nixpkgs/issues/57120
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The LLVM-based D compiler";
-    homepage = https://github.com/ldc-developers/ldc;
+    homepage = "https://github.com/ldc-developers/ldc";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
     license = with licenses; [ bsd3 boost mit ncsa gpl2Plus ];
     maintainers = with maintainers; [ ThomasMader ];

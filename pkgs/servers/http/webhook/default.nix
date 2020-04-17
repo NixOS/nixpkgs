@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    homepage = https://github.com/adnanh/webhook;
+    homepage = "https://github.com/adnanh/webhook";
     license = [ licenses.mit ];
     description = "incoming webhook server that executes shell commands";
   };

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "pahole";
   version = "1.16";
   src = fetchgit {
-    url = https://git.kernel.org/pub/scm/devel/pahole/pahole.git;
+    url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git";
     rev = "v${version}";
     sha256 = "1gfc9v4dgs811v1zjk0d9hsgmizllw2hibc83ykmakzysimaxsy3";
   };
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-D__LIB=lib" ];
 
   meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/cgit/devel/pahole/pahole.git/;
+    homepage = "https://git.kernel.org/cgit/devel/pahole/pahole.git/";
     description = "Pahole and other DWARF utils";
     license = licenses.gpl2;
 

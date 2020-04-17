@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "virtualenv-clone";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c88ae171a11b087ea2513f260cdac9232461d8e9369bcd1dc143fc399d220557";
+    sha256 = "0absh96fsxk9di7ir76f5djyfm2c214wnyk53avrhjy8akflhpk6";
   };
 
   buildInputs = [ pytest ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/edwardgeorge/virtualenv-clone;
+    homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
     license = licenses.mit;
   };

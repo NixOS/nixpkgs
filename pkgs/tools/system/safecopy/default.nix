@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
          resets and other helpful low level operations on a number of other device classes.
        '';
 
-    homepage = http://safecopy.sourceforge.net;
+    homepage = "http://safecopy.sourceforge.net";
 
     license = stdenv.lib.licenses.gpl2Plus;
 

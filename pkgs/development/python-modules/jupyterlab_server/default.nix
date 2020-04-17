@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "1.0.6";
+  version = "1.1.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d0977527bfce6f47c782cb6bf79d2c949ebe3f22ac695fa000b730c671445dad";
+    sha256 = "0cqpyy4jr3023c47ij08djkpx526gmz8fab45mcnws0glhp7xhms";
   };
 
   checkInputs = [ requests pytest ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "JupyterLab Server";
-    homepage = https://jupyter.org;
+    homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];
   };

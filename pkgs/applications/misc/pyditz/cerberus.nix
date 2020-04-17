@@ -12,7 +12,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestrunner pytest ];
 
   meta = with stdenv.lib; {
-    homepage = http://python-cerberus.org/;
+    homepage = "http://python-cerberus.org/";
     description = "Lightweight, extensible schema and data validation tool for Python dictionaries";
     license = licenses.mit;
   };

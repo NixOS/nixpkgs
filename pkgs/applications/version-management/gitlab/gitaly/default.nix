@@ -28,14 +28,14 @@ let
     };
   });
 in buildGoPackage rec {
-  version = "12.8.2";
+  version = "12.8.8";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "1zc44y5yl799vqg12w3iaivk4xwj9i4k6f198svplipa760nl9ic";
+    sha256 = "182jqglzbzq8jnlq6l634125jkvi67pfr1xck68n4k09gyzqllxv";
   };
 
   # Fix a check which assumes that hook files are writeable by their
@@ -68,7 +68,7 @@ in buildGoPackage rec {
   outputs = [ "bin" "out" "ruby" ];
 
   meta = with stdenv.lib; {
-    homepage = https://gitlab.com/gitlab-org/gitaly;
+    homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux;
     maintainers = with maintainers; [ roblabla globin fpletz talyz ];

@@ -14,6 +14,9 @@ with lib;
 
   nix.allowedUsers = mkDefault [ "@users" ];
 
+  environment.memoryAllocator.provider = mkDefault "scudo";
+  environment.variables.SCUDO_OPTIONS = mkDefault "ZeroContents=1";
+
   security.hideProcessInformation = mkDefault true;
 
   security.lockKernelModules = mkDefault true;

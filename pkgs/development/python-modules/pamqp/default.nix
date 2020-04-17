@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "RabbitMQ Focused AMQP low-level library";
-    homepage = https://pypi.python.org/pypi/pamqp;
+    homepage = "https://pypi.python.org/pypi/pamqp";
     license = licenses.bsd3;
   };
 

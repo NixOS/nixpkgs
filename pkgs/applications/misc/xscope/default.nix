@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "program to monitor X11/Client conversations";
-    homepage = https://cgit.freedesktop.org/xorg/app/xscope/;
+    homepage = "https://cgit.freedesktop.org/xorg/app/xscope/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;

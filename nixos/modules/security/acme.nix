@@ -301,8 +301,8 @@ in
                 # StateDirectory must be relative, and will be created under /var/lib by systemd
                 lpath = "acme/${cert}";
                 apath = "/var/lib/${lpath}";
-                spath = "/var/lib/acme/.lego";
-                rights = if data.allowKeysForGroup then "750" else "700";
+                spath = "/var/lib/acme/.lego/${cert}";
+                fileMode = if data.allowKeysForGroup then "640" else "600";
                 globalOpts = [ "-d" data.domain "--email" data.email "--path" "." "--key-type" data.keyType ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
                           ++ optionals (data.dnsProvider != null && !data.dnsPropagationCheck) [ "--dns.disable-cp" ]
@@ -318,25 +318,20 @@ in
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
                   wants = [ "network-online.target" ];
-                  wantedBy = [ "multi-user.target" ];
+                  wantedBy = mkIf (!config.boot.isContainer) [ "multi-user.target" ];
                   serviceConfig = {
                     Type = "oneshot";
-                    # With RemainAfterExit the service is considered active even
-                    # after the main process having exited, which means when it
-                    # gets changed, the activation phase restarts it, meaning
-                    # the permissions of the StateDirectory get adjusted
-                    # according to the specified group
-                    RemainAfterExit = true;
                     User = data.user;
                     Group = data.group;
                     PrivateTmp = true;
-                    StateDirectory = "acme/.lego ${lpath}";
-                    StateDirectoryMode = rights;
+                    StateDirectory = "acme/.lego/${cert} acme/.lego/accounts ${lpath}";
+                    StateDirectoryMode = if data.allowKeysForGroup then "750" else "700";
                     WorkingDirectory = spath;
                     # Only try loading the credentialsFile if the dns challenge is enabled
                     EnvironmentFile = if data.dnsProvider != null then data.credentialsFile else null;
                     ExecStart = pkgs.writeScript "acme-start" ''
                       #!${pkgs.runtimeShell} -e
+                      test -L ${spath}/accounts -o -d ${spath}/accounts || ln -s ../accounts ${spath}/accounts
                       ${pkgs.lego}/bin/lego ${renewOpts} || ${pkgs.lego}/bin/lego ${runOpts}
                     '';
                     ExecStartPost =
@@ -354,9 +349,10 @@ in
                             cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
                             ln -sf fullchain.pem cert.pem
                             cat key.pem fullchain.pem > full.pem
-                            chmod ${rights} *.pem
-                            chown '${data.user}:${data.group}' *.pem
                           fi
+
+                          chmod ${fileMode} *.pem
+                          chown '${data.user}:${data.group}' *.pem
 
                           ${data.postRun}
                         '';
@@ -399,7 +395,7 @@ in
 
                       # Give key acme permissions
                       chown '${data.user}:${data.group}' "${apath}/"{key,fullchain,full}.pem
-                      chmod ${rights} "${apath}/"{key,fullchain,full}.pem
+                      chmod ${fileMode} "${apath}/"{key,fullchain,full}.pem
                     '';
                   serviceConfig = {
                     Type = "oneshot";

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Web testing library for Robot Framework";
-    homepage = https://github.com/robotframework/Selenium2Library;
+    homepage = "https://github.com/robotframework/Selenium2Library";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

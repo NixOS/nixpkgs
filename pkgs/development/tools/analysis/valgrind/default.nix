@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.valgrind.org/;
+    homepage = "http://www.valgrind.org/";
     description = "Debugging and profiling tool suite";
 
     longDescription = ''

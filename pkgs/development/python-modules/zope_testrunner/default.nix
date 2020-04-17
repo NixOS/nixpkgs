@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A flexible test runner with layer support";
-    homepage = https://pypi.python.org/pypi/zope.testrunner;
+    homepage = "https://pypi.python.org/pypi/zope.testrunner";
     license = licenses.zpl20;
     maintainers = [ maintainers.goibhniu ];
   };

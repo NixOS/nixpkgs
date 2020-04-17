@@ -1,7 +1,14 @@
-{ lib, fetchFromGitHub, buildGoPackage, go-md2man
-, pkgconfig, libapparmor, apparmor-parser, libseccomp, which }:
-
-with lib;
+{ lib
+, fetchFromGitHub
+, buildGoPackage
+, go-md2man
+, installShellFiles
+, pkg-config
+, which
+, libapparmor
+, apparmor-parser
+, libseccomp
+}:
 
 buildGoPackage rec {
   pname = "runc";
@@ -17,10 +24,10 @@ buildGoPackage rec {
   goPackagePath = "github.com/opencontainers/runc";
   outputs = [ "bin" "out" "man" ];
 
-  hardeningDisable = ["fortify"];
+  hardeningDisable = [ "fortify" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ go-md2man libseccomp libapparmor apparmor-parser which ];
+  nativeBuildInputs = [ go-md2man installShellFiles pkg-config which ];
+  buildInputs = [ libseccomp libapparmor apparmor-parser ];
 
   makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" ];
 
@@ -29,31 +36,19 @@ buildGoPackage rec {
     patchShebangs .
     substituteInPlace libcontainer/apparmor/apparmor.go \
       --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
-    make ${toString makeFlags} runc
+    make ${toString makeFlags} runc man
   '';
 
   installPhase = ''
     install -Dm755 runc $bin/bin/runc
-
-    # Include contributed man pages
-    man/md2man-all.sh -q
-    manRoot="$man/share/man"
-    mkdir -p "$manRoot"
-    for manDir in man/man?; do
-      manBase="$(basename "$manDir")" # "man1"
-      for manFile in "$manDir"/*; do
-        manName="$(basename "$manFile")" # "docker-build.1"
-        mkdir -p "$manRoot/$manBase"
-        gzip -c "$manFile" > "$manRoot/$manBase/$manName.gz"
-      done
-    done
+    installManPage man/*/*
   '';
 
-  meta = {
-    homepage = https://runc.io/;
+  meta = with lib; {
+    homepage = "https://github.com/opencontainers/runc";
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester saschagrunert ];
+    maintainers = with maintainers; [ offline ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

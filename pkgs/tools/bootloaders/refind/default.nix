@@ -14,12 +14,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "refind";
-  version = "0.11.5";
+  version = "0.12.0";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "0pphl37y1zfrcai821aab9k097yp669hn1j07cas1nppinafg78v";
+    sha256 = "1i5p3sir3mx4i2q5w78360xn2kbgsj8rmgrqvsvag1zzr5dm1f3v";
   };
 
   patches = [
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       runtime makes it very easy to use, particularly when paired with
       Linux kernels that provide EFI stub support.
     '';
-    homepage = http://refind.sourceforge.net/;
+    homepage = "http://refind.sourceforge.net/";
     maintainers = with maintainers; [ AndersonTorres samueldr ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;

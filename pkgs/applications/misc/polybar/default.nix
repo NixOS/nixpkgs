@@ -68,11 +68,6 @@ stdenv.mkDerivation rec {
       (if i3Support || i3GapsSupport then makeWrapper else null)
     ];
 
-    postConfigure = ''
-      substituteInPlace generated-sources/settings.hpp \
-        --replace "${stdenv.cc}" "${stdenv.cc.name}"
-    '';
-
     postInstall = if (i3Support || i3GapsSupport) then ''
       wrapProgram $out/bin/polybar \
         --prefix PATH : "${if i3Support then i3 else i3-gaps}/bin"

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool itstool wrapGAppsHook docbook_xsl libxslt gobject-introspection
+    pkgconfig intltool itstool wrapGAppsHook docbook_xsl libxslt libxml2 gobject-introspection
   ];
   buildInputs = [
     gtk3 glib libxml2 python3 python3.pkgs.pygobject3

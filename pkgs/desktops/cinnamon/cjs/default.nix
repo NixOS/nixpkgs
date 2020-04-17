@@ -17,7 +17,6 @@
 , libffi
 , gtk3
 , readline
-, networkmanagerapplet
 }:
 
 let
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     keybinder3
     upower
     xapps
-    networkmanagerapplet
   ];
 
   nativeBuildInputs = [

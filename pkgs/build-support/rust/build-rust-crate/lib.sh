@@ -1,3 +1,11 @@
+echo_build_heading() {
+  if (( $# == 1 )); then
+    echo_colored "Building $1"
+  else
+    echo_colored "Building $1 ($2)"
+  fi
+}
+
 build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
@@ -6,7 +14,6 @@ build_lib() {
     --crate-name $CRATE_NAME \
     $lib_src \
     --out-dir target/lib \
-    --emit=dep-info,link \
     -L dependency=target/deps \
     --cap-lints allow \
     $LIB_RUSTC_OPTS \
@@ -37,7 +44,6 @@ build_bin() {
     --crate-type bin \
     $BIN_RUSTC_OPTS \
     --out-dir target/bin \
-    --emit=dep-info,link \
     -L dependency=target/deps \
     $LINK \
     $EXTRA_LIB \
@@ -71,6 +77,7 @@ build_bin_test_file() {
     build_bin_test "$derived_crate_name" "$file"
 }
 
+# Add additional link options that were provided by the build script.
 setup_link_paths() {
   EXTRA_LIB=""
   if [[ -e target/link_ ]]; then
@@ -96,11 +103,6 @@ setup_link_paths() {
   done
 
   if [[ -e target/link ]]; then
-     sort -u target/link.final > target/link.final.sorted
-     mv target/link.final.sorted target/link.final
-     sort -u target/link > target/link.sorted
-     mv target/link.sorted target/link
-
      tr '\n' ' ' < target/link > target/link_
      LINK=$(cat target/link_)
   fi
@@ -132,7 +134,41 @@ search_for_bin_path() {
   done
 
   if [[ -z "$BIN_PATH" ]]; then
-    echo "failed to find file for binary target: $BIN_NAME" >&2
+    echo_error "ERROR: failed to find file for binary target: $BIN_NAME" >&2
     exit 1
   fi
+}
+
+# Extracts cargo_toml_path of the matching crate.
+matching_cargo_toml_path() {
+  local manifest_path="$1"
+  local expected_crate_name="$2"
+
+  # If the Cargo.toml is not a workspace root,
+  # it will only contain one package in ".packages"
+  # because "--no-deps" suppressed dependency resolution.
+  #
+  # But to make it more general, we search for a matching
+  # crate in all packages and use the manifest path that
+  # is referenced there.
+  cargo metadata --no-deps --format-version 1 \
+    --manifest-path "$manifest_path" \
+    | jq -r '.packages[] 
+            | select( .name == "'$expected_crate_name'") 
+            | .manifest_path'
+}
+
+# Find a Cargo.toml in the current or any sub directory
+# with a matching crate name.
+matching_cargo_toml_dir() {
+  local expected_crate_name="$1"
+
+  find -L -name Cargo.toml | sort | while read manifest_path; do
+    echo "...checking manifest_path $manifest_path" >&2
+    local matching_path="$(matching_cargo_toml_path "$manifest_path" "$expected_crate_name")"
+    if [ -n "${matching_path}" ]; then
+      echo "$(dirname $matching_path)"
+      break
+    fi
+  done
 }

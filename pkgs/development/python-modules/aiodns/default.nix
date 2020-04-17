@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/saghul/aiodns;
+    homepage = "https://github.com/saghul/aiodns";
     license = licenses.mit;
     description = "Simple DNS resolver for asyncio";
   };

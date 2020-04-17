@@ -32,7 +32,7 @@ buildGoPackage rec {
   ];
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";
-    homepage = https://github.com/containernetworking/plugins;
+    homepage = "https://github.com/containernetworking/plugins";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan saschagrunert ];

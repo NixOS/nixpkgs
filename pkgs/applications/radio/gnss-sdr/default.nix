@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnss-sdr";
-  version = "0.0.11";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "0ajj0wx68yyzigppxxa1wag3hzkrjj8dqq8k28rj0jhp8a6bw2q7";
+    sha256 = "0i9cz85jc2m758pzy3bq4dk4vj9wv7k2z118lasb09xldx01dwsq";
   };
 
   buildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source Global Navigation Satellite Systems software-defined receiver";
-    homepage = https://gnss-sdr.org/;
+    homepage = "https://gnss-sdr.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six chardet ];
 
   meta = with stdenv.lib; {
-    homepage =  https://github.com/kilink/ghdiff;
+    homepage =  "https://github.com/kilink/ghdiff";
     license = licenses.mit;
     description = "Generate Github-style HTML for unified diffs.";
     maintainers = [ maintainers.mic92 ];

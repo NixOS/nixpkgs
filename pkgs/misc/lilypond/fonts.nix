@@ -7,7 +7,6 @@ let
       inherit version;
       pname = "openlilypond-font-${fontName}";
 
-
       src = fetchFromGitHub {
         inherit rev sha256;
         owner = "OpenLilyPondFonts";
@@ -31,8 +30,7 @@ let
       '';
 
       meta = with stdenv.lib; {
-        inherit (src.meta) homepage;
-        inherit (lilypond.meta) platforms;
+        inherit (lilypond.meta) homepage platforms;
         description = "${fontName} font for LilyPond";
         license = licenses.ofl;
         maintainers = with maintainers; [ yurrriq ];

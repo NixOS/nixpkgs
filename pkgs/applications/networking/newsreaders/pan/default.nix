@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A GTK-based Usenet newsreader good at both text and binaries";
-    homepage = http://pan.rebelbase.com/;
+    homepage = "http://pan.rebelbase.com/";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;
   };

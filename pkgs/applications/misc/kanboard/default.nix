@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Kanban project management software";
-    homepage = https://kanboard.net;
+    homepage = "https://kanboard.net";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz lheckemann ];
   };

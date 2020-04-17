@@ -27,8 +27,8 @@ python3Packages.buildPythonApplication rec {
       tags in the notmuch database may be pushed back remotely to your
       GMail account.
     '';
-    homepage         = https://github.com/gauteh/gmailieer;
-    repositories.git = https://github.com/gauteh/gmailieer.git;
+    homepage         = "https://github.com/gauteh/gmailieer";
+    repositories.git = "https://github.com/gauteh/gmailieer.git";
     license          = licenses.gpl3Plus;
     maintainers      = with maintainers; [ kaiha ];
   };

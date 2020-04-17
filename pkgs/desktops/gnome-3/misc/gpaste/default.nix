@@ -18,30 +18,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.34.1";
+  version = "3.36.3";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "1jcj0kgxhad8rblyqhwa2yhkf0010k80w9bm2rajanad2c3bqaxa";
+    sha256 = "sR7/NdCaidP03xE64nqQc1M+xAIipOuKp5OWBJ4VN9w=";
   };
 
   patches = [
-    # Meson fixes
-    # https://github.com/Keruspe/GPaste/pull/283
-    # install systemd units
-    (fetchpatch {
-      url = "https://github.com/Keruspe/GPaste/commit/a474d8c1f2bd600476ba52dc19f517787845533b.patch";
-      sha256 = "19m1ar61l2n0vb5a5qfhdny8giivqlyq04l3j9i8llv16vx80rg2";
-    })
-    # apply symbol versioning
-    (fetchpatch {
-      url = "https://github.com/Keruspe/GPaste/commit/08047752e8dba9363673ddefd422c43075f08006.patch";
-      sha256 = "0jvcs1a17sijvb2wqyn3y8shdxrhv4kwzxs39kmh9y8nyx2dzhpf";
-    })
-
     ./fix-paths.patch
   ];
 

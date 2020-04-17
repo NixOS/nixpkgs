@@ -652,7 +652,7 @@ GEM
     netrc (0.11.0)
     nio4r (2.5.2)
     no_proxy_fix (0.1.2)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.5.0)
       nokogiri
@@ -1404,4 +1404,4 @@ DEPENDENCIES
   wikicloth (= 0.8.1)
 
 BUNDLED WITH
-   1.17.3
+   2.1.4

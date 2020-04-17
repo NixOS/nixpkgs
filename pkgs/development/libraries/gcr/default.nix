@@ -1,6 +1,8 @@
 { stdenv
 , fetchurl
 , pkgconfig
+, meson
+, ninja
 , gettext
 , gnupg
 , p11-kit
@@ -15,30 +17,38 @@
 , vala
 , gnome3
 , python3
+, shared-mime-info
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.34.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0925snsixzkwh49xiayqmj6fcrmklqk8kyy0jkv7m64h9abm1pr9";
+    sha256 = "00b6bzpr8rj8mvj66r2273r417wg2y21m6n88mhkq9m22z8bxyda";
   };
 
   postPatch = ''
     patchShebangs build/ gcr/fixtures/
+
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     pkgconfig
+    meson
+    python3
+    ninja
     gettext
     gobject-introspection
     libxslt
     makeWrapper
     vala
+    shared-mime-info
   ];
 
   buildInputs = [
@@ -56,6 +66,10 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     python3
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=false"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon

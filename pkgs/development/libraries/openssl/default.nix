@@ -1,6 +1,7 @@
 { stdenv, fetchurl, buildPackages, perl, coreutils
 , withCryptodev ? false, cryptodev
 , enableSSL2 ? false
+, enableSSL3 ? false
 , static ? false
 }:
 
@@ -45,6 +46,7 @@ let
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
     configureScript = {
+        armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
         armv6l-linux = "./Configure linux-armv4 -march=armv6";
         armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
         x86_64-darwin  = "./Configure darwin64-x86_64-cc";
@@ -58,7 +60,9 @@ let
                                      (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
-          then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
+          then (if stdenv.hostPlatform.isx86_64
+            then "./Configure linux-x86_64"
+            else "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}")
         else if stdenv.hostPlatform.isiOS
           then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
         else
@@ -73,6 +77,7 @@ let
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
+      ++ stdenv.lib.optional enableSSL3 "enable-ssl3"
       ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
@@ -126,7 +131,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://www.openssl.org/;
+      homepage = "https://www.openssl.org/";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       platforms = platforms.all;
@@ -161,5 +166,4 @@ in {
     ];
     withDocs = true;
   };
-
 }

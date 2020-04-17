@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-atk";
-  version = "2.34.1";
+  version = "2.34.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05ncp7s5nddjinffs26mcvpbd63vk1m3cv5y530p3plgfhqgjvbp";
+    sha256 = "1w7l4xg00qx3dwhn0zaa64daiv5f073hdvjdxh0mrw7fw37264wh";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "D-Bus bridge for Assistive Technology Service Provider Interface (AT-SPI) and Accessibility Toolkit (ATK)";
-    homepage = https://gitlab.gnome.org/GNOME/at-spi2-atk;
+    homepage = "https://gitlab.gnome.org/GNOME/at-spi2-atk";
     license = licenses.lgpl21Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.unix;

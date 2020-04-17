@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cvsq";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchurl {
     url = "http://www.linta.de/~aehlig/cvsq/cvsq-${version}.tgz";
-    sha256 = "1a2e5666d4d23f1eb673a505caeb771ac62a86ed69c9ab89c4e2696c2ccd0621";
+    sha256 = "0491k4skk3jyyd6plp2kcihmxxav9rsch7vd1yi697m2fqckp5ws";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       repository. This is useful for commands like log, diff, etc; however it cannot
       be used for commits (that's what cvsq is for).
     '';
-    homepage = https://www.linta.de/~aehlig/cvsq/;
+    homepage = "https://www.linta.de/~aehlig/cvsq/";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ clkamp ];
     platforms = stdenv.lib.platforms.all;

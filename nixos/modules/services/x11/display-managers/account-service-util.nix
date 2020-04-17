@@ -3,6 +3,7 @@
 , gobject-introspection
 , python3
 , wrapGAppsHook
+, lib
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -36,4 +37,8 @@ python3.pkgs.buildPythonApplication {
     cp $src $out/bin/set-session
     chmod +x $out/bin/set-session
   '';
+
+  meta = with lib; {
+    maintainers = with maintainers; [ worldofpeace ];
+  };
 }

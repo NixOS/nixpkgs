@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
-  name = "headphones-${version}";
+  pname = "headphones";
   version = "0.5.19";
 
   src = fetchFromGitHub {

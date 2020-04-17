@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GLib libusb wrapper";
-    homepage = https://github.com/hughsie/libgusb;
+    homepage = "https://github.com/hughsie/libgusb";
     license = licenses.lgpl21;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;

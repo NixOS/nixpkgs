@@ -188,7 +188,7 @@ core = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Basic binaries for TeX Live";
-    homepage    = http://www.tug.org/texlive;
+    homepage    = "http://www.tug.org/texlive";
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ vcunat veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
@@ -383,7 +383,7 @@ pygmentex = python2Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.ctan.org/pkg/pygmentex;
+    homepage = "https://www.ctan.org/pkg/pygmentex";
     description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
     longDescription = ''
       PygmenTeX is a Python-based LaTeX package that can be used for
@@ -396,6 +396,27 @@ pygmentex = python2Packages.buildPythonApplication rec {
     license = licenses.lppl13c;
     maintainers = with maintainers; [ romildo ];
   };
+};
+
+
+texlinks = stdenv.mkDerivation rec {
+  name = "texlinks.sh";
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
+
+  dontBuild = true;
+  doCheck = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    # Patch texlinks.sh back to 2015 version;
+    # otherwise some bin/ links break, e.g. xe(la)tex.
+    patch --verbose -R scripts/texlive-extra/texlinks.sh < '${./texlinks.diff}'
+    install -Dm555 scripts/texlive-extra/texlinks.sh "$out"
+
+    runHook postInstall
+  '';
 };
 
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An open, trustable and efficient SMT-solver";
-    homepage = http://www.verit-solver.org/;
+    homepage = "http://www.verit-solver.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

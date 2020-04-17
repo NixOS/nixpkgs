@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
+  preConfigure = ''
+    substituteInPlace loader/vulkan.pc.in --replace 'includedir=''${prefix}/include' 'includedir=${vulkan-headers}/include'
+  '';
+
   cmakeFlags = [
     "-DSYSCONFDIR=${addOpenGLRunpath.driverLink}/share"
     "-DVULKAN_HEADERS_INSTALL_DIR=${vulkan-headers}"
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";
-    homepage    = https://www.lunarg.com;
+    homepage    = "https://www.lunarg.com";
     platforms   = platforms.linux;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];

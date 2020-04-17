@@ -68,13 +68,12 @@ in stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/netease-cloud-music \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --set QT_AUTO_SCREEN_SCALE_FACTOR 1 \
       --set QCEF_INSTALL_PATH "${deepin.qcef}/lib/qcef"
   '';
 
   meta = {
     description = "Client for Netease Cloud Music service";
-    homepage = https://music.163.com;
+    homepage = "https://music.163.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.mlatus ];
     license = stdenv.lib.licenses.unfreeRedistributable;

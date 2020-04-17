@@ -6,7 +6,7 @@
 
 let
   optional = stdenv.lib.optional;
-  version = "3.30";
+  version = "3.31";
   name = "libreswan-${version}";
   binPath = stdenv.lib.makeBinPath [
     bash iproute iptables procps coreutils gnused gawk nss.tools which python
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.libreswan.org/${name}.tar.gz";
-    sha256 = "1bww4w5r6hx0xf9xdxvkfmcv7zyas58ls1mklk6k197kv2i0p24w";
+    sha256 = "1wxqsv11nqgfj5and5xzfgh6ayqvl47midcghd5ryynh60mp7naa";
   };
 
   # These flags were added to compile v3.18. Try to lift them when updating.
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://libreswan.org;
+    homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     license = licenses.gpl2;

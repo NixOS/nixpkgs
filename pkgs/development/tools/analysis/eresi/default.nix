@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The ERESI Reverse Engineering Software Interface";
     license = lib.licenses.gpl2;
-    homepage = http://www.eresi-project.org/;
+    homepage = "http://www.eresi-project.org/";
     maintainers = [ lib.maintainers.aszlig ];
     platforms = lib.platforms.linux;
   };

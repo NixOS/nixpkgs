@@ -1,0 +1,12 @@
+--- a/wee_slack.py
++++ b/wee_slack.py
+@@ -4560,8 +4560,7 @@
+ 
+ def load_emoji():
+     try:
+-        DIR = w.info_get('weechat_dir', '')
+-        with open('{}/weemoji.json'.format(DIR), 'r') as ef:
++        with open('@out@/share/wee-slack/weemoji.json', 'r') as ef:
+             emojis = json.loads(ef.read())
+             if 'emoji' in emojis:
+                 print_error('The weemoji.json file is in an old format. Please update it.')

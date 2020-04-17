@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
+{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
-  buildInputs = [ db iptables libelf ];
+  buildInputs = [ db iptables libelf libmnl ];
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.linuxfoundation.org/networking/iproute2;
+    homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;

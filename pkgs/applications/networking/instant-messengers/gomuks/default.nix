@@ -1,19 +1,34 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, makeDesktopItem }:
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "2020-02-19";
+  version = "2020-03-20";
 
   goPackagePath = "maunium.net/go/gomuks";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
-    rev = "702592bf89dfcf1ec382c0a09d99318bce7a3943";
-    sha256 = "0g638q8ypkp6dbfy1s4hz798cpkld301f914il3yd70yf05vvysc";
+    rev = "bce30e32a049b3ee76081c8d3881a3820b0e7341";
+    sha256 = "0f7i88vrvl1xl4hmjplq3wwihqwijbgxy6nk5fkvc8pfmm5hsjcs";
   };
 
-  modSha256 = "03vbrh50pvx71rp6c23qc2sh0ir4jm1wl0gvi3z1c14ndzhsqky4";
+  modSha256 = "10w0bjhnf6bbqx5jbgfv2jxxyqswzx25p64kkjmvh5qamjzpbjz2";
+
+  postInstall = ''
+    cp -r ${
+      makeDesktopItem {
+        name = "net.maunium.gomuks.desktop";
+        exec = "@out@/bin/gomuks";
+        terminal = "true";
+        desktopName = "Gomuks";
+        genericName = "Matrix client";
+        categories = "Network;Chat";
+        comment = meta.description;
+      }
+    }/* $out/
+    substituteAllInPlace $out/share/applications/*
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://maunium.net/go/gomuks/";

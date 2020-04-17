@@ -31,7 +31,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "The Qt port of obconf, the Openbox configuration tool";
-    homepage = https://github.com/lxqt/obconf-qt;
+    homepage = "https://github.com/lxqt/obconf-qt";
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

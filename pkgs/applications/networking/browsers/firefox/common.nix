@@ -6,7 +6,8 @@
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
-, hunspell, libXdamage, libevent, libstartup_notification, libvpx
+, hunspell, libXdamage, libevent, libstartup_notification
+, libvpx, libvpx_1_8
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
@@ -93,15 +94,6 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
-  ] ++ lib.optionals (stdenv.isAarch64) [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/arm.patch";
-      sha256 = "1vbpih23imhv5r3g21m3m541z08n9n9j1nvmqax76bmyhn7mxp32";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
-      sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
-    })
   ]
   ++ patches;
 
@@ -117,8 +109,8 @@ stdenv.mkDerivation ({
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU libGL
     xorg.libXScrnSaver xorg.xorgproto
-    xorg.libXext sqlite unzip makeWrapper
-    libevent libstartup_notification libvpx /* cairo */
+    xorg.libXext unzip makeWrapper
+    libevent libstartup_notification /* cairo */
     icu libpng jemalloc glib
     nasm
     # >= 66 requires nasm for the AV1 lib dav1d
@@ -127,7 +119,8 @@ stdenv.mkDerivation ({
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
     nspr nss
   ]
-
+  ++ lib.optionals  (lib.versionOlder ffversion "75") [ libvpx sqlite ]
+  ++ lib.optional  (lib.versionAtLeast ffversion "75.0") libvpx_1_8
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
@@ -215,7 +208,6 @@ stdenv.mkDerivation ({
     "--with-system-icu"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    "--enable-system-sqlite"
     #"--enable-system-cairo"
     "--enable-startup-notification"
     #"--enable-content-sandbox" # TODO: probably enable after 54
@@ -230,6 +222,7 @@ stdenv.mkDerivation ({
     "--with-system-nspr"
     "--with-system-nss"
   ]
+  ++ lib.optional (lib.versionOlder ffversion "75") "--enable-system-sqlite"
   ++ lib.optional (stdenv.isDarwin) "--disable-xcode-checks"
   ++ lib.optionals (lib.versionOlder ffversion "69") [
     "--enable-webrender=build"
@@ -300,6 +293,9 @@ stdenv.mkDerivation ({
     inherit execdir;
     inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
+} //
+lib.optionalAttrs (lib.versionAtLeast ffversion "74") {
+  hardeningDisable = [ "format" ]; # -Werror=format-security
 } //
 # the build system verifies checksums of the bundled rust sources
 # ./third_party/rust is be patched by our libtool fixup code in stdenv

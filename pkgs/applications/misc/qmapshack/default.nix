@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "qmapshack";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = pname;
     rev = "V_${version}";
-    sha256 = "07c2hrq9sn456w7l3gdr599rmjfv2k6mh159zza7p1py8r7ywksa";
+    sha256 = "0hghynb4ac98fg1pwc645zriqkghxwp8mr3jhr87pa6fh0y848py";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,7 +30,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = https://github.com/Maproom/qmapshack;
+    homepage = "https://github.com/Maproom/qmapshack";
     description = "Consumer grade GIS software";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dotlambda sikmir ];

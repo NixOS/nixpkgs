@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   version = "6.2.1";
 
   src = fetchurl {
-    url = http://files.f-prot.com/files/unix-trial/fp-Linux.x86.32-ws.tar.gz;
+    url = "http://files.f-prot.com/files/unix-trial/fp-Linux.x86.32-ws.tar.gz";
     sha256 = "0qlsrkanf0inplwv1i6hqbimdg91syf5ggd1vahsm9lhivmnr0v5";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.f-prot.com;
+    homepage = "http://www.f-prot.com";
     description = "A popular proprietary antivirus program";
     license = licenses.unfree;
     maintainers = [ maintainers.phreedom ];

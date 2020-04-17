@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = ''High-perfomance MySQL backup tool'';
-    homepage = https://github.com/maxbube/mydumper;
+    homepage = "https://github.com/maxbube/mydumper";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];

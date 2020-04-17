@@ -69,13 +69,14 @@ in
     environment.systemPackages = [ cfg.package ];
 
     # Prevent systemd from potentially changing the MAC address
-    environment.etc."systemd/network/50-zerotier.link".text = ''
-      [Match]
-      OriginalName=zt*
-
-      [Link]
-      AutoNegotiation=false
-      MACAddressPolicy=none
-    '';
+    systemd.network.links."50-zerotier" = {
+      matchConfig = {
+        OriginalName = "zt*";
+      };
+      linkConfig = {
+        AutoNegotiation = false;
+        MACAddressPolicy = "none";
+      };
+    };
   };
 }

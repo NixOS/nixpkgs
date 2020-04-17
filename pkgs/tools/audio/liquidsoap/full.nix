@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Swiss-army knife for multimedia streaming";
-    homepage = https://www.liquidsoap.info/;
+    homepage = "https://www.liquidsoap.info/";
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
     platforms = ocamlPackages.ocaml.meta.platforms or [];

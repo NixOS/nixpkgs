@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ Web Framework built on top of Qt";
-    homepage = https://cutelyst.org/;
+    homepage = "https://cutelyst.org/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fpletz ];
   };

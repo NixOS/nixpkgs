@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Snowball stemming algorithms, for information retrieval";
-    homepage = http://snowball.tartarus.org/;
+    homepage = "http://snowball.tartarus.org/";
     license = licenses.mit;
     platforms = platforms.unix;
   };

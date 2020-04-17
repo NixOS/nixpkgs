@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Windows VirtIO Drivers";
-    homepage = https://fedoraproject.org/wiki/Windows_Virtio_Drivers;
+    homepage = "https://fedoraproject.org/wiki/Windows_Virtio_Drivers";
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
   };

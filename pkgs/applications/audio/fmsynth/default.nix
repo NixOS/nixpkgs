@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       - Full floating point implementation optimized for SIMD
       - Hard real-time constraints
     '';
-    homepage = https://github.com/Themaister/libfmsynth;
+    homepage = "https://github.com/Themaister/libfmsynth";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

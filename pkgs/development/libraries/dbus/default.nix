@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple interprocess messaging system";
-    homepage = http://www.freedesktop.org/wiki/Software/dbus/;
+    homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.unix;

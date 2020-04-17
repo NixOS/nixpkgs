@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, texinfo
 , netcat-gnu, gnutls, gsasl, libidn2, Security
 , withKeyring ? true, libsecret ? null
 , systemd ? null }:
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin Security
     ++ stdenv.lib.optional withKeyring libsecret;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig texinfo ];
 
   configureFlags =
     [ "--sysconfdir=/etc" ] ++ stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
-    homepage = https://marlam.de/msmtp/;
+    homepage = "https://marlam.de/msmtp/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

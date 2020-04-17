@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Module for computing Structured Similarity Image Metric (SSIM) in Python";
-    homepage = https://github.com/jterrace/pyssim;
+    homepage = "https://github.com/jterrace/pyssim";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

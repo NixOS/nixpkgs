@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "19.17.8.54";
+  version = "19.17.9.60";
 
   src = fetchFromGitHub {
     owner  = "yandex";
     repo   = "ClickHouse";
     rev    = "v${version}-stable";
-    sha256 = "0ck6kcifj7y4i2j1jj1a9vf5nfpp9mxk5x8y8557zp9yayjm9qyr";
+    sha256 = "0k1ncn7i4szpw4jlhv3zmw6mrkkm8qfs39nj1zbawjqrkgnw70kg";
   };
 
   nativeBuildInputs = [ cmake libtool lldClang.bintools ninja ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
-    homepage = https://clickhouse.yandex/;
+    homepage = "https://clickhouse.yandex/";
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];

@@ -40,6 +40,10 @@ let
       unfuckRelease = "0.47.01";
       sha256 = "11xvb3qh4crdf59pwfwpi73rzm3ysd1r1xp2k1jp7527jmqapk4k";
     };
+    "0.47.04" = {
+      unfuckRelease = "0.47.04";
+      sha256 = "1wa990xbsyiiz7abq153xmafvvk1dmgz33rp907d005kzl1z86i9";
+    };
   };
 
   release = if hasAttr dfVersion unfuck-releases
@@ -84,7 +88,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Unfucked multimedia layer for Dwarf Fortress";
-    homepage = https://github.com/svenstaro/dwarf_fortress_unfuck;
+    homepage = "https://github.com/svenstaro/dwarf_fortress_unfuck";
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar numinit ];

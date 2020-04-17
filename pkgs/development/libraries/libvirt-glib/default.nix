@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       - libvirt-gconfig - GObjects for manipulating libvirt XML documents
       - libvirt-gobject - GObjects for managing libvirt objects
     '';
-    homepage = https://libvirt.org/;
+    homepage = "https://libvirt.org/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

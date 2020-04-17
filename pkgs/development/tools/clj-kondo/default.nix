@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec{
   pname = "clj-kondo";
-  version = "2019.12.14";
+  version = "2020.03.20";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec{
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "1mprwqc5ydqn2wkssrj2g3wbpjss7flv584wss9j0jjfgy7jc4s1";
+    sha256 = "05z80cdzk8aw3j0nxfynzwpb9hhpbl54bbrv18dpqj5dj893mbgm";
   };
 
   dontUnpack = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec{
 
   meta = with lib; {
     description = "A linter for Clojure code that sparks joy.";
-    homepage = https://github.com/borkdude/clj-kondo;
+    homepage = "https://github.com/borkdude/clj-kondo";
     license = licenses.epl10;
     platforms = graalvm8.meta.platforms;
     maintainers = with maintainers; [ jlesquembre bandresen ];

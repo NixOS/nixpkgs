@@ -52,6 +52,8 @@ python3Packages.buildPythonApplication rec {
     sqlalchemy
     terminaltables
     zxcvbn
+    # plugins
+    transmissionrpc
   ];
 
   meta = with lib; {

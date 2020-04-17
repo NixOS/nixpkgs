@@ -19,14 +19,14 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   pname = "bochs";
-  version = "2.6.10";
+  version = "2.6.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/bochs/bochs/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1c3mw4b8wrjf8z44fvhycs95j1wd1c0b4khcv63giiia5j5q0gvj";
+    sha256 = "0ql8q6y1k356li1g9gbvl21448mlxphxxi6kjb2b3pxvzd0pp2b3";
   };
 
-  patches = [ ./bochs-2.6.10-glibc-2.26.patch ];
+  patches = [ ./bochs-2.6.11-glibc-2.26.patch ./fix-build-smp.patch ];
 
   buildInputs =
   [ pkgconfig libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]

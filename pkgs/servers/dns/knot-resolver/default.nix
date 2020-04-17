@@ -85,7 +85,7 @@ unwrapped = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Caching validating DNS resolver, from .cz domain registry";
-    homepage = https://knot-resolver.cz;
+    homepage = "https://knot-resolver.cz";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];

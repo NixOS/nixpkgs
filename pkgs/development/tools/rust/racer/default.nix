@@ -11,10 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0svvdkfqpk2rw0wxyrhkxy553k55lg7jxc0ly4w1195iwv14ad3y";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1qxg9r6wpv811fh2l889jm0ya96gsra00kqpyxh41fb7myvl2a4i";
+  cargoSha256 = "0zaqa89z3nf23s2q1jpmfz4lygh4zq9ymql71d748fgjy9psr449";
 
   buildInputs = [ makeWrapper ]
                 ++ stdenv.lib.optional stdenv.isDarwin Security;
@@ -45,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
-    homepage = https://github.com/racer-rust/racer;
+    homepage = "https://github.com/racer-rust/racer";
     license = licenses.mit;
     maintainers = with maintainers; [ jagajaga ma27 ];
     platforms = platforms.all;

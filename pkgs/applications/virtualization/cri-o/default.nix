@@ -20,7 +20,7 @@ let
   buildTags = "apparmor seccomp selinux containers_image_ostree_stub";
 in buildGoPackage rec {
   project = "cri-o";
-  version = "1.17.0";
+  version = "1.17.3";
   name = "${project}-${version}${flavor}";
 
   goPackagePath = "github.com/${project}/${project}";
@@ -29,7 +29,7 @@ in buildGoPackage rec {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "0xjmylf0ww23qqcg7kw008px6608r4qq6q57pfqis0661kp6f24j";
+    sha256 = "1cy2lqasfn5n20vlm3ckb6myci8ya6qv08dw8fq7z4ycnm39r1a6";
   };
 
   outputs = [ "bin" "out" ];
@@ -53,7 +53,7 @@ in buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://cri-o.io;
+    homepage = "https://cri-o.io";
     description = ''Open Container Initiative-based implementation of the
                     Kubernetes Container Runtime Interface'';
     license = licenses.asl20;

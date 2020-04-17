@@ -1,12 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, smmap }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, smmap
+, isPy3k
+}:
 
 buildPythonPackage rec {
   pname = "gitdb";
-  version = "0.6.4";
+  version = "4.0.2";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n4n2c7rxph9vs2l6xlafyda5x1mdr8xy16r9s3jwnh3pqkvrsx3";
+    sha256 = "0l113fphn6msjl3cl3kyf332b6lal7daxdd0nfma0x9ipfb013jr";
   };
 
   propagatedBuildInputs = [ smmap ];
@@ -17,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     description = "Git Object Database";
     maintainers = [ ];
-    homepage = https://github.com/gitpython-developers/gitdb;
+    homepage = "https://github.com/gitpython-developers/gitdb";
     license = lib.licenses.bsd3;
   };
 }

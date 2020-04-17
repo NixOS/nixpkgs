@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "trezord-go";
-  version = "2.0.28";
+  version = "2.0.29";
 
   goPackagePath = "github.com/trezor/trezord-go";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "trezor";
     repo   = "trezord-go";
     rev    = "v${version}";
-    sha256 = "02c1mvn01gcfls37sa0c7v2lwffg14x54np8z7d4hjzxxzwg4gpw";
+    sha256 = "1ks1fa0027s3xp0z6qp0dxmayvrb4dwwscfhbx7da0khp153f2cp";
   };
 
   propagatedBuildInputs = [ trezor-udev-rules ];

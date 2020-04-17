@@ -5,11 +5,11 @@
 let deps = lib.makeBinPath [ wget coreutils ];
 
 in stdenv.mkDerivation rec {
-  name = "pcsc-tools-1.5.5";
+  name = "pcsc-tools-1.5.6";
 
   src = fetchurl {
     url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${name}.tar.bz2";
-    sha256 = "01251m8hf7by8rw8fayhjxmcqvi6dp150680fpf89bqycha2vgqv";
+    sha256 = "1a2zd06c6s4sqlpm5801gj41gh5g62jb8srd7vhlcm70hg3l3nsy";
   };
 
   buildInputs = [ udev dbus perlPackages.perl pcsclite ];
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools used to test a PC/SC driver, card or reader";
-    homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-tools/;
+    homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

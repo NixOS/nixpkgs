@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, libnotify, libgnome-keyring, openssl, cyrus_sasl, gnonlin, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
+{ stdenv, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, gnome-icon-theme, libnotify, libgnome-keyring, openssl, cyrus_sasl, gnonlin, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
 
 stdenv.mkDerivation rec {
   rev = "9ae8768";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-   buildInputs = [ glib dbus-glib gmime libnotify libgnome-keyring openssl cyrus_sasl gnonlin sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus-glib gmime libnotify gnome2.scrollkeeper libxml2 gnome2.gnome_icon_theme hicolor-icon-theme tango-icon-theme ];
+   buildInputs = [ glib dbus-glib gmime libnotify libgnome-keyring openssl cyrus_sasl gnonlin sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus-glib gmime libnotify gnome2.scrollkeeper libxml2 gnome-icon-theme hicolor-icon-theme tango-icon-theme ];
 
   prePatch = ''
     sed -i  -e '/jb_rule_set_install_message/d' -e '/jb_rule_add_install_command/d' jbsrc/jb.c
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tray status icon, which notifies us when new email arrives";
-    homepage = https://www.nongnu.org/mailnotify/;
+    homepage = "https://www.nongnu.org/mailnotify/";
     license = with licenses; [ gpl3 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.eleanor ];

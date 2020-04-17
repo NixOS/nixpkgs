@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
-  version = "2.1.1";
+  version = "2.2.14";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planner";
     rev = version;
-    sha256 = "0swj94pqf00wwzsgjap8z19k33gg1wj2b78ba1aj9h791j8lmaim";
+    sha256 = "14k5kiknr0d3my17p4v20iiqzifpz3y80gdzj8vdxic8yk2yr1ap";
   };
 
   nativeBuildInputs = [
@@ -36,24 +36,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     evolution-data-server
-    libical
-    libgee
-    json-glib
     glib
-    sqlite
-    libsoup
     gtk3
-    pantheon.granite
-    webkitgtk
+    json-glib
+    libgee
+    libical
+    libsoup
     pantheon.elementary-icon-theme
-  ];
-
-  # Fix version string, remove in next update!
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/alainm23/planner/pull/194/commits/3d0a2197087b13fe90fa6f85f817ba56798d632c.patch";
-      sha256 = "077q5jddi8jaw2ypc6szbd1c50i4x3b21jvmvi3w7g5zhjwpkmf5";
-    })
+    pantheon.granite
+    sqlite
+    webkitgtk
   ];
 
   postPatch = ''

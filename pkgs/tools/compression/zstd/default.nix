@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       speed is preserved and remain roughly the same at all settings, a
       property shared by most LZ compression algorithms, such as zlib.
     '';
-    homepage = https://facebook.github.io/zstd/;
+    homepage = "https://facebook.github.io/zstd/";
     license = with licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
 
     platforms = platforms.all;

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Asyncio (PEP 3156) Redis client library";
-    homepage = https://github.com/aio-libs/aioredis;
+    homepage = "https://github.com/aio-libs/aioredis";
     license = licenses.mit;
     maintainers = with maintainers; [ mmai ];
   };

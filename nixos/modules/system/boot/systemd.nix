@@ -842,7 +842,6 @@ in
         [Manager]
         ${optionalString config.systemd.enableCgroupAccounting ''
           DefaultCPUAccounting=yes
-          DefaultBlockIOAccounting=yes
           DefaultIOAccounting=yes
           DefaultBlockIOAccounting=yes
           DefaultIPAccounting=yes

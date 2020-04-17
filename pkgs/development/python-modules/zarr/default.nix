@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An implementation of chunked, compressed, N-dimensional arrays for Python";
-    homepage = https://github.com/zarr-developers/zarr;
+    homepage = "https://github.com/zarr-developers/zarr";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

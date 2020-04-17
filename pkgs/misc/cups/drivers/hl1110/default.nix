@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother HL1110 printer driver";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;

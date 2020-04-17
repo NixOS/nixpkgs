@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";
-    homepage = https://github.com/bulkan/robotframework-requests;
+    homepage = "https://github.com/bulkan/robotframework-requests";
     license = licenses.mit;
   };
 

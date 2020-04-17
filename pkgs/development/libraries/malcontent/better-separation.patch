@@ -1,0 +1,35 @@
+diff --git a/meson.build b/meson.build
+index a6c477d..f7b2f0a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -125,8 +125,8 @@ test_env = [
+   'LC_ALL=C.UTF-8',
+ ]
+ 
+-subdir('accounts-service')
+ if not get_option('use_system_libmalcontent')
++  subdir('accounts-service')
+   subdir('libmalcontent')
+ else
+   libmalcontent_api_version = '0'
+@@ -137,11 +137,17 @@ endif
+ if get_option('ui').enabled()
+   subdir('libmalcontent-ui')
+ endif
+-subdir('malcontent-client')
++if not get_option('use_system_libmalcontent')
++  subdir('malcontent-client')
++endif
+ if get_option('ui').enabled()
+   subdir('malcontent-control')
+ endif
+-subdir('pam')
++if not get_option('use_system_libmalcontent')
++  subdir('pam')
++endif
+ subdir('po')
+ 
+-meson.add_install_script('build-aux/meson_post_install.py')
++if get_option('ui').enabled()
++  meson.add_install_script('build-aux/meson_post_install.py')
++endif

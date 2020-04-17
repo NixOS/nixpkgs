@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.ece.purdue.edu/~qobi/software.html;
+    homepage = "http://www.ece.purdue.edu/~qobi/software.html";
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Stalin, an optimizing Scheme compiler";
 

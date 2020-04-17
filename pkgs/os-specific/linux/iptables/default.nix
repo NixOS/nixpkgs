@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program to configure the Linux IP packet filtering ruleset";
-    homepage = https://www.netfilter.org/projects/iptables/index.html;
+    homepage = "https://www.netfilter.org/projects/iptables/index.html";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl2;

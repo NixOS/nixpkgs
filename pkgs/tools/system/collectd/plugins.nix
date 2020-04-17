@@ -25,6 +25,7 @@
 , mongoc
 , mosquitto
 , net-snmp
+, perl
 , postgresql
 , protobufc
 , python
@@ -205,7 +206,9 @@ let
     ovs_stats = {
       buildInputs = [ yajl ];
     };
-    perl = {};
+    perl = {
+      buildInputs = [ perl ];
+    };
     pf = {};
     pinba = {
       buildInputs = [ protobufc ];

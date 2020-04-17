@@ -16,18 +16,19 @@
 , uvicorn
 , trio
 , brotli
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.9.5";
+  version = "0.12.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "140z2j7b5hlcxvfb433hqv5b8irqa88hpq33lzr9m992djbhj2hb";
+    sha256 = "1nrp4h1ppb5vll81fzxmks82p0hxcil9f3mja3dgya511kc703h6";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     idna
     rfc3986
     sniffio
+    urllib3
   ];
 
   checkInputs = [
@@ -61,7 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The next generation HTTP client";
-    homepage = https://github.com/encode/httpx;
+    homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

@@ -82,8 +82,8 @@
 /pkgs/development/r-modules         @peti
 
 # Ruby
-/pkgs/development/interpreters/ruby @alyssais @zimbatm
-/pkgs/development/ruby-modules      @alyssais @zimbatm
+/pkgs/development/interpreters/ruby @alyssais
+/pkgs/development/ruby-modules      @alyssais
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7
@@ -178,6 +178,7 @@
 /nixos/tests/prometheus-exporters.nix                        @WilliButz
 
 # PHP
-/pkgs/development/interpreters/php  @etu
-/pkgs/top-level/php-packages.nix    @etu
-/pkgs/build-support/build-pecl.nix  @etu
+/doc/languages-frameworks/php.section.md @etu
+/pkgs/development/interpreters/php       @etu
+/pkgs/top-level/php-packages.nix         @etu
+/pkgs/build-support/build-pecl.nix       @etu

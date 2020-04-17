@@ -159,7 +159,7 @@ rec {
           let ss = opt.type.getSubOptions opt.loc;
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
       in
-        [ docOption ] ++ subOptions) (collect isOption options);
+        [ docOption ] ++ optionals docOption.visible subOptions) (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from
@@ -191,7 +191,14 @@ rec {
 
      Example:
        (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
-       (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
+       (showOption ["foo" "bar.baz" "tux"]) == "foo.bar.baz.tux"
+
+     Placeholders will not be quoted as they are not actual values:
+       (showOption ["foo" "*" "bar"]) == "foo.*.bar"
+       (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
+
+     Unlike attributes, options can also start with numbers:
+       (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.2bwm.enable"
   */
   showOption = parts: let
     escapeOptionPart = part:

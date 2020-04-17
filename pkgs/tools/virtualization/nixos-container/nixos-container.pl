@@ -9,6 +9,7 @@ use Getopt::Long qw(:config gnu_getopt);
 use Cwd 'abs_path';
 use Time::HiRes;
 
+my $nsenter = "@utillinux@/bin/nsenter";
 my $su = "@su@";
 
 # Ensure a consistent umask.
@@ -319,10 +320,9 @@ sub restartContainer {
 # Run a command in the container.
 sub runInContainer {
     my @args = @_;
-
-    exec("systemd-run", "--machine", $containerName, "--pty", "--quiet", "--", @args);
-
-    die "cannot run ‘systemd-run’: $!\n";
+    my $leader = getLeader;
+    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
+    die "cannot run ‘nsenter’: $!\n";
 }
 
 # Remove a directory while recursively unmounting all mounted filesystems within

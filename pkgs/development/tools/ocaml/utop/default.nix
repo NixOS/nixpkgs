@@ -67,7 +67,7 @@ buildDunePackage rec {
 
     It integrates with the tuareg mode in Emacs.
     '';
-    homepage = https://github.com/diml/utop;
+    homepage = "https://github.com/diml/utop";
     license = stdenv.lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = [

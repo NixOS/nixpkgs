@@ -7,14 +7,18 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   pname = "zcash";
-  version = "2.1.0-1";
+  version = "2.1.1-1";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "05bnn4lxrrcv1ha3jdfrgwg4ar576161n3j9d4gpc14ww3zgf9vz";
+    sha256 = "1g5zlfzfp31my8w8nlg5fncpr2y95iv9fm04x57sjb93rgmjdh5n";
   };
+
+  patchPhase = ''
+    sed -i"" 's,-fvisibility=hidden,,g'            src/Makefile.am
+  '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ gtest gmock gmp openssl wget db62 boost17x zlib
@@ -23,17 +27,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-boost-libdir=${boost17x.out}/lib" ];
 
-  patchPhase = ''
-    sed -i"" 's,-fvisibility=hidden,,g'            src/Makefile.am
-  '';
-
   postInstall = ''
     cp zcutil/fetch-params.sh $out/bin/zcash-fetch-params
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Peer-to-peer, anonymous electronic cash system";
-    homepage = https://z.cash/;
+    homepage = "https://z.cash/";
     maintainers = with maintainers; [ rht tkerber ];
     license = licenses.mit;
     platforms = platforms.linux;

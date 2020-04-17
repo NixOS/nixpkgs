@@ -13,6 +13,7 @@
 , libxml2
 , systemd
 , upower
+, gnome-online-accounts
 , cinnamon-settings-daemon
 , colord
 , polkit
@@ -32,7 +33,7 @@
 , wrapGAppsHook
 , tzdata
 , glibc
-, networkmanagerapplet
+, libnma
 , modemmanager
 , xorg
 , gdk-pixbuf
@@ -67,10 +68,10 @@ stdenv.mkDerivation rec {
     colord
     cinnamon-settings-daemon
     libwacom
-    gnome3.gnome-online-accounts
+    gnome-online-accounts
     tzdata
     networkmanager
-    networkmanagerapplet
+    libnma
     modemmanager
     xorg.libXxf86misc
     xorg.libxkbfile

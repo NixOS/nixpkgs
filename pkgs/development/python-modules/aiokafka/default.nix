@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Kafka integration with asyncio";
-    homepage = https://aiokafka.readthedocs.org;
+    homepage = "https://aiokafka.readthedocs.org";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

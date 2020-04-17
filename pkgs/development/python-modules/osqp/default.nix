@@ -4,10 +4,9 @@
 , cmake
 , future
 , numpy
-  # check inputs
 , scipy
+# check inputs
 , pytestCheckHook
-, mkl
 }:
 
 buildPythonPackage rec {
@@ -23,16 +22,15 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   propagatedBuildInputs = [
-    numpy
     future
+    numpy
+    scipy
   ];
 
-  checkInputs = [ scipy pytestCheckHook mkl ];
   pythonImportsCheck = [ "osqp" ];
-  dontUseSetuptoolsCheck = true;  # running setup.py fails if false
-  preCheck = ''
-    export LD_LIBRARY_PATH=${lib.strings.makeLibraryPath [ mkl ]}:$LD_LIBRARY_PATH;
-  '';
+  checkInputs = [ pytestCheckHook ];
+  dontUseSetuptoolsCheck = true;  # don't run checks twice
+  disabledTests = [ "mkl_" ];
 
   meta = with lib; {
     description = "The Operator Splitting QP Solver";
@@ -44,8 +42,8 @@ buildPythonPackage rec {
       where x in R^n is the optimization variable
     '';
     homepage = "https://osqp.org/";
-    downloadPage = "https://github.com/oxfordcontrol/osqp";
+    downloadPage = "https://github.com/oxfordcontrol/osqp-python/releases";
     license = licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

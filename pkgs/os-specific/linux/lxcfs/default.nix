@@ -3,13 +3,13 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxcfs-3.1.2";
+  name = "lxcfs-4.0.1";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = name;
-    sha256 = "195skz6wc2gfcf99f1fz1yaw29ngzg9lphnkag7yxnk3ffbhv40s";
+    sha256 = "09y26ln2wxpi809kd3r352my64aal0yz2a5kin0i25gnvivl32cs";
   };
 
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://linuxcontainers.org/lxcfs;
+    homepage = "https://linuxcontainers.org/lxcfs";
     description = "FUSE filesystem for LXC";
     license = licenses.asl20;
     platforms = platforms.linux;

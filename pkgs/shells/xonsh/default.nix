@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 , glibcLocales
 , coreutils
@@ -9,23 +8,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.13";
+  version = "0.9.17";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner  = "xonsh";
     repo   = "xonsh";
-    rev    = "refs/tags/${version}";
-    sha256 = "0nk6rjdkbxli510iwqspvray48kdxvbdmq1k8nxn14kqfpqzlbcv";
+    rev    = version;
+    sha256 = "0ynfnphbp69am390m5zfzk5rzj1749vs7rzyq310f6mk7xdq6j4v";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-ptk-tests.patch";
-      url = "https://github.com/xonsh/xonsh/commit/ca7acecc968dcda7dd56c1f5d5b4df349c98d734.patch";
-      sha256 = "00nhbf9wzm6r86r9zq8mnhds30w6gdhkgsx5kpl0jppiz4ll96iw";
-    })
-  ];
 
   LC_ALL = "en_US.UTF-8";
   postPatch = ''
@@ -34,6 +25,7 @@ python3Packages.buildPythonApplication rec {
 
     sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' tests/test_integrations.py
     sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
+    find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
   '';
@@ -41,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight'
+    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight and not test_pyghooks'
     HOME=$TMPDIR pytest -k 'test_builtins or test_main' --reruns 5
     HOME=$TMPDIR pytest -k 'test_ptk_highlight'
   '';
@@ -52,7 +44,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A Python-ish, BASHwards-compatible shell";
-    homepage = https://xon.sh/;
+    homepage = "https://xon.sh/";
+    changelog = "https://github.com/xonsh/xonsh/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ spwhitt vrthra ];
     platforms = platforms.all;

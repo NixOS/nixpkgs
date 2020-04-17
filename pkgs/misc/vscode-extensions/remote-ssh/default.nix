@@ -7,7 +7,7 @@
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
-  
+
   # patch runs on remote machine hence use of which
   # links to local node if version is 12
   patch = ''
@@ -36,8 +36,8 @@ in
     mktplcRef = {
       name = "remote-ssh";
       publisher = "ms-vscode-remote";
-      version = "0.48.0";
-      sha256 = "04q53gljqh5snkrdf5l69g0ahn1s5z35a4ipfcbf1rsjjmm85a19";
+      version = "0.50.0";
+      sha256 = "01pyd6759p5nkjhjy3iplrl748xblr54l1jphk2g02s1n5ds2qb9";
     };
 
     postPatch = ''

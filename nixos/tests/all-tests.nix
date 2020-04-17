@@ -97,6 +97,7 @@ in
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   fsck = handleTest ./fsck.nix {};
+  gerrit = handleTest ./gerrit.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   grocy = handleTest ./grocy.nix {};
   gitdaemon = handleTest ./gitdaemon.nix {};
@@ -120,12 +121,16 @@ in
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
-  hibernate = handleTest ./hibernate.nix {};
+  # 9pnet_virtio used to mount /nix partition doesn't support
+  # hibernation. This test happens to work on x86_64-linux but
+  # not on other platforms.
+  hibernate = handleTestOn ["x86_64-linux"] ./hibernate.nix {};
   hitch = handleTest ./hitch {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   home-assistant = handleTest ./home-assistant.nix {};
   hound = handleTest ./hound.nix {};
   hydra = handleTest ./hydra {};
+  hydra-db-migration = handleTest ./hydra/db-migration.nix {};
   i3wm = handleTest ./i3wm.nix {};
   icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
@@ -135,6 +140,7 @@ in
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
   installer = handleTest ./installer.nix {};
+  iodine = handleTest ./iodine.nix {};
   ipv6 = handleTest ./ipv6.nix {};
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
@@ -164,6 +170,7 @@ in
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
   magnetico = handleTest ./magnetico.nix {};
+  magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
   matomo = handleTest ./matomo.nix {};
@@ -195,7 +202,7 @@ in
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
   ndppd = handleTest ./ndppd.nix {};
   neo4j = handleTest ./neo4j.nix {};
-  nesting = handleTest ./nesting.nix {};
+  specialisation = handleTest ./specialisation.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };
@@ -209,6 +216,7 @@ in
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = handleTest ./nginx.nix {};
   nginx-etag = handleTest ./nginx-etag.nix {};
+  nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
@@ -233,7 +241,7 @@ in
   peerflix = handleTest ./peerflix.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
-  php-pcre = handleTest ./php-pcre.nix {};
+  php = handleTest ./php {};
   plasma5 = handleTest ./plasma5.nix {};
   plotinus = handleTest ./plotinus.nix {};
   postgis = handleTest ./postgis.nix {};
@@ -249,6 +257,7 @@ in
   prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   quagga = handleTest ./quagga.nix {};
+  quorum = handleTest ./quorum.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
@@ -294,6 +303,8 @@ in
   timezone = handleTest ./timezone.nix {};
   tinydns = handleTest ./tinydns.nix {};
   tor = handleTest ./tor.nix {};
+  # traefik test relies on docker-containers
+  traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
   transmission = handleTest ./transmission.nix {};
   trac = handleTest ./trac.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
@@ -305,6 +316,7 @@ in
   vault = handleTest ./vault.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  wg-quick = handleTest ./wireguard/wg-quick.nix {};
   wireguard = handleTest ./wireguard {};
   wireguard-generated = handleTest ./wireguard/generated.nix {};
   wireguard-namespaces = handleTest ./wireguard/namespaces.nix {};

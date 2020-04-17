@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.timokau];
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://linalg.org/;
+    homepage = "https://linalg.org/";
   };
 }

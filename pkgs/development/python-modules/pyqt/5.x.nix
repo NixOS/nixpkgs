@@ -80,6 +80,9 @@ in buildPythonPackage rec {
 
   passthru = {
     inherit sip;
+    multimediaEnabled = withMultimedia;
+    webKitEnabled = withWebKit;
+    WebSocketsEnabled = withWebSockets;
   };
 
   configurePhase = ''
@@ -138,7 +141,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
+    homepage    = "http://www.riverbankcomputing.co.uk";
     license     = licenses.gpl3;
     platforms   = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];

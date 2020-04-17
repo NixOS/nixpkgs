@@ -53,7 +53,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Secure, fast, minimal micro-container virtualization";
-    homepage    = http://firecracker-microvm.io;
+    homepage    = "http://firecracker-microvm.io";
     license     = licenses.asl20;
     platforms   = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ thoughtpolice ];

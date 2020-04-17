@@ -1,0 +1,12 @@
+diff -Nur a/setup.py b/setup.py
+--- a/setup.py	2020-03-12 18:45:34.654296302 +0100
++++ b/setup.py	2020-03-12 18:46:17.476893828 +0100
+@@ -115,7 +115,7 @@
+         ['templates/*', 'local_settings.py.example']},
+       scripts=glob('bin/*'),
+       data_files=list(webapp_content.items()) + storage_dirs + conf_files + examples,
+-      install_requires=['Django>=1.8,<2.3', 'django-tagging==0.4.3', 'pytz', 'pyparsing', 'cairocffi', 'urllib3', 'scandir', 'six'],
++      install_requires=['Django>=1.8,<2.3', 'django-tagging==0.4.6', 'pytz', 'pyparsing', 'cairocffi', 'urllib3', 'scandir', 'six'],
+       classifiers=[
+           'Intended Audience :: Developers',
+           'Natural Language :: English',

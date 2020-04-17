@@ -23,7 +23,7 @@ python2Packages.buildPythonPackage {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sibson/vncdotool;
+    homepage = "https://github.com/sibson/vncdotool";
     description = "A command line VNC client and python library";
     license = licenses.mit;
     maintainers = with maintainers; [ elitak ];

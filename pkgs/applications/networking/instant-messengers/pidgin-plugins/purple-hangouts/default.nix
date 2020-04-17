@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/EionRobb/purple-hangouts;
+    homepage = "https://bitbucket.org/EionRobb/purple-hangouts";
     description = "Native Hangouts support for pidgin";
     license = licenses.gpl3;
     platforms = platforms.linux;

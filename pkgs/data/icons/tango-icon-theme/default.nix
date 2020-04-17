@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A basic set of icons";
-    homepage = http://tango.freedesktop.org/Tango_Icon_Library;
+    homepage = "http://tango.freedesktop.org/Tango_Icon_Library";
     platforms = stdenv.lib.platforms.linux;
   };
 }

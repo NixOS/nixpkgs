@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = https://github.com/rrthomas/recode;
+    homepage = "https://github.com/rrthomas/recode";
     description = "Converts files between various character sets and usages";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2Plus;

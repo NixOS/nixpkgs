@@ -6,14 +6,19 @@
 }:
 mkDerivation rec {
   pname = "vaultenv";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchzip {
     url = "https://github.com/channable/vaultenv/archive/v${version}.tar.gz";
-    sha256 = "0kz5p57fq855mhbqrpb737sqrax9cdcyh2g57460hc8fyvs97lq0";
+    sha256 = "0ycf5skxjns77sgbm8faq9ps9rs2hqznsbzrd51hdkpak56k42cp";
   };
 
   buildTools = [ hpack ];
+
+  prePatch = ''
+    substituteInPlace package.yaml \
+        --replace -Werror ""
+  '';
 
   isLibrary = false;
   isExecutable = true;

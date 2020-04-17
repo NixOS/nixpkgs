@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Calaos Installer, a tool to create calaos configuration";
-    homepage = https://www.calaos.fr/;
+    homepage = "https://www.calaos.fr/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ tiramiseb ];

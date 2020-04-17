@@ -74,7 +74,7 @@ buildDotnetPackage rec {
   '';
 
   meta = {
-    homepage = http://www.pinta-project.com/;
+    homepage = "http://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ ];

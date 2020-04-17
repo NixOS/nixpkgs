@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C-style arbitrary precision calculator";
-    homepage = http://www.isthe.com/chongo/tech/comp/calc/;
+    homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;

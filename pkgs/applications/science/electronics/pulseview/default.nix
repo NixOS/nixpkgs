@@ -22,7 +22,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";
-    homepage = https://sigrok.org/;
+    homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;

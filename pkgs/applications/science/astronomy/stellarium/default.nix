@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "stellarium";
-  version = "0.19.3";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "175aj4bgi9b6bif6fvjdlpd68brcwij4x3ml0lxk6i51binv233y";
+    sha256 = "1732dxkgyqd4xf0ry7v930vcbv60l8iry596869z1d47j2piibs4";
   };
 
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
@@ -24,7 +24,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Free open-source planetarium";
-    homepage = http://stellarium.org/;
+    homepage = "http://stellarium.org/";
     license = licenses.gpl2;
 
     platforms = platforms.linux; # should be mesaPlatforms, but we don't have qt on darwin

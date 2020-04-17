@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/paulirish/git-recent;
+    homepage = "https://github.com/paulirish/git-recent";
     description = "See your latest local git branches, formatted real fancy";
     license = licenses.mit;
     platforms = platforms.all;

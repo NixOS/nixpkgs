@@ -1,4 +1,4 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -7,7 +7,7 @@
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
-, python2Packages, perl, pkgconfig, clang-tools
+, python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
@@ -21,9 +21,11 @@
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
+, libdrm ? null, wayland ? null, mesa_drivers ? null, libxkbcommon ? null # useOzone
 
 # package customization
 , useVaapi ? false
+, useOzone ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -104,8 +106,6 @@ let
             result
        else result;
 
-  llvm-clang-tools = clang-tools.override { inherit llvmPackages; };
-
   base = rec {
     name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) channel version;
@@ -117,7 +117,7 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar
-    ];
+    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools;
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
@@ -131,7 +131,8 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional useVaapi libva
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
     patches = [
       ./patches/nix_plugin_paths_68.patch
@@ -148,10 +149,13 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) [
+    ] ++ optionals (useVaapi) ([
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
-    ];
+    ] ++ optionals (versionRange "81" "82") [
+      (githubPatch "5b2ff215473e0526b5b24aeff4ad90d369b21c75" "0n00vh8wfpn2ay5fqsxcsx0zadnv7mihm72bcvnrfzh75nzbg902")
+      (githubPatch "98e343ab369e4262511b5fce547728e3e5eefba8" "00wwp653jk0k0yvix00vr7ymgck9dj7fxjwx4nc67ynn84dh6064")
+    ]);
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -216,8 +220,6 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
-    '' + optionalString (stdenv.lib.versionAtLeast version "82") ''
-      ln -s ${llvm-clang-tools}/bin/clang-format buildtools/linux64/clang-format
     '';
 
     gnFlags = mkGnFlags ({
@@ -244,7 +246,6 @@ let
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
-      enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
@@ -264,6 +265,16 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
+    } // optionalAttrs useOzone {
+      use_ozone = true;
+      ozone_platform_gbm = false;
+      use_xkbcommon = true;
+      use_glib = true;
+      use_gtk = true;
+      use_system_libwayland = true;
+      use_system_minigbm = true;
+      use_system_libdrm = true;
+      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
@@ -273,13 +284,18 @@ let
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
-      ${gn}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
 
       runHook postConfigure
     '';
+
+    # Don't spam warnings about unknown warning options. This is useful because
+    # our Clang is always older than Chromium's and the build logs have a size
+    # of approx. 25 MB without this option (and this saves e.g. 66 %).
+    NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
       # Build paralelism: on Hydra the build was frequently running into memory

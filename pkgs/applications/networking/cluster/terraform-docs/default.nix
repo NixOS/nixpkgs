@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 buildGoPackage rec {
   pname = "terraform-docs";
-  version = "0.6.0";
+  version = "0.9.1";
 
   goPackagePath = "github.com/segmentio/${pname}";
 
@@ -9,7 +9,7 @@ buildGoPackage rec {
     owner  = "segmentio";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1p6prhjf82qnhf1zwl9h92j4ds5g383a6g9pwwnqbc3wdwy5zx7d";
+    sha256 = "00sfzdqhf8g85m03r6mbzfas5vvc67iq7syb8ljcgxg8l1knxnjx";
   };
 
   preBuild = ''

@@ -7,10 +7,9 @@ buildGoPackage rec {
   goPackagePath = "github.com/zsa/wally";
   subPackages = [ "cli" ];
 
-  nativeBuildInputs = [
-    pkg-config
-    libusb1
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libusb1 ];
 
   src = fetchFromGitHub {
     owner = "zsa";
@@ -27,7 +26,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "A tool to flash firmware to mechanical keyboards";
-    homepage = https://ergodox-ez.com/pages/wally-planck;
+    homepage = "https://ergodox-ez.com/pages/wally-planck";
     license = licenses.mit;
     maintainers = [ maintainers.spacekookie ];
   };

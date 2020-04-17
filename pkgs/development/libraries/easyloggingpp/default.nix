@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "C++ logging library";
-    homepage = https://muflihun.github.io/easyloggingpp/;
+    homepage = "https://muflihun.github.io/easyloggingpp/";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [acowley];
     platforms = stdenv.lib.platforms.all;

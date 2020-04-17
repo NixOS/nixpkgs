@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       manager, Gtk, or any other theme.
     '';
 
-    homepage = http://gkrellm.srcbox.net;
+    homepage = "http://gkrellm.srcbox.net";
     license = licenses.gpl3Plus;
     maintainers = [ ];
     platforms = platforms.linux;
