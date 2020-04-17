@@ -2,18 +2,19 @@
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.12";
+  version = "1.9.13";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "143imiphyzk3009cfnqj7q013pb1wva13zq63byfj3d204b58cg6";
+    sha256 = "1yqqflp73yvjy6bp05xd1nv5fc6p1nx7g4spbssxf3ws96pdh425";
   };
 
-  modSha256 = "15a8if5gx361nrqgv201jy8saq1ir1g18rpqzdmavg4ic75si5x1";
+  modSha256 = "07xrw3fivfpbkg4mp8ghrj1bishfas82dbd780fymgs2h74iigf3";
 
   subPackages = [
+    "cmd/abidump"
     "cmd/abigen"
     "cmd/bootnode"
     "cmd/checkpoint-admin"
