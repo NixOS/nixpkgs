@@ -62,7 +62,7 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.role != "agent" -> cfg.serverAdr == "";
+        assertion = cfg.role != "agent" -> cfg.serverAddr == "";
         message = "serverAddr should only be set if role is 'agent'";
       }
       {
