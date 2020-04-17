@@ -1,38 +1,75 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, uthash, asciidoc, docbook_xml_dtd_45
-, docbook_xsl, libxslt, libxml2, makeWrapper, meson, ninja
-, xorgproto, libxcb ,xcbutilrenderutil, xcbutilimage, pixman, libev
-, dbus, libconfig, libdrm, libGL, pcre, libX11
-, libXinerama, libXext, xwininfo, libxdg_basedir }:
+{ asciidoc
+, dbus
+, docbook_xml_dtd_45
+, docbook_xsl
+, fetchFromGitHub
+, lib
+, libconfig
+, libdrm
+, libev
+, libGL
+, libX11
+, libxcb
+, libxdg_basedir
+, libXext
+, libXinerama
+, libxml2
+, libxslt
+, makeWrapper
+, meson
+, ninja
+, pcre
+, pixman
+, pkg-config
+, stdenv
+, uthash
+, xcbutilimage
+, xcbutilrenderutil
+, xorgproto
+, xwininfo
+}:
 
 stdenv.mkDerivation rec {
   pname = "picom";
   version = "8.2";
 
   src = fetchFromGitHub {
-    owner  = "yshui";
-    repo   = "picom";
-    rev    = "v${version}";
+    owner = "yshui";
+    repo = "picom";
+    rev = "v${version}";
     sha256 = "0gjksayz2xpmgglvw17ppsan2imrd1fijs579kbf27xwp503xgfl";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    meson ninja
-    pkg-config
-    uthash
     asciidoc
     docbook_xml_dtd_45
     docbook_xsl
     makeWrapper
+    meson
+    ninja
+    pkg-config
+    uthash
   ];
 
   buildInputs = [
-    dbus libX11 libXext
-    xorgproto
-    libXinerama libdrm pcre libxml2 libxslt libconfig libGL
-    libxcb xcbutilrenderutil xcbutilimage
-    pixman libev
+    dbus
+    libconfig
+    libdrm
+    libev
+    libGL
+    libX11
+    libxcb
     libxdg_basedir
+    libXext
+    libXinerama
+    libxml2
+    libxslt
+    pcre
+    pixman
+    xcbutilimage
+    xcbutilrenderutil
+    xorgproto
   ];
 
   mesonBuildType = "release";
