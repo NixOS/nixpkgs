@@ -4666,6 +4666,8 @@ in
 
   memtester = callPackage ../tools/system/memtester { };
 
+  mesa-demos = callPackage ../tools/graphics/mesa-demos { };
+
   mhonarc = perlPackages.MHonArc;
 
   minergate = callPackage ../applications/misc/minergate { };
