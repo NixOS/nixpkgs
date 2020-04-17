@@ -17,9 +17,13 @@ let
     throw "Unsupported architecture";
 
   version = lib.getVersion edk2;
+  buildType = if stdenv.isDarwin then
+    "CLANGPDB"
+  else
+    "GCC5";
 in
 
-edk2.mkDerivation projectDscPath {
+edk2.mkDerivation projectDscPath buildType {
   name = "OVMF-${version}";
 
   outputs = [ "out" "fd" ];
@@ -57,6 +61,6 @@ edk2.mkDerivation projectDscPath {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = https://github.com/tianocore/tianocore.github.io/wiki/OVMF;
     license = stdenv.lib.licenses.bsd2;
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
+    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
   };
 }
