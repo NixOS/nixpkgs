@@ -87,5 +87,6 @@ in newPython.pkgs.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

@@ -1681,7 +1681,7 @@ in {
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
-  atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };  
+  atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
@@ -3605,9 +3605,13 @@ in {
 
   folium = callPackage ../development/python-modules/folium { };
 
-  fontforge = toPythonModule (pkgs.fontforge.override {
+  fontforge = (toPythonModule (pkgs.fontforge.override {
     withPython = true;
     inherit python;
+  })).overrideAttrs (old: {
+    meta = old.meta // {
+      broken = isPy38;
+    };
   });
 
   fonttools = callPackage ../development/python-modules/fonttools { };
@@ -4371,7 +4375,7 @@ in {
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
-  nbformat = if isPy3k then 
+  nbformat = if isPy3k then
     callPackage ../development/python-modules/nbformat { }
   else callPackage ../development/python-modules/nbformat/2.nix { };
 

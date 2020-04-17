@@ -113,5 +113,6 @@ stdenv.mkDerivation rec {
     description = "GNU Compiler Collection, version ${version} -- C++ standard library";
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
+    broken = true;
   };
 }

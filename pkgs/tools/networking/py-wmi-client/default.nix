@@ -21,5 +21,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/dlundgren/py-wmi-client";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
+    broken = true;
   };
 }

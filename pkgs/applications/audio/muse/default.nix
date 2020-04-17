@@ -33,6 +33,7 @@ stdenv.mkDerivation {
       it is published under the GNU General Public License.
     '';
     license = stdenv.lib.licenses.gpl2;
+    broken = true;
   };
 
   src =

@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

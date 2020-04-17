@@ -23,5 +23,6 @@ buildRustPackage rec {
     maintainers = [ maintainers.dbrock ];
     license = licenses.gpl3;
     inherit version;
+    broken = true;
   };
 }

@@ -13,6 +13,7 @@
 , XlsxWriter
 , pyyaml
 , pytest
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     description = "Support and convert several CAN (Controller Area Network) database formats .arxml .dbc .dbf .kcd .sym fibex xls(x)";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sorki ];
+    broken = isPy38;
   };
 }
 

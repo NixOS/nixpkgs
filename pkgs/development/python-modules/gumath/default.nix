@@ -6,12 +6,13 @@
 , libxnd
 , libgumath
 , isPy27
+, isPy38
 }:
 
 buildPythonPackage {
   pname = "gumath";
   disabled = isPy27;
-  inherit (libgumath) src version meta;
+  inherit (libgumath) src version;
 
   checkInputs = [ numba ];
   propagatedBuildInputs = [ ndtypes xnd ];
@@ -25,4 +26,8 @@ buildPythonPackage {
       --replace 'add_runtime_library_dirs = ["$ORIGIN"]' \
                 'add_runtime_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib", "${libgumath}/lib"]'
   '';
+
+  meta = libgumath.meta // {
+    broken = isPy38;
+  };
 }

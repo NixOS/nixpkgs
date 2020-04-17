@@ -4,6 +4,7 @@
 , six
 , pytest
 , pytest-sugar
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -28,5 +29,6 @@ buildPythonPackage rec {
     homepage = https://github.com/kyrus/python-junit-xml;
     maintainers = with maintainers; [ multun ];
     license = licenses.mit;
+    broken = true;
   };
 }

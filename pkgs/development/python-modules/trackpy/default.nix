@@ -54,5 +54,6 @@ buildPythonPackage rec {
     homepage = https://github.com/soft-matter/trackpy;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

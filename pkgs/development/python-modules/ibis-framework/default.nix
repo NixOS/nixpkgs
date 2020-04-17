@@ -14,6 +14,7 @@
 , tables
 , pyarrow
 , graphviz
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -53,5 +54,6 @@ buildPythonPackage rec {
     homepage = https://github.com/ibis-project/ibis;
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
+    broken = isPy38;
   };
 }

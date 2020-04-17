@@ -18,6 +18,7 @@ buildPythonPackage rec {
     description = "Python driver library for the RethinkDB database server";
     homepage = "https://pypi.python.org/pypi/rethinkdb";
     license = licenses.agpl3;
+    broken = true;
   };
 
 }

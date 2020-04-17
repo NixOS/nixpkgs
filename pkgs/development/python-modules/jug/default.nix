@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchPypi, fetchpatch
 , nose, numpy
 , bottle, pyyaml, redis, six
-, zlib }:
+, zlib, isPy38
+}:
 
 buildPythonPackage rec {
   pname = "Jug";
@@ -26,5 +27,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = https://jug.readthedocs.io/;
     maintainers = with maintainers; [ luispedro ];
+    broken = true;
   };
 }

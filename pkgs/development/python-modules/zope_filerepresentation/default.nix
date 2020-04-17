@@ -20,6 +20,7 @@ buildPythonPackage rec {
     description = "File-system Representation Interfaces";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
+    broken = true;
   };
 
 }

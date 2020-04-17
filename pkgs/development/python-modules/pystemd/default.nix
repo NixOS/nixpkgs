@@ -20,5 +20,6 @@ python.pkgs.buildPythonPackage rec {
     homepage = https://github.com/facebookincubator/pystemd/;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ flokli ];
+    broken = true;
   };
 }

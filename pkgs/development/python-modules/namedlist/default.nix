@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = https://bitbucket.org/ericvsmith/namedlist;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ivan ];
+    broken = true;
   };
 }

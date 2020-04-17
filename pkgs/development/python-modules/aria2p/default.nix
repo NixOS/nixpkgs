@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , aria2, poetry, pytest, pytestcov, pytest_xdist, responses
 , asciimatics, loguru, requests, setuptools, websocket_client
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "1inak3y2win58zbzykfzy6xp00f276sqsz69h2nfsd93mpr74wf6";
   };
-  
+
   nativeBuildInputs = [ poetry ];
 
   preBuild = ''
@@ -39,5 +40,6 @@ buildPythonPackage rec {
     description = "Command-line tool and library to interact with an aria2c daemon process with JSON-RPC";
     license = licenses.isc;
     maintainers = with maintainers; [ koral ];
+    broken = isPy38;
   };
 }

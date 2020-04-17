@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://circleci.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
+    broken = true;
   };
 }

@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
     maintainers = [ stdenv.lib.maintainers.aszlig ];
+    broken = true;
   };
 }

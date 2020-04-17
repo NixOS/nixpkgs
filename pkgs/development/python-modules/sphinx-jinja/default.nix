@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Sphinx extension to include jinja templates in documentation";
     maintainers = with maintainers; [ nand0p ];
     license = licenses.mit;
+    broken = true;
   };
 }

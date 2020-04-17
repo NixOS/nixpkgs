@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
+    broken = true;
   };
 }

@@ -71,5 +71,6 @@ python.pkgs.buildPythonApplication rec {
     description = "Fitting and data analysis for small angle scattering data";
     maintainers = with maintainers; [ rprospero ];
     license = licenses.bsd3;
+    broken = true;
   };
 }

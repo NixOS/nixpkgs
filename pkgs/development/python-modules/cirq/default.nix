@@ -20,6 +20,7 @@
 , pydot
 , pyyaml
 , pygraphviz
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -82,5 +83,6 @@ buildPythonPackage rec {
     homepage = "http://github.com/quantumlib/cirq";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
+    broken = isPy38;
   };
 }

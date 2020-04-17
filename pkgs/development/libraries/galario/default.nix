@@ -74,5 +74,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = [ maintainers.smaret ];
     platforms = platforms.all;
+    broken = pythonPackages.isPy38;
   };
 }
