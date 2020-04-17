@@ -5038,6 +5038,8 @@ in {
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};
 
+  publicsuffix2 = callPackage ../development/python-modules/publicsuffix2 {};
+
   py = callPackage ../development/python-modules/py { };
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };

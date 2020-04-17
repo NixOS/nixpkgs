@@ -2,9 +2,6 @@
 
 with python3Packages;
 
-let publicsuffix2 = python3Packages.callPackage ./publicsuffix2.nix {};
-    zstandard = python3Packages.callPackage ./zstandard.nix {};
-in
 buildPythonPackage rec {
   pname = "mitmproxy";
   version = "5.0.1";
