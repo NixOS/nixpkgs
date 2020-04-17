@@ -203,10 +203,20 @@ let
   makeJobScript = name: text:
     let
       scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
-      out = pkgs.writeShellScriptBin scriptName ''
-        set -e
-        ${text}
-      '';
+      out = pkgs.writeTextFile {
+        # The derivation name is different from the script file name
+        # to keep the script file name short to avoid cluttering logs.
+        name = "unit-script-${scriptName}";
+        executable = true;
+        destination = "/bin/${scriptName}";
+        text = ''
+          #!${pkgs.runtimeShell} -e
+          ${text}
+        '';
+        checkPhase = ''
+          ${pkgs.stdenv.shell} -n "$out/bin/${scriptName}"
+        '';
+      };
     in "${out}/bin/${scriptName}";
 
   unitConfig = { config, options, ... }: {
