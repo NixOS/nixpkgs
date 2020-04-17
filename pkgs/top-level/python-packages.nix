@@ -969,6 +969,8 @@ in {
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
+  neo = callPackage ../development/python-modules/neo { };
+
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   neuron = pkgs.neuron.override {
