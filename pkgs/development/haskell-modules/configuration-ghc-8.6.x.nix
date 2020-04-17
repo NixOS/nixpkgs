@@ -88,4 +88,7 @@ self: super: {
   stylish-cabal = doDistribute (markUnbroken (super.stylish-cabal.override { haddock-library = self.haddock-library_1_7_0; }));
   haddock-library_1_7_0 = dontCheck super.haddock-library_1_7_0;
 
+  # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+
 }

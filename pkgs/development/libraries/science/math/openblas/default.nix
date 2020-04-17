@@ -176,6 +176,12 @@ Cflags: -I$out/include
 Libs: -L$out/lib -lopenblas
 EOF
     done
+
+    # Setup symlinks for blas / lapack
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapacke${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   meta = with stdenv.lib; {
@@ -185,10 +191,4 @@ EOF
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };
-
-  # We use linkName to pass a different name to --with-blas-libs for
-  # fflas-ffpack and linbox, because we use blas on darwin but openblas
-  # elsewhere.
-  # See see https://github.com/NixOS/nixpkgs/pull/45013.
-  passthru.linkName = "openblas";
 }

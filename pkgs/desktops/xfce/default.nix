@@ -3,7 +3,7 @@
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
 
-  updateScript = callPackage ../../common-updater/update-script.nix { };
+  updateScript = pkgs.genericUpdater;
 
   gitLister = url:
     "${pkgs.common-updater-scripts}/bin/list-git-tags ${url}";

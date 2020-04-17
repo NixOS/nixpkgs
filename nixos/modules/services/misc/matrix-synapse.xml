@@ -33,6 +33,7 @@
    <link xlink:href="https://github.com/matrix-org/synapse#synapse-installation">
    installation instructions of Synapse </link>.
 <programlisting>
+{ pkgs, ... }:
 let
   fqdn =
     let
@@ -46,7 +47,7 @@ in {
   <link linkend="opt-networking.firewall.allowedTCPPorts">networking.firewall.allowedTCPPorts</link> = [ 80 443 ];
 
   <link linkend="opt-services.postgresql.enable">services.postgresql.enable</link> = true;
-  <link linkend="opt-services.postgresql.initialScript">services.postgresql.initialScript</link> = ''
+  <link linkend="opt-services.postgresql.initialScript">services.postgresql.initialScript</link> = pkgs.writeText "synapse-init.sql" ''
     CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
     CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
       TEMPLATE template0
