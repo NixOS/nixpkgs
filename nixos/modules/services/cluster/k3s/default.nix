@@ -30,11 +30,13 @@ in
       type = types.str;
       description = "The k3s server to connect to. This option only makes sense for an agent.";
       example = "https://10.0.0.10:6443";
+      default = "";
     };
 
     token = mkOption {
       type = types.str;
       description = "The k3s token to use when connecting to the server. This option only makes sense for an agent.";
+      default = "";
     };
 
     docker = mkOption {
@@ -61,22 +63,17 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.role != "agent" -> cfg.serverAddr == "";
-        message = "serverAddr should only be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> cfg.serverAddr != "";
+        message = "serverAddr should be set if role is 'agent'";
       }
       {
-        assertion = cfg.role != "agent" -> cfg.token == "";
-        message = "token should only be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> cfg.token != "";
+        message = "token should be set if role is 'agent'";
       }
     ];
 
     virtualisation.docker = mkIf cfg.docker {
       enable = mkDefault true;
-    };
-
-    services.k3s = mkIf (cfg.role == "server") {
-      serverAddr = "";
-      token = "";
     };
 
     systemd.services.k3s = {
