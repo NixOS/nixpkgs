@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , buildGoPackage
 , fetchFromGitHub
 , runCommand
@@ -11,8 +10,6 @@
 , libselinux
 , go-md2man
 }:
-
-with stdenv.lib;
 
 let
   version = "0.2.0";
@@ -28,6 +25,8 @@ let
 
   goPackagePath = "github.com/containers/skopeo";
 
+  vendorPath = "${goPackagePath}/vendor/github.com/containers/image/v5";
+
 in
 buildGoPackage {
   pname = "skopeo";
@@ -36,20 +35,16 @@ buildGoPackage {
 
   outputs = [ "bin" "man" "out" ];
 
-  excludedPackages = "integration";
+  excludedPackages = [ "integration" ];
 
-  nativeBuildInputs = [ pkg-config (lib.getBin go-md2man) ];
-  buildInputs = [ gpgme ] ++ lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs libselinux ];
+  nativeBuildInputs = [ pkg-config go-md2man ];
+  buildInputs = [ gpgme ]
+  ++ stdenv.lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs libselinux ];
 
   buildFlagsArray = ''
     -ldflags=
-    -X github.com/containers/skopeo/vendor/github.com/containers/image/v5/signature.systemDefaultPolicyPath=${defaultPolicyFile}
-    -X github.com/containers/skopeo/vendor/github.com/containers/image/v5/internal/tmpdir.unixTempDirForBigFiles=/tmp
-  '';
-
-  preBuild = ''
-    export CGO_CFLAGS="$CFLAGS"
-    export CGO_LDFLAGS="$LDFLAGS"
+    -X ${vendorPath}/signature.systemDefaultPolicyPath=${defaultPolicyFile}
+    -X ${vendorPath}/internal/tmpdir.unixTempDirForBigFiles=/tmp
   '';
 
   postBuild = ''
