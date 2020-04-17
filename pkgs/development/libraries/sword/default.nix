@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [ "--without-conf" "--enable-tests=no" ];
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-Wno-unused-but-set-variable"
     # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
     "-DU_USING_ICU_NAMESPACE=1"
