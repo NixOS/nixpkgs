@@ -1461,6 +1461,8 @@ in {
 
   shellingham = callPackage ../development/python-modules/shellingham {};
 
+  simpleaudio = callPackage ../development/python-modules/simpleaudio { };
+
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
