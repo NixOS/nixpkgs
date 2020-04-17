@@ -64,17 +64,15 @@ in
     start_all()
 
     k3s.wait_for_unit("k3s")
-    k3s.succeed("sudo k3s kubectl cluster-info")
+    k3s.succeed("k3s kubectl cluster-info")
     k3s.fail("sudo -u noprivs k3s kubectl cluster-info")
     # k3s.succeed("k3s check-config") # fails with the current nixos kernel config, uncomment once this passes
 
     k3s.succeed(
-        "zcat ${pauseImage} | sudo k3s ctr image import -"
+        "zcat ${pauseImage} | k3s ctr image import -"
     )
 
-    k3s.succeed(
-        "sudo k3s kubectl apply -f ${testPodYaml}"
-    )
-    k3s.succeed("sudo k3s kubectl wait --for 'condition=Ready' pod/test")
+    k3s.succeed("k3s kubectl apply -f ${testPodYaml}")
+    k3s.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
   '';
 })
