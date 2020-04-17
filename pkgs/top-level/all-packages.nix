@@ -4753,6 +4753,7 @@ in
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
   next = callPackage ../applications/networking/browsers/next { };
+  next-gtk-webkit = callPackage ../applications/networking/browsers/next/next-gtk-webkit.nix { };
 
   nfpm = callPackage ../tools/package-management/nfpm { };
 

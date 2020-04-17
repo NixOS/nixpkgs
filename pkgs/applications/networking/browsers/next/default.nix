@@ -2,16 +2,11 @@
 , fetchFromGitHub
 , lispPackages
 , sbcl
-, callPackage
+
+# This is the wrapped webkitgtk platform port that we hardcode into the Lisp Core.
+# See https://github.com/atlas-engineer/next/tree/master/ports#next-platform-ports
+, next-gtk-webkit
 }:
-
-let
-
-  # This is the wrapped webkitgtk platform port that we hardcode into the Lisp Core.
-  # See https://github.com/atlas-engineer/next/tree/master/ports#next-platform-ports
-  next-gtk-webkit = callPackage ./next-gtk-webkit.nix {};
-
-in
 
 stdenv.mkDerivation rec {
   pname = "next";
