@@ -60,6 +60,17 @@ in
   # implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.role != "agent" -> cfg.serverAdr == "";
+        message = "serverAddr should only be set if role is 'agent'";
+      }
+      {
+        assertion = cfg.role != "agent" -> cfg.token == "";
+        message = "token should only be set if role is 'agent'";
+      }
+    ];
+
     virtualisation.docker = mkIf cfg.docker {
       enable = mkDefault true;
     };
@@ -78,10 +89,6 @@ in
         Type = "notify";
         KillMode = "process";
         Delegate = "yes";
-        LimitNOFILE = "infinity";
-        LimitNPROC = "infinity";
-        LimitCORE = "infinity";
-        TasksMax = "infinity";
         Restart = "always";
         RestartSec = "5s";
         ExecStart = concatStringsSep " \\\n " (
@@ -94,7 +101,5 @@ in
         );
       };
     };
-
-    environment.systemPackages = [ cfg.package ];
   };
 }
