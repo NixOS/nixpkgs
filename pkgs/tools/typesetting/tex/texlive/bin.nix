@@ -287,7 +287,7 @@ dvisvgm = stdenv.mkDerivation {
 
   # configure script has a bug: it refers to $HAVE_LIBGS but sets $have_libgs
   # TODO: remove for texlive 2020?
-  HAVE_LIBGS = 1;
+  env.HAVE_LIBGS = 1;
 
   configureFlags = common.configureFlags
     ++ [ "--with-system-kpathsea" ];
