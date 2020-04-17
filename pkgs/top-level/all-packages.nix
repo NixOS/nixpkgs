@@ -8077,8 +8077,7 @@ in
   cryptol = haskell.lib.justStaticExecutables haskellPackages.cryptol;
 
   inherit (callPackages ../development/compilers/crystal {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    inherit (llvmPackages) clang llvm;
+    inherit (llvmPackages_10) stdenv clang llvm;
   })
     crystal_0_31
     crystal_0_32
