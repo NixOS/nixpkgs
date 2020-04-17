@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  prePatch = optionalString (conf != null) ''
+    cp ${writeText "config.def.h" conf} config.def.h
+  '';
 
   nativeBuildInputs = [ pkgconfig ncurses ];
   buildInputs = [ libX11 libXft ] ++ extraLibs;
