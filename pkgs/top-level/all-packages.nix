@@ -10624,6 +10624,8 @@ in
   pkg-configUpstream = lowPrio (pkg-config.override { vanilla = true; });
   pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
 
+  inherit (nodePackages) postcss-cli;
+
   postiats-utilities = callPackage ../development/tools/postiats-utilities {};
 
   postman = callPackage ../development/web/postman {};
