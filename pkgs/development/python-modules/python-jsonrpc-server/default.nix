@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytest, mock, pytestcov, coverage
-, future, futures
+, future, futures, isPy38
 }:
 
 buildPythonPackage rec {
@@ -26,6 +26,8 @@ buildPythonPackage rec {
     pytest
   '';
 
+  disabled = isPy38;
+
   propagatedBuildInputs = [ future ]
     ++ stdenv.lib.optional (pythonOlder "3.2") futures;
 
@@ -34,6 +36,5 @@ buildPythonPackage rec {
     description = "A Python 2 and 3 asynchronous JSON RPC server";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
-    broken = true;
   };
 }
