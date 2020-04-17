@@ -7844,6 +7844,7 @@ broken-packages:
   - onama
   - ONC-RPC
   - oneormore
+  - online-csv
   - onpartitions
   - OnRmt
   - onu-course
@@ -8906,6 +8907,7 @@ broken-packages:
   - saferoute
   - sai-shape-syb
   - sajson
+  - sak
   - salak-toml
   - Salsa
   - saltine-quickcheck
