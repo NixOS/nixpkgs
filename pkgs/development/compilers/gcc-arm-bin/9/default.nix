@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Pre-built GNU toolchain for ARM Cortex-A processors";
     homepage = "https://developer.arm.com/open-source/gnu-toolchain/gnu-a";
     license = with licenses; [ bsd2 gpl2 gpl3 lgpl21 lgpl3 mit ];
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ wamserma ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
