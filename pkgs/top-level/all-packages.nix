@@ -18696,6 +18696,8 @@ in
 
   carla = qt5.callPackage ../applications/audio/carla { };
 
+  castor = callPackage ../applications/networking/browsers/castor { };
+
   catimg = callPackage ../tools/misc/catimg { };
 
   catt = python3Packages.callPackage ../applications/video/catt { };
