@@ -19841,6 +19841,7 @@ in
   hugo = callPackage ../applications/misc/hugo { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
+  hydrogen-unstable = qt5.callPackage ../applications/audio/hydrogen/unstable.nix { };
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
