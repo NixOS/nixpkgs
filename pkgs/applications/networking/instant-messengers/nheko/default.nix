@@ -4,6 +4,8 @@
 , cmake
 , cmark
 , lmdb
+, lmdbxx
+, tweeny
 , mkDerivation
 , qtbase
 , qtmacextras
@@ -17,23 +19,6 @@
 , nlohmann_json
 }:
 
-# These hashes and revisions are based on those from here:
-# https://github.com/Nheko-Reborn/nheko/blob/v0.6.4/deps/CMakeLists.txt#L52
-let
-  tweeny = fetchFromGitHub {
-    owner = "mobius3";
-    repo = "tweeny";
-    rev = "b94ce07cfb02a0eb8ac8aaf66137dabdaea857cf";
-    sha256 = "1wyyq0j7dhjd6qgvnh3knr70li47hmf5394yznkv9b1indqjx4mi";
-  };
-
-  lmdbxx = fetchFromGitHub {
-    owner = "bendiken";
-    repo = "lmdbxx";
-    rev = "0b43ca87d8cfabba392dfe884eb1edb83874de02";
-    sha256 = "1whsc5cybf9rmgyaj6qjji03fv5jbgcgygp956s3835b9f9cjg1n";
-  };
-in
 mkDerivation rec {
   pname = "nheko";
   version = "0.6.4";
@@ -61,24 +46,15 @@ mkDerivation rec {
   #  export CFLAGS=-Wno-error=gnu-zero-variadic-macro-arguments
   #'';
 
-  postPatch = ''
-    mkdir -p .deps/include/
-    ln -s ${tweeny}/include .deps/include/tweeny
-    ln -s ${spdlog} .deps/spdlog
-  '';
-
-  cmakeFlags = [
-    "-DTWEENY_INCLUDE_DIR=.deps/include"
-    "-DLMDBXX_INCLUDE_DIR=${lmdbxx}"
-    "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
-  ];
-
   nativeBuildInputs = [
+    lmdbxx
     cmake
     pkgconfig
   ];
 
   buildInputs = [
+    nlohmann_json
+    tweeny
     mtxclient
     olm
     boost
