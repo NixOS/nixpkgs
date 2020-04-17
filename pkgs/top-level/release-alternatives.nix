@@ -37,7 +37,7 @@ let
     "suitesparse_4_2" "petsc" "cholmod-extra"
     "arpack" "qrupdate" "iml" "globalarrays" "arrayfire"
     "xfitter" "lammps" "plink-ng" "quantum-espresso"
-    "calculix" "csdp" "getdp" "giac" "jags"
+    "calculix" "csdp" "getdp" "jags"
     "lammps" "lammps-mpi"
     # ["ocamlPackages" "lacaml"]
     ["haskellPackages" "bindings-levmar"]
