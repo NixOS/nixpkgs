@@ -14,8 +14,7 @@ in
       default = pkgs.k3s;
       defaultText = "pkgs.k3s";
       example = literalExample "pkgs.k3s";
-      description = ''
-      '';
+      description = "Package that should be used for k3s";
     };
 
     role = mkOption {
