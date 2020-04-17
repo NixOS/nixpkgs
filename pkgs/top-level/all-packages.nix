@@ -167,6 +167,8 @@ in
 
   colorz = callPackage ../tools/misc/colorz { };
 
+  colobot = callPackage ../games/colobot {  };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
