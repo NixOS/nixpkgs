@@ -6012,6 +6012,8 @@ in {
 
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
+  zimports = callPackage ../development/python-modules/zimports { };
+
   zipstream = callPackage ../development/python-modules/zipstream { };
 
   zodb = callPackage ../development/python-modules/zodb {};
