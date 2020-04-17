@@ -25223,6 +25223,8 @@ in
 
   cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 { };
 
+  cnijfilter-common = callPackage ../misc/cups/drivers/cnijfilter-common {};
+
   darcnes = callPackage ../misc/emulators/darcnes { };
 
   darling-dmg = callPackage ../tools/filesystems/darling-dmg { };

@@ -1,0 +1,19 @@
+--- pstocanonij/filter/pstocanonij.c	2006-03-06 09:47:40.000000000 +0100
++++ pstocanonij/filter/pstocanonij.c	2006-08-29 09:01:56.000000000 +0200
+@@ -701,13 +701,14 @@
+ 			}
+ 			else
+ 			{
+-				to_lower_except_size_X(choice);
+-
+ 				if( !strcmp(p_table->ppd_key, "PageSize")
+ 				 && is_borderless(choice) )
+ 				{
+ 					param_list_add(&p_list, "--borderless", "", 1);
+ 				}
++
++				to_lower_except_size_X(choice);
++
+ 				param_list_add(&p_list, p_table->opt_key,
+ 					choice, strlen(choice) + 1);
+ 			}

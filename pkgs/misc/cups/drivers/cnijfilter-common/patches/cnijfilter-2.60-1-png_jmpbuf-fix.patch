@@ -1,0 +1,11 @@
+--- cnijfilter/src/bjfimage.c	2016-11-13 13:02:19.551827947 +0100
++++ cnijfilter/src/bjfimage.c	2016-11-13 13:03:16.602826925 +0100
+@@ -1575,7 +1575,7 @@
+ 		goto onErr;
+ 	}
+ 
+-	if (setjmp (png_ptr->jmpbuf))
++	if (setjmp (png_jmpbuf(png_ptr)))
+ 	{
+ 		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+ 		goto onErr;
