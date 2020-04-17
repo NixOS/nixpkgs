@@ -27,7 +27,7 @@ buildPythonPackage rec {
       # https://github.com/mitmproxy/mitmproxy/issues/3459
       # TODO: remove on next update
       name = "wsproto-0.13.patch";
-      url = https://github.com/mitmproxy/mitmproxy/commit/70777a1b6ed64af9cafcdef223a8a260ecc96864.patch;
+      url = "https://github.com/mitmproxy/mitmproxy/commit/70777a1b6ed64af9cafcdef223a8a260ecc96864.patch";
       sha256 = "1ddxdr7js510kzyq3gyks4k5k1n8zb1i9amxw7wzmi1dcg8kqw9a";
       # We strip these bounds anyway
       excludes = [ "setup.py" ];
@@ -37,10 +37,18 @@ buildPythonPackage rec {
       # https://github.com/mitmproxy/mitmproxy/issues/3403
       # TODO: remove on next update
       name = "dont-call-fixtures.patch";
-      url = https://github.com/mitmproxy/mitmproxy/commit/ce28721458c8cc71de86513a5110676e9763041b.patch;
+      url = "https://github.com/mitmproxy/mitmproxy/commit/ce28721458c8cc71de86513a5110676e9763041b.patch";
       sha256 = "05pljr28lx7l1xgswqr9sz8dnhvc7npzh8xg2p9hignf159kd54d";
       # Irrelevant in nixpkgs
       excludes = [ "setup.py" "setup.cfg" "release/docker/*" ];
+    })
+    (fetchpatch {
+      # Fix for OpenSSL 1.1.1f
+      # https://github.com/mitmproxy/mitmproxy/pull/3692#issuecomment-608454530
+      # TODO: remove on next update
+      name = "temporarily-fix-key-logging.patch";
+      url = "https://github.com/mitmproxy/mitmproxy/commit/4bfb81c0089d0e0c1c24739f01fca41a3f055f3a.diff";
+      sha256 = "18yd6alalzq08biikc4aywhvfslz55fpxhixs9id1zzaf6c0vr45";
     })
     ./pytest5.patch
   ];
@@ -79,6 +87,5 @@ buildPythonPackage rec {
     homepage    = https://mitmproxy.org/;
     license     = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
-    broken = true;
   };
 }
