@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   ];
 
   preConfigure = ''
-    configureFlags="$configureFlags --with-config-file=$out/etc/GNUstep/GNUstep.conf"
+    configureFlags+=("--with-config-file=$out/etc/GNUstep/GNUstep.conf")
   '';
 
   makeFlags = [
