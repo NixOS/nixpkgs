@@ -34,7 +34,7 @@ let
   ] ++ lib.optionals allowUnfree [ "magma" ];
   blas64Users = [
     "rspamd" "suitesparse_5_3" "suitesparse_4_4"
-    "suitesparse_4_2" "scs" "petsc" "magma" "cholmod-extra"
+    "suitesparse_4_2" "petsc" "cholmod-extra"
     "arpack" "qrupdate" "iml" "globalarrays" "arrayfire"
     "xfitter" "lammps" "plink-ng" "quantum-espresso"
     "calculix" "csdp" "getdp" "giac" "jags"
