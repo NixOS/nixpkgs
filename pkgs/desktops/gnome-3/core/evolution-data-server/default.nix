@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch --subst-var-by ESD_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
       --subst-var-by GDS_GSETTINGS_PATH ${glib.getSchemaPath gsettings-desktop-schemas}
-    patches="$patches $PWD/hardcode-gsettings.patch"
+    patches+=("$PWD/hardcode-gsettings.patch")
   '';
 
   nativeBuildInputs = [
