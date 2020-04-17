@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   dontConfigure = true;
 
   buildPhase = ''
-    a2x -a revdate=$(date --date=@$(cat $src/.timestamp) +%d/%m/%Y) \
+    a2x -a revdate=$(date --utc --date=@$(cat $src/.timestamp) +%d/%m/%Y) \
       -f manpage doc/nix-prefetch.1.asciidoc
   '';
 
