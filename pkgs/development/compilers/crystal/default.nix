@@ -108,6 +108,8 @@ let
       "all" "docs"
     ];
 
+    LLVM_CONFIG = "${llvm}/bin/llvm-config";
+
     FLAGS = [
       "--release"
       "--single-module" # needed for deterministic builds
