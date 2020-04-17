@@ -20639,31 +20639,11 @@ in
 
   mop = callPackage ../applications/misc/mop { };
 
-  mopidy = callPackage ../applications/audio/mopidy { };
+  mopidyPackages = callPackages ../applications/audio/mopidy/default.nix {
+    python = python3;
+  };
 
-  mopidy-gmusic = callPackage ../applications/audio/mopidy/gmusic.nix { };
-
-  mopidy-local-images = callPackage ../applications/audio/mopidy/local-images.nix { };
-
-  mopidy-local-sqlite = callPackage ../applications/audio/mopidy/local-sqlite.nix { };
-
-  mopidy-spotify = callPackage ../applications/audio/mopidy/spotify.nix { };
-
-  mopidy-moped = callPackage ../applications/audio/mopidy/moped.nix { };
-
-  mopidy-mopify = callPackage ../applications/audio/mopidy/mopify.nix { };
-
-  mopidy-spotify-tunigo = callPackage ../applications/audio/mopidy/spotify-tunigo.nix { };
-
-  mopidy-youtube = callPackage ../applications/audio/mopidy/youtube.nix { };
-
-  mopidy-soundcloud = callPackage ../applications/audio/mopidy/soundcloud.nix { };
-
-  mopidy-musicbox-webclient = callPackage ../applications/audio/mopidy/musicbox-webclient.nix { };
-
-  mopidy-iris = callPackage ../applications/audio/mopidy/iris.nix { };
-
-  mopidy-mpd = callPackage ../applications/audio/mopidy/mpd.nix { };
+  inherit (mopidyPackages) mopidy mopidy-gmusic mopidy-local-images mopidy-local-sqlite mopidy-spotify mopidy-moped mopidy-mopify mopidy-spotify-tunigo mopidy-youtube mopidy-soundcloud mopidy-musicbox-webclient mopidy-iris mopidy-mpd;
 
   motif = callPackage ../development/libraries/motif { };
 
