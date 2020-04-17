@@ -104,6 +104,10 @@ in
 
   ### BUILD SUPPORT
 
+  auditBlasHook = makeSetupHook
+    { name = "auto-blas-hook"; deps = [ blas lapack ]; }
+    ../build-support/setup-hooks/audit-blas.sh;
+
   autoreconfHook = makeSetupHook
     { deps = [ autoconf automake gettext libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
@@ -8702,25 +8706,21 @@ in
 
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
     gmp = gmp6;
-    openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
-    openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
   julia_11 = callPackage ../development/compilers/julia/1.1.nix {
     gmp = gmp6;
-    openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
   julia_13 = callPackage ../development/compilers/julia/1.3.nix {
     gmp = gmp6;
-    openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
@@ -9404,16 +9404,13 @@ in
 
   octave = callPackage ../development/interpreters/octave {
     python = python3;
-    openblas = if stdenv.isDarwin then openblasCompat else openblas;
   };
   octave-jit = callPackage ../development/interpreters/octave {
     python = python3;
-    openblas = if stdenv.isDarwin then openblasCompat else openblas;
     enableJIT = true;
   };
   octaveFull = (lowPrio (libsForQt512.callPackage ../development/interpreters/octave {
     python = python3;
-    openblas = if stdenv.isDarwin then openblasCompat else openblas;
     enableQt = true;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
   }));
@@ -11481,20 +11478,11 @@ in
 
   ffcast = callPackage ../tools/X11/ffcast { };
 
-  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {
-    # We need to use blas instead of openblas on darwin,
-    # see https://github.com/NixOS/nixpkgs/pull/45013.
-    blas = if stdenv.isDarwin then blas else openblas;
-  };
+  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
 
   forge = callPackage ../development/libraries/forge { };
 
-  linbox = callPackage ../development/libraries/linbox {
-    # We need to use blas instead of openblas on darwin, see
-    # https://github.com/NixOS/nixpkgs/pull/45013 and
-    # https://github.com/NixOS/nixpkgs/pull/45015.
-    blas = if stdenv.isDarwin then blas else openblas;
-  };
+  linbox = callPackage ../development/libraries/linbox { };
 
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -15263,7 +15251,6 @@ in
     texLive = texlive.combine {
       inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
     };
-    openblas = openblasCompat;
     withRecommendedPackages = false;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
     inherit (darwin) libobjc;
@@ -24202,7 +24189,7 @@ in
 
   molden = callPackage ../applications/science/chemistry/molden { };
 
-  octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
+  octopus = callPackage ../applications/science/chemistry/octopus { };
 
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
@@ -24430,7 +24417,9 @@ in
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
-  blas = callPackage ../development/libraries/science/math/blas { };
+  blas = callPackage ../build-support/alternatives/blas { };
+
+  blas-reference = callPackage ../development/libraries/science/math/blas { };
 
   brial = callPackage ../development/libraries/science/math/brial { };
 
@@ -24450,11 +24439,14 @@ in
 
   jags = callPackage ../applications/science/math/jags { };
 
+  lapack = callPackage ../build-support/alternatives/lapack { };
+
+  lapack-reference = callPackage ../development/libraries/science/math/liblapack { };
+  liblapack = lapack-reference;
+
   libbraiding = callPackage ../development/libraries/science/math/libbraiding { };
 
   libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
-
-  liblapack = callPackage ../development/libraries/science/math/liblapack {};
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
@@ -24538,7 +24530,7 @@ in
 
   sympow = callPackage ../development/libraries/science/math/sympow { };
 
-  ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
+  ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
 

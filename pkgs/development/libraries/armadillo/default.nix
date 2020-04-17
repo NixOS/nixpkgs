@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, openblasCompat, superlu, hdf5 }:
+{ stdenv, fetchurl, cmake, blas, lapack, superlu, hdf5 }:
 
 stdenv.mkDerivation rec {
   pname = "armadillo";
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openblasCompat superlu hdf5 ];
+  buildInputs = [ blas lapack superlu hdf5 ];
 
   cmakeFlags = [
-    "-DLAPACK_LIBRARY=${openblasCompat}/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DLAPACK_LIBRARY=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DDETECT_HDF5=ON"
   ];
 
