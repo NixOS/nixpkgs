@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
+  env.PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Apps/Evolution";
