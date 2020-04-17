@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
+{ stdenv, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, numix-icon-theme, numix-icon-theme-circle, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "zafiro-icons";
@@ -11,10 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "05h8qm9izjbp8pnl9jpbw3y9sddhp0zmg94fm1k4d4hhdqnakqhv";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [
+    gtk3
+  ];
 
   propagatedBuildInputs = [
+    breeze-icons
+    gnome-icon-theme
+    numix-icon-theme
+    numix-icon-theme-circle
     hicolor-icon-theme
+    # still missing parent icon themes: Surfn
   ];
 
   dontDropIconThemeCache = true;
