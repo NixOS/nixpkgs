@@ -177,6 +177,9 @@ self: super: {
   # Test suite build depends on ancient tasty 0.11.x.
   cryptohash-sha512 = dontCheck super.cryptohash-sha512;
 
+  # Test suite depends on source code being available
+  simple-affine-space = dontCheck super.simple-affine-space;
+
   # https://github.com/kazu-yamamoto/simple-sendfile/issues/17
   simple-sendfile = dontCheck super.simple-sendfile;
 
@@ -1450,9 +1453,12 @@ self: super: {
   # details.
   cryptonite = dontCheck super.cryptonite;
 
-  # The test suite depends on an impure cabal-install installation
-  # in $HOME, which we don't have in our build sandbox.
-  cabal-install-parsers = dontCheck super.cabal-install-parsers;
+  # The test suite depends on an impure cabal-install installation in
+  # $HOME, which we don't have in our build sandbox, and it is keeping
+  # up with the most recent Cabal version.
+  cabal-install-parsers = dontCheck (super.cabal-install-parsers.overrideScope (self: super: {
+    Cabal = self.Cabal_3_2_0_0;
+  }));
 
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
@@ -1500,5 +1506,8 @@ self: super: {
 
   # Fixed at head, but hasn't cut a release in awhile.
   darcs = doJailbreak super.darcs;
+
+  # Test suite requires running a database server. Testing is done upstream.
+  hasql-pool = dontCheck super.hasql-pool;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
