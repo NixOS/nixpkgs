@@ -8131,6 +8131,12 @@
     email = "kirill.wedens@gmail.com";
     name = "wedens";
   };
+  wesnel = {
+    name = "Wesley Nelson";
+    email = "wesley@sent.as";
+    github = "wesnel";
+    githubId = 43357387;
+  };
   WhittlesJr = {
     email = "alex.joseph.whitt@gmail.com";
     github = "WhittlesJr";
