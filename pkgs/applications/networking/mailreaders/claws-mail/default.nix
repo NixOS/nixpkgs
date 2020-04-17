@@ -1,5 +1,5 @@
 { config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
-, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme
+, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, gumbo
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap, perl, pkgconfig, poppler, python, shared-mime-info
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
@@ -13,6 +13,7 @@
 , enableNetworkManager ? config.networking.networkmanager.enable or false
 , enablePgp ? true
 , enablePluginArchive ? false
+, enablePluginLitehtmlViewer ? false
 , enablePluginNotificationDialogs ? true
 , enablePluginNotificationSounds ? true
 , enablePluginPdf ? false
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     ++ optional enablePluginArchive libarchive
     ++ optional enablePluginNotificationSounds libcanberra-gtk2
     ++ optional enablePluginNotificationDialogs libnotify
+    ++ optional enablePluginLitehtmlViewer gumbo
     ++ optional enablePluginRssyl libxml2
     ++ optional enableNetworkManager networkmanager
     ++ optional enableLdap openldap
@@ -80,6 +82,7 @@ stdenv.mkDerivation rec {
       "--disable-pgpmime-plugin"
     ]
     ++ optional (!enablePluginArchive) "--disable-archive-plugin"
+    ++ optional (!enablePluginLitehtmlViewer) "--disable-litehtml_viewer-plugin"
     ++ optional (!enablePluginPdf) "--disable-pdf_viewer-plugin"
     ++ optional (!enablePluginPython) "--disable-python-plugin"
     ++ optional (!enablePluginRavatar) "--disable-libravatar-plugin"
