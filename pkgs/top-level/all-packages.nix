@@ -10799,6 +10799,10 @@ in
   };
   rust = rust_1_49;
 
+  mrustc = callPackage ../development/compilers/mrustc { };
+  mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
+  mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
+
   rustPackages_1_45 = rust_1_45.packages.stable;
   rustPackages_1_49 = rust_1_49.packages.stable;
   rustPackages = rustPackages_1_49;
