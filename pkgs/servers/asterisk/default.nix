@@ -141,11 +141,11 @@ in rec {
   #    # provided here verbatim for the convenience of anyone wanting to build
   #    # Asterisk from other sources. Include in externals.
   #    "sounds/asterisk-core-sounds-en-gsm-1.5.tar.gz" = fetchurl {
-  #      url = http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.5.tar.gz;
+  #      url = "http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.5.tar.gz";
   #      sha256 = "01xzbg7xy0c5zg7sixjw5025pvr4z64kfzi9zvx19im0w331h4cd";
   #    };
   #    "sounds/asterisk-moh-opsound-wav-2.03.tar.gz" = fetchurl {
-  #      url = http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-moh-opsound-wav-2.03.tar.gz;
+  #      url = "http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-moh-opsound-wav-2.03.tar.gz";
   #      sha256 = "449fb810d16502c3052fedf02f7e77b36206ac5a145f3dacf4177843a2fcb538";
   #    };
   #    # TODO: Sounds for other languages could be added here

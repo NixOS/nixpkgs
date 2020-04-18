@@ -596,7 +596,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   psfl = spdx {
     spdxId = "Python-2.0";
     fullName = "Python Software Foundation License version 2";
-    #url = http://docs.python.org/license.html;
+    #url = "http://docs.python.org/license.html";
   };
 
   publicDomain = {
