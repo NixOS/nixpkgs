@@ -17,6 +17,7 @@
 , iso8601
 , pytz
 , hypothesis
+, enum34
 }:
 
 buildPythonPackage rec {
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     packaging
     six
   ] ++ stdenv.lib.optional (!isPyPy) cffi
-  ++ stdenv.lib.optionals isPy27 [ ipaddress ];
+  ++ stdenv.lib.optionals isPy27 [ ipaddress enum34 ];
 
   checkInputs = [
     cryptography_vectors
