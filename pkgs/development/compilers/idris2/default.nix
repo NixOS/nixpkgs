@@ -2,6 +2,7 @@
 
 { stdenv, fetchFromGitHub, makeWrapper, runCommand
 , idris, chez, racket, chickenPkgs
+, clang, gmp
 }:
 
 stdenv.mkDerivation rec {
@@ -11,13 +12,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "edwinb";
     repo = "Idris2";
-    rev = "751fd1f36a55dfe17eccd4732d603796e1705ab";
-    sha256 = "097wyj8k4aavsw8b11gq1dgcjsycw2zf9vhzrazzjmxmpcyh1sz3";
+
+    rev = "884d4adad22c9fa014236e1c8ae56da8f18b48b2";
+    sha256 = "0djwx1janzchpm887yw45zxcfppa23nsyhhb9nhgb7x041wcr5my";
   };
 
-  version = "2020-01-11";
+  version = "2020-04-16";
 
-  nativeBuildInputs = [ idris makeWrapper ];
+  nativeBuildInputs = [ idris makeWrapper clang gmp ];
 
   propagatedBuildInputs =
     [ chez
