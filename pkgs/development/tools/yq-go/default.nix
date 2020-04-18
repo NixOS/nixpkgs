@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     rev = version;
     repo = "yq";
-    sha256 = "1n20m1zizbkgzag4676fvf16h6f8vll6pniblj7haqdwvnza8zwd";
+    sha256 = "1jll5nmskvs61031h3sizhv3scv8znrr9apyc4qlxcp4jiv7xpmp";
   };
 
-  modSha256 = "0hbazc6hf3zrni25lpbyi36sbxyabbrpi591gkqwxgr9hdbdpcg9";
+  modSha256 = "1m7sha6kwis1a00il1iigb9lxxh5m2myj9ps20s816m0b9bhd43v";
 
   meta = with lib; {
     description = "Portable command-line YAML processor";
