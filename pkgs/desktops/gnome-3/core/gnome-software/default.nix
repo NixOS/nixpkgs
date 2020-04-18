@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "Software store that lets you install and update applications and system extensions";
     homepage = "https://wiki.gnome.org/Apps/Software";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

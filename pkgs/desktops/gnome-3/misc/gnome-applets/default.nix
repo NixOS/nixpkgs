@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
     description = "Applets for use with the GNOME panel";
     homepage = "https://wiki.gnome.org/Projects/GnomeApplets";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

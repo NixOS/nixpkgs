@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
     description = "Hex editor for GNOME desktop environment";
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

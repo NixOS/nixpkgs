@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     description = "GNOME image viewer";
     homepage = "https://wiki.gnome.org/Apps/EyeOfGnome";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

@@ -6478,6 +6478,12 @@
       fingerprint = "92B2 904F D293 C94D C4C9  3E6B BFBA F4C9 75F7 6450";
     }];
   };
+  roastiek = {
+    email = "r.dee.b.b@gmail.com";
+    github = "roastiek";
+    githubId = 422802;
+    name = "Rostislav Beneš";
+  };
   rob = {
     email = "rob.vermaas@gmail.com";
     github = "rbvermaa";

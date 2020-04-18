@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Utilities to configure the GNOME desktop";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

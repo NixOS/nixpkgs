@@ -119,7 +119,7 @@ in stdenv.mkDerivation rec {
     description = "Core user interface for the GNOME 3 desktop";
     homepage = "https://wiki.gnome.org/Projects/GnomeShell";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 
