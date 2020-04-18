@@ -11,7 +11,7 @@
   the package to your clone, and (optionally) submit a patch or pull request to
   have it accepted into the main Nixpkgs repository. This is described in
   detail in the <link
-xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs
+xlink:href="https://nixos.org/nixpkgs/manual">Nixpkgs
   manual</link>. In short, you clone Nixpkgs:
 <screen>
 <prompt>$ </prompt>git clone https://github.com/NixOS/nixpkgs
