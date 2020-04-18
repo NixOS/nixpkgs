@@ -16,6 +16,5 @@ buildPythonPackage rec {
     homepage = "https://pdfposter.readthedocs.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ wamserma ];
-    platforms = platforms.all;
   };
 }
