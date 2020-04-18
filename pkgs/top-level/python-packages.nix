@@ -4667,9 +4667,7 @@ in {
   Nuitka = callPackage ../development/python-modules/nuitka { };
 
   numpy = let
-    numpy_ = callPackage ../development/python-modules/numpy {
-      blas = pkgs.openblasCompat;
-    };
+    numpy_ = callPackage ../development/python-modules/numpy { };
     numpy_2 = numpy_.overridePythonAttrs(oldAttrs: rec {
       version = "1.16.5";
       src = oldAttrs.src.override {
@@ -4825,6 +4823,8 @@ in {
 
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
+  pagelabels = callPackage ../development/python-modules/pagelabels { };
+
   pamqp = callPackage ../development/python-modules/pamqp { };
 
   parsedatetime = callPackage ../development/python-modules/parsedatetime { };
@@ -4896,6 +4896,8 @@ in {
 
   pdfkit = callPackage ../development/python-modules/pdfkit { };
 
+  pdfrw = callPackage ../development/python-modules/pdfrw { };
+
   periodictable = callPackage ../development/python-modules/periodictable { };
 
   pgcli = callPackage ../development/tools/database/pgcli {};
@@ -4948,11 +4950,7 @@ in {
 
   promise = callPackage ../development/python-modules/promise { };
 
-  prox-tv = callPackage ../development/python-modules/prox-tv {
-    # We need to use blas instead of openblas on darwin,
-    # see https://github.com/NixOS/nixpkgs/pull/45013.
-    useOpenblas = ! stdenv.isDarwin;
-  };
+  prox-tv = callPackage ../development/python-modules/prox-tv { };
 
   pvlib = callPackage ../development/python-modules/pvlib { };
 
@@ -6011,6 +6009,8 @@ in {
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
   zerorpc = callPackage ../development/python-modules/zerorpc { };
+
+  zimports = callPackage ../development/python-modules/zimports { };
 
   zipstream = callPackage ../development/python-modules/zipstream { };
 

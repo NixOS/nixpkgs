@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, liblapack
+{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, lapack, blas
 , mklSupport ? false, mkl ? null
 }:
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [ gfortran cudatoolkit libpthreadstubs cmake ]
-    ++ (if mklSupport then [ mkl ] else [ liblapack ]);
+    ++ (if mklSupport then [ mkl ] else [ lapack blas ]);
 
   doCheck = false;
 

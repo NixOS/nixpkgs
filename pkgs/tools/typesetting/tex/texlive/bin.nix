@@ -26,10 +26,7 @@ let
       sha256 = "1dfps39q6bdr1zsbp9p74mvalmy3bycihv19sb9c6kg30kprz8nj";
     };
 
-    patches = [
-    ];
-
-    postPatch = let
+    prePatch = let
       # The source compatible with Poppler ${popplerVersion} not yet available in TeXLive ${year}
       # so we need to use files introduced in https://www.tug.org/svn/texlive?view=revision&revision=52959
       popplerVersion = "0.83.0";
@@ -68,10 +65,18 @@ let
       done
       cp -pv ${pdftoepdf} texk/web2c/pdftexdir/pdftoepdf.cc
       cp -pv ${pdftosrc} texk/web2c/pdftexdir/pdftosrc.cc
-
-      # poppler 0.84 compat fixups, use 0.83 files otherwise
-      patch -p1 -i ${./poppler84.patch}
     '';
+
+    patches = [
+      # poppler 0.84 compat fixups, use 0.83 files otherwise
+      ./poppler84.patch
+
+      (fetchpatch {
+        name = "texlive-poppler-0.86.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.86.patch?h=packages/texlive-bin&id=60244e41bb6f1501e8ed1fc9e6b7ba8d3f283398";
+        sha256 = "0pdvhaqc3zgz7hp0x3a4qs0nh26fkvgmr6w1cjljqhp1nyiw2f1l";
+      })
+    ];
 
     # remove when removing synctex-missing-header.patch
     preAutoreconf = "pushd texk/web2c";
@@ -108,7 +113,7 @@ core = stdenv.mkDerivation rec {
   pname = "texlive-bin";
   inherit version;
 
-  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
+  inherit (common) src patches prePatch preAutoreconf postAutoreconf;
 
   outputs = [ "out" "doc" ];
 
@@ -201,7 +206,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
 
-  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
+  inherit (common) src patches prePatch preAutoreconf postAutoreconf;
 
   hardeningDisable = [ "format" ];
 

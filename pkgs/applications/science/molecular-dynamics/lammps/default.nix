@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, libpng, gzip, fftw, openblas
+, libpng, gzip, fftw, blas, lapack
 , mpi ? null
 }:
 let packages = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     inherit packages;
   };
 
-  buildInputs = [ fftw libpng openblas gzip ]
+  buildInputs = [ fftw libpng blas lapack gzip ]
     ++ (stdenv.lib.optionals withMPI [ mpi ]);
 
   configurePhase = ''

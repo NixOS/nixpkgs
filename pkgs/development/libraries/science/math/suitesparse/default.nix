@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , gfortran
-, openblas
+, blas, lapack
 , metis
 , fixDarwinDylibNames
 , gnum4
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
-    openblas
+    blas lapack
     metis
     gfortran.cc.lib
   ] ++ stdenv.lib.optional enableCuda cudatoolkit;
@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
     "INSTALL=${placeholder "out"}"
     "INSTALL_INCLUDE=${placeholder "dev"}/include"
     "JOBS=$(NIX_BUILD_CORES)"
-    "BLAS=-lopenblas"
+    "BLAS=-lblas"
+    "LAPACK=-llapack"
     "MY_METIS_LIB=-lmetis"
-    "LAPACK="
-  ] ++ stdenv.lib.optionals openblas.blas64 [
+  ] ++ stdenv.lib.optionals blas.is64bit [
     "CFLAGS=-DBLAS64"
   ] ++ stdenv.lib.optionals enableCuda [
     "CUDA_PATH=${cudatoolkit}"

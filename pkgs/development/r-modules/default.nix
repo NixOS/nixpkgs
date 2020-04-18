@@ -252,11 +252,10 @@ let
     data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
-    EMCluster = [ pkgs.liblapack ];
+    EMCluster = [ pkgs.lapack ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = [ pkgs.fftw.dev ];
     Formula = [ pkgs.gmp ];
-    geoCount = [ pkgs.gsl_1 ];
     gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
     git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev pkgs.libgit2 pkgs.pkgconfig ];
     GLAD = [ pkgs.gsl_1 ];
@@ -323,11 +322,9 @@ let
     Rmpi = [ pkgs.openmpi ];
     RMySQL = [ pkgs.zlib pkgs.libmysqlclient pkgs.openssl.dev ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
-    RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.bwidget ];
     rpg = [ pkgs.postgresql ];
-    rphast = [ pkgs.pcre.dev pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = [ pkgs.postgresql pkgs.postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
@@ -335,7 +332,6 @@ let
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
-    rtfbs = [ pkgs.zlib pkgs.pcre.dev pkgs.bzip2 pkgs.gzip pkgs.readline ];
     rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
@@ -364,7 +360,6 @@ let
     udunits2 = [ pkgs.udunits pkgs.expat ];
     units = [ pkgs.udunits ];
     V8 = [ pkgs.v8 ];
-    WhopGenome = [ pkgs.zlib.dev ];
     XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
     XML = [ pkgs.libtool pkgs.libxml2.dev pkgs.xmlsec pkgs.libxslt ];
@@ -411,7 +406,6 @@ let
     cairoDevice = [ pkgs.pkgconfig ];
     chebpol = [ pkgs.pkgconfig ];
     fftw = [ pkgs.pkgconfig ];
-    geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkgconfig ];
@@ -463,14 +457,11 @@ let
     "AnnotLists"
     "AnthropMMD"
     "aplpack"
-    "aqfig"
-    "arf3DS4"
     "asbio"
     "AtelieR"
     "BAT"
     "bayesDem"
     "BCA"
-    "BEQI2"
     "betapart"
     "BiodiversityR"
     "bio_infer"
@@ -523,7 +514,6 @@ let
     "gcmr"
     "geomorph"
     "geoR"
-    "geoRglm"
     "georob"
     "GGEBiplotGUI"
     "gnm"
@@ -561,7 +551,6 @@ let
     "miniGUI"
     "MissingDataGUI"
     "mixsep"
-    "mlDNA"
     "MplusAutomation"
     "mpmcorrelogram"
     "mritc"
@@ -628,7 +617,6 @@ let
     "recluster"
     "relimp"
     "RenextGUI"
-    "reportRx"
     "reshapeGUI"
     "rgl"
     "RHRV"
@@ -636,7 +624,6 @@ let
     "RNCEP"
     "RQDA"
     "RSDA"
-    "rsgcc"
     "RSurvey"
     "RunuranGUI"
     "simba"
@@ -644,7 +631,6 @@ let
     "SimpleTable"
     "SOLOMON"
     "soundecology"
-    "spacodiR"
     "spatsurv"
     "sqldf"
     "SRRS"
@@ -676,10 +662,8 @@ let
     "vegan"
     "vegan3d"
     "vegclust"
-    "VIMGUI"
     "WMCapacity"
     "x12GUI"
-    "xergm"
   ];
 
   packagesToSkipCheck = [
@@ -824,11 +808,11 @@ let
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
+      PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
     });
 
     SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
+      PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
     });
 
     EMCluster = old.EMCluster.overrideDerivation (attrs: {

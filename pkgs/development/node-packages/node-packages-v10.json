@@ -135,6 +135,7 @@
 , "peerflix"
 , "peerflix-server"
 , "pnpm"
+, "postcss-cli"
 , "prettier"
 , "pscid"
 , "pulp"

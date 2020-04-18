@@ -4225,6 +4225,12 @@
     githubId = 32152;
     name = "Luka Blaskovic";
   };
+  lbpdt = {
+    email = "nix@pdtpartners.com";
+    github = "lbpdt";
+    githubId = 45168934;
+    name = "Louis Blin";
+  };
   ldelelis = {
     email = "ldelelis@est.frba.utn.edu.ar";
     github = "ldelelis";
@@ -8121,6 +8127,12 @@
     githubId = 3889405;
     name = "vyp";
   };
+  wamserma = {
+    name = "Markus S. Wamser";
+    email = "github-dev@mail2013.wamser.eu";
+    github = "wamserma";
+    githubId = 60148;
+  };
   waynr = {
     name = "Wayne Warren";
     email = "wayne.warren.s@gmail.com";
@@ -8430,6 +8442,12 @@
     github = "zauberpony";
     githubId = 250877;
     name = "Elmar Athmer";
+  };
+  zakkor = {
+    email = "edward.dalbon@gmail.com";
+    github = "zakkor";
+    githubId = 6191421;
+    name = "Edward d'Albon";
   };
   zef = {
     email = "zef@zef.me";

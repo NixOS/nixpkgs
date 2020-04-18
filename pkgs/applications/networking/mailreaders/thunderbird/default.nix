@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
           lib.getVersion stdenv.cc.cc
         } -isystem ${stdenv.cc.cc}/include/c++/${
           lib.getVersion stdenv.cc.cc
-        }/$(cc -dumpmachine)"
+        }/${stdenv.hostPlatform.config}"
       } \
       $NIX_CFLAGS_COMPILE"
 
