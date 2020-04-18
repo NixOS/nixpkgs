@@ -1,0 +1,25 @@
+--- a/run_rustc/Makefile
++++ b/run_rustc/Makefile
+@@ -111,7 +111,7 @@
+ $(BINDIR)hello_world: $(RUST_SRC)test/run-pass/hello.rs $(LIBDIR)libstd.rlib $(BINDIR)rustc
+ 	@mkdir -p $(dir $@)
+ 	@echo "[RUSTC] -o $@"
+-	$Vtime $(DBG) $(BINDIR)rustc $(RUSTFLAGS_$@) -L $(LIBDIR) -L ../output/libs $< -o $@
++	$V $(DBG) $(BINDIR)rustc $(RUSTFLAGS_$@) -L $(LIBDIR) -L ../output/libs $< -o $@
+ 
+ # 
+ # - Build libstd in a hacky hard-coded way first, to allow build scripts to work
+@@ -119,11 +119,11 @@
+ $(LIBDIR_S)lib%.rlib: $(RUST_SRC)lib%/lib.rs $(BINDIR_S)rustc
+ 	@mkdir -p $(dir $@)
+ 	@echo "[RUSTC] -o $@"
+-	$Vtime $(DBG) $(BINDIR_S)rustc --crate-type rlib --crate-name $* -L $(LIBDIR_S) $< -o $@ $(RUSTFLAGS_$*)
++	$V $(DBG) $(BINDIR_S)rustc --crate-type rlib --crate-name $* -L $(LIBDIR_S) $< -o $@ $(RUSTFLAGS_$*)
+ $(LIBDIR_S)lib%.rlib: $(RUST_SRC)lib%/src/lib.rs $(BINDIR_S)rustc
+ 	@mkdir -p $(dir $@)
+ 	@echo "[RUSTC] -o $@"
+-	$Vtime $(DBG) $(BINDIR_S)rustc --crate-type rlib --crate-name $* -L $(LIBDIR_S) $< -o $@ $(RUSTFLAGS_$*)
++	$V $(DBG) $(BINDIR_S)rustc --crate-type rlib --crate-name $* -L $(LIBDIR_S) $< -o $@ $(RUSTFLAGS_$*)
+ 
+ fcn_extcrate = $(patsubst %,$(LIBDIR_S)lib%.rlib,$(1))
+ 
