@@ -57,7 +57,7 @@
     <listitem>
      <para>
       <link xlink:href="https://github.com/NixOS/nixos-org-configurations/pull/18">
-      Make sure a channel is created at http://nixos.org/channels/. </link>
+      Make sure a channel is created at https://nixos.org/channels/. </link>
      </para>
     </listitem>
     <listitem>

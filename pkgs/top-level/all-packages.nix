@@ -25948,7 +25948,7 @@ in
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
-  # TeX Live; see http://nixos.org/nixpkgs/manual/#sec-language-texlive
+  # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
   texlive = recurseIntoAttrs
     (callPackage ../tools/typesetting/tex/texlive { });
 
