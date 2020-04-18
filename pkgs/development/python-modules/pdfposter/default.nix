@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Split large pages of a PDF into smaller ones for poster printing";
-    homepage = https://gitlab.com/pdftools/pdfposter;
+    homepage = "https://pdfposter.readthedocs.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ wamserma ];
     platforms = platforms.all;
