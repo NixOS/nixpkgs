@@ -319,7 +319,9 @@ in
 
                           # Test that existing cert is older than new cert
                           KEY=${spath}/certificates/${keyName}.key
+                          KEY_CHANGED=no
                           if [ -e $KEY -a $KEY -nt key.pem ]; then
+                            KEY_CHANGED=yes
                             cp -p ${spath}/certificates/${keyName}.key key.pem
                             cp -p ${spath}/certificates/${keyName}.crt fullchain.pem
                             cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
@@ -330,7 +332,10 @@ in
                           chmod ${fileMode} *.pem
                           chown '${data.user}:${data.group}' *.pem
 
-                          ${data.postRun}
+                          if [ "$KEY_CHANGED" = "yes" ]; then
+                            : # noop in case postRun is empty
+                            ${data.postRun}
+                          fi
                         '';
                       in
                         "+${script}";
