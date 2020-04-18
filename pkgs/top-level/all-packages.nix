@@ -4554,6 +4554,7 @@ in
 
   lalezar-fonts = callPackage ../data/fonts/lalezar-fonts { };
 
+  ldcBootstrap = callPackage ../development/compilers/ldc/bootstrap.nix { };
   ldc = callPackage ../development/compilers/ldc { };
 
   lbreakout2 = callPackage ../games/lbreakout2 { };
