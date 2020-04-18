@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub }:
 
 let
-  version = "4.106";
+  version = "4.202";
 in fetchFromGitHub {
   name = "fira-${version}";
 
@@ -15,7 +15,7 @@ in fetchFromGitHub {
     cp otf/*.otf $out/share/fonts/opentype
   '';
 
-  sha256 = "0c97nmihcq0ki7ywj8zn048a2bgrszc61lb9p0djfi65ar52jab4";
+  sha256 = "1iwxbp7kw5kghh5nbycb05zby7p2ib61mywva3h6giv2wd4lpxnz";
 
   meta = with lib; {
     homepage = "https://mozilla.github.io/Fira/";
