@@ -312,6 +312,11 @@ environment.systemPackages = [
      the <literal>notmuch.emacs</literal> output.
     </para>
    </listitem>
+   <listitem>
+   <para>
+     The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
+   </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
