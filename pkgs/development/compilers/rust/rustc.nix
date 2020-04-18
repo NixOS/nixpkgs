@@ -1,6 +1,6 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , fetchurl, file, python3
-, llvm_9, darwin, cmake, rust, rustPlatform
+, llvm, darwin, cmake, rust, rustPlatform
 , pkgconfig, openssl
 , which, libffi
 , withBundledLLVM ? false
@@ -8,18 +8,19 @@
 , version
 , sha256
 , patches ? []
+, preConfigure ? null
 }:
 
 let
   inherit (stdenv.lib) optionals optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
-  llvmSharedForBuild = pkgsBuildBuild.llvm_9.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvm_9.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvm_9.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = llvm.override { enableSharedLibraries = true; };
+  llvmSharedForHost = llvm.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = llvm.override { enableSharedLibraries = true; };
 
   # For use at runtime
-  llvmShared = llvm_9.override { enableSharedLibraries = true; };
+  llvmShared = llvm.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
   inherit version;
@@ -93,6 +94,8 @@ in stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     "--enable-profiler" # build libprofiler_builtins
   ];
+
+  inherit preConfigure;
 
   # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass

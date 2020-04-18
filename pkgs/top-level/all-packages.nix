@@ -8970,9 +8970,57 @@ in
   rust_1_42 = callPackage ../development/compilers/rust/1_42.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+  rust_1_41 = callPackage ../development/compilers/rust/1_41.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_40 = callPackage ../development/compilers/rust/1_40.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_39 = callPackage ../development/compilers/rust/1_39.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_38 = callPackage ../development/compilers/rust/1_38.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_37 = callPackage ../development/compilers/rust/1_37.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_36 = callPackage ../development/compilers/rust/1_36.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_35 = callPackage ../development/compilers/rust/1_35.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_34 = callPackage ../development/compilers/rust/1_34.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_33 = callPackage ../development/compilers/rust/1_33.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_32 = callPackage ../development/compilers/rust/1_32.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_31 = callPackage ../development/compilers/rust/1_31.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust_1_30 = callPackage ../development/compilers/rust/1_30.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rust = rust_1_42;
 
   rustPackages_1_42 = rust_1_42.packages.stable;
+  rustPackages_1_41 = rust_1_41.packages.stable;
+  rustPackages_1_40 = rust_1_40.packages.stable;
+  rustPackages_1_39 = rust_1_39.packages.stable;
+  rustPackages_1_38 = rust_1_38.packages.stable;
+  rustPackages_1_37 = rust_1_37.packages.stable;
+  rustPackages_1_36 = rust_1_36.packages.stable;
+  rustPackages_1_35 = rust_1_35.packages.stable;
+  rustPackages_1_34 = rust_1_34.packages.stable;
+  rustPackages_1_33 = rust_1_33.packages.stable;
+  rustPackages_1_32 = rust_1_32.packages.stable;
+  rustPackages_1_31 = rust_1_31.packages.stable;
+  rustPackages_1_30 = rust_1_30.packages.stable;
   rustPackages = rustPackages_1_42;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;

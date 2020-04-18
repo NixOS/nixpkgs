@@ -3,12 +3,16 @@
 , CoreFoundation, Security
 }:
 
+let
+  rustTargetPrefix = if (builtins.compareVersions rustc.version "1.32.0") >= 0 then "" else "src/";
+in
 rustPlatform.buildRustPackage {
   name = "cargo-${rustc.version}";
   inherit (rustc) version src;
 
+  inherit rustTargetPrefix;
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
-  cargoVendorDir = "vendor";
+  cargoVendorDir = "${rustTargetPrefix}vendor";
   preBuild = "pushd src/tools/cargo";
   postBuild = "popd";
 

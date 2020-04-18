@@ -17,6 +17,7 @@
 , buildType ? "release"
 , meta ? {}
 , target ? null
+, rustTargetPrefix ? ""
 , cargoVendorDir ? null
 , ... } @ args:
 
@@ -56,7 +57,7 @@ let
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${rustTarget}/${buildType}";
+  releaseDir = "${rustTargetPrefix}target/${rustTarget}/${buildType}";
 
 in
 
