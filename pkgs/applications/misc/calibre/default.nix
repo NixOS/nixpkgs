@@ -16,7 +16,7 @@
 , hyphen
 , unrarSupport ? false
 , chmlib
-, python2Packages
+, python3Packages
 , libusb1
 , libmtp
 , xdg_utils
@@ -25,16 +25,15 @@
 }:
 
 let
-  pypkgs = python2Packages;
-
+  pypkgs = python3Packages;
 in
 mkDerivation rec {
   pname = "calibre";
-  version = "4.12.0";
+  version = "4.13.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "144vl5p0adcywcqaarrriq5zd8q5i934yfjg9himiq1vdp9vy4fi";
+    sha256 = "1xp1fvpdizk6g74diam4nd59s6fhcvp086y1brm6r9wy9zm7sn7r";
   };
 
   patches = [
@@ -171,8 +170,7 @@ mkDerivation rec {
     description = "Comprehensive e-book software";
     homepage = "https://calibre-ebook.com";
     license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
-    maintainers = with maintainers; [ domenkozar pSub AndersonTorres ];
+    maintainers = with maintainers; [ domenkozar pSub ];
     platforms = platforms.linux;
-    inherit version;
   };
 }
