@@ -36,7 +36,7 @@ in {
 
   machine = { ... }: {
     services.dokuwiki."site1.local" = {
-      acl = " ";
+      aclUse = false;
       superUser = "admin";
       nginx = {
         forceSSL = false;
@@ -44,7 +44,7 @@ in {
       };
     };
     services.dokuwiki."site2.local" = {
-      acl = " ";
+      aclUse = true;
       superUser = "admin";
       nginx = {
         forceSSL = false;

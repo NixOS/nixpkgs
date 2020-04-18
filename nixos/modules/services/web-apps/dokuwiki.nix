@@ -57,7 +57,7 @@ let
     '';
   };
 
-  siteOpts = {lib, name, ...}: {
+  siteOpts = { config, lib, name, ...}: {
     options = {
       enable = mkEnableOption "DokuWiki web application.";
 
@@ -95,7 +95,7 @@ let
 
       aclFile = mkOption {
         type = with types; nullOr str;
-        default = null;
+        default = if (config.aclUse && config.acl == null) then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
         description = ''
           Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
           Mutually exclusive with services.dokuwiki.acl which is preferred.
@@ -140,7 +140,7 @@ let
 
       usersFile = mkOption {
         type = with types; nullOr str;
-        default = null;
+        default = if config.aclUse then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
         description = ''
           Location of the dokuwiki users file. List of users. Format:
           login:passwordhash:Real Name:email:groups,comma,separated
