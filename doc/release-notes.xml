@@ -190,7 +190,7 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
       The function <function>fetchurl</function> now has support for two different kinds of mirroring of files. First, it has support for <emphasis>content-addressable mirrors</emphasis>. For example, given the <function>fetchurl</function> call
 <programlisting>
 fetchurl {
-  url = http://releases.mozilla.org/<replaceable>...</replaceable>/firefox-2.0.0.6-source.tar.bz2;
+  url = "http://releases.mozilla.org/<replaceable>...</replaceable>/firefox-2.0.0.6-source.tar.bz2";
   sha1 = "eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082";
 }</programlisting>
       <function>fetchurl</function> will first try to download this file from <link

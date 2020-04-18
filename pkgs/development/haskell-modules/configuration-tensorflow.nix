@@ -55,12 +55,12 @@ in
   haskell-src-exts_1_19_1 = appendPatches (doJailbreak super.haskell-src-exts_1_19_1) [
     # Adapt to the Semigroup–Monoid Proposal (enables building on GHC >= 8.4)
     (pkgs.fetchpatch {
-        url = https://github.com/haskell-suite/haskell-src-exts/commit/258e072fe9e37f94360b7488b58ea2832843bbb8.patch;
+        url = "https://github.com/haskell-suite/haskell-src-exts/commit/258e072fe9e37f94360b7488b58ea2832843bbb8.patch";
         sha256 = "0ja6ai41v9plinlhjwja282m6ahn6mw4xi79np0jxqk83cg0z1ff";
     })
     # Adapt to MonadFail proposal (enables building on GHC >= 8.8)
     (pkgs.fetchpatch {
-        url = https://gist.githubusercontent.com/mikesperber/0f2addaf3fbe97ffb4a5234d8711ba41/raw/e09e20998283c7195e82d546ba9266d290eb000d/gistfile1.txt;
+        url = "https://gist.githubusercontent.com/mikesperber/0f2addaf3fbe97ffb4a5234d8711ba41/raw/e09e20998283c7195e82d546ba9266d290eb000d/gistfile1.txt";
         sha256 = "18clvli7vpqsqlf2f3qidn71738j9zdlpana6wha3x0dxwan5ly0";
     }) ];
 
