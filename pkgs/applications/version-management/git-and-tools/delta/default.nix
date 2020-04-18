@@ -1,17 +1,20 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, llvmPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.0.17";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "1j01h60snciqp4psyxf67j3gbmi02c1baprsg9frzjacawbx8cz7";
+    sha256 = "0cpd60861k9nd2gbzyb2hg5npnkgvsnyrvv7mlm30vb1833gz94z";
   };
 
-  cargoSha256 = "176bfd57gc9casvk0p10ilvzw3q3rkkv7qflja778vrwr9zrmkzq";
+  LLVM_CONFIG_PATH = "${llvmPackages.llvm}/bin/llvm-config";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  cargoSha256 = "12gl50q5hf6nq571fqxfv61z4mwfjyw4jb2yqyqbsinwj2frwaxn";
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";
