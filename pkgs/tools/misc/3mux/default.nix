@@ -1,22 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "3mux";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "aaronjanse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1iz839w636vv7208wyrmb9r77wv9m0q1j8km06kmi87m0hcbh807";
+    sha256 = "02ry066psvlqdyhimci7nskw4sfb70dw5z7ag7s7rz36gmx1vnmr";
   };
 
-  modSha256 = "10lnzh22qzls1b4i9dbknbxw5v92bcs7sarqipvvk5fymadr3k2p";
+  modSha256 = "1ag9lx8xcp2z9lrg404914zin45n8f4s08365yk71q5vyiwxjj3i";
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Terminal multiplexer inspired by i3";
     homepage = "https://github.com/aaronjanse/3mux";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronjanse filalex77 ];
+    # TODO: fix modules build on darwin
+    broken = stdenv.isDarwin;
   };
 }
