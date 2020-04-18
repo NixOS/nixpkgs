@@ -21137,6 +21137,8 @@ in
 
   packet = callPackage ../development/tools/packet { };
 
+  packet-cli = callPackage ../development/tools/packet-cli { };
+
   pb_cli = callPackage ../tools/misc/pb_cli {};
 
   capture = callPackage ../tools/misc/capture {};
