@@ -26048,6 +26048,8 @@ in
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
+  wmutils-libwm = callPackage ../tools/X11/wmutils-libwm { };
+
   wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
