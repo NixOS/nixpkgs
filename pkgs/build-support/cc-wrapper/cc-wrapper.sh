@@ -60,8 +60,6 @@ while (( "$n" < "$nParams" )); do
         dontLink=1
     elif [[ "$p" = -x && "$p2" = c++* && "$isCpp" = 0 ]]; then
         isCpp=1
-    elif [ "$p" = -nostdlib ]; then
-        isCpp=-1
     elif [ "$p" = -nostdinc ]; then
         cppInclude=0
     elif [ "$p" = -nostdinc++ ]; then
