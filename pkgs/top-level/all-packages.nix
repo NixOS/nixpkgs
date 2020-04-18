@@ -510,6 +510,8 @@ in
 
   _3llo = callPackage ../tools/misc/3llo { };
 
+  _3mux = callPackage ../tools/misc/3mux { };
+
   _1password = callPackage ../applications/misc/1password { };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
