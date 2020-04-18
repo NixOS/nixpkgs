@@ -1,0 +1,146 @@
+Compressed diff from
+```
+git show d21664cce1db8debe2528f36b1fbd2b8af9c9401 87dac7da68ea1e0adac78c59ef1891dcf9632b67 3a0f6e699bb6d96dc62dce6faef20ac26cf103fd
+```
+with the purpose of avoiding linker errors arising in the polly-flavoured clang.
+
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index a02c2a5a23f..faf8f561faa 100644
+--- llvm/CMakeLists.txt
++++ llvm/CMakeLists.txt
+@@ -1069,6 +1069,7 @@ endif()
+ # after all targets are created.
+ include(LLVMDistributionSupport)
+ llvm_distribution_add_targets()
++process_llvm_pass_plugins(GEN_CONFIG)
+ 
+ # This allows us to deploy the Universal CRT DLLs by passing -DCMAKE_INSTALL_UCRT_LIBRARIES=ON to CMake
+ if (MSVC AND CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_INSTALL_UCRT_LIBRARIES)
+@@ -1093,5 +1094,3 @@ endif()
+ if (LLVM_INCLUDE_UTILS AND LLVM_INCLUDE_TOOLS)
+   add_subdirectory(utils/llvm-locstats)
+ endif()
+-
+-process_llvm_pass_plugins()
+diff --git a/llvm/cmake/modules/AddLLVM.cmake b/llvm/cmake/modules/AddLLVM.cmake
+index fd69786544a..8fbb33a22fd 100644
+--- llvm/cmake/modules/AddLLVM.cmake
++++ llvm/cmake/modules/AddLLVM.cmake
+@@ -884,53 +884,71 @@ function(add_llvm_pass_plugin name)
+     if (TARGET intrinsics_gen)
+       add_dependencies(obj.${name} intrinsics_gen)
+     endif()
+-    message(STATUS "Registering ${name} as a pass plugin (static build: ${LLVM_${name_upper}_LINK_INTO_TOOLS})")
+-    set_property(GLOBAL APPEND PROPERTY LLVM_COMPILE_EXTENSIONS ${name})
++    set_property(GLOBAL APPEND PROPERTY LLVM_STATIC_EXTENSIONS ${name})
+   elseif(NOT ARG_NO_MODULE)
+     add_llvm_library(${name} MODULE ${ARG_UNPARSED_ARGUMENTS})
+   else()
+     add_llvm_library(${name} OBJECT ${ARG_UNPARSED_ARGUMENTS})
+   endif()
++  message(STATUS "Registering ${name} as a pass plugin (static build: ${LLVM_${name_upper}_LINK_INTO_TOOLS})")
+ 
+ endfunction(add_llvm_pass_plugin)
+ 
+-# Generate X Macro file for extension handling. It provides a
+-# HANDLE_EXTENSION(extension_namespace, ExtensionProject) call for each extension
+-# allowing client code to define HANDLE_EXTENSION to have a specific code be run for
+-# each extension.
++# process_llvm_pass_plugins([GEN_CONFIG])
++#
++# Correctly set lib dependencies between plugins and tools, based on tools
++# registered with the ENABLE_PLUGINS option.
++#
++# if GEN_CONFIG option is set, also generate X Macro file for extension
++# handling. It provides a HANDLE_EXTENSION(extension_namespace, ExtensionProject)
++# call for each extension allowing client code to define
++# HANDLE_EXTENSION to have a specific code be run for each extension.
+ #
+-# Also correctly set lib dependencies between plugins and tools.
+ function(process_llvm_pass_plugins)
+-  get_property(LLVM_EXTENSIONS GLOBAL PROPERTY LLVM_COMPILE_EXTENSIONS)
+-  file(WRITE "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp" "//extension handlers\n")
+-  foreach(llvm_extension ${LLVM_EXTENSIONS})
+-    string(TOLOWER ${llvm_extension} llvm_extension_lower)
+-
+-    string(TOUPPER ${llvm_extension} llvm_extension_upper)
+-    string(SUBSTRING ${llvm_extension_upper} 0 1 llvm_extension_upper_first)
+-    string(SUBSTRING ${llvm_extension_lower} 1 -1 llvm_extension_lower_tail)
+-    string(CONCAT llvm_extension_project ${llvm_extension_upper_first} ${llvm_extension_lower_tail})
+-
+-    if(LLVM_${llvm_extension_upper}_LINK_INTO_TOOLS)
+-      file(APPEND "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp" "HANDLE_EXTENSION(${llvm_extension_project})\n")
+-
+-      get_property(llvm_plugin_targets GLOBAL PROPERTY LLVM_PLUGIN_TARGETS)
+-      foreach(llvm_plugin_target ${llvm_plugin_targets})
+-        set_property(TARGET ${llvm_plugin_target} APPEND PROPERTY LINK_LIBRARIES ${llvm_extension})
+-        set_property(TARGET ${llvm_plugin_target} APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${llvm_extension})
+-      endforeach()
+-    else()
+-      add_llvm_library(${llvm_extension_lower} MODULE obj.${llvm_extension_lower})
+-    endif()
++  cmake_parse_arguments(ARG
++      "GEN_CONFIG" "" ""
++    ${ARGN})
+ 
++  if(ARG_GEN_CONFIG)
++      get_property(LLVM_STATIC_EXTENSIONS GLOBAL PROPERTY LLVM_STATIC_EXTENSIONS)
++  else()
++      include(LLVMConfigExtensions)
++  endif()
++
++  # Add static plugins to each plugin target.
++  foreach(llvm_extension ${LLVM_STATIC_EXTENSIONS})
++    get_property(llvm_plugin_targets GLOBAL PROPERTY LLVM_PLUGIN_TARGETS)
++    foreach(llvm_plugin_target ${llvm_plugin_targets})
++      set_property(TARGET ${llvm_plugin_target} APPEND PROPERTY LINK_LIBRARIES ${llvm_extension})
++      set_property(TARGET ${llvm_plugin_target} APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${llvm_extension})
++    endforeach()
+   endforeach()
+-  file(APPEND "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp" "#undef HANDLE_EXTENSION\n")
+ 
+-  # only replace if there's an actual change
+-  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-    "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp"
+-    "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def")
+-  file(REMOVE "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp")
++  # Eventually generate the extension header, and store config to a cmake file
++  # for usage in third-party configuration.
++  if(ARG_GEN_CONFIG)
++      set(LLVM_INSTALL_PACKAGE_DIR lib${LLVM_LIBDIR_SUFFIX}/cmake/llvm)
++      set(llvm_cmake_builddir "${LLVM_BINARY_DIR}/${LLVM_INSTALL_PACKAGE_DIR}")
++      file(WRITE
++          "${llvm_cmake_builddir}/LLVMConfigExtensions.cmake"
++          "set(LLVM_STATIC_EXTENSIONS ${LLVM_STATIC_EXTENSIONS})")
++      install(FILES
++          ${llvm_cmake_builddir}/LLVMConfigExtensions.cmake
++          DESTINATION ${LLVM_INSTALL_PACKAGE_DIR}
++          COMPONENT cmake-exports)
++
++      file(WRITE "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp" "//extension handlers\n")
++      foreach(llvm_extension ${LLVM_STATIC_EXTENSIONS})
++        file(APPEND "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp" "HANDLE_EXTENSION(${llvm_extension})\n")
++      endforeach()
++      file(APPEND "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp" "#undef HANDLE_EXTENSION\n")
++
++      # only replace if there's an actual change
++      execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different
++        "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp"
++        "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def")
++      file(REMOVE "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def.tmp")
++  endif()
+ endfunction()
+ 
+ function(export_executable_symbols target)
+diff --git a/llvm/cmake/modules/CMakeLists.txt b/llvm/cmake/modules/CMakeLists.txt
+index 9cf22b436fa..af757d6199a 100644
+--- llvm/cmake/modules/CMakeLists.txt
++++ llvm/cmake/modules/CMakeLists.txt
+@@ -136,6 +136,7 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+     FILES_MATCHING PATTERN *.cmake
+     PATTERN .svn EXCLUDE
+     PATTERN LLVMConfig.cmake EXCLUDE
++    PATTERN LLVMConfigExtensions.cmake EXCLUDE
+     PATTERN LLVMConfigVersion.cmake EXCLUDE
+     PATTERN LLVM-Config.cmake EXCLUDE
+     PATTERN GetHostTriple.cmake EXCLUDE)

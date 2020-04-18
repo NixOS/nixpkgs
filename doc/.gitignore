@@ -1,0 +1,8 @@
+*.chapter.xml
+*.section.xml
+.version
+functions/library/generated
+functions/library/locations.xml
+highlightjs
+manual-full.xml
+out

@@ -1,0 +1,3 @@
+url https://github.com/laurentj/slimerjs
+target default.nix
+GH_latest

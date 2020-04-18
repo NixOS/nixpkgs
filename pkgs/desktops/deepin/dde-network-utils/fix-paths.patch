@@ -1,0 +1,23 @@
+diff -ur dde-network-utils-master.orig/dde-network-utils.pro dde-network-utils-master/dde-network-utils.pro
+--- dde-network-utils-master.orig/dde-network-utils.pro	2019-04-04 03:37:46.000000000 -0300
++++ dde-network-utils-master/dde-network-utils.pro	2019-04-07 05:56:28.283195087 -0300
+@@ -52,6 +52,7 @@
+ 
+ QMAKE_PKGCONFIG_NAME = libddenetworkutils
+ QMAKE_PKGCONFIG_DESCRIPTION = libddenetworkutils
++QMAKE_PKGCONFIG_PREFIX = $$PREFIX
+ QMAKE_PKGCONFIG_INCDIR = $$includes.path
+ QMAKE_PKGCONFIG_LIBDIR = $$target.path
+ QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+diff -ur dde-network-utils-master.orig/networkworker.cpp dde-network-utils-master/networkworker.cpp
+--- dde-network-utils-master.orig/networkworker.cpp	2019-04-04 03:37:46.000000000 -0300
++++ dde-network-utils-master/networkworker.cpp	2019-04-07 05:54:28.656479216 -0300
+@@ -80,7 +80,7 @@
+         }
+     }
+ 
+-    const bool isAppProxyVaild = QProcess::execute("which", QStringList() << "/usr/bin/proxychains4") == 0;
++    const bool isAppProxyVaild = QProcess::execute("@which@/bin/which", QStringList() << "@proxychains@/bin/proxychains4") == 0;
+     m_networkModel->onAppProxyExistChanged(isAppProxyVaild);
+ }
+ 

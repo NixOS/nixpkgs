@@ -1,0 +1,13 @@
+diff -u a/lp_lib.h b/lp_lib.h
+--- a/lp_lib.h	2016-05-04 19:45:15.753143720 +0900
++++ b/lp_lib.h	2016-05-04 19:53:59.536920722 +0900
+@@ -59,9 +59,6 @@
+ # if defined _WIN32 && !defined __GNUC__
+ #  define isnan _isnan
+ # endif
+-#if defined NOISNAN
+-# define isnan(x) FALSE
+-#endif
+ 
+ #define SETMASK(variable, mask)     variable |= mask
+ #define CLEARMASK(variable, mask)   variable &= ~(mask)

@@ -1,0 +1,16 @@
+--- a/docs/Makefile
++++ b/docs/Makefile
+@@ -3,7 +3,7 @@
+# Patching is needed here for the following reason:
+# * importing the `constants` package from Kitty has a side effect that it
+#   creates the user configuration directory. This package gets imported
+#   while sphinx scans the code for documentation strings.
+#
+ 
+ # You can set these variables from the command line.
+ SPHINXOPTS    = -j auto -T $(FAIL_WARN)
+-SPHINXBUILD   = sphinx-build
++SPHINXBUILD   = PYTHONPATH=${PYTHONPATH}:.. HOME=${TMPDIR}/kitty-build-home sphinx-build
+ SPHINXPROJ    = kitty
+ SOURCEDIR     = .
+ BUILDDIR      = _build

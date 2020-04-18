@@ -1,0 +1,48 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-networkmanager">
+ <title>NetworkManager</title>
+
+ <para>
+  To facilitate network configuration, some desktop environments use
+  NetworkManager. You can enable NetworkManager by setting:
+<programlisting>
+<xref linkend="opt-networking.networkmanager.enable"/> = true;
+</programlisting>
+  some desktop managers (e.g., GNOME) enable NetworkManager automatically for
+  you.
+ </para>
+
+ <para>
+  All users that should have permission to change network settings must belong
+  to the <code>networkmanager</code> group:
+<programlisting>
+<link linkend="opt-users.users._name__.extraGroups">users.users.alice.extraGroups</link> = [ "networkmanager" ];
+</programlisting>
+ </para>
+
+ <para>
+  NetworkManager is controlled using either <command>nmcli</command> or
+  <command>nmtui</command> (curses-based terminal user interface). See their
+  manual pages for details on their usage. Some desktop environments (GNOME,
+  KDE) have their own configuration tools for NetworkManager. On XFCE, there is
+  no configuration tool for NetworkManager by default: by enabling <xref linkend="opt-programs.nm-applet.enable"/>, the
+  graphical applet will be installed and will launch automatically when the graphical session is started.
+ </para>
+
+ <note>
+  <para>
+   <code>networking.networkmanager</code> and <code>networking.wireless</code>
+   (WPA Supplicant) can be used together if desired. To do this you need to instruct
+   NetworkManager to ignore those interfaces like:
+<programlisting>
+<xref linkend="opt-networking.networkmanager.unmanaged"/> = [
+   "*" "except:type:wwan" "except:type:gsm"
+];
+</programlisting>
+   Refer to the option description for the exact syntax and references to external documentation.
+  </para>
+ </note>
+</section>

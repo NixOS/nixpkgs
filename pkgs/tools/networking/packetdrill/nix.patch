@@ -1,0 +1,24 @@
+diff --git a/gtests/net/packetdrill/Makefile.common b/gtests/net/packetdrill/Makefile.common
+index 0ec741f..bf1cbb1 100644
+--- a/Makefile.common
++++ b/Makefile.common
+@@ -33,7 +33,7 @@ packetdrill-lib := \
+ packetdrill-objs := packetdrill.o $(packetdrill-lib)
+ 
+ packetdrill: $(packetdrill-objs)
+-	$(CC) -o packetdrill -g -static $(packetdrill-objs) $(packetdrill-ext-libs)
++	$(CC) -o packetdrill -g $(packetdrill-objs) $(packetdrill-ext-libs)
+ 
+ test-bins := checksum_test packet_parser_test packet_to_string_test
+ tests: $(test-bins)
+@@ -43,6 +43,10 @@ tests: $(test-bins)
+ 
+ binaries: packetdrill $(test-bins)
+ 
++install: packetdrill $(test-bins)
++	mkdir -p ${out}/bin
++	cp -vi $^ ${out}/bin
++
+ checksum_test-objs := $(packetdrill-lib) checksum_test.o
+ checksum_test: $(checksum_test-objs)
+ 	$(CC) -o checksum_test $(checksum_test-objs) $(packetdrill-ext-libs)

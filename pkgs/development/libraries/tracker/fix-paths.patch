@@ -1,0 +1,12 @@
+--- a/src/tracker-store/tracker-store.desktop.in
++++ b/src/tracker-store/tracker-store.desktop.in
+@@ -1,8 +1,8 @@
+ [Desktop Entry]
+ Name=Tracker Store
+ Comment=Metadata database store and lookup manager
+-Exec=gdbus call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
++Exec=@gdbus@ call -e -d org.freedesktop.DBus -o /org/freedesktop/DBus -m org.freedesktop.DBus.StartServiceByName org.freedesktop.Tracker1 0
+ Terminal=false
+ Type=Application
+ Categories=Utility;
+ X-GNOME-Autostart-enabled=true

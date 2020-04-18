@@ -1,0 +1,675 @@
+From 39aa8502eee7bb669a29d1a9b3bfe5c9595ad960 Mon Sep 17 00:00:00 2001
+From: Daniel Fullmer <danielrf12@gmail.com>
+Date: Fri, 13 Sep 2019 13:45:05 -0400
+Subject: [PATCH] Willus mod changes from k2pdfopt
+
+---
+ src/api/Makefile.am        |   1 +
+ src/api/baseapi.cpp        |  87 +++++++++++
+ src/api/baseapi.h          |   3 +
+ src/api/tesscapi.cpp       | 311 +++++++++++++++++++++++++++++++++++++
+ src/api/tesseract.h        |  29 ++++
+ src/ccmain/tessedit.cpp    |   5 +-
+ src/ccutil/ccutil.h        |   7 +
+ src/ccutil/genericvector.h |  21 ++-
+ src/ccutil/mainblk.cpp     |  17 +-
+ src/ccutil/params.cpp      |   3 +-
+ src/ccutil/serialis.cpp    |   3 +
+ src/ccutil/serialis.h      |   2 +
+ src/lstm/input.cpp         |   3 +
+ 13 files changed, 488 insertions(+), 4 deletions(-)
+ create mode 100644 src/api/tesscapi.cpp
+ create mode 100644 src/api/tesseract.h
+
+diff --git a/src/api/Makefile.am b/src/api/Makefile.am
+index d9b76eb6..cd2dc30f 100644
+--- a/src/api/Makefile.am
++++ b/src/api/Makefile.am
+@@ -39,6 +39,7 @@ libtesseract_api_la_SOURCES += lstmboxrenderer.cpp
+ libtesseract_api_la_SOURCES += pdfrenderer.cpp
+ libtesseract_api_la_SOURCES += wordstrboxrenderer.cpp
+ libtesseract_api_la_SOURCES += renderer.cpp
++libtesseract_api_la_SOURCES += tesscapi.cpp
+ 
+ lib_LTLIBRARIES += libtesseract.la
+ libtesseract_la_LDFLAGS = $(LEPTONICA_LIBS) $(OPENCL_LDFLAGS) $(libarchive_LIBS)
+diff --git a/src/api/baseapi.cpp b/src/api/baseapi.cpp
+index 9245d07c..ea964ee6 100644
+--- a/src/api/baseapi.cpp
++++ b/src/api/baseapi.cpp
+@@ -215,6 +215,14 @@ TessBaseAPI::TessBaseAPI()
+   // Use the current locale if building debug code.
+   std::locale::global(std::locale(""));
+ #endif
++  const char *locale;
++  locale = std::setlocale(LC_ALL, nullptr);
++/* willus mod Remove assertions--taken care of in tesscapi.cpp */
++//  ASSERT_HOST(!strcmp(locale, "C"));
++  locale = std::setlocale(LC_CTYPE, nullptr);
++//  ASSERT_HOST(!strcmp(locale, "C"));
++  locale = std::setlocale(LC_NUMERIC, nullptr);
++//  ASSERT_HOST(!strcmp(locale, "C"));
+ }
+ 
+ TessBaseAPI::~TessBaseAPI() {
+@@ -1333,6 +1341,85 @@ static void AddBoxToTSV(const PageIterator* it, PageIteratorLevel level,
+   text->add_str_int("\t", bottom - top);
+ }
+ 
++/* willus mod */
++int TessBaseAPI::GetOCRWords(int **x00,int **y00,int **x11,int **y11,int **ybaseline0,
++                             char **utf8words)
++
++    {
++    int iword,nwords,totlen,it8;
++    int *x0,*y0,*x1,*y1,*ybaseline;
++    char *tutf8;
++
++    ResultIterator *res_it = GetIterator();
++    /* Count words */
++    iword=0;
++    totlen=0;
++    while (!res_it->Empty(RIL_BLOCK))
++        {
++        if (res_it->Empty(RIL_WORD))
++            {
++            res_it->Next(RIL_WORD);
++            continue;
++            }
++        iword++;
++        STRING textstr=std::unique_ptr<const char[]>(res_it->GetUTF8Text(RIL_WORD)).get();
++        totlen+=strlen(textstr.string())+1;
++        res_it->Next(RIL_WORD);
++        }
++    nwords=iword;
++/*
++printf("\nnwords=%d, totlen=%d\n",nwords,totlen);
++*/
++    x0=(*x00)=(int *)malloc(sizeof(int)*5*nwords);
++    y0=(*y00)=&x0[nwords];
++    x1=(*x11)=&y0[nwords];
++    y1=(*y11)=&x1[nwords];
++    ybaseline=(*ybaseline0)=&y1[nwords];
++    tutf8=(*utf8words)=(char *)malloc(totlen);
++    iword=0;
++    it8=0;
++    res_it->Begin();
++    while (!res_it->Empty(RIL_BLOCK))
++        {
++        if (res_it->Empty(RIL_WORD))
++            {
++            res_it->Next(RIL_WORD);
++            continue;
++            }
++        STRING textstr=std::unique_ptr<const char[]>(res_it->GetUTF8Text(RIL_WORD)).get();
++        strcpy(&tutf8[it8],textstr.string());
++        it8 += strlen(&tutf8[it8])+1;
++        /*
++        STRING textstr("");
++        textstr += std::unique_ptr<const char[]>(res_it->GetUTF8Text(RIL_WORD)).get();
++        */
++/*
++printf("Word %d: '%s'\n",iword,textstr.string());
++*/
++        int left, top, right, bottom;
++        int u1,v1,u2,v2;
++        res_it->BoundingBox(RIL_WORD, &left, &top, &right, &bottom);
++        res_it->Baseline(RIL_WORD, &u1, &v1, &u2, &v2);
++        x0[iword]=left;
++        x1[iword]=right;
++        y0[iword]=top;
++        y1[iword]=bottom;
++        ybaseline[iword]=(v1+v2)/2;
++        iword++;
++/*
++printf("BB: (%d,%d)-(%d,%d)  BL: (%d,%d)-(%d,%d)\n",left,bottom,right,top,x1,y1,x2,y2);
++*/
++        res_it->Next(RIL_WORD);
++        }
++/*
++printf("iword=%d\n",iword);
++*/
++    return(iword);
++    }
++
++/* willus mod */
++int GetOCRWords(int **x0,int **y0,int **x1,int **y1,int **ybaseline,char **utf8words);
++
+ /**
+  * Make a TSV-formatted string from the internal data structures.
+  * page_number is 0-based but will appear in the output as 1-based.
+diff --git a/src/api/baseapi.h b/src/api/baseapi.h
+index 3724dd92..23be5920 100644
+--- a/src/api/baseapi.h
++++ b/src/api/baseapi.h
+@@ -575,6 +575,9 @@ class TESS_API TessBaseAPI {
+    */
+   char* GetHOCRText(ETEXT_DESC* monitor, int page_number);
+ 
++/* willus mod */
++int GetOCRWords(int **x0,int **y0,int **x1,int **y1,int **ybaseline,char **utf8words);
++
+   /**
+    * Make a HTML-formatted string with hOCR markup from the internal
+    * data structures.
+diff --git a/src/api/tesscapi.cpp b/src/api/tesscapi.cpp
+new file mode 100644
+index 00000000..1752fafe
+--- /dev/null
++++ b/src/api/tesscapi.cpp
+@@ -0,0 +1,311 @@
++/*
++** tesscapi.cpp    willus.com attempt at C wrapper for tesseract.
++**                 (Butchered from tesseractmain.cpp)
++**                 Last udpated 9-1-12
++**
++** Copyright (C) 2012  http://willus.com
++**
++** This program is free software: you can redistribute it and/or modify
++** it under the terms of the GNU Affero General Public License as
++** published by the Free Software Foundation, either version 3 of the
++** License, or (at your option) any later version.
++**
++** This program is distributed in the hope that it will be useful,
++** but WITHOUT ANY WARRANTY; without even the implied warranty of
++** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++** GNU Affero General Public License for more details.
++**
++** You should have received a copy of the GNU Affero General Public License
++** along with this program.  If not, see <http://www.gnu.org/licenses/>.
++**
++*/
++
++/*
++#include "mfcpch.h"
++*/
++// #define USE_VLD //Uncomment for Visual Leak Detector.
++#if (defined _MSC_VER && defined USE_VLD)
++#include <vld.h>
++#endif
++
++// Include automatically generated configuration file if running autoconf
++#ifdef HAVE_CONFIG_H
++#include "config_auto.h"
++#endif
++#include <locale.h>
++#ifdef USING_GETTEXT
++#include <libintl.h>
++#define _(x) gettext(x)
++#else
++#define _(x) (x)
++#endif
++
++#include "allheaders.h"
++#include "baseapi.h"
++#include "strngs.h"
++#include "params.h"
++#include "blobs.h"
++#include "simddetect.h"
++#include "tesseractclass.h"
++/*
++#include "notdll.h"
++*/
++
++/* C Wrappers */
++#include "tesseract.h"
++
++// static tesseract::TessBaseAPI api[4];
++
++/*
++** ocr_type=0:  OEM_DEFAULT
++** ocr_type=1:  OEM_TESSERACT_ONLY
++** ocr_type=2:  OEM_LSTM_ONLY
++** ocr_type=3:  OEM_TESSERACT_LSTM_COMBINED
++*/
++void *tess_capi_init(char *datapath,char *language,int ocr_type,FILE *out,
++                     char *initstr,int maxlen,int *status)
++
++    {
++    char original_locale[256];
++    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI;
++/*
++printf("@tess_capi_init\n");
++printf("    datapath='%s'\n",datapath);
++printf("    language='%s'\n",language);
++printf("    ocr_type=%d\n",ocr_type);
++*/
++#ifdef USE_NLS
++    setlocale (LC_ALL, "");
++    bindtextdomain (PACKAGE, LOCALEDIR);
++    textdomain (PACKAGE);
++#endif
++    /* willus mod, 11-24-16 */
++    /* Tesseract needs "C" locale to correctly parse all data .traineddata files. */
++/*
++printf("locale='%s'\n",setlocale(LC_ALL,NULL));
++printf("ctype='%s'\n",setlocale(LC_CTYPE,NULL));
++printf("numeric='%s'\n",setlocale(LC_NUMERIC,NULL));
++*/
++    strncpy(original_locale,setlocale(LC_ALL,NULL),255);
++    original_locale[255]='\0';
++/*
++printf("original_locale='%s'\n",original_locale);
++*/
++    setlocale(LC_ALL,"C");
++/*
++printf("new locale='%s'\n",setlocale(LC_ALL,NULL));
++printf("new ctype='%s'\n",setlocale(LC_CTYPE,NULL));
++printf("new numeric='%s'\n",setlocale(LC_NUMERIC,NULL));
++*/
++    // fprintf(stderr, "tesseract %s\n", tesseract::TessBaseAPI::Version());
++    // Make the order of args a bit more forgiving than it used to be.
++    const char* lang = "eng";
++    tesseract::PageSegMode pagesegmode = tesseract::PSM_SINGLE_BLOCK;
++    if (language!=NULL && language[0]!='\0')
++        lang = language;
++    /*
++    if (output == NULL)
++        {
++        fprintf(stderr, _("Usage:%s imagename outputbase [-l lang] "
++                      "[-psm pagesegmode] [configfile...]\n"), argv[0]);
++        fprintf(stderr,
++            _("pagesegmode values are:\n"
++              "0 = Orientation and script detection (OSD) only.\n"
++              "1 = Automatic page segmentation with OSD.\n"
++              "2 = Automatic page segmentation, but no OSD, or OCR\n"
++              "3 = Fully automatic page segmentation, but no OSD. (Default)\n"
++              "4 = Assume a single column of text of variable sizes.\n"
++              "5 = Assume a single uniform block of vertically aligned text.\n"
++              "6 = Assume a single uniform block of text.\n"
++              "7 = Treat the image as a single text line.\n"
++              "8 = Treat the image as a single word.\n"
++              "9 = Treat the image as a single word in a circle.\n"
++              "10 = Treat the image as a single character.\n"));
++        fprintf(stderr, _("-l lang and/or -psm pagesegmode must occur before any"
++                      "configfile.\n"));
++        exit(1);
++        }
++    */
++/*
++printf("SSE = %s\n",SIMDDetect::IsSSEAvailable() ? "AVAILABLE" : "NOT AVAILABLE");
++printf("AVX = %s\n",SIMDDetect::IsAVXAvailable() ? "AVAILABLE" : "NOT AVAILABLE");
++*/
++/*
++v4.00 loads either TESSERACT enginer, LSTM engine, or both.  No CUBE.
++*/
++    ocr_type=0; /* Ignore specified and use default */
++    api->SetOutputName(NULL);
++    (*status)=api->Init(datapath,lang,
++              ocr_type==0 ? tesseract::OEM_DEFAULT :
++                (ocr_type==1 ? tesseract::OEM_TESSERACT_ONLY :
++                   (ocr_type==2 ? tesseract::OEM_LSTM_ONLY :
++                                  (tesseract::OEM_TESSERACT_LSTM_COMBINED))));
++    if ((*status)!=0)
++        {
++        /* willus mod, 11-24-16 */
++        setlocale(LC_ALL,original_locale);
++        api->End();
++        delete api;
++        return(NULL);
++        }
++    /*
++    api.Init("tesscapi",lang,tesseract::OEM_DEFAULT,
++           &(argv[arg]), argc - arg, NULL, NULL, false);
++    */
++    // We have 2 possible sources of pagesegmode: a config file and
++    // the command line. For backwards compatability reasons, the
++    // default in tesseract is tesseract::PSM_SINGLE_BLOCK, but the
++    // default for this program is tesseract::PSM_AUTO. We will let
++    // the config file take priority, so the command-line default
++    // can take priority over the tesseract default, so we use the
++    // value from the command line only if the retrieved mode
++    // is still tesseract::PSM_SINGLE_BLOCK, indicating no change
++    // in any config file. Therefore the only way to force
++    // tesseract::PSM_SINGLE_BLOCK is from the command line.
++    // It would be simpler if we could set the value before Init,
++    // but that doesn't work.
++    if (api->GetPageSegMode() == tesseract::PSM_SINGLE_BLOCK)
++        api->SetPageSegMode(pagesegmode);
++
++    /*
++    ** Initialization message
++    */
++    {
++    char istr[1024];
++    int sse,avx;
++
++// printf("tessedit_ocr_engine_mode = %d\n",tessedit_ocr_engine_mode);
++    sprintf(istr,"%s",api->Version());
++    sse=tesseract::SIMDDetect::IsSSEAvailable();
++    avx=tesseract::SIMDDetect::IsAVXAvailable();
++    if (sse || avx)
++        sprintf(&istr[strlen(istr)]," [%s]",sse&&avx?"SSE+AVX":(sse?"SSE":"AVX"));
++    sprintf(&istr[strlen(istr)],"\n    Tesseract data folder = '%s'",datapath==NULL?getenv("TESSDATA_PREFIX"):datapath);
++    strcat(istr,"\n    Tesseract languages: ");
++    GenericVector<STRING> languages;
++    api->GetLoadedLanguagesAsVector(&languages);
++/*
++printf("OEM=%d\n",api->oem());
++printf("Langs='%s'\n",api->GetInitLanguagesAsString());
++printf("AnyTessLang()=%d\n",(int)api->tesseract()->AnyTessLang());
++printf("AnyLSTMLang()=%d\n",(int)api->tesseract()->AnyLSTMLang());
++printf("num_sub_langs()=%d\n",api->tesseract()->num_sub_langs());
++printf("languages.size()=%d\n",(int)languages.size());
++*/
++
++    for (int i=0;i<=api->tesseract()->num_sub_langs();i++)
++        {
++        tesseract::Tesseract *lang1;
++        int eng;
++        lang1 = i==0 ? api->tesseract() : api->tesseract()->get_sub_lang(i-1);
++        eng=(int)lang1->tessedit_ocr_engine_mode;
++        sprintf(&istr[strlen(istr)],"%s%s [%s]",i==0?"":", ",lang1->lang.string(),
++                 eng==2?"LSTM+Tess":(eng==1?"LSTM":"Tess"));
++        }
++/*
++printf("%d. '%s'\n",i+1,languages[i].string());
++printf("    sublang[%d].oem_engine = %d\n",i+1,(int)api->tesseract()->get_sub_lang(i)->tessedit_ocr_engine_mode);
++*/
++
++    /*
++    if (ocr_type==0 || ocr_type==3)
++        sprintf(&istr[strlen(istr)],"[LSTM+] (lang=");
++    else if (ocr_type==2)
++        sprintf(&istr[strlen(istr)],"[LSTM] (lang=");
++    strncpy(&istr[strlen(istr)],language,253-strlen(istr));
++    istr[253]='\0';
++    strcat(istr,")");
++    */
++    if (out!=NULL)
++        fprintf(out,"%s\n",istr);
++    if (initstr!=NULL)
++        {
++        strncpy(initstr,istr,maxlen-1);
++        initstr[maxlen-1]='\0';
++        }
++    }
++
++
++    /* Turn off LSTM debugging output */
++    api->SetVariable("lstm_debug_level","0");
++#if (WILLUSDEBUG & 1)
++    api->SetVariable("lstm_debug_level","9");
++    api->SetVariable("paragraph_debug_level","9");
++    api->SetVariable("tessdata_manager_debug_level","9");
++    api->SetVariable("tosp_debug_level","9");
++    api->SetVariable("wordrec_debug_level","9");
++    api->SetVariable("segsearch_debug_level","9");
++#endif
++    /* willus mod, 11-24-16 */
++    setlocale(LC_ALL,original_locale);
++    return((void *)api);
++    }
++
++
++int tess_capi_get_ocr(void *vapi,PIX *pix,char *outstr,int maxlen,int segmode,FILE *out)
++
++    {
++    tesseract::TessBaseAPI *api;
++    static int old_segmode=-1;
++
++    api=(tesseract::TessBaseAPI *)vapi;
++    if (old_segmode != segmode)
++        {
++        old_segmode=segmode;
++        api->SetPageSegMode((tesseract::PageSegMode)segmode);
++        }
++    if (!api->ProcessPage(pix,0,NULL,NULL,0,NULL))
++        {
++        /* pixDestroy(&pix); */
++        if (out!=NULL)
++            fprintf(out,"tesscapi:  Error during bitmap processing.\n");
++        api->Clear();
++        return(-1);
++        }
++    strncpy(outstr,api->GetUTF8Text(),maxlen-1);
++    outstr[maxlen-1]='\0';
++    api->Clear();
++    return(0);
++    }
++
++
++int tess_capi_get_ocr_multiword(void *vapi,PIX *pix,int segmode,
++                                int **left,int **top,int **right,int **bottom,
++                                int **ybase,char **text,int *nw,
++                                FILE *out)
++
++    {
++    tesseract::TessBaseAPI *api;
++    static int old_segmode=-1;
++
++    api=(tesseract::TessBaseAPI *)vapi;
++    if (old_segmode != segmode)
++        {
++        old_segmode=segmode;
++        api->SetPageSegMode((tesseract::PageSegMode)segmode);
++        }
++    if (!api->ProcessPage(pix,0,NULL,NULL,0,NULL))
++        {
++        if (out!=NULL)
++            fprintf(out,"tesscapi:  Error during bitmap processing.\n");
++        api->Clear();
++        (*nw)=0;
++        return(-1);
++        }
++    (*nw)=api->GetOCRWords(left,top,right,bottom,ybase,text);
++    api->Clear();
++    return(0);
++    }
++
++
++void tess_capi_end(void *vapi)
++
++    {
++    tesseract::TessBaseAPI *api;
++
++    if (vapi==NULL)
++        return;
++    api=(tesseract::TessBaseAPI *)vapi;
++    api->End();
++    delete api;
++    }
+diff --git a/src/api/tesseract.h b/src/api/tesseract.h
+new file mode 100644
+index 00000000..575948cc
+--- /dev/null
++++ b/src/api/tesseract.h
+@@ -0,0 +1,29 @@
++/*
++** Willus.com's Tesseract C Wrappers
++**
++** 6-8-12
++**
++*/
++
++#ifndef           _TESSERACT_H_
++#define           _TESSERACT_H_
++
++//#include <leptonica.h>
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++void *tess_capi_init(char *datapath,char *language,int ocr_type,FILE *out,
++                    char *initstr,int maxlen,int *status);
++int tess_capi_get_ocr(void *api,PIX *pix,char *outstr,int maxlen,int segmode,FILE *out);
++int tess_capi_get_ocr_multiword(void *vapi,PIX *pix,int segmode,
++                                int **left,int **top,int **right,int **bottom,
++                                int **ybase,char **text,int *nw,
++                                FILE *out);
++void tess_capi_end(void *api);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif
+diff --git a/src/ccmain/tessedit.cpp b/src/ccmain/tessedit.cpp
+index 17f0951b..7af94ee2 100644
+--- a/src/ccmain/tessedit.cpp
++++ b/src/ccmain/tessedit.cpp
+@@ -101,6 +101,10 @@ bool Tesseract::init_tesseract_lang_data(
+         " to your \"tessdata\" directory.\n");
+     return false;
+   }
++  /* willus mod */
++  TFile fp;
++  strncpy(fp.tfile_filename,tessdata_path.string(),511);
++  fp.tfile_filename[511]='\0';
+ #ifndef DISABLED_LEGACY_ENGINE
+   if (oem == OEM_DEFAULT) {
+     // Set the engine mode from availability, which can then be overridden by
+@@ -116,7 +120,6 @@ bool Tesseract::init_tesseract_lang_data(
+ #endif  // ndef DISABLED_LEGACY_ENGINE
+ 
+   // If a language specific config file (lang.config) exists, load it in.
+-  TFile fp;
+   if (mgr->GetComponent(TESSDATA_LANG_CONFIG, &fp)) {
+     ParamUtils::ReadParamsFromFp(SET_PARAM_CONSTRAINT_NONE, &fp,
+                                  this->params());
+diff --git a/src/ccutil/ccutil.h b/src/ccutil/ccutil.h
+index 71e89c60..bdeccc14 100644
+--- a/src/ccutil/ccutil.h
++++ b/src/ccutil/ccutil.h
+@@ -80,6 +80,13 @@ class CCUtil {
+   // Member parameters.
+   // These have to be declared and initialized after params_ member, since
+   // params_ should be initialized before parameters are added to it.
++/* willus mod */
++/*
++  #ifdef _WIN32
++  STRING_VAR_H(tessedit_module_name, WINDLLNAME,
++               "Module colocated with tessdata dir");
++  #endif
++*/
+   INT_VAR_H(ambigs_debug_level, 0, "Debug level for unichar ambiguities");
+   BOOL_VAR_H(use_definite_ambigs_for_classifier, false,
+              "Use definite ambiguities when running character classifier");
+diff --git a/src/ccutil/genericvector.h b/src/ccutil/genericvector.h
+index 3556d153..3a5e8662 100644
+--- a/src/ccutil/genericvector.h
++++ b/src/ccutil/genericvector.h
+@@ -382,7 +382,26 @@ inline bool LoadDataFromFile(const char* filename, GenericVector<char>* data) {
+       // reserve an extra byte in case caller wants to append a '\0' character
+       data->reserve(size + 1);
+       data->resize_no_init(size);
+-      result = static_cast<long>(fread(&(*data)[0], 1, size, fp)) == size;
++    /* willus mod Dec 2018--weird issue with Win XP and MinGW gcc 7.3.0 */
++    /* Can't read entire file at once -- need to break up into smaller blocksize reads */
++    {
++    int frs,n;
++    int blocksize;
++    blocksize=1024*1024;
++    for (n=0;1;)
++        {
++        int bs;
++        bs= size-n > blocksize ? blocksize : size-n;
++        frs=(int)fread(&(*data)[n],1,bs,fp);
++        n+=frs;
++        if (frs<bs || bs<blocksize || n>=size)
++            break;
++        }
++    result = static_cast<long>((long)n==size);
++    }
++    /*
++    result = static_cast<long>(fread(&(*data)[0], 1, size, fp)) == size;
++    */
+     }
+     fclose(fp);
+   }
+diff --git a/src/ccutil/mainblk.cpp b/src/ccutil/mainblk.cpp
+index 52b04b04..80b26044 100644
+--- a/src/ccutil/mainblk.cpp
++++ b/src/ccutil/mainblk.cpp
+@@ -55,8 +55,22 @@ void CCUtil::main_setup(const char *argv0, const char *basename) {
+ #if defined(_WIN32)
+   } else if (datadir == nullptr || _access(datadir.string(), 0) != 0) {
+     /* Look for tessdata in directory of executable. */
++    /*
++    char drive[_MAX_DRIVE];
++    char dir[_MAX_DIR];
++    */
+     char path[_MAX_PATH];
+-    DWORD length = GetModuleFileName(nullptr, path, sizeof(path));
++    int i;
++    /* DWORD length = */ GetModuleFileName(nullptr, path, sizeof(path));
++    /* willus mod--avoid _splitpath_s -- not in XP */
++    for (i=strlen(path)-1;i>=0 && path[i]!='/' && path[i]!='\\';i--);
++    if (i>=0)
++        {
++        path[i]='\0';
++        datadir=path;
++        datadir += "/tessdata";
++        }
++    /*
+     if (length > 0 && length < sizeof(path)) {
+       char* separator = std::strrchr(path, '\\');
+       if (separator != nullptr) {
+@@ -65,6 +79,7 @@ void CCUtil::main_setup(const char *argv0, const char *basename) {
+         datadir += "/tessdata";
+       }
+     }
++    */
+ #endif /* _WIN32 */
+ #if defined(TESSDATA_PREFIX)
+   } else {
+diff --git a/src/ccutil/params.cpp b/src/ccutil/params.cpp
+index 00bf2563..486c5ce0 100644
+--- a/src/ccutil/params.cpp
++++ b/src/ccutil/params.cpp
+@@ -82,7 +82,8 @@ bool ParamUtils::ReadParamsFromFp(SetParamConstraint constraint, TFile *fp,
+ 
+       if (!foundit) {
+         anyerr = true;         // had an error
+-        tprintf("Warning: Parameter not found: %s\n", line);
++        /* willus mod */
++        tprintf("Tesseract warning: Parameter %s not found in file %s.\n",line,fp->tfile_filename);
+       }
+     }
+   }
+diff --git a/src/ccutil/serialis.cpp b/src/ccutil/serialis.cpp
+index 7def011f..6107a494 100644
+--- a/src/ccutil/serialis.cpp
++++ b/src/ccutil/serialis.cpp
+@@ -201,6 +201,9 @@ bool TFile::Open(const STRING& filename, FileReader reader) {
+   offset_ = 0;
+   is_writing_ = false;
+   swap_ = false;
++  /* willus mod */
++  strncpy(tfile_filename,filename.string(),511);
++  tfile_filename[511]='\0';
+   if (reader == nullptr)
+     return LoadDataFromFile(filename, data_);
+   else
+diff --git a/src/ccutil/serialis.h b/src/ccutil/serialis.h
+index 095b9227..4cc8251e 100644
+--- a/src/ccutil/serialis.h
++++ b/src/ccutil/serialis.h
+@@ -77,6 +77,8 @@ class TFile {
+  public:
+   TFile();
+   ~TFile();
++  /* willus mod */
++  char tfile_filename[512];
+ 
+   // All the Open methods load the whole file into memory for reading.
+   // Opens a file with a supplied reader, or nullptr to use the default.
+diff --git a/src/lstm/input.cpp b/src/lstm/input.cpp
+index 73b584b3..0b0b54c3 100644
+--- a/src/lstm/input.cpp
++++ b/src/lstm/input.cpp
+@@ -93,8 +93,11 @@ Pix* Input::PrepareLSTMInputs(const ImageData& image_data,
+     return nullptr;
+   }
+   if (width < min_width || height < min_width) {
++    /* willus mod -- no warning */
++    /*
+     tprintf("Image too small to scale!! (%dx%d vs min width of %d)\n", width,
+             height, min_width);
++    */
+     pixDestroy(&pix);
+     return nullptr;
+   }
+-- 
+2.22.0
+

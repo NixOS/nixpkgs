@@ -1,0 +1,43 @@
+diff --git a/src/common/ConfigReader.cpp b/src/common/ConfigReader.cpp
+index 4b5983c..911c511 100644
+--- a/src/common/ConfigReader.cpp
++++ b/src/common/ConfigReader.cpp
+@@ -147,16 +147,13 @@ namespace SDDM {
+         // * m_path (classic fallback /etc/sddm.conf)
+ 
+         QStringList files;
+-        QDateTime latestModificationTime = QFileInfo(m_path).lastModified();
+ 
+         if (!m_sysConfigDir.isEmpty()) {
+             //include the configDir in modification time so we also reload on any files added/removed
+             QDir dir(m_sysConfigDir);
+             if (dir.exists()) {
+-                latestModificationTime = std::max(latestModificationTime,  QFileInfo(m_sysConfigDir).lastModified());
+                 foreach (const QFileInfo &file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot, QDir::LocaleAware)) {
+                     files << (file.absoluteFilePath());
+-                    latestModificationTime = std::max(latestModificationTime, file.lastModified());
+                 }
+             }
+         }
+@@ -164,21 +161,14 @@ namespace SDDM {
+             //include the configDir in modification time so we also reload on any files added/removed
+             QDir dir(m_configDir);
+             if (dir.exists()) {
+-                latestModificationTime = std::max(latestModificationTime,  QFileInfo(m_configDir).lastModified());
+                 foreach (const QFileInfo &file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot, QDir::LocaleAware)) {
+                     files << (file.absoluteFilePath());
+-                    latestModificationTime = std::max(latestModificationTime, file.lastModified());
+                 }
+             }
+         }
+ 
+         files << m_path;
+ 
+-        if (latestModificationTime <= m_fileModificationTime) {
+-            return;
+-        }
+-        m_fileModificationTime = latestModificationTime;
+-
+         foreach (const QString &filepath, files) {
+             loadInternal(filepath);
+         }

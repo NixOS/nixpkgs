@@ -1,0 +1,10 @@
+--- a/Makefile.in	2015-01-13 08:52:30.000000000 +0100
++++ b/Makefile.in	2015-01-13 08:52:58.000000000 +0100
+@@ -30,6 +30,7 @@
+ subdirs = src doc
+ 
+ RECURSIVE_TARGETS = all allbin alldoc tags clean distclean realclean install
++.PHONY: $(RECURSIVE_TARGETS)
+ 
+ #-------------------------------------------------------------------------
+ 

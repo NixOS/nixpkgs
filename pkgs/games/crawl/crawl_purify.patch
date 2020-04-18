@@ -1,0 +1,62 @@
+diff -ru3 crawl-ref-0.23.2-src-old/crawl-ref/source/Makefile crawl-ref-0.23.2-src-new/crawl-ref/source/Makefile
+--- crawl-ref-0.23.2-src-old/crawl-ref/source/Makefile	1970-01-01 03:00:01.000000000 +0300
++++ crawl-ref-0.23.2-src-new/crawl-ref/source/Makefile	2017-07-27 14:45:34.611221571 +0300
+@@ -224,9 +224,9 @@
+	STRIP := strip -x
+	NEED_APPKIT = YesPlease
+	LIBNCURSES_IS_UNICODE = Yes
+-	NO_PKGCONFIG = Yes
+-	BUILD_SQLITE = YesPlease
+-	BUILD_ZLIB = YesPlease
++	#NO_PKGCONFIG = Yes
++	#BUILD_SQLITE = YesPlease
++	#BUILD_ZLIB = YesPlease
+	ifdef TILES
+		EXTRA_LIBS += -framework AppKit -framework AudioUnit -framework CoreAudio -framework ForceFeedback -framework Carbon -framework IOKit -framework OpenGL -framework AudioToolbox -framework CoreVideo contrib/install/$(ARCH)/lib/libSDL2main.a
+		BUILD_FREETYPE = YesPlease
+@@ -286,13 +286,7 @@
+ LIBZ := contrib/install/$(ARCH)/lib/libz.a
+ 
+ ifndef CROSSHOST
+-	# FreeBSD keeps all of its userland includes in /usr/local so
+-	# look there
+-	ifeq ($(uname_S),FreeBSD)
+-		SQLITE_INCLUDE_DIR := /usr/local/include
+-	else
+-		SQLITE_INCLUDE_DIR := /usr/include
+-	endif
++	SQLITE_INCLUDE_DIR := ${sqlite}/include
+ else
+ 	# This is totally wrong, works only with some old-style setups, and
+ 	# on some architectures of Debian/new FHS multiarch -- excluding, for
+diff -ru3 crawl-ref-0.23.2-src-old/crawl-ref/source/util/find_font crawl-ref-0.23.2-src-new/crawl-ref/source/util/find_font
+--- crawl-ref-0.23.2-src-old/crawl-ref/source/util/find_font	1970-01-01 03:00:01.000000000 +0300
++++ crawl-ref-0.23.2-src-new/crawl-ref/source/util/find_font	2017-07-27 14:44:29.784235540 +0300
+@@ -1,6 +1,6 @@
+ #! /bin/sh
+ 
+-FONTDIRS="/usr/share/fonts /usr/local/share/fonts /usr/*/lib/X11/fonts"
++FONTDIRS="${fontsPath}/share/fonts"
+ 
+ name=$1
+ [ "$name" ] || { echo "Usage: $0 <fontname.ttf>" >&2; exit 100; }
+@@ -11,6 +11,6 @@
+         for dir in $FONTDIRS; do
+             [ -d "$dir" ] && echo "$dir"
+         done
+-    } | xargs -I% find % \( -type f -o -type l \) -iname "$name" -print \
++    } | xargs -I% find -L % \( -type f -o -type l \) -iname "$name" -print \
+       | head -n1
+ } 2>/dev/null
+diff --git a/crawl-ref/source/windowmanager-sdl.cc b/crawl-ref/source/windowmanager-sdl.cc
+--- a/crawl-ref/source/windowmanager-sdl.cc
++++ b/crawl-ref/source/windowmanager-sdl.cc
+@@ -20,7 +20,7 @@
+ # else
+ #  include <SDL2/SDL.h>
+ # endif
+-# include <SDL_image.h>
++# include <SDL2/SDL_image.h>
+ # if defined(USE_SOUND) && !defined(WINMM_PLAY_SOUNDS)
+ #  include <SDL2/SDL_mixer.h>
+ # endif

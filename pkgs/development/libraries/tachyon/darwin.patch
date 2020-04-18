@@ -1,0 +1,31 @@
+diff --git a/unix/Make-arch b/unix/Make-arch
+index 08afb85..822c4fc 100644
+--- a/unix/Make-arch
++++ b/unix/Make-arch
+@@ -924,7 +924,7 @@ macosx-thr:
+ 	$(MAKE) all \
+ 	"ARCH = macosx-thr" \
+ 	"CC = cc" \
+-	"CFLAGS = -Os -ffast-math -DBsd -DTHR -F/System/Library/Frameworks $(MISCFLAGS)" \
++	"CFLAGS = -Os -ffast-math -DBsd -DTHR $(MISCFLAGS)" \
+ 	"AR = ar" \
+ 	"ARFLAGS = r" \
+ 	"STRIP = strip" \
+@@ -946,7 +946,7 @@ macosx-x86-thr:
+ 	$(MAKE) all \
+ 	"ARCH = macosx-x86-thr" \
+ 	"CC = cc" \
+-	"CFLAGS = -O2 -ffast-math -DBsd -DTHR -F/System/Library/Frameworks $(MISCFLAGS)" \
++	"CFLAGS = -O2 -ffast-math -DBsd -DTHR $(MISCFLAGS)" \
+ 	"AR = ar" \
+ 	"ARFLAGS = r" \
+ 	"STRIP = strip" \
+@@ -957,7 +957,7 @@ macosx-x86-thr-ogl:
+ 	$(MAKE) all \
+ 	"ARCH = macosx-x86-thr-ogl" \
+ 	"CC = cc" \
+-	"CFLAGS = -O2 -ffast-math -DBsd -DTHR -I/usr/X11R6/include -F/System/Library/Frameworks $(MISCFLAGS) -DUSEOPENGL" \
++	"CFLAGS = -O2 -ffast-math -DBsd -DTHR -I/usr/X11R6/include $(MISCFLAGS) -DUSEOPENGL" \
+ 	"AR = ar" \
+ 	"ARFLAGS = r" \
+ 	"STRIP = strip" \

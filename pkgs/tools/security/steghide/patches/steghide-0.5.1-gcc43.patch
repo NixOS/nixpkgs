@@ -1,0 +1,349 @@
+--- steghide-0.5.1.old/configure.in	2003-10-15 09:48:52.000000000 +0200
++++ steghide-0.5.1.new/configure.in	2008-05-09 19:04:46.000000000 +0200
+@@ -7,27 +7,26 @@
+ dnl checks for programs.
+ AC_PROG_CXX
+ AC_PROG_INSTALL
+ AC_PROG_AWK
+ AC_PROG_LN_S
++AC_CXX_COMPILE_STDCXX_0X
+ 
+ dnl GNU gettext
+ AC_CHECK_FUNCS(strchr)
+ AM_GNU_GETTEXT
+ AM_CONDITIONAL(USE_INTLDIR, test "$nls_cv_use_gnu_gettext" = yes)
+ 
+ dnl check if debugging support is requested
+-AC_MSG_CHECKING([wether to enable debugging])
++AC_MSG_CHECKING([whether to enable debugging])
+ AC_ARG_ENABLE(debug,[  --enable-debug          enable debugging],
+ 	if test "$enableval" = yes ;
+ 	then
+ 		AC_MSG_RESULT([yes])
+ 		AC_DEFINE(DEBUG,1,[enable code used only for debugging])
+-		CXXFLAGS="-O2 -Wall -g"
+ 	else
+ 		AC_MSG_RESULT([no])
+-		CXXFLAGS="-O2 -Wall"
+ 	fi
+ 	,
+ 	AC_MSG_RESULT([no])
+ 	CXXFLAGS="-O2 -Wall"
+ )
+@@ -213,7 +212,18 @@
+ 	echo "libmhash can be downloaded from http://mhash.sourceforge.net/.";
+ 	echo "**********";
+ 	AC_MSG_ERROR([[libmhash not found]])
+ fi
+ 
++dnl Should we add std=c++0x?
++
++if test "$ac_cv_cxx_compile_cxx0x_cxx" = yes;
++then
++	CXXFLAGS="${CXXFLAGS} -std=c++0x -Wall -Wextra"
++else
++	CXXFLAGS="${CXXFLAGS} -Wall -Wextra"
++fi
++
++AC_SUBST(CXXFLAGS)
++
+ dnl create Makefiles
+ AC_OUTPUT([Makefile steghide.spec steghide.doxygen doc/Makefile po/Makefile.in src/Makefile tests/Makefile tests/data/Makefile m4/Makefile intl/Makefile])
+--- steghide-0.5.1.old/m4/ac_cxx_compile_stdcxx_0x.m4	1970-01-01 01:00:00.000000000 +0100
++++ steghide-0.5.1.new/m4/ac_cxx_compile_stdcxx_0x.m4	2008-05-09 19:04:46.000000000 +0200
+@@ -0,0 +1,107 @@
++# ===========================================================================
++#        http://autoconf-archive.cryp.to/ac_cxx_compile_stdcxx_0x.html
++# ===========================================================================
++#
++# SYNOPSIS
++#
++#   AC_CXX_COMPILE_STDCXX_0X
++#
++# DESCRIPTION
++#
++#   Check for baseline language coverage in the compiler for the C++0x
++#   standard.
++#
++# LAST MODIFICATION
++#
++#   2008-04-17
++#
++# COPYLEFT
++#
++#   Copyright (c) 2008 Benjamin Kosnik <bkoz@redhat.com>
++#
++#   Copying and distribution of this file, with or without modification, are
++#   permitted in any medium without royalty provided the copyright notice
++#   and this notice are preserved.
++
++AC_DEFUN([AC_CXX_COMPILE_STDCXX_0X], [
++  AC_CACHE_CHECK(if g++ supports C++0x features without additional flags,
++  ac_cv_cxx_compile_cxx0x_native,
++  [AC_LANG_SAVE
++  AC_LANG_CPLUSPLUS
++  AC_TRY_COMPILE([
++  template <typename T>
++    struct check
++    {
++      static_assert(sizeof(int) <= sizeof(T), "not big enough");
++    };
++
++    typedef check<check<bool>> right_angle_brackets;
++
++    int a;
++    decltype(a) b;
++
++    typedef check<int> check_type;
++    check_type c;
++    check_type&& cr = c;],,
++  ac_cv_cxx_compile_cxx0x_native=yes, ac_cv_cxx_compile_cxx0x_native=no)
++  AC_LANG_RESTORE
++  ])
++
++  AC_CACHE_CHECK(if g++ supports C++0x features with -std=c++0x,
++  ac_cv_cxx_compile_cxx0x_cxx,
++  [AC_LANG_SAVE
++  AC_LANG_CPLUSPLUS
++  ac_save_CXXFLAGS="$CXXFLAGS"
++  CXXFLAGS="$CXXFLAGS -std=c++0x"
++  AC_TRY_COMPILE([
++  template <typename T>
++    struct check
++    {
++      static_assert(sizeof(int) <= sizeof(T), "not big enough");
++    };
++
++    typedef check<check<bool>> right_angle_brackets;
++
++    int a;
++    decltype(a) b;
++
++    typedef check<int> check_type;
++    check_type c;
++    check_type&& cr = c;],,
++  ac_cv_cxx_compile_cxx0x_cxx=yes, ac_cv_cxx_compile_cxx0x_cxx=no)
++  CXXFLAGS="$ac_save_CXXFLAGS"
++  AC_LANG_RESTORE
++  ])
++
++  AC_CACHE_CHECK(if g++ supports C++0x features with -std=gnu++0x,
++  ac_cv_cxx_compile_cxx0x_gxx,
++  [AC_LANG_SAVE
++  AC_LANG_CPLUSPLUS
++  ac_save_CXXFLAGS="$CXXFLAGS"
++  CXXFLAGS="$CXXFLAGS -std=gnu++0x"
++  AC_TRY_COMPILE([
++  template <typename T>
++    struct check
++    {
++      static_assert(sizeof(int) <= sizeof(T), "not big enough");
++    };
++
++    typedef check<check<bool>> right_angle_brackets;
++
++    int a;
++    decltype(a) b;
++
++    typedef check<int> check_type;
++    check_type c;
++    check_type&& cr = c;],,
++  ac_cv_cxx_compile_cxx0x_gxx=yes, ac_cv_cxx_compile_cxx0x_gxx=no)
++  CXXFLAGS="$ac_save_CXXFLAGS"
++  AC_LANG_RESTORE
++  ])
++
++  if test "$ac_cv_cxx_compile_cxx0x_native" = yes ||
++     test "$ac_cv_cxx_compile_cxx0x_cxx" = yes ||
++     test "$ac_cv_cxx_compile_cxx0x_gxx" = yes; then
++    AC_DEFINE(HAVE_STDCXX_0X,,[Define if g++ supports C++0x features. ])
++  fi
++])
+--- steghide-0.5.1.old/src/Arguments.cc	2003-10-11 23:25:04.000000000 +0200
++++ steghide-0.5.1.new/src/Arguments.cc	2008-05-09 19:04:44.000000000 +0200
+@@ -26,10 +26,12 @@
+ #include "Terminal.h"
+ #include "common.h"
+ #include "error.h"
+ #include "msg.h"
+ 
++float Arguments::Default_Goal = 100.0 ;
++
+ // the global Arguments object
+ Arguments Args ;
+ 
+ Arguments::Arguments (int argc, char* argv[])
+ {
+--- steghide-0.5.1.old/src/Arguments.h	2003-10-11 23:23:57.000000000 +0200
++++ steghide-0.5.1.new/src/Arguments.h	2008-05-09 19:04:44.000000000 +0200
+@@ -98,11 +98,11 @@
+ 	static const bool		Default_EmbedEmbFn = true ;
+ 	static const bool		Default_Force = false ;
+ 	static const VERBOSITY	Default_Verbosity = NORMAL ;
+ 	static const unsigned long	Default_Radius = 0 ; // there is no default radius for all file formats
+ 	static const unsigned int	Max_Algorithm = 3 ;
+-	static const float		Default_Goal = 100.0 ;
++	static float			Default_Goal ;
+ 	static const DEBUGCOMMAND	Default_DebugCommand = NONE ;
+ 	static const bool		Default_Check = false ;
+ 	static const unsigned int	Default_DebugLevel = 0 ;
+ 	static const unsigned int	Default_GmlGraphRecDepth = 0 ;
+ 	static const unsigned int	Default_GmlStartVertex = 0 ;
+--- steghide-0.5.1.old/src/EncryptionMode.h	2003-09-28 17:30:30.000000000 +0200
++++ steghide-0.5.1.new/src/EncryptionMode.h	2008-05-09 19:04:46.000000000 +0200
+@@ -69,11 +69,11 @@
+ 	static const unsigned int NumValues = 8 ;
+ 	IRep Value ;
+ 
+ 	typedef struct struct_Translation {
+ 		IRep	irep ;
+-		char*	srep ;
++		const char*	srep ;
+ 	} Translation ;
+ 	static const Translation Translations[] ;
+ } ;
+ 
+ #endif // ndef SH_ENCMODE_H
+--- steghide-0.5.1.old/src/Graph.cc	2003-10-11 23:54:26.000000000 +0200
++++ steghide-0.5.1.new/src/Graph.cc	2008-05-09 19:04:46.000000000 +0200
+@@ -20,10 +20,12 @@
+ 
+ #include <ctime>
+ #include <list>
+ #include <map>
+ #include <vector>
++#include <algorithm>
++#include <climits>
+ 
+ #include "BitString.h"
+ #include "CvrStgFile.h"
+ #include "Edge.h"
+ #include "Graph.h"
+--- steghide-0.5.1.old/src/Matching.cc	2003-10-11 23:54:30.000000000 +0200
++++ steghide-0.5.1.new/src/Matching.cc	2008-05-09 19:04:46.000000000 +0200
+@@ -16,10 +16,11 @@
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  *
+  */
+ 
++#include <algorithm>
+ #include "Edge.h"
+ #include "Graph.h"
+ #include "Matching.h"
+ #include "ProgressOutput.h"
+ #include "common.h"
+--- steghide-0.5.1.old/src/ProgressOutput.cc	2003-10-11 11:20:51.000000000 +0200
++++ steghide-0.5.1.new/src/ProgressOutput.cc	2008-05-09 19:04:44.000000000 +0200
+@@ -21,10 +21,12 @@
+ #include <cmath>
+ 
+ #include "ProgressOutput.h"
+ #include "common.h"
+ 
++float ProgressOutput::NoAvgWeight = 1.0 ;
++
+ ProgressOutput::ProgressOutput ()
+ 	: Message("__nomessage__")
+ {
+ 	LastUpdate = time(NULL) - 1 ; // -1 to ensure that message is written first time
+ }
+--- steghide-0.5.1.old/src/ProgressOutput.h	2003-09-28 17:30:30.000000000 +0200
++++ steghide-0.5.1.new/src/ProgressOutput.h	2008-05-09 19:04:44.000000000 +0200
+@@ -60,13 +60,13 @@
+ 	/**
+ 	 * update the output appending rate, [average edge weight], "done" and a newline
+ 	 * \param rate the rate of matched vertices
+ 	 * \param avgweight the average edge weight (is not printed if not given)
+ 	 **/
+-	void done (float rate, float avgweight = NoAvgWeight) const ;
++	void done (float rate, float avgweight = 1.0) const ;
+ 
+-	static const float NoAvgWeight = -1.0 ;
++	static float NoAvgWeight ;
+ 
+ 	protected:
+ 	std::string vcompose (const char *msgfmt, va_list ap) const ;
+ 
+ 	private:
+--- steghide-0.5.1.old/src/SMDConstructionHeuristic.cc	2003-09-28 17:30:30.000000000 +0200
++++ steghide-0.5.1.new/src/SMDConstructionHeuristic.cc	2008-05-09 19:04:46.000000000 +0200
+@@ -16,10 +16,12 @@
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  *
+  */
+ 
++#include <algorithm>
++
+ #include "Edge.h"
+ #include "Graph.h"
+ #include "Matching.h"
+ #include "SMDConstructionHeuristic.h"
+ #include "Vertex.h"
+--- steghide-0.5.1.old/src/WavFile.cc	2003-09-28 17:30:30.000000000 +0200
++++ steghide-0.5.1.new/src/WavFile.cc	2008-05-09 19:04:46.000000000 +0200
+@@ -19,10 +19,11 @@
+  */
+ 
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cstring>
++#include <algorithm>
+ 
+ #include "CvrStgFile.h"
+ #include "DFSAPHeuristic.h"
+ #include "SampleValueAdjacencyList.h"
+ #include "SMDConstructionHeuristic.h"
+--- steghide-0.5.1.old/src/wrapper_hash_map.h	2003-09-28 17:30:30.000000000 +0200
++++ steghide-0.5.1.new/src/wrapper_hash_map.h	2008-05-09 19:04:46.000000000 +0200
+@@ -25,17 +25,21 @@
+ 
+ #ifdef __GNUC__
+ # if __GNUC__ < 3
+ #  include <hash_map.h>
+     namespace sgi { using ::hash ; using ::hash_map ; } ;
+-# else
++# elif __GNUC__ == 3 || ( __GNUC__ == 4 && __GNUC_MINOR__ < 3 )
+ #  include <ext/hash_map>
+-#  if __GNUC_MINOR__ == 0
++#  if __GNUC__ == 3 &&  __GNUC_MINOR__ == 0
+     namespace sgi = std ;			// GCC 3.0
+ #  else
+     namespace sgi = __gnu_cxx ;	// GCC 3.1 and later
+ #  endif
++# else
++#  include <unordered_map>
++#  define hash_map unordered_map
++   namespace sgi = std ;
+ # endif
+ #else
+   namespace sgi = std ;
+ #endif
+ 
+--- steghide-0.5.1.old/src/wrapper_hash_set.h	2003-09-28 17:30:30.000000000 +0200
++++ steghide-0.5.1.new/src/wrapper_hash_set.h	2008-05-09 19:04:46.000000000 +0200
+@@ -26,17 +26,21 @@
+ 
+ #ifdef __GNUC__
+ # if __GNUC__ < 3
+ #  include <hash_set.h>
+     namespace sgi { using ::hash ; using ::hash_set ; } ;
+-# else
++# elif __GNUC__ == 3 || ( __GNUC__ == 4 && __GNUC_MINOR__ < 3 )
+ #  include <ext/hash_set>
+-#  if __GNUC_MINOR__ == 0
++#  if __GNUC__ == 3 && __GNUC_MINOR__ == 0
+     namespace sgi = std ;			// GCC 3.0
+ #  else
+     namespace sgi = ::__gnu_cxx ;	// GCC 3.1 and later
+ #  endif
++# else
++#  include <unordered_set>
++#  define hash_set unordered_set
++   namespace sgi = std ;
+ # endif
+ #else
+   namespace sgi = std ;
+ #endif
+ 

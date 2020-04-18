@@ -1,0 +1,142 @@
+--- a/giscanner/scannermain.py
++++ b/giscanner/scannermain.py
+@@ -95,6 +95,39 @@ def get_windows_option_group(parser):
+     return group
+ 
+ 
++def _get_default_fallback_libpath():
++    # Newer multiple-output-optimized stdenv has an environment variable
++    # $outputLib which in turn specifies another variable which then is used as
++    # the destination for the library contents (${!outputLib}/lib).
++    store_path = os.environ.get(os.environ.get("outputLib")) if "outputLib" in os.environ else None
++    if store_path is None:
++        outputs = os.environ.get("outputs", "out").split()
++        if "lib" in outputs:
++            # For multiple output derivations let's try whether there is a $lib
++            # environment variable and use that as the base store path.
++            store_path = os.environ.get("lib")
++        elif "out" in outputs:
++            # Otherwise we have a single output derivation, so the libraries
++            # most certainly will end up in "$out/lib".
++            store_path = os.environ.get("out")
++
++    if store_path is not None:
++        # Even if we have a $lib as output, there still should be a $lib/lib
++        # directory.
++        return os.path.join(store_path, 'lib')
++    else:
++        # If we haven't found a possible scenario, let's return an empty string
++        # so that the shared library won't be prepended with a path.
++        #
++        # Note that this doesn't mean that all hope is lost, because after all
++        # we can still use --fallback-library-path to set one.
++        #
++        # Also, we're not returning None, because that would make it very
++        # difficult to disable adding fallback paths altogether using something
++        # like: --fallback-library-path=""
++        return ""
++
++
+ def _get_option_parser():
+     parser = optparse.OptionParser('%prog [options] sources',
+                                    version='%prog ' + giscanner.__version__)
+@@ -205,6 +238,10 @@ match the namespace prefix.""")
+     parser.add_option("", "--filelist",
+                       action="store", dest="filelist", default=[],
+                       help="file containing headers and sources to be scanned")
++    parser.add_option("", "--fallback-library-path",
++                      action="store", dest="fallback_libpath",
++                      default=_get_default_fallback_libpath(),
++                      help="Path to prepend to unknown shared libraries")
+ 
+     group = get_preprocessor_option_group(parser)
+     parser.add_option_group(group)
+--- a/giscanner/shlibs.py
++++ b/giscanner/shlibs.py
+@@ -57,6 +57,12 @@ def _ldd_library_pattern(library_name):
+     $""" % re.escape(library_name), re.VERBOSE)
+ 
+ 
++def _ldd_library_nix_pattern(library_name):
++    nix_store_dir = re.escape('@nixStoreDir@'.rstrip('/'))
++    pattern = r'(%s(?:/[^/]*)+lib%s[^A-Za-z0-9_-][^\s\(\)]*)'
++    return re.compile(pattern % (nix_store_dir, re.escape(library_name)))
++
++
+ # This is a what we do for non-la files. We assume that we are on an
+ # ELF-like system where ldd exists and the soname extracted with ldd is
+ # a filename that can be opened with dlopen().
+@@ -106,7 +112,8 @@ def _resolve_non_libtool(options, binary, libraries):
+             output = output.decode("utf-8", "replace")
+ 
+         shlibs = resolve_from_ldd_output(libraries, output)
+-        return list(map(sanitize_shlib_path, shlibs))
++        fallback_libpath = options.fallback_libpath or "";
++        return list(map(lambda p: os.path.join(fallback_libpath, p), map(sanitize_shlib_path, shlibs)))
+ 
+ 
+ def sanitize_shlib_path(lib):
+@@ -115,19 +122,18 @@ def sanitize_shlib_path(lib):
+     # In case we get relative paths on macOS (like @rpath) then we fall
+     # back to the basename as well:
+     # https://gitlab.gnome.org/GNOME/gobject-introspection/issues/222
+-    if sys.platform == "darwin":
+-        if not os.path.isabs(lib):
+-            return os.path.basename(lib)
+-        return lib
+-    else:
++
++    # Always use absolute paths if available
++    if not os.path.isabs(lib):
+         return os.path.basename(lib)
++    return lib
+ 
+ 
+ def resolve_from_ldd_output(libraries, output):
+     patterns = {}
+     for library in libraries:
+         if not os.path.isfile(library):
+-            patterns[library] = _ldd_library_pattern(library)
++            patterns[library] = (_ldd_library_pattern(library), _ldd_library_nix_pattern(library))
+     if len(patterns) == 0:
+         return []
+ 
+@@ -139,8 +145,11 @@ def resolve_from_ldd_output(libraries, output):
+         if line.endswith(':'):
+             continue
+         for word in line.split():
+-            for library, pattern in patterns.items():
+-                m = pattern.match(word)
++            for library, (pattern, nix_pattern) in patterns.items():
++                if line.find('@nixStoreDir@') != -1:
++                    m = nix_pattern.match(word)
++                else:
++                    m = pattern.match(word)
+                 if m:
+                     del patterns[library]
+                     shlibs.append(m.group())
+--- a/giscanner/utils.py
++++ b/giscanner/utils.py
+@@ -111,17 +111,11 @@ def extract_libtool_shlib(la_file):
+     if dlname is None:
+         return None
+ 
+-    # Darwin uses absolute paths where possible; since the libtool files never
+-    # contain absolute paths, use the libdir field
+-    if platform.system() == 'Darwin':
+-        dlbasename = os.path.basename(dlname)
+-        libdir = _extract_libdir_field(la_file)
+-        if libdir is None:
+-            return dlbasename
+-        return libdir + '/' + dlbasename
+-    # From the comments in extract_libtool(), older libtools had
+-    # a path rather than the raw dlname
+-    return os.path.basename(dlname)
++    dlbasename = os.path.basename(dlname)
++    libdir = _extract_libdir_field(la_file)
++    if libdir is None:
++        return dlbasename
++    return libdir + '/' + dlbasename
+ 
+ 
+ def extract_libtool(la_file):

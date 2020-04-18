@@ -1,0 +1,24 @@
+diff --git a/agents/archivemailagent/CMakeLists.txt b/agents/archivemailagent/CMakeLists.txt
+index 48ed076..9c56896 100644
+--- a/agents/archivemailagent/CMakeLists.txt
++++ b/agents/archivemailagent/CMakeLists.txt
+@@ -22,6 +22,7 @@ ki18n_wrap_ui(libarchivemailagent_SRCS ui/archivemailwidget.ui )
+ add_library(archivemailagent STATIC ${libarchivemailagent_SRCS})
+ target_link_libraries(archivemailagent
+     KF5::MailCommon
++    KF5::Libkdepim
+     KF5::I18n
+     KF5::Notifications
+     KF5::IconThemes
+diff --git a/agents/followupreminderagent/CMakeLists.txt b/agents/followupreminderagent/CMakeLists.txt
+index a56b730..83604cf 100644
+--- a/agents/followupreminderagent/CMakeLists.txt
++++ b/agents/followupreminderagent/CMakeLists.txt
+@@ -23,6 +23,7 @@ target_link_libraries(followupreminderagent
+     KF5::AkonadiMime
+     KF5::AkonadiAgentBase
+     KF5::DBusAddons
++    KF5::FollowupReminder
+     KF5::XmlGui
+     KF5::KIOWidgets
+     KF5::Notifications

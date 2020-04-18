@@ -1,0 +1,65 @@
+From d6e0cb60270e8653bda3f339e3a07ce2cd2d6eb0 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Tue, 17 Oct 2017 23:01:36 -0500
+Subject: [PATCH] glucose: use fenv to set double precision
+
+---
+ core/Main.cc   | 8 ++++++--
+ simp/Main.cc   | 8 ++++++--
+ utils/System.h | 2 +-
+ 3 files changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/core/Main.cc b/core/Main.cc
+index c96aadd..994132b 100644
+--- a/core/Main.cc
++++ b/core/Main.cc
+@@ -96,8 +96,12 @@ int main(int argc, char** argv)
+         // printf("This is MiniSat 2.0 beta\n");
+         
+ #if defined(__linux__)
+-        fpu_control_t oldcw, newcw;
+-        _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
++        fenv_t fenv;
++
++        fegetenv(&fenv);
++        fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
++        fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
++        fesetenv(&fenv);
+         printf("c WARNING: for repeatability, setting FPU to use double precision\n");
+ #endif
+         // Extra options:
+diff --git a/simp/Main.cc b/simp/Main.cc
+index 4f4772d..70c2e4b 100644
+--- a/simp/Main.cc
++++ b/simp/Main.cc
+@@ -97,8 +97,12 @@ int main(int argc, char** argv)
+         
+         
+ #if defined(__linux__)
+-        fpu_control_t oldcw, newcw;
+-        _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
++        fenv_t fenv;
++
++        fegetenv(&fenv);
++        fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
++        fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
++        fesetenv(&fenv);
+         printf("WARNING: for repeatability, setting FPU to use double precision\n");
+ #endif
+         // Extra options:
+diff --git a/utils/System.h b/utils/System.h
+index 004d498..a768e99 100644
+--- a/utils/System.h
++++ b/utils/System.h
+@@ -22,7 +22,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
+ #define Glucose_System_h
+ 
+ #if defined(__linux__)
+-#include <fpu_control.h>
++#include <fenv.h>
+ #endif
+ 
+ #include "glucose/mtl/IntTypes.h"
+-- 
+2.14.2
+

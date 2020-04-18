@@ -1,0 +1,20 @@
+diff --git a/rpy/rinterface/__init__.py b/rpy/rinterface/__init__.py
+index 9362e57..1af258e 100644
+--- a/rpy/rinterface/__init__.py
++++ b/rpy/rinterface/__init__.py
+@@ -43,6 +43,15 @@ if not R_HOME:
+ if not os.environ.get("R_HOME"):
+     os.environ['R_HOME'] = R_HOME
+ 
++# path to libraries
++existing = os.environ.get('R_LIBS_SITE')
++if existing is not None:
++    prefix = existing + ':'
++else:
++    prefix = ''
++additional = '@NIX_R_LIBS_SITE@'
++os.environ['R_LIBS_SITE'] = prefix + additional
++
+ if sys.platform == 'win32':
+     _load_r_dll(R_HOME)
+ 

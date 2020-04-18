@@ -1,0 +1,39 @@
+From c48867b73485b34b95f14e9b9bbb54507fc77648 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Fri, 19 Apr 2019 18:21:49 -0300
+Subject: [PATCH] Use an environment variable for the plugins directory
+
+---
+ frame/controller/dockpluginscontroller.cpp          | 2 +-
+ plugins/tray/system-trays/systemtrayscontroller.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/frame/controller/dockpluginscontroller.cpp b/frame/controller/dockpluginscontroller.cpp
+index 32a5885..efd53c8 100644
+--- a/frame/controller/dockpluginscontroller.cpp
++++ b/frame/controller/dockpluginscontroller.cpp
+@@ -126,7 +126,7 @@ void DockPluginsController::startLoader()
+ {
+     QString pluginsDir("../plugins");
+     if (!QDir(pluginsDir).exists()) {
+-        pluginsDir = "/usr/lib/dde-dock/plugins";
++        pluginsDir = QProcessEnvironment::systemEnvironment().value("DDE_DOCK_PLUGINS_DIR", "@out@/lib/dde-dock/plugins");
+     }
+     qDebug() << "using dock plugins dir:" << pluginsDir;
+
+diff --git a/plugins/tray/system-trays/systemtrayscontroller.cpp b/plugins/tray/system-trays/systemtrayscontroller.cpp
+index 0c8ca88..7c47d25 100644
+--- a/plugins/tray/system-trays/systemtrayscontroller.cpp
++++ b/plugins/tray/system-trays/systemtrayscontroller.cpp
+@@ -159,7 +159,7 @@ void SystemTraysController::startLoader()
+ {
+     QString pluginsDir("../plugins/system-trays");
+     if (!QDir(pluginsDir).exists()) {
+-        pluginsDir = "/usr/lib/dde-dock/plugins/system-trays";
++        pluginsDir = QProcessEnvironment::systemEnvironment().value("DDE_DOCK_PLUGINS_DIR", "@out@/lib/dde-dock/plugins") + "/system-trays";
+     }
+     qDebug() << "using system tray plugins dir:" << pluginsDir;
+
+--
+2.21.0
+

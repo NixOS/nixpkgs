@@ -1,0 +1,86 @@
+From 398f44b4ed545fc1b6c13a057bf0900001f7958b Mon Sep 17 00:00:00 2001
+From: Frederik Rietdijk <fridh@fridh.nl>
+Date: Tue, 22 Oct 2019 15:07:05 +0200
+Subject: [PATCH] Revert "build: Do cmake, pc, and profile variable
+ replacements in Makefile"
+
+This reverts commit 81ba2c7e7dfbaefbafa1e8615727c9612e5fb314.
+---
+ Makefile.am                     | 12 ++++++++----
+ bash-completion-config.cmake.in |  4 ++--
+ bash-completion.pc.in           |  4 ++--
+ configure.ac                    |  3 +++
+ 4 files changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 8f441185..53979529 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -23,8 +23,7 @@ cmakeconfig_DATA = bash-completion-config.cmake \
+ 		-e 's|@VERSION[@]|$(VERSION)|' \
+ 		<$(srcdir)/$@.in >$@
+ 
+-CLEANFILES = bash_completion.sh bash-completion.pc \
+-	bash-completion-config.cmake bash-completion-config-version.cmake
++CLEANFILES = bash_completion.sh bash-completion.pc
+ 
+ EXTRA_DIST = CHANGES $(pkgdata_DATA) bash_completion.sh.in .dir-locals.el \
+ 	.editorconfig README.md CONTRIBUTING.md pyproject.toml .perltidyrc \
+@@ -34,6 +33,11 @@ EXTRA_DIST = CHANGES $(pkgdata_DATA) bash_completion.sh.in .dir-locals.el \
+ install-data-hook:
+ 	tmpfile=`mktemp $${TMPDIR:-/tmp}/bash_completion.XXXXXX` && \
+ 	$(SED) -e 's|-/etc/bash_completion\.d|-$(compatdir)|' \
+-	    $(DESTDIR)$(pkgdatadir)/bash_completion >$$tmpfile && \
+-	cat $$tmpfile >$(DESTDIR)$(pkgdatadir)/bash_completion && \
++	    $(DESTDIR)$(pkgdatadir)/bash_completion > $$tmpfile && \
++	cat $$tmpfile > $(DESTDIR)$(pkgdatadir)/bash_completion && \
++	$(SED) -e 's|\$${prefix}|$(prefix)|' \
++	    $(DESTDIR)$(datadir)/cmake/$(PACKAGE)/bash-completion-config.cmake \
++	         > $$tmpfile && \
++	cat $$tmpfile > \
++	    $(DESTDIR)$(datadir)/cmake/$(PACKAGE)/bash-completion-config.cmake && \
+ 	rm $$tmpfile
+diff --git a/bash-completion-config.cmake.in b/bash-completion-config.cmake.in
+index d907b76c..ccc6e052 100644
+--- a/bash-completion-config.cmake.in
++++ b/bash-completion-config.cmake.in
+@@ -5,7 +5,7 @@ set (BASH_COMPLETION_VERSION "@VERSION@")
+ 
+ set (BASH_COMPLETION_PREFIX "@prefix@")
+ set (BASH_COMPLETION_COMPATDIR "@compatdir@")
+-set (BASH_COMPLETION_COMPLETIONSDIR "@pkgdatadir@/completions")
+-set (BASH_COMPLETION_HELPERSDIR "@pkgdatadir@/helpers")
++set (BASH_COMPLETION_COMPLETIONSDIR "@datarootdir@/@PACKAGE@/completions")
++set (BASH_COMPLETION_HELPERSDIR "@datarootdir@/@PACKAGE@/helpers")
+ 
+ set (BASH_COMPLETION_FOUND "TRUE")
+diff --git a/bash-completion.pc.in b/bash-completion.pc.in
+index ea03fd75..bde217db 100644
+--- a/bash-completion.pc.in
++++ b/bash-completion.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
+ compatdir=@compatdir@
+-completionsdir=@pkgdatadir@/completions
+-helpersdir=@pkgdatadir@/helpers
++completionsdir=@datarootdir@/@PACKAGE@/completions
++helpersdir=@datarootdir@/@PACKAGE@/helpers
+ 
+ Name: bash-completion
+ Description: programmable completion for the bash shell
+diff --git a/configure.ac b/configure.ac
+index 1f3b37e8..a216d9b7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -13,5 +13,8 @@ helpers/Makefile
+ test/Makefile
+ test/t/Makefile
+ test/t/unit/Makefile
++bash-completion.pc
++bash-completion-config.cmake
++bash-completion-config-version.cmake
+ ])
+ AC_OUTPUT
+-- 
+2.21.0
+

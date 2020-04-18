@@ -1,0 +1,41 @@
+diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
+index 4b432785..fa45e87e 100644
+--- a/src/dist/component/package.rs
++++ b/src/dist/component/package.rs
+@@ -109,10 +109,11 @@ impl Package for DirectoryPackage {
+             match &*part.0 {
+                 "file" => {
+                     if self.copy {
+-                        builder.copy_file(path.clone(), &src_path)?
++                        builder.copy_file(path.clone(), &src_path)?;
+                     } else {
+-                        builder.move_file(path.clone(), &src_path)?
++                        builder.move_file(path.clone(), &src_path)?;
+                     }
++                    nix_patchelf_if_needed(&target.prefix().path().join(path.clone()), &src_path)
+                 }
+                 "dir" => {
+                     if self.copy {
+@@ -135,6 +136,22 @@ impl Package for DirectoryPackage {
+     }
+ }
+ 
++fn nix_patchelf_if_needed(dest_path: &Path, src_path: &Path) {
++    let is_bin = if let Some(p) = src_path.parent() {
++        p.ends_with("bin")
++    } else {
++        false
++    };
++
++    if is_bin {
++        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++            .arg("--set-interpreter")
++            .arg("@dynamicLinker@")
++            .arg(dest_path)
++            .output();
++    }
++}
++
+ #[derive(Debug)]
+ pub struct TarPackage<'a>(DirectoryPackage, temp::Dir<'a>);
+ 

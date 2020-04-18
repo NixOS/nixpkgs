@@ -1,0 +1,204 @@
+diff --git a/doc/icedax/tracknames.pl b/doc/icedax/tracknames.pl
+old mode 100755
+new mode 100644
+index 09f0fcf..801b89e
+--- a/doc/icedax/tracknames.pl
++++ b/doc/icedax/tracknames.pl
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/perl 
++#!/usr/bin/perl 
+ # A quick perl hack to get rename files pulled in with icedax.
+ # by billo@billo.com
+ #
+diff --git a/genisoimage/eltorito.c b/genisoimage/eltorito.c
+index b97bdf1..5d7c2d1 100644
+--- a/genisoimage/eltorito.c
++++ b/genisoimage/eltorito.c
+@@ -59,7 +59,7 @@ static	void	get_torito_desc(struct eltorito_boot_descriptor *boot_desc);
+ static	void	fill_boot_desc(struct eltorito_defaultboot_entry *boot_desc_entry,
+ 										struct eltorito_boot_entry_info *boot_entry);
+ void	get_boot_entry(void);
+-void	new_boot_entry(void);
++void	new_boot_entry();
+ static	int	tvd_write(FILE *outfile);
+ 
+ 
+@@ -283,6 +283,7 @@ get_torito_desc(struct eltorito_boot_descriptor *boot_desc)
+ 	int			i;
+ 	int			offset;
+ 	struct eltorito_defaultboot_entry boot_desc_record;
++	struct eltorito_sectionheader_entry section_header;
+ 
+ 	memset(boot_desc, 0, sizeof (*boot_desc));
+ 	boot_desc->type[0] = 0;
+@@ -317,7 +318,7 @@ get_torito_desc(struct eltorito_boot_descriptor *boot_desc)
+ 	 */
+ 	memset(&valid_desc, 0, sizeof (valid_desc));
+ 	valid_desc.headerid[0] = 1;
+-	valid_desc.arch[0] = EL_TORITO_ARCH_x86;
++	valid_desc.arch[0] = first_boot_entry->arch;
+ 
+ 	/*
+ 	 * we'll shove start of publisher id into id field,
+@@ -347,10 +348,53 @@ get_torito_desc(struct eltorito_boot_descriptor *boot_desc)
+ 	/* now write it to the virtual boot catalog */
+ 	memcpy(de2->table, &valid_desc, 32);
+ 
+-	for (current_boot_entry = first_boot_entry, offset = sizeof (valid_desc);
+-		current_boot_entry != NULL;
+-		current_boot_entry = current_boot_entry->next,
+-		offset += sizeof (boot_desc_record)) {
++	/* Fill the first entry, since it's special and already has the
++	 * matching header via the validation header... */
++	offset = sizeof (valid_desc);
++	current_boot_entry = first_boot_entry;
++
++	if (offset >= SECTOR_SIZE) {
++#ifdef	USE_LIBSCHILY
++		comerrno(EX_BAD, "Too many El Torito boot entries\n");
++#else
++		fprintf(stderr,	"Too many El Torito boot entries\n");
++		exit(1);
++#endif
++	}
++	fill_boot_desc(&boot_desc_record, current_boot_entry);
++	memcpy(de2->table + offset, &boot_desc_record,
++				sizeof (boot_desc_record));
++
++	offset += sizeof(boot_desc_record);
++
++	for (current_boot_entry = current_boot_entry->next;
++			current_boot_entry != NULL;
++			current_boot_entry = current_boot_entry->next) {
++		struct eltorito_sectionheader_entry section_header;
++
++		if (offset >= SECTOR_SIZE) {
++#ifdef	USE_LIBSCHILY
++			comerrno(EX_BAD,
++			"Too many El Torito boot entries\n");
++#else
++			fprintf(stderr,
++			"Too many El Torito boot entries\n");
++			exit(1);
++#endif
++		}
++
++		memset(&section_header, '\0', sizeof(section_header));
++		if (current_boot_entry->next)
++			section_header.headerid[0] = EL_TORITO_SECTION_HEADER;
++		else
++			section_header.headerid[0] = EL_TORITO_LAST_SECTION_HEADER;
++
++		section_header.arch[0] = current_boot_entry->arch;
++		set_721(section_header.num_entries, 1);
++
++		memcpy(de2->table + offset, &section_header,
++					sizeof(section_header));
++		offset += sizeof(section_header);
+ 
+ 		if (offset >= SECTOR_SIZE) {
+ #ifdef	USE_LIBSCHILY
+@@ -365,6 +409,8 @@ get_torito_desc(struct eltorito_boot_descriptor *boot_desc)
+ 		fill_boot_desc(&boot_desc_record, current_boot_entry);
+ 		memcpy(de2->table + offset, &boot_desc_record,
+ 					sizeof (boot_desc_record));
++		offset += sizeof (boot_desc_record);
++
+ 	}
+ }/* get_torito_desc(... */
+ 
+diff --git a/genisoimage/genisoimage.c b/genisoimage/genisoimage.c
+index a5b0b46..8add1ac 100644
+--- a/genisoimage/genisoimage.c
++++ b/genisoimage/genisoimage.c
+@@ -47,6 +47,7 @@
+ 
+ #include <mconfig.h>
+ #include "genisoimage.h"
++#include "iso9660.h"
+ #include <errno.h>
+ #include <timedefs.h>
+ #include <fctldefs.h>
+@@ -523,6 +524,8 @@ static const struct ld_option ld_options[] =
+ 	'\0', NULL, "Set debug flag", ONE_DASH},
+ 	{{"eltorito-boot", required_argument, NULL, 'b'},
+ 	'b', "FILE", "Set El Torito boot image name", ONE_DASH},
++	{{"efi-boot", required_argument, NULL, 'e'},
++	'e', "FILE", "Set EFI boot image name", ONE_DASH},
+ 	{{"eltorito-alt-boot", no_argument, NULL, OPTION_ALT_BOOT},
+ 	'\0', NULL, "Start specifying alternative El Torito boot parameters", ONE_DASH},
+ 	{{"sparc-boot", required_argument, NULL, 'B'},
+@@ -1502,6 +1505,7 @@ int main(int argc, char *argv[])
+ 			all_files = 0;
+ 			break;
+ 		case 'b':
++		case 'e':
+ 			do_sort++;		/* We sort bootcat/botimage */
+ 			use_eltorito++;
+ 			boot_image = optarg;	/* pathname of the boot image */
+@@ -1517,6 +1521,10 @@ int main(int argc, char *argv[])
+ #endif
+ 			}
+ 			get_boot_entry();
++			if (c == 'e')
++				current_boot_entry->arch = EL_TORITO_ARCH_EFI;
++			else
++				current_boot_entry->arch = EL_TORITO_ARCH_x86;
+ 			current_boot_entry->boot_image = boot_image;
+ 			break;
+ 		case OPTION_ALT_BOOT:
+diff --git a/genisoimage/genisoimage.h b/genisoimage/genisoimage.h
+index bbedfb0..76e5e21 100644
+--- a/genisoimage/genisoimage.h
++++ b/genisoimage/genisoimage.h
+@@ -293,6 +293,7 @@ struct deferred_write {
+ struct eltorito_boot_entry_info {
+ 	struct eltorito_boot_entry_info *next;
+ 	char		*boot_image;
++	char		arch;
+ 	int		not_bootable;
+ 	int		no_emul_boot;
+ 	int		hard_disk_boot;
+diff --git a/genisoimage/iso9660.h b/genisoimage/iso9660.h
+index c74c2a9..c8b7a05 100644
+--- a/genisoimage/iso9660.h
++++ b/genisoimage/iso9660.h
+@@ -62,10 +62,14 @@ struct iso_volume_descriptor {
+ #define	EL_TORITO_ARCH_x86	0
+ #define	EL_TORITO_ARCH_PPC	1
+ #define	EL_TORITO_ARCH_MAC	2
++#define	EL_TORITO_ARCH_EFI	0xef
+ 
+ #define	EL_TORITO_BOOTABLE	0x88
+ #define	EL_TORITO_NOT_BOOTABLE	0
+ 
++#define	EL_TORITO_SECTION_HEADER	0x90
++#define	EL_TORITO_LAST_SECTION_HEADER	0x91
++
+ #define	EL_TORITO_MEDIA_NOEMUL	0
+ #define	EL_TORITO_MEDIA_12FLOP	1
+ #define	EL_TORITO_MEDIA_144FLOP	2
+@@ -173,7 +177,7 @@ struct eltorito_validation_entry {
+ struct eltorito_defaultboot_entry {
+ 	char boot_id			[ISODCL(1,    1)]; /* 711 */
+ 	char boot_media			[ISODCL(2,    2)];
+-	char loadseg			[ISODCL(3,    4)]; /* 711 */
++	char loadseg			[ISODCL(3,    4)]; /* 712 */
+ 	char sys_type			[ISODCL(5,    5)];
+ 	char pad1			[ISODCL(6,    6)];
+ 	char nsect			[ISODCL(7,    8)];
+@@ -181,6 +185,14 @@ struct eltorito_defaultboot_entry {
+ 	char pad2			[ISODCL(13,  32)];
+ };
+ 
++/* El Torito Section Header Entry in boot catalog */
++struct eltorito_sectionheader_entry {
++	char headerid			[ISODCL(1,    1)]; /* 711 */
++	char arch			[ISODCL(2,    2)];
++	char num_entries		[ISODCL(3,    4)]; /* 711 */
++	char id				[ISODCL(5,   32)];
++};
++
+ /*
+  * XXX JS: The next two structures have odd lengths!
+  * Some compilers (e.g. on Sun3/mc68020) padd the structures to even length.

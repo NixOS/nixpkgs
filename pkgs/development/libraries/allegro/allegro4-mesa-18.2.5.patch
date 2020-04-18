@@ -1,0 +1,26 @@
+--- a/addons/allegrogl/include/alleggl.h
++++ b/addons/allegrogl/include/alleggl.h
+@@ -63,9 +63,11 @@ typedef __int64 INT64;
+ /* HACK: Prevent both Mesa and SGI's broken headers from screwing us */
+ #define __glext_h_
+ #define __glxext_h_
++#define __glx_glxext_h_
+ #include <GL/gl.h>
+ #undef  __glext_h_
+ #undef  __glxext_h_
++#undef  __glx_glxext_h_
+ 
+ #endif /* ALLEGRO_MACOSX */
+ 
+--- a/addons/allegrogl/include/allegrogl/GLext/glx_ext_defs.h
++++ b/addons/allegrogl/include/allegrogl/GLext/glx_ext_defs.h
+@@ -1,7 +1,9 @@
+ /* HACK: Prevent both Mesa and SGI's broken headers from screwing us */
+ #define __glxext_h_
++#define __glx_glxext_h_
+ #include <GL/glx.h>
+ #undef __glxext_h_
++#undef __glx_glxext_h_
+ 
+ #ifndef GLX_VERSION_1_3
+ #define AGLX_VERSION_1_3
