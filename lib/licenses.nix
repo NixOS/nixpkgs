@@ -2,7 +2,7 @@
 let
 
   spdx = lic: lic // {
-    url = "http://spdx.org/licenses/${lic.spdxId}.html";
+    url = "https://spdx.org/licenses/${lic.spdxId}.html";
   };
 
 in
@@ -40,13 +40,13 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
 
   amazonsl = {
     fullName = "Amazon Software License";
-    url = "http://aws.amazon.com/asl/";
+    url = "https://aws.amazon.com/asl/";
     free = false;
   };
 
   amd = {
     fullName = "AMD License Agreement";
-    url = "http://developer.amd.com/amd-license-agreement/";
+    url = "https://developer.amd.com/amd-license-agreement/";
     free = false;
   };
 
@@ -230,7 +230,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
 
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
-    url = "http://avasys.jp/hp/menu000000700/hpg000000603.htm";
+    url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
     free = false;
   };
 
@@ -293,7 +293,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
 
   ffsl = {
     fullName = "Floodgap Free Software License";
-    url = "http://www.floodgap.com/software/ffsl/license.html";
+    url = "https://www.floodgap.com/software/ffsl/license.html";
     free = false;
   };
 
@@ -370,7 +370,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   # Intel's license, seems free
   iasl = {
     fullName = "iASL";
-    url = "http://www.calculate-linux.org/packages/licenses/iASL";
+    url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
 
   ijg = spdx {
@@ -385,13 +385,13 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
 
   inria-compcert = {
     fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
-    url       = "http://compcert.inria.fr/doc/LICENSE";
+    url       = "http://compcert.inria.fr/doc/LICENSE"; # https is broken
     free      = false;
   };
 
   inria-icesl = {
     fullName = "INRIA Non-Commercial License Agreement for IceSL";
-    url      = "http://shapeforge.loria.fr/icesl/EULA_IceSL_binary.pdf";
+    url      = "http://shapeforge.loria.fr/icesl/EULA_IceSL_binary.pdf"; # https is broken
     free     = false;
   };
 
@@ -469,7 +469,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
 
   llgpl21 = {
     fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
-    url = "http://opensource.franz.com/preamble.html";
+    url = "https://opensource.franz.com/preamble.html";
   };
 
   lppl12 = spdx {
@@ -493,7 +493,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   };
 
   # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see http://en.wikipedia.org/wiki/MIT_License#Various_versions
+  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = spdx {
     spdxId = "MIT";
     fullName = "MIT License";
@@ -596,7 +596,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   psfl = spdx {
     spdxId = "Python-2.0";
     fullName = "Python Software Foundation License version 2";
-    #url = "http://docs.python.org/license.html";
+    url = "https://docs.python.org/license.html";
   };
 
   publicDomain = {
@@ -620,7 +620,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
 
   qwt = {
     fullName = "Qwt License, Version 1.0";
-    url = "http://qwt.sourceforge.net/qwtlicense.html";
+    url = "https://qwt.sourceforge.io/qwtlicense.html";
   };
 
   ruby = spdx {
@@ -646,7 +646,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   smail = {
     shortName = "smail";
     fullName = "SMAIL General Public License";
-    url = "http://metadata.ftp-master.debian.org/changelogs/main/d/debianutils/debianutils_4.8.1_copyright";
+    url = "https://sources.debian.org/copyright/license/debianutils/4.9.1/";
   };
 
   sspl = {
@@ -663,7 +663,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
 
   ufl = {
     fullName = "Ubuntu Font License 1.0";
-    url = "http://font.ubuntu.com/ufl/ubuntu-font-licence-1.0.txt";
+    url = "https://ubuntu.com/legal/font-licence";
   };
 
   unfree = {
@@ -740,7 +740,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
 
   xfig = {
     fullName = "xfig";
-    url = "http://mcj.sourceforge.net/authors.html#xfig";
+    url = "http://mcj.sourceforge.net/authors.html#xfig"; # https is broken
   };
 
   zlib = spdx {
