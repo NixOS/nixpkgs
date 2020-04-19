@@ -45,6 +45,12 @@ self: super: {
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
+  # http://bugs.darcs.net/issue2642
+  darcs = doJailbreak (appendPatches super.darcs [
+    ./patches/darcs-setup.patch
+    ./patches/darcs-2.14.2-Compile-against-GHC-8.8.patch
+  ]);
+
   # Tests are failing
   # https://github.com/bos/statistics/issues/123
   statistics = dontCheck super.statistics;
@@ -1498,9 +1504,6 @@ self: super: {
     # version of Polysemy the plugin goes with
     polysemy = self.polysemy_1_3_0_0;
   };
-
-  # Fixed at head, but hasn't cut a release in awhile.
-  darcs = doJailbreak super.darcs;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql-pool = dontCheck super.hasql-pool;
