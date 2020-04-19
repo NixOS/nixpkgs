@@ -3,10 +3,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "gigolo";
-  version = "0.5.0";
+  version = "0.5.1";
   odd-unstable = false;
 
-  sha256 = "1lqsxb0d5i8p9vbzx8s4p3rga7va5h1q146xgmsa41j5v40wrlw6";
+  sha256 = "11a35z5apr26nl6fpmbsvvv3xf5w61sgzcb505plavrchpfbdxjn";
 
   nativeBuildInputs = [ exo ];
   buildInputs = [ gtk3 glib gvfs ];

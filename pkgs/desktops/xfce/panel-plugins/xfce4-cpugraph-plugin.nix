@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, exo, libXtst, xorgproto, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk2, hicolor-icon-theme, xfce }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, exo, libXtst, xorgproto, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, hicolor-icon-theme, xfce }:
 
 let
   category = "panel-plugins";
@@ -6,16 +6,31 @@ in
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-cpugraph-plugin";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1izl53q95m5xm2fiq7385vb1i9nwgjizxkmgpgh33zdckb40xnl5";
+    sha256 = "193bj1p54l4zrvgdjj0pvjn161d6dn82jh9invcy09sqwlj0mkiy";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool glib exo libXtst xorgproto libxfce4util libxfce4ui xfce4-panel xfconf gtk2 hicolor-icon-theme ];
-  
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+  ];
+
+  buildInputs = [
+    glib
+    exo
+    libXtst
+    xorgproto
+    libxfce4util
+    libxfce4ui
+    xfce4-panel
+    xfconf
+    gtk3
+    hicolor-icon-theme
+  ];
+
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.${pname}";
@@ -23,8 +38,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://goodies.xfce.org/projects/panel-plugins/${pname}";
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-cpugraph-plugin";
     description = "CPU graph show for Xfce panel";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];
   };
