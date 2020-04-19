@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, audit
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
   ] ++ optionals stdenv.isLinux [
     libpciaccess lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl attr parted
+    libapparmor audit libcap_ng numactl attr parted
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
   ] ++ optionals enableIscsi [
@@ -81,6 +81,7 @@ in stdenv.mkDerivation rec {
     "--with-attr"
     "--with-apparmor"
     "--with-secdriver-apparmor"
+    "--with-audit"
     "--with-numad"
     "--with-macvtap"
     "--with-virtualport"
