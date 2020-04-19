@@ -23609,10 +23609,7 @@ in
 
   openclonk = callPackage ../games/openclonk { };
 
-  openjk = callPackage ../games/openjk {
-    # segfaults when built with gcc9
-    stdenv = gcc8Stdenv;
-  };
+  openjk = callPackage ../games/openjk { };
 
   openmw = libsForQt5.callPackage ../games/openmw { };
 
