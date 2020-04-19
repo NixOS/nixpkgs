@@ -22,6 +22,6 @@ buildPythonPackage rec {
     homepage = "http://www.libvirt.org/";
     description = "libvirt Python bindings";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.fpletz ];
+    maintainers = with maintainers [ fpletz kmcopper ];
   };
 }
