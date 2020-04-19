@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchgit, pkgconfig, lxml, libvirt, nose }:
+{ stdenv, python3Packages, fetchgit, pkgconfig, lxml, libvirt, nose }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "libvirt";
   version = "6.2.0";
 

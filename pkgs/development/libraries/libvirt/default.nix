@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit
 , pkgconfig, makeWrapper, autoreconfHook, fetchpatch
-, coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
+, coreutils, libxml2, gnutls, perl, python3, attr, glib, docutils
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkgconfig docutils ] ++ optionals (!buildFromTarball) [ autoreconfHook ];
   buildInputs = [
-    libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
+    libxml2 gnutls perl python3 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
   ] ++ optionals stdenv.isLinux [
     libpciaccess lvm2 utillinux systemd libnl numad zfs
