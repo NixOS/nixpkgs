@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "A simple and modern sound recorder";
     homepage = "https://wiki.gnome.org/Apps/SoundRecorder";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

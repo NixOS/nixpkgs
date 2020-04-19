@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, meson, ninja, pkgconfig, python3, wrapGAppsHook
-, glib, pipewire, systemd, libvncserver, libsecret, libnotify, gdk-pixbuf, gnome3 }:
+, glib, pipewire, systemd, libvncserver, libsecret, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Projects/Mutter/RemoteDesktop";
     description = "GNOME Remote Desktop server";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

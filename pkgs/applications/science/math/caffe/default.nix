@@ -9,7 +9,7 @@
 , opencv3
 , protobuf
 , doxygen
-, openblas
+, blas
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
       ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 openblas ]
+  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 blas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb

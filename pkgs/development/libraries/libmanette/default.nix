@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "A simple GObject game controller library";
     homepage = "https://gitlab.gnome.org/aplazas/libmanette";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

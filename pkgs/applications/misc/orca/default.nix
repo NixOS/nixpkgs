@@ -110,7 +110,7 @@ buildPythonApplication rec {
 
       Needs `services.gnome3.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with maintainers; [ berce ] ++ gnome3.maintainers;
+    maintainers = with maintainers; [ berce ] ++ teams.gnome.members;
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

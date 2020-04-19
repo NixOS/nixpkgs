@@ -6,13 +6,15 @@
 , lib
 
 # package customization
+# Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
 , channel ? "stable"
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
-, useVaapi ? false # test video on radeon, before enabling this
+, useVaapi ? false # Deprecated, use enableVaapi instead!
+, enableVaapi ? false # Disabled by default due to unofficial support and issues on radeon
 , useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
@@ -33,7 +35,7 @@ let
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix ({
-      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useVaapi useOzone;
+      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useOzone;
       gnChromium = gn;
     } // lib.optionalAttrs (channel != "stable") {
       # TODO: Remove after we can update gn for the stable channel (backward incompatible changes):
@@ -127,6 +129,14 @@ let
         cp -a ${widevineCdm}/WidevineCdm $out/libexec/chromium/
       ''
     else browser;
+
+  optionalVaapiFlags = if useVaapi # TODO: Remove after 20.09:
+    then throw ''
+      Chromium's useVaapi was replaced by enableVaapi and you don't need to pass
+      "--ignore-gpu-blacklist" anymore (also no rebuilds are required anymore).
+    '' else lib.optionalString
+      (!enableVaapi)
+      "--add-flags --disable-accelerated-video-decode --add-flags --disable-accelerated-video-encode";
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
@@ -146,15 +156,14 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
-    libPath = stdenv.lib.makeLibraryPath ([]
-      ++ stdenv.lib.optional useVaapi libva
-    );
+    libPath = stdenv.lib.makeLibraryPath [ libva ];
 
   in with stdenv.lib; ''
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
+      ${optionalVaapiFlags} \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ed -v -s "$out/bin/chromium" << EOF

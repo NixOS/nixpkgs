@@ -120,13 +120,8 @@ self: super: {
   # Depends on broken "hails" package.
   hails-bin = dontDistribute super.hails-bin;
 
-  # Switch levmar build to openblas.
   bindings-levmar = overrideCabal super.bindings-levmar (drv: {
-    preConfigure = ''
-      sed -i bindings-levmar.cabal \
-          -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
-    '';
-    extraLibraries = [ pkgs.openblasCompat ];
+    extraLibraries = [ pkgs.blas ];
   });
 
   # The Haddock phase fails for one reason or another.

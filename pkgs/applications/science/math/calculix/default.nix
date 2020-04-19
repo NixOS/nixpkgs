@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, arpack, spooles, openblas }:
+{ stdenv, fetchurl, gfortran, arpack, spooles, blas, lapack }:
 
 stdenv.mkDerivation rec {
   pname = "calculix";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gfortran ];
 
-  buildInputs = [ arpack spooles openblas ];
+  buildInputs = [ arpack spooles blas lapack ];
 
   NIX_CFLAGS_COMPILE = "-I${spooles}/include/spooles";
 

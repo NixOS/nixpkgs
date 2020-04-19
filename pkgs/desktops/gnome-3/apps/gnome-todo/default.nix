@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     description = "Personal task manager for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Todo";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

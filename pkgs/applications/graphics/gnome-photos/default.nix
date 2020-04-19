@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     description = "Access, organize and share your photos";
     homepage = "https://wiki.gnome.org/Apps/Photos";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = with platforms; linux ++ darwin;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

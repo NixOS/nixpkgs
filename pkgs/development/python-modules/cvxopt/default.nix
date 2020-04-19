@@ -4,7 +4,7 @@
 , fetchPypi
 , isPyPy
 , python
-, openblasCompat # build segfaults with regular openblas
+, blas, lapack # build segfaults with 64-bit blas
 , suitesparse
 , glpk ? null
 , gsl ? null
@@ -13,6 +13,8 @@
 , withGsl ? true
 , withFftw ? true
 }:
+
+assert (!blas.is64bit) && (!lapack.is64bit);
 
 buildPythonPackage rec {
   pname = "cvxopt";
@@ -25,12 +27,13 @@ buildPythonPackage rec {
     sha256 = "1h9g79gxpgpy6xciqyypihw5q4ngp322lpkka1nkwk0ysybfsp7s";
   };
 
+  buildInputs = [ blas lapack ];
+
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
   preConfigure = ''
-    export CVXOPT_BLAS_LIB_DIR=${openblasCompat}/lib
-    export CVXOPT_BLAS_LIB=openblas
-    export CVXOPT_LAPACK_LIB=openblas
+    export CVXOPT_BLAS_LIB=blas
+    export CVXOPT_LAPACK_LIB=lapack
     export CVXOPT_SUITESPARSE_LIB_DIR=${lib.getLib suitesparse}/lib
     export CVXOPT_SUITESPARSE_INC_DIR=${lib.getDev suitesparse}/include
   '' + lib.optionalString withGsl ''

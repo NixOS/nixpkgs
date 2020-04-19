@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig python3 meson ninja glib ];
 
   meta = with stdenv.lib; {
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

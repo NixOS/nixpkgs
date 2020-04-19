@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Classic falling-block game, Tetris";
     homepage = "https://wiki.gnome.org/Apps/Quadrapassel";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

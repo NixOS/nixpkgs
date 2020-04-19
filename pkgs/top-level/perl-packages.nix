@@ -16811,7 +16811,7 @@ let
       sha256 = "f98a10c625640170cdda408cccc72bdd7f66f8ebe5f59dec1b96185171ef11d0";
     };
     meta = {
-      #homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/; # berlios shut down; I found no replacement
+      #homepage = "http://web-cpan.berlios.de/modules/Statistics-Descriptive/"; # berlios shut down; I found no replacement
       description = "Module of basic descriptive statistical functions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };

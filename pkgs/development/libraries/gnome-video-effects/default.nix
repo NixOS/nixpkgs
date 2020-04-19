@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "A collection of GStreamer effects to be used in different GNOME Modules";
     homepage = "https://wiki.gnome.org/Projects/GnomeVideoEffects";
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
   };
 }

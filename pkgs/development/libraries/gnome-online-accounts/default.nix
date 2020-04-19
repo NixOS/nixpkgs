@@ -100,6 +100,6 @@ stdenv.mkDerivation rec {
     description = "Single sign-on framework for GNOME";
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

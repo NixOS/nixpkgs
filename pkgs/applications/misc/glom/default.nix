@@ -28,7 +28,6 @@
 , isocodes
 , gtksourceviewmm4
 , postgresql
-, gnome3
 , gobject-introspection
 , yelp-tools
 , wrapGAppsHook
@@ -127,7 +126,7 @@ in stdenv.mkDerivation rec {
     description = "An easy-to-use database designer and user interface";
     homepage = "http://www.glom.org/";
     license = [ licenses.lgpl2 licenses.gpl2 ];
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

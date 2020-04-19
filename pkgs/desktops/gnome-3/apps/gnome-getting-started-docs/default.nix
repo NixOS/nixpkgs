@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://live.gnome.org/DocumentationProject";
     description = "Help a new user get started in GNOME";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.cc-by-sa-30;
     platforms = platforms.linux;
   };

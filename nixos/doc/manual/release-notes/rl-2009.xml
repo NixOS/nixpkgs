@@ -203,6 +203,15 @@ environment.systemPackages = [
       <link xlink:href="https://github.com/gollum/gollum/wiki/5.0-release-notes#migrating-your-wiki">here</link>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Deluge 2.x was added and is used as default for new NixOS
+       installations where stateVersion is >= 20.09. If you are upgrading from a previous
+       NixOS version, you can set <literal>service.deluge.package = pkgs.deluge-2_x</literal>
+       to upgrade to Deluge 2.x and migrate the state to the new format.
+       Be aware that backwards state migrations are not supported by Deluge.
+     </para>
+   </listitem>
 
    <listitem>
     <para>

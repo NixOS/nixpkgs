@@ -44,7 +44,7 @@ buildPythonApplication {
       A graphical pdf (and epub, cbz, ...) reader that works
       inside the kitty terminal.
     '';
-    homepage = https://github.com/dsanson/termpdf.py;
+    homepage = "https://github.com/dsanson/termpdf.py";
     maintainers = with maintainers; [ teto ];
     license = licenses.mit;
   };

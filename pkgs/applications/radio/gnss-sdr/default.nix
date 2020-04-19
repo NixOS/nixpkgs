@@ -12,7 +12,7 @@
 , pythonPackages
 , uhd
 , log4cpp
-, openblas
+, blas, lapack
 , matio
 , pugixml
 , protobuf
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     # nothing to be gained by leaving it out.
     uhd
     log4cpp
-    openblas
+    blas lapack
     matio
     pugixml
     protobuf
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
     # armadillo is built using both, so skip checking for them.
     "-DBLAS=YES"
     "-DLAPACK=YES"
-    "-DBLAS_LIBRARIES=-lopenblas"
-    "-DLAPACK_LIBRARIES=-lopenblas"
+    "-DBLAS_LIBRARIES=-lblas"
+    "-DLAPACK_LIBRARIES=-llapack"
 
     # Similarly, it doesn't actually use gfortran despite checking for
     # its presence.

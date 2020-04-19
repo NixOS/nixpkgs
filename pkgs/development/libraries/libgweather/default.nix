@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "A library to access weather information from online services for numerous locations";
     homepage = "https://wiki.gnome.org/Projects/LibGWeather";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }
