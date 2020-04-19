@@ -430,16 +430,6 @@ in
         '';
       };
 
-      buildLocation = mkOption {
-        type = types.str;
-        default = "/tmp";
-        example = "/var/buildroot";
-        description = ''
-          Temporary directory, which used to unpack and build source packages.
-          (by default <filename>/tmp</filename> is used, which commonly reside on tmpfs,
-          and big packages (like browsers) can just not fit there)
-        '';
-      };
     };
 
   };
@@ -486,9 +476,7 @@ in
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars
-          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
-               TMPDIR = cfg.buildLocation;
-             }
+          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt"; }
           // config.networking.proxy.envVars;
 
         unitConfig.RequiresMountsFor = "/nix/store";
@@ -501,8 +489,6 @@ in
 
         restartTriggers = [ nixConf ];
       };
-
-    systemd.tmpfiles.rules = [ "d ${cfg.buildLocation} 0775 root root -" ];
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
