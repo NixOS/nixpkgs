@@ -26,7 +26,7 @@ let
       scm_mercurial_command: ${pkgs.mercurial}/bin/hg
       scm_git_command: ${pkgs.gitAndTools.git}/bin/git
       scm_cvs_command: ${pkgs.cvs}/bin/cvs
-      scm_bazaar_command: ${pkgs.bazaar}/bin/bzr
+      scm_bazaar_command: ${pkgs.breezy}/bin/bzr
       scm_darcs_command: ${pkgs.darcs}/bin/darcs
 
     ${cfg.extraConfig}
@@ -297,7 +297,7 @@ in
       environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
         imagemagick
-        bazaar
+        breezy
         cvs
         darcs
         gitAndTools.git

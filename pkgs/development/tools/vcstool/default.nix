@@ -1,5 +1,5 @@
 { stdenv, python3Packages
-, git, bazaar, subversion }:
+, git, breezy, subversion }:
 
 with python3Packages;
 
@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pyyaml setuptools ];
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ git bazaar subversion ])];
+  makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ git breezy subversion ])];
 
   doCheck = false; # requires network
 
