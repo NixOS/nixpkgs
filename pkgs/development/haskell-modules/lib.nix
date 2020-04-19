@@ -86,6 +86,11 @@ rec {
      future.
 
      Instead of jailbreaking, you can patch the cabal file.
+     
+     Note that jailbreaking at this time, doesn't lift bounds on
+     conditional branches. 
+     https://github.com/peti/jailbreak-cabal/issues/7 has further details.
+     
    */
   doJailbreak = drv: overrideCabal drv (drv: { jailbreak = true; });
 
