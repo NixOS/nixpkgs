@@ -39,10 +39,10 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2]}"
-    "--prefix PATH : ${mlt}/bin"
-    ];
+    "--prefix" "FREI0R_PATH" ":" "${frei0r}/lib/frei0r-1"
+    "--prefix" "LD_LIBRARY_PATH" ":" (stdenv.lib.makeLibraryPath [jack1 SDL2])
+    "--prefix" "PATH" ":" "${mlt}/bin"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/shotcut

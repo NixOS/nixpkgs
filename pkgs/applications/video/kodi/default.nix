@@ -178,7 +178,7 @@ in stdenv.mkDerivation {
       lirc
       # libdvdcss libdvdnav libdvdread
     ]
-    ++ lib.optional x11Support [
+    ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext libXdmcp
       libXinerama libXrandr libXtst libXfixes
     ]
@@ -196,7 +196,7 @@ in stdenv.mkDerivation {
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
     ]
-    ++ lib.optional useGbm [
+    ++ lib.optionals useGbm [
       libxkbcommon.dev
       mesa.dev
       libinput.dev
@@ -231,11 +231,11 @@ in stdenv.mkDerivation {
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python2Packages.python}/bin/python"
-    ] ++ lib.optional useWayland [
+    ] ++ lib.optionals useWayland [
       "-DCORE_PLATFORM_NAME=wayland"
       "-DWAYLAND_RENDER_SYSTEM=gl"
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
-    ] ++ lib.optional useGbm [
+    ] ++ lib.optionals useGbm [
       "-DCORE_PLATFORM_NAME=gbm"
       "-DGBM_RENDER_SYSTEM=gles"
     ];

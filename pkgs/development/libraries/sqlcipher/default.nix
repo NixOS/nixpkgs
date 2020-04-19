@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-threadsafe" "--disable-tcl" ];
 
-  CFLAGS = [ "-DSQLITE_ENABLE_COLUMN_METADATA=1" "-DSQLITE_SECURE_DELETE=1" "-DSQLITE_ENABLE_UNLOCK_NOTIFY=1" "-DSQLITE_HAS_CODEC" ];
-  LDFLAGS = lib.optional (readline != null) "-lncurses";
+  env.CFLAGS = "-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_HAS_CODEC";
+  env.LDFLAGS = lib.optionalString (readline != null) "-lncurses";
 
   doCheck = false; # fails. requires tcl?
 

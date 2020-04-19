@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     + lib.optionalString withManual "sphinx";
 
   # to prevent fatal error: 'backward_warning.h' file not found
-  CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
+  env.CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
   postBuild = with stdenv.lib; let flags = concatStringsSep ";" (
       optional enableDoxygen "./waf doxygen"

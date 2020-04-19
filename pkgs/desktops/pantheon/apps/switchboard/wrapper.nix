@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = lib.forEach selectedPlugs (x: x.buildInputs)
-    ++ selectedPlugs;
+  buildInputs = lib.flatten (lib.forEach selectedPlugs (x: x.buildInputs)
+    ++ selectedPlugs);
 
   dontUnpack = true;
   dontConfigure = true;

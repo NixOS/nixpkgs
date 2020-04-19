@@ -174,12 +174,12 @@ let
     ];
 
     # arbitrarily set to the current latest bazel version, overly careful
-    TF_IGNORE_MAX_BAZEL_VERSION = true;
+    env.TF_IGNORE_MAX_BAZEL_VERSION = true;
 
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
     # https://github.com/tensorflow/tensorflow/blob/master/third_party/systemlibs/syslibs_configure.bzl
-    TF_SYSTEM_LIBS = lib.concatStringsSep "," [
+    env.TF_SYSTEM_LIBS = lib.concatStringsSep "," [
       "absl_py"
       "astor_archive"
       "boringssl"
@@ -215,24 +215,24 @@ let
       "zlib_archive"
     ];
 
-    INCLUDEDIR = "${includes_joined}/include";
+    env.INCLUDEDIR = "${includes_joined}/include";
 
-    PYTHON_BIN_PATH = pythonEnv.interpreter;
+    env.PYTHON_BIN_PATH = toString pythonEnv.interpreter;
 
-    TF_NEED_GCP = true;
-    TF_NEED_HDFS = true;
-    TF_ENABLE_XLA = tfFeature xlaSupport;
+    env.TF_NEED_GCP = true;
+    env.TF_NEED_HDFS = true;
+    env.TF_ENABLE_XLA = tfFeature xlaSupport;
 
-    CC_OPT_FLAGS = " ";
+    env.CC_OPT_FLAGS = " ";
 
     # https://github.com/tensorflow/tensorflow/issues/14454
-    TF_NEED_MPI = tfFeature cudaSupport;
+    env.TF_NEED_MPI = tfFeature cudaSupport;
 
-    TF_NEED_CUDA = tfFeature cudaSupport;
-    TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
-    GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
-    GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
-    TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
+    env.TF_NEED_CUDA = tfFeature cudaSupport;
+    env.TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkit_joined},${cudnn},${nccl}";
+    env.GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
+    env.GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
+    env.TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
 
     postPatch = ''
       # https://github.com/tensorflow/tensorflow/issues/20919
@@ -273,7 +273,7 @@ let
     '';
 
     # FIXME: Tensorflow uses dlopen() for CUDA libraries.
-    NIX_LDFLAGS = lib.optionalString cudaSupport "-lcudart -lcublas -lcufft -lcurand -lcusolver -lcusparse -lcudnn";
+    env.NIX_LDFLAGS = lib.optionalString cudaSupport "-lcudart -lcublas -lcufft -lcurand -lcusolver -lcusparse -lcudnn";
 
     hardeningDisable = [ "format" ];
 

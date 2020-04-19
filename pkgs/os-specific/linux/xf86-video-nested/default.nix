@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "fortify" ];
 
-  CFLAGS = "-I${pixman}/include/pixman-1";
+  env.CFLAGS = "-I${pixman}/include/pixman-1";
 
   meta = {
     homepage = "https://cgit.freedesktop.org/xorg/driver/xf86-video-nested";

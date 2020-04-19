@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libu2f-host libu2f-server pam ];
 
   # Fix the broken include in 1.0.1
-  CFLAGS = "-I${libu2f-host}/include/u2f-host";
+  env.CFLAGS = "-I${libu2f-host}/include/u2f-host";
 
   preConfigure = ''
     configureFlagsArray+=("--with-pam-dir=$out/lib/security")

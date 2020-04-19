@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libunwind gdb pcre];
   nativeBuildInputs = [cmake];
-  CXXFLAGS = ["-fPIC" "-O2" "-w" "-fpermissive"];
+  env.CXXFLAGS = "-fPIC -O2 -w -fpermissive";
 
   meta = {
     description = "The Ignominous Profiler";

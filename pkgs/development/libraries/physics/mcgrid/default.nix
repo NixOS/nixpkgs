@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace "Cflags:" "Cflags: -std=c++11"
   '';
 
-  CXXFLAGS = "-std=c++11";
+  env.CXXFLAGS = "-std=c++11";
   enableParallelBuilding = true;
 
   meta = {

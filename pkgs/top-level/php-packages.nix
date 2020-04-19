@@ -976,7 +976,7 @@ in
         buildInputs = [ libxml2 pcre' ];
         configureFlags = [ "--enable-simplexml" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-libxml-dir=${libxml2.dev}"; }
       { name = "snmp";
         buildInputs = [ net-snmp openssl ];
         configureFlags = [ "--with-snmp" ];
@@ -987,7 +987,7 @@ in
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-soap" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-libxml-dir=${libxml2.dev}";
         doCheck = false; }
       { name = "sockets"; doCheck = false; }
       { name = "sodium"; buildInputs = [ libsodium ]; }
@@ -1007,23 +1007,23 @@ in
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-xml" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-libxml-dir=${libxml2.dev}";
         doCheck = false; }
       { name = "xmlreader";
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-xmlreader" "CFLAGS=-I../.." ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-libxml-dir=${libxml2.dev}"; }
       { name = "xmlrpc";
         buildInputs = [ libxml2 libiconv ];
         configureFlags = [ "--with-xmlrpc" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-libxml-dir=${libxml2.dev}"; }
       { name = "xmlwriter";
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-xmlwriter" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-libxml-dir=${libxml2.dev}"; }
       { name = "xsl";
         buildInputs = [ libxslt libxml2 ];
         doCheck = !(lib.versionOlder php.version "7.4");
@@ -1032,13 +1032,13 @@ in
       { name = "zip";
         buildInputs = [ libzip pcre' ];
         configureFlags = [ "--with-zip" ]
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]
-          ++ lib.optional (lib.versionOlder php.version "7.3") [ "--with-libzip" ];
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-zlib-dir=${zlib.dev}"
+          ++ lib.optional (lib.versionOlder php.version "7.3") "--with-libzip";
         doCheck = false; }
       { name = "zlib";
         buildInputs = [ zlib ];
         configureFlags = [ "--with-zlib" ]
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]; }
+          ++ lib.optional (lib.versionOlder php.version "7.4") "--with-zlib-dir=${zlib.dev}"; }
     ];
 
     # Convert the list of attrs:

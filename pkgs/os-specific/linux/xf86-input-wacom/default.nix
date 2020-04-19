@@ -15,11 +15,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     mkdir -p $out/share/X11/xorg.conf.d
-    configureFlags="--with-xorg-module-dir=$out/lib/xorg/modules
-    --with-sdkdir=$out/include/xorg --with-xorg-conf-dir=$out/share/X11/xorg.conf.d"
+    configureFlags+=(
+      "--with-xorg-module-dir=$out/lib/xorg/modules"
+      "--with-sdkdir=$out/include/xorg"
+      "--with-xorg-conf-dir=$out/share/X11/xorg.conf.d"
+    )
   '';
 
-  CFLAGS = "-I${pixman}/include/pixman-1";
+  env.CFLAGS = "-I${pixman}/include/pixman-1";
 
   meta = with stdenv.lib; {
     maintainers = [ maintainers.goibhniu ];

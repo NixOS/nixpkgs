@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     ./remove-use-of-dlopen.patch
   ];
   buildInputs = [libpulseaudio alsaLib pkgconfig qt5.qtbase];
-  CFLAGS   ="-lasound -lpulse-simple";
+  env.CFLAGS   ="-lasound -lpulse-simple";
 
   meta = with stdenv.lib; {
     description = "sound characters as Morse code on the soundcard or console speaker";

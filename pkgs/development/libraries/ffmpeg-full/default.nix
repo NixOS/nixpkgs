@@ -275,7 +275,6 @@ stdenv.mkDerivation rec {
     # On some ARM platforms --enable-thumb
     "--enable-shared"
     (enableFeature true "pic")
-    (if stdenv.cc.isClang then "--cc=clang" else null)
     (enableFeature smallBuild "small")
     (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
     (enableFeature enableLto "lto")
@@ -283,13 +282,6 @@ stdenv.mkDerivation rec {
     (enableFeature swscaleAlphaBuild "swscale-alpha")
     (enableFeature hardcodedTablesBuild "hardcoded-tables")
     (enableFeature safeBitstreamReaderBuild "safe-bitstream-reader")
-    (if multithreadBuild then (
-       if isCygwin then
-         "--disable-pthreads --enable-w32threads"
-       else # Use POSIX threads by default
-         "--enable-pthreads --disable-w32threads")
-     else
-       "--disable-pthreads --disable-w32threads")
     "--disable-os2threads" # We don't support OS/2
     (enableFeature networkBuild "network")
     (enableFeature pixelutilsBuild "pixelutils")
@@ -411,7 +403,15 @@ stdenv.mkDerivation rec {
     (enableFeature optimizationsDeveloper "optimizations")
     (enableFeature extraWarningsDeveloper "extra-warnings")
     (enableFeature strippingDeveloper "stripping")
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optional stdenv.cc.isClang  "--cc=clang"
+  ++ (if multithreadBuild then (
+       if isCygwin then
+         [ "--disable-pthreads" "--enable-w32threads" ]
+       else # Use POSIX threads by default
+         [ "--enable-pthreads" "--disable-w32threads" ])
+     else
+       [ "--disable-pthreads" "--disable-w32threads" ])
+  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--enable-cross-compile"
   ];

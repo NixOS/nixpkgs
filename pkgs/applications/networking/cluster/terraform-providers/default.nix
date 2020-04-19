@@ -27,7 +27,7 @@ let
   # goPackage derivation so it can install the top-level.
   patchGoModVendor = drv:
     drv.overrideAttrs (attrs: {
-      buildFlags = "-mod=vendor";
+      buildFlags = [ "-mod=vendor" ];
 
       # override configurePhase to not move the source into GOPATH
       configurePhase = ''

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated";
 
   # Disable annoying update reminder
   postPatch = ''

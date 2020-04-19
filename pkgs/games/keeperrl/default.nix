@@ -43,9 +43,7 @@ stdenv.mkDerivation rec {
     openal curl libogg libvorbis SDL2 SDL2_image zlib
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2.dev}/include/SDL2"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
 
   enableParallelBuilding = true;
 

@@ -37,9 +37,7 @@ mkDerivation {
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
   ];
-  CXXFLAGS = [
-    ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
-  ];
+  env.CXXFLAGS = ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"'';
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
   postInstall = ''
     # Some package(s) refer to these service types by the wrong name.

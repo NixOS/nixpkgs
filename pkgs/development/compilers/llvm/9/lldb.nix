@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.Cocoa
   ];
 
-  CXXFLAGS = "-fno-rtti";
+  env.CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [

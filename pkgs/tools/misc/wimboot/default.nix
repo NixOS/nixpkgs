@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "134wqqr147az5vbj4szd0xffwa99b4rar7w33zm3119zsn7sd79k";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-address-of-packed-member"; # Fails on gcc9
+  env.NIX_CFLAGS_COMPILE = "-Wno-address-of-packed-member"; # Fails on gcc9
 
   patches = [
     # Fix for newer binutils

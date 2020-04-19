@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed -i '/#define in_addr_t/ s:^://:' config.h
   '';
 
-  LDFLAGS = "-levent";
+  env.LDFLAGS = "-levent";
 
   configureFlags = [ "--with-libevent" ];
 

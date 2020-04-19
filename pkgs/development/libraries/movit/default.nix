@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  GTEST_DIR = "${gtest.src}/googletest";
+  env.GTEST_DIR = "${gtest.src}/googletest";
 
   propagatedBuildInputs = [ eigen epoxy ];
 

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "00366f2j21b5r4r8310sadf7jjhdr44s0381dhjqkw2nzpwjnhqs";
   };
 
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   nativeBuildInputs = [
     gdal_2 # for gdal-config

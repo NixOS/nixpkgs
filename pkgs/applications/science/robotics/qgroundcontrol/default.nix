@@ -27,7 +27,7 @@ mkDerivation rec {
     cd build
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-address-of-packed-member" ]; # Don't litter logs with these warnings
+  env.NIX_CFLAGS_COMPILE = "-Wno-address-of-packed-member"; # Don't litter logs with these warnings
 
   qmakeFlags = [
     # Default install tries to copy Qt files into package

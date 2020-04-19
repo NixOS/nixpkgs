@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "AVR=avr-"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
 
   nativeBuildInputs = [ which pkgconfig avrgcc ];
   buildInputs = [ libelf freeglut libGLU libGL ]

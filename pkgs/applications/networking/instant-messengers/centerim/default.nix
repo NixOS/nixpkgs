@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0viz86jflp684vfginhl6aaw4gh2qvalc25anlwljjl3kkmibklk";
   };
 
-  CXXFLAGS = "-std=gnu++98";
+  env.CXXFLAGS = "-std=gnu++98";
 
   buildInputs = [ openssl curl ncurses libjpeg ]
     ++ stdenv.lib.optional withGpg gpgme;

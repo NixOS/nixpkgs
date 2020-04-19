@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = optional (!gifview) "--disable-gifview";
 
-  LDFLAGS = optionalString static "-static";
+  env.LDFLAGS = optionalString static "-static";
 
   doCheck = true;
   checkPhase = ''

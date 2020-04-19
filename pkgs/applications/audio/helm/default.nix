@@ -18,7 +18,7 @@
     freetype alsaLib curl libjack2 pkgconfig libGLU libGL lv2
   ];
 
-  CXXFLAGS = "-DHAVE_LROUND";
+  env.CXXFLAGS = "-DHAVE_LROUND";
 
   patchPhase = ''
     sed -i 's|usr/||g' Makefile

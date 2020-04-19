@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  CC = "gcc";
-  CFLAGS = "-std=c99";
+  env.CC = "gcc";
+  env.CFLAGS = "-std=c99";
 
   meta = with stdenv.lib; {
     description = "A console front-end for Pandora.com";

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = stdenv.lib.optional enablePython [
+  propagatedBuildInputs = stdenv.lib.optionals enablePython [
     pythonPackages.numpy
     pythonPackages.cython
     pythonPackages.pytest

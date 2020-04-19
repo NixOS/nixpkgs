@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 alsaLib SDL ];
 
   hardeningDisable = [ "format" ];
-  LDFLAGS = [ "-lm" ];
+  env.LDFLAGS = "-lm";
 
   meta = {
     description = "Ultimate/Unix/Unusable Amiga Emulator";

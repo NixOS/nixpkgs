@@ -17,16 +17,14 @@ in pkgs.stdenv.mkDerivation (
 
     inherit bowerPackages;
 
-    builder = builtins.toFile "builder.sh" ''
-      source $stdenv/setup
-
+    buildCommand = ''
       # The project's bower.json is required
       cp $src/bower.json .
 
       # Dereference symlinks -- bower doesn't like them
       cp  --recursive --reflink=auto       \
           --dereference --no-preserve=mode \
-          $bowerPackages bc
+          "''${bowerPackages[@]}" bc
 
       # Bower install in offline mode -- links together the fetched
       # bower packages.

@@ -50,10 +50,9 @@
 
   nativeBuildInputs = [
     python3
-    (with python3.pkgs; [ beautifulsoup4 markdown ])
     which
     findutils
-  ];
+  ] ++ (with python3.pkgs; [ beautifulsoup4 markdown ]);
 
   meta = with lib; {
     description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo.";

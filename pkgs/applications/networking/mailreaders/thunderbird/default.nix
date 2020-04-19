@@ -143,10 +143,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional waylandSupport libxkbcommon;
 
-  NIX_CFLAGS_COMPILE =[
-    "-I${glib.dev}/include/gio-unix-2.0"
-    "-I${nss.dev}/include/nss"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0 -I${nss.dev}/include/nss";
 
   patches = [
     ./no-buildconfig.patch

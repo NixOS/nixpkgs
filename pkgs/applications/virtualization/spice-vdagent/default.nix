@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "https://www.spice-space.org/download/releases/${name}.tar.bz2";
     sha256 = "0n9k2kna2gd1zi6jv45zsp2jlv439nz5l5jjijirxqaycwi74srf";
   };
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=address-of-packed-member";
   postPatch = ''
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out
   '';

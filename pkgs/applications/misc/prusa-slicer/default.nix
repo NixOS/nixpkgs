@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   # cmake/modules/FindNLopt.cmake in the package source - for finding the nlopt
   # library, which doesn't pick up the package in the nix store.  We
   # additionally need to set the path via the NLOPT environment variable.
-  NLOPT = nlopt;
+  env.NLOPT = toString nlopt;
 
   # Disable compiler warnings that clutter the build log.
   # It seems to be a known issue for Eigen:
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = "-ludev";
+  env.NIX_LDFLAGS = "-ludev";
 
   prePatch = ''
     # In nix ioctls.h isn't available from the standard kernel-headers package

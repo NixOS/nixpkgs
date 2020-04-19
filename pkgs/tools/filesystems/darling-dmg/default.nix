@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse openssl zlib bzip2 libxml2 icu ];
 
   # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
-  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
+  env.CXXFLAGS = "-DU_USING_ICU_NAMESPACE=1";
 
   meta = {
     homepage = "http://www.darlinghq.org/";

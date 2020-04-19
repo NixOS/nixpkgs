@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--enable-rivet=${rivet}"
   ];
 
-  CXXFLAGS = "-std=c++11"; # needed for rivet on OSX
+  env.CXXFLAGS = "-std=c++11"; # needed for rivet on OSX
 
   meta = {
     description = "Simulation of High-Energy Reactions of PArticles in lepton-lepton, lepton-photon, photon-photon, lepton-hadron and hadron-hadron collisions";

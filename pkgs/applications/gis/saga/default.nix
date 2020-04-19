@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
+  env.CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/saga-gis/files/SAGA%20-%207/SAGA%20-%207.6.2/saga-7.6.2.tar.gz";
