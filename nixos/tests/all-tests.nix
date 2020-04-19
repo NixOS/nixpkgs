@@ -313,6 +313,7 @@ in
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
+  tuptime = handleTest ./tuptime.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   upnp = handleTest ./upnp.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
