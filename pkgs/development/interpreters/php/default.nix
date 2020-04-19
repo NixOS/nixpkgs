@@ -113,6 +113,7 @@ let
                   unwrapped = php;
                   tests = nixosTests.php;
                   inherit (php-packages) packages extensions;
+                  inherit (php) meta;
                 };
                 paths = [ php ];
                 postBuild = ''
@@ -246,7 +247,7 @@ let
             description = "An HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;
-            maintainers = with maintainers; [ globin etu ma27 ];
+            maintainers = teams.php.members;
             platforms = platforms.all;
             outputsToInstall = [ "out" "dev" ];
           };
