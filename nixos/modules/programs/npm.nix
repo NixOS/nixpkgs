@@ -14,9 +14,9 @@ in
       enable = mkEnableOption "<command>npm</command> global config";
 
       package = mkOption {
-        type = types.path;
+        type = types.path or null;
         description = "The npm package version / flavor to use";
-        default = pkgs.nodePackages.npm;
+        default = if hasAttr "npm" pkgs.nodePackages then pkgs.nodePackages.npm else null;
         example = literalExample "pkgs.nodePackages_13_x.npm";
       };
 
