@@ -51,7 +51,7 @@ in
         description = "An application for building and managing Phars";
         license = licenses.mit;
         homepage = "https://box-project.github.io/box2/";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
@@ -80,7 +80,7 @@ in
         description = "Dependency Manager for PHP";
         license = licenses.mit;
         homepage = "https://getcomposer.org/";
-        maintainers = with maintainers; [ globin offline ];
+        maintainers = with maintainers; [ offline ] ++ teams.php.members;
       };
     };
 
@@ -107,7 +107,7 @@ in
         description = "A tool to automatically fix PHP coding standards issues";
         license = licenses.mit;
         homepage = "http://cs.sensiolabs.org/";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
@@ -144,7 +144,7 @@ in
         description = "This tool check syntax of PHP files faster than serial check with fancier output";
         license = licenses.bsd2;
         homepage = "https://github.com/JakubOnderka/PHP-Parallel-Lint";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
@@ -171,7 +171,7 @@ in
         description = "PHP coding standard beautifier and fixer";
         license = licenses.bsd3;
         homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
-        maintainers = with maintainers; [ cmcdragonkai etu ];
+        maintainers = with maintainers; [ cmcdragonkai ] ++ teams.php.members;
       };
     };
 
@@ -198,7 +198,7 @@ in
         description = "PHP coding standard tool";
         license = licenses.bsd3;
         homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
-        maintainers = with maintainers; [ javaguirre etu ];
+        maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
       };
     };
 
@@ -224,15 +224,15 @@ in
       meta = with pkgs.lib; {
         description = "PHP Static Analysis Tool";
         longDescription = ''
-        PHPStan focuses on finding errors in your code without actually running
-        it. It catches whole classes of bugs even before you write tests for the
-        code. It moves PHP closer to compiled languages in the sense that the
-        correctness of each line of the code can be checked before you run the
-        actual line.
-      '';
+          PHPStan focuses on finding errors in your code without actually
+          running it. It catches whole classes of bugs even before you write
+          tests for the code. It moves PHP closer to compiled languages in the
+          sense that the correctness of each line of the code can be checked
+          before you run the actual line.
+        '';
         license = licenses.mit;
         homepage = "https://github.com/phpstan/phpstan";
-        maintainers = with maintainers; [ etu ];
+        maintainers = teams.php.members;
       };
     };
 
@@ -259,6 +259,7 @@ in
         description = "A static analysis tool for finding errors in PHP applications";
         license = licenses.mit;
         homepage = "https://github.com/vimeo/psalm";
+        maintainers = teams.php.members;
       };
     };
 
@@ -285,7 +286,7 @@ in
         description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
         license = licenses.mit;
         homepage = "https://psysh.org/";
-        maintainers = with maintainers; [ caugner ];
+        maintainers = with maintainers; [ caugner ] ++ teams.php.members;
       };
     };
   };
