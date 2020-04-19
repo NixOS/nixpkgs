@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     libmbim
   ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = with stdenv.lib; {
