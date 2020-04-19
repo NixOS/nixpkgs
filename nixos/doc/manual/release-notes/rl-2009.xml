@@ -235,7 +235,16 @@ php.override {
        Be aware that backwards state migrations are not supported by Deluge.
      </para>
    </listitem>
-
+   <listitem>
+     <para>
+       Nginx web server is now started with additional sandbox/hardening options. By default, write access to
+       <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
+       <programlisting>
+systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
+       </programlisting>
+     </para>
+   </listitem>
    <listitem>
     <para>
       The NixOS options <literal>nesting.clone</literal> and
