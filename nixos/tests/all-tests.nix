@@ -23,6 +23,7 @@ in
 {
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
+  agda = handleTest ./agda.nix {};
   atd = handleTest ./atd.nix {};
   automysqlbackup = handleTest ./automysqlbackup.nix {};
   avahi = handleTest ./avahi.nix {};
