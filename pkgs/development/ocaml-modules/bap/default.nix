@@ -12,12 +12,12 @@ else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-bap-${version}";
-  version = "1.6.0";
+  version = "2.0.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
     rev = "v${version}";
-    sha256 = "0ryf2xb37pj2f9mc3p5prqgqrylph9qgq7q9jnbx8b03nzzpa6h6";
+    sha256 = "0lb9xkfp67wjjqr75p6krivmjra7l5673236v9ny4gp0xi0755bk";
   };
 
   sigs = fetchurl {
@@ -53,7 +53,9 @@ stdenv.mkDerivation rec {
     ln -s $sigs $out/share/bap/sigs.zip
   '';
 
-  disableIda = "--disable-ida --disable-fsi-benchmark";
+  disableIda = "--disable-ida";
+
+  patches = [ ./dont-add-curses.patch ];
 
   configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
 
