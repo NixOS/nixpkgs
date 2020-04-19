@@ -101,6 +101,7 @@ in rec {
         "nixos.tests.installer.separateBoot.x86_64-linux"
         "nixos.tests.installer.simple.x86_64-linux"
         "nixos.tests.ipv6.x86_64-linux"
+        "nixos.tests.latestKernel.login.x86_64-linux"
         "nixos.tests.login.x86_64-linux"
         "nixos.tests.misc.x86_64-linux"
         "nixos.tests.nat.firewall-conntrack.x86_64-linux"
