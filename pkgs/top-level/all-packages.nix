@@ -375,7 +375,10 @@ in
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
-  fetchcvs = callPackage ../build-support/fetchcvs { };
+  fetchcvs = if stdenv.buildPlatform != stdenv.hostPlatform
+    # hack around splicing being crummy with things that (correctly) don't eval.
+    then buildPackages.fetchcvs
+    else callPackage ../build-support/fetchcvs { };
 
   fetchdarcs = callPackage ../build-support/fetchdarcs { };
 
@@ -427,7 +430,10 @@ in
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
-  fetchsvn = callPackage ../build-support/fetchsvn { };
+  fetchsvn = if stdenv.buildPlatform != stdenv.hostPlatform
+    # hack around splicing being crummy with things that (correctly) don't eval.
+    then buildPackages.fetchsvn
+    else callPackage ../build-support/fetchsvn { };
 
   fetchsvnrevision = import ../build-support/fetchsvnrevision runCommand subversion;
 
