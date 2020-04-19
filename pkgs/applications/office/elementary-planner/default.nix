@@ -24,6 +24,16 @@ stdenv.mkDerivation rec {
     sha256 = "1kjk1zafx71zmax3whzpx6mzl037wlxri30bl2k9y9rg3fd09arr";
   };
 
+  patches = [
+    # Revert a patch the works around some stylesheet issues:
+    # https://github.com/alainm23/planner/issues/268
+    # https://github.com/alainm23/planner/issues/303
+    # The don't seem to be a problem with Pantheon on NixOS
+    # and for some reason produce the opposite effect with
+    # pantheon's stylesheet.
+    ./0001-Revert-Add-patch.patch
+  ];
+
   nativeBuildInputs = [
     desktop-file-utils
     meson
