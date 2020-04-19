@@ -5,7 +5,7 @@ buildPythonPackage rec {
   version = "5.9.0";
 
   src = fetchgit {
-    url = "git://libvirt.org/libvirt-python.git";
+    url = "https://libvirt.org/git/libvirt-python.git";
     rev = "v${version}";
     sha256 = "0qvr0s7yasswy1s5cvkm91iifk33pb8s7nbb38zznc46706b358r";
   };
