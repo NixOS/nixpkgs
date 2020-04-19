@@ -5,9 +5,9 @@
         "version_suffix": "a"
     },
     "4.19.116": {
-        "sha256": "1f54g0xw708kxha07nsb979h5vwxjrkbwa5h04zny2kq702x1h13",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.115.a/linux-hardened-4.19.115.a.patch",
-        "version_suffix": "NixOS-a"
+        "sha256": "00y4i905gzs9w9kckrn1frh2vw32fsndz03g2psl1gk17snc3q7c",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.116.a/linux-hardened-4.19.116.a.patch",
+        "version_suffix": "a"
     },
     "5.4.33": {
         "sha256": "1hjfvhyvz5kyvx25809brhsvfv9mjv9q1mw6ydb71gfwhw6q8d8b",
