@@ -18735,11 +18735,6 @@ in
 
   baudline = callPackage ../applications/audio/baudline { };
 
-
-  bazaar = callPackage ../applications/version-management/bazaar { };
-
-  bazaarTools = callPackage ../applications/version-management/bazaar/tools.nix { };
-
   bb =  callPackage ../applications/misc/bb { };
 
   berry = callPackage ../applications/window-managers/berry { };
