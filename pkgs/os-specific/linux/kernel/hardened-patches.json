@@ -18,10 +18,5 @@
         "sha256": "1lms090kkk4vlvfssqsm7r3j88hlf8smrnpcgq24v9rq9pbr0fyw",
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.5.17.a/linux-hardened-5.5.17.a.patch",
         "version_suffix": "a"
-    },
-    "5.6.4": {
-        "sha256": "05wkzh7927n71x4cl69mclc44grqpnx6i65hli470q1rg1qrk26n",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.6.4.a/linux-hardened-5.6.4.a.patch",
-        "version_suffix": "a"
     }
 }
