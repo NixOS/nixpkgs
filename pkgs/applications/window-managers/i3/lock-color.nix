@@ -4,15 +4,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.c.1";
+  version = "2.12.c.2";
   pname = "i3lock-color";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";
     repo = "i3lock-color";
     rev = version;
-    sha256 = "1q09cfgkikqbrkk1kljg8dsgbs5nacixhdqaww18h94hmlnbbssc";
+    sha256 = "0lyjb075zdknjpvmz9611xb3my2zh4zq9q894484g77hzh3jdflr";
   };
+
+  postPatch = ''
+    sed -i 's/is_release=.*/is_release=yes/g' configure.ac
+  '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libxcb xcbutilkeysyms xcbutilimage pam libX11
