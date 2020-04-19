@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames
+{ stdenv, fetchurl, curl, tzdata, autoPatchelfHook, fixDarwinDylibNames, libxml2
 , version, hashes }:
 with stdenv;
 let
@@ -18,15 +18,15 @@ in mkDerivation {
   dontBuild = true;
 
   nativeBuildInputs = [ fixDarwinDylibNames autoPatchelfHook ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxml2 stdenv.cc.cc ];
+
   propagatedBuildInputs = [ curl tzdata ];
 
   installPhase = ''
     mkdir -p $out
 
     mv bin etc import lib LICENSE README $out/
-
-    # fix paths in ldc2.conf (one level less)
-    # substituteInPlace $out/bin/ldc2.conf --replace "/../../" "/../"
   '';
 
   meta = with lib; {
