@@ -1,22 +1,19 @@
 { stdenv, lib, fetchFromGitHub, substituteAll, cmake, bash }:
 
+# This was originally called mkl-dnn, then it was renamed to dnnl, and it has
+# just recently been renamed again to oneDNN. In a follow-up, let's move the
+# attr and alias dnnl -> oneDNN. See here for details:
+# https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
 stdenv.mkDerivation rec {
   pname = "dnnl";
-  version = "1.2.2";
+  version = "1.4";
 
   src = fetchFromGitHub {
-    owner = "intel";
-    repo = "mkl-dnn";
+    owner = "oneapi-src";
+    repo = "oneDNN";
     rev = "v${version}";
-    sha256 = "0ydy7ibm6sh1awrikyj938n26cpg5magnxraz2d0pj76irv4vj5m";
+    sha256 = "162fb0c7klahz2irchhyxympi4fq4yp284apc53cadbss41mzld9";
   };
-
-  # Generic fix merged upstream in https://github.com/intel/mkl-dnn/pull/631
-  # Delete after next release
-  patches = [ (substituteAll {
-    src = ./bash-to-sh.patch;
-    inherit bash;
-  }) ];
 
   outputs = [ "out" "dev" "doc" ];
 
@@ -36,8 +33,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Deep Neural Network Library (DNNL)";
-    homepage = "https://intel.github.io/mkl-dnn/dev_guide_transition_to_dnnl.html";
+    description = "oneAPI Deep Neural Network Library (oneDNN)";
+    homepage = "https://01.org/dnnl";
+    changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ alexarice bhipple ];
