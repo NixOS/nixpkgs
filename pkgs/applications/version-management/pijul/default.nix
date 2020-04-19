@@ -40,6 +40,7 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ pkgconfig clang ];
+  bulidInputs = [ libclang ];
 
   postInstall = ''
     mkdir -p $out/share/{bash-completion/completions,zsh/site-functions,fish/vendor_completions.d}
@@ -47,8 +48,6 @@ in rustPlatform.buildRustPackage rec {
     $out/bin/pijul generate-completions --zsh > $out/share/zsh/site-functions/_pijul
     $out/bin/pijul generate-completions --fish > $out/share/fish/vendor_completions.d/pijul.fish
   '';
-
-  LIBCLANG_PATH = libclang + "/lib";
 
   buildInputs = [ openssl libsodium nettle_34 libclang ] ++ stdenv.lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ CoreServices Security ]);

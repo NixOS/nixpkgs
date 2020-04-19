@@ -19,13 +19,9 @@ rustPlatform.buildRustPackage rec {
     ./v3.1.1-fix-Cargo.lock.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang ];
-  buildInputs = [ openssl libsodium lzma ]
+  nativeBuildInputs = [ pkgconfig clang ];
+  buildInputs = [ openssl libsodium lzma llvmPackages.libclang ]
     ++ (stdenv.lib.optional stdenv.isDarwin Security);
-
-  configurePhase = ''
-    export LIBCLANG_PATH="${llvmPackages.libclang}/lib"
-  '';
 
   meta = with stdenv.lib; {
     description = "Data deduplication with compression and public key encryption";

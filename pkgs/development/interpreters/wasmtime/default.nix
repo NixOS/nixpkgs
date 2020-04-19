@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ python cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++
    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   doCheck = false; # https://github.com/bytecodealliance/wasmtime/issues/1197
 
