@@ -4584,6 +4584,8 @@ in
 
   libcryptui = callPackage ../development/libraries/libcryptui { };
 
+  libcyaml = callPackage ../development/libraries/libcyaml  { };
+
   libsmi = callPackage ../development/libraries/libsmi { };
 
   libgen-cli = callPackage ../tools/misc/libgen-cli { };
