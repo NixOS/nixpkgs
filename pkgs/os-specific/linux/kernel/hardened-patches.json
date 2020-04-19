@@ -13,10 +13,5 @@
         "sha256": "154iz7i9l0hihjrmfk6rjh7hhqwyhsdjr2c74m3dhadrlm5hwy89",
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.32.a/linux-hardened-5.4.32.a.patch",
         "version_suffix": "NixOS-a"
-    },
-    "5.5.17": {
-        "sha256": "1lms090kkk4vlvfssqsm7r3j88hlf8smrnpcgq24v9rq9pbr0fyw",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.5.17.a/linux-hardened-5.5.17.a.patch",
-        "version_suffix": "a"
     }
 }
