@@ -9,6 +9,7 @@
 , pkg-config
 , libselinux
 , go-md2man
+, installShellFiles
 }:
 
 let
@@ -37,7 +38,7 @@ buildGoPackage {
 
   excludedPackages = [ "integration" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
   buildInputs = [ gpgme ]
   ++ stdenv.lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs libselinux ];
 
@@ -51,6 +52,7 @@ buildGoPackage {
     # depends on buildGoPackage not changing …
     pushd ./go/src/${goPackagePath}
     make install-docs MANINSTALLDIR="$man/share/man"
+    installShellCompletion --bash completions/bash/skopeo
     popd
   '';
 
