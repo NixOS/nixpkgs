@@ -1,5 +1,5 @@
 let
-  commonConfig = ./common/letsencrypt/common.nix;
+  commonConfig = ./common/acme/client;
 
   dnsScript = {writeScript, dnsAddress, bash, curl}: writeScript "dns-hook.sh" ''
     #!${bash}/bin/bash
@@ -16,8 +16,8 @@ in import ./make-test-python.nix {
   name = "acme";
 
   nodes = rec {
-    letsencrypt = { nodes, lib, ... }: {
-      imports = [ ./common/letsencrypt ];
+    acme = { nodes, lib, ... }: {
+      imports = [ ./common/acme/server ];
       networking.nameservers = lib.mkForce [
         nodes.dnsserver.config.networking.primaryIPAddress
       ];
@@ -33,8 +33,7 @@ in import ./make-test-python.nix {
         serviceConfig = {
           ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.config.networking.primaryIPAddress}'";
           # Required to bind on privileged ports.
-          User = "root";
-          Group = "root";
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
       };
     };
@@ -45,19 +44,16 @@ in import ./make-test-python.nix {
         nodes.dnsserver.config.networking.primaryIPAddress
       ];
       networking.firewall.allowedTCPPorts = [ 80 ];
-      security.acme = {
-        server = "https://acme-v02.api.letsencrypt.org/dir";
-        certs."standalone.com" = {
-            webroot = "/var/lib/acme/acme-challenges";
-        };
+      security.acme.certs."standalone.test" = {
+        webroot = "/var/lib/acme/acme-challenges";
       };
-      systemd.targets."acme-finished-standalone.com" = {};
-      systemd.services."acme-standalone.com" = {
-        wants = [ "acme-finished-standalone.com.target" ];
-        before = [ "acme-finished-standalone.com.target" ];
+      systemd.targets."acme-finished-standalone.test" = {};
+      systemd.services."acme-standalone.test" = {
+        wants = [ "acme-finished-standalone.test.target" ];
+        before = [ "acme-finished-standalone.test.target" ];
       };
       services.nginx.enable = true;
-      services.nginx.virtualHosts."standalone.com" = {
+      services.nginx.virtualHosts."standalone.test" = {
         locations."/.well-known/acme-challenge".root = "/var/lib/acme/acme-challenges";
       };
     };
@@ -71,16 +67,16 @@ in import ./make-test-python.nix {
 
       # A target remains active. Use this to probe the fact that
       # a service fired eventhough it is not RemainAfterExit
-      systemd.targets."acme-finished-a.example.com" = {};
-      systemd.services."acme-a.example.com" = {
-        wants = [ "acme-finished-a.example.com.target" ];
-        before = [ "acme-finished-a.example.com.target" ];
+      systemd.targets."acme-finished-a.example.test" = {};
+      systemd.services."acme-a.example.test" = {
+        wants = [ "acme-finished-a.example.test.target" ];
+        before = [ "acme-finished-a.example.test.target" ];
         after = [ "nginx.service" ];
       };
 
       services.nginx.enable = true;
 
-      services.nginx.virtualHosts."a.example.com" = {
+      services.nginx.virtualHosts."a.example.test" = {
         enableACME = true;
         forceSSL = true;
         locations."/".root = pkgs.runCommand "docroot" {} ''
@@ -89,16 +85,16 @@ in import ./make-test-python.nix {
         '';
       };
 
-      security.acme.server = "https://acme-v02.api.letsencrypt.org/dir";
+      security.acme.server = "https://acme.test/dir";
 
       specialisation.second-cert.configuration = {pkgs, ...}: {
-        systemd.targets."acme-finished-b.example.com" = {};
-        systemd.services."acme-b.example.com" = {
-          wants = [ "acme-finished-b.example.com.target" ];
-          before = [ "acme-finished-b.example.com.target" ];
+        systemd.targets."acme-finished-b.example.test" = {};
+        systemd.services."acme-b.example.test" = {
+          wants = [ "acme-finished-b.example.test.target" ];
+          before = [ "acme-finished-b.example.test.target" ];
           after = [ "nginx.service" ];
         };
-        services.nginx.virtualHosts."b.example.com" = {
+        services.nginx.virtualHosts."b.example.test" = {
           enableACME = true;
           forceSSL = true;
           locations."/".root = pkgs.runCommand "docroot" {} ''
@@ -108,8 +104,8 @@ in import ./make-test-python.nix {
         };
       };
       specialisation.dns-01.configuration = {pkgs, config, nodes, lib, ...}: {
-        security.acme.certs."example.com" = {
-          domain = "*.example.com";
+        security.acme.certs."example.test" = {
+          domain = "*.example.test";
           dnsProvider = "exec";
           dnsPropagationCheck = false;
           credentialsFile = with pkgs; writeText "wildcard.env" ''
@@ -118,17 +114,17 @@ in import ./make-test-python.nix {
           user = config.services.nginx.user;
           group = config.services.nginx.group;
         };
-        systemd.targets."acme-finished-example.com" = {};
-        systemd.services."acme-example.com" = {
-          wants = [ "acme-finished-example.com.target" ];
-          before = [ "acme-finished-example.com.target" "nginx.service" ];
+        systemd.targets."acme-finished-example.test" = {};
+        systemd.services."acme-example.test" = {
+          wants = [ "acme-finished-example.test.target" ];
+          before = [ "acme-finished-example.test.target" "nginx.service" ];
           wantedBy = [ "nginx.service" ];
         };
-        services.nginx.virtualHosts."c.example.com" = {
+        services.nginx.virtualHosts."c.example.test" = {
           forceSSL = true;
-          sslCertificate = config.security.acme.certs."example.com".directory + "/cert.pem";
-          sslTrustedCertificate = config.security.acme.certs."example.com".directory + "/full.pem";
-          sslCertificateKey = config.security.acme.certs."example.com".directory + "/key.pem";
+          sslCertificate = config.security.acme.certs."example.test".directory + "/cert.pem";
+          sslTrustedCertificate = config.security.acme.certs."example.test".directory + "/full.pem";
+          sslCertificateKey = config.security.acme.certs."example.test".directory + "/key.pem";
           locations."/".root = pkgs.runCommand "docroot" {} ''
             mkdir -p "$out"
             echo hello world > "$out/index.html"
@@ -159,46 +155,44 @@ in import ./make-test-python.nix {
       client.start()
       dnsserver.start()
 
-      letsencrypt.wait_for_unit("default.target")
+      acme.wait_for_unit("default.target")
       dnsserver.wait_for_unit("pebble-challtestsrv.service")
       client.succeed(
-          'curl --data \'{"host": "acme-v02.api.letsencrypt.org", "addresses": ["${nodes.letsencrypt.config.networking.primaryIPAddress}"]}\' http://${nodes.dnsserver.config.networking.primaryIPAddress}:8055/add-a'
+          'curl --data \'{"host": "acme.test", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${nodes.dnsserver.config.networking.primaryIPAddress}:8055/add-a'
       )
       client.succeed(
-          'curl --data \'{"host": "standalone.com", "addresses": ["${nodes.acmeStandalone.config.networking.primaryIPAddress}"]}\' http://${nodes.dnsserver.config.networking.primaryIPAddress}:8055/add-a'
+          'curl --data \'{"host": "standalone.test", "addresses": ["${nodes.acmeStandalone.config.networking.primaryIPAddress}"]}\' http://${nodes.dnsserver.config.networking.primaryIPAddress}:8055/add-a'
       )
 
-      letsencrypt.start()
+      acme.start()
       acmeStandalone.start()
 
-      letsencrypt.wait_for_unit("default.target")
-      letsencrypt.wait_for_unit("pebble.service")
+      acme.wait_for_unit("default.target")
+      acme.wait_for_unit("pebble.service")
 
       with subtest("can request certificate with HTTPS-01 challenge"):
           acmeStandalone.wait_for_unit("default.target")
-          acmeStandalone.succeed("systemctl start acme-standalone.com.service")
-          acmeStandalone.wait_for_unit("acme-finished-standalone.com.target")
+          acmeStandalone.succeed("systemctl start acme-standalone.test.service")
+          acmeStandalone.wait_for_unit("acme-finished-standalone.test.target")
 
       client.wait_for_unit("default.target")
 
-      client.succeed("curl https://acme-v02.api.letsencrypt.org:15000/roots/0 > /tmp/ca.crt")
-      client.succeed(
-          "curl https://acme-v02.api.letsencrypt.org:15000/intermediate-keys/0 >> /tmp/ca.crt"
-      )
+      client.succeed("curl https://acme.test:15000/roots/0 > /tmp/ca.crt")
+      client.succeed("curl https://acme.test:15000/intermediate-keys/0 >> /tmp/ca.crt")
 
       with subtest("Can request certificate for nginx service"):
-          webserver.wait_for_unit("acme-finished-a.example.com.target")
+          webserver.wait_for_unit("acme-finished-a.example.test.target")
           client.succeed(
-              "curl --cacert /tmp/ca.crt https://a.example.com/ | grep -qF 'hello world'"
+              "curl --cacert /tmp/ca.crt https://a.example.test/ | grep -qF 'hello world'"
           )
 
       with subtest("Can add another certificate for nginx service"):
           webserver.succeed(
               "/run/current-system/specialisation/second-cert/bin/switch-to-configuration test"
           )
-          webserver.wait_for_unit("acme-finished-b.example.com.target")
+          webserver.wait_for_unit("acme-finished-b.example.test.target")
           client.succeed(
-              "curl --cacert /tmp/ca.crt https://b.example.com/ | grep -qF 'hello world'"
+              "curl --cacert /tmp/ca.crt https://b.example.test/ | grep -qF 'hello world'"
           )
 
       with subtest("Can request wildcard certificates using DNS-01 challenge"):
@@ -208,9 +202,9 @@ in import ./make-test-python.nix {
           webserver.succeed(
               "/run/current-system/specialisation/dns-01/bin/switch-to-configuration test"
           )
-          webserver.wait_for_unit("acme-finished-example.com.target")
+          webserver.wait_for_unit("acme-finished-example.test.target")
           client.succeed(
-              "curl --cacert /tmp/ca.crt https://c.example.com/ | grep -qF 'hello world'"
+              "curl --cacert /tmp/ca.crt https://c.example.test/ | grep -qF 'hello world'"
           )
     '';
 }
