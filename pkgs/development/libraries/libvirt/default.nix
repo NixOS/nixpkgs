@@ -4,10 +4,13 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, audit
+, curl, libiconv, gmp, parted, bridge-utils, dmidecode, audit
+, enableLvm ? true, lvm2
+, enableZfs ? true, zfs
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
+, enableGluster ? false, glusterfs
 }:
 
 with stdenv.lib;
@@ -38,20 +41,26 @@ in stdenv.mkDerivation rec {
     libxml2 gnutls perl python3 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
   ] ++ optionals stdenv.isLinux [
-    libpciaccess lvm2 utillinux systemd libnl numad zfs
+    libpciaccess utillinux systemd libnl numad
     libapparmor audit libcap_ng numactl attr parted
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
+  ] ++ optionals (enableZfs && stdenv.isLinux) [
+    zfs
+  ] ++ optionals (enableLvm && stdenv.isLinux) [
+    lvm2
   ] ++ optionals enableIscsi [
     openiscsi
   ] ++ optionals enableCeph [
     ceph
+  ] ++ optionals enableGluster [
+    glusterfs
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
 
   preConfigure = ''
-    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables systemd numad ] ++ optionals enableIscsi [ openiscsi ] ++ optionals (stdenv.isLinux && enableLvm ) [ lvm2 ]}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
@@ -86,12 +95,16 @@ in stdenv.mkDerivation rec {
     "--with-macvtap"
     "--with-virtualport"
     "--with-storage-disk"
-  ] ++ optionals (stdenv.isLinux && zfs != null) [
+  ] ++ optionals (stdenv.isLinux && enableZfs) [
     "--with-storage-zfs"
+  ] ++ optionals (stdenv.isLinux && enableLvm) [
+    "--with-storage-lvm"
   ] ++ optionals enableIscsi [
     "--with-storage-iscsi"
   ] ++ optionals enableCeph [
     "--with-storage-rbd"
+  ] ++ optionals enableGluster [
+    "--with-storage-gluster"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
