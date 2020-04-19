@@ -22,7 +22,7 @@ let
 in
 {
   _3proxy = handleTest ./3proxy.nix {};
-  acme = handleTestOn ["x86_64-linux"] ./acme.nix {};
+  acme = handleTest ./acme.nix {};
   atd = handleTest ./atd.nix {};
   automysqlbackup = handleTest ./automysqlbackup.nix {};
   avahi = handleTest ./avahi.nix {};
