@@ -3560,6 +3560,8 @@ in
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
 
+  uniutils = callPackage ../tools/text/uniutils { };
+
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
   };
