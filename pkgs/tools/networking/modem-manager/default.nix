@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
   '';
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = with stdenv.lib; {
