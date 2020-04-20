@@ -100,7 +100,7 @@ def cli():
 
 
 @cli.command('update-data')
-@click.option('--rev', default='latest', help='The rev to use, \'latest\' points to the latest (stable) tag')
+@click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')
 def update_data(rev: str):
     """Update data.nix"""
     repo = GitLabRepo()
@@ -227,10 +227,11 @@ def update_gitlab_workhorse():
         os.unlink(gitlab_workhorse_dir / fn)
 
 @cli.command('update-all')
+@click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')
 @click.pass_context
-def update_all(ctx):
+def update_all(ctx, rev: str):
     """Update all gitlab components to the latest stable release"""
-    ctx.invoke(update_data, rev='latest')
+    ctx.invoke(update_data, rev=rev)
     ctx.invoke(update_rubyenv)
     ctx.invoke(update_yarnpkgs)
     ctx.invoke(update_gitaly)
