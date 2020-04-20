@@ -245,6 +245,8 @@ mapAliases ({
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
   libsysfs = sysfsutils; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
+  libtxc_dxtn = throw "removed 2020-03-16, now integrated in Mesa";
+  libtxc_dxtn_s2tc = throw "removed 2020-03-16, now integrated in Mesa";
   libudev = udev; # added 2018-04-25
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
   links = links2; # added 2016-01-31
