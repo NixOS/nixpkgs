@@ -2,7 +2,11 @@
 { pkgs }:
 
 let
-  zeroPad = n: if n < 10 then "0${toString n}" else toString n;
+  zeroPad = n:
+    pkgs.lib.optionalString (n < 16) "0" +
+      (if n > 255
+       then throw "Can't have more than 255 nets or nodes!"
+       else pkgs.lib.toHex n);
 in
 
 {
