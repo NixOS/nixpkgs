@@ -103,6 +103,9 @@ stdenv.mkDerivation rec {
 
       # for the compositor
       --prefix PATH : "$out/bin"
+
+      # the theme is hardcoded
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
     )
   '';
 
