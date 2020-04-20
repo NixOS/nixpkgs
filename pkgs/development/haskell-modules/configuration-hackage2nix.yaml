@@ -2358,6 +2358,9 @@ extra-packages:
   - ansi-terminal == 0.10.3             # required by cabal-plan, and policeman in ghc-8.8.x
   - aeson-pretty < 0.8                  # required by elm compiler
   - apply-refact < 0.4                  # newer versions don't work with GHC 8.0.x
+  - apply-refact == 0.6.0.0             # works with GHC 8.6.x
+  - apply-refact == 0.7.0.0             # works with GHC 8.8.x
+  - apply-refact == 0.8.0.0             # works with GHC 8.10.x
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
   - blank-canvas < 0.6.3                # more recent versions depend on base-compat-batteries == 0.10.* but we're on base-compat-0.9.*

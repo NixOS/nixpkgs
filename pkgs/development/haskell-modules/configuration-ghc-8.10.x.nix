@@ -94,4 +94,6 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
 
+  # Only 0.8 is compatible with ghc 8.10 https://hackage.haskell.org/package/apply-refact/changelog
+  apply-refact = super.apply-refact_0_8_0_0;
 }
