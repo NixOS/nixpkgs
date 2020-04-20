@@ -137,4 +137,80 @@ self: super:
    Overlays are similar to other methods for customizing Nixpkgs, in particular the <literal>packageOverrides</literal> attribute described in <xref linkend="sec-modify-via-packageOverrides"/>. Indeed, <literal>packageOverrides</literal> acts as an overlay with only the <varname>super</varname> argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
   </para>
  </section>
+ <section xml:id="sec-overlays-alternatives">
+   <title>Using overlays to configure alternatives</title>
+   <para>
+     Certain software has different implementations of the same
+     interface. Other distributions have functionality to switch
+     between these. For example, Debian provides <link
+     xlink:href="https://wiki.debian.org/DebianAlternatives">DebianAlternatives</link>.
+     Nixpkgs has what we call <literal>alternatives</literal>, which
+     are configured through overlays.
+   </para>
+   <section xml:id="sec-overlays-alternatives-blas-lapack">
+     <title>BLAS/LAPACK</title>
+     <para>
+       In Nixpkgs, we have multiple implementations of the BLAS/LAPACK
+       numerical linear algebra interfaces. They are:
+     </para>
+     <itemizedlist>
+       <listitem>
+         <para>
+           <link xlink:href="https://www.openblas.net/">OpenBLAS</link>
+         </para>
+         <para>
+           The Nixpkgs attribute is <literal>openblas</literal> for
+           ILP64 and <literal>openblasCompat</literal> for LP64. This
+           is the default.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+           <link xlink:href="http://www.netlib.org/lapack/">LAPACK
+           reference</link> (also provides BLAS)
+         </para>
+         <para>
+           The Nixpkgs attribute is <literal>lapack-reference</literal>.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+           <link
+           xlink:href="https://software.intel.com/en-us/mkl">Intel
+           MKL</link> (only works on x86 architecture)
+         </para>
+         <para>
+           The Nixpkgs attribute is <literal>mkl</literal>.
+         </para>
+       </listitem>
+     </itemizedlist>
+     <para>
+       Introduced in <link
+       xlink:href="https://github.com/NixOS/nixpkgs/pull/83888">PR
+       #83888</link>, we are able to override the ‘blas’ and ‘lapack’
+       packages to use different implementations, through the
+       ‘blasProvider’ and ‘lapackProvider’ argument. This can be used
+       to select a different provider. For example, an overlay can be
+       created that looks like:
+     </para>
+     <programlisting>
+self: super:
+
+{
+  blas = super.blas.override {
+    blasProvider = self.mkl;
+  }
+  lapack = super.lapack.override {
+    lapackProvider = self.mkl;
+  }
+}
+     </programlisting>
+     <para>
+       This overlay uses Intel’s MKL library for both BLAS and LAPACK
+       interfaces. Note that the same can be accomplished at runtime
+       using <literal>LD_PRELOAD</literal> of libblas.so.3 and
+       liblapack.so.3.
+     </para>
+   </section>
+ </section>
 </chapter>
