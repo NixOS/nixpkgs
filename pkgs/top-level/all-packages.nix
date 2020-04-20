@@ -25703,6 +25703,8 @@ in
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
+  nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
+
   nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
