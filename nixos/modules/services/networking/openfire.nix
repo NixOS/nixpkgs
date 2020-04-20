@@ -9,12 +9,7 @@ with lib;
 
     services.openfire = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable OpenFire XMPP server.
-        ";
-      };
+      enable = mkEnableOption "OpenFire XMPP server";
 
       usePostgreSQL = mkOption {
         default = true;
