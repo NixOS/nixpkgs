@@ -8890,6 +8890,8 @@ in
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
+  moonplus = callPackage ../development/compilers/moonplus { };
+
   msbuild = callPackage ../development/tools/build-managers/msbuild { mono = mono6; };
 
   mosml = callPackage ../development/compilers/mosml { };
