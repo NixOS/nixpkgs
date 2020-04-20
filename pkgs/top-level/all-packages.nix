@@ -18544,6 +18544,8 @@ in
 
   aesop = callPackage ../applications/office/aesop { };
 
+  AusweisApp2 = libsForQt5.callPackage ../applications/misc/ausweisapp2 { };
+
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
   avrdudess = callPackage ../applications/misc/avrdudess { };
