@@ -6631,6 +6631,8 @@ in
 
   smugline = python3Packages.smugline;
 
+  sn0int = callPackage ../tools/security/sn0int { };
+
   snabb = callPackage ../tools/networking/snabb { } ;
 
   snapcast = callPackage ../applications/audio/snapcast { };
