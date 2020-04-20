@@ -13,13 +13,13 @@ buildRustPackage rec {
     sha256 = "18mpzvvww2g6y2d3m8wcfajzdshagihn59k03xvcknd5d8zxagl3";
   };
 
-  cargoSha256 = "0298x7wkr4j1l5flmv5vhl1ay8icvh4dlhsh4xi8fd3p8jl9jpqv";
+  cargoSha256 = "1f9yn4pvp58laylngdrfdkwygisnzkhkm7pndf6l33k3aqxhz5mm";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with stdenv.lib; {
     description = ''The "Command Line Interactive Controller for Kubernetes"'';
-    homepage = https://github.com/databricks/click;
+    homepage = "https://github.com/databricks/click";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.mbode ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

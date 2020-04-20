@@ -16,9 +16,11 @@ assert iceSupport -> zeroc-ice != null;
 with stdenv.lib;
 let
   generic = overrides: source: qt5.mkDerivation (source // overrides // {
-    name = "${overrides.type}-${source.version}";
+    pname = overrides.type;
+    version = source.version;
 
-    patches = (source.patches or []) ++ optional jackSupport ./mumble-jack-support.patch;
+    patches = (source.patches or [])
+      ++ [ ./fix-rnnoise-argument.patch ];
 
     nativeBuildInputs = [ pkgconfig python qt5.qmake ]
       ++ (overrides.nativeBuildInputs or [ ]);
@@ -36,12 +38,12 @@ let
       "CONFIG+=bundled-celt"
       "CONFIG+=no-bundled-opus"
       "CONFIG+=no-bundled-speex"
+      "DEFINES+=PLUGIN_PATH=${placeholder "out"}/lib/mumble"
     ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
       ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
-       qmakeFlags="$qmakeFlags DEFINES+=PLUGIN_PATH=$out/lib/mumble"
        patchShebangs scripts
     '';
 
@@ -63,9 +65,9 @@ let
 
     meta = {
       description = "Low-latency, high quality voice chat software";
-      homepage = https://mumble.info;
+      homepage = "https://mumble.info";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ petabyteboy infinisil ];
       platforms = platforms.linux;
     };
   });

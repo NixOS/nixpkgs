@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2, polkit, python2, intltool }:
+{ stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2, polkit, python3, intltool }:
 
 stdenv.mkDerivation rec {
   pname = "gconf";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  buildInputs = [ ORBit2 libxml2 python2 ]
+  buildInputs = [ ORBit2 libxml2 python3 ]
     # polkit requires pam, which requires shadow.h, which is not available on
     # darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) polkit;
@@ -24,8 +24,12 @@ stdenv.mkDerivation rec {
     # fixes the "libgconfbackend-oldxml.so is not portable" error on darwin
     stdenv.lib.optional stdenv.isDarwin [ "--enable-static" ];
 
+  postPatch = ''
+    2to3 --write --nobackup gsettings/gsettings-schema-convert
+  '';
+
   meta = with stdenv.lib; {
-    homepage = https://projects.gnome.org/gconf/;
+    homepage = "https://projects.gnome.org/gconf/";
     description = "Deprecated system for storing application preferences";
     platforms = platforms.unix;
   };

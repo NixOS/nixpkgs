@@ -30,16 +30,16 @@ let gnupg-minimal = gnupg.override {
   bzip2 = null;
 };
 in stdenv.mkDerivation {
-  version = "243.3";
+  version = "243.7";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "NixOS";
+    owner = "nixos";
     repo = "systemd";
-    rev = "491a247eff9b7ce1e5877f5f3431517c95f3222f";
-    sha256 = "1xqiahapg480m165glrwqbfmc1fxw5sacdlm933cwyi1q8x4537g";
+    rev = "e7d881488292fc8bdf96acd12767eca1bd65adae";
+    sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -180,18 +180,18 @@ in stdenv.mkDerivation {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE =
-    [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+  NIX_CFLAGS_COMPILE = toString [
+    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
+    # lead to a cyclic dependency.
+    "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    # Set the release_agent on /sys/fs/cgroup/systemd to the
+    # currently running systemd (/run/current-system/systemd) so
+    # that we don't use an obsolete/garbage-collected release agent.
+    "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-      "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
-    ];
+    "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+  ];
 
   doCheck = false; # fails a bunch of tests
 
@@ -258,11 +258,11 @@ in stdenv.mkDerivation {
   passthru.interfaceVersion = 2;
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/systemd;
+    homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ eelco andir mic92 ];
+    maintainers = with maintainers; [ andir eelco flokli mic92 ];
   };
 }

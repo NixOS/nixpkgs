@@ -6,20 +6,11 @@
   # NIXPKGS_ALLOW_UNFREE=1 nix-build nixos/tests/elk.nix -A ELK-6 --arg enableUnfree true
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
-with pkgs.lib;
-
 let
   esUrl = "http://localhost:9200";
 
-  totalHits = message :
-    "curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' " +
-    ''-d '{\"query\" : { \"match\" : { \"message\" : \"${message}\"}}}' '' +
-    "| jq .hits.total";
-
   mkElkTest = name : elk :
-   let elasticsearchGe7 = builtins.compareVersions elk.elasticsearch.version "7" >= 0;
-   in makeTest {
+    import ./make-test-python.nix ({
     inherit name;
     meta = with pkgs.stdenv.lib.maintainers; {
       maintainers = [ eelco offline basvandijk ];
@@ -50,15 +41,15 @@ let
                                         elk.journalbeat.version "6" < 0; in {
                 enable = true;
                 package = elk.journalbeat;
-                extraConfig = mkOptionDefault (''
+                extraConfig = pkgs.lib.mkOptionDefault (''
                   logging:
                     to_syslog: true
                     level: warning
                     metrics.enabled: false
                   output.elasticsearch:
                     hosts: [ "127.0.0.1:9200" ]
-                    ${optionalString lt6 "template.enabled: false"}
-                '' + optionalString (!lt6) ''
+                    ${pkgs.lib.optionalString lt6 "template.enabled: false"}
+                '' + pkgs.lib.optionalString (!lt6) ''
                   journalbeat.inputs:
                   - paths: []
                     seek: cursor
@@ -99,8 +90,7 @@ let
               };
 
               elasticsearch-curator = {
-                # The current version of curator (5.6) doesn't support elasticsearch >= 7.0.0.
-                enable = !elasticsearchGe7;
+                enable = true;
                 actionYAML = ''
                 ---
                 actions:
@@ -130,11 +120,23 @@ let
       };
 
     testScript = ''
-      startAll;
+      import json
 
-      # Wait until elasticsearch is listening for connections.
-      $one->waitForUnit("elasticsearch.service");
-      $one->waitForOpenPort(9200);
+
+      def total_hits(message):
+          dictionary = {"query": {"match": {"message": message}}}
+          return (
+              "curl --silent --show-error '${esUrl}/_search' "
+              + "-H 'Content-Type: application/json' "
+              + "-d '{}' ".format(json.dumps(dictionary))
+              + "| jq .hits.total"
+          )
+
+
+      start_all()
+
+      one.wait_for_unit("elasticsearch.service")
+      one.wait_for_open_port(9200)
 
       # Continue as long as the status is not "red". The status is probably
       # "yellow" instead of "green" because we are using a single elasticsearch
@@ -142,42 +144,43 @@ let
       #
       # TODO: extend this test with multiple elasticsearch nodes
       #       and see if the status turns "green".
-      $one->waitUntilSucceeds(
-        "curl --silent --show-error '${esUrl}/_cluster/health' " .
-        "| jq .status | grep -v red");
+      one.wait_until_succeeds(
+          "curl --silent --show-error '${esUrl}/_cluster/health' | jq .status | grep -v red"
+      )
 
-      # Perform some simple logstash tests.
-      $one->waitForUnit("logstash.service");
-      $one->waitUntilSucceeds("cat /tmp/logstash.out | grep flowers");
-      $one->waitUntilSucceeds("cat /tmp/logstash.out | grep -v dragons");
+      with subtest("Perform some simple logstash tests"):
+          one.wait_for_unit("logstash.service")
+          one.wait_until_succeeds("cat /tmp/logstash.out | grep flowers")
+          one.wait_until_succeeds("cat /tmp/logstash.out | grep -v dragons")
 
-      # See if kibana is healthy.
-      $one->waitForUnit("kibana.service");
-      $one->waitUntilSucceeds(
-        "curl --silent --show-error 'http://localhost:5601/api/status' " .
-        "| jq .status.overall.state | grep green");
+      with subtest("Kibana is healthy"):
+          one.wait_for_unit("kibana.service")
+          one.wait_until_succeeds(
+              "curl --silent --show-error 'http://localhost:5601/api/status' | jq .status.overall.state | grep green"
+          )
 
-      # See if logstash messages arive in elasticsearch.
-      $one->waitUntilSucceeds("${totalHits "flowers"} | grep -v 0");
-      $one->waitUntilSucceeds("${totalHits "dragons"} | grep 0");
+      with subtest("Logstash messages arive in elasticsearch"):
+          one.wait_until_succeeds(total_hits("flowers") + " | grep -v 0")
+          one.wait_until_succeeds(total_hits("dragons") + " | grep 0")
 
-      # Test if a message logged to the journal
-      # is ingested by elasticsearch via journalbeat.
-      $one->waitForUnit("journalbeat.service");
-      $one->execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat");
-      $one->waitUntilSucceeds(
-        "${totalHits "Supercalifragilisticexpialidocious"} | grep -v 0");
+      with subtest(
+          "A message logged to the journal is ingested by elasticsearch via journalbeat"
+      ):
+          one.wait_for_unit("journalbeat.service")
+          one.execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat")
+          one.wait_until_succeeds(
+              total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
+          )
 
-    '' + optionalString (!elasticsearchGe7) ''
-      # Test elasticsearch-curator.
-      $one->systemctl("stop logstash");
-      $one->systemctl("start elasticsearch-curator");
-      $one->waitUntilSucceeds(
-        "! curl --silent --show-error '${esUrl}/_cat/indices' " .
-        "| grep logstash | grep -q ^$1");
+      with subtest("Elasticsearch-curator works"):
+          one.systemctl("stop logstash")
+          one.systemctl("start elasticsearch-curator")
+          one.wait_until_succeeds(
+              '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep -q ^'
+          )
     '';
-  };
-in mapAttrs mkElkTest {
+  }) {};
+in pkgs.lib.mapAttrs mkElkTest {
   ELK-6 =
     if enableUnfree
     then {

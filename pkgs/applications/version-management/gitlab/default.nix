@@ -43,7 +43,15 @@ let
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git ];
+
+    # Since version 12.6.0, the rake tasks need the location of git,
+    # so we have to apply the location patches here too.
+    patches = [ ./remove-hardcoded-locations.patch ];
+    # One of the patches uses this variable - if it's unset, execution
+    # of rake tasks fails.
+    GITLAB_LOG_PATH = "log";
+    FOSS_ONLY = !gitlabEnterprise;
 
     configurePhase = ''
       runHook preConfigure
@@ -166,7 +174,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    homepage = http://www.gitlab.com/;
+    homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin krav talyz ];
   } // (if gitlabEnterprise then

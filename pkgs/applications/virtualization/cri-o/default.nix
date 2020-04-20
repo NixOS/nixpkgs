@@ -1,9 +1,9 @@
 { flavor ? ""
-, ldflags ? ""
 , stdenv
 , btrfs-progs
 , buildGoPackage
 , fetchFromGitHub
+, git
 , glibc
 , gpgme
 , libapparmor
@@ -13,11 +13,14 @@
 , libselinux
 , lvm2
 , pkgconfig
+, which
 }:
 
-buildGoPackage rec {
+let
+  buildTags = "apparmor seccomp selinux containers_image_ostree_stub";
+in buildGoPackage rec {
   project = "cri-o";
-  version = "1.16.1";
+  version = "1.17.3";
   name = "${project}-${version}${flavor}";
 
   goPackagePath = "github.com/${project}/${project}";
@@ -26,46 +29,31 @@ buildGoPackage rec {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "0w690zhc55gdqzc31jc34nrzwd253pfb3rq23z51q22nqwmlsh9p";
+    sha256 = "1cy2lqasfn5n20vlm3ckb6myci8ya6qv08dw8fq7z4ycnm39r1a6";
   };
 
   outputs = [ "bin" "out" ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ git pkgconfig which ];
   buildInputs = [ btrfs-progs gpgme libapparmor libassuan libgpgerror
                  libseccomp libselinux lvm2 ]
                 ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
 
-  makeFlags = ''BUILDTAGS="apparmor seccomp selinux
-    containers_image_ostree_stub"'';
-
   buildPhase = ''
     pushd go/src/${goPackagePath}
 
-    # Build pause
-    make -C pause
-
-    # Build the crio binaries
-    function build() {
-      go build \
-        -tags ${makeFlags} \
-        -o bin/"$1" \
-        -buildmode=pie \
-        -ldflags '-s -w ${ldflags}' \
-        ${goPackagePath}/cmd/"$1"
-    }
-    build crio
-    build crio-status
+    make BUILDTAGS='${buildTags}' \
+      bin/crio \
+      bin/crio-status \
+      bin/pinns
   '';
   installPhase = ''
     install -Dm755 bin/crio $bin/bin/crio${flavor}
     install -Dm755 bin/crio-status $bin/bin/crio-status${flavor}
-
-    mkdir -p $bin/libexec/crio
-    install -Dm755 bin/pause $bin/libexec/crio/pause${flavor}
+    install -Dm755 bin/pinns $bin/bin/pinns${flavor}
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://cri-o.io;
+    homepage = "https://cri-o.io";
     description = ''Open Container Initiative-based implementation of the
                     Kubernetes Container Runtime Interface'';
     license = licenses.asl20;

@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.azul.com/products/zulu/;
+    homepage = "https://www.azul.com/products/zulu/";
     license = licenses.gpl2;
     description = "Certified builds of OpenJDK";
     longDescription = ''

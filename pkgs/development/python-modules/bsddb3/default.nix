@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "bsddb3";
-  version = "6.2.6";
+  version = "6.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42d621f4037425afcb16b67d5600c4556271a071a9a7f7f2c2b1ba65bc582d05";
+    sha256 = "17yw0by4lycwpvnx06cnzbbchz4zvzbx3j89b20xa314xdizmxxh";
   };
 
   buildInputs = [ pkgs.db ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for Oracle Berkeley DB";
-    homepage = https://www.jcea.es/programacion/pybsddb.htm;
+    homepage = "https://www.jcea.es/programacion/pybsddb.htm";
     license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x
     maintainers = [ maintainers.costrouc ];
   };

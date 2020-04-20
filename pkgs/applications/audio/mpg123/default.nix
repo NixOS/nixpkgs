@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Fast console MPEG Audio Player and decoder library";
-    homepage = http://mpg123.org;
+    homepage = "http://mpg123.org";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
     platforms = stdenv.lib.platforms.unix;

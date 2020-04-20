@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xob";
-  version = "0.1.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "florentc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i163avpij8iy04a0wsds237sjqi5dfvi6ny2z8zicnl4crp34xg";
+    sha256 = "0jbj61adwrpscfaadjman4hbyxhxv3ac8b4d88d623samx6kbvkk";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -1,22 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "gcsfuse";
-  version = "0.28.1";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
-    sha256 = "0dh01qvsjlzji2mwznykc2nghg4f1raylvgnp6sbxv9x1kpnwx71";
+    sha256 = "11an7cxgg3x830mwlhyx50xkcv7zpa9aziz6gz1crwp8shr4hdik";
   };
 
-  modSha256 = "0i86xs3lq2mj22yv7jmhmb34k7lz348bakqz020xpyccllkkszy4";
+  goPackagePath = "github.com/googlecloudplatform/gcsfuse";
 
-  patches = [
-    ./go.mod.patch
-    ./go.sum.patch
-  ];
+  subPackages = [ "." "tools/mount_gcsfuse" ];
+
+  postInstall = ''
+    ln -s $bin/bin/mount_gcsfuse $bin/bin/mount.gcsfuse
+    ln -s $bin/bin/mount_gcsfuse $bin/bin/mount.fuse.gcsfuse
+  '';
 
   meta = with lib;{
     description = "A user-space file system for interacting with Google Cloud Storage";

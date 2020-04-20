@@ -24,7 +24,7 @@
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
 , buildPhase ? "", preBuild ? "", postBuild ? ""
 , installPhase ? "", preInstall ? "", postInstall ? ""
-, installTargets ? "install install-docs"
+, installTargets ? [ "install" "install-docs" ]
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , fixupPhase ? "", preFixup ? "", postFixup ? ""
 , meta ? {}
@@ -108,7 +108,7 @@ in stdenv.mkDerivation ({
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; ({
-    homepage = https://www.erlang.org/;
+    homepage = "https://www.erlang.org/";
     downloadPage = "https://www.erlang.org/download.html";
     description = "Programming language used for massively scalable soft real-time systems";
 
@@ -121,8 +121,7 @@ in stdenv.mkDerivation ({
       tolerance.
     '';
 
-    # aarch64 is supposed to work but started failing in https://hydra.nixos.org/build/83735973
-    platforms = subtractLists [ "aarch64-linux" ] platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
     license = licenses.asl20;
   } // meta);
@@ -142,7 +141,7 @@ in stdenv.mkDerivation ({
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
 // optionalAttrs (installPhase != "")   { inherit installPhase; }
-// optionalAttrs (installTargets != "") { inherit installTargets; }
+// optionalAttrs (installTargets != []) { inherit installTargets; }
 // optionalAttrs (preInstall != "")     { inherit preInstall; }
 // optionalAttrs (fixupPhase != "")     { inherit fixupPhase; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }

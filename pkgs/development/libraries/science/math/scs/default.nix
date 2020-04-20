@@ -1,14 +1,16 @@
-{ stdenv, fetchFromGitHub, blas, liblapack, gfortran, fixDarwinDylibNames }:
+{ stdenv, fetchFromGitHub, blas, lapack, gfortran, fixDarwinDylibNames }:
+
+assert (!blas.is64bit) && (!lapack.is64bit);
 
 stdenv.mkDerivation rec {
   pname = "scs";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "cvxgrp";
     repo = "scs";
-    rev = "v${version}";
-    sha256 = "17lbcmcsniqlyzgbzmjipfd0rrk25a8hzh7l5wl2wp1iwsd8c3a9";
+    rev = version;
+    sha256 = "14g5m3lcvrbwpq1bq0liq00jh0gm1947lg3z4jfsp43f6p5alb20";
   };
 
   # Actually link and add libgfortran to the rpath
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [ blas liblapack gfortran.cc.lib ];
+  buildInputs = [ blas lapack gfortran.cc.lib ];
 
   doCheck = true;
 
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Numerical optimization package for solving large-scale convex cone problems
     '';
-    homepage = https://github.com/cvxgrp/scs;
+    homepage = "https://github.com/cvxgrp/scs";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.bhipple ];

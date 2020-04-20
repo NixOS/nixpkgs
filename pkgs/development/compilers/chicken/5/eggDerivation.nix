@@ -7,7 +7,7 @@
 
 let
   overrides = import ./overrides.nix;
-  baseName = (builtins.parseDrvName name).name;
+  baseName = stdenv.lib.getName name;
   override = if builtins.hasAttr baseName overrides
    then
      builtins.getAttr baseName overrides
@@ -31,8 +31,8 @@ stdenv.mkDerivation ({
     for f in $out/bin/*
     do
       wrapProgram $f \
-        --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}/:$CHICKEN_REPOSITORY_PATH" \
-        --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share/" \
+        --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}:$CHICKEN_REPOSITORY_PATH" \
+        --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share" \
         --prefix PATH : "$out/bin:${chicken}/bin:$CHICKEN_REPOSITORY_PATH"
     done
 

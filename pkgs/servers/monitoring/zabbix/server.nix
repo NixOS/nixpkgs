@@ -2,7 +2,7 @@
 , jabberSupport ? true, iksemel
 , ldapSupport ? true, openldap
 , odbcSupport ? true, unixODBC
-, snmpSupport ? true, net_snmp
+, snmpSupport ? true, net-snmp
 , sshSupport ? true, libssh2
 , mysqlSupport ? false, libmysqlclient
 , postgresqlSupport ? false, postgresql
@@ -38,7 +38,7 @@ in
       ++ optional odbcSupport unixODBC
       ++ optional jabberSupport iksemel
       ++ optional ldapSupport openldap
-      ++ optional snmpSupport net_snmp
+      ++ optional snmpSupport net-snmp
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient
       ++ optional postgresqlSupport postgresql;

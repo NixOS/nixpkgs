@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = https://sources.debian.net/data/main/g/gpsbabel/1.5.3-2/debian/patches/use_minizip;
+      url = "https://sources.debian.net/data/main/g/gpsbabel/1.5.3-2/debian/patches/use_minizip";
       sha256 = "03fpsmlx1wc48d1j405zkzp8j64hcp0z72islf4mk1immql3ibcr";
     })
   ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       process data that may (or may not be) placed on a map, such as
       waypoints, tracks, and routes.
     '';
-    homepage = http://www.gpsbabel.org/;
+    homepage = "http://www.gpsbabel.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;

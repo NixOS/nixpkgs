@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Fight Flash Fraud";
-    homepage = http://oss.digirati.com.br/f3/;
+    homepage = "http://oss.digirati.com.br/f3/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ makefu ];

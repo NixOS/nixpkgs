@@ -54,14 +54,14 @@ index 96b25140c..1ad704d4a 100644
  
  typedef struct _TzDB TzDB;
  typedef struct _TzLocation TzLocation;
-diff --git a/panels/info/cc-info-overview-panel.c b/panels/info/cc-info-overview-panel.c
+diff --git a/panels/info-overview/cc-info-overview-panel.c b/panels/info-overview/cc-info-overview-panel.c
 index 4541986db..da7826bfe 100644
---- a/panels/info/cc-info-overview-panel.c
-+++ b/panels/info/cc-info-overview-panel.c
-@@ -187,7 +187,7 @@ load_gnome_version (char **version,
+--- a/panels/info-overview/cc-info-overview-panel.c
++++ b/panels/info-overview/cc-info-overview-panel.c
+@@ -169,7 +169,7 @@ load_gnome_version (char **version,
    gsize length;
    g_autoptr(VersionData) data = NULL;
- 
+
 -  if (!g_file_get_contents (DATADIR "/gnome/gnome-version.xml",
 +  if (!g_file_get_contents ("@gnome_desktop@/share/gnome/gnome-version.xml",
                              &contents,
@@ -71,44 +71,69 @@ diff --git a/panels/network/connection-editor/net-connection-editor.c b/panels/n
 index 9390a3308..d30b4a68e 100644
 --- a/panels/network/connection-editor/net-connection-editor.c
 +++ b/panels/network/connection-editor/net-connection-editor.c
-@@ -247,9 +247,9 @@ net_connection_editor_do_fallback (NetConnectionEditor *editor, const gchar *typ
-         GError *error = NULL;
- 
-         if (editor->is_new_connection) {
+@@ -278,9 +278,9 @@ net_connection_editor_do_fallback (NetConnectionEditor *self, const gchar *type)
+         g_autoptr(GError) error = NULL;
+
+         if (self->is_new_connection) {
 -                cmdline = g_strdup_printf ("nm-connection-editor --type='%s' --create", type);
 +                cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --type='%s' --create", type);
          } else {
 -                cmdline = g_strdup_printf ("nm-connection-editor --edit='%s'",
 +                cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --edit='%s'",
-                                            nm_connection_get_uuid (editor->connection));
+                                            nm_connection_get_uuid (self->connection));
          }
  
-diff --git a/panels/network/net-device-wifi.c b/panels/network/net-device-wifi.c
-index 360fbfc72..870157a11 100644
---- a/panels/network/net-device-wifi.c
-+++ b/panels/network/net-device-wifi.c
-@@ -1385,7 +1385,7 @@ device_wifi_edit (NetObject *object)
-                 return;
-         }
-         uuid = nm_connection_get_uuid (NM_CONNECTION (connection));
--        cmdline = g_strdup_printf ("nm-connection-editor --edit %s", uuid);
-+        cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --edit %s", uuid);
-         g_debug ("Launching '%s'\n", cmdline);
-         if (!g_spawn_command_line_async (cmdline, &error)) {
-                 g_warning ("Failed to launch nm-connection-editor: %s", error->message);
-diff --git a/panels/network/net-device.c b/panels/network/net-device.c
-index d73b537b9..e2ee54294 100644
---- a/panels/network/net-device.c
-+++ b/panels/network/net-device.c
-@@ -197,7 +197,7 @@ net_device_edit (NetObject *object)
- 
-         connection = net_device_get_find_connection (device);
+diff --git a/panels/network/net-device-bluetooth.c b/panels/network/net-device-bluetooth.c
+--- a/panels/network/net-device-bluetooth.c
++++ b/panels/network/net-device-bluetooth.c
+@@ -90,7 +90,7 @@ nm_device_bluetooth_refresh_ui (NetDeviceBluetooth *self)
+         update_off_switch_from_device_state (self->device_off_switch, state, self);
+
+         /* set up the Options button */
+-        path = g_find_program_in_path ("nm-connection-editor");
++        path = g_find_program_in_path ("@networkmanagerapplet@/bin/nm-connection-editor");
+         gtk_widget_set_visible (GTK_WIDGET (self->options_button), state != NM_DEVICE_STATE_UNMANAGED && path != NULL);
+ }
+
+@@ -141,7 +141,7 @@ options_button_clicked_cb (NetDeviceBluetooth *self)
+
+         connection = net_device_get_find_connection (self->client, self->device);
          uuid = nm_connection_get_uuid (connection);
 -        cmdline = g_strdup_printf ("nm-connection-editor --edit %s", uuid);
 +        cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --edit %s", uuid);
          g_debug ("Launching '%s'\n", cmdline);
-         if (!g_spawn_command_line_async (cmdline, &error)) {
+         if (!g_spawn_command_line_async (cmdline, &error))
                  g_warning ("Failed to launch nm-connection-editor: %s", error->message);
+@@ -185,7 +185,7 @@ net_device_bluetooth_init (NetDeviceBluetooth *self)
+
+         gtk_widget_init_template (GTK_WIDGET (self));
+
+-        path = g_find_program_in_path ("nm-connection-editor");
++        path = g_find_program_in_path ("@networkmanagerapplet@/bin/nm-connection-editor");
+         gtk_widget_set_visible (GTK_WIDGET (self->options_button), path != NULL);
+ }
+
+diff --git a/panels/network/net-device-mobile.c b/panels/network/net-device-mobile.c
+--- a/panels/network/net-device-mobile.c
++++ b/panels/network/net-device-mobile.c
+@@ -484,7 +484,7 @@ options_button_clicked_cb (NetDeviceMobile *self)
+
+         connection = net_device_get_find_connection (self->client, self->device);
+         uuid = nm_connection_get_uuid (connection);
+-        cmdline = g_strdup_printf ("nm-connection-editor --edit %s", uuid);
++        cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --edit %s", uuid);
+         g_debug ("Launching '%s'\n", cmdline);
+         if (!g_spawn_command_line_async (cmdline, &error))
+                 g_warning ("Failed to launch nm-connection-editor: %s", error->message);
+@@ -776,7 +776,7 @@ net_device_mobile_init (NetDeviceMobile *self)
+
+         self->cancellable = g_cancellable_new ();
+
+-        path = g_find_program_in_path ("nm-connection-editor");
++        path = g_find_program_in_path ("@networkmanagerapplet@/bin/nm-connection-editor");
+         gtk_widget_set_visible (GTK_WIDGET (self->options_button), path != NULL);
+ }
+
 diff --git a/panels/printers/pp-host.c b/panels/printers/pp-host.c
 index f53ba217e..d24bcaeb9 100644
 --- a/panels/printers/pp-host.c

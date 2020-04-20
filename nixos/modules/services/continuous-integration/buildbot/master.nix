@@ -222,19 +222,20 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = optional (cfg.group == "buildbot") {
-      name = "buildbot";
+    users.groups = optionalAttrs (cfg.group == "buildbot") {
+      buildbot = { };
     };
 
-    users.users = optional (cfg.user == "buildbot") {
-      name = "buildbot";
-      description = "Buildbot User.";
-      isNormalUser = true;
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      useDefaultShell = true;
+    users.users = optionalAttrs (cfg.user == "buildbot") {
+      buildbot = {
+        description = "Buildbot User.";
+        isNormalUser = true;
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        useDefaultShell = true;
+      };
     };
 
     systemd.services.buildbot-master = {

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, texinfo
 , netcat-gnu, gnutls, gsasl, libidn2, Security
 , withKeyring ? true, libsecret ? null
 , systemd ? null }:
@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "msmtp";
-  version = "1.8.6";
+  version = "1.8.8";
 
   src = fetchurl {
     url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "1qa260xrm0fzlwxpjvgvq39m4dfkskjlyb7m4y2vlr8c8d3z29b6";
+    sha256 = "1rarck61mz3mwg0l30vjj6j9fq6gc7gic0r1c1ppwpq2izj57jzc";
   };
 
   patches = [
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin Security
     ++ stdenv.lib.optional withKeyring libsecret;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig texinfo ];
 
   configureFlags =
     [ "--sysconfdir=/etc" ] ++ stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
-    homepage = https://marlam.de/msmtp/;
+    homepage = "https://marlam.de/msmtp/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

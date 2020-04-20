@@ -3,10 +3,10 @@
 
 buildPythonApplication rec {
   pname = "flent";
-  version = "1.3.0";
+  version = "1.3.2";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "099779i0ghjd9ikq77z6m6scnlmk946lw9issrgz8zm7babiw4d7";
+    sha256 = "1k265xxxjld6q38m9lsgy7p0j70qp9a49vh9zg0njbi4i21lxq23";
   };
 
   buildInputs = [ sphinx ];

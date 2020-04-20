@@ -10,13 +10,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "pivx-${version}";
-  version = "3.4.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "PIVX-Project";
     repo= "PIVX";
     rev = "v${version}";
-    sha256 = "1fqccdqhbwyvix0ihhbgg2w048i6bhfmazr36h2cn4j65n1fgmi2";
+    sha256 = "12lnp318k8dx1sar24zfmv2imnzs30srssnlpb31y7hcxhz0wpc5";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       Zero Knowledge cryptography proofs for industry-leading transaction anonymity.
     '';
     license = licenses.mit;
-    homepage = https://www.dash.org;
+    homepage = "https://www.dash.org";
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.unix;
     # TODO

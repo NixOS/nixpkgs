@@ -33,7 +33,7 @@ stdenv.mkDerivation {
       business processes. Targeting mobile, tablet, desktop, and embedded
       production environments.
     '';
-    homepage = https://corvusoft.co.uk/;
+    homepage = "https://corvusoft.co.uk/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ taeer ];
     platforms = platforms.linux;

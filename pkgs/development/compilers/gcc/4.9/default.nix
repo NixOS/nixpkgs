@@ -61,7 +61,13 @@ let majorVersion = "4";
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      [ ../use-source-date-epoch.patch ../parallel-bconfig.patch ./parallel-strsignal.patch ]
+      [ ../use-source-date-epoch.patch ../parallel-bconfig.patch ./parallel-strsignal.patch
+        (fetchpatch {
+          name = "avoid-ustat-glibc-2.28.patch";
+          url = "https://gitweb.gentoo.org/proj/gcc-patches.git/plain/4.9.4/gentoo/100_all_avoid-ustat-glibc-2.28.patch?id=55fcb515620a8f7d3bb77eba938aa0fcf0d67c96";
+          sha256 = "0b32sb4psv5lq0ij9fwhi1b4pjbwdjnv24nqprsk14dsc6xmi1g0";
+        })
+      ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
@@ -94,7 +100,7 @@ let majorVersion = "4";
     # Antlr (optional) allows the Java `gjdoc' tool to be built.  We want a
     # binary distribution here to allow the whole chain to be bootstrapped.
     javaAntlr = fetchurl {
-      url = https://www.antlr.org/download/antlr-4.4-complete.jar;
+      url = "https://www.antlr.org/download/antlr-4.4-complete.jar";
       sha256 = "02lda2imivsvsis8rnzmbrbp8rh1kb8vmq4i67pqhkwz7lf8y6dz";
     };
 
@@ -231,10 +237,7 @@ stdenv.mkDerivation ({
 
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 
-  installTargets =
-    if stripped
-    then "install-strip"
-    else "install";
+  installTargets = optional stripped "install-strip";
 
   # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
@@ -286,7 +289,7 @@ stdenv.mkDerivation ({
   inherit (stdenv) is64bit;
 
   meta = {
-    homepage = https://gcc.gnu.org/;
+    homepage = "https://gcc.gnu.org/";
     license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");
@@ -300,7 +303,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ peti ];
+    maintainers = with stdenv.lib.maintainers; [ peti veprbl ];
 
     platforms =
       stdenv.lib.platforms.linux ++

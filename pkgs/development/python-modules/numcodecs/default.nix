@@ -7,6 +7,7 @@
 , msgpack
 , pytest
 , python
+, gcc8
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools_scm
     cython
+    gcc8
   ];
 
   propagatedBuildInputs = [
@@ -37,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib;{
-    homepage = https://github.com/alimanfoo/numcodecs;
+    homepage = "https://github.com/alimanfoo/numcodecs";
     license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
     maintainers = [ maintainers.costrouc ];

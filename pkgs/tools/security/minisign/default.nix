@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       necessarily private) file transfer, e.g., of software artefacts. minisign
       is similar to and compatible with OpenBSD's signify.
     '';
-    homepage = https://jedisct1.github.io/minisign/;
+    homepage = "https://jedisct1.github.io/minisign/";
     license = licenses.isc;
     maintainers = with maintainers; [ joachifm ];
     platforms = platforms.unix;

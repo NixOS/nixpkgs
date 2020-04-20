@@ -47,8 +47,9 @@
     propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
 
     dontWrapQtApps = true;
-    makeWrapperArgs = [
-      "\${qtWrapperArgs[@]}"
-    ];
+
+    preFixup = ''
+      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    '';
   };
 }

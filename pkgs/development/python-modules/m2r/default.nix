@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/miyakogi/m2r;
+    homepage = "https://github.com/miyakogi/m2r";
     description = "converts a markdown file including reST markups to a valid reST format";
     license = licenses.mit;
     maintainers = [ ];

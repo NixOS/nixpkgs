@@ -47,9 +47,9 @@ let
     includeDirs = self.buildDependsAgdaShareAgda
                   ++ self.sourceDirectories ++ self.topSourceDirectories
                   ++ [ "." ];
-    buildFlags = concatStringsSep " " (map (x: "-i " + x) self.includeDirs);
+    buildFlags = stdenv.lib.concatMap (x: ["-i" x]) self.includeDirs;
 
-    agdaWithArgs = "${Agda}/bin/agda ${self.buildFlags}";
+    agdaWithArgs = "${Agda}/bin/agda ${toString self.buildFlags}";
 
     buildPhase = ''
       runHook preBuild

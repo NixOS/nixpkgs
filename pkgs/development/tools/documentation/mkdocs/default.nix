@@ -1,6 +1,6 @@
-{ stdenv, lib, python, fetchFromGitHub }:
+{ stdenv, lib, python3, fetchFromGitHub }:
 
-with python.pkgs;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mkdocs";
@@ -44,7 +44,7 @@ buildPythonApplication rec {
       
       MkDocs can also be used to generate general-purpose Websites.
     '';
-    homepage = http://mkdocs.org/;
+    homepage = "http://mkdocs.org/";
     license = lib.licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.rkoe ];

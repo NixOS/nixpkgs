@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cd ..
   '';
   patches = [ ./parse.patch ];
-  patchFlags = "-p 0";
+  patchFlags = [ "-p" "0" ];
   NIX_LD_FLAGS = ''
     -rpath ${stdenv.cc}/lib
     -rpath ${stdenv.cc}/lib64
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       after death. Other structures provide automated base defense (to some
       degree), healing functions and much more...
     '';
-    homepage = http://www.tremulous.net;
+    homepage = "http://www.tremulous.net";
     license = with licenses; [
       gpl2
       cc-by-sa-25 /* media */

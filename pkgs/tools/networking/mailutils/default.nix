@@ -1,15 +1,15 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
-, python, gss, libmysqlclient, system-sendmail }:
+, python3, gss, libmysqlclient, system-sendmail }:
 
 stdenv.mkDerivation rec {
   name = "${project}-${version}";
   project = "mailutils";
-  version = "3.2";
+  version = "3.9";
 
   src = fetchurl {
     url = "mirror://gnu/${project}/${name}.tar.xz";
-    sha256 = "0zh7xn8yvnw9zkc7gi5290i34viwxp1rn0g1q9nyvmckkvk59lwn";
+    sha256 = "1g1xf2lal04nsnf1iym9n9n0wxjpqbcr9nysxpm98v4pniinqwsz";
   };
 
   postPatch = ''
@@ -29,17 +29,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
-    gss libmysqlclient python
+    gss libmysqlclient python3
   ];
 
   patches = [
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=afbb33cf9ff";
-      excludes = [ "NEWS" ];
-      sha256 = "0yzkfx3j1zkkb43fhchjqphw4xznbclj39bjzjggv32gppy6d1db";
-    })
     ./fix-build-mb-len-max.patch
-    ./fix-test-ali-awk.patch
     ./path-to-cat.patch
   ];
 
@@ -118,7 +112,7 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ orivej vrthra ];
 
-    homepage = https://www.gnu.org/software/mailutils/;
+    homepage = "https://www.gnu.org/software/mailutils/";
 
     # Some of the dependencies fail to build on {cyg,dar}win.
     platforms = platforms.gnu ++ platforms.linux;

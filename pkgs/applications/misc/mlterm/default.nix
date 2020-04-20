@@ -61,9 +61,7 @@ stdenv.mkDerivation rec {
     "--with-tools=mlclient,mlconfig,mlcc,mlterm-menu,mlimgloader,registobmp,mlfc"
      #mlterm-menu and mlconfig depend on enabling gnome3.at-spi2-core
      #and configuring ~/.mlterm/key correctly.
- ] ++ stdenv.lib.optional (libssh2 == null) [
-    "--disable-ssh2"
- ];
+ ] ++ stdenv.lib.optional (libssh2 == null) "--disable-ssh2";
 
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
@@ -87,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multi Lingual TERMinal emulator on X11";
-    homepage = http://mlterm.sourceforge.net/;
+    homepage = "http://mlterm.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = with platforms; linux;

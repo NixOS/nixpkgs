@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   outputDevdoc = "out";
 
   meta = with stdenv.lib; {
-    homepage = http://www.corpit.ru/mjt/udns.html;
+    homepage = "http://www.corpit.ru/mjt/udns.html";
     description = "Async-capable DNS stub resolver library";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.womfoo ];

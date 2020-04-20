@@ -1,4 +1,4 @@
-From a9a62d7c7adf6fc0237c7d04937b538a4cea87ad Mon Sep 17 00:00:00 2001
+From 977fdfad2ceba7232b4f78144b20640d7fd0aedb Mon Sep 17 00:00:00 2001
 From: Colin Walters <walters@verbum.org>
 Date: Tue, 19 Jun 2018 09:34:18 -0400
 Subject: [PATCH] Drop "ostree trivial-httpd" CLI, move to tests directory
@@ -13,22 +13,22 @@ Also at this point nothing should depend on `ostree trivial-httpd`.
  Makefile-man.am              |   6 --
  Makefile-ostree.am           |   7 ---
  Makefile-tests.am            |   7 +++
- configure.ac                 |  10 ---
+ configure.ac                 |   9 ---
  man/ostree-trivial-httpd.xml | 118 -----------------------------------
  src/ostree/main.c            |   5 --
  tests/libtest.sh             |  13 ++--
- 7 files changed, 12 insertions(+), 154 deletions(-)
+ 7 files changed, 12 insertions(+), 153 deletions(-)
  delete mode 100644 man/ostree-trivial-httpd.xml
 
 diff --git a/Makefile-man.am b/Makefile-man.am
-index 8ccbba8c..d204aa3e 100644
+index bc58103b..bcfde285 100644
 --- a/Makefile-man.am
 +++ b/Makefile-man.am
 @@ -34,12 +34,6 @@ ostree-init.1 ostree-log.1 ostree-ls.1 ostree-prune.1 ostree-pull-local.1 \
  ostree-pull.1 ostree-refs.1 ostree-remote.1 ostree-reset.1 \
  ostree-rev-parse.1 ostree-show.1 ostree-summary.1 \
  ostree-static-delta.1
--if BUILDOPT_TRIVIAL_HTTPD
+-if USE_LIBSOUP
 -man1_files += ostree-trivial-httpd.1
 -else
 -# We still want to distribute the source, even if we are not building it
@@ -38,10 +38,10 @@ index 8ccbba8c..d204aa3e 100644
  if BUILDOPT_FUSE
  man1_files += rofiles-fuse.1
 diff --git a/Makefile-ostree.am b/Makefile-ostree.am
-index 8d352e38..1471b3e5 100644
+index f861afe4..497d99b0 100644
 --- a/Makefile-ostree.am
 +++ b/Makefile-ostree.am
-@@ -133,13 +133,6 @@ ostree_SOURCES += src/ostree/ot-builtin-pull.c
+@@ -144,13 +144,6 @@ ostree_SOURCES += src/ostree/ot-builtin-pull.c
  endif
  
  if USE_LIBSOUP
@@ -56,12 +56,12 @@ index 8d352e38..1471b3e5 100644
  # This is necessary for the cookie jar bits
  ostree_CFLAGS += $(OT_INTERNAL_SOUP_CFLAGS)
 diff --git a/Makefile-tests.am b/Makefile-tests.am
-index 2c0916f6..b11fde89 100644
+index fc2f2d91..7343b63f 100644
 --- a/Makefile-tests.am
 +++ b/Makefile-tests.am
-@@ -248,6 +248,13 @@ _installed_or_uninstalled_test_programs = tests/test-varint tests/test-ot-unix-u
- 	tests/test-gpg-verify-result tests/test-checksum tests/test-lzma tests/test-rollsum \
- 	tests/test-basic-c tests/test-sysroot-c tests/test-pull-c tests/test-repo tests/test-include-ostree-h
+@@ -263,6 +263,13 @@ _installed_or_uninstalled_test_programs += \
+ 	$(NULL)
+ endif
  
 +if USE_LIBSOUP
 +test_extra_programs += ostree-trivial-httpd
@@ -74,10 +74,10 @@ index 2c0916f6..b11fde89 100644
  test_programs += tests/test-repo-finder-avahi
  endif
 diff --git a/configure.ac b/configure.ac
-index e6e145db..1e36e6a0 100644
+index 46a900f5..2f91cdec 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -187,15 +187,6 @@ if test x$with_soup != xno; then OSTREE_FEATURES="$OSTREE_FEATURES libsoup"; fi
+@@ -190,14 +190,6 @@ if test x$with_soup != xno; then OSTREE_FEATURES="$OSTREE_FEATURES libsoup"; fi
  AM_CONDITIONAL(USE_LIBSOUP, test x$with_soup != xno)
  AM_CONDITIONAL(HAVE_LIBSOUP_CLIENT_CERTS, test x$have_libsoup_client_certs = xyes)
  
@@ -85,15 +85,14 @@ index e6e145db..1e36e6a0 100644
 -  [AS_HELP_STRING([--enable-trivial-httpd-cmdline],
 -  [Continue to support "ostree trivial-httpd" [default=no]])],,
 -  enable_trivial_httpd_cmdline=no)
--AM_CONDITIONAL(BUILDOPT_TRIVIAL_HTTPD, test x$enable_trivial_httpd_cmdline = xyes)
--AM_COND_IF(BUILDOPT_TRIVIAL_HTTPD,
+-AS_IF([test x$enable_trivial_httpd_cmdline = xyes],
 -  [AC_DEFINE([BUILDOPT_ENABLE_TRIVIAL_HTTPD_CMDLINE], 1, [Define if we are enabling ostree trivial-httpd entrypoint])]
 -)
 -
  AS_IF([test x$with_curl = xyes && test x$with_soup = xno], [
    AC_MSG_WARN([Curl enabled, but libsoup is not; libsoup is needed for tests (make check, etc.)])
  ])
-@@ -602,7 +593,6 @@ echo "
+@@ -617,7 +609,6 @@ echo "
      Rust (internal oxidation):                    $rust_debug_release
      rofiles-fuse:                                 $enable_rofiles_fuse
      HTTP backend:                                 $fetcher_backend
@@ -226,10 +225,10 @@ index d03c12be..00000000
 -    </refsect1>
 -</refentry>
 diff --git a/src/ostree/main.c b/src/ostree/main.c
-index c5b45012..6478a62b 100644
+index a523ff9a..61ea742d 100644
 --- a/src/ostree/main.c
 +++ b/src/ostree/main.c
-@@ -116,11 +116,6 @@ static OstreeCommand commands[] = {
+@@ -118,11 +118,6 @@ static OstreeCommand commands[] = {
    { "summary", OSTREE_BUILTIN_FLAG_NONE,
      ostree_builtin_summary,
      "Manage summary metadata" },
@@ -242,10 +241,10 @@ index c5b45012..6478a62b 100644
  };
  
 diff --git a/tests/libtest.sh b/tests/libtest.sh
-index e0022512..b07dc962 100755
+index 3f5fd931..eacd96de 100755
 --- a/tests/libtest.sh
 +++ b/tests/libtest.sh
-@@ -149,15 +149,12 @@ fi
+@@ -160,15 +160,12 @@ fi
  if test -n "${OSTREE_UNINSTALLED:-}"; then
      OSTREE_HTTPD=${OSTREE_UNINSTALLED}/ostree-trivial-httpd
  else
@@ -267,5 +266,5 @@ index e0022512..b07dc962 100755
  
  files_are_hardlinked() {
 -- 
-2.22.0
+2.25.0
 

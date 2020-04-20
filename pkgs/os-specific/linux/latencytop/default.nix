@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses glib gtk2 ];
 
   meta = {
-    homepage = http://latencytop.org;
+    homepage = "http://latencytop.org";
     description = "Tool to show kernel reports on latencies (LATENCYTOP option)";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.viric ];

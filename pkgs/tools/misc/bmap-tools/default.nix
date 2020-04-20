@@ -13,7 +13,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "bmap-related tools";
-    homepage = https://github.com/intel/bmap-tools;
+    homepage = "https://github.com/intel/bmap-tools";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

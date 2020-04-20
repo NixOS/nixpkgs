@@ -1234,11 +1234,11 @@
       };
     }
     {
-      name = "_types_notifyjs___notifyjs_3.0.0.tgz";
+      name = "_types_notifyjs___notifyjs_3.0.1.tgz";
       path = fetchurl {
-        name = "_types_notifyjs___notifyjs_3.0.0.tgz";
-        url  = "https://registry.yarnpkg.com/@types/notifyjs/-/notifyjs-3.0.0.tgz";
-        sha1 = "a57126a90be2827d511d00a0615816cd5ca8a740";
+        name = "_types_notifyjs___notifyjs_3.0.1.tgz";
+        url  = "https://registry.yarnpkg.com/@types/notifyjs/-/notifyjs-3.0.1.tgz";
+        sha1 = "eba3bec10e44309df4aba31a73bfd26a562bc755";
       };
     }
     {

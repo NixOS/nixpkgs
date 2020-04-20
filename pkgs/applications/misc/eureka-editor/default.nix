@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://eureka-editor.sourceforge.net;
+    homepage = "http://eureka-editor.sourceforge.net";
     description = "A map editor for the classic DOOM games, and a few related games such as Heretic and Hexen";
     license = licenses.gpl2;
     platforms = platforms.all;

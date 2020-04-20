@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex bison ];
   buildInputs = [ libxml2 ncurses ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   meta = with stdenv.lib; {
     description = "Performance monitoring tool for Linux";
-    homepage = http://tiptop.gforge.inria.fr;
+    homepage = "http://tiptop.gforge.inria.fr";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];

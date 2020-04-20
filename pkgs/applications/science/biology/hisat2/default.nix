@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Graph based aligner";
     license = licenses.gpl3;
-    homepage = https://ccb.jhu.edu/software/hisat2/index.shtml;
+    homepage = "https://ccb.jhu.edu/software/hisat2/index.shtml";
     maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

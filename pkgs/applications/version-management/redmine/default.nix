@@ -1,13 +1,13 @@
 { stdenv, fetchurl, bundlerEnv, ruby }:
 
 let
-  version = "4.0.5";
+  version = "4.1.1";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
     inherit ruby;
     gemdir = ./.;
-    groups = [ "ldap" "openid" ];
+    groups = [ "development" "ldap" "markdown" "minimagick" "openid" "test" ];
   };
 in
   stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ in
 
     src = fetchurl {
       url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
-      sha256 = "1s39qd3j27ryn3p01501iavbkyvikdxl3165nk8i8pgxcxlbxsk4";
+      sha256 = "1nndy5hz8zvfglxf1f3bsb1pkrfwinfxzkdan1vjs3rkckkszyh5";
     };
 
     buildInputs = [ rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler ];
@@ -36,7 +36,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://www.redmine.org/;
+      homepage = "https://www.redmine.org/";
       platforms = platforms.linux;
       maintainers = [ maintainers.aanderse ];
       license = licenses.gpl2;

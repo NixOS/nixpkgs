@@ -91,9 +91,6 @@ sub hasCPUFeature {
 }
 
 
-# Detect the number of CPU cores.
-my $cpus = scalar (grep {/^processor\s*:/} (split '\n', $cpuinfo));
-
 
 # Determine CPU governor to use
 if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
@@ -335,6 +332,9 @@ if (@swaps) {
         next unless -e $swapFilename;
         my $dev = findStableDevPath $swapFilename;
         if ($swapType =~ "partition") {
+            # zram devices are more likely created by configuration.nix, so
+            # ignore them here
+            next if ($swapFilename =~ /^\/dev\/zram/);
             push @swapDevices, "{ device = \"$dev\"; }";
         } elsif ($swapType =~ "file") {
             # swap *files* are more likely specified in configuration.nix, so
@@ -498,7 +498,7 @@ if (-f $fb_modes_file && -r $fb_modes_file) {
     my $console_width = $1, my $console_height = $2;
     if ($console_width > 1920) {
         push @attrs, "# High-DPI console";
-        push @attrs, 'i18n.consoleFont = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
+        push @attrs, 'console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
     }
 }
 
@@ -559,7 +559,6 @@ my $hwConfig = <<EOF;
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
-  nix.maxJobs = lib.mkDefault $cpus;
 ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 

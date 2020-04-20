@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-smtp'';
-  version = ''20190710-git'';
+  version = ''20191130-git'';
 
   description = ''Common Lisp smtp client.'';
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl_plus_ssl" args."cl-base64" args."flexi-streams" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-smtp/2019-07-10/cl-smtp-20190710-git.tgz'';
-    sha256 = ''1bx5jh5vl8slsgrl2w4yv7imiswl8nmknczzyj5bzm1bzk0hx52r'';
+    url = ''http://beta.quicklisp.org/archive/cl-smtp/2019-11-30/cl-smtp-20191130-git.tgz'';
+    sha256 = ''04x1xq1qlsnhl4wdi82l8ds6rl9rzxk72bjf2ja10jay1p6ljvdq'';
   };
 
   packageName = "cl-smtp";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-smtp DESCRIPTION Common Lisp smtp client. SHA256
-    1bx5jh5vl8slsgrl2w4yv7imiswl8nmknczzyj5bzm1bzk0hx52r URL
-    http://beta.quicklisp.org/archive/cl-smtp/2019-07-10/cl-smtp-20190710-git.tgz
-    MD5 f55956a4708d0b4fc2ba181063b73e92 NAME cl-smtp FILENAME cl-smtp DEPS
+    04x1xq1qlsnhl4wdi82l8ds6rl9rzxk72bjf2ja10jay1p6ljvdq URL
+    http://beta.quicklisp.org/archive/cl-smtp/2019-11-30/cl-smtp-20191130-git.tgz
+    MD5 880f09b9fd22e358d1b94a3caf3bd34b NAME cl-smtp FILENAME cl-smtp DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME cl+ssl FILENAME cl_plus_ssl)
@@ -35,4 +35,4 @@ rec {
     (alexandria babel bordeaux-threads cffi cl+ssl cl-base64 flexi-streams
      split-sequence trivial-features trivial-garbage trivial-gray-streams
      usocket)
-    VERSION 20190710-git SIBLINGS NIL PARASITES NIL) */
+    VERSION 20191130-git SIBLINGS NIL PARASITES NIL) */

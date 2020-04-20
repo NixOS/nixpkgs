@@ -8,6 +8,10 @@ in
 
 {
 
+  meta = {
+    maintainers = with maintainers; [ worldofpeace ];
+  };
+
   imports = [
     # added 2019-08-18
     # needed to preserve some semblance of UI familarity
@@ -31,6 +35,7 @@ in
     (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
       [ "services" "xserver" "displayManager" "sessionCommands" ])
+    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
   ];
 
   options = {
@@ -128,6 +133,7 @@ in
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
+      desktopNames = [ "XFCE" ];
       bgSupport = true;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &

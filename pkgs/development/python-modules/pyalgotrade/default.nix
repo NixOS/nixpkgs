@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Algorithmic Trading";
-    homepage = http://gbeced.github.io/pyalgotrade/;
+    homepage = "http://gbeced.github.io/pyalgotrade/";
     license = licenses.asl20;
   };
 

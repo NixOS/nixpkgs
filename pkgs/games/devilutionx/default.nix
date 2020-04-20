@@ -1,16 +1,19 @@
 { stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, SDL2_ttf, libsodium, pkg-config }:
 stdenv.mkDerivation rec {
-  version = "0.5.0";
+  version = "1.0.1";
   pname = "devilutionx";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
     rev = version;
-    sha256 = "010hxj129zmsynvizk89vm2y29dcxsfi585czh3f03wfr38rxa6b";
+    sha256 = "1jvjlch9ql5s5jx9g5y5pkc2xn62199qylsmzpqzx1jc3k2vmw5i";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${SDL2_ttf}/include/SDL2";
+  NIX_CFLAGS_COMPILE = [
+    "-I${SDL2_ttf}/include/SDL2"
+    ''-DTTF_FONT_PATH="${placeholder "out"}/share/fonts/truetype/CharisSILB.ttf"''
+  ];
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ libsodium SDL2 SDL2_mixer SDL2_ttf ];
@@ -22,8 +25,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/Applications
     mv devilutionx.app $out/Applications
   '' else ''
-    mkdir -p $out/bin
-    cp devilutionx $out/bin
+    install -Dm755 -t $out/bin devilutionx
+    install -Dt $out/share/fonts/truetype ../Packaging/resources/CharisSILB.ttf
+
+    # TODO: icons and .desktop (see Packages/{debian,fedora}/*)
   '') + ''
 
     runHook postInstall

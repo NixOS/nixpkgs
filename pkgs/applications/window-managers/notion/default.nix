@@ -1,45 +1,39 @@
-{
-  enableXft ? true, libXft ? null, patches ? [], stdenv, lua, gettext, pkgconfig, xlibsWrapper, libXinerama, libXrandr, libX11,
-  xterm, xmessage, makeWrapper, fetchFromGitHub, mandoc, which
+{ stdenv, fetchFromGitHub, pkgconfig
+, lua, gettext, which, groff, xmessage, xterm
+, readline, fontconfig, libX11, libXext, libSM
+, libXinerama, libXrandr, libXft
+, xlibsWrapper, makeWrapper
 }:
 
-assert enableXft -> libXft != null;
-
-let
+stdenv.mkDerivation rec{
   pname = "notion";
-  version = "3-2017050501";
-  inherit patches;
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
-  meta = with stdenv.lib; {
-    description = "Tiling tabbed window manager, follow-on to the ion window manager";
-    homepage = http://notion.sourceforge.net;
-    platforms = platforms.linux;
-    license   = licenses.notion_lgpl;
-    maintainers = with maintainers; [jfb];
-  };
+  version = "4.0.0";
+
   src = fetchFromGitHub {
     owner = "raboof";
     repo = pname;
     rev = version;
-    sha256 = "1wq5ylpsw5lkbm3c2bzmx2ajlngwib30adxlqbvq4bgkaf9zjh65";
+    sha256 = "0rqfvwkj0j862hf6i4wsmb6185xibsskfj9kwy896qcpcg8w4kk7";
   };
 
-  patches = patches;
-  postPatch = ''
-    substituteInPlace system-autodetect.mk --replace '#PRELOAD_MODULES=1' 'PRELOAD_MODULES=1'
-    substituteInPlace man/Makefile --replace "nroff -man -Tlatin1" "${mandoc}/bin/mandoc -T man"
-  '';
+  nativeBuildInputs = [ pkgconfig makeWrapper groff ];
+  buildInputs = [ lua gettext which readline fontconfig libX11 libXext libSM
+                  libXinerama libXrandr libXft xlibsWrapper ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [makeWrapper xlibsWrapper lua gettext mandoc which libXinerama libXrandr libX11 ] ++ stdenv.lib.optional enableXft libXft;
+  buildFlags = [ "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" ];
 
-  buildFlags = "LUA_DIR=${lua} X11_PREFIX=/no-such-path PREFIX=\${out}";
-  installFlags = "PREFIX=\${out}";
+  makeFlags = [ "NOTION_RELEASE=${version}" "PREFIX=\${out}" ];
 
   postInstall = ''
     wrapProgram $out/bin/notion \
       --prefix PATH ":" "${xmessage}/bin:${xterm}/bin" \
   '';
+
+  meta = with stdenv.lib; {
+    description = "Tiling tabbed window manager";
+    homepage = "https://notionwm.net";
+    license   = licenses.lgpl21;
+    maintainers = with maintainers; [ jfb AndersonTorres raboof ];
+    platforms = platforms.linux;
+  };
 }

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       "--disable-checks"
     ];
 
-  installTargets = "install-staged"; # install does also try to change permissions of /etc/* files
+  installTargets = [ "install-staged" ]; # install does also try to change permissions of /etc/* files
 
   # fcron tries to install pid into system directory on install
   installFlags = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description="A command scheduler with extended capabilities over cron and anacron";
-    homepage = http://fcron.free.fr;
+    homepage = "http://fcron.free.fr";
     license = licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
   };

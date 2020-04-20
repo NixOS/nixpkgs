@@ -19,26 +19,24 @@ stdenv.mkDerivation rec {
       --replace "AC_PREREQ([2.62])" "AC_PREREQ([2.63])"
   '';
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     autoconf automake gettext git gnulib
     help2man libtool perl pkgconfig texinfo
   ];
 
   configurePhase = ''
-    cp -r "${gnulib}" gnulib
-    chmod a+rX,u+w -R gnulib
-    ./bootstrap --gnulib-srcdir=gnulib
+    ./bootstrap --gnulib-srcdir=${gnulib}
     ./configure --prefix="$out"
   '';
 
   buildInputs = [
-    libX11 libXScrnSaver libXext  
+    libX11 libXScrnSaver libXext
   ];
 
   meta = {
     inherit  version;
     description = ''A command-line tool to print idle time from libXss'';
-    homepage = http://taktoa.me/xprintidle-ng/;
+    homepage = "http://taktoa.me/xprintidle-ng/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Simple, cloud native infrastructure for Kubernetes";
-    homepage = http://kubicorn.io/;
+    homepage = "http://kubicorn.io/";
     maintainers = with stdenv.lib.maintainers; [ offline ];
     license = stdenv.lib.licenses.asl20;
   };

@@ -186,8 +186,7 @@ in {
 
     environment.systemPackages = [ pkgs.etcdctl ];
 
-    users.users = singleton {
-      name = "etcd";
+    users.users.etcd = {
       uid = config.ids.uids.etcd;
       description = "Etcd daemon user";
       home = cfg.dataDir;

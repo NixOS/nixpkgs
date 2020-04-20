@@ -3,13 +3,13 @@
 
 mkYarnPackage rec {
   name = "codimd";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner  = "codimd";
     repo   = "server";
     rev    = version;
-    sha256 = "1sd7r5ws1k7dxmr57m67c1k23pzbkn25k2wvcnbrqn7gza6mhlf0";
+    sha256 = "1208a24v664ha9qzr7ky6i3ynphkaj0xi5l3rsw743i22nv5aj33";
   };
 
   nativeBuildInputs = [ which makeWrapper ];

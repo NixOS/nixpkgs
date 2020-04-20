@@ -4,17 +4,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "nnn";
-  version = "2.8.1";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0h7j0wcpwwd2fibggr1nwkqpvhv2i1qnk54c4x6hixx31yidy2l0";
+    sha256 = "0wvn3jbxjcpdg9jzxkhx5dlc0zx2idky6mb75fpha8ww1jg7qf1g";
   };
 
-  configFile = optionalString (conf!=null) (builtins.toFile "nnn.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} nnn.h";
+  configFile = optionalString (conf != null) (builtins.toFile "nnn.h" conf);
+  preBuild = optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline ncurses ];
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Small ncurses-based file browser forked from noice";
-    homepage = https://github.com/jarun/nnn;
+    homepage = "https://github.com/jarun/nnn";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ jfrankenau filalex77 ];
   };
 }

@@ -19,13 +19,13 @@ stdenv.mkDerivation {
     echo 'INSTALL(DIRECTORY include DESTINATION .)' >> CMakeLists.txt
   '';
 
-  cmakeFlags="-DLIBTCOD_SAMPLES=OFF";
+  cmakeFlags = [ "-DLIBTCOD_SAMPLES=OFF" ];
 
   buildInputs = [ cmake SDL libGLU libGL upx zlib ];
 
   meta = {
     description = "API for roguelike games";
-    homepage = http://roguecentral.org/doryen/libtcod/;
+    homepage = "http://roguecentral.org/doryen/libtcod/";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.skeidel ];

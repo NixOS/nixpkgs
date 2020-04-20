@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-hanaonazure";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "01gnrhwi3nswjdxk9fjjwbyyx83agpdksrksk0c4d7bm9p2871g6";
+    sha256 = "cc4058174e371a0b68b305cd5a082fcca47f3446dd9aefd9ada72da4bd637da9";
   };
 
   propagatedBuildInputs = [

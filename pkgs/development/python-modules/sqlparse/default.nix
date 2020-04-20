@@ -27,7 +27,7 @@ buildPythonPackage rec {
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.
     '';
-    homepage = https://github.com/andialbrecht/sqlparse;
+    homepage = "https://github.com/andialbrecht/sqlparse";
     license = licenses.bsd3;
   };
 

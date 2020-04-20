@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pglnjz907ajlhnlnig3p0sx7hdkpggr8ss7b3wzf1lykzgv9l52";
   };
 
+  patches = [ ./rtaudio-pkgconfig.patch ];
+
   enableParallelBuilding = true;
 
   buildInputs = [ autoconf automake libtool libjack2 alsaLib pulseaudio rtmidi ];
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A set of C++ classes that provide a cross platform API for realtime audio input/output";
-    homepage =  http://www.music.mcgill.ca/~gary/rtaudio/;
+    homepage =  "http://www.music.mcgill.ca/~gary/rtaudio/";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;

@@ -1,7 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, wheel, setuptools, packaging
-, cmake, ninja, cython, codecov, coverage, six, virtualenv, pathpy
-, pytest, pytestcov, pytest-virtualenv, pytest-mock, pytestrunner
-, requests, flake8 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, distro
+, packaging
+, setuptools
+, wheel
+# Test Inputs
+, cmake
+, codecov
+, coverage
+, cython
+, flake8
+, ninja
+, pathpy
+, pytest
+, pytestcov
+, pytest-mock
+, pytestrunner
+, pytest-virtualenv
+, requests
+, six
+, virtualenv
+}:
 
 buildPythonPackage rec {
   pname = "scikit-build";
@@ -12,17 +33,40 @@ buildPythonPackage rec {
     sha256 = "7342017cc82dd6178e3b19377389b8a8d1f8b429d9cdb315cfb1094e34a0f526";
   };
 
-  # Fixes incorrect specified requirement (part of next release)
-  patches = [ ./fix_pytestrunner_req.patch ];
-
-  propagatedBuildInputs = [ wheel setuptools packaging ];
-  checkInputs = [ 
-    cmake ninja cython codecov coverage six pathpy
-    pytest pytestcov pytest-mock pytest-virtualenv pytestrunner
-    requests flake8
+  propagatedBuildInputs = [
+    distro
+    packaging
+    setuptools
+    wheel
+  ];
+  checkInputs = [
+    cmake
+    codecov
+    coverage
+    cython
+    flake8
+    ninja
+    pathpy
+    pytest
+    pytestcov
+    pytest-mock
+    pytestrunner
+    pytest-virtualenv
+    requests
+    six
+    virtualenv
   ];
 
   dontUseCmakeConfigure = true;
+
+  # scikit-build PR #458. Remove in version > 0.10.0
+  patches = [
+    (fetchpatch {
+      name = "python38-platform_linux_distribution-fix-458";
+      url = "https://github.com/scikit-build/scikit-build/commit/faa7284e5bc4c72bc8744987acdf3297b5d2e7e4.patch";
+      sha256 = "1hgl3cnkf266zaw534b64c88waxfz9721wha0m6j3hsnxk76ayjv";
+    })
+  ];
 
   disabledTests = lib.concatMapStringsSep " and " (s: "not " + s) ([
     "test_hello_develop" # tries setuptools develop install
@@ -38,9 +82,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = http://scikit-build.org/;
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
+    homepage = "http://scikit-build.org/";
     license = with licenses; [ mit bsd2 ]; # BSD due to reuses of PyNE code
-    maintainers = [ maintainers.FlorianFranzen ];
+    maintainers = with maintainers; [ FlorianFranzen ];
   };
 }

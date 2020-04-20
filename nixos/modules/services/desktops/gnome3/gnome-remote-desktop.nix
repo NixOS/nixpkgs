@@ -4,6 +4,10 @@
 with lib;
 
 {
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
   options = {
     services.gnome3.gnome-remote-desktop = {
@@ -13,6 +17,8 @@ with lib;
 
   ###### implementation
   config = mkIf config.services.gnome3.gnome-remote-desktop.enable {
+    services.pipewire.enable = true;
+
     systemd.packages = [ pkgs.gnome3.gnome-remote-desktop ];
   };
 }

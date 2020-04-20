@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Deepin Internationalization utilities";
-    homepage = https://github.com/linuxdeepin/deepin-gettext-tools;
+    homepage = "https://github.com/linuxdeepin/deepin-gettext-tools";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

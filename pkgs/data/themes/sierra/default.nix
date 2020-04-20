@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sierra-gtk-theme";
-  version = "2019-05-07";
+  version = "2019-12-16";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0rm9lcwp89ljxqrya9bi882qcs339pc1l945cr1xq2rganqyk9cq";
+    sha256 = "14hlz8kbrjypyd6wyrwmnj2wm9w3kc8y00ms35ard7x8lmhs56hr";
   };
 
   nativeBuildInputs = [ libxml2 ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Mac OSX like theme for GTK based desktop environments";
-    homepage = https://github.com/vinceliuice/Sierra-gtk-theme;
+    homepage = "https://github.com/vinceliuice/Sierra-gtk-theme";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

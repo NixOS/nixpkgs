@@ -13,6 +13,19 @@ let
 in
 {
 
+  imports = [
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "directDelivery" ] [ "services" "ssmtp" "enable" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "hostName" ] [ "services" "ssmtp" "hostName" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "domain" ] [ "services" "ssmtp" "domain" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "root" ] [ "services" "ssmtp" "root" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "useTLS" ] [ "services" "ssmtp" "useTLS" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "useSTARTTLS" ] [ "services" "ssmtp" "useSTARTTLS" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authUser" ] [ "services" "ssmtp" "authUser" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPass" ] [ "services" "ssmtp" "authPass" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPassFile" ] [ "services" "ssmtp" "authPassFile" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "setSendmail" ] [ "services" "ssmtp" "setSendmail" ])
+  ];
+
   options = {
 
     services.ssmtp = {

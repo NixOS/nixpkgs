@@ -13,7 +13,7 @@ let
 
 in
 
-import ../make-test.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ...} : {
   name = "wireguard-with-namespaces";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ asymmetric ];
@@ -65,16 +65,14 @@ import ../make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll();
+    start_all()
 
-    $peer0->waitForUnit("wireguard-wg0.service");
-    $peer1->waitForUnit("wireguard-wg0.service");
-    $peer2->waitForUnit("wireguard-wg0.service");
-    $peer3->waitForUnit("wireguard-wg0.service");
+    for machine in peer0, peer1, peer2, peer3:
+        machine.wait_for_unit("wireguard-wg0.service")
 
-    $peer0->succeed("ip -n ${socketNamespace} link show wg0");
-    $peer1->succeed("ip -n ${interfaceNamespace} link show wg0");
-    $peer2->succeed("ip -n ${interfaceNamespace} link show wg0");
-    $peer3->succeed("ip link show wg0");
+    peer0.succeed("ip -n ${socketNamespace} link show wg0")
+    peer1.succeed("ip -n ${interfaceNamespace} link show wg0")
+    peer2.succeed("ip -n ${interfaceNamespace} link show wg0")
+    peer3.succeed("ip link show wg0")
   '';
 })

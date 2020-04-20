@@ -1,61 +1,39 @@
-{ stdenv, libarchive, patchelf, zlib, buildFHSUserEnv, writeScript }:
+{ stdenv, buildFHSUserEnv, writeScript, pkgs
+, bash, radare2, jq, squashfsTools, ripgrep
+, coreutils, libarchive, file, runtimeShell, pv
+, lib, runCommand }:
 
 rec {
-  # Both extraction functions could be unified, but then
-  # it would depend on libmagic to correctly identify ISO 9660s
-
-  extractType1 = { name, src }: stdenv.mkDerivation {
-    name = "${name}-extracted";
-    inherit src;
-
-    nativeBuildInputs = [ libarchive ];
-    buildCommand = ''
-      mkdir $out
-      bsdtar -x -C $out -f $src
-    '';
+  appimage-exec = pkgs.substituteAll {
+    src = ./appimage-exec.sh;
+    isExecutable = true;
+    dir = "bin";
+    path = with pkgs; lib.makeBinPath [ pv ripgrep file radare2 libarchive jq squashfsTools coreutils bash ];
   };
 
-  extractType2 = { name, src }: stdenv.mkDerivation {
-    name = "${name}-extracted";
-    inherit src;
+  extract = { name, src }: runCommand "${name}-extracted" {
+    buildInputs = [ appimage-exec ];
+  } ''
+    appimage-exec.sh -x $out ${src}
+  '';
 
-    nativeBuildInputs = [ patchelf ];
-    buildCommand = ''
-      install $src ./appimage
-      patchelf \
-        --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        --replace-needed libz.so.1 ${zlib}/lib/libz.so.1 \
-        ./appimage
-
-      ./appimage --appimage-extract
-
-      cp -rv squashfs-root $out
-    '';
-  };
+  # for compatibility, deprecated
+  extractType1 = extract;
+  extractType2 = extract;
+  wrapType1 = wrapType2;
 
   wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
     inherit name;
 
-    targetPkgs = pkgs: defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
+    targetPkgs = pkgs: [ appimage-exec ]
+      ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-    runScript = writeScript "run" ''
-      #!${stdenv.shell}
-
-      export APPDIR=${src}
-      export APPIMAGE_SILENT_INSTALL=1
-      cd $APPDIR
-      exec ./AppRun "$@"
-    '';
+    runScript = "appimage-exec.sh -w ${src}";
   } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
-
-  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
-    src = extractType1 { inherit name src; };
-  });
 
   wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
     inherit name extraPkgs;
-    src = extractType2 { inherit name src; };
+    src = extract { inherit name src; };
   });
 
   defaultFhsEnvArgs = {

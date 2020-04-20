@@ -164,6 +164,10 @@ let
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
+      preInstall = ''
+        installFlagsArray+=("-j$NIX_BUILD_CORES")
+      '';
+
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
       installTargets = [ (
         if platform ? kernelInstallTarget then platform.kernelInstallTarget
@@ -265,8 +269,8 @@ let
             + stdenv.lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
         license = stdenv.lib.licenses.gpl2;
-        homepage = https://www.kernel.org/;
-        repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
+        homepage = "https://www.kernel.org/";
+        repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = [
           maintainers.thoughtpolice
         ];

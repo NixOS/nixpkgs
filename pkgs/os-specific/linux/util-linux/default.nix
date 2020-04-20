@@ -1,18 +1,12 @@
 { lib, stdenv, fetchurl, pkgconfig, zlib, shadow
 , ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
-let
-  version = lib.concatStringsSep "." ([ majorVersion ]
-    ++ lib.optional (patchVersion != "") patchVersion);
-  majorVersion = "2.33";
-  patchVersion = "2";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "util-linux";
-  inherit version;
+  version = "2.33.2";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "15yf2dh4jd1kg6066hydlgdhhs2j3na13qld8yx30qngqvmfh6v3";
   };
 
@@ -28,7 +22,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace sys-utils/eject.c \
-      --replace "/bin/umount" "$out/bin/umount"
+      --replace "/bin/umount" "$bin/bin/umount"
   '';
 
   # !!! It would be better to obtain the path to the mount helpers
@@ -70,7 +64,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://www.kernel.org/pub/linux/utils/util-linux/;
+    homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "A set of system utilities for Linux";
     license = licenses.gpl2; # also contains parts under more permissive licenses
     platforms = platforms.linux;

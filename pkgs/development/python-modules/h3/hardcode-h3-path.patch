@@ -1,0 +1,19 @@
+diff --git a/h3/h3.py b/h3/h3.py
+index 18cf168..2cc7812 100644
+--- a/h3/h3.py
++++ b/h3/h3.py
+@@ -34,13 +34,7 @@ from ctypes import (
+     POINTER,
+ )
+
+-_dirname = os.path.dirname(__file__)
+-libh3_path = ('{}/{}'.format(_dirname, 'out/libh3.1.dylib')
+-              if platform.system() == 'Darwin' else (
+-              '{}/{}'.format(_dirname, 'out/h3.dll') if platform.system() == 'Windows' else
+-              '{}/{}'.format(_dirname, 'out/libh3.so.1')))
+-
+-libh3 = cdll.LoadLibrary(libh3_path)
++libh3 = cdll.LoadLibrary('@libh3_path@')
+
+ # Type of an H3 index
+ H3Index = c_ulonglong

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "quickjs";
-  version = "2019-10-27";
+  version = "2019-12-21";
 
   src = fetchurl {
     url = "https://bellard.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0xm16ja3c0k80jy0xkx0f40r44v2lgx2si4dnaw2w7c5nx7cmkai";
+    sha256 = "13hlx6qwrrxmlvvqcr3irxba6zmf05cf54l32vj50wc66s1qd41p";
   };
 
   makeFlags = [ "prefix=${placeholder ''out''}" ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A small and embeddable Javascript engine";
     homepage = "https://bellard.org/quickjs/";
-    maintainers = with maintainers; [ stesie ivan ];
+    maintainers = with maintainers; [ stesie ];
     platforms = platforms.linux;
     license = licenses.mit;
   };

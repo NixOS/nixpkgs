@@ -27,7 +27,7 @@ buildPythonPackage {
       that package.
     '';
 
-    homepage = https://github.com/skarra/CalDAVClientLibrary/tree/asynkdev/;
+    homepage = "https://github.com/skarra/CalDAVClientLibrary/tree/asynkdev/";
     maintainers = with maintainers; [ pjones ];
     broken = true; # 2018-04-11
   };

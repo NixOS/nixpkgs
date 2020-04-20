@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Digital audio workstation";
-    homepage = https://www.reaper.fm/;
+    homepage = "https://www.reaper.fm/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jfrankenau ];

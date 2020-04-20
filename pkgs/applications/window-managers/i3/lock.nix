@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
     pam libX11 libev cairo libxkbcommon libxkbfile ];
 
-  makeFlags = "all";
-  installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc";
+  makeFlags = [ "all" ];
+  installFlags = [ "PREFIX=\${out}" "SYSCONFDIR=\${out}/etc" ];
   postInstall = ''
     mkdir -p $out/share/man/man1
     cp *.1 $out/share/man/man1
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       a configurable image is shown, and a ring-shaped unlock-indicator gives feedback
       for every keystroke. After entering your password, the screen is unlocked again.
     '';
-    homepage = https://i3wm.org/i3lock/;
+    homepage = "https://i3wm.org/i3lock/";
     maintainers = with maintainers; [ malyn domenkozar ];
     license = licenses.bsd3;
     platforms = platforms.all;

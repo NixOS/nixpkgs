@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ groff ];
 
-  installFlags = ''DESTDIR=$(out)'';
+  installFlags = [ "DESTDIR=$(out)" ];
 
   postConfigure = ''
     sed -e s@/usr/man/@/share/man/@ -i Makefile

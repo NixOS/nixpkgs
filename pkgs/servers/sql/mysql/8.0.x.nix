@@ -31,7 +31,6 @@ self = stdenv.mkDerivation rec {
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12" # For std::shared_timed_mutex.
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
     "-DWITH_ROUTER=OFF" # It may be packaged separately.

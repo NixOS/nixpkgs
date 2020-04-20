@@ -12,8 +12,7 @@ buildPythonPackage {
   format = "other";
 
   nativeBuildInputs = [ lndir sip qtbase ];
-  buildInputs = [ qscintilla ];
-  propagatedBuildInputs = [ pyqt5 ];
+  buildInputs = [ qscintilla pyqt5 ];
 
   postPatch = ''
     substituteInPlace Python/configure.py \
@@ -46,6 +45,6 @@ buildPythonPackage {
     description = "A Python binding to QScintilla, Qt based text editing control";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lsix ];
-    homepage = https://www.riverbankcomputing.com/software/qscintilla/;
+    homepage = "https://www.riverbankcomputing.com/software/qscintilla/";
   };
 }

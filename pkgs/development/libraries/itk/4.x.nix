@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk }:
 
 stdenv.mkDerivation rec {
-  name = "itk-4.13.1";
+  name = "itk-4.13.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/itk/InsightToolkit-4.13.1.tar.xz;
-    sha256 = "0p4cspgbnjsnkjz8nfg092yaxz8qkqi2nkxjdv421d0zrmi0i2al";
+    url = "mirror://sourceforge/itk/InsightToolkit-4.13.2.tar.xz";
+    sha256 = "19cgfpd63gqrvc3m27m394gy2d7w79g5y6lvznb5qqr49lihbgns";
   };
 
   cmakeFlags = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
-    homepage = http://www.itk.org/;
+    homepage = "http://www.itk.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

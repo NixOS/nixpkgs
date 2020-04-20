@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , fetchFromGitHub
 
 , cmake
@@ -23,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.0.16";
+  version = "1.0.17";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = pname;
     rev = version;
-    sha256 = "1bdmxxkcqpjvkckizmrz2839b4yspw4xv69bqkrrgkcyvxsr804w";
+    sha256 = "0xw2mcgnm4sa9hrhfgp669lfypw97drxjmz5w8i5whaprpvmkxzw";
   };
 
   nativeBuildInputs = [ cmake gettext pkgconfig wrapGAppsHook ];
@@ -45,7 +44,9 @@ stdenv.mkDerivation rec {
       portaudio
       zlib
     ]
-    ++ lib.optional withLua lua;
+    ++ stdenv.lib.optional withLua lua;
+
+  buildFlags = "translations";
 
   hardeningDisable = [ "format" ];
 
@@ -53,9 +54,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
-    homepage    = https://github.com/xournalpp/xournalpp;
+    homepage    = "https://github.com/xournalpp/xournalpp";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = with maintainers; [ andrew-d sikmir ];
     platforms   = platforms.linux;
   };
 }

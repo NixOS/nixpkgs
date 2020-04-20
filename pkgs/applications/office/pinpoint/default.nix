@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
                   cairo clutter-gtk ];
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/action/show/Apps/Pinpoint;
+    homepage = "https://wiki.gnome.org/action/show/Apps/Pinpoint";
     description = "A tool for making hackers do excellent presentations";
     license = licenses.lgpl21;
     platforms = platforms.linux;

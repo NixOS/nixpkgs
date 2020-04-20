@@ -84,37 +84,38 @@ nix-env -qaP -A nixos.haskellPackages
 nix-env -iA nixos.haskellPackages.cabal-install
 ```
 
-Our current default compiler is GHC 7.10.x and the `haskellPackages` set
-contains packages built with that particular version. Nixpkgs contains the
-latest major release of every GHC since 6.10.4, however, and there is a whole
-family of package sets available that defines Hackage packages built with each
-of those compilers, too:
+Our current default compiler is GHC 8.8.x and the `haskellPackages` set
+contains packages built with that particular version. Nixpkgs contains the last
+three major releases of GHC and there is a whole family of package sets
+available that defines Hackage packages built with each of those compilers,
+too:
 ```shell
-nix-env -f "<nixpkgs>" -qaP -A haskell.packages.ghc6123
-nix-env -f "<nixpkgs>" -qaP -A haskell.packages.ghc763
+nix-env -f "<nixpkgs>" -qaP -A haskell.packages.ghc865
+nix-env -f "<nixpkgs>" -qaP -A haskell.packages.ghc8101
 ```
 
 The name `haskellPackages` is really just a synonym for
-`haskell.packages.ghc7102`, because we prefer that package set internally and
+`haskell.packages.ghc882`, because we prefer that package set internally and
 recommend it to our users as their default choice, but ultimately you are free
 to compile your Haskell packages with any GHC version you please. The following
 command displays the complete list of available compilers:
 ```
 $ nix-env -f "<nixpkgs>" -qaP -A haskell.compiler
-haskell.compiler.ghc822                  ghc-8.2.2
-haskell.compiler.integer-simple.ghc822   ghc-8.2.2
+haskell.compiler.ghc8101                 ghc-8.10.1
+haskell.compiler.integer-simple.ghc8101  ghc-8.10.1
+haskell.compiler.ghcHEAD                 ghc-8.11.20200403
+haskell.compiler.integer-simple.ghcHEAD  ghc-8.11.20200403
 haskell.compiler.ghc822Binary            ghc-8.2.2-binary
 haskell.compiler.ghc844                  ghc-8.4.4
 haskell.compiler.ghc863Binary            ghc-8.6.3-binary
-haskell.compiler.ghc864                  ghc-8.6.4
-haskell.compiler.integer-simple.ghc864   ghc-8.6.4
 haskell.compiler.ghc865                  ghc-8.6.5
 haskell.compiler.integer-simple.ghc865   ghc-8.6.5
 haskell.compiler.ghc881                  ghc-8.8.1
 haskell.compiler.integer-simple.ghc881   ghc-8.8.1
-haskell.compiler.ghcHEAD                 ghc-8.9.20190601
-haskell.compiler.integer-simple.ghcHEAD  ghc-8.9.20190601
-haskell.compiler.ghcjs84                 ghcjs-8.4.0.1
+haskell.compiler.ghc882                  ghc-8.8.2
+haskell.compiler.integer-simple.ghc882   ghc-8.8.2
+haskell.compiler.ghc883                  ghc-8.8.3
+haskell.compiler.integer-simple.ghc883   ghc-8.8.3
 haskell.compiler.ghcjs                   ghcjs-8.6.0.1
 ```
 
@@ -368,7 +369,7 @@ automatically select the right version of GHC and other build tools to build,
 test and execute apps in an existing project downloaded from somewhere on the
 Internet. Pass the `--nix` flag to any `stack` command to do so, e.g.
 ```shell
-git clone --recursive https://github.com/yesodweb/wai
+git clone --recurse-submodules https://github.com/yesodweb/wai.git
 cd wai
 stack --nix build
 ```

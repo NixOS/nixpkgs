@@ -18,10 +18,10 @@ in {
     };
 
     package = mkOption {
-      default = pkgs.rxvt_unicode-with-plugins;
-      defaultText = "pkgs.rxvt_unicode-with-plugins";
+      default = pkgs.rxvt-unicode;
+      defaultText = "pkgs.rxvt-unicode";
       description = ''
-        Package to install. Usually pkgs.rxvt_unicode-with-plugins or pkgs.rxvt_unicode
+        Package to install. Usually pkgs.rxvt-unicode.
       '';
       type = types.package;
     };

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem-pl-parser";
-  version = "3.26.3";
+  version = "3.26.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13a45py2j1r9967zgww8kd24bn2fhycd4m3kzr90sxx9l2w03z8f";
+    sha256 = "132jihnf51zs98yjkc6jxyqib4f3dawpjm17g4bj4j78y93dww2k";
   };
 
   passthru = {
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Videos;
+    homepage = "https://wiki.gnome.org/Apps/Videos";
     description = "Simple GObject-based library to parse and save a host of playlist formats";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.lgpl2;
     platforms = platforms.linux;
   };

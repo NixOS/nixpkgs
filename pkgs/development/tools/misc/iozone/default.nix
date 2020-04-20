@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   name = "iozone-3.471";
 
   src = fetchurl {
-    url = http://www.iozone.org/src/current/iozone3_471.tar;
+    url = "http://www.iozone.org/src/current/iozone3_471.tar";
     sha256 = "0w63b3d4ws1sm52lpdd08sl7n4ay438dl3wy0q9la12iq81rglid";
   };
 
   license = fetchurl {
-    url = http://www.iozone.org/docs/Iozone_License.txt;
+    url = "http://www.iozone.org/docs/Iozone_License.txt";
     sha256 = "1309sl1rqm8p9gll3z8zfygr2pmbcvzw5byf5ba8y12avk735zrv";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "IOzone Filesystem Benchmark";
-    homepage    = http://www.iozone.org/;
+    homepage    = "http://www.iozone.org/";
     license     = stdenv.lib.licenses.unfreeRedistributable;
     platforms   = ["i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ Baughn makefu ];

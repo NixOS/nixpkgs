@@ -19,7 +19,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "contrast";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
     owner = "design";
     repo = "contrast";
     rev = version;
-    sha256 = "0rm705zrk9rfv31pwbqxrswi5v6vhnghxa8dgxjmcrh00l8dm6j9";
+    sha256 = "0kk3mv7a6y258109xvgicmsi0lw0rcs00gfyivl5hdz7qh47iccy";
   };
 
-  cargoSha256 = "06vgc89d93fhjcyy9d1v6lf8kr34pl5bbpwbv2jpfahpj9y84bgj";
+  cargoSha256 = "0vi8nv4hkhsgqgz36xacwkk5cxirg6li44nbmk3x7vx7c64hzybq";
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     pkgconfig
     python3
     wrapGAppsHook
+    glib # for glib-compile-resources
   ];
 
   buildInputs = [
@@ -63,7 +64,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
-    homepage = https://gitlab.gnome.org/World/design/contrast;
+    homepage = "https://gitlab.gnome.org/World/design/contrast";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
   };

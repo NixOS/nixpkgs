@@ -17,6 +17,9 @@ mkDerivation rec {
     sha256 = "1sx4j4brk71bas3cpqzk4bd8bknyl3x4fdg5pv4r7pcfd3vpq2vy";
   };
 
+  # *somtimes* fails with can't find ui_manager.h, also see https://github.com/NixOS/nixpkgs/issues/35359
+  enableParallelBuilding = false;
+
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
 
   buildInputs = [
@@ -28,7 +31,8 @@ mkDerivation rec {
     python3Packages.pyqt5
   ] ++ lib.optional (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) vc;
 
-  NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
+  NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ]
+    ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy";
 
   cmakeFlags = [
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
@@ -44,7 +48,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A free and open source painting application";
-    homepage = https://krita.org/;
+    homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
     license = licenses.gpl2;

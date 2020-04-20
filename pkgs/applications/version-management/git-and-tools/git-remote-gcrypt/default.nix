@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "git-remote-gcrypt";
-  version = "1.2";
+  version = "1.3";
   rev = version;
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "spwhitton";
     repo = "git-remote-gcrypt";
-    sha256 = "0isfg0vlmcphxzj4jm32dycprhym26ina1b28jgc4j57kiqqrdcy";
+    sha256 = "0n8fzvr6y0pxrbvkywlky2bd8jvi0ayp4n9hwi84l1ldmv4a40dh";
   };
 
   outputs = [ "out" "man" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://spwhitton.name/tech/code/git-remote-gcrypt;
+    homepage = "https://spwhitton.name/tech/code/git-remote-gcrypt";
     description = "A git remote helper for GPG-encrypted remotes";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ellis montag451 ];

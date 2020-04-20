@@ -110,11 +110,12 @@ in
 
   config = mkIf config.services.cgminer.enable {
 
-    users.users = optionalAttrs (cfg.user == "cgminer") (singleton
-      { name = "cgminer";
+    users.users = optionalAttrs (cfg.user == "cgminer") {
+      cgminer = {
         uid = config.ids.uids.cgminer;
         description = "Cgminer user";
-      });
+      };
+    };
 
     environment.systemPackages = [ cfg.package ];
 

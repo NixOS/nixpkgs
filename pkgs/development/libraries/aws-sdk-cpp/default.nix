@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (apis != ["*"])
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
+  # fix build with gcc9, can be removed after bumping to current version
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+
   preConfigure =
     ''
       rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
@@ -58,7 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";
-    homepage = https://github.com/awslabs/aws-sdk-cpp;
+    homepage = "https://github.com/awslabs/aws-sdk-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco orivej ];

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     makeWrapper ninja ant perl
   ];
 
-  ninjaFlags = "-C build/Opt";
+  ninjaFlags = [ "-C" "build/Opt" ];
 
   postInstall = ''
     for i in "$out"/bin/*; do

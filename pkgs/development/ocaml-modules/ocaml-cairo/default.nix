@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     cp META $out/lib/ocaml/${ocaml.version}/site-lib/cairo/
   '';
 
-  makeFlags = "INSTALLDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/cairo";
+  makeFlags = [ "INSTALLDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/cairo" ];
 
   meta = {
-    homepage = http://cairographics.org/cairo-ocaml;
+    homepage = "http://cairographics.org/cairo-ocaml";
     description = "ocaml bindings for cairo library";
     license = stdenv.lib.licenses.gpl2;
     platforms = ocaml.meta.platforms or [];

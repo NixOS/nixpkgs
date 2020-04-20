@@ -14,14 +14,12 @@
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.2.1";
+  version = "0.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6efc926738a3cd576c2a79725fed9afde92378aa5c6a957e3af010cb019fac9d";
+    sha256 = "921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db";
   };
-
-  outputs = [ "out" "dev" ];
 
   propagatedBuildInputs =
     [ botocore
@@ -46,7 +44,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/boto/s3transfer;
+    homepage = "https://github.com/boto/s3transfer";
     license = stdenv.lib.licenses.asl20;
     description = "A library for managing Amazon S3 transfers";
   };

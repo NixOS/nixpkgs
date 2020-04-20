@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Easily rotate your AWS key";
-    homepage = https://github.com/Fullscreen/aws-rotate-key;
+    homepage = "https://github.com/Fullscreen/aws-rotate-key";
     license = licenses.mit;
     maintainers = [maintainers.mbode];
     platforms = platforms.unix;

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qtractor";
-  version = "0.9.11";
+  version = "0.9.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "02cpjlf3j4sm74hz88r1frnlycs52rs11mzplr2q8plji3ic5w50";
+    sha256 = "1hwxdjlzsf1z6xl82s4bdfxa2bfisklrfx361zbzskmg9iymw1gy";
   };
 
   nativeBuildInputs = [
@@ -23,9 +23,11 @@ stdenv.mkDerivation rec {
       suil
     ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Audio/MIDI multi-track sequencer";
-    homepage = http://qtractor.sourceforge.net;
+    homepage = "http://qtractor.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

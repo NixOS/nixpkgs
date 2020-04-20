@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tool to measure, monitor and analyze memory behavior";
-    homepage = https://pythonhosted.org/Pympler/;
+    homepage = "https://pythonhosted.org/Pympler/";
     license = licenses.asl20;
   };
 

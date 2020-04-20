@@ -2,8 +2,8 @@
 
 buildGoModule rec {
   pname = "kube3d";
-  version = "1.3.1";
-  k3sVersion = "0.9.1";
+  version = "1.6.0";
+  k3sVersion = "1.17.3-k3s1";
 
   goPackagePath = "github.com/rancher/k3d";
 
@@ -11,7 +11,7 @@ buildGoModule rec {
     owner  = "rancher";
     repo   = "k3d";
     rev    = "v${version}";
-    sha256 = "0bdpjnzyxd6mdc1qv0ml89qds6305kn3wmyci2kv6g2y7r7wxvm2";
+    sha256 = "0qjwqqynvgzainq66fpzczgynwk3hv7wzgfy5271fc6mj2k0zz5x";
   };
 
   buildFlagsArray = ''
@@ -21,13 +21,13 @@ buildGoModule rec {
       -X github.com/rancher/k3d/version.K3sVersion=v${k3sVersion}
   '';
 
-  modSha256 = "1qadf3gc2626l4jpad4lzi649nh8if9m6fgs2cf46r1nish16h95";
+  modSha256 = "0c8bfl0hz5cfhi6jzhhylz051jiix6s7s20fn23w7wri4xaqrjn8";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rancher/k3d";
     description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kuznero jlesquembre ];
+    maintainers = with maintainers; [ kuznero jlesquembre ngerstle ];
   };
 }

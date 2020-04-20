@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Low-level CSS parser for Python";
-    homepage = https://github.com/Kozea/tinycss2;
+    homepage = "https://github.com/Kozea/tinycss2";
     license = licenses.bsd3;
   };
 }

@@ -3,7 +3,7 @@
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
   isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales }:
+  parameterized, git, openssh, glibcLocales, nixosTests }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.5.1";
+    version = "2.7.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "13ddpcbndb22zlg9gjsf2pbgad45g1w5cg4a3z83085fkgnib7sr";
+      sha256 = "0jj8fh611n7xc3vsfbgpqsllp38cfj3spkr2kz3ara2x7jvh3406";
     };
 
     propagatedBuildInputs = [
@@ -44,10 +44,9 @@ let
       autobahn
       pyjwt
       pyyaml
-
+    ]
       # tls
-      twisted.extras.tls
-    ];
+      ++ twisted.extras.tls;
 
     checkInputs = [
       treq
@@ -92,6 +91,7 @@ let
 
     passthru = {
       inherit withPlugins;
+      tests.buildbot = nixosTests.buildbot;
     };
 
     meta = with lib; {

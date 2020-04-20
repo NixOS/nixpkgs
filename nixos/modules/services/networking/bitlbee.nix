@@ -161,16 +161,14 @@ in
 
   config =  mkMerge [
     (mkIf config.services.bitlbee.enable {
-      users.users = singleton {
-        name = "bitlbee";
+      users.users.bitlbee = {
         uid = bitlbeeUid;
         description = "BitlBee user";
         home = "/var/lib/bitlbee";
         createHome = true;
       };
 
-      users.groups = singleton {
-        name = "bitlbee";
+      users.groups.bitlbee = {
         gid = config.ids.gids.bitlbee;
       };
 

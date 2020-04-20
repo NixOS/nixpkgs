@@ -88,9 +88,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [
-    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
-  ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   meta = with stdenv.lib; {
     description = "Application matching framework";
@@ -98,7 +96,7 @@ stdenv.mkDerivation rec {
       Removes the headache of applications matching
       into a simple DBus daemon and c wrapper library.
     '';
-    homepage = https://launchpad.net/bamf;
+    homepage = "https://launchpad.net/bamf";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;

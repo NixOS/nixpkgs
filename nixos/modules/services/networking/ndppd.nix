@@ -43,7 +43,7 @@ let
       timeout = mkOption {
         type = types.int;
         description = ''
-          Controls how long to wait for a Neighbor Advertisment Message before 
+          Controls how long to wait for a Neighbor Advertisment Message before
           invalidating the entry, in milliseconds.
         '';
         default = 500;
@@ -51,7 +51,7 @@ let
       ttl = mkOption {
         type = types.int;
         description = ''
-          Controls how long a valid or invalid entry remains in the cache, in 
+          Controls how long a valid or invalid entry remains in the cache, in
           milliseconds.
         '';
         default = 30000;
@@ -142,7 +142,11 @@ in {
         messages, and respond to them according to a set of rules.
       '';
       default = {};
-      example = { eth0.rules."1111::/64" = {}; };
+      example = literalExample ''
+        {
+          eth0.rules."1111::/64" = {};
+        }
+      '';
     };
   };
 
@@ -161,7 +165,25 @@ in {
       documentation = [ "man:ndppd(1)" "man:ndppd.conf(5)" ];
       after = [ "network-pre.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.ndppd}/bin/ndppd -c ${ndppdConf}";
+      serviceConfig = {
+        ExecStart = "${pkgs.ndppd}/bin/ndppd -c ${ndppdConf}";
+
+        # Sandboxing
+        CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = "AF_INET6 AF_PACKET AF_NETLINK";
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+      };
     };
   };
 }

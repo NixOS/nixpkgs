@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, qtbase }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, qtbase, pantheon }:
 
 mkDerivation rec {
   pname = "adwaita-qt";
@@ -26,9 +26,15 @@ mkDerivation rec {
        --replace "DESTINATION \"\''${QT_PLUGINS_DIR}/styles" "DESTINATION \"$qtPluginPrefix/styles"
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with lib; {
     description = "A style to bend Qt applications to look like they belong into GNOME Shell";
-    homepage = https://github.com/FedoraQt/adwaita-qt;
+    homepage = "https://github.com/FedoraQt/adwaita-qt";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;

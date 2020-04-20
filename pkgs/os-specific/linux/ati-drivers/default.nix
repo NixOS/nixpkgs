@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ATI Catalyst display drivers";
-    homepage = http://support.amd.com/us/gpudownload/Pages/index.aspx;
+    homepage = "http://support.amd.com/us/gpudownload/Pages/index.aspx";
     license = licenses.unfree;
     maintainers = with maintainers; [ marcweber offline jerith666 ];
     platforms = platforms.linux;

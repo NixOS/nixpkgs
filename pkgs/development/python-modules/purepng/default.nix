@@ -25,7 +25,7 @@ buildPythonPackage {
       sha256 = "1ag0pji3p012hmj8kadcd0vydv9702188c0isizsi964qcl4va6m";
     })
   ];
-  patchFlags = "-p1 -d code";
+  patchFlags = [ "-p1" "-d" "code" ];
 
   # cython is optional - if not supplied, the "pure python" implementation will be used
   nativeBuildInputs = [ cython ];
@@ -40,7 +40,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Pure Python library for PNG image encoding/decoding";
-    homepage    = https://github.com/scondo/purepng;
+    homepage    = "https://github.com/scondo/purepng";
     license     = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

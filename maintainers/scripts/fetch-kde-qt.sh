@@ -28,7 +28,8 @@ find . -type f | while read src; do
 done
 
 cat >"$SRCS" <<EOF
-# DO NOT EDIT! This file is generated automatically by fetch-kde-qt.sh
+# DO NOT EDIT! This file is generated automatically.
+# Command: $0 $@
 { fetchurl, mirror }:
 
 {

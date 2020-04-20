@@ -30,7 +30,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
-    homepage = https://github.com/lxqt/pcmanfm-qt;
+    homepage = "https://github.com/lxqt/pcmanfm-qt";
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

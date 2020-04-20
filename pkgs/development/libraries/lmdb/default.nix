@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
   patches = [ ./hardcoded-compiler.patch ];
-  patchFlags = "-p3";
+  patchFlags = [ "-p3" ];
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       offering the persistence of standard disk-based databases, and is only
       limited to the size of the virtual address space.
     '';
-    homepage = http://symas.com/mdb/;
+    homepage = "http://symas.com/mdb/";
     maintainers = with maintainers; [ jb55 vcunat ];
     license = licenses.openldap;
     platforms = platforms.all;

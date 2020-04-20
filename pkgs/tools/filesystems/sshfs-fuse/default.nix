@@ -1,30 +1,26 @@
-{ stdenv, fetchFromGitHub, fetchpatch, meson, pkgconfig, ninja, docutils, makeWrapper
+{ stdenv, fetchFromGitHub
+, meson, pkgconfig, ninja, docutils, makeWrapper
 , fuse3, glib
 , which, python3Packages
 , openssh
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.6.0";
+  version = "3.7.0";
   pname = "sshfs-fuse";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "0l4a6azsp920fhl4safxjam6821b77zxhw8mjgm33f60pksslww0";
+    sha256 = "119qvjaai3nqs2psqk2kv4gxjchrnrcfnmlwk7yxnj3v59pgyxhv";
   };
-
-  patches = [ (fetchpatch {
-    url = "https://github.com/libfuse/sshfs/commit/a548abd1f33a8423bec72724a5f48eb96fa55dd2.patch";
-    sha256 = "19p94aw7nvydd7p2bd1f5cqhlhhamjhda31k22sg06xaqyl893jm";
-  }) ];
 
   nativeBuildInputs = [ meson pkgconfig ninja docutils makeWrapper ];
   buildInputs = [ fuse3 glib ];
   checkInputs = [ which python3Packages.pytest ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString
     (stdenv.hostPlatform.system == "i686-linux")
     "-D_FILE_OFFSET_BITS=64";
 

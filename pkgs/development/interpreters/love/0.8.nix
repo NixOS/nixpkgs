@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     } || true
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-I${SDL.dev}/include/SDL"
     "-I${freetype.dev}include/freetype2"
     "-DGL_GLEXT_PROTOTYPES" # https://community.khronos.org/t/glgenbuffers-was-not-declared-in-this-scope/59283/2

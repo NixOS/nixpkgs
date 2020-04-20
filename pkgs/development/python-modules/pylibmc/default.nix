@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Quick and small memcached client for Python";
-    homepage = http://sendapatch.se/projects/pylibmc/;
+    homepage = "http://sendapatch.se/projects/pylibmc/";
     license = licenses.bsd3;
   };
 }

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       languages. The language largely succeeds in this goal, apart
       from its use of an assignment statement.
     '';
-    homepage = http://www.catb.org/~esr/intercal/;
+    homepage = "http://www.catb.org/~esr/intercal/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

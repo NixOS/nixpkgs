@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
-, xorg, autoPatchelfHook, systemd, libnotify
+, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 }:
 
 let deps = [
@@ -18,6 +18,7 @@ let deps = [
     gnome2.GConf
     pango
     gtk3
+    libappindicator
     libnotify
     xorg.libX11
     xorg.libXScrnSaver
@@ -40,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2019.8";
+  version = "2020.3";
 
   src = fetchurl {
     url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "0cjc8j8pqgdhnax4mvwmvnxfcygjsp805hxalfaj8wa5adph96hz";
+    sha256 = "fac3896db78cc2ddac81abec8bc0aa324e66b453126ed35a501e422ce64b1362";
   };
 
   nativeBuildInputs = [
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ systemd.lib libnotify ];
+  runtimeDependencies = [ systemd.lib libnotify libappindicator ];
 
   installPhase = ''
     runHook preInstall
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
 
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
+    ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
 
     runHook postInstall
   '';
@@ -84,7 +86,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.xfix ];
+    maintainers = with maintainers; [ filalex77 ];
   };
 
 }

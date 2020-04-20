@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
-  version = "3.5.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "0jfi9h8wsj7h5z3dxdijq6ddxiygik9j86pjxl3hza4v2ilsbwy3";
+    sha256 = "1vbaza9c7159xf2ym90l0xkyj2mp6c3hbghhsqn29yvz08fda9df";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   patchPhase = ''
-    substituteInPlace libqalculate/Calculator.cc \
+    substituteInPlace libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
   '' + stdenv.lib.optionalString stdenv.cc.isClang ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An advanced calculator library";
-    homepage = http://qalculate.github.io;
+    homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ gebner ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;

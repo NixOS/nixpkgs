@@ -6,6 +6,7 @@ use warnings;
 
 use CPAN::Meta();
 use CPANPLUS::Backend();
+use Module::CoreList;
 use Getopt::Long::Descriptive qw( describe_options );
 use JSON::PP qw( encode_json );
 use Log::Log4perl qw(:easy);
@@ -164,7 +165,7 @@ Readonly::Hash my %LICENSE_MAP => (
 
     # License not provided in metadata.
     unknown => {
-        licenses => [qw( unknown )],
+        licenses => [],
         amb      => 1
     }
 );
@@ -278,14 +279,8 @@ sub get_deps {
     foreach my $n ( $deps->required_modules ) {
         next if $n eq "perl";
 
-        # Figure out whether the module is a core module by attempting
-        # to `use` the module in a pure Perl interpreter and checking
-        # whether it succeeded. Note, $^X is a magic variable holding
-        # the path to the running Perl interpreter.
-        if ( system("env -i $^X -M$n -e1 >/dev/null 2>&1") == 0 ) {
-            DEBUG("skipping Perl-builtin module $n");
-            next;
-        }
+        my @core = Module::CoreList->find_modules(qr/^$n$/);
+        next if (@core);
 
         my $pkg = module_to_pkg( $cb, $n );
 

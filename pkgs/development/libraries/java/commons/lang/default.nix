@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "3.9";
+  version = "3.10";
   pname = "commons-lang";
 
   src = fetchurl {
     url    = "mirror://apache/commons/lang/binaries/commons-lang3-${version}-bin.tar.gz";
-    sha256 = "0l0q1hnicvpbjmxl81ig3rwc212x5sdfnlg3cniwbmnx8fxjgbki";
+    sha256 = "144057jrx1jral6dnnb039h3k8rnrx0nj3ii428s725jfhazg68f";
   };
 
   installPhase = ''

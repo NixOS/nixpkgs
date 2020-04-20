@@ -77,7 +77,7 @@ with lib;
 
         if [ -w "$themedir" ]; then
           rm -f "$themedir"/icon-theme.cache
-          ${pkgs.gtk3.out}/bin/gtk-update-icon-cache --ignore-theme-index "$themedir"
+          ${pkgs.buildPackages.gtk3.out}/bin/gtk-update-icon-cache --ignore-theme-index "$themedir"
         fi
       done
     '';

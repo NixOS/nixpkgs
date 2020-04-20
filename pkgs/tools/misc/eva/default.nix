@@ -4,7 +4,7 @@ rustPlatform.buildRustPackage rec {
   pname = "eva";
   version = "0.2.7";
 
-  cargoSha256 = "0n3xvlmp4l925nbz8lx6dr9yrrfh6z7b9z8wd6sli3a1dq26d6bg";
+  cargoSha256 = "1lycjw5i169xx73qw8gknbakrxikdbr65fmqx7xq2mafc0hb1zyn";
 
   src = fetchFromGitHub {
     owner = "NerdyPepper";
@@ -18,14 +18,14 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # to fix the test suite (can be removed as soon as #33 is merged).
     (fetchpatch {
-      url = https://github.com/NerdyPepper/eva/commit/cacf51dbb9748b1dbe97b35f3c593a0a272bd4db.patch;
+      url = "https://github.com/NerdyPepper/eva/commit/cacf51dbb9748b1dbe97b35f3c593a0a272bd4db.patch";
       sha256 = "11q7dkz2x1888f3awnlr1nbbxzzfjrr46kd0kk6sgjdkyfh50cvv";
     })
   ];
 
   meta = with stdenv.lib; {
     description = "A calculator REPL, similar to bc";
-    homepage = https://github.com/NerdyPepper/eva;
+    homepage = "https://github.com/NerdyPepper/eva";
     license = licenses.mit;
     maintainers = with maintainers; [ nrdxp ma27 ];
   };

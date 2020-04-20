@@ -20,7 +20,7 @@ bundlerEnv {
         dotfiles, and saves them in ~/.homesick. It then allows you to symlink all the dotfiles into
         place with a single command.
       '';
-    homepage = https://github.com/technicalpickles/homesick;
+    homepage = "https://github.com/technicalpickles/homesick";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronschif nicknovitski ];
     platforms = platforms.unix;

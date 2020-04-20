@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "lz-string for python";
-    homepage    = https://github.com/gkovacs/lz-string-python;
+    homepage    = "https://github.com/gkovacs/lz-string-python";
     license     = lib.licenses.mit;
     maintainers = with lib.maintainers; [ obadz ];
   };

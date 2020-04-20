@@ -1,16 +1,16 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
 , pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
-, sshpubkeys, weasyprint, prometheus_client }:
+, sshpubkeys, weasyprint }:
 
 buildPythonPackage rec {
   pname = "metasrht";
-  version = "0.37.0";
+  version = "0.42.13";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     rev = version;
-    sha256 = "1jf3h2v27cbam8bwiw3x35319pzp0r651p8mfhw150jvskyvmkmr";
+    sha256 = "p7WgnfOsX09YxJJclHwdIky/jYkTOxibbYmXwcmE2S4=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -27,7 +27,6 @@ buildPythonPackage rec {
     pystache
     sshpubkeys
     weasyprint
-    prometheus_client
   ];
 
   patches = [
@@ -40,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/meta.sr.ht;
+    homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

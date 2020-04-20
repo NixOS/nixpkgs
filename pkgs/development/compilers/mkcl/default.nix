@@ -40,7 +40,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
 
   meta = {
     description = "ANSI Common Lisp Implementation";
-    homepage = https://common-lisp.net/project/mkcl/;
+    homepage = "https://common-lisp.net/project/mkcl/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tohl ];

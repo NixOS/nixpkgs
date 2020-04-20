@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ffmpeg libpng libjpeg ];
 
   meta = with stdenv.lib;  {
-    homepage = https://github.com/dirkvdb/ffmpegthumbnailer;
+    homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
     description = "A lightweight video thumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video 
         thumbnailer that can be used by file managers to create thumbnails

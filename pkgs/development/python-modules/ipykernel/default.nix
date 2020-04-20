@@ -1,27 +1,27 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, flaky
 , ipython
 , jupyter_client
 , traitlets
 , tornado
 , pythonOlder
-, pytest
+, pytestCheckHook
 , nose
 }:
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "5.1.2";
-  disabled = pythonOlder "3.4";
+  version = "5.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04jx6ihj3zpj4c7acqa14gl37mpdnbgmfm4nvv97xkjc1cz920xm";
+    sha256 = "7f1f01df22f1229c8879501057877ccaf92a3b01c1d00db708aad5003e5f9238";
   };
 
-  checkInputs = [ pytest nose ];
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
 
   # https://github.com/ipython/ipykernel/pull/377
@@ -32,17 +32,35 @@ buildPythonPackage rec {
     })
   ];
 
-  # For failing tests, see https://github.com/ipython/ipykernel/issues/387
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest ipykernel -k "not (test_sys_path or test_sys_path_profile_dir or test_complete)"
+  checkInputs = [ pytestCheckHook nose flaky ];
+  dontUseSetuptoolsCheck = true;
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
+  disabledTests = lib.optionals stdenv.isDarwin ([
+    # see https://github.com/NixOS/nixpkgs/issues/76197
+    "test_subprocess_print"
+    "test_subprocess_error"
+    "test_ipython_start_kernel_no_userns"
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    # flaky test https://github.com/ipython/ipykernel/issues/485
+    "test_shutdown"
+
+    # test regression https://github.com/ipython/ipykernel/issues/486
+    "test_sys_path_profile_dir"
+    "test_save_history"
+    "test_help_output"
+    "test_write_kernel_spec"
+    "test_ipython_start_kernel_userns"
+    "ZMQDisplayPublisherTests"
+  ]);
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "IPython Kernel for Jupyter";
-    homepage = http://ipython.org/;
+    homepage = "http://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

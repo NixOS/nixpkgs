@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
 
-  buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
-  installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
+  buildFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" "VARDIR=$(out)/var/lib" ];
+  installFlags = [ "PLATFORM=${platform}" "PREFIX=$(out)" "VARDIR=$(out)/var/lib" ];
 
   # We need a bootstrap-chicken to regenerate the c-files after
   # applying a patch to add support for CHICKEN_REPOSITORY_EXTRA
@@ -61,9 +61,9 @@ stdenv.mkDerivation {
   # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion
 
   meta = {
-    homepage = http://www.call-cc.org/;
+    homepage = "http://www.call-cc.org/";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ the-kenny corngood ];
     platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''

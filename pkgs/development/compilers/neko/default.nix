@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high-level dynamically typed programming language";
-    homepage = https://nekovm.org;
+    homepage = "https://nekovm.org";
     license = licenses.lgpl21;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux ++ platforms.darwin;

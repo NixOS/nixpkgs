@@ -17,7 +17,7 @@ self = stdenv.mkDerivation rec {
   version = "${luaversion}.${sourceVersion.patch}";
 
   src = fetchurl {
-    url = "https://www.lua.org/ftp/${pname}-${luaversion}.tar.gz";
+    url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
     sha256 = hash;
   };
 
@@ -97,7 +97,7 @@ self = stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://www.lua.org;
+    homepage = "http://www.lua.org";
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data

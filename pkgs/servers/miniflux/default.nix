@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "miniflux";
-  version = "2.0.18";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0480f4481qf47l3l79f4gxhgfzzhfapjvl18kw9qjj3rzqn9xyj4";
+    sha256 = "121qy1af1qbc09c3yfwhpk6r3hwmh3jg6gjx8ygfv3hfrss9yfll";
   };
 
   goPackagePath = "miniflux.app";
@@ -25,7 +25,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Minimalist and opinionated feed reader";
-    homepage = https://miniflux.app/;
+    homepage = "https://miniflux.app/";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvolosatovs benpye ];
   };

@@ -1,14 +1,12 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
-, cudatoolkit, opencl-clhpp, ocl-icd, fftw, fftwFloat, mkl
-, blas, openblas, boost, mesa, libGLU, libGL
+, opencl-clhpp, ocl-icd, fftw, fftwFloat
+, blas, lapack, boost, mesa, libGLU, libGL
 , freeimage, python, clfft, clblas
 , doxygen, buildDocs ? false
+, cudaSupport ? false, cudatoolkit
 }:
 
-let
-  strOnLinux = stdenv.lib.optionalString stdenv.isLinux;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "arrayfire";
   version = "3.6.4";
 
@@ -21,8 +19,7 @@ in stdenv.mkDerivation rec {
     "-DAF_BUILD_OPENCL=OFF"
     "-DAF_BUILD_EXAMPLES=OFF"
     "-DBUILD_TESTING=OFF"
-    (strOnLinux "-DCMAKE_LIBRARY_PATH=${cudatoolkit}/lib/stubs")
-  ];
+  ] ++ stdenv.lib.optional cudaSupport "-DCMAKE_LIBRARY_PATH=${cudatoolkit}/lib/stubs";
 
   patches = [ ./no-download.patch ];
 
@@ -35,7 +32,7 @@ in stdenv.mkDerivation rec {
     cp -R --no-preserve=mode,ownership ${opencl-clhpp}/include/CL/cl2.hpp ./build/include/CL/cl2.hpp
   '';
 
-  preBuild = strOnLinux ''
+  preBuild = stdenv.lib.optionalString cudaSupport ''
     export CUDA_PATH="${cudatoolkit}"
   '';
 
@@ -49,13 +46,13 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     opencl-clhpp fftw fftwFloat
-    mkl
-    openblas
+    blas lapack
     libGLU libGL
     mesa freeimage
     boost.out boost.dev
-  ] ++ (stdenv.lib.optional stdenv.isLinux [ cudatoolkit ocl-icd ])
-    ++ (stdenv.lib.optional buildDocs [ doxygen ]);
+  ] ++ (stdenv.lib.optional stdenv.isLinux ocl-icd)
+    ++ (stdenv.lib.optional cudaSupport cudatoolkit)
+    ++ (stdenv.lib.optional buildDocs doxygen);
 
   meta = with stdenv.lib; {
     description = "A general-purpose library for parallel and massively-parallel computations";

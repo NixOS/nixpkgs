@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A C client library for the Redis database";
-    homepage = https://github.com/vipshop/hiredis-vip;
+    homepage = "https://github.com/vipshop/hiredis-vip";
     license = lib.licenses.bsd3;
   };
 

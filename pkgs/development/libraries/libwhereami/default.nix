@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=catch-value" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=catch-value";
 
   nativeBuildInputs = [ cmake ];
 

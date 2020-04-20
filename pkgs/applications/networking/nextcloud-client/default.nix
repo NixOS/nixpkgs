@@ -12,19 +12,18 @@
 , qtkeychain
 , qttools
 , qtwebengine
-, qtwebkit
 , sqlite
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "2.6.1";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "18318j488pxksf4zc6zag8pdpyaks55yivn91nx3x458ax6albkz";
+    sha256 = "1wr57qwcjfzbpb4p0ybfjpw2hhwp91yrk2n3ywrqywcvjj38jg1q";
   };
 
   patches = [
@@ -45,7 +44,6 @@ mkDerivation rec {
     qtkeychain
     qttools
     qtwebengine
-    qtwebkit
     sqlite
   ];
 
@@ -55,11 +53,12 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
+    "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
   ];
 
   meta = with lib; {
     description = "Nextcloud themed desktop client";
-    homepage = https://nextcloud.com;
+    homepage = "https://nextcloud.com";
     license = licenses.gpl2;
     maintainers = with maintainers; [ caugner ma27 ];
     platforms = platforms.linux;

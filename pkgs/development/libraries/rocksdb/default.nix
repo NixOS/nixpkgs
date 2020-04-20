@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "find_package(zlib " "find_package(ZLIB "
   '';
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
+
   cmakeFlags = [
     "-DPORTABLE=1"
     "-DWITH_JEMALLOC=0"
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = stdenv.lib.optional stdenv.hostPlatform.isWindows "format";
 
   meta = with stdenv.lib; {
-    homepage = https://rocksdb.org;
+    homepage = "https://rocksdb.org";
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.asl20;
     maintainers = with maintainers; [ adev magenbluten ];

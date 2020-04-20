@@ -7,7 +7,6 @@
 , gettext
 , glib
 , gnome-desktop
-, gnome-flashback
 , gnome-menus
 , gnome3
 , gtk3
@@ -23,7 +22,7 @@
 
 let
   pname = "gnome-panel";
-  version = "3.34.1";
+  version = "3.36.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -31,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "03dr54njdh2szy6yrib2q0agjscbj3bmzrfb9fb4psrf4mah5g56";
+    sha256 = "1lxba8syy9gb50zxdk13gr1f62dfphwbb7njg6p26x9rvlkbf88y";
   };
 
   # make .desktop Exec absolute
@@ -46,8 +45,8 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome-menus}/share:${gnome-flashback}/share"
-      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg:${gnome-flashback}/etc/xdg"
+      --prefix XDG_DATA_DIRS : "${gnome-menus}/share"
+      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg"
     )
   '';
 
@@ -92,9 +91,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Component of Gnome Flashback that provides panels and default applets for the desktop";
-    homepage = https://wiki.gnome.org/Projects/GnomePanel;
+    homepage = "https://wiki.gnome.org/Projects/GnomePanel";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

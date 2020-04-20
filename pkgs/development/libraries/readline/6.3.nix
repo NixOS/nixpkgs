@@ -12,13 +12,11 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
-  configureFlags =
-    stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ # This test requires running host code
-      "bash_cv_wcwidth_broken=no"
-    ];
+  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    # This test requires running host code
+    "bash_cv_wcwidth_broken=no";
 
   patches =
     [ ./link-against-ncurses.patch
@@ -56,7 +54,7 @@ stdenv.mkDerivation {
       desire its capabilities.
     '';
 
-    homepage = https://savannah.gnu.org/projects/readline/;
+    homepage = "https://savannah.gnu.org/projects/readline/";
 
     license = licenses.gpl3Plus;
 

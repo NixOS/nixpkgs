@@ -3,21 +3,21 @@
 }:
 
 let
-  version = "1.14.5";
+  version = "1.15.0";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "1rnkx0h149n3pawmk8d234x5w1xw4kady9pgrcc5aw6krbx38nis";
+    sha256 = "1zr63fqx4qcrnrbg1f97w9mp3yzzxf0dk8pw60y2d4436vanfba4";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "1jg10mslcl0sfwdd9p7hy9zfvk0xc7qhdakiv1kbilsl42bgaxyi";
+    sha256 = "01pdydll37inkq74874rqd5kk0maafnm1lqcv41jzgzjrfkky8d9";
   };
 in mkDerivation {
   pname = "makemkv";
@@ -53,7 +53,7 @@ in mkDerivation {
       expiration date.
     '';
     license = licenses.unfree;
-    homepage = http://makemkv.com;
+    homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.titanous ];
   };

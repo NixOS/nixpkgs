@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     "--ipv6"
   ];
 
-  NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_gfx ];
+  NIX_CFLAGS_COMPILE = toString (makeSDLFlags [ SDL SDL_gfx ]);
 
   enableParallelBuilding = true;
 

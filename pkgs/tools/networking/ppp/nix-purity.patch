@@ -1,17 +1,26 @@
 diff --git a/pppd/Makefile.linux b/pppd/Makefile.linux
-index 060db6a..c151c62 100644
+index 9664f70..d07e01e 100644
 --- a/pppd/Makefile.linux
 +++ b/pppd/Makefile.linux
-@@ -117,7 +117,7 @@ CFLAGS   += -DHAS_SHADOW
+@@ -125,7 +125,7 @@ CFLAGS   += -DHAS_SHADOW
  #LIBS     += -lshadow $(LIBS)
  endif
  
--ifneq ($(wildcard /usr/include/crypt.h),)
+-ifneq ($(wildcard $(shell $(CC) --print-sysroot)/usr/include/crypt.h),)
 +ifneq ($(wildcard @glibc@/include/crypt.h),)
  CFLAGS  += -DHAVE_CRYPT_H=1
- LIBS	+= -lcrypt
+ LIBS   += -lcrypt
  endif
-@@ -169,7 +169,7 @@ LIBS	+= -ldl
+@@ -137,7 +137,7 @@ endif
+ 
+ ifdef NEEDDES
+ ifndef USE_CRYPT
+-CFLAGS   += -I$(shell $(CC) --print-sysroot)/usr/include/openssl
++CFLAGS   += -I@openssl@/include/openssl
+ LIBS     += -lcrypto
+ else
+ CFLAGS   += -DUSE_CRYPT=1
+@@ -188,7 +188,7 @@ LIBS        += -ldl
  endif
  
  ifdef FILTER

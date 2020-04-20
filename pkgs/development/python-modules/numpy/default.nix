@@ -1,14 +1,27 @@
-{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile, isPyPy }:
+{ lib
+, fetchPypi
+, python
+, buildPythonPackage
+, gfortran
+, pytest
+, blas
+, lapack
+, writeTextFile
+, isPyPy
+, cython
+, setuptoolsBuildHook
+ }:
+
+assert (!blas.is64bit) && (!lapack.is64bit);
 
 let
-  blasImplementation = lib.nameFromURL blas.name "-";
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
-      ${blasImplementation} = {
-        include_dirs = "${blas}/include";
-        library_dirs = "${blas}/lib";
-      } // lib.optionalAttrs (blasImplementation == "mkl") {
+      ${blas.implementation} = {
+        include_dirs = "${blas}/include:${lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+      } // lib.optionalAttrs (blas.implementation == "mkl") {
         mkl_libs = "mkl_rt";
         lapack_libs = "";
       };
@@ -16,16 +29,17 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.17.4";
+  version = "1.18.1";
+  format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "f58913e9227400f1395c7b800503ebfdb0772f1c33ff8cb4d6451c06cabdf316";
+    sha256 = "b6ff59cee96b454516e47e7721098e6ceebef435e3e21ac2d6c3b8b02628eb77";
   };
 
-  nativeBuildInputs = [ gfortran pytest ];
-  buildInputs = [ blas ];
+  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
+  buildInputs = [ blas lapack ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -56,8 +70,10 @@ in buildPythonPackage rec {
   '';
 
   passthru = {
-    blas = blas;
-    inherit blasImplementation cfg;
+    # just for backwards compatibility
+    blas = blas.provider;
+    blasImplementation = blas.implementation;
+    inherit cfg;
   };
 
   # Disable test
@@ -66,7 +82,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = http://numpy.scipy.org/;
+    homepage = "https://numpy.org/";
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

@@ -41,7 +41,9 @@ stdenv.mkDerivation rec {
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
   ];
 
-  makeFlags = "AR=${stdenv.cc.targetPrefix}ar";
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
 
   inherit doCheck;
 
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/gawk/;
+    homepage = "https://www.gnu.org/software/gawk/";
     description = "GNU implementation of the Awk programming language";
 
     longDescription = ''

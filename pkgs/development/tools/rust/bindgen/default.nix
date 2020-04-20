@@ -3,7 +3,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
-  version = "0.51.1";
+  version = "0.53.2";
 
   RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
@@ -11,10 +11,10 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1agqfwac2av1b1c2bfzn0hw3178s4l94fadfx8a25dy1k87wmhfm";
+    sha256 = "01dkaa2akqrhpxxf0g2zyfdb3nx16y14qsg0a9d5n92c4yyvmwjg";
   };
 
-  cargoSha256 = "09m0ki1ald1csfzfvlc63r6k8m9ndxy9js6mfwqyfm4lj8kpbr3f";
+  cargoSha256 = "0pm9kh3qrcv5jsbrr476982lg1j31fbvxpzs4gphxl0mv1qmp4zm";
 
   libclang = llvmPackages.libclang.lib; #for substituteAll
 
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
       As with most compiler related software, this will only work
       inside a nix-shell with the required libraries as buildInputs.
     '';
-    homepage = https://github.com/rust-lang/rust-bindgen;
+    homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.ralith ];

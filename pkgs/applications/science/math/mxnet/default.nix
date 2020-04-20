@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, bash, cmake
-, opencv3, gtest, openblas, liblapack, perl
+, opencv3, gtest, blas, perl
 , cudaSupport ? config.cudaSupport or false, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport, cudnn
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl ];
 
-  buildInputs = [ opencv3 gtest openblas liblapack ]
+  buildInputs = [ opencv3 gtest blas ]
               ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
               ++ lib.optional cudnnSupport cudnn;
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     substituteInPlace 3rdparty/mkldnn/tests/CMakeLists.txt \
       --replace "/bin/bash" "${bash}/bin/bash"
 
-    # Build against the system version of OpenMP. 
+    # Build against the system version of OpenMP.
     # https://github.com/apache/incubator-mxnet/pull/12160
     rm -rf 3rdparty/openmp
   '';
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
-    homepage = https://mxnet.incubator.apache.org/;
+    homepage = "https://mxnet.incubator.apache.org/";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.asl20;
     platforms = platforms.linux;

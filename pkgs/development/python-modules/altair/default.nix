@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , entrypoints
 , glibcLocales
 , ipython
@@ -18,11 +18,12 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "3.2.0";
+  version = "4.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "098macm0sw54xqijdy1c8cppcgw79wn52qdc71qqb51nibc17gls";
+    sha256 = "0c99q5dy6f275yg1f137ird08wmwc1z8wmvjickkf2mvyka31p9y";
   };
 
   propagatedBuildInputs = [
@@ -46,12 +47,14 @@ buildPythonPackage rec {
 
   checkPhase = ''
     export LANG=en_US.UTF-8
+    # histogram_responsive.py attempt network access, and cannot be disabled through pytest flags
+    rm altair/examples/histogram_responsive.py
     pytest --doctest-modules altair
   '';
 
   meta = with stdenv.lib; {
     description = "A declarative statistical visualization library for Python.";
-    homepage = https://github.com/altair-viz/altair;
+    homepage = "https://github.com/altair-viz/altair";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     platforms = platforms.unix;

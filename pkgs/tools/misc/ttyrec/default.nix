@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://0xcc.net/ttyrec/;
+    homepage = "http://0xcc.net/ttyrec/";
     description = "Terminal interaction recorder and player";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ zimbatm ];
+    broken = true; # 2020-01-28
   };
 }

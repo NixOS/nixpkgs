@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.12.9.0";
+  version = "0.13.0.0";
 in
 stdenv.mkDerivation {
   pname = "aeon";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     repo = "aeon";
     rev = "v${version}-aeon";
     fetchSubmodules = true;
-    sha256 = "194nxf8c8ihkmdsxyhkhrxc2xiinipifk0ng1rmxiiyr2gjgxzga";
+    sha256 = "07d87n1j4dc9gfwj6xy5jdpryn45095xdh961g6xjnjzc5fivjch";
   };
 
   nativeBuildInputs = [ cmake pkgconfig git doxygen graphviz ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Private, secure, untraceable currency";
-    homepage = http://www.aeon.cash/;
+    homepage = "http://www.aeon.cash/";
     license = licenses.bsd3;
     maintainers = [ maintainers.aij ];
     platforms = [ "x86_64-linux" ];

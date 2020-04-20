@@ -1,25 +1,37 @@
-{ buildPythonPackage, fetchPypi, lib,
-  dicttoxml, pexpect, prettytable, requests_toolbelt
+{ buildPythonPackage, fetchPypi, lib
+, dicttoxml
+, importlib-metadata
+, pexpect
+, prettytable
+, requests_toolbelt
 }:
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "1.10.2";
+  version = "1.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ec88b5ccefe2d47d8f14916a006431d0afb756751ee5c46f28654a7d8a69be53";
+    sha256 = "0h1przxffrhqvi46k40pzjsvdrq4zc3sl1pc96kkigqppq0vdrss";
   };
 
-  doCheck = false; # bash-completion test fails with "compgen: command not found".
+  doCheck = false; # meant to be ran with interactive interpreter
 
   # re-enable if we are able to make testing work
-  # buildInputs = [ coverage flake8 ];
+  # checkInputs = [ bashInteractive coverage flake8 ];
 
-  propagatedBuildInputs = [ dicttoxml pexpect prettytable requests_toolbelt ];
+  propagatedBuildInputs = [
+    dicttoxml
+    importlib-metadata
+    pexpect
+    prettytable
+    requests_toolbelt
+  ];
+
+  pythonImportsCheck = [ "argcomplete" ];
 
   meta = with lib; {
     description = "Bash tab completion for argparse";
-    homepage = https://argcomplete.readthedocs.io;
+    homepage = "https://kislyuk.github.io/argcomplete/";
     maintainers = [ maintainers.womfoo ];
     license = [ licenses.asl20 ];
   };

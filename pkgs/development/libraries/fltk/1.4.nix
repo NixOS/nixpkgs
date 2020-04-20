@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A C++ cross-platform lightweight GUI library";
-    homepage = https://www.fltk.org;
+    homepage = "https://www.fltk.org";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2;
   };

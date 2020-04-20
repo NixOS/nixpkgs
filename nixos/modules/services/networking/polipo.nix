@@ -85,17 +85,15 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton
-      { name = "polipo";
-        uid = config.ids.uids.polipo;
+    users.users.polipo =
+      { uid = config.ids.uids.polipo;
         description = "Polipo caching proxy user";
         home = "/var/cache/polipo";
         createHome = true;
       };
 
-    users.groups = singleton
-      { name = "polipo";
-        gid = config.ids.gids.polipo;
+    users.groups.polipo =
+      { gid = config.ids.gids.polipo;
         members = [ "polipo" ];
       };
 

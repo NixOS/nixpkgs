@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
-  version = "2019-03-05";
+  version = "2019-11-11";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "b1b0bf390363fa36aff1bc09443ff751943b9c34";
-    sha256 = "176hapckx98h4x0ni947qpkv2s95f8xfwz00wi2w7rgbr6cviwjq";
+    rev = "9af2b12552693a47601347e1eafc1e94132d727e";
+    sha256 = "0w8mf2wfpqijg882vhb8xarlp6zja23xf0b59z5zi774pnpjbqvj";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/usbmuxd;
+    homepage = "https://github.com/libimobiledevice/usbmuxd";
     description = "A socket daemon to multiplex connections from and to iOS devices";
     longDescription = ''
       usbmuxd stands for "USB multiplexing daemon". This daemon is in charge of

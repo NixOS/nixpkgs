@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
       This package is for RTL-SDR devices.
     '';
-    homepage = https://github.com/steve-m/kalibrate-rtl;
+    homepage = "https://github.com/steve-m/kalibrate-rtl";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

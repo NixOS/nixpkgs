@@ -45,8 +45,7 @@ mkDerivation rec {
     dtkwidget
     ffmpegthumbnailer
     file
-    glib.bin
-    glib.dev
+    glib
     gnugrep
     gsettings-qt
     gvfs
@@ -229,8 +228,16 @@ mkDerivation rec {
   ];
 
   preBuild = ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${zlib}/lib";
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${libX11}/lib";
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${zlib}/lib";
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libX11}/lib";
+  '';
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
   '';
 
   postFixup = ''
@@ -244,7 +251,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File manager and desktop module for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/dde-file-manager;
+    homepage = "https://github.com/linuxdeepin/dde-file-manager";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   # Perl is needed for `callgrind_{annotate,control}'.
   buildInputs = [ gdb perl ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
+  # Perl is also a native build input.
+  nativeBuildInputs = [ perl ];
+
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
 
@@ -65,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.valgrind.org/;
+    homepage = "http://www.valgrind.org/";
     description = "Debugging and profiling tool suite";
 
     longDescription = ''

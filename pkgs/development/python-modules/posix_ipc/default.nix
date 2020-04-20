@@ -15,7 +15,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "POSIX IPC primitives (semaphores, shared memory and message queues)";
     license = licenses.bsd3;
-    homepage = http://semanchuk.com/philip/posix_ipc/;
+    homepage = "http://semanchuk.com/philip/posix_ipc/";
   };
 
 }

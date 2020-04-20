@@ -7,7 +7,7 @@
  <para>
   NixOS supports automatic domain validation &amp; certificate retrieval and
   renewal using the ACME protocol. This is currently only implemented by and
-  for Let's Encrypt. The alternative ACME client <literal>simp_le</literal> is
+  for Let's Encrypt. The alternative ACME client <literal>lego</literal> is
   used under the hood.
  </para>
  <section xml:id="module-security-acme-prerequisites">

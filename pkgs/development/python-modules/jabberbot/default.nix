@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A framework for writing Jabber/XMPP bots and services";
-    homepage = http://thp.io/2007/python-jabberbot/;
+    homepage = "http://thp.io/2007/python-jabberbot/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mic92 ];
   };

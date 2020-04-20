@@ -2,19 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "4.022";
+  version = "4.030";
 
   src = fetchurl {
     url    = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
-    sha256 = "1sj0qzl387pl2ygii3ssx35c3m601nb07j16lqj5zcxzhcg62i9p";
+    sha256 = "07ldkf7xkr31n1dmx82bmzam8bvc1vsp32k76vd7yzn7r853qyky";
   };
 
   enableParallelBuilding = true;
   buildInputs = [ perl flex bison ];
-
-  postInstall = ''
-    sed -i -e '3a\#!/usr/bin/env perl' -e '1,3d' $out/bin/{verilator,verilator_coverage,verilator_profcfunc}
-  '';
 
   meta = {
     description = "Fast and robust (System)Verilog simulator/compiler";

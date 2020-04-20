@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "1.8.16";
+  version = "1.8.17";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "Release-${version}";
-    sha256 = "0isx137c6anvs1xfxi0z35v1cw855xvnq2ca0pakqqpdh0yivrps";
+    sha256 = "0zq34szprgkrrayg5sl3whrsx2l6lr8nw4hdrnwv2qhn70jbi2w2";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
@@ -34,11 +34,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.openimageio.org;
+    homepage = "http://www.openimageio.org";
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.unix;
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }

@@ -29,13 +29,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "elogind";
-  version = "241.3";
+  version = "243.7";
 
   src = fetchFromGitHub {
     owner = "elogind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jpb55prqq5cm3w2gy9766cbaqknjvbrbniyshb8bz1q31vf4jlq";
+    sha256 = "0cihdf7blhncm2359qxli24j9l3dkn15gjys5vpjwny80zlym5ma";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = https://github.com/elogind/elogind;
+    homepage = "https://github.com/elogind/elogind";
     description = ''The systemd project's "logind", extracted to a standalone package'';
     platforms = platforms.linux; # probably more
     license = licenses.lgpl21Plus;

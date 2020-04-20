@@ -1,6 +1,9 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-
+# The version of darwin.apple_sdk used for sources provided by apple.
+, appleSdkVersion ? "10.12"
+# Minimum required macOS version, used both for compatibility as well as reproducability.
+, macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
@@ -28,15 +31,19 @@ let
   ];
 in rec {
   commonPreHook = ''
-    export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
-    export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+    export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
+    export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
-    stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
-    export MACOSX_DEPLOYMENT_TARGET=10.12
     export SDKROOT=
-    export CMAKE_OSX_ARCHITECTURES=x86_64
+
+    # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
+    export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}
+    export NIX_LDFLAGS+=" -macosx_version_min ${macosVersionMin} -sdk_version ${appleSdkVersion} -no_uuid"
+
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
+
+    stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
 
   bootstrapTools = derivation {
@@ -130,8 +137,7 @@ in rec {
         __extraImpureHostDeps = commonImpureHostDeps;
 
         extraAttrs = {
-          inherit platform;
-          parent = last;
+          inherit macosVersionMin appleSdkVersion platform;
         };
         overrides  = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -165,7 +171,7 @@ in rec {
             ln -s ${bootstrapTools}/include/c++      $out/include/c++
           '';
           linkCxxAbi = false;
-          setupHook = ../../development/compilers/llvm/3.9/libc++/setup-hook.sh;
+          setupHook = ../../development/compilers/llvm/7/libc++/setup-hook.sh;
         };
 
         libcxxabi = stdenv.mkDerivation {
@@ -190,13 +196,10 @@ in rec {
         useSharedLibraries = false;
       };
 
-      python = super.callPackage ../../development/interpreters/python/cpython/2.7/boot.nix {
-        CF = null;  # use CoreFoundation from bootstrap-tools
-        configd = null;
-      };
-      python2 = self.python;
+      python3 = super.python3Minimal;
 
       ninja = super.ninja.override { buildDocs = false; };
+
       darwin = super.darwin // {
         cctools = super.darwin.cctools.override {
           enableTapiSupport = false;
@@ -218,11 +221,11 @@ in rec {
   stage2 = prevStage: let
     persistent = self: super: with prevStage; {
       inherit
-        zlib patchutils m4 scons flex perl bison unifdef unzip openssl python
+        zlib patchutils m4 scons flex perl bison unifdef unzip openssl python3
         libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
         findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
-        libssh2 nghttp2 libkrb5 python2 ninja;
+        libssh2 nghttp2 libkrb5 ninja;
 
       darwin = super.darwin // {
         inherit (darwin)
@@ -252,11 +255,11 @@ in rec {
   stage3 = prevStage: let
     persistent = self: super: with prevStage; {
       inherit
-        patchutils m4 scons flex perl bison unifdef unzip openssl python
+        patchutils m4 scons flex perl bison unifdef unzip openssl python3
         gettext sharutils libarchive pkg-config groff bash subversion
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util
         findfreetype libssh curl cmake autoconf automake libtool cpio
-        libssh2 nghttp2 libkrb5 python2 ninja;
+        libssh2 nghttp2 libkrb5 ninja;
 
       # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
@@ -302,7 +305,7 @@ in rec {
   stage4 = prevStage: let
     persistent = self: super: with prevStage; {
       inherit
-        gnumake gzip gnused bzip2 gawk ed xz patch bash
+        gnumake gzip gnused bzip2 gawk ed xz patch bash python3
         ncurses libffi zlib gmp pcre gnugrep
         coreutils findutils diffutils patchutils ninja;
 
@@ -332,7 +335,7 @@ in rec {
         libxml2-nopython = super.libxml2.override { pythonSupport = false; };
         CF = super.darwin.CF.override {
           libxml2 = libxml2-nopython;
-          python = prevStage.python;
+          python3 = prevStage.python3;
         };
       };
     };
@@ -364,17 +367,6 @@ in rec {
           inherit (llvmPackages_7) compiler-rt libcxx libcxxabi;
         });
       in { inherit tools libraries; } // tools // libraries);
-
-      # N.B: the important thing here is to ensure that python == python2
-      # == python27 or you get weird issues with inconsistent package sets.
-      # In a particularly subtle bug, I overrode python2 instead of python27
-      # here, and it caused gnome-doc-utils to complain about:
-      # "PyThreadState_Get: no current thread". This is because Python gets
-      # really unhappy if you have Python A which loads a native python lib
-      # which was linked against Python B, which in our case was happening
-      # because we didn't override python "deeply enough". Anyway, this works
-      # and I'm just leaving this blurb here so people realize why it matters
-      python27 = super.python27.override { CF = prevStage.darwin.CF; };
 
       darwin = super.darwin // {
         inherit (darwin) dyld ICU Libsystem libiconv;
@@ -414,9 +406,9 @@ in rec {
     extraBuildInputs = [ pkgs.darwin.CF ];
 
     extraAttrs = {
-      inherit platform bootstrapTools;
-      libc         = pkgs.darwin.Libsystem;
+      libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
+      inherit macosVersionMin appleSdkVersion platform bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [
@@ -438,7 +430,8 @@ in rec {
       inherit cc;
 
       darwin = super.darwin // {
-        xnu = super.darwin.xnu.override { python = super.python.override { configd = null; }; };
+        inherit (prevStage.darwin) CF;
+        xnu = super.darwin.xnu.override { inherit (prevStage) python3; };
       };
     });
   };

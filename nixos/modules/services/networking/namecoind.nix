@@ -154,16 +154,14 @@ in
       config = ${configFile}
     '';
 
-    users.users = singleton {
-      name = "namecoin";
+    users.users.namecoin = {
       uid  = config.ids.uids.namecoin;
       description = "Namecoin daemon user";
       home = dataDir;
       createHome = true;
     };
 
-    users.groups = singleton {
-      name = "namecoin";
+    users.groups.namecoin = {
       gid  = config.ids.gids.namecoin;
     };
 

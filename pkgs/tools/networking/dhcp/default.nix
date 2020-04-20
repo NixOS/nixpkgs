@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dhcp";
-  version = "4.4.1";
+  version = "4.4.2";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/dhcp/${version}/${pname}-${version}.tar.gz";
-    sha256 = "025nfqx4zwdgv4b3rkw26ihcj312vir08jk6yi57ndmb4a4m08ia";
+    sha256 = "08a5003zdxgl41b29zjkxa92h2i40zyjgxg0npvnhpkfl5jcsz0s";
   };
 
   patches =
@@ -36,12 +36,14 @@ stdenv.mkDerivation rec {
     "--enable-early-chroot"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (lib.optional stdenv.isLinux "--with-randomdev=/dev/random")
-  ] ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+  ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
+    ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
     "-Wno-error=format-truncation"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=format-overflow"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];
@@ -80,7 +82,7 @@ stdenv.mkDerivation rec {
       client, and relay agent.
    '';
 
-    homepage = http://www.isc.org/products/DHCP/;
+    homepage = "https://www.isc.org/dhcp/";
     license = licenses.isc;
     platforms = platforms.unix;
   };

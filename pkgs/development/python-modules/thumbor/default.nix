@@ -83,8 +83,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A smart imaging service";
-    homepage = https://github.com/thumbor/thumbor/wiki;
+    homepage = "https://github.com/thumbor/thumbor/wiki";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

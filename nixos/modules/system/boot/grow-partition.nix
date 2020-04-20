@@ -7,6 +7,9 @@
 with lib;
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
+  ];
 
   options = {
     boot.growPartition = mkEnableOption "grow the root partition on boot";

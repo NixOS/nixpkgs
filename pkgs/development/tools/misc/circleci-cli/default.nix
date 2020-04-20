@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.5879";
+  version = "0.1.6949";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1471g56apaw0c5dpa0jrr7hvzh3kbwfr3yr0m4mz2dlf27d481ac";
+    sha256 = "0r64m4lcm9w0rzi61rsi3sm719ydwiv5axxnikwhzmvkdz0rd7dq";
   };
 
-  modSha256 = "0cvmcsl00jfikpkw3f7k5zw65156z5g5l2b6s5803a2i9d613268";
+  modSha256 = "199ai38knp50mjjhddjd70qfwx63c69rf7ddw4hpzgx5cm5a04q2";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" ];
 
   preBuild = ''
     substituteInPlace data/data.go \
@@ -30,6 +32,6 @@ buildGoModule rec {
     '';
     maintainers = with maintainers; [ synthetica ];
     license = licenses.mit;
-    homepage = https://circleci.com/;
+    homepage = "https://circleci.com/";
   };
 }

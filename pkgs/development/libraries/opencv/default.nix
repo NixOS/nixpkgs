@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
     (opencvFlag "TIFF" enableTIFF)
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
-    homepage = https://opencv.org/;
+    homepage = "https://opencv.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

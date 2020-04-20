@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Django extension that provides database and form color fields";
-    homepage = https://github.com/charettes/django-colorful;
+    homepage = "https://github.com/charettes/django-colorful";
     license = licenses.mit;
   };
 

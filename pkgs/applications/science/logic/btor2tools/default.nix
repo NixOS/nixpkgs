@@ -24,8 +24,8 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" "lib" ];
 
   meta = with stdenv.lib; {
-    description = "Fast SAT solver";
-    homepage    = http://fmv.jku.at/lingeling/;
+    description = "A generic parser and tool package for the BTOR2 format";
+    homepage    = "https://github.com/Boolector/btor2tools";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

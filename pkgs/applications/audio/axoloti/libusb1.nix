@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.libusb.info;
+    homepage = "http://www.libusb.info";
     description = "User-space USB library";
     platforms = platforms.unix;
     license = licenses.lgpl21;

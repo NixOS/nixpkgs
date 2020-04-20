@@ -153,7 +153,7 @@ in
         defaultText = "pkgs.cockroachdb";
         description = ''
           The CockroachDB derivation to use for running the service.
-          
+
           This would primarily be useful to enable Enterprise Edition features
           in your own custom CockroachDB build (Nixpkgs CockroachDB binaries
           only contain open source features and open source code).
@@ -171,17 +171,17 @@ in
 
     environment.systemPackages = [ crdb ];
 
-    users.users = optionalAttrs (cfg.user == "cockroachdb") (singleton
-      { name        = "cockroachdb";
+    users.users = optionalAttrs (cfg.user == "cockroachdb") {
+      cockroachdb = {
         description = "CockroachDB Server User";
         uid         = config.ids.uids.cockroachdb;
         group       = cfg.group;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "cockroachdb") (singleton
-      { name = "cockroachdb";
-        gid  = config.ids.gids.cockroachdb;
-      });
+    users.groups = optionalAttrs (cfg.group == "cockroachdb") {
+      cockroachdb.gid = config.ids.gids.cockroachdb;
+    };
 
     networking.firewall.allowedTCPPorts = lib.optionals cfg.openPorts
       [ cfg.http.port cfg.listen.port ];

@@ -14,7 +14,7 @@ rec {
   # becomes dev-xyzzy.  FIXME: slow.
   escapeSystemdPath = s:
    replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-    (if hasPrefix "/" s then substring 1 (stringLength s) s else s);
+   (removePrefix "/" s);
 
   # Returns a system path for a given shell package
   toShellPath = shell:

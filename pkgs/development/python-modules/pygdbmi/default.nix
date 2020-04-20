@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pygdbmi";
-  version = "0.9.0.0";
+  version = "0.9.0.2";
 
   src = fetchFromGitHub {
     #inherit pname version;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "cs01";
     repo = "pygdbmi";
     rev = version;
-    sha256 = "12xq9iajgqz23dska5x63hrx75icr5bwwswnmba0y69y39s0jpsj";
+    sha256 = "01isx7912dbalmc3xsafk1a1n6bzzfrjn2363djcq0v57rqii53d";
   };
 
   checkInputs = [ gdb ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parse gdb machine interface output with Python";
-    homepage = https://github.com/cs01/pygdbmi;
+    homepage = "https://github.com/cs01/pygdbmi";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

@@ -17,9 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six requests ];
 
-  postInstall = ''
-    rm $out/${python.sitePackages}/azure/__init__.py
-  '';
+  pythonNamespaces = [ "azure" ];
 
   # requires an active Azure Cosmos service
   doCheck = false;

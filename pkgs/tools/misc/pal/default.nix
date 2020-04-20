@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/etc/pal\.conf,'$out/etc/pal.conf, src/input.c
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib gettext readline ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = http://palcal.sourceforge.net/;
+    homepage = "http://palcal.sourceforge.net/";
     description = "Command-line calendar program that can keep track of events";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];

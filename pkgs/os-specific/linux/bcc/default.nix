@@ -1,38 +1,22 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel
+{ stdenv, fetchurl, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap
+, systemtap, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.11.0";
-  name = "bcc-${version}";
+  pname = "bcc";
+  version = "0.13.0";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner  = "iovisor";
-      repo   = "bcc";
-      rev    = "v${version}";
-      sha256 = "1v2gzdd4k58f3yxmq4z97a7xh5vyd84flzzfr9k2cm29i93cwcam";
-      name   = "bcc";
-    })
-
-    # note: keep this in sync with the version that was used at the time of the
-    # tagged release!
-    (fetchFromGitHub {
-      owner  = "libbpf";
-      repo   = "libbpf";
-      rev    = "a30df5c09fb3941fc42c4570ed2545e7057bf82a";
-      sha256 = "088vb9sfs1zazlqi6abb3ia1xgpmwiz5pmz6y3a6gbh0zdrgh6px";
-      name   = "libbpf";
-    })
-  ];
-  sourceRoot = "bcc";
+  src = fetchurl {
+    url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
+    sha256 = "15xpwf17x2j1c1wcb84cgfs35dp5w0rjd9mllmddmdjvn303wffx";
+  };
   format = "other";
 
   buildInputs = with llvmPackages; [
     llvm clang-unwrapped kernel
     elfutils luajit netperf iperf
-    systemtap.stapBuild flex
+    systemtap.stapBuild flex bash
   ];
 
   patches = [
@@ -58,12 +42,6 @@ python.pkgs.buildPythonApplication rec {
     patch -p1 < libbcc-path.patch
   '';
 
-  preConfigure = ''
-    chmod -R u+w ../libbpf/
-    rmdir src/cc/libbpf
-    (cd src/cc && ln -svf ../../../libbpf/ libbpf)
-  '';
-
   postInstall = ''
     mkdir -p $out/bin $out/share
     rm -r $out/share/bcc/tools/old
@@ -76,6 +54,8 @@ python.pkgs.buildPythonApplication rec {
       if [ ! -e $bin ]; then
         ln -s $f $bin
       fi
+      substituteInPlace "$f" \
+        --replace '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
     done
 
     sed -i -e "s!lib=.*!lib=$out/bin!" $out/bin/{java,ruby,node,python}gc
@@ -87,7 +67,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = https://iovisor.github.io/bcc/;
+    homepage    = "https://iovisor.github.io/bcc/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
   };

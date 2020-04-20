@@ -1,0 +1,25 @@
+From 5798a2691467604e89fd9fb1cd5289ebd1b1d7b8 Mon Sep 17 00:00:00 2001
+From: Graham Christensen <graham@grahamc.com>
+Date: Fri, 20 Mar 2020 22:32:02 -0400
+Subject: [PATCH] find ObsPluginHelpers.cmake in the obs src
+
+---
+ external/FindLibObs.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/external/FindLibObs.cmake b/external/FindLibObs.cmake
+index ab0a3de..53a46b8 100644
+--- a/external/FindLibObs.cmake
++++ b/external/FindLibObs.cmake
+@@ -95,7 +95,7 @@ if(LIBOBS_FOUND)
+ 
+ 	set(LIBOBS_INCLUDE_DIRS ${LIBOBS_INCLUDE_DIR} ${W32_PTHREADS_INCLUDE_DIR})
+ 	set(LIBOBS_LIBRARIES ${LIBOBS_LIB} ${W32_PTHREADS_LIB})
+-	include(${LIBOBS_INCLUDE_DIR}/../cmake/external/ObsPluginHelpers.cmake)
++	include(${OBS_SRC}/cmake/external/ObsPluginHelpers.cmake)
+ 
+ 	# allows external plugins to easily use/share common dependencies that are often included with libobs (such as FFmpeg)
+ 	if(NOT DEFINED INCLUDED_LIBOBS_CMAKE_MODULES)
+-- 
+2.25.0
+

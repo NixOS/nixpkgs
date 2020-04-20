@@ -15,8 +15,10 @@ buildGoPackage {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ffmpeg-full graphicsmagick quicktemplate go-bindata easyjson ];
+
+  nativeBuildInputs = [ pkgconfig go-bindata ];
+
+  buildInputs = [ ffmpeg-full graphicsmagick quicktemplate easyjson ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bakape/hydron";

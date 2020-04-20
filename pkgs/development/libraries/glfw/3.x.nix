@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3";
+  version = "3.3.2";
   pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "1f1hqpqffzg46z33ybs2c3akmkly7b3qmgp5byk50nvad6g2pm4p";
+    sha256 = "0b5lsxz1xkzip7fvbicjkxvg5ig8gbhx1zrlhandqc0rpk56bvyw";
   };
 
   enableParallelBuilding = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
-    homepage = https://www.glfw.org/;
+    homepage = "https://www.glfw.org/";
     license = licenses.zlib;
     maintainers = with maintainers; [ marcweber twey ];
     platforms = platforms.unix;

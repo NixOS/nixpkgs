@@ -47,6 +47,7 @@ let
             Path to the unix socket file on which to accept FastCGI requests.
             <note><para>This option is read-only and managed by NixOS.</para></note>
           '';
+          example = "${runtimeDir}/<name>.sock";
         };
 
         listen = mkOption {
@@ -146,6 +147,10 @@ let
     };
 
 in {
+  imports = [
+    (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
+    (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
+  ];
 
   options = {
     services.phpfpm = {

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nfc628nr2k6kd3q9qpgwz7c12l0191rv5x4pvca8q82jl96gip5";
+    sha256 = "02wlqlrxk0x6a9wifcly2pr84r6k8i97ws0prx21379fss39gf2a";
   };
 
   # google_cloud_core[grpc] -> grpcio
@@ -23,12 +23,12 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock ];
   checkPhase = ''
     cd tests # prevent local google/__init__.py from getting loaded
-    pytest unit
+    pytest unit -k 'not extra_headers'
   '';
 
   meta = with stdenv.lib; {
     description = "Google Cloud Translation API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

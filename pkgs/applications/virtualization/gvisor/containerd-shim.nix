@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, go-bindata }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   name = "gvisor-containerd-shim-${version}";
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "containerd shim for gVisor";
-    homepage    = https://github.com/google/gvisor-containerd-shim;
+    homepage    = "https://github.com/google/gvisor-containerd-shim";
     license     = licenses.asl20;
     maintainers = with maintainers; [ andrew-d ];
     platforms   = [ "x86_64-linux" ];

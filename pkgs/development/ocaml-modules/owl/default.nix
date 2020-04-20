@@ -1,15 +1,29 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, alcotest
-, eigen, stdio, stdlib-shims, openblasCompat, owl-base
+{ stdenv
+, buildDunePackage
+, dune-configurator
+, fetchFromGitHub
+, alcotest
+, eigen
+, stdio
+, stdlib-shims
+, openblas, blas, lapack
+, owl-base
+, npy
 }:
+
+assert (!blas.is64bit) && (!lapack.is64bit);
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 buildDunePackage rec {
   pname = "owl";
 
-  inherit (owl-base) version src meta;
+  inherit (owl-base) version src meta useDune2;
 
-  buildInputs = [ eigen ];
   checkInputs = [ alcotest ];
-  propagatedBuildInputs = [ stdio stdlib-shims openblasCompat owl-base ];
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [
+    eigen stdio stdlib-shims openblas owl-base npy
+  ];
 
-  # tests not enabled for now due to owlbarn/owl/issues/460
+  doCheck = !stdenv.isDarwin;  # https://github.com/owlbarn/owl/issues/462
 }

@@ -622,6 +622,16 @@ args.stdenv.mkDerivation (args // {
        </varlistentry>
        <varlistentry>
         <term>
+         If it’s an <emphasis>icon theme</emphasis>:
+        </term>
+        <listitem>
+         <para>
+          <filename>data/icons</filename>
+         </para>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
          If it’s related to <emphasis>SGML/XML processing</emphasis>:
         </term>
         <listitem>
@@ -650,6 +660,17 @@ args.stdenv.mkDerivation (args // {
            </listitem>
           </varlistentry>
          </variablelist>
+        </listitem>
+       </varlistentry>
+       <varlistentry>
+        <term>
+         If it’s a <emphasis>theme</emphasis> for a <emphasis>desktop environment</emphasis>,
+         a <emphasis>window manager</emphasis> or a <emphasis>display manager</emphasis>:
+        </term>
+        <listitem>
+         <para>
+          <filename>data/themes</filename>
+         </para>
         </listitem>
        </varlistentry>
       </variablelist>

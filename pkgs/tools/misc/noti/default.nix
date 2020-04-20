@@ -3,13 +3,13 @@
 
 buildGoPackage rec {
   pname = "noti";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "variadico";
     repo = "noti";
     rev = version;
-    sha256 = "1644bivjcky07n3rrm83vsms7hw47p4hnp2536q0z3qca5jyri2f";
+    sha256 = "0bcwfyd93fx0rzjc9jgg4pvvqbpxwizr044yqqa5rx70gaasz7qa";
   };
 
   buildInputs = lib.optional stdenv.isDarwin Cocoa;
@@ -32,7 +32,7 @@ buildGoPackage rec {
 
       Never sit and wait for some long-running process to finish. Noti can alert you when it's done. You can receive messages on your computer or phone.
     '';
-    homepage = https://github.com/variadico/noti;
+    homepage = "https://github.com/variadico/noti";
     license = licenses.mit;
     maintainers = with maintainers; [ stites marsam ];
     platforms = platforms.all;

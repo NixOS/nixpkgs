@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "texmaker";
-  version = "5.0.3";
+  version = "5.0.4";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${pname}-${version}.tar.bz2";
-    sha256 = "0vrj9w5lk3vf6138n5bz8phmy3xp5kv4dq1rgirghcf4hbxdyx30";
+    sha256 = "1qnh5g8zkjpjmw2l8spcynpfgs3wpcfcla5ms2kkgvkbdlzspqqx";
   };
 
   buildInputs = [ qtbase qtscript poppler zlib ];
@@ -28,7 +28,7 @@ mkDerivation rec {
 	LaTeX editing with completion, structure viewer, preview,
 	spell checking and support of any compilation chain.
 	'';
-    homepage = http://www.xm1math.net/texmaker/;
+    homepage = "http://www.xm1math.net/texmaker/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cfouche markuskowa ];

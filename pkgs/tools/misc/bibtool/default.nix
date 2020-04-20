@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   # Perl for running test suite.
   buildInputs = [ perl ];
 
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Tool for manipulating BibTeX bibliographies";
-    homepage = http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html;
+    homepage = "http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.rycee ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, runtimeShell }:
 
 let
-  version = "1.7.36";
+  version = "2020.1";
   jar = fetchurl {
     name = "burpsuite.jar";
     url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "12m4fn04yd89r6x4m4yd668p5v0bs9b1h6p239bjj11ykyi3g51a";
+    sha256 = "12awfy0f8fyqjc0kza1gkmdx1g8bniw1xqaps2dhjimi6s0lq5jx";
   };
   launcher = ''
     #!${runtimeShell}
@@ -30,11 +30,11 @@ in stdenv.mkDerivation {
       initial mapping and analysis of an application's attack surface, through to finding and
       exploiting security vulnerabilities.
     '';
-    homepage = https://portswigger.net/burp/;
+    homepage = "https://portswigger.net/burp/";
     downloadPage = "https://portswigger.net/burp/freedownload";
     license = [ stdenv.lib.licenses.unfree ];
     platforms = jre.meta.platforms;
     hydraPlatforms = [];
-    maintainers = [ stdenv.lib.maintainers.bennofs ];
+    maintainers = with stdenv.lib.maintainers; [ bennofs ];
   };
 }

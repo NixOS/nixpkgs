@@ -73,7 +73,7 @@ let
             setupHook = args.setupHook or defaultSetupHook;
 
             meta = {
-              homepage = http://www.kde.org;
+              homepage = "http://www.kde.org";
               license = with lib.licenses; [
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
@@ -97,8 +97,10 @@ let
       breeze-icons = callPackage ./breeze-icons.nix {};
       kapidox = callPackage ./kapidox.nix {};
       karchive = callPackage ./karchive.nix {};
+      kcalendarcore = callPackage ./kcalendarcore.nix {};
       kcodecs = callPackage ./kcodecs.nix {};
       kconfig = callPackage ./kconfig.nix {};
+      kcontacts = callPackage ./kcontacts.nix {};
       kcoreaddons = callPackage ./kcoreaddons.nix {};
       kdbusaddons = callPackage ./kdbusaddons.nix {};
       kdnssd = callPackage ./kdnssd.nix {};

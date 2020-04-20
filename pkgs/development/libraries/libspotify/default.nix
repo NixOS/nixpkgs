@@ -50,11 +50,11 @@ else stdenv.mkDerivation {
   buildInputs = stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") unzip;
 
   # linux-specific
-  installFlags = stdenv.lib.optionalString (isLinux)
+  installFlags = stdenv.lib.optional isLinux
     "prefix=$(out)";
-  patchPhase = stdenv.lib.optionalString (isLinux)
+  patchPhase = stdenv.lib.optionalString isLinux
     "${gnused}/bin/sed -i 's/ldconfig//' Makefile";
-  postInstall = stdenv.lib.optionalString (isLinux)
+  postInstall = stdenv.lib.optionalString isLinux
     "mv -v share $out";
 
   passthru = {
@@ -84,7 +84,7 @@ else stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Spotify API library";
-    homepage    = https://developer.spotify.com/technologies/libspotify;
+    homepage    = "https://developer.spotify.com/technologies/libspotify";
     maintainers = with maintainers; [ lovek323 ];
     license     = licenses.unfree;
   };

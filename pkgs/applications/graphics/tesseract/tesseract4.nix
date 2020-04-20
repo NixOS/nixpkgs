@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tesseract";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    sha256 = "06i7abxy2ifmdx1fak81cx0kns85n8hvp0339jk6242fhshibljx";
+    sha256 = "1ca27zbjpx35nxh9fha410z3jskwyj06i5hqiqdc08s2d7kdivwn";
   };
 
   enableParallelBuilding = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OCR engine";
-    homepage = https://github.com/tesseract-ocr/tesseract;
+    homepage = "https://github.com/tesseract-ocr/tesseract";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ viric earvstedt ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

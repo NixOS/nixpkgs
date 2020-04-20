@@ -8,13 +8,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   pname = "gogs";
-  version = "0.11.86";
+  version = "0.11.91";
 
   src = fetchFromGitHub {
     owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "0l8mwy0cyy3cdxqinf8ydb35kf7c8pj09xrhpr7rr7lldnvczabw";
+    sha256 = "1yfimgjg9n773kdml17119539w9736mi66bivpv5yp3cj2hj9mlj";
   };
 
   patches = [ ./static-root-path.patch ];
@@ -24,10 +24,11 @@ buildGoPackage rec {
     substituteInPlace pkg/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ optional pamSupport pam;
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildFlags = "-tags";
+  buildInputs = optional pamSupport pam;
+
+  buildFlags = [ "-tags" ];
 
   buildFlagsArray =
     (  optional sqliteSupport "sqlite"
@@ -47,7 +48,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A painless self-hosted Git service";
-    homepage = https://gogs.io;
+    homepage = "https://gogs.io";
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
   };

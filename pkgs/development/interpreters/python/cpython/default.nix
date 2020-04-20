@@ -11,7 +11,7 @@
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , zlib
 , self
-, CF, configd
+, configd
 , python-setup-hook
 , nukeReferences
 # For the Python package set
@@ -28,6 +28,8 @@
 , stripTkinter ? false
 , rebuildBytecode ? true
 , stripBytecode ? false
+, includeSiteCustomize ? true
+, static ? false
 }:
 
 assert x11Support -> tcl != null
@@ -57,10 +59,10 @@ let
     pythonForBuild
   ];
 
-  buildInputs = filter (p: p != null) [
+  buildInputs = filter (p: p != null) ([
     zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
-    ++ optionals stdenv.isDarwin [ CF configd ];
+    ++ optionals stdenv.isDarwin [ configd ]);
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
@@ -103,10 +105,7 @@ in with passthru; stdenv.mkDerivation {
     ./3.5/ld_library_path.patch
   ] ++ optionals (isPy37 || isPy38) [
     # Fix darwin build https://bugs.python.org/issue34027
-    (fetchpatch {
-      url = https://bugs.python.org/file47666/darwin-libutil.patch;
-      sha256 = "0242gihnw3wfskl4fydp2xanpl8k5q7fj4dp7dbbqf46a4iwdzpa";
-    })
+    ./3.7/darwin-libutil.patch
   ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
@@ -133,7 +132,7 @@ in with passthru; stdenv.mkDerivation {
   CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
   LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
   LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
+  NIX_LDFLAGS = optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) "-lgcc_s" + optionalString stdenv.hostPlatform.isMusl "-lgcc_eh";
   # Determinism: We fix the hashes of str, bytes and datetime objects.
   PYTHONHASHSEED=0;
 
@@ -172,7 +171,7 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
-  ];
+  ] ++ optional static "LDFLAGS=-static";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -208,9 +207,6 @@ in with passthru; stdenv.mkDerivation {
 
     ln -s "$out/include/${executable}m" "$out/include/${executable}"
 
-    # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-    echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
-
     # Determinism: Windows installers were not deterministic.
     # We're also not interested in building Windows installers.
     find "$out" -name 'wininst*.exe' | xargs -r rm -f
@@ -243,7 +239,7 @@ in with passthru; stdenv.mkDerivation {
     '' + optionalString stripTests ''
     # Strip tests
     rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
-    '' + ''
+    '' + optionalString includeSiteCustomize ''
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
     '' + optionalString rebuildBytecode ''
@@ -268,7 +264,7 @@ in with passthru; stdenv.mkDerivation {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    stdenv.lib.optionals (openssl != null) [ openssl.dev ]
+    stdenv.lib.optionals (openssl != null && !static) [ openssl.dev ]
     ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
@@ -280,7 +276,7 @@ in with passthru; stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://python.org;
+    homepage = "http://python.org";
     description = "A high-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that

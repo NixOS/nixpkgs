@@ -1,0 +1,77 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-grocy">
+
+  <title>Grocy</title>
+  <para>
+    <link xlink:href="https://grocy.info/">Grocy</link> is a web-based self-hosted groceries
+    &amp; household management solution for your home.
+  </para>
+
+  <section xml:id="module-services-grocy-basic-usage">
+   <title>Basic usage</title>
+   <para>
+    A very basic configuration may look like this:
+<programlisting>{ pkgs, ... }:
+{
+  services.grocy = {
+    <link linkend="opt-services.grocy.enable">enable</link> = true;
+    <link linkend="opt-services.grocy.hostName">hostName</link> = "grocy.tld";
+  };
+}</programlisting>
+    This configures a simple vhost using <link linkend="opt-services.nginx.enable">nginx</link>
+    which listens to <literal>grocy.tld</literal> with fully configured ACME/LE (this can be
+    disabled by setting <link linkend="opt-services.grocy.nginx.enableSSL">services.grocy.nginx.enableSSL</link>
+    to <literal>false</literal>). After the initial setup the credentials <literal>admin:admin</literal>
+    can be used to login.
+   </para>
+   <para>
+    The application's state is persisted at <literal>/var/lib/grocy/grocy.db</literal> in a
+    <package>sqlite3</package> database. The migration is applied when requesting the <literal>/</literal>-route
+    of the application.
+   </para>
+  </section>
+
+  <section xml:id="module-services-grocy-settings">
+   <title>Settings</title>
+   <para>
+    The configuration for <literal>grocy</literal> is located at <literal>/etc/grocy/config.php</literal>.
+    By default, the following settings can be defined in the NixOS-configuration:
+<programlisting>{ pkgs, ... }:
+{
+  services.grocy.settings = {
+    # The default currency in the system for invoices etc.
+    # Please note that exchange rates aren't taken into account, this
+    # is just the setting for what's shown in the frontend.
+    <link linkend="opt-services.grocy.settings.currency">currency</link> = "EUR";
+
+    # The display language (and locale configuration) for grocy.
+    <link linkend="opt-services.grocy.settings.currency">culture</link> = "de";
+
+    calendar = {
+      # Whether or not to show the week-numbers
+      # in the calendar.
+      <link linkend="opt-services.grocy.settings.calendar.showWeekNumber">showWeekNumber</link> = true;
+
+      # Index of the first day to be shown in the calendar (0=Sunday, 1=Monday,
+      # 2=Tuesday and so on).
+      <link linkend="opt-services.grocy.settings.calendar.firstDayOfWeek">firstDayOfWeek</link> = 2;
+    };
+  };
+}</programlisting>
+   </para>
+   <para>
+    If you want to alter the configuration file on your own, you can do this manually with
+    an expression like this:
+<programlisting>{ lib, ... }:
+{
+  environment.etc."grocy/config.php".text = lib.mkAfter ''
+    // Arbitrary PHP code in grocy's configuration file
+  '';
+}</programlisting>
+   </para>
+  </section>
+
+</chapter>

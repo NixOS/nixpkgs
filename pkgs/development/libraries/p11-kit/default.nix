@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.23.18.1";
+  version = "0.23.20";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = pname;
     rev = version;
-    sha256 = "0l4ndipcbikblfjz729zkscvni5lzdzvbvsar2538pylw556rx73";
+    sha256 = "00xxhzgd7cpin9nzwrrzykvhjwqg5l45p0cq2gv68y3sxq2p9q6y";
   };
 
   outputs = [ "out" "dev"];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       Provides a standard configuration setup for installing
       PKCS#11 modules in such a way that they're discoverable.
     '';
-    homepage = https://p11-glue.github.io/p11-glue/p11-kit.html;
+    homepage = "https://p11-glue.github.io/p11-glue/p11-kit.html";
     platforms = platforms.all;
     license = licenses.bsd3;
   };

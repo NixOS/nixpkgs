@@ -2,10 +2,10 @@
 
 let
   nssPEM = fetchurl {
-    url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
+    url = "http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz";
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
-  version = "3.47.1";
+  version = "3.51";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "1yx68a1ks63s8914zmiz9h1nh0261aqzcblgg1cb4ig33p5x3qqs";
+    sha256 = "1725d0idf5zzqafdqfdn9vprc7ys2ywhv23sqn328di968xqnd3m";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
       ./ckpem.patch
     ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
@@ -132,7 +132,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://developer.mozilla.org/en-US/docs/NSS;
+    homepage = "https://developer.mozilla.org/en-US/docs/NSS";
     description = "A set of libraries for development of security-enabled client and server applications";
     license = licenses.mpl20;
     platforms = platforms.all;

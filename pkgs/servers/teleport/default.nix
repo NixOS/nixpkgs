@@ -14,8 +14,11 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/gravitational/teleport";
+
   subPackages = [ "tool/tctl" "tool/teleport" "tool/tsh" ];
-  buildInputs = [ zip ];
+
+  nativeBuildInputs = [ zip ];
+
   postBuild = ''
     pushd .
     cd $NIX_BUILD_TOP/go/src/github.com/gravitational/teleport
@@ -27,7 +30,7 @@ buildGoPackage rec {
     cd $NIX_BUILD_TOP/go/bin
     zip -q -A teleport
     popd
-    '';
+  '';
 
   dontStrip = true;
 

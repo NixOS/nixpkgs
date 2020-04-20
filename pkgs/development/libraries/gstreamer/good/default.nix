@@ -3,7 +3,7 @@
 , meson
 , ninja
 , pkgconfig
-, python
+, python3
 , gst-plugins-base
 , orc
 , bzip2
@@ -29,9 +29,7 @@
 , mpg123
 , twolame
 , gtkSupport ? false, gtk3 ? null
-  # As of writing, jack2 incurs a Qt dependency (big!) via `ffado`.
-  # In the future we should probably split `ffado`.
-, enableJack ? false, jack2
+, enableJack ? true, libjack2
 , libXdamage
 , libXext
 , libXfixes
@@ -48,20 +46,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.16.1";
+  version = "1.16.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "07wgz9anf4ram2snp8n1wv6l0q3pd00iaw8bvw3wgklg05lvxflz";
+    sha256 = "068k3cbv1yf3gbllfdzqsg263kzwh21y8dpwr0wvgh15vapkpfs0";
   };
 
   patches = [ ./fix_pkgconfig_includedir.patch ];
 
   nativeBuildInputs = [
     pkgconfig
-    python
+    python3
     meson
     ninja
     gettext
@@ -104,8 +102,8 @@ stdenv.mkDerivation rec {
     libavc1394
     libiec61883
     libgudev
-  ] ++ optionals (stdenv.isLinux && enableJack) [
-    jack2
+  ] ++ optionals enableJack [
+    libjack2
   ];
 
   mesonFlags = [
@@ -113,8 +111,8 @@ stdenv.mkDerivation rec {
     "-Dqt5=disabled" # not clear as of writing how to correctly pass in the required qt5 deps
   ] ++ optionals (!gtkSupport) [
     "-Dgtk3=disabled"
-  ] ++ optionals (!stdenv.isLinux || !enableJack) [
-    "-Djack=disabled" # unclear whether Jack works on Darwin
+  ] ++ optionals (!enableJack) [
+    "-Djack=disabled"
   ] ++ optionals (!stdenv.isLinux) [
     "-Ddv1394=disabled" # Linux only
     "-Doss4=disabled" # Linux only

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "7.89";
 
   src = fetchurl {
-    url = http://business.toshiba.com/downloads/KB/f1Ulds/15178/TOSHIBA_ColorMFP_CUPS.tar;
+    url = "http://business.toshiba.com/downloads/KB/f1Ulds/15178/TOSHIBA_ColorMFP_CUPS.tar";
     sha256 = "0qz4r7q55i0adf4fv3aqnfqgi2pz3jb1jixkqm9x6nk4vanyjf4r";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       TOSHIBA e-STUDIO6540C, TOSHIBA e-STUDIO6550C, TOSHIBA e-STUDIO6560C,
       TOSHIBA e-STUDIO6570C and TOSHIBA e-STUDIO7506AC.
     '';
-    homepage = http://business.toshiba.com/support/downloads/index.html;
+    homepage = "http://business.toshiba.com/support/downloads/index.html";
     license = licenses.unfree;
     maintainers = [ maintainers.jpotier ];
   };

@@ -2,7 +2,7 @@
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
-, perl, perlPackages, pkgconfig, autoreconfHook
+, perl, perlPackages, python2Packages, pkgconfig, autoreconfHook
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , cairo, pixman, xorg, clisp, biber, xxHash
 , makeWrapper, shortenPerlShebang
@@ -26,10 +26,7 @@ let
       sha256 = "1dfps39q6bdr1zsbp9p74mvalmy3bycihv19sb9c6kg30kprz8nj";
     };
 
-    patches = [
-    ];
-
-    postPatch = let
+    prePatch = let
       # The source compatible with Poppler ${popplerVersion} not yet available in TeXLive ${year}
       # so we need to use files introduced in https://www.tug.org/svn/texlive?view=revision&revision=52959
       popplerVersion = "0.83.0";
@@ -70,6 +67,17 @@ let
       cp -pv ${pdftosrc} texk/web2c/pdftexdir/pdftosrc.cc
     '';
 
+    patches = [
+      # poppler 0.84 compat fixups, use 0.83 files otherwise
+      ./poppler84.patch
+
+      (fetchpatch {
+        name = "texlive-poppler-0.86.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.86.patch?h=packages/texlive-bin&id=60244e41bb6f1501e8ed1fc9e6b7ba8d3f283398";
+        sha256 = "0pdvhaqc3zgz7hp0x3a4qs0nh26fkvgmr6w1cjljqhp1nyiw2f1l";
+      })
+    ];
+
     # remove when removing synctex-missing-header.patch
     preAutoreconf = "pushd texk/web2c";
     postAutoreconf = "popd";
@@ -105,7 +113,7 @@ core = stdenv.mkDerivation rec {
   pname = "texlive-bin";
   inherit version;
 
-  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
+  inherit (common) src patches prePatch preAutoreconf postAutoreconf;
 
   outputs = [ "out" "doc" ];
 
@@ -185,7 +193,7 @@ core = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Basic binaries for TeX Live";
-    homepage    = http://www.tug.org/texlive;
+    homepage    = "http://www.tug.org/texlive";
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ vcunat veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
@@ -198,7 +206,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
 
-  inherit (common) src patches postPatch preAutoreconf postAutoreconf;
+  inherit (common) src patches prePatch preAutoreconf postAutoreconf;
 
   hardeningDisable = [ "format" ];
 
@@ -261,9 +269,24 @@ dvisvgm = stdenv.mkDerivation {
 
   inherit (common) src;
 
+  patches = [
+    # Fix for ghostscript>=9.27
+    # Backport of
+    # https://github.com/mgieseki/dvisvgm/commit/bc51951bc90b700c28ea018993bdb058e5271e9b
+    ./dvisvgm-fix.patch
+
+    # Needed for ghostscript>=9.50
+    (fetchpatch {
+      url = "https://github.com/mgieseki/dvisvgm/commit/7b93a9197b69305429183affd24fa40ee04a663a.patch";
+      sha256 = "1gmj76ja9xng39wxckhs9q140abixgb8rkrcfv2cdgq786wm3vag";
+      stripLen = 1;
+      extraPrefix = "texk/dvisvgm/dvisvgm-src/";
+    })
+  ];
+
   nativeBuildInputs = [ pkgconfig ];
   # TODO: dvisvgm still uses vendored dependencies
-  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype potrace xxHash ];
+  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype /*potrace xxHash*/ ];
 
   preConfigure = "cd texk/dvisvgm";
 
@@ -286,6 +309,15 @@ dvipng = stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
+
+  patches = [
+    (fetchpatch {
+      url = "http://git.savannah.nongnu.org/cgit/dvipng.git/patch/?id=f3ff241827a587e3d39eda477041fd3280f5b245";
+      sha256 = "1a0ixl9mga24p6xk8dy3v60yifvbzd27vs0hv8996rfkp8jqa7is";
+      stripLen = 1;
+      extraPrefix = "texk/dvipng/dvipng-src/";
+    })
+  ];
 
   preConfigure = ''
     cd texk/dvipng
@@ -331,6 +363,64 @@ latexindent = perlPackages.buildPerlPackage rec {
     cp -r ./scripts/latexindent/LatexIndent "$out"/${perl.libPrefix}/
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang "$out"/bin/latexindent
+  '';
+};
+
+
+pygmentex = python2Packages.buildPythonApplication rec {
+  pname = "pygmentex";
+  inherit (src) version;
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
+
+  propagatedBuildInputs = with python2Packages; [ pygments chardet ];
+
+  dontBuild = true;
+
+  doCheck = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D ./scripts/pygmentex/pygmentex.py "$out"/bin/pygmentex
+
+    runHook postInstall
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://www.ctan.org/pkg/pygmentex";
+    description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
+    longDescription = ''
+      PygmenTeX is a Python-based LaTeX package that can be used for
+      typesetting code listings in a LaTeX document using Pygments.
+
+      Pygments is a generic syntax highlighter for general use in all kinds of
+      software such as forum systems, wikis or other applications that need to
+      prettify source code.
+    '';
+    license = licenses.lppl13c;
+    maintainers = with maintainers; [ romildo ];
+  };
+};
+
+
+texlinks = stdenv.mkDerivation rec {
+  name = "texlinks.sh";
+
+  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
+
+  dontBuild = true;
+  doCheck = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    # Patch texlinks.sh back to 2015 version;
+    # otherwise some bin/ links break, e.g. xe(la)tex.
+    patch --verbose -R scripts/texlive-extra/texlinks.sh < '${./texlinks.diff}'
+    install -Dm555 scripts/texlive-extra/texlinks.sh "$out"
+
+    runHook postInstall
   '';
 };
 

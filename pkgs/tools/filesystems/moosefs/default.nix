@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
-  version = "3.0.107";
+  version = "3.0.112";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "18mw7a1by8l09fb2pan6zak29bcrgbf5zgfzrlw3c203yawqbx3k";
+    sha256 = "04ymwg9r9x9gqjwy9jbjv7zzfgwal0xlfy6z5bwl27m2ys6l5k4a";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://moosefs.com;
+    homepage = "https://moosefs.com";
     description = "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -32,7 +32,7 @@ let
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
   i686bundled = versionAtLeast version "391";
 
-  libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.xorg.libXext pkgs.xorg.libX11
+  libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.libdrm pkgs.xorg.libXext pkgs.xorg.libX11
     pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc ];
 
   self = stdenv.mkDerivation {
@@ -89,7 +89,7 @@ let
     };
 
     meta = with stdenv.lib; {
-      homepage = https://www.nvidia.com/object/unix.html;
+      homepage = "https://www.nvidia.com/object/unix.html";
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "i686-linux" "x86_64-linux" ];

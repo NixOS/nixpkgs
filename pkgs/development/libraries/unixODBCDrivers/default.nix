@@ -21,7 +21,7 @@
 
     meta = with stdenv.lib; {
       description = "Official PostgreSQL ODBC Driver";
-      homepage =  https://odbc.postgresql.org/;
+      homepage =  "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
       platforms = platforms.linux;
     };
@@ -62,7 +62,7 @@
 
     meta = with stdenv.lib; {
       description = "MariaDB ODBC database driver";
-      homepage =  https://downloads.mariadb.org/connector-odbc/;
+      homepage =  "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
       platforms = platforms.linux ++ platforms.darwin;
     };
@@ -90,7 +90,7 @@
 
     meta = with stdenv.lib; {
       description = "MariaDB ODBC database driver";
-      homepage = https://dev.mysql.com/downloads/connector/odbc/;
+      homepage = "https://dev.mysql.com/downloads/connector/odbc/";
       license = licenses.gpl2;
       platforms = platforms.linux;
       broken = true;
@@ -100,16 +100,16 @@
   sqlite = stdenv.mkDerivation rec {
     pname = "sqlite-connector-odbc";
     version = "0.9993";
- 
+
     src = fetchurl {
       url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
       sha256 = "0dgsj28sc7f7aprmdd0n5a1rmcx6pv7170c8dfjl0x1qsjxim6hs";
     };
- 
+
     buildInputs = [ unixODBC sqlite zlib libxml2 ];
- 
+
     configureFlags = [ "--with-odbc=${unixODBC}" ];
- 
+
     installTargets = [ "install-3" ];
 
     # move libraries to $out/lib where they're expected to be
@@ -117,7 +117,7 @@
       mkdir -p "$out/lib"
       mv "$out"/*.* "$out/lib"
     '';
- 
+
     passthru = {
       fancyName = "SQLite";
       driver = "lib/libsqlite3odbc.so";
@@ -125,7 +125,7 @@
 
     meta = with stdenv.lib; {
       description = "ODBC driver for SQLite";
-      homepage = http://www.ch-werner.de/sqliteodbc;
+      homepage = "http://www.ch-werner.de/sqliteodbc";
       license = licenses.bsd2;
       platforms = platforms.linux;
       maintainers = with maintainers; [ vlstill ];
@@ -137,12 +137,12 @@
     version = "${versionMajor}.${versionMinor}.${versionAdditional}-1";
 
     versionMajor = "17";
-    versionMinor = "4";
+    versionMinor = "5";
     versionAdditional = "1.1";
 
     src = fetchurl {
       url = "https://packages.microsoft.com/debian/9/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
-      sha256 = "0jb16irr7qlgd2zshg0vyia7zqipd0pcvwfcr6z807pss1mnzj8w";
+      sha256 = "0ysrl01z5ca72qw8n8kwwcl432cgiyw4pibfwg5nifx0kd7i7z4z";
     };
 
     nativeBuildInputs = [ dpkg patchelf ];
@@ -168,7 +168,7 @@
 
     meta = with stdenv.lib; {
       description = "ODBC Driver 17 for SQL Server";
-      homepage = https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017;
+      homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
       license = licenses.unfree;
       platforms = platforms.linux;
       maintainers = with maintainers; [ spencerjanssen ];

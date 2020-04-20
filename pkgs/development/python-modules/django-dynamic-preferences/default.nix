@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/EliotBerriot/django-dynamic-preferences;
+    homepage = "https://github.com/EliotBerriot/django-dynamic-preferences";
     description = "Dynamic global and instance settings for your django project";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];

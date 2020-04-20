@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     chmod u+x $(pwd)/../${usr_prefix}/bin/mlton
 
     # So the builder runs the binary compiler with gmp.
-    export LD_LIBRARY_PATH=${gmp.out}/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=${gmp.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
 
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     # Patch ELF interpreter.

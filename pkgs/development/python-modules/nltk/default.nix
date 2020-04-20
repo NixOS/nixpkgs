@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Natural Language Processing ToolKit";
-    homepage = http://nltk.org/;
+    homepage = "http://nltk.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lheckemann ];
   };

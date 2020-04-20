@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "2019.02.14";
+  version = "2020.03.04";
   dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://linux.dropboxstatic.com/packages/nautilus-dropbox-${version}.tar.bz2";
-    sha256 = "09yg7q45sycl88l3wq0byz4a9k6sxx3m0r3szinvisfay9wlj35f";
+    sha256 = "1jjc835n2j61d23kvygdb4n4jsrw33r9mbwxrm4fqin6x01l2w7k";
   };
 
   strictDeps = true;
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    homepage = https://www.dropbox.com;
+    homepage = "https://www.dropbox.com";
     description = "Command line client for the dropbox daemon";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];

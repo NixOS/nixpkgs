@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "ReplayGain for wave files";
-    homepage = https://github.com/MestreLion/wavegain;
+    homepage = "https://github.com/MestreLion/wavegain";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.robbinch ];

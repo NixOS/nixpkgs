@@ -31,7 +31,7 @@ xorgserver.overrideAttrs (oldAttrs: {
 
   meta = {
     description = "An X server for interfacing X11 apps with the Wayland protocol";
-    homepage = https://wayland.freedesktop.org/xserver.html;
+    homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
     platforms = platforms.linux;
   };

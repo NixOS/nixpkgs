@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
       the default theme for Gnome 2. Style is also included for GTK2, Unity and
       for Metacity, Openbox and Xfwm4 window managers.
     '';
-    homepage = https://github.com/jpfleury/clearlooks-phenix;
-    downloadPage = https://github.com/jpfleury/clearlooks-phenix/releases;
+    homepage = "https://github.com/jpfleury/clearlooks-phenix";
+    downloadPage = "https://github.com/jpfleury/clearlooks-phenix/releases";
     license = licenses.gpl3;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;

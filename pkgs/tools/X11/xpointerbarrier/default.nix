@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xorg.libX11 xorg.libXfixes xorg.libXrandr ];
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = {
-    homepage = https://uninformativ.de/git/xpointerbarrier;
+    homepage = "https://uninformativ.de/git/xpointerbarrier";
     description = "Create X11 pointer barriers around your working area";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.xzfc ];

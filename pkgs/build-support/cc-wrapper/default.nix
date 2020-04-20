@@ -10,7 +10,7 @@
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
-, extraPackages ? [], extraBuildCommands ? ""
+, extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
@@ -41,12 +41,14 @@ let
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
   libc_lib = if libc == null then null else getLib libc;
-  cc_solib = getLib cc;
+  cc_solib = getLib cc
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
   default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc) && !(targetPlatform.useLLVM or false) then
-    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
+    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/${targetPlatform.config}"
   else if targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false) && !(targetPlatform.useLLVM or false) then
     "-isystem ${libcxx}/include/c++/v1"
   else "";
@@ -59,7 +61,7 @@ let
   infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
-    if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+    if buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
 
@@ -212,7 +214,7 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
-  propagatedBuildInputs = [ bintools ];
+  propagatedBuildInputs = [ bintools ] ++ extraTools;
   depsTargetTargetPropagated = extraPackages;
 
   wrapperName = "CC_WRAPPER";
@@ -237,7 +239,7 @@ stdenv.mkDerivation {
       fi
     ''
 
-    + optionalString (libc != null) ''
+    + optionalString (libc != null) (''
       ##
       ## General libc support
       ##
@@ -253,11 +255,17 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B${libc_lib}${libc.libdir or "/lib/"} -idirafter ${libc_dev}${libc.incdir or "/include"} ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
+      echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+    '' + optionalString isGNU ''
+      for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
+        echo '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
+      done
+    '' + ''
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
-    ''
+    '')
 
     + optionalString (!nativeTools) ''
       ##
@@ -355,7 +363,13 @@ stdenv.mkDerivation {
       done
     ''
 
+    # There are a few tools (to name one libstdcxx5) which do not work
+    # well with multi line flags, so make the flags single line again
     + ''
+      if [ -e "$out/nix-support/libc-cflags" ]; then
+        substituteInPlace "$out/nix-support/libc-cflags" --replace $'\n' ' '
+      fi
+
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash

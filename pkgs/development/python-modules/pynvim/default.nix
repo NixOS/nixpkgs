@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mp9ajsgrb9k2f3s8g7vdflj5mg02ii0d0wk4n6dmvjx52rqpzbi";
+    sha256 = "0n2cx22lrmbq7xk7356lyn6k77ryqvkxplw9k0fglk35ckb1isam";
   };
 
   nativeBuildInputs = [

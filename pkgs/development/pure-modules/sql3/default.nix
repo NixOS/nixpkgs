@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure sqlite ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
     description = "A SQLite module for the Pure programming language";
-    homepage = http://puredocs.bitbucket.org/pure-sql3.html;
+    homepage = "http://puredocs.bitbucket.org/pure-sql3.html";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

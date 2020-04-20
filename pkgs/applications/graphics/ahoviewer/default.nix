@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
   ] ++ stdenv.lib.optional useUnrar unrar;
 
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   postPatch = ''patchShebangs version.sh'';
 
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ahodesuka/ahoviewer;
+    homepage = "https://github.com/ahodesuka/ahoviewer";
     description = "A GTK2 image viewer, manga reader, and booru browser";
     maintainers = with maintainers; [ skrzyp xzfc ];
     license = licenses.mit;

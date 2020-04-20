@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lmvsnb4xw4hmz6zs0z5ilsah5hjz29g1s0050n59fllskqr3b8k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libusb1 ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ libusb1 ];
 
   # TODO: get these fixes upstream:
   # * Building with -DINSTALL_UDEV_RULES=ON tries to install udev rules to
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
-    homepage = http://sdr.osmocom.org/trac/wiki/rtl-sdr;
+    homepage = "http://sdr.osmocom.org/trac/wiki/rtl-sdr";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];

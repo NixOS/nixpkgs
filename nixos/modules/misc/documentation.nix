@@ -1,4 +1,4 @@
-{ config, lib, pkgs, baseModules, extraModules, modules, ... }:
+{ config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
 
 with lib;
 
@@ -17,12 +17,16 @@ let
     inherit pkgs config;
     version = config.system.nixos.release;
     revision = "release-${version}";
+    extraSources = cfg.nixos.extraModuleSources;
     options =
       let
         scrubbedEval = evalModules {
           modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
           args = (config._module.args) // { modules = [ ]; };
-          specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
+          specialArgs = {
+            pkgs = scrubDerivations "pkgs" pkgs;
+            inherit modulesPath;
+          };
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
@@ -67,6 +71,11 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
+    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+  ];
 
   options = {
 
@@ -155,6 +164,19 @@ in
         '';
       };
 
+      nixos.extraModuleSources = mkOption {
+        type = types.listOf (types.either types.path types.str);
+        default = [ ];
+        description = ''
+          Which extra NixOS module paths the generated NixOS's documentation should strip
+          from options.
+        '';
+        example = literalExample ''
+          # e.g. with options from modules in ''${pkgs.customModules}/nix:
+          [ pkgs.customModules ]
+        '';
+      };
+
     };
 
   };
@@ -196,9 +218,7 @@ in
            ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
 
       services.mingetty.helpLine = mkIf cfg.doc.enable (
-          "\nRun `nixos-help` "
-        + optionalString config.services.nixosManual.showManual "or press <Alt-F${toString config.services.nixosManual.ttyNumber}> "
-        + "for the NixOS manual."
+          "\nRun 'nixos-help' for the NixOS manual."
       );
     })
 

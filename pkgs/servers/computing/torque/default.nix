@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # added to fix build with gcc7
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error" "-fpermissive"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
 
   postPatch = ''
     substituteInPlace Makefile.am \
@@ -63,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.adaptivecomputing.com/products/open-source/torque;
+    homepage = "http://www.adaptivecomputing.com/products/open-source/torque";
     description = "Resource management system for submitting and controlling jobs on supercomputers, clusters, and grids";
     platforms = platforms.linux;
     license = "TORQUEv1.1";

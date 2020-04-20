@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Network A/V plugin for OBS Studio";
-    homepage = https://github.com/Palakis/obs-ndi;
+    homepage = "https://github.com/Palakis/obs-ndi";
     maintainers = with maintainers; [ peti ];
     license = licenses.gpl2;
     platforms = with platforms; linux;

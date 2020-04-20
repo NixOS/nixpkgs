@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for setting up self-contained Kerberos 5 environment";
-    homepage = https://github.com/pythongssapi/k5test;
+    homepage = "https://github.com/pythongssapi/k5test";
     license = licenses.mit;
     maintainers = [ ];
   };

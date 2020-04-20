@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2, gtkmm2,
-  libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors
+  libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors, xfce
 }:
 
 stdenv.mkDerivation rec {
@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = "https://git.xfce.org/panel-plugins/${pname}/snapshot/${pname}-${version}.tar.bz2";
-    sha256 = "0xg5har11fk1wmdymydxlbk1z8aa39j8k0p4gzw2iqslv3n0zf7b";
+    url = "https://git.xfce.org/archive/${pname}/snapshot/${pname}-${version}.tar.gz";
+    sha256 = "11k7m41jxkaqmpp5njkixw60q517xnw923mz34dnm1llx9ilvfk8";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${pname}";
+  meta = with stdenv.lib; {
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/xfce4-hardware-monitor-plugin";
     description = "Hardware monitor plugin for the XFCE4 panel";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

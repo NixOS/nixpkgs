@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://liw.fi/larch/;
+    homepage = "http://liw.fi/larch/";
     description = "Python B-tree library";
     license = licenses.gpl3;
     maintainers = [];

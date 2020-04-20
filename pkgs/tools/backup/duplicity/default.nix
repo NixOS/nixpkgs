@@ -1,64 +1,90 @@
-{ stdenv, fetchpatch, fetchurl, python2Packages, librsync, ncftp, gnupg
+{ stdenv
+, fetchpatch
+, fetchurl
+, pythonPackages
+, librsync
+, ncftp
+, gnupg
 , gnutar
 , par2cmdline
 , utillinux
 , rsync
-, backblaze-b2, makeWrapper }:
-
-python2Packages.buildPythonApplication rec {
+, backblaze-b2
+, makeWrapper
+, gettext
+}:
+let
+  inherit (stdenv.lib.versions) majorMinor splitVersion;
+  majorMinorPatch = v: builtins.concatStringsSep "." (stdenv.lib.take 3 (splitVersion v));
+in
+pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
-  version = "0.7.19";
+  version = "0.8.11.1596";
 
   src = fetchurl {
-    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "0ag9dknslxlasslwfjhqgcqbkb1mvzzx93ry7lch2lfzcdd91am6";
+    url = "https://code.launchpad.net/duplicity/${majorMinor version}-series/${majorMinorPatch version}/+download/duplicity-${version}.tar.gz";
+    sha256 = "1qdaaybwdc13nfwnwrqij4lc23iwy73lyqn5lb4iznq6axp6m0h9";
   };
-  patches = [
-    ./gnutar-in-test.patch
-    ./use-installed-scripts-in-test.patch
 
-    # The following patches improve the performance of installCheckPhase:
-    # Ensure all duplicity output is captured in tests
-    (fetchpatch {
-      extraPrefix = "";
-      sha256 = "07ay3mmnw8p2j3v8yvcpjsx0rf2jqly9ablwjpmry23dz9f0mxsd";
-      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.1";
-    })
-    # Minimize time spent sleeping between backups
-    (fetchpatch {
-      extraPrefix = "";
-      sha256 = "0v99q6mvikb8sf68gh3s0zg12pq8fijs87fv1qrvdnc8zvs4pmfs";
-      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.2";
-    })
-    # Remove unnecessary sleeping after running backups in tests
-    (fetchpatch {
-      extraPrefix = "";
-      sha256 = "1bmgp4ilq2gwz2k73fxrqplf866hj57lbyabaqpkvwxhr0ch1jiq";
-      url = "https://bazaar.launchpad.net/~duplicity-team/duplicity/0.8-series/diff/1359.2.3";
-    })
+  patches = [
+    # We use the tar binary on all platforms.
+    ./gnutar-in-test.patch
+
+    # Our Python infrastructure runs test in installCheckPhase so we need
+    # to make the testing code stop assuming it is run from the source directory.
+    ./use-installed-scripts-in-test.patch
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     ./linux-disable-timezone-test.patch
   ];
 
-  buildInputs = [ librsync makeWrapper python2Packages.wrapPython ];
-  propagatedBuildInputs = [ backblaze-b2 ] ++ (with python2Packages; [
-    boto cffi cryptography ecdsa enum idna pygobject3 fasteners
-    ipaddress lockfile paramiko pyasn1 pycrypto six pydrive
+  nativeBuildInputs = [
+    makeWrapper
+    gettext
+    pythonPackages.wrapPython
+  ];
+  buildInputs = [
+    librsync
+  ];
+
+  propagatedBuildInputs = [
+    backblaze-b2
+  ] ++ (with pythonPackages; [
+    boto
+    cffi
+    cryptography
+    ecdsa
+    idna
+    pygobject3
+    fasteners
+    ipaddress
+    lockfile
+    paramiko
+    pyasn1
+    pycrypto
+    pydrive
+    future
+  ] ++ stdenv.lib.optionals (!isPy3k) [
+    enum
   ]);
+
   checkInputs = [
-    gnupg  # Add 'gpg' to PATH.
-    gnutar  # Add 'tar' to PATH.
-    librsync  # Add 'rdiff' to PATH.
-    par2cmdline  # Add 'par2' to PATH.
+    gnupg # Add 'gpg' to PATH.
+    gnutar # Add 'tar' to PATH.
+    librsync # Add 'rdiff' to PATH.
+    par2cmdline # Add 'par2' to PATH.
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    utillinux  # Add 'setsid' to PATH.
-  ] ++ (with python2Packages; [ lockfile mock pexpect ]);
+    utillinux # Add 'setsid' to PATH.
+  ] ++ (with pythonPackages; [
+    lockfile
+    mock
+    pexpect
+    pytest
+    pytestrunner
+  ]);
 
   postInstall = ''
     wrapProgram $out/bin/duplicity \
       --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
-
-    wrapPythonPrograms
   '';
 
   preCheck = ''
@@ -88,7 +114,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
-    homepage = https://www.nongnu.org/duplicity;
+    homepage = "https://www.nongnu.org/duplicity";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peti ];
     platforms = platforms.unix;

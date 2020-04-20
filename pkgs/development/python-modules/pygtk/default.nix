@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pkgconfig, gtk2, pygobject2, pycairo
+{ stdenv, fetchurl, fetchpatch, python, pkgconfig, gtk2, pygobject2, pycairo, pango
 , buildPythonPackage, libglade ? null, isPy3k }:
 
 buildPythonPackage rec {
@@ -12,8 +12,22 @@ buildPythonPackage rec {
     sha256 = "04k942gn8vl95kwf0qskkv6npclfm31d78ljkrkgyqxxcni1w76d";
   };
 
+  patches = [
+    # https://bugzilla.gnome.org/show_bug.cgi?id=660216 - fixes some memory leaks
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/Archive/pygtk/commit/eca72baa5616fbe4dbebea43c7e5940847dc5ab8.diff";
+      sha256 = "031px4w5cshcx1sns430sdbr2i007b9zyb2carb3z65nzr77dpdd";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/Archive/pygtk/commit/4aaa48eb80c6802aec6d03e5695d2a0ff20e0fc2.patch";
+      sha256 = "0z8cg7nr3qki8gg8alasdzzyxcihfjlxn518glq5ajglk3q5pzsn";
+    })
+  ];
+
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = stdenv.lib.optional (libglade != null) libglade;
+  buildInputs = [
+    pango
+  ] ++ stdenv.lib.optional (libglade != null) libglade;
 
   propagatedBuildInputs = [ gtk2 pygobject2 pycairo ];
 

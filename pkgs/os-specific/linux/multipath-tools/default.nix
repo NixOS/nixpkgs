@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "LIB=lib"
     "prefix=$(out)"
-    "mandir=$(out)/share/man/man8"
+    "man8dir=$(out)/share/man/man8"
     "man5dir=$(out)/share/man/man5"
     "man3dir=$(out)/share/man/man3"
-    "unitdir=$(out)/lib/systemd/system"
+    "SYSTEMDPATH=lib"
   ];
 
   meta = with stdenv.lib; {
     description = "Tools for the Linux multipathing driver";
-    homepage = http://christophe.varoqui.free.fr/;
+    homepage = "http://christophe.varoqui.free.fr/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

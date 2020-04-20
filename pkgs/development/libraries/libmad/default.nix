@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals stdenv.cc.isClang [
     (fetchpatch {
       url = "https://github.com/KaOSx/main/raw/1270b8080f37fb6cca562829a521991800b0a497/libmad/optimize.diff";
-      sha256 = "0ciyaj1acg08g8hpzqx6whayq206fvf4whksz2pjgxlv207lqgjh";
+      sha256 = "0hcxzz9ql1fizyqbsgdchdwi7bvchfr72172j43hpyj53p0yabc6";
     })
   ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   preConfigure = "autoconf";
 
   meta = with stdenv.lib; {
-    homepage    = https://sourceforge.net/projects/mad/;
+    homepage    = "https://sourceforge.net/projects/mad/";
     description = "A high-quality, fixed-point MPEG audio decoder supporting MPEG-1 and MPEG-2";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];

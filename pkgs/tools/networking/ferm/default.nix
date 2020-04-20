@@ -1,12 +1,14 @@
 { stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables, nixosTests }:
 
-stdenv.mkDerivation rec {
-  version = "2.4.1";
+let
+  inherit (stdenv.lib.versions) majorMinor;
+in stdenv.mkDerivation rec {
+  version = "2.5";
   pname = "ferm";
 
   src = fetchurl {
-    url = "http://ferm.foo-projects.org/download/2.4/ferm-${version}.tar.xz";
-    sha256 = "1fv8wk513yysp4q0i65rl2m0hg2lxwwgk9ppprsca1xcxrdpsvwa";
+    url = "http://ferm.foo-projects.org/download/${majorMinor version}/ferm-${version}.tar.xz";
+    sha256 = "0lxqcpirphihpvdqrh5kq0621aqq0h2vdy9q2v85gqdhd52js20p";
   };
 
   buildInputs = [ perl ipset ebtables iptables makeWrapper ];
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
   passthru.tests.ferm = nixosTests.ferm;
 
   meta = {
-    homepage = http://ferm.foo-projects.org/;
+    homepage = "http://ferm.foo-projects.org/";
     description = "Tool to maintain complex firewalls";
     longDescription = ''
       ferm is a tool to maintain complex firewalls, without having the trouble to

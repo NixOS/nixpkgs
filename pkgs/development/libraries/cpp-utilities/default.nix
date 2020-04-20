@@ -1,14 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, cppunit }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, cppunit
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpp-utilities";
-  version = "5.0.1";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11wm7z4ldsja2x2m2dkj3xhiammkwfqgbgkwq9gssnv14803fhnv";
+    sha256 = "1c5rs28pavv8zabprjbd2y1sblgqbbhww07qvairh149rahvxi85";
   };
 
   nativeBuildInputs = [ cmake ];

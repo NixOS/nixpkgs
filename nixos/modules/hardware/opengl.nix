@@ -31,6 +31,11 @@ let
 in
 
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
+  ];
+
   options = {
 
     hardware.opengl = {
@@ -38,11 +43,11 @@ in
         description = ''
           Whether to enable OpenGL drivers. This is needed to enable
           OpenGL support in X11 systems, as well as for Wayland compositors
-          like sway, way-cooler and Weston. It is enabled by default
+          like sway and Weston. It is enabled by default
           by the corresponding modules, so you do not usually have to
           set it yourself, only if there is no module for your wayland
-          compositor of choice. See services.xserver.enable,
-          programs.sway.enable, and programs.way-cooler.enable.
+          compositor of choice. See services.xserver.enable and
+          programs.sway.enable.
         '';
         type = types.bool;
         default = false;

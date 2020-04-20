@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     broken = cornice.version != "0.17";
     description = "The SyncServer server software, as used by Firefox Sync";
-    homepage = https://github.com/mozilla-services/server-syncstorage;
+    homepage = "https://github.com/mozilla-services/server-syncstorage";
     license = licenses.mpl20;
     maintainers = with maintainers; [ nadrieril ];
   };

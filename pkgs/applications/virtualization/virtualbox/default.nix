@@ -2,7 +2,7 @@
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
 , makeself, perl
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
@@ -21,8 +21,18 @@ let
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
-  main = "1hxbvr78b0fddcn7npz72ki89lpmbgqj4b5qvxm1wik7v0d8v1y8";
-  version = "6.0.12";
+  main = "59f8f5774473f593e3eb5940e2a337e0674bcd9854164b2578fd43f896260c99";
+  version = "6.1.4";
+
+  iasl' = iasl.overrideAttrs (old: rec {
+    inherit (old) pname;
+    version = "20190108";
+    src = fetchurl {
+      url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
+      sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
+    };
+    NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
+  });
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -41,7 +51,7 @@ in stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs =
-    [ iasl dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsaLib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk
@@ -79,6 +89,7 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
+  ++ [ ./extra_symbols.patch ]
      # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
      # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
      # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
@@ -92,9 +103,6 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
-    # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
-    # https://www.virtualbox.org/ticket/18911
-    ./kernel-5.3-fix.patch
   ];
 
   postPatch = ''
@@ -213,7 +221,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "PC emulator";
     license = licenses.gpl2;
-    homepage = https://www.virtualbox.org/;
+    homepage = "https://www.virtualbox.org/";
     maintainers = with maintainers; [ sander ];
     platforms = [ "x86_64-linux" ];
   };

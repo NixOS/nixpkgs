@@ -16,12 +16,8 @@ in stdenv.mkDerivation rec {
   pname = "gwenhywfar";
   inherit version;
 
-  src = let
-    qstring = "package=01&release=${releaseId}&file=02";
-    mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
-  in fetchurl {
-    name = "${pname}-${version}.tar.gz";
-    urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
+  src = fetchurl {
+    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
     inherit sha256;
   };
 
@@ -63,7 +59,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OS abstraction functions used by aqbanking and related tools";
-    homepage = http://www2.aquamaniac.de/sites/download/packages.php?package=01&showall=1;
+    homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=01&showall=1";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig
+{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
 , wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
 , ffmpeg_4, x264, libvpx, libwebp, x265
@@ -11,14 +11,30 @@ with lib;
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
-  xf86videodummy = callPackage ./xf86videodummy { };
+  xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
+    patches = [
+      ./0002-Constant-DPI.patch
+      ./0003-fix-pointer-limits.patch
+      ./0005-support-for-30-bit-depth-in-dummy-driver.patch
+    ];
+  });
+
+  xorgModulePaths = writeText "module-paths" ''
+    Section "Files"
+      ModulePath "${xorgserver}/lib/xorg/modules"
+      ModulePath "${xorgserver}/lib/xorg/modules/extensions"
+      ModulePath "${xorgserver}/lib/xorg/modules/drivers"
+      ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
+    EndSection
+  '';
+
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "2.5.3";
+  version = "3.0.8";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "1ys35lj28903alccks9p055psy1fsk1nxi8ncchvw8bfxkkkvbys";
+    sha256 = "0d78bn7s03nwnyc4ryznxaivbg55kvsb26q75p8747j3562s9p2b";
   };
 
   patches = [
@@ -60,10 +76,8 @@ in buildPythonApplication rec {
     ipaddress idna
   ];
 
-  NIX_CFLAGS_COMPILE = [
     # error: 'import_cairo' defined but not used
-    "-Wno-error=unused-function"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [
     "--with-Xdummy"
@@ -83,6 +97,11 @@ in buildPythonApplication rec {
     )
   '';
 
+  # append module paths to xorg.conf
+  postInstall = ''
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+  '';
+
   doCheck = false;
 
   enableParallelBuilding = true;
@@ -90,7 +109,7 @@ in buildPythonApplication rec {
   passthru = { inherit xf86videodummy; };
 
   meta = {
-    homepage = http://xpra.org/;
+    homepage = "http://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";

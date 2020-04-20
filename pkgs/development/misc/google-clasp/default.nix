@@ -11,7 +11,7 @@ in
   '';
   meta = {
     description = "Command Line tool for Google Apps Script Projects";
-    homepage = https://developers.google.com/apps-script/guides/clasp;
+    homepage = "https://developers.google.com/apps-script/guides/clasp";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.michojel ];
     priority = 100;

@@ -33,8 +33,10 @@ let
     fi
   '';
 
+  getLibOutputs = lib.mapAttrs (k: v: lib.getLib v);
+
   # https://www.python.org/dev/peps/pep-0599/
-  manylinux2014Libs = with pkgs; {
+  manylinux2014Libs = getLibOutputs(with pkgs; {
     "libgcc_s.so.1" = glibc;
     "libstdc++.so.6" = stdenv.cc.cc;
     "libm.so.6" = glibc;
@@ -54,17 +56,18 @@ let
     "libgobject-2.0.so.0" = glib;
     "libgthread-2.0.so.0" = glib;
     "libglib-2.0.so.0" = glib;
-  };
+    });
 
   # https://www.python.org/dev/peps/pep-0571/
   manylinux2010Libs = manylinux2014Libs;
 
   # https://www.python.org/dev/peps/pep-0513/
-  manylinux1Libs = manylinux2010Libs // (with pkgs; {
+  manylinux1Libs = getLibOutputs(manylinux2010Libs // (with pkgs; {
     "libpanelw.so.5" = ncurses5;
     "libncursesw.so.5" = ncurses5;
     "libcrypt.so.1" = glibc;
-  });
+    }));
+
 in {
   # List of libraries that are needed for manylinux compatibility.
   # When using a wheel that is manylinux1 compatible, just extend

@@ -16,16 +16,19 @@ buildPythonPackage rec {
   };
 
   patches = fetchpatch {
-    url = https://bitbucket.org/pytest-dev/pytest-timeout/commits/36998c891573d8ec1db1acd4f9438cb3cf2aee2e/raw;
+    url = "https://bitbucket.org/pytest-dev/pytest-timeout/commits/36998c891573d8ec1db1acd4f9438cb3cf2aee2e/raw";
     sha256 = "05zc2w7mjgv8rm8i1cbxp7k09vlscmay5iy78jlzgjqkrx3wkf46";
   };
 
   checkInputs = [ pytest pexpect ];
-  checkPhase = ''pytest -ra'';
+  checkPhase = ''
+    # test_suppresses_timeout_when_pdb_is_entered fails under heavy load
+    pytest -ra -k 'not test_suppresses_timeout_when_pdb_is_entered'
+  '';
 
   meta = with lib;{
     description = "py.test plugin to abort hanging tests";
-    homepage = https://bitbucket.org/pytest-dev/pytest-timeout/;
+    homepage = "https://bitbucket.org/pytest-dev/pytest-timeout/";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu costrouc ];
   };

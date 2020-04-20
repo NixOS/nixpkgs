@@ -102,7 +102,7 @@ in
         enable = mkDefault config.boot.isContainer;
       };
 
-    environment.etc = singleton
+    environment.etc.issue =
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
 
@@ -110,7 +110,6 @@ in
           ${config.services.mingetty.helpLine}
 
         '';
-        target = "issue";
       };
 
   };

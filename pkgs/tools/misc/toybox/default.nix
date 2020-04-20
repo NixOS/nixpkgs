@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)/bin" ] ++ lib.optional enableStatic "LDFLAGS=--static";
 
-  installTargets = "install_flat";
+  installTargets = [ "install_flat" ];
 
   # tests currently (as of 0.8.0) get stuck in an infinite loop...
   # ...this is fixed in latest git, so doCheck can likely be enabled for next release
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight implementation of some Unix command line utilities";
-    homepage = https://landley.net/toybox/;
+    homepage = "https://landley.net/toybox/";
     license = licenses.bsd0;
     platforms = with platforms; linux ++ darwin ++ freebsd;
     maintainers = with maintainers; [ hhm ];

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       while maintaining access to the performance and functionality already
       on offer.
     '';
-    homepage = https://hpc.github.io/charliecloud;
+    homepage = "https://hpc.github.io/charliecloud";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.bzizou ];
     platforms = stdenv.lib.platforms.linux;

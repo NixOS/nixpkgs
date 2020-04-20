@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, boost, qtbase }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, boost, qtbase }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "snowman";
   version = "0.1.3";
 

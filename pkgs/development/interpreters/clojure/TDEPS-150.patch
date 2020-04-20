@@ -1,0 +1,23 @@
+--- a/clojure
++++ b/clojure
+@@ -317,17 +317,17 @@ if "$stale" || "$pom"; then
+     tools_args+=("--threads" "$threads")
+   fi
+   if "$trace"; then
+     tools_args+=("--trace")
+   fi
+ fi
+
+ # If stale, run make-classpath to refresh cached classpath
+-if [[ "$stale" = true && "$describe" = false ]]; then
++if [[ "$stale" = true && "$describe" = false && -z "$force_cp" ]]; then
+   if "$verbose"; then
+     echo "Refreshing classpath"
+   fi
+
+   "$JAVA_CMD" -classpath "$tools_cp" clojure.main -m clojure.tools.deps.alpha.script.make-classpath2 --config-user "$config_user" --config-project "$config_project" --libs-file "$libs_file" --cp-file "$cp_file" --jvm-file "$jvm_file" --main-file "$main_file" "${tools_args[@]}"
+ fi
+
+ if "$describe"; then
+--
+2.25.0

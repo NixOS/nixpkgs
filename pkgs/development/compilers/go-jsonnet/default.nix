@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-jsonnet";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "go-jsonnet";
     rev = "v${version}";
-    sha256 = "1q0mpydh8h0zrml605q9r259y8584kbwcr9g4sqcb1n13b4d1sgp";
+    sha256 = "0l6cwky2xl7m8nnc9abp76bhkdcf2ldbbv3r8p30xv2yr5wd1j8i";
   };
 
   modSha256 = "1b6hz5a66hhlzpcv1badxr1b4nmk4lw0507d5jks7lqzvvwd0sxq";

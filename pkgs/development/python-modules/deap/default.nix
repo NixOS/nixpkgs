@@ -1,16 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, numpy, matplotlib }:
+{ stdenv, buildPythonPackage, fetchPypi, python, numpy, matplotlib, nose }:
 
 buildPythonPackage rec {
   pname = "deap";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "102r11pxb36xkq5bjv1lpkss77v278f5xdv6lvkbjdvqryydf3yd";
+    sha256 = "0bvshly83c4h5jhxaa97z192viczymz5fxp6vl8awjmmrs9l9x8i";
   };
 
   propagatedBuildInputs = [ numpy matplotlib ];
 
+  checkInputs = [ nose ];
   checkPhase = ''
     ${python.interpreter} setup.py nosetests --verbosity=3
   '';

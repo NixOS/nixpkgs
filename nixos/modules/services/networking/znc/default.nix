@@ -287,20 +287,22 @@ in
       '';
     };
 
-    users.users = optional (cfg.user == defaultUser)
-      { name = defaultUser;
-        description = "ZNC server daemon owner";
-        group = defaultUser;
-        uid = config.ids.uids.znc;
-        home = cfg.dataDir;
-        createHome = true;
+    users.users = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} =
+        { description = "ZNC server daemon owner";
+          group = defaultUser;
+          uid = config.ids.uids.znc;
+          home = cfg.dataDir;
+          createHome = true;
+        };
       };
 
-    users.groups = optional (cfg.user == defaultUser)
-      { name = defaultUser;
-        gid = config.ids.gids.znc;
-        members = [ defaultUser ];
-      };
+    users.groups = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} =
+        { gid = config.ids.gids.znc;
+          members = [ defaultUser ];
+        };
+    };
 
   };
 }

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...}: {
+import ./make-test-python.nix ({ pkgs, ...}: {
   name = "haproxy";
   nodes = {
     machine = { ... }: {
@@ -23,21 +23,25 @@ import ./make-test.nix ({ pkgs, ...}: {
       };
       services.httpd = {
         enable = true;
-        documentRoot = pkgs.writeTextDir "index.txt" "We are all good!";
-        adminAddr = "notme@yourhost.local";
-        listen = [{
-          ip = "::1";
-          port = 8000;
-        }];
+        virtualHosts.localhost = {
+          documentRoot = pkgs.writeTextDir "index.txt" "We are all good!";
+          adminAddr = "notme@yourhost.local";
+          listen = [{
+            ip = "::1";
+            port = 8000;
+          }];
+        };
       };
     };
   };
   testScript = ''
-    startAll;
-    $machine->waitForUnit('multi-user.target');
-    $machine->waitForUnit('haproxy.service');
-    $machine->waitForUnit('httpd.service');
-    $machine->succeed('curl -k http://localhost:80/index.txt | grep "We are all good!"');
-    $machine->succeed('curl -k http://localhost:80/metrics | grep haproxy_process_pool_allocated_bytes');
+    start_all()
+    machine.wait_for_unit("multi-user.target")
+    machine.wait_for_unit("haproxy.service")
+    machine.wait_for_unit("httpd.service")
+    assert "We are all good!" in machine.succeed("curl -k http://localhost:80/index.txt")
+    assert "haproxy_process_pool_allocated_bytes" in machine.succeed(
+        "curl -k http://localhost:80/metrics"
+    )
   '';
 })

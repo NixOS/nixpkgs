@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "minimalistic but powerful Linux console hex editor";
-    homepage = https://yx7.cc/code/;
+    homepage = "https://yx7.cc/code/";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;

@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "3.34.0";
+  version = "3.34.1";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12j455id5g616cn0nnj73v83aqgpavrsqszw1r5yhbpyc76lg03m";
+    sha256 = "1ifm8hmxpf9nnxddfcpkbc5wc5f5hz43yj83nnakzqr6x1mq7gdp";
   };
 
   patches = [
@@ -117,9 +117,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Access, organize and share your photos";
-    homepage = https://wiki.gnome.org/Apps/Photos;
+    homepage = "https://wiki.gnome.org/Apps/Photos";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

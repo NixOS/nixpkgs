@@ -41,7 +41,8 @@
 , lcalc
 , rubiks
 , flintqs
-, openblasCompat
+, blas
+, lapack
 , flint
 , gmp
 , mpfr
@@ -52,6 +53,8 @@
 , jdk
 , less
 }:
+
+assert (!blas.is64bit) && (!lapack.is64bit);
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
 # It sets up various environment variables, telling sage where to find its
@@ -114,7 +117,7 @@ writeTextFile rec {
         # testsuite instead, but since all the packages are also runtime
         # dependencies it doesn't really hurt to include them here.
         singular
-        openblasCompat
+        blas lapack
         fflas-ffpack givaro
         gd
         libpng zlib
@@ -177,7 +180,7 @@ writeTextFile rec {
     export SAGE_EXTCODE='${sagelib.src}/src/ext'
 
   # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}:$DYLD_LIBRARY_PATH"
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
 } // {
   lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support

@@ -5,7 +5,7 @@
 , tinyxml
 , agg, alsaLib, soundtouch, openal
 , desktop-file-utils
-, gtk2, gtkglext, libglade, pangox_compat
+, gtk2, gtkglext, libglade
 , libGLU, libpcap, SDL, zziplib }:
 
 with stdenv.lib;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
-    openal desktop-file-utils gtk2 gtkglext libglade pangox_compat
+    openal desktop-file-utils gtk2 gtkglext libglade
     libGLU libpcap SDL zziplib tinyxml ];
 
   configureFlags = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       roms. DeSmuME is also able to emulate nearly all of the
       commercial nds rom titles which other DS Emulators aren't.
     '';
-    homepage = http://www.desmume.com ;
+    homepage = "http://www.desmume.com";
     license = licenses.gpl1Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

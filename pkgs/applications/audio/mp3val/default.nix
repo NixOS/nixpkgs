@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       also other MPEG versions and layers. The tool is also aware of the most
       common types of tags (ID3v1, ID3v2, APEv2).
     '';
-    homepage = http://mp3val.sourceforge.net/index.shtml;
+    homepage = "http://mp3val.sourceforge.net/index.shtml";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.devhell ];

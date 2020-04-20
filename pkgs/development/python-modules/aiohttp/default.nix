@@ -1,7 +1,9 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, pythonAtLeast
 , attrs
 , chardet
 , multidict
@@ -25,16 +27,16 @@
 buildPythonPackage rec {
   pname = "aiohttp";
   version = "3.6.2";
+  # https://github.com/aio-libs/aiohttp/issues/4525 python3.8 failures
+  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "09pkw6f1790prnrq0k8cqgnf1qy57ll8lpmc6kld09q7zw4vi6i5";
   };
 
-  disabled = pythonOlder "3.5";
-
   checkInputs = [
-    pytestrunner pytest gunicorn pytest-timeout async_generator pytest_xdist
+    pytestrunner pytest gunicorn async_generator pytest_xdist
     pytest-mock pytestcov trustme brotlipy freezegun
   ];
 
@@ -51,7 +53,9 @@ buildPythonPackage rec {
                and not connector \
                and not client_disconnect \
                and not handle_keepalive_on_closed_connection \
+               and not proxy_https_bad_response \
                and not partially_applied_handler \
+               ${lib.optionalString stdenv.is32bit "and not test_cookiejar"} \
                and not middleware" \
       --ignore=test_connector.py
   '';
@@ -59,7 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = licenses.asl20;
-    homepage = https://github.com/aio-libs/aiohttp;
+    homepage = "https://github.com/aio-libs/aiohttp";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

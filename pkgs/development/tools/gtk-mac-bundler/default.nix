@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "a helper script that creates application bundles form GTK executables for macOS";
     maintainers = [ maintainers.matthewbauer ];
     platforms = platforms.darwin;
-    homepage = https://wiki.gnome.org/Projects/GTK/OSX/Bundling;
+    homepage = "https://wiki.gnome.org/Projects/GTK/OSX/Bundling";
     license = licenses.gpl2;
   };
 }

@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 
-  buildFlags = "CC=cc";
-  installFlags = "PREFIX=$(out)";
+  buildFlags = [ "CC=cc" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
-    homepage = https://joeyh.name/code/moreutils/;
+    homepage = "https://joeyh.name/code/moreutils/";
     maintainers = with maintainers; [ koral pSub ];
     platforms = platforms.all;
     license = licenses.gpl2Plus;

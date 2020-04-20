@@ -58,62 +58,6 @@ with lib;
         '';
       };
 
-      consolePackages = mkOption {
-        type = types.listOf types.package;
-        default = with pkgs.kbdKeymaps; [ dvp neo ];
-        defaultText = ''with pkgs.kbdKeymaps; [ dvp neo ]'';
-        description = ''
-          List of additional packages that provide console fonts, keymaps and
-          other resources.
-        '';
-      };
-
-      consoleFont = mkOption {
-        type = types.str;
-        default = "Lat2-Terminus16";
-        example = "LatArCyrHeb-16";
-        description = ''
-          The font used for the virtual consoles.  Leave empty to use
-          whatever the <command>setfont</command> program considers the
-          default font.
-        '';
-      };
-
-      consoleUseXkbConfig = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          If set, configure the console keymap from the xserver keyboard
-          settings.
-        '';
-      };
-
-      consoleKeyMap = mkOption {
-        type = with types; either str path;
-        default = "us";
-        example = "fr";
-        description = ''
-          The keyboard mapping table for the virtual consoles.
-        '';
-      };
-
-      consoleColors = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = [
-          "002b36" "dc322f" "859900" "b58900"
-          "268bd2" "d33682" "2aa198" "eee8d5"
-          "002b36" "cb4b16" "586e75" "657b83"
-          "839496" "6c71c4" "93a1a1" "fdf6e3"
-        ];
-        description = ''
-          The 16 colors palette used by the virtual consoles.
-          Leave empty to use the default colors.
-          Colors must be in hexadecimal format and listed in
-          order from color 0 to color 15.
-        '';
-      };
-
     };
 
   };
@@ -122,13 +66,6 @@ with lib;
   ###### implementation
 
   config = {
-
-    i18n.consoleKeyMap = with config.services.xserver;
-      mkIf config.i18n.consoleUseXkbConfig
-        (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
-          '${pkgs.ckbcomp}/bin/ckbcomp' -model '${xkbModel}' -layout '${layout}' \
-            -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
-        '');
 
     environment.systemPackages =
       optional (config.i18n.supportedLocales != []) config.i18n.glibcLocales;
@@ -143,14 +80,11 @@ with lib;
     };
 
     # ‘/etc/locale.conf’ is used by systemd.
-    environment.etc = singleton
-      { target = "locale.conf";
-        source = pkgs.writeText "locale.conf"
-          ''
-            LANG=${config.i18n.defaultLocale}
-            ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${v}'') config.i18n.extraLocaleSettings)}
-          '';
-      };
+    environment.etc."locale.conf".source = pkgs.writeText "locale.conf"
+      ''
+        LANG=${config.i18n.defaultLocale}
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${v}'') config.i18n.extraLocaleSettings)}
+      '';
 
   };
 }

@@ -1,33 +1,33 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pip, pandoc, glibcLocales, haskellPackages, texlive }:
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, pandoc, haskellPackages, texlive }:
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.4";
+  version = "1.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e914e6d5f84a76764887e4d909b09d63308725f0cbb5293872c2c92f07c11a5b";
+  src = fetchFromGitHub {
+    owner = "bebraw";
+    repo = pname;
+    rev = version;
+    sha256 = "1lpslfns6zxx7b0xr13bzg921lwrj5am8za0b2dviywk6iiib0ld";
   };
 
-  # Fix tests: first requires network access, second is a bug (reported upstream)
-  preConfigure = ''
-    substituteInPlace tests.py --replace "pypandoc.convert(url, 'html')" "'GPL2 license'"
-    substituteInPlace tests.py --replace "pypandoc.convert_file(file_name, lua_file_name)" "'<h1 id=\"title\">title</h1>'"
+  postPatch = ''
+    # set pandoc path statically
+    sed -i '/^__pandoc_path = None$/c__pandoc_path = "${pandoc}/bin/pandoc"' pypandoc/__init__.py
+
+    # Skip test that requires network access
+    sed -i '/test_basic_conversion_from_http_url/i\\    @unittest.skip\("no network access during checkPhase"\)' tests.py
   '';
 
-  LC_ALL="en_US.UTF-8";
-
-  propagatedBuildInputs = [ pip ];
-
-  buildInputs = [ pandoc texlive.combined.scheme-small haskellPackages.pandoc-citeproc glibcLocales ];
+  preCheck = ''
+    export PATH="${haskellPackages.pandoc-citeproc}/bin:${texlive.combined.scheme-small}/bin:$PATH"
+  '';
 
   meta = with stdenv.lib; {
     description = "Thin wrapper for pandoc";
-    homepage = https://github.com/bebraw/pypandoc;
+    homepage = "https://github.com/bebraw/pypandoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs ];
-
-    broken = true; # incompatible with pandoc v2
+    maintainers = with maintainers; [ sternenseemann bennofs ];
   };
 }

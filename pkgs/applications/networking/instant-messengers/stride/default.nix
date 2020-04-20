@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Desktop client for Atlassian Stride";
-    homepage = https://www.stride.com/;
+    homepage = "https://www.stride.com/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ puffnfresh ];

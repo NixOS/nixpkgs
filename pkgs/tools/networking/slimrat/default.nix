@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://code.google.com/archive/p/slimrat/;
+    homepage = "https://code.google.com/archive/p/slimrat/";
     description = "Linux Rapidshare downloader";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;

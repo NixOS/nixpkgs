@@ -61,7 +61,7 @@ buildGoPackage rec {
       - Built-in patched fonts for powerline
       - Retina display support
     '';
-    homepage = https://github.com/liamg/aminal;
+    homepage = "https://github.com/liamg/aminal";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

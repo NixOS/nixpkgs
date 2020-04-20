@@ -4,11 +4,11 @@
 }:
 mkDerivation rec {
   pname = "hpmyroom";
-  version = "11.1.0.0508";
+  version = "12.0.0.0220";
 
   src = fetchurl {
     url = "https://www.myroom.hpe.com/downloadfiles/${pname}-${version}.x86_64.rpm";
-    sha256 = "1j7mzvf349yxb42m8syh73gpvil01hy1a2wrr0rdzb2ijfnkxyaa";
+    sha256 = "0gajj2s6l7jj8520agrv2dyisg7hhacbwzqlsp9a0xdxr0v71jhr";
   };
 
   nativeBuildInputs = [

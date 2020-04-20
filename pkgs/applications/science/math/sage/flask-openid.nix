@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Adds openid support to flask applications";
     license = licenses.bsd2;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://pythonhosted.org/Flask-OpenID/;
+    homepage = "https://pythonhosted.org/Flask-OpenID/";
   };
 }

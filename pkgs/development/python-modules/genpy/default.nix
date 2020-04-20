@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "C/C++ source generation from an AST";
-    homepage = https://github.com/inducer/genpy;
+    homepage = "https://github.com/inducer/genpy";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

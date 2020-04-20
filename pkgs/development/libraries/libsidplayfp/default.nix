@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to play Commodore 64 music derived from libsidplay2";
-    homepage = https://sourceforge.net/projects/sidplay-residfp/;
+    homepage = "https://sourceforge.net/projects/sidplay-residfp/";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; unix;

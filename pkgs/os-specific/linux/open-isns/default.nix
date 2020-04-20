@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-shared" ];
 
-  installFlags = "etcdir=$(out)/etc vardir=$(out)/var/lib/isns";
-  installTargets = "install install_hdrs install_lib";
+  installFlags = [ "etcdir=$(out)/etc" "vardir=$(out)/var/lib/isns" ];
+  installTargets = [ "install" "install_hdrs" "install_lib" ];
 
   meta = {
     description = "iSNS server and client for Linux";
     license = stdenv.lib.licenses.lgpl21;
-    homepage = https://github.com/gonzoleeman/open-isns;
+    homepage = "https://github.com/gonzoleeman/open-isns";
     platforms = stdenv.lib.platforms.linux;
   };
 }

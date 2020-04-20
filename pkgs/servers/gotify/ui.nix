@@ -8,13 +8,13 @@ yarn2nix-moretea.mkYarnPackage rec {
   packageJSON = ./package.json;
   yarnNix = ./yarndeps.nix;
 
-  version = "2.0.11";
+  version = "2.0.14";
 
   src_all = fetchFromGitHub {
     owner = "gotify";
     repo = "server";
     rev = "v${version}";
-    sha256 = "0zrylyaxy1cks1wlzyf0di8in2braj4pfriyqa24vipwrlnhvgs6";
+    sha256 = "0hyy9fki2626cgd78l7fkk67lik6g1pkcpf6xr3gl07dxwcclyr8";
   };
   src = "${src_all}/ui";
 

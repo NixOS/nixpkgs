@@ -1,6 +1,5 @@
 { stdenv
-, fetchFromGitHub
-, fetchpatch
+, fetchFromGitHub 
 , pantheon
 , pkgconfig
 , meson
@@ -16,37 +15,22 @@
 , libxml2
 , libsoup
 , elementary-calendar
-, fetchurl
 }:
-
-let
-
-  # Terrible workaround https://github.com/elementary/wingpanel-indicator-datetime/issues/122
-  # Evolution Data Server functionality will be broken (events from calendar in indicator)
-  # but at least we don't fail to build.
-  old-evolution-data-server = evolution-data-server.overrideAttrs(old: {
-    src = fetchurl {
-      url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor "3.32.4"}/${old.pname}-3.32.4.tar.xz";
-      sha256 = "0zsc9xwy6ixk3x0dx69ax5isrdw8qxjdxg2i5fr95s40nss7rxl3";
-    };
-  });
-
-in
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0y8lfrrkzcj8nw94jqawbxr4jz41ac0z539kkr3n3x0qmx72md2y";
+    sha256 = "0a0pqrpmrdd5pch30lizr9righlc7165z7krmnaxrzd0fvfkbr2h";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -60,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    old-evolution-data-server
+    evolution-data-server
     granite
     gtk3
     libgee
@@ -76,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Date & Time Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-datetime;
+    homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

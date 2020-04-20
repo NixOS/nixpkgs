@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zlrg602q781q8dij62lwdprpfliyy9j1rqfqcz8p2wgndpivddj";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
+  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
   preConfigure = ''
     substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
       flashy GUI dialogs. Rather, Wyrd is designed to make you more
       efficient at editing your reminder files directly.
     '';
-    homepage = http://pessimization.com/software/wyrd/;
-    downloadPage = http://pessimization.com/software/wyrd/;
+    homepage = "http://pessimization.com/software/wyrd/";
+    downloadPage = "http://pessimization.com/software/wyrd/";
     license = licenses.gpl2;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;

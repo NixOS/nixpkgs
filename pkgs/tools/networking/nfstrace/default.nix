@@ -18,13 +18,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "-Wno-braced-scalar-init" ""
+  '';
+
   buildInputs = [ json_c libpcap ncurses ];
   nativeBuildInputs = [ cmake ];
 
   # To build with GCC 8+ it needs:
-  CXXFLAGS = [ "-Wno-class-memaccess" "-Wno-ignored-qualifiers" ];
+  CXXFLAGS = "-Wno-class-memaccess -Wno-ignored-qualifiers";
   # CMake can't find json_c without:
-  NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" ];
+  NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" "-Wno-error=address-of-packed-member" ];
 
   doCheck = false; # requires network access
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
 , cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
+, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.6";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch { /* glibmm 2.50 fix */
-      url = https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch;
+      url = "https://github.com/K-3D/k3d/commit/c65889d0652490d88a573e47de7a9324bf27bff2.patch";
       sha256 = "162icv1hicr2dirkb9ijacvg9bhz5j30yfwg7b45ijavk8rns62j";
     })
   ];
@@ -34,18 +34,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
      libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
      boost cairomm libjpeg libtiff
-     ftgl glew gtkmm2 glibmm gtkglext pangox_compat libXmu
+     ftgl glew gtkmm2 glibmm gtkglext libXmu
     ];
 
   #doCheck = false;
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-deprecated-declarations"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";
-    homepage = http://www.k-3d.org/;
+    homepage = "http://www.k-3d.org/";
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;

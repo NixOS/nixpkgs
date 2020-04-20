@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
-, python, perl, gdk-pixbuf, libiconv, libintl, gnome3 }:
+, perl, gdk-pixbuf, libiconv, libintl, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
 
-  buildInputs = [ gettext bzip2 zlib python ];
+  buildInputs = [ gettext bzip2 zlib ];
   checkInputs = [ perl ];
 
   propagatedBuildInputs = [ libxml2 glib gdk-pixbuf libiconv ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME's Structured File Library";
-    homepage    = https://www.gnome.org/projects/libgsf;
+    homepage    = "https://www.gnome.org/projects/libgsf";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = stdenv.lib.platforms.unix;

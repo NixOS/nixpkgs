@@ -84,9 +84,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Highly configurable, dynamic window manager for X";
-    homepage    = https://awesomewm.org/;
+    homepage    = "https://awesomewm.org/";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 rasendubi ndowens ];
+    maintainers = with maintainers; [ lovek323 rasendubi ];
     platforms   = platforms.linux;
   };
 }

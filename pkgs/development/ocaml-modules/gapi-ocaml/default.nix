@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   meta = {
     description = "OCaml client for google services";
-    homepage = http://gapi-ocaml.forge.ocamlcore.org;
+    homepage = "http://gapi-ocaml.forge.ocamlcore.org";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ bennofs ];
   };

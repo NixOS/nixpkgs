@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "4.6.6";
+  version = "4.6.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1760b54b1d15a547c9a26d3598a1c8cdaf2436386ac1f5561934bc8a3cbbbd86";
+    sha256 = "0xlv1rsfc3vn22l35csaj939zygd15nzmxbz3bcl981685vxl71d";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Messaging library for Python";
-    homepage    = https://github.com/celery/kombu;
+    homepage    = "https://github.com/celery/kombu";
     license     = licenses.bsd3;
   };
 }

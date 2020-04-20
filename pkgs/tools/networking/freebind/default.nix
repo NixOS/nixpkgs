@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "IPv4 and IPv6 address rate limiting evasion tool";
-    homepage = https://github.com/blechschmidt/freebind;
+    homepage = "https://github.com/blechschmidt/freebind";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ volth ];

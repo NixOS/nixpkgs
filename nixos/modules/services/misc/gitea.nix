@@ -364,7 +364,7 @@ in
           ''}
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
-              -e "s,#jwtsecet#,$JWTSECET,g" \
+              -e "s,#jwtsecret#,$JWTSECRET,g" \
               -e "s,#mailerpass#,$MAILERPASSWORD,g" \
               -i ${runConfig}
           chmod 640 ${runConfig} ${secretKey} ${jwtSecret}

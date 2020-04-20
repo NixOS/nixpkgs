@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib
+{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, cmake, perl, pkgconfig, zlib
 , darwin, libiconv, installShellFiles
 }:
 
@@ -8,7 +8,7 @@ buildRustPackage rec {
   pname = "exa";
   version = "0.9.0";
 
-  cargoSha256 = "1hgjp23rjd90wyf0nq6d5akjxdfjlaps54dv23zgwjvkhw24fidf";
+  cargoSha256 = "0nl106jlbr8gnnlbi20mrc6zyww7vxgmw6w34ibndxqh9ggxwfvr";
 
   src = fetchFromGitHub {
     owner = "ogham";
@@ -16,6 +16,15 @@ buildRustPackage rec {
     rev = "v${version}";
     sha256 = "14qlm9zb9v22hxbbi833xaq2b7qsxnmh15s317200vz5f1305hhw";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/ogham/exa/pull/584
+      name = "fix-panic-on-broken-symlink-in-git-repository.patch";
+      url = "https://github.com/ogham/exa/pull/584/commits/a7a8e99cf3a15992afb2383435da0231917ffb54.patch";
+      sha256 = "0n5q483sz300jkp0sbb350hdinmkw7s6bmigdyr6ypz3fvygd9hx";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkgconfig perl installShellFiles ];
   buildInputs = [ zlib ]
@@ -46,7 +55,7 @@ buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. exa is
       written in Rust, so it’s small, fast, and portable.
     '';
-    homepage = https://the.exa.website;
+    homepage = "https://the.exa.website";
     license = licenses.mit;
     maintainers = with maintainers; [ ehegnes lilyball globin ];
   };

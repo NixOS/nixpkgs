@@ -16,9 +16,8 @@ let
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
-        services.xserver.windowManager.default = "icewm";
+        services.xserver.displayManager.defaultSession = "none+icewm";
         services.xserver.windowManager.icewm.enable = true;
-        services.xserver.desktopManager.default = "none";
       };
 
       enableOCR = true;
@@ -52,9 +51,8 @@ let
             user = "alice";
           };
         };
-        services.xserver.windowManager.default = "icewm";
+        services.xserver.displayManager.defaultSession = "none+icewm";
         services.xserver.windowManager.icewm.enable = true;
-        services.xserver.desktopManager.default = "none";
       };
 
       testScript = { nodes, ... }: let

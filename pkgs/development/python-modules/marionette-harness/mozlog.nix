@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "mozlog";
-  version = "4.2.0";
+  version = "5.0";
 
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dc85cfb9d47af6811f2367f471de7028c36204340c5e68a928115409ea75d9a9";
+    sha256 = "0h1hgs13c1w0wvz60400i37m00077li1ky28j7kgx4bl75pkd3sw";
   };
 
   propagatedBuildInputs = [ blessings mozterm six ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Mozilla logging library";
-    homepage = https://wiki.mozilla.org/Auto-tools/Projects/Mozbase;
+    homepage = "https://wiki.mozilla.org/Auto-tools/Projects/Mozbase";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raskin ];
   };

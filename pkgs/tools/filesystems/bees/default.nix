@@ -2,8 +2,8 @@
 
 let
 
-  version = "0.6.1";
-  sha256 = "0h7idclmhyp14mq6786x7f2237vqpn70gyi88ik4g70xl84yfgyh";
+  version = "0.6.2";
+  sha256 = "05niv9rivd3j3cwcx3n3vjr85wr0l5i76giq9n54d2vdwmn8qjib";
 
   bees = stdenv.mkDerivation {
     pname = "bees";

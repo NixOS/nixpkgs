@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "manuskript";
-  version = "0.10.0";
+  version = "0.11.0";
 
   format = "other";
 
@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     repo = pname;
     owner = "olivierkes";
     rev = version;
-    sha256 = "0q413vym7hzjpyg3krj5y63hwpncdifjkyswqmr76zg5yqnklnh3";
+    sha256 = "1l6l9k6k69yv8xqpll0zv9cwdqqg4zvxy90l6sx5nv2yywh5crla";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "A open-source tool for writers";
-    homepage = http://www.theologeek.ch/manuskript;
+    homepage = "http://www.theologeek.ch/manuskript";
     longDescription = ''
     Manuskript is a tool for those writer who like to organize and
     plan everything before writing.  The snowflake method can help you

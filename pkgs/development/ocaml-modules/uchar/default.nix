@@ -4,14 +4,14 @@ stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-uchar-0.0.2";
 
   src = fetchurl {
-    url = https://github.com/ocaml/uchar/releases/download/v0.0.2/uchar-0.0.2.tbz;
+    url = "https://github.com/ocaml/uchar/releases/download/v0.0.2/uchar-0.0.2.tbz";
     sha256 = "1w2saw7zanf9m9ffvz2lvcxvlm118pws2x1wym526xmydhqpyfa7";
   };
 
-  nativeBuildInputs = [ ocaml ocamlbuild findlib opaline ];
-  buildInputs = [ findlib ocaml ocamlbuild opaline ];
+  nativeBuildInputs = [ ocaml ocamlbuild findlib ];
+  buildInputs = [ findlib ocaml ocamlbuild ];
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=${if withShared then "true" else "false"}";
-  installPhase = "opaline -libdir $OCAMLFIND_DESTDIR";
+  installPhase = "${opaline}/bin/opaline -libdir $OCAMLFIND_DESTDIR";
   configurePlatforms = [];
 
   meta = {

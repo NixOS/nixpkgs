@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
+    scons.py2 pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
     python2Packages.python
     python2Packages.wrapPython
   ];
@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     # to be able to find pps-tools
     ./0002-scons-envs-patch.patch
   ];
+
+  postPatch = ''
+    sed -i -e '17i#include <sys/sysmacros.h>' serial.c
+  '';
 
   # - leapfetch=no disables going online at build time to fetch leap-seconds
   #   info. See <gpsd-src>/build.txt for more info.
@@ -67,7 +71,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/lib/udev/rules.d"
   '';
-  installTargets = "install udev-install";
+  installTargets = [ "install" "udev-install" ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
@@ -93,7 +97,7 @@ stdenv.mkDerivation rec {
       diagnostic monitoring and profiling of receivers and feeding
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
-    homepage = http://catb.org/gpsd/;
+    homepage = "http://catb.org/gpsd/";
     license = "BSD-style";
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor rasendubi ];

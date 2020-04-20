@@ -15,10 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = with llvmPackages; [ clang-unwrapped llvm rapidjson ];
 
-  cmakeFlags = [
-    "-DCCLS_VERSION=${version}"
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
-  ];
+  cmakeFlags = [ "-DCCLS_VERSION=${version}" ];
 
   preConfigure = ''
     cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
@@ -42,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A c/c++ language server powered by clang";
-    homepage    = https://github.com/MaskRay/ccls;
+    homepage    = "https://github.com/MaskRay/ccls";
     license     = licenses.asl20;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mic92 tobim ];

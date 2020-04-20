@@ -7,11 +7,14 @@ let
   };
 
   jdk = stdenv.mkDerivation {
-    name = "zulu1.8.0_222-8.40.0.25-ca-fx";
+    # @hlolli: Later version than 1.8.0_202 throws error when building jvmci.
+    # dyld: lazy symbol binding failed: Symbol not found: _JVM_BeforeHalt
+    # Referenced from: ../libjava.dylib Expected in: .../libjvm.dylib
+    name = "zulu1.8.0_202-8.36.0.1";
 
     src = fetchurl {
-      url = "http://cdn.azul.com/zulu/bin/zulu8.40.0.25-ca-fx-jdk8.0.222-macosx_x64.zip";
-      sha256 = "1mal8bdc94q7ahx7p3xggy3qpxr6h83g2y01wzgvnqjd8n5i3qr1";
+      url = "https://cdn.azul.com/zulu/bin/zulu8.36.0.1-ca-jdk8.0.202-macosx_x64.zip";
+      sha256 = "0s92l1wlf02vjx8dvrsla2kq7qwxnmgh325b38mgqy872016jm9p";
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
     };
 

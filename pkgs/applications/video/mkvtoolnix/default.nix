@@ -13,13 +13,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "40.0.0";
+  version = "45.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "103rvj6f6nlzybzbkqix7q5f2017bmzsn9z5g7bwnjjwgih5mrpq";
+    sha256 = "1m9ih6bgl3nrjgr0rxvfbvw8s9ska7ps1ypc2ynvyxba4gjkkyyf";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform tools for Matroska";
-    homepage    = http://www.bunkus.org/videotools/mkvtoolnix/;
+    homepage    = "http://www.bunkus.org/videotools/mkvtoolnix/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel rnhmjoj ];
     platforms   = platforms.linux

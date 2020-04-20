@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchgit {
-    url = git://projects.qi-hardware.com/xburst-tools.git;
+    url = "git://projects.qi-hardware.com/xburst-tools.git";
     rev = "c71ce8e15db25fe49ce8702917cb17720882e341";
     sha256 = "1hzdngs1l5ivvwnxjwzc246am6w1mj1aidcf0awh9yw0crzcjnjr";
   };
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Qi tools to access the Ben Nanonote USB_BOOT mode";
     license = stdenv.lib.licenses.gpl3;
-    homepage = http://www.linux-mtd.infradead.org/;
+    homepage = "http://www.linux-mtd.infradead.org/";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = stdenv.lib.platforms.x86_64;
   };

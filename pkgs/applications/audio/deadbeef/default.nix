@@ -59,21 +59,14 @@ assert remoteSupport -> curl != null;
 
 stdenv.mkDerivation rec {
   pname = "deadbeef";
-  version = "1.8.0";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
     rev = version;
-    sha256 = "126i5qlkpv7pvi1mmc9y0jhqs6jjspsj7j615n2ddvsb2jsps81c";
+    sha256 = "0n0q7zfl56gnadcqqp5rg7sbh1xvfcmp7cvmh2ax07037b346qig";
   };
-
-  patches = [
-    # Fix broken symbol name
-    # https://github.com/NixOS/nixpkgs/pull/59187#issuecomment-480977993
-    # will be fixed in deadbeef 1.8.1
-    ./fix-wildmidi.patch
-  ];
 
   buildInputs = with stdenv.lib; [ jansson ]
     ++ optional gtk2Support gtk2
@@ -115,7 +108,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ultimate Music Player for GNU/Linux";
-    homepage = http://deadbeef.sourceforge.net/;
+    homepage = "http://deadbeef.sourceforge.net/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];

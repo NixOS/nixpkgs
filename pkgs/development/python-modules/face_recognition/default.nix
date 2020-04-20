@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "face_recognition";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "ageitgey";
-    rev = "634db2e4309a365cee2503cb65d6f2e88f519d1e";
-    sha256 = "06zw5hq417d5yp17zynhxhb73074lx2qy64fqfzf711rw5vrn2mx";
+    rev = "d34c622bf42e2c619505a4884017051ecf61ac77";
+    sha256 = "052878vnh3vbrsvmpgr0bx78k524dlxn47b2xakzbxk7dyjrgcli";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     license = licenses.mit;
-    homepage = https://github.com/ageitgey/face_recognition;
+    homepage = "https://github.com/ageitgey/face_recognition";
     maintainers = with maintainers; [ ma27 ];
     description = "The world's simplest facial recognition api for Python and the command line";
   };

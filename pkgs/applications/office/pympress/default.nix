@@ -12,11 +12,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "101wj6m931bj0ah6niw79i8ywb5zlb2783g7n7dmkhw6ay3jj4vq";
+    sha256 = "173d9scf2z29qg279jf33zcl7sgc3wp662fgpm943bn9667q18wf";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Simple yet powerful PDF reader designed for dual-screen presentations";
     license = licenses.gpl2Plus;
-    homepage = "https://pympress.xyz/";
+    homepage = "https://cimbali.github.io/pympress/";
     maintainers = [ maintainers.tbenst ];
   };
 }

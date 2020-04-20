@@ -7,7 +7,7 @@
 , fetchFromGitLab
 , cmake
 , pkgconfig
-, opencv
+, opencv3
 , openexr
 , graphicsmagick
 , fftw
@@ -120,7 +120,7 @@ mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    opencv
+    opencv3
     openexr
     graphicsmagick
     curl
@@ -137,7 +137,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = variants.${variant}.description;
-    homepage = http://gmic.eu/;
+    homepage = "http://gmic.eu/";
     license = licenses.gpl3;
     platforms = platforms.unix;
   };

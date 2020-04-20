@@ -41,9 +41,10 @@ stdenv.mkDerivation rec {
     -DSSH_SOURCE_BASHRC
   '';
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" "-T" ];
 
-  patches = upstreamPatches;
+  patches = upstreamPatches
+    ++ [ ./pgrp-pipe-5.0.patch ];
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/bash/;
+    homepage = "https://www.gnu.org/software/bash/";
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
         (if interactive then " (for interactive use)" else "");

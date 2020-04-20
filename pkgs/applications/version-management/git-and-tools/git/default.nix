@@ -21,7 +21,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.24.0";
+  version = "2.26.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "06rpakbwzck85ncfsgv4xmq3iwab9d4f5y6dqhl8nvb2fccxcwcz";
+    sha256 = "0s03ix9j1h0yychkh1l1cgpr1l9lwzn3rprl08rk8ii5ix02i0l8";
   };
 
   outputs = [ "out" ];
@@ -95,7 +95,15 @@ stdenv.mkDerivation {
   ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
   ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc"])
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
-  ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1";
+  ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1"
+  # git-gui refuses to start with the version of tk distributed with
+  # macOS Catalina. We can prevent git from building the .app bundle
+  # by specifying an invalid tk framework. The postInstall step will
+  # then ensure that git-gui uses tcl/tk from nixpkgs, which is an
+  # acceptable version.
+  #
+  # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
+  ++ stdenv.lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent";
 
 
   postBuild = ''
@@ -114,7 +122,7 @@ stdenv.mkDerivation {
   # WARNING: Do not `rm` or `mv` files from the source tree; use `cp` instead.
   #          We need many of these files during the installCheckPhase.
 
-  installFlags = "NO_INSTALL_HARDLINKS=1";
+  installFlags = [ "NO_INSTALL_HARDLINKS=1" ];
 
   preInstall = (stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin
@@ -139,12 +147,16 @@ stdenv.mkDerivation {
       # Install contrib stuff.
       mkdir -p $out/share/git
       cp -a contrib $out/share/git/
-      mkdir -p $out/share/emacs/site-lisp
-      ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
       mkdir -p $out/etc/bash_completion.d
       ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
+      mkdir -p $out/share/zsh/site-functions
+      ln -s $out/share/git/contrib/completion/git-completion.zsh $out/share/zsh/site-functions/_git
+
+      # Patch the zsh completion script so it can find the Bash completion script.
+      sed -i -e "/locations=(/a \${"\t\t"}'$out/share/git/contrib/completion/git-completion.bash'" \
+        $out/share/git/contrib/completion/git-completion.zsh
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
@@ -177,7 +189,7 @@ stdenv.mkDerivation {
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
     '' + stdenv.lib.optionalString perlSupport ''
       # wrap perl commands
-      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc" $out/bin/git-credential-netrc \
+      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/bin/git-credential-netrc \
                   --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsimport \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
@@ -230,6 +242,7 @@ stdenv.mkDerivation {
                 -e "s|exec wish|exec '${tk}/bin/wish'|g" \
                 "$out/$prog"
        done
+       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk
      '' else ''
        # Don't wrap Tcl/Tk, replace them by notification scripts
        for prog in bin/gitk libexec/git-core/git-gui; do
@@ -293,10 +306,6 @@ stdenv.mkDerivation {
     disable_test t1700-split-index "null sha1"
 
     # Tested to fail: 2.18.0
-    disable_test t7005-editor "editor with a space"
-    disable_test t7005-editor "core.editor with a space"
-
-    # Tested to fail: 2.18.0
     disable_test t9902-completion "sourcing the completion script clears cached --options"
 
     ${stdenv.lib.optionalString (!perlSupport) ''
@@ -305,9 +314,6 @@ stdenv.mkDerivation {
       # not check for the Perl prerequisite.
       disable_test t5150-request-pull
     ''}
-
-    # As of 2.19.0, t5562 refers to #!/usr/bin/perl
-    patchShebangs t/t5562/invoke-with-content-length.pl
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
     # Please try to re-enable on the next release.
@@ -324,7 +330,7 @@ stdenv.mkDerivation {
 
 
   meta = {
-    homepage = https://git-scm.com/;
+    homepage = "https://git-scm.com/";
     description = "Distributed version control system";
     license = stdenv.lib.licenses.gpl2;
 

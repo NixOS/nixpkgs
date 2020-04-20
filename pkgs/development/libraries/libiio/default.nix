@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libiio";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchFromGitHub {
     owner  = "analogdevicesinc";
     repo   = "libiio";
     rev    = "refs/tags/v${version}";
-    sha256 = "1cmg3ipam101iy9yncwz2y48idaqaw4fg7i9i4c8vfjisfcycnkk";
+    sha256 = "1r67h5mayx9krh3mmzs5vz20mvwb2lw04hpbyyisygl01ndc77kq";
   };
 
   outputs = [ "out" "lib" "dev" "python" ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "API for interfacing with the Linux Industrial I/O Subsystem";
-    homepage    = https://github.com/analogdevicesinc/libiio;
+    homepage    = "https://github.com/analogdevicesinc/libiio";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

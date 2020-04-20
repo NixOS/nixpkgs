@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Implementation of the PEP 3156 event-loop (asyncio) api using the Qt Event-Loop";
-    homepage = https://github.com/harvimt/quamash;
+    homepage = "https://github.com/harvimt/quamash";
     license = licenses.bsd2;
     maintainers = with maintainers; [ borisbabic ];
   };

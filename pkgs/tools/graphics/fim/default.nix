@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ optional jpegSupport libjpeg
     ++ optional pngSupport libpng;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional x11Support "-lSDL";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString x11Support "-lSDL";
 
   meta = with stdenv.lib; {
     description = "A lightweight, highly customizable and scriptable image viewer";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       to be a highly customizable and scriptable for users who are comfortable
       with software like the VIM text editor or the Mutt mail user agent.
     '';
-    homepage = https://www.nongnu.org/fbi-improved/;
+    homepage = "https://www.nongnu.org/fbi-improved/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

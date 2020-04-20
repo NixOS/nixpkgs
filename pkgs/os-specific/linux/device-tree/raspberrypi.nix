@@ -30,4 +30,7 @@ stdenvNoCC.mkDerivation {
     # Compatible overlays that may be used
     overlays = "${raspberrypifw}/share/raspberrypi/boot/overlays";
   };
+  meta = with stdenvNoCC.lib; {
+    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+  };
 }

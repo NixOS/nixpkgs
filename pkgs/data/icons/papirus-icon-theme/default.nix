@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "papirus-icon-theme";
-  version = "20191101";
+  version = "20200405";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    sha256 = "17as9i5b9wqzvj08hwxqk9dlv6hrvkylns85s8gzhv6b5x2q5ma3";
+    sha256 = "0qv4340avm5s0640r8aznbfwjzvm6k64840qggyg9jfcy6223pdy";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Papirus icon theme";
-    homepage = https://github.com/PapirusDevelopmentTeam/papirus-icon-theme;
+    homepage = "https://github.com/PapirusDevelopmentTeam/papirus-icon-theme";
     license = licenses.lgpl3;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
     platforms = platforms.linux;

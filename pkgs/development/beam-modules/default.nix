@@ -36,7 +36,12 @@ let
         buildMix = callPackage ./build-mix.nix {};
 
         # BEAM-based languages.
-        elixir = elixir_1_9;
+        elixir = elixir_1_10;
+
+        elixir_1_10 = lib.callElixir ../interpreters/elixir/1.10.nix {
+          inherit rebar erlang;
+          debugInfo = true;
+        };
 
         elixir_1_9 = lib.callElixir ../interpreters/elixir/1.9.nix {
           inherit rebar erlang;
@@ -58,16 +63,12 @@ let
           debugInfo = true;
         };
 
-        elixir_1_5 = lib.callElixir ../interpreters/elixir/1.5.nix {
-          inherit rebar erlang;
-          debugInfo = true;
-        };
-
         # Remove old versions of elixir, when the supports fades out:
-        #   https://hexdocs.pm/elixir/compatibility-and-deprecations.html
+        # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
-        lfe = lfe_1_2;
+        lfe = lfe_1_3;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
+        lfe_1_3 = lib.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
 
         # Non hex packages. Examples how to build Rebar/Mix packages with and
         # without helper functions buildRebar3 and buildMix.

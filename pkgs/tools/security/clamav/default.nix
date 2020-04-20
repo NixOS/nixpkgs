@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "0.102.1";
+  version = "0.102.2";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    sha256 = "1mpdgn3isz26hd1j6p8lcb76v8hjs54k1wb655rnil4hv78aig8d";
+    sha256 = "1lq7r6r2yl8pp3fkn32b0bsmbbl9pg90kpvhsa2clad3xg0drz49";
   };
 
   # don't install sample config files into the absolute sysconfdir folder
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.clamav.net;
+    homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom robberer qknight fpletz globin ];

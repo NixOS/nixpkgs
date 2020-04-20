@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, jre, graphviz }:
 
 stdenv.mkDerivation rec {
-  version = "1.2019.12";
+  version = "1.2020.5";
   pname = "plantuml";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/plantuml/${version}/plantuml.${version}.jar";
-    sha256 = "1682lcfk63grzhzzxv34jxw3jacznvz1pd5cb266p9akk560a3z0";
+    sha256 = "1cn1bjah9qvhh3hixa92v804crkgz69mg30k8229a551x3alykhd";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Draw UML diagrams using a simple and human readable text description";
-    homepage = http://plantuml.sourceforge.net/;
+    homepage = "http://plantuml.sourceforge.net/";
     # "plantuml -license" says GPLv3 or later
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bjornfor ];

@@ -403,6 +403,10 @@ let
       filter types.shellPackage.check shells;
 
 in {
+  imports = [
+    (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
+    (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+  ];
 
   ###### interface
 

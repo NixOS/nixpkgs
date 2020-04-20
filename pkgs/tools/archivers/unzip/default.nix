@@ -7,13 +7,13 @@ stdenv.mkDerivation {
   name = "unzip-6.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/infozip/unzip60.tar.gz;
+    url = "mirror://sourceforge/infozip/unzip60.tar.gz";
     sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
   };
 
   hardeningDisable = [ "format" ];
 
-  patchFlags = "-p1 -F3";
+  patchFlags = [ "-p1" "-F3" ];
 
   patches = [
     ./CVE-2014-8139.diff
@@ -53,20 +53,26 @@ stdenv.mkDerivation {
 
   makefile = "unix/Makefile";
 
-  NIX_LDFLAGS = [ "-lbz2" ] ++ stdenv.lib.optional enableNLS "-lnatspec";
+  NIX_LDFLAGS = "-lbz2" + stdenv.lib.optionalString enableNLS " -lnatspec";
 
-  buildFlags = "generic D_USE_BZ2=-DUSE_BZIP2 L_BZ2=-lbz2";
+  buildFlags = [
+    "generic"
+    "D_USE_BZ2=-DUSE_BZIP2"
+    "L_BZ2=-lbz2"
+  ];
 
   preConfigure = ''
     sed -i -e 's@CF="-O3 -Wall -I. -DASM_CRC $(LOC)"@CF="-O3 -Wall -I. -DASM_CRC -DLARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(LOC)"@' unix/Makefile
   '';
 
-  installFlags = "prefix=$(out)";
+  installFlags = [
+    "prefix=${placeholder ''out''}"
+  ];
 
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = http://www.info-zip.org;
+    homepage = "http://www.info-zip.org";
     description = "An extraction utility for archives compressed in .zip format";
     license = stdenv.lib.licenses.free; # http://www.info-zip.org/license.html
     platforms = stdenv.lib.platforms.all;

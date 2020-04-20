@@ -6,7 +6,7 @@
 
   <xsl:param name="imageType" />
 
-  <xsl:output omit-xml-declaration="yes" indent="no" />
+  <xsl:output method="text" omit-xml-declaration="yes" indent="no" />
 
   <xsl:template name="repository-url">
     <xsl:variable name="raw-url" select="complete/url"/>
@@ -15,33 +15,62 @@
         <xsl:value-of select="$raw-url"/>
       </xsl:when>
       <xsl:otherwise>
-        https://dl.google.com/android/repository/sys-img/<xsl:value-of select="$imageType" />/<xsl:value-of select="$raw-url"/>
+        <xsl:text>https://dl.google.com/android/repository/sys-img/</xsl:text><xsl:value-of select="$imageType" /><xsl:text>/</xsl:text><xsl:value-of select="$raw-url"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template mode="revision" match="type-details[codename]">
+    <xsl:value-of select="codename" />-<xsl:value-of select="tag/id" />-<xsl:value-of select="abi" />
+  </xsl:template>
+
+  <xsl:template mode="revision" match="type-details[not(codename)]">
+    <xsl:value-of select="api-level" />-<xsl:value-of select="tag/id" />-<xsl:value-of select="abi" />
+  </xsl:template>
+
+  <xsl:template mode="attrkey" match="type-details[codename]">
+    <xsl:text>"</xsl:text>
+    <xsl:value-of select="codename" />
+    <xsl:text>".</xsl:text>
+    <xsl:value-of select="tag/id" />
+    <xsl:text>."</xsl:text>
+    <xsl:value-of select="abi" />
+    <xsl:text>"</xsl:text>
+  </xsl:template>
+
+  <xsl:template mode="attrkey" match="type-details[not(codename)]">
+    <xsl:text>"</xsl:text>
+    <xsl:value-of select="api-level" />
+    <xsl:text>".</xsl:text>
+    <xsl:value-of select="tag/id" />
+    <xsl:text>."</xsl:text>
+    <xsl:value-of select="abi" />
+    <xsl:text>"</xsl:text>
+  </xsl:template>
+
   <xsl:template match="/sys-img:sdk-sys-img">
-{fetchurl}:
+<xsl:text>{fetchurl}:
 
 {
-  <xsl:for-each select="remotePackage[starts-with(@path, 'system-images;')]">
-    <xsl:variable name="revision">
-      <xsl:value-of select="type-details/api-level" />-<xsl:value-of select="type-details/tag/id" />-<xsl:value-of select="type-details/abi" />
-    </xsl:variable>
+</xsl:text><xsl:for-each select="remotePackage[starts-with(@path, 'system-images;')]">
+  <xsl:variable name="revision"><xsl:apply-templates mode="revision" select="type-details" /></xsl:variable>
 
-    "<xsl:value-of select="type-details/api-level" />".<xsl:value-of select="type-details/tag/id" />."<xsl:value-of select="type-details/abi" />" = {
-      name = "system-image-<xsl:value-of select="$revision" />";
-      path = "<xsl:value-of select="translate(@path, ';', '/')" />";
-      revision = "<xsl:value-of select="$revision" />";
-      displayName = "<xsl:value-of select="display-name" />";
-      archives.all = fetchurl {
-      <xsl:for-each select="archives/archive">
-        url = <xsl:call-template name="repository-url"/>;
-        sha1 = "<xsl:value-of select="complete/checksum" />";
-      </xsl:for-each>
-      };
+  <xsl:variable name="attrkey"><xsl:apply-templates mode="attrkey" select="type-details" /></xsl:variable>
+
+  <xsl:text>  </xsl:text><xsl:value-of select="$attrkey" /><xsl:text> = {
+    name = "system-image-</xsl:text><xsl:value-of select="$revision" /><xsl:text>";
+    path = "</xsl:text><xsl:value-of select="translate(@path, ';', '/')" /><xsl:text>";
+    revision = "</xsl:text><xsl:value-of select="$revision" /><xsl:text>";
+    displayName = "</xsl:text><xsl:value-of select="display-name" /><xsl:text>";
+    archives.all = fetchurl {</xsl:text>
+    <xsl:for-each select="archives/archive"><xsl:text>
+      url = </xsl:text><xsl:call-template name="repository-url"/><xsl:text>;
+      sha1 = "</xsl:text><xsl:value-of select="complete/checksum" /><xsl:text>";</xsl:text>
+    </xsl:for-each><xsl:text>
+    };
   };
+</xsl:text>
   </xsl:for-each>
-}
+<xsl:text>}</xsl:text>
   </xsl:template>
 </xsl:stylesheet>

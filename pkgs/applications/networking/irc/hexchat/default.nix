@@ -1,35 +1,27 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, lua, perl, python3
 , pciutils, dbus-glib, libcanberra-gtk2, libproxy
-, libsexy, enchant2, libnotify, openssl, isocodes
+, enchant2, libnotify, openssl, isocodes
 , desktop-file-utils
 , meson, ninja
 }:
 
 stdenv.mkDerivation rec {
   pname = "hexchat";
-  version = "2.14.2";
+  version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "hexchat";
     repo = "hexchat";
     rev = "v${version}";
-    sha256 = "1kz81xfis0bw2cfd6ndw32jdzdl5azk9ixqj4a3lginmlj6fs45a";
+    sha256 = "08kvp0dcn3bvmlqcfp9312075bwkqkpa8m7zybr88pfp210gfl85";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
 
   buildInputs = [
     gtk2 lua perl python3 pciutils dbus-glib libcanberra-gtk2 libproxy
-    libsexy libnotify openssl desktop-file-utils
+    libnotify openssl desktop-file-utils
     isocodes
-  ];
-
-  patches = [
-    #https://github.com/hexchat/hexchat/issues/2237
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hexchat/raw/8a08a0c8a8da503b18f2fbb15194c5f3728a689a/f/0001-Python-plugin-Call-EndInterpreter-when-deinit-ing-th.patch";
-      sha256 = "1199dj3wvjqj6h5vlm7lzhaax84j9ki6an8y8fs4rww27iq0lk8g";
-    })
   ];
 
   #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
@@ -50,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A popular and easy to use graphical IRC (chat) client";
-    homepage = https://hexchat.github.io/;
+    homepage = "https://hexchat.github.io/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

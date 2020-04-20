@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.1";
+  version = "2.3.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1888vyz2l5n46ywb70fryd0qipyh3x5n6q0mk56jzbb5whk8fx5n";
+    sha256 = "V3lSJEq5d8eLC4ji9jxBl+q6FuTWa/9pK39YmT4GUW0=";
   };
 
   nativeBuildInputs = [
@@ -52,15 +52,14 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
       versionPolicy = "none";
     };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Tracker;
+    homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

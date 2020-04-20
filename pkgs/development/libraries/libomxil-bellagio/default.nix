@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/omxil/;
+    homepage = "https://sourceforge.net/projects/omxil/";
     description = "An opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
     license = licenses.lgpl21;
     platforms = platforms.linux;

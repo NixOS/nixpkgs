@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, intltool, perlPackages
-, goffice, gnome3, wrapGAppsHook, gtk3, bison, pythonPackages
+, goffice, gnome3, wrapGAppsHook, gtk3, bison, python3Packages
 , itstool
 }:
 
 let
-  inherit (pythonPackages) python pygobject3;
+  inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "gnumeric";
   version = "1.12.46";
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The GNOME Office Spreadsheet";
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://projects.gnome.org/gnumeric/;
+    homepage = "http://projects.gnome.org/gnumeric/";
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];
   };

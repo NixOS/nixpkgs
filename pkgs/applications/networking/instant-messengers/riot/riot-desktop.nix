@@ -1,18 +1,21 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_5, riot-web, mkYarnPackage }:
-
+{ stdenv, fetchFromGitHub
+, makeWrapper, makeDesktopItem, mkYarnPackage
+, electron_7, riot-web
+}:
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
 # * the Yarn dependency expression must be updated with `./update-riot-desktop.sh <git release tag>`
 
 let
   executableName = "riot-desktop";
-  version = "1.5.5";
+  version = "1.5.15";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "18xhqniwxp1sv49qcd9ah8nyy2n2yliy3wg613raxjl16qvvzxmc";
+    sha256 = "08yk5is6n9ci1jml0b94a3swdybx01k5klbl30i1b76biyn75m77";
   };
+  electron = electron_7;
 
 in mkYarnPackage rec {
   name = "riot-desktop-${version}";
@@ -29,7 +32,6 @@ in mkYarnPackage rec {
     # resources
     mkdir -p "$out/share/riot"
     ln -s '${riot-web}' "$out/share/riot/webapp"
-    cp -r '${riot-web-src}/origin_migrator' "$out/share/riot/origin_migrator"
     cp -r './deps/riot-web' "$out/share/riot/electron"
     cp -r './deps/riot-web/img' "$out/share/riot"
     rm "$out/share/riot/electron/node_modules"
@@ -46,7 +48,7 @@ in mkYarnPackage rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
-    makeWrapper '${electron_5}/bin/electron' "$out/bin/${executableName}" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --add-flags "$out/share/riot/electron"
   '';
 
@@ -70,15 +72,15 @@ in mkYarnPackage rec {
     comment = meta.description;
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
-      StartupWMClass="riot"
+      StartupWMClass=riot
     '';
   };
 
   meta = with stdenv.lib; {
     description = "A feature-rich client for Matrix.org";
-    homepage = https://about.riot.im/;
+    homepage = "https://about.riot.im/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pacien worldofpeace ];
-    inherit (electron_5.meta) platforms;
+    inherit (electron.meta) platforms;
   };
 }

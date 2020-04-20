@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
-  version = "3.34.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1g63xzs17i36if923b36k9fwbk0nqa5vz6zh1k6q2axrzhhpx1i4";
+    sha256 = "15ahfgqj0rz16y2bdxb7sa4b3b3larg8hn3b41pc5ddnwf9x63zi";
   };
 
   nativeBuildInputs = [ pkgconfig meson ninja wrapGAppsHook python3 ];
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Weather;
+    homepage = "https://wiki.gnome.org/Apps/Weather";
     description = "Access current weather conditions and forecasts";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

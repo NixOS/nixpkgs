@@ -24,8 +24,7 @@
   </para>
 
   <para>
-   The NixOS manual is available on virtual console 8 (press Alt+F8 to access)
-   or by running <command>nixos-help</command>.
+   The NixOS manual is available by running <command>nixos-help</command>.
   </para>
 
   <para>
@@ -478,7 +477,7 @@ Retype new UNIX password: ***</screen>
      shows what packages are available, and
 <screen>
 <prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -iA w3m</screen>
-     install the <literal>w3m</literal> browser.
+     installs the <literal>w3m</literal> browser.
     </para>
    </listitem>
   </orderedlist>

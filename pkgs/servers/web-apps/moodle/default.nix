@@ -1,7 +1,7 @@
 { stdenv, fetchurl, writeText }:
 
 let
-  version = "3.8";
+  version = "3.8.2";
   stableVersion = builtins.substring 0 2 (builtins.replaceStrings ["."] [""] version);
 in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.moodle.org/stable${stableVersion}/${pname}-${version}.tgz";
-    sha256 = "00ssx0drgp1fy062x6alp0x8di7hjn4xc87v8skpy3aznchfxyk9";
+    sha256 = "134vxsbslk7sfalmgcp744aygaxz2k080d14j8nkivk9zhplds53";
   };
 
   phpConfig = writeText "config.php" ''

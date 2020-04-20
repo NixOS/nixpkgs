@@ -14,7 +14,7 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       name = "tests-expect-werkzeug-308.patch";
-      url = https://github.com/twisted/klein/commit/e2a5835b83e37a2bc5faefbfe1890c529b18b9c6.patch;
+      url = "https://github.com/twisted/klein/commit/e2a5835b83e37a2bc5faefbfe1890c529b18b9c6.patch";
       sha256 = "03j0bj3l3hnf7f96rb27i4bzy1iih79ll5bcah7gybdi1wpznh8w";
     })
   ];

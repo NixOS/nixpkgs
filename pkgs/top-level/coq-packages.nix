@@ -31,13 +31,14 @@ let
       flocq = callPackage ../development/coq-modules/flocq {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
       heq = callPackage ../development/coq-modules/heq {};
+      hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
-      inherit (callPackage ../development/coq-modules/mathcomp { })
+      inherit (callPackage ../development/coq-modules/mathcomp {})
         mathcompGen mathcompGenSingle ssreflect
 
         mathcompCorePkgs mathcomp
@@ -54,7 +55,12 @@ let
 
         mathcompCorePkgs_1_9 mathcomp_1_9
         mathcomp-ssreflect_1_9 mathcomp-fingroup_1_9 mathcomp-algebra_1_9
-        mathcomp-solvable_1_9 mathcomp-field_1_9 mathcomp-character_1_9;
+        mathcomp-solvable_1_9 mathcomp-field_1_9 mathcomp-character_1_9
+
+        mathcompCorePkgs_1_10 mathcomp_1_10
+        mathcomp-ssreflect_1_10 mathcomp-fingroup_1_10 mathcomp-algebra_1_10
+        mathcomp-solvable_1_10 mathcomp-field_1_10 mathcomp-character_1_10
+        ;
       inherit (callPackage ../development/coq-modules/mathcomp/extra.nix { })
         mathcompExtraGen multinomials coqeal
 
@@ -130,6 +136,9 @@ in rec {
   coq_8_10 = callPackage ../applications/science/logic/coq {
     version = "8.10.2";
   };
+  coq_8_11 = callPackage ../applications/science/logic/coq {
+    version = "8.11.1";
+  };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
@@ -137,6 +146,7 @@ in rec {
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;
   coqPackages_8_10 = mkCoqPackages coq_8_10;
+  coqPackages_8_11 = mkCoqPackages coq_8_11;
   coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
     coqPackages_8_9
   );

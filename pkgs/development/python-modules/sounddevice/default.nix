@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Play and Record Sound with Python";
-    homepage = http://python-sounddevice.rtfd.org/;
+    homepage = "http://python-sounddevice.rtfd.org/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fridh ];
   };

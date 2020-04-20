@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
 , pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
-, buildPackages, pruneLibtoolFiles }:
+, buildPackages, pruneLibtoolFiles, fetchpatch }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
     ./cyrus-sasl-ac-try-run-fix.patch
+    (fetchpatch {
+      name = "CVE-2019-19906.patch";
+      url = "https://sources.debian.org/data/main/c/cyrus-sasl2/2.1.27+dfsg-1+deb10u1/debian/patches/0021-CVE-2019-19906.patch";
+      sha256 = "1n4c5wg7l9j8rlbvx8i605j5d39xmj5wm618k8acxl4fmglcmfls";
+    })
   ];
 
   configureFlags = [
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
   meta = {
-    homepage = https://www.cyrusimap.org/sasl;
+    homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
     license = licenses.bsdOriginal;

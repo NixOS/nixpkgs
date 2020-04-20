@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Custom Python plots on a Google Maps background";
-    homepage = https://github.com/tcassou/mapsplotlib;
+    homepage = "https://github.com/tcassou/mapsplotlib";
     license = licenses.mit;
     maintainers = [ maintainers.rob ];
   };

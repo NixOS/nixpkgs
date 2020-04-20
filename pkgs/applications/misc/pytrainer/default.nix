@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     requests
     certifi
+    setuptools
   ];
 
   nativeBuildInputs = [
@@ -84,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pytrainer/pytrainer/wiki;
+    homepage = "https://github.com/pytrainer/pytrainer/wiki";
     description = "Application for logging and graphing sporting excursions";
     maintainers = [ maintainers.rycee ];
     license = licenses.gpl2Plus;

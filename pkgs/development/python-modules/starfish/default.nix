@@ -26,11 +26,11 @@
 
 buildPythonPackage rec {
   pname = "starfish";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02002b908572fcd2c7471475936a6c375f143d15df871399ce86ced6d7aef865";
+    sha256 = "0340e37b732e184081b150f21bbbd4eed3643ab49f74633b9c4d827bda663235";
   };
 
   propagatedBuildInputs = [
@@ -82,8 +82,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pipelines and pipeline components for the analysis of image-based transcriptomics data";
-    homepage = https://spacetx-starfish.readthedocs.io/en/latest/;
+    homepage = "https://spacetx-starfish.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true; # incompatible with latest python-dateutil, scikit-image
   };
 }

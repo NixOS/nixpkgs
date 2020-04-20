@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
+{ stdenv, lib, fetchpatch, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
 , pkgconfig, cmake, gnumake, yasm, python2Packages
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
@@ -19,6 +19,7 @@
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
 , libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, lirc
 , dbusSupport ? true, dbus ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
@@ -30,6 +31,7 @@
 , vdpauSupport ? true, libvdpau ? null
 , useWayland ? false, wayland ? null, wayland-protocols ? null
 , waylandpp ?  null, libxkbcommon ? null
+, useGbm ? false, mesa ? null, libinput ? null
 }:
 
 assert dbusSupport  -> dbus != null;
@@ -43,15 +45,15 @@ assert vdpauSupport -> libvdpau != null;
 assert useWayland -> wayland != null && wayland-protocols != null && waylandpp != null && libxkbcommon != null;
 
 let
-  kodiReleaseDate = "20190901";
-  kodiVersion = "18.4";
+  kodiReleaseDate = "20200301";
+  kodiVersion = "18.6";
   rel = "Leia";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "1m0295czxabdcqyqf5m94av9d88pzhnzjvyfs1q07xqq82h313p7";
+    sha256 = "0rwymipn5hljy5xrslzmrljmj6f9wb191wi7gjw20wl6sv44d0bk";
   };
 
   cmakeProto = fetchurl {
@@ -168,6 +170,7 @@ in stdenv.mkDerivation {
       libcrossguid cwiid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs libXdmcp
       ffmpeg flatbuffers fmt fstrcmp rapidjson
+      lirc
       # libdvdcss libdvdnav libdvdread
     ]
     ++ lib.optional  dbusSupport     dbus
@@ -179,10 +182,15 @@ in stdenv.mkDerivation {
     ++ lib.optional  udevSupport     udev
     ++ lib.optional  usbSupport      libusb
     ++ lib.optional  vdpauSupport    libvdpau
-    ++ lib.optional  useWayland [
+    ++ lib.optionals useWayland [
       wayland waylandpp
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
+    ]
+    ++ lib.optional useGbm [
+      libxkbcommon.dev
+      mesa.dev
+      libinput.dev
     ];
 
     nativeBuildInputs = [
@@ -192,7 +200,7 @@ in stdenv.mkDerivation {
       which
       pkgconfig gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
-    ] ++ lib.optional useWayland [ wayland-protocols ];
+    ] ++ lib.optionals useWayland [ wayland-protocols ];
 
     cmakeFlags = [
       "-Dlibdvdcss_URL=${libdvdcss.src}"
@@ -202,10 +210,12 @@ in stdenv.mkDerivation {
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
       "-DENABLE_OPTICAL=ON"
-      "-DLIRC_DEVICE=/run/lirc/lircd"
     ] ++ lib.optional useWayland [
       "-DCORE_PLATFORM_NAME=wayland"
       "-DWAYLAND_RENDER_SYSTEM=gl"
+    ] ++ lib.optional useGbm [
+      "-DCORE_PLATFORM_NAME=gbm"
+      "-DGBM_RENDER_SYSTEM=gles"
     ];
 
     enableParallelBuilding = true;
@@ -241,7 +251,7 @@ in stdenv.mkDerivation {
 
     meta = with stdenv.lib; {
       description = "Media center";
-      homepage    = https://kodi.tv/;
+      homepage    = "https://kodi.tv/";
       license     = licenses.gpl2;
       platforms   = platforms.linux;
       maintainers = with maintainers; [ domenkozar titanous edwtjo peterhoeg sephalon ];

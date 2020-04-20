@@ -22,8 +22,5 @@ mkDerivation {
   outputs = [ "out" "dev" ];
   # Fix build with cups deprecations etc.
   # See: https://github.com/NixOS/nixpkgs/issues/73334
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=deprecated-declarations"
-    "-Wno-error=format-security"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=format-security";
 }

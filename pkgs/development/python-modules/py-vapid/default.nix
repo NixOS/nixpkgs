@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "VAPID is a voluntary standard for WebPush subscription providers";
-    homepage = https://github.com/mozilla-services/vapid;
+    homepage = "https://github.com/mozilla-services/vapid";
     license = licenses.mpl20;
   };
 }

@@ -1,21 +1,22 @@
 { stdenv, fetchFromGitHub, cmake, openssh
-, gfortran, mpi, openblasCompat
+, gfortran, mpi, blas, lapack
 } :
 
+assert (!blas.is64bit) && (!lapack.is64bit);
 
 stdenv.mkDerivation rec {
   pname = "scalapack";
-  version = "2.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "042q9kc383h7y0had9a37702z4s0szavss063ljvfdsbjy07gzb1";
+    sha256 = "1c10d18gj3kvpmyv5q246x35hjxaqn4ygy1cygaydhyxnm4klzdj";
   };
 
   nativeBuildInputs = [ cmake openssh ];
-  buildInputs = [ mpi gfortran openblasCompat ];
+  buildInputs = [ mpi gfortran blas lapack ];
 
   enableParallelBuilding = true;
 
@@ -24,8 +25,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cmakeFlagsArray+=(
       -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
-      -DLAPACK_LIBRARIES="-lopenblas"
-      -DBLAS_LIBRARIES="-lopenblas"
+      -DLAPACK_LIBRARIES="-llapack"
+      -DBLAS_LIBRARIES="-lblas"
       )
   '';
 
@@ -40,11 +41,11 @@ stdenv.mkDerivation rec {
     # Run single threaded
     export OMP_NUM_THREADS=1
 
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.netlib.org/scalapack/;
+    homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];

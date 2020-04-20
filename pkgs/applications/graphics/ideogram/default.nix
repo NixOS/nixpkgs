@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ideogram";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = pname;
     rev = version;
-    sha256 = "0ghc7hk4b4r3a0x9r30rrgv3rarxyjr2hf9ig244xwvhh5rn3j10";
+    sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
   };
 
   nativeBuildInputs = [
@@ -50,9 +50,15 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
-    homepage = https://github.com/cassidyjames/ideogram;
+    homepage = "https://github.com/cassidyjames/ideogram";
     license = licenses.gpl2Plus;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;
