@@ -1,13 +1,13 @@
 { lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage }:
 
 let
-  version = "2.17.1";
+  version = "2.17.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "0ai9l7gx25x5m07617c0cjzwxknywwq822fn2q5b850hvs48whyv";
+    sha256 = "1q89c98rdypfcw8sqzipwlmxg8vrm4b9vdryygnacxv4am7bxsia";
   };
 
   webui = mkYarnPackage {
