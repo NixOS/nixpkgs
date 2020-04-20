@@ -37,6 +37,9 @@ let
   '';
 in
 {
+  meta = {
+    maintainers = lib.teams.podman.members;
+  };
 
   options.virtualisation.podman = {
 
@@ -143,7 +146,6 @@ in
       pkgs.runc # Default container runtime
       pkgs.crun # Default container runtime (cgroups v2)
       pkgs.conmon # Container runtime monitor
-      pkgs.skopeo # Interact with container registry
       pkgs.slirp4netns # User-mode networking for unprivileged namespaces
       pkgs.fuse-overlayfs # CoW for images, much faster than default vfs
       pkgs.utillinux # nsenter
@@ -180,7 +182,7 @@ in
             offset = acc.offset + 65536;
           }
         )
-          { values = []; offset = 100000; } cfg.users
+        { values = []; offset = 100000; } (lib.unique cfg.users)
       ).values
     );
 

@@ -1,10 +1,10 @@
 # This test runs podman and checks if simple container starts
 
 import ./make-test-python.nix (
-  { pkgs, ... }: {
+  { pkgs, lib, ... }: {
     name = "podman";
-    meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ adisbladis ];
+    meta = {
+      maintainers = lib.teams.podman.members;
     };
 
     nodes = {
