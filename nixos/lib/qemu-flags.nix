@@ -9,10 +9,11 @@ let
        else pkgs.lib.toHex n);
 in
 
-{
+rec {
+  qemuNicMac = net: machine: "52:54:00:12:${zeroPad net}:${zeroPad machine}";
 
   qemuNICFlags = nic: net: machine:
-    [ "-device virtio-net-pci,netdev=vlan${toString nic},mac=52:54:00:12:${zeroPad net}:${zeroPad machine}"
+    [ "-device virtio-net-pci,netdev=vlan${toString nic},mac=${qemuNicMac net machine}"
       "-netdev vde,id=vlan${toString nic},sock=$QEMU_VDE_SOCKET_${toString net}"
     ];
 
