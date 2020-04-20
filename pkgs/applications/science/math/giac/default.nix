@@ -5,7 +5,7 @@
 }:
 
 assert enableGUI -> libGLU != null && libGL != null && xorg != null && fltk != null;
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";

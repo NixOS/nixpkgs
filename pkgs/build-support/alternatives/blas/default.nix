@@ -1,7 +1,7 @@
 { lib, stdenv
 , lapack-reference, openblasCompat, openblas
-, is64bit ? false
-, blasProvider ? if is64bit then openblas else openblasCompat }:
+, isILP64 ? false
+, blasProvider ? if isILP64 then openblas else openblasCompat }:
 
 let
   blasFortranSymbols = [
@@ -31,12 +31,12 @@ let
                        else stdenv.hostPlatform.extensions.sharedLibrary;
 
 
-  is64bit = blasProvider.blas64 or false;
+  isILP64 = blasProvider.blas64 or false;
   blasImplementation = lib.getName blasProvider;
 
 in
 
-assert is64bit -> (blasImplementation == "openblas" && blasProvider.blas64) || blasImplementation == "mkl";
+assert isILP64 -> (blasImplementation == "openblas" && blasProvider.blas64) || blasImplementation == "mkl";
 
 stdenv.mkDerivation {
   pname = "blas";
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    inherit is64bit;
+    inherit isILP64;
     provider = blasProvider;
     implementation = blasImplementation;
   };
@@ -134,6 +134,6 @@ Libs: -L$out/lib -lcblas
 EOF
 '' + stdenv.lib.optionalString (blasImplementation == "mkl") ''
   mkdir -p $out/nix-support
-  echo 'export MKL_INTERFACE_LAYER=${lib.optionalString is64bit "I"}LP64,GNU' > $out/nix-support/setup-hook
+  echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
 '');
 }

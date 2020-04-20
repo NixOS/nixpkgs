@@ -22,7 +22,7 @@
 
 with stdenv.lib;
 
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
   dsfmtVersion = "2.2.3";
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
       "SHELL=${stdenv.shell}"
 
       "USE_SYSTEM_BLAS=1"
-      "USE_BLAS64=${if blas.is64bit then "1" else "0"}"
+      "USE_BLAS64=${if blas.isILP64 then "1" else "0"}"
 
       "USE_SYSTEM_LAPACK=1"
 

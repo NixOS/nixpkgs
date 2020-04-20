@@ -12,7 +12,7 @@
 , setuptoolsBuildHook
  }:
 
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
   cfg = writeTextFile {
