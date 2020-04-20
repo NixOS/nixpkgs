@@ -21,9 +21,7 @@ let
       ${blas.implementation} = {
         include_dirs = "${blas}/include:${lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
-      } // lib.optionalAttrs (blas.implementation == "mkl") {
-        mkl_libs = "mkl_rt";
-        lapack_libs = "";
+        libraries = "lapack,lapacke,blas,cblas";
       };
     });
   };
