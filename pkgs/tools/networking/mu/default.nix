@@ -5,19 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "0yhjlj0z23jw3cf2wfnl98y8q6gikvmhkb8vdm87bd7jw0bdnrfz";
+    sha256 = "0q2ik7fj5k9i76js4ijyxbgrwqff437lass0sd5if2r40rqh0as0";
   };
-
-  # test-utils coredumps so don't run those
-  postPatch = ''
-    sed -i -e '/test-utils/d' lib/parser/Makefile.am
-  '';
 
   buildInputs = [
     sqlite xapian glib gmime3 texinfo emacs guile libsoup icu
@@ -27,19 +22,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preConfigure = "./autogen.sh";
+
   preBuild = ''
     # Fix mu4e-builddir (set it to $out)
     substituteInPlace mu4e/mu4e-meta.el.in \
       --replace "@abs_top_builddir@" "$out"
-
-    # We install msg2pdf to bin/msg2pdf, fix its location in elisp
-    substituteInPlace mu4e/mu4e-actions.el \
-      --replace "/toys/msg2pdf/" "/bin/"
   '';
 
-  # Install mug and msg2pdf
+  # Install mug
   postInstall = stdenv.lib.optionalString withMug ''
-    for f in msg2pdf mug ; do
+    for f in mug ; do
       install -m755 toys/$f/$f $out/bin/$f
     done
   '';
