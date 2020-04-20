@@ -265,34 +265,28 @@ let
           environment.PATH = config.path;
         }
         (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
-              ${config.preStart}
-            '';
+          { serviceConfig.ExecStartPre =
+              makeJobScript "${name}-pre-start" config.preStart;
           })
         (mkIf (config.script != "")
-          { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
-              ${config.script}
-            '' + " " + config.scriptArgs;
+          { serviceConfig.ExecStart =
+              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
           })
         (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
-              ${config.postStart}
-            '';
+          { serviceConfig.ExecStartPost =
+              makeJobScript "${name}-post-start" config.postStart;
           })
         (mkIf (config.reload != "")
-          { serviceConfig.ExecReload = makeJobScript "${name}-reload" ''
-              ${config.reload}
-            '';
+          { serviceConfig.ExecReload =
+              makeJobScript "${name}-reload" config.reload;
           })
         (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
-              ${config.preStop}
-            '';
+          { serviceConfig.ExecStop =
+              makeJobScript "${name}-pre-stop" config.preStop;
           })
         (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
-              ${config.postStop}
-            '';
+          { serviceConfig.ExecStopPost =
+              makeJobScript "${name}-post-stop" config.postStop;
           })
       ];
   };
