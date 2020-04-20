@@ -96,4 +96,6 @@ self: super: {
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
 
+  # Only 0.7 is compatible with ghc 8.7 https://hackage.haskell.org/package/apply-refact/changelog
+  apply-refact = super.apply-refact_0_7_0_0;
 }
