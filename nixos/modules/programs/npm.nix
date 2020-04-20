@@ -15,7 +15,7 @@ in
 
       package = mkOption {
         type = types.package;
-        description = "The npm package version / flavor to use";
+        description = "The nodejs package version / flavor to use";
         default = pkgs.nodejs;
         example = literalExample "pkgs.nodePackages_13_x";
       };
