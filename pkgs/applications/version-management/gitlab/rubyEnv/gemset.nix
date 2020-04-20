@@ -763,10 +763,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1x07r23s7836cpp5z9yrlbpljcxpax14yw4fy4bnp6crhr6x24an";
+      sha256 = "094387x4yasb797mv07cs3g6f08y56virc2rjcpb1k79rzaj3nhl";
       type = "gem";
     };
-    version = "1.1.5";
+    version = "1.1.6";
   };
   connection_pool = {
     groups = ["default"];
@@ -3501,10 +3501,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0z90vflxbgjy2n84r7mbyax3i2vyvvrxxrf86ljzn5rw65jgnn2i";
+      sha256 = "1mxzk12xylrz6d4n9jj5jasfscbf1pbk4idrb0nlf327lx9rwfkk";
       type = "gem";
     };
-    version = "2.0.7";
+    version = "2.0.9";
   };
   rack-accept = {
     dependencies = ["rack"];
@@ -3803,10 +3803,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1hvai5ygkyii9wq8h98wim8shgrm7vkv0js62zpm85vdl1xzvphz";
+      sha256 = "0c2276zzc0044zh37a8frx1v7hnra7z7k126154ps7njbqngfdv3";
       type = "gem";
     };
-    version = "5.1.0";
+    version = "5.2.0";
   };
   redis-activesupport = {
     dependencies = ["activesupport" "redis-store"];
@@ -3836,10 +3836,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1pa19ydbk0l6wilwbxcjn6knfs4ffgj0rhaaldrlhf76pjgkaiqb";
+      sha256 = "0ldw5sxyd80pv0gr89kvn6ziszlbs8lv1a573fkm6d0f11fps413";
       type = "gem";
     };
-    version = "2.0.6";
+    version = "2.1.2";
   };
   redis-rails = {
     dependencies = ["redis-actionpack" "redis-activesupport" "redis-store"];
