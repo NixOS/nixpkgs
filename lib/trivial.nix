@@ -332,4 +332,55 @@ rec {
   */
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
+
+  /* Convert the given positive integer to a string of its hexadecimal
+     representation. For example:
+
+     toHex 0 => "0"
+
+     toHex 16 => "10"
+
+     toHex 250 => "FA"
+  */
+  toHex = i:
+    let
+      toHexDigit = d:
+        if d < 10
+        then toString d
+        else
+          {
+            "10" = "A";
+            "11" = "B";
+            "12" = "C";
+            "13" = "D";
+            "14" = "E";
+            "15" = "F";
+          }.${toString d};
+    in
+      lib.concatMapStrings toHexDigit (toBase 16 i);
+
+  /* `toBase base i` converts the positive integer i to a list of its
+     digits in the given base. For example:
+
+     toBase 10 123 => [ 1 2 3 ]
+
+     toBase 2 6 => [ 1 1 0 ]
+
+     toBase 16 250 => [ 15 10 ]
+  */
+  toBase = base: i:
+    let
+      go = i:
+        if i < base
+        then [i]
+        else
+          let
+            r = i - ((i / base) * base);
+            q = (i - r) / base;
+          in
+            [r] ++ go q;
+    in
+      assert (base >= 2);
+      assert (i >= 0);
+      lib.reverseList (go i);
 }

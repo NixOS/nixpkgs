@@ -67,7 +67,7 @@ let
     inherit (trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell min max
       importJSON warn info showWarnings nixpkgsVersion version mod compare
-      splitByAndCompare functionArgs setFunctionArgs isFunction;
+      splitByAndCompare functionArgs setFunctionArgs isFunction toHex toBase;
     inherit (fixedPoints) fix fix' converge extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath

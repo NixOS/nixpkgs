@@ -102,6 +102,16 @@ runTests {
     expected = 9;
   };
 
+  testToHex = {
+    expr = toHex 250;
+    expected = "FA";
+  };
+
+  testToBase = {
+    expr = toBase 2 6;
+    expected = [ 1 1 0 ];
+  };
+
 # STRINGS
 
   testConcatMapStrings = {
