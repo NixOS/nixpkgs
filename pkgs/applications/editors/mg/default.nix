@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, buildPackages, libbsd }:
+{ stdenv, fetchFromGitHub, pkgconfig, ncurses, buildPackages, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "mg";
-  version = "20180927";
+  version = "20200215";
 
-  src = fetchurl {
-    url = "https://github.com/hboetes/mg/archive/${version}.tar.gz";
-    sha256 = "fbb09729ea00fe42dcdbc96ac7fc1d2b89eac651dec49e4e7af52fad4f5788f6";
+  src = fetchFromGitHub {
+    owner = "hboetes";
+    repo = "mg";
+    rev = "20200215";
+    sha256 = "1rss7d43hbq43n63gxfvx4b2vh2km58cchwzdf2ssqhaz3qj40m6";
   };
 
   enableParallelBuilding = true;
