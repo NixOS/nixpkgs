@@ -2143,6 +2143,8 @@ in
 
   stagit = callPackage ../development/tools/stagit { };
 
+  statserial = callPackage ../tools/misc/statserial { };
+
   step-ca = callPackage ../tools/security/step-ca { };
 
   step-cli = callPackage ../tools/security/step-cli { };
