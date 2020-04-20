@@ -1,5 +1,14 @@
-{ stdenv, buildGoPackage, fetchFromGitHub
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkg-config, libselinux, libseccomp
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, gpgme
+, libgpgerror
+, lvm2
+, btrfs-progs
+, libselinux
+, libseccomp
 }:
 
 buildGoPackage rec {
@@ -7,9 +16,9 @@ buildGoPackage rec {
   version = "1.14.8";
 
   src = fetchFromGitHub {
-    owner  = "containers";
-    repo   = "buildah";
-    rev    = "v${version}";
+    owner = "containers";
+    repo = "buildah";
+    rev = "v${version}";
     sha256 = "187cvb3i5cwm7cwxmzpl2ca7900yb6v6b6cybyz5mnd5ccy5ff1q";
   };
 
@@ -18,7 +27,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/containers/buildah";
   excludedPackages = [ "tests" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
 
   patches = [ ./disable-go-module-mode.patch ];
@@ -27,7 +36,7 @@ buildGoPackage rec {
     pushd go/src/${goPackagePath}
     make GIT_COMMIT="unknown"
     install -Dm755 buildah $bin/bin/buildah
-    install -Dm444 contrib/completions/bash/buildah $bin/share/bash-completion/completions/buildah
+    installShellCompletion --bash contrib/completions/bash/buildah
   '';
 
   postBuild = ''
