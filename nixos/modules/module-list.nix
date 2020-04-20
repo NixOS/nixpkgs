@@ -603,6 +603,7 @@
   ./services/networking/dnscrypt-wrapper.nix
   ./services/networking/dnsdist.nix
   ./services/networking/dnsmasq.nix
+  ./services/networking/dropbox.nix
   ./services/networking/ejabberd.nix
   ./services/networking/epmd.nix
   ./services/networking/eternal-terminal.nix
