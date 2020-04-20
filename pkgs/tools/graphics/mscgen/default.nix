@@ -2,7 +2,6 @@
 , bison
 , fetchurl
 , flex
-, freetype
 , gd
 , libjpeg
 , libpng
@@ -24,12 +23,15 @@ stdenv.mkDerivation {
     sha256 = "3c3481ae0599e1c2d30b7ed54ab45249127533ab2f20e768a0ae58d8551ddc23";
   };
 
-  buildInputs = [ bison flex freetype gd libjpeg libpng libwebp pkg-config zlib ];
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ gd libjpeg libpng libwebp zlib ];
 
   doCheck = true;
   preCheck = ''
     sed -i -e "s|#!/bin/bash|#!${runtimeShell}|" test/renderercheck.sh
   '';
+
+  outputs = [ "out" "man" ];
 
   meta = {
     homepage = "http://www.mcternan.me.uk/mscgen/";
