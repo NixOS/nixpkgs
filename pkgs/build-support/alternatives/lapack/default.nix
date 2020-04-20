@@ -36,6 +36,8 @@ stdenv.mkDerivation {
   dontConfigure = true;
   unpackPhase = "src=$PWD";
 
+  dontPatchELF = true;
+
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
