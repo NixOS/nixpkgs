@@ -28,7 +28,7 @@ let
       sha256 = "0h8b1my0wf1jyjq63wbiqkl2clgxsf87f6i4fjhqs431fzlq8sac";
     };
 
-    outputs = [ "out" "dev" ];
+    outputs = [ "out" "dev" "man" ];
 
     nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
     buildInputs = [ libuuid ]
