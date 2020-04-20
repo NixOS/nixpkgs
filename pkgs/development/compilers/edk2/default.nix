@@ -30,6 +30,11 @@ buildStdenv = if stdenv.isDarwin then
 else
   stdenv;
 
+buildType = if stdenv.isDarwin then
+    "CLANGPDB"
+  else
+    "GCC5";
+
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
   version = "201911";
@@ -44,9 +49,9 @@ edk2 = buildStdenv.mkDerivation {
   buildInputs = [ libuuid pythonEnv ];
 
   makeFlags = [ "-C BaseTools" ]
-    ++ lib.optional (stdenv.isDarwin) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
+    ++ lib.optional (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (!stdenv.isDarwin) " -Wno-error=stringop-truncation";
+  NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 
   hardeningDisable = [ "format" "fortify" ];
 
@@ -66,7 +71,7 @@ edk2 = buildStdenv.mkDerivation {
   };
 
   passthru = {
-    mkDerivation = projectDscPath: buildType: attrs: buildStdenv.mkDerivation ({
+    mkDerivation = projectDscPath: attrs: buildStdenv.mkDerivation ({
       inherit (edk2) src;
 
       buildInputs = [ bc pythonEnv ] ++ attrs.buildInputs or [];

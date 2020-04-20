@@ -17,13 +17,9 @@ let
     throw "Unsupported architecture";
 
   version = lib.getVersion edk2;
-  buildType = if stdenv.isDarwin then
-    "CLANGPDB"
-  else
-    "GCC5";
 in
 
-edk2.mkDerivation projectDscPath buildType {
+edk2.mkDerivation projectDscPath {
   name = "OVMF-${version}";
 
   outputs = [ "out" "fd" ];
