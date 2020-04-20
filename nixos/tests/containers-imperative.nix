@@ -100,6 +100,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       with subtest("Start one of them"):
           machine.succeed(f"nixos-container start {id1}")
 
+      with subtest("Perform atomic restart"):
+          machine.succeed(f"systemctl restart container@{id1}")
+
       with subtest("Execute commands via the root shell"):
           assert "Linux" in machine.succeed(f"nixos-container run {id1} -- uname")
 

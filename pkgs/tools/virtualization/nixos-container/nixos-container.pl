@@ -26,7 +26,7 @@ Usage: nixos-container list
        nixos-container create <container-name>
          [--nixos-path <path>]
          [--system-path <path>]
-         [--config <string>]
+         [--config <string>]  -- config without outer braces, for example 'services.nginx.enable = true;'
          [--config-file <path>]
          [--flake <flakeref>]
          [--ensure-unique-name]
@@ -35,12 +35,13 @@ Usage: nixos-container list
          [--port <port>]
          [--host-address <string>]
          [--local-address <string>]
-       nixos-container destroy <container-name>
        nixos-container start <container-name>
-       nixos-container stop <container-name>
-       nixos-container terminate <container-name>
        nixos-container status <container-name>
        nixos-container update <container-name>
+       nixos-container restart <container-name>
+       nixos-container stop <container-name>  -- shutdown container cleanly, wait until stopped
+       nixos-container terminate <container-name> -- halt container, like hard poweroff
+       nixos-container destroy <container-name> -- terminate (halt) container and remove state data
          [--config <string>]
          [--config-file <path>]
          [--flake <flakeref>]
@@ -290,6 +291,7 @@ sub isContainerRunning {
 
 sub terminateContainer {
     my $leader = getLeader;
+    system("systemctl", "stop", "--no-block", "container\@$containerName");
     system("machinectl", "terminate", $containerName) == 0
         or die "$0: failed to terminate container\n";
     # Wait for the leader process to exit
@@ -313,8 +315,8 @@ sub stopContainer {
 }
 
 sub restartContainer {
-    stopContainer;
-    startContainer;
+    system("systemctl", "restart", "container\@$containerName") == 0
+        or die "$0: failed to restart container\n";
 }
 
 # Run a command in the container.
