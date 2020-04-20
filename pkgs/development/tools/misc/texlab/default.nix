@@ -5,17 +5,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "texlab";
-  version = "1.10.0";
+  pname = "texlab-unwrapped";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12zfcvbihirh38xxzc8fbx293m4vsrhq6kh0qnhnhlrx75m09l9i";
+    sha256 = "0y8cv8y92a4nqwrvqk2cxgs6nspqjk8jm4spr8rgkwlpfbrg74xn";
   };
 
-  cargoSha256 = "08fi0c4s0d1p2rqxvj1y82zg6xl3n0ikgyhgrjwh6xay8f0121f0";
+  cargoSha256 = "1cxi6bvdyhxb5jnw5dhba5mdsc149cw6mzaf00ayvc4pcdrj323s";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 

@@ -10879,8 +10879,12 @@ in
 
   texi2mdoc = callPackage ../tools/misc/texi2mdoc { };
 
-  texlab = callPackage ../development/tools/misc/texlab {
+  texlab-unwrapped = callPackage ../development/tools/misc/texlab {
     inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  texlab = callPackage ../development/tools/misc/texlab/wrapper.nix {
+    tex = texlive.combined.scheme-small;
   };
 
   tflint = callPackage ../development/tools/analysis/tflint { };
