@@ -592,6 +592,12 @@ self: super: {
   elm-server = markBroken super.elm-server;
   elm-yesod = markBroken super.elm-yesod;
 
+  # https://github.com/Euterpea/Euterpea2/issues/40
+  Euterpea = appendPatch super.Euterpea (pkgs.fetchpatch {
+    url = "https://github.com/Euterpea/Euterpea2/pull/38.patch";
+    sha256 = "13g462qmj8c7if797gnyvf8h0cddmm3xy0pjldw48w8f8sr4qsj0";
+  });
+
   # https://github.com/athanclark/sets/issues/2
   sets = dontCheck super.sets;
 
