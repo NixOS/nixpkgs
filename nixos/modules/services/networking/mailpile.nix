@@ -18,12 +18,8 @@ in
   options = {
 
     services.mailpile = {
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable Mailpile the mail client.
-        ";
-      };
+      enable = mkEnableOption "Mailpile the mail client";
+
       hostname = mkOption {
         default = "localhost";
         description = "Listen to this hostname or ip.";
