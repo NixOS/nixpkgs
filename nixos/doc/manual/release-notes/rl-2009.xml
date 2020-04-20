@@ -40,6 +40,11 @@
      make use of these new options instead.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     There is a new module for Podman(<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
