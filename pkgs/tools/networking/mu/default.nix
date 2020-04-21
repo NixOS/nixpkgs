@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = "./autogen.sh";
-
   preBuild = ''
     # Fix mu4e-builddir (set it to $out)
     substituteInPlace mu4e/mu4e-meta.el.in \
@@ -43,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
-    platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ antono the-kenny peterhoeg ];
+    platforms = platforms.mesaPlatforms;
   };
 }
