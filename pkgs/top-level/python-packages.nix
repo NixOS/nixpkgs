@@ -2895,6 +2895,8 @@ in {
 
   hglib = callPackage ../development/python-modules/hglib {};
 
+  huey = callPackage ../development/python-modules/huey { };
+
   humanize = callPackage ../development/python-modules/humanize { };
 
   humanfriendly = callPackage ../development/python-modules/humanfriendly { };
