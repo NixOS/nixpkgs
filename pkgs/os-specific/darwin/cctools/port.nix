@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+, installShellFiles
 , libcxxabi, libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
@@ -30,7 +31,7 @@ let
 
     outputs = [ "out" "dev" "man" ];
 
-    nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
+    nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
     buildInputs = [ libuuid ]
       ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
       ++ stdenv.lib.optional enableTapiSupport libtapi;
@@ -88,6 +89,8 @@ let
       pushd include
       make DSTROOT=$out/include RC_OS=common install
       popd
+
+      installManPage ar/ar.{1,5}
     '';
 
     passthru = {
