@@ -8,11 +8,11 @@ assert withDoc -> asciidoc != null;
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "04n8cmrgb490kfn70x9kgxp286mrrn7nb4irhi7nvbm6lv0z28sq";
+    sha256 = "0c1lf82z6a56g8asin91cmqhzk3anw0xwc44b31bpjixadmns57y";
   };
 
   outputs = [
