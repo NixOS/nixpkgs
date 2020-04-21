@@ -22815,6 +22815,8 @@ in
 
   timewarrior = callPackage ../applications/misc/timewarrior { };
 
+  timg = callPackage ../tools/misc/timg { };
+
   timidity = callPackage ../tools/misc/timidity { };
 
   tint2 = callPackage ../applications/misc/tint2 { };
