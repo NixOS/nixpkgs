@@ -49,6 +49,7 @@ in
     services.hostapd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable putting a wireless interface into infrastructure mode,

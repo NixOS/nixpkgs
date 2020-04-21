@@ -11,10 +11,7 @@ with lib;
 
     services.clickhouse = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable ClickHouse database server.";
-      };
+      enable = mkEnableOption "ClickHouse database server";
 
     };
 
