@@ -136,5 +136,6 @@ EOF
   mkdir -p $out/nix-support
   echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
   ln -s $out/lib/libblas${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}
+  ln -sf ${blasProvider}/include/* $dev/include
 '');
 }
