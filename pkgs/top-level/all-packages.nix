@@ -389,6 +389,8 @@ in
   fetchNuGet = callPackage ../build-support/fetchnuget { };
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
 
+  fetchGitHubRelease = callPackage ../build-support/fetchgithub/release.nix {};
+
   fetchgx = callPackage ../build-support/fetchgx { };
 
   resolveMirrorURLs = {url}: fetchurl {
