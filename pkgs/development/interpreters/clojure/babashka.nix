@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, graalvm8 }:
+{ stdenv, fetchurl, graalvm8, glibcLocales }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ graalvm8 ];
+  LC_ALL = "en_US.UTF-8";
+  nativeBuildInputs = [ graalvm8 glibcLocales ];
 
   buildPhase = ''
     native-image \
