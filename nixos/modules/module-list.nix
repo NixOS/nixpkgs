@@ -983,7 +983,7 @@
   ./testing/service-runner.nix
   ./virtualisation/anbox.nix
   ./virtualisation/container-config.nix
-  ./virtualisation/containers.nix
+  ./virtualisation/nixos-containers.nix
   ./virtualisation/cri-o.nix
   ./virtualisation/docker.nix
   ./virtualisation/docker-containers.nix
