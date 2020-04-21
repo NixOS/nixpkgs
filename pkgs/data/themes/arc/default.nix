@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
-  version = "20190917";
+  version = "20200416";
 
   src = fetchFromGitHub {
-    owner  = "arc-design";
+    owner  = "jnsh";
     repo   = pname;
-    rev    = version;
-    sha256 = "1qgpk4p2hi5hd4yy0hj93kq1vs0b32wb8qkaj1wi90c8gwddq5wa";
+    rev    = "0779e1ca84141d8b443cf3e60b85307a145169b6";
+    sha256 = "1ddyi8g4rkd4mxadjvl66wc0lxpa4qdr98nbbhm5abaqfs2yldd4";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-gnome-shell" # 3.36 not supported
+    "--disable-cinnamon" # not equipped to test
     "--disable-unity"
   ];
 
@@ -44,10 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
-    homepage    = "https://github.com/arc-design/arc-theme";
+    homepage    = "https://github.com/jnsh/arc-theme";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ simonvandel romildo ];
     platforms   = platforms.linux;
-    broken = true; # since libsass 3.6.3
   };
 }
