@@ -3197,6 +3197,8 @@ in {
 
   priority = callPackage ../development/python-modules/priority { };
 
+  privacyidea = callPackage ../servers/privacyidea { };
+
   prov = callPackage ../development/python-modules/prov { };
 
   pudb = callPackage ../development/python-modules/pudb { };
