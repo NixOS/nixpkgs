@@ -155,6 +155,12 @@ in rec {
     inherit system;
   });
 
+  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-gnome.nix;
+    type = "gnome";
+    inherit system;
+  });
+
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
   iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
