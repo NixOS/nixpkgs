@@ -20,6 +20,7 @@ stdenv.mkDerivation  rec {
   installPhase = ''
     mkdir -p $out/lib
     cp libfakeXinerama.so.1.0 $out/lib
+    ln -s libfakeXinerama.so.1.0 $out/lib/libXinerama.so.1.0
     ln -s libXinerama.so.1.0 $out/lib/libXinerama.so.1
     ln -s libXinerama.so.1 $out/lib/libXinerama.so
   '';
