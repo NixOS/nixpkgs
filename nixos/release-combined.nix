@@ -20,11 +20,6 @@ let
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
-  allSupportedNixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    supportedSystems = supportedSystems ++ limitedSupportedSystems;
-    nixpkgs = nixpkgsSrc;
-  })) [ "unstable" ];
-
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
