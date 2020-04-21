@@ -1290,32 +1290,9 @@ self: super: {
 
 ### How to use Intel's MKL with numpy and scipy?
 
-A `site.cfg` is created that configures BLAS based on the `blas` parameter of
-the `numpy` derivation. By passing in `mkl`, `numpy` and packages depending on
-`numpy` will be built with `mkl`.
-
-The following is an overlay that configures `numpy` to use `mkl`:
-
-```nix
-self: super: {
-  python37 = super.python37.override {
-    packageOverrides = python-self: python-super: {
-      numpy = python-super.numpy.override {
-        blas = super.pkgs.mkl;
-      };
-    };
-  };
-}
-```
-
-`mkl` requires an `openmp` implementation when running with multiple processors.
-By default, `mkl` will use Intel's `iomp` implementation if no other is
-specified, but this is a runtime-only dependency and binary compatible with the
-LLVM implementation. To use that one instead, Intel recommends users set it with
-`LD_PRELOAD`.
-
-Note that `mkl` is only available on `x86_64-{linux,darwin}` platforms;
-moreover, Hydra is not building and distributing pre-compiled binaries using it.
+MKL can be configured using an overlay. See the section “[Using
+overlays to configure
+alternatives](#sec-overlays-alternatives-blas-lapack)”.
 
 ### What inputs do `setup_requires`, `install_requires` and `tests_require` map to?
 
