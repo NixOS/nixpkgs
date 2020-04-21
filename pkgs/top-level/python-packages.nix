@@ -6204,6 +6204,8 @@ in {
 
   smartdc = callPackage ../development/python-modules/smartdc { };
 
+  smpplib = callPackage ../development/python-modules/smpplib { };
+
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
