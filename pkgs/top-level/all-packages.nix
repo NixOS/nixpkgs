@@ -20590,6 +20590,8 @@ in
 
   minicom = callPackage ../tools/misc/minicom { };
 
+  minigalaxy = python3.pkgs.callPackage ../applications/misc/minigalaxy { };
+
   minimodem = callPackage ../applications/radio/minimodem { };
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
