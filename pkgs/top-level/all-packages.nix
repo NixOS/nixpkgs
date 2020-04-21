@@ -21068,6 +21068,8 @@ in
 
   omxplayer = callPackage ../applications/video/omxplayer { };
 
+  inherit (python3Packages.callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
+
   openbox = callPackage ../applications/window-managers/openbox { };
 
   openbox-menu = callPackage ../applications/misc/openbox-menu {
