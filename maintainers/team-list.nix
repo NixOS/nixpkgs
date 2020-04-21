@@ -33,10 +33,11 @@ with lib.maintainers; {
 
   podman = {
     members = [
+      adisbladis
       saschagrunert
       vdemeester
       zowoq
     ];
-    scope = "Maintain podman related packages.";
+    scope = "Maintain Podman related packages and modules.";
   };
 }
