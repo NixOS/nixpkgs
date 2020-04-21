@@ -1,8 +1,4 @@
-{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, lapack, blas
-, mklSupport ? false, mkl ? null
-}:
-
-assert !mklSupport || mkl != null;
+{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, lapack, blas }:
 
 with stdenv.lib;
 
@@ -17,12 +13,9 @@ in stdenv.mkDerivation {
     name = "magma-${version}.tar.gz";
   };
 
-  buildInputs = [ gfortran cudatoolkit libpthreadstubs cmake ]
-    ++ (if mklSupport then [ mkl ] else [ lapack blas ]);
+  buildInputs = [ gfortran cudatoolkit libpthreadstubs cmake lapack blas ];
 
   doCheck = false;
-
-  MKLROOT = optionalString mklSupport mkl;
 
   preConfigure = ''
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++

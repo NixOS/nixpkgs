@@ -18,7 +18,7 @@ stdenv.mkDerivation {
           -e 's,^LAPACK=.*,LAPACK=-L${lapack}/lib -llapack,' \
           Makeconf
     ''
-    + stdenv.lib.optionalString blas.is64bit
+    + stdenv.lib.optionalString blas.isILP64
     ''
       sed -i Makeconf -e '/^FFLAGS=.*/ s/$/-fdefault-integer-8/'
     '';

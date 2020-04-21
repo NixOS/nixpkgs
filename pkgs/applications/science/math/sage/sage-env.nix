@@ -54,7 +54,7 @@
 , less
 }:
 
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
 # It sets up various environment variables, telling sage where to find its

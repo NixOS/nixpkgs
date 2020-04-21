@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
 , zlib, libGL, libGLU, xorg, opencascade-occt }:
 
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "gmsh";

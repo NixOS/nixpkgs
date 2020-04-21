@@ -12,18 +12,16 @@
 , setuptoolsBuildHook
  }:
 
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
       ${blas.implementation} = {
-        include_dirs = "${blas}/include:${lapack}/include";
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
-      } // lib.optionalAttrs (blas.implementation == "mkl") {
-        mkl_libs = "mkl_rt";
-        lapack_libs = "";
+        libraries = "lapack,lapacke,blas,cblas";
       };
     });
   };
