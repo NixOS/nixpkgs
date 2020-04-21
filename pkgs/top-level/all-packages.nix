@@ -20801,6 +20801,8 @@ in
     geoip = geoipWithDatabase;
   };
 
+  nixos-shell = callPackage ../tools/virtualization/nixos-shell {};
+
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
 
   notion = callPackage ../applications/window-managers/notion { };
