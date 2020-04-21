@@ -273,6 +273,7 @@ environment.systemPackages = [
      <literal>1000</literal> to <literal>10000</literal> to follow the new
      upstream systemd default.
     </para>
+   </listitem>
    <listitem>
     <para>
      The <package>notmuch</package> package move its emacs-related binaries and
