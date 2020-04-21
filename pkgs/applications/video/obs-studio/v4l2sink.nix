@@ -1,42 +1,46 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig, wrapQtAppsHook
-, obs-studio }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qtbase
+, obs-studio
+}:
 
-stdenv.mkDerivation {
-  pname = "obs-v4l2sink-unstable";
-  version = "20181012";
+stdenv.mkDerivation rec {
+  pname = "obs-v4l2sink";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "CatxFish";
     repo = "obs-v4l2sink";
-    rev = "1ec3c8ada0e1040d867ce567f177be55cd278378";
-    sha256 = "03ah91cm1qz26k90mfx51l0d598i9bcmw39lkikjs1msm4c9dfxx";
+    rev = version;
+    sha256 = "0l4lavaywih5lzwgxcbnvdrxhpvkrmh56li06s3aryikngxwsk3z";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
-  buildInputs = [ obs-studio ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qtbase obs-studio ];
 
-  patches = [
-    ./0001-find-ObsPluginHelpers.cmake-in-the-obs-src.patch
+  cmakeFlags = with lib; [
+    "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
   ];
 
-  cmakeFlags = [
-    "-DLIBOBS_INCLUDE_DIR=${obs-studio}/include/obs"
-    "-DLIBOBS_LIBRARIES=${obs-studio}/lib"
-    "-DCMAKE_CXX_FLAGS=-I${obs-studio.src}/UI/obs-frontend-api"
-    "-DOBS_SRC=${obs-studio.src}"
-  ];
-
-  installPhase = ''
-    mkdir -p $out/share/obs/obs-plugins/v4l2sink/bin/64bit
-    cp ./v4l2sink.so $out/share/obs/obs-plugins/v4l2sink/bin/64bit/
+  # obs-studio expects the shared object to be located in bin/32bit or bin/64bit
+  # https://github.com/obsproject/obs-studio/blob/d60c736cb0ec0491013293c8a483d3a6573165cb/libobs/obs-nix.c#L48
+  postInstall = let
+    pluginPath = {
+      i686-linux = "bin/32bit";
+      x86_64-linux = "bin/64bit";
+    }.${stdenv.targetPlatform.system} or (throw "Unsupported system: ${stdenv.targetPlatform.system}");
+  in ''
+    mkdir -p $out/share/obs/obs-plugins/v4l2sink/${pluginPath}
+    ln -s $out/lib/obs-plugins/v4l2sink.so $out/share/obs/obs-plugins/v4l2sink/${pluginPath}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "obs studio output plugin for Video4Linux2 device";
     homepage = "https://github.com/CatxFish/obs-v4l2sink";
     maintainers = with maintainers; [ colemickens peelz ];
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
