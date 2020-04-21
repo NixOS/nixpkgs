@@ -948,6 +948,8 @@ in
 
   gjs = callPackage ../development/libraries/gjs { };
 
+  gjo = callPackage ../tools/text/gjo { };
+
   glances = python3Packages.callPackage ../applications/system/glances { };
 
   glasgow = with python3Packages; toPythonApplication glasgow;
