@@ -1,7 +1,7 @@
-{ stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand, buildPackages
-, python2, gn, ninja, llvmPackages_9, llvmPackages_10, bison, gperf, pkg-config
+{ stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand, buildPackages, git
+, python2, ninja, llvmPackages_9, llvmPackages_10, bison, gperf, pkg-config
 , dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf
-, glib, gtk3, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
+, gnome2, glib, gtk2, gtk3, cups, libgcrypt, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
 , customGnFlags ? {}
 }:
 
@@ -43,6 +43,7 @@ let
     linux_use_bundled_binutils = false;
     treat_warnings_as_errors = false;
     use_sysroot = false;
+    use_cups = true;
     use_gio = true;
     use_gnome_keyring = false;
     use_lld = false;
@@ -72,10 +73,16 @@ let
           # <nixpkgs/pkgs/build-support/trivial-builders.nix>'s `linkFarm` or `buiildEnv` would work here if they supported nested paths
           lib.concatStringsSep "\n" (
             lib.mapAttrsToList (path: src: ''
-                                       mkdir -p         "$out/${path}"
-                                  echo cp -r "${src}/." "$out/${path}"
-                                       cp -r "${src}/." "$out/${path}"
-                                       chmod -R u+w     "$out/${path}"
+                                    echo "$out/${path}"
+                                    if [ -d "${src}" ]; then
+                                      mkdir -p         "$out/${path}"
+                                      cp -r "${src}/." "$out/${path}"
+                                      chmod -R u+w     "$out/${path}"
+                                    elif [ -f "${src}" ]; then
+                                      install -D "${src}" "$out/${path}"
+                                    else
+                                      exit 1
+                                    fi
                                 '') deps
           ) +
           # introduce files missing in git repos
@@ -100,10 +107,16 @@ let
       pname = "chromium-git";
       inherit version src;
 
-      nativeBuildInputs = [ gn ninja python2 pkg-config gperf bison ];
+      nativeBuildInputs = [ ninja python2 pkg-config gperf bison git ]
+        ++ lib.optional (lib.versionAtLeast version "83") python2.pkgs.setuptools;
+
       buildInputs = [
         dbus at-spi2-atk atk at-spi2-core nspr nss pciutils utillinux kerberos
         gdk-pixbuf glib gtk3 alsaLib libXScrnSaver libXcursor libXtst libGLU libGL libXdamage
+      ] ++ lib.optionals (lib.versionOlder version "65.0") [
+        gnome2.GConf gtk2
+      ] ++ lib.optionals gnFlags.use_cups [
+        cups libgcrypt
       ] ++ lib.optionals gnFlags.use_pulseaudio [
         pulseaudio
       ];
@@ -116,27 +129,55 @@ let
               'return sandbox_binary;' \
               'return base::FilePath(GetDevelSandboxPath());'
 
-          sed -i.bak -e 's|".*/gconv/|"${glibc}/lib/gconv/|'            \
-                     -e 's|".*/share/alsa/|"${alsaLib}/share/alsa/|'    \
-                     -e 's|".*/share/locale/|"${glibc}/share/locale/|'  \
-            services/audio/audio_sandbox_hook_linux.cc
+          for f in services/audio/audio_sandbox_hook_linux.cc ; do
+            if [ -f "$f" ]; then
+              echo "postPatch: patching $f"
+              sed -i.bak -e 's|".*/gconv/|"${glibc}/lib/gconv/|'            \
+                         -e 's|".*/share/alsa/|"${alsaLib}/share/alsa/|'    \
+                         -e 's|".*/share/locale/|"${glibc}/share/locale/|'  "$f"
+              git diff --no-index --  $f.bak $f || true
+            else
+              echo "postPatch: $f does not exist"
+            fi
+          done
 
-          sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
-            chrome/browser/shell_integration_linux.cc
+          for f in chrome/browser/shell_integration_linux.cc ; do
+            if [ -f "$f" ]; then
+              echo "postPatch: patching $f"
+              sed -i.bak -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' "$f"
+              git diff --no-index --  $f.bak $f || true
+            else
+              echo "postPatch: $f does not exist"
+            fi
+          done
 
-          sed -i.bak -e 's!"[^"]*libudev\.so!"${systemd.lib}/lib/libudev.so!' \
-            device/udev_linux/udev?_loader.cc
+          for f in device/udev_linux/udev?_loader.cc ; do
+            echo "postPatch: patching $f"
+            sed -i.bak -e 's!"[^"]*libudev\.so!"${systemd.lib}/lib/libudev.so!' "$f"
+            git diff --no-index --  $f.bak $f || true
+          done
 
           for f in gpu/config/gpu_info_collector_linux.cc \
                    third_party/angle/src/gpu_info_util/SystemInfo_libpci.cpp \
                    ios/third_party/webkit/src/Source/ThirdParty/ANGLE/src/gpu_info_util/SystemInfo_libpci.cpp ; do
             if [ -f "$f" ]; then
+              echo "postPatch: patching $f"
               sed -i.bak -e 's!"[^"]*libpci\.so!"${pciutils}/lib/libpci.so!' "$f"
+              git diff --no-index --  $f.bak $f || true
+            else
+              echo "postPatch: $f does not exist"
             fi
           done
 
           # Allow to put extensions into the system-path.
-          sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
+          for f in chrome/common/chrome_paths.cc ; do
+            if [ -f "$f" ]; then
+              sed -i.bak -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
+              git diff --no-index --  $f.bak $f || true
+            else
+              echo "postPatch: $f does not exist"
+            fi
+          done
 
           ${lib.optionalString stdenv.isAarch64 ''
               substituteInPlace build/toolchain/linux/BUILD.gn \
@@ -168,7 +209,7 @@ let
         # attept to fix python2 failing with "EOFError: EOF read where object expected" on multi-core builders
         export PYTHONDONTWRITEBYTECODE=true
         ( cd src
-          gn gen ${lib.escapeShellArg "--args=${gnToString gnFlags}"} out/Release
+          buildtools/linux64/gn gen ${lib.escapeShellArg "--args=${gnToString gnFlags}"} out/Release
         )
       '';
 
@@ -199,7 +240,9 @@ let
 in {
   chromium-git_78 = common { version = "78.0.3905.1"  ; llvmPackages = llvmPackages_9;  };
   chromium-git_79 = common { version = "79.0.3945.147"; llvmPackages = llvmPackages_9;  };
-  chromium-git_80 = common { version = "80.0.3987.142"; llvmPackages = llvmPackages_9;  };
-  chromium-git_81 = common { version = "81.0.4044.60" ; llvmPackages = llvmPackages_9;  };
-  chromium-git_82 = common { version = "82.0.4082.1"  ; llvmPackages = llvmPackages_10; };
+  chromium-git_80 = common { version = "80.0.3987.163"; llvmPackages = llvmPackages_9;  };
+  chromium-git_81 = common { version = "81.0.4044.118"; llvmPackages = llvmPackages_9;  };
+  chromium-git_82 = common { version = "82.0.4085.28" ; llvmPackages = llvmPackages_10; };
+  chromium-git_83 = common { version = "83.0.4103.18" ; llvmPackages = llvmPackages_10; };
+  chromium-git_84 = common { version = "84.0.4118.0"  ; llvmPackages = llvmPackages_10; };
 }

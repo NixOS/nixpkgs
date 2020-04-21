@@ -187,6 +187,39 @@
   "src/tools/swarming_client"                                                                = fetchgit { url = "https://chromium.googlesource.com/infra/luci/client-py.git"                                                                    ; rev = "96f125709acfd0b48fc1e5dae7d6ea42291726ac"; sha256 = "0n2zs5r9dk7gvw1g29xc4mw9x719lp76v1ddichnhanbc5vbim4d"; };
   "src/v8"                                                                                   = fetchgit { url = "https://chromium.googlesource.com/v8/v8.git"                                                                                   ; rev = "73694fd32996da7f914e05ebc84aa9fbe2cd6b52"; sha256 = "1k30hci5i3zz1r65a0yp9cw4i834af14mhlfv1hmcpg3rpsw1pbh"; };
 
+  "src/buildtools/linux64/gn" =
+    let
+      rev = "152c5144ceed9592c20f0c8fd55769646077569b";
+      revNum = "1718"; # FIXME: `git describe HEAD --match initial-commit | cut -d- -f3`
+      revShort = builtins.substring 0 7 rev;
+      lastCommitPosition = buildPackages.writeText "last_commit_position.h" ''
+        #ifndef OUT_LAST_COMMIT_POSITION_H_
+        #define OUT_LAST_COMMIT_POSITION_H_
+
+        #define LAST_COMMIT_POSITION_NUM ${revNum}
+        #define LAST_COMMIT_POSITION "${revNum} (${revShort})"
+
+        #endif  // OUT_LAST_COMMIT_POSITION_H_
+      '';
+
+    in buildPackages.stdenv.mkDerivation {
+      name = "gn";
+      src = fetchgit {
+        url = "https://gn.googlesource.com/gn";
+        inherit rev;
+        sha256 = "0yv04fas776ghyal1avhd173qi3hqibcxai3fi3yw60ahjkwir2q";
+      };
+      nativeBuildInputs = [ buildPackages.ninja buildPackages.python3 ];
+      buildPhase = ''
+        python build/gen.py --no-last-commit-position
+        ln -s ${lastCommitPosition} out/last_commit_position.h
+        ninja  -C out gn
+      '';
+      installPhase = ''
+        install -Dm755 out/gn $out
+      '';
+    };
+
   "src/third_party/node/linux/node-linux-x64" = {
 
     "aarch64-linux" = buildPackages.stdenv.mkDerivation {

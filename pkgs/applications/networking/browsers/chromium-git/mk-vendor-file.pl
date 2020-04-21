@@ -38,7 +38,7 @@ sub make_vendor_file {
   # first checkout depot_tools for gclient.py which will help to produce list of deps
   unless (-d "$topdir/depot_tools") {
     my $hash = checkout("https://chromium.googlesource.com/chromium/tools/depot_tools",
-                        "a12175c2a7a9f79c3296068a022ac4f3051f8600", # 2020-03-09
+                        "refs/heads/master",
                         "$topdir/depot_tools");
   }
 
@@ -134,6 +134,66 @@ sub make_vendor_file {
     printf $vendor_nix "  %-90s = fetchgit { url = %-128s; rev = \"$dep->{rev}\"; sha256 = \"$dep->{hash}\"; };\n", "\"$dep->{path}\"", "\"$dep->{url}\"";
   }
 
+  if (-f "$topdir/src/buildtools/linux64/gn.sha1") {
+    my $gn_sha = read_file("$topdir/src/buildtools/linux64/gn.sha1") =~ s|\s+$||r;
+    print $vendor_nix qq[
+  "src/buildtools/linux64/gn" = {
+    "x86_64-linux" = buildPackages.stdenv.mkDerivation {
+      name = "gn";
+      buildCommand = ''
+        install -Dm755 \${fetchurl { url = "https://commondatastorage.googleapis.com/chromium-gn/$gn_sha"; sha1 = "$gn_sha"; }} \$out
+        patchelf --set-interpreter \$(cat \$NIX_CC/nix-support/dynamic-linker) \\
+                 --set-rpath \${buildPackages.gcc.cc.lib}/lib \\
+                 \$out
+      '';
+    };
+  }.\${buildPackages.stdenv.system};
+];
+  } else {
+    my ($gn_version) = read_file("$topdir/src/buildtools/DEPS") =~ /'gn_version': 'git_revision:([0-9a-f]{40})/;
+    print("gn_version=$gn_version\n");
+    remove_tree("$topdir/gn");
+    my $hash = checkout("https://gn.googlesource.com/gn",
+                        $gn_version,
+                        "$topdir/gn");
+
+
+    print $vendor_nix qq[
+  "src/buildtools/linux64/gn" =
+    let
+      rev = "$gn_version";
+      revNum = "1718"; # FIXME: `git describe HEAD --match initial-commit | cut -d- -f3`
+      revShort = builtins.substring 0 7 rev;
+      lastCommitPosition = buildPackages.writeText "last_commit_position.h" ''
+        #ifndef OUT_LAST_COMMIT_POSITION_H_
+        #define OUT_LAST_COMMIT_POSITION_H_
+
+        #define LAST_COMMIT_POSITION_NUM \${revNum}
+        #define LAST_COMMIT_POSITION "\${revNum} (\${revShort})"
+
+        #endif  // OUT_LAST_COMMIT_POSITION_H_
+      '';
+
+    in buildPackages.stdenv.mkDerivation {
+      name = "gn";
+      src = fetchgit {
+        url = "https://gn.googlesource.com/gn";
+        inherit rev;
+        sha256 = "$hash";
+      };
+      nativeBuildInputs = [ buildPackages.ninja buildPackages.python3 ];
+      buildPhase = ''
+        python build/gen.py --no-last-commit-position
+        ln -s \${lastCommitPosition} out/last_commit_position.h
+        ninja  -C out gn
+      '';
+      installPhase = ''
+        install -Dm755 out/gn \$out
+      '';
+    };
+];
+  }
+
   my ($node_version) = read_file("$topdir/src/third_party/node/README.chromium") =~ /Version: ([0-9.]+)/;
   print("node_version=$node_version\n");
   File::Fetch->new(uri => "https://nodejs.org/dist/v$node_version/SHASUMS256.txt")->fetch(to => "$basedir/node-$node_version") unless -f "$basedir/node-$node_version/SHASUMS256.txt";
@@ -177,6 +237,8 @@ sub make_vendor_file {
   }.${buildPackages.stdenv.system};
 ];
 
+
+
   my $node_modules_sha = read_file("$topdir/src/third_party/node/node_modules.tar.gz.sha1"    ) =~ s|\s+$||r;
   print $vendor_nix qq[
   "src/third_party/node/node_modules"         = runCommand "download_from_google_storage" {} ''
@@ -187,6 +249,8 @@ sub make_vendor_file {
                                                            }} --strip-components=1 -C \$out
                                                 '';
 ];
+
+
 
   if (-f "$topdir/src/third_party/test_fonts/test_fonts.tar.gz.sha1") {
     my $test_fonts_sha   = read_file("$topdir/src/third_party/test_fonts/test_fonts.tar.gz.sha1") =~ s|\s+$||r;
