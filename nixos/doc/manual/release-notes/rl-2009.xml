@@ -269,6 +269,12 @@ environment.systemPackages = [
   <itemizedlist>
    <listitem>
     <para>
+     <option>services.journald.rateLimitBurst</option> was updated from
+     <literal>1000</literal> to <literal>10000</literal> to follow the new
+     upstream systemd default.
+    </para>
+   <listitem>
+    <para>
      The <package>notmuch</package> package move its emacs-related binaries and
      emacs lisp files to a separate output. They're not part
      of the default <literal>out</literal> output anymore - if you relied on the
