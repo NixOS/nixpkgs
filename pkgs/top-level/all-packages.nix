@@ -703,6 +703,8 @@ in
 
   ascii = callPackage ../tools/text/ascii { };
 
+  ascii2binary = callPackage ../tools/text/ascii2binary { };
+
   asciinema = callPackage ../tools/misc/asciinema {};
 
   asciiquarium = callPackage ../applications/misc/asciiquarium {};
