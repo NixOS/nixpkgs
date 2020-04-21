@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   dontDropIconThemeCache = true;
 
-  postFixup = ''
+  postInstall = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
