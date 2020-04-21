@@ -1,4 +1,4 @@
-{ fetchpatch }:
+{ lib, fetchpatch, fetchurl }:
 
 {
   bridge_stp_helper =
@@ -37,6 +37,21 @@
     name = "tag-hardened";
     patch = ./tag-hardened.patch;
   };
+
+  hardened = let
+    mkPatch = kernelVersion: patch: let
+      fullVersion = "${kernelVersion}.${patch.version_suffix}";
+      name = "linux-hardened-${fullVersion}";
+    in {
+      inherit name;
+      patch = fetchurl {
+        name = "${name}.patch";
+        inherit (patch) url sha256;
+        meta.maintainers = with lib.maintainers; [ emily ];
+      };
+    };
+    patches = builtins.fromJSON (builtins.readFile ./hardened-patches.json);
+  in lib.mapAttrs mkPatch patches;
 
   # https://bugzilla.kernel.org/show_bug.cgi?id=197591#c6
   iwlwifi_mvm_support_version_7_scan_req_umac_fw_command = rec {

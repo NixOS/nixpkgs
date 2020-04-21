@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xfce4-vala-panel-appmenu-plugin";
-  version = "0.6.94";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "rilian-la-te";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     rev = version;
     fetchSubmodules = true;
 
-    sha256 = "0xxn3zs60a9nfix8wrdp056wviq281cm1031hznzf1l38lp3wr5p";
+    sha256 = "06rykdr2c9rnzxwinwdynd73v9wf0gjkx6qfva7sx2n94ajsdnaw";
   };
 
   nativeBuildInputs = [ pkgconfig cmake vala libxml2.bin ];

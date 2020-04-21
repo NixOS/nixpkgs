@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3;
     maintainers = with maintainers; [ simonvandel romildo ];
     platforms   = platforms.linux;
+    broken = true; # since libsass 3.6.3
   };
 }

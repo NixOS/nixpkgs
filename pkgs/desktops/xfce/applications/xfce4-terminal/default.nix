@@ -3,9 +3,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "0.8.8";
+  version = "0.8.9.2";
 
-  sha256 = "0sg9vwyvhh7pjp83biv7gvf42423a7ly4dc7q2gn28kp6bds2qcp";
+  sha256 = "1vlpfsrdalqmsd86aj0kvvam5skzn6xngigjziwli6q6il6lb9fj";
 
   buildInputs = [ gtk3 libxfce4ui vte xfconf pcre2 ];
 

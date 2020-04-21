@@ -21,7 +21,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "http://www.kde.org";
     license = with licenses; [ gpl2 lgpl21 fdl12 bsd3 ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel turion ];
     platforms = lib.platforms.linux;
   };
 }

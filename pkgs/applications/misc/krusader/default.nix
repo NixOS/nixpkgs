@@ -20,7 +20,7 @@ in mkDerivation rec {
     description = "Norton/Total Commander clone for KDE";
     license = licenses.gpl2;
     homepage = "http://www.krusader.org";
-    maintainers = with maintainers; [ sander ];
+    maintainers = with maintainers; [ sander turion ];
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];

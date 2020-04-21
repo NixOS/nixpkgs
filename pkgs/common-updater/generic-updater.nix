@@ -5,8 +5,8 @@
 , attrPath ? pname
 , versionLister
 , rev-prefix ? ""
-, odd-unstable ? true
-, patchlevel-unstable ? true
+, odd-unstable ? false
+, patchlevel-unstable ? false
 }:
 
 let

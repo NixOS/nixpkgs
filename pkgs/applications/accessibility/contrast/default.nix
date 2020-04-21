@@ -19,7 +19,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "contrast";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
     owner = "design";
     repo = "contrast";
     rev = version;
-    sha256 = "0rm705zrk9rfv31pwbqxrswi5v6vhnghxa8dgxjmcrh00l8dm6j9";
+    sha256 = "0kk3mv7a6y258109xvgicmsi0lw0rcs00gfyivl5hdz7qh47iccy";
   };
 
-  cargoSha256 = "0qj0vmxa1d6war1vb3zgkf1drvk7awm970fw6692hd9msa9c1kkf";
+  cargoSha256 = "0vi8nv4hkhsgqgz36xacwkk5cxirg6li44nbmk3x7vx7c64hzybq";
 
   nativeBuildInputs = [
     desktop-file-utils

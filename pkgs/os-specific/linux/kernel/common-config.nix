@@ -613,6 +613,8 @@ let
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
 
+      SYSVIPC            = yes;  # System-V IPC
+
       UNIX               = yes;  # Unix domain sockets.
 
       MD                 = yes;     # Device mapper (RAID, LVM, etc.)

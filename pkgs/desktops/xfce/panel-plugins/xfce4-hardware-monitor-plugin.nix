@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://goodies.xfce.org/projects/panel-plugins/${pname}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/xfce4-hardware-monitor-plugin";
     description = "Hardware monitor plugin for the XFCE4 panel";
     license = licenses.gpl3;
     platforms = platforms.unix;
