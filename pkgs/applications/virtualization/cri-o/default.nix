@@ -16,9 +16,7 @@
 , which
 }:
 
-let
-  buildTags = "apparmor seccomp selinux containers_image_ostree_stub";
-in buildGoPackage rec {
+buildGoPackage rec {
   project = "cri-o";
   version = "1.17.3";
   name = "${project}-${version}${flavor}";
@@ -38,10 +36,11 @@ in buildGoPackage rec {
                  libseccomp libselinux lvm2 ]
                 ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
 
+  BUILDTAGS = "apparmor seccomp selinux containers_image_ostree_stub";
   buildPhase = ''
     pushd go/src/${goPackagePath}
 
-    make BUILDTAGS='${buildTags}' \
+    make BUILDTAGS="$BUILDTAGS" \
       bin/crio \
       bin/crio-status \
       bin/pinns
