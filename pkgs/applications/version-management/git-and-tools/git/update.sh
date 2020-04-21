@@ -4,8 +4,8 @@
 set -eu -o pipefail
 
 oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion git" | tr -d '"')"
-latestTag="$(git ls-remote --tags --sort="v:refname" git://github.com/git/git.git | grep -v '\{\}' | grep -v '\-rc' | tail -1 | sed 's|^.*/v\(.*\)|\1|')"
-targetVersion="${1:-latestTag}"
+latestTag="$(git ls-remote --tags --sort="v:refname" https://github.com/git/git.git | grep -v '\{\}' | grep -v '\-rc' | tail -1 | sed 's|^.*/v\(.*\)|\1|')"
+targetVersion="${1:-$latestTag}"
 
 if [ ! "${oldVersion}" = "${targetVersion}" ]; then
   update-source-version git "${targetVersion}"

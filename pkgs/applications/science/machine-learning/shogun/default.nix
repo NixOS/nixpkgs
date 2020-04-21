@@ -13,7 +13,7 @@
 assert pythonSupport -> pythonPackages != null;
 assert opencvSupport -> opencv != null;
 
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
   pname = "shogun";

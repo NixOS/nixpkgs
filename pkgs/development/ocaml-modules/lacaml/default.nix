@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, darwin, ocaml, findlib, dune, base, stdio, lapack, blas }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.05.0";
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-lacaml";

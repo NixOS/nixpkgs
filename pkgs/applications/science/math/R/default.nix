@@ -9,7 +9,7 @@
 , static ? false
 }:
 
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   name = "R-3.6.3";

@@ -23,7 +23,7 @@
 }:
 
 # lots of segfaults with (64 bit) blas
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # Wrapper that combined `sagelib` with `sage-env` to produce an actually
 # executable sage. No tests are run yet and no documentation is built.

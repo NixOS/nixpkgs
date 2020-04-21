@@ -1,38 +1,26 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg
-, ppx_sexp_conv, result, x509, nocrypto, cstruct-sexp, ppx_cstruct, cstruct-unix, ounit
-, lwt     ? null}:
+{ stdenv, fetchurl, buildDunePackage, ppx_sexp_conv, ppx_cstruct, cstruct
+, cstruct-sexp, sexplib, mirage-crypto, mirage-crypto-pk, mirage-crypto-rng
+, x509, domain-name, fmt, cstruct-unix, ounit2, ocaml_lwt, ptime }:
 
-with stdenv.lib;
+buildDunePackage rec {
+  minimumOCamlVersion = "4.07";
 
-let withLwt = lwt != null; in
+  version = "0.11.1";
+  pname = "tls";
 
-if !versionAtLeast ocaml.version "4.04"
-then throw "tls is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-  version = "0.10.4";
-  name = "ocaml${ocaml.version}-tls-${version}";
-
-  src = fetchFromGitHub {
-    owner  = "mirleft";
-    repo   = "ocaml-tls";
-    rev    = version;
-    sha256 = "02wv4lia583imn3sfci4nqv6ac5nzig5j3yfdnlqa0q8bp9rfc6g";
+  src = fetchurl {
+    url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-v${version}.tbz";
+    sha256 = "0ms13fbaxgmpbviazlfa4hb7nmi7s22nklc7ns926b0rr1aq1069";
   };
 
-  nativeBuildInputs = [ ocaml ocamlbuild findlib ];
-  buildInputs = [ findlib topkg ppx_sexp_conv ppx_cstruct ]
-  ++ optionals doCheck [ ounit cstruct-unix ];
-  propagatedBuildInputs = [ cstruct-sexp nocrypto result x509 ] ++
-                          optional withLwt lwt;
+  useDune2 = true;
 
-  buildPhase = "${topkg.run} build --tests ${boolToString doCheck} --with-mirage false --with-lwt ${boolToString withLwt}";
+  doCheck = true;
+  buildInputs = [ cstruct-unix ounit2 ];
 
-  doCheck = versionAtLeast ocaml.version "4.06";
-  checkPhase = "${topkg.run} test";
-
-  inherit (topkg) installPhase;
+  propagatedBuildInputs = [ ppx_sexp_conv ppx_cstruct cstruct cstruct-sexp
+                            sexplib mirage-crypto mirage-crypto-pk mirage-crypto-rng
+                            x509 domain-name fmt ocaml_lwt ptime ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mirleft/ocaml-tls";

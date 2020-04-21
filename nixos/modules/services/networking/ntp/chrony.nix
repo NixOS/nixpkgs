@@ -30,6 +30,7 @@ in
   options = {
     services.chrony = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to synchronise your machine's time using chrony.

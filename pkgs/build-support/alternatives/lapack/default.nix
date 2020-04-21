@@ -1,7 +1,7 @@
 { lib, stdenv
 , lapack-reference, openblasCompat, openblas
-, is64bit ? false
-, lapackProvider ? if is64bit then openblas else openblasCompat }:
+, isILP64 ? false
+, lapackProvider ? if isILP64 then openblas else openblasCompat }:
 
 let
 
@@ -14,7 +14,7 @@ let
 
 in
 
-assert is64bit -> (lapackImplementation == "openblas" && lapackProvider.blas64) || lapackImplementation == "mkl";
+assert isILP64 -> (lapackImplementation == "openblas" && lapackProvider.blas64) || lapackImplementation == "mkl";
 
 stdenv.mkDerivation {
   pname = "lapack";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    inherit is64bit;
+    inherit isILP64;
     provider = lapackProvider;
     implementation = lapackImplementation;
   };
@@ -35,6 +35,8 @@ stdenv.mkDerivation {
   dontBuild = true;
   dontConfigure = true;
   unpackPhase = "src=$PWD";
+
+  dontPatchELF = true;
 
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
@@ -106,6 +108,8 @@ Libs: -L$out/lib -llapacke
 EOF
 '' + stdenv.lib.optionalString (lapackImplementation == "mkl") ''
   mkdir -p $out/nix-support
-  echo 'export MKL_INTERFACE_LAYER=${lib.optionalString is64bit "I"}LP64,GNU' > $out/nix-support/setup-hook
+  echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
+  ln -s $out/lib/liblapack${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}
+  ln -sf ${lapackProvider}/include/* $dev/include
 '');
 }
