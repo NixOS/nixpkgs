@@ -6653,6 +6653,8 @@ in
 
   sshping = callPackage ../tools/networking/sshping {};
 
+  ssh-chat = callPackage ../applications/networking/instant-messengers/ssh-chat { };
+
   suricata = callPackage ../applications/networking/ids/suricata {
     python = python3;
   };
