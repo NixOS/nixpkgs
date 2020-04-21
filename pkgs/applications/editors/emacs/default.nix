@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm
+{ stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./clean-env.patch
     ./tramp-detect-wrapped-gvfsd.patch
+    # unbreak macOS unexec
+    (fetchpatch {
+      url = https://github.com/emacs-mirror/emacs/commit/888ffd960c06d56a409a7ff15b1d930d25c56089.patch;
+      sha256 = "08q3ygdigqwky70r47rcgzlkc5jy82xiq8am5kwwy891wlpl7frw";
+    })
   ];
 
   postPatch = lib.optionalString srcRepo ''

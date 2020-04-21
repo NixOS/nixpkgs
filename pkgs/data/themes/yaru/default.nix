@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ cc-by-sa-40 gpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.jD91mZM2 ];
+    broken = true; # since libsass 3.6.3
   };
 }

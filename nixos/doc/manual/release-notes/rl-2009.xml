@@ -255,6 +255,7 @@ environment.systemPackages = [
 # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
 </programlisting>
     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

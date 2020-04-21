@@ -41,7 +41,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A soundfont editor for creating musical instruments";
-    homepage = https://www.polyphone-soundfonts.com/;
+    homepage = "https://www.polyphone-soundfonts.com/";
     license = licenses.gpl3;
     maintainers = [ maintainers.maxdamantus ];
     platforms = platforms.linux;

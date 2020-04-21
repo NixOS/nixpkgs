@@ -1,0 +1,84 @@
+From a6d8bd67416c848f9bf52f4746bda34216ae9993 Mon Sep 17 00:00:00 2001
+From: worldofpeace <worldofpeace@protonmail.ch>
+Date: Sun, 19 Apr 2020 12:48:59 -0400
+Subject: [PATCH] Revert "Add patch"
+
+This reverts commit c44127936b785afda0e914da4c1dc1e66a0ac97b.
+---
+ src/Application.vala | 49 --------------------------------------------
+ 1 file changed, 49 deletions(-)
+
+diff --git a/src/Application.vala b/src/Application.vala
+index 43d52fbc..82a9ebe5 100644
+--- a/src/Application.vala
++++ b/src/Application.vala
+@@ -127,66 +127,17 @@ public class Planner : Gtk.Application {
+ 
+         utils.apply_theme_changed ();
+ 
+-        // Set Theme and Icon
+         Gtk.Settings.get_default ().set_property ("gtk-icon-theme-name", "elementary");
+         Gtk.Settings.get_default ().set_property ("gtk-theme-name", "elementary");
+ 
+-        // Path Theme
+-        var command = new Granite.Services.SimpleCommand (".", "echo $DESKTOP_SESSION");
+-        command.run ();
+-        command.output_changed.connect ((text) => {
+-            print ("DESKTOP_SESSION: %s\n".printf (text));
+-        });
+-
+-        if (get_os_info ("PRETTY_NAME") == null || get_os_info ("PRETTY_NAME").index_of ("elementary") == -1) {
+-            string CSS = """
+-                window decoration {
+-                    box-shadow: none;
+-                    margin: 1px;
+-                }
+-            """;
+-
+-            var _provider = new Gtk.CssProvider ();
+-            _provider.load_from_data (CSS, CSS.length);
+-
+-            Gtk.StyleContext.add_provider_for_screen (
+-                Gdk.Screen.get_default (), _provider,
+-                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+-            );
+-        }
+-
+         // Set shortcut
+         string quick_add_shortcut = settings.get_string ("quick-add-shortcut");
+         if (quick_add_shortcut == "") {
+             quick_add_shortcut = "<Primary>Tab";
+             settings.set_string ("quick-add-shortcut", quick_add_shortcut);
+         }
+-
+         utils.set_quick_add_shortcut (quick_add_shortcut);
+     }
+-    
+-    public string get_os_info (string field) {
+-        string return_value = "";
+-        var file = File.new_for_path ("/etc/os-release");
+-        try {
+-            var osrel = new Gee.HashMap<string, string> ();
+-            var dis = new DataInputStream (file.read ());
+-            string line;
+-            // Read lines until end of file (null) is reached
+-            while ((line = dis.read_line (null)) != null) {
+-                var osrel_component = line.split ("=", 2);
+-                if (osrel_component.length == 2) {
+-                    osrel[osrel_component[0]] = osrel_component[1].replace ("\"", "");
+-                }
+-            }
+-
+-            return_value = osrel[field];
+-        } catch (Error e) {
+-            warning ("Couldn't read os-release file, assuming elementary OS");
+-        }
+-        
+-        return return_value;
+-    }
+ 
+     public override int command_line (ApplicationCommandLine command_line) {
+         bool silence_mode = false;
+-- 
+2.25.1
+

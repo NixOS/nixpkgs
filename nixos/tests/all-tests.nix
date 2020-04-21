@@ -22,7 +22,7 @@ let
 in
 {
   _3proxy = handleTest ./3proxy.nix {};
-  acme = handleTestOn ["x86_64-linux"] ./acme.nix {};
+  acme = handleTest ./acme.nix {};
   atd = handleTest ./atd.nix {};
   automysqlbackup = handleTest ./automysqlbackup.nix {};
   avahi = handleTest ./avahi.nix {};
@@ -51,7 +51,9 @@ in
   cloud-init = handleTest ./cloud-init.nix {};
   codimd = handleTest ./codimd.nix {};
   consul = handleTest ./consul.nix {};
+  cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};
+  containers-custom-pkgs.nix = handleTest ./containers-custom-pkgs.nix {};
   containers-ephemeral = handleTest ./containers-ephemeral.nix {};
   containers-extra_veth = handleTest ./containers-extra_veth.nix {};
   containers-hosts = handleTest ./containers-hosts.nix {};
@@ -160,6 +162,7 @@ in
   # kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #kubernetes.e2e = handleTestOn ["x86_64-linux"] ./kubernetes/e2e.nix {};
   kubernetes.rbac = handleTestOn ["x86_64-linux"] ./kubernetes/rbac.nix {};
+  latestKernel.hardened = handleTest ./hardened.nix { latestKernel = true; };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
@@ -311,6 +314,7 @@ in
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
+  tuptime = handleTest ./tuptime.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   upnp = handleTest ./upnp.nix {};
   uwsgi = handleTest ./uwsgi.nix {};

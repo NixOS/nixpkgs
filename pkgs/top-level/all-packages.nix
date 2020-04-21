@@ -510,6 +510,8 @@ in
 
   _3llo = callPackage ../tools/misc/3llo { };
 
+  _3mux = callPackage ../tools/misc/3mux { };
+
   _1password = callPackage ../applications/misc/1password { };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
@@ -2140,6 +2142,8 @@ in
   socklog = callPackage ../tools/system/socklog { };
 
   stagit = callPackage ../development/tools/stagit { };
+
+  statserial = callPackage ../tools/misc/statserial { };
 
   step-ca = callPackage ../tools/security/step-ca { };
 
@@ -6343,6 +6347,8 @@ in
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
+  rshijack = callPackage ../tools/networking/rshijack { };
+
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
@@ -6625,6 +6631,8 @@ in
 
   smugline = python3Packages.smugline;
 
+  sn0int = callPackage ../tools/security/sn0int { };
+
   snabb = callPackage ../tools/networking/snabb { } ;
 
   snapcast = callPackage ../applications/audio/snapcast { };
@@ -6632,6 +6640,8 @@ in
   sng = callPackage ../tools/graphics/sng {
     libpng = libpng12;
   };
+
+  sniffglue = callPackage ../tools/networking/sniffglue { };
 
   snort = callPackage ../applications/networking/ids/snort { };
 
@@ -7107,6 +7117,8 @@ in
   ipbt = callPackage ../tools/misc/ipbt { };
 
   tuir = callPackage ../applications/misc/tuir { };
+
+  tuptime = callPackage ../tools/system/tuptime { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
@@ -9139,7 +9151,7 @@ in
   tinycc = callPackage ../development/compilers/tinycc { };
 
   tinygo = callPackage ../development/compilers/tinygo {
-    inherit (llvmPackages_9) llvm clang-unwrapped lld;
+    inherit (llvmPackages_10) llvm clang-unwrapped lld;
     avrgcc = pkgsCross.avr.buildPackages.gcc;
   };
 
@@ -12984,6 +12996,8 @@ in
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
+  libjcat = callPackage ../development/libraries/libjcat { };
+
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
   libjpeg_drop = callPackage ../development/libraries/libjpeg-drop { };
@@ -13265,10 +13279,6 @@ in
   libtgvoip = callPackage ../development/libraries/libtgvoip { };
 
   libtsm = callPackage ../development/libraries/libtsm { };
-
-  libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
-
-  libtxc_dxtn_s2tc = callPackage ../development/libraries/libtxc_dxtn_s2tc { };
 
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
@@ -15517,6 +15527,8 @@ in
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
+  https-dns-proxy = callPackage ../servers/dns/https-dns-proxy { };
+
   hydron = callPackage ../servers/hydron { };
 
   icingaweb2 = callPackage ../servers/icingaweb2 { };
@@ -16463,8 +16475,6 @@ in
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
 
-  gmailieer = callPackage ../applications/networking/gmailieer {};
-
   gmailctl = callPackage ../applications/networking/gmailctl {};
 
   gpm = callPackage ../servers/gpm {
@@ -16570,6 +16580,8 @@ in
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
+
+  lieer = callPackage ../applications/networking/lieer {};
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
@@ -16983,7 +16995,10 @@ in
       inherit stdenv;
       inherit (kernel) version;
     };
-    kernelPatches = kernel.kernelPatches ++ [ kernelPatches.tag_hardened ];
+    kernelPatches = kernel.kernelPatches ++ [
+      kernelPatches.tag_hardened
+      kernelPatches.hardened.${kernel.version}
+    ];
     modDirVersionArg = kernel.modDirVersion + "-hardened";
   });
 
@@ -16992,9 +17007,6 @@ in
 
   linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
-
-  linuxPackages_testing_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_testing);
-  linux_testing_hardened = linuxPackages_testing_hardened.kernel;
 
   linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
 
@@ -18532,6 +18544,8 @@ in
 
   aesop = callPackage ../applications/office/aesop { };
 
+  AusweisApp2 = libsForQt5.callPackage ../applications/misc/ausweisapp2 { };
+
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
   avrdudess = callPackage ../applications/misc/avrdudess { };
@@ -19846,6 +19860,7 @@ in
   hugo = callPackage ../applications/misc/hugo { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
+  hydrogen-unstable = qt5.callPackage ../applications/audio/hydrogen/unstable.nix { };
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
@@ -21428,6 +21443,8 @@ in
   qtbitcointrader = libsForQt5.callPackage ../applications/misc/qtbitcointrader { };
 
   qtchan = libsForQt5.callPackage ../applications/networking/browsers/qtchan { };
+
+  qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
 
   qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
@@ -23603,10 +23620,7 @@ in
 
   openclonk = callPackage ../games/openclonk { };
 
-  openjk = callPackage ../games/openjk {
-    # segfaults when built with gcc9
-    stdenv = gcc8Stdenv;
-  };
+  openjk = callPackage ../games/openjk { };
 
   openmw = libsForQt5.callPackage ../games/openmw { };
 
@@ -25834,7 +25848,9 @@ in
 
   sanoid = callPackage ../tools/backup/sanoid { };
 
-  satysfi = callPackage ../tools/typesetting/satysfi { };
+  satysfi = callPackage ../tools/typesetting/satysfi {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_07;
+  };
 
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
