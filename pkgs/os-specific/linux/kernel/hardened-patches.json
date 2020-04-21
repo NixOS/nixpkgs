@@ -8,10 +8,5 @@
         "sha256": "00y4i905gzs9w9kckrn1frh2vw32fsndz03g2psl1gk17snc3q7c",
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.116.a/linux-hardened-4.19.116.a.patch",
         "version_suffix": "a"
-    },
-    "5.5.18": {
-        "sha256": "0v7vla784sf1fk6d8qa5x8hkyhjb1jkw4lxxcgvvlqbmxl8md8ld",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.5.18.a/linux-hardened-5.5.18.a.patch",
-        "version_suffix": "a"
     }
 }
