@@ -45,7 +45,7 @@ let
       homepage    = "https://github.com/vanhauser-thc/AFLplusplus";
       license     = stdenv.lib.licenses.asl20;
       platforms   = ["x86_64-linux" "i686-linux"];
-      maintainers = with stdenv.lib.maintainers; [ Mindavi ];
+      maintainers = with stdenv.lib.maintainers; [ mindavi ];
     };
   };
 in aflplusplus
