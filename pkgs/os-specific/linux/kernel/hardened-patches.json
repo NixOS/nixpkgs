@@ -3,10 +3,5 @@
         "sha256": "0pr3m2j63mc746fcbzg1hlwv85im9f87qkl6r4033gwnpa9brcgk",
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.176.a/linux-hardened-4.14.176.a.patch",
         "version_suffix": "a"
-    },
-    "4.19.116": {
-        "sha256": "00y4i905gzs9w9kckrn1frh2vw32fsndz03g2psl1gk17snc3q7c",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.116.a/linux-hardened-4.19.116.a.patch",
-        "version_suffix": "a"
     }
 }
