@@ -271,6 +271,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "European Union Public License 1.1";
   };
 
+  eupl12 = spdx {
+    spdxId = "EUPL-1.2";
+    fullName = "European Union Public License 1.2";
+  };
+
   fdl12 = spdx {
     spdxId = "GFDL-1.2-only";
     fullName = "GNU Free Documentation License v1.2 only";

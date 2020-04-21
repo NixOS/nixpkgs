@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "gmailieer-${version}";
-  version = "1.0";
+  pname = "lieer";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "gauteh";
-    repo = "gmailieer";
+    repo = "lieer";
     rev = "v${version}";
-    sha256 = "1zzylv8xbcrh34bz0s29dawzcyx39lai8y8wk0bl4x75v1jfynvf";
+    sha256 = "19jx3sm925nrzl26km1bxbp6y5gk1mzwadd79vip2jl70b3xk9f8";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -27,8 +27,8 @@ python3Packages.buildPythonApplication rec {
       tags in the notmuch database may be pushed back remotely to your
       GMail account.
     '';
-    homepage         = "https://github.com/gauteh/gmailieer";
-    repositories.git = "https://github.com/gauteh/gmailieer.git";
+    homepage         = "https://lieer.gaute.vetsj.com/";
+    repositories.git = "https://github.com/gauteh/lieer.git";
     license          = licenses.gpl3Plus;
     maintainers      = with maintainers; [ kaiha ];
   };

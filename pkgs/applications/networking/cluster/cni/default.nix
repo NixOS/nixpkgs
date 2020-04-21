@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   pname = "cni";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15ad323dw44k82bfx9r8w5q2kn7jix60p9v4ciyzx2p5pip36wp8";
+    sha256 = "02qn1br8164d99978acalisy1sx294g1axnii4yh1wji0fc735xz";
   };
 
   goPackagePath = "github.com/containernetworking/cni";
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "Container Network Interface - networking for Linux containers";
     license = licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";

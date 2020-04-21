@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix_pkgconfig_includedir.patch
+
+    # Fix build with bash-completion 2.10
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/436
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/commit/dd2ec3681e2d38e13e01477efa36e851650690fb.patch";
+      sha256 = "CMYQF2MTsC5A0btMpLVLemkwsMtEbzhDXVE3u49xHB4=";
+    })
   ];
 
   nativeBuildInputs = [

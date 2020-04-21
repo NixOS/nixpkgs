@@ -234,6 +234,8 @@ let
 
     dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
+    dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
+
     dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { };
 
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
@@ -978,12 +980,20 @@ let
     # Jane Street
 
     janePackage =
-      if lib.versionOlder "4.07" ocaml.version
+      if lib.versionOlder "4.08" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/janePackage_0_13.nix {}
+      else if lib.versionOlder "4.07" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_12.nix {}
       else callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
 
     janeStreet =
-    if lib.versionOlder "4.07" ocaml.version
+    if lib.versionOlder "4.08" ocaml.version
+    then import ../development/ocaml-modules/janestreet/0.13.nix {
+      inherit ctypes janePackage num octavius re;
+      inherit (pkgs) openssl;
+      ppxlib = ppxlib.override { version = "0.12.0"; };
+    }
+    else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {
       inherit ctypes janePackage num octavius ppxlib re;
       inherit (pkgs) openssl;
@@ -1231,11 +1241,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async.nix {}
       else async_p4;
-
-    async_ssl =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_ssl
-      else callPackage ../development/ocaml-modules/janestreet/async_ssl.nix { };
 
     # Apps / from all-packages
 

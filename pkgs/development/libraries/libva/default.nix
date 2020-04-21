@@ -2,6 +2,7 @@
 , libXext, libdrm, libXfixes, wayland, libffi, libX11
 , libGL, mesa
 , minimal ? false, libva-minimal
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig wayland ];
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     # Add FHS paths for non-NixOS applications.
     "--with-drivers-path=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
+    "ac_cv_path_WAYLAND_SCANNER=${buildPackages.wayland}/bin/wayland-scanner"
   ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [

@@ -3,15 +3,15 @@
 
 buildDunePackage rec {
   pname = "phylogenetics";
-  version = "unstable-2020-01-05";
+  version = "unstable-2020-01-25";
 
   useDune2 = true;
 
   src = fetchFromGitHub {
     owner  = "biocaml";
     repo   = pname;
-    rev    = "b55ef7d7322bd822be26d21339945d45487fb547";
-    sha256 = "0hzfjhs5w3a7hlzxs739k5ik3k1xn3dzyzziid765s74f638n4hj";
+    rev    = "752a7d0324709ba919ef43630a270afd45d6b734";
+    sha256 = "1zsxpl1yjbw6y6n1q7qk3h0l7c0lxhh8yp8bkxlwnpzlkqq28ycg";
   };
 
   minimumOCamlVersion = "4.08";  # e.g., uses Float.min

@@ -2143,6 +2143,8 @@ in
 
   stagit = callPackage ../development/tools/stagit { };
 
+  statserial = callPackage ../tools/misc/statserial { };
+
   step-ca = callPackage ../tools/security/step-ca { };
 
   step-cli = callPackage ../tools/security/step-cli { };
@@ -6629,6 +6631,8 @@ in
 
   smugline = python3Packages.smugline;
 
+  sn0int = callPackage ../tools/security/sn0int { };
+
   snabb = callPackage ../tools/networking/snabb { } ;
 
   snapcast = callPackage ../applications/audio/snapcast { };
@@ -8400,6 +8404,28 @@ in
     inherit (gnome2) libart_lgpl;
   });
 
+  gnat = gnat9;
+
+  gnat6 = wrapCC (gcc6.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    inherit gnatboot;
+  });
+
+  gnat9 = wrapCC (gcc9.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    gnatboot = gnat6;
+  });
+
+  gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
+
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
   gccgo = gccgo6;
@@ -8410,6 +8436,16 @@ in
     langGo = true;
     profiledCompiler = false;
   });
+
+  ghdl = ghdl-mcode;
+
+  ghdl-mcode = callPackage ../development/compilers/ghdl {
+    backend = "mcode";
+  };
+
+  ghdl-llvm = callPackage ../development/compilers/ghdl {
+    backend = "llvm";
+  };
 
   gcl = callPackage ../development/compilers/gcl {
     gmp = gmp4;
@@ -12648,9 +12684,7 @@ in
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
 
-  libfido2 = callPackage ../development/libraries/libfido2 {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
+  libfido2 = callPackage ../development/libraries/libfido2 { };
 
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
@@ -12995,6 +13029,7 @@ in
   libjcat = callPackage ../development/libraries/libjcat { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
+  # also known as libturbojpeg
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
   libjpeg_drop = callPackage ../development/libraries/libjpeg-drop { };
   libjpeg = libjpeg_turbo;
@@ -13275,10 +13310,6 @@ in
   libtgvoip = callPackage ../development/libraries/libtgvoip { };
 
   libtsm = callPackage ../development/libraries/libtsm { };
-
-  libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
-
-  libtxc_dxtn_s2tc = callPackage ../development/libraries/libtxc_dxtn_s2tc { };
 
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
@@ -15527,6 +15558,8 @@ in
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
+  https-dns-proxy = callPackage ../servers/dns/https-dns-proxy { };
+
   hydron = callPackage ../servers/hydron { };
 
   icingaweb2 = callPackage ../servers/icingaweb2 { };
@@ -16473,8 +16506,6 @@ in
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
 
-  gmailieer = callPackage ../applications/networking/gmailieer {};
-
   gmailctl = callPackage ../applications/networking/gmailctl {};
 
   gpm = callPackage ../servers/gpm {
@@ -16580,6 +16611,8 @@ in
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
+
+  lieer = callPackage ../applications/networking/lieer {};
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
@@ -18542,6 +18575,8 @@ in
 
   aesop = callPackage ../applications/office/aesop { };
 
+  AusweisApp2 = libsForQt5.callPackage ../applications/misc/ausweisapp2 { };
+
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
   avrdudess = callPackage ../applications/misc/avrdudess { };
@@ -19856,6 +19891,7 @@ in
   hugo = callPackage ../applications/misc/hugo { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
+  hydrogen-unstable = qt5.callPackage ../applications/audio/hydrogen/unstable.nix { };
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
@@ -21438,6 +21474,8 @@ in
   qtbitcointrader = libsForQt5.callPackage ../applications/misc/qtbitcointrader { };
 
   qtchan = libsForQt5.callPackage ../applications/networking/browsers/qtchan { };
+
+  qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
 
   qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
@@ -25841,7 +25879,9 @@ in
 
   sanoid = callPackage ../tools/backup/sanoid { };
 
-  satysfi = callPackage ../tools/typesetting/satysfi { };
+  satysfi = callPackage ../tools/typesetting/satysfi {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_07;
+  };
 
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.

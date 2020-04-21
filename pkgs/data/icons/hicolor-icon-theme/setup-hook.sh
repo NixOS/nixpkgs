@@ -10,8 +10,7 @@ hicolorIconThemeHook() {
 }
 
 # I think this is meant to be a runtime dep
-addEnvHooks "${hostOffset:?}" hicolorIconThemeHook
-
+addEnvHooks "${targetOffset:?}" hicolorIconThemeHook
 
 # Make symbolic links of parent icon themes that are inherited in the
 # icon themes installed by the package.

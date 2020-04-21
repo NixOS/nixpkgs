@@ -104,6 +104,12 @@ rustPlatform.buildRustPackage rec {
     '' else ''
       install -D extra/linux/Alacritty.desktop -t $out/share/applications/
       install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
+
+      # patchelf generates an ELF that binutils' "strip" doesn't like:
+      #    strip: not enough room for program headers, try linking with -N
+      # As a workaround, strip manually before running patchelf.
+      strip -S $out/bin/alacritty
+
       patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
   ) + ''

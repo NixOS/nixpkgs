@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, libtool, ghostscript, groff }:
+{ stdenv, fetchzip, libtool, ghostscript, groff, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "fstrcmp";
@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0yg3y3k0wz50gmhgigfi2dx725w1gc8snb95ih7vpcnj6kabgz9a";
   };
 
+  patches = [ ./cross.patch ];
+
   outputs = [ "out" "dev" "doc" "man" "devman" ];
 
-  nativeBuildInputs = [ libtool ghostscript groff ];
+  nativeBuildInputs = [ libtool ghostscript groff autoreconfHook ];
 
   enableParallelBuilding = true;
 
