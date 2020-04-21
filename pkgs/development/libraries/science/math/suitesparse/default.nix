@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "BLAS=-lblas"
     "LAPACK=-llapack"
     "MY_METIS_LIB=-lmetis"
-  ] ++ stdenv.lib.optionals blas.is64bit [
+  ] ++ stdenv.lib.optionals blas.isILP64 [
     "CFLAGS=-DBLAS64"
   ] ++ stdenv.lib.optionals enableCuda [
     "CUDA_PATH=${cudatoolkit}"

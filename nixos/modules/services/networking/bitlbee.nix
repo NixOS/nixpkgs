@@ -48,6 +48,7 @@ in
     services.bitlbee = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to run the BitlBee IRC to other chat network gateway.

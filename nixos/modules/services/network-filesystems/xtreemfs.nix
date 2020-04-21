@@ -100,11 +100,13 @@ in
 
       dir = {
         enable = mkOption {
+          type = types.bool;
           default = true;
           description = ''
             Whether to enable XtreemFS DIR service.
           '';
         };
+
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e40";
           description = ''
@@ -218,11 +220,13 @@ in
 
       mrc = {
         enable = mkOption {
+          type = types.bool;
           default = true;
           description = ''
             Whether to enable XtreemFS MRC service.
           '';
         };
+
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e41";
           description = ''
@@ -354,11 +358,13 @@ in
 
       osd = {
         enable = mkOption {
+          type = types.bool;
           default = true;
           description = ''
             Whether to enable XtreemFS OSD service.
           '';
         };
+
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e42";
           description = ''

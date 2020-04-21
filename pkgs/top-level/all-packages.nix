@@ -948,6 +948,8 @@ in
 
   gjs = callPackage ../development/libraries/gjs { };
 
+  gjo = callPackage ../tools/text/gjo { };
+
   glances = python3Packages.callPackage ../applications/system/glances { };
 
   glasgow = with python3Packages; toPythonApplication glasgow;
@@ -2470,6 +2472,7 @@ in
   circus = callPackage ../tools/networking/circus { };
 
   citrix_workspace_unwrapped = callPackage ../applications/networking/remote/citrix-workspace { };
+  citrix_workspace_unwrapped_20_04_0 = citrix_workspace_unwrapped.override { version = "20.04.0"; };
   citrix_workspace_unwrapped_19_12_0 = citrix_workspace_unwrapped.override { version = "19.12.0"; };
   citrix_workspace_unwrapped_19_10_0 = citrix_workspace_unwrapped.override { version = "19.10.0"; };
   citrix_workspace_unwrapped_19_8_0 = citrix_workspace_unwrapped.override { version = "19.8.0"; };

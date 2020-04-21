@@ -72,6 +72,7 @@ in
 
     services.xserver.desktopManager.gnome3 = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Enable Gnome 3 desktop manager.";
       };

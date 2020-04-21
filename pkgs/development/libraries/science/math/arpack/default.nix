@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DINTERFACE64=${optionalString blas.is64bit "1"}"
+    "-DINTERFACE64=${optionalString blas.isILP64 "1"}"
   ];
 
   preCheck = if stdenv.isDarwin then ''

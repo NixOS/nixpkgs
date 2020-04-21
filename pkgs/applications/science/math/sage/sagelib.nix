@@ -53,7 +53,7 @@
 , pplpy
 }:
 
-assert (!blas.is64bit) && (!lapack.is64bit);
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # This is the core sage python package. Everything else is just wrappers gluing
 # stuff together. It is not very useful on its own though, since it will not

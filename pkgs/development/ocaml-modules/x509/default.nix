@@ -1,21 +1,26 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib, fetchurl, buildDunePackage
 , alcotest, cstruct-unix
-, asn1-combinators, domain-name, fmt, gmap, nocrypto, rresult
+, asn1-combinators, domain-name, fmt, gmap, rresult, mirage-crypto, mirage-crypto-pk
+, logs, base64
 }:
 
 buildDunePackage rec {
+  minimumOCamlVersion = "4.07";
+
   pname = "x509";
-  version = "0.7.1";
+  version = "0.11.0";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-x509/releases/download/v${version}/x509-v${version}.tbz";
-    sha256 = "0hnklgdm1fwwqi0nfvpdbp7ddqvrh9h8697mr99bxqdfhg6sxh1w";
+    sha256 = "0gcs3vpmixxxx2q4b2iphb1xw1jffya1wkp0p1xbmsfcghzrj20m";
   };
 
-  buildInputs = lib.optionals doCheck [ alcotest cstruct-unix ];
-  propagatedBuildInputs = [ asn1-combinators domain-name fmt gmap nocrypto rresult ];
+  useDune2 = true;
 
-  doCheck = lib.versionAtLeast ocaml.version "4.06";
+  buildInputs = [ alcotest cstruct-unix ];
+  propagatedBuildInputs = [ asn1-combinators domain-name fmt gmap mirage-crypto mirage-crypto-pk rresult  logs base64 ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/mirleft/ocaml-x509";

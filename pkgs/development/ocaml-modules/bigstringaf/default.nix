@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, alcotest, bigarray-compat }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, bigarray-compat }:
 
 buildDunePackage rec {
   pname = "bigstringaf";
@@ -13,9 +13,9 @@ buildDunePackage rec {
     sha256 = "04b088vrqzmxsyan9f9nr8721bxip4b930cgvb5zkbbmrw3ylmwc";
   };
 
-  buildInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
   propagatedBuildInputs = [ bigarray-compat ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.05";
 
   meta = {
     description = "Bigstring intrinsics and fast blits based on memcpy/memmove";

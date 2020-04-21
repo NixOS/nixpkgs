@@ -6,7 +6,7 @@ let
   version = "4.4.4";
   name = "suitesparse-${version}";
 
-  int_t = if blas.is64bit then "int64_t" else "int32_t";
+  int_t = if blas.isILP64 then "int64_t" else "int32_t";
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 stdenv.mkDerivation {

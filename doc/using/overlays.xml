@@ -137,4 +137,118 @@ self: super:
    Overlays are similar to other methods for customizing Nixpkgs, in particular the <literal>packageOverrides</literal> attribute described in <xref linkend="sec-modify-via-packageOverrides"/>. Indeed, <literal>packageOverrides</literal> acts as an overlay with only the <varname>super</varname> argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
   </para>
  </section>
+ <section xml:id="sec-overlays-alternatives">
+   <title>Using overlays to configure alternatives</title>
+   <para>
+     Certain software has different implementations of the same
+     interface. Other distributions have functionality to switch
+     between these. For example, Debian provides <link
+     xlink:href="https://wiki.debian.org/DebianAlternatives">DebianAlternatives</link>.
+     Nixpkgs has what we call <literal>alternatives</literal>, which
+     are configured through overlays.
+   </para>
+   <section xml:id="sec-overlays-alternatives-blas-lapack">
+     <title>BLAS/LAPACK</title>
+     <para>
+       In Nixpkgs, we have multiple implementations of the BLAS/LAPACK
+       numerical linear algebra interfaces. They are:
+     </para>
+     <itemizedlist>
+       <listitem>
+         <para>
+           <link xlink:href="https://www.openblas.net/">OpenBLAS</link>
+         </para>
+         <para>
+           The Nixpkgs attribute is <literal>openblas</literal> for
+           ILP64 and <literal>openblasCompat</literal> for LP64. This
+           is the default.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+           <link xlink:href="http://www.netlib.org/lapack/">LAPACK
+           reference</link> (also provides BLAS)
+         </para>
+         <para>
+           The Nixpkgs attribute is <literal>lapack-reference</literal>.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+           <link
+           xlink:href="https://software.intel.com/en-us/mkl">Intel
+           MKL</link> (only works on x86 architecture, unfree)
+         </para>
+         <para>
+           The Nixpkgs attribute is <literal>mkl</literal>.
+         </para>
+       </listitem>
+     </itemizedlist>
+     <para>
+       Introduced in <link
+       xlink:href="https://github.com/NixOS/nixpkgs/pull/83888">PR
+       #83888</link>, we are able to override the ‘blas’ and ‘lapack’
+       packages to use different implementations, through the
+       ‘blasProvider’ and ‘lapackProvider’ argument. This can be used
+       to select a different provider. For example, an overlay can be
+       created that looks like:
+     </para>
+     <programlisting>
+self: super:
+
+{
+  blas = super.blas.override {
+    blasProvider = self.mkl;
+  }
+  lapack = super.lapack.override {
+    lapackProvider = self.mkl;
+  }
+}
+     </programlisting>
+     <para>
+       This overlay uses Intel’s MKL library for both BLAS and LAPACK
+       interfaces. Note that the same can be accomplished at runtime
+       using <literal>LD_PRELOAD</literal> of libblas.so.3 and
+       liblapack.so.3.
+     </para>
+     <para>
+       Intel MKL requires an <literal>openmp</literal> implementation
+       when running with multiple processors. By default,
+       <literal>mkl</literal> will use Intel’s <literal>iomp</literal>
+       implementation if no other is specified, but this is a
+       runtime-only dependency and binary compatible with the LLVM
+       implementation. To use that one instead, Intel recommends users
+       set it with <literal>LD_PRELOAD</literal>. Note that
+       <literal>mkl</literal> is only available on
+       <literal>x86_64-linux</literal> and
+       <literal>x86_64-darwin</literal>. Moreover, Hydra is not build
+       and distributing pre-compiled binaries using it.
+     </para>
+     <para>
+       For BLAS/LAPACK switching to work correctly, all packages must
+       depend on <literal>blas</literal> or <literal>lapack</literal>.
+       This ensures that only one BLAS/LAPACK library is used at one
+       time. There are two versions versions of BLAS/LAPACK currently
+       in the wild, <literal>LP64</literal> (integer size = 32 bits)
+       and <literal>ILP64</literal> (integer size = 64 bits). Some
+       software needs special flags or patches to work with
+       <literal>ILP64</literal>. You can check if
+       <literal>ILP64</literal> is used in Nixpkgs with
+       <varname>blas.isILP64</varname> and
+       <varname>lapack.isILP64</varname>. Some software does NOT work
+       with <literal>ILP64</literal>, and derivations need to specify
+       an assertion to prevent this. You can prevent
+       <literal>ILP64</literal> from being used with the following:
+     </para>
+     <programlisting>
+{ stdenv, blas, lapack, ... }:
+
+assert (!blas.isILP64) &amp;&amp; (!lapack.isILP64);
+
+stdenv.mkDerivation {
+  ...
+}
+     </programlisting>
+   </section>
+ </section>
 </chapter>
