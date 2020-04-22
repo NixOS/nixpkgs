@@ -38,17 +38,18 @@ let
       is_nixenv = "False";
     };
 
+  } // lib.optionalAttrs (python.pythonAtLeast "3.8") {
     # Venv built using Python Nix environment (python.buildEnv)
     # TODO: Cannot create venv from a  nix env
     # Error: Command '['/nix/store/ddc8nqx73pda86ibvhzdmvdsqmwnbjf7-python3-3.7.6-venv/bin/python3.7', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
-    # nixenv-venv = rec {
-    #   env = runCommand "${python.name}-venv" {} ''
-    #     ${pythonEnv.interpreter} -m venv $out
-    #   '';
-    #   interpreter = "${env}/bin/${pythonEnv.executable}";
-    #   is_venv = "True";
-    #   is_nixenv = "True";
-    # };
+    nixenv-venv = rec {
+      env = runCommand "${python.name}-venv" {} ''
+        ${pythonEnv.interpreter} -m venv $out
+      '';
+      interpreter = "${env}/bin/${pythonEnv.executable}";
+      is_venv = "True";
+      is_nixenv = "True";
+    };
   };
 
   # All PyPy package builds are broken at the moment
