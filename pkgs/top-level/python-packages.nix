@@ -248,6 +248,8 @@ in {
 
   authres = callPackage ../development/python-modules/authres { };
 
+  auth0-python = callPackage ../development/python-modules/auth0-python { };
+
   autograd = callPackage ../development/python-modules/autograd { };
 
   autologging = callPackage ../development/python-modules/autologging { };
