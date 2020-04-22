@@ -80,6 +80,11 @@ mkChromiumDerivation (base: rec {
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
     timeout = 172800; # 48 hours
-    broken = channel == "dev";
+    broken = channel != "stable"; # M81 is the last supported version for 19.09
+    # Reason: The build of Chromium 83 requires a lot of additional changes
+    # (LLVM 10, a newer gn version, some patches, etc.) which are unlikely to be
+    # backported to 19.09. Therefore we'll only maintain M81 for NixOS 19.09
+    # which will give us approx. one month of security updates / time for users
+    # to transition to 20.03 (as per our policy).
   };
 })
