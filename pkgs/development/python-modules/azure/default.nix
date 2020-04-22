@@ -9,13 +9,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.0.0";
+  version = "5.0.0";
   pname = "azure";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7d6afa332fccffe1a9390bcfac5122317eec657c6029f144d794603a81cd0e50";
+    sha256 = "f56d22acaba0ce74b821fd3d012d18854f9d0b3662d5a3a9240b1bd587c96b23";
   };
 
   propagatedBuildInputs = [ dateutil pyopenssl requests ]
