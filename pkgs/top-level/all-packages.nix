@@ -6532,6 +6532,8 @@ in
 
   shocco = callPackage ../tools/text/shocco { };
 
+  shopify-themekit = callPackage ../development/web/shopify-themekit { };
+
   shorewall = callPackage ../tools/networking/shorewall { };
 
   shotwell = callPackage ../applications/graphics/shotwell { };
