@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, lxml, requests, tkinter }:
+{ stdenv, buildPythonPackage, fetchPypi, lxml, requests, tkinter, isPy38 }:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = https://bitbucket.org/kbr/fritzconnection;
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    broken = isPy38;
   };
 }

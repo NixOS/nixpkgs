@@ -11,6 +11,7 @@
 , jinja2
 , pyyaml
 , nose
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -38,5 +39,6 @@ buildPythonPackage rec {
     description = "Junos 'EZ' automation for non-programmers";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
+    broken = true;
   };
 }

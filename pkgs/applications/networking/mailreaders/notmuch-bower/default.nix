@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ erictapen ];
     license = licenses.gpl3;
     platforms = platforms.linux;
+    broken = true;
   };
 }

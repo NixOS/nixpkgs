@@ -109,5 +109,6 @@ buildPythonPackage rec {
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];
+    broken = true;
   };
 }

@@ -3997,6 +3997,12 @@
     githubId = 32152;
     name = "Luka Blaskovic";
   };
+  lbpdt = {
+    email = "nix@pdtpartners.com";
+    github = "lbpdt";
+    githubId = 45168934;
+    name = "Louis Blin";
+  };
   ldelelis = {
     email = "ldelelis@est.frba.utn.edu.ar";
     github = "ldelelis";
@@ -7633,6 +7639,12 @@
     github = "vyp";
     githubId = 3889405;
     name = "vyp";
+  };
+  wamserma = {
+    name = "Markus S. Wamser";
+    email = "github-dev@mail2013.wamser.eu";
+    github = "wamserma";
+    githubId = 60148;
   };
   waynr = {
     name = "Wayne Warren";

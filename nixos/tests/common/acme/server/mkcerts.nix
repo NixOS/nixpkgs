@@ -1,10 +1,9 @@
 { pkgs ? import <nixpkgs> {}
 , lib ? pkgs.lib
-
-, domains ? [ "acme-v02.api.letsencrypt.org" "letsencrypt.org" ]
+, domains ? [ "acme.test" ]
 }:
 
-pkgs.runCommand "letsencrypt-snakeoil-ca" {
+pkgs.runCommand "acme-snakeoil-ca" {
   nativeBuildInputs = [ pkgs.openssl ];
 } ''
   addpem() {

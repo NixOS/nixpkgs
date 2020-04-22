@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, keyring, pbkdf2, pyaes}:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, keyring, pbkdf2, pyaes, isPy38 }:
 buildPythonPackage rec {
   pname = "browser-cookie3";
   version = "0.9.1";
@@ -20,5 +20,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ borisbabic ];
     homepage = https://github.com/borisbabic/browser_cookie3;
     license = licenses.gpl3;
+    broken = isPy38;
   };
 }

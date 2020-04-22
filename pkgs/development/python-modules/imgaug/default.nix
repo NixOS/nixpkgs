@@ -9,6 +9,7 @@
 , shapely
 , six
 , stdenv
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace "opencv-python-headless" ""
     substituteInPlace setup.py \
-      --replace "opencv-python-headless" "" 
+      --replace "opencv-python-headless" ""
     substituteInPlace pytest.ini \
       --replace "--xdoctest --xdoctest-global-exec=\"import imgaug as ia\nfrom imgaug import augmenters as iaa\"" ""
   '';
@@ -51,5 +52,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai rakesh4g ];
     platforms = platforms.linux;
+    broken = isPy38;
   };
 }

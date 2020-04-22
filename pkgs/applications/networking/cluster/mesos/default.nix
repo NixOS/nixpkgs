@@ -258,5 +258,6 @@ in stdenv.mkDerivation rec {
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
     maintainers = with maintainers; [ cstrahan kevincox offline ];
     platforms   = platforms.unix;
+    broken = true;
   };
 }

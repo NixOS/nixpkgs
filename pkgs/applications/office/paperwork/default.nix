@@ -2,6 +2,7 @@
 , aspellDicts, buildEnv
 , gnome3, librsvg
 , xvfb_run, dbus, libnotify
+, stdenv
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -77,5 +78,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.aszlig ];
     platforms = lib.platforms.linux;
+    broken = stdenv.isAarch64;
   };
 }

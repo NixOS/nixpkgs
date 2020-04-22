@@ -8,6 +8,7 @@
 , h5py
 , nose
 , isPy27
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -46,5 +47,6 @@ buildPythonPackage rec {
     homepage = https://clifford.readthedocs.io;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    broken = isPy38;
   };
 }

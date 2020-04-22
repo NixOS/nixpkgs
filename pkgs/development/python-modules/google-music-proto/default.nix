@@ -4,6 +4,7 @@
 , marshmallow
 , pendulum
 , protobuf
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -33,5 +34,6 @@ buildPythonPackage rec {
     description = "Sans-I/O wrapper of Google Music API calls";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
+    broken = isPy38;
   };
 }

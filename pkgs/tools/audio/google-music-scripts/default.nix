@@ -31,5 +31,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "A CLI utility for interacting with Google Music";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
+    broken = true;
   };
 }

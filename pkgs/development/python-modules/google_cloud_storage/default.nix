@@ -7,6 +7,7 @@
 , pytest
 , mock
 , setuptools
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -35,5 +36,6 @@ buildPythonPackage rec {
     homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
+    broken = isPy38;
   };
 }

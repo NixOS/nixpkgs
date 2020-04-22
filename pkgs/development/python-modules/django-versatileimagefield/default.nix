@@ -4,6 +4,7 @@
 , django
 , python
 , pillow
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/respondcreate/django-versatileimagefield/";
     license = licenses.mit;
     maintainers = with maintainers; [ mmai ];
+    broken = isPy38;
   };
 }
 

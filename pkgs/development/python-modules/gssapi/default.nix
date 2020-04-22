@@ -14,6 +14,7 @@
 , cython
 , python
 , k5test
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -66,5 +67,6 @@ buildPythonPackage rec {
     homepage = https://pypi.python.org/pypi/gssapi;
     description = "Python GSSAPI Wrapper";
     license = licenses.mit;
+    broken = isPy38;
   };
 }

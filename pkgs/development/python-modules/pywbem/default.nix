@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = https://pywbem.github.io;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ peterhoeg ];
+    broken = true;
   };
 }

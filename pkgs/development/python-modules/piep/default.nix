@@ -22,6 +22,7 @@ buildPythonPackage rec {
     homepage = https://github.com/timbertson/piep;
     maintainers = with maintainers; [ timbertson ];
     license = licenses.gpl3;
+    broken = true;
   };
 
 }

@@ -48,6 +48,7 @@ buildPythonPackage rec {
     homepage = http://www.ruffus.org.uk;
     license = licenses.mit;
     maintainers = [ maintainers.kiwi ];
+    broken = true;
   };
 }
 

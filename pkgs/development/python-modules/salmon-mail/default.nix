@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Pythonic mail application server";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jluttine ];
+    broken = true;
   };
 }

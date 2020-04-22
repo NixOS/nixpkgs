@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license = with licenses;  [ asl20 bsd3 gpl2 lgpl21 lgpl21Plus openldap ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ markuskowa ];
+    broken = true;
   };
 }

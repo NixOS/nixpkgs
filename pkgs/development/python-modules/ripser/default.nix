@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = https://ripser.scikit-tda.org;
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

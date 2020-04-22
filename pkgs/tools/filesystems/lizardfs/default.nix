@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = [ maintainers.rushmorem ];
+    broken = true;
   };
 }

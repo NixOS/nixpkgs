@@ -9,6 +9,7 @@
 , py-lru-cache
 , six
 , pytest
+, isPy38
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     homepage = https://github.com/simonw/csvs-to-sqlite;
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
+    broken = isPy38;
   };
 
 }

@@ -52,5 +52,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/rndusr/stig";
     license = licenses.gpl3;
     maintainers = with maintainers; [ doronbehar ];
+    broken = true;
   };
 }

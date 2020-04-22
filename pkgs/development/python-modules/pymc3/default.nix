@@ -59,5 +59,6 @@ buildPythonPackage rec {
     homepage = https://github.com/pymc-devs/pymc3;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
+    broken = true;
   };
 }

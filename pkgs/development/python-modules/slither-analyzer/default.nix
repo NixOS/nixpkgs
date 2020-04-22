@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = https://github.com/trailofbits/slither;
     license = licenses.agpl3;
     maintainers = [ maintainers.asymmetric ];
+    broken = true;
   };
 }

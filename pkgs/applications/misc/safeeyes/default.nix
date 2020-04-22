@@ -66,5 +66,6 @@ in buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ srghma ];
     platforms = lib.platforms.all;
+    broken = true;
   };
 }

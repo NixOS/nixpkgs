@@ -26,5 +26,6 @@ buildPythonPackage rec {
   meta = {
     homepage = https://locust.io/;
     description = "A load testing tool";
+    broken = true;
   };
 }

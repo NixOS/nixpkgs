@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytest, mock, pytestcov, coverage
-, future, futures
+, future, futures, isPy38
 }:
 
 buildPythonPackage rec {
@@ -25,6 +25,8 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest
   '';
+
+  disabled = isPy38;
 
   propagatedBuildInputs = [ future ]
     ++ stdenv.lib.optional (pythonOlder "3.2") futures;

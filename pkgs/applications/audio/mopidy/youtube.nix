@@ -19,5 +19,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Mopidy extension for playing music from YouTube";
     license = licenses.asl20;
     maintainers = [ maintainers.spwhitt ];
+    broken = true;
   };
 }
