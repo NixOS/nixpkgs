@@ -4779,7 +4779,7 @@ in
 
   nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = hiPrio nodejs-10_x;
+  nodejs = hiPrio nodejs-12_x;
 
   nodejs-slim = nodejs-slim-10_x;
 
@@ -4809,11 +4809,7 @@ in
     nodejs = pkgs.nodejs-12_x;
   });
 
-  nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
-    nodejs = pkgs.nodejs-10_x;
-  });
-
-  nodePackages = nodePackages_10_x;
+  nodePackages = nodePackages_12_x;
 
   now-cli = callPackage ../development/web/now-cli {};
 

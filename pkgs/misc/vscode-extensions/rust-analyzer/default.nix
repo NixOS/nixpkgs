@@ -1,5 +1,5 @@
 # Update script: pkgs/development/tools/rust/rust-analyzer/update.sh
-{ lib, stdenv, vscode-utils, jq, rust-analyzer, nodePackages_10_x
+{ lib, stdenv, vscode-utils, jq, rust-analyzer, nodePackages
 , setDefaultServerPath ? true
 }:
 
@@ -10,7 +10,7 @@ let
   # Follow the unstable version of rust-analyzer, since the extension is not stable yet.
   inherit (rust-analyzer) version;
 
-  build-deps = nodePackages_10_x."rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps";
+  build-deps = nodePackages."rust-analyzer-build-deps-../../misc/vscode-extensions/rust-analyzer/build-deps";
   # FIXME: Making a new derivation to link `node_modules` and run `npm run package`
   # will cause a build failure.
   vsix = build-deps.override {
