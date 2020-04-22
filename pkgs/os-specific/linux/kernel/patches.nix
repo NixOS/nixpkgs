@@ -92,4 +92,10 @@
     name = "mac_nvme_t2";
     patch = ./mac-nvme-t2.patch;
   };
+
+  toolchain_compat = rec {
+    name = "toolchain_compat";
+    patch = ./toolchain-compat.patch;
+  };
+
 }

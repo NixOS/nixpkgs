@@ -16692,6 +16692,10 @@ in
     kernelPatches = linux_4_19.kernelPatches;
   };
 
+  linux_rock64 = callPackage ../os-specific/linux/kernel/linux-rock64.nix {
+    kernelPatches = linux_4_4.kernelPatches ++ [ kernelPatches.toolchain_compat ];
+  };
+
   linux_rpi1 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
     kernelPatches = with kernelPatches; [
       bridge_stp_helper
@@ -17000,6 +17004,7 @@ in
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
+  linuxPackages_rock64 = linuxPackagesFor pkgs.linux_rock64;
   linuxPackages_rpi1 = linuxPackagesFor pkgs.linux_rpi1;
   linuxPackages_rpi2 = linuxPackagesFor pkgs.linux_rpi2;
   linuxPackages_rpi3 = linuxPackagesFor pkgs.linux_rpi3;
