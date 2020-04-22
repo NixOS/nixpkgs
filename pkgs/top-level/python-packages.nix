@@ -378,6 +378,8 @@ in {
 
   azure-mgmt-containerservice = callPackage ../development/python-modules/azure-mgmt-containerservice { };
 
+  azure-mgmt-core = callPackage ../development/python-modules/azure-mgmt-core { };
+
   azure-mgmt-cosmosdb = callPackage ../development/python-modules/azure-mgmt-cosmosdb { };
 
   azure-mgmt-datafactory = callPackage ../development/python-modules/azure-mgmt-datafactory { };
