@@ -560,6 +560,8 @@ in {
 
   catalogue = callPackage ../development/python-modules/catalogue { };
 
+  cbeams = callPackage ../misc/cbeams { };
+
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
