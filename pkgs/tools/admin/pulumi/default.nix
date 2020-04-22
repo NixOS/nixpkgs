@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '';
 
-  buildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
 
   meta = {
     homepage = "https://pulumi.io/";
