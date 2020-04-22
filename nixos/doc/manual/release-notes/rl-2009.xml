@@ -40,6 +40,11 @@
      make use of these new options instead.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     There is a new module for Podman(<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -267,6 +272,13 @@ environment.systemPackages = [
   <title>Other Notable Changes</title>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     <option>services.journald.rateLimitBurst</option> was updated from
+     <literal>1000</literal> to <literal>10000</literal> to follow the new
+     upstream systemd default.
+    </para>
+   </listitem>
    <listitem>
     <para>
      The <package>notmuch</package> package move its emacs-related binaries and

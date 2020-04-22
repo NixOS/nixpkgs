@@ -1,4 +1,4 @@
-{ buildGoModule, stdenv, lib, procps, fetchFromGitHub }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
 
 let
   common = { stname, target, postInstall ? "" }:
@@ -34,6 +34,11 @@ let
       '';
 
       inherit postInstall;
+
+      passthru.tests = with nixosTests; {
+        init = syncthing-init;
+        relay = syncthing-relay;
+      };
 
       meta = with lib; {
         homepage = "https://www.syncthing.net/";

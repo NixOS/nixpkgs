@@ -3991,6 +3991,8 @@ in
 
   httplab = callPackage ../tools/networking/httplab { };
 
+  lucky-cli = callPackage ../development/web/lucky-cli { };
+
   partclone = callPackage ../tools/backup/partclone { };
 
   partimage = callPackage ../tools/backup/partimage { };
@@ -6532,6 +6534,8 @@ in
 
   shocco = callPackage ../tools/text/shocco { };
 
+  shopify-themekit = callPackage ../development/web/shopify-themekit { };
+
   shorewall = callPackage ../tools/networking/shorewall { };
 
   shotwell = callPackage ../applications/graphics/shotwell { };
@@ -8114,9 +8118,7 @@ in
     crystal
     crystal2nix;
 
-  icr = callPackage ../development/tools/icr {
-    openssl = openssl_1_0_2;
-  };
+  icr = callPackage ../development/tools/icr { };
 
   scry = callPackage ../development/tools/scry {};
 
@@ -12222,6 +12224,16 @@ in
   } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu65 = callPackage ../development/libraries/icu/65.nix ({
+    nativeBuildRoot = buildPackages.icu65.override { buildRootOnly = true; };
+  } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
+  icu66 = callPackage ../development/libraries/icu/66.nix ({
+    nativeBuildRoot = buildPackages.icu66.override { buildRootOnly = true; };
+  } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
   icu = icu64;
 
@@ -14546,6 +14558,8 @@ in
   spice-protocol = callPackage ../development/libraries/spice-protocol { };
 
   spice-up = callPackage ../applications/office/spice-up { };
+
+  spirv-cross = callPackage ../tools/graphics/spirv-cross { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
 

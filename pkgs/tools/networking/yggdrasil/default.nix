@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "yggdrasil";
@@ -26,6 +26,8 @@ buildGoModule rec {
       -X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}
       -s -w
   '';
+
+  passthru.tests.basic = nixosTests.yggdrasil;
 
   meta = with lib; {
     description =

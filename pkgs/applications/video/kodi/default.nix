@@ -192,7 +192,9 @@ in stdenv.mkDerivation {
     ++ lib.optional  usbSupport      libusb
     ++ lib.optional  vdpauSupport    libvdpau
     ++ lib.optionals useWayland [
-      wayland waylandpp wayland-protocols
+      wayland 
+      waylandpp.dev 
+      wayland-protocols
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
     ]
@@ -213,7 +215,7 @@ in stdenv.mkDerivation {
 
       # for TexturePacker
       giflib zlib libpng libjpeg lzo
-    ] ++ lib.optionals useWayland [ wayland-protocols ];
+    ] ++ lib.optionals useWayland [ wayland-protocols waylandpp.bin ];
 
     depsBuildBuild = [
       buildPackages.stdenv.cc

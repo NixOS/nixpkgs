@@ -12,6 +12,9 @@ buildPythonPackage rec {
     sha256 = "089a95s6g9izsy1fzpz48p6pz0wpngcbbrvsillm1n53492gfhjg";
   };
 
+  # Required for a breaking change in google-api-python-client 1.8.1:
+  patches = [ ./fix-build.patch ];
+
   propagatedBuildInputs = [
     google_api_python_client simplejson oauth2client setuptools
   ];

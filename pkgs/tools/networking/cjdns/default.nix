@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nodejs, which, python27, utillinux }:
+{ stdenv, fetchFromGitHub, nodejs, which, python27, utillinux, nixosTests }:
 
 let version = "20.6"; in
 stdenv.mkDerivation {
@@ -28,6 +28,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/cjdns
     cp -R contrib tools node_build node_modules $out/share/cjdns/
   '';
+
+  passthru.tests.basic = nixosTests.cjdns;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/cjdelisle/cjdns";

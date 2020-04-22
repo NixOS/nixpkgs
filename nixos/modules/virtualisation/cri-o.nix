@@ -62,9 +62,7 @@ in
       log_level = "${cfg.logLevel}"
       manage_network_ns_lifecycle = true
     '';
-    environment.etc."containers/policy.json".text = ''
-      {"default": [{"type": "insecureAcceptAnything"}]}
-    '';
+
     environment.etc."cni/net.d/20-cri-o-bridge.conf".text = ''
       {
         "cniVersion": "0.3.1",
@@ -82,6 +80,9 @@ in
         }
       }
     '';
+
+    # Enable common container configuration, this will create policy.json
+    virtualisation.containers.enable = true;
 
     systemd.services.crio = {
       description = "Container Runtime Interface for OCI (CRI-O)";

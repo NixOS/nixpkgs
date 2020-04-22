@@ -12,7 +12,7 @@ let
 
   httpdConf = cfg.configFile;
 
-  php = cfg.phpPackage.override { apacheHttpd = pkg.dev; /* otherwise it only gets .out */ };
+  php = cfg.phpPackage.override { apacheHttpd = pkg; };
 
   phpMajorVersion = lib.versions.major (lib.getVersion php);
 
@@ -338,6 +338,7 @@ let
     }
     ''
       cat ${php}/etc/php.ini > $out
+      cat ${php}/lib/custom-php.ini > $out
       echo "$options" >> $out
     '';
 
