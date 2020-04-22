@@ -1,31 +1,28 @@
-{ lib, stdenv, fetchgit }:
+{ lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "memtest86+";
-  version = "5.01-coreboot-002";
+  version = "5.31b";
 
-  src = fetchgit {
-    url = "https://review.coreboot.org/memtest86plus.git";
-    rev = "v002";
-    sha256 = "0cwx20yja24bfknqh1rjb5rl2c0kwnppzsisg1dibbak0l8mxchk";
+  src = fetchurl {
+    url = "https://www.memtest.org/download/${version}/memtest86+-${version}.tar.gz";
+    sha256 = "028zrch87ggajlb5xx1c2ab85ggl9qldpibf45735sy0haqzyiki";
   };
-
-  NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
 
   hardeningDisable = [ "all" ];
 
-  buildFlags = [ "memtest.bin" ];
-
-  doCheck = false; # fails
+  doCheck = stdenv.isi686;
+  checkTarget = "run_self_test";
 
   installPhase = ''
     install -Dm0444 -t $out/ memtest.bin
   '';
 
-  meta = {
-    homepage = "http://www.memtest.org/";
-    description = "A tool to detect memory errors";
-    license = lib.licenses.gpl2;
+  meta = with lib; {
+    homepage = "https://www.memtest.org/";
+    description = "An advanced memory diagnostic tool";
+    license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ evils ];
   };
 }
