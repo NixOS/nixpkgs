@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
-  libblas="${lib.getLib blasProvider}/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+  libblas="${lib.getLib blasProvider}/lib/libblas${canonicalExtension}"
 
   if ! [ -e "$libblas" ]; then
     echo "$libblas does not exist, ${blasProvider.name} does not provide libblas."
@@ -100,7 +100,7 @@ Libs: -L$out/lib -lblas
 Cflags: -I$dev/include
 EOF
 
-  libcblas="${lib.getLib blasProvider}/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+  libcblas="${lib.getLib blasProvider}/lib/libcblas${canonicalExtension}"
 
   if ! [ -e "$libcblas" ]; then
     echo "$libcblas does not exist, ${blasProvider.name} does not provide libcblas."
