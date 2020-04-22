@@ -12360,10 +12360,6 @@ in
 
   kf5gpgmepp = libsForQt5.callPackage ../development/libraries/kf5gpgmepp { };
 
-  kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client {
-    openssl = openssl_1_0_2;
-  };
-
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
