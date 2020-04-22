@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname   = "keycloak";
-  version = "9.0.2";
+  version = "9.0.3";
 
   src = fetchzip {
     url    = "https://downloads.jboss.org/keycloak/${version}/keycloak-${version}.zip";
-    sha256 = "0yavkmwhjb8i4j3g57nda77simlf1dj1m751xzbgxxq6nd0q73lw";
+    sha256 = "0nlfa6wwgj04xgg4ps5gpjp4iq2lmas97y5qz61lhns1p42xr4ls";
   };
 
   nativeBuildInputs = [ makeWrapper ];
