@@ -2218,6 +2218,8 @@ in {
 
   closure-linter = callPackage ../development/python-modules/closure-linter { };
 
+  cloudflare = callPackage ../development/python-modules/cloudflare { };
+
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
   cmdline = callPackage ../development/python-modules/cmdline { };
