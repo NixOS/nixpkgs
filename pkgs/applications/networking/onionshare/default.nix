@@ -48,6 +48,7 @@ let
     homepage = "https://onionshare.org/";
 
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ lourkeur ];
   };
 
   common = buildPythonApplication {
