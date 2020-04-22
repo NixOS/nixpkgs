@@ -4,15 +4,15 @@
 
 let hashes = {
   "8.0" = "1x1giy2c1y6krg3kf8pf9wrmvk981shv0pxcwi483yjqm90xng4r";
-  "8.2" = "1x33kv6w9cbqzvyrihn61pzmqlvnk3drm8ksd5v0arg38i95awi3";
+  "8.3" = "0c0wimaf16nrr3d6cxq6p7nr7rxffvpmn66hkpwc1m6zpcipf0y5";
 };
 revs = {
   "8.0" = "8.0";
-  "8.2" = "8.2";
+  "8.3" = "8.3";
 };
 in stdenv.mkDerivation rec {
   pname = "acl2";
-  version = "8.2";
+  version = "8.3";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";
@@ -72,6 +72,7 @@ in stdenv.mkDerivation rec {
     #[ free bsd3 mit gpl2 llgpl21 cc0 publicDomain ];
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ kini raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
+    broken = stdenv.isAarch64 && stdenv.isLinux;
   };
 }
