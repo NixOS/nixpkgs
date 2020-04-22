@@ -137,6 +137,7 @@ let
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
+      # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
@@ -265,6 +266,11 @@ let
 
       runHook postConfigure
     '';
+
+    # Don't spam warnings about unknown warning options. This is useful because
+    # our Clang is always older than Chromium's and the build logs have a size
+    # of approx. 25 MB without this option (and this saves e.g. 66 %).
+    NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
       # Build paralelism: on Hydra the build was frequently running into memory

@@ -6,6 +6,7 @@
 , pantheon
 , gtk3
 , glib
+, glib-networking
 , libxml2
 , webkitgtk
 , clutter-gtk
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     pantheon.granite
     sqlite
     webkitgtk
+    glib-networking
   ];
 
   meta = with stdenv.lib; {

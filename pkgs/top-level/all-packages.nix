@@ -7156,6 +7156,8 @@ in
 
   yeshup = callPackage ../tools/system/yeshup { };
 
+  yggdrasil = callPackage ../tools/networking/yggdrasil { };
+
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
@@ -12512,6 +12514,7 @@ in
   libviper = callPackage ../development/libraries/libviper { };
 
   libvpx = callPackage ../development/libraries/libvpx { };
+  libvpx_1_8 = callPackage ../development/libraries/libvpx/1_8.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
   libvterm-neovim = callPackage ../development/libraries/libvterm-neovim { };
@@ -15741,11 +15744,6 @@ in
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.4"
         kernelPatches.modinst_arg_list_too_long
-        # https://github.com/NixOS/nixpkgs/issues/42755
-        # Remove these xen-netfront patches once they're included in
-        # upstream! Fixes https://github.com/NixOS/nixpkgs/issues/42755
-        kernelPatches.xen-netfront_fix_mismatched_rtnl_unlock
-        kernelPatches.xen-netfront_update_features_after_registering_netdev
       ];
   };
 
@@ -15957,7 +15955,7 @@ in
       virtualbox = pkgs.virtualboxHardened;
     };
 
-    wireguard = callPackage ../os-specific/linux/wireguard { };
+    wireguard = if lib.versionOlder kernel.version "5.6" then callPackage ../os-specific/linux/wireguard { } else null;
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 

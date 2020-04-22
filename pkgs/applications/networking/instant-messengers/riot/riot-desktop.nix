@@ -69,7 +69,7 @@ in yarn2nix-moretea.mkYarnPackage rec {
     comment = meta.description;
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
-      StartupWMClass="riot"
+      StartupWMClass=riot
     '';
   };
 
