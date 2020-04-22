@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib, enableUnfree ? false }:
 
 stdenv.mkDerivation rec {
   pname = "p7zip";
@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile.machine \
       --replace 'CC=gcc'  'CC=${stdenv.cc.targetPrefix}gcc' \
       --replace 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'
+  '' + lib.optionalString (!enableUnfree) ''
+    # Remove non-free RAR source code
+    # (see DOC/License.txt, https://fedoraproject.org/wiki/Licensing:Unrar)
+    rm -r CPP/7zip/Compress/Rar*
+    find . -name makefile'*' -exec sed -i '/Rar/d' {} +
   '';
 
   preConfigure = ''
@@ -42,9 +47,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://p7zip.sourceforge.net/;
     description = "A port of the 7-zip archiver";
-    # license = stdenv.lib.licenses.lgpl21Plus; + "unRAR restriction"
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.raskin ];
-    license = stdenv.lib.licenses.lgpl2Plus;
+    # RAR code is under non-free UnRAR license, but we remove it
+    license = if enableUnfree then lib.licenses.unfree else lib.licenses.lgpl2Plus;
   };
 }
