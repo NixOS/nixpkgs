@@ -69,6 +69,8 @@ core-packages:
 default-package-overrides:
   # pandoc-2.9 does not accept the 0.3 version yet
   - doclayout < 0.3
+  # asn1-types-0.3.4 contains a bugfix for Unicode parsing
+  - asn1-types ==0.3.4
   # latest version does not support pandoc 2.8, remove once 2.9
   # is available in LTS
   - pandoc-crossref ==0.3.4.2
@@ -137,7 +139,6 @@ default-package-overrides:
   - ascii-progress ==0.3.3.0
   - asn1-encoding ==0.9.6
   - asn1-parse ==0.9.5
-  - asn1-types ==0.3.3
   - assert-failure ==0.1.2.2
   - assoc ==1.0.1
   - astro ==0.4.2.1
