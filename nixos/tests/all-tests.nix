@@ -248,6 +248,7 @@ in
   php = handleTest ./php {};
   plasma5 = handleTest ./plasma5.nix {};
   plotinus = handleTest ./plotinus.nix {};
+  podman = handleTest ./podman.nix {};
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
@@ -299,6 +300,7 @@ in
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
+  systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};

@@ -6,7 +6,7 @@
   , fetchpatch
 
   , writeText
-
+  , nixosTests
   , useOperatingSystemEtc ? true
 
 }:
@@ -179,6 +179,7 @@ let
 
     passthru = {
       shellPath = "/bin/fish";
+      tests.nixos = nixosTests.fish;
     };
   };
 

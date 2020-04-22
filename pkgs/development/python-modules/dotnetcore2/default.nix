@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "dotnetcore2";
-  version = "2.1.11";
+  version = "2.1.13";
   format = "wheel";
   disabled = isPy27;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     inherit pname version format;
     python = "py3";
     platform = "manylinux1_x86_64";
-    sha256 = "0qhp94bjz4icz2f0fnhgck875chiqzy4lvsp6lwhj5jd0zsv2bb3";
+    sha256 = "1fbg3pn7g0a6pg0gb5vaapcc3cdp6wfnliim57fn3cnzmx5d8p6i";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -35,13 +35,9 @@ buildPythonPackage rec {
     )
   ];
 
-  # unfortunately the noraml pip install fails because the manylinux1 format check fails with NixOS
-  installPhase = ''
-    mkdir -p $out/${python.sitePackages}/${pname}
-    # copy metadata
-    cp -r dotnetcore2-2* $out/${python.sitePackages}
-    # copy non-dotnetcore related files
-    cp -r dotnetcore2/{__init__.py,runtime.py} $out/${python.sitePackages}/${pname}
+  # prevent exposing a broken dotnet executable
+  postInstall = ''
+    rm -r $out/${python.sitePackages}/${pname}/bin
   '';
 
   # no tests, ensure it's one useful function works

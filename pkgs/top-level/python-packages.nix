@@ -560,6 +560,8 @@ in {
 
   catalogue = callPackage ../development/python-modules/catalogue { };
 
+  cbeams = callPackage ../misc/cbeams { };
+
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
@@ -1063,6 +1065,8 @@ in {
 
   proglog = callPackage ../development/python-modules/proglog { };
 
+  pulsectl = callPackage ../development/python-modules/pulsectl { };
+
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
   purl = callPackage ../development/python-modules/purl { };
@@ -1462,6 +1466,8 @@ in {
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
   shellingham = callPackage ../development/python-modules/shellingham {};
+
+  simpleaudio = callPackage ../development/python-modules/simpleaudio { };
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
@@ -3265,6 +3271,8 @@ in {
   pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
 
   peewee =  callPackage ../development/python-modules/peewee { };
+
+  pyroma = callPackage ../development/python-modules/pyroma { };
 
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 

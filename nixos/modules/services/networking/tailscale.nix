@@ -37,7 +37,10 @@ in {
         RuntimeDirectoryMode = 755;
 
         StateDirectory = "tailscale";
-        StateDirectoryMode = 700;
+        StateDirectoryMode = 750;
+
+        CacheDirectory = "tailscale";
+        CacheDirectoryMode = 750;
 
         Restart = "on-failure";
       };

@@ -18,6 +18,7 @@
 , mpd_clientlib
 # Tag support
 , libid3tag
+, nixosTests
 }:
 
 let
@@ -127,6 +128,8 @@ let
           "-Dzeroconf=avahi"
         ++ lib.optional (builtins.elem "systemd" features_)
           "-Dsystemd_system_unit_dir=etc/systemd/system";
+
+      passthru.tests.nixos = nixosTests.mpd;
 
       meta = with stdenv.lib; {
         description = "A flexible, powerful daemon for playing music";

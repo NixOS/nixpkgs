@@ -9,8 +9,7 @@ let
 
   baseAttrs = {
     src = fetchurl {
-      url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
-        + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
+      url = "https://github.com/unicode-org/icu/releases/download/release-${lib.replaceChars [ "." ] [ "-" ] version}/icu4c-${lib.replaceChars [ "." ] [ "_" ] version}-src.tgz";
       inherit sha256;
     };
 

@@ -1,37 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, crystal, shards }:
+{ stdenv, lib, fetchFromGitHub, crystal }:
 
-stdenv.mkDerivation rec {
+crystal.buildCrystalPackage rec {
   pname = "ameba";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
-    owner  = "crystal-ameba";
-    repo   = "ameba";
-    rev    = "v${version}";
-    sha256 = "0g68yijbm2j4ig536fwq49d1z7x2iv9kp4g3gjklf5zn1sbqhm12";
+    owner = "crystal-ameba";
+    repo = "ameba";
+    rev = "v${version}";
+    sha256 = "0c2j2qki0czkpsqxv75qg95pk9f0w4rqa5ln07rs4bj9dk2lrr3l";
   };
-
-  nativeBuildInputs = [ crystal shards ];
-
-  buildPhase = ''
-    runHook preBuild
-    shards build --release
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 -t $out/bin bin/ameba
-    runHook postInstall
-  '';
-
-  doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-    crystal spec
-    runHook postCheck
-  '';
 
   meta = with stdenv.lib; {
     description = "A static code analysis tool for Crystal";
