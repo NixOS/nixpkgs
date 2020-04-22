@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
+{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
 , freeglut ? null, openal ? null, SDL2 ? null }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yabause";
   version = "0.9.15";
 
