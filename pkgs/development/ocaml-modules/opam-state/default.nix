@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "opam-state";
   inherit (opam-repository) version src enable_checks;
 
-  buildInputs = [
+  propagatedBuildInputs = [
     opam-repository
   ];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ocaml, ocamlbuild, findlib
-, cppo, cudf, ocamlgraph, ocaml_extlib, re, perl }:
+, cppo, cudf, ocamlgraph, ocaml_extlib, re, perl, ncurses }:
 
 let base_patch_url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/dose3/dose3.5.0.1/files";
 in
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ ncurses ]; # for tput
+
   buildInputs = [
     ocaml
     ocamlbuild
@@ -47,8 +49,12 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "BINDIR=$(out)/bin"
     "LIBDIR=$(out)/lib"
-    "INCDIR=$(out)/include"
   ];
+
+  preInstall = ''
+    substituteInPlace Makefile.config \
+      --replace "-destdir \$(LIBDIR)" ""
+  '';
 
   createFindlibDestdir = true;
 

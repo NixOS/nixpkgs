@@ -1292,4 +1292,15 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_latest = ocamlPackages_4_10;
 
   ocamlPackages = ocamlPackages_4_09;
+
+  esyOcamlPackages = ocamlPackages.overrideScope' (self: super: {
+    cmdliner = super.cmdliner.overrideAttrs (oldAttrs : {
+      src = pkgs.fetchFromGitHub {
+        owner = "esy-ocaml";
+        repo = "cmdliner";
+        rev = "e9316bc34e4781ffdd51ffe6f2de7c59b36c741e";
+        sha256 = "0dly2gskcfh2cari5s87bfqahkf8jsxrzp2wb0madl3v9dgmil3b";
+      };
+    });
+  });
 }

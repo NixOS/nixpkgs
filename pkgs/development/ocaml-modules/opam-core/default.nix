@@ -3,13 +3,13 @@
 
 buildDunePackage rec {
   pname = "opam-core";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "opam";
     rev = version;
-    sha256 = "0pf2smq2sdcxryq5i87hz3dv05pb3zasb1is3kxq1pi1s4cn55mx";
+    sha256 = "1p719ccn9wnzk6impsnwr809yh507h8f37dx9nn64b1hsyb5z8ax";
   };
 
   buildInputs = [

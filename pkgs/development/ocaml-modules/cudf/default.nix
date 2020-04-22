@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, ocamlbuild, findlib, ocaml_extlib, perl }:
+{ stdenv, fetchurl, ocaml, ocamlbuild, findlib, ocaml_extlib, perl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "cudf";
@@ -9,20 +9,28 @@ stdenv.mkDerivation rec {
     sha256 = "0771lwljqwwn3cryl0plny5a5dyyrj4z6bw66ha5n8yfbpcy8clr";
   };
 
+  dontConfigure = true;
+
+  nativeBuildInputs = [ ncurses ];
+
   buildInputs = [
     ocaml
     ocamlbuild
     findlib
-    ocaml_extlib
     perl
   ];
+
+  propagatedBuildInputs = [ ocaml_extlib ];
 
   makeFlags = [
     "OCAMLLIBDIR=$(out)/lib"
     "BINDIR=$(out)/bin"
     "LIBDIR=$(out)/lib"
-    "INCDIR=$(out)/include"
   ];
+
+  buildPhase = ''
+    make all opt
+  '';
 
   createFindlibDestdir = true;
 

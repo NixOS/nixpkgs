@@ -255,7 +255,14 @@ in
 
   etBook = callPackage ../data/fonts/et-book { };
 
-  esy = callPackage ../development/tools/ocaml/esy { };
+  esy = callPackage ../development/tools/ocaml/esy {
+    ocamlPackages = ocaml-ng.esyOcamlPackages;
+    buildDunePackage = ocamlPackages.buildDunePackage;
+    esy-solve-cudf = callPackage ../development/tools/ocaml/esy/solve-cudf.nix {
+      inherit ocamlPackages;
+      inherit (ocamlPackages) buildDunePackage;
+    };
+  };
 
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
