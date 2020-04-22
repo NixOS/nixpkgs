@@ -17,6 +17,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cp * $out/bin/
+  '' + optionalString stdenv.isLinux ''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '';
 
