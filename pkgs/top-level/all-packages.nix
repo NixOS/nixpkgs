@@ -873,6 +873,8 @@ in
 
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
+  crowbar = callPackage ../tools/security/crowbar { };
+
   crumbs = callPackage ../applications/misc/crumbs { };
 
   crc32c = callPackage ../development/libraries/crc32c { };
