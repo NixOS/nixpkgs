@@ -25,14 +25,16 @@ stdenv.mkDerivation rec {
     sha256 = "1r4m0xhvwpcqxrqvp3hz1bzlkxqj2jiymd5r6hj8xjzz536hyprz";
   };
 
-  cmakeFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++";
+  cmakeFlags = [ 
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}" 
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
+  ];
 
   nativeBuildInputs = [ cmake pkgconfig ] ++ optional docSupport doxygen;
   buildInputs = [ pugixml wayland libGL libffi ];
 
   outputs = [ "bin" "dev" "lib" "out" ] ++ optionals docSupport [ "doc" "devman" ];
-
-  cmakeFlags = [ "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}" ];
 
   meta = with stdenv.lib; {
     description = "Wayland C++ binding";
