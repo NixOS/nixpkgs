@@ -4,6 +4,11 @@
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.176.a/linux-hardened-4.14.176.a.patch",
         "version_suffix": "a"
     },
+    "4.19.117": {
+        "sha256": "0c8dvh49nzypxwvsls10i896smvpdrk40x8ybljb3qk3r8j7niaw",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.117.a/linux-hardened-4.19.117.a.patch",
+        "version_suffix": "a"
+    },
     "5.4.34": {
         "sha256": "1xwpqr9nzpjg837b3wnzb8fmrl2g9rz8gz5yb55vnnllbzbz36v6",
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.34.a/linux-hardened-5.4.34.a.patch",
