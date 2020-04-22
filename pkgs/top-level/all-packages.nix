@@ -25227,6 +25227,8 @@ in
 
   dosbox = callPackage ../misc/emulators/dosbox { };
 
+  dosbox-staging = callPackage ../misc/emulators/dosbox-staging { };
+
   dpkg = callPackage ../tools/package-management/dpkg { };
 
   dumb = callPackage ../misc/dumb { };
