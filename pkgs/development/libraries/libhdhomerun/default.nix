@@ -1,18 +1,26 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation {
-  name = "libhdhomerun-1efbcb";
+  pname = "libhdhomerun";
+  version = "20200303";
 
-  src = fetchgit {
-    url = "git://github.com/Silicondust/libhdhomerun.git";
-    rev = "1efbcb2b87b17a82f2b3d873d1c9cc1c6a3a9b77";
-    sha256 = "11iyrfs98xb50n9iqnwfphmmnn5w3mq2l9cjjpf8qp29cvs33cgy";
+  src = fetchFromGitHub {
+    owner = "Silicondust";
+    repo = "libhdhomerun";
+    # repo does not use tagged releases
+    rev = "64aa1606b58e9654385333031c5d7bf02989bf49";
+    sha256 = "0151n9f845k7l3ha2bwr67n4csj83qmygmlhy1zf8q9hvp6y8ia4";
   };
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "gcc" "cc"
-    substituteInPlace Makefile --replace "-arch i386" ""
-  '';
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  patches = [
+    # https://github.com/Silicondust/libhdhomerun/pull/27
+    (fetchpatch {
+      url = "https://github.com/Silicondust/libhdhomerun/commit/2845a5d9a13d51f0028087abd0c745bad53a1390.patch";
+      sha256 = "1jsy69447fsiwg3qmlx84zbxxh28pzknjz1h5wr54pmmwqlhcjp2";
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,include/hdhomerun}
