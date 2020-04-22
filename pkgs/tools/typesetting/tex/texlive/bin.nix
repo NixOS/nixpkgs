@@ -277,6 +277,11 @@ dvisvgm = stdenv.mkDerivation {
       stripLen = 1;
       extraPrefix = "texk/dvisvgm/dvisvgm-src/";
     })
+    # Needed for ghostscript>=9.50
+    (fetchpatch {
+      url = "https://github.com/TeX-Live/texlive-source/commit/ebe96188a9699053cc134084f311b876b18bdb58.patch";
+      sha256 = "09km2zqja07sxjkbv9l0kwx9yrmbfv09gp79fz7w7f77lmvyd235";
+    })
   ];
 
   nativeBuildInputs = [ pkgconfig ];
