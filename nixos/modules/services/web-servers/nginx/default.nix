@@ -698,7 +698,7 @@ in
       '';
       serviceConfig = {
         ExecStart = execCommand;
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecReload = "${execCommand} -s reload";
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
@@ -721,18 +721,14 @@ in
       wants = [ "nginx.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
-      # commented, because can cause extra delays during activate for this config:
-      #      services.nginx.virtualHosts."_".locations."/".proxyPass = "http://blabla:3000";
-      # stopIfChanged = false;
-      serviceConfig.Type = "oneshot";
-      serviceConfig.TimeoutSec = 60;
-      script = ''
-        if ${pkgs.systemd}/bin/systemctl -q is-active nginx.service ; then
-          ${execCommand} -t && \
-            ${pkgs.systemd}/bin/systemctl reload nginx.service
-        fi
-      '';
-      serviceConfig.RemainAfterExit = true;
+      serviceConfig = {
+        Type = "oneshot";
+        TimeoutSec = 60;
+        ExecStart = [
+          "/run/current-system/systemd/bin/systemctl reload nginx.service"
+        ];
+        RemainAfterExit = true;
+      };
     };
 
     security.acme.certs = filterAttrs (n: v: v != {}) (

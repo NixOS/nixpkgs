@@ -114,16 +114,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         webserver.wait_for_unit("nginx")
         webserver.succeed("journalctl -u nginx | grep -q -i stopped")
 
-    with subtest("nixos-rebuild --switch should fail when there are configuration errors"):
-        webserver.fail(
+    with subtest(
+        "When switching to a broken configuration, the nginx unit should fail to reload"
+    ):
+        webserver.succeed(
             "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
         )
-        webserver.succeed("[[ $(systemctl is-failed nginx-config-reload) == failed ]]")
+        webserver.succeed("journalctl -u nginx | grep -q -i 'reload failed'")
         webserver.succeed("[[ $(systemctl is-failed nginx) == active ]]")
-        # just to make sure operation is idempotent. During development I had a situation
-        # when first time it shows error, but stops showing it on subsequent rebuilds
-        webserver.fail(
-            "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
-        )
   '';
 })
