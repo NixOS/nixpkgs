@@ -70,6 +70,14 @@ let
     patches = [
       # poppler 0.84 compat fixups, use 0.83 files otherwise
       ./poppler84.patch
+
+      # Needed for ghostscript>=9.50
+      (fetchpatch {
+        name = "xdvipdfm-fix.patch";
+        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/dvipdfm-x/spc_dvips.c?view=patch&r1=52765&r2=52764&pathrev=52765";
+        sha256 = "0qvrc7yxhbl5f4g340z8aql388bwib0m2gxd473skbmviy5bjr3f";
+        stripLen = 2;
+      })
     ];
 
     # remove when removing synctex-missing-header.patch
