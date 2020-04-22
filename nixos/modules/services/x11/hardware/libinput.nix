@@ -191,6 +191,25 @@ in {
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.libinput;
+        defaultText = "pkgs.libinput";
+        description = ''
+          The libinput package to use.
+        '';
+      };
+
+      xf86inputlibinput = {
+        package = mkOption {
+          type = types.package;
+          default = pkgs.xorg.xf86inputlibinput;
+          defaultText = "pkgs.xorg.xf86inputlibinput";
+          description = ''
+            The xf86-input-libinput package to use.
+          '';
+        };
+      };
     };
 
   };
@@ -198,19 +217,19 @@ in {
 
   config = mkIf cfg.enable {
 
-    services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
+    services.xserver.modules = [ cfg.xf86inputlibinput.package ];
 
-    environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
+    environment.systemPackages = [ cfg.xf86inputlibinput.package ];
 
     environment.etc =
       let cfgPath = "X11/xorg.conf.d/40-libinput.conf";
       in {
         ${cfgPath} = {
-          source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
+          source = cfg.xf86inputlibinput.package.out + "/share/" + cfgPath;
         };
       };
 
-    services.udev.packages = [ pkgs.libinput.out ];
+    services.udev.packages = [ cfg.package.out ];
 
     services.xserver.config =
       ''
