@@ -26,7 +26,7 @@ build system it uses. Here are some examples:
 
 After you have identified the correct system, you need to override your package
 expression while adding in build system as a build input. For example, `dat`
-requires `node-gyp-build`, so we override its expression in `default-v10.nix`:
+requires `node-gyp-build`, so we override its expression in `default-v12.nix`:
 
 ```nix
 dat = nodePackages.dat.override (oldAttrs: {
@@ -36,14 +36,14 @@ dat = nodePackages.dat.override (oldAttrs: {
 
 To add a package from NPM to nixpkgs:
 
- 1. Modify `pkgs/development/node-packages/node-packages-v10.json` to add, update
+ 1. Modify `pkgs/development/node-packages/node-packages-v12.json` to add, update
     or remove package entries. (Or `pkgs/development/node-packages/node-packages-v8.json`
     for packages depending on Node.js 8.x)
  2. Run the script: `(cd pkgs/development/node-packages && ./generate.sh)`.
  3. Build your new package to test your changes:
     `cd /path/to/nixpkgs && nix-build -A nodePackages.<new-or-updated-package>`.
-    To build against a specific Node.js version (e.g. 10.x):
-    `nix-build -A nodePackages_10_x.<new-or-updated-package>`
+    To build against a specific Node.js version (e.g. 12.x):
+    `nix-build -A nodePackages_12_x.<new-or-updated-package>`
  4. Add and commit all modified and generated files.
 
 For more information about the generation process, consult the
