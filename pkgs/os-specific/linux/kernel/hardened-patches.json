@@ -9,7 +9,7 @@
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.117.a/linux-hardened-4.19.117.a.patch",
         "version_suffix": "a"
     },
-    "5.4.34": {
+    "5.4.35": {
         "sha256": "1xwpqr9nzpjg837b3wnzb8fmrl2g9rz8gz5yb55vnnllbzbz36v6",
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.34.a/linux-hardened-5.4.34.a.patch",
         "version_suffix": "a"
