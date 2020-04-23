@@ -17,6 +17,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "SHELL=/bin/sh" "GREP=grep" ];
 
+  # Many gzip executables are shell scripts that depend upon other gzip
+  # executables being in $PATH.  Rather than try to re-write all the
+  # internal cross-references, just add $out/bin to PATH at the top of
+  # all the executables that are shell scripts.
+  preFixup = ''
+    sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
+    }' $out/bin/*
+  '';
+
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";

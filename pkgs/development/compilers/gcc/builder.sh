@@ -216,6 +216,7 @@ postInstall() {
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "$lib"
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "$lib"
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "$lib"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "$lib"
     moveToOutput "share/gcc-*/python" "$lib"
 
     for i in "$lib/${targetConfig}"/lib/*.{la,py}; do

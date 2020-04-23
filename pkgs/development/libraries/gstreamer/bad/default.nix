@@ -10,7 +10,7 @@
 , gst-plugins-base
 , orc
 , gobject-introspection
-, enableZbar ? true
+, enableZbar ? false
 , faacSupport ? false
 , faac ? null
 , faad2

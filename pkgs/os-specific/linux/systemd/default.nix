@@ -7,6 +7,7 @@
 , gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
+, substituteAll
 , getent
 , buildPackages
 , perl
@@ -23,24 +24,49 @@ let gnupg-minimal = gnupg.override {
   pinentry = null;
   adns = null;
   gnutls = null;
-  libusb = null;
+  libusb1 = null;
   openldap = null;
   readline = null;
   zlib = null;
   bzip2 = null;
 };
 in stdenv.mkDerivation {
-  version = "243.7";
+  version = "245.3";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "nixos";
-    repo = "systemd";
-    rev = "e7d881488292fc8bdf96acd12767eca1bd65adae";
-    sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
+    owner = "systemd";
+    repo = "systemd-stable";
+    rev = "0f5047b7d393cfba37f91e25cae559a0bc910582";
+    sha256 = "0wyh14gbvvpgdmk1mjgpxr9i4pv1i9n7pnwpa0gvjh6hq948fyn2";
   };
+
+  patches = [
+    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
+    ./0003-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0004-Fix-NixOS-containers.patch
+    ./0006-Look-for-fsck-in-the-right-place.patch
+    ./0007-Add-some-NixOS-specific-unit-directories.patch
+    ./0009-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0010-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0011-Fix-hwdb-paths.patch
+    ./0012-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0013-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0016-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0018-Install-default-configuration-into-out-share-factory.patch
+    ./0019-inherit-systemd-environment-when-calling-generators.patch
+    ./0021-add-rootprefix-to-lookup-dir-paths.patch
+    ./0022-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0023-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0024-kmod-static-nodes.service-Update-ConditionFileNotEmpty.patch
+    ./0025-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+  '';
 
   outputs = [ "out" "lib" "man" "dev" ];
 
@@ -83,8 +109,10 @@ in stdenv.mkDerivation {
     "-Dtests=false"
     "-Dimportd=true"
     "-Dlz4=true"
+    "-Dhomed=false"
     "-Dhostnamed=true"
     "-Dnetworkd=true"
+    "-Dportabled=false"
     "-Dsysusers=false"
     "-Dtimedated=true"
     "-Dtimesyncd=true"
@@ -195,6 +223,11 @@ in stdenv.mkDerivation {
 
   doCheck = false; # fails a bunch of tests
 
+  # trigger the test -n "$DESTDIR" || mutate in upstreams build system
+  preInstall = ''
+    export DESTDIR=/
+  '';
+
   postInstall = ''
     # sysinit.target: Don't depend on
     # systemd-tmpfiles-setup.service. This interferes with NixOps's
@@ -263,6 +296,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ andir eelco flokli mic92 ];
+    maintainers = with maintainers; [ andir eelco flokli ];
   };
 }

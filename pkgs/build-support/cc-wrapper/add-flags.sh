@@ -10,6 +10,7 @@ var_templates_list=(
     NIX+CFLAGS_LINK
     NIX+CXXSTDLIB_COMPILE
     NIX+CXXSTDLIB_LINK
+    NIX+GNATFLAGS_COMPILE
 )
 var_templates_bool=(
     NIX+ENFORCE_NO_NATIVE
@@ -38,6 +39,10 @@ fi
 
 if [ -e @out@/nix-support/cc-cflags ]; then
     NIX_@infixSalt@_CFLAGS_COMPILE="$(< @out@/nix-support/cc-cflags) $NIX_@infixSalt@_CFLAGS_COMPILE"
+fi
+
+if [ -e @out@/nix-support/gnat-cflags ]; then
+    NIX_@infixSalt@_GNATFLAGS_COMPILE="$(< @out@/nix-support/gnat-cflags) $NIX_@infixSalt@_GNATFLAGS_COMPILE"
 fi
 
 if [ -e @out@/nix-support/cc-ldflags ]; then
