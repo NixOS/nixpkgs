@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.0.38-1";
+  version = "3.1.00-1";
 
   src = fetchFromGitHub {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "1qw3sxgd3ly916bzzl3873s3flngwd3vh57slw0shsj7ivz8bfnm";
+    sha256 = "0md6yfd297l8695g0rsbs4mm74dc3k00rfjl4x2n4i33mkylp6qa";
   };
 
   buildInputs = [ perl makeWrapper ];
@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A full featured CLI system information tool";
+    longDescription = ''
+      inxi is a command line system information script built for console and
+      IRC. It is also used a debugging tool for forum technical support to
+      quickly ascertain users' system configurations and hardware. inxi shows
+      system hardware, CPU, drivers, Xorg, Desktop, Kernel, gcc version(s),
+      Processes, RAM usage, and a wide variety of other useful information.
+    '';
     homepage = "https://smxi.org/docs/inxi.htm";
     changelog = "https://github.com/smxi/inxi/blob/${version}/inxi.changelog";
     license = licenses.gpl3Plus;
