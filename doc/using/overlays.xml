@@ -220,7 +220,7 @@ self: super:
        liblapack.so.3. For instance:
      </para>
      <programlisting>
-$ LD_LIBRARY_PATH=$(nix-build -A mkl):$LD_LIBRARY_PATH nix-shell -p octave --run octave
+$ LD_LIBRARY_PATH=$(nix-build -A mkl)/lib:$LD_LIBRARY_PATH nix-shell -p octave --run octave
      </programlisting>
      <para>
        Intel MKL requires an <literal>openmp</literal> implementation
