@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, gtest, doxygen, graphviz }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "uriparser";
@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake doxygen graphviz ];
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DURIPARSER_BUILD_DOCS=OFF"
+  ];
 
   checkInputs = [ gtest ];
   doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;
