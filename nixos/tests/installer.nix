@@ -29,7 +29,7 @@ let
             boot.loader.grub.splashImage = null;
           ''}
 
-          boot.loader.grub.extraConfig = "serial; terminal_output.serial";
+          boot.loader.grub.extraConfig = "serial; terminal_output serial";
           ${if grubUseEfi then ''
             boot.loader.grub.device = "nodev";
             boot.loader.grub.efiSupport = true;
