@@ -5708,7 +5708,6 @@ broken-packages:
   - hdph-closure
   - hdr-histogram
   - HDRUtils
-  - headed-megaparsec
   - headergen
   - heapsort
   - heart-app
