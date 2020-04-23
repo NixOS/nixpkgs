@@ -38,6 +38,6 @@ with lib.maintainers; {
       vdemeester
       zowoq
     ];
-    scope = "Maintain Podman related packages and modules.";
+    scope = "Maintain Podman and CRI-O related packages and modules.";
   };
 }
