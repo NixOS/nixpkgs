@@ -21,15 +21,21 @@ let
     };
 
     "8.9" = {
-      version = "1.2";
-      rev = "v1.2-8.9";
-      sha256 = "1q3wvicr43bgy7xn1diwh4j43mnrhprrc2xd22qlbz9cl6bhf8bj";
+      version = "1.2.1";
+      rev = "v1.2.1-8.9";
+      sha256 = "0d8ddj6nc6p0k25cd8fs17cq427zhzbc3v9pk2wd2fnvk70nlfij";
     };
 
     "8.10" = {
-      version = "1.2";
-      rev = "v1.2-8.10";
-      sha256 = "1v5kx0xzxzsbs5r4w08rm1lrmjjggnd3ap0sd1my88ds17jzyasd";
+      version = "1.2.1";
+      rev = "v1.2.1-8.10-2";
+      sha256 = "0j3z4l5nrbyi9zbbyqkc6kassjanwld2188mwmrbqspaypm2ys68";
+    };
+
+    "8.11" = {
+      version = "1.2.1";
+      rev = "v1.2.1-8.11";
+      sha256 = "06k0h7lansxs479is3vj5ikg8s5k4c6svnqcwmxbni4wx8bhmg17";
     };
   };
   param = params.${coq.coq-version};
