@@ -16497,14 +16497,6 @@ in
     ];
   };
 
-  linux_5_5 = callPackage ../os-specific/linux/kernel/linux-5.5.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
-    ];
-  };
-
   linux_5_6 = callPackage ../os-specific/linux/kernel/linux-5.6.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
