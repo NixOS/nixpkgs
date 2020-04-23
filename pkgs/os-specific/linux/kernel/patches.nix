@@ -39,16 +39,9 @@
   };
 
   hardened = let
-    mkPatch = kernelVersion: patch: let
-      fullVersion = "${kernelVersion}.${patch.version_suffix}";
-      name = "linux-hardened-${fullVersion}";
-    in {
-      inherit name;
-      patch = fetchurl {
-        name = "${name}.patch";
-        inherit (patch) url sha256;
-        meta.maintainers = with lib.maintainers; [ emily ];
-      };
+    mkPatch = kernelVersion: src: {
+      name = lib.removeSuffix ".patch" src.name;
+      patch = fetchurl src;
     };
     patches = builtins.fromJSON (builtins.readFile ./hardened-patches.json);
   in lib.mapAttrs mkPatch patches;
