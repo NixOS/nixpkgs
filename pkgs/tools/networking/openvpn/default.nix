@@ -19,11 +19,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openvpn";
-  version = "2.4.7";
+  version = "2.4.9";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/${pname}-${version}.tar.xz";
-    sha256 = "0j7na936isk9j8nsdrrbw7wmy09inmjqvsb8mw8az7k61xbm6bx4";
+    sha256 = "1qpbllwlha7cffsd5dlddb8rl22g9rar5zflkz1wrcllhvfkl7v4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -32,13 +32,6 @@ in stdenv.mkDerivation rec {
                   ++ optionals stdenv.isLinux [ pam iproute ]
                   ++ optional useSystemd systemd
                   ++ optional pkcs11Support pkcs11helper;
-
-  patches = [
-    ( fetchpatch {
-      url = "https://sources.debian.org/data/main/o/openvpn/2.4.7-1/debian/patches/fix-pkcs11-helper-hang.patch";
-      sha256 = "0c8jzbfsmb0mm9f7kkjxac1hk8q6igm267s687vx3mdqs1wys6bm";
-    })
-  ];
 
   configureFlags = optionals stdenv.isLinux [
     "--enable-iproute2"
@@ -68,7 +61,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A robust and highly flexible tunneling application";
-    downloadPage = "https://openvpn.net/index.php/open-source/downloads.html";
+    downloadPage = "https://openvpn.net/community-downloads/";
     homepage = "https://openvpn.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
