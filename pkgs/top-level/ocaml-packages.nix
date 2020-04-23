@@ -562,6 +562,10 @@ let
 
     mirage-stack = callPackage ../development/ocaml-modules/mirage-stack { };
 
+    mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
+
+    mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
