@@ -3439,6 +3439,8 @@ in {
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
+  setuptools-lint = callPackage ../development/python-modules/setuptools-lint { };
+
   sievelib = callPackage ../development/python-modules/sievelib { };
 
   watchdog = callPackage ../development/python-modules/watchdog { };
