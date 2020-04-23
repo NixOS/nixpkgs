@@ -1354,6 +1354,11 @@ in
 
   bs-platform = callPackage ../development/compilers/bs-platform {};
 
+  reason-language-server = callPackage ../development/tools/reason-language-server {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_08;
+    inherit (ocaml-ng.ocamlPackages_4_08) buildDunePackage;
+  };
+
   c3d = callPackage ../applications/graphics/c3d {
     stdenv = gcc8Stdenv;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
