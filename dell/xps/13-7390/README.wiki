@@ -1,8 +1,8 @@
 = Dell XPS 13 7390 =
 
 == Installation == 
-You need to disable AHCI as described here.
-https://wiki.ubuntu.com/Dell/XPS/XPS-13-7390-2-in-1
+
+You need to disable RAID and use AHCI instead as described [here](https://wiki.ubuntu.com/Dell/XPS/XPS-13-7390-2-in-1).
 
 == Firmware upgrades ==
 
