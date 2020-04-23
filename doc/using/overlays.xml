@@ -140,8 +140,8 @@ self: super:
  <section xml:id="sec-overlays-alternatives">
    <title>Using overlays to configure alternatives</title>
    <para>
-     Certain software has different implementations of the same
-     interface. Other distributions have functionality to switch
+     Certain software packages have different implementations of the
+     same interface. Other distributions have functionality to switch
      between these. For example, Debian provides <link
      xlink:href="https://wiki.debian.org/DebianAlternatives">DebianAlternatives</link>.
      Nixpkgs has what we call <literal>alternatives</literal>, which
@@ -160,8 +160,9 @@ self: super:
          </para>
          <para>
            The Nixpkgs attribute is <literal>openblas</literal> for
-           ILP64 and <literal>openblasCompat</literal> for LP64. This
-           is the default.
+           ILP64 (integer width = 64 bits) and
+           <literal>openblasCompat</literal> for LP64 (integer width =
+           32 bits). <literal>openblasCompat</literal> is the default.
          </para>
        </listitem>
        <listitem>
@@ -190,8 +191,15 @@ self: super:
        #83888</link>, we are able to override the ‘blas’ and ‘lapack’
        packages to use different implementations, through the
        ‘blasProvider’ and ‘lapackProvider’ argument. This can be used
-       to select a different provider. For example, an overlay can be
-       created that looks like:
+       to select a different provider. BLAS providers will have
+       symlinks in <literal>$out/lib/libblas.so.3</literal> and
+       <literal>$out/lib/libcblas.so.3</literal> to their respective
+       BLAS libraries. Likewise, LAPACK providers will have symlinks
+       in <literal>$out/lib/liblapack.so.3</literal> and
+       <literal>$out/lib/liblapacke.so.3</literal> to their respective
+       LAPCK libraries. For example, Intel MKL is both a BLAS and
+       LAPACK provider. An overlay can be created to use Intel MKL
+       that looks like:
      </para>
      <programlisting>
 self: super:
@@ -208,9 +216,12 @@ self: super:
      <para>
        This overlay uses Intel’s MKL library for both BLAS and LAPACK
        interfaces. Note that the same can be accomplished at runtime
-       using <literal>LD_PRELOAD</literal> of libblas.so.3 and
-       liblapack.so.3.
+       using <literal>LD_LIBRARY_PATH</literal> of libblas.so.3 and
+       liblapack.so.3. For instance:
      </para>
+     <programlisting>
+$ LD_LIBRARY_PATH=$(nix-build -A mkl)/lib:$LD_LIBRARY_PATH nix-shell -p octave --run octave
+     </programlisting>
      <para>
        Intel MKL requires an <literal>openmp</literal> implementation
        when running with multiple processors. By default,
@@ -221,8 +232,8 @@ self: super:
        set it with <literal>LD_PRELOAD</literal>. Note that
        <literal>mkl</literal> is only available on
        <literal>x86_64-linux</literal> and
-       <literal>x86_64-darwin</literal>. Moreover, Hydra is not build
-       and distributing pre-compiled binaries using it.
+       <literal>x86_64-darwin</literal>. Moreover, Hydra is not
+       building and distributing pre-compiled binaries using it.
      </para>
      <para>
        For BLAS/LAPACK switching to work correctly, all packages must

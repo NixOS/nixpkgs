@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, qt5, ffmpeg, guvcview, cmake, ninja, libxml2
+{ mkDerivation, stdenv, fetchurl, qt5, ffmpeg, guvcview, cmake, ninja, libxml2
 , gettext, pkgconfig, libgphoto2, gphoto2, v4l-utils, libv4l, pcre
 , qwt, extra-cmake-modules }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qstopmotion";
   version = "2.4.1";
 

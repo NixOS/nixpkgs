@@ -65,6 +65,13 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # this theme is required
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+    )
+  '';
+
   meta = with stdenv.lib; {
     description = "The extensible top panel for Pantheon";
     longDescription = ''

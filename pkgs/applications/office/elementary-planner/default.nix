@@ -1,6 +1,12 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, desktop-file-utils
-, python3, vala, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkgconfig
+, desktop-file-utils
+, python3
+, vala
+, wrapGAppsHook
 , evolution-data-server
 , libical
 , libgee
@@ -63,8 +69,15 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # the theme is hardcoded
+      --prefix XDG_DATA_DIRS : "${pantheon.elementary-gtk-theme}/share"
+    )
+  '';
+
   meta = with stdenv.lib; {
-    description = "Task and project manager designed to elementary OS";
+    description = "Task manager with Todoist support designed for GNU/Linux 🚀️";
     homepage = "https://planner-todo.web.app";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ] ++ pantheon.maintainers;

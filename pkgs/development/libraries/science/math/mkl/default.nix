@@ -114,10 +114,10 @@ in stdenvNoCC.mkDerivation {
     '') + ''
 
     # Setup symlinks for blas / lapack
-    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/libblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
-    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/libcblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
-    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/liblapack${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
-    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/liblapacke${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/libblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}${stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ".3"}
+    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/libcblas${stdenvNoCC.hostPlatform.extensions.sharedLibrary}${stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ".3"}
+    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/liblapack${stdenvNoCC.hostPlatform.extensions.sharedLibrary}${stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ".3"}
+    ln -s $out/lib/libmkl_rt${stdenvNoCC.hostPlatform.extensions.sharedLibrary} $out/lib/liblapacke${stdenvNoCC.hostPlatform.extensions.sharedLibrary}${stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ".3"}
   '';
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the

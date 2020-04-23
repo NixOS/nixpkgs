@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
-  liblapack="${lib.getLib lapackProvider}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
+  liblapack="${lib.getLib lapackProvider}/lib/liblapack${canonicalExtension}"
 
   if ! [ -e "$liblapack" ]; then
     echo "$liblapack does not exist, ${lapackProvider.name} does not provide liblapack."
@@ -74,7 +74,7 @@ Cflags: -I$dev/include
 Libs: -L$out/lib -llapack
 EOF
 
-  liblapacke="${lib.getLib lapackProvider}/lib/liblapacke${stdenv.hostPlatform.extensions.sharedLibrary}"
+  liblapacke="${lib.getLib lapackProvider}/lib/liblapacke${canonicalExtension}"
 
   if ! [ -e "$liblapacke" ]; then
     echo "$liblapacke does not exist, ${lapackProvider.name} does not provide liblapacke."
