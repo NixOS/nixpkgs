@@ -9017,10 +9017,14 @@ in
   rust_1_42 = callPackage ../development/compilers/rust/1_42.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust = rust_1_42;
+  rust_1_43 = callPackage ../development/compilers/rust/1_43.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+  rust = rust_1_43;
 
   rustPackages_1_42 = rust_1_42.packages.stable;
-  rustPackages = rustPackages_1_42;
+  rustPackages_1_43 = rust_1_43.packages.stable;
+  rustPackages = rustPackages_1_43;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
   inherit (rust) makeRustPlatform;
@@ -22145,6 +22149,7 @@ in
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
+    inherit (rustPackages_1_42) rustc;
     libpng = libpng_apng;
     gtk3Support = true;
   };
