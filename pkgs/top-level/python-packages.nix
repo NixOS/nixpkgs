@@ -3413,6 +3413,8 @@ in {
 
   samplerate = callPackage ../development/python-modules/samplerate { };
 
+  screeninfo = callPackage ../development/python-modules/screeninfo { };
+
   ssdeep = callPackage ../development/python-modules/ssdeep { };
 
   ssdp = callPackage ../development/python-modules/ssdp { };
