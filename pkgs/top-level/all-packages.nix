@@ -11400,8 +11400,6 @@ in
 
   dhex = callPackage ../applications/editors/dhex { };
 
-  dnnl = callPackage ../development/libraries/dnnl { };
-
   double-conversion = callPackage ../development/libraries/double-conversion { };
 
   dclib = callPackage ../development/libraries/dclib { };
@@ -13760,6 +13758,8 @@ in
   olm = callPackage ../development/libraries/olm { };
 
   one_gadget = callPackage ../development/tools/misc/one_gadget { };
+
+  oneDNN = callPackage ../development/libraries/oneDNN { };
 
   onedrive = callPackage ../applications/networking/sync/onedrive { };
 

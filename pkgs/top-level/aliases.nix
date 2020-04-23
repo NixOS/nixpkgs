@@ -98,6 +98,7 @@ mapAliases ({
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
   dmtx = dmtx-utils; # added 2018-04-25
+  dnnl = oneDNN; # added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   double_conversion = double-conversion; # 2017-11-22
