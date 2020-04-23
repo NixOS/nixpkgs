@@ -8,6 +8,7 @@ use File::stat;
 use File::Copy;
 use File::Slurp;
 use File::Temp;
+use JSON;
 require List::Compare;
 use POSIX;
 use Cwd;
@@ -606,9 +607,12 @@ struct(GrubState => {
     efi => '$',
     devices => '$',
     efiMountPoint => '$',
+    extraGrubInstallArgs => '@',
 });
+# If you add something to the state file, only add it to the end
+# because it is read line-by-line.
 sub readGrubState {
-    my $defaultGrubState = GrubState->new(name => "", version => "", efi => "", devices => "", efiMountPoint => "" );
+    my $defaultGrubState = GrubState->new(name => "", version => "", efi => "", devices => "", efiMountPoint => "", extraGrubInstallArgs => () );
     open FILE, "<$bootPath/grub/state" or return $defaultGrubState;
     local $/ = "\n";
     my $name = <FILE>;
@@ -621,16 +625,34 @@ sub readGrubState {
     chomp($devices);
     my $efiMountPoint = <FILE>;
     chomp($efiMountPoint);
+    # Historically, arguments in the state file were one per each line, but that
+    # gets really messy when newlines are involved, structured arguments
+    # like lists are needed (they have to have a separator encoding), or even worse,
+    # when we need to remove a setting in the future. Thus, the 6th line is a JSON
+    # object that can store structured data, with named keys, and all new state
+    # should go in there.
+    my $jsonStateLine = <FILE>;
+    # For historical reasons we do not check the values above for un-definedness
+    # (that is, when the state file has too few lines and EOF is reached),
+    # because the above come from the first version of this logic and are thus
+    # guaranteed to be present.
+    $jsonStateLine = defined $jsonStateLine ? $jsonStateLine : '{}'; # empty JSON object
+    chomp($jsonStateLine);
+    my %jsonState = %{decode_json($jsonStateLine)};
+    my @extraGrubInstallArgs = @{$jsonState{'extraGrubInstallArgs'}};
     close FILE;
-    my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint );
+    my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint, extraGrubInstallArgs => \@extraGrubInstallArgs );
     return $grubState
 }
 
 my @deviceTargets = getList('devices');
 my $prevGrubState = readGrubState();
 my @prevDeviceTargets = split/,/, $prevGrubState->devices;
+my @extraGrubInstallArgs = getList('extraGrubInstallArgs');
+my @prevExtraGrubInstallArgs = $prevGrubState->extraGrubInstallArgs;
 
 my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
+my $extraGrubInstallArgsDiffer = scalar (List::Compare->new( '-u', '-a', \@extraGrubInstallArgs, \@prevExtraGrubInstallArgs)->get_symmetric_difference());
 my $nameDiffer = get("fullName") ne $prevGrubState->name;
 my $versionDiffer = get("fullVersion") ne $prevGrubState->version;
 my $efiDiffer = $efiTarget ne $prevGrubState->efi;
@@ -639,7 +661,7 @@ if (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1") {
     warn "NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER";
     $ENV{'NIXOS_INSTALL_BOOTLOADER'} = "1";
 }
-my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_BOOTLOADER'} // "") eq "1");
+my $requireNewInstall = $devicesDiffer || $extraGrubInstallArgsDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_BOOTLOADER'} // "") eq "1");
 
 # install a symlink so that grub can detect the boot drive
 my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space";
@@ -650,7 +672,7 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
     foreach my $dev (@deviceTargets) {
         next if $dev eq "nodev";
         print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
-        my @command = ("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", Cwd::abs_path($dev));
+        my @command = ("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", Cwd::abs_path($dev), @extraGrubInstallArgs);
         if ($forceInstall eq "true") {
             push @command, "--force";
         }
@@ -665,7 +687,7 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
 # install EFI GRUB
 if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both")) {
     print STDERR "installing the GRUB $grubVersion EFI boot loader into $efiSysMountPoint...\n";
-    my @command = ("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint");
+    my @command = ("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint", @extraGrubInstallArgs);
     if ($forceInstall eq "true") {
         push @command, "--force";
     }
@@ -692,6 +714,11 @@ if ($requireNewInstall != 0) {
     print FILE $efiTarget, "\n" or die;
     print FILE join( ",", @deviceTargets ), "\n" or die;
     print FILE $efiSysMountPoint, "\n" or die;
+    my %jsonState = (
+        extraGrubInstallArgs => \@extraGrubInstallArgs
+    );
+    my $jsonStateLine = encode_json(\%jsonState);
+    print FILE $jsonStateLine, "\n" or die;
     close FILE or die;
 
     # Atomically switch to the new state file
