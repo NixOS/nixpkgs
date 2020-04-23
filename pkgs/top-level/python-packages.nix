@@ -1071,6 +1071,8 @@ in {
 
   purl = callPackage ../development/python-modules/purl { };
 
+  pyclipper = callPackage ../development/python-modules/pyclipper { };
+
   pymystem3 = callPackage ../development/python-modules/pymystem3 { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
