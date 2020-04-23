@@ -1,0 +1,42 @@
+From: Benjamin Kaduk <kaduk@mit.edu>
+Date: Fri, 10 Apr 2020 12:27:28 -0700
+Subject: Fix NULL dereference in SSL_check_chain() for TLS 1.3
+
+In the tls1_check_sig_alg() helper function, we loop through the list of
+"signature_algorithms_cert" values received from the client and attempt
+to look up each one in turn in our internal table that maps wire
+codepoint to string-form name, digest and/or signature NID, etc., in
+order to compare the signature scheme from the peer's list against what
+is used to sign the certificates in the certificate chain we're
+checking.  Unfortunately, when the peer sends a value that we don't
+support, the lookup returns NULL, but we unconditionally dereference the
+lookup result for the comparison, leading to an application crash
+triggerable by an unauthenticated client.
+
+Since we will not be able to say anything about algorithms we don't
+recognize, treat NULL return from lookup as "does not match".
+
+We currently only apply the "signature_algorithm_cert" checks on TLS 1.3
+connections, so previous TLS versions are unaffected.  SSL_check_chain()
+is not called directly from libssl, but may be used by the application
+inside a callback (e.g., client_hello or cert callback) to verify that a
+candidate certificate chain will be acceptable to the client.
+
+CVE-2020-1967
+---
+ ssl/t1_lib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ssl/t1_lib.c b/ssl/t1_lib.c
+index b482019c4c17..5287d10a2d0a 100644
+--- a/ssl/t1_lib.c
++++ b/ssl/t1_lib.c
+@@ -2099,7 +2099,7 @@ static int tls1_check_sig_alg(SSL *s, X509 *x, int default_nid)
+         sigalg = use_pc_sigalgs
+                  ? tls1_lookup_sigalg(s->s3->tmp.peer_cert_sigalgs[i])
+                  : s->shared_sigalgs[i];
+-        if (sig_nid == sigalg->sigandhash)
++        if (sigalg != NULL && sig_nid == sigalg->sigandhash)
+             return 1;
+     }
+     return 0;
