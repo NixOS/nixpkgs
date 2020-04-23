@@ -9,6 +9,7 @@
 , libseccomp
 , systemd
 , go-md2man
+, nixosTests
 }:
 
 buildGoPackage rec {
@@ -44,6 +45,8 @@ buildGoPackage rec {
     installShellCompletion --zsh completions/zsh/_podman
     MANDIR=$man/share/man make install.man
   '';
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with stdenv.lib; {
     homepage = "https://podman.io/";
