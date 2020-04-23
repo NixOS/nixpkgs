@@ -42,7 +42,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs;
-      [ cri-o cri-tools conmon cni-plugins iptables runc utillinux ];
+      [ cri-o cri-tools conmon iptables runc utillinux ];
     environment.etc."crictl.yaml".text = ''
       runtime-endpoint: unix:///var/run/crio/crio.sock
     '';
@@ -56,6 +56,10 @@ in
       registries = [
         ${concatMapStringsSep ", " (x: "\"" + x + "\"") cfg.registries}
       ]
+
+      [crio.network]
+      plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
+      network_dir = "/etc/cni/net.d/"
 
       [crio.runtime]
       conmon = "${pkgs.conmon}/bin/conmon"
