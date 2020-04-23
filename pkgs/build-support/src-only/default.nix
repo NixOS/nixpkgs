@@ -11,11 +11,21 @@
 , src
 , stdenv ? orig.stdenv
 , patches ? []
-, buildInputs ? []
-, ... # needed when passing an existing derivation
+, # deprecated, use the nativeBuildInputs
+  buildInputs ? []
+, # used to pass extra unpackers
+  nativeBuildInputs ? []
+, # needed when passing an existing derivation
+  ...
 }:
 stdenv.mkDerivation {
-  inherit src buildInputs patches name;
+  inherit
+    buildInputs
+    name
+    nativeBuildInputs
+    patches
+    src
+    ;
   installPhase = "cp -r . $out";
   phases = ["unpackPhase" "patchPhase" "installPhase"];
 }
