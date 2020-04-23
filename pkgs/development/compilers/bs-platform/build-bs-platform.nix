@@ -57,8 +57,7 @@ stdenv.mkDerivation rec {
     cp jscomp/others/*.ml jscomp/others/*.mli jscomp/others/*.cm* $out/lib/ocaml
     cp jscomp/stdlib-406/*.ml jscomp/stdlib-406/*.mli jscomp/stdlib-406/*.cm* $out/lib/ocaml
     cp bsconfig.json package.json $out
-    ln -s $out/bsb $out/bin/bsb
-    ln -s $out/bsc $out/bin/bsc
-    ln -s $out/bsrefmt $out/bin/bsrefmt
+    ln -s $out/bsb $out/bsc $out/bsrefmt $out/bin
+    ln -s $out/bsb $out/bsc $out/bsrefmt $out/lib
   '';
 }
