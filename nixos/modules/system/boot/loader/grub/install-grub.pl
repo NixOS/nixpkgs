@@ -682,11 +682,18 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
 
 # update GRUB state file
 if ($requireNewInstall != 0) {
-    open FILE, ">$bootPath/grub/state" or die "cannot create $bootPath/grub/state: $!\n";
+    # Temp file for atomic rename.
+    my $stateFile = "$bootPath/grub/state";
+    my $stateFileTmp = $stateFile . ".tmp";
+
+    open FILE, ">$stateFileTmp" or die "cannot create $stateFileTmp: $!\n";
     print FILE get("fullName"), "\n" or die;
     print FILE get("fullVersion"), "\n" or die;
     print FILE $efiTarget, "\n" or die;
     print FILE join( ",", @deviceTargets ), "\n" or die;
     print FILE $efiSysMountPoint, "\n" or die;
     close FILE or die;
+
+    # Atomically switch to the new state file
+    rename $stateFileTmp, $stateFile or die "cannot rename $stateFileTmp to $stateFile\n";
 }
