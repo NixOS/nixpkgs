@@ -23,6 +23,7 @@ in
   options = {
 
     services.xserver.desktopManager.enlightenment.enable = mkOption {
+      type = types.bool;
       default = false;
       description = "Enable the Enlightenment desktop environment.";
     };

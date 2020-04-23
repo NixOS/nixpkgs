@@ -16,10 +16,7 @@ in
 
     services.safeeyes = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the safeeyes OSGi service";
-      };
+      enable = mkEnableOption "the safeeyes OSGi service";
 
     };
 

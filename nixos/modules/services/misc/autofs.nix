@@ -19,6 +19,7 @@ in
     services.autofs = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Mount filesystems on demand. Unmount them automatically.
