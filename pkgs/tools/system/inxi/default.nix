@@ -1,6 +1,26 @@
-{ stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper
+, ps, dnsutils # dig is recommended for multiple categories
+, withRecommends ? false # Install (almost) all recommended tools (see --recommends)
+, withRecommendedSystemPrograms ? withRecommends, utillinuxMinimal, dmidecode
+, file, hddtemp, iproute, ipmitool, usbutils, kmod, lm_sensors, smartmontools
+, binutils, tree, upower
+, withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
+}:
 
-stdenv.mkDerivation rec {
+let
+  prefixPath = programs:
+    "--prefix PATH ':' '${stdenv.lib.makeBinPath programs}'";
+  recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
+    utillinuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
+    lm_sensors smartmontools binutils tree upower
+  ];
+  recommendedDisplayInformationPrograms = lib.optionals
+    withRecommendedDisplayInformationPrograms
+    ([ glxinfo ] ++ (with xorg; [ xdpyinfo xprop xrandr ]));
+  programs = [ ps dnsutils ] # Core programs
+    ++ recommendedSystemPrograms
+    ++ recommendedDisplayInformationPrograms;
+in stdenv.mkDerivation rec {
   pname = "inxi";
   version = "3.1.00-1";
 
@@ -17,7 +37,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp inxi $out/bin/
     wrapProgram $out/bin/inxi \
-      --set PERL5LIB "${perlPackages.makePerlPath (with perlPackages; [ CpanelJSONXS ])}"
+      --set PERL5LIB "${perlPackages.makePerlPath (with perlPackages; [ CpanelJSONXS ])}" \
+      ${prefixPath programs}
     mkdir -p $out/share/man/man1
     cp inxi.1 $out/share/man/man1/
   '';
