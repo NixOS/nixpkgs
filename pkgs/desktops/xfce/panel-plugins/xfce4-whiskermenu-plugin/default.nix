@@ -1,4 +1,4 @@
-{ mkXfceDerivation, gtk3, glib, cmake, exo, garcon, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
+{ mkXfceDerivation, gettext, gtk3, glib, cmake, exo, garcon, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
 
 mkXfceDerivation {
   category = "panel-plugins";
@@ -9,7 +9,12 @@ mkXfceDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ exo garcon gtk3 glib libxfce4ui libxfce4util xfce4-panel xfconf ];
+  buildInputs = [ gettext exo garcon gtk3 glib libxfce4ui libxfce4util xfce4-panel xfconf ];
+
+  postPatch = ''
+    substituteInPlace panel-plugin/xfce4-popup-whiskermenu.in \
+      --replace gettext ${gettext}/bin/gettext
+  '';
 
   postInstall = ''
     substituteInPlace $out/bin/xfce4-popup-whiskermenu \
