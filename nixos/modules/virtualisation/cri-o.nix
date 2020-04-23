@@ -6,6 +6,10 @@ let
   cfg = config.virtualisation.cri-o;
 in
 {
+  meta = {
+    maintainers = lib.teams.podman.members;
+  };
+
   options.virtualisation.cri-o = {
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
