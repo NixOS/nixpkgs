@@ -19,7 +19,7 @@
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.5.19.a/linux-hardened-5.5.19.a.patch",
         "version_suffix": "a"
     },
-    "5.6.6": {
+    "5.6.7": {
         "sha256": "0jiqh0frxirjbccgfdk007fca6r6n36n0pkqq4jszkckn59ayl7r",
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.6.6.a/linux-hardened-5.6.6.a.patch",
         "version_suffix": "a"
