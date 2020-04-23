@@ -8512,6 +8512,8 @@ in
 
   pscid = nodePackages.pscid;
 
+  remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
+
   tacacsplus = callPackage ../servers/tacacsplus { };
 
   tamarin-prover =
