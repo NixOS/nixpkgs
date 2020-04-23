@@ -310,6 +310,8 @@ in {
 
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
 
+  azure-keyvault-certificates = callPackage ../development/python-modules/azure-keyvault-certificates { };
+
   azure-keyvault-keys = callPackage ../development/python-modules/azure-keyvault-keys { };
 
   azure-keyvault-nspkg = callPackage ../development/python-modules/azure-keyvault-nspkg { };
