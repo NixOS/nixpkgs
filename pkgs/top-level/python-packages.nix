@@ -2597,6 +2597,8 @@ in {
 
   libais = callPackage ../development/python-modules/libais { };
 
+  libevdev = callPackage ../development/python-modules/libevdev { };
+
   libfdt = toPythonModule (pkgs.dtc.override {
     inherit python;
     pythonSupport = true;
