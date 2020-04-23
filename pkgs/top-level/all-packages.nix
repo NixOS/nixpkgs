@@ -15681,6 +15681,8 @@ in
     wt3
     wt4;
 
+  wxformbuilder = callPackage ../development/tools/wxformbuilder { };
+
   wxGTK = wxGTK28;
 
   wxGTK30 = wxGTK30-gtk2;
