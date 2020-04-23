@@ -20,6 +20,16 @@ my $dom = XML::LibXML->load_xml(location => $ARGV[0]);
 
 sub get { my ($name) = @_; return $dom->findvalue("/expr/attrs/attr[\@name = '$name']/*/\@value"); }
 
+sub getList {
+    my ($name) = @_;
+    my @list = ();
+    foreach my $entry ($dom->findnodes("/expr/attrs/attr[\@name = '$name']/list/string/\@value")) {
+        $entry = $entry->findvalue(".") or die;
+        push(@list, $entry);
+    }
+    return @list;
+}
+
 sub readFile {
     my ($fn) = @_; local $/ = undef;
     open FILE, "<$fn" or return undef; my $s = <FILE>; close FILE;
@@ -616,15 +626,7 @@ sub readGrubState {
     return $grubState
 }
 
-sub getDeviceTargets {
-    my @devices = ();
-    foreach my $dev ($dom->findnodes('/expr/attrs/attr[@name = "devices"]/list/string/@value')) {
-        $dev = $dev->findvalue(".") or die;
-        push(@devices, $dev);
-    }
-    return @devices;
-}
-my @deviceTargets = getDeviceTargets();
+my @deviceTargets = getList('devices');
 my $prevGrubState = readGrubState();
 my @prevDeviceTargets = split/,/, $prevGrubState->devices;
 
