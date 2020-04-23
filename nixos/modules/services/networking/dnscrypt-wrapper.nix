@@ -5,12 +5,20 @@ let
   cfg     = config.services.dnscrypt-wrapper;
   dataDir = "/var/lib/dnscrypt-wrapper";
 
+  mkPath = path: default:
+    if path != null
+      then toString path
+      else default;
+
+  publicKey = mkPath cfg.providerKey.public "${dataDir}/public.key";
+  secretKey = mkPath cfg.providerKey.secret "${dataDir}/secret.key";
+
   daemonArgs = with cfg; [
     "--listen-address=${address}:${toString port}"
     "--resolver-address=${upstream.address}:${toString upstream.port}"
     "--provider-name=${providerName}"
-    "--provider-publickey-file=public.key"
-    "--provider-secretkey-file=secret.key"
+    "--provider-publickey-file=${publicKey}"
+    "--provider-secretkey-file=${secretKey}"
     "--provider-cert-file=${providerName}.crt"
     "--crypt-secretkey-file=${providerName}.key"
   ];
@@ -24,17 +32,19 @@ let
       dnscrypt-wrapper --gen-cert-file \
         --crypt-secretkey-file=${cfg.providerName}.key \
         --provider-cert-file=${cfg.providerName}.crt \
-        --provider-publickey-file=public.key \
-        --provider-secretkey-file=secret.key \
+        --provider-publickey-file=${publicKey} \
+        --provider-secretkey-file=${secretKey} \
         --cert-file-expire-days=${toString cfg.keys.expiration}
     }
 
     cd ${dataDir}
 
     # generate provider keypair (first run only)
-    if [ ! -f public.key ] || [ ! -f secret.key ]; then
-      dnscrypt-wrapper --gen-provider-keypair
-    fi
+    ${optionalString (cfg.providerKey.public == null || cfg.providerKey.secret == null) ''
+      if [ ! -f ${publicKey} ] || [ ! -f ${secretKey} ]; then
+        dnscrypt-wrapper --gen-provider-keypair
+      fi
+    ''}
 
     # generate new keys for rotation
     if [ ! -f ${cfg.providerName}.key ] || [ ! -f ${cfg.providerName}.crt ]; then
@@ -139,6 +149,26 @@ in {
       '';
     };
 
+    providerKey.public = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/etc/secrets/public.key";
+      description = ''
+        The filepath to the provider public key. If not given a new
+        provider key pair will be generated on the first run.
+      '';
+    };
+
+    providerKey.secret = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/etc/secrets/secret.key";
+      description = ''
+        The filepath to the provider secret key. If not given a new
+        provider key pair will be generated on the first run.
+      '';
+    };
+
     upstream.address = mkOption {
       type = types.str;
       default = "127.0.0.1";
@@ -236,6 +266,13 @@ in {
         OnUnitActiveSec = cfg.keys.checkInterval * 60;
       };
     };
+
+    assertions = with cfg; [
+      { assertion = (providerKey.public == null && providerKey.secret == null) ||
+                    (providerKey.secret != null && providerKey.public != null);
+        message = "The secret and public provider key must be set together.";
+      }
+    ];
 
   };
 
