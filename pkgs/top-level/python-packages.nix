@@ -460,6 +460,8 @@ in {
 
   azure-mgmt-recoveryservicesbackup = callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup { };
 
+  azure-mgmt-redhatopenshift = callPackage ../development/python-modules/azure-mgmt-redhatopenshift { };
+
   azure-mgmt-redis = callPackage ../development/python-modules/azure-mgmt-redis { };
 
   azure-mgmt-relay = callPackage ../development/python-modules/azure-mgmt-relay { };
