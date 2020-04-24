@@ -17051,7 +17051,7 @@ in
     };
     kernelPatches = kernel.kernelPatches ++ [
       kernelPatches.tag_hardened
-      kernelPatches.hardened.${kernel.version}
+      kernelPatches.hardened.${kernel.meta.branch}
     ];
     modDirVersionArg = kernel.modDirVersion + "-hardened";
   });
