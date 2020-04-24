@@ -2379,7 +2379,8 @@ extra-packages:
   - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock == 2.22.*                   # required on GHC 8.0.x
-  - haddock-api == 2.22.*               # required on GHC 7.8.x
+  - haddock == 2.23.*                   # required on GHC < 8.10.x
+  - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy <1.19.6                       # newer versions break Agda
   - happy == 1.19.9                     # for purescript
