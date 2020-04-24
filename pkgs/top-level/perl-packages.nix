@@ -12251,6 +12251,22 @@ let
     };
   };
 
+  MojoliciousPluginTextExceptions = buildPerlPackage {
+    pname = "Mojolicious-Plugin-TextExceptions";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MR/MRAMBERG/Mojolicious-Plugin-TextExceptions-0.01.tar.gz";
+      sha256 = "070daf284c5d3832b7fde42120eaf747aea4cc75de8ff807f77accc84fe4f22e";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/marcusramberg/mojolicious-plugin-textexceptions";
+      description = "Render exceptions as text in command line user agents";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MojoRedis = buildPerlPackage {
     pname = "Mojo-Redis";
     version = "3.24";
