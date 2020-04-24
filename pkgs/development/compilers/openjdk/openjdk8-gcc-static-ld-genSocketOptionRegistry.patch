@@ -1,0 +1,13 @@
+diff --git a/jdk/make/gensrc/GensrcMisc.gmk b/jdk/make/gensrc/GensrcMisc.gmk
+index 9db5c9d6f7..84a3c27e7d 100644
+--- a/jdk/make/gensrc/GensrcMisc.gmk
++++ b/jdk/make/gensrc/GensrcMisc.gmk
+@@ -76,7 +76,7 @@ $(eval $(call SetupNativeCompilation,BUILD_GENSRC_SOR_EXE, \
+     INCLUDE_FILES := $(GENSRC_SOR_SRC_FILE), \
+     LANG := C, \
+     CC := $(BUILD_CC), \
+-    LDEXE := $(BUILD_LD), \
++    LDEXE := $(BUILD_CC), \
+     OBJECT_DIR := $(GENSRC_SOR_BIN), \
+     OUTPUT_DIR := $(GENSRC_SOR_BIN), \
+     PROGRAM := genSocketOptionRegistry))
