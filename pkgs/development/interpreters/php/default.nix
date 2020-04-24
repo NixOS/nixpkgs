@@ -105,7 +105,7 @@ let
                     (enabledExtensions ++ (getDepsRecursively enabledExtensions)));
 
               extNames = map getExtName enabledExtensions;
-              extraInit = writeText "custom-php.ini" ''
+              extraInit = writeText "php.ini" ''
                 ${lib.concatStringsSep "\n"
                   (lib.textClosureList extensionTexts extNames)}
                 ${extraConfig}
@@ -118,11 +118,12 @@ let
                 passthru = {
                   buildEnv = mkBuildEnv allArgs allExtensionFunctions;
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
+                  phpIni = "${phpWithExtensions}/lib/php.ini";
                   inherit (php-packages) packages extensions;
                 };
                 paths = [ php ];
                 postBuild = ''
-                  cp ${extraInit} $out/lib/custom-php.ini
+                  cp ${extraInit} $out/lib/php.ini
 
                   wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
 
