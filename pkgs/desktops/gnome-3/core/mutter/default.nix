@@ -62,6 +62,17 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/mutter/commit/8307c0f7ab60760de53f764e6636893733543be8.diff";
       sha256 = "1hzfva71xdqvvnx5smjsrjlgyrmc7dj94mpylkak0gwda5si0h2n";
     })
+
+    # Fix backported for desktop freezing after ~50 days idle
+    # https://mail.gnome.org/archives/distributor-list/2020-April/msg00001.html
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/002299fbef2fd99fb36e5b881ed7b4095ff481f6.patch";
+      sha256 = "0x3kk75rqmcsyzhmhxjnh8n8ng4zyrbmh0yzvc79zcphzmdckavb";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/c2e12b3434967e520dcda76bf1d562676e8961ff.patch";
+      sha256 = "0l3ckmskxmisbjdhpr30yc2hclyc4l2f0jsgzisnq5aiszy9q0i0";
+    })
   ];
 
   postPatch = ''
