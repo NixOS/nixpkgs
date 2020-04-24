@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
 
   meta = with stdenv.lib; {
-    homepage = "http://snakemake.bitbucket.io";
+    homepage = "https://snakemake.bitbucket.io";
     license = licenses.mit;
     description = "Python-based execution environment for make-like workflows";
     longDescription = ''
