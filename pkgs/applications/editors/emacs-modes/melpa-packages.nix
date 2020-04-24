@@ -170,6 +170,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        mandoku-tls = super.mandoku-tls.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         magit = super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
