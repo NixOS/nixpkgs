@@ -164,6 +164,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         ivy-rtags = fix-rtags super.ivy-rtags;
 
+        mandoku = super.mandoku.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         magit = super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
