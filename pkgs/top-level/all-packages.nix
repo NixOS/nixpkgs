@@ -25191,9 +25191,7 @@ in
 
   clinfo = callPackage ../tools/system/clinfo { };
 
-  cups = callPackage ../misc/cups {
-    libusb = libusb1;
-  };
+  cups = callPackage ../misc/cups { };
 
   cups-filters = callPackage ../misc/cups/filters.nix { };
 
