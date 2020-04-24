@@ -8605,8 +8605,6 @@ in
 
   gogetdoc = callPackage ../development/tools/gogetdoc { };
 
-  gometalinter = callPackage ../development/tools/gometalinter { };
-
   gox = callPackage ../development/tools/gox { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
@@ -17270,6 +17268,8 @@ in
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
   go-langserver = callPackage ../development/tools/go-langserver { };
+
+  gopls = callPackage ../development/tools/gopls { };
 
   gotests = callPackage ../development/tools/gotests { };
 

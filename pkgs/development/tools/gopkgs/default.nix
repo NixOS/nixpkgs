@@ -1,18 +1,21 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gopkgs";
-  version = "2.0.1";
+  version = "2.1.2";
 
   goPackagePath = "github.com/uudashr/gopkgs";
-  goDeps = ./deps.nix;
+
+  subPackages = [ "cmd/gopkgs" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "uudashr";
     repo = "gopkgs";
-    sha256 = "03zfwkmzwx2knkghky3irb2r78lbc1ccszjcg9y445b4pbqkn6w4";
+    sha256 = "1jak1bg6k5iasscw68ra875k59k3iqhka2ykabsd427k1j3mypln";
   };
+
+  modSha256 = "0v9lg5kq3776b2s4kgyi19jy8shjqrr0f5ljrchsj1k7867sxiw7";
 
   meta = {
     description = "Tool to get list available Go packages.";
