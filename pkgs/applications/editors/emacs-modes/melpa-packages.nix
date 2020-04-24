@@ -236,6 +236,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        magit-stgit = super.magit-stgit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         magit-annex = super.magit-annex.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
