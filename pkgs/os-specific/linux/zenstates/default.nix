@@ -24,7 +24,7 @@
 { stdenv, fetchFromGitHub, python3 }:
 stdenv.mkDerivation rec {
   pname = "zenstates";
-  version = "0.1.0";
+  version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "r4m0n";
