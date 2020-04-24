@@ -43,6 +43,7 @@ let
       pkgs.time
       pkgs.utillinux
       pkgs.which # 88K size
+      pkgs.zstd
     ];
 
 in
