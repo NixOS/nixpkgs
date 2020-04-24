@@ -6,7 +6,7 @@ Add and update `nixos-hardware` channel:
 
 ```
 $ sudo nix-channel --add https://github.com/NixOS/nixos-hardware/archive/master.tar.gz nixos-hardware
-$ sudo nix-channel --update nixos-hardware
+$ sudo nix-channel --update
 ```
 
 Then import an appropriate profile path from the table below. For example, to
