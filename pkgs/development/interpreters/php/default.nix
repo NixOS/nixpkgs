@@ -17,23 +17,22 @@ let
     , defaultPhpExtensions
 
     # Sapi flags
-    , cgiSupport ? config.php.cgi or true
-    , cliSupport ? config.php.cli or true
-    , fpmSupport ? config.php.fpm or true
-    , pearSupport ? config.php.pear or true
-    , pharSupport ? config.php.phar or true
-    , phpdbgSupport ? config.php.phpdbg or true
-
+    , cgiSupport ? true
+    , cliSupport ? true
+    , fpmSupport ? true
+    , pearSupport ? true
+    , pharSupport ? true
+    , phpdbgSupport ? true
 
     # Misc flags
-    , apxs2Support ? config.php.apxs2 or (!stdenv.isDarwin)
-    , argon2Support ? config.php.argon2 or true
-    , cgotoSupport ? config.php.cgoto or false
-    , embedSupport ? config.php.embed or false
-    , ipv6Support ? config.php.ipv6 or true
-    , systemdSupport ? config.php.systemd or stdenv.isLinux
-    , valgrindSupport ? config.php.valgrind or true
-    , ztsSupport ? (config.php.zts or false) || (apxs2Support)
+    , apxs2Support ? !stdenv.isDarwin
+    , argon2Support ? true
+    , cgotoSupport ? false
+    , embedSupport ? false
+    , ipv6Support ? true
+    , systemdSupport ? stdenv.isLinux
+    , valgrindSupport ? true
+    , ztsSupport ? apxs2Support
     }@args:
       let
         self = generic args;

@@ -18,12 +18,12 @@ with stdenv.lib;
 
 let
   phpConfig = {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-    config.php.systemd = false;
-    config.php.phpdbg = false;
-    config.php.cgi = false;
-    config.php.fpm = false;
+    embedSupport = true;
+    apxs2Support = false;
+    systemdSupport = false;
+    phpdbgSupport = false;
+    cgiSupport = false;
+    fpmSupport = false;
   };
 
   php72-unit = php72base.override phpConfig;
