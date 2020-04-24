@@ -34,7 +34,7 @@
 , # The path (outside the ISO file system) of the isohybrid-mbr image.
   isohybridMbrImage ? ""
 
-, # Whether to compress the resulting ISO image with bzip2.
+, # Whether to compress the resulting ISO image with zstd.
   compressImage ? false
 
 , # The volume ID.
@@ -48,7 +48,7 @@ assert usbBootable -> isohybridMbrImage != "";
 stdenv.mkDerivation {
   name = isoName;
   builder = ./make-iso9660-image.sh;
-  buildInputs = [ xorriso syslinux ];
+  buildInputs = [ xorriso syslinux zstd ];
 
   inherit isoName bootable bootImage compressImage volumeID efiBootImage efiBootable isohybridMbrImage usbBootable;
 
