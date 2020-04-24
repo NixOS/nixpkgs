@@ -1,5 +1,5 @@
 { stdenv, pkgs, lib, writeScript, python3, common-updater-scripts }:
-{ packageName, attrPath ? packageName, versionPolicy ? "odd-unstable", freeze ? false }:
+{ packageName, attrPath ? packageName, versionPolicy ? "odd-unstable", freeze ? true }:
 
 let
   python = python3.withPackages (p: [ p.requests ]);
