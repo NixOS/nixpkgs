@@ -24435,6 +24435,8 @@ in
 
   manta = callPackage ../applications/science/biology/manta { };
 
+  obitools3 = callPackage ../applications/science/biology/obitools/obitools3.nix { };
+
   octopus-caller = callPackage ../applications/science/biology/octopus { };
 
   paml = callPackage ../applications/science/biology/paml { };
