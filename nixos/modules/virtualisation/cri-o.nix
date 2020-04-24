@@ -85,7 +85,7 @@ in
       }
     '';
 
-    # Enable common container configuration, this will create policy.json
+    # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;
 
     systemd.services.crio = {

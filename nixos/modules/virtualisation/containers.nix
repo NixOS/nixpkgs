@@ -30,7 +30,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          This option enables the common libpod container configuration module.
+          This option enables the common /etc/containers configuration module.
         '';
       };
 
@@ -89,34 +89,9 @@ in
       '';
     };
 
-    libpod = mkOption {
-      default = {};
-      description = "Libpod configuration";
-      type = types.submodule {
-        options = {
-
-          extraConfig = mkOption {
-            type = types.lines;
-            default = "";
-            description = ''
-              Extra configuration that should be put in the libpod.conf
-              configuration file
-            '';
-
-          };
-        };
-      };
-    };
-
   };
 
   config = lib.mkIf cfg.enable {
-
-    environment.etc."containers/libpod.conf".text = ''
-      cni_plugin_dir = ["${pkgs.cni-plugins}/bin/"]
-      cni_config_dir = "/etc/cni/net.d/"
-
-    '' + cfg.libpod.extraConfig;
 
     environment.etc."containers/registries.conf".source = toTOML "registries.conf" {
       registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
