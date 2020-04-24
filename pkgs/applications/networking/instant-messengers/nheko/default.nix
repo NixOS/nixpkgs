@@ -53,6 +53,11 @@ mkDerivation rec {
     cmake
     pkgconfig
   ];
+  cmakeFlags = [
+    # Can be removed once either https://github.com/NixOS/nixpkgs/pull/85254 or
+    # https://github.com/NixOS/nixpkgs/pull/73940 are merged
+    "-DBoost_NO_BOOST_CMAKE=TRUE"
+  ];
 
   buildInputs = [
     nlohmann_json
