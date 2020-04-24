@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "obs studio output plugin for Video4Linux2 device";
     homepage = "https://github.com/CatxFish/obs-v4l2sink";
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ colemickens peelz ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
   };
