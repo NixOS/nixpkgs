@@ -130,10 +130,10 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
-    mtools, libfaketime, utillinux, bzip2, zstd }: stdenv.mkDerivation {
+    mtools, libfaketime, utillinux, pbzip2, zstd }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux bzip2 zstd ];
+      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux pbzip2 zstd ];
 
       inherit (config.sdImage) compressImage;
 
@@ -190,7 +190,7 @@ in
         fsck.vfat -vn firmware_part.img
         dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
         if test -n "$compressImage"; then
-            bzip2 $img
+            pbzip2 -p$NIX_BUILD_CORES $img
         fi
       '';
     }) {};
