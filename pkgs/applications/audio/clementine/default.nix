@@ -130,7 +130,7 @@ let
     '';
     enableParallelBuilding = true;
     meta = with stdenv.lib; {
-      homepage = "http://www.clementine-player.org";
+      homepage = "https://www.clementine-player.org";
       description = "Spotify integration for Clementine";
       # The blob itself is Apache-licensed, although libspotify is unfree.
       license = licenses.asl20;
