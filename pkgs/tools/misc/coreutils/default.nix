@@ -1,5 +1,5 @@
 { stdenv, lib, buildPackages
-, autoreconfHook, bison, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
+, autoreconfHook, texinfo, fetchpatch, fetchurl, perl, xz, libiconv, gmp ? null
 , aclSupport ? stdenv.isLinux, acl ? null
 , attrSupport ? stdenv.isLinux, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
@@ -17,21 +17,19 @@ with lib;
 
 stdenv.mkDerivation (rec {
   pname = "coreutils";
-  version = "8.31";
+  version = "8.32";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1zg9m79x1i2nifj4kb0waf9x3i5h6ydkypkjnbsb9rnwis8rqypz";
+    sha256 = "1yjcrh5hw70c0yn8zw55pd6j51dj90anpq8mmg649ps9g3gdhn24";
   };
 
-  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
-         # Fix failing test with musl. See https://lists.gnu.org/r/coreutils/2019-05/msg00031.html
-         # To be removed in coreutils-8.32.
-         ++ optional stdenv.hostPlatform.isMusl ./avoid-false-positive-in-date-debug-test.patch
-         # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
-         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch
-         # Fix compilation in android-cross environments. To be removed in coreutils-8.32.
-         ++ [ ./coreutils-8.31-android-cross.patch ];
+  patches = [(fetchpatch {
+    # remove me on 8.33
+    name = "coreutils-fix-ls-behavior";
+    url = "https://github.com/coreutils/coreutils/commit/10fcb97bd728f09d4a027eddf8ad2900f0819b0a.patch";
+    sha256 = "10zyc18611a427md65y3z14k3ks5w4vcgp12c2x8k46q0i7dp3gf";
+  })];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -72,9 +70,7 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ perl xz.bin ]
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
-    ++ optionals stdenv.hostPlatform.isMusl [ autoreconfHook bison ];   # due to patch
+  nativeBuildInputs = [ perl xz.bin ];
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
@@ -87,7 +83,6 @@ stdenv.mkDerivation (rec {
       # don't know why it is not properly detected cross building with glibc.
       "fu_cv_sys_stat_statfs2_bsize=yes"
     ];
-
 
   buildInputs = [ gmp ]
     ++ optional aclSupport acl
@@ -109,9 +104,7 @@ stdenv.mkDerivation (rec {
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
 
-  # Saw random failures like ‘help2man: can't get '--help' info from
-  # man/sha512sum.td/sha512sum’.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
