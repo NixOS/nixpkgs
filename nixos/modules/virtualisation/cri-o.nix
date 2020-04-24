@@ -6,6 +6,10 @@ let
   cfg = config.virtualisation.cri-o;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "virtualisation" "cri-o" "registries" ] [ "virtualisation" "containers" "registries" "search" ])
+  ];
+
   meta = {
     maintainers = lib.teams.podman.members;
   };
@@ -36,12 +40,6 @@ in
       default = "/pause";
       description = "Pause command to be executed";
     };
-
-    registries = mkOption {
-      type = types.listOf types.str;
-      default = [ "docker.io" "quay.io" ];
-      description = "Registries to be configured for unqualified image pull";
-    };
   };
 
   config = mkIf cfg.enable {
@@ -57,9 +55,6 @@ in
       [crio.image]
       pause_image = "${cfg.pauseImage}"
       pause_command = "${cfg.pauseCommand}"
-      registries = [
-        ${concatMapStringsSep ", " (x: "\"" + x + "\"") cfg.registries}
-      ]
 
       [crio.network]
       plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
