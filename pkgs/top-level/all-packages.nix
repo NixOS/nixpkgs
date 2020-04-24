@@ -12141,9 +12141,7 @@ in
 
   heyefi = haskellPackages.heyefi;
 
-  hidapi = callPackage ../development/libraries/hidapi {
-    libusb = libusb1;
-  };
+  hidapi = callPackage ../development/libraries/hidapi { };
 
   highfive = callPackage ../development/libraries/highfive { };
 
