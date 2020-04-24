@@ -25254,6 +25254,10 @@ in
     libusb = libusb1;
   };
 
+  cnijfilter_3_80 = callPackage ../misc/cups/drivers/cnijfilter_3_80 {
+    libusb = libusb1;
+  };
+
   cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 {
     libusb = libusb1;
   };
