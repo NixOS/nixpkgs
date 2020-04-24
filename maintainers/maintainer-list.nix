@@ -7184,6 +7184,12 @@
     githubId = 1414088;
     name = "Spencer Whitt";
   };
+  squalus = {
+    email = "squalus@tuta.io";
+    github = "squalus";
+    githubId = 36899624;
+    name = "squalus";
+  };
   srghma = {
     email = "srghma@gmail.com";
     github = "srghma";
