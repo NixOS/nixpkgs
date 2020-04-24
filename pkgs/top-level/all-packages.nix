@@ -5874,9 +5874,7 @@ in
 
   briss = callPackage ../tools/graphics/briss { };
 
-  brickd = callPackage ../servers/brickd {
-    libusb = libusb1;
-  };
+  brickd = callPackage ../servers/brickd { };
 
   bully = callPackage ../tools/networking/bully {
     openssl = openssl_1_0_2;
