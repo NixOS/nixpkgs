@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     "-DBUILD_LIB_TESTS=OFF"
     "-DBUILD_LIB_EXAMPLES=OFF"
     "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
+    # Can be removed once either https://github.com/NixOS/nixpkgs/pull/85254 or
+    # https://github.com/NixOS/nixpkgs/pull/73940 are merged
+    "-DBoost_NO_BOOST_CMAKE=TRUE"
   ];
 
   nativeBuildInputs = [
