@@ -91,7 +91,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = "http://www.clementine-player.org";
+      homepage = "https://www.clementine-player.org";
       description = "A multiplatform music player";
       license = licenses.gpl3Plus;
       platforms = platforms.linux;
