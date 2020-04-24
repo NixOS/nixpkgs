@@ -28,7 +28,7 @@ mkDerivation {
     quickcheck-io split tasty tasty-golden tasty-hunit tasty-quickcheck
     text
   ];
-  homepage = "http://elm-lang.org";
+  homepage = "https://elm-lang.org";
   description = "Instrumentation library for Elm";
   license = stdenv.lib.licenses.bsd3;
 }
