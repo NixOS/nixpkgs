@@ -1,4 +1,5 @@
 import argparse
+import math
 import json
 import requests
 import sys
@@ -27,13 +28,19 @@ version_policies = {
     'none': no_policy,
 }
 
-def make_version_policy(version_predicate, selected):
-    return lambda version: version_predicate(version, selected)
+def make_version_policy(version_predicate, selected, upper_bound):
+    if not upper_bound:
+        upper_bound = [math.inf, math.inf]
+    else:
+        upper_bound = version_to_list(upper_bound)
+
+    return lambda version: version_predicate(version, selected) and version_to_list(version) < upper_bound
 
 parser = argparse.ArgumentParser(description='Find latest version for a GNOME package by crawling their release server.')
 parser.add_argument('package-name', help='Name of the directory in https://ftp.gnome.org/pub/GNOME/sources/ containing the package.')
 parser.add_argument('version-policy', help='Policy determining which versions are considered stable. For most GNOME packages, odd minor versions are unstable but there are exceptions.', choices=version_policies.keys(), nargs='?', default='odd-unstable')
 parser.add_argument('requested-release', help='Most of the time, we will want to update to stable version but sometimes it is useful to test.', choices=['stable', 'unstable'], nargs='?', default='stable')
+parser.add_argument('--upper-bound', dest='upper-bound', help='Only look for versions older than this one (useful for pinning dependencies).')
 
 
 if __name__ == '__main__':
@@ -41,8 +48,9 @@ if __name__ == '__main__':
 
     package_name = getattr(args, 'package-name')
     requested_release = getattr(args, 'requested-release')
+    upper_bound = getattr(args, 'upper-bound')
     version_predicate = version_policies[getattr(args, 'version-policy')]
-    version_policy = make_version_policy(version_predicate, requested_release)
+    version_policy = make_version_policy(version_predicate, requested_release, upper_bound)
 
     # The structure of cache.json: https://gitlab.gnome.org/Infrastructure/sysadmin-bin/blob/master/ftpadmin#L762
     cache = json.loads(requests.get('https://ftp.gnome.org/pub/GNOME/sources/{}/cache.json'.format(package_name)).text)
