@@ -26505,4 +26505,5 @@ in
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
+  zenstates = callPackage ../os-specific/linux/zenstates {};
 }
