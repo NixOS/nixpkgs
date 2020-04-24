@@ -68,7 +68,7 @@ let
         also useful for seeding other, more labor or resource-intensive
         testing regimes down the road.
       '';
-      homepage    = "http://lcamtuf.coredump.cx/afl/";
+      homepage    = "https://lcamtuf.coredump.cx/afl/";
       license     = stdenv.lib.licenses.asl20;
       platforms   = ["x86_64-linux" "i686-linux"];
       maintainers = with stdenv.lib.maintainers; [ thoughtpolice ris ];
