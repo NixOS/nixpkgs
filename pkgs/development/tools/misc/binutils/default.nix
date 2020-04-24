@@ -8,15 +8,13 @@
 , bison ? null
 , flex
 , texinfo
+, perl
 }:
 
 let
   reuseLibs = enableShared && withAllTargets;
 
-  # Remove gold-symbol-visibility patch when updating, the proper fix
-  # is now upstream.
-  # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
-  version = "2.33.1";
+  version = "2.34";
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -31,7 +29,7 @@ let
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
-    sha256 = "1cmd0riv37bqy9mwbg6n3523qgr8b3bbm5kwj19sjrasl4yq9d0c";
+    sha256 = "1rin1f5c7wm4n3piky6xilcrpf2s0n3dd5vqq8irrxkcic3i1w49";
   });
 in
 
@@ -64,10 +62,6 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
-  ] ++ lib.optionals (!stdenv.targetPlatform.isVc4)
-  [
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
-    ./gold-symbol-visibility.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
@@ -75,9 +69,11 @@ stdenv.mkDerivation {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     bison
+    perl
+    texinfo
   ] ++ (lib.optionals stdenv.targetPlatform.isiOS [
     autoreconfHook
-  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ texinfo flex ];
+  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ flex ];
   buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
