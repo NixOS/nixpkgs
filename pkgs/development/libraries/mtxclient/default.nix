@@ -3,23 +3,24 @@
 , fetchpatch
 , cmake
 , pkgconfig
-, boost
+, boost17x
 , openssl
 , zlib
 , libsodium
 , olm
+, spdlog
 , nlohmann_json
 }:
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "0pycznrvj57ff6gbwfn1xj943d2dr4vadl79hii1z16gn0nzxpmj";
+    sha256 = "0vf5xmn6yfi5lvskfgrdmnalvclzrapcrml92bj9qaa8vq8mfsf2";
   };
 
   cmakeFlags = [
@@ -33,7 +34,8 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
   buildInputs = [
-    boost
+    spdlog
+    boost17x
     openssl
     zlib
     libsodium
