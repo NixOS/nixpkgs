@@ -19,10 +19,9 @@ with stdenv.lib;
 let
   python = python3;
   buildType = "release";
-  # Remember to change the extpackRev and version in extpack.nix and
-  # guest-additions/default.nix as well.
-  main = "59f8f5774473f593e3eb5940e2a337e0674bcd9854164b2578fd43f896260c99";
-  version = "6.1.4";
+  # Use maintainers/scripts/update.nix to update the version and all related hashes or
+  # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
+  version = "6.1.6";
 
   iasl' = iasl.overrideAttrs (old: rec {
     inherit (old) pname;
@@ -39,7 +38,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = main;
+    sha256 = "b031c30d770f28c5f884071ad933e8c1f83e65b93aaba03a4012077c1d90a54f";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -108,6 +107,10 @@ in stdenv.mkDerivation {
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
+  '' + optionalString headless ''
+    # Fix compile error in version 6.1.6
+    substituteInPlace src/VBox/HostServices/SharedClipboard/VBoxSharedClipboardSvc-x11-stubs.cpp \
+      --replace PSHCLFORMATDATA PSHCLFORMATS
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
@@ -216,6 +219,7 @@ in stdenv.mkDerivation {
   passthru = {
     inherit version;       # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
+    updateScript = ./update.sh;
   };
 
   meta = {
