@@ -2,7 +2,7 @@
 , cups, freetype, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib, glibc
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , xorgproto, libxcb, xtrans, libpthreadstubs, libXau, xcbproto, libXdmcp, xcbutilkeysyms
-, autoconf, bzip2, libpng, libjpeg, giflib
+, autoconf, libpng, libjpeg, giflib
 , openjdk8-bootstrap
 , setJavaClassPath
 , headless ? false
@@ -97,7 +97,6 @@ let
         "--enable-static"
         "--disable-shared"
       ];
-      # postInstall = "rm -rf $out/lib/*.la";
     });
   libX11-static = libX11
     .overrideAttrs(oldAttrs: {
@@ -106,7 +105,6 @@ let
         "--disable-shared"
         "--enable-malloc0returnsnull"
       ];
-      # postInstall = "rm -rf $out/lib/*.la";
     });
   libpng-static = libpng
     .overrideAttrs(oldAttrs: {
@@ -122,7 +120,7 @@ let
         "--disable-shared"
       ];
     });
-  bzip2-static = bzip2.override { linkStatic = true;};
+  # bzip2-static = bzip2.override { linkStatic = true;};
 
 
   openjdk8 = stdenv.mkDerivation {
@@ -144,7 +142,7 @@ let
       gtk2 gnome_vfs GConf glib
     ] ++ lib.optionals (static) [
       autoconf
-      bzip2-static
+      # bzip2-static
       freetype-static
       glibc
       glibc.static
@@ -191,7 +189,7 @@ let
       substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
       substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "${stdenv.shell}"
       substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
-      '';
+    '';
 
     configureFlags = [
       "--with-boot-jdk=${openjdk8-bootstrap.home}"
@@ -206,7 +204,7 @@ let
       "--disable-freetype-bundling"
       "--with-zlib=system"
       "--with-giflib=system"
-    ] ++ lib.optionals static [
+     ] ++ lib.optionals static [
       "--enable-static-build=yes"
       "--verbose"
       "--host=${stdenv.hostPlatform.system}"
@@ -307,7 +305,7 @@ let
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
       EOF
     '';
-/*
+
     postFixup = ''
       # Build the set of output library directories to rpath against
       LIBDIRS=""
@@ -326,7 +324,7 @@ let
         done
       done
     '';
-*/
+
     disallowedReferences = [ openjdk8-bootstrap ];
 
     meta = with lib; {
