@@ -683,6 +683,8 @@ in {
     inherit (pkgs) dbus pkgconfig;
   };
 
+  debts = callPackage ../development/python-modules/debts { };
+
   dftfit = callPackage ../development/python-modules/dftfit { };
 
   dicom2nifti = callPackage ../development/python-modules/dicom2nifti { };
