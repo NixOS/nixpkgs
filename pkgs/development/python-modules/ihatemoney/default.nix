@@ -15,6 +15,7 @@
 , flask_script
 , flask_sqlalchemy
 , flask_wtf
+, debts
 , idna
 , itsdangerous
 , jinja2
@@ -25,6 +26,7 @@
 , pytz
 , six
 , sqlalchemy
+, sqlalchemy-continuum
 , werkzeug
 , wtforms
 , psycopg2 # optional, for postgresql support
@@ -33,14 +35,19 @@
 
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "4.1.3";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "spiral-project";
     repo = pname;
     rev = version;
-    sha256 = "02mxhf41c95gfp2wi74li2xli7sblm075w5z5ywkrh0pc1v02mgp";
+    sha256 = "0d4vc6m0jkwlz9ly0hcjghccydvqbldh2jb8yzf94jrgkd5fd7k1";
   };
+
+  patchPhase = ''
+    # remove draconian pinning
+    sed -i 's/==.*$//' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     alembic
@@ -68,9 +75,11 @@ buildPythonPackage rec {
     pytz
     six
     sqlalchemy
+    sqlalchemy-continuum
     werkzeug
     wtforms
     psycopg2
+    debts
   ];
 
   checkInputs = [
