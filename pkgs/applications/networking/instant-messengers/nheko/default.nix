@@ -11,8 +11,10 @@
 , qtmacextras
 , qtmultimedia
 , qttools
+, qtquickcontrols2
+, qtgraphicaleffects
 , mtxclient
-, boost
+, boost17x
 , spdlog
 , olm
 , pkgconfig
@@ -21,13 +23,13 @@
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.6.4";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "19dkc98l1q4070v6mli4ybqn0ip0za607w39hjf0x8rqdxq45iwm";
+    sha256 = "12sxibbrn79sxkf9jrm7jrlj7l5vz15claxrrll7pkv9mv44wady";
   };
 
   # If, on Darwin, you encounter the error
@@ -57,13 +59,15 @@ mkDerivation rec {
     tweeny
     mtxclient
     olm
-    boost
+    boost17x
     lmdb
     spdlog
     cmark
     qtbase
     qtmultimedia
     qttools
+    qtquickcontrols2
+    qtgraphicaleffects
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
   enableParallelBuilding = true;
