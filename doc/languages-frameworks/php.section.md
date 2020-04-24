@@ -66,6 +66,13 @@ ignore `enabled`:
 php.withExtensions ({ all, ... }: with all; [ opcache imagick ])
 ```
 
+`php.withExtensions` provides extensions by wrapping a minimal php
+base package, providing a `php.ini` file listing all extensions to be
+loaded. You can access this package through the `php.unwrappedPhp`
+attribute; useful if you, for example, need access to the `dev`
+output. The generated `php.ini` file can be accessed through the
+`php.phpIni` attribute.
+
 If you want a PHP build with extra configuration in the `php.ini`
 file, you can use `php.buildEnv`. This function takes two named and
 optional parameters: `extensions` and `extraConfig`. `extensions`

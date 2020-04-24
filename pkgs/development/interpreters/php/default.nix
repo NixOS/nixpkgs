@@ -119,6 +119,7 @@ let
                   buildEnv = mkBuildEnv allArgs allExtensionFunctions;
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   phpIni = "${phpWithExtensions}/lib/php.ini";
+                  unwrapped = php;
                   inherit (php-packages) packages extensions;
                 };
                 paths = [ php ];
