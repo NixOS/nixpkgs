@@ -54,7 +54,10 @@ stdenv.mkDerivation rec {
   # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
   # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
   # a flag and turn the flag off during the stdenv build.
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    substituteInPlace cmake/builtin-config-ix.cmake \
+      --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + stdenv.lib.optionalString (useLLVM) ''
