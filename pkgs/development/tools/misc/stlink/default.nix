@@ -18,7 +18,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1mlkrxjxg538335g59hjb0zc739dx4mhbspb26z5gz3lf7d4xv6x";
   };
 
-  buildInputs = [ cmake libusb1' ];
+  buildInputs = [ libusb1' ];
+  nativeBuildInputs = [ cmake ];
   patchPhase = ''
     sed -i 's@/etc/udev/rules.d@$ENV{out}/etc/udev/rules.d@' CMakeLists.txt
     sed -i 's@/etc/modprobe.d@$ENV{out}/etc/modprobe.d@' CMakeLists.txt
