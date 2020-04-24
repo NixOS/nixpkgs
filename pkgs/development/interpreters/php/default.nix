@@ -71,6 +71,19 @@ let
 
               getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
 
+              # Recursively get a list of all internal dependencies
+              # for a list of extensions.
+              getDepsRecursively = extensions:
+                let
+                  deps = lib.concatMap
+                           (ext: ext.internalDeps or [])
+                           extensions;
+                in
+                  if ! (deps == []) then
+                    deps ++ (getDepsRecursively deps)
+                  else
+                    deps;
+
               # Generate extension load configuration snippets from the
               # extension parameter. This is an attrset suitable for use
               # with textClosureList, which is used to put the strings in
@@ -89,7 +102,7 @@ let
                         deps = lib.optionals (ext ? internalDeps)
                           (map getExtName ext.internalDeps);
                       })
-                    enabledExtensions);
+                    (enabledExtensions ++ (getDepsRecursively enabledExtensions)));
 
               extNames = map getExtName enabledExtensions;
               extraInit = writeText "custom-php.ini" ''
