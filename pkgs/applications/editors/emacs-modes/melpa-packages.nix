@@ -302,6 +302,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        kapacitor = super.kapacitor.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         kubernetes = super.kubernetes.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
