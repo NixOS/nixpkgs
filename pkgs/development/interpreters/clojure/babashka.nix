@@ -3,17 +3,17 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.0.78";
+  version = "0.0.89";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "1m1nwdxjsc6bkdzkbsll316ly0c3qxaimjzyfph1220irjxnm7xf";
+    sha256 = "0bc5rbizd2lg7qfh733yiip8m9zqrwgjf5ca09sdibxp7nhhsjby";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "01w990zk5qjrbnc846snh6na002kdyrlrfnqwg03ibx20g3mr7if";
+    sha256 = "11jhqbm3svvikr9glz8wwps1267y25g3384ijw6avn267s7d7l8c";
   };
 
   dontUnpack = true;
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       --no-fallback \
       --no-server \
       --report-unsupported-elements-at-runtime \
+      "--initialize-at-run-time=org.postgresql.sspi.SSPIClient" \
       "-J-Xmx3g"
   '';
 
