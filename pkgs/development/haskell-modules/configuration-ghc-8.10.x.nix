@@ -42,6 +42,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Deviate from Stackage LTS-15.x to fix the build.
+  haddock-library = self.haddock-library_1_9_0;
+
   # Jailbreak to fix the build.
   async = doJailbreak super.async;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
