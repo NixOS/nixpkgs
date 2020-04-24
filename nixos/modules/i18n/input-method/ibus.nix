@@ -64,7 +64,7 @@ in
     # Without dconf enabled it is impossible to use IBus
     programs.dconf.enable = true;
 
-    programs.dconf.packages = [ ibusPackage ];
+    programs.dconf.profiles.ibus = "${ibusPackage}/etc/dconf/profile/ibus";
 
     services.dbus.packages = [
       ibusAutostart
