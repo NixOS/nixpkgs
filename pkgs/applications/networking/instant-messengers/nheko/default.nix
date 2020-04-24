@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , cmark
 , lmdb
@@ -57,6 +58,15 @@ mkDerivation rec {
     # Can be removed once either https://github.com/NixOS/nixpkgs/pull/85254 or
     # https://github.com/NixOS/nixpkgs/pull/73940 are merged
     "-DBoost_NO_BOOST_CMAKE=TRUE"
+  ];
+  # commit missing from latest release and recommended by upstream:
+  # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619263903
+  patches = [
+    (fetchpatch {
+      name = "room-ids-escape-patch";
+      url = "https://github.com/Nheko-Reborn/nheko/commit/d94ac86816f9f325cba11f71344a3ca99591130d.patch";
+      sha256 = "1p0kj4a60l3jf0rfakc88adld7ccg3vfjhzia5rf2i03h35cxw8c";
+    })
   ];
 
   buildInputs = [
