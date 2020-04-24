@@ -24457,6 +24457,8 @@ in
 
   prodigal = callPackage ../applications/science/biology/prodigal { };
 
+  quast = callPackage ../applications/science/biology/quast { };
+
   raxml = callPackage ../applications/science/biology/raxml { };
 
   raxml-mpi = appendToName "mpi" (raxml.override {
