@@ -603,6 +603,17 @@ let
     meta.homepage = "https://github.com/neoclide/coc-rls/";
   };
 
+  coc-rust-analyzer = buildVimPluginFrom2Nix {
+    pname = "coc-rust-analyzer";
+    version = "2020-04-24";
+    src = fetchFromGitHub {
+      owner = "fannheyward";
+      repo = "coc-rust-analyzer";
+      rev = "1dcdf6768520bff29921c50ef904478cbdfe0fb8";
+      sha256 = "1p6hyixx9bjpyy42g2w4bnxwv9hafs5ppsx1fq8gndnq3nsjcyl3";
+    };
+  };
+
   coc-smartf = buildVimPluginFrom2Nix {
     pname = "coc-smartf";
     version = "2019-07-26";
