@@ -278,6 +278,9 @@ environment.systemPackages = [
 
   <itemizedlist>
    <listitem>
+     <para>SD and ISO images are now compressed by default using <literal>zstd</literal>.</para>
+   </listitem>
+   <listitem>
     <para>
      <option>services.journald.rateLimitBurst</option> was updated from
      <literal>1000</literal> to <literal>10000</literal> to follow the new
