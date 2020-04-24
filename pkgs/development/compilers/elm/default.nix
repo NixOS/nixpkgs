@@ -4,7 +4,7 @@
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
-  hsPkgs = haskell.packages.ghc881.override {
+  hsPkgs = haskell.packages.ghc883.override {
     overrides = self: super: with haskell.lib;
       let elmPkgs = rec {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
@@ -28,7 +28,7 @@ let
             `package/nix/build.sh`
             */
             elm-format = justStaticExecutables (overrideCabal (self.callPackage ./packages/elm-format.nix {}) (drv: {
-              # GHC 8.8.1 support
+              # GHC 8.8.3 support
               # https://github.com/avh4/elm-format/pull/640
               patches = [(
                 fetchpatch {
@@ -39,7 +39,7 @@ let
               # Tests are failing after upgrade to ghc881.
               # Cause is probably just a minor change in stdout output
               # see https://github.com/avh4/elm-format/pull/640
-              doCheck = false;
+              # doCheck = false;
               jailbreak = true;
             }));
 
