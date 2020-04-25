@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
+    python.pkgs.wrapPython
   ] ++ optionals stdenv.isDarwin [
     rpcgen
     fixDarwinDylibNames
@@ -98,6 +99,8 @@ stdenv.mkDerivation rec {
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
+
+  pythonPath = [ python.pkgs.dnspython ];
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -143,6 +146,8 @@ stdenv.mkDerivation rec {
     patchelf --shrink-rpath "\$BIN";
     EOF
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
+
+    wrapPythonPrograms
   '';
 
   passthru = {
