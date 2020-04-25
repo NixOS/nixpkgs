@@ -1,12 +1,14 @@
-{ buildGoPackage
+{ buildGoModule
 , lib
 , fetchFromGitHub
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gogetdoc-unstable";
-  version = "2018-10-25";
-  rev = "9098cf5fc236a5e25060730544af2ba6d65cd968";
+  version = "2019-02-28";
+  rev = "b37376c5da6aeb900611837098f40f81972e63e4";
+
+  modSha256 = "0j6a2b8hx54cnjz1ya65v9czg9ygqj6zwg52ffpz7cqkx0pgl9q4";
 
   goPackagePath = "github.com/zmb3/gogetdoc";
   excludedPackages = "\\(testdata\\)";
@@ -16,7 +18,7 @@ buildGoPackage rec {
 
     owner = "zmb3";
     repo = "gogetdoc";
-    sha256 = "159dgkd2lz07kimbpzminli5p539l4ry0dr93r46iz3lk5q76znl";
+    sha256 = "1v74zd0x2xh10603p8raazssacv3y0x0lr9apkpsdk0bfp5jj0lr";
   };
 
   goDeps = ./deps.nix;

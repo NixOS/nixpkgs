@@ -1,6 +1,12 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, desktop-file-utils
-, python3, vala, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkgconfig
+, desktop-file-utils
+, python3
+, vala
+, wrapGAppsHook
 , evolution-data-server
 , libical
 , libgee
@@ -15,24 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planner";
     rev = version;
-    sha256 = "1kjk1zafx71zmax3whzpx6mzl037wlxri30bl2k9y9rg3fd09arr";
+    sha256 = "1jc668hg26vb1q50abm6k566v9qimgs9skkwmlgi5h37vxm3ai1x";
   };
-
-  patches = [
-    # Revert a patch the works around some stylesheet issues:
-    # https://github.com/alainm23/planner/issues/268
-    # https://github.com/alainm23/planner/issues/303
-    # The don't seem to be a problem with Pantheon on NixOS
-    # and for some reason produce the opposite effect with
-    # pantheon's stylesheet.
-    ./0001-Revert-Add-patch.patch
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -63,8 +59,15 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # the theme is hardcoded
+      --prefix XDG_DATA_DIRS : "${pantheon.elementary-gtk-theme}/share"
+    )
+  '';
+
   meta = with stdenv.lib; {
-    description = "Task and project manager designed to elementary OS";
+    description = "Task manager with Todoist support designed for GNU/Linux 🚀️";
     homepage = "https://planner-todo.web.app";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ] ++ pantheon.maintainers;

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for date manipulation";
-    license     = "apache";
+    license = licenses.asl20;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.4.1";
+  version = "0.5.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
-    repo = pname;
+    repo = "qiskit-aer";
     rev = version;
     fetchSubmodules = true; # fetch muparserx and other required libraries
-    sha256 = "1j2pv6jx5dlzanjp1qnf32s53d8jrlpv96nvymznkcnjvqn60gv9";
+    sha256 = "05lsirrdnnr5yqhwkgv08d9aib8xq4xpd6aq2pfqsi9qkii2fff1";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   prePatch = ''
     # remove dependency on PyPi cmake package, which isn't in Nixpkgs
-    substituteInPlace setup.py --replace "'cmake'" ""
+    substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'" ""
   '';
 
   dontUseCmakeConfigure = true;
@@ -92,7 +92,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High performance simulators for Qiskit";
-    homepage = "https://github.com/QISKit/qiskit-aer";
+    homepage = "https://qiskit.org/aer";
+    downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
     # Doesn't build on aarch64 (libmuparserx issue).

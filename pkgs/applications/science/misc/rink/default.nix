@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Unit-aware calculator";
-    homepage = "http://rink.tiffnix.com";
+    homepage = "https://rink.tiffnix.com";
     license = with licenses; [ mpl20 gpl3 ];
     maintainers = with maintainers; [ sb0 filalex77 ];
   };

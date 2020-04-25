@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Verification for C and Java programs via separation logic";
     homepage    = "http://people.cs.kuleuven.be/~bart.jacobs/verifast/";
-    license     = stdenv.lib.licenses.msrla;
+    license     = stdenv.lib.licenses.mit;
     platforms   = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };

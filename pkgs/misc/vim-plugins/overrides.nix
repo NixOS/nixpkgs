@@ -22,7 +22,7 @@
 # vim-go dependencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
-, gnused, reftools, gogetdoc, gometalinter
+, gnused, reftools, gogetdoc, golangci-lint
 , impl, iferr, gocode, gocode-gomod, go-tools
 
 # direnv-vim dependencies
@@ -57,16 +57,16 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.156";
+    version = "0.1.157";
     LanguageClient-neovim-src = fetchurl {
       url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
-      sha256 = "0bf2va6lpgw7wqpwpfidijbzphhvw48hyc2b529qv12vwgnd1shq";
+      sha256 = "1ccq5akkm8n612ni5g7w7v5gv73g7p1d9i92k0bnsy33fvi3pmnh";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0w66fcrlaxf6zgkrfpgfybfbm759fzimnr3pjq6sm14frar7lhr6";
+      cargoSha256 = "0r3f7sixkvgfrw0j81bxj1jpam5si9dnivrw63s29cvjxrdbnmqz";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -550,7 +550,7 @@ self: super: {
       godef
       gogetdoc
       golint
-      gometalinter
+      golangci-lint
       gomodifytags
       gotags
       gotools

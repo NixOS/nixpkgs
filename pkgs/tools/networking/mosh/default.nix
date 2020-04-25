@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mobile-shell/mosh/commit/e5f8a826ef9ff5da4cfce3bb8151f9526ec19db0.patch";
       sha256 = "15518rb0r5w1zn4s6981bf1sz6ins6gpn2saizfzhmr13hw4gmhm";
     })
+    # Fix build with bash-completion 2.10
+    ./bash_completion_datadir.patch
   ];
   postPatch = ''
     substituteInPlace scripts/mosh.pl \

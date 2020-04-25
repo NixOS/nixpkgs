@@ -6738,6 +6738,12 @@
     githubId = 2347889;
     name = "Sauyon Lee";
   };
+  savannidgerinel = {
+    email = "savanni@luminescent-dreams.com";
+    github = "savannidgerinel";
+    githubId = 8534888;
+    name = "Savanni D'Gerinel";
+  };
   sb0 = {
     email = "sb@m-labs.hk";
     github = "sbourdeauducq";
@@ -7177,6 +7183,12 @@
     github = "spwhitt";
     githubId = 1414088;
     name = "Spencer Whitt";
+  };
+  squalus = {
+    email = "squalus@tuta.io";
+    github = "squalus";
+    githubId = 36899624;
+    name = "squalus";
   };
   srghma = {
     email = "srghma@gmail.com";
