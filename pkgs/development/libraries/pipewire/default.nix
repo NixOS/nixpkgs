@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -71,6 +72,13 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-loader
     xorg.libX11
+  ];
+  patches = [
+      # fix SIGILL in fmt-ops: https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/227
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1b3aaba206f48e75bb34ff0cd00321bd3d6db2b4.patch";
+        sha256 = "08bmr9k2r0q4r7vhhm28k558nk3mz3jfnqswvq9mcj7p0srmfb4x";
+      })
   ];
 
   mesonFlags = [
