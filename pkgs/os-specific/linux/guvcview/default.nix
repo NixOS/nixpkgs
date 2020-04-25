@@ -16,7 +16,7 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio ? null
 , useQt ? false
-, qt5 ? null
+, qtbase ? null
 , wrapQtAppsHook ? null
 # can be turned off if used as a library
 , useGtk ? true
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (pulseaudioSupport) [ libpulseaudio ]
     ++ stdenv.lib.optionals (useGtk) [ gtk3 ]
     ++ stdenv.lib.optionals (useQt) [
-      qt5.qtbase
+      qtbase
     ]
   ;
   configureFlags = [

@@ -19848,7 +19848,7 @@ in
 
   gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
 
-  guvcview = callPackage ../os-specific/linux/guvcview { };
+  guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
