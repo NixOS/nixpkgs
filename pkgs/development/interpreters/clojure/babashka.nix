@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       --no-server \
       --report-unsupported-elements-at-runtime \
       "--initialize-at-run-time=org.postgresql.sspi.SSPIClient" \
-      "-J-Xmx3g"
+      "-J-Xmx4500m"
   '';
 
   installPhase = ''
