@@ -49,6 +49,7 @@ self: super: {
   async = doJailbreak super.async;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   hashable = doJailbreak super.hashable;
+  pandoc = doJailbreak super.pandoc;
   parallel = doJailbreak super.parallel;
   regex-base = doJailbreak super.regex-base;
   regex-compat = doJailbreak super.regex-compat;
