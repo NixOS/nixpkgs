@@ -1,4 +1,11 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtsvg, lxqt-build-tools }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, qtsvg
+, lxqt-build-tools
+}:
 
 mkDerivation rec {
   pname = "libqtxdg";
@@ -11,9 +18,15 @@ mkDerivation rec {
     sha256 = "16jqnpc740a6phq7vcgy85hl7253yzyw4m5h71r0vijk79ir73b5";
   };
 
-  nativeBuildInputs = [ cmake lxqt-build-tools ];
+  nativeBuildInputs = [
+    cmake
+    lxqt-build-tools
+  ];
 
-  buildInputs = [ qtbase qtsvg ];
+  buildInputs = [
+    qtbase
+    qtsvg
+  ];
 
   preConfigure = ''
     cmakeFlagsArray+=(

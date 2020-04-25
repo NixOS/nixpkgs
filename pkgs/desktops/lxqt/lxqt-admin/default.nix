@@ -1,4 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit-qt }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtx11extras
+, qttools
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, polkit-qt
+}:
 
 mkDerivation rec {
   pname = "lxqt-admin";

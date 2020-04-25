@@ -1,4 +1,10 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, lxqt-build-tools }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, lxqt-build-tools
+}:
 
 mkDerivation rec {
   pname = "libsysstat";
@@ -11,9 +17,14 @@ mkDerivation rec {
     sha256 = "10h9n7km7yx8bnmzxi4nn1yqq03hizjkrx4745j0mczy7niiffsz";
   };
 
-  nativeBuildInputs = [ cmake lxqt-build-tools ];
+  nativeBuildInputs = [
+    cmake
+    lxqt-build-tools
+  ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [
+    qtbase
+  ];
 
   meta = with lib; {
     description = "Library used to query system info and statistics";

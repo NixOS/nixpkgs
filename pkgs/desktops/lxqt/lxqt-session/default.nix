@@ -1,4 +1,19 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg, xorg, xdg-user-dirs }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtsvg
+, qtx11extras
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, xorg
+, xdg-user-dirs
+}:
 
 mkDerivation rec {
   pname = "lxqt-session";

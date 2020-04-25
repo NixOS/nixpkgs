@@ -1,4 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtx11extras
+, qttools
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+}:
 
 mkDerivation rec {
   pname = "lxqt-about";

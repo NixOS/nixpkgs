@@ -1,4 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, glib }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, pcre
+, qtbase
+, glib
+}:
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
@@ -11,9 +19,17 @@ mkDerivation rec {
     sha256 = "0i7m9s4g5rsw28vclc9nh0zcapx85cqfwxkx7rrw7wa12svy7pm2";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig setupHook ];
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
+    setupHook
+  ];
 
-  buildInputs = [ qtbase glib pcre ];
+  buildInputs = [
+    qtbase
+    glib
+    pcre
+  ];
 
   setupHook = ./setup-hook.sh;
 

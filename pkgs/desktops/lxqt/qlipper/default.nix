@@ -1,4 +1,10 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qttools }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, qttools
+}:
 
 mkDerivation rec {
   pname = "qlipper";
@@ -11,9 +17,14 @@ mkDerivation rec {
     sha256 = "0vlm4ab9isi7i2bimnyrk6083j2dfdrs14qj59vjcjri7mcwmf76";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  buildInputs = [ qtbase qttools ];
+  buildInputs = [
+    qtbase
+    qttools
+  ];
 
   meta = with lib; {
     description = "Cross-platform clipboard history applet";

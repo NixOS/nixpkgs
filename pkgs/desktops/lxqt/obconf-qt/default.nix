@@ -1,5 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, qttools,
-  qtx11extras, xorg, lxqt-build-tools, openbox }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, pcre
+, qtbase
+, qttools
+, qtx11extras
+, xorg
+, lxqt-build-tools
+, openbox
+}:
 
 mkDerivation rec {
   pname = "obconf-qt";

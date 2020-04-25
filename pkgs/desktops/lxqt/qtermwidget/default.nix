@@ -1,4 +1,11 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qttools, lxqt-build-tools }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, qtbase
+, qttools
+, lxqt-build-tools
+}:
 
 mkDerivation rec {
   pname = "qtermwidget";
@@ -11,9 +18,15 @@ mkDerivation rec {
     sha256 = "1pz8dwb86jpga4vfyn5v9n2s6dx3zh74yfp1kjsmsmhf878zs6lv";
   };
 
-  nativeBuildInputs = [ cmake lxqt-build-tools ];
+  nativeBuildInputs = [
+    cmake
+    lxqt-build-tools
+  ];
 
-  buildInputs = [ qtbase qttools ];
+  buildInputs = [
+    qtbase
+    qttools
+  ];
 
   meta = with lib; {
     description = "A terminal emulator widget for Qt 5";

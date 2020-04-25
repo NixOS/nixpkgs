@@ -1,4 +1,9 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+}:
 
 mkDerivation rec {
   pname = "lxqt-themes";

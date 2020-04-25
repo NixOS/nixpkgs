@@ -1,4 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, json-glib, libfm-qt, qtbase, qttools, qtx11extras }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, lxqt-build-tools
+, json-glib
+, libfm-qt
+, qtbase
+, qttools
+, qtx11extras
+}:
 
 mkDerivation rec {
   # pname = "lxqt-archiver";

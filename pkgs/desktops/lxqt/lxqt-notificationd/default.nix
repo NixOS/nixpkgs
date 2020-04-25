@@ -1,4 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, qtx11extras }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, qtx11extras
+}:
 
 mkDerivation rec {
   pname = "lxqt-notificationd";
