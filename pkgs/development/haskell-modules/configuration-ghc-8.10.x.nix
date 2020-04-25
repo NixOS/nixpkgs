@@ -56,6 +56,7 @@ self: super: {
   regex-posix = doJailbreak super.regex-posix;
   regex-tdfa = doJailbreak super.regex-tdfa;
   split = doJailbreak super.split;
+  system-fileio = doJailbreak super.system-fileio;
   tar = doJailbreak super.tar;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
   unliftio-core = doJailbreak super.unliftio-core;
