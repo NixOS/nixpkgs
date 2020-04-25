@@ -1,8 +1,31 @@
-{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, rustPlatform, pkgconfig, openssl, CoreServices, Security }:
+{ stdenv
+, buildPythonApplication
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, pkg-config
+, openssl
+, CoreServices
+, Security
+, click
+, click-log
+, click-threading
+, requests_toolbelt
+, requests
+, requests_oauthlib # required for google oauth sync
+, atomicwrites
+, milksnake
+, shippai
+, hypothesis
+, pytest
+, pytest-localserver
+, pytest-subtesthack
+, setuptools_scm
+}:
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   version = "unstable-2018-08-05";
   pname = "vdirsyncer";
   name = "${pname}-${version}";
@@ -20,11 +43,11 @@ python3Packages.buildPythonApplication rec {
     inherit src;
     sourceRoot = "source/rust";
     cargoSha256 = "0cqy0s55pkg6hww86h7qip4xaidh6g8lcypdj84n2x374jq38c5d";
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     click click-log click-threading
     requests_toolbelt
     requests
@@ -34,9 +57,16 @@ python3Packages.buildPythonApplication rec {
     shippai
   ];
 
-  nativeBuildInputs = with python3Packages; [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools_scm
+  ];
 
-  checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ];
+  checkInputs = [
+    hypothesis
+    pytest
+    pytest-localserver
+    pytest-subtesthack
+  ];
 
   patches = [
     (fetchpatch {
