@@ -42,6 +42,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Deviate from Stackage LTS-15.x to fix the build.
+  haddock-library = self.haddock-library_1_9_0;
+
   # Jailbreak to fix the build.
   async = doJailbreak super.async;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
@@ -60,7 +63,6 @@ self: super: {
   zlib = doJailbreak super.zlib;
 
   # Use the latest version to fix the build.
-  microlens-th = self.microlens-th_0_4_3_5;
   optics-core = self.optics-core_0_3;
   repline = self.repline_0_3_0_0;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_4;
@@ -94,4 +96,6 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
 
+  # Only 0.8 is compatible with ghc 8.10 https://hackage.haskell.org/package/apply-refact/changelog
+  apply-refact = super.apply-refact_0_8_0_0;
 }

@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python geospatial data analysis framework";
-    homepage = "http://geopandas.org";
+    homepage = "https://geopandas.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

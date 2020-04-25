@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.6.0";
+  version = "0.6.1";
 
   disabled = pythonOlder "3.6";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "0arbhwaa2kx04jbrj6hk3vvn92wdk6lrr9zx36pr6p22r0yyxnj9";
+    sha256 = "16c73m9gp1wcrygr6mnc0a9ps0i872bgc7v1zbqyh50kxbcrnpnz";
   };
 
   propagatedBuildInputs = [

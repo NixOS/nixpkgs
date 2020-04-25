@@ -45,6 +45,11 @@
      There is a new module for Podman(<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The new <varname>virtualisation.containers</varname> module manages configuration shared by the CRI-O and Podman modules.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

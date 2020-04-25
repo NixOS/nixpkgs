@@ -6617,8 +6617,6 @@ in
 
   sleepyhead = callPackage ../applications/misc/sleepyhead {};
 
-  slimrat = callPackage ../tools/networking/slimrat { };
-
   slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
 
   slsnif = callPackage ../tools/misc/slsnif { };
@@ -8512,6 +8510,8 @@ in
 
   pscid = nodePackages.pscid;
 
+  remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
+
   tacacsplus = callPackage ../servers/tacacsplus { };
 
   tamarin-prover =
@@ -8604,8 +8604,6 @@ in
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
   gogetdoc = callPackage ../development/tools/gogetdoc { };
-
-  gometalinter = callPackage ../development/tools/gometalinter { };
 
   gox = callPackage ../development/tools/gox { };
 
@@ -12301,8 +12299,8 @@ in
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_6;
-    stdenv = llvmPackages_6.stdenv;
+    stdenv = llvmPackages_10.stdenv;
+    llvmPackages = llvmPackages_10;
   };
 
   isso = callPackage ../servers/isso { };
@@ -17053,7 +17051,7 @@ in
     };
     kernelPatches = kernel.kernelPatches ++ [
       kernelPatches.tag_hardened
-      kernelPatches.hardened.${kernel.version}
+      kernelPatches.hardened.${kernel.meta.branch}
     ];
     modDirVersionArg = kernel.modDirVersion + "-hardened";
   });
@@ -17270,6 +17268,8 @@ in
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
   go-langserver = callPackage ../development/tools/go-langserver { };
+
+  gopls = callPackage ../development/tools/gopls { };
 
   gotests = callPackage ../development/tools/gotests { };
 
@@ -18947,7 +18947,7 @@ in
 
   dablin = callPackage ../applications/radio/dablin { };
 
-  darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskell.packages.ghc865.darcs) (drv: {
+  darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.darcs) (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
   });
 
@@ -19944,6 +19944,8 @@ in
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
+  musikcube = callPackage ../applications/audio/musikcube {};
+
   pinboard-notes-backup = haskell.lib.overrideCabal
     (haskell.lib.generateOptparseApplicativeCompletion "pnbackup"
       haskellPackages.pinboard-notes-backup)
@@ -20210,7 +20212,13 @@ in
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = gcc6Stdenv;
-    boost = boost155.override { enablePython = true; };
+    boost = boost155.override {
+      enablePython = true;
+      stdenv = gcc6Stdenv;
+      buildPackages = buildPackages // {
+        stdenv = gcc6Stdenv;
+      };
+    };
   };
 
   k3s = callPackage ../applications/networking/cluster/k3s {};
@@ -24449,6 +24457,8 @@ in
 
   prodigal = callPackage ../applications/science/biology/prodigal { };
 
+  quast = callPackage ../applications/science/biology/quast { };
+
   raxml = callPackage ../applications/science/biology/raxml { };
 
   raxml-mpi = appendToName "mpi" (raxml.override {
@@ -25693,6 +25703,8 @@ in
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
+  nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
+
   nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
@@ -26505,4 +26517,5 @@ in
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
+  zenstates = callPackage ../os-specific/linux/zenstates {};
 }

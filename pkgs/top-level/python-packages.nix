@@ -2761,6 +2761,8 @@ in {
 
   fastdtw = callPackage ../development/python-modules/fastdtw { };
 
+  fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
+
   faulthandler = if ! isPy3k
     then callPackage ../development/python-modules/faulthandler {}
     else throw "faulthandler is built into ${python.executable}";
@@ -3287,6 +3289,8 @@ in {
   pysrt = callPackage ../development/python-modules/pysrt { };
 
   pytools = callPackage ../development/python-modules/pytools { };
+
+  python-constraint = callPackage ../development/python-modules/python-constraint { };
 
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
 
@@ -5521,6 +5525,8 @@ in {
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
   readchar = callPackage ../development/python-modules/readchar { };
+
+  retworkx = callPackage ../development/python-modules/retworkx { };
 
   rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
     python2 = python;
