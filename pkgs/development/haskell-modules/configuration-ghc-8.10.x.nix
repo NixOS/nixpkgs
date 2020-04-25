@@ -91,6 +91,7 @@ self: super: {
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
   weeder = doJailbreak super.weeder;    # https://github.com/ocharles/weeder/issues/15
+  xmobar = doJailbreak super.xmobar;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
