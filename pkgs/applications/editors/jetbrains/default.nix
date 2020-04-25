@@ -78,6 +78,19 @@ let
       '';
     });
 
+  buildJetBrainsToolbox = { name, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit name version src wmClass jdk;
+      product = "Toolbox App";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/toolbox-app/";
+        inherit description license;
+        longDescription = "Manage your tools the easy way";
+        maintainers = with maintainers; [ loskutov ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildDataGrip = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
@@ -259,6 +272,20 @@ in
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
+  };
+
+  toolbox = buildJetBrainsToolbox rec {
+    # https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.17.6802.tar.gz
+    name = "jetbrains-toolbox-${version}";
+    version = "1.17.6802";
+    description = "Manage your tools the easy way";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/toolbox/${name}.tar.gz";
+      sha256 = "65a7e446c339de361bf713880b2fb3953de8adeb95a10c9bb4100fcbb249cdf2"; 
+    };
+    wmClass = "jetbrains-toolbox";
+    update-channel = "Jetbrains Toolbox App RELEASE";
   };
 
   datagrip = buildDataGrip rec {
