@@ -8247,6 +8247,12 @@
     githubId = 483465;
     name = "Mateusz Wykurz";
   };
+  wulfsta = {
+    email = "wulfstawulfsta@gmail.com";
+    github = "Wulfsta";
+    githubId = 13378502;
+    name = "Wulfsta";
+  };
   wyvie = {
     email = "elijahrum@gmail.com";
     github = "wyvie";
