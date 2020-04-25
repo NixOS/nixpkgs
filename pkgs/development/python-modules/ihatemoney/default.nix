@@ -21,7 +21,6 @@
 , jinja2
 , Mako
 , markupsafe
-, mock
 , python-dateutil
 , pytz
 , six
@@ -43,6 +42,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "0d4vc6m0jkwlz9ly0hcjghccydvqbldh2jb8yzf94jrgkd5fd7k1";
   };
+
+  disabled = isPy27;
 
   patches = [
     # fix migration on postgresql
@@ -93,7 +94,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     flask_testing
-  ] ++ lib.optionals isPy27 [ mock ];
+  ];
 
   passthru.tests = {
     inherit (nixosTests) ihatemoney;
