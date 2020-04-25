@@ -70,6 +70,7 @@ self: super: {
   lens = self.lens_4_19_2;
   optics-core = self.optics-core_0_3;
   repline = self.repline_0_3_0_0;
+  singletons = self.singletons_2_7;
   th-desugar = self.th-desugar_1_11;
 
   # `ghc-lib-parser-ex` (see conditionals in its `.cabal` file) does not need
