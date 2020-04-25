@@ -5,7 +5,7 @@ let
   python = python3.withPackages (p: [ p.requests ]);
   upperBoundFlag =
     let
-      package = lib.getAttrFromPath (lib.splitString "." attrPath) pkgs;
+      package = lib.attrByPath (lib.splitString "." attrPath) (throw "Cannot find attribute ‘${attrPath}’.") pkgs;
       packageVersion = lib.getVersion package;
       versionComponents = lib.versions.splitVersion packageVersion;
       minorVersion = lib.versions.minor packageVersion;
