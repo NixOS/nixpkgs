@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A modernized DOS emulator";
-    homepage = "https://github.com/dreamer/dosbox-staging";
+    homepage = "https://dosbox-staging.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ joshuafern ];
     platforms = platforms.unix;
