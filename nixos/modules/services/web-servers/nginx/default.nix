@@ -187,7 +187,7 @@ let
     then "/etc/nginx/nginx.conf"
     else configFile;
 
-  execCommand = "${cfg.package}/bin/nginx -c '${configPath}' -p '${cfg.stateDir}'";
+  execCommand = "${cfg.package}/bin/nginx -c '${configPath}'";
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
@@ -463,13 +463,6 @@ in
         '';
       };
 
-      stateDir = mkOption {
-        default = "/var/spool/nginx";
-        description = "
-          Directory holding all state for nginx to run.
-        ";
-      };
-
       user = mkOption {
         type = types.str;
         default = "nginx";
@@ -636,6 +629,13 @@ in
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "nginx" "stateDir" ] ''
+      The Nginx log directory has been moved to /var/log/nginx, the cache directory
+      to /var/cache/nginx. The option services.nginx.stateDir has been removed.
+    '')
+  ];
+
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
@@ -680,12 +680,6 @@ in
       }
     ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/logs' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
-
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
@@ -708,6 +702,12 @@ in
         # Runtime directory and mode
         RuntimeDirectory = "nginx";
         RuntimeDirectoryMode = "0750";
+        # Cache directory and mode
+        CacheDirectory = "nginx";
+        CacheDirectoryMode = "0750";
+        # Logs directory and mode
+        LogsDirectory = "nginx";
+        LogsDirectoryMode = "0750";
         # Capabilities
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
       };
