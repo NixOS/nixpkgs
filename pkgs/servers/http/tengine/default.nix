@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
-, gd, geoip, gperftools, jemalloc
+, substituteAll, gd, geoip, gperftools, jemalloc
 , withDebug ? false
 , withMail ? false
 , withStream ? false
@@ -24,7 +24,12 @@ stdenv.mkDerivation rec {
     [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
-  patches = [
+  patches = singleton (substituteAll {
+    src = ../nginx/nix-etag-1.15.4.patch;
+    preInstall = ''
+      export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
+    '';
+  }) ++ [
     ./check-resolv-conf.patch
   ];
 
