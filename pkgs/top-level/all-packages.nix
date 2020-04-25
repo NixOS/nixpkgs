@@ -6617,8 +6617,6 @@ in
 
   sleepyhead = callPackage ../applications/misc/sleepyhead {};
 
-  slimrat = callPackage ../tools/networking/slimrat { };
-
   slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
 
   slsnif = callPackage ../tools/misc/slsnif { };
