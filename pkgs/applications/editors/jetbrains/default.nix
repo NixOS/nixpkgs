@@ -79,9 +79,10 @@ let
     });
 
   buildJetBrainsToolbox = { name, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct {
+    lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
-      product = "Toolbox App";
+      product = "Toolbox";
+
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/toolbox-app/";
         inherit description license;
@@ -89,6 +90,15 @@ let
         maintainers = with maintainers; [ loskutov ];
         platforms = platforms.linux;
       };
+    }) (attrs: {
+      patchPhase = ("") +  optionalString (stdenv.isLinux) ''
+        echo "Empty patchPhase";
+      '';
+
+      installPhase = ''
+        mkdir -p $out/{bin,share}
+        cp -a . $out/bin
+      '';
     });
 
   buildDataGrip = { name, version, src, license, description, wmClass, ... }:
@@ -275,7 +285,6 @@ in
   };
 
   toolbox = buildJetBrainsToolbox rec {
-    # https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.17.6802.tar.gz
     name = "jetbrains-toolbox-${version}";
     version = "1.17.6802";
     description = "Manage your tools the easy way";
