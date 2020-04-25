@@ -12,7 +12,7 @@ let
       minorAvailable = builtins.length versionComponents > 1 && builtins.match "[0-9]+" minorVersion != null;
       nextMinor = builtins.fromJSON minorVersion + 1;
       upperBound = "${lib.versions.major packageVersion}.${builtins.toString nextMinor}";
-    in lib.optionalString (minorAvailable && freeze) ''--upper-bound="${upperBound}"'';
+    in lib.optionalString (freeze && minorAvailable) ''--upper-bound="${upperBound}"'';
   updateScript = writeScript "gnome-update-script" ''
     #!${stdenv.shell}
     set -o errexit
