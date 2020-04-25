@@ -185,7 +185,7 @@ stdenv.mkDerivation (rec {
     "--disable-large-address-space"
   ];
 
-  # Make sure we never relax`$PATH` and hooks support for compatability.
+  # Make sure we never relax`$PATH` and hooks support for compatibility.
   strictDeps = true;
 
   # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.

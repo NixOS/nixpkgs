@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.6.5";
+  version = "0.6.6";
 
   disabled = pythonOlder "3.5";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "03c0gl2qxyngf3cccjghjb0bhp0w78sdbvhim08cimf3cd577ldz";
+    sha256 = "080m5nsy3ia6bcdypq5d3ijb7762yl1l9llygmxsi6si449zl2cp";
   };
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.

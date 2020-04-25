@@ -7,15 +7,16 @@
 , markdown
 , pyct
 , testpath
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.7.0";
+  version = "0.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "71d446f469b424cb190bc896e78d0415b2bbebf17c6e5b024ed1a73b4448f8f4";
+    sha256 = "0iz20k7mqn0560r4358yrzvrrfn00h8s6dim7p7y4icpgjw2mjnb";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     markdown
     pyct
     testpath
+    tqdm
   ];
 
   # infinite recursion in test dependencies (hvplot)

@@ -22,7 +22,7 @@
 # vim-go dependencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
-, gnused, reftools, gogetdoc, gometalinter
+, gnused, reftools, gogetdoc, golangci-lint
 , impl, iferr, gocode, gocode-gomod, go-tools
 
 # direnv-vim dependencies
@@ -550,7 +550,7 @@ self: super: {
       godef
       gogetdoc
       golint
-      gometalinter
+      golangci-lint
       gomodifytags
       gotags
       gotools

@@ -54,6 +54,25 @@ in
       '';
     };
 
+    libpod = mkOption {
+      default = {};
+      description = "Libpod configuration";
+      type = types.submodule {
+        options = {
+
+          extraConfig = mkOption {
+            type = types.lines;
+            default = "";
+            description = ''
+              Extra configuration that should be put in the libpod.conf
+              configuration file
+            '';
+
+          };
+        };
+      };
+    };
+
   };
 
   config = lib.mkIf cfg.enable {
@@ -66,13 +85,19 @@ in
       pkgs.slirp4netns # User-mode networking for unprivileged namespaces
       pkgs.fuse-overlayfs # CoW for images, much faster than default vfs
       pkgs.utillinux # nsenter
-      pkgs.cni-plugins # Networking plugins
       pkgs.iptables
     ]
     ++ lib.optional cfg.dockerCompat dockerCompat;
 
+    environment.etc."containers/libpod.conf".text = ''
+      cni_plugin_dir = ["${pkgs.cni-plugins}/bin/"]
+      cni_config_dir = "/etc/cni/net.d/"
+
+    '' + cfg.libpod.extraConfig;
+
     environment.etc."cni/net.d/87-podman-bridge.conflist".source = copyFile "${pkgs.podman.src}/cni/87-podman-bridge.conflist";
 
+    # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;
 
   };

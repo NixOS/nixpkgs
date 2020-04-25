@@ -1,17 +1,18 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "gomodifytags-unstable";
-  version = "2018-09-14";
-  rev = "141225bf62b6e5c9c0c9554a2e993e8c30aebb1d";
+buildGoModule rec {
+  pname = "gomodifytags";
+  version = "1.4.0";
+
+  modSha256 = "0nkdk2zgnwsg9lv20vqk2lshk4g9fqwqxd5bpr78nlahb9xk486s";
 
   goPackagePath = "github.com/fatih/gomodifytags";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "fatih";
     repo = "gomodifytags";
-    sha256 = "16qbp594l90qpvf388wlv0kf6wvqj1vz2mqq0g3qcz6dkrc4cjqa";
+    rev = "v${version}";
+    sha256 = "1436wjqs6n2jxlyzx38nm4ih6fr11bybivg3wy5nvzfs6cs59q63";
   };
 
   meta = {

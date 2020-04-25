@@ -37,6 +37,6 @@ buildGoPackage rec {
     homepage = "https://github.com/containernetworking/plugins";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan saschagrunert ];
+    maintainers = with maintainers; [ cstrahan ] ++ teams.podman.members;
   };
 }

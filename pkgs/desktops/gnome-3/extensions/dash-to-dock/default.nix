@@ -1,27 +1,34 @@
-{ stdenv, fetchFromGitHub, glib, gettext }:
+{ stdenv
+, fetchFromGitHub
+, glib
+, gettext
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-dash-to-dock-unstable";
-  version = "2020-03-19";
+  version = "2020-04-20";
 
   src = fetchFromGitHub {
     owner = "micheleg";
     repo = "dash-to-dock";
     # rev = "extensions.gnome.org-v" + version;
-    rev = "8c94a8d6db47ebc1273e690f4e0ba5e592f7f268";
-    sha256 = "7nNfxAINqOIJCgYXYaPck2EJ1IOmzt6AkfDFknZ8GaI=";
+    rev = "1788f31b049b622f78d0e65c56bef76169022ca9";
+    sha256 = "M3tlRbQ1PjKvNrKNtg0+CBEtzLSFQYauXJXQojdkHuk=";
   };
 
   nativeBuildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
-  makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
+  makeFlags = [
+    "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions"
+  ];
 
   meta = with stdenv.lib; {
     description = "A dock for the Gnome Shell";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ eperuffo ];
     homepage = "https://micheleg.github.io/dash-to-dock/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ eperuffo jtojnar ];
   };
 }

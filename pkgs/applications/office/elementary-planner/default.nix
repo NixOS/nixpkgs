@@ -21,24 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planner";
     rev = version;
-    sha256 = "1kjk1zafx71zmax3whzpx6mzl037wlxri30bl2k9y9rg3fd09arr";
+    sha256 = "1jc668hg26vb1q50abm6k566v9qimgs9skkwmlgi5h37vxm3ai1x";
   };
-
-  patches = [
-    # Revert a patch the works around some stylesheet issues:
-    # https://github.com/alainm23/planner/issues/268
-    # https://github.com/alainm23/planner/issues/303
-    # The don't seem to be a problem with Pantheon on NixOS
-    # and for some reason produce the opposite effect with
-    # pantheon's stylesheet.
-    ./0001-Revert-Add-patch.patch
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils

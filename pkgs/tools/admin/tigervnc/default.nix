@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/xorg/protocol.txt
 
     wrapProgram $out/bin/vncserver \
-      --prefix PATH : ${stdenv.lib.makeBinPath (with xorg; [ xterm twm xsetroot ]) }
+      --prefix PATH : ${stdenv.lib.makeBinPath (with xorg; [ xterm twm xsetroot xauth ]) }
   '';
 
   buildInputs = with xorg; [

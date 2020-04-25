@@ -524,12 +524,6 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "Microsoft Public License";
   };
 
-  msrla = {
-    fullName  = "Microsoft Research License Agreement";
-    url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
-    free = false;
-  };
-
   nasa13 = spdx {
     spdxId = "NASA-1.3";
     fullName = "NASA Open Source Agreement 1.3";
