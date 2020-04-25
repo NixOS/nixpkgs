@@ -155,12 +155,13 @@ let
         "0.1.0" = "0hwkr2wzy710pcyh274fcarzdx8sv8myp16pv0vq5978nmih46al";
       };
       multinomials = {
-        "1.5" = "064rvc0x5g7y1a0nip6ic91vzmq52alf6in2bc2dmss6dmzv90hw";
-        "1.4" = "0vnkirs8iqsv8s59yx1fvg1nkwnzydl42z3scya1xp1b48qkgn0p";
-        "1.3" = "0l3vi5n094nx3qmy66hsv867fnqm196r8v605kpk24gl0aa57wh4";
-        "1.2" = "1mh1w339dslgv4f810xr1b8v2w7rpx6fgk9pz96q0fyq49fw2xcq";
-        "1.1" = "1q8alsm89wkc0lhcvxlyn0pd8rbl2nnxg81zyrabpz610qqjqc3s";
-        "1.0" = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
+        "1.5.1" = "13nlfm2wqripaq671gakz5mn4r0xwm0646araxv0nh455p9ndjs3";
+        "1.5"   = "064rvc0x5g7y1a0nip6ic91vzmq52alf6in2bc2dmss6dmzv90hw";
+        "1.4"   = "0vnkirs8iqsv8s59yx1fvg1nkwnzydl42z3scya1xp1b48qkgn0p";
+        "1.3"   = "0l3vi5n094nx3qmy66hsv867fnqm196r8v605kpk24gl0aa57wh4";
+        "1.2"   = "1mh1w339dslgv4f810xr1b8v2w7rpx6fgk9pz96q0fyq49fw2xcq";
+        "1.1"   = "1q8alsm89wkc0lhcvxlyn0pd8rbl2nnxg81zyrabpz610qqjqc3s";
+        "1.0"   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
       };
       real-closed = {
         "1.0.5" = "0q8nkxr9fba4naylr5xk7hfxsqzq2pvwlg1j0xxlhlgr3fmlavg2";
@@ -185,7 +186,7 @@ let
         finmap.version       = "1.5.0";
         bigenough.version    = "1.0.0";
         analysis.version     = "678d3cc37f5f3c71b1bd550836eb44e3ba2a5459";
-        multinomials.version = "b4b148692e971eb46343d5648f8ea3055e010bf2";
+        multinomials.version = "1.5.1";
         real-closed.version  = "1.0.5";
         coqeal.version       = "CohenCyril/bdfc96771644b082e41268edc43d61dc5fda2358";
       };
@@ -217,6 +218,7 @@ let
       {
         "8.11.1" = {
           "1.11.0+beta1" = v5;
+          "1.10.0"       = v4;
         };
         "8.10.2" = {
           "1.11.0+beta1" = v5;
