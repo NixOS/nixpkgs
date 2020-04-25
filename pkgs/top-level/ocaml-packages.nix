@@ -45,11 +45,6 @@ let
 
     async_kernel_p4 = callPackage ../development/ocaml-modules/async_kernel { };
 
-    async_shell =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_shell
-      else callPackage ../development/ocaml-modules/async_shell { };
-
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
 
     async_p4 =
