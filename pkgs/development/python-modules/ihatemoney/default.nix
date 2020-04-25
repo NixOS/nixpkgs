@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests
+{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch
 , alembic
 , aniso8601
 , Babel
@@ -44,7 +44,16 @@ buildPythonPackage rec {
     sha256 = "0d4vc6m0jkwlz9ly0hcjghccydvqbldh2jb8yzf94jrgkd5fd7k1";
   };
 
-  patchPhase = ''
+  patches = [
+    # fix migration on postgresql
+    # remove on next release
+    (fetchpatch {
+      url = "https://github.com/spiral-project/ihatemoney/commit/6129191b26784b895e203fa3eafb89cee7d88b71.patch";
+      sha256 = "0yc24gsih9x3pnh2mhj4v5i71x02dq93a9jd2r8b1limhcl4p1sw";
+    })
+  ];
+
+  postPatch = ''
     # remove draconian pinning
     sed -i 's/==.*$//' setup.cfg
   '';
