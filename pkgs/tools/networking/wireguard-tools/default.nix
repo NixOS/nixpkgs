@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) wg-quick wireguard-generated wireguard-namespaces;
+      inherit (nixosTests) wireguard wg-quick wireguard-generated wireguard-namespaces;
     };
   };
 
