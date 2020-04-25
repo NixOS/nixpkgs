@@ -7694,6 +7694,12 @@
     githubId = 678511;
     name = "Thomas Mader";
   };
+  thomasjm = {
+    email = "tom@codedown.io";
+    github = "thomasjm";
+    githubId = 1634990;
+    name = "Tom McLaughlin";
+  };
   thoughtpolice = {
     email = "aseipp@pobox.com";
     github = "thoughtpolice";
