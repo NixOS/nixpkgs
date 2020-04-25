@@ -1,6 +1,6 @@
-{stdenv, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
+{ mkDerivation, stdenv, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "caneda";
   version = "0.3.1";
 

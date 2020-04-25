@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, pkgconfig, makeWrapper
+{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, makeWrapper
 , httrack, qtbase, qtmultimedia }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "httraqt";
   version = "1.4.9";
 
