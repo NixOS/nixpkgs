@@ -81,8 +81,8 @@ in
       after = mkIf cfg.docker [ "docker.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        # Taken from https://github.com/rancher/k3s/blob/v1.17.4+k3s1/contrib/ansible/roles/k3s/node/templates/k3s.service.j2
-        Type = "notify";
+        # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
+        Type = if cfg.role == "agent" then "exec" else "notify";
         KillMode = "process";
         Delegate = "yes";
         Restart = "always";

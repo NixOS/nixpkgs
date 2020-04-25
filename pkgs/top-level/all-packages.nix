@@ -6887,6 +6887,8 @@ in
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
 
+  tartube = callPackage ../applications/video/tartube { };
+
   tayga = callPackage ../tools/networking/tayga { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };

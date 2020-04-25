@@ -5,14 +5,14 @@ let
   python = python3.withPackages (p: [ p.requests ]);
   upperBoundFlag =
     let
-      package = lib.getAttrFromPath (lib.splitString "." attrPath) pkgs;
+      package = lib.attrByPath (lib.splitString "." attrPath) (throw "Cannot find attribute ‘${attrPath}’.") pkgs;
       packageVersion = lib.getVersion package;
       versionComponents = lib.versions.splitVersion packageVersion;
       minorVersion = lib.versions.minor packageVersion;
       minorAvailable = builtins.length versionComponents > 1 && builtins.match "[0-9]+" minorVersion != null;
       nextMinor = builtins.fromJSON minorVersion + 1;
       upperBound = "${lib.versions.major packageVersion}.${builtins.toString nextMinor}";
-    in lib.optionalString (minorAvailable && freeze) ''--upper-bound="${upperBound}"'';
+    in lib.optionalString (freeze && minorAvailable) ''--upper-bound="${upperBound}"'';
   updateScript = writeScript "gnome-update-script" ''
     #!${stdenv.shell}
     set -o errexit
