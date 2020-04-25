@@ -67,6 +67,7 @@ self: super: {
   # Use the latest version to fix the build.
   dhall = self.dhall_1_31_1;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_4;
+  lens = self.lens_4_19_2;
   optics-core = self.optics-core_0_3;
   repline = self.repline_0_3_0_0;
   th-desugar = self.th-desugar_1_11;
