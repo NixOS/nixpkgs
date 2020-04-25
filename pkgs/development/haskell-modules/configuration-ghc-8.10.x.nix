@@ -64,6 +64,7 @@ self: super: {
   zlib = doJailbreak super.zlib;
 
   # Use the latest version to fix the build.
+  dhall = self.dhall_1_31_1;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_4;
   optics-core = self.optics-core_0_3;
   repline = self.repline_0_3_0_0;
