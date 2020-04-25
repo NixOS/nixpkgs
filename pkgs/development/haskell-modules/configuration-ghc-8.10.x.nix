@@ -110,6 +110,7 @@ self: super: {
     url = "https://github.com/haskell-hvr/cabal-plan/pull/55.patch";
     sha256 = "0lhs4vx5qg5ldhnyb9z7k0jmxhmd2f34x4xbwv6vsljs9vr02pd8";
   });
+  dbus = appendPatch super.dbus ./patches/fix-dbus-for-ghc-8.10.x.patch;
 
   # https://github.com/ndmitchell/hlint/issues/959
   hlint = super.hlint.override {
