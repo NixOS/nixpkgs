@@ -8011,6 +8011,8 @@ in
 
   bluespec = callPackage ../development/compilers/bluespec { };
 
+  ciao = callPackage ../development/compilers/ciao { };
+
   colm = callPackage ../development/compilers/colm { };
 
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { };
