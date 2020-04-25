@@ -5057,6 +5057,8 @@ in {
 
   pyaudio = callPackage ../development/python-modules/pyaudio { };
 
+  pycoin = callPackage ../development/python-modules/pycoin { };
+
   pysam = callPackage ../development/python-modules/pysam { };
 
   pysaml2 = callPackage ../development/python-modules/pysaml2 {
