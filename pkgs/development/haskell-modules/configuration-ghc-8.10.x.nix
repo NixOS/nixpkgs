@@ -80,6 +80,7 @@ self: super: {
 
   # Jailbreak to fix the build.
   aeson-diff = doJailbreak super.aeson-diff;
+  brick = doJailbreak super.brick;
   cborg = doJailbreak super.cborg;
   cborg-json = doJailbreak super.cborg-json;
   exact-pi = doJailbreak super.exact-pi;
@@ -87,7 +88,6 @@ self: super: {
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
-  brick = doJailbreak super.brick;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
