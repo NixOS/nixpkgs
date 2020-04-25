@@ -4565,6 +4565,8 @@ in
 
   kst = libsForQt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
+  kstars = libsForQt5.callPackage ../applications/science/astronomy/kstars { };
+
   kytea = callPackage ../tools/text/kytea { };
 
   k6 = callPackage ../development/tools/k6 { };
