@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     '';
   }) ++ [
     ./check-resolv-conf.patch
+    ../nginx/nix-skip-check-logs-path.patch
   ];
 
   configureFlags = [
@@ -58,6 +59,14 @@ stdenv.mkDerivation rec {
     "--with-poll_module"
     "--with-google_perftools_module"
     "--with-jemalloc"
+    "--http-log-path=/var/log/nginx/access.log"
+    "--error-log-path=/var/log/nginx/error.log"
+    "--pid-path=/var/log/nginx/nginx.pid"
+    "--http-client-body-temp-path=/var/cache/nginx/client_body"
+    "--http-proxy-temp-path=/var/cache/nginx/proxy"
+    "--http-fastcgi-temp-path=/var/cache/nginx/fastcgi"
+    "--http-uwsgi-temp-path=/var/cache/nginx/uwsgi"
+    "--http-scgi-temp-path=/var/cache/nginx/scgi"
   ] ++ optionals withDebug [
     "--with-debug"
   ] ++ optionals withMail [
