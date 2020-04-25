@@ -7,10 +7,10 @@ stdenv.mkDerivation rec {
   inherit (libva) version;
 
   src = fetchFromGitHub {
-    owner  = "01org";
+    owner  = "intel";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "1yk9bg1wg4nqva3l01s6bghcvc3hb02gp62p1sy5qk0r9mn5kpik";
+    sha256 = "13a0dccphi4cpr2cx45kg4djxsssi3d1fcjrkx27b16xiayp5lx9";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
@@ -26,10 +26,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "VAAPI tools: Video Acceleration API";
-    homepage = "http://www.freedesktop.org/wiki/Software/vaapi";
+    description = "A collection of utilities and examples for VA-API";
+    longDescription = ''
+      libva-utils is a collection of utilities and examples to exercise VA-API
+      in accordance with the libva project.
+    '';
+    homepage = "https://github.com/intel/libva-utils";
+    changelog = "https://raw.githubusercontent.com/intel/libva-utils/${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ primeos ];
     platforms = platforms.unix;
   };
 }

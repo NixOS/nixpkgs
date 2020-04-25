@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, xfce }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, xfce }:
 
 let
   category = "art";
@@ -18,6 +18,15 @@ stdenv.mkDerivation rec {
     intltool
     gtk3
   ];
+
+  buildInputs = [
+    gnome-icon-theme
+    tango-icon-theme
+    hicolor-icon-theme
+    # missing parent icon theme Industrial
+  ];
+
+  dontDropIconThemeCache = true;
 
   passthru.updateScript = xfce.updateScript {
     inherit pname version;

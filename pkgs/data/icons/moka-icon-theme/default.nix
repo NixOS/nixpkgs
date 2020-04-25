@@ -11,9 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "015l02im4mha5z91dbchxf6xkp66d346bg3xskwg0rh3lglhjsrd";
   };
 
-  nativeBuildInputs = [ meson ninja gtk3 python3 faba-icon-theme ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gtk3
+    python3
+  ];
 
   propagatedBuildInputs = [
+    faba-icon-theme
     hicolor-icon-theme
   ];
 
