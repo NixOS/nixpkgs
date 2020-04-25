@@ -1,12 +1,12 @@
-{
-  stdenv, fetchzip,
-
-  iptables ? null,
-  iproute ? null,
-  makeWrapper ? null,
-  openresolv ? null,
-  procps ? null,
-  wireguard-go ? null,
+{ stdenv
+, fetchzip
+, nixosTests
+, iptables ? null
+, iproute ? null
+, makeWrapper ? null
+, openresolv ? null
+, procps ? null
+, wireguard-go ? null
 }:
 
 with stdenv.lib;
@@ -47,7 +47,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      inherit (nixosTests) wg-quick wireguard-generated wireguard-namespaces;
+    };
+  };
 
   meta = {
     description = "Tools for the WireGuard secure network tunnel";
