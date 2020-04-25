@@ -1607,6 +1607,13 @@ in {
 
   vdf = callPackage ../development/python-modules/vdf { };
 
+  vdirsyncer = disabledIf (!isPy3k) callPackage ../tools/misc/vdirsyncer {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (pkgs) pkg-config openssl rustPlatform;
+  };
+
+  vdirsyncerStable = disabledIf (!isPy3k) callPackage ../tools/misc/vdirsyncer/stable.nix { };
+
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };

@@ -22345,11 +22345,9 @@ in
 
   vcv-rack = callPackage ../applications/audio/vcv-rack { };
 
-  vdirsyncer = callPackage ../tools/misc/vdirsyncer {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
-  vdirsyncerStable = callPackage ../tools/misc/vdirsyncer/stable.nix { };
+  vdirsyncerStable = with python3Packages; toPythonApplication vdirsyncerStable;
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
