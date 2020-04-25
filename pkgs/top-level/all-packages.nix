@@ -24603,7 +24603,9 @@ in
 
   dcmtk = callPackage ../applications/science/medicine/dcmtk { };
 
-  ### PHYSICS
+  ### SCIENCE/PHYSICS
+
+  elmerfem = callPackage ../applications/science/physics/elmerfem {};
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
 
