@@ -134,16 +134,17 @@ let
     ###############################
     sha256 = {
       finmap = {
-        "1.5.0" = "0vx9n1fi23592b3hv5p5ycy7mxc8qh1y5q05aksfwbzkk5zjkwnq";
-        "1.4.1" = "0kx4nx24dml1igk0w0qijmw221r5bgxhwhl5qicnxp7ab3c35s8p";
-        "1.4.0" = "0mp82mcmrs424ff1vj3cvd8353r9vcap027h3p0iprr1vkkwjbzd";
-        "1.3.4" = "0f5a62ljhixy5d7gsnwd66gf054l26k3m79fb8nz40i2mgp6l9ii";
-        "1.3.3" = "1n844zjhv354kp4g4pfbajix0plqh7yxv6471sgyb46885298am5";
-        "1.3.1" = "14rvm0rm5hd3pd0srgak3jqmddzfv6n7gdpjwhady5xcgrc7gsx7";
-        "1.2.1" = "0jryb5dq8js3imbmwrxignlk5zh8gwfb1wr4b1s7jbwz410vp7zf";
-        "1.2.0" = "0b6wrdr0d7rcnv86s37zm80540jl2wmiyf39ih7mw3dlwli2cyj4";
-        "1.1.0" = "05df59v3na8jhpsfp7hq3niam6asgcaipg2wngnzxzqnl86srp2a";
-        "1.0.0" = "0sah7k9qm8sw17cgd02f0x84hki8vj8kdz7h15i7rmz08rj0whpa";
+        "1.5.0"          = "0vx9n1fi23592b3hv5p5ycy7mxc8qh1y5q05aksfwbzkk5zjkwnq";
+        "1.4.1"          = "0kx4nx24dml1igk0w0qijmw221r5bgxhwhl5qicnxp7ab3c35s8p";
+        "1.4.0+coq-8.11" = "1fd00ihyx0kzq5fblh9vr8s5mr1kg7p6pk11c4gr8svl1n69ppmb";
+        "1.4.0"          = "0mp82mcmrs424ff1vj3cvd8353r9vcap027h3p0iprr1vkkwjbzd";
+        "1.3.4"          = "0f5a62ljhixy5d7gsnwd66gf054l26k3m79fb8nz40i2mgp6l9ii";
+        "1.3.3"          = "1n844zjhv354kp4g4pfbajix0plqh7yxv6471sgyb46885298am5";
+        "1.3.1"          = "14rvm0rm5hd3pd0srgak3jqmddzfv6n7gdpjwhady5xcgrc7gsx7";
+        "1.2.1"          = "0jryb5dq8js3imbmwrxignlk5zh8gwfb1wr4b1s7jbwz410vp7zf";
+        "1.2.0"          = "0b6wrdr0d7rcnv86s37zm80540jl2wmiyf39ih7mw3dlwli2cyj4";
+        "1.1.0"          = "05df59v3na8jhpsfp7hq3niam6asgcaipg2wngnzxzqnl86srp2a";
+        "1.0.0"          = "0sah7k9qm8sw17cgd02f0x84hki8vj8kdz7h15i7rmz08rj0whpa";
       };
       bigenough = {
         "1.0.0" = "10g0gp3hk7wri7lijkrqna263346wwf6a3hbd4qr9gn8hmsx70wg";
@@ -218,7 +219,7 @@ let
       {
         "8.11.1" = {
           "1.11.0+beta1" = v5;
-          "1.10.0"       = v4;
+          "1.10.0"       = v4 // {finmap.version = "1.4.0+coq-8.11";};
         };
         "8.10.2" = {
           "1.11.0+beta1" = v5;
