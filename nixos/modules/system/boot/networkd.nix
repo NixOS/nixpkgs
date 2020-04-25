@@ -1012,7 +1012,7 @@ in
 
       systemd.services.systemd-networkd = {
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = attrNames unitFiles;
+        restartTriggers = map (x: x.source) (attrValues unitFiles);
         # prevent race condition with interface renaming (#39069)
         requires = [ "systemd-udev-settle.service" ];
         after = [ "systemd-udev-settle.service" ];

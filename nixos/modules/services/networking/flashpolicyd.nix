@@ -39,6 +39,7 @@ in
     services.flashpolicyd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description =
           ''

@@ -17,10 +17,7 @@ in
 
     services.disnix = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable Disnix";
-      };
+      enable = mkEnableOption "Disnix";
 
       enableMultiUser = mkOption {
         type = types.bool;

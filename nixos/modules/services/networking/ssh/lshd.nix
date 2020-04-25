@@ -19,6 +19,7 @@ in
     services.lshd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the GNU lshd SSH2 daemon, which allows

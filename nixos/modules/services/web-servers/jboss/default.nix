@@ -24,6 +24,7 @@ in
     services.jboss = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable JBoss. WARNING : this package is outdated and is known to have vulnerabilities.";
       };
