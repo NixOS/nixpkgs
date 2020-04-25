@@ -1,7 +1,11 @@
 { stdenv
 , mkDerivation
 , fetchurl
-, qt5
+, qtbase
+, qtmultimedia
+, qtquickcontrols
+, qtimageformats
+, qtxmlpatterns
 , ffmpeg
 , guvcview
 , cmake
@@ -27,18 +31,18 @@ mkDerivation rec {
     sha256 = "03r6jxyq0bak2vsy2b78nk27m7fm96hnl8cx11l3l17704j4iglh";
   };
 
-  buildInputs = with qt5; [
-    v4l-utils
-    libv4l
-    pcre
+  buildInputs = [
     qtbase
     qtmultimedia
-    ffmpeg
-    guvcview
-    qwt
     qtquickcontrols
     qtimageformats
     qtxmlpatterns
+    v4l-utils
+    libv4l
+    pcre
+    ffmpeg
+    guvcview
+    qwt
   ];
 
   nativeBuildInputs = [
