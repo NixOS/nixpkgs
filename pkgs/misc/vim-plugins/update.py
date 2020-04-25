@@ -414,6 +414,7 @@ let
       rev = "{plugin.commit}";
       sha256 = "{plugin.sha256}";{submodule_attr}
     }};
+    meta.homepage = "https://github.com/{owner}/{repo}/";
   }};
 """
             )

@@ -1457,11 +1457,8 @@ self: super: {
   cryptonite = dontCheck super.cryptonite;
 
   # The test suite depends on an impure cabal-install installation in
-  # $HOME, which we don't have in our build sandbox, and it is keeping
-  # up with the most recent Cabal version.
-  cabal-install-parsers = dontCheck (super.cabal-install-parsers.overrideScope (self: super: {
-    Cabal = self.Cabal_3_2_0_0;
-  }));
+  # $HOME, which we don't have in our build sandbox.
+  cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;

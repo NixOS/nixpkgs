@@ -6617,8 +6617,6 @@ in
 
   sleepyhead = callPackage ../applications/misc/sleepyhead {};
 
-  slimrat = callPackage ../tools/networking/slimrat { };
-
   slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
 
   slsnif = callPackage ../tools/misc/slsnif { };
@@ -6888,6 +6886,8 @@ in
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
+
+  tartube = callPackage ../applications/video/tartube { };
 
   tayga = callPackage ../tools/networking/tayga { };
 
@@ -8511,6 +8511,8 @@ in
   pulp = nodePackages.pulp;
 
   pscid = nodePackages.pscid;
+
+  remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
 
   tacacsplus = callPackage ../servers/tacacsplus { };
 
@@ -25702,6 +25704,8 @@ in
   nixpkgs-review = callPackage ../tools/package-management/nixpkgs-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
+
+  nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
 
   nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
 

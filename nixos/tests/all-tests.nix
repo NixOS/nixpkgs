@@ -287,6 +287,7 @@ in
   snapper = handleTest ./snapper.nix {};
   solr = handleTest ./solr.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
+  spike = handleTest ./spike.nix {};
   sonarr = handleTest ./sonarr.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
