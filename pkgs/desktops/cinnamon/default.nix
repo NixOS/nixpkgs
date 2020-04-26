@@ -1,6 +1,17 @@
 { pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
+  iso-flags-png-320x420 = pkgs.iso-flags.overrideAttrs(p: p // {
+    buildPhase = "make png-country-320x240-fancy";
+    # installPhase = "mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png-320x420";
+    installPhase = "mkdir -p $out/share && mv build/png-country-4x2-fancy/res-320x240 $out/share/iso-flags-png";
+  });
+
+  iso-flags-svg = pkgs.iso-flags.overrideAttrs(p: p // {
+    buildPhase = "mkdir -p $out/share";
+    installPhase = "mv svg $out/share/iso-flags-svg";
+  });
+
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
   cinnamon-menus = callPackage ./cinnamon-menus { };
