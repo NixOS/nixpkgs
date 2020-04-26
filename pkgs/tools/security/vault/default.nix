@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles }:
 
 buildGoPackage rec {
   pname = "vault";
@@ -15,14 +15,16 @@ buildGoPackage rec {
 
   subPackages = [ "." ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildFlagsArray = [
     "-tags='vault'"
     "-ldflags=\"-X github.com/hashicorp/vault/sdk/version.GitCommit='v${version}'\""
   ];
 
   postInstall = ''
-    mkdir -p $bin/share/bash-completion/completions
-    echo "complete -C $bin/bin/vault vault" > $bin/share/bash-completion/completions/vault
+    echo "complete -C $bin/bin/vault vault" > vault.bash
+    installShellCompletion vault.bash
   '';
 
   meta = with stdenv.lib; {
