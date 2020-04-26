@@ -3738,6 +3738,8 @@ in {
 
   eventlet = callPackage ../development/python-modules/eventlet { };
 
+  executing = callPackage ../development/python-modules/executing { };
+
   exifread = callPackage ../development/python-modules/exifread { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
