@@ -7878,6 +7878,20 @@ let
     };
   };
 
+  GitAutofixup = buildPerlPackage rec {
+    pname = "GitAutofixup";
+    version = "0.002007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-${version}.tar.gz";
+      sha256 = "1ydy15pibva0qr5vrv5mqyzw3zlc3wbszzv7932vh7m88vv6gfr6";
+    };
+    meta = {
+      maintainers = [ maintainers.DamienCassou ];
+      description = "Create fixup commits for topic branches";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   GitPurePerl = buildPerlPackage {
     pname = "Git-PurePerl";
     version = "0.53";
