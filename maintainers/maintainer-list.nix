@@ -7102,6 +7102,12 @@
     githubId = 602439;
     name = "Serguei Narojnyi";
   };
+  snicket2100 = {
+    email = "57048005+snicket2100@users.noreply.github.com";
+    github = "snicket2100";
+    githubId = 57048005;
+    name = "snicket2100";
+  };
   snyh = {
     email = "snyh@snyh.org";
     github = "snyh";
