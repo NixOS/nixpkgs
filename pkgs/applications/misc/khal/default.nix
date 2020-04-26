@@ -1,4 +1,9 @@
-{ stdenv, pkgs, python3, fetchpatch, glibcLocales }:
+{ stdenv
+, pkgs
+, python3
+, fetchpatch
+, glibcLocales
+}:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "khal";
@@ -37,8 +42,15 @@ with python3.pkgs; buildPythonApplication rec {
     pkginfo
     freezegun
   ];
-  nativeBuildInputs = [ setuptools_scm sphinx sphinxcontrib_newsfeed ];
-  checkInputs = [ pytest glibcLocales ];
+  nativeBuildInputs = [
+    setuptools_scm
+    sphinx
+    sphinxcontrib_newsfeed
+  ];
+  checkInputs = [
+    pytest
+    glibcLocales
+  ];
   LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
