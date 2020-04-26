@@ -15558,6 +15558,8 @@ in
 
   haka = callPackage ../tools/security/haka { };
 
+  hashi-ui = callPackage ../servers/hashi-ui {};
+
   heapster = callPackage ../servers/monitoring/heapster { };
 
   hbase = callPackage ../servers/hbase {};
