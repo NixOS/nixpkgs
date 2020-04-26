@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "2019-09-25";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
-    rev = "62501255434b2ba6a8fd043a5af13dc0df038a5b";
-    sha256 = "1af58k68karmnay7xgngzlmcgkmvx6hay5m1xbl5id9hh16n20in";
+    rev = version;
+    sha256 = "0c0y8sy12laqyanvy6mmnpjvy1yb8k3241pbxhc3nyl5zrq3hzdh";
   };
 
   nativeBuildInputs = [
@@ -36,8 +36,6 @@ mkDerivation rec {
     qttools
     qtx11extras
   ];
-
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   hardeningDisable = [ "format" ];
 
