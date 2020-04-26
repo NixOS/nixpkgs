@@ -7593,6 +7593,8 @@ in
 
   which = callPackage ../tools/system/which { };
 
+  whsniff = callPackage ../applications/networking/sniffers/whsniff { };
+
   woeusb = callPackage ../tools/misc/woeusb { };
 
   chase = callPackage ../tools/system/chase { };
