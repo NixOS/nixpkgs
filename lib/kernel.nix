@@ -14,7 +14,7 @@ with lib;
   freeform = x: { freeform = x; };
 
   /*
-    Common patterns/legacy used in common-config/hardened-config.nix
+    Common patterns/legacy used in common-config/hardened/config.nix
    */
   whenHelpers = version: {
     whenAtLeast = ver: mkIf (versionAtLeast version ver);
