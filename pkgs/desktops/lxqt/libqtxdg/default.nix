@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "libqtxdg";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "16jqnpc740a6phq7vcgy85hl7253yzyw4m5h71r0vijk79ir73b5";
+    sha256 = "00dzs6zc8prc0mxmvq0pmpy1qi8rysg97as7jfd0ndk5jii0nd85";
   };
 
   nativeBuildInputs = [
@@ -31,9 +31,7 @@ mkDerivation rec {
 
   preConfigure = ''
     cmakeFlagsArray+=(
-      "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix/iconengines"
     )
   '';
 
