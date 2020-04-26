@@ -14635,6 +14635,7 @@ in
   stlport = callPackage ../development/libraries/stlport { };
 
   streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
+  streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix {};
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
