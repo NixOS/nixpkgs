@@ -1,17 +1,44 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p "python3.withPackages (ps: [ps.PyGithub])" git gnupg
+#! nix-shell -i python -p "python38.withPackages (ps: [ps.PyGithub])" git gnupg
 
 # This is automatically called by ../update.sh.
+
+from __future__ import annotations
 
 import json
 import os
 import re
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import (
+    Dict,
+    Iterator,
+    List,
+    Optional,
+    Sequence,
+    Tuple,
+    TypedDict,
+    Union,
+)
 
 from github import Github
+from github.GitRelease import GitRelease
+
+VersionComponent = Union[int, str]
+Version = List[VersionComponent]
+
+
+Patch = TypedDict("Patch", {"name": str, "url": str, "sha256": str})
+
+
+@dataclass
+class ReleaseInfo:
+    version: Version
+    release: GitRelease
+
 
 HERE = Path(__file__).resolve().parent
 NIXPKGS_KERNEL_PATH = HERE.parent
@@ -19,17 +46,13 @@ NIXPKGS_PATH = HERE.parents[4]
 HARDENED_GITHUB_REPO = "anthraxx/linux-hardened"
 HARDENED_TRUSTED_KEY = HERE / "anthraxx.asc"
 HARDENED_PATCHES_PATH = HERE / "patches.json"
-MIN_KERNEL_VERSION = [4, 14]
+MIN_KERNEL_VERSION: Version = [4, 14]
 
 
-def run(*args, **kwargs):
+def run(*args: Union[str, Path]) -> subprocess.CompletedProcess[bytes]:
     try:
         return subprocess.run(
-            args,
-            **kwargs,
-            check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            args, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
     except subprocess.CalledProcessError as err:
         print(
@@ -42,13 +65,15 @@ def run(*args, **kwargs):
         sys.exit(1)
 
 
-def nix_prefetch_url(url):
+def nix_prefetch_url(url: str) -> Tuple[str, Path]:
     output = run("nix-prefetch-url", "--print-path", url).stdout
     sha256, path = output.decode("utf-8").strip().split("\n")
     return sha256, Path(path)
 
 
-def verify_openpgp_signature(*, name, trusted_key, sig_path, data_path):
+def verify_openpgp_signature(
+    *, name: str, trusted_key: Path, sig_path: Path, data_path: Path,
+) -> bool:
     with TemporaryDirectory(suffix=".nixpkgs-gnupg-home") as gnupg_home_str:
         gnupg_home = Path(gnupg_home_str)
         run("gpg", "--homedir", gnupg_home, "--import", trusted_key)
@@ -69,14 +94,15 @@ def verify_openpgp_signature(*, name, trusted_key, sig_path, data_path):
             return False
 
 
-def fetch_patch(*, name, release):
-    def find_asset(filename):
+def fetch_patch(*, name: str, release: GitRelease) -> Optional[Patch]:
+    def find_asset(filename: str) -> str:
         try:
-            return next(
+            it: Iterator[str] = (
                 asset.browser_download_url
                 for asset in release.get_assets()
                 if asset.name == filename
             )
+            return next(it)
         except StopIteration:
             raise KeyError(filename)
 
@@ -99,15 +125,11 @@ def fetch_patch(*, name, release):
     if not sig_ok:
         return None
 
-    return {
-        "name": patch_filename,
-        "url": patch_url,
-        "sha256": sha256,
-    }
+    return Patch(name=patch_filename, url=patch_url, sha256=sha256)
 
 
-def parse_version(version_str):
-    version = []
+def parse_version(version_str: str) -> Version:
+    version: Version = []
     for component in version_str.split("."):
         try:
             version.append(int(component))
@@ -116,15 +138,15 @@ def parse_version(version_str):
     return version
 
 
-def version_string(version):
+def version_string(version: Version) -> str:
     return ".".join(str(component) for component in version)
 
 
-def major_kernel_version_key(kernel_version):
+def major_kernel_version_key(kernel_version: Version) -> str:
     return version_string(kernel_version[:-1])
 
 
-def commit_patches(*, kernel_key, message):
+def commit_patches(*, kernel_key: str, message: str) -> None:
     new_patches_path = HARDENED_PATCHES_PATH.with_suffix(".new")
     with open(new_patches_path, "w") as new_patches_file:
         json.dump(patches, new_patches_file, indent=4, sort_keys=True)
@@ -144,6 +166,7 @@ def commit_patches(*, kernel_key, message):
 
 
 # Load the existing patches.
+patches: Dict[str, Patch]
 with open(HARDENED_PATCHES_PATH) as patches_file:
     patches = json.load(patches_file)
 
@@ -177,7 +200,6 @@ for kernel_key in sorted(patches.keys() - kernel_versions.keys()):
 
 g = Github(os.environ.get("GITHUB_TOKEN"))
 repo = g.get_repo(HARDENED_GITHUB_REPO)
-
 failures = False
 
 # Match each kernel version with the best patch version.
@@ -195,10 +217,7 @@ for release in repo.get_releases():
     except KeyError:
         continue
 
-    release_info = {
-        "version": version,
-        "release": release,
-    }
+    release_info = ReleaseInfo(version=version, release=release)
 
     if kernel_version == packaged_kernel_version:
         releases[kernel_key] = release_info
@@ -208,18 +227,20 @@ for release in repo.get_releases():
         if kernel_version > packaged_kernel_version:
             continue
         elif (
-            kernel_key not in releases
-            or releases[kernel_key]["version"] < version
+            kernel_key not in releases or releases[kernel_key].version < version
         ):
             releases[kernel_key] = release_info
 
 # Update hardened-patches.json for each release.
 for kernel_key, release_info in releases.items():
-    release = release_info["release"]
-    version = release_info["version"]
+    release = release_info.release
+    version = release_info.version
     version_str = release.tag_name
     name = f"linux-hardened-{version_str}"
 
+    old_version: Optional[Version] = None
+    old_version_str: Optional[str] = None
+    update: bool
     try:
         old_filename = patches[kernel_key]["name"]
         old_version_str = old_filename.replace("linux-hardened-", "").replace(
@@ -229,7 +250,6 @@ for kernel_key, release_info in releases.items():
         update = old_version < version
     except KeyError:
         update = True
-        old_version = None
 
     if update:
         patch = fetch_patch(name=name, release=release)
