@@ -12047,9 +12047,20 @@ in
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
-  gobject-introspection = callPackage ../development/libraries/gobject-introspection {
+  gobject-introspection-full-classic = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
     inherit (darwin) cctools;
+  };
+
+  gobject-introspection-py-tools = gobject-introspection-full-classic.override {
+    build_python_tools = true;
+    build_library_and_c_tools = false;
+  };
+
+  gobject-introspection = gobject-introspection-full-classic.override {
+    build_python_tools = false;
+    build_library_and_c_tools = true;
+    gi_cross_use_prebuilt_gi = true;
   };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };

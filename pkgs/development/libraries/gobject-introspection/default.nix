@@ -1,9 +1,11 @@
 { stdenv
+, buildPackages
 , fetchurl
 , fetchFromGitLab
 , glib
 , flex
 , bison
+, makeSetupHook
 , meson
 , ninja
 , gtk-doc
@@ -17,13 +19,32 @@
 , cairo
 , gnome3
 , substituteAll
+, writeText
 , nixStoreDir ? builtins.storeDir
-, x11Support ? true
+, x11Support ? stdenv.buildPlatform == stdenv.hostPlatform
+, build_library_and_c_tools ? true
+, build_python_tools ? true
+, gi_cross_use_prebuilt_gi ? false
+, build_introspection_data ?
+    build_library_and_c_tools &&
+    (build_python_tools || gi_cross_use_prebuilt_gi)
+, gobject-introspection-py-tools ? null
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
+
+assert build_library_and_c_tools || build_python_tools;
+assert build_introspection_data -> build_library_and_c_tools;
+assert gi_cross_use_prebuilt_gi -> gobject-introspection-py-tools != null;
+
+let
+  giSetupHook = makeSetupHook {
+    name = "gobject-introspection-hook";
+  } ./setup-hook.sh;
+  mkFlag = name: cond: "-D${name}=${if cond then "true" else "false"}";
+in
 
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
@@ -31,8 +52,12 @@ stdenv.mkDerivation rec {
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
-  outputs = [ "out" "dev" "devdoc" "man" ];
-  outputBin = "dev";
+  outputs = [ "out" ]
+    ++ stdenv.lib.optionals build_library_and_c_tools [ "dev" "bin" ]
+    ++ [ "devdoc" "man" ];
+
+  # Do not propogate the "bin" output, as it refers to the dev output.
+  propagatedBuildOutputs = stdenv.lib.optional build_library_and_c_tools "out";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -49,6 +74,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
+    })
+	# We use this during the build, so patch shebangs in the fixed phase is too
+	# later. This is a template for string substitution so patch shebangs of
+	# the source is also too early.
+    (substituteAll {
+      src = ./absolute-python-shebang.patch;
+      python_bin = stdenv.lib.escapeShellArg python3.interpreter;
     })
   ] ++ stdenv.lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
@@ -70,11 +102,14 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43 # FIXME: remove in next release
     docbook_xml_dtd_45
     python3
-    setupHook # move .gir files
+  ] ++ stdenv.lib.optionals (build_introspection_data && !gi_cross_use_prebuilt_gi) [
+    giSetupHook # move .gir files
   ];
 
   buildInputs = [
     python3
+  ] ++ stdenv.lib.optionals gi_cross_use_prebuilt_gi [
+    gobject-introspection-py-tools
   ];
 
   checkInputs = stdenv.lib.optionals stdenv.isDarwin [
@@ -86,12 +121,24 @@ stdenv.mkDerivation rec {
     glib
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
-    "--datadir=${placeholder "dev"}/share"
     "-Ddoctool=disabled"
     "-Dcairo=disabled"
     "-Dgtk_doc=true"
-  ];
+    (mkFlag "build_library_and_c_tools" build_library_and_c_tools)
+    (mkFlag "build_python_tools" build_python_tools)
+    (mkFlag "gi_cross_use_prebuilt_gi" gi_cross_use_prebuilt_gi)
+    (mkFlag "build_introspection_data" build_introspection_data)
+  ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ("--cross-file=" + writeText "cross-file.conf" (''
+      [binaries]
+      exe_wrapper = ${stdenv.lib.escapeShellArg (stdenv.hostPlatform.emulator buildPackages)}
+    ''))
+    "-Dgi_cross_ldd_wrapper=${buildPackages.prelink}/bin/prelink-rtld"
+    "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
+  ] ++ stdenv.lib.optional build_library_and_c_tools "--datadir=${placeholder "dev"}/share";
 
   doCheck = !stdenv.isAarch64;
 
@@ -108,7 +155,12 @@ stdenv.mkDerivation rec {
     rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
   '';
 
-  setupHook = ./setup-hook.sh;
+  # Remove the bindir from the pkg-config file. We will add it back in a wrapper.
+  postInstall = stdenv.lib.optionalString build_library_and_c_tools ''
+    sed -i '/bindir/d' "$out/lib/pkgconfig"/*.pc
+  '';
+
+  setupHook = if build_python_tools then giSetupHook else null;
 
   passthru = {
     updateScript = gnome3.updateScript {
