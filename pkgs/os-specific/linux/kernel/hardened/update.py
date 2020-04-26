@@ -1,7 +1,7 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python -p "python3.withPackages (ps: [ps.PyGithub])" git gnupg
 
-# This is automatically called by ./update.sh.
+# This is automatically called by ../update.sh.
 
 import json
 import os
@@ -14,9 +14,11 @@ from tempfile import TemporaryDirectory
 from github import Github
 
 HERE = Path(__file__).resolve().parent
+NIXPKGS_KERNEL_PATH = HERE.parent
+NIXPKGS_PATH = HERE.parents[4]
 HARDENED_GITHUB_REPO = "anthraxx/linux-hardened"
 HARDENED_TRUSTED_KEY = HERE / "anthraxx.asc"
-HARDENED_PATCHES_PATH = HERE / "hardened-patches.json"
+HARDENED_PATCHES_PATH = HERE / "patches.json"
 MIN_KERNEL_VERSION = [4, 14]
 
 
@@ -128,16 +130,16 @@ def commit_patches(*, kernel_key, message):
         json.dump(patches, new_patches_file, indent=4, sort_keys=True)
         new_patches_file.write("\n")
     os.rename(new_patches_path, HARDENED_PATCHES_PATH)
-    message = f"linux/hardened-patches/{kernel_key}: {message}"
+    message = f"linux/hardened/patches/{kernel_key}: {message}"
     print(message)
     if os.environ.get("COMMIT"):
         run(
             "git",
             "-C",
-            HERE,
+            NIXPKGS_PATH,
             "commit",
             f"--message={message}",
-            "hardened-patches.json",
+            HARDENED_PATCHES_PATH,
         )
 
 
@@ -156,10 +158,10 @@ NIX_VERSION_RE = re.compile(
 
 # Get the set of currently packaged kernel versions.
 kernel_versions = {}
-for filename in os.listdir(HERE):
+for filename in os.listdir(NIXPKGS_KERNEL_PATH):
     filename_match = re.fullmatch(r"linux-(\d+)\.(\d+)\.nix", filename)
     if filename_match:
-        with open(HERE / filename) as nix_file:
+        with open(NIXPKGS_KERNEL_PATH / filename) as nix_file:
             for nix_line in nix_file:
                 match = NIX_VERSION_RE.fullmatch(nix_line)
                 if match:
