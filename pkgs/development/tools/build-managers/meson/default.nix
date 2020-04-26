@@ -90,8 +90,6 @@ python3Packages.buildPythonApplication rec {
   # checkInputs = [ ninja pkgconfig ];
   # checkPhase = "python ./run_project_tests.py";
 
-  inherit (stdenv) cc;
-
   isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
