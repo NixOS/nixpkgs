@@ -19,7 +19,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
-    categories = "Application;Development;";
+    categories = "Development;";
     icon = execName;
     extraEntries = ''
       StartupWMClass=${wmClass}
