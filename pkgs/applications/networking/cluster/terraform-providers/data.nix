@@ -440,6 +440,14 @@
       version = "1.14.0";
       sha256  = "10g5xl3pspzmj0bjzqbw3br4k7kh2jplph06f7sz2zg9dncl4h5z";
     };
+  ibm =
+    {
+      owner   = "IBM-Cloud";
+      repo    = "terraform-provider-ibm";
+      rev     = "v1.4.0";
+      version = "1.4.0";
+      sha256  = "147vl55g6c49ihk8z2hwfq2v7g1yj35id1qfjlz0dxalm7cwa3l6";
+    };
   icinga2 =
     {
       owner   = "terraform-providers";
