@@ -1,11 +1,11 @@
 # We have tests for PCRE and PHP-FPM in nixos/tests/php/ or
 # both in the same attribute named nixosTests.php
 
-{ callPackage, lib, stdenv }@_args:
+{ callPackage, lib, stdenv, nixosTests }@_args:
 
 let
   generic =
-    { callPackage, lib, stdenv, config, fetchurl, makeWrapper
+    { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
     , systemd, valgrind
@@ -120,6 +120,7 @@ let
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   phpIni = "${phpWithExtensions}/lib/php.ini";
                   unwrapped = php;
+                  tests = nixosTests.php;
                   inherit (php-packages) packages extensions;
                 };
                 paths = [ php ];
