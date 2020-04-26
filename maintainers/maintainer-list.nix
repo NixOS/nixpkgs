@@ -3997,6 +3997,12 @@
     githubId = 59667;
     name = "Ahmed Kamal";
   };
+  kimat = {
+    email = "mail@kimat.org";
+    github = "kimat";
+    githubId = 3081769;
+    name = "Kimat Boven";
+  };
   kimburgess = {
     email = "kim@acaprojects.com";
     github = "kimburgess";
