@@ -1,5 +1,5 @@
 { stdenv
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
 , rustPlatform
@@ -25,7 +25,7 @@
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
-buildPythonApplication rec {
+buildPythonPackage rec {
   version = "unstable-2018-08-05";
   pname = "vdirsyncer";
   name = "${pname}-${version}";

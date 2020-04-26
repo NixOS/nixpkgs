@@ -1,6 +1,6 @@
 { stdenv
 , pythonAtLeast
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , fetchpatch
 , click
@@ -21,7 +21,7 @@
 
 # Packaging documentation at:
 # https://github.com/pimutils/vdirsyncer/blob/0.16.7/docs/packaging.rst
-buildPythonApplication rec {
+buildPythonPackage rec {
   version = "0.16.7";
   pname = "vdirsyncer";
 
