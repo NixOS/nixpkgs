@@ -19551,6 +19551,8 @@ in
 
   bgpq3 = callPackage ../tools/networking/bgpq3 { };
 
+  bgpq4 = callPackage ../tools/networking/bgpq4 { };
+
   blackbox = callPackage ../applications/version-management/blackbox { };
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
