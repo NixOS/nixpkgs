@@ -20756,6 +20756,8 @@ in
 
   rofi-emoji = callPackage ../applications/misc/rofi-emoji { };
 
+  rofi-file-browser = callPackage ../applications/misc/rofi-file-browser { };
+
   ympd = callPackage ../applications/audio/ympd { };
 
   nload = callPackage ../applications/networking/nload { };
