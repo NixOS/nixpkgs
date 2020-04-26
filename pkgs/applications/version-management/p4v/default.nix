@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebkit, openssl_1_0_2, xkeyboard_config, wrapQtAppsHook }:
+{ stdenv, fetchurl, lib, qtbase, qtscript, qtwebengine, qtwebkit, openssl_1_1, xkeyboard_config, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "p4v";
-  version = "2017.3.1601999";
+  version = "2020.1.1946989";
 
   src = fetchurl {
-    url = "https://cdist2.perforce.com/perforce/r17.3/bin.linux26x86_64/p4v.tgz";
-    sha256 = "9ded42683141e1808535ec3e87d3149f890315c192d6e97212794fd54862b9a4";
+    url = "https://www.perforce.com/downloads/perforce/r20.1/bin.linux26x86_64/p4v.tgz";
+    sha256 = "67aa4949fb29b04b537f32b3f8fc18a24ef3ce12f81a38ffea46210a89553a89";
   };
 
   dontBuild = true;
@@ -15,21 +15,20 @@ stdenv.mkDerivation rec {
   ldLibraryPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
       qtbase
-      qtmultimedia
       qtscript
-      qtsensors
+      qtwebengine
       qtwebkit
-      openssl_1_0_2
+      openssl_1_1
   ];
 
   dontWrapQtApps = true;
   installPhase = ''
     mkdir $out
     cp -r bin $out
-    mkdir -p $out/lib/p4v
-    cp -r lib/p4v/P4VResources $out/lib/p4v
+    mkdir -p $out/lib
+    cp -r lib/P4VResources $out/lib
 
-    for f in $out/bin/*.bin ; do
+    for f in $out/bin/{*.bin,helixmfa,QtWebEngineProcess} ; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
 
       wrapQtApp $f \
