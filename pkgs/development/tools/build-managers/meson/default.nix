@@ -45,6 +45,11 @@ python3Packages.buildPythonApplication rec {
     # We remove the check so multiple outputs can work sanely.
     ./allow-dirs-outside-of-prefix.patch
 
+    # Meson is currently inspecting fewer variables than autoconf does, which
+    # makes it harder for us to use setup hooks, etc.  Taken from
+    # https://github.com/mesonbuild/meson/pull/6827
+    ./more-env-vars.patch
+
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
     # breaking the GIR when path other than ${!outputLib}/lib is used.
@@ -67,13 +72,7 @@ python3Packages.buildPythonApplication rec {
 
   crossFile = writeTextDir "cross-file.conf" ''
     [binaries]
-    c = '${targetPackages.stdenv.cc.targetPrefix}cc'
-    cpp = '${targetPackages.stdenv.cc.targetPrefix}c++'
-    ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
     pkgconfig = 'pkg-config'
-    ld = '${targetPackages.stdenv.cc.targetPrefix}ld'
-    objcopy = '${targetPackages.stdenv.cc.targetPrefix}objcopy'
 
     [properties]
     needs_exe_wrapper = true
