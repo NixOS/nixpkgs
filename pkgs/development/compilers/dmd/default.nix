@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , makeWrapper, unzip, which, writeTextFile
 , curl, tzdata, gdb, darwin, git, callPackage
-, targetPackages, fetchpatch
+, targetPackages, fetchpatch, bash
 , dmdBootstrap ? callPackage ./bootstrap.nix { }
 , HOST_DMD ? "${dmdBootstrap}/bin/dmd"
 , version ? "2.091.1"
@@ -74,7 +74,10 @@ stdenv.mkDerivation rec {
       patchShebangs .
   '';
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+  postPatch = ''
+      substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+  ''
+  + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   ''
   + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
