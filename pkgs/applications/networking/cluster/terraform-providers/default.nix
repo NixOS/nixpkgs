@@ -136,6 +136,7 @@ let
     elasticsearch = callPackage ./elasticsearch {};
     libvirt = callPackage ./libvirt {};
     lxd = callPackage ./lxd {};
+    vpsadmin = callPackage ./vpsadmin {};
   };
 in
   automated-providers // special-providers
