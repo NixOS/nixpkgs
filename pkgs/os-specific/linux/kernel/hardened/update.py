@@ -227,7 +227,8 @@ for release in repo.get_releases():
             releases[kernel_key] = release_info
 
 # Update hardened-patches.json for each release.
-for kernel_key, release_info in releases.items():
+for kernel_key in sorted(releases.keys()):
+    release_info = releases[kernel_key]
     release = release_info.release
     version = release_info.version
     version_str = release.tag_name
