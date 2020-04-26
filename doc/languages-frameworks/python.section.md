@@ -1059,6 +1059,11 @@ let
 in newpkgs.inkscape
 ```
 
+If you'd like to disable tests for a particular Python based package built with
+`buildPythonPackage` or `buildPythonApplication`, you'd need to set
+`doInstallCheck = false` and not `doCheck = false` as the later will take no
+effect.
+
 ### `python setup.py bdist_wheel` cannot create .whl
 
 Executing `python setup.py bdist_wheel` in a `nix-shell `fails with
