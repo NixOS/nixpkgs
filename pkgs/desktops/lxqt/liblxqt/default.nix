@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "liblxqt";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0g2502lcws5j74p82qhfryz9n51cvi85hb50r5s227xhkv91q65k";
+    sha256 = "1dqxsz8fy6xyzbkxhsymmr71yw4d5dwjgqd4rdjn0r9gk8ajrfzp";
   };
 
   nativeBuildInputs = [
