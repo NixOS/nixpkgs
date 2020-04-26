@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
      sha256 = "0v4xgqmrx5r8vbx5a4v88s0xnm23mam9nm99yfga7s2sxr0hi5p2";
     })
     (fetchpatch {
-     url = "https://github.com/dlang/dmd/commit/14547ae37a97678a80a32fea4c76626bbd8595ca.patch";
-     sha256 = "17f7glbmq61r9zy9y40p1zwgqc9daf2sbly3p6d6z9wsd1p57xnl";
+     url = "https://github.com/dlang/dmd/commit/1b8a4c90b040bf2f0b68a2739de4991315580b13.patch";
+     sha256 = "1iih6aalv4fsw9mbrlrybhngkkchzzrzg7q8zl047w36c0x397cs";
     })
   ];
 
