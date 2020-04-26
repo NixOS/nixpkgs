@@ -10,6 +10,7 @@
 , liblxqt
 , libqtxdg
 , qtx11extras
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -37,6 +38,8 @@ mkDerivation rec {
     libqtxdg
     qtx11extras
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "The LXQt notification daemon";

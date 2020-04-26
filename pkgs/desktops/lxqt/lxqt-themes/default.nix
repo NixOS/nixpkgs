@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , lxqt-build-tools
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -20,6 +21,8 @@ mkDerivation rec {
     cmake
     lxqt-build-tools
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Themes, graphics and icons for LXQt";

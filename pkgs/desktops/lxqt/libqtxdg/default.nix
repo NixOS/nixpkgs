@@ -5,6 +5,7 @@
 , qtbase
 , qtsvg
 , lxqt-build-tools
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -35,6 +36,8 @@ mkDerivation rec {
       "-DCMAKE_INSTALL_LIBDIR=lib"
     )
   '';
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Qt implementation of freedesktop.org xdg specs";

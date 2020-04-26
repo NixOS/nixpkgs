@@ -9,11 +9,11 @@
 , qtbase
 , qttools
 , qtx11extras
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
-  # pname = "lxqt-archiver";
-  pname = "lxqt-archiver-unstable";
+  pname = "lxqt-archiver";
   version = "2019-09-25";
 
   src = fetchFromGitHub {
@@ -40,6 +40,8 @@ mkDerivation rec {
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   hardeningDisable = [ "format" ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Archive tool for the LXQt desktop environment";

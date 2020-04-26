@@ -11,10 +11,11 @@
 , menu-cache
 , qtx11extras
 , qttools
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
-  pname = "libfm-qt-unstable";
+  pname = "libfm-qt";
   version = "2019-09-22";
 
   src = fetchFromGitHub {
@@ -41,6 +42,8 @@ mkDerivation rec {
     libfm
     menu-cache
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";

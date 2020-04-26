@@ -13,6 +13,7 @@
 , liblxqt
 , libqtxdg
 , xorg
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -53,6 +54,8 @@ mkDerivation rec {
   postPatch = ''
     sed -i "/\''${XORG_LIBINPUT_INCLUDE_DIRS}/a ${xorg.xf86inputlibinput.dev}/include/xorg" lxqt-config-input/CMakeLists.txt
   '';
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Tools to configure LXQt and the underlying operating system";

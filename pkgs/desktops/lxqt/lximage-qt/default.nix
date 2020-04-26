@@ -11,6 +11,7 @@
 , lxqt-build-tools
 , libfm-qt
 , libexif
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -40,6 +41,8 @@ mkDerivation rec {
     xorg.libXdmcp
     libexif
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "The image viewer and screenshot tool for lxqt";

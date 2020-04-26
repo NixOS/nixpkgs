@@ -10,6 +10,7 @@
 , polkit-qt
 , kwindowsystem
 , xorg
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -41,6 +42,8 @@ mkDerivation rec {
   postPatch = ''
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
   '';
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Core utility library for all LXQt components";

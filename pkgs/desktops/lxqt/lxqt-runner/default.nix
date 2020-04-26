@@ -15,6 +15,7 @@
 , menu-cache
 , muparser
 , pcre
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -47,6 +48,8 @@ mkDerivation rec {
     muparser
     pcre
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Tool used to launch programs quickly by typing their names";

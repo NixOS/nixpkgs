@@ -4,6 +4,7 @@
 , cmake
 , qtbase
 , qttools
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -25,6 +26,8 @@ mkDerivation rec {
     qtbase
     qttools
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Cross-platform clipboard history applet";

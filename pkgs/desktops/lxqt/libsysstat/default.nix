@@ -4,6 +4,7 @@
 , cmake
 , qtbase
 , lxqt-build-tools
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -25,6 +26,8 @@ mkDerivation rec {
   buildInputs = [
     qtbase
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Library used to query system info and statistics";

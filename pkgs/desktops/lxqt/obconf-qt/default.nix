@@ -10,6 +10,7 @@
 , xorg
 , lxqt-build-tools
 , openbox
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -39,6 +40,8 @@ mkDerivation rec {
     xorg.libSM
     openbox
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "The Qt port of obconf, the Openbox configuration tool";

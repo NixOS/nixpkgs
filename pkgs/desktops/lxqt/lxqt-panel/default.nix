@@ -25,6 +25,7 @@
 , lxmenu-data
 , pcre
 , libXdamage
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -68,6 +69,8 @@ mkDerivation rec {
     pcre
     libXdamage
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "The LXQt desktop panel";

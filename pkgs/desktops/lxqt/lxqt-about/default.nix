@@ -9,6 +9,7 @@
 , kwindowsystem
 , liblxqt
 , libqtxdg
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -35,6 +36,8 @@ mkDerivation rec {
     liblxqt
     libqtxdg
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Dialogue window providing information about LXQt and the system it's running on";

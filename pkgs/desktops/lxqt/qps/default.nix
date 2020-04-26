@@ -6,6 +6,7 @@
 , qtx11extras
 , qttools
 , lxqt-build-tools
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -29,6 +30,8 @@ mkDerivation rec {
     qtx11extras
     qttools
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Qt based process manager";

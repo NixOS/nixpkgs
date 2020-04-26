@@ -11,6 +11,7 @@
 , libqtxdg
 , xorg
 , autoPatchelfHook
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -40,6 +41,8 @@ mkDerivation rec {
     xorg.libpthreadstubs
     xorg.libXdmcp
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Crossplatform tool for fast making screenshots";

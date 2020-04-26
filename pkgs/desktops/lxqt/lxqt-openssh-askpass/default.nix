@@ -10,6 +10,7 @@
 , kwindowsystem
 , liblxqt
 , libqtxdg
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -37,6 +38,8 @@ mkDerivation rec {
     liblxqt
     libqtxdg
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "GUI to query passwords on behalf of SSH agents";

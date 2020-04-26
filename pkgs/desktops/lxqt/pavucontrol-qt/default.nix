@@ -36,6 +36,8 @@ mkDerivation rec {
     pcre
   ];
 
+  passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
+
   meta = with lib; {
     description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
     homepage = "https://github.com/lxqt/pavucontrol-qt";

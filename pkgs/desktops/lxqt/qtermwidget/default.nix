@@ -5,6 +5,7 @@
 , qtbase
 , qttools
 , lxqt-build-tools
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -27,6 +28,8 @@ mkDerivation rec {
     qtbase
     qttools
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "A terminal emulator widget for Qt 5";

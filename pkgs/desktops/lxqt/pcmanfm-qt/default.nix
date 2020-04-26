@@ -10,6 +10,7 @@
 , libfm-qt
 , menu-cache
 , lxmenu-data
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -38,6 +39,8 @@ mkDerivation rec {
     menu-cache
     lxmenu-data
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";

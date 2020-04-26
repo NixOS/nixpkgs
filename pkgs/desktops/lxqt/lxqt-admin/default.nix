@@ -10,6 +10,7 @@
 , liblxqt
 , libqtxdg
 , polkit-qt
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -42,6 +43,8 @@ mkDerivation rec {
     sed "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" \
       -i lxqt-admin-user/CMakeLists.txt
   '';
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "LXQt system administration tool";

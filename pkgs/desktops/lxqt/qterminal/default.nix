@@ -7,6 +7,7 @@
 , qtbase
 , qttools
 , qtx11extras
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -31,6 +32,8 @@ mkDerivation rec {
     qtx11extras
     qtermwidget
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "A lightweight Qt-based terminal emulator";

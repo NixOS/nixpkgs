@@ -11,6 +11,7 @@
 , liblxqt
 , libqtxdg
 , sudo
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -39,6 +40,8 @@ mkDerivation rec {
     libqtxdg
     sudo
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "GUI frontend for sudo/su";

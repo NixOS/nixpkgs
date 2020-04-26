@@ -12,6 +12,7 @@
 , kidletime
 , liblxqt
 , libqtxdg
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -41,6 +42,8 @@ mkDerivation rec {
     liblxqt
     libqtxdg
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Power management module for LXQt";

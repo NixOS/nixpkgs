@@ -13,6 +13,7 @@
 , libqtxdg
 , xorg
 , xdg-user-dirs
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -44,6 +45,8 @@ mkDerivation rec {
     xorg.libXdmcp
     xdg-user-dirs
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "An alternative session manager ported from the original razor-session";

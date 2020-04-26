@@ -13,6 +13,7 @@
 , liblxqt
 , libqtxdg
 , pcre
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -43,6 +44,8 @@ mkDerivation rec {
     libqtxdg
     pcre
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "The LXQt PolicyKit agent";

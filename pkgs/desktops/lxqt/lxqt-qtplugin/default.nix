@@ -10,6 +10,7 @@
 , libdbusmenu
 , libqtxdg
 , libfm-qt
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -42,6 +43,8 @@ mkDerivation rec {
     substituteInPlace src/CMakeLists.txt \
       --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
   '';
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "LXQt Qt platform integration plugin";

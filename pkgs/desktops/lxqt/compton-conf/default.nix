@@ -37,6 +37,8 @@ mkDerivation rec {
       --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
   '';
 
+  passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
+
   meta = with lib; {
     description = "GUI configuration tool for compton X composite manager";
     homepage = "https://github.com/lxqt/compton-conf";

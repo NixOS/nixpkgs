@@ -6,6 +6,7 @@
 , pcre
 , qtbase
 , glib
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
@@ -39,6 +40,8 @@ mkDerivation rec {
     rm $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
     cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
   '';
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Various packaging tools and scripts for LXQt applications";
