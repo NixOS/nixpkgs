@@ -1558,4 +1558,3 @@ vstruct = buildLuarocksPackage {
 
 }
 /* GENERATED */
-
