@@ -4,19 +4,19 @@
 # This is automatically called by ./update.sh.
 
 import json
-import os.path
+import os
 import re
 import subprocess
 import sys
-from glob import glob
+from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from github import Github
 
-HERE = os.path.dirname(os.path.realpath(__file__))
+HERE = Path(__file__).resolve().parent
 HARDENED_GITHUB_REPO = "anthraxx/linux-hardened"
-HARDENED_TRUSTED_KEY = os.path.join(HERE, "anthraxx.asc")
-HARDENED_PATCHES_PATH = os.path.join(HERE, "hardened-patches.json")
+HARDENED_TRUSTED_KEY = HERE / "anthraxx.asc"
+HARDENED_PATCHES_PATH = HERE / "hardened-patches.json"
 MIN_KERNEL_VERSION = [4, 14]
 
 
@@ -42,13 +42,15 @@ def run(*args, **kwargs):
 
 def nix_prefetch_url(url):
     output = run("nix-prefetch-url", "--print-path", url).stdout
-    return output.decode("utf-8").strip().split("\n")
+    sha256, path = output.decode("utf-8").strip().split("\n")
+    return sha256, Path(path)
 
 
 def verify_openpgp_signature(*, name, trusted_key, sig_path, data_path):
-    with TemporaryDirectory(suffix=".nixpkgs-gnupg-home") as gnupg_home:
+    with TemporaryDirectory(suffix=".nixpkgs-gnupg-home") as gnupg_home_str:
+        gnupg_home = Path(gnupg_home_str)
         run("gpg", "--homedir", gnupg_home, "--import", trusted_key)
-        keyring = os.path.join(gnupg_home, "pubring.kbx")
+        keyring = gnupg_home / "pubring.kbx"
         try:
             subprocess.run(
                 ("gpgv", "--keyring", keyring, sig_path, data_path),
@@ -121,10 +123,11 @@ def major_kernel_version_key(kernel_version):
 
 
 def commit_patches(*, kernel_key, message):
-    with open(HARDENED_PATCHES_PATH + ".new", "w") as new_patches_file:
+    new_patches_path = HARDENED_PATCHES_PATH.with_suffix(".new")
+    with open(new_patches_path, "w") as new_patches_file:
         json.dump(patches, new_patches_file, indent=4, sort_keys=True)
         new_patches_file.write("\n")
-    os.rename(HARDENED_PATCHES_PATH + ".new", HARDENED_PATCHES_PATH)
+    os.rename(new_patches_path, HARDENED_PATCHES_PATH)
     message = f"linux/hardened-patches/{kernel_key}: {message}"
     print(message)
     if os.environ.get("COMMIT"):
@@ -156,7 +159,7 @@ kernel_versions = {}
 for filename in os.listdir(HERE):
     filename_match = re.fullmatch(r"linux-(\d+)\.(\d+)\.nix", filename)
     if filename_match:
-        with open(os.path.join(HERE, filename)) as nix_file:
+        with open(HERE / filename) as nix_file:
             for nix_line in nix_file:
                 match = NIX_VERSION_RE.fullmatch(nix_line)
                 if match:
