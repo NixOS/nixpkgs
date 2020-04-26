@@ -1,5 +1,5 @@
 { stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
-, runCommand, writeText, terraform-providers }:
+, runCommand, writeText, terraform-providers, fetchpatch }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -120,7 +120,13 @@ in rec {
   terraform_0_12 = pluggable (generic {
     version = "0.12.24";
     sha256 = "1rjihp6qcaizp2nnv4z20kpmjnqcw95pq5rnhq381a3pdzr0cd0z";
-    patches = [ ./provider-path.patch ];
+    patches = [
+        ./provider-path.patch
+        (fetchpatch {
+            name = "fix-mac-mojave-crashes.patch";
+            url = "https://github.com/hashicorp/terraform/pull/24562.patch";
+            sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
+        }) ];
     passthru = { inherit plugins; };
   });
 
