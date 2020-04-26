@@ -5,11 +5,11 @@
 , glibcLocales
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "khal";
   version = "0.10.1";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "1r8bkgjwkh7i8ygvsv51h1cnax50sb183vafg66x5snxf3dgjl6l";
   };
@@ -25,7 +25,7 @@ with python3.pkgs; buildPythonApplication rec {
     ./skip-broken-test.patch
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     click
     click-log
@@ -33,7 +33,7 @@ with python3.pkgs; buildPythonApplication rec {
     dateutil
     icalendar
     lxml
-    pkgs.vdirsyncer
+    vdirsyncer
     pytz
     pyxdg
     requests_toolbelt
@@ -42,13 +42,11 @@ with python3.pkgs; buildPythonApplication rec {
     pkginfo
     freezegun
   ];
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     setuptools_scm
-    sphinx
-    sphinxcontrib_newsfeed
   ];
   checkInputs = [
-    pytest
+    python3.pkgs.pytest
     glibcLocales
   ];
   LC_ALL = "en_US.UTF-8";
