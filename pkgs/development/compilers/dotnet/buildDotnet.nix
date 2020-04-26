@@ -13,10 +13,14 @@ assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
 , curl
 }: 
 let pname = if type == "aspnetcore" then "aspnetcore-runtime" else if type == "netcore" then "dotnet-runtime" else "dotnet-sdk";
+    suffix = {
+      x86_64-linux  = "x64";
+      aarch64-linux = "arm64";
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     urls = {
-        aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-linux-x64.tar.gz";
-        netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-linux-x64.tar.gz";
-        sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-linux-x64.tar.gz";
+        aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-linux-${suffix}.tar.gz";
+        netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-linux-${suffix}.tar.gz";
+        sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-linux-${suffix}.tar.gz";
     };
     descriptions = {
         aspnetcore = "ASP .NET Core runtime ${version}";
@@ -30,7 +34,7 @@ in stdenv.mkDerivation rec {
 
     src = fetchurl {
         url = builtins.getAttr type urls;
-        inherit sha512;
+        sha512 = sha512."${stdenv.hostPlatform.system}"  or (throw "Missing hash for host system: ${stdenv.hostPlatform.system}");
     };
 
     sourceRoot = ".";
@@ -61,7 +65,7 @@ in stdenv.mkDerivation rec {
     meta = with stdenv.lib; {
         homepage = "https://dotnet.github.io/";
         description = builtins.getAttr type descriptions;
-        platforms = [ "x86_64-linux" ];
+        platforms = [ "x86_64-linux" "aarch64-linux" ];
         maintainers = with maintainers; [ kuznero ];
         license = licenses.mit;
     };
