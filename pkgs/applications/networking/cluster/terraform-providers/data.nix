@@ -928,6 +928,14 @@
       version = "0.0.1";
       sha256  = "1xcg5zm2n1pc3l7ng94k589r7ykv6fxsmr5qn9xmmpdf912rdnfq";
     };
+  sops =
+    {
+      owner   = "carlpett";
+      repo    = "terraform-provider-sops";
+      rev     = "v0.5.0";
+      version = "0.5.0";
+      sha256  = "18zhqjkw1639a1vrxniws3sf5p91vrf5m7kksaj3yfiavsr5q2ki";
+    };
   spotinst =
     {
       owner   = "terraform-providers";
