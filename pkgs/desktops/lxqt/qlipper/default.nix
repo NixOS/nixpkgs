@@ -9,13 +9,13 @@
 
 mkDerivation rec {
   pname = "qlipper";
-  version = "5.1.1";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "pvanek";
     repo = pname;
     rev = version;
-    sha256 = "0vlm4ab9isi7i2bimnyrk6083j2dfdrs14qj59vjcjri7mcwmf76";
+    sha256 = "0zpkcqfylcfwvadp1bidcrr64d8ls5c7bdnkfqwjjd32sd35ly60";
   };
 
   nativeBuildInputs = [
