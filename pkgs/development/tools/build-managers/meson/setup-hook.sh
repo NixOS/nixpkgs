@@ -5,11 +5,6 @@ mesonConfigurePhase() {
         mesonFlags="--prefix=$prefix $mesonFlags"
     fi
 
-    # Build release by default.
-    if [ -n "@isCross@" ]; then
-      crossMesonFlags="--cross-file=@crossFile@/cross-file.conf"
-    fi
-
     # See multiple-outputs.sh and meson’s coredata.py
     mesonFlags="\
         --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
