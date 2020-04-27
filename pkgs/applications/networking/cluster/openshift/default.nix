@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildGoPackage, which, go-bindata, rsync, utillinux
-, coreutils, kerberos, clang
+, coreutils, kerberos, clang, installShellFiles
 , components ? [
   "cmd/oc"
   "cmd/openshift"
@@ -35,7 +35,7 @@ in buildGoPackage rec {
 
   buildInputs = [ kerberos ];
 
-  nativeBuildInputs = [ which rsync go-bindata clang ];
+  nativeBuildInputs = [ which rsync go-bindata clang installShellFiles ];
 
   patchPhase = ''
     patchShebangs ./hack
@@ -74,8 +74,8 @@ in buildGoPackage rec {
   installPhase = ''
     mkdir -p $bin/bin
     cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
-    install -D -t "$bin/etc/bash_completion.d" contrib/completions/bash/*
-    install -D -t "$bin/share/zsh/site-functions" contrib/completions/zsh/*
+    installShellCompletion --bash contrib/completions/bash/*
+    installShellCompletion --zsh contrib/completions/zsh/*
   '';
 
   meta = with stdenv.lib; {
