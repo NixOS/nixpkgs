@@ -287,8 +287,9 @@ let
 
   pkgUp = recursiveUpdateUntil (path: l: r: !(isAttrs l && isAttrs r) || path == ["src"]);
 
-  # update attributes using the configuration in the style of
-  # the above `initial`. Initialize using `mk-attrs pkgcfg`
+  # Fixes a partial attribute set using the configuration
+  # in the style of the above mathcomp-extra-config.initial,
+  # and generates a name according to the conventional naming scheme below
   fix-attrs = pkgcfg:
     let attrs = pkgUp default-attrs pkgcfg; in
     pkgUp attrs (rec {
@@ -301,6 +302,7 @@ let
       };
     });
 
+  # Gets a version out of a string, path or attribute set.
   getVersion = arg:
     if isFunction arg then (arg {}).version
     else  if arg == "" then "master"
@@ -310,36 +312,38 @@ let
     else  if isPath arg   then (baseNameOf arg)
     else "master";
 
-  # converts a string, path or attribute set into an override function
-  rec-mathcomp-extra-override = overrides: old: let
-    version = getVersion overrides;
+  # Converts a string, path or attribute set into an override function
+  # It tries to fill the `old` argument of the override function using
+  # `mathcomp-extra-config.initial` first and finishes with `fix-attrs`
+  rec-mathcomp-extra-override = generic: old: let
+    version = getVersion generic;
     package = old.meta.package or "math-comp-nix";
     cfg = pkgUp ((mathcomp-extra-config.initial.${package} or (_: {})) version) old
           // { inherit version; };
     fix = attrs: fix-attrs (pkgUp cfg attrs);
   in
-    if isFunction overrides then fix (overrides cfg)
-    else  if overrides == null || overrides == "" then fix {}
-    else  if isDerivation overrides then fix overrides.drvAttrs
-    else  if isAttrs overrides then fix overrides
-    else  if overrides == "broken" then fix { meta.broken = true; passthru.compatibleCoqVersions = _: false; }
+    if isFunction generic then fix (generic cfg)
+    else  if generic == null || generic == "" then fix {}
+    else  if isDerivation generic then fix generic.drvAttrs
+    else  if isAttrs generic then fix generic
+    else  if generic == "broken" then fix { meta.broken = true; passthru.compatibleCoqVersions = _: false; }
     else  let fixedcfg = fix cfg; in fixedcfg // (
-      if isString overrides then
-        if (mathcomp-extra-config.sha256.${package} or {})?${overrides} then {
+      if isString generic then
+        if (mathcomp-extra-config.sha256.${package} or {})?${generic} then {
           src = fetchFromGitHub {
             inherit (fixedcfg.meta) owner repo;
             rev = version;
             sha256 = mathcomp-extra-config.sha256.${package}.${version};
           };
         }
-        else  let splitted = filter isString (split "/" overrides); in {
+        else  let splitted = filter isString (split "/" generic); in {
         src = fetchTarball
           ("https://github.com/" +
            (if length splitted == 1 then "${fixedcfg.meta.owner}/${fixedcfg.meta.repo}/archive/${version}.tar.gz"
             else "${head splitted}/${fixedcfg.meta.repo}/archive/${concatStringsSep "/" (tail splitted)}.tar.gz"));
         }
-      else  if isPath overrides then { src = overrides; }
-      else abort "${toString overrides} not a legitimate overrides");
+      else  if isPath generic then { src = generic; }
+      else abort "${toString generic} not a legitimate generic version/override");
 
   # applies mathcomp-extra-config.for-coq-and-mc to the current mathcomp version
   for-this = mathcomp-extra-config.for-coq-and-mc.${coq.coq-version}.${mathcomp.version} or {};
