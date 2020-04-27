@@ -49,6 +49,7 @@ self: super: {
   async = doJailbreak super.async;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   email-validate = doJailbreak super.email-validate;  # https://github.com/Porges/email-validate-hs/issues/51
+  feed = doJailbreak super.feed;  # https://github.com/bergmark/feed/issues/48
   hashable = doJailbreak super.hashable;
   pandoc = doJailbreak super.pandoc;
   parallel = doJailbreak super.parallel;
