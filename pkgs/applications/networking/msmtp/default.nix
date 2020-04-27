@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, pkgconfig, texinfo
+{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, texinfo
 , netcat-gnu, gnutls, gsasl, libidn2, Security
 , withKeyring ? true, libsecret ? null
 , systemd ? null }:
@@ -9,20 +9,15 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "msmtp";
-  version = "1.8.8";
+  version = "1.8.10";
 
   src = fetchurl {
     url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "1rarck61mz3mwg0l30vjj6j9fq6gc7gic0r1c1ppwpq2izj57jzc";
+    sha256 = "041g921rdjiv8bapp61gp4rylq8cckfkcwzyh8bs7xwxs4wpzfna";
   };
 
-  # the 2nd patch should go when 1.8.9 is released
   patches = [
     ./paths.patch
-    (fetchpatch {
-      url = "https://github.com/marlam/msmtp-mirror/commit/c78f24347ec996c7a3830b48403bf3736afca071.patch";
-      sha256 = "0d4sc2f5838jriv65wahpgvwckkzqhdk3hs660fyg80si2i0l1bx";
-    })
   ];
 
   buildInputs = [ gnutls gsasl libidn2 ]

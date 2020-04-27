@@ -54,10 +54,6 @@ stdenv.mkDerivation {
 '' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname liblapack${canonicalExtension} $out/lib/liblapack${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapack${canonicalExtension}):${lapackProvider}/lib" $out/lib/liblapack${canonicalExtension}
-'' else if stdenv.hostPlatform.isDarwin then ''
-  install_name_tool -id liblapack${canonicalExtension} \
-                    -add_rpath ${lib.getLib lapackProvider}/lib \
-                    $out/lib/liblapack${canonicalExtension}
 '' else "") + ''
 
   if [ "$out/lib/liblapack${canonicalExtension}" != "$out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
@@ -87,10 +83,6 @@ EOF
 '' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname liblapacke${canonicalExtension} $out/lib/liblapacke${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapacke${canonicalExtension}):${lib.getLib lapackProvider}/lib" $out/lib/liblapacke${canonicalExtension}
-'' else if stdenv.hostPlatform.isDarwin then ''
-  install_name_tool -id liblapacke${canonicalExtension} \
-                    -add_rpath ${lib.getLib lapackProvider}/lib \
-                    $out/lib/liblapacke${canonicalExtension}
 '' else "") + ''
 
   if [ -f "$out/lib/liblapacke.so.3" ]; then

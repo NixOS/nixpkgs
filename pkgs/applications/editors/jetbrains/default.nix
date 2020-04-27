@@ -250,12 +250,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2019.3.5"; /* updated by script */
+    version = "2020.1"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "0qmhp0sqcknwgsirnbi6461lzr7mxgrgjsd0q5cxnhscbbczl7pk"; /* updated by script */
+      sha256 = "18mbw72vgrzkvjykc23h17qxrxfvhjzhy9rxpi2asw196qalavzp"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -276,12 +276,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2019.3.4"; /* updated by script */
+    version = "2020.1"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "01dik4ppn4a6m1bmz6cmdnyrilh2v190lrys65n4nps03sjy2v0b"; /* updated by script */
+      sha256 = "1qlpx3vfqwpyyxjsknhxvbdhyciwihhl0hkinrpdky6bza1yfgf6"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -315,12 +315,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2019.3.4"; /* updated by script */
+    version = "2020.1"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1bxi2i6vxpw8x4mvb4d5plqy4r938xjf8nkimfg0sspramcc4r5m"; /* updated by script */
+      sha256 = "1yvqljjv6004kw2nkpddrsgnigb56rapgs3f1pcvl20h6hj08qj8"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -354,12 +354,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2019.3.4"; /* updated by script */
+    version = "2020.1.0"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "17axv0v31dpmjcaij5qpqqm071mwhmf1ahy0y0h96limq8cw9872"; /* updated by script */
+      sha256 = "1allpdr7k48nvl8vbvzyn6h81jpklzaqdqivrqqyh8hy9l98w4ws"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";
@@ -367,12 +367,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2019.3.4"; /* updated by script */
+    version = "2020.1"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "13lwrqrkg5vk0azqfhr67psgv1idvkxwjxly2xawr6cy5vnrcd8s"; /* updated by script */
+      sha256 = "1hk6k4f24infw9qj9mxp305nl0bxif6ymdsqg005pskvnyi8v5fi"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";

@@ -8585,13 +8585,6 @@ in
     buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
   });
 
-  go_1_13 = callPackage ../development/compilers/go/1.13.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs stdenv.isAarch64 {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
-  });
-
   go_1_14 = callPackage ../development/compilers/go/1.14.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs stdenv.isAarch64 {
@@ -15230,9 +15223,6 @@ in
   buildGo112Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_12;
   };
-  buildGo113Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_13;
-  };
   buildGo114Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_14;
   };
@@ -15241,9 +15231,6 @@ in
 
   buildGo112Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_12;
-  };
-  buildGo113Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_13;
   };
   buildGo114Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_14;
@@ -15571,6 +15558,8 @@ in
 
   haka = callPackage ../tools/security/haka { };
 
+  hashi-ui = callPackage ../servers/hashi-ui {};
+
   heapster = callPackage ../servers/monitoring/heapster { };
 
   hbase = callPackage ../servers/hbase {};
@@ -15815,6 +15804,8 @@ in
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
+
+  tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
 
   pies = callPackage ../servers/pies { };
 
@@ -20343,9 +20334,7 @@ in
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes {
-    go = buildPackages.go_1_13;
-  };
+  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
@@ -20770,6 +20759,8 @@ in
   rofi-calc = callPackage ../applications/science/math/rofi-calc { };
 
   rofi-emoji = callPackage ../applications/misc/rofi-emoji { };
+
+  rofi-file-browser = callPackage ../applications/misc/rofi-file-browser { };
 
   ympd = callPackage ../applications/audio/ympd { };
 
@@ -25973,10 +25964,7 @@ in
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py {};
 
-  inherit (callPackage ../applications/networking/cluster/terraform {
-    # terraform 0.12 crashes with go1.14 on darwin https://github.com/hashicorp/terraform/issues/24287
-    buildGoPackage = if stdenv.isDarwin then buildGo113Package else buildGoPackage;
-  })
+  inherit (callPackage ../applications/networking/cluster/terraform { })
     terraform_0_11
     terraform_0_11-full
     terraform_0_12

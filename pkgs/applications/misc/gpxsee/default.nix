@@ -2,19 +2,19 @@
 
 mkDerivation rec {
   pname = "gpxsee";
-  version = "7.28";
+  version = "7.29";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "0077y5az3hb46rvkqrpl4zxga5wnm85ca6rz1rdpwiwhq4ch9q8y";
+    sha256 = "sha256-OTKyxEu7RZZy3JBHTM7YoH+G4lhoRfb1INLtQEKC5p4=";
   };
 
   nativeBuildInputs = [ qmake qttools ];
 
   preConfigure = ''
-    lrelease lang/*.ts
+    lrelease gpxsee.pro
   '';
 
   postInstall = with stdenv; lib.optionalString isDarwin ''
