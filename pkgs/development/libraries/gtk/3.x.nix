@@ -48,7 +48,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.17";
+  version = "3.24.18";
 
   outputs = [ "out" "dev" ] ++ optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "1h5snvqz8f6zgwpmq7pblvfwj5dphfckj8bv7vdz1c0w49dja47j";
+    sha256 = "1lia2ybd1661j6mvrc00iyd50gm7sy157bdzlyf4mr028rzzzspm";
   };
 
   patches = [
@@ -73,21 +73,6 @@ stdenv.mkDerivation rec {
 
     # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1002
     ./patches/01-build-Fix-path-handling-in-pkgconfig.patch
-
-    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/1634
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/79732da1ed8cb167440fb047c72cfc0d888a187b.patch";
-      sha256 = "1ynrx81dkwjfqhvg80q28qbb6jabg4x73fkbrnligzgkzimfjpx3";
-    })
-    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/1633
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/12fc9a45efcbb546eb7de13c5c4d3183f2f5a3b8.patch";
-      sha256 = "00zrm77qk39p1hgn207az82cgvqiyp6is7dk0ssjxkc34403r78v";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/5a52af20cba76474e631b2a7548963bcad22d66d.patch";
-      sha256 = "0sbzzwa0si1w83m5abyf312f4w445wwlms53m5hb7kdgkjbhaa3f";
-    })
   ] ++ optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it

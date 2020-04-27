@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk3 ];
 
+  dontDropIconThemeCache = true;
+
   # remove a tree of dirs with no files within
   postInstall = '' rm -rf "$out/locale" '';
 

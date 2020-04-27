@@ -13,9 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gtk3 xcursorgen ];
 
-  buildInputs = [ papirus-icon-theme ];
-
   propagatedBuildInputs = [
+    papirus-icon-theme
     hicolor-icon-theme
   ];
 
