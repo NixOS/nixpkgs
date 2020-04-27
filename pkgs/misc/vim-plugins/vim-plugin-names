@@ -97,6 +97,7 @@ enomsg/vim-haskellConcealPlus
 ensime/ensime-vim
 ervandew/supertab
 esneider/YUNOcommit.vim
+fannheyward/coc-rust-analyzer
 farmergreg/vim-lastplace
 fatih/vim-go
 FelikZ/ctrlp-py-matcher

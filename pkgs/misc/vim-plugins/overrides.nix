@@ -229,6 +229,12 @@ self: super: {
     src = "${nodePackages.coc-rls}/lib/node_modules/coc-rls";
   };
 
+  coc-rust-analyzer = buildVimPluginFrom2Nix {
+    pname = "coc-rust-analyzer";
+    version = nodePackages.coc-rust-analyzer.version;
+    src = "${nodePackages.coc-rust-analyzer}/lib/node_modules/coc-rust-analyzer";
+  };
+
   coc-smartf = buildVimPluginFrom2Nix {
     pname = "coc-smartf";
     version = nodePackages.coc-smartf.version;

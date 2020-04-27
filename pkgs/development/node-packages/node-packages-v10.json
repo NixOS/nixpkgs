@@ -35,6 +35,7 @@
 , "coc-python"
 , "coc-r-lsp"
 , "coc-rls"
+, "coc-rust-analyzer"
 , "coc-smartf"
 , "coc-snippets"
 , "coc-solargraph"
