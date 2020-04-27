@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.fail(f"curl {url}")
         machine.succeed(
             """
-            mkdir -p /run/nginx /var/spool/nginx/logs
+            mkdir -p /run/nginx /var/log/nginx /var/cache/nginx
             ${nodes.machine.config.systemd.services.nginx.runner} &
             echo $!>my-nginx.pid
             """
