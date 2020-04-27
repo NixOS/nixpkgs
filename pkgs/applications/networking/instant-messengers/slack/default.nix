@@ -40,8 +40,13 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   sha256 = {
-    x86_64-darwin = "05xsbiviikrwfayjr6rvvfkm70681x2an6mgcg1cxw1fsi4sr6fd";
-    x86_64-linux = "0h2rfgx92yq9a6dqsv9a0r8a6m5xfrywkljjk5w9snw49b0r1p12";
+    x86_64-darwin = "0z731q00bwljlcmbjwqphyys7skqms1vg87pyi4nsvjmc7kjx7qg";
+    x86_64-linux = "0wrs0i2bqv21ivy8s88khbww28b3gsw4abbbbjc76mqma9b0bajs";
+  }.${system} or throwSystem;
+
+  version = {
+    x86_64-darwin = "4.4.2";
+    x86_64-linux = "4.4.2";
   }.${system} or throwSystem;
 
   meta = with stdenv.lib; {
@@ -53,8 +58,7 @@ let
   };
 
   linux = stdenv.mkDerivation rec {
-    inherit pname meta;
-    version = "4.4.0";
+    inherit pname meta version;
     src = fetchurl {
       url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
       inherit sha256;
@@ -140,8 +144,7 @@ let
   };
 
   darwin = stdenv.mkDerivation rec {
-    inherit pname meta;
-    version = "4.4.1";
+    inherit pname meta version;
 
     phases = [ "installPhase" ];
 

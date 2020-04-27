@@ -518,6 +518,8 @@ in {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  bluepy = callPackage ../development/python-modules/bluepy { };
+
   boltons = callPackage ../development/python-modules/boltons { };
 
   bravia-tv = callPackage ../development/python-modules/bravia-tv { };

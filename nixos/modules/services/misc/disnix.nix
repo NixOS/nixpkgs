@@ -25,10 +25,7 @@ in
         description = "Whether to support multi-user mode by enabling the Disnix D-Bus service";
       };
 
-      useWebServiceInterface = mkOption {
-        default = false;
-        description = "Whether to enable the DisnixWebService interface running on Apache Tomcat";
-      };
+      useWebServiceInterface = mkEnableOption "the DisnixWebService interface running on Apache Tomcat";
 
       package = mkOption {
         type = types.path;

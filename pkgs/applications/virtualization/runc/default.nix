@@ -24,8 +24,6 @@ buildGoPackage rec {
   goPackagePath = "github.com/opencontainers/runc";
   outputs = [ "bin" "out" "man" ];
 
-  hardeningDisable = [ "fortify" ];
-
   nativeBuildInputs = [ go-md2man installShellFiles pkg-config which ];
   buildInputs = [ libseccomp libapparmor apparmor-parser ];
 

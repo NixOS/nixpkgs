@@ -1,20 +1,26 @@
-{ lib, fetchFromGitHub, rustPlatform, llvmPackages }:
+{ lib, fetchFromGitHub, rustPlatform, llvmPackages, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.0.18";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "0cpd60861k9nd2gbzyb2hg5npnkgvsnyrvv7mlm30vb1833gz94z";
+    sha256 = "1b5ap468d0gvgwkx6wqxvayzda2xw95lymd0kl38nq1fc0ica6hk";
   };
 
   LLVM_CONFIG_PATH = "${llvmPackages.llvm}/bin/llvm-config";
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-  cargoSha256 = "12gl50q5hf6nq571fqxfv61z4mwfjyw4jb2yqyqbsinwj2frwaxn";
+  cargoSha256 = "07mjl751r9d88fnmnan0ip0m3vxqf51vq2y7k3g3yywcgasj9jgr";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --bash --name delta.bash completion/bash/completion.sh
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";

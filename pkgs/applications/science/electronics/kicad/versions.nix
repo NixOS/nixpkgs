@@ -27,25 +27,25 @@
   };
   "kicad-unstable" = {
     kicadVersion = {
-      version =			"2020-02-10";
+      version =			"2020-04-25";
       src = {
-        rev =			"1190e60dd426d246661e478db3287f266ec6cda2";
-        sha256 =		"0cgfad07j69cks97llj4hf3kga0d5qf728s89xwxrzcwm06k62bi";
+        rev =			"3759799d1e03b2da6a0dcd72273e4978880fc8f1";
+        sha256 =		"0ba14fla8m5zli68wfjkfc4ymvj4j8z92y3jigxs8hys0450bybi";
       };
     };
     libVersion = {
-      version =			"2020-02-10";
+      version =			"2020-04-25";
       libSources = {
-        i18n.rev =		"26786c4ca804bad7eb072f1ef381f00b5a2ff3ee";
-        i18n.sha256 =		"0iqr1xfw4s677afjy9bn5y41z4isp327f9y90wypkxiwwq3dfkfl";
-        symbols.rev =		"35b7da2d211d7cc036b37ad7f5e40ef03faa1bc7";
-        symbols.sha256 =	"0wbfw1swbfvfp47cn48pxpqlygjs3xh568ydrrs51v3w102x8y64";
-        templates.rev =		"0c0490897f803ab8b7c3dad438b7eb1f80e0417c";
-        templates.sha256 =	"0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-        footprints.rev =	"9357b6f09312966c57fec9f66a516941d79c3038";
-        footprints.sha256 =	"0cgah1q0h012ffwfl220k7qb6hgbs0i91spq2j4v3lgpfr4g638d";
-        packages3d.rev =	"de368eb739abe41dfc3163e0e370477e857f9cc1";
-        packages3d.sha256 =	"0b3p5v8g24h6l7q3sbqz7ns0gnrf9l89glj86m5ybhizvls9vrrs";
+        i18n.rev =		"fc14baa52ca56a58b0048ab860bf31887d3cf8eb";
+        i18n.sha256 =		"05nayab7dkjyq7g3i9q7k55hcckpc0cmq4bbklmxx16rx4rbhzc6";
+        symbols.rev =		"0f9ff2d17237f90bb649bf0a52b6d454f68197e8";
+        symbols.sha256 =	"1a54428syn2xksc00n2bvh1alrx2vrqmp7cg7d2rn8nlq8yk4qd5";
+        templates.rev =		"7db8d4d0ea0711f1961d117853547fb3edbc3857";
+        templates.sha256 =	"1hppcsrkn4dk6ggby6ckh0q65qxkywrbyxa4lwpaf7pxjyv498xg";
+        footprints.rev =	"61df6d8853b4c68cca0ac87784c0a33cff9394d3";
+        footprints.sha256 =	"0blmhk8pwd4mi6rlsr4lf4lq7j01h6xbpbvr3pm8pmw8zylhi54v";
+        packages3d.rev =	"88bcf2e817fe000bb2c05e14489afc3b1a4e10ed";
+        packages3d.sha256 =	"0z9p1fn5xbz940kr5jz2ibzf09hpdi1c9izmabkffvrnfy6408x6";
       };
     };
   };

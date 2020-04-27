@@ -15,10 +15,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "aspell-0.60.8";
+  pname = "aspell";
+  version = "0.60.8";
 
   src = fetchurl {
-    url = "mirror://gnu/aspell/${name}.tar.gz";
+    url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
     sha256 = "1wi60ankalmh8ds7nplz434jd7j94gdvbahdwsr539rlad8pxdzr";
   };
 

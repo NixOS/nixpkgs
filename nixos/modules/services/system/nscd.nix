@@ -24,7 +24,11 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable the Name Service Cache Daemon.";
+        description = ''
+          Whether to enable the Name Service Cache Daemon.
+          Disabling this is strongly discouraged, as this effectively disables NSS Lookups
+          from all non-glibc NSS modules, including the ones provided by systemd.
+        '';
       };
 
       config = mkOption {
