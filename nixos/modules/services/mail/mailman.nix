@@ -414,4 +414,9 @@ in {
       }));
   };
 
+  meta = {
+    maintainers = with lib.maintainers; [ lheckemann ];
+    doc = ./mailman.xml;
+  };
+
 }
