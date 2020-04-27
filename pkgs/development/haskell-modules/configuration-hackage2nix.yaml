@@ -5631,7 +5631,6 @@ broken-packages:
   - hasql-postgres
   - hasql-postgres-options
   - hasql-simple
-  - hasql-th
   - hastache
   - hastache-aeson
   - haste
