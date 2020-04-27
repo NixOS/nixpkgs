@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yaru";
-  version = "20.04.1";
+  version = "20.04.6";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
     rev = version;
-    sha256 = "0c9az0bmnrnkgxfifp6nkan5bvjrkqrpg38zsp2vg493bm3bpbg1";
+    sha256 = "04z16bcv1xdq4acnchd6cq9a8j46zl2bjp50cj90qmd6plpiiz50";
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ cc-by-sa-40 gpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.jD91mZM2 ];
-    broken = true; # since libsass 3.6.3
   };
 }

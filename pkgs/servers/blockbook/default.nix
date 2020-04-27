@@ -39,9 +39,7 @@ buildGoPackage rec {
     packr clean && packr
   '';
 
-  postInstall = ''
-    rm $bin/bin/{scripts,templates,trezor-common}
-  '';
+  subPackages = [ "." ];
 
   meta = with lib; {
     description = "Trezor address/account balance backend";
@@ -51,4 +49,3 @@ buildGoPackage rec {
     platforms = platforms.all;
   };
 }
-

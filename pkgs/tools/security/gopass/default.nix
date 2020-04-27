@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, wl-clipboard, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, wl-clipboard, installShellFiles, makeWrapper }:
 
 buildGoPackage rec {
   pname = "gopass";
@@ -6,7 +6,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/gopasspw/gopass";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "gopasspw";
@@ -22,13 +22,10 @@ buildGoPackage rec {
   ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard);
 
   postInstall = ''
-    mkdir -p \
-      $bin/share/bash-completion/completions \
-      $bin/share/zsh/site-functions \
-      $bin/share/fish/vendor_completions.d
-    $bin/bin/gopass completion bash > $bin/share/bash-completion/completions/_gopass
-    $bin/bin/gopass completion zsh  > $bin/share/zsh/site-functions/_gopass
-    $bin/bin/gopass completion fish > $bin/share/fish/vendor_completions.d/gopass.fish
+    for shell in bash fish zsh; do
+      $bin/bin/gopass completion $shell > gopass.$shell
+      installShellCompletion gopass.$shell
+    done
   '';
 
   postFixup = ''

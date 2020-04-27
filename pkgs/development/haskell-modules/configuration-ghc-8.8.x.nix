@@ -102,4 +102,8 @@ self: super: {
 
   # Only 0.7 is compatible with ghc 8.7 https://hackage.haskell.org/package/apply-refact/changelog
   apply-refact = super.apply-refact_0_7_0_0;
+
+  # The package needs the latest Cabal version.
+  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
+
 }

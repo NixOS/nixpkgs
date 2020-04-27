@@ -45,11 +45,6 @@ let
 
     async_kernel_p4 = callPackage ../development/ocaml-modules/async_kernel { };
 
-    async_shell =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_shell
-      else callPackage ../development/ocaml-modules/async_shell { };
-
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
 
     async_p4 =
@@ -74,6 +69,8 @@ let
     bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
 
     bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
+
+    bigstring = callPackage ../development/ocaml-modules/bigstring { };
 
     biocaml = callPackage ../development/ocaml-modules/biocaml { };
 
@@ -561,6 +558,10 @@ let
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
 
     mirage-stack = callPackage ../development/ocaml-modules/mirage-stack { };
+
+    mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
+
+    mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
