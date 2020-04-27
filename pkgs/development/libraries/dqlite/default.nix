@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/CanonicalLtd/dqlite/";
     license = licenses.asl20;
     maintainers = with maintainers; [ joko wucke13 ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
