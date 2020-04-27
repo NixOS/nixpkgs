@@ -21,7 +21,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "3.0a";
+  version = "3.1";
 
   outputs = [ "out" "man" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "0y9lv1yr0x50v3k70vzkc8hfr7yijlsi30p7dr7i8akp3lwmmc7h";
+    sha256 = "1jgxal6jzzannh7hb3617r6g5p9yczl6a78m4kjnf3cxxm4jdaxz";
   };
 
   nativeBuildInputs = [
