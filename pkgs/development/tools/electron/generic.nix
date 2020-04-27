@@ -17,6 +17,11 @@ let
     sha256 = hash;
   };
 
+  headersFetcher = ver: hash: fetchurl {
+    url = "https://atom.io/download/electron/v${ver}/node-v${ver}-headers.tar.gz";
+    sha256 = hash;
+  };
+
   tags = {
     i686-linux = "linux-ia32";
     x86_64-linux = "linux-x64";
@@ -31,6 +36,7 @@ let
   common = platform: {
     inherit name version meta;
     src = fetcher version (get tags platform) (get hashes platform);
+    passthru.headers = headersFetcher version hashes.headers;
   };
 
   linux = {
