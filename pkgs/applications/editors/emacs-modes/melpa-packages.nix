@@ -441,6 +441,11 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        gerrit = super.gerrit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         helm-rtags = fix-rtags super.helm-rtags;
 
         mandoku = super.mandoku.overrideAttrs (attrs: {
