@@ -38,11 +38,6 @@ let
 
     async_extra_p4 = callPackage ../development/ocaml-modules/async_extra { };
 
-    async_find =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_find
-      else callPackage ../development/ocaml-modules/async_find { };
-
     async_kernel_p4 = callPackage ../development/ocaml-modules/async_kernel { };
 
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
