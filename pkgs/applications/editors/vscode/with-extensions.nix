@@ -7,7 +7,7 @@
       example:
 
       ~~~
-      vscode-with-extensions.override {
+      vscode.withExtensions.override {
 
         # When the extension is already available in the default extensions set.
         vscodeExtensions = with vscode-extensions; [
