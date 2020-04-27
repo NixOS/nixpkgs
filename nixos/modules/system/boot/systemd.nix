@@ -1026,6 +1026,8 @@ in
     #systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
     systemd.services.systemd-logind.restartIfChanged = false;
     systemd.services.systemd-logind.stopIfChanged = false;
+    # systemd-coredump[30479]: Process 29419 (X) of user 0 dumped core.
+    systemd.services.systemd-udev-trigger.restartIfChanged = false;
     # The user-runtime-dir@ service is managed by systemd-logind we should not touch it or else we break the users' sessions.
     systemd.services."user-runtime-dir@".stopIfChanged = false;
     systemd.services."user-runtime-dir@".restartIfChanged = false;
