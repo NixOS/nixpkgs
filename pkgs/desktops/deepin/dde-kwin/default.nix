@@ -133,6 +133,7 @@ mkDerivation rec {
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
+    broken = versionAtLeast (versions.majorMinor (getVersion kwindowsystem)) "5.18";
     description = "KWin configuration for Deepin Desktop Environment";
     homepage = "https://github.com/linuxdeepin/dde-kwin";
     license = licenses.gpl3;

@@ -152,6 +152,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Starter of deepin desktop environment";
     homepage = "https://github.com/linuxdeepin/startdde";
     license = licenses.gpl3;
