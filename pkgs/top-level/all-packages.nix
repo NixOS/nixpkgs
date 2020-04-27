@@ -3040,6 +3040,8 @@ in
 
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
+  magic-vlsi = callPackage ../applications/science/electronics/magic-vlsi { };
+
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   rage = callPackage ../tools/security/rage {
