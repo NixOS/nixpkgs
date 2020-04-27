@@ -13,7 +13,7 @@
 , acl
 , gmp
 , darwin
-, libusb ? null
+, libusb1 ? null
 , gnutls ? null
 , avahi ? null
 , libpaper ? null
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
 
-  buildInputs = [ zlib libjpeg libpng libtiff libusb gnutls libpaper ]
+  buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus ]
     ++ optional enableSystemd systemd
     # Separate from above only to not modify order, to avoid mass rebuilds; merge this with the above at next big change.
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     "--enable-dbus"
     "--enable-pam"
     "--with-dbusdir=${placeholder "out"}/share/dbus-1"
-  ] ++ optional (libusb != null) "--enable-libusb"
+  ] ++ optional (libusb1 != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
     ++ optional (libpaper != null) "--enable-libpaper"

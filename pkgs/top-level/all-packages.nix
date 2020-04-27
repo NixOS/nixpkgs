@@ -5874,9 +5874,7 @@ in
 
   briss = callPackage ../tools/graphics/briss { };
 
-  brickd = callPackage ../servers/brickd {
-    libusb = libusb1;
-  };
+  brickd = callPackage ../servers/brickd { };
 
   bully = callPackage ../tools/networking/bully {
     openssl = openssl_1_0_2;
@@ -12141,9 +12139,7 @@ in
 
   heyefi = haskellPackages.heyefi;
 
-  hidapi = callPackage ../development/libraries/hidapi {
-    libusb = libusb1;
-  };
+  hidapi = callPackage ../development/libraries/hidapi { };
 
   highfive = callPackage ../development/libraries/highfive { };
 
@@ -14618,10 +14614,7 @@ in
 
   stfl = callPackage ../development/libraries/stfl { };
 
-  stlink = callPackage ../development/tools/misc/stlink {
-    # The Darwin build of stlink explicitly refers to static libusb.
-    libusb1 = if stdenv.isDarwin then libusb1.override { withStatic = true; } else libusb1;
-  };
+  stlink = callPackage ../development/tools/misc/stlink { };
 
   steghide = callPackage ../tools/security/steghide {};
 
@@ -14795,9 +14788,7 @@ in
 
   ustr = callPackage ../development/libraries/ustr { };
 
-  usbredir = callPackage ../development/libraries/usbredir {
-    libusb = libusb1;
-  };
+  usbredir = callPackage ../development/libraries/usbredir { };
 
   uthash = callPackage ../development/libraries/uthash { };
 
@@ -15068,9 +15059,7 @@ in
 
   yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
 
-  yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
-    libusb = libusb1;
-  };
+  yubikey-personalization = callPackage ../tools/misc/yubikey-personalization { };
 
   yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
 
@@ -25203,9 +25192,7 @@ in
 
   clinfo = callPackage ../tools/system/clinfo { };
 
-  cups = callPackage ../misc/cups {
-    libusb = libusb1;
-  };
+  cups = callPackage ../misc/cups { };
 
   cups-filters = callPackage ../misc/cups/filters.nix { };
 
@@ -25253,13 +25240,9 @@ in
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
 
-  cnijfilter_4_00 = callPackage ../misc/cups/drivers/cnijfilter_4_00 {
-    libusb = libusb1;
-  };
+  cnijfilter_4_00 = callPackage ../misc/cups/drivers/cnijfilter_4_00 { };
 
-  cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 {
-    libusb = libusb1;
-  };
+  cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 { };
 
   darcnes = callPackage ../misc/emulators/darcnes { };
 
