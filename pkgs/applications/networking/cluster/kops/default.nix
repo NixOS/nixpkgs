@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
 
 let
   goPackagePath = "k8s.io/kops";
@@ -18,7 +18,7 @@ let
           inherit sha256;
         };
 
-        nativeBuildInputs = [ go-bindata ];
+        nativeBuildInputs = [ go-bindata installShellFiles ];
         subPackages = [ "cmd/kops" ];
 
         buildFlagsArray = ''
@@ -33,10 +33,10 @@ let
         '';
 
         postInstall = ''
-          mkdir -p $bin/share/bash-completion/completions
-          mkdir -p $bin/share/zsh/site-functions
-          $bin/bin/kops completion bash > $bin/share/bash-completion/completions/kops
-          $bin/bin/kops completion zsh > $bin/share/zsh/site-functions/_kops
+          for shell in bash zsh; do
+            $bin/bin/kops completion $shell > kops.$shell
+            installShellCompletion kops.$shell
+          done
         '';
 
         meta = with stdenv.lib; {
