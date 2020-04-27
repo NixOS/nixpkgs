@@ -25963,6 +25963,8 @@ in
 
   prow = callPackage ../applications/networking/cluster/prow { };
 
+  tellico = libsForQt5.callPackage ../applications/misc/tellico { };
+
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py {};
 
   inherit (callPackage ../applications/networking/cluster/terraform { })
