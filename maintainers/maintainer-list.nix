@@ -5608,6 +5608,12 @@
     githubId = 369111;
     name = "Morgan Jones";
   };
+  numkem = {
+    name = "Sebastien Bariteau";
+    email = "numkem@numkem.org";
+    github = "numkem";
+    githubId = 332423;
+  };
   nyanloutre = {
     email = "paul@nyanlout.re";
     github = "nyanloutre";
