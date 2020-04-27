@@ -45,12 +45,6 @@ self: super: {
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
-  # http://bugs.darcs.net/issue2642
-  darcs = doJailbreak (appendPatches super.darcs [
-    ./patches/darcs-setup.patch
-    ./patches/darcs-2.14.2-Compile-against-GHC-8.8.patch
-  ]);
-
   # Tests are failing
   # https://github.com/bos/statistics/issues/123
   statistics = dontCheck super.statistics;
