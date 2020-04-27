@@ -545,6 +545,7 @@ in
     };
 
     security.pam.enableSSHAgentAuth = mkOption {
+      type = types.bool;
       default = false;
       description =
         ''
@@ -555,12 +556,7 @@ in
         '';
     };
 
-    security.pam.enableOTPW = mkOption {
-      default = false;
-      description = ''
-        Enable the OTPW (one-time password) PAM module.
-      '';
-    };
+    security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
 
     security.pam.u2f = {
       enable = mkOption {
@@ -719,12 +715,7 @@ in
       };
     };
 
-    security.pam.enableEcryptfs = mkOption {
-      default = false;
-      description = ''
-        Enable eCryptfs PAM module (mounting ecryptfs home directory on login).
-      '';
-    };
+    security.pam.enableEcryptfs = mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
 
     users.motd = mkOption {
       default = null;
