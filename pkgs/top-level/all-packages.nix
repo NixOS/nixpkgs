@@ -450,7 +450,7 @@ in
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
-  srcOnly = args: callPackage ../build-support/src-only args;
+  srcOnly = callPackage ../build-support/src-only { };
 
   substituteAll = callPackage ../build-support/substitute/substitute-all.nix { };
 
