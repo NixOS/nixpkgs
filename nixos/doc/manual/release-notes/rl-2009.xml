@@ -531,6 +531,14 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      to be used for every display-manager in NixOS.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     SSH public keys in <literal>programs.ssh.knownHosts</literal> now produce a <literal>ssh_known_hosts</literal>
+     file, that only contains hashed entries.  This provides security as an attacker cannot easily derive
+     the remotes accessible from a compromised machine.  At the same time the contents of that file are now
+     illegible for legitimate use cases.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

@@ -25,6 +25,14 @@ let
       + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
     )) + "\n";
 
+  # We hash all entries in programs.ssh.knownHosts so an attacker cannot easily
+  # derive all possible destinations from an ssh_known_hosts file.
+  knownHostsFile = pkgs.runCommand "hashed-known_hosts" { } ''
+      cp ${builtins.toFile "unhashed-known_hosts" knownHostsText} known_hosts
+      ${pkgs.buildPackages.openssh}/bin/ssh-keygen -H -f known_hosts;
+      cp known_hosts $out
+    '';
+
 in
 {
   ###### interface
@@ -264,7 +272,7 @@ in
         ${optionalString (cfg.macs != null) "MACs ${concatStringsSep "," cfg.macs}"}
       '';
 
-    environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
+    environment.etc."ssh/ssh_known_hosts".source = knownHostsFile;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
     systemd.user.services.ssh-agent = mkIf cfg.startAgent
