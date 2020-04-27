@@ -110,6 +110,10 @@ let
       sha256 = "1f12c56v7n4s0f9mi9xinviwj6kpwlcjwaig1d4vsk5wlgp7ip07";
     };
 
+    # We don't have access to the codesign executable, so we patch this out.
+    # For more information, see: https://github.com/fish-shell/fish-shell/issues/6952
+    patches = lib.optional stdenv.isDarwin ./dont-codesign-on-mac.diff;
+
     nativeBuildInputs = [
       cmake
     ];
