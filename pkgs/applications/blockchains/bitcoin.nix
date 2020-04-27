@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 let
-  version = "0.19.0.1";
+  version = "0.19.1";
   majorMinorVersion = versions.majorMinor version;
 
   desktop = fetchurl {
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     urls = [ "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
              "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
            ];
-    sha256 = "7ac9f972249a0a16ed01352ca2a199a5448fe87a4ea74923404a40b4086de284";
+    sha256 = "f2591d555b8e8c2e1bd780e40d53a91e165d8b3c7e0391ae2d24a0c0f23a7cc0";
   };
 
   nativeBuildInputs =
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
     '';
-    homepage = "http://www.bitcoin.org/";
+    homepage = "https://bitcoin.org/";
     maintainers = with maintainers; [ roconnor AndersonTorres ];
     license = licenses.mit;
     platforms = platforms.unix;
