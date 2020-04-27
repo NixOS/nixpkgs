@@ -12285,7 +12285,7 @@ in
   itk4 = callPackage ../development/libraries/itk/4.x.nix { stdenv = gcc8Stdenv; };
 
   itk = callPackage ../development/libraries/itk {
-    stdenv = gcc8Stdenv;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   jasper = callPackage ../development/libraries/jasper { };
