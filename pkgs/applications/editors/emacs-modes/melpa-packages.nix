@@ -105,6 +105,11 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        eopengrok = super.eopengrok.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         ess-R-data-view = super.ess-R-data-view.override {
           inherit (self.melpaPackages) ess ctable popup;
         };
