@@ -19899,6 +19899,8 @@ in
 
   howl = callPackage ../applications/editors/howl { };
 
+  hpcg = callPackage ../tools/misc/hpcg/default.nix { };
+
   hpl = callPackage ../tools/misc/hpl { mpi = openmpi; };
 
   hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
