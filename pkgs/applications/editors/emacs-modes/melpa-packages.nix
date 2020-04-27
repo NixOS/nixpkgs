@@ -458,6 +458,11 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         helm-rtags = fix-rtags super.helm-rtags;
 
+        jist = super.jist.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         mandoku = super.mandoku.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
