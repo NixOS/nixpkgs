@@ -60,6 +60,7 @@ in
       };
 
       useJK = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to use to connector to the Apache HTTP server";
       };
