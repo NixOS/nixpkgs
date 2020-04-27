@@ -62,6 +62,7 @@ self: super: {
   system-fileio = doJailbreak super.system-fileio;
   tar = doJailbreak super.tar;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
+  tasty-rerun = doJailbreak super.tasty-rerun;  # https://github.com/ocharles/tasty-rerun/issues/18
   unliftio-core = doJailbreak super.unliftio-core;
   vector = doJailbreak super.vector;
   zlib = doJailbreak super.zlib;
