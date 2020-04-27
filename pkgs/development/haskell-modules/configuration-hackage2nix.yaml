@@ -72,7 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 15.9
+  # LTS Haskell 15.10
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -319,7 +319,7 @@ default-package-overrides:
   - blaze-bootstrap ==0.1.0.1
   - blaze-builder ==0.4.1.0
   - blaze-html ==0.9.1.2
-  - blaze-markup ==0.8.2.4
+  - blaze-markup ==0.8.2.5
   - blaze-svg ==0.3.6.1
   - blaze-textual ==0.2.1.0
   - bmp ==1.2.6.3
@@ -437,9 +437,9 @@ default-package-overrides:
   - codec-rpm ==0.2.2
   - code-page ==0.2
   - coercible-utils ==0.1.0
-  - co-log ==0.4.0.0
-  - co-log-core ==0.2.1.0
-  - co-log-polysemy ==0.0.1.1
+  - co-log ==0.4.0.1
+  - co-log-core ==0.2.1.1
+  - co-log-polysemy ==0.0.1.2
   - Color ==0.1.4
   - colorful-monoids ==0.2.1.2
   - colorize-haskell ==1.0.1
@@ -859,7 +859,7 @@ default-package-overrides:
   - gi-glib ==2.0.23
   - gi-gobject ==2.0.22
   - gi-graphene ==1.0.1
-  - gi-gtk ==3.0.32
+  - gi-gtk ==3.0.33
   - gi-gtk-hs ==0.3.8.1
   - gingersnap ==0.3.1.0
   - gi-pango ==1.0.22
@@ -889,7 +889,7 @@ default-package-overrides:
   - graphviz ==2999.20.0.4
   - graph-wrapper ==0.2.6.0
   - gravatar ==0.8.0
-  - greskell ==1.0.0.1
+  - greskell ==1.0.1.0
   - greskell-core ==0.1.3.2
   - greskell-websocket ==0.1.2.1
   - groom ==0.1.2.1
@@ -932,6 +932,8 @@ default-package-overrides:
   - HaXml ==1.25.5
   - haxr ==3000.11.4
   - hdaemonize ==0.5.6
+  - HDBC ==2.4.0.3
+  - HDBC-session ==0.1.2.0
   - headroom ==0.1.3.0
   - heap ==1.0.4
   - heaps ==0.3.6.1
@@ -958,7 +960,7 @@ default-package-overrides:
   - highlighting-kate ==0.6.4
   - hinfo ==0.0.3.0
   - hinotify ==0.4
-  - hint ==0.9.0.2
+  - hint ==0.9.0.3
   - hjsmin ==0.2.0.4
   - hkgr ==0.2.5.2
   - hlibcpuid ==0.2.0
@@ -1471,7 +1473,7 @@ default-package-overrides:
   - OneTuple ==0.2.2.1
   - Only ==0.1
   - oo-prototypes ==0.1.0.0
-  - opaleye ==0.6.7004.1
+  - opaleye ==0.6.7004.2
   - OpenAL ==1.7.0.5
   - open-browser ==0.2.1.0
   - openexr-write ==0.1.0.2
@@ -1541,6 +1543,7 @@ default-package-overrides:
   - perfect-vector-shuffle ==0.1.1.1
   - persist ==0.1.1.4
   - persistable-record ==0.6.0.4
+  - persistable-types-HDBC-pg ==0.0.3.5
   - persistent ==2.10.5.2
   - persistent-mysql ==2.10.2.3
   - persistent-pagination ==0.1.1.1
@@ -1625,7 +1628,7 @@ default-package-overrides:
   - print-console-colors ==0.1.0.0
   - process-extras ==0.7.4
   - product-isomorphic ==0.0.3.3
-  - product-profunctors ==0.10.0.0
+  - product-profunctors ==0.10.0.1
   - profiterole ==0.1
   - profunctors ==5.5.2
   - projectroot ==0.2.0.1
@@ -1727,6 +1730,8 @@ default-package-overrides:
   - reinterpret-cast ==0.1.0
   - relapse ==1.0.0.0
   - relational-query ==0.12.2.2
+  - relational-query-HDBC ==0.7.2.0
+  - relational-record ==0.2.2.0
   - relational-schemas ==0.1.8.0
   - relude ==0.6.0.0
   - renderable ==0.2.0.1
@@ -1738,10 +1743,10 @@ default-package-overrides:
   - rerebase ==1.4.1
   - resolv ==0.1.2.0
   - resource-pool ==0.2.3.2
-  - resourcet ==1.2.3
+  - resourcet ==1.2.4
   - result ==0.2.6.0
   - rethinkdb-client-driver ==0.0.25
-  - retry ==0.8.1.1
+  - retry ==0.8.1.2
   - rev-state ==0.1.2
   - rfc1751 ==0.1.2
   - rfc5051 ==0.1.0.4
@@ -1779,8 +1784,8 @@ default-package-overrides:
   - sampling ==0.3.3
   - say ==0.1.0.1
   - sbp ==2.6.3
-  - scalpel ==0.6.1
-  - scalpel-core ==0.6.1
+  - scalpel ==0.6.2
+  - scalpel-core ==0.6.2
   - scanf ==0.1.0.0
   - scanner ==0.3.1
   - scheduler ==1.4.2.2
@@ -1844,7 +1849,7 @@ default-package-overrides:
   - servant-swagger-ui-redoc ==0.3.3.1.22.3
   - servant-websockets ==2.0.0
   - servant-yaml ==0.1.0.1
-  - serverless-haskell ==0.10.2
+  - serverless-haskell ==0.10.5
   - serversession ==1.0.1
   - serversession-frontend-wai ==1.0
   - ses-html ==0.4.0.0
@@ -1889,7 +1894,7 @@ default-package-overrides:
   - skip-var ==0.1.1.0
   - skylighting ==0.8.3.4
   - skylighting-core ==0.8.3.4
-  - slist ==0.1.0.0
+  - slist ==0.1.1.0
   - small-bytearray-builder ==0.3.4.0
   - smallcheck ==1.1.5
   - smoothie ==0.4.2.10
@@ -1946,7 +1951,7 @@ default-package-overrides:
   - streaming ==0.2.3.0
   - streaming-bytestring ==0.1.6
   - streaming-commons ==0.2.1.2
-  - streamly ==0.7.1
+  - streamly ==0.7.2
   - streams ==3.3
   - strict ==0.3.2
   - strict-base-types ==0.6.1
@@ -1960,8 +1965,8 @@ default-package-overrides:
   - string-qq ==0.0.4
   - stringsearch ==0.3.6.6
   - string-transform ==1.1.1
-  - stripe-concepts ==1.0.2.0
-  - stripe-signature ==1.0.0.1
+  - stripe-concepts ==1.0.2.2
+  - stripe-signature ==1.0.0.2
   - strive ==5.0.10
   - structs ==0.1.3
   - structured-cli ==2.5.2.0
@@ -2035,7 +2040,7 @@ default-package-overrides:
   - test-framework-th ==0.2.4
   - testing-feat ==1.1.0.0
   - testing-type-modifiers ==0.1.0.1
-  - texmath ==0.12.0.1
+  - texmath ==0.12.0.2
   - text-binary ==0.2.1.1
   - text-builder ==0.6.6.1
   - text-conversions ==0.3.0
@@ -2131,7 +2136,7 @@ default-package-overrides:
   - typed-uuid ==0.0.0.2
   - type-equality ==1
   - type-errors ==0.2.0.0
-  - type-errors-pretty ==0.0.1.0
+  - type-errors-pretty ==0.0.1.1
   - type-fun ==0.1.1
   - type-hint ==0.1
   - type-level-integers ==0.0.1
@@ -2143,7 +2148,7 @@ default-package-overrides:
   - type-of-html ==1.5.1.0
   - type-of-html-static ==0.1.0.2
   - type-operators ==0.2.0.0
-  - typerep-map ==0.3.2
+  - typerep-map ==0.3.3.0
   - type-spec ==0.4.0.0
   - tzdata ==0.1.20190911.0
   - ua-parser ==0.7.5.1
@@ -2201,7 +2206,7 @@ default-package-overrides:
   - validity ==0.9.0.3
   - validity-aeson ==0.2.0.3
   - validity-bytestring ==0.4.1.1
-  - validity-containers ==0.5.0.1
+  - validity-containers ==0.5.0.3
   - validity-path ==0.4.0.1
   - validity-primitive ==0.0.0.1
   - validity-scientific ==0.2.0.3
