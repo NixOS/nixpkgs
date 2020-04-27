@@ -2,7 +2,7 @@
 , cups, freetype, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib, glibc
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , xorgproto, libxcb, xtrans, libpthreadstubs, libXau, xcbproto, libXdmcp, xcbutilkeysyms
-, autoconf, libpng, libjpeg, giflib
+, autoconf, libpng, libjpeg, giflib, bzip2
 , openjdk8-bootstrap
 , setJavaClassPath
 , headless ? false
@@ -120,10 +120,10 @@ let
         "--disable-shared"
       ];
     });
-  # bzip2-static = bzip2.override { linkStatic = true;};
+  bzip2-static = bzip2.override { linkStatic = true;};
 
 
-  openjdk8 = stdenv.mkDerivation {
+  openjdk8 = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
     version = "8u${update}-${build}";
 
@@ -142,7 +142,7 @@ let
       gtk2 gnome_vfs GConf glib
     ] ++ lib.optionals (static) [
       autoconf
-      # bzip2-static
+      bzip2-static
       freetype-static
       glibc
       glibc.static
@@ -204,11 +204,7 @@ let
       "--disable-freetype-bundling"
       "--with-zlib=system"
       "--with-giflib=system"
-     ] ++ lib.optionals static [
-      "--enable-static-build=yes"
-      "--verbose"
-      "--host=${stdenv.hostPlatform.system}"
-    ];
+     ];
 
     separateDebugInfo = true;
 
@@ -225,9 +221,23 @@ let
       "-Wno-error"
     ]);
 
-    buildFlags = if (static) then [ "images" ] else [ "all" ];
+    buildFlags = [ "all" ];
 
     doCheck = false; # fails with "No rule to make target 'y'."
+
+    # static build here means to include static-jdk-libs
+    # this will require two stage build
+    # https://github.com/oracle/graal/issues/1755#issuecomment-542590772
+    buildPhase = lib.optionalString static ''
+      # Stage1: build statically to generate static-libs
+      ./configure ${toString (configureFlags ++ [ "--enable-static-build=yes" ])}
+      make images
+      mv build STAGE_1
+
+      # Stage2: compile normally
+      ./configure ${toString (configureFlags ++ [ "--enable-static-build=no" ])}
+      make images
+    '';
 
     installPhase = ''
       mkdir -p $out/lib
@@ -288,6 +298,8 @@ let
       ln -s $out/lib/openjdk/bin $out/bin
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
       ln -s $jre/lib/openjdk/jre $out/jre
+
+      ${lib.optionalString static "cp ./STAGE_1/*/jdk/lib/*.a $out/lib"}
     '';
 
     propagatedBuildInputs = [ setJavaClassPath ];
