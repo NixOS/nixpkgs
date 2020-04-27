@@ -1432,11 +1432,11 @@ self: super: {
 
   # HsYAML-aeson depends on a more modern version of HsYAML than the one
   # available in stackage's LTS 14.23
-  HsYAML-aeson = unmarkBroken (super.HsYAML-aeson.override {
+  HsYAML-aeson = super.HsYAML-aeson.override {
     HsYAML = self.HsYAML_0_2_1_0;
-  });
+  };
 
-  stylish-haskell = (unmarkBroken super.stylish-haskell).override {
+  stylish-haskell = super.stylish-haskell.override {
     HsYAML = self.HsYAML_0_2_1_0;
   };
 
