@@ -6666,6 +6666,8 @@ in
     python = python3;
   };
 
+  sof-firmware = callPackage ../os-specific/linux/firmware/sof-firmware { };
+
   softhsm = callPackage ../tools/security/softhsm {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Security;
