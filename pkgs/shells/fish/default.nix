@@ -148,6 +148,13 @@ let
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
 
+      cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
+      function __fish_anypython
+          echo ${python3.interpreter}
+          return 0
+      end
+      EOF
+
     '' + optionalString stdenv.isLinux ''
       sed -e "s| ul| ${utillinux}/bin/ul|" \
           -i "$out/share/fish/functions/__fish_print_help.fish"
