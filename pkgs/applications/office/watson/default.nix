@@ -1,4 +1,3 @@
-{ stdenv, pythonPackages, fetchpatch }:
 
 with pythonPackages;
 
@@ -14,7 +13,7 @@ buildPythonApplication rec {
 
   checkPhase = ''
     pytest -vs tests
- '';
+  '';
 
   checkInputs = [ py pytest pytest-datafiles mock pytest-mock pytestrunner ];
   propagatedBuildInputs = [ requests click arrow ];
@@ -23,6 +22,6 @@ buildPythonApplication rec {
     homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner nathyong ] ;
+    maintainers = with maintainers; [ mguentner nathyong ];
   };
 }
