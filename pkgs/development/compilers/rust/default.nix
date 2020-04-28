@@ -31,9 +31,10 @@
       inherit cargo;
     };
 
-    buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo fetchCargoTarball;
-    };
+    buildRustPackage = lib.makeOverridableWithName "overrideRustAttrs"
+      (callPackage ../../../build-support/rust {
+        inherit rustc cargo fetchCargoTarball;
+      });
 
     rustcSrc = callPackage ./rust-src.nix {
       inherit rustc;
