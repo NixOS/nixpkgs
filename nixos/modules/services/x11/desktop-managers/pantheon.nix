@@ -180,6 +180,7 @@ in
         gtk3.out
         hicolor-icon-theme
         lightlocker
+        nixos-artwork.wallpapers.simple-dark-gray
         onboard
         qgnomeplatform
         shared-mime-info
