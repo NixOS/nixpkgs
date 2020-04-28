@@ -1,6 +1,7 @@
 { config, stdenv
 , mkDerivation
 , fetchFromGitHub
+, addOpenGLRunpath
 , cmake
 , fdk_aac
 , ffmpeg
@@ -46,7 +47,7 @@ in mkDerivation rec {
     sha256 = "11hl3lxvbsm7ackl7qhzgy2x0jsz2dfpi2qxsf8pkp908lrh3b3r";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
 
   buildInputs = [ curl
                   fdk_aac
@@ -78,6 +79,10 @@ in mkDerivation rec {
   postInstall = ''
       wrapProgram $out/bin/obs \
         --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${vlc}/lib"
+  '';
+
+  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
+      addOpenGLRunpath $out/lib/lib*.so
   '';
 
   meta = with stdenv.lib; {
