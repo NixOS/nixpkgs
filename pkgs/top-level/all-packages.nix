@@ -19414,8 +19414,6 @@ in
 
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
-  gopherclient = libsForQt5.callPackage ../applications/networking/gopher/gopherclient { };
-
   goxel = callPackage ../applications/graphics/goxel { };
 
   gpa = callPackage ../applications/misc/gpa { };
