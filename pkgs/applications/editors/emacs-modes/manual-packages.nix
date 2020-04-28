@@ -109,9 +109,6 @@
 
   helm-words = callPackage ./helm-words { };
 
-  lib-requires =
-    callPackage ./lib-requires { };
-
   org-mac-link =
     callPackage ./org-mac-link { };
 
