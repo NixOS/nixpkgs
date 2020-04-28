@@ -125,8 +125,6 @@
 
   tramp = callPackage ./tramp { };
 
-  yaoddmuse = callPackage ./yaoddmuse { };
-
   zeitgeist = callPackage ./zeitgeist { };
 
   # From old emacsPackages (pre emacsPackagesNg)
