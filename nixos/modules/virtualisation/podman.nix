@@ -6,13 +6,11 @@ let
 
   # Provides a fake "docker" binary mapping to podman
   dockerCompat = pkgs.runCommandNoCC "${pkgs.podman.pname}-docker-compat-${pkgs.podman.version}" {
-    outputs = [ "out" "bin" "man" ];
+    outputs = [ "out" "man" ];
     inherit (pkgs.podman) meta;
   } ''
-    mkdir $out
-
-    mkdir -p $bin/bin
-    ln -s ${pkgs.podman.bin}/bin/podman $bin/bin/docker
+    mkdir -p $out/bin
+    ln -s ${pkgs.podman}/bin/podman $out/bin/docker
 
     mkdir -p $man/share/man/man1
     for f in ${pkgs.podman.man}/share/man/man1/*; do

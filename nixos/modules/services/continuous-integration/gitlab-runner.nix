@@ -127,7 +127,7 @@ in
       serviceConfig = {
         StateDirectory = "gitlab-runner";
         ExecReload= "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        ExecStart = ''${cfg.package.bin}/bin/gitlab-runner run \
+        ExecStart = ''${cfg.package}/bin/gitlab-runner run \
           --working-directory ${cfg.workDir} \
           --config /etc/gitlab-runner/config.toml \
           --service gitlab-runner \
