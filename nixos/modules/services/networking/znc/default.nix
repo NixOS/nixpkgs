@@ -76,6 +76,7 @@ let
 in
 
 {
+  meta.maintainers = with maintainers; [ infinisil sorki ];
 
   imports = [ ./options.nix ];
 
@@ -141,6 +142,8 @@ in
                   "##linux" = { Disabled = true; };
                 };
               };
+              # generate password with
+              # nix-shell -p znc --run "znc --makepass"
               Pass.password = {
                 Method = "sha256";
                 Hash = "e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93";
@@ -220,6 +223,18 @@ in
         '';
       };
 
+      proxychains = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            When enabled wraps <literal>znc</literal> executable
+            with <literal>proxychains</literal> to route all traffic
+            via SOCKS proxy.
+          '';
+        };
+      };
+
       extraFlags = mkOption {
         default = [ ];
         example = [ "--debug" ];
@@ -255,7 +270,12 @@ in
         User = cfg.user;
         Group = cfg.group;
         Restart = "always";
-        ExecStart = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = ''
+          ${optionalString cfg.proxychains.enable "${pkgs.proxychains}/bin/proxychains4 "}${pkgs.znc}/bin/znc \
+            --foreground \
+            --datadir ${cfg.dataDir} \
+            ${escapeShellArgs cfg.extraFlags}
+        '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
       };
