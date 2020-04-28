@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/intel/opa-psm2;
+    homepage = "https://github.com/intel/opa-psm2";
     description = "The PSM2 library supports a number of fabric media and stacks";
     license = with licenses; [ gpl2 bsd3 ];
     platforms = platforms.linux;
