@@ -77,17 +77,8 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [
-      pkgs.podman # Docker compat
-      pkgs.runc # Default container runtime
-      pkgs.crun # Default container runtime (cgroups v2)
-      pkgs.conmon # Container runtime monitor
-      pkgs.slirp4netns # User-mode networking for unprivileged namespaces
-      pkgs.fuse-overlayfs # CoW for images, much faster than default vfs
-      pkgs.utillinux # nsenter
-      pkgs.iptables
-    ]
-    ++ lib.optional cfg.dockerCompat dockerCompat;
+    environment.systemPackages = [ pkgs.podman ]
+      ++ lib.optional cfg.dockerCompat dockerCompat;
 
     environment.etc."containers/libpod.conf".text = ''
       cni_plugin_dir = ["${pkgs.cni-plugins}/bin/"]
@@ -95,7 +86,7 @@ in
 
     '' + cfg.libpod.extraConfig;
 
-    environment.etc."cni/net.d/87-podman-bridge.conflist".source = copyFile "${pkgs.podman.src}/cni/87-podman-bridge.conflist";
+    environment.etc."cni/net.d/87-podman-bridge.conflist".source = copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
 
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;
