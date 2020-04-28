@@ -1,0 +1,21 @@
+diff --git a/compiler/mx.compiler/mx_compiler.py b/compiler/mx.compiler/mx_compiler.py
+index f1d1977b5a9..91cec8349fa 100644
+--- a/compiler/mx.compiler/mx_compiler.py
++++ b/compiler/mx.compiler/mx_compiler.py
+@@ -1311,14 +1311,13 @@ def _update_graaljdk(src_jdk, dst_jdk_dir=None, root_module_names=None, export_t
+             libjvm_dir = join(jre_dir, 'lib', 'server')
+         mx.ensure_dir_exists(libjvm_dir)
+         jvmlib = join(libjvm_dir, mx.add_lib_prefix(mx.add_lib_suffix('jvm')))
+-
+         with open(join(tmp_dst_jdk_dir, 'release.jvmci'), 'w') as fp:
+             for d in _graal_config().jvmci_dists:
+                 s = d.suite
+-                print('{}={}'.format(d.name, s.vc.parent(s.dir)), file=fp)
++                print('{}={}'.format(d.name, s.dir), file=fp)
+             for d in _graal_config().boot_dists + _graal_config().truffle_dists:
+                 s = d.suite
+-                print('{}={}'.format(d.name, s.vc.parent(s.dir)), file=fp)
++                print('{}={}'.format(d.name, s.dir), file=fp)
+ 
+         assert exists(jvmlib), jvmlib + ' does not exist'
+         out = mx.LinesOutputCapture()

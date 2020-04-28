@@ -1,0 +1,23 @@
+diff --git a/truffle/mx.truffle/mx_truffle.py b/truffle/mx.truffle/mx_truffle.py
+index a35597b20eb..031938bb155 100644
+--- a/truffle/mx.truffle/mx_truffle.py
++++ b/truffle/mx.truffle/mx_truffle.py
+@@ -737,17 +737,10 @@ class LibffiBuildTask(mx.AbstractNativeBuildTask):
+         return None if output and not output.exists() else output
+ 
+     def build(self):
+-        assert not mx.exists(self.subject.out_dir), '{} must be cleaned before build'.format(self.subject.name)
+-
+         mx.log('Extracting {}...'.format(self.subject.sources))
+         mx.Extractor.create(self.subject.sources.get_path(False)).extract(self.subject.out_dir)
+ 
+-        mx.log('Applying patches...')
+-        git_apply = ['git', 'apply', '--whitespace=nowarn', '--directory',
+-                     os.path.relpath(self.subject.delegate.dir, self.subject.suite.vc_dir)]
+-        for patch in self.subject.patches:
+-            mx.run(git_apply + [patch], cwd=self.subject.suite.vc_dir)
+-
++        mx.run(['cp', os.path.join('/build', 'truffle.make'), os.path.join(self.subject.delegate.dir, 'Makefile')])
+         self.delegate.logBuild()
+         self.delegate.build()
+ 

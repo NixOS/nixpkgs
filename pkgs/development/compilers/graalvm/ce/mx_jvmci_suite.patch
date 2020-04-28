@@ -2,10 +2,10 @@ diff --git a/mx.jvmci/suite.py b/mx.jvmci/suite.py
 index 9690c0a38f..fa1d36b7e1 100644
 --- a/mx.jvmci/suite.py
 +++ b/mx.jvmci/suite.py
-@@ -241,18 +241,7 @@ suite = {
+@@ -241,15 +241,4 @@ suite = {
        "workingSets" : "JVMCI,HotSpot,SPARC",
      },
- 
+
 -    "jdk.vm.ci.hotspot.jfr" : {
 -      "subDir" : "jvmci",
 -      "sourceDirs" : ["src"],
@@ -19,7 +19,7 @@ index 9690c0a38f..fa1d36b7e1 100644
 -      "workingSets" : "JVMCI,HotSpot",
 -    },
 +
- 
+
      "hotspot" : {
        "native" : True,
 @@ -354,7 +343,7 @@ suite = {

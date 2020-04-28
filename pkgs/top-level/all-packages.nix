@@ -8711,13 +8711,13 @@ in
   jre = jre8;
   jre_headless = jre8_headless;
 
-  inherit (callPackages ../development/compilers/graalvm {
+  inherit (callPackages ../development/compilers/graalvm/community-edition.nix {
     gcc = if stdenv.targetPlatform.isDarwin then gcc8 else gcc;
     inherit (darwin.apple_sdk.frameworks)
       CoreFoundation Foundation JavaNativeFoundation
       JavaVM JavaRuntimeSupport Cocoa;
     inherit (darwin) libiconv libobjc libresolv;
-  }) mx jvmci8 graalvm8;
+  }) graalvm8Packages;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
