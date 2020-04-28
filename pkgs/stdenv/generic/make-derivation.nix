@@ -256,21 +256,19 @@ in rec {
 
           mesonFlags = if mesonFlags == null then null else let
             # See https://mesonbuild.com/Reference-tables.html#cpu-families
-            cpuFamilies = {
-              aarch64  = "aarch64";
-              armv5tel = "arm";
-              armv6l   = "arm";
-              armv7l   = "arm";
-              i686     = "x86";
-              x86_64   = "x86_64";
-            };
+            cpuFamily = platform: with platform;
+              /**/ if isAarch64 then "arm"
+              else if isAarch32 then "aarch64"
+              else if isx86_32  then "x86"
+              else if isx86_64  then "x86_64"
+              else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;
             crossFile = builtins.toFile "cross-file.conf" (''
               [properties]
               needs_exe_wrapper = true
 
               [host_machine]
               system = '${stdenv.targetPlatform.parsed.kernel.name}'
-              cpu_family = '${cpuFamilies.${stdenv.targetPlatform.parsed.cpu.name}}'
+              cpu_family = '${cpuFamily stdenv.targetPlatform}'
               cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
               endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
             ''
