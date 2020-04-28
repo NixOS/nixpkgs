@@ -14,7 +14,6 @@ let
   nssmdns = canLoadExternalModules && config.services.avahi.nssmdns;
   nsswins = canLoadExternalModules && config.services.samba.nsswins;
   ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
-  sssd = canLoadExternalModules && config.services.sssd.enable;
   resolved = canLoadExternalModules && config.services.resolved.enable;
   googleOsLogin = canLoadExternalModules && config.security.googleOsLogin.enable;
 
@@ -31,7 +30,6 @@ let
 
   passwdArray = mkMerge [
     (mkBefore [ "files" ])
-    (mkIf sssd [ "sss" ])
     (mkIf ldap [ "ldap" ])
     (mkIf mymachines [ "mymachines" ])
     (mkIf googleOsLogin [ "cache_oslogin oslogin" ])
@@ -40,13 +38,7 @@ let
 
   shadowArray = mkMerge [
     (mkBefore [ "files" ])
-    (mkIf sssd [ "sss" ])
     (mkIf ldap [ "ldap" ])
-  ];
-
-  servicesArray = mkMerge [
-    (mkBefore [ "files" ])
-    (mkIf sssd [ "sss" ])
   ];
 
 in {
@@ -172,7 +164,7 @@ in {
       group = passwdArray;
       shadow = shadowArray;
       hosts = hostArray;
-      services = servicesArray;
+      services = mkBefore [ "files" ];
     };
 
     # Systemd provides nss-myhostname to ensure that our hostname
