@@ -109,8 +109,6 @@
 
   helm-words = callPackage ./helm-words { };
 
-  icicles = callPackage ./icicles { };
-
   lib-requires =
     callPackage ./lib-requires { };
 
