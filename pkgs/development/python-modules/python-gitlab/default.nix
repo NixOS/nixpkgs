@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, requests, six, mock, httmock }:
 
 buildPythonPackage rec {
-  pname   = "python-gitlab";
+  pname = "python-gitlab";
   version = "1.15.0";
 
   src = fetchPypi {
@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Interact with GitLab API";
-    homepage    = "https://github.com/python-gitlab/python-gitlab";
-    license     = licenses.lgpl3;
+    homepage = "https://github.com/python-gitlab/python-gitlab";
+    license = licenses.lgpl3;
     maintainers = with maintainers; [ nyanloutre ];
   };
 }
