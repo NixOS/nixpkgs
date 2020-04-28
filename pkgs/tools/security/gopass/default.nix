@@ -23,13 +23,13 @@ buildGoPackage rec {
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $bin/bin/gopass completion $shell > gopass.$shell
+      $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell
     done
   '';
 
   postFixup = ''
-    wrapProgram $bin/bin/gopass \
+    wrapProgram $out/bin/gopass \
       --prefix PATH : "${wrapperPath}"
   '';
 

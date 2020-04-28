@@ -37,8 +37,6 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  outputs = [ "out" ];
-
   nativeBuildInputs = [
     pkgconfig
     deepin-gettext-tools # build
@@ -109,7 +107,7 @@ buildGoPackage rec {
   installPhase = ''
     make install PREFIX="$out" SYSTEMD_LIB_DIR="$out/lib" -C go/src/${goPackagePath}
     mv $out/share/gocode $out/share/go
-    remove-references-to -t ${go} $out/bin/* $out/lib/deepin-api/*
+    remove-references-to -t ${go} $out/lib/deepin-api/*
   '';
 
   postFixup = ''

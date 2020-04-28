@@ -22,8 +22,6 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  outputs = [ "out" ];
-
   nativeBuildInputs = [
     pkgconfig
     dbus-factory
@@ -114,7 +112,7 @@ buildGoPackage rec {
   installPhase = ''
     make install PREFIX="$out" -C go/src/${goPackagePath}
     rm -rf $out/share/lightdm  # this is uselesss for NixOS
-    remove-references-to -t ${go} $out/bin/* $out/sbin/*
+    remove-references-to -t ${go} $out/sbin/*
   '';
 
   postFixup = ''

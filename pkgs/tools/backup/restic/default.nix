@@ -20,7 +20,7 @@ buildGoPackage rec {
   passthru.tests.restic = nixosTests.restic;
 
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    $bin/bin/restic generate \
+    $out/bin/restic generate \
       --bash-completion restic.bash \
       --zsh-completion restic.zsh \
       --man .

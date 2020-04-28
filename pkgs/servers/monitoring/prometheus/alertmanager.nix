@@ -27,7 +27,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    $bin/bin/amtool --completion-script-bash > amtool.bash
+    $out/bin/amtool --completion-script-bash > amtool.bash
     installShellCompletion amtool.bash
   '';
 

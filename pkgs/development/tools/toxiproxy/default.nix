@@ -15,8 +15,8 @@ buildGoPackage rec {
   buildFlagsArray = "-ldflags=-X github.com/Shopify/toxiproxy.Version=v${version}";
 
   postInstall = ''
-    mv $bin/bin/cli $bin/bin/toxiproxy-cli
-    mv $bin/bin/cmd $bin/bin/toxiproxy-cmd
+    mv $out/bin/cli $out/bin/toxiproxy-cli
+    mv $out/bin/cmd $out/bin/toxiproxy-cmd
   '';
 
   meta = {

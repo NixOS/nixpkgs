@@ -35,10 +35,10 @@ buildGoPackage rec {
   patches = [ ./fix-shell-path.patch ];
 
   postInstall = ''
-    touch $bin/bin/hello
-    install -d $bin/bin/helper-images
-    ln -sf ${docker_x86_64} $bin/bin/helper-images/prebuilt-x86_64.tar.xz
-    ln -sf ${docker_arm} $bin/bin/helper-images/prebuilt-arm.tar.xz
+    touch $out/bin/hello
+    install -d $out/bin/helper-images
+    ln -sf ${docker_x86_64} $out/bin/helper-images/prebuilt-x86_64.tar.xz
+    ln -sf ${docker_arm} $out/bin/helper-images/prebuilt-arm.tar.xz
   '';
 
   meta = with lib; {

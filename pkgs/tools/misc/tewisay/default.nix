@@ -18,12 +18,12 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postInstall = ''
-    install -D -t $bin/share/tewisay/cows go/src/${goPackagePath}/cows/*.cow
+    install -D -t $out/share/tewisay/cows go/src/${goPackagePath}/cows/*.cow
   '';
 
   preFixup = ''
-    wrapProgram $bin/bin/tewisay \
-      --prefix COWPATH : $bin/share/tewisay/cows
+    wrapProgram $out/bin/tewisay \
+      --prefix COWPATH : $out/share/tewisay/cows
   '';
 
   meta = {

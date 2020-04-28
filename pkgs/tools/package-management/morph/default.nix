@@ -29,10 +29,10 @@ buildGoPackage rec {
   postInstall = ''
     mkdir -p $lib
     cp -v $src/data/*.nix $lib
-    wrapProgram $bin/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
+    wrapProgram $out/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
   '';
 
-  outputs = [ "out" "bin" "lib" ];
+  outputs = [ "out" "lib" ];
 
   meta = with lib; {
     description = "Morph is a NixOS host manager written in Golang.";

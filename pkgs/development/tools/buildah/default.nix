@@ -22,7 +22,7 @@ buildGoPackage rec {
     sha256 = "187cvb3i5cwm7cwxmzpl2ca7900yb6v6b6cybyz5mnd5ccy5ff1q";
   };
 
-  outputs = [ "bin" "man" "out" ];
+  outputs = [ "out" "man" ];
 
   goPackagePath = "github.com/containers/buildah";
   excludedPackages = [ "tests" ];
@@ -35,7 +35,7 @@ buildGoPackage rec {
   buildPhase = ''
     pushd go/src/${goPackagePath}
     make GIT_COMMIT="unknown"
-    install -Dm755 buildah $bin/bin/buildah
+    install -Dm755 buildah $out/bin/buildah
     installShellCompletion --bash contrib/completions/bash/buildah
   '';
 

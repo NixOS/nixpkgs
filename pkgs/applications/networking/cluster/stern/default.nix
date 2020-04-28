@@ -20,7 +20,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall =
-    let stern = if isCrossBuild then buildPackages.stern else "$bin"; in
+    let stern = if isCrossBuild then buildPackages.stern else "$out"; in
     ''
       for shell in bash zsh; do
         ${stern}/bin/stern --completion $shell > stern.$shell

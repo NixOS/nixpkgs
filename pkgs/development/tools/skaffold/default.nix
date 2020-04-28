@@ -26,7 +26,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     for shell in bash zsh; do
-      $bin/bin/skaffold completion $shell > skaffold.$shell
+      $out/bin/skaffold completion $shell > skaffold.$shell
       installShellCompletion skaffold.$shell
     done
   '';
