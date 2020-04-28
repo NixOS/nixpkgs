@@ -68,8 +68,6 @@
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
 
-  filesets-plus = callPackage ./filesets-plus { };
-
   font-lock-plus = callPackage ./font-lock-plus { };
 
   ghc-mod = melpaBuild {
