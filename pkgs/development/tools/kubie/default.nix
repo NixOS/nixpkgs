@@ -15,6 +15,11 @@ buildRustPackage rec {
 
   cargoSha256 = "0mish7wqwq5ynl98n6swdn5i6mg62aih5rfykbl3wx39b468n481";
 
+  installPhase = ''
+    mkdir -p $out/share/bash-completion/completions
+    cp -v ${src}/completion/kubie.bash $out/share/bash-completion/completions/kubie
+  '';
+
   meta = with stdenv.lib; {
     description =
       "Shell independent context and namespace switcher for kubectl";
