@@ -628,11 +628,6 @@ self: super: builtins.intersectAttrs super {
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
 
-  # Hadolint wants to build a statically linked binary by default.
-  hadolint = overrideCabal super.hadolint (drv: {
-    preConfigure = "sed -i -e /ld-options:/d hadolint.cabal";
-  });
-
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
   cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;

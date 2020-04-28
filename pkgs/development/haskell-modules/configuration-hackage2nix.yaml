@@ -5338,7 +5338,6 @@ broken-packages:
   - haddock-leksah
   - haddock-test
   - haddocset
-  - hadolint
   - hadoop-formats
   - hadoop-rpc
   - hadoop-tools
