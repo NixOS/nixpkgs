@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
-  pname = "hxcdumptool";
+  pname = "hcxdumptool";
   version = "6.0.5";
 
   src = fetchFromGitHub {
