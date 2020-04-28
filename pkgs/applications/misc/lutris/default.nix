@@ -31,13 +31,13 @@ let
 
 in buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.5";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    sha256 = "1g093g0difnkjmnm91p20issdsxn9ri4c56zzddj5wfrbmhwdfag";
+    sha256 = "1f78qhyy8xqdg0rhxcwkap1bmg5mfxhb8qw1vbpxr6g62ajpwksa";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
