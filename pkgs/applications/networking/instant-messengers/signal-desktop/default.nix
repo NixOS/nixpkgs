@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook
+{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
@@ -120,6 +120,9 @@ in stdenv.mkDerivation rec {
 
     autoPatchelf --no-recurse -- $out/lib/Signal/
   '';
+
+  # Tests if the application launches and waits for "Link your phone to Signal Desktop":
+  passthru.tests.application-launch = nixosTests.signal-desktop;
 
   meta = {
     description = "Private, simple, and secure messenger";
