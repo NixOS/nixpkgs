@@ -5,23 +5,24 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "pass-audit";
-  version = "1.0.1";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-audit";
     rev = "v${version}";
-    sha256 = "1mdckw0dwcnv8smp1za96y0zmdnykbkw2606v7mzfnzbz4zjdlwl";
+    sha256 = "1vapymgpab91kh798mirgs1nb7j9qln0gm2d3321cmsghhb7xs45";
   };
 
   patches = [
-    ./0001-Make-it-possible-to-run-the-tests-offline.patch
     ./0002-Fix-audit.bash-setup.patch
   ];
 
   postPatch = ''
     substituteInPlace audit.bash \
-      --replace '/usr/bin/env python3' "${pythonEnv}/bin/python3"
+      --replace 'python3' "${pythonEnv}/bin/python3"
+    substituteInPlace Makefile \
+      --replace "install --root" "install --prefix ''' --root"
   '';
 
   outputs = [ "out" "man" ];
