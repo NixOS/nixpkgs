@@ -14,15 +14,18 @@ self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
                                  makeStaticLibraries
                                  propagateBuildInputs;
-  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs;
+  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs optionalString;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
-  makeStaticDarwin = stdenv: stdenv // {
+  makeStaticDarwin = stdenv_: let stdenv = stdenv_.override {
+    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
+    extraBuildInputs = [ self.buildPackages.darwin.CF ];
+  }; in stdenv // {
     mkDerivation = args: stdenv.mkDerivation (args // {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
-                      + " -static-libgcc";
+                      + optionalString stdenv.cc.isGNU " -static-libgcc";
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ (makeSetupHook {
         substitutions = {
           libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
