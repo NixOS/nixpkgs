@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     "osx"
   else
     stdenv.hostPlatform.parsed.kernel.name;
-  top = "$(echo $NIX_BUILD_TOP)";
+  top = "$(echo $NIX_BUILD_TOP/$sourceRoot)";
   pathToDmd = "${top}/dmd/generated/${osname}/release/${bits}/dmd";
 
   # Buid and install are based on http://wiki.dlang.org/Building_DMD
