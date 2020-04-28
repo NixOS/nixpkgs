@@ -258,6 +258,7 @@ in rec {
             # See https://mesonbuild.com/Reference-tables.html#cpu-families
             cpuFamilies = {
               aarch64  = "aarch64";
+              arm      = "arm";
               armv5tel = "arm";
               armv6l   = "arm";
               armv7l   = "arm";
