@@ -38,13 +38,13 @@ let
   inherit (stdenv.lib) optional optionals;
 in mkDerivation rec {
   pname = "obs-studio";
-  version = "25.0.3";
+  version = "25.0.8";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "11hl3lxvbsm7ackl7qhzgy2x0jsz2dfpi2qxsf8pkp908lrh3b3r";
+    sha256 = "0j2k65q3wfyfxhvkl6icz4qy0s3kfqhksizy2i3ah7yml266axbj";
   };
 
   nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
@@ -83,6 +83,7 @@ in mkDerivation rec {
 
   postFixup = stdenv.lib.optionalString stdenv.isLinux ''
       addOpenGLRunpath $out/lib/lib*.so
+      addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
   meta = with stdenv.lib; {
