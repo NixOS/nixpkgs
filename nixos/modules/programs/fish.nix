@@ -178,6 +178,10 @@ in
         set -l post (string join0 $fish_complete_path | string match --regex "[^\x00]*generated_completions.*" | string split0 | string match -er ".")
         set fish_complete_path $prev "/etc/fish/generated_completions" $post
       end
+      # prevent fish from generating completions on first run
+      if not test -d $__fish_user_data_dir/generated_completions
+        ${pkgs.coreutils}/bin/mkdir $__fish_user_data_dir/generated_completions
+      end
     '';
 
     environment.etc."fish/generated_completions".source =
