@@ -107,8 +107,6 @@
     };
   };
 
-  header2 = callPackage ./header2 { };
-
   helm-words = callPackage ./helm-words { };
 
   icicles = callPackage ./icicles { };
