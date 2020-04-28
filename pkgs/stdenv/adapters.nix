@@ -15,7 +15,7 @@ rec {
   # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs:
-    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = prev.extraBuildInputs or [] ++ pkgs; });
+    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = (prev.extraBuildInputs or []) ++ pkgs; });
 
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -34,7 +34,7 @@ rec {
   makeStaticBinaries = stdenv:
     let stdenv' = if stdenv.hostPlatform.libc != "glibc" then stdenv else
       stdenv.override (prev: {
-          extraBuildInputs = prev.extraBuildInputs or [] ++ [
+          extraBuildInputs = (prev.extraBuildInputs or []) ++ [
               stdenv.glibc.static
             ];
         });
