@@ -22,7 +22,7 @@
 , ruby, bundler
 } @ defs:
 
-lib.makeOverridable (
+lib.makeOverridableWithName "overrideRubyGemAttrs" (
 
 { name ? null
 , gemName
