@@ -20331,6 +20331,8 @@ in
 
   kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
+  kvmtool = callPackage ../applications/virtualization/kvmtool { };
+
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
