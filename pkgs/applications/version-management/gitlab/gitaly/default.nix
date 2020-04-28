@@ -65,7 +65,7 @@ in buildGoPackage rec {
        "'/run/gitlab/shell-config.yml'"
   '';
 
-  outputs = [ "bin" "out" "ruby" ];
+  outputs = [ "out" "ruby" ];
 
   meta = with stdenv.lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";

@@ -48,7 +48,7 @@ in buildGoPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram "$bin/bin/minishift" \
+    wrapProgram "$out/bin/minishift" \
       --prefix PATH ':' '${lib.makeBinPath [ docker-machine-kvm openshift ]}'
   '';
 

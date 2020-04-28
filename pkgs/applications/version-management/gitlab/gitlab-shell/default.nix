@@ -18,8 +18,8 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postInstall = ''
-    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/bin/* $bin/bin
-    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/{support,VERSION} $bin/
+    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/bin/* $out/bin
+    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/{support,VERSION} $out/
   '';
 
   meta = with stdenv.lib; {

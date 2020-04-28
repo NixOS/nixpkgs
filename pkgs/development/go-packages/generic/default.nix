@@ -203,15 +203,15 @@ let
     installPhase = args.installPhase or ''
       runHook preInstall
 
-      mkdir -p $bin
+      mkdir -p $out
       dir="$NIX_BUILD_TOP/go/bin"
-      [ -e "$dir" ] && cp -r $dir $bin
+      [ -e "$dir" ] && cp -r $dir $out
 
       runHook postInstall
     '';
 
     preFixup = preFixup + ''
-      find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
+      find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
 
     strictDeps = true;
@@ -234,9 +234,6 @@ let
       lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
     enableParallelBuilding = enableParallelBuilding;
-
-    # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-    outputs = args.outputs or [ "bin" "out" ];
 
     meta = {
       # Add default meta information

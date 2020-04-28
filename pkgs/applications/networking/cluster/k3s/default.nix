@@ -126,8 +126,8 @@ let
     installPhase = ''
       pushd go/src/${goPackagePath}
 
-      mkdir -p "$bin/bin"
-      install -m 0755 -t "$bin/bin" ./bin/*
+      mkdir -p "$out/bin"
+      install -m 0755 -t "$out/bin" ./bin/*
 
       popd
     '';
@@ -181,8 +181,8 @@ let
     installPhase = ''
       pushd go/src/${goPackagePath}
 
-      mkdir -p "$bin/bin"
-      install -m 0755 -t "$bin/bin" ./dist/artifacts/k3s
+      mkdir -p "$out/bin"
+      install -m 0755 -t "$out/bin" ./dist/artifacts/k3s
 
       popd
     '';

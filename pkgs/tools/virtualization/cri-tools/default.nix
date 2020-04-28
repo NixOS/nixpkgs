@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   buildPhase = ''
     pushd go/src/${goPackagePath}
-    make all install BINDIR=$bin/bin
+    make all install BINDIR=$out/bin
   '';
 
   meta = with lib; {

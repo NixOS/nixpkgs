@@ -19,8 +19,8 @@ in {
     package = mkOption {
       description = "Package to use for flannel";
       type = types.package;
-      default = pkgs.flannel.bin;
-      defaultText = "pkgs.flannel.bin";
+      default = pkgs.flannel;
+      defaultText = "pkgs.flannel";
     };
 
     publicIp = mkOption {
@@ -167,7 +167,7 @@ in {
         touch /run/flannel/docker
       '' + optionalString (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"
-        until ${pkgs.etcdctl.bin}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'
+        until ${pkgs.etcdctl}/bin/etcdctl set /coreos.com/network/config '${builtins.toJSON networkConfig}'
         do
           echo "setting network configuration, retry"
           sleep 1
