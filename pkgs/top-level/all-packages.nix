@@ -25427,6 +25427,8 @@ in
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
+  helmsman = callPackage ../applications/networking/cluster/helmsman { };
+
   heptio-ark = callPackage ../applications/networking/cluster/heptio-ark { };
 
   hplip = callPackage ../misc/drivers/hplip { };
