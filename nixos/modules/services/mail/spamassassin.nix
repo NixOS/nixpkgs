@@ -15,6 +15,7 @@ in
       enable = mkEnableOption "the SpamAssassin daemon";
 
       debug = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to run the SpamAssassin daemon in debug mode";
       };
