@@ -91,6 +91,20 @@ let
       pkgFun = pkgs: pkgs.hello;
     };
 
+    pkg-config = {platformFun, crossPkgs, emulator}: crossPkgs.runCommand
+      "test-pkg-config-${crossPkgs.hostPlatform.config}"
+    {
+      depsBuildBuild = [ crossPkgs.pkgsBuildBuild.pkg-config ];
+      nativeBuildInputs = [ crossPkgs.pkgsBuildHost.pkg-config crossPkgs.buildPackages.zlib ];
+      depsBuildTarget = [ crossPkgs.pkgsBuildTarget.pkg-config ];
+      buildInputs = [ crossPkgs.zlib ];
+      NIX_DEBUG = 7;
+    } ''
+       mkdir $out
+       ${crossPkgs.pkgsBuildBuild.pkg-config.targetPrefix}pkg-config --cflags zlib > "$out/for-build"
+       ${crossPkgs.pkgsBuildHost.pkg-config.targetPrefix}pkg-config --cflags zlib > "$out/for-host"
+       ! diff "$out/for-build" "$out/for-host"
+    '';
   };
 
 in {
