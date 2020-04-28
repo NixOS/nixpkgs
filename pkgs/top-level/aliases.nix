@@ -249,7 +249,7 @@ mapAliases ({
   libtxc_dxtn = throw "removed 2020-03-16, now integrated in Mesa";
   libtxc_dxtn_s2tc = throw "removed 2020-03-16, now integrated in Mesa";
   libudev = udev; # added 2018-04-25
-  libusb = libusb-compat-0_1; # added 2020-04-28
+  libusb = libusb1; # added 2020-04-28
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
