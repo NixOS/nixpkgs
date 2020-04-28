@@ -12798,6 +12798,8 @@ in
 
   libf2c = callPackage ../development/libraries/libf2c {};
 
+  libfabric = callPackage ../os-specific/linux/libfabric {};
+
   libfive = callPackage ../development/libraries/libfive { };
 
   libfixposix = callPackage ../development/libraries/libfixposix {};
