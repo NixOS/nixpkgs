@@ -143,6 +143,7 @@
   ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/plotinus.nix
+  ./programs/proxychains.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
