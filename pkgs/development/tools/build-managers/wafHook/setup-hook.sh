@@ -7,12 +7,12 @@ wafConfigurePhase() {
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
-        wafConfigureFlags="${prefixKey:---prefix=}$prefix $wafConfigureFlags"
+        wafConfigureFlags=("${prefixKey:---prefix=}$prefix" "${wafConfigureFlags[@]}")
     fi
 
     local flagsArray=(
         "${flagsArray[@]}"
-        $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
+        "${wafConfigureFlags[@]}" "${wafConfigureFlagsArray[@]}"
         ${configureTargets:-configure}
     )
     if [ -z "${dontAddWafCrossFlags:-}" ]; then
@@ -32,12 +32,12 @@ wafBuildPhase () {
     runHook preBuild
 
     # set to empty if unset
-    : ${wafFlags=}
+    wafFlags=(${wafFlags+"${wafFlags[@]}"})
 
     local flagsArray=(
       ${enableParallelBuilding:+-j ${NIX_BUILD_CORES}}
-      $wafFlags ${wafFlagsArray[@]}
-      $buildFlags ${buildFlagsArray[@]}
+      "${wafFlags[@]}" "${wafFlagsArray[@]}"
+      "${buildFlags[@]}" "${buildFlagsArray[@]}"
       ${buildTargets:-build}
     )
 
@@ -59,8 +59,8 @@ wafInstallPhase() {
     fi
 
     local flagsArray=(
-        $wafFlags ${wafFlagsArray[@]}
-        $installFlags ${installFlagsArray[@]}
+        "${wafFlags[@]}" "${wafFlagsArray[@]}"
+        "${installFlags[@]}" "${installFlagsArray[@]}"
         ${installTargets:-install}
     )
 
