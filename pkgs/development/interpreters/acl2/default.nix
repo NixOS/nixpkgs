@@ -27,7 +27,10 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  phases = "unpackPhase installPhase";
+  phases = "unpackPhase patchPhase installPhase";
+
+  # Needed for AArch64 build
+  patches = [ ./0001-Fix-detection-of-RDTSC-on-SBCL.patch ];
 
   installSuffix = "acl2";
 
@@ -73,6 +76,5 @@ in stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ kini raskin ];
     platforms = stdenv.lib.platforms.all;
-    broken = stdenv.isAarch64 && stdenv.isLinux;
   };
 }

@@ -1,0 +1,26 @@
+From c53de3a5437751371112422ad95ed2ac2f9505a9 Mon Sep 17 00:00:00 2001
+From: Keshav Kini <keshav.kini@gmail.com>
+Date: Mon, 27 Apr 2020 17:21:25 -0700
+Subject: [PATCH] Fix detection of RDTSC on SBCL
+
+Backported from a subset of https://github.com/acl2/acl2/commit/c3803f5046db4e847f9134a9d9ccec8f499acab8
+---
+ memoize-raw.lisp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/memoize-raw.lisp b/memoize-raw.lisp
+index 205e78653..6d1f8153b 100644
+--- a/memoize-raw.lisp
++++ b/memoize-raw.lisp
+@@ -205,7 +205,7 @@
+ ; a successful build and used it for (profile 'rewrite) followed by
+ ; :mini-proveall and then (memsum), on top of both SBCL 1.1.11 and SBCL 1.4.7.
+ 
+-       (not (ignore-errors (sb-vm::%read-cycle-counter)))
++       (ignore-errors (sb-vm::%read-cycle-counter))
+    (pushnew :RDTSC *features*)))
+ 
+ #+rdtsc
+-- 
+2.25.3
+
