@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, libusb, libusb1 }:
+{ stdenv, fetchPypi, buildPythonPackage, libusb1 }:
 
 buildPythonPackage rec {
   pname = "pyusb";
@@ -16,8 +16,6 @@ buildPythonPackage rec {
       test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
       sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
     '';
-
-  propagatedBuildInputs = [ libusb ];
 
   # No tests included
   doCheck = false;
