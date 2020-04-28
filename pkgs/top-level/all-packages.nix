@@ -8982,6 +8982,8 @@ in
     inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
   };
 
+  open-watcom-bin = callPackage ../development/compilers/open-watcom-bin { };
+
   pforth = callPackage ../development/compilers/pforth {};
 
   picat = callPackage ../development/compilers/picat { };

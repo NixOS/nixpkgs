@@ -3,6 +3,9 @@
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+# If open-watcom-bin is not passed, VirtualBox will fall back to use
+# the shipped alternative sources (assembly).
+, open-watcom-bin ? null
 , makeself, perl
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
@@ -148,6 +151,7 @@ in stdenv.mkDerivation {
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
+      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
