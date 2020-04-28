@@ -1270,8 +1270,6 @@ in
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
 
-  blsd = callPackage ../tools/misc/blsd { };
-
   bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
 
   bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
