@@ -89,7 +89,7 @@ in
       };
 
       rpc.password = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Password for RPC connections.
