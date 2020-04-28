@@ -62,6 +62,7 @@ let
       fetchurl {
         urls = [
           "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
+          "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
           "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
         ];
         sha256 = "1cnlwlp84942ywji3x60zvhijavazdxfym3rfzq3ysky28b6mn6i";
