@@ -5,6 +5,8 @@ buildPythonPackage rec {
 
   buildInputs = [ pybind11 ];
 
+  pythonImportsCheck = [ "fasttext" ];
+
   propagatedBuildInputs = [ numpy ];
 
   preBuild = ''
