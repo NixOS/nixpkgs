@@ -2084,6 +2084,8 @@ in
 
   xkbd = callPackage ../applications/misc/xkbd { };
 
+  libpsm2 = callPackage ../os-specific/linux/libpsm2 { };
+
   optar = callPackage ../tools/graphics/optar {};
 
   obinskit = callPackage ../applications/misc/obinskit {};
