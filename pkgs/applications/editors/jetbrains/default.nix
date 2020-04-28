@@ -1,13 +1,13 @@
 { lib, stdenv, callPackage, fetchurl
 , python
 , jdk, cmake, libxml2, zlib, python3, ncurses5
+, dotnet-sdk_3
 }:
 
 with stdenv.lib;
 
 let
   mkJetBrainsProduct = callPackage ./common.nix { };
-
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass, ... }:
@@ -205,6 +205,8 @@ let
         # Patch built-in mono for ReSharperHost to start successfully
         interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
         patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
+        rm -rf lib/ReSharperHost/linux-x64/dotnet
+        ln -s ${dotnet-sdk_3} lib/ReSharperHost/linux-x64/dotnet
       '');
     });
 
