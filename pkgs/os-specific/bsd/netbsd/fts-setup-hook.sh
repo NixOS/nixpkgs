@@ -1,4 +1,4 @@
 # See pkgs/build-support/setup-hooks/role.bash
 getHostRole
 
-export NIX_${role_pre}LDFLAGS+=" -lfts"
+export NIX_LDFLAGS${role_post}+=" -lfts"

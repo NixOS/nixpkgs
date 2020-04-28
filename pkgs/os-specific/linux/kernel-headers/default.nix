@@ -29,8 +29,8 @@ let
       "cc-version:=9999"
       "cc-fullversion:=999999"
       # `$(..)` expanded by make alone
-      "HOSTCC:=$(BUILD_CC)"
-      "HOSTCXX:=$(BUILD_CXX)"
+      "HOSTCC:=$(CC_FOR_BUILD)"
+      "HOSTCXX:=$(CXX_FOR_BUILD)"
     ];
 
     # Skip clean on darwin, case-sensitivity issues.

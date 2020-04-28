@@ -25,12 +25,12 @@ echo "\$LIBRARY_PATH is \`${LIBRARY_PATH-}'"
 if test "$noSysDirs" = "1"; then
 
     declare \
-        EXTRA_BUILD_FLAGS EXTRA_FLAGS EXTRA_TARGET_FLAGS \
-        EXTRA_BUILD_LDFLAGS EXTRA_TARGET_LDFLAGS
+        EXTRA_FLAGS_FOR_BUILD EXTRA_FLAGS EXTRA_FLAGS_FOR_TARGET \
+        EXTRA_LDFLAGS_FOR_BUILD EXTRA_LDFLAGS_FOR_TARGET
 
     # Extract flags from Bintools Wrappers
-    for pre in 'BUILD_' ''; do
-        curBintools="NIX_${pre}BINTOOLS"
+    for post in '_FOR_BUILD' ''; do
+        curBintools="NIX_BINTOOLS${post}"
 
         declare -a extraLDFlags=()
         if [[ -e "${!curBintools}/nix-support/orig-libc" ]]; then
@@ -48,14 +48,14 @@ if test "$noSysDirs" = "1"; then
         extraLDFlags=("-L$libc_libdir" "-rpath" "$libc_libdir"
                       "${extraLDFlags[@]}")
         for i in "${extraLDFlags[@]}"; do
-            declare EXTRA_${pre}LDFLAGS+=" -Wl,$i"
+            declare EXTRA_LDFLAGS${post}+=" -Wl,$i"
         done
     done
 
     # Extract flags from CC Wrappers
-    for pre in 'BUILD_' ''; do
-        curCC="NIX_${pre}CC"
-        curFIXINC="NIX_${pre}FIXINC_DUMMY"
+    for post in '_FOR_BUILD' ''; do
+        curCC="NIX_CC${post}"
+        curFIXINC="NIX_FIXINC_DUMMY${post}"
 
         declare -a extraFlags=()
         if [[ -e "${!curCC}/nix-support/orig-libc" ]]; then
@@ -69,11 +69,11 @@ if test "$noSysDirs" = "1"; then
             # Use *real* header files, otherwise a limits.h is generated that
             # does not include Libc's limits.h (notably missing SSIZE_MAX,
             # which breaks the build).
-            declare NIX_${pre}FIXINC_DUMMY="$libc_devdir/include"
+            declare NIX_FIXINC_DUMMY${post}="$libc_devdir/include"
         else
             # Hack: support impure environments.
             extraFlags=("-isystem" "/usr/include")
-            declare NIX_${pre}FIXINC_DUMMY=/usr/include
+            declare NIX_FIXINC_DUMMY${post}=/usr/include
         fi
 
         extraFlags=("-I${!curFIXINC}" "${extraFlags[@]}")
@@ -89,13 +89,13 @@ if test "$noSysDirs" = "1"; then
             extraFlags=("-O2" "${extraFlags[@]}")
         fi
 
-        declare EXTRA_${pre}FLAGS="${extraFlags[*]}"
+        declare EXTRA_FLAGS${post}="${extraFlags[*]}"
     done
 
     if test -z "${targetConfig-}"; then
         # host = target, so the flags are the same
-        EXTRA_TARGET_FLAGS="$EXTRA_FLAGS"
-        EXTRA_TARGET_LDFLAGS="$EXTRA_LDFLAGS"
+        EXTRA_FLAGS_FOR_TARGET="$EXTRA_FLAGS"
+        EXTRA_LDFLAGS_FOR_TARGET="$EXTRA_LDFLAGS"
     fi
 
     # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
@@ -103,31 +103,31 @@ if test "$noSysDirs" = "1"; then
     # FLAGS_FOR_TARGET are needed for the target libraries to receive the -Bxxx
     # for the startfiles.
     makeFlagsArray+=(
-        "BUILD_SYSTEM_HEADER_DIR=$NIX_BUILD_FIXINC_DUMMY"
-        "SYSTEM_HEADER_DIR=$NIX_BUILD_FIXINC_DUMMY"
+        "BUILD_SYSTEM_HEADER_DIR=$NIX_FIXINC_DUMMY_FOR_BUILD"
+        "SYSTEM_HEADER_DIR=$NIX_FIXINC_DUMMY_FOR_BUILD"
         "NATIVE_SYSTEM_HEADER_DIR=$NIX_FIXINC_DUMMY"
 
-        "LDFLAGS_FOR_BUILD=$EXTRA_BUILD_LDFLAGS"
+        "LDFLAGS_FOR_BUILD=$EXTRA_LDFLAGS_FOR_BUILD"
         #"LDFLAGS=$EXTRA_LDFLAGS"
-        "LDFLAGS_FOR_TARGET=$EXTRA_TARGET_LDFLAGS"
+        "LDFLAGS_FOR_TARGET=$EXTRA_LDFLAGS_FOR_TARGET"
 
-        "CFLAGS_FOR_BUILD=$EXTRA_BUILD_FLAGS $EXTRA_BUILD_LDFLAGS"
-        "CXXFLAGS_FOR_BUILD=$EXTRA_BUILD_FLAGS $EXTRA_BUILD_LDFLAGS"
-        "FLAGS_FOR_BUILD=$EXTRA_BUILD_FLAGS $EXTRA_BUILD_LDFLAGS"
+        "CFLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
+        "CXXFLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
+        "FLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
 
         # It seems there is a bug in GCC 5
         #"CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
         #"CXXFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
 
-        "CFLAGS_FOR_TARGET=$EXTRA_TARGET_FLAGS $EXTRA_TARGET_LDFLAGS"
-        "CXXFLAGS_FOR_TARGET=$EXTRA_TARGET_FLAGS $EXTRA_TARGET_LDFLAGS"
-        "FLAGS_FOR_TARGET=$EXTRA_TARGET_FLAGS $EXTRA_TARGET_LDFLAGS"
+        "CFLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
+        "CXXFLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
+        "FLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
     )
 
     if test -z "${targetConfig-}"; then
         makeFlagsArray+=(
             "BOOT_CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
-            "BOOT_LDFLAGS=$EXTRA_TARGET_FLAGS $EXTRA_TARGET_LDFLAGS"
+            "BOOT_LDFLAGS=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
         )
     fi
 

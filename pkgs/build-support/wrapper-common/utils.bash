@@ -1,29 +1,29 @@
-# Accumulate infixes for taking in the right input parameters with the `mangle*`
+# Accumulate suffixes for taking in the right input parameters with the `mangle*`
 # functions below. See setup-hook for details.
 accumulateRoles() {
-    declare -ga role_infixes=()
-    if [ "${NIX_@wrapperName@_@infixSalt@_TARGET_BUILD:-}" ]; then
-        role_infixes+=(_BUILD_)
+    declare -ga role_suffixes=()
+    if [ "${NIX_@wrapperName@_TARGET_BUILD_@suffixSalt@:-}" ]; then
+        role_suffixes+=('_FOR_BUILD')
     fi
-    if [ "${NIX_@wrapperName@_@infixSalt@_TARGET_HOST:-}" ]; then
-        role_infixes+=(_)
+    if [ "${NIX_@wrapperName@_TARGET_HOST_@suffixSalt@:-}" ]; then
+        role_suffixes+=('')
     fi
-    if [ "${NIX_@wrapperName@_@infixSalt@_TARGET_TARGET:-}" ]; then
-        role_infixes+=(_TARGET_)
+    if [ "${NIX_@wrapperName@_TARGET_TARGET_@suffixSalt@:-}" ]; then
+        role_suffixes+=('_FOR_TARGET')
     fi
 }
 
 mangleVarList() {
     local var="$1"
     shift
-    local -a role_infixes=("$@")
+    local -a role_suffixes=("$@")
 
-    local outputVar="${var/+/_@infixSalt@_}"
+    local outputVar="${var}_@suffixSalt@"
     declare -gx ${outputVar}+=''
     # For each role we serve, we accumulate the input parameters into our own
     # cc-wrapper-derivation-specific environment variables.
-    for infix in "${role_infixes[@]}"; do
-        local inputVar="${var/+/${infix}}"
+    for suffix in "${role_suffixes[@]}"; do
+        local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
             export ${outputVar}+="${!outputVar:+ }${!inputVar}"
         fi
@@ -33,12 +33,12 @@ mangleVarList() {
 mangleVarBool() {
     local var="$1"
     shift
-    local -a role_infixes=("$@")
+    local -a role_suffixes=("$@")
 
-    local outputVar="${var/+/_@infixSalt@_}"
+    local outputVar="${var}_@suffixSalt@"
     declare -gxi ${outputVar}+=0
-    for infix in "${role_infixes[@]}"; do
-        local inputVar="${var/+/${infix}}"
+    for suffix in "${role_suffixes[@]}"; do
+        local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
             # "1" in the end makes `let` return success error code when
             # expression itself evaluates to zero.
