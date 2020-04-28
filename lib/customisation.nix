@@ -55,16 +55,33 @@ rec {
        nix-repl> y = lib.makeOverridable x { a = 1; b = 2; }
 
        nix-repl> y
-       { override = «lambda»; overrideDerivation = «lambda»; result = 3; }
+       { override = { ... }; overrideDerivation = «lambda»; result = 3; }
 
        nix-repl> y.override { a = 10; }
-       { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
+       { override = { ... }; overrideDerivation = «lambda»; result = 12; }
 
      Please refer to "Nixpkgs Contributors Guide" section
      "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
      related to its use.
   */
-  makeOverridable = f: origArgs:
+  makeOverridable = makeOverridableWithName null;
+
+
+  /* `makeOverridableWithName` takes a function from attribute set to attribute
+     set and injects a `override` attribute and a optional `name` attribute
+     which can be used to override arguments of the function.
+
+       nix-repl> x = {a, b}: { result = a + b; }
+
+       nix-repl> y = lib.makeOverridableWithName "update" x { a = 1; b = 2; }
+
+       nix-repl> y
+       { override = { ... }; overrideDerivation = «lambda»; result = 3; update = «repeated»; }
+
+       nix-repl> y.update { a = 10; }
+       { override = { ... }; overrideDerivation = «lambda»; result = 12; }
+  */
+  makeOverridableWithName = name: f: origArgs:
     let
       result = f origArgs;
 
@@ -81,6 +98,7 @@ rec {
       if builtins.isAttrs result then
         result // {
           override = overrideArgs;
+          ${name} = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
             overrideResult (x: x.overrideAttrs fdrv);
@@ -89,6 +107,7 @@ rec {
         # Transform the result into a functor while propagating its arguments
         lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
+          ${name} = overrideArgs;
         }
       else result;
 

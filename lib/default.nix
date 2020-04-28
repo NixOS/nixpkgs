@@ -101,7 +101,7 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
-      makeScope;
+      makeScope makeOverridableWithName;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet;
