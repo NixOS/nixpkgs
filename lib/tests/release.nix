@@ -1,7 +1,12 @@
 { pkgs ? import ../.. {} }:
 
 pkgs.runCommandNoCC "nixpkgs-lib-tests" {
-  buildInputs = [ pkgs.nix (import ./check-eval.nix) (import ./maintainers.nix { inherit pkgs; }) ];
+  buildInputs = [
+    pkgs.nix
+    (import ./check-eval.nix)
+    (import ./maintainers.nix { inherit pkgs; })
+    (import ./teams.nix { inherit pkgs; })
+  ];
   NIX_PATH = "nixpkgs=${toString pkgs.path}";
 } ''
     datadir="${pkgs.nix}/share"

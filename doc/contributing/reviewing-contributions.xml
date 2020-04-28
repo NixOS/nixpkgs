@@ -493,6 +493,129 @@
 </screen>
   </example>
  </section>
+ <section xml:id="reviewing-contributions-maintainers">
+  <title>Individual Maintainer List</title>
+
+  <para>
+   When adding users to <filename>maintainers/maintainer-list.nix</filename>, the following checks should be performed:
+  </para>
+
+  <itemizedlist>
+   <listitem xml:id="reviewing-maintainer-gpg-key">
+    <para>
+     If the user has specified a GPG key, verify that the commit is signed by their key.
+    </para>
+    <example>
+     <title>Validating a maintainer's GPG key</title>
+     <para>
+      First, validate that the commit adding the maintainer is signed by the key the maintainer listed. Check out the pull request and compare its signing key with the listed key in the commit.
+     </para>
+     <para>
+      If the commit is not signed or it is signed by a different user, ask them to either recommit using that key or to remove their key information.
+     </para>
+     <para>
+       Given a maintainter entry like this:
+     </para>
+     <programlisting language="nix">
+{
+  example = {
+    email = "user@example.com";
+    name = "Example User";
+    keys = [{
+      fingerprint = "0000 0000 2A70 6423 0AED  3C11 F04F 7A19 AAA6 3AFE";
+    }];
+  }
+};</programlisting>
+     <para>
+      First receive their key from a keyserver:
+     </para>
+<screen>
+<prompt>$ </prompt>gpg --recv-keys 0xF04F7A19AAA63AFE
+gpg: key 0xF04F7A19AAA63AFE: public key "Example &lt;user@example.com&gt;" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+</screen>
+     <para>
+      Then check the commit is signed by that key:
+     </para>
+     <screen>
+<prompt>$ </prompt>git log --show-signature
+commit b87862a4f7d32319b1de428adb6cdbdd3a960153
+gpg: Signature made Wed Mar 12 13:32:24 2003 +0000
+gpg:                using RSA key 000000002A7064230AED3C11F04F7A19AAA63AFE
+gpg: Good signature from "Example User &lt;user@example.com&gt;
+Author: Example User &lt;user@example.com&gt;
+Date:   Wed Mar 12 13:32:24 2003 +0000
+
+    maintainers: adding example
+</screen>
+     <para>
+      and validate that there is a <literal>Good signature</literal> and the printed key matches the user's submitted key.
+     </para>
+
+     <para>
+      Note: GitHub's "Verified" label does not display the user's full key fingerprint, and should not be used for validating the key matches.
+     </para>
+    </example>
+   </listitem>
+   <listitem xml:id="reviewing-maintainer-github-id">
+    <para>
+     If the user has specified a <literal>github</literal> account name, ensure they have also specified a <literal>githubId</literal> and verify the two match.
+    </para>
+    <example>
+     <title>Validating a maintainer's GitHub handle and ID</title>
+     <para>
+      Maintainer entries that include a <literal>github</literal> field must also include their <literal>githubId</literal>. People can and do change their GitHub name frequently, and the ID is used as the official and stable identity of the maintainer.
+     </para>
+     <para>
+      Given a maintainer entry like this:
+     </para>
+<programlisting language="nix">
+{
+  example = {
+    email = "user@example.com";
+    name = "Example User";
+    github = "ghost";
+    githubId = 10137;
+  }
+};</programlisting>
+     <para>
+      First, make sure that the listed GitHub handle matches the author of the commit.
+     </para>
+     <para>
+      Then, visit the URL <literal>https://api.github.com/users/<replaceable>ghost</replaceable></literal> and validate that the <literal>id</literal> field matches the provided <literal>githubId</literal>.
+     </para>
+    </example>
+   </listitem>
+  </itemizedlist>
+ </section>
+ <section xml:id="reviewing-contributions-maintainer-teams">
+  <title>Maintainer Teams</title>
+
+  <para>
+   Feel free to create a new maintainer team in <filename>maintainers/team-list.nix</filename> when a group is collectively responsible for a collection of packages. Use taste and personal judgement when deciding if a team is warranted.
+  </para>
+
+  <para>
+   Teams are allowed to define their own rules about membership.
+  </para>
+
+  <para>
+   For example, some teams will represent a business or other group which wants to carefully track its members. Other teams may be very open about who can join, and allow anybody to participate.
+  </para>
+
+  <para>
+   When reviewing changes to a team, read the team's scope and the context around the member list for indications about the team's membership policy.
+  </para>
+
+  <para>
+   In any case, request reviews from the existing team members. If the team lists no specific membership policy, feel free to merge changes to the team after giving the existing members a few days to respond.
+  </para>
+
+  <para>
+   <emphasis>Important:</emphasis> If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
+  </para>
+ </section>
  <section xml:id="reviewing-contributions-other-submissions">
   <title>Other submissions</title>
 
