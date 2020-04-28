@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl ];
 
   preBuild = ''
-    makeFlags="PREFIX=$out PKG_CONFIG=${pkgconfig}/bin/pkg-config"
+    makeFlags="PREFIX=$out PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
   '';
 
   meta = {

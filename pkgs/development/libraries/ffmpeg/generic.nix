@@ -163,7 +163,6 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
-      "--pkg-config=pkg-config" # Override ffmpeg's ./configure assumption that pkg-config is prefixed by the architecture. (e.g. aarch64-unknown-linux-gnu-pkg-config)
   ] ++ optional stdenv.cc.isClang "--cc=clang");
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
