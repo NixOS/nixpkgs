@@ -120,8 +120,8 @@ let
     in loop [] l;
 
   pkgUp = l: r: l // r // {
-    meta     = l.meta // r.meta;
-    passthru = l.passthru // r.passthru;
+    meta     = (l.meta or {}) // (r.meta or {});
+    passthru = (l.passthru or {}) // (r.passthru or {});
   };
 
   coq = coqPackages.coq;
