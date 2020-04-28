@@ -6027,8 +6027,6 @@ in
 
   prettyping = callPackage ../tools/networking/prettyping { };
 
-  prey-bash-client = callPackage ../tools/security/prey { };
-
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
