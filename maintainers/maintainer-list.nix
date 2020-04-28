@@ -1406,6 +1406,16 @@
     githubId = 1103294;
     name = "Christopher Rosset";
   };
+  christianharke = {
+    email = "christian@harke.ch";
+    github = "christianharke";
+    githubId = 13007345;
+    name = "Christian Harke";
+    keys = [{
+      longkeyid = "rsa4096/0x830A9728630966F4";
+      fingerprint = "4EBB 30F1 E89A 541A A7F2  52BE 830A 9728 6309 66F4";
+    }];
+  };
   christopherpoole = {
     email = "mail@christopherpoole.net";
     github = "christopherpoole";
