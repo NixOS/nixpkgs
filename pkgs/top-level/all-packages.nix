@@ -4509,6 +4509,8 @@ in
   kibana = kibana6;
   kibana-oss = kibana6-oss;
 
+  kibi = callPackage ../applications/editors/kibi { };
+
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   klick = callPackage ../applications/audio/klick { };
