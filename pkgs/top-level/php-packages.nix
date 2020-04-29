@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchgit, php, phpWithExtensions, autoconf, pkgconfig, re2c
+{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
 , gettext, bzip2, curl, libxml2, openssl, gmp, icu, oniguruma, libsodium
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
@@ -8,7 +8,8 @@
 
 let
   buildPecl = import ../build-support/build-pecl.nix {
-    inherit php lib;
+    php = php.unwrapped;
+    inherit lib;
     inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
   };
 
@@ -43,7 +44,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/box/box.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/box \
+        makeWrapper ${php}/bin/php $out/bin/box \
           --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
       '';
 
@@ -71,7 +72,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/composer/composer.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/composer \
+        makeWrapper ${php}/bin/php $out/bin/composer \
           --add-flags "$out/libexec/composer/composer.phar" \
           --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
       '';
@@ -163,7 +164,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpcbf/phpcbf.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpcbf \
+        makeWrapper ${php}/bin/php $out/bin/phpcbf \
           --add-flags "$out/libexec/phpcbf/phpcbf.phar"
       '';
 
@@ -190,7 +191,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpcs/phpcs.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpcs \
+        makeWrapper ${php}/bin/php $out/bin/phpcs \
           --add-flags "$out/libexec/phpcs/phpcs.phar"
       '';
 
@@ -217,7 +218,7 @@ in
       installPhase = ''
         mkdir -p $out/bin
         install -D $src $out/libexec/phpstan/phpstan.phar
-        makeWrapper ${phpWithExtensions}/bin/php $out/bin/phpstan \
+        makeWrapper ${php}/bin/php $out/bin/phpstan \
           --add-flags "$out/libexec/phpstan/phpstan.phar"
       '';
 
@@ -537,7 +538,7 @@ in
     };
 
     pdo_oci = buildPecl rec {
-      inherit (php) src version;
+      inherit (php.unwrapped) src version;
 
       pname = "pdo_oci";
       sourceRoot = "php-${version}/ext/pdo_oci";
@@ -548,8 +549,8 @@ in
       internalDeps = [ php.extensions.pdo ];
 
       postPatch = ''
-      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
-    '';
+        sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+      '';
     };
 
     pdo_sqlsrv = buildPecl {
@@ -746,11 +747,11 @@ in
       pname = "php-${name}";
       extensionName = name;
 
-      inherit (php) version src;
+      inherit (php.unwrapped) version src;
       sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
-      nativeBuildInputs = [ php autoconf pkgconfig re2c ];
+      nativeBuildInputs = [ php.unwrapped autoconf pkgconfig re2c ];
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 

@@ -14,8 +14,6 @@ let
     , sha256
     , extraPatches ? []
 
-    , defaultPhpExtensions
-
     # Sapi flags
     , cgiSupport ? true
     , cliSupport ? true
@@ -35,13 +33,6 @@ let
     , ztsSupport ? apxs2Support
     }@args:
       let
-        self = generic args;
-
-        php-packages = (callPackage ../../../top-level/php-packages.nix {
-          php = self;
-          phpWithExtensions = self.withExtensions defaultPhpExtensions;
-        });
-
         # buildEnv wraps php to provide additional extensions and
         # configuration. Its usage is documented in
         # doc/languages-frameworks/php.section.md.
@@ -58,7 +49,7 @@ let
               php = generic filteredArgs;
 
               php-packages = (callPackage ../../../top-level/php-packages.nix {
-                inherit php phpWithExtensions;
+                php = phpWithExtensions;
               });
 
               allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
@@ -249,7 +240,6 @@ let
           passthru = {
             buildEnv = mkBuildEnv {} [];
             withExtensions = mkWithExtensions {} [];
-            inherit (php-packages) packages extensions;
           };
 
           meta = with stdenv.lib; {
@@ -265,7 +255,6 @@ let
   php72base = callPackage generic (_args // {
     version = "7.2.29";
     sha256 = "08xry2fgqgg8s0ym1hh11wkbr36av3zq1bn4krbciw1b7x8gb8ga";
-    defaultPhpExtensions = defaultPhpExtensionsWithHash;
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
@@ -274,7 +263,6 @@ let
   php73base = callPackage generic (_args // {
     version = "7.3.16";
     sha256 = "0bh499v9dfgh9k51w4rird1slb9rh9whp5h37fb84c98d992s1xq";
-    defaultPhpExtensions = defaultPhpExtensionsWithHash;
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
@@ -283,7 +271,6 @@ let
   php74base = callPackage generic (_args // {
     version = "7.4.4";
     sha256 = "17w2m4phhpj76x5fx67vgjrlkcczqvky3f5in1kjg2pch90qz3ih";
-    inherit defaultPhpExtensions;
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([
