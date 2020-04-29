@@ -302,5 +302,5 @@ let
   php72 = php72base.withExtensions defaultPhpExtensionsWithHash;
 
 in {
-  inherit php72base php73base php74base php72 php73 php74;
+  inherit php72 php73 php74;
 }

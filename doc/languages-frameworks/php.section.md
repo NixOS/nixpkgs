@@ -9,17 +9,23 @@
 Several versions of PHP are available on Nix, each of which having a
 wide variety of extensions and libraries available.
 
-The attribute `php` refers to the version of PHP considered most
-stable and thoroughly tested in nixpkgs for any given release of
-NixOS. Note that while this version of PHP may not be the latest major
-release from upstream, any version of PHP supported in nixpkgs may be
-utilized by specifying the desired attribute by version, such as
-`php74`.
+The different versions of PHP that nixpkgs provides are located under
+attributes named based on major and minor version number; e.g.,
+`php74` is PHP 7.4.
 
 Only versions of PHP that are supported by upstream for the entirety
 of a given NixOS release will be included in that release of
 NixOS. See [PHP Supported
 Versions](https://www.php.net/supported-versions.php).
+
+The attribute `php` refers to the version of PHP considered most
+stable and thoroughly tested in nixpkgs for any given release of
+NixOS - not necessarily the latest major release from upstream.
+
+All available PHP attributes are wrappers around their respective
+binary PHP package and provide commonly used extensions this way. The
+real PHP 7.4 package, i.e. the unwrapped one, is available as
+`php74.unwrapped`; see the next section for more details.
 
 Interactive tools built on PHP are put in `php.packages`; composer is
 for example available at `php.packages.composer`.
@@ -30,12 +36,7 @@ opcache extension shipped with PHP is available at
 `php.extensions.opcache` and the third-party ImageMagick extension at
 `php.extensions.imagick`.
 
-The different versions of PHP that nixpkgs provides are located under
-attributes named based on major and minor version number; e.g.,
-`php74` is PHP 7.4 with commonly used extensions installed,
-`php74base` is the same PHP runtime without extensions.
-
-#### Installing PHP with packages
+#### Installing PHP with extensions
 
 A PHP package with specific extensions enabled can be built using
 `php.withExtensions`. This is a function which accepts an anonymous
@@ -68,7 +69,7 @@ php.withExtensions ({ all, ... }: with all; [ opcache imagick ])
 
 `php.withExtensions` provides extensions by wrapping a minimal php
 base package, providing a `php.ini` file listing all extensions to be
-loaded. You can access this package through the `php.unwrappedPhp`
+loaded. You can access this package through the `php.unwrapped`
 attribute; useful if you, for example, need access to the `dev`
 output. The generated `php.ini` file can be accessed through the
 `php.phpIni` attribute.
