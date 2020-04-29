@@ -153,6 +153,7 @@
 , "sloc"
 , "smartdc"
 , "snyk"
+, "snowpack"
 , "socket.io"
 , "speed-test"
 , "ssb-server"
