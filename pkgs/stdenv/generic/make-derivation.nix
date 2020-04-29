@@ -257,8 +257,8 @@ in rec {
           mesonFlags = if mesonFlags == null then null else let
             # See https://mesonbuild.com/Reference-tables.html#cpu-families
             cpuFamily = platform: with platform;
-              /**/ if isAarch64 then "arm"
-              else if isAarch32 then "aarch64"
+              /**/ if isAarch32 then "arm"
+              else if isAarch64 then "aarch64"
               else if isx86_32  then "x86"
               else if isx86_64  then "x86_64"
               else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;

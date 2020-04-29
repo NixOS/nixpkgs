@@ -3,6 +3,7 @@
 , stdenv
 , writeTextDir
 , substituteAll
+, pkgsHostHost
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -57,6 +58,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   setupHook = ./setup-hook.sh;
+
+  # Ensure there will always be a native C compiler when meson is used, as a
+  # workaround until https://github.com/mesonbuild/meson/pull/6512 lands.
+  depsHostHostPropagated = [ pkgsHostHost.stdenv.cc ];
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;
