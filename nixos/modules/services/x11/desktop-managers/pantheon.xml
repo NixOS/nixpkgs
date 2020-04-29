@@ -1,7 +1,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-pantheon">
- <title>Pantheon Destkop</title>
+ <title>Pantheon Desktop</title>
  <para>
   Pantheon is the desktop environment created for the elementary OS distribution. It is written from scratch in Vala, utilizing GNOME technologies with GTK 3 and Granite.
  </para>
