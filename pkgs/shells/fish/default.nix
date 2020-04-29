@@ -97,7 +97,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.1.1";
+    version = "3.1.2";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -107,7 +107,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
-      sha256 = "1f12c56v7n4s0f9mi9xinviwj6kpwlcjwaig1d4vsk5wlgp7ip07";
+      sha256 = "1vblmb3x2k2cb0db5jdyflppnlqsm7i6jjaidyhmvaaw7ch2gffm";
     };
 
     # We don't have access to the codesign executable, so we patch this out.
@@ -197,7 +197,7 @@ let
       homepage = "http://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ocharles cole-h ];
     };
 
     passthru = {
