@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   pname = "tmux";
   version = "3.1";
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" ];
 
   src = fetchFromGitHub {
     owner = "tmux";
