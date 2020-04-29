@@ -12,8 +12,9 @@ let
     fi
   '';
 
-in import ./make-test-python.nix {
+in import ./make-test-python.nix ({ lib, ... }: {
   name = "acme";
+  meta.maintainers = lib.teams.acme.members;
 
   nodes = rec {
     acme = { nodes, lib, ... }: {
@@ -207,4 +208,4 @@ in import ./make-test-python.nix {
               "curl --cacert /tmp/ca.crt https://c.example.test/ | grep -qF 'hello world'"
           )
     '';
-}
+})

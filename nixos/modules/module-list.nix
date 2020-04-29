@@ -196,7 +196,6 @@
   ./security/pam_usb.nix
   ./security/pam_mount.nix
   ./security/polkit.nix
-  ./security/prey.nix
   ./security/rngd.nix
   ./security/rtkit.nix
   ./security/wrappers/default.nix

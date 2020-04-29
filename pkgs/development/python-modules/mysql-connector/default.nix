@@ -1,22 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, protobuf3_6 }:
+{ lib, buildPythonPackage, fetchFromGitHub, python }:
 
 let
-  py = python.override {
-    packageOverrides = self: super: {
-      protobuf = super.protobuf.override {
-        protobuf = protobuf3_6;
-      };
-    };
-  };
+  py = python;
 in buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.19";
+  version = "8.0.20";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "1jscmc5s7mwx43gvxjlqc30ylp5jjpmkqx7s3b9nllbh926p3ixg";
+    sha256 = "1pm98mjbkhwawhni98cjhp0gg3mim75i0sdby77vzrlcrxajxkbw";
   };
 
   propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];
@@ -33,6 +27,7 @@ in buildPythonPackage rec {
       implements the DB API v2.0 specification.
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
+    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
     license = [ lib.licenses.gpl2 ];
     maintainers = with lib.maintainers; [ primeos ];
   };

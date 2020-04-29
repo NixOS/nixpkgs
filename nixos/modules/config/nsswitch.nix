@@ -10,35 +10,36 @@ let
   canLoadExternalModules = config.services.nscd.enable;
   myhostname = canLoadExternalModules;
   mymachines = canLoadExternalModules;
+  # XXX Move these to their respective modules
   nssmdns = canLoadExternalModules && config.services.avahi.nssmdns;
   nsswins = canLoadExternalModules && config.services.samba.nsswins;
   ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
-  sssd = canLoadExternalModules && config.services.sssd.enable;
   resolved = canLoadExternalModules && config.services.resolved.enable;
   googleOsLogin = canLoadExternalModules && config.security.googleOsLogin.enable;
 
-  hostArray = [ "files" ]
-    ++ optional mymachines "mymachines"
-    ++ optional nssmdns "mdns_minimal [NOTFOUND=return]"
-    ++ optional nsswins "wins"
-    ++ optional resolved "resolve [!UNAVAIL=return]"
-    ++ [ "dns" ]
-    ++ optional nssmdns "mdns"
-    ++ optional myhostname "myhostname";
+  hostArray = mkMerge [
+    (mkBefore [ "files" ])
+    (mkIf mymachines [ "mymachines" ])
+    (mkIf nssmdns [ "mdns_minimal [NOTFOUND=return]" ])
+    (mkIf nsswins [ "wins" ])
+    (mkIf resolved [ "resolve [!UNAVAIL=return]" ])
+    (mkAfter [ "dns" ])
+    (mkIf nssmdns (mkOrder 1501 [ "mdns" ])) # 1501 to ensure it's after dns
+    (mkIf myhostname (mkOrder 1600 [ "myhostname" ])) # 1600 to ensure it's always the last
+  ];
 
-  passwdArray = [ "files" ]
-    ++ optional sssd "sss"
-    ++ optional ldap "ldap"
-    ++ optional mymachines "mymachines"
-    ++ optional googleOsLogin "cache_oslogin oslogin"
-    ++ [ "systemd" ];
+  passwdArray = mkMerge [
+    (mkBefore [ "files" ])
+    (mkIf ldap [ "ldap" ])
+    (mkIf mymachines [ "mymachines" ])
+    (mkIf googleOsLogin [ "cache_oslogin oslogin" ])
+    (mkIf canLoadExternalModules (mkAfter [ "systemd" ]))
+  ];
 
-  shadowArray = [ "files" ]
-    ++ optional sssd "sss"
-    ++ optional ldap "ldap";
-
-  servicesArray = [ "files" ]
-    ++ optional sssd "sss";
+  shadowArray = mkMerge [
+    (mkBefore [ "files" ])
+    (mkIf ldap [ "ldap" ])
+  ];
 
 in {
   options = {
@@ -61,16 +62,72 @@ in {
         };
     };
 
-    system.nssHosts = mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "mdns" ];
-      description = ''
-        List of host entries to configure in <filename>/etc/nsswitch.conf</filename>.
-      '';
-    };
+    system.nssDatabases = {
+      passwd = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of passwd entries to configure in <filename>/etc/nsswitch.conf</filename>.
 
+          Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
+      group = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of group entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
+      shadow = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of shadow entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
+      hosts = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of hosts entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended, and "dns" and "myhostname" are always appended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
+      services = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of services entries to configure in <filename>/etc/nsswitch.conf</filename>.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+    };
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "system" "nssHosts" ] [ "system" "nssDatabases" "hosts" ])
+  ];
 
   config = {
     assertions = [
@@ -87,23 +144,28 @@ in {
     ];
 
     # Name Service Switch configuration file.  Required by the C
-    # library.  !!! Factor out the mdns stuff.  The avahi module
-    # should define an option used by this module.
+    # library.
     environment.etc."nsswitch.conf".text = ''
-      passwd:    ${concatStringsSep " " passwdArray}
-      group:     ${concatStringsSep " " passwdArray}
-      shadow:    ${concatStringsSep " " shadowArray}
+      passwd:    ${concatStringsSep " " config.system.nssDatabases.passwd}
+      group:     ${concatStringsSep " " config.system.nssDatabases.group}
+      shadow:    ${concatStringsSep " " config.system.nssDatabases.shadow}
 
-      hosts:     ${concatStringsSep " " config.system.nssHosts}
+      hosts:     ${concatStringsSep " " config.system.nssDatabases.hosts}
       networks:  files
 
       ethers:    files
-      services:  ${concatStringsSep " " servicesArray}
+      services:  ${concatStringsSep " " config.system.nssDatabases.services}
       protocols: files
       rpc:       files
     '';
 
-    system.nssHosts = hostArray;
+    system.nssDatabases = {
+      passwd = passwdArray;
+      group = passwdArray;
+      shadow = shadowArray;
+      hosts = hostArray;
+      services = mkBefore [ "files" ];
+    };
 
     # Systemd provides nss-myhostname to ensure that our hostname
     # always resolves to a valid IP address.  It returns all locally

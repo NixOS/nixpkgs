@@ -3,7 +3,7 @@ pkgconfig, libtool,
 gtk2,
 libxml2,
 libxslt,
-libusb,
+libusb-compat-0_1,
 sane-backends,
 rpm, cpio,
 getopt,
@@ -263,7 +263,7 @@ stdenv.mkDerivation rec {
     gtk2
     libxml2
     libtool
-    libusb
+    libusb-compat-0_1
     sane-backends
     makeWrapper
   ];

@@ -60,6 +60,8 @@ mapAliases ({
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
+  buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
+  buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   catfish = xfce.catfish; # added 2019-12-22
@@ -166,6 +168,7 @@ mapAliases ({
   gnuradio-rds = gr-rds; # added 2019-05-27
   gnuradio-osmosdr = gr-osmosdr; # added 2019-05-27
   gnustep-make = gnustep.make; # added 2016-7-6
+  go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
   goimports = gotools; # added 2018-09-16
@@ -212,6 +215,7 @@ mapAliases ({
   keepassx-reboot = keepassx-community; # added 2017-02-01
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keybase-go = keybase;  # added 2016-08-24
+  kinetic-cpp-client = throw "kinetic-cpp-client has been removed from nixpkgs, as it's abandoned."; # 2020-04-28
   kicad-with-packages3d = kicad; # added 2019-11-25
   krename-qt5 = krename; # added 2017-02-18
   keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # 2019-12-10
@@ -249,7 +253,9 @@ mapAliases ({
   libtxc_dxtn = throw "removed 2020-03-16, now integrated in Mesa";
   libtxc_dxtn_s2tc = throw "removed 2020-03-16, now integrated in Mesa";
   libudev = udev; # added 2018-04-25
+  libusb = libusb1; # added 2020-04-28
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
+  libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
@@ -432,6 +438,7 @@ mapAliases ({
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   qtpfsgui = throw "Is now luminanceHDR"; # added 2019-06-26
+  quaternion-git = throw "quaternion-git has been removed in favor of the stable version 'quaternion'"; # added 2020-04-09
   rdf4store = throw "rdf4store has been removed from nixpkgs."; # added 2019-12-21
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19

@@ -458,7 +458,7 @@ in
   ];
 
   meta = {
-    maintainers = with lib.maintainers; [ abbradar fpletz globin m1cr0man ];
+    maintainers = lib.teams.acme.members;
     doc = ./acme.xml;
   };
 }

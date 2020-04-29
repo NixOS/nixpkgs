@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libusb, readline }:
+{ stdenv, fetchurl, libusb-compat-0_1, readline }:
 
 stdenv.mkDerivation {
   pname = "libnfc";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0wj0iwwcpmpalyk61aa7yc6i4p9hgdajkrgnlswgk0vnwbc78pll";
   };
 
-  buildInputs = [ libusb readline ];
+  buildInputs = [ libusb-compat-0_1 readline ];
 
   meta = with stdenv.lib; {
     description = "Open source library libnfc for Near Field Communication";
