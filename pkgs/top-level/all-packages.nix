@@ -9457,9 +9457,9 @@ in
   php73Extensions = recurseIntoAttrs php73.extensions;
   php74Extensions = recurseIntoAttrs php74.extensions;
 
-  inherit (callPackages ../development/interpreters/php {
+  inherit (callPackage ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  }) php74 php73 php72 php74base php73base php72base;
+  }) php74 php73 php72;
 
   picoc = callPackage ../development/interpreters/picoc {};
 

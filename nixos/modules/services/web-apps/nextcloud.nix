@@ -11,8 +11,8 @@ let
       base = pkgs.php74;
     in
       base.buildEnv {
-        extensions = e: with e;
-          base.enabledExtensions ++ [
+        extensions = { enabled, all }: with all;
+          enabled ++ [
             apcu redis memcached imagick
           ];
         extraConfig = phpOptionsStr;
