@@ -1467,6 +1467,8 @@ in {
 
   transformers = callPackage ../development/python-modules/transformers { };
 
+  transforms3d = callPackage ../development/python-modules/transforms3d { };
+
   sentinel = callPackage ../development/python-modules/sentinel { };
 
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};
