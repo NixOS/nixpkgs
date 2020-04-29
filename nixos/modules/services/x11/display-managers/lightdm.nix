@@ -132,7 +132,7 @@ in
       };
 
       background = mkOption {
-        type = types.str;
+        type = types.path;
         # Manual cannot depend on packages, we are actually setting the default in config below.
         defaultText = "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
         description = ''
