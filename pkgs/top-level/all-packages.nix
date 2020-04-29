@@ -13308,7 +13308,7 @@ in
 
   liburcu = callPackage ../development/libraries/liburcu { };
 
-  libusb = callPackage ../development/libraries/libusb {};
+  libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix {};
 
   libusb1 = callPackage ../development/libraries/libusb1 {
     inherit (darwin) libobjc;

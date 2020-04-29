@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, go-md2man, installShellFiles, libusb }:
+{ stdenv, fetchFromGitHub, go-md2man, installShellFiles, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
   pname = "teensy-loader-cli";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yx8vsh6b29pqr4zb6sx47429i9x51hj9psn8zksfz75j5ivfd5i";
   };
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   nativeBuildInputs = [ go-md2man installShellFiles ];
 
