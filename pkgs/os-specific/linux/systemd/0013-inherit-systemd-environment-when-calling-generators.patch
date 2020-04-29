@@ -1,4 +1,4 @@
-From d16a7d5580adcf5737c7be3b02d411097a498256 Mon Sep 17 00:00:00 2001
+From 0b0510aa72cf8026f34f300efa3f150f45971404 Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Fri, 2 Nov 2018 21:15:42 +0100
 Subject: [PATCH 13/18] inherit systemd environment when calling generators.

@@ -1,4 +1,4 @@
-From be87849145bc50ab0b16c63fe2b748de13974f0e Mon Sep 17 00:00:00 2001
+From 3dbcdab1ba22c4eeca6d61718c09bcb9b5551764 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Mon, 26 Feb 2018 14:25:57 +0000
 Subject: [PATCH 12/18] Install default configuration into $out/share/factory

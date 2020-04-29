@@ -1,4 +1,4 @@
-From 1e2f2f80e106910bbf3fd27438b794937ff3a1a8 Mon Sep 17 00:00:00 2001
+From bdd3ff777dd8253ff5732118dd6de0fa9a9b95fe Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
 Subject: [PATCH 02/18] Don't try to unmount /nix or /nix/store
