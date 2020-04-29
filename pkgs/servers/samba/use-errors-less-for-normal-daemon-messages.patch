@@ -1,0 +1,100 @@
+From a1e3ac7c70f701cd499ed7967dbd3b0ba1d3edb5 Mon Sep 17 00:00:00 2001
+From: Matthew Bauer <mjbauer95@gmail.com>
+Date: Tue, 28 Apr 2020 19:54:08 -0500
+Subject: [PATCH] Use errors less for normal daemon messages
+
+These should be considered info / level=6 messages instead.
+
+Upstream PR: https://gitlab.com/samba-team/samba/-/merge_requests/1306
+---
+ lib/util/become_daemon.c          | 4 ++--
+ source3/nmbd/nmbd.c               | 2 +-
+ source3/nmbd/nmbd_become_lmb.c    | 2 +-
+ source3/nmbd/nmbd_subnetdb.c      | 2 +-
+ source3/winbindd/winbindd.c       | 2 +-
+ source3/winbindd/winbindd_cache.c | 2 +-
+ 6 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/lib/util/become_daemon.c b/lib/util/become_daemon.c
+index 89991b7981c..638b7c93a73 100644
+--- a/lib/util/become_daemon.c
++++ b/lib/util/become_daemon.c
+@@ -132,8 +132,8 @@ void daemon_ready(const char *daemon)
+ 	sd_notifyf(0, "READY=1\nSTATUS=%s: ready to serve connections...",
+ 		   daemon);
+ #endif
+-	DBG_ERR("daemon '%s' finished starting up and ready to serve "
+-		"connections\n", daemon);
++	DBG_INFO("daemon '%s' finished starting up and ready to serve "
++		 "connections\n", daemon);
+ }
+ 
+ void daemon_status(const char *daemon, const char *msg)
+diff --git a/source3/nmbd/nmbd.c b/source3/nmbd/nmbd.c
+index 0b881d13f7b..cd77b191774 100644
+--- a/source3/nmbd/nmbd.c
++++ b/source3/nmbd/nmbd.c
+@@ -56,7 +56,7 @@ struct tevent_context *nmbd_event_context(void)
+ 
+ static void terminate(struct messaging_context *msg)
+ {
+-	DEBUG(0,("Got SIGTERM: going down...\n"));
++	DEBUG(6,("Got SIGTERM: going down...\n"));
+ 
+ 	/* Write out wins.dat file if samba is a WINS server */
+ 	wins_write_database(0,False);
+diff --git a/source3/nmbd/nmbd_become_lmb.c b/source3/nmbd/nmbd_become_lmb.c
+index 80c699f2d91..1cb51590f88 100644
+--- a/source3/nmbd/nmbd_become_lmb.c
++++ b/source3/nmbd/nmbd_become_lmb.c
+@@ -140,7 +140,7 @@ static void unbecome_local_master_success(struct subnet_record *subrec,
+ 
+ 	memcpy((char *)&force_new_election, userdata->data, sizeof(bool));
+ 
+-	DEBUG(3,("unbecome_local_master_success: released name %s.\n",
++	DEBUG(6,("unbecome_local_master_success: released name %s.\n",
+ 		nmb_namestr(released_name)));
+ 
+ 	/* Now reset the workgroup and server state. */
+diff --git a/source3/nmbd/nmbd_subnetdb.c b/source3/nmbd/nmbd_subnetdb.c
+index 5c9e4c7eb26..3afb3894757 100644
+--- a/source3/nmbd/nmbd_subnetdb.c
++++ b/source3/nmbd/nmbd_subnetdb.c
+@@ -250,7 +250,7 @@ bool create_subnets(void)
+ 		daemon_status("nmbd",
+ 			      "No local IPv4 non-loopback interfaces "
+ 			      "available, waiting for interface ...");
+-		DEBUG(0,("NOTE: NetBIOS name resolution is not supported for "
++		DEBUG(6,("NOTE: NetBIOS name resolution is not supported for "
+ 			 "Internet Protocol Version 6 (IPv6).\n"));
+ 	}
+ 
+diff --git a/source3/winbindd/winbindd.c b/source3/winbindd/winbindd.c
+index 4397a1bc0d1..d4b93bad218 100644
+--- a/source3/winbindd/winbindd.c
++++ b/source3/winbindd/winbindd.c
+@@ -244,7 +244,7 @@ static void winbindd_sig_term_handler(struct tevent_context *ev,
+ 
+ 	TALLOC_FREE(p);
+ 
+-	DEBUG(0,("Got sig[%d] terminate (is_parent=%d)\n",
++	DEBUG(6,("Got sig[%d] terminate (is_parent=%d)\n",
+ 		 signum, is_parent));
+ 	terminate(is_parent);
+ }
+diff --git a/source3/winbindd/winbindd_cache.c b/source3/winbindd/winbindd_cache.c
+index 63368fd1821..730e08acfb9 100644
+--- a/source3/winbindd/winbindd_cache.c
++++ b/source3/winbindd/winbindd_cache.c
+@@ -3200,7 +3200,7 @@ bool initialize_winbindd_cache(void)
+ 	if (cache_bad) {
+ 		char *db_path;
+ 
+-		DEBUG(0,("initialize_winbindd_cache: clearing cache "
++		DEBUG(6,("initialize_winbindd_cache: clearing cache "
+ 			"and re-creating with version number %d\n",
+ 			WINBINDD_CACHE_VERSION ));
+ 
+-- 
+2.23.3
+

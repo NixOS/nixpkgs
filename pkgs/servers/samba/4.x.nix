@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
+    ./use-errors-less-for-normal-daemon-messages.patch
   ];
 
   nativeBuildInputs = [
