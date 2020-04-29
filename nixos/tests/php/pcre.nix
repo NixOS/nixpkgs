@@ -1,9 +1,7 @@
 let
   testString = "can-use-subgroups";
-in import ../make-test-python.nix ({lib, ...}: {
+in import ../make-test-python.nix ({ ...}: {
   name = "php-httpd-pcre-jit-test";
-  meta.maintainers = lib.teams.php.members;
-
   machine = { lib, pkgs, ... }: {
     time.timeZone = "UTC";
     services.httpd = {
