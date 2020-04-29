@@ -79,7 +79,6 @@ stdenv.mkDerivation (rec {
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional withOpenssl "--with-openssl"
-    ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
     ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "glibc") [
