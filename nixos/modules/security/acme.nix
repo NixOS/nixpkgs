@@ -87,13 +87,13 @@ let
         default = {};
         example = literalExample ''
           {
-            "example.org" = "/srv/http/nginx";
+            "example.org" = null;
             "mydomain.org" = null;
           }
         '';
         description = ''
-          A list of extra domain names, which are included in the one certificate to be issued, with their
-          own server roots if needed.
+          A list of extra domain names, which are included in the one certificate to be issued.
+          Setting a distinct server root is deprecated and not functional in 20.03+
         '';
       };
 
