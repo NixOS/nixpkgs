@@ -21,12 +21,10 @@ python3Packages.buildPythonApplication rec {
     pygments
   ];
 
+  # Hy does not include tests in the source distribution from PyPI, so only test executable.
   checkPhase = ''
-    PATH=$out/bin:$PATH pytest
+    $out/bin/hy --help > /dev/null
   '';
-
-  # Hy does not include tests in the source distribution from PyPI, so skip testing.
-  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A LISP dialect embedded in Python";
