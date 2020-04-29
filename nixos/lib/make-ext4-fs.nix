@@ -73,7 +73,14 @@ pkgs.stdenv.mkDerivation {
       fi
 
       echo "Resizing to minimum allowed size"
-      resize2fs -M $img
+      # The previous fsck is executed read-only, and it doesn't update the timestamp bundled
+      # in the EXT filesystem which holds the time it was last checked. If resize2fs is run
+      # without the -f flag, it would fail since it only allows to run if the file system was
+      # checked after its last mount. Since the filesystem was deemed safe by fsck immediately
+      # before, we can safely let resize2fs skip these checks.
+      # Note that due to a regression in cptofs and some other fortunate coincidences this worked
+      # before, but it will break when the regression in LKL is fixed.
+      resize2fs -f -M $img
 
       # And a final fsck, because of the previous truncating.
       fsck.ext4 -n -f $img
