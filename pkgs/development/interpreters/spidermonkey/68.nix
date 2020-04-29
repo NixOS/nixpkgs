@@ -17,6 +17,13 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
 
+  patches = optionals stdenv.isAarch32 [
+    # Firefox only supports Android on armv7. Systems that use glibc won't
+    # compile without disabling this feature that relies on an Android header.
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
+    ./bug-1526653.patch
+  ];
+
   nativeBuildInputs = [
     autoconf213
     pkgconfig
