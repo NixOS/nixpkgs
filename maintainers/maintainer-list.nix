@@ -4577,6 +4577,12 @@
     githubId = 2057309;
     name = "Sergey Sofeychuk";
   };
+  lynty = {
+    email = "ltdong93+nix@gmail.com";
+    github = "lynty";
+    githubId = 39707188;
+    name = "Lynn Dong";
+  };
   lyt = {
     email = "wheatdoge@gmail.com";
     name = "Tim Liou";
