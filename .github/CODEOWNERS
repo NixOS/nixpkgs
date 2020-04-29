@@ -176,7 +176,6 @@
 
 # PHP
 /doc/languages-frameworks/php.section.md @etu
-/nixos/tests/php                         @etu
-/pkgs/build-support/build-pecl.nix       @etu
 /pkgs/development/interpreters/php       @etu
 /pkgs/top-level/php-packages.nix         @etu
+/pkgs/build-support/build-pecl.nix       @etu
