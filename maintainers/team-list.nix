@@ -43,6 +43,17 @@ with lib.maintainers; {
     scope = "Maintain GNOME desktop environment and platform.";
   };
 
+  php = {
+    members = [
+      aanderse
+      etu
+      globin
+      ma27
+      talyz
+    ];
+    scope = "Maintain PHP related packages and extensions.";
+  };
+
   podman = {
     members = [
       adisbladis
