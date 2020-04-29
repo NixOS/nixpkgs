@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "golangci-lint";
-  version = "1.25.0";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "0xf9chk6f1ydg2wyi6wzj2fxl641z7iyk6spp5gb1chq7plsi8sm";
+    sha256 = "04r26nn72myacs6v2jq8mi4kjik82iwsh6w59h4k9yk0my3fjwia";
   };
 
-  modSha256 = "15lb8y4kj2h514nl5517ah3ml9d2i71zv6ah08lpycz1b4v9hlwv";
+  modSha256 = "1pz5f2hv2lssiwsp60hsycg2ijyafb7r5fl2yrvflqg547k3n8x2";
   subPackages = [ "cmd/golangci-lint" ];
 
   meta = with lib; {
