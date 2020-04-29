@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
-, curl, grantlee, libgit2, libusb, libssh2, libxml2, libxslt, libzip, zlib
+, curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
 }:
 
@@ -83,7 +83,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     libdc googlemaps
-    curl grantlee libgit2 libssh2 libusb libxml2 libxslt libzip
+    curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
     qtbase qtconnectivity qtsvg qttools qtwebkit
   ];
 

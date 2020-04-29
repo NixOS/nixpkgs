@@ -1,5 +1,5 @@
 { stdenv, autoconf, automake, pkgconfig, gettext, libtool, bison
-, flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb, readline
+, flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb-compat-0_1, readline
 , python3
 , svfSupport ? true
 , bsdlSupport ? true
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gettext autoconf automake libtool bison flex which
-    subversion makeWrapper readline libftdi libusb python3 ];
+    subversion makeWrapper readline libftdi libusb-compat-0_1 python3 ];
 
   configureFlags = [
     (stdenv.lib.enableFeature svfSupport   "svf")

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libusb, readline ? null }:
+{ stdenv, fetchFromGitHub, libusb-compat-0_1, readline ? null }:
 
 let
   version = "0.25";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     sha256 = "0prgwb5vx6fd4bj12ss1bbb6axj2kjyriyjxqrzd58s5jyyy8d3c";
   };
 
-  buildInputs = [ libusb readline ];
+  buildInputs = [ libusb-compat-0_1 readline ];
   makeFlags = [ "PREFIX=$(out)" "INSTALL=install" ] ++
     (if readline == null then [ "WITHOUT_READLINE=1" ] else []);
 

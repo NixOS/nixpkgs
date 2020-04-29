@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, libftdi1, libusb, pkgconfig
+, gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkgconfig
 , python, pythonPackages
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libftdi1
-    libusb
+    libusb-compat-0_1
     python
     pythonPackages.intelhex
   ];

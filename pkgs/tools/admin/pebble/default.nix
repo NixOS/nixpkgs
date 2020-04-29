@@ -21,6 +21,6 @@ in buildGoPackage {
     homepage = "https://github.com/letsencrypt/pebble";
     description = "A miniature version of Boulder, Pebble is a small RFC 8555 ACME test server not suited for a production CA";
     license = [ lib.licenses.mpl20 ];
-    maintainers = with lib.maintainers; [ emily ];
+    maintainers = lib.teams.acme.members;
   };
 }

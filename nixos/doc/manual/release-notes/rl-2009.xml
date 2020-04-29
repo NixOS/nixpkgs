@@ -28,6 +28,11 @@
    </listitem>
    <listitem>
     <para>
+     We now distribute a GNOME ISO.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      PHP now defaults to PHP 7.4, updated from 7.3.
     </para>
    </listitem>
