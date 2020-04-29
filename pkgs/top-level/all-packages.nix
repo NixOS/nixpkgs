@@ -19437,6 +19437,7 @@ in
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
+    botan = botan.override (x: { openssl = null; });
   };
 
   inherit (ocaml-ng.ocamlPackages_4_01_0) monotoneViz;
