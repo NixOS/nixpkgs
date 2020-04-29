@@ -51,7 +51,7 @@ in
         description = "An application for building and managing Phars";
         license = licenses.mit;
         homepage = "https://box-project.github.io/box2/";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
@@ -80,7 +80,7 @@ in
         description = "Dependency Manager for PHP";
         license = licenses.mit;
         homepage = "https://getcomposer.org/";
-        maintainers = with maintainers; [ globin offline ];
+        maintainers = with maintainers; [ offline ] ++ teams.php.members;
       };
     };
 
@@ -107,7 +107,7 @@ in
         description = "A tool to automatically fix PHP coding standards issues";
         license = licenses.mit;
         homepage = "http://cs.sensiolabs.org/";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
@@ -144,7 +144,7 @@ in
         description = "This tool check syntax of PHP files faster than serial check with fancier output";
         license = licenses.bsd2;
         homepage = "https://github.com/JakubOnderka/PHP-Parallel-Lint";
-        maintainers = with maintainers; [ jtojnar ];
+        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
       };
     };
 
@@ -171,7 +171,7 @@ in
         description = "PHP coding standard beautifier and fixer";
         license = licenses.bsd3;
         homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
-        maintainers = with maintainers; [ cmcdragonkai etu ];
+        maintainers = with maintainers; [ cmcdragonkai ] ++ teams.php.members;
       };
     };
 
@@ -198,7 +198,7 @@ in
         description = "PHP coding standard tool";
         license = licenses.bsd3;
         homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
-        maintainers = with maintainers; [ javaguirre etu ];
+        maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
       };
     };
 
@@ -224,15 +224,15 @@ in
       meta = with pkgs.lib; {
         description = "PHP Static Analysis Tool";
         longDescription = ''
-        PHPStan focuses on finding errors in your code without actually running
-        it. It catches whole classes of bugs even before you write tests for the
-        code. It moves PHP closer to compiled languages in the sense that the
-        correctness of each line of the code can be checked before you run the
-        actual line.
-      '';
+          PHPStan focuses on finding errors in your code without actually
+          running it. It catches whole classes of bugs even before you write
+          tests for the code. It moves PHP closer to compiled languages in the
+          sense that the correctness of each line of the code can be checked
+          before you run the actual line.
+        '';
         license = licenses.mit;
         homepage = "https://github.com/phpstan/phpstan";
-        maintainers = with maintainers; [ etu ];
+        maintainers = teams.php.members;
       };
     };
 
@@ -259,6 +259,7 @@ in
         description = "A static analysis tool for finding errors in PHP applications";
         license = licenses.mit;
         homepage = "https://github.com/vimeo/psalm";
+        maintainers = teams.php.members;
       };
     };
 
@@ -285,7 +286,7 @@ in
         description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
         license = licenses.mit;
         homepage = "https://psysh.org/";
-        maintainers = with maintainers; [ caugner ];
+        maintainers = with maintainers; [ caugner ] ++ teams.php.members;
       };
     };
   };
@@ -308,6 +309,8 @@ in
       checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
       makeFlags = [ "phpincludedir=$(dev)/include" ];
       outputs = [ "out" "dev" ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     apcu_bc = buildPecl {
@@ -320,6 +323,8 @@ in
         php.extensions.apcu
         pcre'
       ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     ast = buildPecl {
@@ -327,6 +332,8 @@ in
       pname = "ast";
 
       sha256 = "16c5isldm4csjbcvz1qk2mmrhgvh24sxsp6w6f5a37xpa3vciawp";
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     couchbase = buildPecl rec {
@@ -374,6 +381,7 @@ in
         '')
       ];
 
+      meta.maintainers = lib.teams.php.members;
       meta.broken = isPhp74; # Build error
     };
 
@@ -406,6 +414,7 @@ in
         '';
         license = licenses.php301;
         homepage = "https://bitbucket.org/osmanov/pecl-event/";
+        maintainers = teams.php.members;
       };
     };
 
@@ -418,6 +427,8 @@ in
       configureFlags = [ "--enable-igbinary" ];
       makeFlags = [ "phpincludedir=$(dev)/include" ];
       outputs = [ "out" "dev" ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     imagick = buildPecl {
@@ -429,6 +440,8 @@ in
       configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
       nativeBuildInputs = [ pkgs.pkgconfig ];
       buildInputs = [ pcre' ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     mailparse = buildPecl {
@@ -440,6 +453,8 @@ in
       postConfigure = ''
         echo "#define HAVE_MBSTRING 1" >> config.h
       '';
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     maxminddb = buildPecl rec {
@@ -459,7 +474,7 @@ in
       meta = with pkgs.lib; {
         description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";
         license = with licenses; [ asl20 ];
-        maintainers = with maintainers; [ ajs124 das_j ];
+        maintainers = with maintainers; [ ajs124 das_j ] ++ teams.php.members;
       };
     };
 
@@ -486,6 +501,8 @@ in
 
       nativeBuildInputs = [ pkgs.pkgconfig ];
       buildInputs = with pkgs; [ cyrus_sasl zlib ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     mongodb = buildPecl {
@@ -503,6 +520,8 @@ in
         zlib
         pcre'
       ] ++ lib.optional (pkgs.stdenv.isDarwin) pkgs.darwin.apple_sdk.frameworks.Security;
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     oci8 = buildPecl {
@@ -516,6 +535,8 @@ in
       postPatch = ''
         sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
       '';
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     pcov = buildPecl {
@@ -525,6 +546,8 @@ in
       sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
 
       buildInputs = [ pcre' ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     pcs = buildPecl {
@@ -533,6 +556,7 @@ in
 
       sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
 
+      meta.maintainers = lib.teams.php.members;
       meta.broken = isPhp74; # Build error
     };
 
@@ -548,8 +572,10 @@ in
       internalDeps = [ php.extensions.pdo ];
 
       postPatch = ''
-      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
-    '';
+        sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+      '';
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     pdo_sqlsrv = buildPecl {
@@ -561,6 +587,8 @@ in
       internalDeps = [ php.extensions.pdo ];
 
       buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     php_excel = buildPecl rec {
@@ -576,6 +604,8 @@ in
       };
 
       configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     pinba = let
@@ -601,6 +631,7 @@ in
           statistics server for PHP using MySQL as a read-only interface.
         '';
         homepage = "http://pinba.org/";
+        maintainers = teams.php.members;
       };
     };
 
@@ -618,6 +649,7 @@ in
         '';
         license = licenses.bsd3;
         homepage = "https://developers.google.com/protocol-buffers/";
+        maintainers = teams.php.members;
       };
     };
 
@@ -653,6 +685,8 @@ in
         session
       ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
         hash ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     sqlsrv = buildPecl {
@@ -662,6 +696,8 @@ in
       sha256 = "1kv4krk1w4hri99b0sdgwgy9c4y0yh217wx2y3irhkfi46kdrjnw";
 
       buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     v8 = buildPecl {
@@ -672,6 +708,8 @@ in
 
       buildInputs = [ pkgs.v8_6_x ];
       configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
+
+      meta.maintainers = lib.teams.php.members;
       meta.broken = true;
     };
 
@@ -683,6 +721,8 @@ in
 
       buildInputs = [ pkgs.v8_6_x ];
       configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
+
+      meta.maintainers = lib.teams.php.members;
       meta.broken = true;
     };
 
@@ -696,6 +736,8 @@ in
       checkTarget = "test";
 
       zendExtension = true;
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     yaml = buildPecl {
@@ -709,6 +751,8 @@ in
       ];
 
       nativeBuildInputs = [ pkgs.pkgconfig ];
+
+      meta.maintainers = lib.teams.php.members;
     };
 
     zmq = buildPecl {
@@ -723,6 +767,7 @@ in
 
       nativeBuildInputs = [ pkgs.pkgconfig ];
 
+      meta.maintainers = lib.teams.php.members;
       meta.broken = isPhp73;
     };
   } // (let
@@ -782,6 +827,8 @@ in
                               --prune-empty-dirs \
                               . $dev/include/
       '';
+
+      meta.maintainers = lib.teams.php.members;
     });
 
     # This list contains build instructions for different modules that one may

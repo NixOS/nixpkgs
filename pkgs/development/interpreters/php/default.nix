@@ -138,9 +138,9 @@ let
 
     meta = with stdenv.lib; {
       description = "An HTML-embedded scripting language";
-      homepage = "https://www.php.net/";
+      homepage = "https://www.php.net";
       license = licenses.php301;
-      maintainers = with maintainers; [ globin etu ma27 ];
+      maintainers = teams.php.members;
       platforms = platforms.all;
       outputsToInstall = [ "out" "dev" ];
     };
@@ -194,6 +194,7 @@ let
             passthru = {
               inherit buildEnv withExtensions enabledExtensions;
               inherit (php-packages) packages extensions;
+              inherit (php) meta;
             };
             paths = [ php ];
             postBuild = ''
