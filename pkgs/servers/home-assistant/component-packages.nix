@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.108.7";
+  version = "0.109.0";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -42,11 +42,13 @@
     "arduino" = ps: with ps; [ ]; # missing inputs: PyMata
     "arest" = ps: with ps; [ ];
     "arlo" = ps: with ps; [ ha-ffmpeg]; # missing inputs: pyarlo
+    "arris_tg2492lg" = ps: with ps; [ ]; # missing inputs: arris-tg2492lg
     "aruba" = ps: with ps; [ pexpect];
     "arwn" = ps: with ps; [ aiohttp-cors hbmqtt paho-mqtt];
     "asterisk_cdr" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
     "asterisk_mbox" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
     "asuswrt" = ps: with ps; [ ]; # missing inputs: aioasuswrt
+    "atag" = ps: with ps; [ ]; # missing inputs: pyatag
     "aten_pe" = ps: with ps; [ ]; # missing inputs: atenpdu
     "atome" = ps: with ps; [ ]; # missing inputs: pyatome
     "august" = ps: with ps; [ ]; # missing inputs: py-august
@@ -86,7 +88,7 @@
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
     "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
     "bom" = ps: with ps; [ ]; # missing inputs: bomradarloop
-    "braviatv" = ps: with ps; [ bravia-tv getmac];
+    "braviatv" = ps: with ps; [ bravia-tv];
     "broadlink" = ps: with ps; [ broadlink];
     "brother" = ps: with ps; [ ]; # missing inputs: brother
     "brottsplatskartan" = ps: with ps; [ ]; # missing inputs: brottsplatskartan
@@ -139,7 +141,7 @@
     "datadog" = ps: with ps; [ datadog];
     "ddwrt" = ps: with ps; [ ];
     "deconz" = ps: with ps; [ ]; # missing inputs: pydeconz
-    "decora" = ps: with ps; [ ]; # missing inputs: bluepy decora
+    "decora" = ps: with ps; [ bluepy]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
     "default_config" = ps: with ps; [ pynacl aiohttp-cors defusedxml distro hass-nabucasa netdisco sqlalchemy zeroconf]; # missing inputs: home-assistant-frontend
     "delijn" = ps: with ps; [ ]; # missing inputs: pydelijn
@@ -327,7 +329,7 @@
     "hive" = ps: with ps; [ ]; # missing inputs: pyhiveapi
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "homeassistant" = ps: with ps; [ ];
-    "homekit" = ps: with ps; [ HAP-python];
+    "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors]; # missing inputs: base36 fnvhash
     "homekit_controller" = ps: with ps; [ ]; # missing inputs: aiohomekit[IP]
     "homematic" = ps: with ps; [ pyhomematic];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
@@ -467,7 +469,7 @@
     "microsoft_face" = ps: with ps; [ aiohttp-cors];
     "microsoft_face_detect" = ps: with ps; [ aiohttp-cors];
     "microsoft_face_identify" = ps: with ps; [ aiohttp-cors];
-    "miflora" = ps: with ps; [ ]; # missing inputs: bluepy miflora
+    "miflora" = ps: with ps; [ bluepy]; # missing inputs: miflora
     "mikrotik" = ps: with ps; [ ]; # missing inputs: librouteros
     "mill" = ps: with ps; [ ]; # missing inputs: millheater
     "min_max" = ps: with ps; [ ];
@@ -548,6 +550,7 @@
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy]; # missing inputs: opencv-python-headless
+    "openerz" = ps: with ps; [ ]; # missing inputs: openerz-api
     "openevse" = ps: with ps; [ ]; # missing inputs: openevsewifi
     "openexchangerates" = ps: with ps; [ ];
     "opengarage" = ps: with ps; [ ];
@@ -567,7 +570,7 @@
     "otp" = ps: with ps; [ pyotp];
     "owntracks" = ps: with ps; [ pynacl aiohttp-cors];
     "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
-    "panasonic_viera" = ps: with ps; [ wakeonlan]; # missing inputs: panasonic_viera
+    "panasonic_viera" = ps: with ps; [ ]; # missing inputs: panasonic_viera
     "pandora" = ps: with ps; [ pexpect];
     "panel_custom" = ps: with ps; [ aiohttp-cors]; # missing inputs: home-assistant-frontend
     "panel_iframe" = ps: with ps; [ aiohttp-cors]; # missing inputs: home-assistant-frontend
@@ -576,6 +579,7 @@
     "persistent_notification" = ps: with ps; [ ];
     "person" = ps: with ps; [ ];
     "philips_js" = ps: with ps; [ ]; # missing inputs: ha-philipsjs
+    "pi4ioe5v9xxxx" = ps: with ps; [ ]; # missing inputs: pi4ioe5v9xxxx
     "pi_hole" = ps: with ps; [ ]; # missing inputs: hole
     "picotts" = ps: with ps; [ ];
     "piglow" = ps: with ps; [ ]; # missing inputs: piglow
@@ -603,7 +607,6 @@
     "pulseaudio_loopback" = ps: with ps; [ ];
     "push" = ps: with ps; [ aiohttp-cors];
     "pushbullet" = ps: with ps; [ pushbullet];
-    "pushetta" = ps: with ps; [ ]; # missing inputs: pushetta
     "pushover" = ps: with ps; [ pushover-complete];
     "pushsafer" = ps: with ps; [ ];
     "pvoutput" = ps: with ps; [ ];
@@ -761,8 +764,8 @@
     "syncthru" = ps: with ps; [ ]; # missing inputs: pysyncthru
     "synology" = ps: with ps; [ ]; # missing inputs: py-synology
     "synology_chat" = ps: with ps; [ ];
+    "synology_dsm" = ps: with ps; [ ]; # missing inputs: python-synology
     "synology_srm" = ps: with ps; [ ]; # missing inputs: synology-srm
-    "synologydsm" = ps: with ps; [ ]; # missing inputs: python-synology
     "syslog" = ps: with ps; [ ];
     "system_health" = ps: with ps; [ aiohttp-cors];
     "system_log" = ps: with ps; [ aiohttp-cors];
@@ -912,7 +915,6 @@
     "yessssms" = ps: with ps; [ ]; # missing inputs: YesssSMS
     "yi" = ps: with ps; [ aioftp ha-ffmpeg];
     "yr" = ps: with ps; [ xmltodict];
-    "yweather" = ps: with ps; [ yahooweather];
     "zabbix" = ps: with ps; [ ]; # missing inputs: pyzabbix
     "zamg" = ps: with ps; [ ];
     "zengge" = ps: with ps; [ ]; # missing inputs: zengge
