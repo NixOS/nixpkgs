@@ -1,21 +1,19 @@
-diff --git a/bfd/plugin.c b/bfd/plugin.c
-index 537ab60311..bfe7957f96 100644
---- a/bfd/plugin.c
-+++ b/bfd/plugin.c
-@@ -386,6 +386,7 @@ load_plugin (bfd *abfd)
+diff -ru binutils-2.27-orig/bfd/plugin.c binutils-2.27/bfd/plugin.c
+--- binutils-2.27-orig/bfd/plugin.c	2016-10-14 17:46:30.791315555 +0200
++++ binutils-2.27/bfd/plugin.c	2016-10-14 17:46:38.583298765 +0200
+@@ -333,6 +333,7 @@
    if (plugin_program_name == NULL)
      return found;
  
 +#if 0
-   /* Try not to search the same dir twice, by looking at st_dev and
-      st_ino for the dir.  If we are on a file system that always sets
-      st_ino to zero or the actual st_ino is zero we might waste some
-@@ -437,7 +438,7 @@ load_plugin (bfd *abfd)
-       if (found)
- 	break;
-     }
--
+   plugin_dir = concat (BINDIR, "/../lib/bfd-plugins", NULL);
+   p = make_relative_prefix (plugin_program_name,
+ 			    BINDIR,
+@@ -364,6 +365,7 @@
+   free (p);
+   if (d)
+     closedir (d);
 +#endif
+ 
    return found;
  }
- 
