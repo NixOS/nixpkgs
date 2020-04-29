@@ -31,7 +31,7 @@ in
 
     pauseImage = mkOption {
       type = types.str;
-      default = "k8s.gcr.io/pause:3.1";
+      default = "k8s.gcr.io/pause:3.2";
       description = "Pause image for pod sandboxes to be used";
     };
 
@@ -62,8 +62,9 @@ in
 
       [crio.runtime]
       conmon = "${pkgs.conmon}/bin/conmon"
+      cgroup_manager = "systemd"
       log_level = "${cfg.logLevel}"
-      manage_network_ns_lifecycle = true
+      manage_ns_lifecycle = true
     '';
 
     environment.etc."cni/net.d/20-cri-o-bridge.conf".text = ''
