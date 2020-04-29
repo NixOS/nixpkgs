@@ -1,7 +1,7 @@
-From 9be689d5243d0c78bec7b285774c58749da08c9c Mon Sep 17 00:00:00 2001
+From 858fbf641ff5cd207282f3ad9d7458b2be2dcdb8 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 25 Jul 2019 20:46:58 +0300
-Subject: [PATCH 23/27] systemd-sleep: execute scripts in
+Subject: [PATCH 16/18] systemd-sleep: execute scripts in
  /etc/systemd/system-sleep
 
 This is needed for NixOS to use such scripts as systemd directory is immutable.
@@ -10,10 +10,10 @@ This is needed for NixOS to use such scripts as systemd directory is immutable.
  1 file changed, 1 insertion(+)
 
 diff --git a/src/sleep/sleep.c b/src/sleep/sleep.c
-index b9fe96635d..f1c3ca06a3 100644
+index fbfddc0262..d2530b9421 100644
 --- a/src/sleep/sleep.c
 +++ b/src/sleep/sleep.c
-@@ -191,6 +191,7 @@ static int execute(char **modes, char **states) {
+@@ -178,6 +178,7 @@ static int execute(char **modes, char **states) {
          };
          static const char* const dirs[] = {
                  SYSTEM_SLEEP_PATH,
@@ -22,5 +22,5 @@ index b9fe96635d..f1c3ca06a3 100644
          };
  
 -- 
-2.24.1
+2.26.2
 

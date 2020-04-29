@@ -1,7 +1,7 @@
-From 3eb1716dd80c245a2883da04156af79fb9097519 Mon Sep 17 00:00:00 2001
+From d16a7d5580adcf5737c7be3b02d411097a498256 Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Fri, 2 Nov 2018 21:15:42 +0100
-Subject: [PATCH 19/27] inherit systemd environment when calling generators.
+Subject: [PATCH 13/18] inherit systemd environment when calling generators.
 
 Systemd generators need access to the environment configured in
 stage-2-init.sh since it schedules fsck and mkfs executions based on
@@ -16,10 +16,10 @@ executables that are being called from managers.
  1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/src/core/manager.c b/src/core/manager.c
-index d9114bb0c5..22c3b6ff76 100644
+index 25afdbea04..7afd5e5a37 100644
 --- a/src/core/manager.c
 +++ b/src/core/manager.c
-@@ -3868,9 +3868,14 @@ static int manager_run_generators(Manager *m) {
+@@ -3896,9 +3896,14 @@ static int manager_run_generators(Manager *m) {
          argv[4] = NULL;
  
          RUN_WITH_UMASK(0022)
@@ -38,5 +38,5 @@ index d9114bb0c5..22c3b6ff76 100644
  
  finish:
 -- 
-2.24.1
+2.26.2
 

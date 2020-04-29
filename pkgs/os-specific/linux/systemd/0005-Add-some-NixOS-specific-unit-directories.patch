@@ -1,7 +1,7 @@
-From 8c0be07ccbad35d0c1106015057996aa55b9a1f9 Mon Sep 17 00:00:00 2001
+From a036a1754104df9b9f7d9b3787840a83b06d0c18 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
-Subject: [PATCH 07/27] Add some NixOS-specific unit directories
+Subject: [PATCH 05/18] Add some NixOS-specific unit directories
 
 Look in /nix/var/nix/profiles/default/lib/systemd for units provided
 by packages in the default (system-wide) profile, and in
@@ -15,7 +15,7 @@ Also, remove /usr and /lib as these don't exist on NixOS.
  2 files changed, 7 insertions(+), 15 deletions(-)
 
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
-index 5d1ddd7620..21b977d6fc 100644
+index 8331832c7a..bedb97115d 100644
 --- a/src/core/systemd.pc.in
 +++ b/src/core/systemd.pc.in
 @@ -17,8 +17,8 @@ systemduserunitdir=${prefix}/lib/systemd/user
@@ -28,12 +28,12 @@ index 5d1ddd7620..21b977d6fc 100644
 +systemduserunitpath=${systemduserconfdir}:/etc/systemd/user:/etc/systemd-mutable/user:/nix/var/nix/profiles/default/lib/systemd/system:/run/systemd/user:${systemduserunitdir}
  systemdsystemgeneratordir=${rootprefix}/lib/systemd/system-generators
  systemdusergeneratordir=${prefix}/lib/systemd/user-generators
- systemdsleepdir=${rootprefix}/lib/systemd/system-sleep
+ systemdsystemgeneratorpath=/run/systemd/system-generators:/etc/systemd/system-generators:/usr/local/lib/systemd/system-generators:${systemdsystemgeneratordir}
 diff --git a/src/shared/path-lookup.c b/src/shared/path-lookup.c
-index 6bf0ff0316..2b6324ad8c 100644
+index 5b16209745..13c0a57637 100644
 --- a/src/shared/path-lookup.c
 +++ b/src/shared/path-lookup.c
-@@ -99,17 +99,14 @@ int xdg_user_data_dir(char **ret, const char *suffix) {
+@@ -98,17 +98,14 @@ int xdg_user_data_dir(char **ret, const char *suffix) {
  }
  
  static const char* const user_data_unit_paths[] = {
@@ -52,7 +52,7 @@ index 6bf0ff0316..2b6324ad8c 100644
          NULL
  };
  
-@@ -604,15 +601,14 @@ int lookup_paths_init(
+@@ -603,15 +600,14 @@ int lookup_paths_init(
                                          persistent_config,
                                          SYSTEM_CONFIG_UNIT_PATH,
                                          "/etc/systemd/system",
@@ -70,7 +70,7 @@ index 6bf0ff0316..2b6324ad8c 100644
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -628,14 +624,12 @@ int lookup_paths_init(
+@@ -627,14 +623,12 @@ int lookup_paths_init(
                                          persistent_config,
                                          USER_CONFIG_UNIT_PATH,
                                          "/etc/systemd/user",
@@ -87,7 +87,7 @@ index 6bf0ff0316..2b6324ad8c 100644
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -824,14 +818,12 @@ char **generator_binary_paths(UnitFileScope scope) {
+@@ -823,14 +817,12 @@ char **generator_binary_paths(UnitFileScope scope) {
          case UNIT_FILE_SYSTEM:
                  return strv_new("/run/systemd/system-generators",
                                  "/etc/systemd/system-generators",
@@ -103,5 +103,5 @@ index 6bf0ff0316..2b6324ad8c 100644
  
          default:
 -- 
-2.24.1
+2.26.2
 

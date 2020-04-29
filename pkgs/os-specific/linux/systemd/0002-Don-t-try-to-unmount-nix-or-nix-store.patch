@@ -1,21 +1,21 @@
-From fd9c882581877eef8ba1b34a9502a1ff546b3833 Mon Sep 17 00:00:00 2001
+From 1e2f2f80e106910bbf3fd27438b794937ff3a1a8 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
-Subject: [PATCH 03/27] Don't try to unmount /nix or /nix/store
+Subject: [PATCH 02/18] Don't try to unmount /nix or /nix/store
 
 They'll still be remounted read-only.
 
 https://github.com/NixOS/nixos/issues/126
 ---
- src/core/mount.c      | 4 +++-
+ src/core/mount.c      | 2 ++
  src/shutdown/umount.c | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ 2 files changed, 4 insertions(+)
 
 diff --git a/src/core/mount.c b/src/core/mount.c
-index a0dfa6a1a7..4ca6adcdc6 100644
+index 1c4aefd734..a5553226f8 100644
 --- a/src/core/mount.c
 +++ b/src/core/mount.c
-@@ -414,6 +414,8 @@ static bool mount_is_extrinsic(Mount *m) {
+@@ -412,6 +412,8 @@ static bool mount_is_extrinsic(Mount *m) {
  
          if (PATH_IN_SET(m->where,  /* Don't bother with the OS data itself */
                          "/",       /* (strictly speaking redundant: should already be covered by the perpetual flag check above) */
@@ -25,10 +25,10 @@ index a0dfa6a1a7..4ca6adcdc6 100644
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index 2d07d3d6c1..8b112f464e 100644
+index 8a5e80eeaa..fab35ed6f3 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
-@@ -373,6 +373,8 @@ static int delete_dm(dev_t devnum) {
+@@ -414,6 +414,8 @@ static int delete_dm(dev_t devnum) {
  
  static bool nonunmountable_path(const char *path) {
          return path_equal(path, "/")
@@ -38,5 +38,5 @@ index 2d07d3d6c1..8b112f464e 100644
                  || path_equal(path, "/usr")
  #endif
 -- 
-2.25.1
+2.26.2
 
