@@ -1480,6 +1480,12 @@
     githubId = 848609;
     name = "Michael Bishop";
   };
+  cmacrae = {
+    email = "hi@cmacr.ae";
+    github = "cmacrae";
+    githubId = 3392199;
+    name = "Calum MacRae";
+  };
   cmcdragonkai = {
     email = "roger.qiu@matrix.ai";
     github = "cmcdragonkai";
