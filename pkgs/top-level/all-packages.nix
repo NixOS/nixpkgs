@@ -19548,6 +19548,8 @@ in
 
   gcalcli = callPackage ../applications/misc/gcalcli { };
 
+  havoc = callPackage ../applications/misc/havoc { };
+
   vcal = callPackage ../applications/misc/vcal { };
 
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
