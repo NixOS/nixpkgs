@@ -24,6 +24,18 @@ in
     };
   };
 
+  bbenoist.Doxygen = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "Doxygen";
+      publisher = "bbenoist";
+      version = "1.0.0";
+      sha256 = "0kclb60mnaj3c5lmpwmhkbnx4g8gr4wy66lkcklkwm555nkgw48n";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   bbenoist.Nix = buildVscodeMarketplaceExtension {
     mktplcRef = {
         name = "Nix";
