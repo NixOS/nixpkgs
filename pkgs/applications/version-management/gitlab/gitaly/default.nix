@@ -19,14 +19,14 @@ let
       };
   };
 in buildGoPackage rec {
-  version = "12.8.9";
+  version = "12.8.10";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "06q1km2pigpl4yxl8pkzdy2yxzvsfm6n5r3kmd8h19j3sc6imbmh";
+    sha256 = "1vhnpyggh2ch93i75np11rjzvq8d6pwv2kzvwh7ak3fa02w9qdfs";
   };
 
   # Fix a check which assumes that hook files are writeable by their
