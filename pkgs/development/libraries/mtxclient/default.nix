@@ -1,5 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig
-, boost, openssl, zlib, libsodium, olm, nlohmann_json }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, boost
+, openssl
+, zlib
+, libsodium
+, olm
+, nlohmann_json
+}:
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
@@ -18,8 +28,17 @@ stdenv.mkDerivation rec {
     "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ boost openssl zlib libsodium olm ];
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
+  ];
+  buildInputs = [
+    boost
+    openssl
+    zlib
+    libsodium
+    olm
+  ];
 
   meta = with stdenv.lib; {
     description = "Client API library for Matrix, built on top of Boost.Asio";
