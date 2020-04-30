@@ -25953,6 +25953,8 @@ in
     ffmpeg = ffmpeg_4;
   };
 
+  ventoy = callPackage ../tools/misc/ventoy { };
+
   vice = callPackage ../misc/emulators/vice {
     giflib = giflib_4_1;
   };
