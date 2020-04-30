@@ -1,4 +1,4 @@
-{ fetchzip, lib, p7zip, stdenv }:
+{ fetchzip, lib, stdenv, mtools }:
 
 stdenv.mkDerivation rec {
   pname = "memtest86-efi";
@@ -22,19 +22,19 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ p7zip ];
+  nativeBuildInputs = [ mtools ];
 
   installPhase = ''
-    mkdir -p $out
+    mkdir -p $out $TEMP/memtest86-files
 
     # memtest86 is distributed as a bootable USB image.  It contains the actual
     # memtest86 EFI app.
     #
-    # The following command uses p7zip to extract the actual EFI app from the
+    # The following uses dd and mcopy to extract the actual EFI app from the
     # usb image so that it can be installed directly on the hard drive.
-    7z x -o$TEMP/temp-efi-dirs $src/memtest86-usb.img
-    7z x -o$TEMP/memtest86-files $TEMP/temp-efi-dirs/EFI\ System\ Partition.img
-    cp -r $TEMP/memtest86-files/EFI/BOOT/* $out/
+    dd if=$src/memtest86-usb.img of=$TEMP/ESP.img skip=2048
+    mcopy -i $TEMP/ESP.img ::/EFI/BOOT/ $TEMP/memtest86-files/
+    mv $TEMP/memtest86-files/BOOT/* $out/
   '';
 
   meta = with lib; {
