@@ -1,11 +1,57 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, SDL, SDL2, alsaLib,
-  avahi, bullet, check, curl, dbus, doxygen, expat, fontconfig,
-  freetype, fribidi, ghostscript, giflib, glib, gst_all_1, gtk3,
-  harfbuzz, hicolor-icon-theme, ibus, jbig2dec, libGL, libdrm,
-  libinput, libjpeg, libpng, libpulseaudio, libraw, librsvg,
-  libsndfile, libspectre, libtiff, libwebp, libxkbcommon, luajit, lz4,
-  mesa, openjpeg, openssl, poppler, python27Packages, systemd, udev,
-  utillinux, writeText, xorg, zlib }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, SDL
+, SDL2
+, alsaLib
+, avahi
+, bullet
+, check
+, curl
+, dbus
+, doxygen
+, expat
+, fontconfig
+, freetype
+, fribidi
+, ghostscript
+, giflib
+, glib
+, gst_all_1
+, gtk3
+, harfbuzz
+, hicolor-icon-theme
+, ibus
+, jbig2dec
+, libGL
+, libdrm
+, libinput
+, libjpeg
+, libpng
+, libpulseaudio
+, libraw
+, librsvg
+, libsndfile
+, libspectre
+, libtiff
+, libwebp
+, libxkbcommon
+, luajit
+, lz4
+, mesa
+, openjpeg
+, openssl
+, poppler
+, python27Packages
+, systemd
+, udev
+, utillinux
+, writeText
+, xorg
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "efl";
