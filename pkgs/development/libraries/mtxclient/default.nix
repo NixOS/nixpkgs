@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
+    # Network requiring tests can't be disabled individually:
+    # https://github.com/Nheko-Reborn/mtxclient/issues/22
     "-DBUILD_LIB_TESTS=OFF"
     "-DBUILD_LIB_EXAMPLES=OFF"
     "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
