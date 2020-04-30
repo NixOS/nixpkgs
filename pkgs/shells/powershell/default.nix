@@ -1,4 +1,4 @@
-{ stdenv, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl
+{ stdenv, lib, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl
 , darwin, makeWrapper, less, openssl_1_1, pam, lttng-ust }:
 
 let platformString = if stdenv.isDarwin then "osx"
@@ -26,19 +26,25 @@ stdenv.mkDerivation rec {
   buildInputs = [ less ] ++ libraries;
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-  installPhase = ''
+  installPhase =
+  let
+    ext = stdenv.hostPlatform.extensions.sharedLibrary;
+  in ''
     pslibs=$out/share/powershell
     mkdir -p $pslibs
 
     cp -r * $pslibs
 
-	  rm $pslibs/libcrypto.so.1.0.0
-	  rm $pslibs/libssl.so.1.0.0
+    rm -f $pslibs/libcrypto${ext}.1.0.0
+    rm -f $pslibs/libssl${ext}.1.0.0
 
-	  patchelf --replace-needed libcrypto.so.1.0.0 libcrypto.so.1.1 $pslibs/libmi.so
-	  patchelf --replace-needed libssl.so.1.0.0 libssl.so.1.1 $pslibs/libmi.so
-	
-	  mkdir -p $out/bin
+    ls $pslibs
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext}.1.1 $pslibs/libmi.so
+    patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext}.1.1 $pslibs/libmi.so
+  '' + ''
+
+    mkdir -p $out/bin
 
     makeWrapper $pslibs/pwsh $out/bin/pwsh \
       --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
@@ -47,7 +53,12 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  doInstallCheck = true;
+  installCheck = ''
+    $out/bin/pwsh --help > /dev/null
+  '';
+
+  meta = with lib; {
     description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
     homepage = "https://github.com/PowerShell/PowerShell";
     maintainers = with maintainers; [ yrashk srgom ];
