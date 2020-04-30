@@ -33,22 +33,6 @@ mkDerivation rec {
     sha256 = "12sxibbrn79sxkf9jrm7jrlj7l5vz15claxrrll7pkv9mv44wady";
   };
 
-  # If, on Darwin, you encounter the error
-  #   error: must specify at least one argument for '...' parameter of variadic
-  #   macro [-Werror,-Wgnu-zero-variadic-macro-arguments]
-  # Then adding this parameter is likely the fix you want.
-  #
-  # However, it looks like either cmake doesn't honor this CFLAGS variable, or
-  # darwin's compiler doesn't have the same syntax as gcc for turning off
-  # -Werror selectively.
-  #
-  # Anyway, this is something that will have to be debugged with access to a
-  # darwin-based OS. Sorry about that!
-  #
-  #preConfigure = lib.optionalString stdenv.isDarwin ''
-  #  export CFLAGS=-Wno-error=gnu-zero-variadic-macro-arguments
-  #'';
-
   nativeBuildInputs = [
     lmdbxx
     cmake
@@ -89,7 +73,10 @@ mkDerivation rec {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
     maintainers = with maintainers; [ ekleog fpletz ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
+    # Should be fixable if a higher clang version is used, see:
+    # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
+    broken = stdenv.targetPlatform.isDarwin;
     license = licenses.gpl3Plus;
   };
 }
