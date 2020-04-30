@@ -1,6 +1,6 @@
 { stdenv
-, fetchgit
 , fetchpatch
+, fetchurl
 , pkgconfig
 , utillinux
 , libuuid
@@ -17,10 +17,9 @@ in
   pname = "lvm2" + stdenv.lib.optionalString enable_dmeventd "with-dmeventd";
   inherit version;
 
-  src = fetchgit {
-    url = "git://sourceware.org/git/lvm2.git";
-    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "0jlaswf1srdxiqpgpp97j950ddjds8z0kr4pbwmal2za2blrgvbl";
+  src = fetchurl {
+    url = "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz";
+    sha256 = "02sk6p8w3f6fpm1mrsisqfc0jnah4pzimyhm0f7c0phrfjq5hkj2";
   };
 
   nativeBuildInputs = [ pkgconfig ];
