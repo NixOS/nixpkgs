@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
     description = "A port of the 7-zip archiver";
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.raskin ];
+    knownVulnerabilities = [
+      # p7zip is abandoned, according to this thread on its forums:
+      # https://sourceforge.net/p/p7zip/discussion/383043/thread/fa143cf2/#1817
+      "p7zip is abandoned and may not receive important security fixes"
+    ];
     # RAR code is under non-free UnRAR license, but we remove it
     license = if enableUnfree then lib.licenses.unfree else lib.licenses.lgpl2Plus;
   };
