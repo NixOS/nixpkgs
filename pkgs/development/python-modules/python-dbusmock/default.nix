@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # TODO: Get the rest of these tests running?
   # This is a mocking library used as a check dependency for a single derivation.
   # That derivation's tests pass. Maybe not worth the effort to fix these...
-  NOSE_EXCLUDE = lib.concatStringsSep "," [
+  env.NOSE_EXCLUDE = lib.concatStringsSep "," [
     "test_bluez4" # NixOS ships BlueZ5
     # These appear to fail because they're expecting to run in an Ubuntu chroot?
     "test_everything" # BlueZ5 OBEX
