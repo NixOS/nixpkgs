@@ -48,6 +48,18 @@ in
     };
   };
 
+  DavidAnson.vscode-markdownlint = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-markdownlint";
+      publisher = "DavidAnson";
+      version = "0.35.1";
+      sha256 = "1hb0wkdqzpy2g1vf2aahrjw4xhshfs35xnd76px4a5y4gsy9sqlm";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "auto-close-tag";
