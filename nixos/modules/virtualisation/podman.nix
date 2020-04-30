@@ -105,6 +105,11 @@ in
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;
 
+    assertions = [{
+      assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
+      message = "Option dockerCompat conflicts with docker";
+    }];
+
   };
 
 }
