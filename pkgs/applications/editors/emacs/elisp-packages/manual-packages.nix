@@ -113,6 +113,8 @@
 
   isearch-plus = callPackage ./isearch-plus { };
 
+  isearch-prop = callPackage ./isearch-prop { };
+
   jam-mode = callPackage ./jam-mode { };
 
   llvm-mode = trivialBuild {
