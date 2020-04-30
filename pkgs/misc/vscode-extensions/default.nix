@@ -48,6 +48,18 @@ in
     };
   };
 
+  donjayamanne.githistory = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "githistory";
+      publisher = "donjayamanne";
+      version = "0.6.5";
+      sha256 = "0v6f8mkdwm6c0ypjhra22iv5fmmjpdc8fnja70zjkvbgxb48cd2s";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "auto-close-tag";
