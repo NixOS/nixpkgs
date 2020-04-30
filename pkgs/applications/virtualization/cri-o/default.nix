@@ -1,6 +1,6 @@
 { stdenv
 , btrfs-progs
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , glibc
 , gpgme
@@ -14,11 +14,9 @@
 , pkg-config
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cri-o";
   version = "1.18.0";
-
-  goPackagePath = "github.com/cri-o/cri-o";
 
   src = fetchFromGitHub {
     owner = "cri-o";
@@ -26,9 +24,8 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "142flmv54pj48rjqkd26fbxrcbx2cv6pdmrc33jgyvn6r99zliah";
   };
-
+  vendorSha256 = null;
   outputs = [ "out" "man" ];
-
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = [
@@ -44,8 +41,6 @@ buildGoPackage rec {
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_ostree_stub";
   buildPhase = ''
-    pushd go/src/${goPackagePath}
-
     sed -i '/version.buildDate/d' Makefile
 
     make binaries docs BUILDTAGS="$BUILDTAGS"
