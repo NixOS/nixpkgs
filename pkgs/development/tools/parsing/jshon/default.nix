@@ -1,25 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, jansson }:
+{ stdenv, lib, fetchFromGitHub, jansson }:
 
 stdenv.mkDerivation rec {
-  name = "jshon-20160111.2";
-
-  rev = "a61d7f2f85f4627bc3facdf951746f0fd62334b7";
-  sha256 = "1053w7jbl90q3p5y34pi4i8an1ddsjzwaib5cfji75ivamc5wdmh";
+  pname = "jshon";
+  version = "20170302";
 
   src = fetchFromGitHub {
-    inherit rev sha256;
     owner = "keenerd";
     repo = "jshon";
+    rev = "d919aeaece37962251dbe6c1ee50f0028a5c90e4";
+    sha256 = "1x4zfmsjq0l2y994bxkhx3mn5vzjxxr39iib213zjchi9h6yxvnc";
   };
-
-  patches = [
-    # Fix null termination in read_stream.
-    # https://github.com/keenerd/jshon/issues/53
-    (fetchpatch {
-      url = "https://github.com/mbrock/jshon/commit/32288dd186573ceb58164f30be1782d4580466d8.patch";
-      sha256 = "04rss2nprl9nqblc7smq0477n54hm801xgnnmvyzni313i1n6vhl";
-    })
-  ];
 
   buildInputs = [ jansson ];
 
