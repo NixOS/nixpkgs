@@ -60,6 +60,18 @@ in
     };
   };
 
+  ionutvmi.path-autocomplete = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "path-autocomplete";
+      publisher = "ionutvmi";
+      version = "1.13.6";
+      sha256 = "1iajr639c41j3zs7qcw6zr16spv1h99gyqsng3bbwla4dic6w0m9";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   james-yu.latex-workshop = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "latex-workshop";
