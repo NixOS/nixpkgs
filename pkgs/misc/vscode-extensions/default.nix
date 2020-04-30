@@ -36,6 +36,18 @@ in
     };
   };
 
+  bierner.markdown-preview-github-styles = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "markdown-preview-github-styles";
+      publisher = "bierner";
+      version = "0.1.6";
+      sha256 = "1plj6a1hgbhb740zbw4pbnk7919cx1s6agf5xiiqbb9485x2pqiw";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   cmschuetz12.wal = buildVscodeMarketplaceExtension {
     mktplcRef = {
         name = "wal";
