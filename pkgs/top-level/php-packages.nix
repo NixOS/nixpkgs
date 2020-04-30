@@ -57,12 +57,12 @@ in
     };
 
     composer = mkDerivation rec {
-      version = "1.9.3";
+      version = "1.10.5";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "VRZVwvyB9BBlCPQrvEsk6r00sCKxO8Hn2WQr9IPQp9Q=";
+        sha256 = "0a9iwhd7ijm8gkp3zadxza0xb6xwa5ps0d16pz4mz2p21gfzvwym";
       };
 
       dontUnpack = true;
@@ -86,12 +86,12 @@ in
     };
 
     php-cs-fixer = mkDerivation rec {
-      version = "2.16.1";
+      version = "2.16.3";
       pname = "php-cs-fixer";
 
       src = pkgs.fetchurl {
         url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-        sha256 = "1dq1nhy666zg6d4fkfsjwhj1vwh1ncap2c9ljplxv98a9mm6fk68";
+        sha256 = "195j61qbgbdn5xi0l6030mklji8m7fan2kf3446a1m2n4df3f5hb";
       };
 
       phases = [ "installPhase" ];
@@ -150,12 +150,12 @@ in
     };
 
     phpcbf = mkDerivation rec {
-      version = "3.5.4";
+      version = "3.5.5";
       pname = "phpcbf";
 
       src = pkgs.fetchurl {
         url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-        sha256 = "18x7fk59l821pivw1i2r868y78qgs0qk47b9il1smwi6plwyyflr";
+        sha256 = "0hgagn70gl46migm6zpwcr39dxal07f5cdpnasrafgz5vq0gwr3g";
       };
 
       phases = [ "installPhase" ];
@@ -177,12 +177,12 @@ in
     };
 
     phpcs = mkDerivation rec {
-      version = "3.5.4";
+      version = "3.5.5";
       pname = "phpcs";
 
       src = pkgs.fetchurl {
         url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-        sha256 = "1lrybdxxig3yqd3i3nwji5jjn377p50sbpm4s4852dlsxz9qnlgs";
+        sha256 = "0jl038l55cmzn5ml61qkv4z1w4ri0h3v7h00pcb04xhz3gznlbsa";
       };
 
       phases = [ "installPhase" ];
@@ -204,12 +204,12 @@ in
     };
 
     phpstan = mkDerivation rec {
-      version = "0.12.18";
+      version = "0.12.19";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "0xf0q2z6rhpnbys53si05mddfyjn3wx5wc8zx5y6dv5fzw6z7rch";
+        sha256 = "15fz7rixi9s46qqxpj26349aky7wxqnzmfsnwlh1f2p4jsfd85ki";
       };
 
       phases = [ "installPhase" ];
@@ -238,12 +238,12 @@ in
     };
 
     psalm = mkDerivation rec {
-      version = "3.9.3";
+      version = "3.11.2";
       pname = "psalm";
 
       src = pkgs.fetchurl {
         url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-        sha256 = "KHm2n06y/yxN5B2rCVxT5ja7HxkyxAMsjZ5HLb3xr4M=";
+        sha256 = "1ani0907whqy2ycr01sjlvrmwps4dg5igim8z1qyv8grhwvw6gb0";
       };
 
       phases = [ "installPhase" ];
@@ -265,12 +265,12 @@ in
     };
 
     psysh = mkDerivation rec {
-      version = "0.9.12";
+      version = "0.10.3";
       pname = "psysh";
 
       src = pkgs.fetchurl {
         url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-        sha256 = "0bzmc94li481xk81gv460ipq9zl03skbnq8m3rnw34i2c04hxczc";
+        sha256 = "0glply451fy0g7zbasyp350qvmk2aglrlcrcdd7w0igylgwfkg71";
       };
 
       phases = [ "installPhase" ];
