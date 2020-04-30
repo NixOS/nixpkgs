@@ -1,0 +1,345 @@
+diff --git a/mx.py b/mx.py
+index bea1c22..3356bd6 100755
+--- a/mx.py
++++ b/mx.py
+@@ -238,21 +238,7 @@ def _check_file_with_sha1(path, sha1, sha1path, mustExist=True, newFile=False, l
+             f.write(value or sha1OfFile(path))
+ 
+     if exists(path):
+-        if sha1Check and sha1:
+-            if not _sha1CachedValid() or (newFile and sha1 != _sha1Cached()):
+-                logv('Create/update SHA1 cache file ' + sha1path)
+-                _writeSha1Cached()
+-
+-            if sha1 != _sha1Cached():
+-                computedSha1 = sha1OfFile(path)
+-                if sha1 == computedSha1:
+-                    warn('Fixing corrupt SHA1 cache file ' + sha1path)
+-                    _writeSha1Cached(computedSha1)
+-                    return True
+-                if logErrors:
+-                    size = os.path.getsize(path)
+-                    log_error('SHA1 of {} [size: {}] ({}) does not match expected value ({})'.format(TimeStampFile(path), size, computedSha1, sha1))
+-                return False
++        return True
+     elif mustExist:
+         if logErrors:
+             log_error("'{}' does not exist".format(path))
+@@ -1070,46 +1056,8 @@ class SuiteImport:
+         version = import_dict.get("version")
+         suite_dir = None
+         version_from = import_dict.get("versionFrom")
+-        if version_from and version:
+-            abort("In import for '{}': 'version' and 'versionFrom' can not be both set".format(name), context=context)
+-        if version is None and version_from is None:
+-            if not (in_subdir and (importer.vc_dir != importer.dir or isinstance(importer, BinarySuite))):
+-                abort("In import for '{}': No version given and not a 'subdir' suite of the same repository".format(name), context=context)
+-            if importer.isSourceSuite():
+-                suite_dir = join(importer.vc_dir, name)
+-            version = importer.version()
+-        if urls is None:
+-            if not in_subdir:
+-                if import_dict.get("subdir") is None and importer.vc_dir != importer.dir:
+-                    warn("In import for '{}': No urls given but 'subdir' is not set, assuming 'subdir=True'".format(name), context)
+-                    in_subdir = True
+-                else:
+-                    abort("In import for '{}': No urls given and not a 'subdir' suite".format(name), context=context)
+-            return SuiteImport(name, version, None, None, dynamicImport=dynamicImport, in_subdir=in_subdir, version_from=version_from, suite_dir=suite_dir)
+-        # urls a list of alternatives defined as dicts
+-        if not isinstance(urls, list):
+-            abort('suite import urls must be a list', context=context)
+-        urlinfos = []
+-        mainKind = None
+-        for urlinfo in urls:
+-            if isinstance(urlinfo, dict) and urlinfo.get('url') and urlinfo.get('kind'):
+-                kind = urlinfo.get('kind')
+-                if not VC.is_valid_kind(kind):
+-                    abort('suite import kind ' + kind + ' illegal', context=context)
+-            else:
+-                abort('suite import url must be a dict with {"url", kind", attributes', context=context)
+-            vc = vc_system(kind)
+-            if kind != 'binary':
+-                assert not mainKind or mainKind == kind, "Only expecting one non-binary kind"
+-                mainKind = kind
+-            url = mx_urlrewrites.rewriteurl(urlinfo.get('url'))
+-            urlinfos.append(SuiteImportURLInfo(url, kind, vc))
+-        vc_kind = None
+-        if mainKind:
+-            vc_kind = mainKind
+-        elif urlinfos:
+-            vc_kind = 'binary'
+-        return SuiteImport(name, version, urlinfos, vc_kind, dynamicImport=dynamicImport, in_subdir=in_subdir, version_from=version_from, suite_dir=suite_dir)
++        suite_dir = join(get_env('MX_GIT_CACHE_DIR'), name)
++        return SuiteImport(name, version, [], None, True, in_subdir=in_subdir, version_from=version_from, suite_dir=suite_dir)
+ 
+     @staticmethod
+     def get_source_urls(source, kind=None):
+@@ -1482,8 +1430,6 @@ class Suite(object):
+     :type dists: list[Distribution]
+     """
+     def __init__(self, mxDir, primary, internal, importing_suite, load, vc, vc_dir, dynamicallyImported=False):
+-        if primary is True and vc_dir is None:
+-            abort("The primary suite must be in a vcs repository")
+         self.imported_by = [] if primary else [importing_suite]
+         self.mxDir = mxDir
+         self.dir = dirname(mxDir)
+@@ -1511,7 +1457,7 @@ class Suite(object):
+         self._outputRoot = None
+         self._preloaded_suite_dict = None
+         self.vc = vc
+-        self.vc_dir = vc_dir
++        self.vc_dir = get_env('MX_GIT_CACHE_DIR')
+         self._preload_suite_dict()
+         self._init_imports()
+         if load:
+@@ -1556,18 +1502,8 @@ class Suite(object):
+         Gets the root of the directory hierarchy under which generated artifacts for this
+         suite such as class files and annotation generated sources should be placed.
+         """
+-        if not self._outputRoot:
+-            outputRoot = self._get_early_suite_dict_property('outputRoot')
+-            if outputRoot:
+-                self._outputRoot = realpath(_make_absolute(outputRoot.replace('/', os.sep), self.dir))
+-            elif get_env('MX_ALT_OUTPUT_ROOT') is not None:
+-                self._outputRoot = realpath(_make_absolute(join(get_env('MX_ALT_OUTPUT_ROOT'), self.name), self.dir))
+-            else:
+-                self._outputRoot = self.getMxCompatibility().getSuiteOutputRoot(self)
+-        if platformDependent:
+-            return os.path.join(self._outputRoot, get_os() + '-' + get_arch())
+-        else:
+-            return self._outputRoot
++        self._outputRoot = get_env('MX_NIX_OUTPUT_ROOT')
++        return self._outputRoot
+ 
+     def get_mx_output_dir(self):
+         """
+@@ -2420,7 +2356,9 @@ class Repository(SuiteConstituent):
+ class SourceSuite(Suite):
+     """A source suite"""
+     def __init__(self, mxDir, primary=False, load=True, internal=False, importing_suite=None, dynamicallyImported=False):
+-        vc, vc_dir = VC.get_vc_root(dirname(mxDir), abortOnError=False)
++        vc, vc_dir_test = VC.get_vc_root(dirname(mxDir), abortOnError=False)
++        vc_dir = get_env('MX_GIT_CACHE_DIR')
++        warn("LOOKING FOR: " + mxDir)
+         Suite.__init__(self, mxDir, primary, internal, importing_suite, load, vc, vc_dir, dynamicallyImported=dynamicallyImported)
+         logvv("SourceSuite.__init__({}), got vc={}, vc_dir={}".format(mxDir, self.vc, self.vc_dir))
+         self.projects = []
+@@ -2469,17 +2407,7 @@ class SourceSuite(Suite):
+         """
+         Gets the release tag from VC or create a time based once if VC is unavailable
+         """
+-        if snapshotSuffix not in self._releaseVersion:
+-            _version = self._get_early_suite_dict_property('version')
+-            if _version and self.getMxCompatibility().addVersionSuffixToExplicitVersion():
+-                if not self.is_release():
+-                    _version = _version + '-' + snapshotSuffix
+-            if not _version:
+-                _version = self.vc.release_version_from_tags(self.vc_dir, self.name, snapshotSuffix=snapshotSuffix)
+-            if not _version:
+-                _version = 'unknown-{0}-{1}'.format(platform.node(), time.strftime('%Y-%m-%d_%H-%M-%S_%Z'))
+-            self._releaseVersion[snapshotSuffix] = _version
+-        return self._releaseVersion[snapshotSuffix]
++        return get_env('version')
+ 
+     def scm_metadata(self, abortOnError=False):
+         scm = self.scm
+@@ -3008,12 +2936,8 @@ def _find_suite_import(importing_suite, suite_import, fatalIfMissing=True, load=
+         Attempts to locate an existing suite in the local context
+         Returns the path to the mx.name dir if found else None
+         """
+-        if mode == 'binary':
+-            # binary suites are always stored relative to the importing suite in mx-private directory
+-            return importing_suite._find_binary_suite_dir(suite_import.name)
+-        else:
+-            # use the SuiteModel to locate a local source copy of the suite
+-            return _suitemodel.find_suite_dir(suite_import)
++        warn("FAKE MX CLONE" + str(join(get_env('MX_GIT_CACHE_DIR'), suite_import.name, "mx." + suite_import.name)))
++        return join(get_env('MX_GIT_CACHE_DIR'), suite_import.name, "mx." + suite_import.name)
+ 
+     def _get_import_dir(url, mode):
+         """Return directory where the suite will be cloned to"""
+@@ -3853,7 +3777,7 @@ def getmtime(name):
+     """
+     Wrapper for builtin open function that handles long path names on Windows.
+     """
+-    return os.path.getmtime(_safe_path(name))
++    return 315532800
+ 
+ 
+ def stat(name):
+@@ -4099,61 +4023,8 @@ def _attempt_download(url, path, jarEntryName=None):
+     return False
+ 
+ def download(path, urls, verbose=False, abortOnError=True, verifyOnly=False):
+-    """
+-    Attempts to downloads content for each URL in a list, stopping after the first successful download.
+-    If the content cannot be retrieved from any URL, the program is aborted, unless abortOnError=False.
+-    The downloaded content is written to the file indicated by `path`.
+-    """
+-    if not verifyOnly:
+-        ensure_dirname_exists(path)
+-        assert not path.endswith(os.sep)
+-
+-    # https://docs.oracle.com/javase/7/docs/api/java/net/JarURLConnection.html
+-    jarURLPattern = re.compile('jar:(.*)!/(.*)')
+-    verify_errors = {}
+-    for url in urls:
+-        if not verifyOnly or verbose:
+-            log('Downloading ' + url + ' to ' + path)
+-        m = jarURLPattern.match(url)
+-        jarEntryName = None
+-        if m:
+-            url = m.group(1)
+-            jarEntryName = m.group(2)
+-
+-        if not _opts.trust_http and (url.lower().startswith('http://') or url.lower().startswith('ftp://')):
+-            warn('Downloading from non-https URL {}. Use --trust-http mx option to suppress this warning.'.format(url))
+-
+-        if verifyOnly:
+-            try:
+-                conn = _urlopen(url, timeout=5, timeout_retries=1)
+-                conn.close()
+-            except (IOError, socket.timeout) as e:
+-                _suggest_tlsv1_error(e)
+-                verify_errors[url] = e
+-        else:
+-            for i in range(4):
+-                if i != 0:
+-                    time.sleep(1)
+-                    warn('Retry {} to download from {}'.format(i, url))
+-                if _attempt_download(url, path, jarEntryName):
+-                    return True # Download was successful
+-
+-    verify_msg = None
+-    if verifyOnly and len(verify_errors) > 0: # verify-mode -> print error details
+-        verify_msg = 'Could not download to ' + path + ' from any of the following URLs: ' + ', '.join(urls)
+-        for url, e in verify_errors.items():
+-            verify_msg += '\n  ' + url + ': ' + str(e)
+-
+-    if verifyOnly and len(verify_errors) < len(urls): # verify-mode at least one success -> success
+-        if verify_msg is not None:
+-            warn(verify_msg)
+-        return True
+-    else: # Either verification error or no download was successful
+-        if abortOnError:
+-            abort(verify_msg)
+-        else:
+-            warn(verify_msg)
+-            return False
++    print("FAKE download(path={} urls={} verbose={} abortOnError={} verifyOnly={})".format(path, urls, verbose, abortOnError, verifyOnly))
++    return True
+ 
+ def update_file(path, content, showDiff=False):
+     """
+@@ -5502,10 +5373,12 @@ class LayoutDistribution(AbstractDistribution):
+                 yield (destination, source_dict)
+ 
+     def _install_source(self, source, output, destination, archiver):
++        warn("INSTALL SOURCE: " + str(source) + " to: " + str(join(output, destination)))
+         clean_destination = destination
+         if destination.startswith('./'):
+             clean_destination = destination[2:]
+         absolute_destination = join(output, clean_destination.replace('/', os.sep))
++        warn("INSTALL SOURCE ABS DEST: " + str(absolute_destination))
+         source_type = source['source_type']
+         provenance = "{}<-{}".format(destination, source['_str_'])
+ 
+@@ -5562,6 +5435,7 @@ class LayoutDistribution(AbstractDistribution):
+                     shutil.copy(src, absolute_destination)
+ 
+         def _install_source_files(files, include=None, excludes=None, optional=False, archive=True):
++            source['_str_'] = source['_str_'].replace("file:", "")
+             excludes = excludes or []
+             if destination.endswith('/'):
+                 ensure_dir_exists(absolute_destination)
+@@ -5753,13 +5627,18 @@ class LayoutDistribution(AbstractDistribution):
+             def _rel_arcname(_source_file):
+                 return os.path.relpath(_source_file, files_root)
+             _arcname_f = _rel_arcname
+-            if not self.suite.vc.locate(self.suite.vc_dir, file_path, abortOnError=False):
+-                absolute_source = isabs(source_path)
+-                if absolute_source:
+-                    _arcname_f = lambda a: a
+-                warn("Adding file which is not in the repository: '{}' in '{}'".format(file_path, destination), context=self)
++            warn("LOOKING FOR: '{}' TO BE INSTALLED TO: '{}' ABS: '{}'".format(file_path, destination, absolute_destination))
++            if not os.path.isdir(file_path) and not os.path.isfile(file_path):
++                warn("SKIPPING FILE WITH BROKEN PATH: '{}'".format(file_path))
++                output_done = True
++                return
+             elif isabs(source_path):
+-                abort("Source should not be absolute: '{}' in '{}'".format(source_path, destination), context=self)
++                if os.path.isdir(file_path):
++                    os.system("cp -r " + file_path + "/*" + " " + absolute_destination)
++                else:
++                    os.system("cp -f " + file_path + " " + absolute_destination)
++                output_done = True
++                return
+             _install_source_files(((source_file, _arcname_f(source_file)) for source_file in glob.iglob(file_path)), include=source_path, excludes=source.get('exclude'))
+         elif source_type == 'link':
+             link_target = source['path']
+@@ -7981,30 +7860,6 @@ class PackedResourceLibrary(ResourceLibrary):
+ 
+     def get_path(self, resolve):
+         extract_path = _make_absolute(self.extract_path, self.suite.dir)
+-        download_path = super(PackedResourceLibrary, self).get_path(resolve)
+-        if resolve and self._check_extract_needed(extract_path, download_path):
+-            extract_path_tmp = tempfile.mkdtemp(suffix=basename(extract_path), dir=dirname(extract_path))
+-            try:
+-                # extract archive
+-                Extractor.create(download_path).extract(extract_path_tmp)
+-                # ensure modification time is up to date
+-                os.utime(extract_path_tmp, None)
+-                logv("Moving temporary directory {} to {}".format(extract_path_tmp, extract_path))
+-                try:
+-                    # attempt atomic overwrite
+-                    os.rename(extract_path_tmp, extract_path)
+-                except OSError:
+-                    # clean destination & re-try for cases where atomic overwrite doesn't work
+-                    rmtree(extract_path, ignore_errors=True)
+-                    os.rename(extract_path_tmp, extract_path)
+-            except OSError as ose:
+-                # Rename failed. Race with other process?
+-                if self._check_extract_needed(extract_path, download_path):
+-                    # ok something really went wrong
+-                    abort("Extracting {} failed!".format(download_path), context=ose)
+-            finally:
+-                rmtree(extract_path_tmp, ignore_errors=True)
+-
+         return extract_path
+ 
+     def _check_download_needed(self):
+@@ -8525,7 +8380,7 @@ class VC(_with_metaclass(ABCMeta, object)):
+         :param bool abortOnError: if True abort on error
+         :return: True if update performed, False otherwise
+         """
+-        abort(self.kind + " update_to_branch is not implemented")
++        self.run(['hg', vcdir] + cmd)
+ 
+     def is_release_from_tags(self, vcdir, prefix):
+         """
+@@ -8926,7 +8781,7 @@ class HgConfig(VC):
+                 return None
+ 
+     def parent_info(self, vcdir, abortOnError=True):
+-        out = self.hg_command(vcdir, ["log", "-r", ".", "--template", "{author}|||{date|hgdate}"], abortOnError=abortOnError)
++        out = "nixbld@localhost|||1586693534 0"
+         author, date = out.split("|||")
+         ts, _ = date.split(" ")
+         return self._sanitize_parent_info({
+@@ -9085,7 +8940,7 @@ class HgConfig(VC):
+         elif not isinstance(patterns, list):
+             patterns = [patterns]
+         out = LinesOutputCapture()
+-        rc = self.run(['hg', 'locate', '-R', vcdir] + patterns, out=out, nonZeroIsFatal=False)
++        rc = self.run(['hg', 'locate', '-R', vcdir] + fixed_patterns, out=out, nonZeroIsFatal=False)
+         if rc == 1:
+             # hg locate returns 1 if no matches were found
+             return []
+@@ -14271,6 +14126,7 @@ class Archiver(SafeFileCreation):
+ 
+     def _add_zip(self, filename, archive_name, provenance):
+         self._add_provenance(archive_name, provenance)
++        os.utime(filename, (315532800, 315532800))
+         self.zf.write(filename, archive_name)
+ 
+     def _add_str_zip(self, data, archive_name, provenance):

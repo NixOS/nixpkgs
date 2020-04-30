@@ -1,4 +1,5 @@
 { stdenv
+, callPackage
 , Cocoa
 , CoreFoundation
 , Foundation
@@ -7,7 +8,6 @@
 , JavaVM
 , bash
 , bzip2
-, clang
 , curl
 , ed
 , fetchFromGitHub
@@ -23,7 +23,6 @@
 , libiconv
 , libobjc
 , libresolv
-, llvm
 , lzma
 , makeWrapper
 , mercurial_4
@@ -82,13 +81,14 @@ let
     };
   };
   python27withPackages = python27.withPackages (ps: [ ninja-syntax ]);
+  llvm-sulong = callPackage ./ce/llvm.nix {};
   # https://github.com/graalvm/openjdk8-jvmci-builder/issues/11#issuecomment-542195999
   # openjdk8Static = openjdk8.override { static = true; };
   callPackageGraal8 = newScope ({
     openjdk = openjdk8.override { static = true; };
     inherit stdenv sdkVersion fetchFromGitHub
       makeMxCache makeMxGitCache graalVMSource
-      python27withPackages;
+      python27withPackages ninja mercurial_4 bash;
   }
   );
 in
@@ -104,7 +104,8 @@ rec {
         xcodebuild Cocoa;
     };
     sdk = callPackageGraal8 ./ce/sdk.nix {
-      inherit jvmci mx clang ninja mercurial_4 bash;
+      inherit jvmci mx;
+      llvm = llvm-sulong;
     };
   };
 }

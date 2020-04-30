@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, llvm
 , bash
 , sdkVersion
 , graalVMSource
@@ -11,7 +12,6 @@
 , ninja
 , python27withPackages
 , mercurial_4
-, clang
 , zlib
 }:
 
@@ -20,18 +20,19 @@ stdenv.mkDerivation rec {
   pname = "sdk";
   src = graalVMSource;
   buildInputs = [
-    mx clang ninja python27withPackages
+    llvm mx ninja python27withPackages
     mercurial_4 jvmci zlib
+    stdenv.cc.bintools.libc.bin
   ];
 
-  patches = [ ./mx_truffle.py.patch ./mx_compiler.py.patch ];
+  patches = [ ./mx_truffle.py.patch ./mx_compiler.py.patch ./sulong_llvm_setjmp.patch ];
 
   postUnpack = ''
-
     export MX_CACHE_DIR=$NIX_BUILD_TOP/mxcache
     export MX_GIT_CACHE_DIR=$NIX_BUILD_TOP/$sourceRoot
     export MX_ALT_OUTPUT_ROOT=$NIX_BUILD_TOP
     export MX_NIX_OUTPUT_ROOT=$MX_ALT_OUTPUT_ROOT
+
     ${makeMxCache { depList = (import ./graal-mxcache.nix { inherit stdenv lib; }); outputDir = "$MX_CACHE_DIR"; }}
 
     ( cd $MX_GIT_CACHE_DIR
@@ -66,8 +67,28 @@ stdenv.mkDerivation rec {
       --replace '-H:MaxRuntimeCompileMethods=1400' \
                 '-H:MaxRuntimeCompileMethods=2800'
 
+    substituteInPlace sulong/mx.sulong/suite.py \
+      --replace '<path:LLVM_TOOLCHAIN>' '${llvm}'
+
+    substituteInPlace sulong/mx.sulong/mx_sulong.py \
+      --replace '#!/usr/bin/env bash' '#!${bash}/bin/bash'
+
+    substituteInPlace sulong/tests/com.oracle.truffle.llvm.tests.native/Makefile \
+      --replace '$(CLANG)' '$(CLANG) $(EXTRA_CFLAGS) -fuse-ld=lld -nostdlib'
+
+    substituteInPlace sulong/projects/com.oracle.truffle.llvm.libraries.mock/Makefile \
+      --replace '$(CLANG)' '$(CLANG) $(EXTRA_CFLAGS) -fuse-ld=lld -nostdlib'
+
+    substituteInPlace sulong/projects/com.oracle.truffle.llvm.libraries.native/Makefile \
+      --replace '$(CLANG)' '$(CLANG) $(EXTRA_CFLAGS) -fuse-ld=lld -nostdlib'
+
+    substituteInPlace sulong/tests/com.oracle.truffle.llvm.tests.tck.native/Makefile \
+      --replace '$(CLANG)' '$(CLANG) $(EXTRA_CFLAGS) -fuse-ld=lld -nostdlib'
+
     patchShebangs substratevm/mx.substratevm/rebuild-images.sh
   '';
+
+  EXTRA_CFLAGS = "-I${stdenv.cc.bintools.libc.dev}/include -I${llvm}/include";
 
   buildPhase = ''
     export MX_GIT_CACHE='refcache'
@@ -78,20 +99,21 @@ stdenv.mkDerivation rec {
     cd vm
     mx-internal \
      --max-cpus 1 \
-     --dynamicimports substratevm \
+     --dynamicimports substratevm,sulong,vm \
      --suite compiler \
      --suite sdk \
      --suite vm \
      --suite tools \
      --suite regex \
      --suite truffle \
+     --suite sulong \
      build
   '';
 
   installPhase = ''
     mkdir -p $out
     rm -rf $MX_NIX_OUTPUT_ROOT/GRAALVM_*STAGE1*
-    cp -rf $MX_NIX_OUTPUT_ROOT/GRAALVM*/graalvm-unknown*/{bin,include,jre,lib,share} $out
+    cp -rf $MX_NIX_OUTPUT_ROOT/GRAALVM*/graalvm-unknown*/{bin,include,jre,lib,release,share} $out
   '';
 
   preFixup = jvmci.preFixup;
