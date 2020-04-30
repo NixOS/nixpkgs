@@ -111,6 +111,8 @@
 
   helm-words = callPackage ./helm-words { };
 
+  isearch-plus = callPackage ./isearch-plus { };
+
   jam-mode = callPackage ./jam-mode { };
 
   llvm-mode = trivialBuild {
