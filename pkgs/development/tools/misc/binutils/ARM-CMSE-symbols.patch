@@ -1,0 +1,125 @@
+From baf46cd78048e1b959462567556e1de1ef6b9039 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Thu, 22 Aug 2019 11:21:48 +0930
+Subject: [PATCH] ARM CMSE symbols
+
+This patch removes use of st_target_internal to cache the result of
+comparing symbol names against CMSE_PREFIX.  The problem with setting
+a bit in st_target_internal in swap_symbol_in is that calling
+bfd_elf_sym_name from swap_symbol_in requires symtab_hdr, and you
+don't know for sure whether swap_symbol_in is operating on dynsyms
+(and thus elf_tdata (abfd)->dynsymtab_hdr should be used) or on the
+normal symtab (thus elf_tdata (abfd)->symtab_hdr).  You can make an
+educated guess based on abfd->flags & DYNAMIC but that relies on
+knowing a lot about calls to bfd_elf_get_elf_syms, and is fragile in
+the face of possible future changes.
+
+include/
+	* elf/arm.h (ARM_GET_SYM_CMSE_SPCL, ARM_SET_SYM_CMSE_SPCL): Delete.
+bfd/
+	* elf32-arm.c (cmse_scan): Don't use ARM_GET_SYM_CMSE_SPCL,
+	instead recognize CMSE_PREFIX in symbol name.
+	(elf32_arm_gc_mark_extra_sections): Likewise.
+	(elf32_arm_filter_cmse_symbols): Don't test ARM_GET_SYM_CMSE_SPCL.
+	(elf32_arm_swap_symbol_in): Don't invoke ARM_SET_SYM_CMSE_SPCL.
+---
+ bfd/ChangeLog     |  8 ++++++++
+ bfd/elf32-arm.c   | 26 ++++++--------------------
+ include/ChangeLog |  4 ++++
+ include/elf/arm.h |  7 -------
+ 4 files changed, 18 insertions(+), 27 deletions(-)
+
+diff --git a/bfd/elf32-arm.c b/bfd/elf32-arm.c
+index d1548d6db33..b675fc60c1a 100644
+--- a/bfd/elf32-arm.c
++++ b/bfd/elf32-arm.c
+@@ -6002,12 +6002,12 @@ cmse_scan (bfd *input_bfd, struct elf32_arm_link_hash_table *htab,
+       if (i < ext_start)
+ 	{
+ 	  cmse_sym = &local_syms[i];
+-	  /* Not a special symbol.  */
+-	  if (!ARM_GET_SYM_CMSE_SPCL (cmse_sym->st_target_internal))
+-	    continue;
+ 	  sym_name = bfd_elf_string_from_elf_section (input_bfd,
+ 						      symtab_hdr->sh_link,
+ 						      cmse_sym->st_name);
++	  if (!sym_name || !CONST_STRNEQ (sym_name, CMSE_PREFIX))
++	    continue;
++
+ 	  /* Special symbol with local binding.  */
+ 	  cmse_invalid = TRUE;
+ 	}
+@@ -6015,9 +6015,7 @@ cmse_scan (bfd *input_bfd, struct elf32_arm_link_hash_table *htab,
+ 	{
+ 	  cmse_hash = elf32_arm_hash_entry (sym_hashes[i - ext_start]);
+ 	  sym_name = (char *) cmse_hash->root.root.root.string;
+-
+-	  /* Not a special symbol.  */
+-	  if (!ARM_GET_SYM_CMSE_SPCL (cmse_hash->root.target_internal))
++	  if (!CONST_STRNEQ (sym_name, CMSE_PREFIX))
+ 	    continue;
+ 
+ 	  /* Special symbol has incorrect binding or type.  */
+@@ -15990,7 +15988,8 @@ elf32_arm_gc_mark_extra_sections (struct bfd_link_info *info,
+ 
+ 		  /* Assume it is a special symbol.  If not, cmse_scan will
+ 		     warn about it and user can do something about it.  */
+-		  if (ARM_GET_SYM_CMSE_SPCL (cmse_hash->root.target_internal))
++		  if (CONST_STRNEQ (cmse_hash->root.root.root.string,
++				    CMSE_PREFIX))
+ 		    {
+ 		      cmse_sec = cmse_hash->root.root.u.def.section;
+ 		      if (!cmse_sec->gc_mark
+@@ -18610,9 +18609,6 @@ elf32_arm_filter_cmse_symbols (bfd *abfd ATTRIBUTE_UNUSED,
+ 	  || cmse_hash->root.type != STT_FUNC)
+ 	continue;
+ 
+-      if (!ARM_GET_SYM_CMSE_SPCL (cmse_hash->root.target_internal))
+-	continue;
+-
+       syms[dst_count++] = sym;
+     }
+   free (cmse_name);
+@@ -19935,9 +19931,6 @@ elf32_arm_swap_symbol_in (bfd * abfd,
+ 			  const void *pshn,
+ 			  Elf_Internal_Sym *dst)
+ {
+-  Elf_Internal_Shdr *symtab_hdr;
+-  const char *name = NULL;
+-
+   if (!bfd_elf32_swap_symbol_in (abfd, psrc, pshn, dst))
+     return FALSE;
+   dst->st_target_internal = 0;
+@@ -19966,13 +19959,6 @@ elf32_arm_swap_symbol_in (bfd * abfd,
+   else
+     ARM_SET_SYM_BRANCH_TYPE (dst->st_target_internal, ST_BRANCH_UNKNOWN);
+ 
+-  /* Mark CMSE special symbols.  */
+-  symtab_hdr = & elf_symtab_hdr (abfd);
+-  if (symtab_hdr->sh_size)
+-    name = bfd_elf_sym_name (abfd, symtab_hdr, dst, NULL);
+-  if (name && CONST_STRNEQ (name, CMSE_PREFIX))
+-    ARM_SET_SYM_CMSE_SPCL (dst->st_target_internal);
+-
+   return TRUE;
+ }
+ 
+diff --git a/include/elf/arm.h b/include/elf/arm.h
+index 5cb99706443..75fb5e26ca0 100644
+--- a/include/elf/arm.h
++++ b/include/elf/arm.h
+@@ -399,11 +399,4 @@ enum arm_st_branch_type {
+ 	   | ((TYPE) & ENUM_ARM_ST_BRANCH_TYPE_BITMASK))
+ #endif
+ 
+-/* Get or set whether a symbol is a special symbol of an entry function of CMSE
+-   secure code.  */
+-#define ARM_GET_SYM_CMSE_SPCL(SYM_TARGET_INTERNAL) \
+-  (((SYM_TARGET_INTERNAL) >> 2) & 1)
+-#define ARM_SET_SYM_CMSE_SPCL(SYM_TARGET_INTERNAL) \
+-  (SYM_TARGET_INTERNAL) |= 4
+-
+ #endif /* _ELF_ARM_H */
+-- 
+2.18.2
+
