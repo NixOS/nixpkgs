@@ -178,6 +178,18 @@ in
     };
   };
 
+  slevesque.vscode-hexdump = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "vscode-hexdump";
+      publisher = "slevesque";
+      version = "1.7.2";
+      sha256 = "0l1nm0w3615fha65kpv3ada5vnnaw2wgjwlksi4lda3qxlbwrchj";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "vim";
