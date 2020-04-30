@@ -67,15 +67,15 @@ stdenv.mkDerivation rec {
       "--with-python=${pythonEnv.interpreter}"
   ]
   ++ optional (build_profile != null) "--build-profile=${build_profile}"
-  ++ optional withExamples " --enable-examples "
-  ++ optional doCheck " --enable-tests "
+  ++ optional withExamples "--enable-examples"
+  ++ optional doCheck "--enable-tests"
   ;
 
   doCheck = true;
 
   buildTargets = "build"
     + lib.optionalString enableDoxygen " doxygen"
-    + lib.optionalString withManual "sphinx";
+    + lib.optionalString withManual " sphinx";
 
   # to prevent fatal error: 'backward_warning.h' file not found
   env.CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
