@@ -1,6 +1,6 @@
 . @fix_qmake_libtool@
 
-qmakeFlags=${qmakeFlags[@]+"${qmakeFlags[@]}"}
+qmakeFlags=(${qmakeFlags[@]+"${qmakeFlags[@]}"})
 
 qmakePrePhase() {
     qmakeFlags=( \
