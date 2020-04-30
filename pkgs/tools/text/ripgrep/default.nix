@@ -30,9 +30,9 @@ rustPlatform.buildRustPackage rec {
   ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
-    (cd target/release/build/ripgrep-*/out
-    installManPage rg.1
-    installShellCompletion rg.{bash,fish})
+    installManPage $releaseDir/build/ripgrep-*/out/rg.1
+
+    installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
     installShellCompletion --zsh "$src/complete/_rg"
   '';
 
