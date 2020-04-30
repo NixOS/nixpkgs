@@ -334,7 +334,7 @@ in {
         requiredBy = [ "mailman-uwsgi.service" ];
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         script = ''
-          find "${settings.STATIC_ROOT}/" -mindepth 1 -delete
+          [[ -e "${settings.STATIC_ROOT}" ]] && find "${settings.STATIC_ROOT}/" -mindepth 1 -delete
           ${pythonEnv}/bin/mailman-web migrate
           ${pythonEnv}/bin/mailman-web collectstatic
           ${pythonEnv}/bin/mailman-web compress
