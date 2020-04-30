@@ -48,6 +48,18 @@ in
     };
   };
 
+  cschlosser.doxdocgen = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "doxdocgen";
+      publisher = "cschlosser";
+      version = "0.6.0";
+      sha256 = "sha256:1agnhl6qkdzf4gvd5mp8mmxday6vqrj7df86xa0b2jfj4h9zsgd9";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "auto-close-tag";
