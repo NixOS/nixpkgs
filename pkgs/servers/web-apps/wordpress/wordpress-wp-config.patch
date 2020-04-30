@@ -1,0 +1,14 @@
+--- a/wp-load.php
++++ b/wp-load.php
+@@ -31,7 +31,10 @@
+  *
+  * If neither set of conditions is true, initiate loading the setup process.
+  */
+-if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
++if ( !empty( getenv( 'WORDPRESS_CONFIG' ) ) && file_exists( getenv( 'WORDPRESS_CONFIG' ) )  ) {
++	/** Patched by NixOS */
++	require_once( getenv( 'WORDPRESS_CONFIG' ) );
++} elseif ( file_exists( ABSPATH . 'wp-config.php' ) ) {
+ 
+ 	/** The config file resides in ABSPATH */
+ 	require_once( ABSPATH . 'wp-config.php' );
