@@ -192,5 +192,17 @@ in
 
   llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
+  tomoki1207.pdf = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "pdf";
+      publisher = "tomoki1207";
+      version = "0.6.0";
+      sha256 = "0cb7p23h5qrjpgcn22sg09llldxr0vmqjz38sv4ryqm9yjpzx6m9";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   WakaTime.vscode-wakatime = callPackage ./wakatime {};
 }
