@@ -85,8 +85,6 @@ CHAR_TO_KEY = {
 }
 
 # Forward references
-nr_tests: int
-failed_tests: list
 log: "Logger"
 machines: "List[Machine]"
 
@@ -882,33 +880,16 @@ def run_tests() -> None:
         if machine.is_up():
             machine.execute("sync")
 
-    if nr_tests != 0:
-        nr_succeeded = nr_tests - len(failed_tests)
-        eprint("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
-        if len(failed_tests) > 0:
-            eprint(
-                "The following tests have failed:\n - {}".format(
-                    "\n - ".join(failed_tests)
-                )
-            )
-            sys.exit(1)
-
 
 @contextmanager
 def subtest(name: str) -> Iterator[None]:
-    global nr_tests
-    global failed_tests
-
     with log.nested(name):
-        nr_tests += 1
         try:
             yield
             return True
         except Exception as e:
-            failed_tests.append(
-                'Test "{}" failed with error: "{}"'.format(name, str(e))
-            )
-            log.log("error: {}".format(str(e)))
+            log.log(f'Test "{name}" failed with error: "{e}"')
+            raise e
 
     return False
 
@@ -927,9 +908,6 @@ if __name__ == "__main__":
         "{0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
     ]
     exec("\n".join(machine_eval))
-
-    nr_tests = 0
-    failed_tests = []
 
     @atexit.register
     def clean_up() -> None:
