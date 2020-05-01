@@ -62,7 +62,7 @@ To build your list of extensions from the ground up, you can simply
 ignore `enabled`:
 
 ```nix
-php.withExtensions ({ all, ... }: with all; [ opcache imagick ])
+php.withExtensions ({ all, ... }: with all; [ imagick opcache ])
 ```
 
 `php.withExtensions` provides extensions by wrapping a minimal php
@@ -94,7 +94,7 @@ follows:
 
 ```nix
 let
-  myPhp = php.withExtensions ({ all, ... }: with all; [ opcache imagick ]);
+  myPhp = php.withExtensions ({ all, ... }: with all; [ imagick opcache ]);
 in {
   services.phpfpm.pools."foo".phpPackage = myPhp;
 };
@@ -118,4 +118,20 @@ with the extensions `imagick` and `opcache` enabled:
 
 ```sh
 nix-shell -p 'php.withExtensions ({ all, ... }: with all; [ imagick opcache ])'
+```
+
+### Installing PHP packages with extensions {#ssec-php-user-guide-installing-packages-with-extensions}
+
+All interactive tools use the PHP package you get them from, so all
+packages at `php.packages.*` use the `php` package with its default
+extensions. Sometimes this default set of extensions isn't enough and
+you may want to extend it. A common case of this is the `composer`
+package: a project may depend on certain extensions and `composer`
+won't work with that project unless those extensions are loaded.
+
+Example of building `composer` with additional extensions:
+```nix
+(php.withExtensions ({ all, enabled }:
+  enabled ++ (with all; [ imagick redis ]))
+).packages.composer
 ```
