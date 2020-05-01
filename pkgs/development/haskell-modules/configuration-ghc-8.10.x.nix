@@ -42,12 +42,30 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # The proper 3.2.0.0 release does not compile with ghc-8.10.1, so we take the
+  # hitherto unreleased next version from the '3.2' branch of the upstream git
+  # repository for the time being.
+  cabal-install = assert super.cabal-install.version == "3.2.0.0";
+                  overrideCabal super.cabal-install (drv: {
+    postUnpack = "sourceRoot+=/cabal-install; echo source root reset to $sourceRoot";
+    version = "3.2.0.0-git";
+    editedCabalFile = null;
+    src = pkgs.fetchgit {
+      url = "git://github.com/haskell/cabal.git";
+      rev = "9bd4cc0591616aeae78e17167338371a2542a475";
+      sha256 = "005q1shh7vqgykkp72hhmswmrfpz761x0q0jqfnl3wqim4xd9dg0";
+    };
+  });
+
   # Deviate from Stackage LTS-15.x to fix the build.
   haddock-library = self.haddock-library_1_9_0;
 
   # Jailbreak to fix the build.
   async = doJailbreak super.async;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
+  ed25519 = doJailbreak super.ed25519;
+  email-validate = doJailbreak super.email-validate;  # https://github.com/Porges/email-validate-hs/issues/51
+  feed = doJailbreak super.feed;  # https://github.com/bergmark/feed/issues/48
   hashable = doJailbreak super.hashable;
   pandoc = doJailbreak super.pandoc;
   parallel = doJailbreak super.parallel;
@@ -60,6 +78,7 @@ self: super: {
   system-fileio = doJailbreak super.system-fileio;
   tar = doJailbreak super.tar;
   tasty-expected-failure = doJailbreak super.tasty-expected-failure;
+  tasty-rerun = doJailbreak super.tasty-rerun;  # https://github.com/ocharles/tasty-rerun/issues/18
   unliftio-core = doJailbreak super.unliftio-core;
   vector = doJailbreak super.vector;
   zlib = doJailbreak super.zlib;
