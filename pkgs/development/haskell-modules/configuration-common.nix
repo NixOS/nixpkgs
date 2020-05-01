@@ -1511,7 +1511,8 @@ self: super: {
   });
 
   # Depends on selective >= 0.4, but the default of selective is 0.3
-   headed-megaparsec = super.headed-megaparsec.override {
+  headed-megaparsec = super.headed-megaparsec.override {
     selective = self.selective_0_4_1;
   };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
