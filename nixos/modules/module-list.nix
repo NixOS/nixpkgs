@@ -156,6 +156,7 @@
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
   ./programs/systemtap.nix
+  ./programs/steam.nix
   ./programs/sway.nix
   ./programs/system-config-printer.nix
   ./programs/thefuck.nix
