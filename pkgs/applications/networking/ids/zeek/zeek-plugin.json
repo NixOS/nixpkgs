@@ -1,0 +1,36 @@
+{
+    "zeek-postgresql": {
+        "owner": "0xxon",
+        "repo": "zeek-postgresql",
+        "rev": "fb72b41140094ec8795cd7aaecbb3997c28ff202",
+        "sha256": "1r6nxxkpcb8d8mxm5nafvaixclll1xfslnzqhadl89kzvy4z6z00"
+    },
+
+    "IRC-Behavioral-Analysis": {
+        "owner": "GTrunSec",
+        "repo": "IRC-Behavioral-Analysis",
+        "rev": "3b2ec64f1f235f75cef0b4e79707b3ca9863abb3",
+        "sha256": "1xbksahi9a2g9gcwzc4k1bg488lc3mygs91x1sdjzn2w7229cvvc"
+    },
+
+    "metron-bro-plugin-kafka": {
+        "owner": "apache",
+        "repo": "metron-bro-plugin-kafka",
+        "rev": "9f2cb11c10722ee19eb57d213bb4af180ea4f12b",
+        "sha256": "08syll906qy0svfpmrmc3zm52xvdm7wbd3p517lmj8zbw06vra7j"
+    },
+
+    "IRC-Zeek-package": {
+        "owner": "stratosphereips",
+        "repo": "IRC-Zeek-package",
+        "rev": "57310d1dc0340b547cf34d7179e629a15ce9253e",
+        "sha256": "08q21lmsc1hy3ihynsxjz26zwfl2da5k4dh8pw44b4wx426w3kqz"
+    },
+
+    "spl-spt": {
+        "owner": "GTrunSec",
+        "repo": "spl-spt",
+        "rev": "1e33d19c70e9827ccf3c1444c20c41f94d7abd25",
+        "sha256": "1vcgsxb0kd1mz7cyg3088sh67kd1wmkn3xmpyjsbygn0kfafzfx8"
+    }
+}
