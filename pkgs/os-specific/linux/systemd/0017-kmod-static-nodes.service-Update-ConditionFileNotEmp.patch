@@ -1,7 +1,7 @@
-From 7db89c2236158461c99fe5c5da7ddb7feab825cf Mon Sep 17 00:00:00 2001
+From ce9fe2249c91fdfb224eaffce63e3dbdb4a5c25d Mon Sep 17 00:00:00 2001
 From: Florian Klink <flokli@flokli.de>
 Date: Sat, 7 Mar 2020 22:40:27 +0100
-Subject: [PATCH] kmod-static-nodes.service: Update ConditionFileNotEmpty
+Subject: [PATCH 17/18] kmod-static-nodes.service: Update ConditionFileNotEmpty
 
 On NixOS, kernel modules of the currently booted systems are located at
 /run/booted-system/kernel-modules/lib/modules/%v/, not /lib/modules/%v/.
@@ -23,5 +23,5 @@ index 0971edf9ec..87105a87b9 100644
  [Service]
  Type=oneshot
 -- 
-2.25.1
+2.26.2
 
