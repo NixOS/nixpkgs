@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "0q2ik7fj5k9i76js4ijyxbgrwqff437lass0sd5if2r40rqh0as0";
+    sha256 = "1i9chd8ks1q4g5pyscsir6pw4kahkx3k8ckzbi8j3gr6jz1qzzsg";
   };
 
   buildInputs = [

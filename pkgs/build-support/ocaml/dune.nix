@@ -1,6 +1,6 @@
 { stdenv, ocaml, findlib, dune, dune_2, opaline }:
 
-{ pname, version, buildInputs ? [], ... }@args:
+{ pname, version, buildInputs ? [], enableParallelBuilding ? true, ... }@args:
 
 let Dune = if args.useDune2 or false then dune_2 else dune; in
 
@@ -11,14 +11,16 @@ else
 
 stdenv.mkDerivation ({
 
+  inherit enableParallelBuilding;
+
   buildPhase = ''
     runHook preBuild
-    dune build -p ${pname}
+    dune build -p ${pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postBuild
   '';
   checkPhase = ''
     runHook preCheck
-    dune runtest -p ${pname}
+    dune runtest -p ${pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postCheck
   '';
   installPhase = ''

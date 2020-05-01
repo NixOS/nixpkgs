@@ -8,8 +8,8 @@
 }:
 
 let php-embed = php.override {
-      config.php.embed = true;
-      config.php.apxs2 = false;
+      embedSupport = true;
+      apxs2Support = false;
     };
 
     pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {

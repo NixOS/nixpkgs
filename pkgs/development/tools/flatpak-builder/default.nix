@@ -29,7 +29,6 @@
 , gnumake
 , gnupg
 , gnutar
-, p7zip
 , json-glib
 , libcap
 , libdwarf
@@ -99,7 +98,6 @@ in stdenv.mkDerivation rec {
       cpio = "${cpio}/bin/cpio";
       git = "${gitMinimal}/bin/git";
       rofilesfuse = "${ostree}/bin/rofiles-fuse";
-      sevenz = "${p7zip}/bin/7z";
       strip = "${binutils}/bin/strip";
       eustrip = "${elfutils}/bin/eu-strip";
       euelfcompress = "${elfutils}/bin/eu-elfcompress";

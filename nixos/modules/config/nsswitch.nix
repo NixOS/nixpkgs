@@ -15,7 +15,6 @@ let
   nsswins = canLoadExternalModules && config.services.samba.nsswins;
   ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
   resolved = canLoadExternalModules && config.services.resolved.enable;
-  googleOsLogin = canLoadExternalModules && config.security.googleOsLogin.enable;
 
   hostArray = mkMerge [
     (mkBefore [ "files" ])
@@ -32,7 +31,6 @@ let
     (mkBefore [ "files" ])
     (mkIf ldap [ "ldap" ])
     (mkIf mymachines [ "mymachines" ])
-    (mkIf googleOsLogin [ "cache_oslogin oslogin" ])
     (mkIf canLoadExternalModules (mkAfter [ "systemd" ]))
   ];
 
@@ -172,7 +170,6 @@ in {
     # configured IP addresses, or ::1 and 127.0.0.2 as
     # fallbacks. Systemd also provides nss-mymachines to return IP
     # addresses of local containers.
-    system.nssModules = (optionals canLoadExternalModules [ config.systemd.package.out ])
-      ++ optional googleOsLogin pkgs.google-compute-engine-oslogin.out;
+    system.nssModules = (optionals canLoadExternalModules [ config.systemd.package.out ]);
   };
 }
