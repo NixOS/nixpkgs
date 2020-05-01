@@ -31,6 +31,6 @@ buildGoPackage rec {
     description = "Git extension for versioning large files";
     homepage    = "https://git-lfs.github.com/";
     license     = [ licenses.mit ];
-    maintainers = [ maintainers.twey ];
+    maintainers = [ maintainers.twey maintainers.marsam ];
   };
 }
