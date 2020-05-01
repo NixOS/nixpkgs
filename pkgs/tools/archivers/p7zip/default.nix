@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, enableUnfree ? false }:
+{ stdenv, fetchurl, fetchpatch, lib, enableUnfree ? false }:
 
 stdenv.mkDerivation rec {
   pname = "p7zip";
@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./12-CVE-2016-9296.patch
     ./13-CVE-2017-17969.patch
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/termux/termux-packages/master/packages/p7zip/3-CVE-2018-5996.patch";
+      sha256 = "1zivvkazmza0653i498ccp3zbpbpc7dvxl3zxwllbx41b6n589yp";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/termux/termux-packages/master/packages/p7zip/4-CVE-2018-10115.patch";
+      sha256 = "1cr7q8gnrk9yp6dcvxaqi1yhdbgp964nkv65ls41mw1kdfm44zn6";
+    })
   ];
 
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
