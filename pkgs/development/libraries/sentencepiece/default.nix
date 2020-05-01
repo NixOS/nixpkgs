@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentencepiece";
-  version = "0.1.85";
+  version = "0.1.86";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ncvyw9ar0z7nd47cysxg5xrjm01y1shdlhp8l2pdpx059p3yx3w";
+    sha256 = "0r4z5n3dx0bg1pm2kgfllyj65s7ljn2ny7i7c5bz618r7h8bax9p";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional withGPerfTools gperftools;

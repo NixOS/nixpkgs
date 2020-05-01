@@ -8,11 +8,11 @@ let
 
 in python3Packages.buildPythonApplication rec {
   pname = "mercurial";
-  version = "5.3";
+  version = "5.3.1";
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-    sha256 = "1fgr8k2ra7hs2dm8048pw01anmd41as246a5vm4m2sb7dcfzczz5";
+    sha256 = "1nbjpzjrzgql4hrvslpxwbcgn885ikq6ba1yb4w6p78rw9nzkhgp";
   };
 
   format = "other";

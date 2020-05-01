@@ -8,12 +8,12 @@ let
   plugins = callPackage ./plugins.nix args;
 in
 stdenv.mkDerivation rec {
-  version = "5.10.0";
+  version = "5.11.0";
   pname = "collectd";
 
   src = fetchurl {
     url = "https://collectd.org/files/${pname}-${version}.tar.bz2";
-    sha256 = "0nrpq09q6vbbv0hjc1vfa36z8j5802500hy75m678gh2cgsmjcx0";
+    sha256 = "1cjxksxdqcqdccz1nbnc2fp6yy84qq361ynaq5q8bailds00mc9p";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

@@ -24,8 +24,13 @@
 , libdrm ? null, wayland ? null, mesa_drivers ? null, libxkbcommon ? null # useOzone
 
 # package customization
-, useVaapi ? false
 , useOzone ? false
+, useVaapi ? !(useOzone || stdenv.isAarch64) # Built if supported, but disabled in the wrapper
+# VA-API TODOs:
+# - Ozone: M81 fails to build due to "ozone_platform_gbm = false"
+#   - Possible solutions: Write a patch to fix the build (wrong gn dependencies)
+#     or build with minigbm
+# - AArch64: Causes serious regressions (https://github.com/NixOS/nixpkgs/pull/85253#issuecomment-614405879)
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -134,10 +139,10 @@ let
       libXScrnSaver libXcursor libXtst libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
-    ] ++ optional gnomeKeyringSupport libgnome-keyring3
+    ] ++ optional useVaapi libva
+      ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional useVaapi libva
       ++ optional pulseSupport libpulseaudio
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
@@ -156,9 +161,9 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) ([
-      # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
-      ./patches/vaapi-fix.patch
+    ] ++ optionals (useVaapi) ([ # Fixes for the VA-API build:
+      ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
+      ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
     ] ++ optionals (versionRange "81" "82") [
       (githubPatch "5b2ff215473e0526b5b24aeff4ad90d369b21c75" "0n00vh8wfpn2ay5fqsxcsx0zadnv7mihm72bcvnrfzh75nzbg902")
       (githubPatch "98e343ab369e4262511b5fce547728e3e5eefba8" "00wwp653jk0k0yvix00vr7ymgck9dj7fxjwx4nc67ynn84dh6064")
