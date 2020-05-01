@@ -1,0 +1,20 @@
+diff --git a/go.mod b/go.mod
+index 75d4a09..ef2a7ef 100644
+--- a/go.mod
++++ b/go.mod
+@@ -9,13 +9,14 @@ require (
+ 	github.com/lithammer/fuzzysearch v1.1.0
+ 	github.com/lucasb-eyer/go-colorful v1.0.3
+ 	github.com/mattn/go-runewidth v0.0.8
++	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
+ 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
+ 	github.com/pkg/errors v0.9.1
+ 	github.com/rivo/uniseg v0.1.0
+ 	github.com/russross/blackfriday/v2 v2.0.1
+ 	github.com/sasha-s/go-deadlock v0.2.0
+ 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+-	github.com/stretchr/testify v1.5.1
++    github.com/stretchr/testify v1.3.0
+ 	go.etcd.io/bbolt v1.3.3
+ 	golang.org/x/image v0.0.0-20200119044424-58c23975cae1
+ 	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e

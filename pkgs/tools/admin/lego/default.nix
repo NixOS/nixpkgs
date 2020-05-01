@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-hjH1TBw6GHYNI9JSBOzdyEtJmp8NhlwNYydGZwsjAg0=";
   };
 
-  modSha256 = "sha256-+PJRaDdZqVO6D9SXojlr8JXn++pL18HOHFdaiUEalw8=";
+  vendorSha256 = "14453iiya6algkympyvwm03qgjcwk79z8bbrij7qhnp52qfrbmrp";
   subPackages = [ "cmd/lego" ];
 
   buildFlagsArray = [

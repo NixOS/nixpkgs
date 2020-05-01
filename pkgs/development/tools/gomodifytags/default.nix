@@ -4,7 +4,7 @@ buildGoModule rec {
   pname = "gomodifytags";
   version = "1.4.0";
 
-  modSha256 = "0nkdk2zgnwsg9lv20vqk2lshk4g9fqwqxd5bpr78nlahb9xk486s";
+  vendorSha256 = null;
 
   goPackagePath = "github.com/fatih/gomodifytags";
 

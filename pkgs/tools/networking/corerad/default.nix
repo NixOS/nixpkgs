@@ -11,13 +11,15 @@ buildGoModule rec {
     sha256 = "1r9kvz1ylrnfc7y5c4knqhx6xngh1p8j1axb8bd7h7p51c4i7jz2";
   };
 
-  modSha256 = "00xisa4l90f0digb1jfd2w616r080m7yp01y1rb83r8k147z5d2v";
+  vendorSha256 = "0ncwf197dx6mqzg69mnyp0iyad585izmydm0yj8ikd0y8ngpx7a3";
 
   buildFlagsArray = ''
     -ldflags=
     -X github.com/mdlayher/corerad/internal/build.linkTimestamp=1589133047
     -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}
   '';
+
+  deleteVendor = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mdlayher/corerad";

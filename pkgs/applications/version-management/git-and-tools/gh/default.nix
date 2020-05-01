@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "08fy3677yq52x40rab49ijhw4r25ls2807dbv9wpna6w07n7r8v7";
   };
 
-  modSha256 = "0v33x9bnwjfg4425vralnsb4i22c0g1rcmaga9911v0i7d51k0fn";
+  vendorSha256 = "0s99bjmsafnzhl3s2lcybxgsw1s4i1h3vh6p40gz4vsfhndidqrq";
 
   buildFlagsArray = [
     "-ldflags=-s -w -X github.com/cli/cli/command.Version=${version}"

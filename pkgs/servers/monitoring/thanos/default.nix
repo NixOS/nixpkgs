@@ -10,7 +10,7 @@ buildGoModule rec {
     sha256 = "10xscm9h2krha66v96v2q85fynnxfizjcc47h7yz4xhjwvb5dgz2";
   };
 
-  modSha256 = "0c8gc4qzdazxxnabfms63df8vlf2iy6iy0jrm710x76m4vm6mrbj";
+  vendorSha256 = "126rghnyjpykvjg9sr4kwpskc13qqafxgfn9ffykwc4jjz8vc07q";
 
   subPackages = "cmd/thanos";
 

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0z51iwdc4m0y8wyyx3mcvbzxlrgws7n5wkcd0g7nr73irnsld4lh";
   };
 
-  modSha256 = "029h0zr3fpzlsv9hf1d1x5j7aalxkcsyszsxjz8fqrhjafqc7zvq";
+  vendorSha256 = null;
 
   subPackages = [ "cmd/kubeseal" ];
 

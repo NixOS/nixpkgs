@@ -13,7 +13,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  modSha256 = "1gc8kc9mbi3mlh48zx4lcgpsrf8z879f1qj9wfyr66s7wd1ljazg";
+  vendorSha256 = "19wza3vkkda44cng8m6f9y7qpzrgk2adyjmcafk17v4773rxlncf";
 
   postInstall = ''
     wrapProgram "$out/bin/prototool" \
