@@ -1662,6 +1662,12 @@
       }
     ];
   };
+  cyplo = {
+    email = "nixos@cyplo.dev";
+    github = "cyplo";
+    githubId = 217899;
+    name = "Cyryl Płotnicki";
+  };
   d-goldin = {
     email = "dgoldin+github@protonmail.ch";
     github = "d-goldin";
