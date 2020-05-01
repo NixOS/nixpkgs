@@ -22034,7 +22034,7 @@ in
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
-  terminator = callPackage ../applications/misc/terminator { };
+  terminator = callPackage ../applications/misc/terminator { python = python3; };
 
   terminus = callPackage ../applications/misc/terminus { };
 
