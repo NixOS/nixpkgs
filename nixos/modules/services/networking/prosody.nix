@@ -873,5 +873,5 @@ in
     };
 
   };
-
+  meta.doc = ./prosody.xml;
 }
