@@ -65,6 +65,8 @@
     };
   };
 
+  emacspeak = callPackage ./emacspeak {};
+
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
 
