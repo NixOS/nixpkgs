@@ -16094,7 +16094,7 @@ in
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
-  spring-boot = callPackage ../development/tools/spring-boot { };
+  spring-boot-cli = callPackage ../development/tools/spring-boot-cli { };
 
   squid = callPackage ../servers/squid { };
 
