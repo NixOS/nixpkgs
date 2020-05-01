@@ -57,6 +57,7 @@ in
       };
 
       debug = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Pass -d and -7 to automount and write log to the system journal.

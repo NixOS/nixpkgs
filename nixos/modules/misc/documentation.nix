@@ -17,6 +17,7 @@ let
     inherit pkgs config;
     version = config.system.nixos.release;
     revision = "release-${version}";
+    extraSources = cfg.nixos.extraModuleSources;
     options =
       let
         scrubbedEval = evalModules {
@@ -160,6 +161,19 @@ in
           the options from all the NixOS modules included in the current
           <literal>configuration.nix</literal>. Disabling this will make the manual
           generator to ignore options defined outside of <literal>baseModules</literal>.
+        '';
+      };
+
+      nixos.extraModuleSources = mkOption {
+        type = types.listOf (types.either types.path types.str);
+        default = [ ];
+        description = ''
+          Which extra NixOS module paths the generated NixOS's documentation should strip
+          from options.
+        '';
+        example = literalExample ''
+          # e.g. with options from modules in ''${pkgs.customModules}/nix:
+          [ pkgs.customModules ]
         '';
       };
 

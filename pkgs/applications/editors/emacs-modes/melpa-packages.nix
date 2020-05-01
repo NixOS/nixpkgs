@@ -42,7 +42,9 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
   }: let
 
     inherit (import ./libgenerated.nix lib self) melpaDerivation;
-    super = lib.listToAttrs (map (melpaDerivation variant) (lib.importJSON archiveJson));
+    super = lib.listToAttrs (builtins.filter (s: s != null)
+                                             (map (melpaDerivation variant)
+                                                  (lib.importJSON archiveJson)));
 
     overrides = rec {
       shared = rec {
@@ -268,10 +270,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
         _0blayout = super."0blayout";
-        _0xc = super."0xc";
-        _2048-game = super."2048-game";
-        _4clojure = super."4clojure";
-        at = super."@";
         desktop-plus = super."desktop+";
         ghub-plus = super."ghub+";
         git-gutter-plus = super."git-gutter+";
@@ -282,10 +280,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         markdown-mode-plus = super."markdown-mode+";
         package-plus = super."package+";
         rect-plus = super."rect+";
-        term-plus = super."term+";
-        term-plus-key-intercept = super."term+key-intercept";
-        term-plus-mux = super."term+mux";
-        xml-plus = super."xml+";
       };
 
       stable = shared // {
@@ -413,6 +407,16 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         });
         # Legacy alias
         emacs-libvterm = unstable.vterm;
+
+        # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
+        _0xc = super."0xc";
+        _2048-game = super."2048-game";
+        _4clojure = super."4clojure";
+        at = super."@";
+        term-plus = super."term+";
+        term-plus-key-intercept = super."term+key-intercept";
+        term-plus-mux = super."term+mux";
+        xml-plus = super."xml+";
 
         w3m = super.w3m.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {

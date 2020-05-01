@@ -16726,6 +16726,13 @@ in
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_6);
 
+  # Kernels removed on release-20.03
+  linuxPackages_5_5 = throw ''
+    The 5.5 tree of Linux has been removed from 20.03. As per our stable
+    release policy, only LTS kernels and the latest one are available.
+  '';
+  linux_5_5 = linuxPackages_5_5;
+
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
   # - Update the rev in ../os-specific/linux/kernel/linux-libre.nix to the latest one.
@@ -20347,6 +20354,7 @@ in
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
+    botan = botan.override (x: { openssl = null; });
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {
