@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, python
+, python3
 , keybinder3
 , intltool
 , file
@@ -11,14 +11,14 @@
 , vte
 }:
 
-python.pkgs.buildPythonApplication rec {
-  name = "terminator-${version}";
+python3.pkgs.buildPythonApplication rec {
+  pname = "terminator";
   version = "1.92";
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
-    rev = "bb24273eb40dc5eac97de74064488701fa40a743";
+    rev = "v${version}";
     sha256 = "105f660wzf9cpn24xzwaaa09igg5h3qhchafv190v5nqck6g1ssh";
   };
 
@@ -34,11 +34,11 @@ python.pkgs.buildPythonApplication rec {
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
     keybinder3
     libnotify
-    python
+    python3
     vte
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     configobj
     dbus-python
     pygobject3
@@ -47,14 +47,18 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs run_tests tests po
     # dbus-python is correctly passed in propagatedBuildInputs, but for some reason setup.py complains.
     # The wrapped terminator has the correct path added, so ignore this.
     substituteInPlace setup.py --replace "'dbus-python'," ""
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     ./run_tests
+
+    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
