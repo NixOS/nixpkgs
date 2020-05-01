@@ -2,6 +2,7 @@
 , fetchurl
 , lib
 , unzip
+, symlinkJoin
 # To select only certain fonts, put a list of strings to `fonts`: every key in
 # ./shas.nix is an optional font
 , fonts ? []
@@ -25,33 +26,40 @@ let
     fName:
     fontsShas."${fName}"
   );
-  srcs = lib.attrsets.mapAttrsToList (
+  # Create a separate derivation for each individual font so that a font doesn't
+  # need to be rebuilt when used in different selection fonts. Reduces
+  # unnecessary rebuilds and disk usage.
+  fontPkgs = lib.attrsets.mapAttrsToList (
     fName:
     fSha:
-    (fetchurl {
-      url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.zip";
-      sha256 = fSha;
-    })
+    stdenv.mkDerivation rec {
+      inherit version;
+      pname = "nerdfonts-${fName}";
+      src = fetchurl {
+        url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.zip";
+        sha256 = fSha;
+      };
+      nativeBuildInputs = [
+        unzip
+      ];
+      sourceRoot = ".";
+      installPhase = ''
+        find -name \*.otf -exec mkdir -p $out/share/fonts/opentype/NerdFonts \; -exec mv {} $out/share/fonts/opentype/NerdFonts \;
+        find -name \*.ttf -exec mkdir -p $out/share/fonts/truetype/NerdFonts \; -exec mv {} $out/share/fonts/truetype/NerdFonts \;
+      '';
+      meta = with stdenv.lib; {
+        description = "${fName} font in Nerdfonts collection";
+        homepage = "https://nerdfonts.com/";
+        maintainers = with maintainers; [ doronbehar ];
+        hydraPlatforms = []; # 'Output limit exceeded' on Hydra
+      };
+    }
   ) selectedFontsShas;
-in
-
-stdenv.mkDerivation rec {
-  inherit version;
-  inherit srcs;
-  pname = "nerdfonts";
-  nativeBuildInputs = [
-    unzip
-  ];
-  sourceRoot = ".";
-  buildPhase = ''
-    echo "selected fonts are ${toString selectedFonts}"
-    ls *.otf *.ttf
-  '';
-  installPhase = ''
-    find -name \*.otf -exec mkdir -p $out/share/fonts/opentype/NerdFonts \; -exec mv {} $out/share/fonts/opentype/NerdFonts \;
-    find -name \*.ttf -exec mkdir -p $out/share/fonts/truetype/NerdFonts \; -exec mv {} $out/share/fonts/truetype/NerdFonts \;
-  '';
-
+in symlinkJoin {
+  # This package is just a thin symlink join which wraps the separate font
+  # packages under the same store path.
+  name = "nerdfonts-${version}";
+  paths = fontPkgs;
   meta = with stdenv.lib; {
     description = "Iconic font aggregator, collection, & patcher. 3,600+ icons, 50+ patched fonts";
     longDescription = ''
