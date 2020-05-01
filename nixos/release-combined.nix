@@ -111,6 +111,7 @@ in rec {
         (onFullSupported "nixos.tests.networking.scripted.sit")
         (onFullSupported "nixos.tests.networking.scripted.static")
         (onFullSupported "nixos.tests.networking.scripted.vlan")
+        (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
         (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onFullSupported "nixos.tests.openssh")
