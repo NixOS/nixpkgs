@@ -4424,6 +4424,8 @@ broken-packages:
   - elision
   - elm-street
   - elm-websocket
+  - elynx
+  - elynx-markov
   - elynx-seq
   - elynx-tools
   - elynx-tree
@@ -8660,6 +8662,7 @@ broken-packages:
   - reflex-basic-host
   - reflex-dom-retractable
   - reflex-dom-svg
+  - reflex-dynamic-containers
   - reflex-fsnotify
   - reflex-ghci
   - reflex-gloss
@@ -8668,6 +8671,7 @@ broken-packages:
   - reflex-orphans
   - reflex-process
   - reflex-sdl2
+  - reflex-test-host
   - reflex-transformers
   - reflex-vty
   - reformat
@@ -9153,6 +9157,7 @@ broken-packages:
   - shake-pack
   - shake-path
   - shake-persist
+  - shakebook
   - shaker
   - shakespeare-babel
   - shakespeare-sass
