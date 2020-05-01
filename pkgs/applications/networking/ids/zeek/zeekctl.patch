@@ -1,0 +1,81 @@
+--- a/aux/zeekctl/CMakeLists.txt	2020-03-10 11:30:39.000000000 -0700
++++ b/aux/zeekctl/CMakeLists.txt	2020-03-14 14:58:48.643194358 -0700
+@@ -165,35 +165,35 @@
+     set(LOGS ${VAR}/logs)
+ endif ()
+ 
+-if ( BINARY_PACKAGING_MODE AND NOT APPLE )
+-    # Packaging for Apple-based systems does not need special logic
+-    # because many probably find it more convenient for uninstalling
+-    # when everything resides under a common prefix (since there's no
+-    # native package management system)
+-    set(perms OWNER_READ OWNER_WRITE OWNER_EXECUTE
+-              GROUP_READ GROUP_WRITE GROUP_EXECUTE
+-              WORLD_READ WORLD_WRITE WORLD_EXECUTE)
+-
+-    install(DIRECTORY DESTINATION ${SPOOL}
+-            DIRECTORY_PERMISSIONS ${perms})
+-    install(DIRECTORY DESTINATION ${SPOOL}/tmp
+-            DIRECTORY_PERMISSIONS ${perms})
+-    install(DIRECTORY DESTINATION ${LOGS}
+-            DIRECTORY_PERMISSIONS ${perms})
+-    set(EMPTY_WORLD_DIRS
+-        "${EMPTY_WORLD_DIRS} ${SPOOL} ${SPOOL}/tmp ${LOGS}"
+-        CACHE STRING "" FORCE)
+-else ()
+-    install(DIRECTORY DESTINATION ${SPOOL})
+-    install(DIRECTORY DESTINATION ${SPOOL}/tmp)
+-    install(DIRECTORY DESTINATION ${LOGS})
+-endif ()
++# if ( BINARY_PACKAGING_MODE AND NOT APPLE )
++#     # Packaging for Apple-based systems does not need special logic
++#     # because many probably find it more convenient for uninstalling
++#     # when everything resides under a common prefix (since there's no
++#     # native package management system)
++#     set(perms OWNER_READ OWNER_WRITE OWNER_EXECUTE
++#               GROUP_READ GROUP_WRITE GROUP_EXECUTE
++#               WORLD_READ WORLD_WRITE WORLD_EXECUTE)
++
++#     install(DIRECTORY DESTINATION ${SPOOL}
++#             DIRECTORY_PERMISSIONS ${perms})
++#     install(DIRECTORY DESTINATION ${SPOOL}/tmp
++#             DIRECTORY_PERMISSIONS ${perms})
++#     install(DIRECTORY DESTINATION ${LOGS}
++#             DIRECTORY_PERMISSIONS ${perms})
++#     set(EMPTY_WORLD_DIRS
++#         "${EMPTY_WORLD_DIRS} ${SPOOL} ${SPOOL}/tmp ${LOGS}"
++#         CACHE STRING "" FORCE)
++# else ()
++#     install(DIRECTORY DESTINATION ${SPOOL})
++#     install(DIRECTORY DESTINATION ${SPOOL}/tmp)
++#     install(DIRECTORY DESTINATION ${LOGS})
++# endif ()
+ 
+ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/zeekctl-config.sh
+      "# Automatically generated. Do not edit.\n")
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zeekctl-config.sh DESTINATION ${SPOOL})
+-InstallSymlink(${SPOOL}/zeekctl-config.sh
+-               ${PREFIX}/share/zeekctl/scripts/zeekctl-config.sh)
++# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zeekctl-config.sh DESTINATION ${SPOOL})
++# InstallSymlink(${SPOOL}/zeekctl-config.sh
++#                ${PREFIX}/share/zeekctl/scripts/zeekctl-config.sh)
+ 
+ # A couple of configuration options that are needed are placed in here.
+ configure_file(etc/zeekctl.cfg.in
+@@ -271,11 +271,11 @@
+ ########################################################################
+ ## Build Summary
+ 
+-if (SPOOL)
+-    set(spoolDir ${SPOOL})
+-else ()
+-    set(spoolDir ${CMAKE_INSTALL_PREFIX}/spool)
+-endif ()
++# if (SPOOL)
++#     set(spoolDir ${SPOOL})
++# else ()
++#     set(spoolDir ${CMAKE_INSTALL_PREFIX}/spool)
++# endif ()
+ 
+ if (LOGS)
+     set(logDir ${LOGS})
