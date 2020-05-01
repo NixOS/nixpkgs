@@ -4,16 +4,21 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "kubie";
-  version = "0.7.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "sbstp";
     repo = "kubie";
-    sha256 = "186h5fng16gwqhsy2nxswbrrxsx0ysqrb4pqznyygbiz5cd9bgxp";
+    sha256 = "1f82xlhhxbjadjw609kr1kdm4n69c9mqjia4b3k505wjh7cc55n0";
   };
 
-  cargoSha256 = "1yllpi8dp1fy39z4zmhyf1hdjpl62vwh8b8qlj0g778qsdrm9p98";
+  cargoSha256 = "0mish7wqwq5ynl98n6swdn5i6mg62aih5rfykbl3wx39b468n481";
+
+  installPhase = ''
+    mkdir -p $out/share/bash-completion/completions
+    cp -v ${src}/completion/kubie.bash $out/share/bash-completion/completions/kubie
+  '';
 
   meta = with stdenv.lib; {
     description =
