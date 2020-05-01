@@ -7419,6 +7419,8 @@ in
 
   tweet-hs = haskell.lib.justStaticExecutables haskellPackages.tweet-hs;
 
+  tweeny = callPackage ../development/libraries/tweeny { };
+
   qfsm = callPackage ../applications/science/electronics/qfsm { };
 
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
