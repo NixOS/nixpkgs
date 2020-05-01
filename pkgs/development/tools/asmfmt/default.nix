@@ -27,6 +27,10 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
+  # This package comes with its own version of goimports, gofmt and goreturns
+  # but these binaries are outdated and are offered by other packages.
+  subPackages = [ "cmd/asmfmt" ];
+
   meta = with lib; {
     description = "Go Assembler Formatter";
     homepage = "https://github.com/klauspost/asmfmt";
