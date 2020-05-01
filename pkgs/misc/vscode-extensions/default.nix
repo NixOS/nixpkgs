@@ -84,6 +84,18 @@ in
     };
   };
 
+  mhutchie.git-graph = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "git-graph";
+      publisher = "mhutchie";
+      version = "1.22.0";
+      sha256 = "06j49pxz9vp6z4hax60jsn4fa2iig76d8p9cjhdhbvmyil0dgggx";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+ 
   ms-azuretools.vscode-docker = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "vscode-docker";
