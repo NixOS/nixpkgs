@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional withDoc asciidoc;
 
   buildInputs = [
-    glib
     libX11
     libXext
     libXinerama
