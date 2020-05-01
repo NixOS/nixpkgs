@@ -593,8 +593,6 @@ let
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
-    core_extended_p4 = callPackage ../development/ocaml-modules/core_extended { };
-
     core_kernel_p4 = callPackage ../development/ocaml-modules/core_kernel { };
 
     core_p4 = callPackage ../development/ocaml-modules/core { };
@@ -1193,13 +1191,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/textutils.nix {}
       else textutils_p4;
-
-    core_extended =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.core_extended
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/core-extended.nix {}
-      else core_extended_p4;
 
     async_kernel =
       if lib.versionOlder "4.03" ocaml.version
