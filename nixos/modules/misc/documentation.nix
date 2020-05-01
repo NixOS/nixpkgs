@@ -102,6 +102,16 @@ in
         '';
       };
 
+      man.generateCaches = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to generate the manual page index caches using
+          <literal>mandb(8)</literal>. This allows searching for a page or
+          keyword using utilities like <literal>apropos(1)</literal>.
+        '';
+      };
+
       info.enable = mkOption {
         type = types.bool;
         default = true;
@@ -187,7 +197,33 @@ in
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
-      environment.etc."man.conf".source = "${pkgs.man-db}/etc/man_db.conf";
+      environment.etc."man_db.conf".text =
+        let
+          manualPages = pkgs.buildEnv {
+            name = "man-paths";
+            paths = config.environment.systemPackages;
+            pathsToLink = [ "/share/man" ];
+            extraOutputsToInstall = ["man"];
+            ignoreCollisions = true;
+          };
+          manualCache = pkgs.runCommandLocal "man-cache" { }
+          ''
+            echo "MANDB_MAP ${manualPages}/share/man $out" > man.conf
+            ${pkgs.man-db}/bin/mandb -C man.conf -psc
+          '';
+        in
+        ''
+          # Manual pages paths for NixOS
+          MANPATH_MAP /run/current-system/sw/bin /run/current-system/sw/share/man
+          MANPATH_MAP /run/wrappers/bin          /run/current-system/sw/share/man
+
+          ${optionalString cfg.man.generateCaches ''
+          # Generated manual pages cache for NixOS (immutable)
+          MANDB_MAP /run/current-system/sw/share/man ${manualCache}
+          ''}
+          # Manual pages caches for NixOS
+          MANDB_MAP /run/current-system/sw/share/man /var/cache/man/nixos
+        '';
     })
 
     (mkIf cfg.info.enable {
