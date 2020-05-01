@@ -55,11 +55,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.23.3";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "00b9lp3h65254kdb1ys15fv7p3ln7qsvf15jkw4kli5ymagadkjk";
+    sha256 = "1yhck2g4rwlzgnzqa4wjxw3lf6k6rd730hz4bwzajdjy7i26xfdk";
   };
 
   nativeBuildInputs = [
@@ -148,6 +148,7 @@ stdenv.mkDerivation rec {
     "-D build-tests=false" # disable build tests, which are not working
     "-D drm=true"
     "-D embedded-lz4=false"
+    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
     "-D evas-loaders-disabler=json"
     "-D fb=true"
     "-D opengl=full"
