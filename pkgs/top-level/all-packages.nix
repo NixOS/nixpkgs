@@ -7367,6 +7367,10 @@ in
 
   wootility = callPackage ../tools/misc/wootility { };
 
+  wormhole = callPackage ../tools/networking/wormhole {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   wpscan = callPackage ../tools/security/wpscan { };
 
   wsmancli = callPackage ../tools/system/wsmancli {};
