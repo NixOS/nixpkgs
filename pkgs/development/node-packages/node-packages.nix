@@ -63230,6 +63230,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  he = nodeEnv.buildNodePackage {
+    name = "he";
+    packageName = "he";
+    version = "1.2.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/he/-/he-1.2.0.tgz";
+      sha512 = "F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "A robust HTML entities encoder/decoder with full Unicode support.";
+      homepage = "https://mths.be/he";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   html-minifier = nodeEnv.buildNodePackage {
     name = "html-minifier";
     packageName = "html-minifier";
