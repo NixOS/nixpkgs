@@ -178,6 +178,18 @@ in
     };
   };
 
+  streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "code-spell-checker";
+      publisher = "streetsidesoftware";
+      version = "1.8.0";
+      sha256 = "189daplk4hsj0jza2ck95g65hg3f9rm39cn2swrhi6z6li4xc7y7";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "vim";
