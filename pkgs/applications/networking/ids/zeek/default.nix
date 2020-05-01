@@ -2,6 +2,9 @@
 , libmaxminddb, gperftools, python, swig, fetchpatch, caf }:
 let
   preConfigure = (import ./script.nix);
+  metron-bro-plugin-kafka = pkgs.fetchFromGitHub (builtins.fromJSON (builtins.readFile ./zeek-plugin.json)).metron-bro-plugin-kafka;
+  zeek-postgresql = pkgs.fetchFromGitHub (builtins.fromJSON (builtins.readFile ./zeek-plugin.json)).zeek-postgresql;
+  install_plugin = pkgs.writeScript "install_plugin" (import ./install_plugin.nix { });
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
