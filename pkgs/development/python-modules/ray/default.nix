@@ -50,8 +50,6 @@ buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ mjlbach ];
     platforms = [ "x86_64-linux" ];
-    # Python 2.7 build uses different string encoding.
-    # See https://github.com/NixOS/nixpkgs/pull/37044#issuecomment-373452253
-    broken = stdenv.isDarwin
+    broken = stdenv.isDarwin;
   };
 }
