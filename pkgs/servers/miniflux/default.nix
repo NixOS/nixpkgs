@@ -20,7 +20,7 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    mv $bin/bin/miniflux.app $bin/bin/miniflux
+    mv $out/bin/miniflux.app $out/bin/miniflux
   '';
 
   meta = with stdenv.lib; {

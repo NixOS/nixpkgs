@@ -19,7 +19,7 @@ buildGoPackage rec {
   };
 
   postInstall = ''
-    mv $bin/bin/cli $bin/bin/wally
+    mv $out/bin/cli $out/bin/wally
   '';
 
   goDeps = ./deps.nix;

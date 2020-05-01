@@ -29,10 +29,10 @@ buildGoPackage rec {
 
   postInstall = ''
     tar -xvf $srcStatic
-    mkdir -p $bin/share/grafana
-    mv grafana-*/{public,conf,tools} $bin/share/grafana/
+    mkdir -p $out/share/grafana
+    mv grafana-*/{public,conf,tools} $out/share/grafana/
   '' + lib.optionalString phantomJsSupport ''
-    ln -sf ${phantomjs2}/bin/phantomjs $bin/share/grafana/tools/phantomjs/phantomjs
+    ln -sf ${phantomjs2}/bin/phantomjs $out/share/grafana/tools/phantomjs/phantomjs
   '';
 
   meta = with lib; {

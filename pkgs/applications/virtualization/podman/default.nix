@@ -25,7 +25,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/containers/libpod";
 
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
@@ -40,7 +40,7 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -Dm555 bin/podman $bin/bin/podman
+    install -Dm555 bin/podman $out/bin/podman
     installShellCompletion --bash completions/bash/podman
     installShellCompletion --zsh completions/zsh/_podman
     MANDIR=$man/share/man make install.man

@@ -35,9 +35,9 @@ buildGoPackage {
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin $bin/share/meguca
-    cp meguca $bin/bin
-    cp -r www $bin/share/meguca
+    mkdir -p $out/bin $out/share/meguca
+    cp meguca $out/bin
+    cp -r www $out/share/meguca
   '';
 
   meta = with stdenv.lib; {

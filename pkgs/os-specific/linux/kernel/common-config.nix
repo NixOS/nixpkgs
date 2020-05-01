@@ -254,6 +254,27 @@ let
       SND_USB_CAIAQ_INPUT = yes;
       # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
       PSS_MIXER           = whenOlder "4.12" yes;
+    # Enable Sound Open Firmware support
+    } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
+                        versionAtLeast version "5.5") {
+      SND_SOC_SOF_TOPLEVEL              = yes;
+      SND_SOC_SOF_ACPI                  = module;
+      SND_SOC_SOF_PCI                   = module;
+      SND_SOC_SOF_APOLLOLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_CANNONLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COFFEELAKE_SUPPORT    = yes;
+      SND_SOC_SOF_COMETLAKE_H_SUPPORT   = yes;
+      SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = yes;
+      SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
+      SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;
+      SND_SOC_SOF_HDA_AUDIO_CODEC       = yes;
+      SND_SOC_SOF_HDA_COMMON_HDMI_CODEC = yes;
+      SND_SOC_SOF_HDA_LINK              = yes;
+      SND_SOC_SOF_ICELAKE_SUPPORT       = yes;
+      SND_SOC_SOF_INTEL_TOPLEVEL        = yes;
+      SND_SOC_SOF_JASPERLAKE_SUPPORT    = yes;
+      SND_SOC_SOF_MERRIFIELD_SUPPORT    = yes;
+      SND_SOC_SOF_TIGERLAKE_SUPPORT     = yes;
     };
 
     usb-serial = {

@@ -10,7 +10,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$bin/bin/assh" \
+    wrapProgram "$out/bin/assh" \
       --prefix PATH : ${openssh}/bin
   '';
 

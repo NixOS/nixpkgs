@@ -42,7 +42,7 @@ buildGoPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D cockroachoss $bin/bin/cockroach
+    install -D cockroachoss $out/bin/cockroach
     installShellCompletion cockroach.bash
 
     mkdir -p $man/share/man
@@ -51,11 +51,7 @@ buildGoPackage rec {
     runHook postInstall
   '';
 
-  # Unfortunately we have to keep an empty reference to $out, because it seems
-  # buildGoPackages only nukes references to the go compiler under $bin, effectively
-  # making all binary output under $bin mandatory. Ideally, we would just use
-  # $out and $man and remove $bin since there's no point in an empty path. :(
-  outputs = [ "bin" "man" "out" ];
+  outputs = [ "out" "man" ];
 
   meta = with stdenv.lib; {
     homepage    = "https://www.cockroachlabs.com";
