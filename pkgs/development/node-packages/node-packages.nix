@@ -59655,6 +59655,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  escape-string-regexp = nodeEnv.buildNodePackage {
+    name = "escape-string-regexp";
+    packageName = "escape-string-regexp";
+    version = "4.0.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz";
+      sha512 = "TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Escape RegExp special characters";
+      homepage = "https://github.com/sindresorhus/escape-string-regexp#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   eslint = nodeEnv.buildNodePackage {
     name = "eslint";
     packageName = "eslint";
