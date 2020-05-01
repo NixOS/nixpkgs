@@ -1,6 +1,6 @@
-From b0d7b8b348adba8131b12f99be7a9a30a1cca867 Mon Sep 17 00:00:00 2001
+From a13aff157f899a6388b3c9e621680049f329a028 Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
-Date: Thu, 30 Apr 2020 00:24:57 +0200
+Date: Fri, 1 May 2020 23:44:08 +0200
 Subject: [PATCH] Add cargo.lock
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH] Add cargo.lock
 
 diff --git a/Cargo.lock b/Cargo.lock
 new file mode 100644
-index 00000000..8ae15438
+index 00000000..4822cea1
 --- /dev/null
 +++ b/Cargo.lock
 @@ -0,0 +1,2527 @@
@@ -605,7 +605,7 @@ index 00000000..8ae15438
 +dependencies = [
 + "proc-macro-hack",
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 +]
 +
@@ -782,7 +782,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "js-sys"
-+version = "0.3.38"
++version = "0.3.39"
 +dependencies = [
 + "wasm-bindgen",
 + "wasm-bindgen-futures",
@@ -1173,7 +1173,7 @@ index 00000000..8ae15438
 +dependencies = [
 + "proc-macro-error-attr",
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 + "version_check 0.9.1",
 +]
@@ -1185,7 +1185,7 @@ index 00000000..8ae15438
 +checksum = "4f5444ead4e9935abd7f27dc51f7e852a0569ac888096d5ec2499470794e2e53"
 +dependencies = [
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 + "syn-mid",
 + "version_check 0.9.1",
@@ -1238,9 +1238,9 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "quote"
-+version = "1.0.3"
++version = "1.0.4"
 +source = "registry+https://github.com/rust-lang/crates.io-index"
-+checksum = "2bdc6c187c65bca4260c9011c9e3132efe4909da44726bad24cf7572ae338d7f"
++checksum = "4c1f4b0efa5fc5e8ceb705136bfee52cfdb6a4e3509f770b478cd6ed434232a7"
 +dependencies = [
 + "proc-macro2 1.0.10",
 +]
@@ -1642,7 +1642,7 @@ index 00000000..8ae15438
 +checksum = "9e549e3abf4fb8621bd1609f11dfc9f5e50320802273b12f3811a67e6716ea6c"
 +dependencies = [
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 +]
 +
@@ -1731,7 +1731,7 @@ index 00000000..8ae15438
 + "heck",
 + "proc-macro-error",
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 +]
 +
@@ -1753,7 +1753,7 @@ index 00000000..8ae15438
 +checksum = "410a7488c0a728c7ceb4ad59b9567eb4053d02e8cc7f5c0e0eeeb39518369213"
 +dependencies = [
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "unicode-xid 0.2.0",
 +]
 +
@@ -1764,7 +1764,7 @@ index 00000000..8ae15438
 +checksum = "7be3539f6c128a931cf19dcee741c1af532c7fd387baa739c03dd2e96479338a"
 +dependencies = [
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 +]
 +
@@ -2038,7 +2038,7 @@ index 00000000..8ae15438
 +dependencies = [
 + "heck",
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 +]
 +
@@ -2050,7 +2050,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "cfg-if",
 + "js-sys",
@@ -2066,7 +2066,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-anyref-xform"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "anyhow",
 + "rayon",
@@ -2078,13 +2078,13 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-backend"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "bumpalo",
 + "lazy_static",
 + "log 0.4.8",
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 + "wasm-bindgen-shared",
 +]
@@ -2099,7 +2099,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-cli"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "anyhow",
 + "assert_cmd",
@@ -2127,7 +2127,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-cli-support"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "anyhow",
 + "base64 0.9.3",
@@ -2149,7 +2149,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-futures"
-+version = "0.4.11"
++version = "0.4.12"
 +dependencies = [
 + "cfg-if",
 + "futures-channel-preview",
@@ -2161,9 +2161,9 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-macro"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "trybuild",
 + "wasm-bindgen",
 + "wasm-bindgen-futures",
@@ -2172,10 +2172,10 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-macro-support"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "syn 1.0.18",
 + "wasm-bindgen-backend",
 + "wasm-bindgen-shared",
@@ -2183,7 +2183,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-multi-value-xform"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "anyhow",
 + "rayon",
@@ -2204,11 +2204,11 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-shared"
-+version = "0.2.61"
++version = "0.2.62"
 +
 +[[package]]
 +name = "wasm-bindgen-test"
-+version = "0.3.11"
++version = "0.3.12"
 +dependencies = [
 + "console_error_panic_hook",
 + "js-sys",
@@ -2234,15 +2234,15 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-test-macro"
-+version = "0.3.11"
++version = "0.3.12"
 +dependencies = [
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 +]
 +
 +[[package]]
 +name = "wasm-bindgen-threads-xform"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "anyhow",
 + "walrus",
@@ -2251,7 +2251,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-wasm-conventions"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "anyhow",
 + "walrus",
@@ -2259,7 +2259,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-wasm-interpreter"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "anyhow",
 + "log 0.4.8",
@@ -2270,7 +2270,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "wasm-bindgen-webidl"
-+version = "0.2.61"
++version = "0.2.62"
 +dependencies = [
 + "anyhow",
 + "env_logger",
@@ -2278,7 +2278,7 @@ index 00000000..8ae15438
 + "lazy_static",
 + "log 0.4.8",
 + "proc-macro2 1.0.10",
-+ "quote 1.0.3",
++ "quote 1.0.4",
 + "sourcefile",
 + "structopt",
 + "syn 1.0.18",
@@ -2353,7 +2353,7 @@ index 00000000..8ae15438
 +
 +[[package]]
 +name = "web-sys"
-+version = "0.3.38"
++version = "0.3.39"
 +dependencies = [
 + "js-sys",
 + "wasm-bindgen",
