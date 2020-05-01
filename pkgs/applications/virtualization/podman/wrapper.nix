@@ -34,15 +34,15 @@ in runCommand podman.name {
   ];
 
 } ''
-  # Symlink everything but $bin from podman-unwrapped
+  # Symlink everything but $out from podman-unwrapped
   ${
     lib.concatMapStringsSep "\n"
     (o: "ln -s ${podman.${o}} ${placeholder o}")
-    (builtins.filter (o: o != "bin")
+    (builtins.filter (o: o != "out")
     podman.outputs)}
 
-  mkdir -p $bin/bin
-  ln -s ${podman-unwrapped}/share $bin/share
-  makeWrapper ${podman-unwrapped}/bin/podman $bin/bin/podman \
+  mkdir -p $out/bin
+  ln -s ${podman-unwrapped}/share $out/share
+  makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
     --prefix PATH : ${binPath}
 ''
