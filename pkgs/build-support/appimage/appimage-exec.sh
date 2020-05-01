@@ -17,7 +17,7 @@ unpack() {
   local appimageType=0
 
   # https://github.com/AppImage/libappimage/blob/ca8d4b53bed5cbc0f3d0398e30806e0d3adeaaab/src/libappimage/utils/MagicBytesChecker.cpp#L45-L63
-  eval "$(r2 "$src" -nn -Nqc "p8j 3 @ 8" |
+  eval "$(r2 -nn -Nqc "p8j 3 @ 8" "$src"|
     jq -r '{appimageSignature: (.[:-1]|implode), appimageType: .[-1]}|
       @sh "appimageSignature=\(.appimageSignature) appimageType=\(.appimageType)"')"
 
@@ -38,7 +38,7 @@ unpack() {
 
         # multiarch offset one-liner using same method as AppImage
         # see https://gist.github.com/probonopd/a490ba3401b5ef7b881d5e603fa20c93
-        offset=$(r2 "$src" -nn -Nqc "pfj.elf_header @ 0" |\
+        offset=$(r2 -nn -Nqc "pfj.elf_header @ 0" "$src"|\
           jq 'map({(.name): .value}) | add | .shoff + (.shnum * .shentsize)')
 
         echo "Uncompress $(basename "$src") of type $appimageType @ offset $offset."
