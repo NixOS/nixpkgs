@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   '';
 
   postBuild = ''
-    make -C servers/native-espeak "TCL_INCLUDE=${tcl}/include" "LIBPARENTDIR=/"
+    make -C servers/native-espeak PREFIX=$out "TCL_INCLUDE=${tcl}/include"
   '';
 
   postInstall = ''
-    make -C servers/native-espeak DESTDIR=${placeholder "out"} install
+    make -C servers/native-espeak PREFIX=$out install
     local d=$out/share/emacs/site-lisp/emacspeak/
     install -d -- "$d"
     cp -a .  "$d"
