@@ -3080,6 +3080,8 @@ in
 
   dtc = callPackage ../development/compilers/dtc { };
 
+  dt-schema = python3Packages.callPackage ../development/tools/dt-schema { };
+
   dub = callPackage ../development/tools/build-managers/dub { };
 
   duc = callPackage ../tools/misc/duc { };
