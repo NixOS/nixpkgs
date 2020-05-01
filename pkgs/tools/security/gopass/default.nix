@@ -1,10 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, gnupg, xclip, wl-clipboard, installShellFiles, makeWrapper }:
+{ stdenv, buildGoModule, fetchFromGitHub, git, gnupg, xclip, wl-clipboard, installShellFiles, makeWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gopass";
-  version = "1.8.6";
-
-  goPackagePath = "github.com/gopasspw/gopass";
+  version = "1.9.0";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -12,8 +10,12 @@ buildGoPackage rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v3sx9hb03bdn4rvsv2r0jzif6p1rx47hrkpsbnwva31k396mck2";
+    sha256 = "1cssiglhxnrk1wl8phqkhmljqig5ms5a23sdzf8lywk5f6w2gayh";
   };
+
+  modSha256 = "01p3zv6dq1l68in1qqvlsh7i3ydhhanf54dyf7288x35js8wnmqa";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
 
   wrapperPath = stdenv.lib.makeBinPath ([
     git
@@ -23,13 +25,13 @@ buildGoPackage rec {
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $bin/bin/gopass completion $shell > gopass.$shell
+      $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell
     done
   '';
 
   postFixup = ''
-    wrapProgram $bin/bin/gopass \
+    wrapProgram $out/bin/gopass \
       --prefix PATH : "${wrapperPath}"
   '';
 
