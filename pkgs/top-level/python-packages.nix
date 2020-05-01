@@ -6714,6 +6714,8 @@ in {
 
   clize = callPackage ../development/python-modules/clize { };
 
+  ray = callPackage ../development/python-modules/ray { } ; 
+
   rl-coach = callPackage ../development/python-modules/rl-coach { };
 
   zerobin = callPackage ../development/python-modules/zerobin { };
