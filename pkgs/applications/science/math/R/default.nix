@@ -1,5 +1,5 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
+, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
@@ -12,27 +12,24 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
-  name = "R-3.6.3";
+  name = "R-4.0.0";
 
   src = fetchurl {
-    url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "13xaxwfbzj0bd6rn2n27z0n04lb93mcyq991w4vdbbg8v282jc49";
+    url = "https://cran.r-project.org/src/base/R-4/${name}.tar.gz";
+    sha256 = "0h1995smlyiyhx7gpg9paxsfqrcn6g9bbp5h9r47i6an3clv1gh6";
   };
 
   dontUseImakeConfigure = true;
 
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre perl readline texLive xz zlib less texinfo graphviz icu
+    pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
     pkgconfig bison imake which blas lapack curl tcl tk jdk
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
     ./no-usr-local-search-paths.patch
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Remove a test which fails on aarch64.
-    # See https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17718
-    ./0001-Disable-test-pending-upstream-fix.patch
+    ./fix-failing-test.patch
   ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
