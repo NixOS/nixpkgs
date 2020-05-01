@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, glib, gettext, bash, gnome3 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-caffeine-unstable";
-  version = "2020-03-13";
+  pname = "gnome-shell-extension-caffeine";
+  version = "unstable-2020-03-13";
 
   src = fetchFromGitHub {
     owner = "eonpatapon";

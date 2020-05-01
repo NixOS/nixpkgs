@@ -1,11 +1,8 @@
-{ stdenv
-, fetchFromGitHub
-, gnome3
-}:
+{ stdenv , fetchFromGitHub , gnome3 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-mpris-indicator-button-unstable";
-  version = "2020-03-21";
+  pname = "gnome-shell-extension-mpris-indicator-button";
+  version = "unstable-2020-03-21";
 
   src = fetchFromGitHub {
     owner = "JasonLG1979";

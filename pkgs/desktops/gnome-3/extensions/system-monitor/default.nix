@@ -1,7 +1,7 @@
 { stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, gnome3 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-system-monitor";
+  pname = "gnome-shell-extension-system-monitor";
   version = "38";
 
   src = fetchFromGitHub {
