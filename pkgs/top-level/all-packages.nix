@@ -20264,6 +20264,8 @@ in
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
+  kubernix = callPackage ../applications/networking/cluster/kubernix { };
+
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
   kubeless = callPackage ../applications/networking/cluster/kubeless { };
