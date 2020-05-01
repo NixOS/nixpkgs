@@ -250,7 +250,7 @@ in
             "example.com" = {
               webroot = "/var/www/challenges/";
               email = "foo@example.com";
-              extraDomains = { "www.example.com" = null; "foo.example.com" = "/var/www/foo/"; };
+              extraDomains = { "www.example.com" = null; "foo.example.com" = null; };
             };
             "bar.example.com" = {
               webroot = "/var/www/challenges/";
