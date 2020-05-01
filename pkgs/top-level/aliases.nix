@@ -339,48 +339,50 @@ mapAliases ({
   pg_tmp = ephemeralpg; # added 2018-01-16
 
   php-embed = throw ''
-    php*-embed has been dropped, you can build the same package by using
-     something similar with this following snippet:
-    (php74.override { config.php.embed = true; config.php.apxs2 = false; })
+    php*-embed has been dropped, you can build something similar
+    with the following snippet:
+    php74.override { embedSupport = true; apxs2Support = false; }
   ''; # added 2020-04-01
   php72-embed = php-embed; # added 2020-04-01
   php73-embed = php-embed; # added 2020-04-01
   php74-embed = php-embed; # added 2020-04-01
 
   phpPackages-embed = throw ''
-    php*Packages-embed has been dropped, you can build the same package by using
-     something similar with this following snippet:
-    (php74.override { config.php.embed = true; config.php.apxs2 = false; }).packages
+    php*Packages-embed has been dropped, you can build something
+    similar with the following snippet:
+    (php74.override { embedSupport = true; apxs2Support = false; }).packages
   ''; # added 2020-04-01
   php74Packages-embed = phpPackages-embed;
   php73Packages-embed = phpPackages-embed;
   php72Packages-embed = phpPackages-embed;
 
   php-unit = throw ''
-    php*-unit has been dropped, you can build the same package by using
-     something similar with this following snippet:
-    (php74.override {
-      config.php.embed = true;
-      config.php.apxs2 = false;
-      config.php.systemd = false;
-      config.php.phpdbg = false;
-      config.php.cgi = false;
-      config.php.fpm = false; })
+    php*-unit has been dropped, you can build something similar with
+    the following snippet:
+    php74.override {
+      embedSupport = true;
+      apxs2Support = false;
+      systemdSupport = false;
+      phpdbgSupport = false;
+      cgiSupport = false;
+      fpmSupport = false;
+    }
   ''; # added 2020-04-01
   php72-unit = php-unit; # added 2020-04-01
   php73-unit = php-unit; # added 2020-04-01
   php74-unit = php-unit; # added 2020-04-01
 
   phpPackages-unit = throw ''
-    php*Packages-unit has been dropped, you can build the same package by using
-     something similar with this following snippet:
+    php*Packages-unit has been dropped, you can build something
+     similar with this following snippet:
     (php74.override {
-      config.php.embed = true;
-      config.php.apxs2 = false;
-      config.php.systemd = false;
-      config.php.phpdbg = false;
-      config.php.cgi = false;
-      config.php.fpm = false; }).packages
+      embedSupport = true;
+      apxs2Support = false;
+      systemdSupport = false;
+      phpdbgSupport = false;
+      cgiSupport = false;
+      fpmSupport = false;
+    }).packages
   ''; # added 2020-04-01
   php74Packages-unit = phpPackages-unit;
   php73Packages-unit = phpPackages-unit;
@@ -575,6 +577,7 @@ mapAliases ({
   transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
+  uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12

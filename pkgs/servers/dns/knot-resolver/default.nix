@@ -16,20 +16,12 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.0.1";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "4a93264ad0cda7ea2252d1ba057e474722f77848165f2893e0c76e21ae406415";
+    sha256 = "9ab179d1dccc6ba59aacac81a4cd10a039615c7a846d9f77f26b851da25d1a86";
   };
-
-  patches = [
-    (fetchpatch { # merged to upstream master, remove on update
-      name = "zfs-cpu-usage.diff";
-      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/merge_requests/946.diff";
-      sha256 = "0mcvx4pfnl19h6zrv2fcgxdjarqzczn2dz85sylcczsfvdmn6i5m";
-    })
-  ];
 
   outputs = [ "out" "dev" ];
 

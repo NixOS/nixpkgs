@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     # install shell completion files
-    OUT_DIR=target/release/build/broot-*/out
+    OUT_DIR=$releaseDir/build/broot-*/out
 
     installShellCompletion --bash $OUT_DIR/{br,broot}.bash
     installShellCompletion --fish $OUT_DIR/{br,broot}.fish

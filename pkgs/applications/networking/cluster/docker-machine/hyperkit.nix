@@ -1,19 +1,20 @@
 { lib, buildGoModule, minikube }:
 
 buildGoModule rec {
-  inherit (minikube) version src nativeBuildInputs buildInputs goPackagePath preBuild;
+  inherit (minikube) version src nativeBuildInputs buildInputs modSha256 commit;
 
   pname = "docker-machine-hyperkit";
-  subPackages = [ "cmd/drivers/hyperkit" ];
 
-  modSha256   = minikube.go-modules.outputHash;
+  buildPhase = ''
+    make docker-machine-driver-hyperkit COMMIT=${commit}
+  '';
 
-  postInstall = ''
-    mv $out/bin/hyperkit $out/bin/docker-machine-driver-hyperkit
+  installPhase = ''
+    install out/docker-machine-driver-hyperkit -Dt $out/bin
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/kubernetes/minikube/blob/master/docs/drivers.md";
+    homepage = "https://minikube.sigs.k8s.io/docs/drivers/hyperkit";
     description = "HyperKit driver for docker-machine.";
     license = licenses.asl20;
     maintainers = with maintainers; [ atkinschang ];
