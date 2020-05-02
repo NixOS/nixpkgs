@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bats";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchzip {
     url = "https://github.com/bats-core/bats-core/archive/v${version}.tar.gz";
-    sha256 = "1kkh0j2alql3xiyhw9wsvcc3xclv52g0ivgyk8h85q9fn3qdqakz";
+    sha256 = "0f59zh4d4pa1a7ybs5zl6h0csbqqv11lbnq0jl1dgwm1s6p49bsq";
   };
 
   patchPhase = ''
