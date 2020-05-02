@@ -1,5 +1,5 @@
-{ godot, stdenv }:
-godot.overrideAttrs (oldAttrs: rec {
+{ godot, stdenv, withMono ? false }:
+(godot.override { withMono = withMono; }).overrideAttrs (oldAttrs: rec {
   pname = "godot-server";
   sconsFlags = "target=release platform=server tools=no";
   installPhase = ''
