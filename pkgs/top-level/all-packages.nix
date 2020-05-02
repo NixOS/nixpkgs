@@ -19351,6 +19351,8 @@ in
 
   goffice = callPackage ../development/libraries/goffice { };
 
+  jetbrains-toolbox = callPackage ../applications/editors/jetbrains/toolbox.nix { };
+
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
     jdk = jetbrains.jdk;
   }) // {

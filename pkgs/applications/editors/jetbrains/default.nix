@@ -1,6 +1,7 @@
 { lib, stdenv, callPackage, fetchurl
 , python
 , jdk, cmake, libxml2, zlib, python3, ncurses5
+, autoPatchelfHook, unzip
 }:
 
 with stdenv.lib;
@@ -82,22 +83,25 @@ let
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Toolbox";
-
+      
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/toolbox-app/";
         inherit description license;
         longDescription = "Manage your tools the easy way";
         maintainers = with maintainers; [ loskutov ];
-        platforms = platforms.linux;
+        platforms = platforms.linux;   
       };
     }) (attrs: {
+
+     
       patchPhase = ("") +  optionalString (stdenv.isLinux) ''
-        echo "Empty patchPhase";
+        echo "Empty patchPhase"
       '';
 
       installPhase = ''
-        mkdir -p $out/{bin,share}
-        cp -a . $out/bin
+        pwd
+        ls -lsah jetbrains-toolbox
+        install -m755 -D jetbrains-toolbox $out/bin/jetbrains-toolbox
       '';
     });
 
@@ -290,7 +294,7 @@ in
     description = "Manage your tools the easy way";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/toolbox/${name}.tar.gz";
+      url = "https://download.jetbrains.com/toolbox/${name}.tar.gz?platform=linux";
       sha256 = "65a7e446c339de361bf713880b2fb3953de8adeb95a10c9bb4100fcbb249cdf2"; 
     };
     wmClass = "jetbrains-toolbox";
