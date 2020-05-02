@@ -44,7 +44,7 @@
 , openjpeg
 , openssl
 , poppler
-, python27Packages
+, python3Packages
 , systemd
 , udev
 , utillinux
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
     luajit
     openjpeg
     poppler
-    python27Packages.dbus-python
+    python3Packages.dbus-python
     utillinux
     xorg.libXScrnSaver
     xorg.libXcomposite
