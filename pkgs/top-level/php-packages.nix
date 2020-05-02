@@ -346,13 +346,6 @@ in
       version = "2.6.1";
       pname = "couchbase";
 
-      buildInputs = [
-        pkgs.libcouchbase
-        pkgs.zlib
-        php.extensions.igbinary
-        php.extensions.pcs
-      ];
-
       src = pkgs.fetchFromGitHub {
         owner = "couchbase";
         repo = "php-couchbase";
@@ -361,7 +354,14 @@ in
       };
 
       configureFlags = [ "--with-couchbase" ];
+
+      buildInputs = [
+        pkgs.libcouchbase
+        pkgs.zlib
+      ];
       internalDeps = [ php.extensions.json ];
+      peclDeps = [ php.extensions.igbinary ];
+
       patches = [
         (pkgs.writeText "php-couchbase.patch" ''
           --- a/config.m4
@@ -388,7 +388,6 @@ in
       ];
 
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp74; # Build error
     };
 
     event = buildPecl {
