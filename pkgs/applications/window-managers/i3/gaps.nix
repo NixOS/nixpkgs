@@ -3,12 +3,12 @@
 i3.overrideAttrs (oldAttrs : rec {
 
   name = "i3-gaps-${version}";
-  version = "4.18";
+  version = "4.18.1";
   releaseDate = "2019-01-27";
 
   src = fetchurl {
     url = "https://github.com/Airblader/i3/archive/${version}.tar.gz";
-    sha256 = "04sq2sik7j09kgnn1k87yg3vzy56pk4688bmxh49l6drl0wr1m2v";
+    sha256 = "07gk5m90v0ih7c18vcwx7p7innsccd09j2vkr99a33wk71xrww1z";
   };
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ autoreconfHook ];
