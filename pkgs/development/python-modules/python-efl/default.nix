@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, buildPythonPackage, pkgconfig, python, enlightenment }:
+{ stdenv
+, fetchurl
+, buildPythonPackage
+, pkgconfig
+, python
+, enlightenment
+}:
 
 # Should be bumped along with EFL!
 
@@ -18,12 +24,16 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ python.pkgs.dbus-python ];
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${stdenv.lib.getDev python.pkgs.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
+    NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${stdenv.lib.getDev python.pkgs.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
   '';
 
-  preBuild = "${python.interpreter} setup.py build_ext";
+  preBuild = ''
+    ${python.interpreter} setup.py build_ext
+  '';
 
-  installPhase= "${python.interpreter} setup.py install --prefix=$out";
+  installPhase = ''
+    ${python.interpreter} setup.py install --prefix=$out
+  '';
 
   doCheck = false;
 
