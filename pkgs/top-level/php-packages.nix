@@ -562,8 +562,10 @@ in
 
       sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
 
+      internalDeps = [ php.extensions.tokenizer ];
+
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp74; # Build error
+      meta.broken = isPhp73; # Runtime failure on 7.3, build error on 7.4
     };
 
     pdo_oci = buildPecl rec {
