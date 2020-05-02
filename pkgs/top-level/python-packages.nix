@@ -490,6 +490,8 @@ in {
 
   azure-multiapi-storage = callPackage ../development/python-modules/azure-multiapi-storage { };
 
+  b4 = callPackage ../applications/version-management/git-and-tools/b4 { };
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
