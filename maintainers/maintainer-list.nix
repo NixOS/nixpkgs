@@ -1480,6 +1480,12 @@
     githubId = 848609;
     name = "Michael Bishop";
   };
+  cmacrae = {
+    email = "hi@cmacr.ae";
+    github = "cmacrae";
+    githubId = 3392199;
+    name = "Calum MacRae";
+  };
   cmcdragonkai = {
     email = "roger.qiu@matrix.ai";
     github = "cmcdragonkai";
@@ -8262,6 +8268,12 @@
     github = "wykurz";
     githubId = 483465;
     name = "Mateusz Wykurz";
+  };
+  wulfsta = {
+    email = "wulfstawulfsta@gmail.com";
+    github = "Wulfsta";
+    githubId = 13378502;
+    name = "Wulfsta";
   };
   wyvie = {
     email = "elijahrum@gmail.com";

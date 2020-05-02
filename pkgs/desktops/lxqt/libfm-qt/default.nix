@@ -1,18 +1,28 @@
-{
-  lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools,
-  pcre, libexif, xorg, libfm, menu-cache,
-  qtx11extras, qttools
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, lxqt-build-tools
+, pcre
+, libexif
+, xorg
+, libfm
+, menu-cache
+, qtx11extras
+, qttools
+, lxqtUpdateScript
 }:
 
 mkDerivation rec {
-  pname = "libfm-qt-unstable";
-  version = "2019-09-22";
+  pname = "libfm-qt";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libfm-qt";
-    rev = "7c94e9efb996df0602f1f2b34b0216ba9b6df498";
-    sha256 = "1fnli2kh7n4hxmqwcb1n06lyk67d9a2fx6z70gas5jzym7r2h5vw";
+    rev = version;
+    sha256 = "0isshh627zr69kdmjxsy75i1nh95ky2wfhgy90g8j4zijpkdrd3l";
   };
 
   nativeBuildInputs = [
@@ -32,6 +42,8 @@ mkDerivation rec {
     libfm
     menu-cache
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";

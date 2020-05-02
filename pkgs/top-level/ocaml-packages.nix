@@ -593,8 +593,6 @@ let
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
-    core_extended_p4 = callPackage ../development/ocaml-modules/core_extended { };
-
     core_kernel_p4 = callPackage ../development/ocaml-modules/core_kernel { };
 
     core_p4 = callPackage ../development/ocaml-modules/core { };
@@ -926,16 +924,9 @@ let
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
 
-    uri =
-      if lib.versionAtLeast ocaml.version "4.3"
-      then callPackage ../development/ocaml-modules/uri { }
-      else callPackage ../development/ocaml-modules/uri/legacy.nix { };
+    uri = callPackage ../development/ocaml-modules/uri { };
 
     uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
-
-    uri_p4 = callPackage ../development/ocaml-modules/uri/legacy.nix {
-      legacyVersion = true;
-    };
 
     uuseg = callPackage ../development/ocaml-modules/uuseg { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
@@ -1200,13 +1191,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/textutils.nix {}
       else textutils_p4;
-
-    core_extended =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.core_extended
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/core-extended.nix {}
-      else core_extended_p4;
 
     async_kernel =
       if lib.versionOlder "4.03" ocaml.version

@@ -829,7 +829,10 @@ in
                               . $dev/include/
       '';
 
-      meta.maintainers = lib.teams.php.members;
+      meta = {
+        description = "PHP upstream extension: ${name}";
+        inherit (php.meta) maintainers homepage license;
+      };
     });
 
     # This list contains build instructions for different modules that one may

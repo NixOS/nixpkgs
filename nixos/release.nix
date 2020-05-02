@@ -314,9 +314,9 @@ in rec {
     lapp = makeClosure ({ pkgs, ... }:
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
+        services.httpd.enablePHP = true;
         services.postgresql.enable = true;
         services.postgresql.package = pkgs.postgresql;
-        environment.systemPackages = [ pkgs.php ];
       });
   };
 }
