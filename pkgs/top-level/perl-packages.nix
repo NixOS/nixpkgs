@@ -3114,6 +3114,19 @@ let
     };
   };
 
+  ConfigProperties = buildPerlPackage {
+    pname = "Config-Properties";
+    version = "1.80";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SALVA/Config-Properties-1.80.tar.gz";
+      sha256 = "5d04395be7e14e970a03ea952fb7629ae304d97c031f90cc1c29bd0a6a62fc40";
+    };
+    meta = {
+      description = "Read and write property files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ConfigSimple = buildPerlPackage {
     pname = "Config-Simple";
     version = "4.58";
@@ -3221,6 +3234,19 @@ let
       description = "Encoding and decoding of base32 strings";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  ConvertBencode = buildPerlPackage rec {
+    pname = "Convert-Bencode";
+    version = "1.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OR/ORCLEV/${pname}-${version}.tar.gz";
+      sha256 = "0v2ywj18px67mg97xnrdq9mnlzgqvj92pr2g47g9c9b9cpw3v7r6";
+    };
+    meta = {
+      description = "Functions for converting to/from bencoded strings";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -16996,6 +17022,20 @@ let
     };
   };
 
+  StringInterpolate = buildPerlPackage {
+    pname = "String-Interpolate";
+    version = "0.32";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NE/NEILB/String-Interpolate-0.32.tar.gz;
+      sha256 = "15fwbpz3jdpdgmz794iw9hz2caxrnrw9pdwprxxkanpm92cdhaf7";
+    };
+    meta = with stdenv.lib; {
+      # https://metacpan.org/pod/String::Interpolate
+      description = "String::Interpolate - Wrapper for builtin the Perl interpolation engine.";
+      license = licenses.gpl1Plus;
+    };
+  };
+
   StringMkPasswd = buildPerlPackage {
     pname = "String-MkPasswd";
     version = "0.05";
@@ -17039,6 +17079,20 @@ let
     meta = {
       # http://cpansearch.perl.org/src/ROSCH/String-ShellQuote-1.04/README
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  StringSimilarity = buildPerlPackage {
+    pname = "String-Similarity";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/String-Similarity-1.04.tar.gz";
+      sha256 = "0i9j3hljxw7j6yiii9nsscfj009vw6zv1q8cxwd75jxvj0idm3hz";
+    };
+    doCheck = true;
+    meta = {
+      license = with stdenv.lib.licenses; [ gpl2 ];
+      description = "Calculate the similarity of two strings";
     };
   };
 

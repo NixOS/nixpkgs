@@ -1,26 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, python3, substituteAll }:
+{ stdenv, fetchpatch, fetchFromGitHub, cmake, python3, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "wabt";
-  version = "1.0.13";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wabt";
     rev = version;
-    sha256 = "07x8m5sf4c7zjq1flypycw1d15ylqdp38l81vn961ds089ngvpgg";
+    sha256 = "1zzc46d6m7l5lil423417crdda2cqb396p2idcla2ps161hwq3qp";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (substituteAll {
-      src = ./version.patch;
-      inherit version;
-    })
-  ];
+  # https://github.com/WebAssembly/wabt/pull/1408
+  patches = [ (fetchpatch {
+    url = "https://github.com/WebAssembly/wabt/pull/1408/commits/28505f4db6e4561cf6840af5c304a9aa900c4987.patch";
+    sha256 = "1nh1ddsak6w51np17xf2r7i0czxrjslz1i4impmmp88h5bp2yjba";
+  }) ];
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" "-DCMAKE_PROJECT_VERSION=${version}" ];
   buildInputs = [ python3 ];
 
   meta = with stdenv.lib; {

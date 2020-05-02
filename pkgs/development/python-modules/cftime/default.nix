@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "cftime";
-  version = "1.0.4.2";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ac64f8f9066ea756ea27d67cedaf064e7c866275218fa7c84684066a5890f70";
+    sha256 = "17w9myl8mg4isv4lb1nv64zim53ishi32f6m5m0s00q9a6v5qfb0";
   };
 
   checkInputs = [ pytest coveralls pytestcov ];

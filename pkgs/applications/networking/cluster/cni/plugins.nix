@@ -1,17 +1,21 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cni-plugins";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "17c8pvpn0dpda6ah7irr9hhd8sk7mnm32zv72nc5pxg1xvfpaipi";
+    sha256 = "0f1cqxjf26sy1c4aw6y7pyd9lrz0vknby4q5j6xj77a1pab9073m";
   };
 
-  goPackagePath = "github.com/containernetworking/plugins";
+  vendorSha256 = null;
+
+  buildFlagsArray = [
+    "-ldflags=-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=${version}"
+  ];
 
   subPackages = [
     "plugins/ipam/dhcp"
@@ -31,6 +35,8 @@ buildGoPackage rec {
     "plugins/meta/sbr"
     "plugins/meta/tuning"
   ];
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";

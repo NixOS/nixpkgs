@@ -4,7 +4,6 @@
 , python
 , pytest
 , numpy
-, isPy33
 }:
 
 buildPythonPackage rec {
@@ -28,7 +27,7 @@ buildPythonPackage rec {
   # https://github.com/enthought/traits/issues/187
   # https://github.com/enthought/traits/pull/188
   # Furthermore, some tests fail due to being in a chroot
-  doCheck = isPy33;
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Explicitly typed attributes for Python";

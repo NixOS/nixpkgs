@@ -1,28 +1,23 @@
-{ lib, fetchurl, buildDunePackage, ounit, cstruct, ocplib-endian
-, cpuid, dune-configurator, cpuAcceleration ? false }:
+{ lib, fetchurl, buildDunePackage, ounit, cstruct, dune-configurator, pkg-config }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.07";
+  minimumOCamlVersion = "4.08";
 
   pname = "mirage-crypto";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-v${version}.tbz";
-    sha256 = "08xq49cxn66yi0gfajzi8czcxfx24rd191rvf7s10wfkz304sa72";
+    sha256 = "0k7kllv3bh192yj6p9dk2z81r56w7x2kyr46pxygb5gnhqqxcncf";
   };
 
   useDune2 = true;
 
-  preBuild = ''
-    MIRAGE_CRYPTO_ACCELERATE=${lib.boolToString cpuAcceleration}
-  '';
-
   doCheck = true;
   checkInputs = [ ounit ];
 
-  nativeBuildInputs = [ cpuid dune-configurator ];
-  propagatedBuildInputs = [ cstruct ocplib-endian ];
+  nativeBuildInputs = [ dune-configurator pkg-config ];
+  propagatedBuildInputs = [ cstruct ];
 
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage-crypto";

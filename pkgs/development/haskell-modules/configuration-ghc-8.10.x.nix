@@ -84,7 +84,7 @@ self: super: {
   zlib = doJailbreak super.zlib;
 
   # Use the latest version to fix the build.
-  dhall = self.dhall_1_31_1;
+  dhall = self.dhall_1_32_0;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_4;
   lens = self.lens_4_19_2;
   optics-core = self.optics-core_0_3;
@@ -132,11 +132,13 @@ self: super: {
     url = "https://github.com/haskell-hvr/cabal-plan/pull/55.patch";
     sha256 = "0lhs4vx5qg5ldhnyb9z7k0jmxhmd2f34x4xbwv6vsljs9vr02pd8";
   });
-  dbus = appendPatch super.dbus ./patches/fix-dbus-for-ghc-8.10.x.patch;
 
-  # https://github.com/ndmitchell/hlint/issues/959
-  hlint = super.hlint.override {
-    ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex super.ghc-lib-parser;
-  };
+  # https://github.com/commercialhaskell/pantry/issues/21
+  pantry = appendPatch super.pantry (pkgs.fetchpatch {
+    name = "add-cabal-3.2.x-support.patch";
+    url = "https://patch-diff.githubusercontent.com/raw/commercialhaskell/pantry/pull/22.patch";
+    sha256 = "198hsfjsy83s7rp71llf05cwa3vkm74g73djg5p4sk4awm9s6vf2";
+    excludes = ["package.yaml"];
+  });
 
 }

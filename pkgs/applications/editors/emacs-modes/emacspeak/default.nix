@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, makeWrapper, emacs, tcl, tclx, espeak-ng }:
+{ stdenv, fetchurl, makeWrapper, emacs, tcl, tclx, espeak-ng, lib }:
 
 stdenv.mkDerivation rec {
   pname = "emacspeak";
   version = "51.0";
-
 
   src = fetchurl {
     url = "https://github.com/tvraman/emacspeak/releases/download/${version}/${pname}-${version}.tar.bz2";
@@ -33,11 +32,11 @@ stdenv.mkDerivation rec {
         --add-flags '-l "${placeholder "out"}/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.elc"'
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/tvraman/emacspeak/;
+  meta = {
+    homepage = "https://github.com/tvraman/emacspeak/";
     description = "Emacs extension that provides spoken output";
-    license = licenses.gpl2;
-    maintainers = [ dema ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   subPackages = [ "." ];
 
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,7 +23,7 @@ buildGoPackage rec {
     let
       rcloneBin =
         if stdenv.buildPlatform == stdenv.hostPlatform
-        then "$bin"
+        then "$out"
         else stdenv.lib.getBin buildPackages.rclone;
     in
       ''

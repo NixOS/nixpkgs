@@ -2,6 +2,7 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , cvxpy
 , cython
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.5.0";
+  version = "0.5.1";
 
   disabled = pythonOlder "3.5";
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     repo = "qiskit-aer";
     rev = version;
     fetchSubmodules = true; # fetch muparserx and other required libraries
-    sha256 = "05lsirrdnnr5yqhwkgv08d9aib8xq4xpd6aq2pfqsi9qkii2fff1";
+    sha256 = "0pbi8ldz8f1zm7pf2n5229g6kccriq21f24q9cb7bd4j5gdky5sk";
   };
 
   nativeBuildInputs = [
@@ -47,7 +48,15 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  prePatch = ''
+  patches = [
+    (fetchpatch{
+      name = "qiskit-aer-pr-727-fix-random-unitary-test.patch";
+      url = "https://github.com/Qiskit/qiskit-aer/commit/09afb3b6b0710042ab65d88e863363f2c843dcb0.patch";
+      sha256 = "0521b7i4fpc5brqs08w381g3c655f9cbn6my1740jnk7dv5lhsv9";
+    })
+  ];
+
+  postPatch = ''
     # remove dependency on PyPi cmake package, which isn't in Nixpkgs
     substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'" ""
   '';
@@ -81,7 +90,7 @@ buildPythonPackage rec {
     # Tests include a compiled "circuit" which is auto-built in $HOME
     export HOME=$(mktemp -d)
     # move tests b/c by default try to find (missing) cython-ized code in /build/source dir
-    cp -r test $HOME
+    cp -r $TMP/$sourceRoot/test $HOME
 
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME

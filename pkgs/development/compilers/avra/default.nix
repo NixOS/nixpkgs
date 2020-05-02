@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     homepage = "http://avra.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ the-kenny ];
   };
 }

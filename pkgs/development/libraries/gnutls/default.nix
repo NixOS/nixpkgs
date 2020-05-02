@@ -11,7 +11,7 @@ let
   version = "3.6.13";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
-  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4"
       && stdenv.buildPlatform == stdenv.hostPlatform;
 
@@ -48,6 +48,8 @@ stdenv.mkDerivation {
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
     sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
+  '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
+    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool
   '';
 
   preConfigure = "patchShebangs .";
@@ -57,8 +59,12 @@ stdenv.mkDerivation {
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
-  ] ++ lib.optional guileBindings
-    [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
+  ] ++ lib.optional guileBindings [
+    "--enable-guile"
+    "--with-guile-site-dir=\${out}/share/guile/site"
+    "--with-guile-site-ccache-dir=\${out}/share/guile/site"
+    "--with-guile-extension-dir=\${out}/share/guile/site"
+  ];
 
   enableParallelBuilding = true;
 

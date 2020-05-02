@@ -1,25 +1,28 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig,
-  alsaLib,
-  bc,
-  blur-effect,
-  coreutils,
-  dbus-factory,
-  deepin,
-  deepin-gettext-tools,
-  fontconfig,
-  go,
-  go-dbus-factory,
-  go-gir-generator,
-  go-lib,
-  grub2,
-  gtk3,
-  libcanberra,
-  libgudev,
-  librsvg,
-  poppler,
-  pulseaudio,
-  rfkill,
-  xcur2png
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, bc
+, blur-effect
+, coreutils
+, dbus-factory
+, deepin
+, deepin-gettext-tools
+, fontconfig
+, go
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, grub2
+, gtk3
+, libcanberra
+, libgudev
+, librsvg
+, poppler
+, pulseaudio
+, rfkill
+, xcur2png
 }:
 
 buildGoPackage rec {
@@ -36,8 +39,6 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
-
-  outputs = [ "out" ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -109,14 +110,14 @@ buildGoPackage rec {
   installPhase = ''
     make install PREFIX="$out" SYSTEMD_LIB_DIR="$out/lib" -C go/src/${goPackagePath}
     mv $out/share/gocode $out/share/go
-    remove-references-to -t ${go} $out/bin/* $out/lib/deepin-api/*
+    remove-references-to -t ${go} $out/lib/deepin-api/*
   '';
 
   postFixup = ''
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Go-lang bindings for dde-daemon";

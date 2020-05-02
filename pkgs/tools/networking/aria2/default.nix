@@ -20,7 +20,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
     stdenv.lib.optional stdenv.isDarwin Security;
 
-  configureFlags = [ "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" ];
+  outputs = [ "bin" "dev" "out" "doc" "man" ];
+
+  configureFlags = [
+    "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
+    "--enable-libaria2"
+  ];
 
   prePatch = ''
     patchShebangs doc/manual-src/en/mkapiref.py

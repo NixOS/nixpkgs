@@ -1,9 +1,40 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, deepin, qttools, qtdeclarative,
- networkmanager, qtsvg, qtx11extras,  dtkcore, dtkwidget, geoip, gsettings-qt,
- dde-network-utils, networkmanager-qt, xorg, mtdev, fontconfig, freetype, dde-api,
- dde-daemon, qt5integration, deepin-desktop-base, deepin-desktop-schemas, dbus,
- systemd, dde-qt-dbus-factory, qtmultimedia, qtbase, glib, gnome3, which,
- substituteAll, tzdata, wrapGAppsHook
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, deepin
+, qttools
+, qtdeclarative
+, networkmanager
+, qtsvg
+, qtx11extras
+, dtkcore
+, dtkwidget
+, geoip
+, gsettings-qt
+, dde-network-utils
+, networkmanager-qt
+, xorg
+, mtdev
+, fontconfig
+, freetype
+, dde-api
+, dde-daemon
+, qt5integration
+, deepin-desktop-base
+, deepin-desktop-schemas
+, dbus
+, systemd
+, dde-qt-dbus-factory
+, qtmultimedia
+, qtbase
+, glib
+, gnome3
+, which
+, substituteAll
+, tzdata
+, wrapGAppsHook
 }:
 
 mkDerivation rec {
@@ -90,7 +121,7 @@ mkDerivation rec {
     substituteInPlace dde-control-center.desktop \
       --replace "dbus-send" "${dbus}/bin/dbus-send"
     substituteInPlace com.deepin.controlcenter.addomain.policy \
-      --replace "/bin/systemctl" "${systemd}/bin/systemctl"
+      --replace "/bin/systemctl" "/run/current-system/sw/bin/systemctl"
   '';
 
   dontWrapQtApps = true;
@@ -107,7 +138,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Control panel of Deepin Desktop Environment";

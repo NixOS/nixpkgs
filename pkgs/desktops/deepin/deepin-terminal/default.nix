@@ -1,8 +1,39 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, ninja, vala_0_40, fetchpatch,
-  gettext, at-spi2-core, dbus, epoxy, expect, gtk3, json-glib,
-  libXdmcp, libgee, libpthreadstubs, librsvg, libsecret, libtasn1,
-  libxcb, libxkbcommon, p11-kit, pcre, vte, wnck, libselinux, gnutls, pcre2,
-  libsepol, utillinux, deepin-menu, deepin-shortcut-viewer, deepin, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, ninja
+, vala_0_40
+, fetchpatch
+, gettext
+, at-spi2-core
+, dbus
+, epoxy
+, expect
+, gtk3
+, json-glib
+, libXdmcp
+, libgee
+, libpthreadstubs
+, librsvg
+, libsecret
+, libtasn1
+, libxcb
+, libxkbcommon
+, p11-kit
+, pcre
+, vte
+, wnck
+, libselinux
+, gnutls
+, pcre2
+, libsepol
+, utillinux
+, deepin-menu
+, deepin-shortcut-viewer
+, deepin
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-terminal";
@@ -69,7 +100,7 @@ stdenv.mkDerivation rec {
     "-DVERSION=${version}"
   ];
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Default terminal emulator for Deepin";
@@ -77,7 +108,7 @@ stdenv.mkDerivation rec {
       Deepin terminal, it sharpens your focus in the world of command line!
       It is an advanced terminal emulator with workspace, multiple
       windows, remote management, quake mode and other features.
-     '';
+    '';
     homepage = "https://github.com/linuxdeepin/deepin-terminal";
     license = licenses.gpl3;
     platforms = platforms.linux;

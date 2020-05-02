@@ -1,24 +1,22 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
+buildGoModule rec {
   pname = "ipfs-migrator";
-  version = "7";
-
-  goPackagePath = "github.com/ipfs/fs-repo-migrations";
-
-  goDeps = ./deps.nix;
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "fs-repo-migrations";
-    rev = "4e8e0b41d7348646c719d572c678c3d0677e541a";
-    sha256 = "1i6izncgc3wgabppglnnrslffvwrv3cazbdhsk4vjfsd66hb4d37";
+    rev = "v${version}";
+    sha256 = "18pjxkxfbsbbj4hs4xyzfmmz991h31785ldx41dll6wa9zx4lsnm";
   };
 
-  patches = [ ./lru-repo-path-fix.patch ];
+  vendorSha256 = null;
 
-  meta = with stdenv.lib; {
-    description = "Migration tool for ipfs repositories";
+  subPackages = [ "." ];
+
+  meta = with lib; {
+    description = "Migrations for the filesystem repository of ipfs clients";
     homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "libmpack";
   version = "1.0.5";
   src = fetchFromGitHub {
-    owner = "tarruda";
+    owner = "libmpack";
     repo = "libmpack";
     rev = version;
     sha256 = "0rai5djdkjz7bsn025k5489in7r1amagw1pib0z4qns6b52kiar2";

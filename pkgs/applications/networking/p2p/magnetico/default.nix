@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1622xcl5v67lrnkjwbg7g5b5ikrawx7p91jxbj3ixc1za2f3a3fn";
   };
 
-  modSha256 = "193n323xaypm9xkpray68nqcgyf141x8qzpxzwjnrmsgfz8p6wgk";
+  vendorSha256 = "0g4m0jnpy0q64xnflphyc0lmhni0q9448h7grbbr7f1s9lpqsjml";
 
   nativeBuildInputs = [ go-bindata ];
   buildPhase = ''

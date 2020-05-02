@@ -1,10 +1,8 @@
-{ stdenv, callPackage, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "caddy";
-  version = "2.0.0-rc.1";
-
-  goPackagePath = "github.com/caddyserver/caddy";
+  version = "2.0.0";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -12,9 +10,9 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ir394nmdrqvslghqky4d2py65ff77fqsp0nmxdlsdps49szwh7h";
+    sha256 = "1c1frfx0qkprhf4var70cncvrw8s9gjag2hygndbd9055hb52bvv";
   };
-  modSha256 = "0sqnw81l73gssnpd4dsl3vd10584riq0417z4dvbhjnc8b3z4xwv";
+  vendorSha256 = "004hpjxpp18f71vy5v5ky0g07a8d5xh5qwl5b4bbx34hpf8yxs81";
 
   meta = with stdenv.lib; {
     homepage = "https://caddyserver.com";

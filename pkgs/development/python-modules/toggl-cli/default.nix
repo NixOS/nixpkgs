@@ -19,6 +19,7 @@ buildPythonPackage rec {
    substituteInPlace requirements.txt \
      --replace "pendulum==2.0.4" "pendulum>=2.0.4" \
      --replace "click-completion==0.5.0" "click-completion>=0.5.0" \
+     --replace "click==7.0" "click>=7.0" \
      --replace "pbr==5.1.2" "pbr>=5.1.2" \
      --replace "inquirer==2.5.1" "inquirer>=2.5.1"
   '';

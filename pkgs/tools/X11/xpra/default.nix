@@ -30,11 +30,11 @@ let
 
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "3.0.8";
+  version = "3.0.9";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "0d78bn7s03nwnyc4ryznxaivbg55kvsb26q75p8747j3562s9p2b";
+    sha256 = "04qskz1x1pvbdfirpxk58d3dfnf1n6dc69q2rdkak0avzl1nlzi7";
   };
 
   patches = [
@@ -42,6 +42,7 @@ in buildPythonApplication rec {
       src = ./fix-paths.patch;
       inherit (xorg) xkeyboardconfig;
     })
+    ./fix-41106.patch
   ];
 
   postPatch = ''

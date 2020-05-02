@@ -164,8 +164,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   ghex = callPackage ./apps/ghex { };
 
-  glade = callPackage ./apps/glade { };
-
   gnome-books = callPackage ./apps/gnome-books { };
 
   gnome-boxes = callPackage ./apps/gnome-boxes { };
@@ -351,6 +349,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) dconf; # added 2019-11-30
 
   inherit (pkgs) networkmanagerapplet; # added 2019-12-12
+
+  inherit (pkgs) glade; # added 2020-05-15
 
   vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
 

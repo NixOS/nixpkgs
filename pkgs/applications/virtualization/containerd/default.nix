@@ -1,10 +1,12 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
+{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, utillinux }:
 
 with lib;
 
 buildGoPackage rec {
   pname = "containerd";
   version = "1.2.13";
+  # git commit for the above version's tag
+  commit = "7ad184331fa3e55e52b890ea95e65ba581ae3429";
 
   src = fetchFromGitHub {
     owner = "containerd";
@@ -14,13 +16,13 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ go-md2man utillinux ];
+  nativeBuildInputs = [ go-md2man installShellFiles utillinux ];
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" ];
+  buildFlags = [ "VERSION=v${version}" "REVISION=${commit}" ];
 
   BUILDTAGS = []
     ++ optional (btrfs-progs == null) "no_btrfs";
@@ -28,23 +30,16 @@ buildGoPackage rec {
   buildPhase = ''
     cd go/src/${goPackagePath}
     patchShebangs .
-    make binaries
+    make binaries $buildFlags
   '';
 
   installPhase = ''
     for b in bin/*; do
-      install -Dm555 $b $bin/$b
+      install -Dm555 $b $out/$b
     done
 
     make man
-    manRoot="$man/share/man"
-    mkdir -p "$manRoot"
-    for manFile in man/*; do
-      manName="$(basename "$manFile")" # "docker-build.1"
-      number="$(echo $manName | rev | cut -d'.' -f1 | rev)"
-      mkdir -p "$manRoot/man$number"
-      gzip -c "$manFile" > "$manRoot/man$number/$manName.gz"
-    done
+    installManPage man/*.[1-9]
   '';
 
   meta = {

@@ -5,12 +5,12 @@
 , extraPackages ? []
 , podman # Docker compat
 , runc # Default container runtime
-, crun # Default container runtime (cgroups v2)
+, crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
 , slirp4netns # User-mode networking for unprivileged namespaces
 , fuse-overlayfs # CoW for images, much faster than default vfs
 , utillinux # nsenter
-, cni-plugins
+, cni-plugins # not added to path
 , iptables
 }:
 
@@ -28,21 +28,25 @@ let
   ] ++ extraPackages);
 
 in runCommand podman.name {
-  inherit (podman) name pname version meta outputs;
+  name = "${podman.pname}-wrapper-${podman.version}";
+  inherit (podman) pname version passthru;
+
+  meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
   ];
 
 } ''
-  # Symlink everything but $bin from podman-unwrapped
-  ${
-    lib.concatMapStringsSep "\n"
-    (o: "ln -s ${podman.${o}} ${placeholder o}")
-    (builtins.filter (o: o != "bin")
-    podman.outputs)}
+  ln -s ${podman.man} $man
 
-  mkdir -p $bin/bin
-  ln -s ${podman-unwrapped}/share $bin/share
-  makeWrapper ${podman-unwrapped}/bin/podman $bin/bin/podman \
+  mkdir -p $out/bin
+  ln -s ${podman-unwrapped}/share $out/share
+  makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
     --prefix PATH : ${binPath}
 ''

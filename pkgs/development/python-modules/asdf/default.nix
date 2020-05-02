@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.5.2";
+  version = "2.6.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ai5l62ldaq1cqfmq3hvnzp8gp0hjjmjnck9d3cnx5r8la5ig18y";
+    sha256 = "1ym9mmxjpnnlinly1rxfqj9rlyl2fv7dxc81f30n1b8n9pwc6jb5";
   };
 
   postPatch = ''

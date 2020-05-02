@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, httpserver
 , libftdi1
 , libusb1
 }:
@@ -16,14 +15,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    httpserver
     libftdi1
     libusb1
   ];
 
   postPatch = ''
     substituteInPlace pylibftdi/driver.py \
-      --replace "self._load_library('libusb')" "cdll.LoadLibrary('${libusb1.out}/lib/libusb1.so')" \
+      --replace "self._load_library('libusb')" "cdll.LoadLibrary('${libusb1.out}/lib/libusb-1.0.so')" \
       --replace "self._load_library('libftdi')" "cdll.LoadLibrary('${libftdi1.out}/lib/libftdi1.so')"
   '';
 

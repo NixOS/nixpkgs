@@ -5,11 +5,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   pname = "fs-uae";
-  version = "3.0.3";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://fs-uae.net/stable/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0v5c8ns00bam4myj7454hpkrnm9i81jwdzrp5nl7gaa18qb60hjq";
+    sha256 = "1qwzhp34wy7bnd3c0plv11rg9fs5m92rh3ffnr9pn6ng0cpc8vpj";
   };
 
   nativeBuildInputs = [ pkgconfig ];

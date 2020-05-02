@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
@@ -67,7 +67,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.109.0";
+  hassVersion = "0.110.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -84,9 +84,9 @@ in with py.pkgs; buildPythonApplication rec {
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
     owner = "home-assistant";
-    repo = "home-assistant";
+    repo = "core";
     rev = version;
-    sha256 = "1b5y464yhngivxkz3cg2b7j2ssawy7fqr3si5pdmqkgz1dbqihhn";
+    sha256 = "1495kl997mvk9k11lk1ahv5w0yc0185qmxwa1h51j6d0zyqwz749";
   };
 
   propagatedBuildInputs = [
@@ -97,6 +97,9 @@ in with py.pkgs; buildPythonApplication rec {
     # From http, frontend and recorder components and auth.mfa_modules.totp
     sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode ciso8601
   ] ++ componentBuildInputs ++ extraBuildInputs;
+
+  # upstream only tests on Linux, so do we.
+  doCheck = stdenv.isLinux;
 
   checkInputs = [
     asynctest pytest pytest-aiohttp requests-mock hass-nabucasa netdisco pydispatcher
@@ -117,6 +120,10 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
+
+  passthru = {
+    inherit (py.pkgs) hass-frontend;
+  };
 
   meta = with lib; {
     homepage = "https://home-assistant.io/";

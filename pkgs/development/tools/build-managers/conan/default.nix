@@ -1,7 +1,7 @@
 { lib, python3, git, pkgconfig }:
 
 # Note:
-# Conan has specific dependency demanands; check
+# Conan has specific dependency demands; check
 #     https://github.com/conan-io/conan/blob/master/conans/requirements.txt
 #     https://github.com/conan-io/conan/blob/master/conans/requirements_server.txt
 # on the release branch/commit we're packaging.
@@ -39,12 +39,12 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.24.0";
+  version = "1.25.0";
   pname = "conan";
 
   src = newPython.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0nkh4f6plamijwcfw536ydm0i04y74qmkh5l1nanyb8p0c3z3x0y";
+    sha256 = "1wgmx6s4h5m6zixb3wlaicy56rsqcy2srzmvii80xdx9g5wvi9pv";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
@@ -90,7 +90,8 @@ in newPython.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace conans/requirements.txt \
-      --replace "PyYAML>=3.11, <3.14.0" "PyYAML"
+      --replace "PyYAML>=3.11, <3.14.0" "PyYAML" \
+      --replace "deprecation>=2.0, <2.1" "deprecation"
   '';
 
   meta = with lib; {

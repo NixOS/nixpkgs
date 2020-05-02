@@ -300,9 +300,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "1qygfcvvn9vysap9nk6xccxi9mgmzyxiywz6k456f811l1v70p2c"
+        "09j57w6kc0vkfcdwr0qggy3qgrgq82kfa2jrwvvcnij4bl3wj40j"
       else
-        "0kfjanw0mfbh30vi1ms2xlg8yp429cbyfriik6yxd5cla2pncg2j";
+        "14g8z49qz7d8n1c2mcsfhr7yqpcy7mhmpm6hgmqvpgb8vm7yvwrc";
     };
 
     buildAttrs = {
@@ -430,7 +430,10 @@ in buildPythonPackage {
     EOF
   '';
 
-  passthru.libtensorflow = bazel-build.out;
+  passthru = {
+    deps = bazel-build.deps;
+    libtensorflow = bazel-build.out;
+  };
 
   inherit (bazel-build) meta;
 }

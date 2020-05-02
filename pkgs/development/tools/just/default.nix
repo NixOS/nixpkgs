@@ -1,26 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, dash }:
+{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, dash
+, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.5.10";
+  version = "0.5.11";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s8np28glzn3kmh59dwk86yc9fb2lm9fq2325kzmy7rkb5jsdcl1";
+    sha256 = "0li5lspxfrim8gymqzzd5djjfbfi7jh1m234qlzy5vkx2q9qg0xv";
   };
 
-  cargoSha256 = "05mrzav3aydvwac9jjckdmlxvxnlcncmkfsdb9z7zvxia4k89w1l";
+  cargoSha256 = "1sp8xrh3gmgmphh1bv050p1ybjybk9x8kswyxz2rd93q3zb5hpzz";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    # generate completion scripts for just
+    installManPage man/just.1
 
-    mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
-
-    $out/bin/just --completions bash > "$out/share/bash-completion/completions/just"
-    $out/bin/just --completions fish > "$out/share/fish/vendor_completions.d/just.fish"
-    $out/bin/just --completions zsh  > "$out/share/zsh/site-functions/_just"
+    installShellCompletion --bash --name just.bash completions/just.bash
+    installShellCompletion --fish --name just.fish completions/just.fish
+    installShellCompletion --zsh  --name _just     completions/just.zsh
   '';
 
   checkInputs = [ coreutils bash dash ];

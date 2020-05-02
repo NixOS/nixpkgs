@@ -57,12 +57,12 @@ in
     };
 
     composer = mkDerivation rec {
-      version = "1.10.5";
+      version = "1.10.6";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "0a9iwhd7ijm8gkp3zadxza0xb6xwa5ps0d16pz4mz2p21gfzvwym";
+        sha256 = "0yzfzgg9qlc388g91bdg7y7rp1q8vqb5hkwykwmr1n1lv8dsrg99";
       };
 
       dontUnpack = true;
@@ -203,13 +203,41 @@ in
       };
     };
 
+    phpmd = mkDerivation rec {
+      version = "2.8.2";
+      pname = "phpmd";
+
+      src = pkgs.fetchurl {
+        url = "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
+        sha256 = "1i8qgzxniw5d8zjpypalm384y7qfczapfq70xmg129laq6xiqlqb";
+      };
+
+      phases = [ "installPhase" ];
+      buildInputs = [ pkgs.makeWrapper ];
+
+      installPhase = ''
+        mkdir -p $out/bin
+        install -D $src $out/libexec/phpmd/phpmd.phar
+        makeWrapper ${php}/bin/php $out/bin/phpmd \
+          --add-flags "$out/libexec/phpmd/phpmd.phar"
+      '';
+
+      meta = with pkgs.lib; {
+        description = "PHP code quality analyzer";
+        license = licenses.bsd3;
+        homepage = "https://phpmd.org/";
+        maintainers = teams.php.members;
+        broken = !isPhp74;
+      };
+    };
+
     phpstan = mkDerivation rec {
-      version = "0.12.19";
+      version = "0.12.25";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "15fz7rixi9s46qqxpj26349aky7wxqnzmfsnwlh1f2p4jsfd85ki";
+        sha256 = "1a864v7fxpv5kp24nkvczrir3ldl6wxvaq85rd391ppa8ahdhvdd";
       };
 
       phases = [ "installPhase" ];
@@ -320,10 +348,15 @@ in
 
       sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
 
+      peclDeps = [ php.extensions.apcu ];
+
       buildInputs = [
-        php.extensions.apcu
         pcre'
       ];
+
+      postInstall = ''
+        mv $out/lib/php/extensions/apc.so $out/lib/php/extensions/apcu_bc.so
+      '';
 
       meta.maintainers = lib.teams.php.members;
     };
@@ -341,13 +374,6 @@ in
       version = "2.6.1";
       pname = "couchbase";
 
-      buildInputs = [
-        pkgs.libcouchbase
-        pkgs.zlib
-        php.extensions.igbinary
-        php.extensions.pcs
-      ];
-
       src = pkgs.fetchFromGitHub {
         owner = "couchbase";
         repo = "php-couchbase";
@@ -356,7 +382,14 @@ in
       };
 
       configureFlags = [ "--with-couchbase" ];
+
+      buildInputs = [
+        pkgs.libcouchbase
+        pkgs.zlib
+      ];
       internalDeps = [ php.extensions.json ];
+      peclDeps = [ php.extensions.igbinary ];
+
       patches = [
         (pkgs.writeText "php-couchbase.patch" ''
           --- a/config.m4
@@ -383,7 +416,6 @@ in
       ];
 
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp74; # Build error
     };
 
     event = buildPecl {
@@ -557,8 +589,10 @@ in
 
       sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
 
+      internalDeps = [ php.extensions.tokenizer ];
+
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp74; # Build error
+      meta.broken = isPhp73; # Runtime failure on 7.3, build error on 7.4
     };
 
     pdo_oci = buildPecl rec {
@@ -580,10 +614,10 @@ in
     };
 
     pdo_sqlsrv = buildPecl {
-      version = "5.8.0";
+      version = "5.8.1";
       pname = "pdo_sqlsrv";
 
-      sha256 = "0z4vbyd851b4jr6p69l2ylk91iihndsm2qjb429pxcv8g6dqzqll";
+      sha256 = "06ba4x34fgs092qq9w62y2afsm1nyasqiprirk4951ax9v5vcir0";
 
       internalDeps = [ php.extensions.pdo ];
 
@@ -675,6 +709,26 @@ in
       meta.broken = isPhp74;
     };
 
+    rdkafka = buildPecl {
+      version = "4.0.3";
+      pname = "rdkafka";
+
+      sha256 = "1g00p911raxcc7n2w9pzadxaggw5c564md6hjvqfs9ip550y5x16";
+
+      buildInputs = with pkgs; [ rdkafka pcre' ];
+
+      postPhpize = ''
+        substituteInPlace configure \
+          --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${pkgs.rdkafka}'
+      '';
+
+      meta = {
+        description = "Kafka client based on librdkafka";
+        homepage = "https://github.com/arnaud-lb/php-rdkafka";
+        maintainers = lib.teams.php.members;
+      };
+    };
+
     redis = buildPecl {
       version = "5.1.1";
       pname = "redis";
@@ -691,10 +745,10 @@ in
     };
 
     sqlsrv = buildPecl {
-      version = "5.8.0";
+      version = "5.8.1";
       pname = "sqlsrv";
 
-      sha256 = "1kv4krk1w4hri99b0sdgwgy9c4y0yh217wx2y3irhkfi46kdrjnw";
+      sha256 = "0c9a6ghch2537vi0274vx0mn6nb1xg2qv7nprnf3xdfqi5ww1i9r";
 
       buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
 
