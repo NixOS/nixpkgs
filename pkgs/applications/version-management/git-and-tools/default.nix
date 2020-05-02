@@ -173,6 +173,10 @@ let
 
   gitstatus = callPackage ./gitstatus { };
 
+  gitui = callPackage ./gitui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   grv = callPackage ./grv { };
 
   hub = callPackage ./hub { };
