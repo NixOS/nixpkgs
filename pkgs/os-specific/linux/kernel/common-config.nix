@@ -609,6 +609,9 @@ let
 
     misc = {
       HID_BATTERY_STRENGTH = yes;
+      # enabled by default in x86_64 but not arm64, so we do that here
+      HIDRAW               = yes;
+
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
