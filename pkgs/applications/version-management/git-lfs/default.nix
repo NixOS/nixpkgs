@@ -24,7 +24,7 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    installManPage man/*.1 man/*.5
+    installManPage go/src/${goPackagePath}/man/*.{1,5}
   '';
 
   meta = with stdenv.lib; {
