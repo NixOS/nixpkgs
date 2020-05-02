@@ -49,9 +49,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ls -al ./
-    mkdir -p "$out/bin" "$out/lib" "$out/share"
+    mkdir -p "$out/bin" "$out/share"
     cp -a lib/sky/* $out/bin/
-    cp -aR lib/sky/lib64/* "$out/lib/"
     cp -a lib/sky/man.sh "$out/bin"
     chmod +x $out/bin/sky
     cp -a share/* "$out/share"
