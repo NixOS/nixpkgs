@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, gnugrep }:
+{ stdenv, fetchzip, coreutils, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "bats";
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     patchShebangs ./install.sh
-    substituteInPlace ./libexec/bats-core/bats-format-tap-stream --replace grep ${gnugrep}/bin/grep
+
+    substituteInPlace ./libexec/bats-core/bats \
+        --replace 'type -p greadlink readlink' 'type -p ${coreutils}/bin/readlink'
+    substituteInPlace ./libexec/bats-core/bats-format-tap-stream \
+        --replace grep ${gnugrep}/bin/grep
   '';
 
   installPhase = "./install.sh $out";
