@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pkgconfig
 , python
+, dbus-python
 , enlightenment
 }:
 
@@ -10,21 +11,21 @@
 
 buildPythonPackage rec {
   pname = "python-efl";
-  version = "1.23.0";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
-    sha256 = "16yn6a1b9167nfmryyi44ma40m20ansfpwgrvqzfvwix7qaz9pib";
+    sha256 = "1vk1cdd959gia4a9qzyq56a9zw3lqf9ck66k8c9g3c631mp5cfpy";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ enlightenment.efl ];
 
-  propagatedBuildInputs = [ python.pkgs.dbus-python ];
+  propagatedBuildInputs = [ dbus-python ];
 
   preConfigure = ''
-    NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${stdenv.lib.getDev python.pkgs.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
+    NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl evas) $NIX_CFLAGS_COMPILE"
   '';
 
   preBuild = ''
