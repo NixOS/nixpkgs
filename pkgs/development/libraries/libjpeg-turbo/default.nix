@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, nasm, enableStatic ? false }:
+{ stdenv, fetchurl, fetchpatch, cmake, nasm, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
 
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   patches =
+    [
+      # Fixes race in tests that causes "jpegtran-shared-icc" to fail
+      # https://github.com/libjpeg-turbo/libjpeg-turbo/pull/425
+      (fetchpatch {
+        url = "https://github.com/libjpeg-turbo/libjpeg-turbo/commit/a2291b252de1413a13db61b21863ae7aea0946f3.patch";
+        sha256 = "0nc5vcch5h52gpi07h08zf8br58q8x81q2hv871hrn0dinb53vym";
+      })
+    ] ++
     stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
