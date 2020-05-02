@@ -19,8 +19,8 @@
 # installManPage <path> [...<path>]
 #
 # Each argument is checked for its man section suffix and installed into the appropriate
-# share/man<n>/ directory. The function returns an error if any paths don't have the man section
-# suffix (with optional .gz compression).
+# share/man/man<n>/ directory. The function returns an error if any paths don't have the man
+# section suffix (with optional .gz compression).
 installManPage() {
     local path
     for path in "$@"; do
