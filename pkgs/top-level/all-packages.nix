@@ -20014,6 +20014,12 @@ in
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
+  librespot = callPackage ../applications/audio/librespot {
+    withALSA = stdenv.isLinux;
+    withPulseAudio = config.pulseaudio or stdenv.isLinux;
+    withPortAudio = stdenv.isDarwin;
+  };
+
   lwm = callPackage ../applications/window-managers/lwm { };
 
   musikcube = callPackage ../applications/audio/musikcube {};
