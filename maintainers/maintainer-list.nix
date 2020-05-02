@@ -2568,6 +2568,12 @@
     githubId = 415760;
     name = "Jonas Höglund";
   };
+  firmero = {
+    email = "romanfirment@gmail.com";
+    github = "firmero";
+    githubId = 25690815;
+    name = "Roman Firment";
+  };
   fishi0x01 = {
     email = "fishi0x01@gmail.com";
     github = "fishi0x01";
