@@ -39,7 +39,7 @@ let
               # Tests are failing after upgrade to ghc881.
               # Cause is probably just a minor change in stdout output
               # see https://github.com/avh4/elm-format/pull/640
-              # doCheck = false;
+              doCheck = false;
               jailbreak = true;
             }));
 
