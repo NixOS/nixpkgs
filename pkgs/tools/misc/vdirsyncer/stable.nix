@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
-    make DETERMINISTIC_TESTS=true test
+    make DETERMINISTIC_TESTS=true PYTEST_ARGS="--deselect=tests/system/cli/test_sync.py::test_verbosity" test
   '';
 
   meta = with lib; {

@@ -873,6 +873,8 @@ in
 
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
+  crowbar = callPackage ../tools/security/crowbar { };
+
   crumbs = callPackage ../applications/misc/crumbs { };
 
   crc32c = callPackage ../development/libraries/crc32c { };
@@ -4287,6 +4289,8 @@ in
 
   intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
 
+  intermodal = callPackage ../tools/misc/intermodal { };
+
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
   inxi = callPackage ../tools/system/inxi { };
@@ -7364,6 +7368,10 @@ in
 
   wootility = callPackage ../tools/misc/wootility { };
 
+  wormhole = callPackage ../tools/networking/wormhole {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   wpscan = callPackage ../tools/security/wpscan { };
 
   wsmancli = callPackage ../tools/system/wsmancli {};
@@ -7417,6 +7425,8 @@ in
   time = callPackage ../tools/misc/time { };
 
   tweet-hs = haskell.lib.justStaticExecutables haskellPackages.tweet-hs;
+
+  tweeny = callPackage ../development/libraries/tweeny { };
 
   qfsm = callPackage ../applications/science/electronics/qfsm { };
 
@@ -16093,7 +16103,7 @@ in
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
-  spring-boot = callPackage ../development/tools/spring-boot { };
+  spring-boot-cli = callPackage ../development/tools/spring-boot-cli { };
 
   squid = callPackage ../servers/squid { };
 
@@ -19787,7 +19797,9 @@ in
 
   heme = callPackage ../applications/editors/heme { };
 
-  herbstluftwm = callPackage ../applications/window-managers/herbstluftwm { };
+  herbstluftwm = callPackage ../applications/window-managers/herbstluftwm {
+    asciidoc = asciidoc-full;
+  };
 
   hercules = callPackage ../applications/virtualization/hercules { };
 
@@ -24596,7 +24608,9 @@ in
 
   dcmtk = callPackage ../applications/science/medicine/dcmtk { };
 
-  ### PHYSICS
+  ### SCIENCE/PHYSICS
+
+  elmerfem = callPackage ../applications/science/physics/elmerfem {};
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
 
@@ -26115,6 +26129,11 @@ in
   xwiimote = callPackage ../misc/drivers/xwiimote { };
 
   xzoom = callPackage ../tools/X11/xzoom {};
+
+  yabai = callPackage ../os-specific/darwin/yabai {
+    inherit (darwin.apple_sdk.frameworks)
+      Carbon Cocoa ScriptingBridge;
+  };
 
   yabause = libsForQt5.callPackage ../misc/emulators/yabause {
     freeglut = null;

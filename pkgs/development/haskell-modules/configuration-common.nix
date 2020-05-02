@@ -45,12 +45,6 @@ self: super: {
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
-  # http://bugs.darcs.net/issue2642
-  darcs = doJailbreak (appendPatches super.darcs [
-    ./patches/darcs-setup.patch
-    ./patches/darcs-2.14.2-Compile-against-GHC-8.8.patch
-  ]);
-
   # Tests are failing
   # https://github.com/bos/statistics/issues/123
   statistics = dontCheck super.statistics;
@@ -1073,35 +1067,8 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-
-  stack =
-    let
-      stackWithOverrides =
-        super.stack.override {
-          # stack-2.1.3.1 requires pantry-0.2.0.0.
-          pantry = self.pantry_0_2_0_0;
-        };
-    in
-    generateOptparseApplicativeCompletion
-      "stack"
-      (appendPatches stackWithOverrides [
-        # This PR fixes stack up to be able to build with Cabal-3.  This patch
-        # can probably be dropped when the next stack release is made after
-        # 2.1.3.1.
-        (pkgs.fetchpatch {
-          url = "https://github.com/commercialhaskell/stack/pull/5156.diff";
-          sha256 = "0knk6f9fh1b4fxkhvx5gfrwclal4vi2va4zy34gpmwnjr7knf42y";
-          excludes = [
-            "snapshot-lts-12.yaml"
-            "snapshot-nightly.yaml"
-            "snapshot.yaml"
-          ];
-        })
-        # This patch fixes stack up to be able to build various GHC-8.8 changes.
-        # This can hopefully be dropped when the next stack release is made
-        # after 2.1.3.1 (assuming the next stack release uses GHC-8.8).
-        ./patches/stack-ghc882-support.patch
-      ]);
+  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: { http-download = self.http-download_0_2_0_0; }));
+  http-download_0_2_0_0 = dontCheck super.http-download_0_2_0_0;
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -1515,5 +1482,10 @@ self: super: {
     url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
     sha256 = "sha256:0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
   });
+
+  # Depends on selective >= 0.4, but the default of selective is 0.3
+  headed-megaparsec = super.headed-megaparsec.override {
+    selective = self.selective_0_4_1;
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
