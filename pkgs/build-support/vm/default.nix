@@ -1030,11 +1030,11 @@ rec {
     };
 
     debian9x86_64 = {
-      name = "debian-9.8-stretch-amd64";
-      fullName = "Debian 9.8 Stretch (amd64)";
+      name = "debian-9.12-stretch-amd64";
+      fullName = "Debian 9.12 Stretch (amd64)";
       packagesList = fetchurl {
-        url = "http://snapshot.debian.org/archive/debian/20190503T090946Z/dists/stretch/main/binary-amd64/Packages.xz";
-        sha256 = "01q00nl47p12n7wx0xclx59wf3zlkzrgj3zxpshyvb91xdnw5sh6";
+        url = "mirror://debian/dists/stretch/main/binary-amd64/Packages.xz";
+        sha256 = "00950vx4xqi69li4f2r29yxl3gn1dhbvwlqrkr7ck6vjwb2q927c";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
