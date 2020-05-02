@@ -4,12 +4,14 @@
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
 , pinentry ? null, guiSupport ? false
-, openldap ? null, bzip2 ? null, libusb-compat-0_1 ? null, curl ? null
+, openldapSupport ? stdenv.isLinux, openldap ? null
+, bzip2 ? null, libusb-compat-0_1 ? null, curl ? null
 }:
 
 with stdenv.lib;
 
 assert guiSupport -> pinentry != null;
+assert openldapSupport -> openldap != null;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
@@ -22,7 +24,8 @@ stdenv.mkDerivation rec {
 
   buildInputs
     = [ readline zlib libgpgerror libgcrypt libassuan libksba pth
-        openldap bzip2 libusb-compat-0_1 curl libiconv ];
+        bzip2 libusb-compat-0_1 curl libiconv ]
+    ++ optional openldapSupport openldap;
 
   patches = [ ./gpgkey2ssh-20.patch ];
 
