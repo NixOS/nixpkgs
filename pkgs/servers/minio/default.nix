@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "minio";
@@ -18,6 +18,8 @@ buildGoModule rec {
   buildFlagsArray = [''-ldflags=
     -s -w -X github.com/minio/minio/cmd.Version=${version}
   ''];
+
+  passthru.tests.minio = nixosTests.minio;
 
   meta = with stdenv.lib; {
     homepage = "https://www.minio.io/";
