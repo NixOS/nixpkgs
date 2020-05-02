@@ -24702,6 +24702,7 @@ in
 
   wayfire = callPackage ../applications/window-managers/wayfire { };
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
+  wf-shell = callPackage ../applications/window-managers/wayfire/wf-shell.nix { };
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
