@@ -24700,6 +24700,8 @@ in
   way-cooler = throw ("way-cooler is abandoned by its author: " +
     "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html");
 
+  wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
+
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
   wayv = callPackage ../tools/X11/wayv {};
