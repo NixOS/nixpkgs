@@ -20,7 +20,7 @@ mkDerivation (rec {
   '';
 
   meta = {
-    homepage = "https://svn.divms.uiowa.edu/repos/clc/projects/agda/lib/";
+    homepage = "https://github.com/cedille/ial";
     description = "Agda standard library developed at Iowa";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
