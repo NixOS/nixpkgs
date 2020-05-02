@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "14iv8iwyvfznyifhkqz1bjh24dvb03gmpjn8v3fs6h734l93vvw5";
   };
 
+  patches = [
+    # cross compiling fix
+    # https://github.com/brgl/libgpiod/pull/45
+    ./0001-Drop-AC_FUNC_MALLOC-and-_REALLOC-and-check-for-them-.patch
+  ];
+
   buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
   nativeBuildInputs = [
     autoconf-archive
