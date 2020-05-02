@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, httpserver
 , libftdi1
 , libusb1
 }:
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    httpserver
     libftdi1
     libusb1
   ];
