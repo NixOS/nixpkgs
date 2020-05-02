@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, apr, expat, gnused
 , sslSupport ? true, openssl
 , bdbSupport ? true, db
-, ldapSupport ? !stdenv.isCygwin, openldap
+, ldapSupport ? !stdenv.isLinux, openldap
 , libiconv
 , cyrus_sasl, autoreconfHook
 }:
