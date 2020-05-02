@@ -3120,6 +3120,8 @@ in
 
   wob = callPackage ../tools/misc/wob { };
 
+  xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
+
   xob = callPackage ../tools/X11/xob { };
 
   z-lua = callPackage ../tools/misc/z-lua { };
