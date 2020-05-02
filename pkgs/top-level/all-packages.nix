@@ -4289,6 +4289,8 @@ in
 
   intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
 
+  intermodal = callPackage ../tools/misc/intermodal { };
+
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
   inxi = callPackage ../tools/system/inxi { };
