@@ -42,9 +42,6 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  # otherwise, the pkgconfig info for the libraries will not match the filenames
-  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--enable-namespaceversioning=no";
-
   nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
   propagatedBuildInputs = [ ilmbase zlib ];
 

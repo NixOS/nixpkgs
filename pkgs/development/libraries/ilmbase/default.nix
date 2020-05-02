@@ -18,9 +18,6 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  # otherwise, the pkgconfig info for the libraries will not match the filenames
-  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--enable-namespaceversioning=no";
-  
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ automake autoconf libtool which ];
 
