@@ -4,7 +4,7 @@
 , curl, sqlite, openssl
 , libuuid, openh264, libv4l, libxkbfile, libXv, zlib, libXmu
 , libXtst, libXdamage, pam, libXfixes, libXrender, libjpeg_original
-, ffmpeg_4
+, ffmpeg_4, autoPatchelfHook
 }:
  let
    # Sky is linked to the libjpeg 8 version and checks for the version number in the code.
@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     libXfixes libXrender
     libjpeg_original_fix
   ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    qt5.wrapQtAppsHook
+  ];
   dontBuild = true;
 
   installPhase = ''
@@ -56,18 +60,6 @@ stdenv.mkDerivation rec {
 
 
   postFixup = ''
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libfreerdp-client.so.2.0.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libfreerdp-server.so.2.0.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libfreerdp-shadow.so.2.0.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libfreerdp.so.2.0.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libopenh264.so.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/librdtk.so.1.1.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libSDL-1.3.so.0.0.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libsipw.so.1.0.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libwinpr.so.1.1.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} $out/lib/libxfreerdp-client.so.2.0.0
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/sky
-    patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}:${stdenv.lib.makeLibraryPath buildInputs} --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/sky_sender
     sed -i "s#/usr/bin/sky#$out/bin/sky#g" $out/share/applications/sky.desktop
     sed -i "s#/usr/lib/sky#$out/bin/#g" $out/share/applications/sky.desktop
   '';
