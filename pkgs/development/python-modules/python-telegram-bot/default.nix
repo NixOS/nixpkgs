@@ -7,11 +7,13 @@
 , urllib3
 , tornado
 , pytest
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
   version = "12.7";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
