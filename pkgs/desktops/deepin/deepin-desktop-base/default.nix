@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, deepin-wallpapers, deepin }:
+{ stdenv
+, fetchFromGitHub
+, deepin-wallpapers
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-desktop-base";
@@ -11,9 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "0rs7bjy35k5gc5nbba1cijhdz16zny30lgmcf2ckx1pkdszk2vra";
   };
 
-  nativeBuildInputs = [ deepin.setupHook ];
+  nativeBuildInputs = [
+    deepin.setupHook
+  ];
 
-  buildInputs = [ deepin-wallpapers ];
+  buildInputs = [
+    deepin-wallpapers
+  ];
 
   # TODO: Fedora recommended dependencies:
   #   deepin-wallpapers

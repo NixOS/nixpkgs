@@ -74,7 +74,9 @@ mkDerivation rec {
 
   # Need to add kwayland around:
   # * https://github.com/linuxdeepin/dde-kwin/blob/5226bb984c844129f9fa589da56e77decb7b39a1/plugins/kwineffects/blur/CMakeLists.txt#L14
-  NIX_CFLAGS_COMPILE = "-I${kwayland.dev}/include/KF5";
+  NIX_CFLAGS_COMPILE = [
+    "-I${kwayland.dev}/include/KF5"
+  ];
 
   cmakeFlags = [
     "-DKWIN_VERSION=${(builtins.parseDrvName kwin.name).version}"

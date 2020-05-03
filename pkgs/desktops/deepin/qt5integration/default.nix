@@ -1,6 +1,19 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, mtdev,
-  lxqt, qtx11extras, qtmultimedia, qtsvg,
-  qt5dxcb-plugin, qtstyleplugins, dtkcore, dtkwidget, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, mtdev
+, lxqt
+, qtx11extras
+, qtmultimedia
+, qtsvg
+, qt5dxcb-plugin
+, qtstyleplugins
+, dtkcore
+, dtkwidget
+, deepin
+}:
 
 mkDerivation rec {
   pname = "qt5integration";

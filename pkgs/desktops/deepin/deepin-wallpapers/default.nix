@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, dde-api, deepin }:
+{ stdenv
+, fetchFromGitHub
+, dde-api
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-wallpapers";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "09cfnxbpms98ibqbi4xd51181q3az5n8rmndcdr9w12kyzniz7xv";
   };
 
-  nativeBuildInputs = [ dde-api deepin.setupHook ];
+  nativeBuildInputs = [
+    dde-api
+    deepin.setupHook
+  ];
 
   postPatch = ''
     searchHardCodedPaths # debugging

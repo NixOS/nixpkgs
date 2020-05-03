@@ -1,6 +1,22 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, pkgconfig, qttools, qtx11extras,
-  dtkcore, dtkwidget, ffmpeg, ffmpegthumbnailer, mpv, pulseaudio,
-  libdvdnav, libdvdread, xorg, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, qttools
+, qtx11extras
+, dtkcore
+, dtkwidget
+, ffmpeg
+, ffmpegthumbnailer
+, mpv
+, pulseaudio
+, libdvdnav
+, libdvdread
+, xorg
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-movie-reborn";
@@ -47,7 +63,6 @@ mkDerivation rec {
   ];
 
   NIX_LDFLAGS = "-ldvdnav";
-
 
   postPatch = ''
     searchHardCodedPaths  # debugging

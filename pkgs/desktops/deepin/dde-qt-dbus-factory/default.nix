@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, qmake, python3, deepin }:
+{ stdenv
+, fetchFromGitHub
+, qmake
+, python3
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "dde-qt-dbus-factory";

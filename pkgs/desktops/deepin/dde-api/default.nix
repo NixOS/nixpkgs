@@ -1,25 +1,28 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig,
-  alsaLib,
-  bc,
-  blur-effect,
-  coreutils,
-  dbus-factory,
-  deepin,
-  deepin-gettext-tools,
-  fontconfig,
-  go,
-  go-dbus-factory,
-  go-gir-generator,
-  go-lib,
-  grub2,
-  gtk3,
-  libcanberra,
-  libgudev,
-  librsvg,
-  poppler,
-  pulseaudio,
-  rfkill,
-  xcur2png
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, bc
+, blur-effect
+, coreutils
+, dbus-factory
+, deepin
+, deepin-gettext-tools
+, fontconfig
+, go
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, grub2
+, gtk3
+, libcanberra
+, libgudev
+, librsvg
+, poppler
+, pulseaudio
+, rfkill
+, xcur2png
 }:
 
 buildGoPackage rec {

@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, go, go-lib, deepin }:
+{ stdenv
+, fetchFromGitHub
+, go
+, go-lib
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "go-dbus-generator";

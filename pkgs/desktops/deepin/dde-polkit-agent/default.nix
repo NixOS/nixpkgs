@@ -1,5 +1,15 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, polkit-qt,
-  dtkcore, dtkwidget, dde-qt-dbus-factory, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qttools
+, polkit-qt
+, dtkcore
+, dtkwidget
+, dde-qt-dbus-factory
+, deepin
+}:
 
 mkDerivation rec {
   pname = "dde-polkit-agent";

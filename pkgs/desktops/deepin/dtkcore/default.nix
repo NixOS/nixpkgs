@@ -1,4 +1,12 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, gsettings-qt
+, pythonPackages
+, deepin
+}:
 
 mkDerivation rec {
   pname = "dtkcore";

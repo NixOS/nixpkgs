@@ -1,5 +1,14 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, pkgconfig, qtbase, udisks2-qt5, utillinux,
-  dtkcore, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qtbase
+, udisks2-qt5
+, utillinux
+, dtkcore
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-anything";

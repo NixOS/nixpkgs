@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, gtk3, xcursorgen, papirus-icon-theme, deepin, hicolor-icon-theme }:
+{ stdenv
+, fetchFromGitHub
+, gtk3
+, xcursorgen
+, papirus-icon-theme
+, deepin
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-icon-theme";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "12rzzjp906np95ckbxrd4mb345lm198wz69kxy48f8q1zg78q8iw";
   };
 
-  nativeBuildInputs = [ gtk3 xcursorgen ];
+  nativeBuildInputs = [
+    gtk3
+    xcursorgen
+  ];
 
   propagatedBuildInputs = [
     papirus-icon-theme

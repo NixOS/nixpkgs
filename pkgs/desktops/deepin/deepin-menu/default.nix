@@ -1,5 +1,13 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, dtkcore, dtkwidget,
-  qt5integration, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, dtkcore
+, dtkwidget
+, qt5integration
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-menu";

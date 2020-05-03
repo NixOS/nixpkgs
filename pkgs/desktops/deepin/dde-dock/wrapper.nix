@@ -1,4 +1,8 @@
-{ makeWrapper, symlinkJoin, dde-dock, plugins }:
+{ makeWrapper
+, symlinkJoin
+, dde-dock
+, plugins
+}:
 
 symlinkJoin {
   name = "dde-dock-with-plugins-${dde-dock.version}";

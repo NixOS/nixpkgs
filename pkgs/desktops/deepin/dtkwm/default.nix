@@ -1,4 +1,13 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, pkgconfig, qmake, qtx11extras, dtkcore, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qmake
+, qtx11extras
+, dtkcore
+, deepin
+}:
 
 mkDerivation rec {
   pname = "dtkwm";

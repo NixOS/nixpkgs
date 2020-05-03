@@ -1,4 +1,12 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qtbase, libisoburn, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qtbase
+, libisoburn
+, deepin
+}:
 
 mkDerivation rec {
   pname = "disomaster";

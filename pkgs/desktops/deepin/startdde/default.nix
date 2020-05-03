@@ -1,10 +1,40 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, alsaLib,
-  coreutils, dbus-factory, dde-api, dde-daemon, dde-dock,
-  dde-file-manager, dde-polkit-agent, dde-session-ui, deepin,
-  deepin-desktop-base, deepin-desktop-schemas, deepin-turbo,
-  dde-kwin, glib, gnome3, go, go-dbus-factory, go-gir-generator,
-  go-lib, gtk3, jq, kmod, libX11, libXi, libcgroup, pciutils, psmisc,
-  pulseaudio, systemd, xorg, wrapGAppsHook }:
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, coreutils
+, dbus-factory
+, dde-api
+, dde-daemon
+, dde-dock
+, dde-file-manager
+, dde-polkit-agent
+, dde-session-ui
+, deepin
+, deepin-desktop-base
+, deepin-desktop-schemas
+, deepin-turbo
+, dde-kwin
+, glib
+, gnome3
+, go
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, gtk3
+, jq
+, kmod
+, libX11
+, libXi
+, libcgroup
+, pciutils
+, psmisc
+, pulseaudio
+, systemd
+, xorg
+, wrapGAppsHook
+}:
 
 buildGoPackage rec {
   name = "${pname}-${version}";

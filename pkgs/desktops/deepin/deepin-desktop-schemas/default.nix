@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, python3, dconf, glib, deepin-gtk-theme,
-  deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, deepin }:
+{ stdenv
+, fetchFromGitHub
+, python3
+, dconf
+, glib
+, deepin-gtk-theme
+, deepin-icon-theme
+, deepin-sound-theme
+, deepin-wallpapers
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-desktop-schemas";
@@ -46,7 +55,9 @@ stdenv.mkDerivation rec {
     #   /usr/share/desktop-directories
   '';
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   doCheck = true;
   checkTarget = "test";

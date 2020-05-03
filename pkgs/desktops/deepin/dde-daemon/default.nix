@@ -1,10 +1,38 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkgconfig,
-  dbus-factory, go-dbus-factory, go-gir-generator, go-lib,
-  deepin-gettext-tools, gettext, dde-api, deepin-desktop-schemas,
-  deepin-wallpapers, deepin-desktop-base, alsaLib, glib, gtk3,
-  libgudev, libinput, libnl, librsvg, linux-pam, networkmanager,
-  pulseaudio, python3, hicolor-icon-theme, glibc, tzdata, go,
-  deepin, makeWrapper, xkeyboard_config, wrapGAppsHook }:
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, dbus-factory
+, go-dbus-factory
+, go-gir-generator
+, go-lib
+, deepin-gettext-tools
+, gettext
+, dde-api
+, deepin-desktop-schemas
+, deepin-wallpapers
+, deepin-desktop-base
+, alsaLib
+, glib
+, gtk3
+, libgudev
+, libinput
+, libnl
+, librsvg
+, linux-pam
+, networkmanager
+, pulseaudio
+, python3
+, hicolor-icon-theme
+, glibc
+, tzdata
+, go
+, deepin
+, makeWrapper
+, xkeyboard_config
+, wrapGAppsHook
+}:
 
 buildGoPackage rec {
   pname = "dde-daemon";

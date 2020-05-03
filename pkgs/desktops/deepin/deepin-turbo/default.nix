@@ -1,4 +1,11 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, qtbase
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-turbo";
