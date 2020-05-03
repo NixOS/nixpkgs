@@ -570,7 +570,7 @@ self: super:
       attrs =
         if (abiCompat == null || lib.hasPrefix abiCompat version) then
           attrs_passed // {
-            buildInputs = attrs_passed.buildInputs ++ [ libdrm.dev ]; patchPhase = ''
+            buildInputs = attrs_passed.buildInputs ++ [ libdrm.dev ]; postPatch = ''
             for i in dri3/*.c
             do
               sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
