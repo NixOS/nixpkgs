@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python One Time Password Library";
-    homepage = https://github.com/pyotp/pyotp;
+    homepage = "https://github.com/pyotp/pyotp";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

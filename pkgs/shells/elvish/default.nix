@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "elvish";
-  version = "0.13";
+  version = "0.13.1";
 
   goPackagePath = "github.com/elves/elvish";
   excludedPackages = [ "website" ];
@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "elves";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fprii430p9w8x4wq93iqkgkwi5kypwwlnzgvlcz0mkksayk8bzg";
+    sha256 = "0lz9lf1swrn67kymcp2wh67lh3c0ifqm9035gpkd3zynlq3wzqfm";
   };
 
   modSha256 = "13x4wbfj8049ygm3zbgzyr2bm4sq4x6xddrxx6shr8fydlcf1g8v";
@@ -27,7 +27,7 @@ buildGoModule rec {
       language. It runs on Linux, BSDs, macOS and Windows. Despite its pre-1.0
       status, it is already suitable for most daily interactive use.
     '';
-    homepage = https://elv.sh/;
+    homepage = "https://elv.sh/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra AndersonTorres ];
     platforms = with platforms; linux ++ darwin;

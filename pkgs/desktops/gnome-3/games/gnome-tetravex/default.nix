@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-tetravex";
-  version = "3.34.4";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-tetravex/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1sm90nkpig02hwk7bh5bnf65awgssxl63bvvh2a7gmlaln8x99iy";
+    sha256 = "1xbd0flh77v3x0dh4dsfspykwb6rwvga7kqwn1fq7gk421mq6n52";
   };
 
   passthru = {
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Tetravex;
+    homepage = "https://wiki.gnome.org/Apps/Tetravex";
     description = "Complete the puzzle by matching numbered tiles";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -6,6 +6,7 @@ from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
 import base64
+import codecs
 import os
 import pathlib
 import ptpython.repl
@@ -84,8 +85,6 @@ CHAR_TO_KEY = {
 }
 
 # Forward references
-nr_tests: int
-failed_tests: list
 log: "Logger"
 machines: "List[Machine]"
 
@@ -101,10 +100,12 @@ def make_command(args: list) -> str:
 def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]:
     global log
     log.log("starting VDE switch for network {}".format(vlan_nr))
-    vde_socket = os.path.abspath("./vde{}.ctl".format(vlan_nr))
+    vde_socket = tempfile.mkdtemp(
+        prefix="nixos-test-vde-", suffix="-vde{}.ctl".format(vlan_nr)
+    )
     pty_master, pty_slave = pty.openpty()
     vde_process = subprocess.Popen(
-        ["vde_switch", "-s", vde_socket, "--dirmode", "0777"],
+        ["vde_switch", "-s", vde_socket, "--dirmode", "0700"],
         bufsize=1,
         stdin=pty_slave,
         stdout=subprocess.PIPE,
@@ -115,6 +116,7 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     fd.write("version\n")
     # TODO: perl version checks if this can be read from
     # an if not, dies. we could hang here forever. Fix it.
+    assert vde_process.stdout is not None
     vde_process.stdout.readline()
     if not os.path.exists(os.path.join(vde_socket, "ctl")):
         raise Exception("cannot start vde_switch")
@@ -139,7 +141,7 @@ def retry(fn: Callable) -> None:
 class Logger:
     def __init__(self) -> None:
         self.logfile = os.environ.get("LOGFILE", "/dev/null")
-        self.logfile_handle = open(self.logfile, "wb")
+        self.logfile_handle = codecs.open(self.logfile, "wb")
         self.xml = XMLGenerator(self.logfile_handle, encoding="utf-8")
         self.queue: "Queue[Dict[str, str]]" = Queue(1000)
 
@@ -383,7 +385,7 @@ class Machine:
             if state != require_state:
                 raise Exception(
                     "Expected unit ‘{}’ to to be in state ".format(unit)
-                    + "'active' but it is in state ‘{}’".format(state)
+                    + "'{}' but it is in state ‘{}’".format(require_state, state)
                 )
 
     def execute(self, command: str) -> Tuple[int, str]:
@@ -739,6 +741,7 @@ class Machine:
         self.shell, _ = self.shell_socket.accept()
 
         def process_serial_output() -> None:
+            assert self.process.stdout is not None
             for _line in self.process.stdout:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
@@ -877,33 +880,16 @@ def run_tests() -> None:
         if machine.is_up():
             machine.execute("sync")
 
-    if nr_tests != 0:
-        nr_succeeded = nr_tests - len(failed_tests)
-        eprint("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
-        if len(failed_tests) > 0:
-            eprint(
-                "The following tests have failed:\n - {}".format(
-                    "\n - ".join(failed_tests)
-                )
-            )
-            sys.exit(1)
-
 
 @contextmanager
 def subtest(name: str) -> Iterator[None]:
-    global nr_tests
-    global failed_tests
-
     with log.nested(name):
-        nr_tests += 1
         try:
             yield
             return True
         except Exception as e:
-            failed_tests.append(
-                'Test "{}" failed with error: "{}"'.format(name, str(e))
-            )
-            log.log("error: {}".format(str(e)))
+            log.log(f'Test "{name}" failed with error: "{e}"')
+            raise e
 
     return False
 
@@ -923,9 +909,6 @@ if __name__ == "__main__":
     ]
     exec("\n".join(machine_eval))
 
-    nr_tests = 0
-    failed_tests = []
-
     @atexit.register
     def clean_up() -> None:
         with log.nested("cleaning up"):
@@ -936,7 +919,7 @@ if __name__ == "__main__":
                 machine.process.kill()
 
             for _, _, process, _ in vde_sockets:
-                process.kill()
+                process.terminate()
         log.close()
 
     tic = time.time()

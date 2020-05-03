@@ -44,16 +44,15 @@
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
-  version = "1.0.9";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  inherit version;
+  version = "1.0.10";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "00qd770qjsiyd8qhhhyn7zg6jyi283ix5dhjzcfdn9yr3h53kvyn";
+    sha256 = "1fn61cl1d33yd1jgqm8jpffjw3xlyyhkn032g14d9gnwkcaf4649";
   };
 
   nativeBuildInputs = [
@@ -146,8 +145,8 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool to build flatpaks from source";
-    homepage = https://flatpak.org/;
-    license = licenses.lgpl21;
+    homepage = "https://github.com/flatpak/flatpak-builder";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

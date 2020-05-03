@@ -2,22 +2,20 @@
 
 buildGoModule rec {
   pname = "imgproxy";
-  version = "2.8.1";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    sha256 = "00hhgh6nrzg2blc6yl8rph5h5w7swlkbh0zgsj7xr0lkm10879pc";
+    sha256 = "0lzk9nv7fbyc0jbsigw54310pvpwfrvji58z7a08j03vypc0v3x4";
     rev = "v${version}";
   };
 
-  modSha256 = "0kgd8lwcdns3skvd4bj4z85mq6hkk79mb0zzwky0wqxni8f73s6w";
+  modSha256 = "02pj8ryis89dl4wjp2mvx6h5d0xdvskxdxiwarg7q0x23m9r7kpg";
 
-  buildInputs = [
-    gobject-introspection
-    pkg-config
-    vips
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ gobject-introspection vips ];
 
   preBuild = ''
     export CGO_LDFLAGS_ALLOW='-(s|w)'

@@ -1,7 +1,15 @@
-{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5 }:
+{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
+, enablePlayback ? true
+, gst_all_1
+}:
 
 let
   pythonPackages = python3Packages;
+  pyqt5 = if enablePlayback then
+    pythonPackages.pyqt5_with_qtmultimedia
+  else
+    pythonPackages.pyqt5
+  ;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
   version = "2.3.1";
@@ -13,7 +21,16 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "0xalg4dvaqb396h4s6gzxnplgv1lcvsczmmrlhyrj0kfj10amhsj";
   };
 
-  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ];
+  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
+    ++ stdenv.lib.optionals (pyqt5.multimediaEnabled) [
+      qt5.qtmultimedia.bin
+      gst_all_1.gstreamer
+      gst_all_1.gst-vaapi
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+    ]
+  ;
 
   propagatedBuildInputs = with pythonPackages; [
     pyqt5
@@ -27,10 +44,14 @@ in pythonPackages.buildPythonApplication rec {
     substituteInPlace setup.cfg --replace "‘" "'"
   '';
 
-  installPhase = ''
-    python setup.py install --prefix="$out"
-    wrapQtApp $out/bin/picard
-  '';
+  # In order to spare double wrapping, we use:
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  ''
+    + stdenv.lib.optionalString (pyqt5.multimediaEnabled) ''
+      makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+    ''
+  ;
 
   meta = with stdenv.lib; {
     homepage = "https://picard.musicbrainz.org/";

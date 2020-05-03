@@ -50,7 +50,7 @@ buildPythonPackage rec {
   checkInputs = [ opencv3 pytest ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/aleju/imgaug;
+    homepage = "https://github.com/aleju/imgaug";
     description = "Image augmentation for machine learning experiments";
     license = licenses.mit;
     maintainers = with maintainers; [ cmcdragonkai rakesh4g ];

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase }:
+{ mkDerivation, stdenv, fetchFromGitHub, qmake, qtbase }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "rocket";
   version = "2018-06-09";
 

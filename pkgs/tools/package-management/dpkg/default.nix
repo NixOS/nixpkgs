@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.19.7";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1s4nlaqz4c3p5r85f4il8m21825sfy2s9wgz4ajhl332vzggw9sc";
+    sha256 = "0009dp4p3d2j5vd956achqczf8qizfixha8hw5hzn3h31qmwqcxn";
   };
 
   configureFlags = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Debian package manager";
-    homepage = https://wiki.debian.org/Teams/Dpkg;
+    homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

@@ -1,28 +1,27 @@
-{ stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
+{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
-  version = "4.10";
+  version = "4.11";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1imnbfrmizs0yx2165qj423y3m5vw9z33pqxmvhvs0rcwwddgqix";
+    sha256 = "18sqnrvh4bbmg3zzm78n4s2hvv8a77ilg7xa3hl94mp9qla6gasn";
   };
 
   nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [ gnome-icon-theme hicolor-icon-theme ];
+  # still missing parent themes: Ambiant-MATE, Mint-X, Faenza-Dark, KFaenza
 
   dontDropIconThemeCache = true;
 
   installPhase = ''
-     mkdir -p $out/share/icons
-     mv Obsidian* $out/share/icons
-  '';
+    mkdir -p $out/share/icons
+    mv Obsidian* $out/share/icons
 
-  postFixup = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done

@@ -4,13 +4,13 @@
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "195vplq4182pq62sn6ci0a8p57k6zv8pk1gmifmwdv69wzaph043";
+    sha256 = "1cnii5wj0pgqg3dqk5cm6slpbs3730x8ippps4cjbsxcsrmqjpx6";
     fetchSubmodules = true; # needed for display_mirror css file
   };
 

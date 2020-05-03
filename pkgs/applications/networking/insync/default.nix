@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux"];
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.benley ];
-    homepage = https://www.insynchq.com;
+    homepage = "https://www.insynchq.com";
     description = "Google Drive sync and backup with multiple account support";
     longDescription = ''
      Insync is a commercial application that syncs your Drive files to your

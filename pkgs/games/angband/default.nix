@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "bindir=$(out)/bin" ];
 
   meta = with stdenv.lib; {
-    homepage = http://rephial.org/;
+    homepage = "http://rephial.org/";
     description = "A single-player roguelike dungeon exploration game";
     maintainers = [ maintainers.chattered ];
     license = licenses.gpl2;

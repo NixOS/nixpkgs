@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Rate limiting for flask applications";
-    homepage = https://flask-limiter.readthedocs.org/;
+    homepage = "https://flask-limiter.readthedocs.org/";
     license = licenses.mit;
   };
 }

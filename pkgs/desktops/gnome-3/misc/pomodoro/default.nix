@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://gnomepomodoro.org/;
+    homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.

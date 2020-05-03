@@ -41,7 +41,8 @@
 , lcalc
 , rubiks
 , flintqs
-, openblasCompat
+, blas
+, lapack
 , flint
 , gmp
 , mpfr
@@ -52,6 +53,8 @@
 , jdk
 , less
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
 # It sets up various environment variables, telling sage where to find its
@@ -114,7 +117,7 @@ writeTextFile rec {
         # testsuite instead, but since all the packages are also runtime
         # dependencies it doesn't really hurt to include them here.
         singular
-        openblasCompat
+        blas lapack
         fflas-ffpack givaro
         gd
         libpng zlib

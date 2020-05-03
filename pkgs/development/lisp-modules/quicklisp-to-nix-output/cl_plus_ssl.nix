@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl_plus_ssl'';
-  version = ''cl+ssl-20190710-git'';
+  version = ''cl+ssl-20191130-git'';
 
   description = ''Common Lisp interface to OpenSSL.'';
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."flexi-streams" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl+ssl/2019-07-10/cl+ssl-20190710-git.tgz'';
-    sha256 = ''0lxyd8nryhk9f8gg0fksqf3y5lgbb7f61snsc3qzi5gplkdy0mzv'';
+    url = ''http://beta.quicklisp.org/archive/cl+ssl/2019-11-30/cl+ssl-20191130-git.tgz'';
+    sha256 = ''073ba82xb0jsqlmhv46g7n31j0k2ahw6bw02a51qg77l7wxnms23'';
   };
 
   packageName = "cl+ssl";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl+ssl DESCRIPTION Common Lisp interface to OpenSSL. SHA256
-    0lxyd8nryhk9f8gg0fksqf3y5lgbb7f61snsc3qzi5gplkdy0mzv URL
-    http://beta.quicklisp.org/archive/cl+ssl/2019-07-10/cl+ssl-20190710-git.tgz
-    MD5 fae6e01902964d010ad2565a61a6af2a NAME cl+ssl FILENAME cl_plus_ssl DEPS
+    073ba82xb0jsqlmhv46g7n31j0k2ahw6bw02a51qg77l7wxnms23 URL
+    http://beta.quicklisp.org/archive/cl+ssl/2019-11-30/cl+ssl-20191130-git.tgz
+    MD5 995aaef02ec5112a0de78b2533691629 NAME cl+ssl FILENAME cl_plus_ssl DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME flexi-streams FILENAME flexi-streams)
@@ -31,4 +31,4 @@ rec {
     DEPENDENCIES
     (alexandria babel bordeaux-threads cffi flexi-streams trivial-features
      trivial-garbage trivial-gray-streams uiop)
-    VERSION cl+ssl-20190710-git SIBLINGS (cl+ssl.test) PARASITES NIL) */
+    VERSION cl+ssl-20191130-git SIBLINGS (cl+ssl.test) PARASITES NIL) */

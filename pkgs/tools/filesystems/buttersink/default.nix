@@ -23,7 +23,7 @@ python2.pkgs.buildPythonApplication rec {
       Sources and destinations can be local btrfs file systems, remote btrfs
       file systems over SSH, or S3 buckets.
     '';
-    homepage = https://github.com/AmesCornish/buttersink/wiki;
+    homepage = "https://github.com/AmesCornish/buttersink/wiki";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

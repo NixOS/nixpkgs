@@ -24,8 +24,9 @@ buildGoPackage rec {
     substituteInPlace pkg/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ optional pamSupport pam;
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = optional pamSupport pam;
 
   buildFlags = [ "-tags" ];
 
@@ -47,7 +48,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A painless self-hosted Git service";
-    homepage = https://gogs.io;
+    homepage = "https://gogs.io";
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
   };

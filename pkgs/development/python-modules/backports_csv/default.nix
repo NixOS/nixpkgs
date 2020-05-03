@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Backport of Python 3 csv module";
-    homepage = https://github.com/ryanhiebert;
+    homepage = "https://github.com/ryanhiebert";
     license = licenses.psfl;
   };
 }

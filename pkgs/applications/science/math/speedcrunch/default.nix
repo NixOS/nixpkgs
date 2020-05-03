@@ -20,7 +20,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = http://speedcrunch.org;
+    homepage    = "http://speedcrunch.org";
     license     = licenses.gpl2Plus;
     description = "A fast power user calculator";
     longDescription = ''

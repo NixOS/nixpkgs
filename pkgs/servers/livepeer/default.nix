@@ -16,13 +16,15 @@ buildGoPackage rec {
     sha256 = "07vhw787wq5q4xm7zvswjdsmr20pwfa39wfkgamb7hkrffn3k2ia";
   };
 
-  buildInputs = [ pkgconfig ffmpeg ];
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ ffmpeg ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Official Go implementation of the Livepeer protocol";
-    homepage = https://livepeer.org;
+    homepage = "https://livepeer.org";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ elitak ];

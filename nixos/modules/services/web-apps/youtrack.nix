@@ -46,9 +46,11 @@ in
         https://www.jetbrains.com/help/youtrack/standalone/YouTrack-Java-Start-Parameters.html
         for more information.
       '';
-      example = {
-        "jetbrains.youtrack.overrideRootPassword" = "tortuga";
-      };
+      example = literalExample ''
+        {
+          "jetbrains.youtrack.overrideRootPassword" = "tortuga";
+        }
+      '';
       type = types.attrsOf types.str;
     };
 

@@ -1,8 +1,17 @@
-{ pkgs ? import ((import ../.).cleanSource ../..) {} }:
+{ # The pkgs used for dependencies for the testing itself
+  # Don't test properties of pkgs.lib, but rather the lib in the parent directory
+  pkgs ? import ../.. {} // { lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!"; }
+}:
 
 pkgs.runCommandNoCC "nixpkgs-lib-tests" {
-  buildInputs = [ pkgs.nix (import ./check-eval.nix) ];
-  NIX_PATH = "nixpkgs=${toString pkgs.path}";
+  buildInputs = [
+    pkgs.nix
+    (import ./check-eval.nix)
+    (import ./maintainers.nix {
+      inherit pkgs;
+      lib = import ../.;
+    })
+  ];
 } ''
     datadir="${pkgs.nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp
@@ -17,8 +26,8 @@ pkgs.runCommandNoCC "nixpkgs-lib-tests" {
     cacheDir=$TEST_ROOT/binary-cache
     nix-store --init
 
-    cd ${pkgs.path}/lib/tests
-    bash ./modules.sh
+    cp -r ${../.} lib
+    bash lib/tests/modules.sh
 
     touch $out
 ''

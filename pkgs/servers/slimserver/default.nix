@@ -93,7 +93,7 @@ perlPackages.buildPerlPackage rec {
   outputs = [ "out" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Logitech/slimserver;
+    homepage = "https://github.com/Logitech/slimserver";
     description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
     # the firmware is not under a free license!
     # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt

@@ -112,7 +112,7 @@ in
           modifications to the core source
         - Improve extensibility with a new plugin architecture
       '';
-      homepage    = https://www.neovim.io;
+      homepage    = "https://www.neovim.io";
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.
       # Contributions committed after b17d96 are licensed under Apache 2.0 unless

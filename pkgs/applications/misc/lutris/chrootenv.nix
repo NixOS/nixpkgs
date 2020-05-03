@@ -92,9 +92,9 @@ in buildFHSUserEnv {
   multiPkgs = pkgs: with pkgs; [
     # Common
     libsndfile libtheora libogg libvorbis libopus libGLU libpcap libpulseaudio
-    libao libusb libevdev udev libgcrypt libxml2 libusb libpng libmpeg2 libv4l
+    libao libevdev udev libgcrypt libxml2 libusb-compat-0_1 libpng libmpeg2 libv4l
     libjpeg libxkbcommon libass libcdio libjack2 libsamplerate libzip libmad libaio
-    libcap libtiff libva libgphoto2 libxslt libtxc_dxtn libsndfile giflib zlib glib
+    libcap libtiff libva libgphoto2 libxslt libsndfile giflib zlib glib
     alsaLib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
     readline gcc SDL SDL2 curl graphite2 gtk2 gtk3 udev ncurses wayland libglvnd
     vulkan-loader xdg_utils sqlite gnutls libbsd
@@ -103,7 +103,7 @@ in buildFHSUserEnv {
 
     # WINE
     cups lcms2 mpg123 cairo unixODBC samba4 sane-backends openldap
-    ocl-icd utillinux
+    ocl-icd utillinux libkrb5
 
     # Winetricks
     fribidi

@@ -1,4 +1,4 @@
-{ lowPrio, newScope, pkgs, stdenv, cmake, libstdcxxHook
+{ lowPrio, newScope, pkgs, stdenv, cmake, gcc, libstdcxxHook
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -6,15 +6,15 @@
 
 let
   release_version = "10.0.0";
-  candidate = "rc3";
-  version = "10.0.0${candidate}"; # differentiating these is important for rc's
+  version = release_version; # differentiating these (variables) is important for rc's
+  targetConfig = stdenv.targetPlatform.config;
 
   fetch = name: sha256: fetchurl {
-    url = "https://prereleases.llvm.org/${release_version}/${candidate}/${name}-${version}.src.tar.xz";
+    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "03669c93wzmbmfpv0pyzb7y4z1xc912l95iqywyx01xgdl1xws0r";
+  clang-tools-extra_src = fetch "clang-tools-extra" "074ija5s2jsdn0k035r2dzmryjmqxdnyg4xwvaqych2bazv8rpxc";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
@@ -30,15 +30,10 @@ let
   in {
 
     llvm = callPackage ./llvm.nix { };
-    llvm-polly = callPackage ./llvm.nix { enablePolly = true; };
 
     clang-unwrapped = callPackage ./clang {
       inherit (tools) lld;
       inherit clang-tools-extra_src;
-    };
-    clang-polly-unwrapped = callPackage ./clang {
-      inherit clang-tools-extra_src;
-      llvm = tools.llvm-polly;
     };
 
     llvm-manpages = lowPrio (tools.llvm.override {
@@ -66,7 +61,12 @@ let
         libstdcxxHook
         targetLlvmLibraries.compiler-rt
       ];
-      extraBuildCommands = mkExtraBuildCommands cc;
+      extraBuildCommands = ''
+          echo "-target ${targetConfig}" >> $out/nix-support/cc-cflags
+          echo "-B${gcc.cc}/lib/gcc/${targetConfig}/${gcc.version}" >> $out/nix-support/cc-cflags
+          echo "-L${gcc.cc}/lib/gcc/${targetConfig}/${gcc.version}" >> $out/nix-support/cc-ldflags
+          echo "-L${gcc.cc.lib}/${targetConfig}/lib" >> $out/nix-support/cc-ldflags
+      '' + mkExtraBuildCommands cc;
     };
 
     libcxxClang = wrapCCWith rec {

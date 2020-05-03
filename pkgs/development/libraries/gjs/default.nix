@@ -1,11 +1,14 @@
 { fetchurl
+, fetchpatch
 , stdenv
+, meson
+, ninja
 , pkgconfig
 , gnome3
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_60
+, spidermonkey_68
 , pango
 , cairo
 , readline
@@ -14,21 +17,29 @@
 , dbus
 , gdk-pixbuf
 , makeWrapper
+, xvfb_run
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+let
+  testDeps = [
+    gobject-introspection # for Gio and cairo typelibs
+    gtk3 atk pango.out gdk-pixbuf
+  ];
+in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.58.5";
+  version = "1.64.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0fm1szmhdawvgbf9fh6vvkv1fdvbn888fciyi2wkhx48kz09jvg7";
+    sha256 = "0z4qx4s3174b1w5b0slnn6jwpy2c18s4fvx4xii2kflr7s4q7bsm";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkgconfig
     makeWrapper
     libxml2 # for xml-stripblanks
@@ -38,30 +49,61 @@ stdenv.mkDerivation rec {
     gobject-introspection
     cairo
     readline
-    spidermonkey_60
+    spidermonkey_68
     dbus # for dbus-run-session
   ];
+
+  checkInputs = [
+    xvfb_run
+  ] ++ testDeps;
 
   propagatedBuildInputs = [
     glib
   ];
 
-  configureFlags = [
-    "--enable-installed-tests"
+  mesonFlags = [
+    "-Dprofiler=disabled"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
+  patches = [
+    # Hard-code various paths
+    ./fix-paths.patch
+
+    # Allow installing installed tests to a separate output.
+    ./installed-tests-path.patch
+  ];
+
+  # Gio test is failing
+  # https://github.com/NixOS/nixpkgs/pull/81626#issuecomment-599325843
+  doCheck = false;
+
   postPatch = ''
-    for f in installed-tests/*.test.in; do
-      substituteInPlace "$f" --subst-var-by pkglibexecdir "$installedTests/libexec/gjs"
-    done
+    substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
+  '';
+
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p $out/lib $installedTests/libexec/gjs/installed-tests
+    ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
+    ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/gjs/installed-tests/libgimarshallingtests.so
+    ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/gjs/installed-tests/libregress.so
+    ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/gjs/installed-tests/libwarnlib.so
   '';
 
   postInstall = ''
-    moveToOutput "share/installed-tests" "$installedTests"
-    moveToOutput "libexec/gjs/installed-tests" "$installedTests"
-
     wrapProgram "$installedTests/libexec/gjs/installed-tests/minijasmine" \
-      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gtk3 atk pango.out gdk-pixbuf ]}:$installedTests/libexec/gjs/installed-tests"
+      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run -s '-screen 0 800x600x24' \
+      meson test --print-errorlogs
+    runHook postCheck
   '';
 
   separateDebugInfo = stdenv.isLinux;
@@ -80,7 +122,7 @@ stdenv.mkDerivation rec {
     description = "JavaScript bindings for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

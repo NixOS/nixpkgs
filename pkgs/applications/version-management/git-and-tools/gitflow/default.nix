@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/petervanderdoes/gitflow;
+    homepage = "https://github.com/petervanderdoes/gitflow";
     description = "Extend git with the Gitflow branching model";
     longDescription = ''
       A set of scripts that provide high-level repository operations

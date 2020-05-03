@@ -11,8 +11,8 @@ stdenv.mkDerivation {
     sha256 = "02j09y06csaic4m0fyb4dr9l3hl15nxbbniwq0i1qlccpxjak0j3";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake udev libcec_platform ] ++
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ udev libcec_platform ] ++
     stdenv.lib.optional (libraspberrypi != null) libraspberrypi;
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=1" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Allows you (with the right hardware) to control your device with your TV remote control using existing HDMI cabling";
-    homepage = http://libcec.pulse-eight.com;
+    homepage = "http://libcec.pulse-eight.com";
     repositories.git = "https://github.com/Pulse-Eight/libcec.git";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;

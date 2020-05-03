@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gkqx26pvlw00b3fgx6sh87yyjfzyj51jwxvbf9k117npkrf4b2g";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig makeWrapper ];
+  nativeBuildInputs = [ meson ninja pkgconfig makeWrapper wayland ];
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Wayland kiosk";
-    homepage    = https://www.hjdskes.nl/projects/cage/;
+    homepage    = "https://www.hjdskes.nl/projects/cage/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];

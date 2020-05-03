@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_mixer, alsaLib, libpng
-, pcre, graphicsmagick, makeDesktopItem }:
+, pcre, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
 
   pname = "ivan";
-  version = "057";
+  version = "058";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
     rev = "v${version}";
-    sha256 = "0mavmwikfsyr5sp65sl8dqknl1yz7c7ds53y1qkma24vsikz3k64";
+    sha256 = "04jzs8wad2b3g9hvnijr4r89iiw6b1i44zdzkg0dy447lrw6l6xc";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig graphicsmagick ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ SDL2 SDL2_mixer alsaLib libpng pcre ];
 
@@ -36,12 +36,19 @@ stdenv.mkDerivation rec {
     comment = meta.description;
   };
 
-  # Create appropriate directories. Convert "Icon.bmp" to "ivan.png", then copy
-  # it and "ivan.desktop" to these directories.
+  # Create appropriate directories. Copy icons and desktop item to these directories.
   postInstall = ''
     mkdir -p $out/share/applications
+    mkdir -p $out/share/icons/hicolor/16x16/apps
     mkdir -p $out/share/icons/hicolor/32x32/apps
-    gm convert $src/Graphics/Icon.bmp $out/share/icons/hicolor/32x32/apps/ivan.png
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    cp $src/Graphics/icons/shadowless.iconset/icon_16x16.png $out/share/icons/hicolor/16x16/apps/ivan.png
+    cp $src/Graphics/icons/shadowless.iconset/icon_32x32.png $out/share/icons/hicolor/32x32/apps/ivan.png
+    cp $src/Graphics/icons/shadowless.iconset/icon_128x128.png $out/share/icons/hicolor/128x128/apps/ivan.png
+    cp $src/Graphics/icons/shadowless.iconset/icon_256x256.png $out/share/icons/hicolor/256x256/apps/ivan.png
+    cp $src/Graphics/icons/shadowless.iconset/icon_512x512.png $out/share/icons/hicolor/512x512/apps/ivan.png
     cp ${ivanDesktop}/share/applications/* $out/share/applications
   '';
 
@@ -54,7 +61,7 @@ stdenv.mkDerivation rec {
 
       This is a fan continuation of IVAN by members of Attnam.com
     '';
-    homepage = https://attnam.com/;
+    homepage = "https://attnam.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [freepotion];

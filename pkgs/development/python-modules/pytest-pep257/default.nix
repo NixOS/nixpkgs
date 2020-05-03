@@ -13,7 +13,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pep257 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/anderslime/pytest-pep257;
+    homepage = "https://github.com/anderslime/pytest-pep257";
     description = "py.test plugin for PEP257";
     license = licenses.mit;
   };

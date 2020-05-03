@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = https://ocaml-community.github.io/ISO8601.ml/;
+    homepage = "https://ocaml-community.github.io/ISO8601.ml/";
     description = "ISO 8601 and RFC 3999 date parsing for OCaml";
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];

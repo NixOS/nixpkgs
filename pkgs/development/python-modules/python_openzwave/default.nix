@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python wrapper for the OpenZWave C++ library";
-    homepage = https://github.com/OpenZWave/python-openzwave;
+    homepage = "https://github.com/OpenZWave/python-openzwave";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ etu ];
     inherit (openzwave.meta) platforms;

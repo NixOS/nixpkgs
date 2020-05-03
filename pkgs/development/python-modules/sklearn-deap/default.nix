@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Use evolutionary algorithms instead of gridsearch in scikit-learn";
-    homepage = https://github.com/rsteca/sklearn-deap;
+    homepage = "https://github.com/rsteca/sklearn-deap";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ psyanticy ];
   };

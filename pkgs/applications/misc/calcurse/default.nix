@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
-  version = "4.5.1";
+  version = "4.6.0";
 
   src = fetchurl {
     url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
-    sha256 = "0cgkd285x5pk62lmdx9fjxl46c5lj8wj2cqbxq7d99yb4il5fdjk";
+    sha256 = "0hzhdpkkn75jlymanwzl69hrrf1pw29hrchr11wlxqjpl43h62gs";
   };
 
   buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       customized to suit user needs and a very powerful set of command line options can
       be used to filter and format appointments, making it suitable for use in scripts.
     '';
-    homepage = http://calcurse.org/;
+    homepage = "http://calcurse.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

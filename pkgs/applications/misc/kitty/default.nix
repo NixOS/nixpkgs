@@ -20,14 +20,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.16.0";
+  version = "0.17.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1bszyddar0g1gdz67h8rd3gbrdhi6ahjg7j14cjiqxm1938z9ajf";
+    sha256 = "1nx8gjavq8kc656ayh3wign1f68b46jbnmy8zyks25wg0p9gid8l";
   };
 
   buildInputs = [
@@ -72,7 +72,6 @@ buildPythonApplication rec {
     })
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     ./no-lto.patch
-    ./png2icns.patch
   ];
 
   # Causes build failure due to warning
@@ -106,6 +105,7 @@ buildPythonApplication rec {
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
     "$out/bin/kitty" + complete setup fish > "$out/share/fish/vendor_completions.d/kitty.fish"
     "$out/bin/kitty" + complete setup bash > "$out/share/bash-completion/completions/kitty.bash"
+    "$out/bin/kitty" + complete setup zsh > "$out/share/zsh/site-functions/_kitty"
   '';
 
   postInstall = ''
@@ -122,7 +122,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kovidgoyal/kitty;
+    homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.darwin ++ platforms.linux;

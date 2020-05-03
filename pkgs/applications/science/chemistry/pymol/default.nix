@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = description;
-    homepage = https://www.pymol.org/;
+    homepage = "https://www.pymol.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ samlich ];
   };

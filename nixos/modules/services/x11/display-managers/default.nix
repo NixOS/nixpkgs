@@ -54,14 +54,6 @@ let
         exec &> >(tee ~/.xsession-errors)
       ''}
 
-      # Start PulseAudio if enabled.
-      ${optionalString (config.hardware.pulseaudio.enable) ''
-        # Publish access credentials in the root window.
-        if ${config.hardware.pulseaudio.package.out}/bin/pulseaudio --dump-modules | grep module-x11-publish &> /dev/null; then
-          ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
-        fi
-      ''}
-
       # Tell systemd about our $DISPLAY and $XAUTHORITY.
       # This is needed by the ssh-agent unit.
       #
@@ -412,6 +404,9 @@ in
             (dm: wm: let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
               script = xsession dm wm;
+              desktopNames = if dm ? desktopNames
+                             then concatStringsSep ";" dm.desktopNames
+                             else sessionName;
             in
               optional (dm.name != "none" || wm.name != "none")
                 (pkgs.writeTextFile {
@@ -427,7 +422,7 @@ in
                     TryExec=${script}
                     Exec=${script}
                     Name=${sessionName}
-                    DesktopNames=${sessionName}
+                    DesktopNames=${desktopNames}
                   '';
                 } // {
                   providedSessions = [ sessionName ];

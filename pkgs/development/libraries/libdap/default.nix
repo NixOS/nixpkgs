@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.opendap.org/pub/source/${pname}-${version}.tar.gz";
-    sha256 = "17j6ca2qsp69a91lm11mwbs4l8q13xqcdz60l94avl5krymrqg47";
+    sha256 = "15jysnsmdjs7q4iafb4qzq4b76cfyvmbxgcxnqg4sr0x4bplwfnb";
   };
 
   meta = with stdenv.lib; {
     description = "A C++ SDK which contains an implementation of DAP";
-    homepage = https://www.opendap.org/software/libdap;
+    homepage = "https://www.opendap.org/software/libdap";
     license = licenses.lgpl2;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.linux;

@@ -46,7 +46,7 @@ in buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "DVD Creator for Linux";
-    homepage = http://www.rastersoft.com/programas/devede.html;
+    homepage = "http://www.rastersoft.com/programas/devede.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.bdimcheff ];
   };

@@ -19,7 +19,7 @@ buildGoPackage rec {
     description = "High-Performance server for NATS";
     license = licenses.asl20;
     maintainers = [ maintainers.swdunlop ];
-    homepage = https://nats.io/;
+    homepage = "https://nats.io/";
     platforms = platforms.all;
   };
 }

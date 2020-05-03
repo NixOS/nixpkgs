@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit version;
-    homepage = https://github.com/open-source-parsers/jsoncpp;
+    homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "A C++ library for interacting with JSON.";
     maintainers = with maintainers; [ ttuegel cpages nand0p ];
     license = licenses.mit;

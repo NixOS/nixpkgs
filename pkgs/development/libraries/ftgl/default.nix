@@ -18,10 +18,12 @@ stdenv.mkDerivation {
       [ libGL libGLU ])
     ;
 
+  configureFlags = [ "--with-ft-prefix=${stdenv.lib.getDev freetype}" ];
+
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://sourceforge.net/apps/mediawiki/ftgl/;
+    homepage = "https://sourceforge.net/apps/mediawiki/ftgl/";
     description = "Font rendering library for OpenGL applications";
     license = stdenv.lib.licenses.gpl3Plus;
 

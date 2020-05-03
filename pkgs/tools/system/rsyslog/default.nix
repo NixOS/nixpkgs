@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2001.0";
+  version = "8.2002.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "1nm83s9abknli46sknjs50cmdhhqzkznbsjspjbdg96likshdgsq";
+    sha256 = "1y414g61j93dgm5xg0ni985a99cyag0flvv1fqn2188dhr6w31py";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = https://www.rsyslog.com/;
+    homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
     changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
     license = licenses.gpl3;

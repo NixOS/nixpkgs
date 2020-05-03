@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiling window manager for macOS based on plugin architecture";
-    homepage = https://github.com/koekeishiya/chunkwm;
+    homepage = "https://github.com/koekeishiya/chunkwm";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 ];
     license = licenses.mit;

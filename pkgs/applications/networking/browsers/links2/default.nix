@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableDirectFB "--with-directfb";
 
   meta = with stdenv.lib; {
-    homepage = http://links.twibright.com/;
+    homepage = "http://links.twibright.com/";
     description = "A small browser with some graphics support";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

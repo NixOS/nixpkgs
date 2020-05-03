@@ -28,7 +28,7 @@ in
       browser = mkOption {
         type = types.str;
         default = concatStringsSep " " [ ''${pkgs.chromium}/bin/chromium''
-                                         ''--user-data-dir=$HOME/.chromium-captive''
+                                         ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
                                          ''--proxy-server="socks5://$PROXY"''
                                          ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
                                          ''--no-first-run''

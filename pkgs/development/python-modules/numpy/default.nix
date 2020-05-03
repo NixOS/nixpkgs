@@ -5,23 +5,23 @@
 , gfortran
 , pytest
 , blas
+, lapack
 , writeTextFile
 , isPyPy
 , cython
 , setuptoolsBuildHook
  }:
 
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 let
-  blasImplementation = lib.nameFromURL blas.name "-";
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
-      ${blasImplementation} = {
-        include_dirs = "${blas}/include";
-        library_dirs = "${blas}/lib";
-      } // lib.optionalAttrs (blasImplementation == "mkl") {
-        mkl_libs = "mkl_rt";
-        lapack_libs = "";
+      ${blas.implementation} = {
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+        libraries = "lapack,lapacke,blas,cblas";
       };
     });
   };
@@ -37,7 +37,7 @@ in buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
-  buildInputs = [ blas ];
+  buildInputs = [ blas lapack ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -68,8 +68,10 @@ in buildPythonPackage rec {
   '';
 
   passthru = {
-    blas = blas;
-    inherit blasImplementation cfg;
+    # just for backwards compatibility
+    blas = blas.provider;
+    blasImplementation = blas.implementation;
+    inherit cfg;
   };
 
   # Disable test
@@ -78,7 +80,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = https://numpy.org/;
+    homepage = "https://numpy.org/";
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

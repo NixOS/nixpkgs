@@ -37,7 +37,7 @@ buildPythonPackage rec {
   dontWrapPythonPrograms = true;
 
   meta = {
-    homepage = https://www.gnu.org/software/mailman/;
+    homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ peti ];

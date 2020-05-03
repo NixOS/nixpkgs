@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Securely transfer data between computers";
-    homepage = https://github.com/warner/magic-wormhole-mailbox-server;
+    homepage = "https://github.com/warner/magic-wormhole-mailbox-server";
     license = licenses.mit;
   };
 }

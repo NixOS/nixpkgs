@@ -1,7 +1,9 @@
 { stdenv
 , fetchFromGitHub
 , pantheon
-, cmake
+, meson
+, ninja
+, python3
 , pkg-config
 , vala
 , gettext
@@ -13,20 +15,23 @@
 
 stdenv.mkDerivation rec {
   pname = "agenda";
-  version = "1.0.12";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "dahenson";
     repo = pname;
     rev = version;
-    sha256 = "128c9p2jkc90imlq25xg5alqlam8q4i3gd5p1kcggf7s4amv8l8w";
+    sha256 = "0yfapapsanqacaa83iagar88i335yy2jvay8y6z7gkri7avbs4am";
   };
 
   nativeBuildInputs = [
-    cmake
     gettext
-    vala
+    glib # for glib-compile-schemas
+    meson
+    ninja
     pkg-config
+    python3
+    vala
     wrapGAppsHook
   ];
 
@@ -37,6 +42,13 @@ stdenv.mkDerivation rec {
     pantheon.granite
   ];
 
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+  doCheck = true;
+
   passthru = {
     updateScript = pantheon.updateScript {
       attrPath = pname;
@@ -45,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple, fast, no-nonsense to-do (task) list designed for elementary OS";
-    homepage = https://github.com/dahenson/agenda;
+    homepage = "https://github.com/dahenson/agenda";
     maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;

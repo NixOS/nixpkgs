@@ -30,7 +30,7 @@ stdenv.mkDerivation ({
   buildInputs = [ ocaml findlib benchmark ] ++ param.buildInputs;
 
   meta = {
-    homepage = http://rope.forge.ocamlcore.org/;
+    homepage = "http://rope.forge.ocamlcore.org/";
     platforms = ocaml.meta.platforms or [];
     description = ''Ropes ("heavyweight strings") in OCaml'';
     license = stdenv.lib.licenses.lgpl21;

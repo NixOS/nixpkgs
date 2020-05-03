@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Apache Spark";
-    homepage = https://github.com/apache/spark/tree/master/python;
+    homepage = "https://github.com/apache/spark/tree/master/python";
     license = licenses.asl20;
     maintainers = [ maintainers.shlevy ];
   };

@@ -10,11 +10,11 @@ let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   pname = "network-manager";
-  version = "1.22.8";
+  version = "1.22.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "0kxbgln78lb1cxhd79vbpdbncsb0cppr15fycgqb9df6f8nbj4cm";
+    sha256 = "0xyaizyp3yz6x3pladw3nvl3hf4n5g140zx9jnxfp9qvag0wqa9b";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/NetworkManager;
+    homepage = "https://wiki.gnome.org/Projects/NetworkManager";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ phreedom domenkozar obadz worldofpeace ];

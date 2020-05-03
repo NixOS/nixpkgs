@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, substituteAll, gjs, vte }:
+{ stdenv, fetchFromGitHub, substituteAll, gjs, vte, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-drop-down-terminal";
-  version = "24";
+  version = "unstable-2020-03-25";
 
   src = fetchFromGitHub {
     owner = "zzrough";
     repo = "gs-extensions-drop-down-terminal";
-    rev = "v${version}";
-    sha256 = "1gda56xzwsa5pgmgpb7lhb3i3gqishvn84282inwvqm86afks73r";
+    rev = "a59669afdb395b3315619f62c1f740f8b2f0690d";
+    sha256 = "0igfxgrjdqq6z6xg4rsawxn261pk25g5dw2pm3bhwz5sqsy4bq3i";
   };
 
   uuid = "drop-down-terminal@gs-extensions.zzrough.org";
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Configurable drop down terminal shell";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ericdallo ];
-    homepage = https://github.com/zzrough/gs-extensions-drop-down-terminal;
+    homepage = "https://github.com/zzrough/gs-extensions-drop-down-terminal";
   };
 }

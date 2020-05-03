@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ++ (lib.optionals withQt5 (with qt5; [ qtbase qttools ]));
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/suil;
+    homepage = "http://drobilla.net/software/suil";
     description = "A lightweight C library for loading and wrapping LV2 plugin UIs";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];

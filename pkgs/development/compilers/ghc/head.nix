@@ -2,13 +2,17 @@
 
 # build-tools
 , bootPkgs
-, autoconf, autoreconfHook, automake, coreutils, fetchgit, fetchpatch, perl, python3, m4, sphinx
+, autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx
 , bash
 
 , libiconv ? null, ncurses
 
+, # GHC can be built with system libffi or a bundled one.
+  libffi ? null
+
 , enableDwarf ? !stdenv.targetPlatform.isDarwin &&
-                !stdenv.targetPlatform.isWindows, elfutils # for DWARF support
+                !stdenv.targetPlatform.isWindows
+, elfutils # for DWARF support
 
 , useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
@@ -18,7 +22,8 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms)
+, gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -30,7 +35,7 @@
 , # Whetherto build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.10.20191119"
+, version ? "8.11.20200403"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -75,6 +80,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
+    ++ [libffi]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
     ++ stdenv.lib.optional enableDwarf elfutils;
@@ -85,7 +91,9 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
+  # ld.gold is disabled for musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
+  # see #84670 and #49071 for more background.
+  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false) && !targetPlatform.isMusl;
 
 in
 stdenv.mkDerivation (rec {
@@ -95,16 +103,13 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "0418c38d55c7a47967187dce2db5ea2ab1021b1e";
-    sha256 = "1d8g30ii0w4xh6fh61bxbalsqqyanny99nn3p727fx7favnhgvxi";
+    rev = "4291bddaea3148908c55f235ee8978e1d9aa6f20";
+    sha256 = "1gs3mxmsdpsgsp7vnawx8mys0qwg4x2zhfrbciy3wv8nv13ar1af";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
-
-  patches = [
-  ];
 
   postPatch = "patchShebangs .";
 
@@ -128,8 +133,8 @@ stdenv.mkDerivation (rec {
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
 
     echo -n "${buildMK}" > mk/build.mk
-    echo ${version} >VERSION
-    echo ${src.rev} >GIT_COMMIT_ID
+    echo ${version} > VERSION
+    echo ${src.rev} > GIT_COMMIT_ID
     ./boot
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
@@ -159,30 +164,39 @@ stdenv.mkDerivation (rec {
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]
     ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--with-curses-libraries=${ncurses.out}/lib"
+  ] ++ stdenv.lib.optionals (libffi != null) [
+    "--with-system-libffi"
+    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
+    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
-    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include"
+    "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
-    "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
+    "--with-iconv-includes=${libiconv}/include"
+    "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
   ] ++ stdenv.lib.optionals useLdGold [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
-  ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
-    "--disable-large-address-space"
-  ] ++ stdenv.lib.optionals enableDwarf [
+  ] ++ stdenv.lib.optional disableLargeAddressSpace "--disable-large-address-space"
+    ++ stdenv.lib.optionals enableDwarf [
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${stdenv.lib.getDev elfutils}/include"
     "--with-libdw-libraries=${stdenv.lib.getLib elfutils}/lib"
   ];
 
-  # Make sure we never relax`$PATH` and hooks support for compatability.
+  # Make sure we never relax`$PATH` and hooks support for compatibility.
   strictDeps = true;
+
+  # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
+	dontAddExtraLibs = true;
 
   nativeBuildInputs = [
     perl autoconf autoreconfHook automake m4 python3 sphinx
@@ -231,7 +245,7 @@ stdenv.mkDerivation (rec {
   };
 
   meta = {
-    homepage = http://haskell.org/ghc;
+    homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;

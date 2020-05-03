@@ -48,18 +48,22 @@ in
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
   ];
 
+  CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
+
   postInstall = lib.optionalString withX ''
     wrapProgram $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \
        --prefix PATH : '${coreutils}/bin' \
        --prefix PATH : '${fontconfig.bin}/bin' \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
+  '' + lib.optionalString (stdenv.isDarwin && withQt) ''
+     wrapQtApp $out/bin/gnuplot
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = http://www.gnuplot.info/;
+    homepage = "http://www.gnuplot.info/";
     description = "A portable command-line driven graphing utility for many platforms";
     platforms = platforms.linux ++ platforms.darwin;
     license = {
@@ -69,7 +73,7 @@ in
       # be distributed as patches to the released version.  Permission to
       # distribute binaries produced by compiling modified sources is granted,
       # provided you: ...
-      url = https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright;
+      url = "https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright";
     };
     maintainers = with maintainers; [ lovek323 ];
   };

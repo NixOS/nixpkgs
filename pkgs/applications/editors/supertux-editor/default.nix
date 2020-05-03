@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Level editor for SuperTux";
-    homepage = https://github.com/SuperTux/supertux-editor;
+    homepage = "https://github.com/SuperTux/supertux-editor";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mathnerd314 ];
     platforms = platforms.linux;

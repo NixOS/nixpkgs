@@ -3,6 +3,8 @@
 buildDunePackage rec {
   pname = "dune-private-libs";
 
+  useDune2 = true;
+
   inherit (dune_2) src version;
 
   dontAddPrefix = true;

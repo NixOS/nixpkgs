@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Generates a status line for i3bar, dzen2, xmobar or lemonbar";
-    homepage = https://i3wm.org;
+    homepage = "https://i3wm.org";
     maintainers = [ ];
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;

@@ -124,7 +124,7 @@ EOF
 
   meta = with stdenv.lib; {
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
-    homepage = https://github.com/mono/msbuild;
+    homepage = "https://github.com/mono/msbuild";
     license = licenses.mit;
     maintainers = with maintainers; [ jdanek ];
     platforms = platforms.unix;

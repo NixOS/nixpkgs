@@ -13,13 +13,13 @@ let
 
 in buildGoPackage rec {
   name = "perkeep-${version}";
-  version = "unstable-2019-07-29";
+  version = "unstable-2020-03-23";
 
   src = fetchFromGitHub {
     owner = "perkeep";
     repo = "perkeep";
-    rev = "c9f78d02adf9740f3b8d403a1418554293cc9f41";
-    sha256 = "11rin94pjzg0kvizrq9ss42fjw7wfwx3g1pk8zdlhyfkiwwh2rmg";
+    rev = "c2e31370ddefd86b6112a5d891100ea3382a4254";
+    sha256 = "0jf02k20ms7h60wglcq6dj3vqi9rlfww7db5iplgwznbij70c1i4";
   };
 
   goPackagePath = "perkeep.org";
@@ -43,7 +43,7 @@ in buildGoPackage rec {
 
   meta = with lib; {
     description = "A way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
-    homepage = https://perkeep.org;
+    homepage = "https://perkeep.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan kalbasit ];
     platforms = platforms.unix;

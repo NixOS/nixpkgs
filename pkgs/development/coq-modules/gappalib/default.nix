@@ -1,10 +1,10 @@
 { stdenv, fetchurl, which, coq, flocq }:
 
 stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-gappalib-1.4.1";
+  name = "coq${coq.coq-version}-gappalib-1.4.3";
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/37917/gappalib-coq-1.4.1.tar.gz;
-    sha256 = "0d3f23a871haglg8hq1jgxz3y5nryiwy12b5xfnfjn279jfqqjw4";
+    url = "https://gforge.inria.fr/frs/download.php/file/38302/gappalib-coq-1.4.3.tar.gz";
+    sha256 = "108k9dks04wbcqz38pf0zz11hz5imbzimpnkgjrk5gp1hifih370";
   };
 
   nativeBuildInputs = [ which ];
@@ -18,13 +18,13 @@ stdenv.mkDerivation {
   meta = {
     description = "Coq support library for Gappa";
     license = stdenv.lib.licenses.lgpl21;
-    homepage = http://gappa.gforge.inria.fr/;
+    homepage = "http://gappa.gforge.inria.fr/";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (coq.meta) platforms;
   };
 
   passthru = {
-    compatibleCoqVersions = stdenv.lib.flip builtins.elem [ "8.7" "8.8" "8.9" ];
+    compatibleCoqVersions = stdenv.lib.flip builtins.elem [ "8.8" "8.9" "8.10" "8.11" ];
   };
 
 }

@@ -23,6 +23,7 @@ in
   options = {
 
     services.xserver.desktopManager.enlightenment.enable = mkOption {
+      type = types.bool;
       default = false;
       description = "Enable the Enlightenment desktop environment.";
     };
@@ -38,7 +39,7 @@ in
       pkgs.gtk2 # To get GTK's themes.
       pkgs.tango-icon-theme
 
-      pkgs.gnome2.gnome_icon_theme
+      pkgs.gnome-icon-theme
       pkgs.xorg.xcursorthemes
     ];
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT=1" ];
 
   meta = {
-    homepage = https://bitbucket.org/olegoandreev/purple-vk-plugin;
+    homepage = "https://bitbucket.org/olegoandreev/purple-vk-plugin";
     description = "Vk (russian social network) plugin for Pidgin / libpurple";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

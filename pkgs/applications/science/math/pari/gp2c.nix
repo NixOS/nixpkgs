@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
 
   pname = "gp2c";
-  version = "0.0.11pl2";
+  version = "0.0.11pl3";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${pname}-${version}.tar.gz";
-    sha256 = "0wqsf05wgkqvmmsx7jinvzdqav6rl56sr8haibgs31nzz4x9xz9g";
+    sha256 = "0yymbrgyjw500hqgmkj5m4nmscd7c9rs9w2c96lxgrcyab8krhrm";
   };
 
   buildInputs = [ pari perl ];
@@ -25,4 +25,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }
-# TODO: add it as "source file" for default package

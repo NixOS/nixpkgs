@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A family of better random number generators";
-    homepage = http://www.pcg-random.org/;
+    homepage = "https://www.pcg-random.org/";
     license = stdenv.lib.licenses.asl20;
     longDescription = ''
       PCG is a family of simple fast space-efficient statistically good
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     maintainers = [ maintainers.linus ];
-    repositories.git = git://github.com/imneme/pcg-c.git;
+    repositories.git = "git://github.com/imneme/pcg-c.git";
     broken = stdenv.isi686; # https://github.com/imneme/pcg-c/issues/11
   };
 }

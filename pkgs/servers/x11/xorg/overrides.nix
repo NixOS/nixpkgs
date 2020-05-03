@@ -256,6 +256,15 @@ self: super:
 
   libXres = super.libXres.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "devdoc" ];
+    buildInputs = with self; attrs.buildInputs ++ [ utilmacros ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+
+  libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
+    buildInputs = with self; attrs.buildInputs ++ [ utilmacros ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
   });
 
   libXv = super.libXv.overrideAttrs (attrs: {
@@ -291,7 +300,7 @@ self: super:
   libxshmfence = super.libxshmfence.overrideAttrs (attrs: {
     name = "libxshmfence-1.3";
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2;
+      url = "mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2";
       sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
     };
     outputs = [ "out" "dev" ]; # mainly to avoid propagation
@@ -571,7 +580,7 @@ self: super:
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
           src = fetchurl {
-            url = mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2;
+            url = "mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2";
             sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
           };
           nativeBuildInputs = [ pkgconfig ];
@@ -581,7 +590,7 @@ self: super:
             name = "xorg-server-1.18.4";
             builder = ./builder.sh;
             src = fetchurl {
-              url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
+              url = "mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2";
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
             nativeBuildInputs = [ pkgconfig ];

@@ -15,10 +15,10 @@ let
     #       The command
     #         find /nix/store/...-glusterfs-.../ -name '*.py' -executable
     #       can help with finding new Python scripts.
-    version = "7.3";
+    version = "7.4";
     name="${baseName}-${version}";
     url="https://github.com/gluster/glusterfs/archive/v${version}.tar.gz";
-    sha256 = "08g8394vk88cb71z4k5sknld1nsd20f4mk2yyjvdp1hwm97z12pq";
+    sha256 = "1f7z1dacnx7pd3ri4nka6851fzhdfandbf94blds8bqfqc1263h6";
   };
 
   buildInputs = [
@@ -186,7 +186,7 @@ stdenv.mkDerivation
   meta = with stdenv.lib; {
     inherit (s) version;
     description = "Distributed storage system";
-    homepage = https://www.gluster.org;
+    homepage = "https://www.gluster.org";
     license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
     maintainers = [ maintainers.raskin ];
     platforms = with platforms; linux ++ freebsd;

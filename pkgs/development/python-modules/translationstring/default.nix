@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://pylonsproject.org/;
+    homepage = "https://pylonsproject.org/";
     description = "Utility library for i18n relied on by various Repoze and Pyramid packages";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];

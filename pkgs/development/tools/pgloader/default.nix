@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, sbcl, sqlite, freetds, libzip, curl, git, cacert, openssl }:
 stdenv.mkDerivation rec {
   pname = "pgloader";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
-    url = "https://github.com/dimitri/pgloader/releases/download/v3.6.1/pgloader-bundle-3.6.1.tgz";
-    sha256 = "1sm8xmq30d1biin5br0y3vrv4fydbrzfqglz1hnvrkdyxrg7d6f9";
+    url = "https://github.com/dimitri/pgloader/releases/download/v3.6.2/pgloader-bundle-3.6.2.tgz";
+    sha256 = "1jqnw6pw11kwyy8zm2g7g85r8197fy0q4l70yybw9wr87wnqqnz3";
   };
 
   nativeBuildInputs = [ git makeWrapper ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://pgloader.io/;
+    homepage = "https://pgloader.io/";
     description = "pgloader loads data into PostgreSQL and allows you to implement Continuous Migration from your current database to PostgreSQL";
     maintainers = with maintainers; [ mguentner ];
     license = licenses.postgresql;

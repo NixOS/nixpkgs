@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, hicolor-icon-theme }:
+{ stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, gnome3, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "paper-icon-theme";
@@ -11,9 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "0x45zkjnmbz904df63ph06npbm3phpgck4xwyymx8r8jgrfplk6v";
   };
 
-  nativeBuildInputs = [ meson ninja gtk3 python3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gtk3
+    python3
+  ];
 
   propagatedBuildInputs = [
+    gnome3.adwaita-icon-theme
+    gnome-icon-theme
     hicolor-icon-theme
   ];
 
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Modern icon theme designed around bold colours and simple geometric shapes";
-    homepage = https://snwh.org/paper;
+    homepage = "https://snwh.org/paper";
     license = with licenses; [ cc-by-sa-40 lgpl3 ];
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;

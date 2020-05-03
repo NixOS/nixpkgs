@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "C parser in Python";
-    homepage = https://github.com/eliben/pycparser;
+    homepage = "https://github.com/eliben/pycparser";
     license = licenses.bsd3;
     maintainers = with maintainers; [ domenkozar ];
   };

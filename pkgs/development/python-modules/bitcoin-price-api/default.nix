@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/dursk/bitcoin-price-api;
+    homepage = "https://github.com/dursk/bitcoin-price-api";
     description = "Price APIs for bitcoin exchanges";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ bhipple ];

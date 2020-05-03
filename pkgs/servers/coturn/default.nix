@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, libevent }:
+{ stdenv, fetchFromGitHub, fetchpatch, openssl, libevent }:
 
 stdenv.mkDerivation rec {
   pname = "coturn";
@@ -13,10 +13,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl libevent ];
 
-  patches = [ ./pure-configure.patch ];
+  patches = [
+    ./pure-configure.patch
+    (fetchpatch {
+      name = "CVE-2020-6061+6062.patch";
+      url = "https://sources.debian.org/data/main/c/coturn/4.5.1.1-1.2/debian/patches/CVE-2020-6061+6062.patch";
+      sha256 = "0fcy1wp91bb4hlhnp96sf9bs0d9hf3pwx5f7b1r9cfvr3l5c1bk2";
+    })
+  ];
 
   meta = with stdenv.lib; {
-    homepage = https://coturn.net/;
+    homepage = "https://coturn.net/";
     license = with licenses; [ bsd3 ];
     description = "A TURN server";
     platforms = platforms.all;

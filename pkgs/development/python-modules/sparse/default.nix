@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Sparse n-dimensional arrays computations";
-    homepage = https://github.com/pydata/sparse/;
+    homepage = "https://github.com/pydata/sparse/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

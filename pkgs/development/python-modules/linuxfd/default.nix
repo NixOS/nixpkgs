@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for the Linux eventfd/signalfd/timerfd/inotify syscalls";
-    homepage = https://github.com/FrankAbelbeck/linuxfd;
+    homepage = "https://github.com/FrankAbelbeck/linuxfd";
     license = with lib.licenses; [ lgpl3 ];
   };
 }

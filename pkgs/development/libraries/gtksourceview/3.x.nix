@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gtksourceview";
-      attrPath = "gnome3.gtksourceview";
+      attrPath = "gtksourceview3";
     };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/GtkSourceView;
+    homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl21;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

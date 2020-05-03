@@ -11,7 +11,7 @@ let
 in
 
 { stdenv, fetchurl, ncurses, buildEnv
-, libX11, xorgproto, useX11 ? safeX11 stdenv
+, libX11, xorgproto, useX11 ? safeX11 stdenv && !stdenv.lib.versionAtLeast version "4.09"
 , aflSupport ? false
 , flambdaSupport ? false
 }:
@@ -73,7 +73,7 @@ stdenv.mkDerivation (args // {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://caml.inria.fr/ocaml;
+    homepage = "http://caml.inria.fr/ocaml";
     branch = versionNoPatch;
     license = with licenses; [
       qpl /* compiler */

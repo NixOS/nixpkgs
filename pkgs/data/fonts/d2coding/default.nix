@@ -24,7 +24,7 @@ in fetchzip {
       Since verion 1.3, D2Coding font is officially supported by the font
       creator, with symbols for Powerline.
     '';
-    homepage = https://github.com/naver/d2codingfont;
+    homepage = "https://github.com/naver/d2codingfont";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];

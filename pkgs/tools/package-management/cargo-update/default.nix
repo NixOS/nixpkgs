@@ -23,8 +23,8 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v3.0.0.patch ];
   cargoSha256 = "034v1ql5k3n3rgi3aqszkybvv3vc80v263c9nlwxcwbswsh9jpp1";
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libgit2 libssh2 openssl pkg-config zlib ]
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libgit2 libssh2 openssl zlib ]
     ++ stdenv.lib.optional stdenv.isDarwin curl;
 
   meta = with stdenv.lib; {

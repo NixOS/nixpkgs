@@ -19,6 +19,7 @@ in
     services.lshd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the GNU lshd SSH2 daemon, which allows
@@ -53,21 +54,25 @@ in
       };
 
       syslog = mkOption {
+        type = types.bool;
         default = true;
         description = ''Whether to enable syslog output.'';
       };
 
       passwordAuthentication = mkOption {
+        type = types.bool;
         default = true;
         description = ''Whether to enable password authentication.'';
       };
 
       publicKeyAuthentication = mkOption {
+        type = types.bool;
         default = true;
         description = ''Whether to enable public key authentication.'';
       };
 
       rootLogin = mkOption {
+        type = types.bool;
         default = false;
         description = ''Whether to enable remote root login.'';
       };
@@ -89,11 +94,13 @@ in
       };
 
       tcpForwarding = mkOption {
+        type = types.bool;
         default = true;
         description = ''Whether to enable TCP/IP forwarding.'';
       };
 
       x11Forwarding = mkOption {
+        type = types.bool;
         default = true;
         description = ''Whether to enable X11 forwarding.'';
       };

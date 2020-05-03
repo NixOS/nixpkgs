@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A small python module for wake on lan";
-    homepage = https://github.com/remcohaszing/pywakeonlan;
+    homepage = "https://github.com/remcohaszing/pywakeonlan";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ peterhoeg ];
   };

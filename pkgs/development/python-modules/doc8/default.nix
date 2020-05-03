@@ -7,6 +7,7 @@
 , chardet
 , stevedore
 , restructuredtext_lint
+, pygments
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,14 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pbr ];
-  propagatedBuildInputs = [ docutils six chardet stevedore restructuredtext_lint ];
+  propagatedBuildInputs = [
+    docutils
+    six
+    chardet
+    stevedore
+    restructuredtext_lint
+    pygments
+  ];
 
   doCheck = false;
 

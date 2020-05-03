@@ -3,7 +3,12 @@
 , networkExpr
 }:
 
-let nodes = import networkExpr; in
+let
+  nodes = builtins.mapAttrs (vm: module: {
+    _file = "${networkExpr}@node-${vm}";
+    imports = [ module ];
+  }) (import networkExpr);
+in
 
 with import ../../../../lib/testing-python.nix {
   inherit system;

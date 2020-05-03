@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Long data type with atomic operations using CFFI";
-    homepage = https://github.com/dreid/atomiclong;
+    homepage = "https://github.com/dreid/atomiclong";
     license = licenses.mit;
     maintainers = with maintainers; [ robbinch ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, libusb, libxml2, perl }:
+{ stdenv, fetchurl, cups, libusb-compat-0_1, libxml2, perl }:
 
 let
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     cups
-    libusb
+    libusb-compat-0_1
     libxml2
     perl
   ];
@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
     done
 
     patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$out/lib/libscmssc.so"
-    patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
+    patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb-compat-0_1.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
 
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
   '';
@@ -104,8 +104,8 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Unified Linux Driver for Samsung printers and scanners";
-    homepage = http://www.bchemnet.com/suldr;
-    downloadPage = http://www.bchemnet.com/suldr/driver/;
+    homepage = "http://www.bchemnet.com/suldr";
+    downloadPage = "http://www.bchemnet.com/suldr/driver/";
     license = licenses.unfree;
 
     # Tested on linux-x86_64. Might work on linux-i386.

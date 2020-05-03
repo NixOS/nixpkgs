@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
-    homepage = http://opensource.spotify.com/cefbuilds/index.html;
+    homepage = "http://opensource.spotify.com/cefbuilds/index.html";
     maintainers = with maintainers; [ puffnfresh ];
     license = licenses.bsd3;
     platforms = with platforms; linux;

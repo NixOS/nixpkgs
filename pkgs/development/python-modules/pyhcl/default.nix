@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyhcl";
-  version = "0.4.0";
+  version = "0.4.2";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "virtuald";
     repo = pname;
     rev = version;
-    sha256 = "09kwm3digbwn3kmbk76jswxgwfcfchik6cfa2xbhjanh4xs893hs";
+    sha256 = "01y5fn3pis43i0w0858wmrc8azfinp07a16ixglmg28gg07c0zkd";
   };
 
   # https://github.com/virtuald/pyhcl/blob/51a7524b68fe21e175e157b8af931016d7a357ad/setup.py#L64

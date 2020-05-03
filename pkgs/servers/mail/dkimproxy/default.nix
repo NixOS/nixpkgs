@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SMTP-proxy that signs and/or verifies emails";
-    homepage = http://dkimproxy.sourceforge.net/;
+    homepage = "http://dkimproxy.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.ekleog ];
     platforms = platforms.all;

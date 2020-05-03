@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pathlib-compatible object wrapper for zip files";
-    homepage = https://github.com/jaraco/zipp;
+    homepage = "https://github.com/jaraco/zipp";
     license = licenses.mit;
   };
 }

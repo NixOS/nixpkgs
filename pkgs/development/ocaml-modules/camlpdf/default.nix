@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An OCaml library for reading, writing and modifying PDF files";
-    homepage = https://github.com/johnwhitington/camlpdf;
+    homepage = "https://github.com/johnwhitington/camlpdf";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [vbgl];
   };

@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   dontDropIconThemeCache = true;
 
-  postFixup = ''
+  postInstall = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Icons based on Breeze and Super Flat Remix";
-    homepage = https://gitlab.manjaro.org/artwork/themes/maia;
+    homepage = "https://gitlab.manjaro.org/artwork/themes/maia";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ mounium ];
     platforms = platforms.all;

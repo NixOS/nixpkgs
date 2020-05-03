@@ -16,6 +16,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Rate limiting utilities";
     license = licenses.mit;
-    homepage = https://limits.readthedocs.org/;
+    homepage = "https://limits.readthedocs.org/";
   };
 }

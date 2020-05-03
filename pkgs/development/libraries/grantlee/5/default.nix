@@ -2,12 +2,12 @@
 
 mkDerivation rec {
   pname = "grantlee";
-  version = "5.1.0";
+  version = "5.2.0";
   grantleePluginPrefix = "lib/grantlee/${lib.versions.majorMinor version}";
 
   src = fetchurl {
     url = "https://github.com/steveire/grantlee/archive/v${version}.tar.gz";
-    sha256 = "1lf9rkv0i0kd7fvpgg5l8jb87zw8dzcwd1liv6hji7g4wlpmfdiq";
+    sha256 = "02lrdbnvaz19hkawbbj2psww1m04qsbhvv172ggpp5bbfkjwx6hk";
     name = "${pname}-${version}.tar.gz";
   };
 
@@ -43,7 +43,7 @@ mkDerivation rec {
       The syntax is intended to follow the syntax of the Django template system,
       and the design of Django is reused in Grantlee.'';
 
-    homepage = http://gitorious.org/grantlee;
+    homepage = "http://gitorious.org/grantlee";
     maintainers = [ maintainers.ttuegel ];
     license = licenses.lgpl21;
     inherit (qtbase.meta) platforms;

@@ -12,7 +12,7 @@ buildDunePackage rec {
 	meta = {
 		description = "Various signed and unsigned integer types for OCaml";
 		license = lib.licenses.mit;
-		homepage = https://github.com/ocamllabs/ocaml-integers;
+		homepage = "https://github.com/ocamllabs/ocaml-integers";
 		maintainers = [ lib.maintainers.vbgl ];
 	};
 }

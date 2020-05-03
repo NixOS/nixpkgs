@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Patched module for IT87xx superio chip sensors support";
-    homepage = https://github.com/hannesha/it87;
+    homepage = "https://github.com/hannesha/it87";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ yorickvp ];

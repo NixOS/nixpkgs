@@ -91,7 +91,7 @@ mkDerivation rec {
   '') scriptAndSource;
 
   meta = {
-    homepage = https://github.com/falkTX/Cadence/;
+    homepage = "https://github.com/falkTX/Cadence/";
     description = "Collection of tools useful for audio production";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ genesis worldofpeace ];

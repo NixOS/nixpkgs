@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "miller";
 
-  version = "5.6.2";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "johnkerl";
     repo = "miller";
     rev = "v${version}";
-    sha256 = "1xajaab02y9bysanfn4i5c77q1zfmjzdswyvw2mzbidsxnjsgn6l";
+    sha256 = "1lmin69rf9lp3b64ga7li4sz7mm0gqapsbk1nb29l4fqjxk16ddh";
   };
 
   nativeBuildInputs = [ autoreconfHook flex libtool ];

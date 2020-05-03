@@ -1,5 +1,5 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper
-, runCommand, writeText, terraform-providers }:
+{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
+, runCommand, writeText, terraform-providers, fetchpatch }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -17,6 +17,12 @@ let
         rev = "v${version}";
         inherit sha256;
       };
+
+      postPatch = ''
+        # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
+        substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
+          --replace "/bin/stty" "${coreutils}/bin/stty"
+      '';
 
       postInstall = ''
         # remove all plugins, they are part of the main binary now
@@ -112,9 +118,15 @@ in rec {
   terraform_0_11-full = terraform_0_11.full;
 
   terraform_0_12 = pluggable (generic {
-    version = "0.12.23";
-    sha256 = "1lr2gfk5dmj6rhv5rvzn3fggb34za73ryjy0vdzx4kf3qj12r0wz";
-    patches = [ ./provider-path.patch ];
+    version = "0.12.24";
+    sha256 = "1rjihp6qcaizp2nnv4z20kpmjnqcw95pq5rnhq381a3pdzr0cd0z";
+    patches = [
+        ./provider-path.patch
+        (fetchpatch {
+            name = "fix-mac-mojave-crashes.patch";
+            url = "https://github.com/hashicorp/terraform/pull/24562.patch";
+            sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
+        }) ];
     passthru = { inherit plugins; };
   });
 

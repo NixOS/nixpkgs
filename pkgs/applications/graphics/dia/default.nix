@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   version = "0.97.3.20170622";
 
   src = fetchgit {
-    url = https://gitlab.gnome.org/GNOME/dia.git;
+    url = "https://gitlab.gnome.org/GNOME/dia.git";
     rev = "b86085dfe2b048a2d37d587adf8ceba6fb8bc43c";
     sha256 = "1fyxfrzdcs6blxhkw3bcgkksaf3byrsj4cbyrqgb4869k3ynap96";
   };
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Gnome Diagram drawing software";
-    homepage = http://live.gnome.org/Dia;
+    homepage = "http://live.gnome.org/Dia";
     maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;
     platforms = platforms.unix;

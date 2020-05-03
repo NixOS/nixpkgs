@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "2.2.4";
+  version = "2.2.5";
 
   repoName = "capnet-assist";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0yz827gs1qv6csgv4v993rjmqzc6dbymbvznsy45ghlh19l4l7j1";
+    sha256 = "09pl1ynrmqjj844np4ww2i18z7kgx5kmj5ggfp8lqmxgsny7g8m3";
   };
 
   passthru = {
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small WebKit app that assists a user with login when a captive portal is detected";
-    homepage = https://github.com/elementary/capnet-assist;
+    homepage = "https://github.com/elementary/capnet-assist";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

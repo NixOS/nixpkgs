@@ -13,7 +13,7 @@ in fetchzip {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Mic92/iana-etc;
+    homepage = "https://github.com/Mic92/iana-etc";
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
     platforms = platforms.unix;
     license = licenses.mit;

@@ -2,23 +2,22 @@
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.15.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = pname;
     rev = version;
-    sha256 = "1193i30k2m7cibn79xw51i2lxg90f5i97h8sbjiv0hr9g502r2qf";
+    sha256 = "15dzivnndzsiw7g6qzccpk1hqb5amfn0zba1rzkvcslhl1y9gsfi";
   };
 
-  modSha256 = "0f8dlcp3q84fa5dnnzx4347ngb1raw1mxkcqpz2s3zq6d1kv0nvf";
+  modSha256 = "13gqvr1y1b2yi2iar0p8y9hpajgy5w9xp4az5n6b5xhzcbn19f2k";
 
   subPackages = [ "cmd/eksctl" ];
 
   buildFlags = [ "-tags netgo" "-tags release" ];
 
-  postInstall =
-  ''
+  postInstall = ''
     mkdir -p "$out/share/"{bash-completion/completions,zsh/site-functions}
 
     $out/bin/eksctl completion bash > "$out/share/bash-completion/completions/eksctl"

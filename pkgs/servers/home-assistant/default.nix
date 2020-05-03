@@ -67,7 +67,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.106.6";
+  hassVersion = "0.109.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -75,7 +75,9 @@ in with py.pkgs; buildPythonApplication rec {
 
   disabled = pythonOlder "3.5";
 
-  patches = [ ./relax-importlib-metadata-pyaml.patch ];
+  patches = [
+    ./0001-setup.py-relax-dependencies.patch
+  ];
 
   inherit availableComponents;
 
@@ -84,7 +86,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "11kv5lmm8nxp7yv3w43mzmgzkafddy0z6wl2878p96iyil1w7qhb";
+    sha256 = "1b5y464yhngivxkz3cg2b7j2ssawy7fqr3si5pdmqkgz1dbqihhn";
   };
 
   propagatedBuildInputs = [
@@ -93,38 +95,33 @@ in with py.pkgs; buildPythonApplication rec {
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
     setuptools voluptuous voluptuous-serialize
     # From http, frontend and recorder components and auth.mfa_modules.totp
-    sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
+    sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode ciso8601
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue netdisco
-    hass-nabucasa defusedxml
+    asynctest pytest pytest-aiohttp requests-mock hass-nabucasa netdisco pydispatcher
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp==3.6.1" "aiohttp" \
-      --replace "attrs==19.2.0" "attrs" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml"
-  '';
 
   checkPhase = ''
     # - components' dependencies are not included, so they cannot be tested
     # - test_merge_id_schema requires pyqwikswitch
+    # - test_loader.py tries to load not-packaged dependencies
     # - unclear why test_merge fails: assert merge_log_err.call_count != 0
-    py.test --ignore tests/components -k "not test_merge_id_schema and not test_merge"
+    # - test_setup_safe_mode_if_no_frontend: requires dependencies for components we have not packaged
+    py.test --ignore tests/components --ignore tests/test_loader.py -k "not test_setup_safe_mode_if_no_frontend and not test_merge_id_schema and not test_merge"
+
     # Some basic components should be tested however
     py.test \
-      tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
+      tests/components/{api,config,configurator,demo,discovery,frontend,group,history} \
       tests/components/{homeassistant,http,logger,script,shell_command,system_log,websocket_api}
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
   meta = with lib; {
-    homepage = https://home-assistant.io/;
+    homepage = "https://home-assistant.io/";
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda globin ];
+    maintainers = with maintainers; [ dotlambda globin mic92 ];
   };
 }

@@ -37,7 +37,7 @@ in
 
   meta = with lib; {
     description = "Machine learning for creators";
-    homepage = https://runwayml.com/;
+    homepage = "https://runwayml.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "x86_64-linux" ];

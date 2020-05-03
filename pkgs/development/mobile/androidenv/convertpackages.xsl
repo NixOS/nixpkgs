@@ -28,7 +28,7 @@
 
 {
   <!-- Convert all remote packages -->
-  <xsl:for-each select="remotePackage"><xsl:sort select="@path" />
+  <xsl:for-each select="remotePackage[not(contains(@path, ';') and substring-after(@path, ';') = 'latest')]"><xsl:sort select="@path" />
 
   <!-- Extract the package name from the path -->
   <xsl:variable name="name">

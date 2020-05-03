@@ -1,30 +1,22 @@
-{ lib, fetchPypi, buildPythonPackage, fetchpatch, astroid, six, coverage
-, lazy-object-proxy, nose, wrapt
+{ lib, fetchPypi, buildPythonPackage,
+  setuptools_scm, toml, six, astroid, pytest
 }:
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "1.1.13";
+  version = "2.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vd4djlxmgznz84gzakkv45avnrcpgl1kir92l1pxyp0z5c0dh2m";
+    sha256 = "0a2ixiz04aw4p0aivxh47k3fa9ql804l3y5iv5gcih9aizi5fbm4";
   };
 
-  patches = [
-    # Fix tests for astroid 2.2 in python 3. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/gristlabs/asttokens/commit/21caaaa74105c410b3d84c3d8ff0dc2f612aac9a.patch";
-      sha256 = "182xfr0cx4pxx0dv1l50a1c281h8ywir8vvd1zh5iicflivim1nv";
-    })
-  ];
+  propagatedBuildInputs = [ setuptools_scm toml six astroid ];
 
-  propagatedBuildInputs = [ lazy-object-proxy six wrapt astroid ];
-
-  checkInputs = [ coverage nose ];
+  checkInputs = [ pytest ];
 
   meta = with lib; {
-    homepage = https://github.com/gristlabs/asttokens;
+    homepage = "https://github.com/gristlabs/asttokens";
     description = "Annotate Python AST trees with source text and token information";
     license = licenses.asl20;
     platforms = platforms.all;

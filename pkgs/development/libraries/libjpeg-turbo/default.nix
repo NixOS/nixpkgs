@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   pname = "libjpeg-turbo";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1ds16bnj17v6hzd43w8pzijz3imd9am4hw75ir0fxm240m8dwij2";
+    sha256 = "01ill8bgjyk582wipx7sh7gj2nidylpbzvwhx0wkcm6mxx3qbp9k";
   };
 
   patches =
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
   installCheckTarget = "test";
 
   meta = with stdenv.lib; {
-    homepage = http://libjpeg-turbo.virtualgl.org/;
+    homepage = "http://libjpeg-turbo.virtualgl.org/";
     description = "A faster (using SIMD) libjpeg implementation";
     license = licenses.ijg; # and some parts under other BSD-style licenses
-    maintainers = [ maintainers.vcunat ];
+    maintainers = with maintainers; [ vcunat colemickens ];
     platforms = platforms.all;
   };
 }

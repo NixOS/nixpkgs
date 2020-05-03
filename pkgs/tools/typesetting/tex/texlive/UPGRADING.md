@@ -58,10 +58,9 @@ mv fixedHashes.nix fixedHashes-old.nix
 # start with empty fixedHashes
 echo '{}' > fixedHashes.nix
 
-nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes-new.nix
+nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.awk > ./fixedHashes-new.nix
 
-# The script wrongly includes the nix store path to `biber`, which is a separate nixpkgs package
-grep -v -F '/nix/store/' fixedHashes-new.nix > fixedHashes.nix
+mv fixedHashes-new.nix fixedHashes.nix
 ```
 
 ### Commit changes

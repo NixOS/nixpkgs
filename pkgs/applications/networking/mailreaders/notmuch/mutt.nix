@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit version;
     description = "Mutt support for notmuch";
-    homepage    = https://notmuchmail.org/;
+    homepage    = "https://notmuchmail.org/";
     license     = with licenses; gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;

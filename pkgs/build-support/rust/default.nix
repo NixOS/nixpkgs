@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, rust, cargo, rustc, fetchcargo, fetchCargoTarball, buildPackages, windows }:
+{ stdenv, cacert, git, rust, cargo, rustc, fetchCargoTarball, buildPackages, windows }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
@@ -14,7 +14,6 @@
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
-, legacyCargoFetcher ? false
 , buildType ? "release"
 , meta ? {}
 , target ? null
@@ -26,21 +25,17 @@ assert buildType == "release" || buildType == "debug";
 
 let
 
-  cargoFetcher = if legacyCargoFetcher
-                 then fetchcargo
-                 else fetchCargoTarball;
-
   cargoDeps = if cargoVendorDir == null
-    then cargoFetcher {
+    then fetchCargoTarball {
         inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
         patches = cargoPatches;
         sha256 = cargoSha256;
       }
     else null;
 
-  # If we're using the modern fetcher that always preserves the original Cargo.lock
-  # and have vendored deps, check them against the src attr for consistency.
-  validateCargoDeps = cargoSha256 != "unset" && !legacyCargoFetcher;
+  # If we have a cargoSha256 fixed-output derivation, validate it at build time
+  # against the src fixed-output derivation to check consistency.
+  validateCargoDeps = cargoSha256 != "unset";
 
   # Some cargo builds include build hooks that modify their own vendor
   # dependencies. This copies the vendor directory into the build tree and makes
@@ -50,8 +45,6 @@ let
     then (''
       unpackFile "$cargoDeps"
       cargoDepsCopy=$(stripHash $cargoDeps)
-    '' + stdenv.lib.optionalString legacyCargoFetcher ''
-      chmod -R +w "$cargoDepsCopy"
     '')
     else ''
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
@@ -65,13 +58,9 @@ let
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${rustTarget}/${buildType}";
 
-  # Fetcher implementation choice should not be part of the hash in final
-  # derivation; only the cargoSha256 input matters.
-  filteredArgs = builtins.removeAttrs args [ "legacyCargoFetcher" ];
-
 in
 
-stdenv.mkDerivation (filteredArgs // {
+stdenv.mkDerivation (args // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
@@ -191,6 +180,8 @@ stdenv.mkDerivation (filteredArgs // {
   '';
 
   doCheck = args.doCheck or true;
+
+  strictDeps = true;
 
   inherit releaseDir;
 

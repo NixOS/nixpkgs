@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Attic/LibUnique";
     description = "A library for writing single instance applications";
     license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

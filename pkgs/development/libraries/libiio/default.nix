@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "API for interfacing with the Linux Industrial I/O Subsystem";
-    homepage    = https://github.com/analogdevicesinc/libiio;
+    homepage    = "https://github.com/analogdevicesinc/libiio";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

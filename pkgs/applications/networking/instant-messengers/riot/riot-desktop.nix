@@ -1,17 +1,19 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_7, riot-web, mkYarnPackage }:
-
+{ stdenv, fetchFromGitHub
+, makeWrapper, makeDesktopItem, mkYarnPackage
+, electron_7, riot-web
+}:
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
 # * the Yarn dependency expression must be updated with `./update-riot-desktop.sh <git release tag>`
 
 let
   executableName = "riot-desktop";
-  version = "1.5.12";
+  version = "1.5.15";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "1qz3n2dlklhbi6rbhv2v769xbr4rcp9s6pm2cc9r33ak6axn4aym";
+    sha256 = "08yk5is6n9ci1jml0b94a3swdybx01k5klbl30i1b76biyn75m77";
   };
   electron = electron_7;
 
@@ -70,13 +72,13 @@ in mkYarnPackage rec {
     comment = meta.description;
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
-      StartupWMClass="riot"
+      StartupWMClass=riot
     '';
   };
 
   meta = with stdenv.lib; {
     description = "A feature-rich client for Matrix.org";
-    homepage = https://about.riot.im/;
+    homepage = "https://about.riot.im/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pacien worldofpeace ];
     inherit (electron.meta) platforms;

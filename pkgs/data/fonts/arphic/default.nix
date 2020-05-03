@@ -20,7 +20,7 @@ in {
 
     meta = with lib; {
       description = "CJK Unicode font Kai style";
-      homepage = https://www.freedesktop.org/wiki/Software/CJKUnifonts/;
+      homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
 
       license = licenses.arphicpl;
       maintainers = [ maintainers.changlinli ];
@@ -45,7 +45,7 @@ in {
 
     meta = with lib; {
       description = "CJK Unicode font Ming style";
-      homepage = https://www.freedesktop.org/wiki/Software/CJKUnifonts/;
+      homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
 
       license = licenses.arphicpl;
       maintainers = [ maintainers.changlinli ];

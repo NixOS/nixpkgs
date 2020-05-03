@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   libraries = [ xorg.libXpm xorg.libXt xorg.libX11 xorg.libICE xorg.libSM stdenv.cc.cc ];
 
   meta = {
-    homepage = http://java.sun.com/products/sjwtoolkit/download.html;
+    homepage = "http://java.sun.com/products/sjwtoolkit/download.html";
     description = "Sun Java Wireless Toolkit 2.5.2_01 for CLDC";
     license = stdenv.lib.licenses.unfree;
   };

@@ -80,7 +80,7 @@ unwrapped = mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dock for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/dde-dock;
+    homepage = "https://github.com/linuxdeepin/dde-dock";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

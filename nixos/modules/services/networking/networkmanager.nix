@@ -131,6 +131,10 @@ let
 
 in {
 
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   ###### interface
 
   options = {

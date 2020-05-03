@@ -86,7 +86,7 @@ stdenv.mkDerivation {
        layer. It adds TLS-KDH ciphers: Kerberos + Diffie-Hellman.
     '';
 
-    homepage = https://github.com/arpa2/gnutls-kdh;
+    homepage = "https://github.com/arpa2/gnutls-kdh";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;

@@ -9,12 +9,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  pname = "zathura-core";
-  version = "0.4.4";
+  pname = "zathura";
+  version = "0.4.5";
 
   src = fetchurl {
-    url = "https://git.pwmt.org/pwmt/zathura/-/archive/${version}/zathura-${version}.tar.gz";
-    sha256 = "0v5klgr009rsxi41h73k0398jbgmgh37asvwz2w15i4fzmw89jgb";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "0b3nrcvykkpv2vm99kijnic2gpfzva520bsjlihaxandzfm9ff8c";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
+    # Make sure tests are enabled for doCheck
+    "-Dtests=enabled"
   ];
 
   nativeBuildInputs = [

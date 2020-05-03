@@ -1,24 +1,41 @@
-{ stdenv, fetchurl, makeWrapper }:
+{ stdenv, fetchFromGitHub, autoreconfHook, strace, which }:
 
 stdenv.mkDerivation rec {
-  name = "libeatmydata-105";
-  
-  src = fetchurl {
-    url = "https://www.flamingspork.com/projects/libeatmydata/${name}.tar.gz";
-    sha256 = "1pd8sc73cgc41ldsvq6g8ics1m5k8gdcb91as9yg8z5jnrld1lmx";
+  pname = "libeatmydata";
+  version = "105";
+
+  src = fetchFromGitHub {
+    owner = "stewartsmith";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "0sx803h46i81h67xbpd3c7ky0nhaw4gij214nsx4lqig70223v9r";
   };
 
-  buildInputs = [ makeWrapper ];
+  patches = [ ./find-shell-lib.patch ];
 
-  postInstall = ''
-    wrapProgram $out/bin/eatmydata \
-      --prefix PATH : $out/bin
+  patchFlags = "-p0";
+
+  postPatch = ''
+    substituteInPlace eatmydata.in \
+      --replace NIX_OUT_DIR $out
+
+    patchShebangs .
   '';
 
-  meta = {
-    homepage = https://www.flamingspork.com/projects/libeatmydata/;
-    license = stdenv.lib.licenses.gpl3Plus;
+  nativeBuildInputs = [
+    autoreconfHook
+  ] ++ stdenv.lib.optionals doCheck [ strace which ];
+
+  # while we can *build* in parallel, the tests also run in parallel which does
+  # not work with v105. Later versions (unreleased) have a fix for that. The
+  # problem is that on hydra we cannot use strace, so the tests don't run there.
+  enableParallelBuilding = true;
+  doCheck = false;
+
+  meta = with stdenv.lib; {
     description = "Small LD_PRELOAD library to disable fsync and friends";
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.flamingspork.com/projects/libeatmydata/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
   };
 }

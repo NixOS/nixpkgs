@@ -8,7 +8,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "1w7ixr16a9f0g5kv4irvhwq973wn0d418kb0p9rabyfscm05wfmq";
+    src = fetch "clang" "08fbxa2a0kr3ni35ckppj0kyvlcyaywrhpqwcdrdy0z900mhcnw8";
 
     unpackPhase = ''
       unpackFile $src
@@ -36,7 +36,7 @@ let
     ];
 
     patches = [
-      # 10.0.0rc3-only
+      # 10.0.0 only, this should be present in 10.0.1
       ./clang-extension-handling.patch
 
       ./purity.patch
@@ -95,7 +95,7 @@ let
 
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
-      homepage    = http://llvm.org/;
+      homepage    = "https://llvm.org/";
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };

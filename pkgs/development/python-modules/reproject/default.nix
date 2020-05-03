@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Reproject astronomical images";
-    homepage = https://reproject.readthedocs.io;
+    homepage = "https://reproject.readthedocs.io";
     license = licenses.bsd3;
     maintainers = [ maintainers.smaret ];
   };

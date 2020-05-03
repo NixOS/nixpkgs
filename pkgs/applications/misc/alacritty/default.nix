@@ -1,40 +1,38 @@
-{ stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
 
-  cmake,
-  gzip,
-  installShellFiles,
-  makeWrapper,
-  ncurses,
-  pkgconfig,
-  python3,
+, cmake
+, gzip
+, installShellFiles
+, makeWrapper
+, ncurses
+, pkgconfig
+, python3
 
-  expat,
-  fontconfig,
-  freetype,
-  libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  libxcb,
-  libxkbcommon,
-  wayland,
-  xdg_utils,
+, expat
+, fontconfig
+, freetype
+, libGL
+, libX11
+, libXcursor
+, libXi
+, libXrandr
+, libXxf86vm
+, libxcb
+, libxkbcommon
+, wayland
+, xdg_utils
 
   # Darwin Frameworks
-  AppKit,
-  CoreGraphics,
-  CoreServices,
-  CoreText,
-  Foundation,
-  OpenGL }:
-
-with rustPlatform;
-
+, AppKit
+, CoreGraphics
+, CoreServices
+, CoreText
+, Foundation
+, OpenGL
+}:
 let
   rpathLibs = [
     expat
@@ -51,18 +49,19 @@ let
     libxkbcommon
     wayland
   ];
-in buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
-    owner = "jwilm";
+    owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05jcg33ifngpzw2hdhgb614j87ihhhlqgar0kky183rywg0dxikg";
+    sha256 = "133d8vm7ihlvgw8n1jghhh35h664h0f52h6gci54f11vl6c1spws";
   };
 
-  cargoSha256 = "182j8ah67b2gw409vjfml3p41i00zh0klx9m8bwfkm64y2ki2bip";
+  cargoSha256 = "07gq63qd11zz229b8jp9wqggz39qfpzd223z1zk1xch7rhqq0pn4";
 
   nativeBuildInputs = [
     cmake
@@ -75,9 +74,17 @@ in buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-    ++ lib.optionals stdenv.isDarwin [ AppKit CoreGraphics CoreServices CoreText Foundation OpenGL ];
+  ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    CoreGraphics
+    CoreServices
+    CoreText
+    Foundation
+    OpenGL
+  ];
 
   outputs = [ "out" "terminfo" ];
+
   postPatch = ''
     substituteInPlace alacritty/src/config/mouse.rs \
       --replace xdg-open ${xdg_utils}/bin/xdg-open
@@ -88,16 +95,24 @@ in buildRustPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D target/release/alacritty $out/bin/alacritty
+    install -D $releaseDir/alacritty $out/bin/alacritty
 
-  '' + (if stdenv.isDarwin then ''
-    mkdir $out/Applications
-    cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
-  '' else ''
-    install -D extra/linux/alacritty.desktop -t $out/share/applications/
-    install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
-  '') + ''
+  '' + (
+    if stdenv.isDarwin then ''
+      mkdir $out/Applications
+      cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
+    '' else ''
+      install -D extra/linux/Alacritty.desktop -t $out/share/applications/
+      install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
+
+      # patchelf generates an ELF that binutils' "strip" doesn't like:
+      #    strip: not enough room for program headers, try linking with -N
+      # As a workaround, strip manually before running patchelf.
+      strip -S $out/bin/alacritty
+
+      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+    ''
+  ) + ''
 
     installShellCompletion --zsh extra/completions/_alacritty
     installShellCompletion --bash extra/completions/alacritty.bash
@@ -116,11 +131,11 @@ in buildRustPackage rec {
 
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
-    description = "GPU-accelerated terminal emulator";
-    homepage = "https://github.com/jwilm/alacritty";
+  meta = with lib; {
+    description = "A cross-platform, GPU-accelerated terminal emulator";
+    homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
-    maintainers = with maintainers; [ filalex77 mic92 ];
+    maintainers = with maintainers; [ filalex77 mic92 cole-h ];
     platforms = platforms.unix;
   };
 }

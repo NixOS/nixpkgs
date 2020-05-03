@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, libftdi1, libusb, pkgconfig
+, gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkgconfig
 , python, pythonPackages
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libftdi1
-    libusb
+    libusb-compat-0_1
     python
     pythonPackages.intelhex
   ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       directory.  It also places the FTDI version of the blackmagic
       executable in the bin directory.
     '';
-    homepage = https://github.com/blacksphere/blackmagic;
+    homepage = "https://github.com/blacksphere/blackmagic";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pjones emily sorki ];
     # fails on darwin with

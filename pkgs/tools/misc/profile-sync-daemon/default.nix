@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, utillinux}:
+{ stdenv, fetchurl, utillinux, coreutils}:
 
 stdenv.mkDerivation rec {
   version = "6.36";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     # $HOME detection fails (and is unnecessary)
     sed -i '/^HOME/d' $out/bin/profile-sync-daemon
     substituteInPlace $out/bin/psd-overlay-helper \
-      --replace "PATH=/usr/bin:/bin" "PATH=${utillinux.bin}/bin"
+      --replace "PATH=/usr/bin:/bin" "PATH=${utillinux.bin}/bin:${coreutils}/bin" \
+      --replace "sudo " "/run/wrappers/bin/sudo " 
   '';
 
   preferLocalBuild = true;
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
       transparent user experience.
     '';
     homepage = "https://github.com/graysky2/profile-sync-daemon";
-    downloadPage = https://github.com/graysky2/profile-sync-daemon/releases;
+    downloadPage = "https://github.com/graysky2/profile-sync-daemon/releases";
     license = licenses.mit;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;

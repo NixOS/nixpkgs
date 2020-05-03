@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python class library which helps with writing Nagios (Icinga) compatible plugins";
-    homepage =  https://github.com/mpounsett/nagiosplugin;
+    homepage =  "https://github.com/mpounsett/nagiosplugin";
     license = licenses.zpl21;
     maintainers = with maintainers; [ symphorien ];
   };

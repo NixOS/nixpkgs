@@ -19,14 +19,15 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    $bin/bin/kind completion bash > kind.bash
-    $bin/bin/kind completion zsh > kind.zsh
-    installShellCompletion kind.{bash,zsh}
+    for shell in bash zsh; do
+      $bin/bin/kind completion $shell > kind.$shell
+      installShellCompletion kind.$shell
+    done
   '';
 
   meta = {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
-    homepage    = https://github.com/kubernetes-sigs/kind;
+    homepage    = "https://github.com/kubernetes-sigs/kind";
     maintainers = with maintainers; [ offline rawkode ];
     license     = stdenv.lib.licenses.asl20;
     platforms   = platforms.unix;

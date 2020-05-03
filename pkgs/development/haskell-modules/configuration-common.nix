@@ -37,9 +37,6 @@ self: super: {
   # compiled on Linux. We provide the name to avoid evaluation errors.
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
-  # The test suite depends on old versions of tasty and QuickCheck.
-  hackage-security = dontCheck super.hackage-security;
-
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
   # $ hoogle server
@@ -47,18 +44,6 @@ self: super: {
 
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
-
-  # https://github.com/koalaman/shellcheck/issues/1778
-  ShellCheck = overrideCabal super.ShellCheck (drv: {
-    patches = [
-      # cabal 3.0 support
-      ( pkgs.fetchpatch {
-        url = "https://github.com/koalaman/shellcheck/commit/2c026f1ec7c205c731ff2a0ccd85365f37245.patch";
-        sha256 = "0z6yf350ngr6rwfkvdy670c476fgzj8a0n4ppdm1xr8r1lij7sfz";
-        excludes = [ "Dockerfile" ];
-      })
-    ];
-  });
 
   # Tests are failing
   # https://github.com/bos/statistics/issues/123
@@ -86,7 +71,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0y2qcjahi705c6nnypqpa5w3bzyzk4kqvbwfnpiaxzk5vna589gg";
+      sha256 = "1jjw6ar8ddcncwzksyx2xky50sm2jg1zjr7iiqk0vn8qq0fn2gwy";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -129,13 +114,8 @@ self: super: {
   # Depends on broken "hails" package.
   hails-bin = dontDistribute super.hails-bin;
 
-  # Switch levmar build to openblas.
   bindings-levmar = overrideCabal super.bindings-levmar (drv: {
-    preConfigure = ''
-      sed -i bindings-levmar.cabal \
-          -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
-    '';
-    extraLibraries = [ pkgs.openblasCompat ];
+    extraLibraries = [ pkgs.blas ];
   });
 
   # The Haddock phase fails for one reason or another.
@@ -191,6 +171,9 @@ self: super: {
 
   # Test suite build depends on ancient tasty 0.11.x.
   cryptohash-sha512 = dontCheck super.cryptohash-sha512;
+
+  # Test suite depends on source code being available
+  simple-affine-space = dontCheck super.simple-affine-space;
 
   # https://github.com/kazu-yamamoto/simple-sendfile/issues/17
   simple-sendfile = dontCheck super.simple-sendfile;
@@ -326,6 +309,7 @@ self: super: {
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
+  hspec-core = if pkgs.stdenv.isi686 then dontCheck super.hspec-core else super.hspec-core; # tests rely on `Int` being 64-bit; https://github.com/hspec/hspec/issues/431
   hspec-server = dontCheck super.hspec-server;
   HTF = dontCheck super.HTF;
   htsn = dontCheck super.htsn;
@@ -359,7 +343,6 @@ self: super: {
   optional = dontCheck super.optional;
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
-  pandoc-crossref = dontCheck super.pandoc-crossref;  # (most likely change when no longer 0.3.2.1) https://github.com/lierdakil/pandoc-crossref/issues/199
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -609,6 +592,12 @@ self: super: {
   elm-server = markBroken super.elm-server;
   elm-yesod = markBroken super.elm-yesod;
 
+  # https://github.com/Euterpea/Euterpea2/issues/40
+  Euterpea = appendPatch super.Euterpea (pkgs.fetchpatch {
+    url = "https://github.com/Euterpea/Euterpea2/pull/38.patch";
+    sha256 = "13g462qmj8c7if797gnyvf8h0cddmm3xy0pjldw48w8f8sr4qsj0";
+  });
+
   # https://github.com/athanclark/sets/issues/2
   sets = dontCheck super.sets;
 
@@ -701,7 +690,7 @@ self: super: {
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
   djinn = appendPatch super.djinn (pkgs.fetchpatch {
-    url = https://github.com/augustss/djinn/commit/6cb9433a137fb6b5194afe41d616bd8b62b95630.patch;
+    url = "https://github.com/augustss/djinn/commit/6cb9433a137fb6b5194afe41d616bd8b62b95630.patch";
     sha256 = "0s021y5nzrh74gfp8xpxpxm11ivzfs3jwg6mkrlyry3iy584xqil";
   });
 
@@ -719,10 +708,19 @@ self: super: {
     '';
   });
 
-  # The standard libraries are compiled separately
-  idris = generateOptparseApplicativeCompletion "idris" (
-    doJailbreak (dontCheck super.idris)
-  );
+  # The standard libraries are compiled separately.
+  # The megaparsec-7 override is needed because https://github.com/idris-lang/Idris-dev/issues/4826 declares that
+  # idris1 has no plans to migrate to megaparsec-8.
+  # The idris-lang/Idris-dev#4808 patch is for GHC 8.8 compatibility, and can likely be removed with the next release.
+  idris = generateOptparseApplicativeCompletion "idris" (doJailbreak (dontCheck
+    (appendPatches
+      (super.idris.override { megaparsec = self.megaparsec_7_0_5; }) [
+        (pkgs.fetchpatch {
+          url = "https://github.com/idris-lang/Idris-dev/pull/4808.diff";
+          sha256 = "060ib1rczy34ip8xf3bv1pf28655f6s0bvvij19jhh5dpcr0pf71";
+          excludes = [ ".travis.yml" "Makefile" "appveyor.yml" ];
+        })
+      ])));
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -1063,45 +1061,14 @@ self: super: {
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
 
-  # 2.23.0 supports GHC 8.x and up
-  haddock = super.haddock_2_22_0;
-  # haddock-api-2.22.0: Break out of “QuickCheck ==2.11.*, hspec >=2.4.4 && <2.6”
-  haddock-api = dontHaddock (doJailbreak (super.haddock-api_2_22_0));
-
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
+  haddock-library_1_9_0 = doJailbreak (dontCheck super.haddock-library_1_9_0);
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-
-  stack =
-    let
-      stackWithOverrides =
-        super.stack.override {
-          # stack-2.1.3.1 requires pantry-0.2.0.0.
-          pantry = self.pantry_0_2_0_0;
-        };
-    in
-    generateOptparseApplicativeCompletion
-      "stack"
-      (appendPatches stackWithOverrides [
-        # This PR fixes stack up to be able to build with Cabal-3.  This patch
-        # can probably be dropped when the next stack release is made after
-        # 2.1.3.1.
-        (pkgs.fetchpatch {
-          url = "https://github.com/commercialhaskell/stack/pull/5156.diff";
-          sha256 = "0knk6f9fh1b4fxkhvx5gfrwclal4vi2va4zy34gpmwnjr7knf42y";
-          excludes = [
-            "snapshot-lts-12.yaml"
-            "snapshot-nightly.yaml"
-            "snapshot.yaml"
-          ];
-        })
-        # This patch fixes stack up to be able to build various GHC-8.8 changes.
-        # This can hopefully be dropped when the next stack release is made
-        # after 2.1.3.1 (assuming the next stack release uses GHC-8.8).
-        ./patches/stack-ghc882-support.patch
-      ]);
+  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: { http-download = self.http-download_0_2_0_0; }));
+  http-download_0_2_0_0 = dontCheck super.http-download_0_2_0_0;
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -1192,10 +1159,10 @@ self: super: {
   });
 
   # Remove unecessary constraint:
-  # https://github.com/agrafix/superbuffer/pull/2
-  superbuffer = overrideCabal super.superbuffer (drv: {
+  # https://github.com/haskell-infra/hackage-trustees/issues/258
+  data-accessor-template = overrideCabal super.data-accessor-template (drv: {
     postPatch = ''
-      sed -i 's#QuickCheck < 2.10#QuickCheck < 2.13#' superbuffer.cabal
+      sed -i 's#template-haskell >=2.11 && <2.15#template-haskell#' data-accessor-template.cabal
     '';
   });
 
@@ -1248,17 +1215,6 @@ self: super: {
         export PATH="$i:$PATH"
       done
     '';
-  });
-
-  # Version bounds for http-client are too strict:
-  # https://github.com/bitnomial/prometheus/issues/34
-  prometheus = doJailbreak super.prometheus;
-
-  # Tasty-tap tests are out-of-date with TAP format
-  # https://github.com/MichaelXavier/tasty-tap/issues/2
-  tasty-tap = appendPatch super.tasty-tap (pkgs.fetchpatch {
-    url = https://patch-diff.githubusercontent.com/raw/MichaelXavier/tasty-tap/pull/3.diff;
-    sha256 = "0l8zbc56dy8ilxl3k49aiknmfhgpcg3jhs72lh3dk51d0a09d9sv";
   });
 
   # The doctests in universum-1.5.0 are broken.  The doctests in versions of universum after
@@ -1324,12 +1280,12 @@ self: super: {
   snap-server = overrideCabal super.snap-server (drv: {
     patches = [(pkgs.fetchpatch {
       # allow compilation with network >= 3
-      url = https://github.com/snapframework/snap-server/pull/126/commits/4338fe15d68e11e3c7fd0f9862f818864adc1d45.patch;
+      url = "https://github.com/snapframework/snap-server/pull/126/commits/4338fe15d68e11e3c7fd0f9862f818864adc1d45.patch";
       sha256 = "1nlw9lckm3flzkmhkzwc7zxhdh9ns33w8p8ds8nf574nqr5cr8bv";
     })
     (pkgs.fetchpatch {
       # prefer fdSocket over unsafeFdSocket
-      url = https://github.com/snapframework/snap-server/pull/126/commits/410de2df123b1d56b3093720e9c6a1ad79fe9de6.patch;
+      url = "https://github.com/snapframework/snap-server/pull/126/commits/410de2df123b1d56b3093720e9c6a1ad79fe9de6.patch";
       sha256 = "08psvw0xny64q4bw1nwg01pkzh01ak542lw6k1ps7cdcwaxk0n94";
     })];
   });
@@ -1355,7 +1311,7 @@ self: super: {
   });
 
   # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_0_0_0; };
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
 
   # Several gtk2hs-provided packages at v0.13.8.0 fail to build on Darwin
   # until we pick up https://github.com/gtk2hs/gtk2hs/pull/293 so apply that
@@ -1467,14 +1423,21 @@ self: super: {
   # details.
   cryptonite = dontCheck super.cryptonite;
 
-  # The test suite depends on an impure cabal-install installation
-  # in $HOME, which we don't have in our build sandbox.
+  # The test suite depends on an impure cabal-install installation in
+  # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
 
+  # Needs the latest version of vty.
+  matterhorn = super.matterhorn.overrideScope (self: super: {
+    vty = self.vty_5_28_2;
+  });
+
+  # Test suite requires database
   persistent-mysql = dontCheck super.persistent-mysql;
+  persistent-postgresql = dontCheck super.persistent-postgresql;
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
   # https://github.com/robdockins/edison/pull/16
@@ -1495,5 +1458,34 @@ self: super: {
     '';
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
+
+  # Needs a version that's newer than LTS-15.x provides.
+  weeder = super.weeder.override { generic-lens = self.generic-lens_2_0_0_0;  };
+
+  polysemy-plugin = super.polysemy-plugin.override {
+    # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
+    # This upstream issue is relevant:
+    # https://github.com/polysemy-research/polysemy/issues/322
+    ghc-tcplugins-extra = self.ghc-tcplugins-extra_0_3_2;
+    # version of Polysemy the plugin goes with
+    polysemy = self.polysemy_1_3_0_0;
+  };
+
+  # Test suite requires running a database server. Testing is done upstream.
+  hasql-pool = dontCheck super.hasql-pool;
+
+  # This bumps optparse-applicative to <0.16 in the cabal file, as otherwise
+  # the version bounds are not satisfied.  This can be removed if the PR at
+  # https://github.com/ananthakumaran/webify/pull/27 is merged and a new
+  # release of webify is published.
+  webify = appendPatch super.webify (pkgs.fetchpatch {
+    url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
+    sha256 = "sha256:0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
+  });
+
+  # Depends on selective >= 0.4, but the default of selective is 0.3
+  headed-megaparsec = super.headed-megaparsec.override {
+    selective = self.selective_0_4_1;
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

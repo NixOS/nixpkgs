@@ -91,7 +91,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://www.clementine-player.org;
+      homepage = "https://www.clementine-player.org";
       description = "A multiplatform music player";
       license = licenses.gpl3Plus;
       platforms = platforms.linux;
@@ -125,12 +125,12 @@ let
 
       mkdir -p $out/share
       for dir in applications icons kde4; do
-        ln -s "$free/share/$dir" "$out/share/$dir"
+        ln -s "${free}/share/$dir" "$out/share/$dir"
       done
     '';
     enableParallelBuilding = true;
     meta = with stdenv.lib; {
-      homepage = http://www.clementine-player.org;
+      homepage = "https://www.clementine-player.org";
       description = "Spotify integration for Clementine";
       # The blob itself is Apache-licensed, although libspotify is unfree.
       license = licenses.asl20;

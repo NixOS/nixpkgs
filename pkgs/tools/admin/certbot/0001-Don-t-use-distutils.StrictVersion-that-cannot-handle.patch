@@ -22,18 +22,16 @@ ValueError: invalid version number '41.4.0.post20191022'
  1 file changed, 1 insertion(+), 14 deletions(-)
 
 diff --git a/certbot/setup.py b/certbot/setup.py
-index c1bf914..7456bf2 100644
+index d19327e5e..ac1524793 100644
 --- a/certbot/setup.py
 +++ b/certbot/setup.py
-@@ -3,7 +3,6 @@ import os
+@@ -1,5 +1,4 @@
+ import codecs
+-from distutils.version import StrictVersion
+ import os
  import re
  import sys
- 
--from distutils.version import StrictVersion
- from setuptools import find_packages, setup, __version__ as setuptools_version
- from setuptools.command.test import test as TestCommand
- 
-@@ -56,20 +55,8 @@ install_requires = [
+@@ -58,20 +57,8 @@ install_requires = [
  
  # Add pywin32 on Windows platforms to handle low-level system calls.
  # This dependency needs to be added using environment markers to avoid its installation on Linux.
@@ -54,7 +52,7 @@ index c1bf914..7456bf2 100644
 +install_requires.append(pywin32_req + " ; sys_platform == 'win32'")
  
  dev_extras = [
-     'astroid==1.6.5',
+     'coverage',
 -- 
 2.24.1
 

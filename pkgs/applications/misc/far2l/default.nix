@@ -74,13 +74,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/far2l --argv0 $out/bin/far2l
   '';
 
-  stripDebugList = "bin share";
+  stripDebugList = [ "bin" "share" ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "An orthodox file manager";
-    homepage = https://github.com/elfmz/far2l;
+    homepage = "https://github.com/elfmz/far2l";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = platforms.all;

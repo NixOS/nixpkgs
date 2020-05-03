@@ -23,6 +23,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja
+    glib # for glib-mkenum
     pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [
@@ -66,7 +67,7 @@ in stdenv.mkDerivation rec {
       Pango forms the core of text and font handling for GTK.
     '';
 
-    homepage = https://www.pango.org/;
+    homepage = "https://www.pango.org/";
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ];

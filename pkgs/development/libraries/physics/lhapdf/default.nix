@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A general purpose interpolator, used for evaluating Parton Distribution Functions from discretised data files";
     license     = stdenv.lib.licenses.gpl2;
-    homepage    = http://lhapdf.hepforge.org;
+    homepage    = "http://lhapdf.hepforge.org";
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };

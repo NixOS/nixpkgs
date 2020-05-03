@@ -49,6 +49,10 @@ with lib;
       simply add the brightnessctl package to environment.systemPackages.
     '')
 
+    (mkRemovedOptionModule ["services" "prey" ] ''
+      prey-bash-client is deprecated upstream
+    '')
+
     # Do NOT add any option renames here, see top of the file
   ];
 }

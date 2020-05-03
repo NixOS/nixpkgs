@@ -14,8 +14,8 @@ let
   baseWrapper = writeShellScriptBin "sway" ''
      set -o errexit
      if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
-       export _SWAY_WRAPPER_ALREADY_EXECUTED=1
        ${extraSessionCommands}
+       export _SWAY_WRAPPER_ALREADY_EXECUTED=1
      fi
      if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
        export DBUS_SESSION_BUS_ADDRESS

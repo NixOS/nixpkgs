@@ -41,6 +41,13 @@ with python3.pkgs; buildPythonApplication rec {
   checkInputs = [ pytest glibcLocales ];
   LC_ALL = "en_US.UTF-8";
 
+  postPatch = ''
+    sed -i \
+      -e "s/Invalid value for \"ics\"/Invalid value for \\\'ics\\\'/" \
+      -e "s/Invalid value for \"\[ICS\]\"/Invalid value for \\\'\[ICS\]\\\'/" \
+      tests/cli_test.py
+  '';
+
   postInstall = ''
     # zsh completion
     install -D misc/__khal $out/share/zsh/site-functions/__khal
@@ -61,7 +68,7 @@ with python3.pkgs; buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://lostpackets.de/khal/;
+    homepage = "http://lostpackets.de/khal/";
     description = "CLI calendar application";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];

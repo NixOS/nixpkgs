@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "clikit";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ae4766b974d7b1983e39d501da9a0aadf118a907a0c9b50714d027c8b59ea81";
+    sha256 = "0glppxx0pyppjcigzs8h16srlbxb6nci0282xfy3ayvwbq8pwbbf";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/clikit;
+    homepage = "https://github.com/sdispater/clikit";
     description = "A group of utilities to build beautiful and testable command line interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

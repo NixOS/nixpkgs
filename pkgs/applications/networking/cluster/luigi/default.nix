@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = ["--prefix PYTHONPATH . :"];
 
   meta = with lib; {
-    homepage = https://github.com/spotify/luigi;
+    homepage = "https://github.com/spotify/luigi";
     description = "Python package that helps you build complex pipelines of batch jobs";
     longDescription = ''
       Luigi handles dependency resolution, workflow management, visualization,

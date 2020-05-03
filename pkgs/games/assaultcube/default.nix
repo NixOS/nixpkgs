@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Fast and fun first-person-shooter based on the Cube fps";
-    homepage = https://assault.cubers.net;
+    homepage = "https://assault.cubers.net";
     maintainers = [ maintainers.genesis ];
     platforms = platforms.linux; # should work on darwin with a little effort.
     license = stdenv.lib.licenses.zlib;

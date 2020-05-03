@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://tails.boum.org;
+    homepage = "https://tails.boum.org";
     description = "GTK application to display Tor circuits and streams";
     license = licenses.gpl3;
     maintainers = [ maintainers.phreedom ];

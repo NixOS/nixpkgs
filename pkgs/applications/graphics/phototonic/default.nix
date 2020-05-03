@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, exiv2 }:
+{ mkDerivation, stdenv, fetchFromGitHub, qtbase, qmake, exiv2 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "phototonic";
   version = "2.1";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An image viewer and organizer";
-    homepage = https://sourceforge.net/projects/phototonic/;
+    homepage = "https://sourceforge.net/projects/phototonic/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

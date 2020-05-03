@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Computer vision package based on numpy";
-    homepage = https://mahotas.readthedocs.io/;
+    homepage = "https://mahotas.readthedocs.io/";
     maintainers = with maintainers; [ luispedro ];
     license = licenses.mit;
     platforms = platforms.unix;

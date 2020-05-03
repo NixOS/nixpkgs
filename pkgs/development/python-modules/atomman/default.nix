@@ -31,7 +31,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/usnistgov/atomman/;
+    homepage = "https://github.com/usnistgov/atomman/";
     description = "Atomistic Manipulation Toolkit";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

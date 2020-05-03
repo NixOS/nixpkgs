@@ -1,8 +1,4 @@
-{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, liblapack
-, mklSupport ? false, mkl ? null
-}:
-
-assert !mklSupport || mkl != null;
+{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, lapack, blas }:
 
 with stdenv.lib;
 
@@ -17,12 +13,9 @@ in stdenv.mkDerivation {
     name = "magma-${version}.tar.gz";
   };
 
-  buildInputs = [ gfortran cudatoolkit libpthreadstubs cmake ]
-    ++ (if mklSupport then [ mkl ] else [ liblapack ]);
+  buildInputs = [ gfortran cudatoolkit libpthreadstubs cmake lapack blas ];
 
   doCheck = false;
-
-  MKLROOT = optionalString mklSupport mkl;
 
   preConfigure = ''
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
@@ -51,7 +44,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
-    homepage = http://icl.cs.utk.edu/magma/index.html;
+    homepage = "http://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.unix;
     maintainers = with maintainers; [ tbenst ];
   };

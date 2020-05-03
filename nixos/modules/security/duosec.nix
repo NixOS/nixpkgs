@@ -9,8 +9,7 @@ let
 
   configFilePam = ''
     [duo]
-    ikey=${cfg.ikey}
-    skey=${cfg.skey}
+    ikey=${cfg.integrationKey}
     host=${cfg.host}
     ${optionalString (cfg.groups != "") ("groups="+cfg.groups)}
     failmode=${cfg.failmode}
@@ -24,26 +23,12 @@ let
     motd=${boolToStr cfg.motd}
     accept_env_factor=${boolToStr cfg.acceptEnvFactor}
   '';
-
-  loginCfgFile = optionalAttrs cfg.ssh.enable {
-    "duo/login_duo.conf" =
-      { source = pkgs.writeText "login_duo.conf" configFileLogin;
-        mode   = "0600";
-        user   = "sshd";
-      };
-  };
-
-  pamCfgFile = optional cfg.pam.enable {
-    "duo/pam_duo.conf" =
-      { source = pkgs.writeText "pam_duo.conf" configFilePam;
-        mode   = "0600";
-        user   = "sshd";
-      };
-  };
 in
 {
   imports = [
     (mkRenamedOptionModule [ "security" "duosec" "group" ] [ "security" "duosec" "groups" ])
+    (mkRenamedOptionModule [ "security" "duosec" "ikey" ] [ "security" "duosec" "integrationKey" ])
+    (mkRemovedOptionModule [ "security" "duosec" "skey" ] "The insecure security.duosec.skey option has been replaced by a new security.duosec.secretKeyFile option. Use this new option to store a secure copy of your key instead.")
   ];
 
   options = {
@@ -60,14 +45,18 @@ in
         description = "If enabled, protect logins with Duo Security using PAM support.";
       };
 
-      ikey = mkOption {
+      integrationKey = mkOption {
         type = types.str;
         description = "Integration key.";
       };
 
-      skey = mkOption {
-        type = types.str;
-        description = "Secret key.";
+      secretKeyFile = mkOption {
+        type = types.path;
+        default = null;
+        description = ''
+          A file containing your secret key. The security of your Duo application is tied to the security of your secret key.
+        '';
+        example = "/run/keys/duo-skey";
       };
 
       host = mkOption {
@@ -195,21 +184,52 @@ in
   };
 
   config = mkIf (cfg.ssh.enable || cfg.pam.enable) {
-     environment.systemPackages = [ pkgs.duo-unix ];
+    environment.systemPackages = [ pkgs.duo-unix ];
 
-     security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";
-     environment.etc = loginCfgFile // pamCfgFile;
+    security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";
 
-     /* If PAM *and* SSH are enabled, then don't do anything special.
-     If PAM isn't used, set the default SSH-only options. */
-     services.openssh.extraConfig = mkIf (cfg.ssh.enable || cfg.pam.enable) (
-     if cfg.pam.enable then "UseDNS no" else ''
-       # Duo Security configuration
-       ForceCommand ${config.security.wrapperDir}/login_duo
-       PermitTunnel no
-       ${optionalString (!cfg.allowTcpForwarding) ''
-         AllowTcpForwarding no
-       ''}
-     '');
+    system.activationScripts = {
+      login_duo = mkIf cfg.ssh.enable ''
+        if test -f "${cfg.secretKeyFile}"; then
+          mkdir -m 0755 -p /etc/duo
+
+          umask 0077
+          conf="$(mktemp)"
+          {
+            cat ${pkgs.writeText "login_duo.conf" configFileLogin}
+            printf 'skey = %s\n' "$(cat ${cfg.secretKeyFile})"
+          } >"$conf"
+
+          chown sshd "$conf"
+          mv -fT "$conf" /etc/duo/login_duo.conf
+        fi
+      '';
+      pam_duo = mkIf cfg.pam.enable ''
+        if test -f "${cfg.secretKeyFile}"; then
+          mkdir -m 0755 -p /etc/duo
+
+          umask 0077
+          conf="$(mktemp)"
+          {
+            cat ${pkgs.writeText "login_duo.conf" configFilePam}
+            printf 'skey = %s\n' "$(cat ${cfg.secretKeyFile})"
+          } >"$conf"
+
+          mv -fT "$conf" /etc/duo/pam_duo.conf
+        fi
+      '';
+    };
+
+    /* If PAM *and* SSH are enabled, then don't do anything special.
+    If PAM isn't used, set the default SSH-only options. */
+    services.openssh.extraConfig = mkIf (cfg.ssh.enable || cfg.pam.enable) (
+    if cfg.pam.enable then "UseDNS no" else ''
+      # Duo Security configuration
+      ForceCommand ${config.security.wrapperDir}/login_duo
+      PermitTunnel no
+      ${optionalString (!cfg.allowTcpForwarding) ''
+        AllowTcpForwarding no
+      ''}
+    '');
   };
 }

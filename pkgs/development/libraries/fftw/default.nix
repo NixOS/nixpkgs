@@ -48,7 +48,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Fastest Fourier Transform in the West library";
-    homepage = http://www.fftw.org/;
+    homepage = "http://www.fftw.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.spwhitt ];
     platforms = platforms.unix;

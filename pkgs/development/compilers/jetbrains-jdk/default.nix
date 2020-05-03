@@ -1,6 +1,6 @@
-{ stdenv, openjdk12, fetchFromGitHub, jetbrains }:
+{ stdenv, openjdk11, fetchFromGitHub, jetbrains }:
 
-openjdk12.overrideAttrs (oldAttrs: rec {
+openjdk11.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk";
   version = "11.0.6-b774";
   src = fetchFromGitHub {

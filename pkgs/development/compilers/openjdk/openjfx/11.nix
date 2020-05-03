@@ -29,6 +29,9 @@ let
       JDK_HOME = ${openjdk11-bootstrap.home}
     '' + args.gradleProperties or "");
 
+    #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
+    NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+
     buildPhase = ''
       runHook preBuild
 
@@ -101,7 +104,7 @@ in makePackage {
   passthru.deps = deps;
 
   meta = with stdenv.lib; {
-    homepage = http://openjdk.java.net/projects/openjfx/;
+    homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
     description = "The next-generation Java client toolkit.";
     maintainers = with maintainers; [ abbradar ];

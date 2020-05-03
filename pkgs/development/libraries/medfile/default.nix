@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to read and write MED files";
-    homepage = http://salome-platform.org/;
+    homepage = "http://salome-platform.org/";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
   };

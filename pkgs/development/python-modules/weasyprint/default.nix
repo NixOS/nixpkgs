@@ -63,7 +63,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://weasyprint.org/;
+    homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];

@@ -60,3 +60,6 @@ done
 
 # Update linux-libre
 COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-libre.sh
+
+# Update linux-hardened
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-hardened.py

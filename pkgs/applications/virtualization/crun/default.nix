@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     inherit (src.meta) homepage;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

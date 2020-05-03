@@ -19,12 +19,12 @@ buildRustPackage rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p target/release/cfdyndns $out/bin/
+    cp -p $releaseDir/cfdyndns $out/bin/
   '';
 
   meta = with stdenv.lib; {
     description = "CloudFlare Dynamic DNS Client";
-    homepage = https://github.com/colemickens/cfdyndns;
+    homepage = "https://github.com/colemickens/cfdyndns";
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [ colemickens ];
     platforms = with platforms; linux;

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Create and verify OpenTimestamps proofs";
-    homepage = https://github.com/opentimestamps/python-opentimestamps;
+    homepage = "https://github.com/opentimestamps/python-opentimestamps";
     license = lib.licenses.lgpl3;
   };
 }

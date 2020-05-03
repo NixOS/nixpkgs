@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ soupsieve ];
 
   meta = with stdenv.lib; {
-    homepage = http://crummy.com/software/BeautifulSoup/bs4/;
+    homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     description = "HTML and XML parser";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Probabilistic programming language using Tensorflow";
-    homepage = https://github.com/blei-lab/edward;
+    homepage = "https://github.com/blei-lab/edward";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

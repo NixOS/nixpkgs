@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = ''Basic Local Alignment Search Tool (BLAST) finds regions of
     similarity between biological sequences'';
-    homepage = https://blast.ncbi.nlm.nih.gov/Blast.cgi;
+    homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
     license = licenses.publicDomain;
 
     # Version 2.10.0 fails on Darwin

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/nir0s/distro;
+    homepage = "https://github.com/nir0s/distro";
     description = "Linux Distribution - a Linux OS platform information API.";
     license = licenses.asl20;
     maintainers = with maintainers; [ nand0p ];

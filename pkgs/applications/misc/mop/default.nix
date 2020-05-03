@@ -24,7 +24,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple stock tracker implemented in go";
-    homepage =  https://github.com/mop-tracker/mop;
+    homepage =  "https://github.com/mop-tracker/mop";
     license = licenses.mit;
     platforms = platforms.all;
   };

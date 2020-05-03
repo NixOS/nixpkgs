@@ -6,12 +6,8 @@ in stdenv.mkDerivation rec {
   pname = "libchipcard";
   inherit version;
 
-  src = let
-    qstring = "package=02&release=${releaseId}&file=01";
-    mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
-  in fetchurl {
-    name = "${pname}-${version}.tar.gz";
-    urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
+  src = fetchurl {
+    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
     inherit sha256;
   };
 

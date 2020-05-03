@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
 
       TECOC is a portable C implementation of TECO-11.
  '';
-    homepage = https://github.com/blakemcbride/TECOC;
-    license = {  url = https://github.com/blakemcbride/TECOC/tree/master/doc/readme-1st.txt; };
+    homepage = "https://github.com/blakemcbride/TECOC";
+    license = {  url = "https://github.com/blakemcbride/TECOC/tree/master/doc/readme-1st.txt"; };
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
   };

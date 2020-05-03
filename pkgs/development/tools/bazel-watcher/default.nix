@@ -5,35 +5,29 @@
 , go
 , python
 , stdenv
+, iana-etc
+, mailcap
+, tzdata
 }:
 
 let
   patches = [
     ./use-go-in-path.patch
-
-    # update rules_go to fix the build. Remove these when updating past 0.10.3
-    (fetchpatch {
-      url = "https://github.com/bazelbuild/bazel-watcher/commit/686130f50cea274f7453f6abc8c5249654047462.patch";
-      sha256 = "0rzs01sfiinl5d3dq9sx1bhl8kkzppdwh964fr7bzafqcxv5llmb";
-    })
-    (fetchpatch {
-      url = "https://github.com/bazelbuild/bazel-watcher/commit/18bdb44832ccc533e0ab3923ef80060eeb24582d.patch";
-      sha256 = "0k5hvlxlg4n092d53cbfxqqhzc6f1jv4licdhhi1dhckkhb4sdk6";
-    })
   ];
 in
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
-  version = "0.10.3";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "17z4nqqsdrainbh8fmhf6sgrxwf7aknadmn94z1yqpxa7kb9x33v";
+    sha256 = "1fc3sp79znbbq1yjap56lham72n7cap8yfghpzrzmpl5brybjkvm";
   };
 
   nativeBuildInputs = [ go git python ];
+  removeRulesCC = false;
 
   bazelTarget = "//ibazel";
 
@@ -55,6 +49,10 @@ buildBazelPackage rec {
       rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
       sed -e '/^FILE:@go_sdk.*/d' -i $bazelOut/external/\@*.marker
 
+      # Retains go build input markers
+      chmod -R 755 $bazelOut/external/{bazel_gazelle_go_repository_cache,@\bazel_gazelle_go_repository_cache.marker}
+      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_cache,@\bazel_gazelle_go_repository_cache.marker}
+
       # Remove the gazelle tools, they contain go binaries that are built
       # non-deterministically. As long as the gazelle version matches the tools
       # should be equivalent.
@@ -62,7 +60,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "0cmj186n2y1g9kkdhcivmh2qvigvpnbp03m575b7hgsxi1cp3ssj";
+    sha256 = "0wj573dcirssr2cmq90b4yl57mv3gsxaj1s26afvkz1dvyxmq7sz";
   };
 
   buildAttrs = {
@@ -78,7 +76,7 @@ buildBazelPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bazelbuild/bazel-watcher;
+    homepage = "https://github.com/bazelbuild/bazel-watcher";
     description = "Tools for building Bazel targets when source files change.";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];

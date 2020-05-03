@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "2.68.4";
+  version = "2.70.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "151j5dc84gbl6a917pxvd0b372lw5za48n63lyv6llfc48lv2l1d";
+    sha256 = "0hjk9lgppc5435my0lyywbpmj7ib5vvcylwfin8ki97g9bvj1c2l";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ python3 sqlite libpsl brotli ];
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala glib ];
   propagatedBuildInputs = [ glib libxml2 ];
 
   mesonFlags = [

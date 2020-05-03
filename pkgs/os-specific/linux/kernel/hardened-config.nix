@@ -16,31 +16,9 @@ with (stdenv.lib.kernel.whenHelpers version);
 
 assert (versionAtLeast version "4.9");
 
-optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
-  DEFAULT_MMAP_MIN_ADDR = freeform "65536";  # Prevent allocation of first 64K of memory
-
-  # Reduce attack surface by disabling X32
-  X86_X32            = no;
-  # Note: this config depends on EXPERT y and so will not take effect, hence
-  # it is left "optional" for now.
-  MODIFY_LDT_SYSCALL = option no;
-  VMAP_STACK         = yes; # Catch kernel stack overflows
-
-  # Randomize position of kernel and memory.
-  RANDOMIZE_BASE   = yes;
-  RANDOMIZE_MEMORY = yes;
-
-  # Disable legacy virtual syscalls by default (modern glibc use vDSO instead).
-  #
-  # Note that the vanilla default is to *emulate* the legacy vsyscall mechanism,
-  # which is supposed to be safer than the native variant (wrt. ret2libc), so
-  # disabling it mainly helps reduce surface.
-  LEGACY_VSYSCALL_NONE = yes;
-} // {
+{
   # Report BUG() conditions and kill the offending process.
   BUG = yes;
-
-  BUG_ON_DATA_CORRUPTION = whenAtLeast "4.10" yes;
 
   # Safer page access permissions (wrt. code injection).  Default on >=4.11.
   DEBUG_RODATA          = whenOlder "4.11" yes;
@@ -57,31 +35,16 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   SECURITY_SELINUX_DISABLE = whenAtLeast "4.12" no;
   SECURITY_WRITABLE_HOOKS  = whenAtLeast "4.12" (option no);
 
-  DEBUG_WX = yes; # boot-time warning on RWX mappings
   STRICT_KERNEL_RWX = whenAtLeast "4.11" yes;
-
-  # Stricter /dev/mem
-  STRICT_DEVMEM    = option yes;
-  IO_STRICT_DEVMEM = option yes;
 
   # Perform additional validation of commonly targeted structures.
   DEBUG_CREDENTIALS     = yes;
   DEBUG_NOTIFIERS       = yes;
-  DEBUG_LIST            = yes;
   DEBUG_PI_LIST         = yes; # doesn't BUG()
   DEBUG_SG              = yes;
   SCHED_STACK_END_CHECK = yes;
 
   REFCOUNT_FULL = whenAtLeast "4.13" yes;
-
-  # Perform usercopy bounds checking.
-  HARDENED_USERCOPY = yes;
-  HARDENED_USERCOPY_FALLBACK = whenAtLeast "4.16" no; # for full whitelist enforcement
-
-  # Randomize allocator freelists.
-  SLAB_FREELIST_RANDOM = yes;
-
-  SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
 
   # Randomize page allocator when page_alloc.shuffle=1
   SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
@@ -98,7 +61,6 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   SECURITY_SAFESETID = whenAtLeast "5.1" yes;
 
   # Reboot devices immediately if kernel experiences an Oops.
-  PANIC_ON_OOPS = yes;
   PANIC_TIMEOUT = freeform "-1";
 
   GCC_PLUGINS = yes; # Enable gcc plugin options
@@ -119,8 +81,5 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
   CC_STACKPROTECTOR_REGULAR = whenOlder "4.18" no;
   CC_STACKPROTECTOR_STRONG  = whenOlder "4.18" yes;
-
-  # Enable compile/run-time buffer overflow detection ala glibc's _FORTIFY_SOURCE
-  FORTIFY_SOURCE = whenAtLeast "4.13" yes;
 
 }

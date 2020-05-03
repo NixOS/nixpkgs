@@ -214,6 +214,8 @@ let
       find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
 
+    strictDeps = true;
+
     shellHook = ''
       d=$(mktemp -d "--suffix=-$name")
     '' + toString (map (dep: ''
@@ -240,11 +242,7 @@ let
       # Add default meta information
       homepage = "https://${goPackagePath}";
       platforms = go.meta.platforms or lib.platforms.all;
-    } // meta // {
-      # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.ehmry lib.maintainers.lethalman ];
-    };
+    } // meta;
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"

@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "yggdrasil";
-  version = "0.3.13";
+  version = "0.3.14";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${version}";
-    sha256 = "1k3xxarrl33sxik1dqahfllrhd501xqq5q5mcn4y5wi9lwywsy50";
+    sha256 = "147kl2kvv1rn3yk0mlvd998a2yayjl07csxxkjvs6264j6csb860";
   };
 
-  modSha256 = "057yl3i29kwpd129aa2rb67s5rmz898fi2a7lxv3nfjp7018s9qw";
+  modSha256 = "1ffp7q7kbkm1312sz6xnpc7342iczy9vj3m76lflirr1ljmw0dnb";
 
   # Change the default location of the management socket on Linux
   # systems so that the yggdrasil system service unit does not have to
@@ -26,6 +26,8 @@ buildGoModule rec {
       -X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}
       -s -w
   '';
+
+  passthru.tests.basic = nixosTests.yggdrasil;
 
   meta = with lib; {
     description =

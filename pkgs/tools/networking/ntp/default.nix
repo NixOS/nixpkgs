@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "An implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
-      url = https://www.eecis.udel.edu/~mills/ntp/html/copyright.html;
+      url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
     maintainers = with maintainers; [ eelco thoughtpolice ];
     platforms = platforms.linux;

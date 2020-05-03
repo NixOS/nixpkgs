@@ -18,7 +18,7 @@ buildDunePackage rec {
   doCheck = false; # ipaddr and macaddr tests are together, which requires mutual dependency
 
   meta = with lib; {
-    homepage = https://github.com/mirage/ocaml-ipaddr;
+    homepage = "https://github.com/mirage/ocaml-ipaddr";
     description = "A library for manipulation of MAC address representations";
     license = licenses.isc;
     maintainers = [ maintainers.alexfmpe ];

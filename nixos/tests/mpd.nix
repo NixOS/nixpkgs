@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       # License: http://creativecommons.org/licenses/by-sa/4.0/
 
       name = "Blue_Wave_Theory-Skyhawk_Beach.mp3";
-      url = https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3;
+      url = "https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3";
       sha256 = "0xw417bxkx4gqqy139bb21yldi37xx8xjfxrwaqa0gyw19dl6mgp";
     };
 

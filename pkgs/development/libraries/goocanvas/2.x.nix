@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Canvas widget for GTK based on the the Cairo 2D library";
-    homepage = https://wiki.gnome.org/Projects/GooCanvas;
+    homepage = "https://wiki.gnome.org/Projects/GooCanvas";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

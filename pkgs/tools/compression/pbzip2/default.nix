@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=reserved-user-defined-literal";
 
   meta = with stdenv.lib; {
-    homepage = http://compression.ca/pbzip2/;
+    homepage = "http://compression.ca/pbzip2/";
     description = "A parallel implementation of bzip2 for multi-core machines";
     license = licenses.bsd2;
     maintainers = with maintainers; [viric];

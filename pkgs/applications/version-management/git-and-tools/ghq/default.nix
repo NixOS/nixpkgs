@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = {
     description = "Remote repository management made easy";
-    homepage = https://github.com/x-motemen/ghq;
+    homepage = "https://github.com/x-motemen/ghq";
     maintainers = with stdenv.lib.maintainers; [ sigma ];
     license = stdenv.lib.licenses.mit;
   };

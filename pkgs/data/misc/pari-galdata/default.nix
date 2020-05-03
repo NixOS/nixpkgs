@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "PARI database needed to compute Galois group in degrees 8 through 11";
-    homepage = http://pari.math.u-bordeaux.fr/;
+    homepage = "http://pari.math.u-bordeaux.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ timokau ];

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = https://github.com/aio-libs/aiohttp-remotes/commit/188772abcea038c31dae7d607e487eeed44391bc.patch;
+      url = "https://github.com/aio-libs/aiohttp-remotes/commit/188772abcea038c31dae7d607e487eeed44391bc.patch";
       sha256 = "0pb1y4jb8ar1szhnjiyj2sdmdk6z9h6c3wrxw59nv9kr3if5igvs";
     })
   ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/wikibusiness/aiohttp-remotes;
+    homepage = "https://github.com/wikibusiness/aiohttp-remotes";
     description = "A set of useful tools for aiohttp.web server";
     license = licenses.mit;
     maintainers = [ maintainers.qyliss ];

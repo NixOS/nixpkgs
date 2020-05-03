@@ -1,4 +1,4 @@
-{stdenv, autoreconfHook, fetchurl, gmp, openblas}:
+{stdenv, autoreconfHook, fetchurl, gmp, blas}:
 stdenv.mkDerivation rec {
   pname = "iml";
   version = "1.0.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [
     gmp
-    openblas
+    blas
   ];
   nativeBuildInputs = [
     autoreconfHook
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gmp-include=${gmp.dev}/include"
     "--with-gmp-lib=${gmp}/lib"
-    "--with-cblas=-lopenblas"
+    "--with-cblas=-lblas"
   ];
   meta = {
     inherit version;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://cs.uwaterloo.ca/~astorjoh/iml.html;
+    homepage = "https://cs.uwaterloo.ca/~astorjoh/iml.html";
     updateWalker = true;
   };
 }

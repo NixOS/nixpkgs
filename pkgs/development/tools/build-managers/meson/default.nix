@@ -19,11 +19,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "meson";
-  version = "0.53.2";
+  version = "0.54.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "Po+DDzMYQ5fC6wtlHsUCrbY97LKJeL3ISzVY1xKEwh8=";
+    sha256 = "3eVybXeBEqy9Sme7NjOrLuddM9HoeaYoOntKRMM2PCc=";
   };
 
   postFixup = ''
@@ -95,10 +95,10 @@ python3Packages.buildPythonApplication rec {
   isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
-    homepage = https://mesonbuild.com;
+    homepage = "https://mesonbuild.com";
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe rasendubi ];
+    maintainers = with maintainers; [ jtojnar mbe ];
     platforms = platforms.all;
   };
 }

@@ -24,12 +24,12 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "20.01";
+  version = "20.03";
   pname = "ejabberd";
 
   src = fetchurl {
-    url = "https://www.process-one.net/downloads/ejabberd/${version}/${pname}-${version}.tgz";
-    sha256 = "14bgwa6y17bhnwhcqb2hdl7psds0iqkcawb4kpaw6d7lzzsx4ay6";
+    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
+    sha256 = "0i013l9cygmgainfid298n6llhs3mblfklry3jw2a6irvhffym0s";
   };
 
   nativeBuildInputs = [ fakegit ];
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "097c84qp00dq8x7ngfqcrv9fa0wm0k94grashmi1fxlasgbvxh18";
+    outputHash = "0xwgi9hy6y0m8mwznl6px98kdmkcxg98k62zgqbaqd4paks5zwqa";
   };
 
   configureFlags =
@@ -113,7 +113,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
-    homepage = https://www.ejabberd.im;
+    homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sander abbradar ajs124 ];
     broken = withElixir;

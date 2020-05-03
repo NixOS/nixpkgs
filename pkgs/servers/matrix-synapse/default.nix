@@ -23,11 +23,11 @@ let
 
 in buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.9.1";
+  version = "1.12.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13csf18dchm75vw251a7h57diag94vw6rhg8kkkbpi35cibn0cz2";
+    sha256 = "0psr17ai42ma9923g9bj3q9fd8kph9rx7jpxsxwbfzr2y6lwr306";
   };
 
   patches = [
@@ -85,7 +85,7 @@ in buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://matrix.org;
+    homepage = "https://matrix.org";
     description = "Matrix reference homeserver";
     license = licenses.asl20;
     maintainers = with maintainers; [ ralith roblabla ekleog pacien ma27 ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin IOKit;
 
   meta = with stdenv.lib; {
-    homepage = http://linukz.org/cd-discid.shtml;
+    homepage = "http://linukz.org/cd-discid.shtml";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;

@@ -1,5 +1,6 @@
 { stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
+, langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langGo ? false
@@ -13,6 +14,7 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
+, gnatboot ? null
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
@@ -35,6 +37,7 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
+assert langAda -> gnatboot != null;
 
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
@@ -43,7 +46,7 @@ with stdenv.lib;
 with builtins;
 
 let majorVersion = "9";
-    version = "${majorVersion}.2.0";
+    version = "${majorVersion}.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -54,6 +57,7 @@ let majorVersion = "9";
         url = "https://git.busybox.net/buildroot/plain/package/gcc/${version}/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
         sha256 = ""; # TODO: uncomment and check hash when available.
       }) */
+      ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
@@ -76,7 +80,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "01mj3yk7z49i49168hg2cg7qs4bsccrrnv7pjmbdlf8j2a7z0vpa";
+    sha256 = "1la2yy27ziasyf0jvzk58y1i5b5bq2h176qil550bxhifs39gqbi";
   };
 
   inherit patches;
@@ -160,6 +164,7 @@ stdenv.mkDerivation ({
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
+    ++ (optional langAda gnatboot)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
@@ -168,7 +173,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit (stdenv) lib;
-    inherit version hostPlatform langGo;
+    inherit version hostPlatform gnatboot langAda langGo;
   };
 
   dontDisableStatic = true;
@@ -193,6 +198,7 @@ stdenv.mkDerivation ({
       langC
       langCC
       langFortran
+      langAda
       langGo
       langObjC
       langObjCpp
@@ -236,7 +242,7 @@ stdenv.mkDerivation ({
     ;
 
   passthru = {
-    inherit langC langCC langObjC langObjCpp langFortran langGo version;
+    inherit langC langCC langObjC langObjCpp langAda langFortran langGo version;
     isGNU = true;
   };
 
@@ -245,14 +251,8 @@ stdenv.mkDerivation ({
 
   inherit (stdenv) is64bit;
 
-  # In this particular combination it stopped creating lib output at all.
-  # TODO: perhaps find a better fix?  (ideally understand what's going on)
-  postFixup = if crossStageStatic && targetPlatform.isMusl && targetPlatform.is32bit
-    then ''mkdir "$lib"''
-    else null;
-
   meta = {
-    homepage = https://gcc.gnu.org/;
+    homepage = "https://gcc.gnu.org/";
     license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");

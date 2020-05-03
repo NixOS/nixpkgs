@@ -21,7 +21,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "A Python wrapper around libmagic";
-    homepage = http://www.darwinsys.com/file/;
+    homepage = "http://www.darwinsys.com/file/";
     license = licenses.lgpl2;
   };
 

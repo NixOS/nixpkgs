@@ -40,7 +40,7 @@ mkDerivation rec {
       there is no password file that can be lost or get stolen. There is also
       no need to trust any online password service.
     '';
-    homepage = https://github.com/bkueng/qMasterPassword;
+    homepage = "https://github.com/bkueng/qMasterPassword";
     license = licenses.gpl3;
     maintainers = [ maintainers.tadeokondrak ];
     platforms = platforms.all;

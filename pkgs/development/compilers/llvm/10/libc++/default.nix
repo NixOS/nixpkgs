@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "1cjxiby8nq95g02rgx08iy86pswpi66b9wmxqjiyga1s92nb19j0";
+  src = fetch "libcxx" "1isnj78diknh0nvd73mlq8p8g209f9bab2mbysq826bg2wzql3r7";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    homepage = http://libcxx.llvm.org/;
+    homepage = "https://libcxx.llvm.org/";
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = with stdenv.lib.licenses; [ ncsa mit ];
     platforms = stdenv.lib.platforms.all;

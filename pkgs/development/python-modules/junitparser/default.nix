@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A JUnit/xUnit Result XML Parser";
     license = licenses.asl20;
-    homepage = https://github.com/gastlygem/junitparser;
+    homepage = "https://github.com/gastlygem/junitparser";
     maintainers = with maintainers; [ multun ];
   };
 }

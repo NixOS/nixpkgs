@@ -40,6 +40,7 @@ in
     services.ntp = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in

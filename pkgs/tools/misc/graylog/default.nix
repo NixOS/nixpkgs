@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "graylog";
-  version = "3.2.2";
+  version = "3.2.4";
 
   src = fetchurl {
     url = "https://packages.graylog2.org/releases/graylog/graylog-${version}.tgz";
-    sha256 = "1n9nwxq0aklihhp0v39klq4za63ks6v5z76dp5821jcv1cbk96g9";
+    sha256 = "0m3g68ycb0yvdpiyd6qysgz0ygz9s0kb98g79cdx9rqpb7x0rmd0";
   };
 
   dontBuild = true;

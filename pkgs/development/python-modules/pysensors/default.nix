@@ -25,7 +25,7 @@ buildPythonPackage {
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ guibou ];
     description = "Easy hardware health monitoring in Python for Linux systems";
-    homepage = https://pysensors.readthedocs.org;
+    homepage = "https://pysensors.readthedocs.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

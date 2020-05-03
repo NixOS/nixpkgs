@@ -24,8 +24,7 @@
   </para>
 
   <para>
-   The NixOS manual is available on virtual console 8 (press Alt+F8 to access)
-   or by running <command>nixos-help</command>.
+   The NixOS manual is available by running <command>nixos-help</command>.
   </para>
 
   <para>
@@ -40,6 +39,11 @@
    terminal, you can use <command>loadkeys</command> to switch to your
    preferred keyboard layout. (We even provide neo2 via <command>loadkeys de
    neo</command>!)
+  </para>
+
+  <para>
+   If the text is too small to be legible, try <command>setfont ter-132n</command>
+   to increase the font size.
   </para>
 
   <section xml:id="sec-installation-booting-networking">

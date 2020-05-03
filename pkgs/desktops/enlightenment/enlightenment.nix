@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Compositing Window Manager and Desktop Shell";
-    homepage = https://www.enlightenment.org;
+    homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Simple ncurses UI for connman";
-    homepage = https://github.com/eurogiciel-oss/connman-json-client;
+    homepage = "https://github.com/eurogiciel-oss/connman-json-client";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

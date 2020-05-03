@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     inherit rev;
-    url = https://github.com/wolf9466/cpuminer-multi.git;
+    url = "https://github.com/wolf9466/cpuminer-multi.git";
     sha256 = "11dg4rra4dgfb9x6q85irn0hrkx2lkwyrdpgdh10pag09s3vhy4v";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Multi-algo CPUMiner";
-    homepage = https://github.com/wolf9466/cpuminer-multi;
+    homepage = "https://github.com/wolf9466/cpuminer-multi";
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
     # does not build on i686 https://github.com/lucasjones/cpuminer-multi/issues/27

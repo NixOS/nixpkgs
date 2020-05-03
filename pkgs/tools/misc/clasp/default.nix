@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Answer set solver for (extended) normal and disjunctive logic programs";
-    homepage = http://potassco.sourceforge.net/;
+    homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;
     maintainers = [ maintainers.hakuch ];
     license = licenses.gpl2Plus;

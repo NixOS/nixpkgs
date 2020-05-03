@@ -65,6 +65,7 @@ rec {
           freebsd = "FreeBSD";
           openbsd = "OpenBSD";
           wasi = "Wasi";
+          genode = "Genode";
         }.${final.parsed.kernel.name} or null;
 
          # uname -p

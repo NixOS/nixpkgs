@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-tui";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "Rigellute";
     repo = "spotify-tui";
     rev = "v${version}";
-    sha256 = "0fmj25zjg12v0kyanic343lrdhxkh290v88qiz6ac47g8bdy3c83";
+    sha256 = "15icg332iyacdn4ydr4nivblayg4xkcnjh4f0sjnhj4q173v8fq2";
   };
 
-  cargoSha256 = "1n8aacy0hapjm10hmgqm07rb5c0ngmzr1s116pspsl7cdszza6xi";
+  cargoSha256 = "0rw8pj74k88rvcr18837g356lwsn2vdq384yma9df462xd2cw823";
 
   nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optionals stdenv.isLinux [ python3 ];
   buildInputs = [ openssl ]
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Spotify for the terminal written in Rust";
-    homepage = https://github.com/Rigellute/spotify-tui;
+    homepage = "https://github.com/Rigellute/spotify-tui";
     changelog = "https://github.com/Rigellute/spotify-tui/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jwijenbergh ];

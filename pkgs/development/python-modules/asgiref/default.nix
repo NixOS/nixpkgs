@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, async-timeout, pytest, pytest-asyncio }:
 buildPythonPackage rec {
-  version = "3.2.3";
+  version = "3.2.7";
   pname = "asgiref";
 
   disabled = pythonOlder "3.5";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "1b8h50wvvby9m17q39kc0ql8a2yvg2f89ii7zrl2phaw0vb9i109";
+    sha256 = "1qf29blzhh6sljaj1adc0p8cnyxh9ar6hky9ccdfbgmrk4rw5kwc";
   };
 
   propagatedBuildInputs = [ async-timeout ];
@@ -24,6 +24,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Reference ASGI adapters and channel layers";
     license = licenses.bsd3;
-    homepage = https://github.com/django/asgiref;
+    homepage = "https://github.com/django/asgiref";
   };
 }

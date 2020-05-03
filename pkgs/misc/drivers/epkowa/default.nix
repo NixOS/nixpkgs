@@ -3,7 +3,7 @@ pkgconfig, libtool,
 gtk2,
 libxml2,
 libxslt,
-libusb,
+libusb-compat-0_1,
 sane-backends,
 rpm, cpio,
 getopt,
@@ -153,6 +153,39 @@ let plugins = {
 
     meta = common_meta // { description = "iscan esci s80 plugin for "+passthru.hw; };
   };
+  s650 = stdenv.mkDerivation rec {
+    name = "iscan-gt-s650-bundle";
+    version = "2.30.4";
+
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-s650/rpm/x64/iscan-gt-s650-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "1ffddf488c5fc1eb39452499951bd13a2dc1971980c0551176076c81af363038";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-s650-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+      '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x013c "$plugin/lib/esci/libiscan-plugin-gt-s650 $plugin/share/esci/esfw010c.bin"
+        $registry --add interpreter usb 0x04b8 0x013d "$plugin/lib/esci/libiscan-plugin-gt-s650 $plugin/share/esci/esfw010c.bin"
+        '';
+      hw = "GT-S650, Perfection V19, Perfection V39";
+    };
+    meta = common_meta // { description = "iscan GT-S650 for "+passthru.hw; };
+  };
   network = stdenv.mkDerivation rec {
     pname = "iscan-nt-bundle";
     # for the version, look for the driver of XP-750 in the search page
@@ -230,7 +263,7 @@ stdenv.mkDerivation rec {
     gtk2
     libxml2
     libtool
-    libusb
+    libusb-compat-0_1
     sane-backends
     makeWrapper
   ];
@@ -244,6 +277,7 @@ stdenv.mkDerivation rec {
       sha256 = "04y70qjd220dpyh771fiq50lha16pms98mfigwjczdfmx6kpj1jd";
     })
     ./firmware_location.patch
+    ./sscanf.patch
     ];
   patchFlags = [ "-p0" ];
 
@@ -277,6 +311,6 @@ stdenv.mkDerivation rec {
       Supported hardware: at least :
     '' +
     stdenv.lib.concatStringsSep ", " (stdenv.lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
-    maintainers = with stdenv.lib.maintainers; [ symphorien ];
+    maintainers = with stdenv.lib.maintainers; [ symphorien dominikh ];
   };
 }

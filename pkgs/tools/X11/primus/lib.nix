@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Low-overhead client-side GPU offloading";
-    homepage = https://github.com/amonakov/primus;
+    homepage = "https://github.com/amonakov/primus";
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.bsd2;
     maintainers = with maintainers; [ abbradar ];

@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Split flac/ape/wv/wav + cue sheet into separate tracks";
-    homepage = https://github.com/ftrvxmtrx/split2flac;
+    homepage = "https://github.com/ftrvxmtrx/split2flac";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];

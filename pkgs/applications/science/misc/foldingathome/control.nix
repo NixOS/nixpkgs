@@ -1,13 +1,14 @@
 { stdenv
 , autoPatchelfHook
 , dpkg
+, fahviewer
 , fetchurl
 , makeWrapper
 , python2
 }:
 let
   majMin = stdenv.lib.versions.majorMinor version;
-  version = "7.5.1";
+  version = "7.6.9";
 
   python = python2.withPackages
     (
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.foldingathome.org/releases/public/release/fahcontrol/debian-stable-64bit/v${majMin}/fahcontrol_${version}-1_all.deb";
-    hash = "sha256-ydN4I6vmZpI9kD+/TXxgWc+AQqIIlUvABEycWmY1tNg=";
+    sha256 = "1fh7ybbp3qlqzh18c4gva3aaymv7d31mqchrv235a1axldha1s9s";
   };
 
   nativeBuildInputs = [
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ python ];
+  buildInputs = [ fahviewer python ];
 
   doBuild = false;
 
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     sed -e 's|/usr/bin|$out/bin|g' -i $out/share/applications/FAHControl.desktop
     wrapProgram "$out/bin/FAHControl" \
+      --suffix PATH : "${fahviewer.outPath}/bin" \
       --set PYTHONPATH "$out/lib/python2.7/dist-packages"
   '';
 

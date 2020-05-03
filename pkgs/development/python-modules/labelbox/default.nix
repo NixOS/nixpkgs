@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;   
 
   meta = with lib; {
-    homepage = https://github.com/Labelbox/Labelbox;
+    homepage = "https://github.com/Labelbox/Labelbox";
     description = "Platform API for LabelBox";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];

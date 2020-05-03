@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, boost, bzip2, fftw, fftwFloat, libfishsound
-, libid3tag, liblo, liblrdf, libmad, liboggz, libpulseaudio, libsamplerate
-, libsndfile, opusfile, portaudio, rubberband, serd, sord, vampSDK, capnproto
+, libid3tag, liblo, libmad, liboggz, libpulseaudio, libsamplerate
+, libsndfile, lrdf, opusfile, portaudio, rubberband, serd, sord, capnproto
 , wrapQtAppsHook, pkgconfig
 }:
 
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ alsaLib boost bzip2 fftw fftwFloat libfishsound libid3tag liblo liblrdf
-      libmad liboggz libpulseaudio libsamplerate libsndfile opusfile pkgconfig
+    [ alsaLib boost bzip2 fftw fftwFloat libfishsound libid3tag liblo
+      libmad liboggz libpulseaudio libsamplerate libsndfile lrdf opusfile
       portaudio rubberband serd sord capnproto
     ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Comparative visualisation of related audio recordings";
-    homepage = https://www.sonicvisualiser.org/sonic-lineup/;
+    homepage = "https://www.sonicvisualiser.org/sonic-lineup/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.vandenoever ];
     platforms = platforms.linux;

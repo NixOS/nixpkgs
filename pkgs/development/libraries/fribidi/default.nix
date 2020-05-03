@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ python3 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/fribidi/fribidi;
+    homepage = "https://github.com/fribidi/fribidi";
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
     license = licenses.lgpl21;
     platforms = platforms.unix;

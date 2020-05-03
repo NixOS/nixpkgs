@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       x11spice will enable a running X11 desktop to be available
       via a Spice server
     '';
-    homepage = https://gitlab.freedesktop.org/spice/x11spice;
+    homepage = "https://gitlab.freedesktop.org/spice/x11spice";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];

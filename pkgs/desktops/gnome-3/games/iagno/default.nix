@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iagno";
-  version = "3.34.5";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05qywjcar29vk29yvbxwlddxhwlrvllgjw7srmlz5811hc5m0a1m";
+    sha256 = "0ysb021mf5sy1ywicys35rn5c9v355rffjrlhxmr3z6yplrljm5b";
   };
 
   nativeBuildInputs = [
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Iagno;
+    homepage = "https://wiki.gnome.org/Apps/Iagno";
     description = "Computer version of the game Reversi, more popularly called Othello";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

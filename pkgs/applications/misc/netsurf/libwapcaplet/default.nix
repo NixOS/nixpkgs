@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
   meta = with stdenv.lib; {
-    homepage = http://www.netsurf-browser.org/;
+    homepage = "http://www.netsurf-browser.org/";
     description = "String internment library for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

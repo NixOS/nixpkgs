@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "C API for TensorFlow";
-    homepage = https://www.tensorflow.org/install/lang_c;
+    homepage = "https://www.tensorflow.org/install/lang_c";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ basvandijk ];

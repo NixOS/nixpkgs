@@ -1,0 +1,29 @@
+The "%as" verb requests sscanf to allocate a buffer for us. However,
+this use of 'a' has been long deprecated, and gcc doesn't support it
+in this manner when using -std=c99. The modern replacement is "%ms".
+
+Without this change, iscan couldn't read the interpreter file, in turn
+breaking all scanners that require plugins.
+--- backend/cfg-obj.c.orig	2020-03-19 01:27:17.254762077 +0100
++++ backend/cfg-obj.c	2020-03-19 02:01:52.293329873 +0100
+@@ -1026,7 +1026,7 @@
+       char *vendor = NULL;
+       char *model  = NULL;
+ 
+-      sscanf (string, "%*s %as %as", &vendor, &model);
++      sscanf (string, "%*s %ms %ms", &vendor, &model);
+ 
+       if (list_append (_cfg->seen[CFG_KEY_SCSI], info))
+         {
+@@ -1108,10 +1112,10 @@
+       char *library  = NULL;
+       char *firmware = NULL;
+ 
+-      sscanf (string, "%*s %*s %x %x %as %as",
++      sscanf (string, "%*s %*s %x %x %ms %ms",
+               &vendor, &product, &library, &firmware);
+ 
+       if (library && _cfg_have_interpreter (library, firmware)
+           && list_append (_cfg->seen[CFG_KEY_INTERPRETER], info))
+         {
+ 

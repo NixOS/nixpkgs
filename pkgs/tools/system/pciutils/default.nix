@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm $out/sbin/update-pciids $out/man/man8/update-pciids.8";
 
   meta = with stdenv.lib; {
-    homepage = http://mj.ucw.cz/pciutils.html;
+    homepage = "http://mj.ucw.cz/pciutils.html";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

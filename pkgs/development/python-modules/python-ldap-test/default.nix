@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tool for testing code speaking with LDAP server";
-    homepage = https://github.com/zoldar/python-ldap-test;
+    homepage = "https://github.com/zoldar/python-ldap-test";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

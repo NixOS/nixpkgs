@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, libxfce4ui,
-  libxfce4util, xfce4-panel, libnotify, lm_sensors, hddtemp, netcat-gnu
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxfce4ui,
+  libxfce4util, xfce4-panel, libnotify, lm_sensors, hddtemp, netcat-gnu, xfce
 }:
 
+let
+  category = "panel-plugins";
+in
+
 stdenv.mkDerivation rec {
-  name = "${pname}-${ver_maj}.${ver_min}";
   pname  = "xfce4-sensors-plugin";
-  ver_maj = "1.2";
-  ver_min = "6";
+  version = "1.3.92";
 
   src = fetchurl {
-    url = "mirror://xfce/src/panel-plugins/${pname}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "1h0vpqxcziml3gwrbvd8xvy1mwh9mf2a68dvxsy03rs5pm1ghpi3";
+    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "04jibw23ibi61f19gc9xy400yhcdiya4px6zp8c7fjq65hyn9iix";
   };
 
   nativeBuildInputs = [
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2
+    gtk3
     libxfce4ui
     libxfce4util
     xfce4-panel
@@ -35,12 +37,18 @@ stdenv.mkDerivation rec {
     "--with-pathhddtemp=${hddtemp}/bin/hddtemp"
     "--with-pathnetcat=${netcat-gnu}/bin/netcat"
   ];
+  
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.archiveLister category pname;
+  };
 
-  meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${pname}";
+  meta = with stdenv.lib; {
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-sensors-plugin";
     description = "A panel plug-in for different sensors using acpi, lm_sensors and hddtemp";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

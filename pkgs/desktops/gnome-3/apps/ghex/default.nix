@@ -75,10 +75,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Ghex;
+    homepage = "https://wiki.gnome.org/Apps/Ghex";
     description = "Hex editor for GNOME desktop environment";
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

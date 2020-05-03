@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ arrow jinja2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/hackebrot/jinja2-time;
+    homepage = "https://github.com/hackebrot/jinja2-time";
     description = "Jinja2 Extension for Dates and Times";
     license = licenses.mit;
   };
