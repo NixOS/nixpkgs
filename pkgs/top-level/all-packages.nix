@@ -24977,6 +24977,8 @@ in
 
   fped = callPackage ../applications/science/electronics/fped { };
 
+  horizon-eda = callPackage ../applications/science/electronics/horizon-eda {};
+
   # this is a wrapper for kicad.base and kicad.libraries
   kicad = callPackage ../applications/science/electronics/kicad { };
   kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
