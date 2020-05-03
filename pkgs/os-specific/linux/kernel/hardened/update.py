@@ -52,14 +52,18 @@ MIN_KERNEL_VERSION: Version = [4, 14]
 def run(*args: Union[str, Path]) -> subprocess.CompletedProcess[bytes]:
     try:
         return subprocess.run(
-            args, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            args,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            encoding="utf-8",
         )
     except subprocess.CalledProcessError as err:
         print(
             f"error: `{err.cmd}` failed unexpectedly\n"
             f"status code: {err.returncode}\n"
-            f'stdout:\n{err.stdout.decode("utf-8").strip()}\n'
-            f'stderr:\n{err.stderr.decode("utf-8").strip()}',
+            f"stdout:\n{err.stdout.strip()}\n"
+            f"stderr:\n{err.stderr.strip()}",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -67,7 +71,7 @@ def run(*args: Union[str, Path]) -> subprocess.CompletedProcess[bytes]:
 
 def nix_prefetch_url(url: str) -> Tuple[str, Path]:
     output = run("nix-prefetch-url", "--print-path", url).stdout
-    sha256, path = output.decode("utf-8").strip().split("\n")
+    sha256, path = output.strip().split("\n")
     return sha256, Path(path)
 
 
@@ -83,6 +87,7 @@ def verify_openpgp_signature(
                 ("gpgv", "--keyring", keyring, sig_path, data_path),
                 check=True,
                 stderr=subprocess.PIPE,
+                encoding="utf-8",
             )
             return True
         except subprocess.CalledProcessError as err:
@@ -90,7 +95,7 @@ def verify_openpgp_signature(
                 f"error: signature for {name} failed to verify!",
                 file=sys.stderr,
             )
-            print(err.stderr.decode("utf-8"), file=sys.stderr, end="")
+            print(err.stderr, file=sys.stderr, end="")
             return False
 
 
@@ -182,7 +187,7 @@ for filename in os.listdir(NIXPKGS_KERNEL_PATH):
         kernel_version = parse_version(
             run(
                 "nix", "eval", "--impure", "--raw", "--expr", nix_version_expr,
-            ).stdout.decode("utf-8")
+            ).stdout
         )
         if kernel_version < MIN_KERNEL_VERSION:
             continue
