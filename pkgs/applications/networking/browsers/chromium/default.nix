@@ -1,5 +1,5 @@
 { newScope, config, stdenv, llvmPackages_9, llvmPackages_10
-, makeWrapper, ed
+, makeWrapper, ed, gnugrep
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
 , gcc, nspr, nss, patchelfUnstable, runCommand
@@ -183,7 +183,7 @@ in stdenv.mkDerivation {
   '' + ''
 
     # libredirect causes chromium to deadlock on startup
-    export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
+    export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | ${gnugrep}/bin/grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
 
     export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
 
