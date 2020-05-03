@@ -9,6 +9,6 @@ symlinkJoin {
 
   postBuild = ''
     wrapProgram $out/bin/mpv \
-      --add-flags "${stdenv.lib.concatMapStringsSep " " (x: "--script=" + x) scripts}"
+      --add-flags "${stdenv.lib.concatMapStringsSep " " (x: "--script=${x}/share/mpv/scripts/${x.scriptName}") scripts}"
   '';
 }
