@@ -6640,6 +6640,12 @@
     githubId = 1942810;
     name = "Christian Ulrich";
   };
+  rpearce = {
+    email = "me@robertwpearce.com";
+    github = "rpearce";
+    githubId = 592876;
+    name = "Robert W. Pearce";
+  };
   rprospero = {
     email = "rprospero+nix@gmail.com";
     github = "rprospero";
