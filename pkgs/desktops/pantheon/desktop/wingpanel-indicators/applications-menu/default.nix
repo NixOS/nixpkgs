@@ -22,11 +22,12 @@
 , wingpanel
 , zeitgeist
 , bc
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.6.0";
+  version = "2.7.0";
 
   repoName = "applications-menu";
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "16ki1x6697jmfqajynx2zvwqrpjpshnd08y7vf6g7xc7zwwh38c5";
+    sha256 = "0p6zldrd8wl907kzgjaxlxb7zm825c8j8sjxdw7grrsq1y3ibl5l";
   };
 
   passthru = {
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libunity
     plank
