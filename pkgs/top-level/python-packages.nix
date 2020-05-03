@@ -78,7 +78,6 @@ let
       # Use passthru in order to prevent rebuilds when possible.
       passthru = (oldAttrs.passthru or {})// {
         pythonModule = python;
-        inherit python;
         pythonPath = [ ]; # Deprecated, for compatibility.
         requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
       };
@@ -93,7 +92,6 @@ let
         # used by `nix-env`.
         name = removePythonPrefix oldAttrs.name;
         pythonModule = false;
-        inherit python;
       };
     });
 
