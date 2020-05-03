@@ -7,6 +7,10 @@
 # files.
 self: super: {
 
+  # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
+  # from the latest master instead of the current version on Hackage.
+  cabal2nix-latest = self.callPackage ./cabal2nix-latest.nix { };
+
   multi-ghc-travis = throw ("haskellPackages.multi-ghc-travis has been renamed"
     + " to haskell-ci, which is now on hackage");
 
