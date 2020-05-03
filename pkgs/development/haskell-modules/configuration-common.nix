@@ -1488,4 +1488,16 @@ self: super: {
     selective = self.selective_0_4_1;
   };
 
+  # Needed for ghcide
+  haskell-lsp_0_19_0_0 = super.haskell-lsp_0_19_0_0.override {
+    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
+  };
+
+  # this will probably need to get updated with every ghcide update,
+  # we need an override because ghcide is tracking haskell-lsp closely.
+  ghcide = dontCheck (super.ghcide.override rec {
+    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
+    haskell-lsp = self.haskell-lsp_0_19_0_0;
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
