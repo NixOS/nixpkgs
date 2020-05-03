@@ -7,11 +7,13 @@
 , urllib3
 , tornado
 , pytest
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
   version = "12.7";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +23,11 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ certifi future urllib3 tornado decorator ];
 
-  pipInstallFlags = "--install-option '--with-upstream-urllib3'";
+  # --with-upstream-urllib3 is not working properly
+  postPatch = ''
+    rm -rf telegram/vendor
+  '';
+  setupPyGlobalFlags = "--with-upstream-urllib3";
 
   # tests not included with release
   doCheck = false;
