@@ -5,13 +5,13 @@
 
 let
   pname = "polari";
-  version = "3.36.1";
+  version = "3.36.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1rmmq74g22qrmsg0mjvpzk5403kkpfw0iznvnwxfqbi0dfkamhn4";
+    sha256 = "12i0gp2kwp0b7af135q32qygkhh2025f74dqbaylfbmzacbdpz5c";
   };
 
   patches = [
