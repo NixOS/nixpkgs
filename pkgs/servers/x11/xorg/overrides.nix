@@ -625,6 +625,7 @@ self: super:
       if (!isDarwin)
       then {
         outputs = [ "out" "dev" ];
+        patches = [ ./dont-create-logdir.patch ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
