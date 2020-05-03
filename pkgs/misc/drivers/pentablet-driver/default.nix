@@ -1,6 +1,6 @@
 { stdenv, fetchzip, autoPatchelfHook, libusb1, libX11, libXtst, qtbase, wrapQtAppsHook, libglvnd }:
 stdenv.mkDerivation rec {
-  pname = "xp-pen-G430";
+  pname = "pentablet-driver";
   version = "20190820";
 
   src = fetchzip {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "https://www.xp-pen.com/download-46.html";
-    description = "Driver for the XP-PEN G430 drawing tablet";
+    description = "Driver for XP-PEN Pentablet drawing tablets";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ivar ];
