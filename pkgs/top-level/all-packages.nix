@@ -19211,6 +19211,8 @@ in
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
+  gspeech = callPackage ../applications/audio/gspeech { };
+
   icesl = callPackage ../applications/misc/icesl { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
