@@ -17,6 +17,7 @@ let
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
       (mkOverride "flask"       "0.12.5" "fac2b9d443e49f7e7358a444a3db5950bdd0324674d92ba67f8f1f15f876b14f")
+      (mkOverride "flaskbabel"  "0.12.2" "11jwp8vvq1gnm31qh6ihy2h393hy18yn9yjp569g60r0wj1x2sii")
       (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
       (mkOverride "psutil"      "5.6.7"  "ffad8eb2ac614518bbe3c0b8eb9dffdb3a8d2e3a7d5da51c5b974fb723a5c5aa")
 
@@ -50,7 +51,7 @@ let
             owner  = "foosel";
             repo   = "OctoPrint";
             rev    = version;
-            sha256 = "1zla1ayr62lkvkr828dh3y287rzj3rv1hpij9kws44ynn4i582ga";
+            sha256 = "0387228544v28d69dcdg2zr5gp6qavkfr6dydpjgj5awxv3w25d5";
           };
 
           propagatedBuildInputs = with super; [
