@@ -90,6 +90,8 @@ let
             "test_set_external_modification"
           ];
 
+          passthru.python = self.python;
+
           meta = with stdenv.lib; {
             homepage = "https://octoprint.org/";
             description = "The snappy web interface for your 3D printer";
