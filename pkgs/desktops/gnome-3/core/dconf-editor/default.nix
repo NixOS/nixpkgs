@@ -3,13 +3,13 @@
 
 let
   pname = "dconf-editor";
-  version = "3.36.0";
+  version = "3.36.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "14q678bwgmhzmi7565xhhw51y8b0pv3cqh0f411qwzwif1bd1vkj";
+    sha256 = "1iz1ngb26llhqnm2s4p55ysvnav41iv0fx0pbw98k181gy3cikpd";
   };
 
   nativeBuildInputs = [
