@@ -1,5 +1,5 @@
 { buildPythonApplication, lib, fetchFromGitHub, fetchpatch
-, wrapGAppsHook, gobject-introspection, glib-networking, gnome-desktop, libnotify, libgnome-keyring, pango
+, wrapGAppsHook, gtk3, glib, gobject-introspection, glib-networking, gnome-desktop, libnotify, libgnome-keyring, pango
 , gdk-pixbuf, atk, webkitgtk, gst_all_1
 , dbus-python, evdev, pyyaml, pygobject3, requests, pillow
 , xrandr, pciutils, psmisc, glxinfo, vulkan-tools, xboxdrv, pulseaudio, p7zip, xgamma
@@ -42,9 +42,12 @@ in buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = [
+    gtk3 glib
     gobject-introspection glib-networking gnome-desktop libnotify libgnome-keyring pango
     gdk-pixbuf atk webkitgtk
   ] ++ gstDeps;
+  # Needed for gtk and glib to run their setup hooks https://nixos.org/nixpkgs/manual/#sec-language-gnome
+  strictDeps = false;
 
   makeWrapperArgs = [
     "--prefix PATH : ${binPath}"
