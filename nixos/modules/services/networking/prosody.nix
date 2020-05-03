@@ -382,6 +382,11 @@ let
         default = "en";
         description = "Default room language.";
       };
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Additional MUC specific configuration";
+      };
     };
   };
 
@@ -792,6 +797,8 @@ in
 
       https_ports = ${toLua cfg.httpsPorts}
 
+      ${ cfg.extraConfig }
+
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
             modules_enabled = { "muc_mam"; ${optionalString muc.vcard_muc ''"vcard_muc";'' } }
@@ -809,8 +816,8 @@ in
             muc_room_default_change_subject = ${toLua muc.roomDefaultChangeSubject}
             muc_room_default_history_length = ${toLua muc.roomDefaultHistoryLength}
             muc_room_default_language = ${toLua muc.roomDefaultLanguage}
-
-          '') cfg.muc}
+            ${ muc.extraConfig }
+        '') cfg.muc}
 
       ${ lib.optionalString (cfg.uploadHttp != null) ''
         Component ${toLua cfg.uploadHttp.domain} "http_upload"
@@ -819,8 +826,6 @@ in
             ${lib.optionalString (cfg.uploadHttp.userQuota != null) "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"}
             http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
       ''}
-
-      ${ cfg.extraConfig }
 
       ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
         VirtualHost "${v.domain}"
