@@ -2301,6 +2301,8 @@ in
 
   bareos = callPackage ../tools/backup/bareos { };
 
+  bashtop = callPackage ../tools/system/bashtop { };
+
   bats = callPackage ../development/interpreters/bats { };
 
   bbe = callPackage ../tools/misc/bbe { };
