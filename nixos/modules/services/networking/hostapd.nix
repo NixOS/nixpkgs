@@ -164,6 +164,8 @@ in
 
     environment.systemPackages =  [ pkgs.hostapd ];
 
+    services.udev.packages = [ pkgs.crda ];
+
     systemd.services.hostapd =
       { description = "hostapd wireless AP";
 
