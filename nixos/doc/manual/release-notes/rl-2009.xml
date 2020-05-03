@@ -311,6 +311,15 @@ php.override {
      <manvolnum>5</manvolnum></citerefentry> for details.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      In the <literal>picom</literal> module, several options that accepted
+      floating point numbers encoded as strings (for example
+      <xref linkend="opt-services.picom.activeOpacity"/>) have been changed
+      to the (relatively) new native <literal>float</literal> type. To migrate
+      your configuration simply remove the quotes around the numbers.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
