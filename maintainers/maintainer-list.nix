@@ -4084,6 +4084,12 @@
     githubId = 6346418;
     name = "Kolby Crouch";
   };
+  kolloch = {
+    email = "info@eigenvalue.net";
+    github = "kolloch";
+    githubId = 339354;
+    name = "Peter Kolloch";
+  };
   konimex = {
     email = "herdiansyah@netc.eu";
     github = "konimex";
