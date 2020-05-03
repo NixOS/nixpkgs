@@ -5,13 +5,13 @@
 
 let
   pname = "gnome-maps";
-  version = "3.36.1";
+  version = "3.36.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1yajq2pxd4fbzngwhn92h55rn02psxih8bbdcdxgg66qdbcyychs";
+    sha256 = "114pia3nd8k7j6ll7za7qzv0ggcdvcw6b3w4lppqqrwqvswik8jv";
   };
 
   doCheck = true;
