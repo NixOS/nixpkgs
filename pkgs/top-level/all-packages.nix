@@ -2058,6 +2058,8 @@ in
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
 
+  nix-direnv = callPackage ../tools/misc/nix-direnv { };
+
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
