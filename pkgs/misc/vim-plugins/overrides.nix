@@ -589,14 +589,15 @@ self: super: {
       asmfmt
       delve
       errcheck
+      go
       go-motion
       go-tools
       gocode
       gocode-gomod
       godef
       gogetdoc
-      golint
       golangci-lint
+      golint
       gomodifytags
       gopls
       gotags
@@ -606,6 +607,7 @@ self: super: {
       reftools
     ];
     in {
+    patches = (old.patches or []) ++ [./patches/vim-go/pure.patch];
     postPatch = ''
       ${gnused}/bin/sed \
         -Ee 's@"go_bin_path", ""@"go_bin_path", "${binPath}"@g' \

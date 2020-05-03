@@ -1,0 +1,114 @@
+From 8d6d023dadf55f2d340ce85c51834bff218920ae Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sat, 2 May 2020 21:09:48 -0700
+Subject: [PATCH 1/2] util/system: respect g:go_bin_path when calling system
+ commands
+
+Respect g:go_bin_path when calling commands through system()
+---
+ autoload/go/util.vim | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/autoload/go/util.vim b/autoload/go/util.vim
+index 05e0e1b..ef869d6 100644
+--- a/autoload/go/util.vim
++++ b/autoload/go/util.vim
+@@ -169,10 +169,25 @@ function! s:system(cmd, ...) abort
+     endif
+   endif
+ 
++  let l:old_path = $PATH
++
++  let l:go_bin_path = go#path#BinPath()
++  if !empty(l:go_bin_path)
++    " append our GOBIN and GOPATH paths and be sure they can be found there...
++    " let us search in our GOBIN and GOPATH paths
++    " respect the ordering specified by go_search_bin_path_first
++    if go#config#SearchBinPathFirst()
++      let $PATH = l:go_bin_path . go#util#PathListSep() . $PATH
++    else
++      let $PATH = $PATH . go#util#PathListSep() . l:go_bin_path
++    endif
++  endif
++
+   try
+     return call('system', [a:cmd] + a:000)
+   finally
+     " Restore original values
++    let $PATH = l:old_path
+     let &shell = l:shell
+     let &shellredir = l:shellredir
+     let &shellcmdflag = l:shellcmdflag
+-- 
+2.25.0
+
+
+From 1e3b7bb7e8b7e3d1c5271989ae8769f1826763aa Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sat, 2 May 2020 21:15:35 -0700
+Subject: [PATCH 2/2] job: respect g:go_bin_path when starting a job
+
+When starting a job, such as gopls, respect the g:go_bin_path setting.
+---
+ autoload/go/job.vim | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/autoload/go/job.vim b/autoload/go/job.vim
+index f0ee305..847b9ab 100644
+--- a/autoload/go/job.vim
++++ b/autoload/go/job.vim
+@@ -289,8 +289,19 @@ endfunction
+ " transformed to their Neovim equivalents.
+ function! go#job#Start(cmd, options)
+   let l:cd = exists('*haslocaldir') && haslocaldir() ? 'lcd' : 'cd'
++  let l:cmd = copy(a:cmd)
+   let l:options = copy(a:options)
+ 
++  let l:go_bin_path = go#path#BinPath()
++  if !empty(l:go_bin_path)
++    if go#config#SearchBinPathFirst()
++      let l:path = l:go_bin_path . go#util#PathListSep() . $PATH
++    else
++      let l:path = $PATH . go#util#PathListSep() . l:go_bin_path
++    endif
++    let l:cmd = extend(['env', 'PATH=' . l:path], l:cmd)
++  endif
++
+   if has('nvim')
+     let l:options = s:neooptions(l:options)
+   endif
+@@ -326,8 +337,9 @@ function! go#job#Start(cmd, options)
+     call remove(l:options, 'noblock')
+   endif
+ 
++
+   if go#util#HasDebug('shell-commands')
+-    call go#util#EchoInfo('job command: ' . string(a:cmd))
++    call go#util#EchoInfo('job command: ' . string(l:cmd))
+   endif
+ 
+   if has('nvim')
+@@ -336,7 +348,7 @@ function! go#job#Start(cmd, options)
+       let l:input = readfile(a:options.in_name, "b")
+     endif
+ 
+-    let job = jobstart(a:cmd, l:options)
++    let job = jobstart(l:cmd, l:options)
+ 
+     if len(l:input) > 0
+       call chansend(job, l:input)
+@@ -344,9 +356,9 @@ function! go#job#Start(cmd, options)
+       call chanclose(job, 'stdin')
+     endif
+   else
+-    let l:cmd = a:cmd
++    let l:cmd = l:cmd
+     if go#util#IsWin()
+-      let l:cmd = join(map(copy(a:cmd), function('s:winjobarg')), " ")
++      let l:cmd = join(map(copy(l:cmd), function('s:winjobarg')), " ")
+     endif
+ 
+     let job = job_start(l:cmd, l:options)
+-- 
+2.25.0
+
