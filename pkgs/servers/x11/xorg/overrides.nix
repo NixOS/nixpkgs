@@ -642,6 +642,7 @@ self: super:
           "--with-xkb-bin-directory=${self.xkbcomp}/bin"
           "--with-xkb-path=${self.xkeyboardconfig}/share/X11/xkb"
           "--with-xkb-output=$out/share/X11/xkb/compiled"
+          "--with-log-dir=/var/log"
           "--enable-glamor"
         ] ++ lib.optionals stdenv.hostPlatform.isMusl [
           "--disable-tls"
