@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   # tests not included with release
   doCheck = false;
+  pythonImportsCheck = [ "telegram" ];
 
   meta = with stdenv.lib; {
     description = "This library provides a pure Python interface for the Telegram Bot API.";
