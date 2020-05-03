@@ -688,4 +688,6 @@ self: super: builtins.intersectAttrs super {
   # checks SQL statements at compile time, and so requires a running PostgreSQL
   # database to run it's test suite
   postgresql-typed = dontCheck super.postgresql-typed;
+
+  hie-bios = dontCheck super.hie-bios;
 }
