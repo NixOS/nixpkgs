@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral${lib.optionalString withGui "-gui"}";
-  version = "0.6.3";
+  version = "0.6.4";
 
   disabled = python3.pkgs.pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SamSchott";
     repo = "maestral-dropbox";
     rev = "v${version}";
-    sha256 = "0h1vbx00mps2msdhsab1yz64c8sprwrg38nkqyj86mkb6jkirq92";
+    sha256 = "06psbjd205qj6vx7k7ywhclz1bs5zp43xnf275hf0k80h3b064sn";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
