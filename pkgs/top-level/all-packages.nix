@@ -24701,6 +24701,7 @@ in
     "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html");
 
   wayfire = callPackage ../applications/window-managers/wayfire { };
+  wcm = callPackage ../applications/window-managers/wayfire/wcm.nix { };
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
   wf-shell = callPackage ../applications/window-managers/wayfire/wf-shell.nix { };
 
