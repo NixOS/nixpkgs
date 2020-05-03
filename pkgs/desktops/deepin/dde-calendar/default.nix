@@ -45,7 +45,7 @@ mkDerivation rec {
       -e "s,/usr/bin/deepin-desktop-ts-convert,deepin-desktop-ts-convert,"
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Calendar for Deepin Desktop Environment";

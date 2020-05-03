@@ -53,7 +53,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version; src = (builtins.head srcs); };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugin for DDE";

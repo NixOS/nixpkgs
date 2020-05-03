@@ -37,7 +37,6 @@
 }:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "startdde";
   version = "5.0.1";
 
@@ -152,7 +151,7 @@ buildGoPackage rec {
   '';
 
   passthru = {
-    updateScript = deepin.updateScript { inherit name; };
+    updateScript = deepin.updateScript { inherit pname version src; };
     providedSessions = [ "deepin" ];
   };
 

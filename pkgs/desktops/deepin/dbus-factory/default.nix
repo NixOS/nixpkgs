@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's:/share/gocode:/share/go:' Makefile
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Generates static DBus bindings for Golang and QML at build-time";

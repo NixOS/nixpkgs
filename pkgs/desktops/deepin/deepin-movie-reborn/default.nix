@@ -73,7 +73,7 @@ mkDerivation rec {
       --replace "Exec=deepin-movie" "Exec=$out/bin/deepin-movie"
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin movie player";

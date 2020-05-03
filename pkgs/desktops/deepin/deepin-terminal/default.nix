@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     "-DVERSION=${version}"
   ];
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Default terminal emulator for Deepin";

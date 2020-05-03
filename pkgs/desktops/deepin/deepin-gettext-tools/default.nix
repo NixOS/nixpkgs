@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/deepin-desktop-ts-convert --set PERL5LIB $PERL5LIB
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin Internationalization utilities";

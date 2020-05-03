@@ -13,7 +13,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "deepin-editor";
   version = "1.2.9.1";
 
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Simple editor for Deepin Desktop Environment";
