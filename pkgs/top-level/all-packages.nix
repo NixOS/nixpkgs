@@ -2974,7 +2974,9 @@ in
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
-  drill = callPackage ../tools/networking/drill { };
+  drill = callPackage ../tools/networking/drill {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   drone = callPackage ../development/tools/continuous-integration/drone { };
 
