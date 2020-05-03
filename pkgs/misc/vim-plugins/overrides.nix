@@ -556,6 +556,10 @@ self: super: {
     dependencies = with super; [ vim-maktaba ];
   });
 
+  vim-beancount = super.vim-beancount.overrideAttrs(old: {
+    passthru.python3Dependencies = ps: with ps; [ beancount ];
+  });
+
   vim-codefmt = super.vim-codefmt.overrideAttrs(old: {
     dependencies = with super; [ vim-maktaba ];
   });
