@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     sha256 = "0j685w6pzkn926z5nf5r8fij4ziipvw4c9yb0wc577nzf4j16rbd";
   };
 
-  outputs = [ "out" ];
+  outputs = [ "out" "doc" ];
 
   hardeningDisable = [ "format" ];
 
@@ -234,7 +234,7 @@ stdenv.mkDerivation {
       '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-info \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html install-info \
          -C Documentation ''
 
    + (if guiSupport then ''
