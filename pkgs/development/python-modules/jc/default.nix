@@ -2,22 +2,22 @@
 , buildPythonPackage
 , fetchPypi
 , ruamel_yaml
-, ifconfig-parser
 , xmltodict
+, pygments
 , isPy27
 }:
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.9.3";
+  version = "1.10.7";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hg6h3ag4pbilpmqylnj7dflz7avk3w8ngmk6psfqrizizwx0hnj";
+    sha256 = "198vsnh6j0nv9d7msnvw6qr1bzf0nffjsz7clm11bs7fh3ri3qxp";
   };
 
-  propagatedBuildInputs = [ ruamel_yaml ifconfig-parser xmltodict ];
+  propagatedBuildInputs = [ ruamel_yaml xmltodict pygments ];
 
   meta = with stdenv.lib; {
     description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output.";
