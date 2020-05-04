@@ -24,9 +24,9 @@ let
 
     # logging (debug level)
     logger_syslog=-1
-    logger_syslog_level=2
+    logger_syslog_level=${toString cfg.logLevel}
     logger_stdout=-1
-    logger_stdout_level=2
+    logger_stdout_level=${toString cfg.logLevel}
 
     ctrl_interface=/run/hostapd
     ctrl_interface_group=${cfg.group}
@@ -142,6 +142,19 @@ in
           passphrase to associate with this access point.
           Warning: This passphrase will get put into a world-readable file in
           the Nix store!
+        '';
+      };
+
+      logLevel = mkOption {
+        default = 2;
+        type = types.int;
+        description = ''
+          Levels (minimum value for logged events):
+          0 = verbose debugging
+          1 = debugging
+          2 = informational messages
+          3 = notification
+          4 = warning
         '';
       };
 
