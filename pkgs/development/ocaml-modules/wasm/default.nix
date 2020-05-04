@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "WebAssembly";
     repo = "spec";
     rev = "v${version}";
-    sha256 = "0r0wj31s2yg4vn4hyw2afc8wp8b0k3q130yiypwq3dlvfxrr70n6";
+    sha256 = "1jsgrjqzsdmm6f5pgd947nikj7pnxx1mqdnz16j7s62rg8x06h7d";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];
