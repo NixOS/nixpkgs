@@ -2,13 +2,13 @@
 stdenv.mkDerivation {
   pname = "orca-c";
 
-  version = "git-2020-02-12";
+  version = "git-2020-05-01";
 
   src = fetchFromGitHub {
     owner = "hundredrabbits";
     repo = "Orca-c";
-    rev = "c6d981d35bb7b93b9b43e1920d45a71f00328dd3";
-    sha256 = "00hmjcadv4w0y4ixbys8c6w43lcma48arjhikjr55grz9krlvwqa";
+    rev = "d7a3b169c5ed0b06a9ad0fdb3057704da9a0b6ce";
+    sha256 = "101y617a295hzwr98ykvza1sycxlk29kzxn2ybjwc718r0alkbzz";
   };
 
   buildInputs = [ ncurses portmidi ];
