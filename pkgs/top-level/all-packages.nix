@@ -16937,6 +16937,8 @@ in
 
   urserver = callPackage ../servers/urserver { };
 
+  unifi-poller = callPackage ../servers/monitoring/unifi-poller { };
+
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
 
   virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
