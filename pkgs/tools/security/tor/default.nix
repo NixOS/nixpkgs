@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
+  # cross compiles correctly but needs the following
+  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    "--disable-tool-name-check";
+
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   postPatch = ''
