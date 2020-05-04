@@ -21114,6 +21114,8 @@ in
     inherit (pkgs) pkgconfig;
   };
 
+  orca-c = callPackage ../applications/audio/orca-c {};
+
   osm2xmap = callPackage ../applications/misc/osm2xmap {
     libyamlcpp = libyamlcpp_0_3;
   };
