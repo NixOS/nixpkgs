@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nlopt";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "stevengj";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1k6x14lgyfhfqpbs7xx8mrgklp8l6jkkcs39zgi2sj3kg6n0hdc9";
+    sha256 = "0maxvarvd4x0bg11qrb98zk9kw55qi474p8javfrkrbmc3xl31y6";
   };
 
   nativeBuildInputs = [ cmake ];
