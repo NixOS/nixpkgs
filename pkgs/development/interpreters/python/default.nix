@@ -23,8 +23,6 @@ with pkgs;
       };
     in rec {
         isPy27 = pythonVersion == "2.7";
-        isPy33 = pythonVersion == "3.3"; # TODO: remove
-        isPy34 = pythonVersion == "3.4"; # TODO: remove
         isPy35 = pythonVersion == "3.5";
         isPy36 = pythonVersion == "3.6";
         isPy37 = pythonVersion == "3.7";
