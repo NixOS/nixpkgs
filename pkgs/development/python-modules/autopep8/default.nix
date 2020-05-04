@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1swr8ccm3mafcm3zpbwyn22kjs39lbqmg8w41sh7yb3gskgy2syc";
+    sha256 = "0m29ndgrcgrzi3y1fsxmdl421x6n4gn02l70hsz8486h8zzdhbqm";
   };
 
   propagatedBuildInputs = [ pycodestyle ];
