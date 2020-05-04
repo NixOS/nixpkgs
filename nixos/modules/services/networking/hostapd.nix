@@ -20,6 +20,7 @@ let
     ssid=${cfg.ssid}
     hw_mode=${cfg.hwMode}
     channel=${toString cfg.channel}
+    ${optionalString (cfg.countryCode != null) ''country_code=${cfg.countryCode}''}
 
     # logging (debug level)
     logger_syslog=-1
@@ -144,6 +145,19 @@ in
         '';
       };
 
+      countryCode = mkOption {
+        default = null;
+        example = "US";
+        type = with types; nullOr str;
+        description = ''
+          Country code (ISO/IEC 3166-1). Used to set regulatory domain.
+          Set as needed to indicate country in which device is operating.
+          This can limit available channels and transmit power.
+          These two octets are used as the first two octets of the Country String
+          (dot11CountryString)
+        '';
+      };
+
       extraConfig = mkOption {
         default = "";
         example = ''
@@ -164,7 +178,7 @@ in
 
     environment.systemPackages =  [ pkgs.hostapd ];
 
-    services.udev.packages = [ pkgs.crda ];
+    services.udev.packages = optional (cfg.countryCode != null) [ pkgs.crda ];
 
     systemd.services.hostapd =
       { description = "hostapd wireless AP";
