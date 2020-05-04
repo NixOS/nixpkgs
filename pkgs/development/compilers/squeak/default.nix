@@ -1,33 +1,54 @@
-{ stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
-, libpthreadstubs, pango, pkgconfig, libpulseaudio, which }:
+{ stdenv, fetchFromGitHub, lib, alsaLib, autoconf, automake, bash, clang, coreutils
+, freetype, git, glib, libpulseaudio, libtool, libuuid, makeWrapper, openssl
+, pango, perl, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "squeak";
-  version = "4.10.2.2614";
+  version = "202003021730";
 
-  src = fetchurl {
+  src = fetchFromGitHub {
+    owner="OpenSmalltalk";
+    repo="opensmalltalk-vm";
+    rev="${version}";
     sha256 = "0bpwbnpy2sb4gylchfx50sha70z36bwgdxraym4vrr93l8pd3dix";
-    url = "http://squeakvm.org/unix/release/Squeak-${version}-src.tar.gz";
   };
 
-  buildInputs = [ coreutils dbus freetype glib gnused libpthreadstubs
-    pango libpulseaudio which ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [
+    alsaLib
+    autoconf
+    automake
+    bash
+    clang
+    coreutils
+    freetype
+    git
+    glib
+    libpulseaudio
+    libtool
+    makeWrapper
+    openssl
+    pango
+    perl
+  ];
 
-  postPatch = ''
-    for i in squeak.in squeak.sh.in; do
-      substituteInPlace unix/cmake/$i --replace "PATH=" \
-        "PATH=${stdenv.lib.makeBinPath [ coreutils gnused which ]} #"
-    done
+  ldLibraryPath = stdenv.lib.makeLibraryPath  [
+    libuuid
+    xorg.libX11
+  ];
+
+  buildPhase = ''
+   find . -type f -exec sed -i -e 's/\/usr\/bin\/env/${lib.escape ["/"] coreutils.outPath}\/bin\/env/g' {} \;
+   ./scripts/updateSCCSVersions
+   cd build.linux64x64/squeak.cog.spur/build.debug
+   printf "\n" | ./mvm
+   make
   '';
 
-  configurePhase = ''
-    unix/cmake/configure --prefix=$out --enable-mpg-{mmx,pthreads}
+  installPhase = ''
+    mkdir -p $out/bin
+    cp -a . $out/bin
+    wrapProgram "$out/bin/squeak" --prefix LD_LIBRARY_PATH ${ldLibraryPath}
   '';
-
-  enableParallelBuilding = true;
-
-  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "Smalltalk programming language and environment";
