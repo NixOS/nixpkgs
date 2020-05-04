@@ -19,6 +19,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.all;
-    broken = true;
   };
 }
