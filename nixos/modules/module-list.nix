@@ -553,6 +553,7 @@
   ./services/monitoring/telegraf.nix
   ./services/monitoring/thanos.nix
   ./services/monitoring/tuptime.nix
+  ./services/monitoring/unifi-poller.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/vnstat.nix
