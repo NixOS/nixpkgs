@@ -47,6 +47,11 @@ let
         # will be included in zfs 0.5.4 as well
         url = "https://gist.githubusercontent.com/satmandu/67cbae9c4d461be0e64428a1707aef1c/raw/ba0fb65f17ccce5b710e4ce86a095de577f7dfe1/k5.6.3.patch";
         sha256 = "0zay7cz078v7wcnk7xl96blp7j6y64q1migb91c7h66zkpikqvgb";
+      }) (fetchpatch {
+        # https://github.com/openzfs/zfs/issues/9745
+        # will be included in next 0.8.x release
+        url = "https://github.com/openzfs/zfs/commit/2fcab8795c7c493845bfa277d44bc443802000b8.patch";
+        sha256 = "17pbm6qhc1fr5h8jn3kkhl920km6avqw0dpnabjhq1zibkqb0pfc";
       }) ] ++ extraPatches;
 
       postPatch = optionalString buildKernel ''
