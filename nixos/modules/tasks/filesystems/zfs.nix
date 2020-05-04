@@ -22,10 +22,10 @@ let
   kernel = config.boot.kernelPackages;
 
   packages = if config.boot.zfs.enableUnstable then {
-    zfs = kernel.zfsUnstable;
+    zfs = kernel.zfsUnstable.override { kernel = kernel.kernel; };
     zfsUser = pkgs.zfsUnstable;
   } else {
-    zfs = kernel.zfs;
+    zfs = kernel.zfs.override { kernel = kernel.kernel; };
     zfsUser = pkgs.zfs;
   };
 
