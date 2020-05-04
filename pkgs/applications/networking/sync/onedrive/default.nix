@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
-  version = "2.3.13";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bcsrfh1g7bdlcp0zjn6np88qzpn5frv61lzxz9b2ayxf7wyybvi";
+    sha256 = "0cswiwwbkdjnx0bd4hz5d6w20k0b4074a37qmcgyifwzl5qfx09q";
   };
 
   nativeBuildInputs = [ dmd pkgconfig ];
