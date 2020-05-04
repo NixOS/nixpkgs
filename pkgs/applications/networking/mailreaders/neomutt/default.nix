@@ -5,24 +5,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200417";
+  version = "20200501"; # remove the url_parse.c patch when changing this
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "0s7943r2s14kavyjf7i70vca252l626539i09a9vk0i9sfi35vx5";
+    sha256 = "1xrs2bagrcg489zp7g39l3rrpgz8n1ji9cbr21wrnasfbhqcsmnx";
   };
-
-  patches = [
-    # Remove on next release. Fixes the `change-folder`
-    # macro (https://github.com/neomutt/neomutt/issues/2268)
-    (fetchpatch {
-      url = "https://github.com/neomutt/neomutt/commit/9e7537caddb9c6adc720bb3322a7512cf51ab025.patch";
-      sha256 = "1vmlvgnhx1ra3rnyjkpkv6lrqw8xfh2kkmqp43fqn9lnk3pkjxvv";
-    })
-  ];
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
@@ -37,6 +28,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
+    # https://github.com/neomutt/neomutt/issues/2309
+    substituteInPlace test/url/url_parse.c \
+      --replace en_US.UTF-8 C.UTF-8
+
     substituteInPlace contrib/smime_keys \
       --replace /usr/bin/openssl ${openssl}/bin/openssl
 
