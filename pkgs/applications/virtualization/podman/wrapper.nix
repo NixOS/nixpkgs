@@ -27,8 +27,19 @@ let
     iptables
   ] ++ extraPackages);
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
 in runCommand podman.name {
-  inherit (podman) name pname version meta outputs;
+  name = "${podman.pname}-wrapper-${podman.version}";
+  inherit (podman) pname version;
+
+  meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
+
+  inherit outputs;
+
   nativeBuildInputs = [
     makeWrapper
   ];
@@ -39,7 +50,7 @@ in runCommand podman.name {
     lib.concatMapStringsSep "\n"
     (o: "ln -s ${podman.${o}} ${placeholder o}")
     (builtins.filter (o: o != "out")
-    podman.outputs)}
+    outputs)}
 
   mkdir -p $out/bin
   ln -s ${podman-unwrapped}/share $out/share
