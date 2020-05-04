@@ -1156,7 +1156,7 @@ in
 
   base16-shell-preview = callPackage ../misc/base16-shell-preview { };
 
-  base16-builder = callPackage ../misc/base16-builder { };
+  base16-builder = nodePackages.base16-builder;
 
   basex = callPackage ../tools/text/xml/basex { };
 
