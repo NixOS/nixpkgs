@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "patroni";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0w0mz4a1cyxdsqmv7jrkw163jll8ir5zmf93zcidlqx13knrk80g";
+    sha256 = "0iw0ra9fya4bf1vkjq3w5kij4x46yinb90v015pi9c6qfpancfdj";
   };
 
   # cdiff renamed to ydiff; remove when patroni source reflects this.
