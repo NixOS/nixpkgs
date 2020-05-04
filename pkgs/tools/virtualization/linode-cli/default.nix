@@ -13,8 +13,8 @@
 let
 
   spec = fetchurl {
-    url = "https://developers.linode.com/api/docs/v4/openapi.yaml";
-    sha256 = "1l2fahdcmv7sp1qkwr5nv2vls8fypvlybwylqfzhyjmn7jqkw4hq";
+    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v4.63.1/openapi.yaml";
+    sha256 = "03ngzbq24zazfqmfd7xjmxixkcb9vv1jgamplsj633j7sjj708s0";
   };
 
 in
