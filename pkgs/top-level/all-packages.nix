@@ -3776,6 +3776,8 @@ in
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
+  gitqlient = qt5.callPackage ../applications/version-management/gitqlient { };
+
   gitstats = callPackage ../applications/version-management/gitstats { };
 
   gogs = callPackage ../applications/version-management/gogs { };
