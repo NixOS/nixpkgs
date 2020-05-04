@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
+    # Install desktop file
+    mkdir -p $out/share/applications
+    cp hildon/tuxpaint.xpm $out/share/pixmaps
+    sed -e "s+Exec=tuxpaint+Exec=$out/bin/tuxpaint+" < src/tuxpaint.desktop > $out/share/applications/tuxpaint.desktop
+ 
+    # Install stamps
     tar xzf $stamps
     cd tuxpaint-stamps-2014.08.23
     make install-all PREFIX=$out
