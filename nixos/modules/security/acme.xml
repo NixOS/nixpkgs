@@ -6,65 +6,49 @@
  <title>SSL/TLS Certificates with ACME</title>
  <para>
   NixOS supports automatic domain validation &amp; certificate retrieval and
-  renewal using the ACME protocol. This is currently only implemented by and
-  for Let's Encrypt. The alternative ACME client <literal>lego</literal> is
-  used under the hood.
+  renewal using the ACME protocol. Any provider can be used, but by default
+  NixOS uses Let's Encrypt. The alternative ACME client <literal>lego</literal>
+  is used under the hood.
+ </para>
+ <para>
+  Automatic cert validation and configuration for Apache and Nginx virtual
+  hosts is included in NixOS, however if you would like to generate a wildcard
+  cert or you are not using a web server you will have to configure DNS
+  based validation.
  </para>
  <section xml:id="module-security-acme-prerequisites">
   <title>Prerequisites</title>
 
   <para>
-   You need to have a running HTTP server for verification. The server must
-   have a webroot defined that can serve
+   To use the ACME module, you must accept the provider's terms of service
+   by setting <literal><xref linkend="opt-security.acme.acceptTerms" /></literal>
+   to <literal>true</literal>. The Let's Encrypt ToS can be found
+   <link xlink:href="https://letsencrypt.org/repository/">here</link>.
+  </para>
+
+  <para>
+   You must also set an email address to be used when creating accounts with
+   Let's Encrypt. You can set this for all certs with
+   <literal><xref linkend="opt-security.acme.email" /></literal>
+   and/or on a per-cert basis with
+   <literal><xref linkend="opt-security.acme.certs._name_.email" /></literal>.
+   This address is only used for registration and renewal reminders,
+   and cannot be used to administer the certificates in any way.
+  </para>
+
+  <para>
+   Alternatively, you can use a different ACME server by changing the
+   <literal><xref linkend="opt-security.acme.server" /></literal> option
+   to a provider of your choosing, or just change the server for one cert with
+   <literal><xref linkend="opt-security.acme.certs._name_.server" /></literal>.
+  </para>
+
+  <para>
+   You will need an HTTP server or DNS server for verification. For HTTP,
+   the server must have a webroot defined that can serve
    <filename>.well-known/acme-challenge</filename>. This directory must be
-   writeable by the user that will run the ACME client.
-  </para>
-
-  <para>
-   For instance, this generic snippet could be used for Nginx:
-<programlisting>
-http {
-  server {
-    server_name _;
-    listen 80;
-    listen [::]:80;
-
-    location /.well-known/acme-challenge {
-      root /var/www/challenges;
-    }
-
-    location / {
-      return 301 https://$host$request_uri;
-    }
-  }
-}
-</programlisting>
-  </para>
- </section>
- <section xml:id="module-security-acme-configuring">
-  <title>Configuring</title>
-
-  <para>
-   To enable ACME certificate retrieval &amp; renewal for a certificate for
-   <literal>foo.example.com</literal>, add the following in your
-   <filename>configuration.nix</filename>:
-<programlisting>
-<xref linkend="opt-security.acme.certs"/>."foo.example.com" = {
-  <link linkend="opt-security.acme.certs._name_.webroot">webroot</link> = "/var/www/challenges";
-  <link linkend="opt-security.acme.certs._name_.email">email</link> = "foo@example.com";
-};
-</programlisting>
-  </para>
-
-  <para>
-   The private key <filename>key.pem</filename> and certificate
-   <filename>fullchain.pem</filename> will be put into
-   <filename>/var/lib/acme/foo.example.com</filename>.
-  </para>
-  <para>
-   Refer to <xref linkend="ch-options" /> for all available configuration
-   options for the <link linkend="opt-security.acme.certs">security.acme</link>
-   module.
+   writeable by the user that will run the ACME client. For DNS, you must
+   set up credentials with your provider/server for use with lego.
   </para>
  </section>
  <section xml:id="module-security-acme-nginx">
@@ -80,12 +64,27 @@ http {
   </para>
 
 <programlisting>
+<xref linkend="opt-security.acme.acceptTerms" /> = true;
+<xref linkend="opt-security.acme.email" /> = "admin+acme@example.com";
 services.nginx = {
-  <link linkend="opt-services.nginx.enable">enable = true;</link>
+  <link linkend="opt-services.nginx.enable">enable</link> = true;
   <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
     "foo.example.com" = {
       <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
       <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
+      # All serverAliases will be added as <link linkend="opt-security.acme.certs._name_.extraDomains">extra domains</link> on the certificate.
+      <link linkend="opt-services.nginx.virtualHosts._name_.serverAliases">serverAliases</link> = [ "bar.example.com" ];
+      locations."/" = {
+        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.root">root</link> = "/var/www";
+      };
+    };
+
+    # We can also add a different vhost and reuse the same certificate
+    # but we have to append extraDomains manually.
+    <link linkend="opt-security.acme.certs._name_.extraDomains">security.acme.certs."foo.example.com".extraDomains."baz.example.com"</link> = null;
+    "baz.example.com" = {
+      <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
+      <link linkend="opt-services.nginx.virtualHosts._name_.useACMEHost">useACMEHost</link> = "foo.example.com";
       locations."/" = {
         <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.root">root</link> = "/var/www";
       };
@@ -93,5 +92,163 @@ services.nginx = {
   };
 }
 </programlisting>
+ </section>
+ <section xml:id="module-security-acme-httpd">
+  <title>Using ACME certificates in Apache/httpd</title>
+
+  <para>
+   Using ACME certificates with Apache virtual hosts is identical
+   to using them with Nginx. The attribute names are all the same, just replace
+   "nginx" with "httpd" where appropriate.
+  </para>
+ </section>
+ <section xml:id="module-security-acme-configuring">
+  <title>Manual configuration of HTTP-01 validation</title>
+
+  <para>
+   First off you will need to set up a virtual host to serve the challenges.
+   This example uses a vhost called <literal>certs.example.com</literal>, with
+   the intent that you will generate certs for all your vhosts and redirect
+   everyone to HTTPS.
+  </para>
+
+<programlisting>
+<xref linkend="opt-security.acme.acceptTerms" /> = true;
+<xref linkend="opt-security.acme.email" /> = "admin+acme@example.com";
+services.nginx = {
+  <link linkend="opt-services.nginx.enable">enable</link> = true;
+  <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
+    "acmechallenge.example.com" = {
+      # Catchall vhost, will redirect users to HTTPS for all vhosts
+      <link linkend="opt-services.nginx.virtualHosts._name_.serverAliases">serverAliases</link> = [ "*.example.com" ];
+      # /var/lib/acme/.challenges must be writable by the ACME user
+      # and readable by the Nginx user.
+      # By default, this is the case.
+      locations."/.well-known/acme-challenge" = {
+        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.root">root</link> = "/var/lib/acme/.challenges";
+      };
+      locations."/" = {
+        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.return">return</link> = "301 https://$host$request_uri";
+      };
+    };
+  };
+}
+# Alternative config for Apache
+services.httpd = {
+  <link linkend="opt-services.httpd.enable">enable = true;</link>
+  <link linkend="opt-services.httpd.virtualHosts">virtualHosts</link> = {
+    "acmechallenge.example.com" = {
+      # Catchall vhost, will redirect users to HTTPS for all vhosts
+      <link linkend="opt-services.httpd.virtualHosts._name_.serverAliases">serverAliases</link> = [ "*.example.com" ];
+      # /var/lib/acme/.challenges must be writable by the ACME user and readable by the Apache user.
+      # By default, this is the case.
+      <link linkend="opt-services.httpd.virtualHosts._name_.documentRoot">documentRoot</link> = "/var/lib/acme/.challenges";
+      <link linkend="opt-services.httpd.virtualHosts._name_.extraConfig">extraConfig</link> = ''
+        RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge [NC]
+        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
+      '';
+    };
+  };
+}
+</programlisting>
+
+  <para>
+   Now you need to configure ACME to generate a certificate.
+  </para>
+
+<programlisting>
+<xref linkend="opt-security.acme.certs"/>."foo.example.com" = {
+  <link linkend="opt-security.acme.certs._name_.webroot">webroot</link> = "/var/lib/acme/.challenges";
+  <link linkend="opt-security.acme.certs._name_.email">email</link> = "foo@example.com";
+  # Since we have a wildcard vhost to handle port 80,
+  # we can generate certs for anything!
+  # Just make sure your DNS resolves them.
+  <link linkend="opt-security.acme.certs._name_.extraDomains">extraDomains</link> = [ "mail.example.com" ];
+};
+</programlisting>
+
+  <para>
+   The private key <filename>key.pem</filename> and certificate
+   <filename>fullchain.pem</filename> will be put into
+   <filename>/var/lib/acme/foo.example.com</filename>.
+  </para>
+
+  <para>
+   Refer to <xref linkend="ch-options" /> for all available configuration
+   options for the <link linkend="opt-security.acme.certs">security.acme</link>
+   module.
+  </para>
+ </section>
+ <section xml:id="module-security-acme-config-dns">
+  <title>Configuring ACME for DNS validation</title>
+
+  <para>
+   This is useful if you want to generate a wildcard certificate, since
+   ACME servers will only hand out wildcard certs over DNS validation.
+   There a number of supported DNS providers and servers you can utilise,
+   see the <link xlink:href="https://go-acme.github.io/lego/dns/">lego docs</link>
+   for provider/server specific configuration values. For the sake of these
+   docs, we will provide a fully self-hosted example using bind.
+  </para>
+
+<programlisting>
+services.bind = {
+  <link linkend="opt-services.bind.enable">enable</link> = true;
+  <link linkend="opt-services.bind.extraConfig">extraConfig</link> = ''
+    include "/var/lib/secrets/dnskeys.conf";
+  '';
+  <link linkend="opt-services.bind.zones">zones</link> = [
+    rec {
+      name = "example.com";
+      file = "/var/db/bind/${name}";
+      master = true;
+      extraConfig = "allow-update { key rfc2136key.example.com.; };";
+    }
+  ];
+}
+
+# Now we can configure ACME
+<xref linkend="opt-security.acme.acceptTerms" /> = true;
+<xref linkend="opt-security.acme.email" /> = "admin+acme@example.com";
+<xref linkend="opt-security.acme.certs" />."example.com" = {
+  <link linkend="opt-security.acme.certs._name_.domain">domain</link> = "*.example.com";
+  <link linkend="opt-security.acme.certs._name_.dnsProvider">dnsProvider</link> = "rfc2136";
+  <link linkend="opt-security.acme.certs._name_.credentialsFile">credentialsFile</link> = "/var/lib/secrets/certs.secret";
+  # We don't need to wait for propagation since this is a local DNS server
+  <link linkend="opt-security.acme.certs._name_.dnsPropagationCheck">dnsPropagationCheck</link> = false;
+};
+</programlisting>
+
+  <para>
+   The <filename>dnskeys.conf</filename> and <filename>certs.secret</filename>
+   must be kept secure and thus you should not keep their contents in your
+   Nix config. Instead, generate them one time with these commands:
+  </para>
+
+<programlisting>
+mkdir -p /var/lib/secrets
+tsig-keygen rfc2136key.example.com &gt; /var/lib/secrets/dnskeys.conf
+chown named:root /var/lib/secrets/dnskeys.conf
+chmod 400 /var/lib/secrets/dnskeys.conf
+
+# Copy the secret value from the dnskeys.conf, and put it in
+# RFC2136_TSIG_SECRET below
+
+cat &gt; /var/lib/secrets/certs.secret &lt;&lt; EOF
+RFC2136_NAMESERVER='127.0.0.1:53'
+RFC2136_TSIG_ALGORITHM='hmac-sha256.'
+RFC2136_TSIG_KEY='rfc2136key.example.com'
+RFC2136_TSIG_SECRET='your secret key'
+EOF
+chmod 400 /var/lib/secrets/certs.secret
+</programlisting>
+
+  <para>
+   Now you're all set to generate certs! You should monitor the first invokation
+   by running <literal>systemctl start acme-example.com.service &amp;
+   journalctl -fu acme-example.com.service</literal> and watching its log output.
+  </para>
  </section>
 </chapter>
