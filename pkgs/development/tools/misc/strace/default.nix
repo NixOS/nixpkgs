@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional libunwind.supportsHost libunwind; # support -k
 
+  postPatch = "patchShebangs strace-graph";
+
   configureFlags = stdenv.lib.optional (!stdenv.hostPlatform.isx86) "--enable-mpers=check";
 
   # fails 1 out of 523 tests with
