@@ -1,5 +1,5 @@
 { lib, stdenv, pkgs
-, haskell, nodejs
+, haskell, nodejs, nodePackages
 , fetchurl, fetchpatch, makeWrapper, writeScriptBin }:
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
@@ -77,17 +77,11 @@ let
   Packages which rely on `bin-wrap` will fail by default
   and can be patched using `patchBinwrap` function defined in `packages/patch-binwrap.nix`.
   */
-  elmNodePackages =
-    let
-      nodePkgs = import ./packages/node-composition.nix {
-          inherit nodejs pkgs;
-          inherit (stdenv.hostPlatform) system;
-        };
-    in with hsPkgs.elmPkgs; {
-      elm-test = patchBinwrap [elmi-to-json] nodePkgs.elm-test;
-      elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples;
+  elmNodePackages = with hsPkgs.elmPkgs; {
+      elm-test = patchBinwrap [elmi-to-json] nodePackages.elm-test;
+      elm-verify-examples = patchBinwrap [elmi-to-json] nodePackages.elm-verify-examples;
       elm-coverage =
-        let patched = patchBinwrap [elmi-to-json] nodePkgs.elm-coverage;
+        let patched = patchBinwrap [elmi-to-json] nodePackages.elm-coverage;
         in patched.override {
           preRebuild = ''
             sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
@@ -107,16 +101,16 @@ let
           '';
         };
 
-      create-elm-app = patchBinwrap [elmi-to-json] (nodePkgs.create-elm-app.override {
+      create-elm-app = patchBinwrap [elmi-to-json] (nodePackages.create-elm-app.override {
         preRebuild = ''
           rm node_modules/elm/install.js
           echo "console.log('no-op');" > node_modules/elm/install.js
         '';
       });
 
-      elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
+      elm-language-server = nodePackages."@elm-tooling/elm-language-server";
 
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
+      inherit (nodePackages) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
     };
 
   patchBinwrap = import ./packages/patch-binwrap.nix { inherit lib writeScriptBin stdenv; };
