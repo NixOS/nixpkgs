@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Minimalistic Murmur (Mumble server)";
     license = licenses.bsd3;
-    homepage = https://github.com/umurmur/umurmur;
+    homepage = "https://github.com/umurmur/umurmur";
     platforms = platforms.all;
   };
 }

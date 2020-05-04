@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       Included is a sample application, called oping, which demonstrates the
       library's abilities.
     '';
-    homepage = http://noping.cc/;
+    homepage = "http://noping.cc/";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

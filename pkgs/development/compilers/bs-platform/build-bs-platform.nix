@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -rf jscomp lib ${bin_folder} vendor odoc_gen native bsb bsc bsrefmt $out
-    mkdir $out/lib/ocaml
+    mkdir -p $out/lib/ocaml
     cp jscomp/runtime/js.* jscomp/runtime/*.cm* $out/lib/ocaml
     cp jscomp/others/*.ml jscomp/others/*.mli jscomp/others/*.cm* $out/lib/ocaml
     cp jscomp/stdlib-406/*.ml jscomp/stdlib-406/*.mli jscomp/stdlib-406/*.cm* $out/lib/ocaml

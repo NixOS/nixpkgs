@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];
     license = stdenv.lib.licenses.bsd2;
-    homepage = https://google.github.io/liquidfun/;
+    homepage = "https://google.github.io/liquidfun/";
   };
 }
 

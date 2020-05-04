@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A poor man's debugger for Python";
-    homepage = https://github.com/cool-RR/PySnooper;
+    homepage = "https://github.com/cool-RR/PySnooper";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, buildGoModule, wireshark-cli, Security }:
+{ stdenv, fetchFromGitHub, makeWrapper, buildGoModule, wireshark-cli }:
 
 buildGoModule rec {
   pname = "termshark";
@@ -12,8 +12,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ wireshark-cli ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ wireshark-cli ];
 
   modSha256 = "0lp4gky76di7as78421p3lsirfr7mic3z204ildvj6gf6d15svpr";
 
@@ -27,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://termshark.io/;
+    homepage = "https://termshark.io/";
     description = "A terminal UI for wireshark-cli, inspired by Wireshark";
     license = licenses.mit;
     maintainers = with maintainers; [ winpat elseym ];

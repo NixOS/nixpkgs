@@ -3,7 +3,6 @@
 , fetchPypi
 , pytest
 , pytest-repeat
-, pytest-faulthandler
 , pytest-timeout
 , mock
 , joblib
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     sha256 = "d37a5c5be992f3b16db24b54d2801cbe370990fbc63089c6e7ef40d6f03cf5dd";
   };
 
-  checkInputs = [ pytest pytest-repeat pytest-faulthandler pytest-timeout mock joblib ];
+  checkInputs = [ pytest pytest-repeat pytest-timeout mock joblib ];
   propagatedBuildInputs = [
       click cloudpickle dask msgpack psutil six
       sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
@@ -54,7 +53,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Distributed computation in Python.";
-    homepage = https://distributed.readthedocs.io/en/latest/;
+    homepage = "https://distributed.readthedocs.io/en/latest/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.x86; # fails on aarch64
     maintainers = with lib.maintainers; [ teh costrouc ];

@@ -1,31 +1,21 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch, Security }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "hydroxide";
-  version = "0.2.11";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rn35iyli80kgj3yn93lrx0ybgc8fhvmkvx1d18ill7r4cmavand";
+    sha256 = "0d8wjyzmw89yhrszz487f7i19rcz7xlx4w2wd4c69k5nsdrs6dys";
   };
 
-  modSha256 = "0b19rcif8yiyvhrsjd3q5nsvr580lklamlphx4dk47n456ckcqfp";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  # FIXME: remove with next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/emersion/hydroxide/commit/80e0fa6f3e0154338fb0af8a82ca32ae6281dd15.patch";
-      sha256 = "1xi0clzgz14a7sxnwr0li7sz9p05sfh3zh5iqg2qz5f415k9jknj";
-    })
-  ];
+  modSha256 = "0888ikywclhjb4n7xqxc7hvzlhx1qhf4c3skaddqs3nrxm171jwn";
 
   subPackages = [ "cmd/hydroxide" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A third-party, open-source ProtonMail bridge";
     homepage = "https://github.com/emersion/hydroxide";
     license = licenses.mit;

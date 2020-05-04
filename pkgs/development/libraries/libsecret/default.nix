@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.20.1";
+  version = "0.20.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ir4ynpf8b64xss1azvsi5x6697lik7hkf3z0xxa2qv2xja3xxsp";
+    sha256 = "1hzz34gmsxxf1jm1b7qin390rkwbg8sx198xdkwxqp3q6cw19sc1";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [
     pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
-    gobject-introspection vala gtk-doc
+    gobject-introspection vala gtk-doc glib
   ];
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for storing and retrieving passwords and other secrets";
-    homepage = https://wiki.gnome.org/Projects/Libsecret;
+    homepage = "https://wiki.gnome.org/Projects/Libsecret";
     license = stdenv.lib.licenses.lgpl21Plus;
     inherit (glib.meta) platforms maintainers;
   };

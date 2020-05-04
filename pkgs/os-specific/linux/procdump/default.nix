@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "procdump";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "ProcDump-for-Linux";
     rev = version;
-    sha256 = "1pcf6cpslpazla0na0q680dih9wb811q5irr7d2zmw0qmxm33jw2";
+    sha256 = "0h5fhk39d10kjbinzw1yp6nr8w8l300mn9qxrkpivdkyfn6bpq2f";
   };
 
   nativeBuildInputs = [ zlib ];

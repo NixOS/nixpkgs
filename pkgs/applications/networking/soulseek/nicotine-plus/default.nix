@@ -36,7 +36,7 @@ python27Packages.buildPythonApplication {
 
   meta = {
     description = "A graphical client for the SoulSeek peer-to-peer system";
-    homepage = https://www.nicotine-plus.org;
+    homepage = "https://www.nicotine-plus.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ klntsky ];
     platforms = platforms.unix;

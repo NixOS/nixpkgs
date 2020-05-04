@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Cross-platform GUI toolkit";
-    homepage = http://libagar.org/index.html;
+    homepage = "http://libagar.org/index.html";
     license = with licenses; bsd3;
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; linux;

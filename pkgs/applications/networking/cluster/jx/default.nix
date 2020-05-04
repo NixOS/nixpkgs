@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, stdenv, Security }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   name = "jx";
@@ -16,8 +16,6 @@ buildGoModule rec {
     ./3321-fix-location-of-thrift.patch
   ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   modSha256 = "0ljf0c0c3pc12nmhdbrwflcaj6hs8igzjw5hi6fyhi6n9cy87vac";
 
   subPackages = [ "cmd/jx" ];
@@ -28,9 +26,9 @@ buildGoModule rec {
     -X github.com/jenkins-x/jx/pkg/version.Revision=${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JX is a command line tool for installing and using Jenkins X.";
-    homepage = https://jenkins-x.io;
+    homepage = "https://jenkins-x.io";
     longDescription = ''
       Jenkins X provides automated CI+CD for Kubernetes with Preview
       Environments on Pull Requests using Jenkins, Knative Build, Prow,

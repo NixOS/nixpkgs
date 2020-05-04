@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, stdenv, libobjc, Security }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "smimesign";
@@ -13,14 +13,12 @@ buildGoModule rec {
 
   modSha256 = "1k3gnjzblfk14y19zhlvwysx045nbw0xr5nngh7zj1wcqxhhm206";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libobjc Security ];
-
   buildFlagsArray = "-ldflags=-X main.versionString=${version}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An S/MIME signing utility for macOS and Windows that is compatible with Git.";
 
-    homepage    = https://github.com/github/smimesign;
+    homepage    = "https://github.com/github/smimesign";
     license     = licenses.mit;
     platforms   = platforms.darwin;
     maintainers = [ maintainers.enorris ];

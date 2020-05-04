@@ -33,7 +33,7 @@ buildPythonPackage rec {
       runs a suite of vulnerability detectors, prints visual information about
       contract details, and provides an API to easily write custom analyses.
     '';
-    homepage = https://github.com/trailofbits/slither;
+    homepage = "https://github.com/trailofbits/slither";
     license = licenses.agpl3;
     maintainers = [ maintainers.asymmetric ];
   };

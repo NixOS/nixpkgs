@@ -101,17 +101,15 @@ to compile your Haskell packages with any GHC version you please. The following
 command displays the complete list of available compilers:
 ```
 $ nix-env -f "<nixpkgs>" -qaP -A haskell.compiler
-haskell.compiler.ghc8101                 ghc-8.10.0.20191210
-haskell.compiler.integer-simple.ghc8101  ghc-8.10.0.20191210
-haskell.compiler.ghcHEAD                 ghc-8.10.20191119
-haskell.compiler.integer-simple.ghcHEAD  ghc-8.10.20191119
+haskell.compiler.ghc8101                 ghc-8.10.1
+haskell.compiler.integer-simple.ghc8101  ghc-8.10.1
+haskell.compiler.ghcHEAD                 ghc-8.11.20200403
+haskell.compiler.integer-simple.ghcHEAD  ghc-8.11.20200403
 haskell.compiler.ghc822Binary            ghc-8.2.2-binary
 haskell.compiler.ghc844                  ghc-8.4.4
 haskell.compiler.ghc863Binary            ghc-8.6.3-binary
 haskell.compiler.ghc865                  ghc-8.6.5
 haskell.compiler.integer-simple.ghc865   ghc-8.6.5
-haskell.compiler.ghc881                  ghc-8.8.1
-haskell.compiler.integer-simple.ghc881   ghc-8.8.1
 haskell.compiler.ghc882                  ghc-8.8.2
 haskell.compiler.integer-simple.ghc882   ghc-8.8.2
 haskell.compiler.ghc883                  ghc-8.8.3
@@ -369,7 +367,7 @@ automatically select the right version of GHC and other build tools to build,
 test and execute apps in an existing project downloaded from somewhere on the
 Internet. Pass the `--nix` flag to any `stack` command to do so, e.g.
 ```shell
-git clone --recursive https://github.com/yesodweb/wai
+git clone --recurse-submodules https://github.com/yesodweb/wai.git
 cd wai
 stack --nix build
 ```

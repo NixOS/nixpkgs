@@ -125,5 +125,8 @@ nodePackages // {
 
   thelounge = nodePackages.thelounge.override {
     buildInputs = [ nodePackages.node-pre-gyp ];
+    postInstall = ''
+      echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
+    '';
   };
 }

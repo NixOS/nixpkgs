@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, makeWrapper
-, coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, p7zip, utillinux, wget
+, coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, utillinux, wget
 , wxGTK30 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     # should be patched with a less useless default PATH, but for now
     # we add everything we need manually.
     wrapProgram "$out/bin/woeusb" \
-      --set PATH '${stdenv.lib.makeBinPath [ coreutils dosfstools findutils gawk gnugrep grub2_light ncurses ntfs3g parted utillinux wget p7zip ]}'
+      --set PATH '${stdenv.lib.makeBinPath [ coreutils dosfstools findutils gawk gnugrep grub2_light ncurses ntfs3g parted utillinux wget ]}'
   '';
 
   doInstallCheck = true;
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Create bootable USB disks from Windows ISO images";
-    homepage = https://github.com/slacka/WoeUSB;
+    homepage = "https://github.com/slacka/WoeUSB";
     license = licenses.gpl3;
     maintainers = with maintainers; [ bjornfor gnidorah ];
     platforms = platforms.linux;

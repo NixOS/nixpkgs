@@ -41,7 +41,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A collection of more than 1000 solitaire card games";
-    homepage = https://pysolfc.sourceforge.io;
+    homepage = "https://pysolfc.sourceforge.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kierdavis genesis ];
   };

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python Fedora Module";
-    homepage = https://github.com/fedora-infra/python-fedora;
+    homepage = "https://github.com/fedora-infra/python-fedora";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];
   };

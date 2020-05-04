@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Hitch is a libev-based high performance SSL/TLS proxy by Varnish Software";
-    homepage = https://hitch-tls.org/;
+    homepage = "https://hitch-tls.org/";
     license = licenses.bsd2;
     maintainers = [ maintainers.jflanglois ];
     platforms = platforms.linux;

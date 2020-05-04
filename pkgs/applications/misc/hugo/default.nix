@@ -1,19 +1,19 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.68.1";
+  version = "0.69.2";
+
+  goPackagePath = "github.com/gohugoio/hugo";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h7zymvxk71jq51az4qnldk54jl9sd4zwkn5r5323xzjffwzny82";
+    sha256 = "0bw31264q8w2r3fm3g2qjh9531nmbn942vl5rjf2cjff25c0d4ji";
   };
 
-  modSha256 = "04vzm65kbj9905z4cf5yh6yc6g3b0pd5vc00lrxw84pwgqgc0ykb";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  modSha256 = "1i1mw8jcklmnsqawc1jkgw4h1dxjxb9zaf2p8pgfzxzpy5cp6qkl";
 
   buildFlags = [ "-tags" "extended" ];
 

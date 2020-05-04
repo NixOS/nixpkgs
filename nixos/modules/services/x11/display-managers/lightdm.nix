@@ -69,6 +69,10 @@ let
 
 in
 {
+  meta = {
+    maintainers = with maintainers; [ worldofpeace ];
+  };
+
   # Note: the order in which lightdm greeter modules are imported
   # here determines the default: later modules (if enable) are
   # preferred.

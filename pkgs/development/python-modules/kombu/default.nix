@@ -5,6 +5,8 @@
 , pytest
 , pytz
 , sqlalchemy
+, importlib-metadata
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -23,7 +25,11 @@ buildPythonPackage rec {
       --replace "amqp==2.5.1" "amqp~=2.5"
   '';
 
-  propagatedBuildInputs = [ amqp ];
+  propagatedBuildInputs = [
+    amqp
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   checkInputs = [ pytest case pytz Pyro4 sqlalchemy ];
   # test_redis requires fakeredis, which isn't trivial to package
@@ -33,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Messaging library for Python";
-    homepage    = https://github.com/celery/kombu;
+    homepage    = "https://github.com/celery/kombu";
     license     = licenses.bsd3;
   };
 }

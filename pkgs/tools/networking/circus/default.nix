@@ -6,11 +6,11 @@ in
 
 buildPythonApplication rec {
   pname = "circus";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1603cf4c4f620ce6593d3d2a67fad25bf0242183ea24110d8bb1c8079c55d1b";
+    sha256 = "0paccmqwgard2l0z7swcc3nwc418l9b4mfaddb4s31bpnqg02z6x";
   };
 
   postPatch = ''

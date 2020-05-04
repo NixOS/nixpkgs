@@ -1,0 +1,24 @@
+diff --git a/common/gnomehintssettings.cpp b/common/gnomehintssettings.cpp
+index 9860e57..40fa6ec 100644
+--- a/common/gnomehintssettings.cpp
++++ b/common/gnomehintssettings.cpp
+@@ -80,9 +80,17 @@ void gtkMessageHandler(const gchar *log_domain,
+ GnomeHintsSettings::GnomeHintsSettings()
+     : QObject(0)
+     , m_usePortal(checkUsePortalSupport())
+-    , m_gnomeDesktopSettings(g_settings_new("org.gnome.desktop.wm.preferences"))
+-    , m_settings(g_settings_new("org.gnome.desktop.interface"))
+ {
++    g_autoptr(GSettingsSchemaSource) schemaSource = nullptr;
++    g_autoptr(GSettingsSchema) gnomeDesktopSchema = nullptr;
++    g_autoptr(GSettingsSchema) settingsSchema = nullptr;
++
++    schemaSource = g_settings_schema_source_new_from_directory("@gds_gsettings_path@", g_settings_schema_source_get_default(), true, nullptr);
++    gnomeDesktopSchema = g_settings_schema_source_lookup(schemaSource, "org.gnome.desktop.wm.preferences", false);
++    m_gnomeDesktopSettings = g_settings_new_full(gnomeDesktopSchema, nullptr, nullptr);
++    settingsSchema = g_settings_schema_source_lookup(schemaSource, "org.gnome.desktop.interface", false);
++    m_settings = g_settings_new_full(settingsSchema, nullptr, nullptr);
++
+     gtk_init(nullptr, nullptr);
+ 
+     // Set log handler to suppress false GtkDialog warnings

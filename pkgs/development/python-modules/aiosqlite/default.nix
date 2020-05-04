@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.11.0";
+  version = "0.12.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jreese";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0pmkp4iy738yv2sl08kvhd0ma6wjqbmfnwid72gvg4zqsr1hnn0z";
+    sha256 = "090vdv210zfry0bms5b3lmm06yhiyjb8ga96996cqs611l7c2a2j";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asyncio bridge to the standard sqlite3 module";
-    homepage = https://github.com/jreese/aiosqlite;
+    homepage = "https://github.com/jreese/aiosqlite";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

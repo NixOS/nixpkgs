@@ -1,8 +1,10 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "iamy";
   version = "2.3.2";
+
+  goPackagePath = "github.com/99designs/iamy";
 
   src = fetchFromGitHub {
     owner = "99designs";
@@ -13,15 +15,13 @@ buildGoModule rec {
 
   modSha256 = "0akak573zvz3xg5d7vf0ch2mrmj1jkzcdc29v3kn43f7944c2wcl";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   buildFlagsArray = [''-ldflags=
     -X main.Version=v${version} -s -w
   ''];
 
   meta = with stdenv.lib; {
     description = "A cli tool for importing and exporting AWS IAM configuration to YAML files";
-    homepage = https://github.com/99designs/iamy;
+    homepage = "https://github.com/99designs/iamy";
     license = licenses.mit;
     maintainers = with maintainers; [ suvash ];
   };

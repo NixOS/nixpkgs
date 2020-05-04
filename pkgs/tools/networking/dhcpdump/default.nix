@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
-    homepage = http://www.mavetju.org/unix/dhcpdump-man.php;
+    homepage = "http://www.mavetju.org/unix/dhcpdump-man.php";
     platforms = platforms.linux;
     license = licenses.bsd2;
   };

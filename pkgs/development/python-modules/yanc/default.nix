@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Yet another nose colorer";
-    homepage = https://github.com/0compute/yanc;
+    homepage = "https://github.com/0compute/yanc";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jluttine ];
   };

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A pickled object field for Django";
-    homepage = https://github.com/gintas/django-picklefield;
+    homepage = "https://github.com/gintas/django-picklefield";
     license = lib.licenses.mit;
   };
 }

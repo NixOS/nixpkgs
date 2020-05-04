@@ -2,7 +2,7 @@
 , cmake, pkgconfig
 , boost, miniupnpc, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline, libsodium, hidapi
-, pythonProtobuf, randomx, rapidjson, libusb
+, pythonProtobuf, randomx, rapidjson, libusb-compat-0_1
 , CoreData, IOKit, PCSC
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     boost miniupnpc openssl unbound
     cppzmq zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
-    pythonProtobuf libusb
+    pythonProtobuf libusb-compat-0_1
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
   cmakeFlags = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Private, secure, untraceable currency";
-    homepage    = https://getmonero.org/;
+    homepage    = "https://getmonero.org/";
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ ehmry rnhmjoj ];

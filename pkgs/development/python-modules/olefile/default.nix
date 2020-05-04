@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python package to parse, read and write Microsoft OLE2 files";
-    homepage = https://www.decalage.info/python/olefileio;
+    homepage = "https://www.decalage.info/python/olefileio";
     # BSD like + reference to Pillow
     license = "http://olefile.readthedocs.io/en/latest/License.html";
   };

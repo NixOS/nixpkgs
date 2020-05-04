@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = ''Generate "if err != nil {" block'';
-    homepage = https://github.com/koron/iferr;
+    homepage = "https://github.com/koron/iferr";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

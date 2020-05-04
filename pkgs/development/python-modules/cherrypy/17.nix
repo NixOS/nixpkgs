@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.cherrypy.org;
+    homepage = "https://www.cherrypy.org";
     description = "A pythonic, object-oriented HTTP framework";
     license = licenses.bsd3;
   };

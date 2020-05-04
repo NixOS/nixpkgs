@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/txthinking/brook;
+    homepage = "https://github.com/txthinking/brook";
     description = "A cross-platform Proxy/VPN software";
     license = with licenses; [ gpl3 ];
     platforms = platforms.linux;

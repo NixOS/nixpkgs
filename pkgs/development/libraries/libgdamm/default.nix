@@ -31,9 +31,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ bindings for libgda";
-    homepage = https://www.gnome-db.org/;
+    homepage = "https://www.gnome-db.org/";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

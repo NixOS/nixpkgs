@@ -29,7 +29,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Pop-up shortcut viewer for Deepin applications";
-    homepage = https://github.com/linuxdeepin/deepin-shortcut-viewer;
+    homepage = "https://github.com/linuxdeepin/deepin-shortcut-viewer";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

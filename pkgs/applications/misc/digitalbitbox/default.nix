@@ -7,7 +7,7 @@
 , libtool
 , qrencode
 , udev
-, libusb
+, libusb-compat-0_1
 , makeWrapper
 , pkgconfig
 , qtbase
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     libevent
     libtool
     udev
-    libusb
+    libusb-compat-0_1
     qrencode
 
     qtbase

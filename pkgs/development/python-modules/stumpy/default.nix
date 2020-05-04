@@ -48,7 +48,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A powerful and scalable library that can be used for a variety of time series data mining tasks";
-    homepage = https://github.com/TDAmeritrade/stumpy;
+    homepage = "https://github.com/TDAmeritrade/stumpy";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

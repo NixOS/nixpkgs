@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "12.0.0";
+  version = "12.0.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "0n4169l662fvg6r4rcfs8n8f92rxndlaqb7k4x63680mra470dbi";
+    sha256 = "1c0v51s05kbg9825n6mvpizhkkgz38wl7hp8f3vzbjfg4i8l8wb0";
   };
 
-  cargoSha256 = "01zi9zqdjsgc3im9na511n6w2bmqvm46wryh10fhzc9fnkziqmq3";
+  cargoSha256 = "0i8x2xgri8f8mzrlkc8l2yzcgczl35nw4bmwg09d343mjkmk6d8y";
 
   cargoBuildFlags = stdenv.lib.optional withPCRE2 "--features pcre2";
 
@@ -30,9 +30,9 @@ rustPlatform.buildRustPackage rec {
   ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   preFixup = ''
-    (cd target/release/build/ripgrep-*/out
-    installManPage rg.1
-    installShellCompletion rg.{bash,fish})
+    installManPage $releaseDir/build/ripgrep-*/out/rg.1
+
+    installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
     installShellCompletion --zsh "$src/complete/_rg"
   '';
 

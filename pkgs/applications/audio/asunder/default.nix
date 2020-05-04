@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A graphical Audio CD ripper and encoder for Linux";
-    homepage = http://littlesvr.ca/asunder/index.php;
+    homepage = "http://littlesvr.ca/asunder/index.php";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mudri ];
     platforms = platforms.linux;

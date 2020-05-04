@@ -1,8 +1,11 @@
-{ stdenv, fetchFromGitHub, buildGoModule, Security }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoModule rec {
+let version = "1.2.1";
+in buildGoModule rec {
+  inherit version;
   pname = "drone-cli";
-  version = "1.2.1";
+  revision = "v${version}";
+  goPackagePath = "github.com/drone/drone-cli";
 
   modSha256 = "0g0vq4vm2hy00r2gjsrhg57xv9sldlqix3wzimiqdli085bcz46b";
 
@@ -13,11 +16,9 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "drone";
     repo = "drone-cli";
-    rev = "v${version}";
+    rev = revision;
     sha256 = "19icihi5nxcafxlh4w61nl4cd0dhvik9zl8g4gqmazikjqsjms2j";
   };
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ bricewge ];

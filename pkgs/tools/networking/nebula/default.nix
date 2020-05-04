@@ -1,25 +1,23 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "nebula";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0nwagk3q2gkirqrk27fisad2c2p2y1lsvz5phax9v5h51p1y79ia";
+    sha256 = "0xrki9w83b4b3l5adq1rxz374f124wf388sdyvy7ngc3b04k7qlb";
   };
 
-  modSha256 = "1sy5mnwn9fxjf3y41lm8gsggid2c0y08iw88m9ng8psaf4qid8ij";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  modSha256 = "0v45ikw0bl00412krg4v6sr9bggvsrvl0h6clihkh4mdfz6kwa47";
 
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
   buildFlagsArray = [ "-ldflags='-X main.Build=${version}'" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A scalable overlay networking tool with a focus on performance, simplicity and security";
     longDescription = ''
       Nebula is a scalable overlay networking tool with a focus on performance,

@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags, abseil-cpp }:
 
 stdenv.mkDerivation rec {
-  version = "1.27.1"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
+  version = "1.28.1"; # N.B: if you change this, change pythonPackages.grpcio and pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1yvmqxv6pwzbxw3si47x3anvl2pp3qy1acspmz4v60pd188c1fnc";
+    sha256 = "17p3xwz5izlqg5ijnim4asl40pr8yhg9wrrmws4g0dk37nkn1x6p";
     fetchSubmodules = true;
   };
   patches = [
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
     maintainers = [ maintainers.lnl7 maintainers.marsam ];
-    homepage = https://grpc.io/;
+    homepage = "https://grpc.io/";
+    platforms = platforms.all;
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
   };
 }

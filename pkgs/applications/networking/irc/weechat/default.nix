@@ -27,12 +27,12 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.7.1";
+      version = "2.8";
       pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0acz41jg7lmipni9z2agfqw4dhmx5hf6k9w4pvr4zih1fhkldva2";
+        sha256 = "0xpzl7985j47rpmly4r833jxd448xpy7chqphaxmhlql2c0gc08z";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -70,7 +70,7 @@ let
       '';
 
       meta = {
-        homepage = http://www.weechat.org/;
+        homepage = "http://www.weechat.org/";
         description = "A fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package

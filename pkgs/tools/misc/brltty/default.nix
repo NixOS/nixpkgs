@@ -6,11 +6,11 @@ assert alsaSupport -> alsaLib != null;
 assert systemdSupport -> systemd != null;
 
 stdenv.mkDerivation rec {
-  name = "brltty-6.0";
+  name = "brltty-6.1";
 
   src = fetchurl {
     url = "http://brltty.com/archive/${name}.tar.gz";
-    sha256 = "0lmp9ab8gp4yv8m3qx4gxns3prrh7kvh8sfcd6vc45h40cgcsjxg";
+    sha256 = "0nk54chr7z2w579vyiak9xk2avhnvrx7x2l5sk8nyw2zplchkx9q";
   };
 
   nativeBuildInputs = [ pkgconfig python3.pkgs.cython ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       It drives the braille display, and provides complete screen review functionality.
       Some speech capability has also been incorporated.
     '';
-    homepage = http://www.brltty.com/;
+    homepage = "http://www.brltty.com/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bramd ];
     platforms = stdenv.lib.platforms.all;

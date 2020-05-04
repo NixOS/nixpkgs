@@ -32,7 +32,7 @@ stdenv.mkDerivation {
       This is a maintained fork of the original AtomicParsley.
     '';
 
-    homepage = https://bitbucket.org/wez/atomicparsley;
+    homepage = "https://bitbucket.org/wez/atomicparsley";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pjones ];

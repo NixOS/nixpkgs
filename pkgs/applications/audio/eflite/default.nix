@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   CFLAGS = stdenv.lib.optionalString debug " -DDEBUG=2";
 
   meta = {
-    homepage = http://eflite.sourceforge.net;
+    homepage = "http://eflite.sourceforge.net";
     description = "EFlite is a speech server for screen readers";
     longDescription = ''
       EFlite is a speech server for Emacspeak and other screen

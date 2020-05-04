@@ -15,7 +15,7 @@ stdenv.mkDerivation {
       binary. The rpath, or runpath if it is present, is where the runtime
       linker should look for the libraries needed for a program.
     '';
-    homepage = https://tracker.debian.org/pkg/chrpath;
+    homepage = "https://tracker.debian.org/pkg/chrpath";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Garry's Mod Addon Creator and Extractor";
-    homepage = https://github.com/garrynewman/gmad;
+    homepage = "https://github.com/garrynewman/gmad";
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.abigailbuccaneer ];
     platforms = stdenv.lib.platforms.all;

@@ -75,5 +75,9 @@ in
       QT_IM_MODULE = "ibus";
       XMODIFIERS = "@im=ibus";
     };
+
+    xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
+      ibusPackage
+    ];
   };
 }

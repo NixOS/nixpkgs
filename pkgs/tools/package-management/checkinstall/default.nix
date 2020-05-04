@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "checkinstall-1.6.2";
 
   src = fetchurl {
-    url = http://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-1.6.2.tar.gz;
+    url = "http://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-1.6.2.tar.gz";
     sha256 = "1x4kslyvfd6lm6zd1ylbq2pjxrafb77ydfjaqi16sa5qywn1jqfw";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    homepage = http://checkinstall.izto.org/;
+    homepage = "http://checkinstall.izto.org/";
     description = "A tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

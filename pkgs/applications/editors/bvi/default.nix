@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Hex editor with vim style keybindings";
-    homepage = http://bvi.sourceforge.net/download.html;
+    homepage = "http://bvi.sourceforge.net/download.html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux ++ darwin;

@@ -7,6 +7,10 @@ with lib;
     (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
   ];
 
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   options.xdg.portal = {
     enable =
       mkEnableOption "<link xlink:href='https://github.com/flatpak/xdg-desktop-portal'>xdg desktop integration</link>"//{

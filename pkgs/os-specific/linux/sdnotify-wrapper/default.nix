@@ -23,13 +23,13 @@ in runCommandCC "sdnotify-wrapper" {
   mkdir -p $bin/bin
   mkdir $out
 
-  # just dynamic for now
+  # the -lskarnet has to come at the end to support static builds
   $CC \
     -o $bin/bin/sdnotify-wrapper \
     -I${skalibs.dev}/include \
     -L${skalibs.lib}/lib \
-    -lskarnet \
-    ${src}
+    ${src} \
+    -lskarnet
 
   mkdir -p $doc/share/doc/sdnotify-wrapper
   # copy the documentation comment

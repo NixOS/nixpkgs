@@ -1,15 +1,26 @@
-{ stdenv, cmake, fetchFromGitHub, bctoolbox }:
+{ bctoolbox
+, cmake
+, fetchFromGitLab
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "ortp";
-  version = "1.0.2";
+  # Using master branch for linphone-desktop caused a chain reaction that many
+  # of its dependencies needed to use master branch too.
+  version = "unstable-2020-03-17";
 
-  src = fetchFromGitHub {
-    owner = "BelledonneCommunications";
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
     repo = pname;
-    rev = version;
-    sha256 = "12cwv593bsdnxs0zfcp07vwyk7ghlz2wv7vdbs1ksv293w3vj2rv";
+    rev = "804dfc4f90d1a4301127c7af10a74fd2935dd5d8";
+    sha256 = "1yr8j8am68spyy5d9vna8zcq3qn039mi16cv9jf5n4chs9rxf7xx";
   };
+
+  # Do not build static libraries
+  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
 
@@ -18,8 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Real-Time Transport Protocol (RFC3550) stack";
-    homepage = https://linphone.org/technical-corner/ortp;
-    license = licenses.gpl2Plus;
+    homepage = "https://linphone.org/technical-corner/ortp";
+    license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   doCheck = false; # pypi package comes without tests, other homepage does not provide all verisons
 
   meta = with lib; {
-    homepage = http://twill.idyll.org/;
+    homepage = "http://twill.idyll.org/";
     description = "A simple scripting language for Web browsing";
     license     = licenses.mit;
     maintainers = with maintainers; [ mic92 ];

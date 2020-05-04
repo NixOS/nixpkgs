@@ -35,7 +35,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/SecurityInnovation/PGPy;
+    homepage = "https://github.com/SecurityInnovation/PGPy";
     description = "Pretty Good Privacy for Python 2 and 3";
     longDescription = ''
       PGPy is a Python (2 and 3) library for implementing Pretty Good Privacy

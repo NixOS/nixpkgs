@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "A tool that helps controlling nvim processes from a terminal";
-    homepage = https://github.com/mhinz/neovim-remote/;
+    homepage = "https://github.com/mhinz/neovim-remote/";
     license = licenses.mit;
     maintainers = with maintainers; [ edanaher ];
     platforms = platforms.unix;

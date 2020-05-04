@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.zlib.net/pigz/;
+    homepage = "http://www.zlib.net/pigz/";
     description = "A parallel implementation of gzip for multi-core machines";
     license = licenses.zlib;
     platforms = platforms.unix;

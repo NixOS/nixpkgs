@@ -8,13 +8,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "setools";
-  version = "4.2.2";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = pname;
     rev = version;
-    sha256 = "18kklv26dwm2fdjjzfflvxsq83b2svnwf4g18xq7wsfsri121a90";
+    sha256 = "0vr20bi8w147z5lclqz1l0j1b34137zg2r04pkafkgqqk7qbyjk6";
   };
 
   nativeBuildInputs = [ cython ];
@@ -35,7 +35,7 @@ buildPythonApplication rec {
 
   meta = {
     description = "SELinux Policy Analysis Tools";
-    homepage = https://github.com/SELinuxProject/setools;
+    homepage = "https://github.com/SELinuxProject/setools";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

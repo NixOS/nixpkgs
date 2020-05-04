@@ -7,13 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "spring";
-  version = "104.0.1";
+  version = "104.0.1-${buildId}-g${shortRev}";
+  # usually the latest in https://github.com/spring/spring/commits/maintenance
+  rev = "f266c8107b3e5dda5a78061ef00ca0ed8736d6f2";
+  shortRev = builtins.substring 0 7 rev;
+  buildId = "1486";
 
+  # taken from https://github.com/spring/spring/commits/maintenance
   src = fetchFromGitHub {
     owner = "spring";
     repo = "spring";
-    rev = "9ee29da876f6d3d23e169185619b58df9c036703";
-    sha256 = "0m94i85k8k5ls1ff9z8djslzhkgr7b7vsbpic2axxjvki6sn2xjv";
+    inherit rev;
+    sha256 = "1nx68d894yfmqc6df72hmk75ph26fqdvlmmq58cca0vbwpz9hf5v";
     fetchSubmodules = true;
   };
 
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     rm rts/build/cmake/FindGLEW.cmake
 
-    echo "104.0.1-1466-g9ee29da maintenance" > VERSION
+    echo "${version} maintenance" > VERSION
   '';
 
   cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
@@ -51,10 +56,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://springrts.com/;
+    homepage = "https://springrts.com/";
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar ];
+    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar maintainers.sorki ];
     platforms = platforms.linux;
   };
 }

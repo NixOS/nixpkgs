@@ -3,7 +3,7 @@
 { stdenv, fetchurl, alsaLib, bzip2, fftw, libjack2, libX11, liblo
 , libmad, libogg, lrdf, librdf_raptor, librdf_rasqal, libsamplerate
 , libsndfile, pkgconfig, libpulseaudio, qtbase, qtsvg, redland
-, rubberband, serd, sord, vampSDK, fftwFloat
+, rubberband, serd, sord, vamp-plugin-sdk, fftwFloat
 , capnproto, liboggz, libfishsound, libid3tag, opusfile
 , wrapQtAppsHook
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ libsndfile qtbase qtsvg fftw fftwFloat bzip2 lrdf rubberband
-      libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
+      libsamplerate vamp-plugin-sdk alsaLib librdf_raptor librdf_rasqal redland
       serd
       sord
       # optional
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "View and analyse contents of music audio files";
-    homepage = https://www.sonicvisualiser.org/;
+    homepage = "https://www.sonicvisualiser.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];
     platforms = platforms.linux;

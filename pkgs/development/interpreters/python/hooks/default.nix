@@ -89,6 +89,14 @@ in rec {
       };
     } ./python-imports-check-hook.sh) {};
 
+  pythonNamespacesHook = callPackage ({}:
+    makeSetupHook {
+      name = "python-namespaces-hook.sh";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-namespaces-hook.sh) {};
+
   pythonRemoveBinBytecodeHook = callPackage ({ }:
     makeSetupHook {
       name = "python-remove-bin-bytecode-hook";

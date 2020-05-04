@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gradle tab completion for bash and zsh";
-    homepage = https://github.com/gradle/gradle-completion;
+    homepage = "https://github.com/gradle/gradle-completion";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

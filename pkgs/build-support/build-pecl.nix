@@ -1,9 +1,11 @@
-{ stdenv, php, autoreconfHook, fetchurl, re2c }:
+{ stdenv, lib, php, autoreconfHook, fetchurl, re2c }:
 
 { pname
 , version
+, internalDeps ? []
 , buildInputs ? []
 , nativeBuildInputs ? []
+, postPhpize ? ""
 , makeFlags ? []
 , src ? fetchurl {
     url = "http://pecl.php.net/get/${pname}-${version}.tgz";
@@ -22,5 +24,11 @@ stdenv.mkDerivation (args // {
 
   makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
 
-  autoreconfPhase = "phpize";
+  autoreconfPhase = ''
+    phpize
+    ${postPhpize}
+    ${lib.concatMapStringsSep "\n"
+      (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
+      internalDeps}
+  '';
 })

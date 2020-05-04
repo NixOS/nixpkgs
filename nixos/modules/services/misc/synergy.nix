@@ -19,12 +19,8 @@ in
       # !!! All these option descriptions needs to be cleaned up.
 
       client = {
-        enable = mkOption {
-          default = false;
-          description = "
-            Whether to enable the Synergy client (receive keyboard and mouse events from a Synergy server).
-          ";
-        };
+        enable = mkEnableOption "the Synergy client (receive keyboard and mouse events from a Synergy server)";
+
         screenName = mkOption {
           default = "";
           description = ''
@@ -47,12 +43,8 @@ in
       };
 
       server = {
-        enable = mkOption {
-          default = false;
-          description = ''
-            Whether to enable the Synergy server (send keyboard and mouse events).
-          '';
-        };
+        enable = mkEnableOption "the Synergy server (send keyboard and mouse events)";
+
         configFile = mkOption {
           default = "/etc/synergy-server.conf";
           description = "The Synergy server configuration file.";

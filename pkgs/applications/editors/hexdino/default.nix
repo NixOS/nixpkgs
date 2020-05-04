@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
 
   meta = with stdenv.lib; {
     description = "A hex editor with vim like keybindings written in Rust";
-    homepage = https://github.com/Luz/hexdino;
+    homepage = "https://github.com/Luz/hexdino";
     license = licenses.mit;
     maintainers = [ maintainers.luz ];
     platforms = platforms.all;

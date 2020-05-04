@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
       file using that grammar. Lemon is similar to the much more famous
       programs "yacc" and "bison", but is not compatible with either.
     '';
-    homepage = http://www.hwaci.com/sw/lemon/;
+    homepage = "http://www.hwaci.com/sw/lemon/";
     license = licenses.publicDomain;
     platforms = platforms.unix;
   };

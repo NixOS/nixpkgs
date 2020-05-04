@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Systray workspace pager";
-    homepage = https://github.com/vzxwco/neap;
+    homepage = "https://github.com/vzxwco/neap";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

@@ -28,14 +28,14 @@ assert brotliSupport -> brotli != null;
 assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.68.0";
+  name = "curl-7.69.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${name}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
     ];
-    sha256 = "1fgf4f33wj25jk6lkpxmrvmfnnxvc66z3k3561rxr8nngn8m8zr0";
+    sha256 = "1s2ddjjif1wkp69vx25nzxklhimgqzaazfzliyl6mpvsa2yybx9g";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line tool for transferring files with URL syntax";
-    homepage    = https://curl.haxx.se/;
+    homepage    = "https://curl.haxx.se/";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.curl;
     platforms = platforms.all;

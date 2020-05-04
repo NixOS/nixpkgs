@@ -37,6 +37,7 @@
 , enableGl ? (enableX11 || enableWayland || enableCocoa)
 , enableCdparanoia ? (!stdenv.isDarwin)
 , cdparanoia
+, glib
 }:
 
 stdenv.mkDerivation rec {
@@ -60,13 +61,15 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     gettext
+    orc
+    glib
     gobject-introspection
 
     # docs
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_43
-  ];
+  ] ++ lib.optional enableWayland wayland;
 
   buildInputs = [
     orc

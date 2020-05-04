@@ -1,10 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
-with lib;
-
 buildGoPackage rec {
   pname = "go-md2man";
-  version = "1.0.6";
+  version = "2.0.0";
 
   goPackagePath = "github.com/cpuguy83/go-md2man";
 
@@ -12,13 +10,13 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "cpuguy83";
     repo = "go-md2man";
-    sha256 = "1rm3zjrmfpzy0l3qp02xmd5pqzl77pdql9pbxhl0k1qw2vfzrjv6";
+    sha256 = "0r1f7v475dxxgzqci1mxfliwadcrk86ippflx9n411325l4g3ghv";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Go tool to convert markdown to man pages";
     license = licenses.mit;
-    homepage = https://github.com/cpuguy83/go-md2man;
+    homepage = "https://github.com/cpuguy83/go-md2man";
     maintainers = with maintainers; [offline];
     platforms = platforms.unix;
   };

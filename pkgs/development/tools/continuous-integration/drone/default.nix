@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, Security }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   name = "drone.io-${version}";
@@ -13,8 +13,6 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "05cgd72qyss836fby0adhrm5p8g7639psk2yslhg6pmz0cqfbq9m";
   };
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ elohmeier vdemeester ];

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/vala-lang/vala-lint;
+    homepage = "https://github.com/vala-lang/vala-lint";
     description = "Check Vala code files for code-style errors";
     longDescription = ''
       Small command line tool and library for checking Vala code files for code-style errors.

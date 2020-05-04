@@ -189,7 +189,7 @@ in
           See <command>man smb.conf</command> for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
-        example =
+        example = literalExample ''
           { public =
             { path = "/srv/public";
               "read only" = true;
@@ -197,7 +197,8 @@ in
               "guest ok" = "yes";
               comment = "Public samba share.";
             };
-          };
+          }
+        '';
       };
 
     };

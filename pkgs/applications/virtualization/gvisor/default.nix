@@ -93,7 +93,7 @@ in buildBazelPackage rec {
 
   meta = with stdenv.lib; {
     description = "Container Runtime Sandbox";
-    homepage = https://github.com/google/gvisor;
+    homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;
     maintainers = with maintainers; [ andrew-d ];
     platforms = [ "x86_64-linux" ];

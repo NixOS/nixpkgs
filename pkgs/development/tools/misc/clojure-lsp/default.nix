@@ -2,18 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "20200305T151710";
+  version = "20200413T141742";
 
   src = fetchurl {
     url = "https://github.com/snoe/clojure-lsp/releases/download/release-${version}/${pname}";
-    sha256 = "0zi05skp36azv0b6spxdscal32cj5rc6g0d0gzfnsaavvxd128lg";
+    sha256 = "0bgyl791l8qaja9p22p77llis39kgdm8x1djz1dm8iy6qn22hm1y";
   };
 
   dontUnpack = true;
 
   installPhase = ''
     install -Dm755 $src $out/bin/clojure-lsp
+    sed -i -e '1 s!java!${jre}/bin/java!' $out/bin/clojure-lsp
   '';
+
+  # verify shebang patch
+  installCheckPhase = "PATH= clojure-lsp --version";
 
   meta = with stdenv.lib; {
     description = "Language Server Protocol (LSP) for Clojure";

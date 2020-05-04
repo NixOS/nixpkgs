@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, Security }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule {
   pname = "linkerd-unstablle";
@@ -13,13 +13,11 @@ buildGoModule {
 
   modSha256 = "0gahhywpcj16ww4l8s3wjwvavq24fpy258snhyf94ipy6lb797sl";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "cli/cmd" ];
 
   meta = with stdenv.lib; {
     description = "A service mesh for Kubernetes and beyond.";
-    homepage = https://linkerd.io/;
+    homepage = "https://linkerd.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ Gonzih ];
   };

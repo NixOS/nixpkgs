@@ -3,17 +3,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libdazzle";
-  version = "3.34.1";
+  version = "3.36.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdazzle/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "01cmcrd75b7ns7j2b4p6h7pv68vjhkcl9zbvzzx7pf4vknxir61x";
+    sha256 = "0n6r16a07in82cnzw91vl675pbjzbvazkxwbqxq2kihganzipcw2";
   };
 
-  nativeBuildInputs = [ ninja meson pkgconfig vala gobject-introspection libxml2 gtk-doc docbook_xsl docbook_xml_dtd_43 dbus xvfb_run ];
+  nativeBuildInputs = [ ninja meson pkgconfig vala gobject-introspection libxml2 gtk-doc docbook_xsl docbook_xml_dtd_43 dbus xvfb_run glib ];
   buildInputs = [ glib gtk3 ];
 
   mesonFlags = [
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
       for those libraries. In other cases, our design isn't quite generic
       enough to work for everyone.
     '';
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://wiki.gnome.org/Apps/Builder";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

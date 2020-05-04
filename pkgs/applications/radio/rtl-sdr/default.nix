@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
-    homepage = http://sdr.osmocom.org/trac/wiki/rtl-sdr;
+    homepage = "http://sdr.osmocom.org/trac/wiki/rtl-sdr";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];

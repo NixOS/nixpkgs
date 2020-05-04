@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++11/14/17 std::expected with functional-style extensions";
-    homepage = https://tl.tartanllama.xyz/en/latest/api/expected.html;
+    homepage = "https://tl.tartanllama.xyz/en/latest/api/expected.html";
     license = licenses.cc0;
     platforms = platforms.all;
     maintainers = with maintainers; [ primeos ];

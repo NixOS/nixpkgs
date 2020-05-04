@@ -3,18 +3,18 @@
 }:
 
 let
-  version = "0.7.4";
+  version = "0.7.5";
 in stdenv.mkDerivation rec {
   pname = "rambox";
   inherit version;
   src = {
     x86_64-linux = fetchurl {
       url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-amd64.deb";
-      sha256 = "0m9627bcwfg9aximv7ifsmspm8xi231pcnnd4p46lahb2qp19vbd";
+      sha256 = "108yd5djnap37yh0nbjyqkp5ci1zmydfzqcsbapin40a4f36zm31";
     };
     i686-linux = fetchurl {
       url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-i386.deb";
-      sha256 = "162p6x400w3pny38adinp53rcifvbkjbs12cwrpf7s3b0yml8qxr";
+      sha256 = "1pvh048h6m19rmbscsy69ih0jkyhazmq2pcagmf3kk8gmbi7y6p6";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free and Open Source messaging and emailing app that combines common web applications into one";
-    homepage = http://rambox.pro;
+    homepage = "https://rambox.pro";
     license = licenses.mit;
     maintainers = with maintainers; [ gnidorah ma27 ];
     platforms = ["i686-linux" "x86_64-linux"];

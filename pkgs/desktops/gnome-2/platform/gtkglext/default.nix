@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://projects.gnome.org/gtkglext/;
+    homepage = "https://projects.gnome.org/gtkglext/";
     description = "GtkGLExt, an OpenGL extension to GTK";
     longDescription = ''
       GtkGLExt is an OpenGL extension to GTK. It provides additional GDK

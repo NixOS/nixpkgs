@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "InfluxDB storage plugin for Graphite-API";
-    homepage = https://github.com/InfluxGraph/influxgraph;
+    homepage = "https://github.com/InfluxGraph/influxgraph";
     license = licenses.asl20;
     maintainers = with maintainers; [ basvandijk ];
   };

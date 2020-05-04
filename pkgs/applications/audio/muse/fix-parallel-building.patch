@@ -36,6 +36,13 @@ In file included from ../muse/mixer/rack.cpp:49:
 ui_plugindialogbase.h: No such file or directory
 
 
+ninja muse/midiedit/CMakeFiles/midiedit.dir/drumedit.o
+
+In file included from /build/source/muse3/muse/midiedit/drumedit.cpp:64:
+/build/source/muse3/muse/components/filedialog.h:29:10: fatal error:
+ui_fdialogbuttons.h: No such file or directory
+
+
 --- a/muse/components/CMakeLists.txt
 +++ b/muse/components/CMakeLists.txt
 @@ -343,4 +343,5 @@ set_target_properties( components
@@ -76,3 +83,11 @@ ui_plugindialogbase.h: No such file or directory
 +      components
        widgets
        )
+--- a/muse/midiedit/CMakeLists.txt
++++ b/muse/midiedit/CMakeLists.txt
+@@ -93,4 +93,5 @@ set_target_properties( midiedit
+ target_link_libraries ( midiedit
+       ${QT_LIBRARIES}
++      components
+       al
+       ctrl

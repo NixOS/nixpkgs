@@ -26,10 +26,6 @@ with lib;
 
     # Show the manual.
     documentation.nixos.enable = mkForce true;
-    services.nixosManual.showManual = true;
-
-    # Let the user play Rogue on TTY 8 during the installation.
-    #services.rogue.enable = true;
 
     # Use less privileged nixos user
     users.users.nixos = {

@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Monospace bitmap screen fonts for X11";
-    homepage = https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/;
+    homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
     license = with licenses; [ free mit ];
     maintainers = with maintainers; [ rnhmjoj ];
   };

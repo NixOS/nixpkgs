@@ -42,7 +42,7 @@ patchShebangs() {
     local newInterpreterLine
 
     if [ $# -eq 0 ]; then
-        echo "No arguments supplied to patchShebangs" >0
+        echo "No arguments supplied to patchShebangs" >&2
         return 0
     fi
 
@@ -66,7 +66,7 @@ patchShebangs() {
             # - options: something starting with a '-'
             # - environment variables: foo=bar
             if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
-                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >0
+                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >&2
                 exit 1
             fi
 

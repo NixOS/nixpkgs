@@ -30,7 +30,7 @@ buildGoPackage rec {
       It's optimized and created to work with vim-go, but it's designed to work
       with any editor. It's currently work in progress and open to change.
     '';
-    homepage = https://github.com/fatih/motion;
+    homepage = "https://github.com/fatih/motion";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An MPD client built on top of rofi";
-    homepage    = https://github.com/carnager/clerk;
+    homepage    = "https://github.com/carnager/clerk";
     license     = licenses.mit;
     maintainers = with maintainers; [ anderspapitto ];
   };

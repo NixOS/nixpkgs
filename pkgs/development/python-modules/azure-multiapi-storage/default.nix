@@ -16,11 +16,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ azure-common msrest msrestazure ];
 
-  # fix namespace issues
-  postInstall = ''
-    rm $out/${python.sitePackages}/azure/__init__.py
-    rm $out/${python.sitePackages}/azure/multiapi/__init__.py
-  '';
+  # fix namespace
+  pythonNamespaces = [ "azure.multiapi" ];
 
   # no tests included
   doCheck = false;

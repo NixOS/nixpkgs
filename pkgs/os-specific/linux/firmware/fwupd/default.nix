@@ -2,6 +2,7 @@
 
 { stdenv
 , fetchurl
+, fetchpatch
 , substituteAll
 , gtk-doc
 , pkgconfig
@@ -16,7 +17,7 @@
 , glib-networking
 , libsoup
 , help2man
-, gpgme
+, libjcat
 , libxslt
 , elfutils
 , libsmbios
@@ -31,7 +32,6 @@
 , docbook_xsl
 , ninja
 , gcab
-, gnutls
 , python3
 , wrapGAppsHook
 , json-glib
@@ -87,11 +87,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.3.9";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "ZuRG+UN8ebXv5Z8fOYWT0eCtHykGXoB8Ysu3wAeqx0A=";
+    sha256 = "V131/l05FKYFavRMXRaiW1bQkTCEn7MTyyD+bqYClU4=";
   };
 
   # libfwupd goes to lib
@@ -130,9 +130,8 @@ stdenv.mkDerivation rec {
     libyaml
     libgudev
     colord
-    gpgme
+    libjcat
     libuuid
-    gnutls
     glib-networking
     json-glib
     umockdev
@@ -151,15 +150,43 @@ stdenv.mkDerivation rec {
     ./fix-paths.patch
     ./add-option-for-installation-sysconfdir.patch
 
-    # install plug-ins and libfwupdplugin to out,
-    # they are not really part of the library
+    # Install plug-ins and libfwupdplugin to out,
+    # they are not really part of the library.
     ./install-fwupdplugin-to-out.patch
 
-    # installed tests are installed to different output
-    # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle
+    # Make it easier to patch installed-tests directory.
+    # https://github.com/fwupd/fwupd/pull/2002
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/2f12e38e61d982dea63778736e2b71d16f0e9925.patch";
+      sha256 = "goTyDj0v50FOQYCS+LhPjo0AEugubr6aBIGfO9ztZOA=";
+    })
+
+    # Install systemd files to our prefix.
+    # https://github.com/fwupd/fwupd/pull/2006
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/463db5162fe4f6fea417973ff95a44ed51ec6402.patch";
+      sha256 = "I0TIfnCca83QpINABUINtl8nIB78dG8OR9MC/hP2hg8=";
+    })
+
+    # Fix installed tests.
+    # https://github.com/fwupd/fwupd/issues/2007
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/c727742df3702fc934e2d9488c883dcbdfa59e9c.patch";
+      sha256 = "b9D2Xblf1VbpS5XZpHtwEJhzuq7+840l7skW5w0NMBU=";
+    })
+
+    # Fix build with bash-completion 2.10
+    # https://github.com/fwupd/fwupd/pull/2014
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/0f035013dfb150c2c3fc7f51090103ba84bd1c06.patch";
+      sha256 = "VXRf5N3inaWThudk6pc4mtp6cMEIyybkdfqKin+9XSw=";
+    })
+
+    # Installed tests are installed to different output
+    # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
     (substituteAll {
       src = ./installed-tests-path.patch;
-      # needs a different set of modules than po/make-images
+      # Needs a different set of modules than po/make-images.
       inherit installedTestsPython;
     })
   ];
@@ -172,14 +199,6 @@ stdenv.mkDerivation rec {
       po/make-images \
       po/make-images.sh \
       po/test-deps
-
-    # we cannot use placeholder in substituteAll
-    # https://github.com/NixOS/nix/issues/1846
-    substituteInPlace data/installed-tests/meson.build --subst-var installedTests
-
-    substituteInPlace data/meson.build --replace \
-      "install_dir: systemd.get_pkgconfig_variable('systemdshutdowndir')" \
-      "install_dir: '${placeholder "out"}/lib/systemd/system-shutdown'"
   '';
 
   # /etc/os-release not available in sandbox
@@ -203,7 +222,8 @@ stdenv.mkDerivation rec {
     "-Dgtkdoc=true"
     "-Dplugin_dummy=true"
     "-Dudevdir=lib/udev"
-    "-Dsystemdunitdir=lib/systemd/system"
+    "-Dsystemd_root_prefix=${placeholder "out"}"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
     "-Defi-libdir=${gnu-efi}/lib"
     "-Defi-ldsdir=${gnu-efi}/lib"
     "-Defi-includedir=${gnu-efi}/include/efi"
@@ -225,23 +245,19 @@ stdenv.mkDerivation rec {
     "-Dplugin_flashrom=true"
   ];
 
-  postInstall = ''
-    moveToOutput share/installed-tests "$installedTests"
-    wrapProgram $installedTests/share/installed-tests/fwupd/hardware.py \
-      --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0:${libsoup}/lib/girepository-1.0"
-  '';
-
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
   # error: “PolicyKit files are missing”
   # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
   PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
 
-  # cannot install to systemd prefix
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMPRESETDIR = "${placeholder "out"}/lib/systemd/system-preset";
-
   # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
   dontWrapGApps = true;
+
+  preCheck = ''
+    addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
+  '';
+
   # so we need to wrap the executables manually
   postFixup = ''
     find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
@@ -256,6 +272,7 @@ stdenv.mkDerivation rec {
   # /etc/fwupd/uefi.conf is created by the services.hardware.fwupd NixOS module
   passthru = {
     filesInstalledToEtc = [
+      "fwupd/ata.conf"
       # "fwupd/daemon.conf" # already created by the module
       "fwupd/redfish.conf"
       "fwupd/remotes.d/dell-esrt.conf"

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub, tree }:
 
 buildGoModule rec {
   pname = "kustomize";
@@ -25,16 +25,14 @@ buildGoModule rec {
 
   modSha256 = "1bas6al14ck0d2ccb4235426a5hldqsm0nf8vi76chz4nahzb71g";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
     longDescription = ''
       kustomize lets you customize raw, template-free YAML files for
       multiple purposes, leaving the original YAML untouched and usable
       as is.
     '';
-    homepage = https://github.com/kubernetes-sigs/kustomize;
+    homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
     maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "lab";
@@ -15,8 +15,6 @@ buildGoModule rec {
 
   modSha256 = "03fqa7s6729g0a6ffiyc61dkldpi7vg8pvvpqak4c0mqi1dycivd";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   postInstall = ''
@@ -28,7 +26,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
-    homepage = https://zaquestion.github.io/lab;
+    homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
     maintainers = with maintainers; [ marsam dtzWill ];
     platforms = platforms.all;

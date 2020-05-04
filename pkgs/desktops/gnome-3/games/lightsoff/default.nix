@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lightsoff";
-  version = "3.34.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1yyq0962fv16rab3alq5saf4gpii9xvcfy5vbq85hhhgjpbqrfns";
+    sha256 = "0qvafpciqbqmpan9i8ans3lqs29v02zblz6k0hzj4p3qq4sch3a3";
   };
 
   nativeBuildInputs = [
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Lightsoff;
+    homepage = "https://wiki.gnome.org/Apps/Lightsoff";
     description = "Puzzle game, where the objective is to turn off all of the tiles on the board";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

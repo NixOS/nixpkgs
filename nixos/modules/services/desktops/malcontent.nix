@@ -12,7 +12,7 @@ with lib;
 
     services.malcontent = {
 
-      enable = mkEnableOption "Malcontent";
+      enable = mkEnableOption "Malcontent, parental control support for applications";
 
     };
 
@@ -23,9 +23,14 @@ with lib;
 
   config = mkIf config.services.malcontent.enable {
 
-    environment.systemPackages = [ pkgs.malcontent ];
+    environment.systemPackages = with pkgs; [
+      malcontent
+      malcontent-ui
+    ];
 
     services.dbus.packages = [ pkgs.malcontent ];
+
+    services.accounts-daemon.enable = true;
 
   };
 

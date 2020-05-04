@@ -2,14 +2,14 @@
 
 let
   pname = "wootility";
-  version = "3.3.3";
+  version = "3.4.6";
 in
 appimageTools.wrapType2 rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-linux-latest/wootility-${version}.AppImage";
-    sha256 = "1qdiacwnvqahqkrhwnblz0jjywn63c6ndl3z450myhx5x55fdcja";
+    sha256 = "02ivbgnzr657iqb9hviaylmsym2kki2c84xmqfix3b0awsphn05q";
   };
 
   profile = ''
@@ -23,7 +23,7 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 
   meta = with lib; {
-    homepage = https://wooting.io/wootility;
+    homepage = "https://wooting.io/wootility";
     description = "Wootility is customization and management software for Wooting keyboards.";
     platforms = [ "x86_64-linux" ];
     license = "unknown";

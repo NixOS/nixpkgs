@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://gtkspell.sourceforge.net/;
+    homepage = "http://gtkspell.sourceforge.net/";
     description = "Word-processor-style highlighting GtkTextView widget";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

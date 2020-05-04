@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Script for taking notes and open urls with taskwarrior";
-    homepage = https://github.com/ValiValpas/taskopen;
+    homepage = "https://github.com/ValiValpas/taskopen";
     platforms = platforms.linux;
     license = stdenv.lib.licenses.free ;
     maintainers = [ maintainers.winpat ];

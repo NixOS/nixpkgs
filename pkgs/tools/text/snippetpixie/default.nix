@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
       For example:- "spr`" expands to "Snippet Pixie rules!"
     '';
-    homepage = https://www.snippetpixie.com;
+    homepage = "https://www.snippetpixie.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       ianmjones

@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = https://airtame.com/download;
+    homepage = "https://airtame.com/download";
     description = "Wireless streaming client for Airtame devices";
     license = licenses.unfree;
     maintainers = with maintainers; [ thanegill ];

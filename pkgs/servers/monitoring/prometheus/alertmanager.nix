@@ -1,4 +1,4 @@
-{ stdenv, go, buildGoPackage, fetchFromGitHub }:
+{ stdenv, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "alertmanager";
@@ -24,14 +24,16 @@ buildGoPackage rec {
        -X ${t}.GoVersion=${stdenv.lib.getVersion go}
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
-    mkdir -p $bin/etc/bash_completion.d
-    $NIX_BUILD_TOP/go/bin/amtool --completion-script-bash > $bin/etc/bash_completion.d/amtool_completion.sh
+    $bin/bin/amtool --completion-script-bash > amtool.bash
+    installShellCompletion amtool.bash
   '';
 
   meta = with stdenv.lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
-    homepage = https://github.com/prometheus/alertmanager;
+    homepage = "https://github.com/prometheus/alertmanager";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin ];
     platforms = platforms.unix;

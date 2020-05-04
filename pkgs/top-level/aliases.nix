@@ -46,6 +46,7 @@ mapAliases ({
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
   at_spi2_core = at-spi2-core; # added 2018-02-25
+  avldrums-lv2 = x42-avldrums; # added 2020-03-29
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
@@ -59,6 +60,8 @@ mapAliases ({
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
+  buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
+  buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   catfish = xfce.catfish; # added 2019-12-22
@@ -113,6 +116,7 @@ mapAliases ({
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
   facette = throw "facette has been removed."; # added 2020-01-06
+  fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H.";
   ffadoFull = ffado; # added 2018-05-01
   firefox-esr-wrapper = firefox-esr;  # 2016-01
@@ -150,6 +154,7 @@ mapAliases ({
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   glib_networking = glib-networking; # added 2018-02-25
+  gmailieer = lieer; # added 2020-04-19
   gnome-mpv = celluloid; # added 2019-08-22
   gnome15 = throw "gnome15 has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # added 2019-12-10
   gmic_krita_qt = gmic-qt-krita; # added 2019-09-07
@@ -163,9 +168,11 @@ mapAliases ({
   gnuradio-rds = gr-rds; # added 2019-05-27
   gnuradio-osmosdr = gr-osmosdr; # added 2019-05-27
   gnustep-make = gnustep.make; # added 2016-7-6
+  go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
   goimports = gotools; # added 2018-09-16
+  gometalinter = throw "Abandoned by upstream. Consider switching to golangci-lint instead"; # added 2020-04-23
   google-gflags = gflags; # added 2019-07-25
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
@@ -208,6 +215,7 @@ mapAliases ({
   keepassx-reboot = keepassx-community; # added 2017-02-01
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keybase-go = keybase;  # added 2016-08-24
+  kinetic-cpp-client = throw "kinetic-cpp-client has been removed from nixpkgs, as it's abandoned."; # 2020-04-28
   kicad-with-packages3d = kicad; # added 2019-11-25
   krename-qt5 = krename; # added 2017-02-18
   keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # 2019-12-10
@@ -219,6 +227,7 @@ mapAliases ({
   libcanberra_gtk3 = libcanberra-gtk3; # added 2018-02-25
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
+  libcroco = throw "libcroco has been removed as it's no longer used in any derivations."; # added 2020-03-04
   libindicate = throw "libindacate has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   libindicate-gtk3 = throw "libindacate-gtk2 has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   libindicate-gtk2 = throw "libindacate-gtk3 has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
@@ -234,18 +243,28 @@ mapAliases ({
   libGL_driver = mesa.drivers;
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
-  liblapackWithoutAtlas = liblapack; # added 2018-11-05
+  liblapackWithoutAtlas = lapack-reference; # added 2018-11-05
   liblrdf = lrdf; # added 2018-04-25
   libqrencode = qrencode;  # added 2019-01-01
   librdf = lrdf; # added 2020-03-22
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
   libsysfs = sysfsutils; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
+  libtxc_dxtn = throw "removed 2020-03-16, now integrated in Mesa";
+  libtxc_dxtn_s2tc = throw "removed 2020-03-16, now integrated in Mesa";
   libudev = udev; # added 2018-04-25
+  libusb = libusb1; # added 2020-04-28
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
+  libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
+
+  # added 2020-04-04
+  linuxPackages_testing_hardened = throw "linuxPackages_testing_hardened has been removed, please use linuxPackages_latest_hardened";
+  linux_testing_hardened = throw "linux_testing_hardened has been removed, please use linux_latest_hardened";
+
+  loadcaffe = throw "loadcaffe has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
@@ -292,10 +311,11 @@ mapAliases ({
   networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
   networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
   networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
-  nix-review = nixpkgs-review; # added 2019-12-22
+  neutral-style = throw "neural-style has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   nfsUtils = nfs-utils;  # added 2014-12-06
   nginxUnstable = nginxMainline; # added 2018-04-25
   nilfs_utils = nilfs-utils; # added 2018-04-25
+  nix-review = nixpkgs-review; # added 2019-12-22
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nologin = shadow; # added 2018-04-25
   nxproxy = nx-libs; # added 2019-02-15
@@ -317,6 +337,57 @@ mapAliases ({
   perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
   pg_tmp = ephemeralpg; # added 2018-01-16
+
+  php-embed = throw ''
+    php*-embed has been dropped, you can build something similar
+    with the following snippet:
+    php74.override { embedSupport = true; apxs2Support = false; }
+  ''; # added 2020-04-01
+  php72-embed = php-embed; # added 2020-04-01
+  php73-embed = php-embed; # added 2020-04-01
+  php74-embed = php-embed; # added 2020-04-01
+
+  phpPackages-embed = throw ''
+    php*Packages-embed has been dropped, you can build something
+    similar with the following snippet:
+    (php74.override { embedSupport = true; apxs2Support = false; }).packages
+  ''; # added 2020-04-01
+  php74Packages-embed = phpPackages-embed;
+  php73Packages-embed = phpPackages-embed;
+  php72Packages-embed = phpPackages-embed;
+
+  php-unit = throw ''
+    php*-unit has been dropped, you can build something similar with
+    the following snippet:
+    php74.override {
+      embedSupport = true;
+      apxs2Support = false;
+      systemdSupport = false;
+      phpdbgSupport = false;
+      cgiSupport = false;
+      fpmSupport = false;
+    }
+  ''; # added 2020-04-01
+  php72-unit = php-unit; # added 2020-04-01
+  php73-unit = php-unit; # added 2020-04-01
+  php74-unit = php-unit; # added 2020-04-01
+
+  phpPackages-unit = throw ''
+    php*Packages-unit has been dropped, you can build something
+     similar with this following snippet:
+    (php74.override {
+      embedSupport = true;
+      apxs2Support = false;
+      systemdSupport = false;
+      phpdbgSupport = false;
+      cgiSupport = false;
+      fpmSupport = false;
+    }).packages
+  ''; # added 2020-04-01
+  php74Packages-unit = phpPackages-unit;
+  php73Packages-unit = phpPackages-unit;
+  php72Packages-unit = phpPackages-unit;
+
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
   pidginlatexSF = pidgin-latex; # added 2014-11-02
@@ -369,6 +440,7 @@ mapAliases ({
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   qtpfsgui = throw "Is now luminanceHDR"; # added 2019-06-26
+  quaternion-git = throw "quaternion-git has been removed in favor of the stable version 'quaternion'"; # added 2020-04-09
   rdf4store = throw "rdf4store has been removed from nixpkgs."; # added 2019-12-21
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
@@ -421,6 +493,7 @@ mapAliases ({
   skrooge2 = skrooge; # added 2017-02-18
   skype = skypeforlinux; # added 2017-07-27
   skydive = throw "skydive has been removed from nixpkgs (2019-09-10)";
+  slack-dark = slack; # added 2020-03-27
   slic3r-prusa3d = prusa-slicer; # added 2019-05-21
   slurm-llnl = slurm; # renamed July 2017
   slurm-llnl-full = slurm-full; # renamed July 2017
@@ -459,6 +532,7 @@ mapAliases ({
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
   spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_60 instead."; # added 2019-10-16
+  spring-boot = spring-boot-cli; # added 2020-04-24
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   squid4 = squid;  # added 2019-08-22
@@ -494,12 +568,17 @@ mapAliases ({
   tftp_hpa = tftp-hpa; # added 2015-04-03
   tomcat85 = tomcat8; # added 2020-03-11
   torbrowser = tor-browser-bundle-bin; # added 2017-04-05
-  transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
+  torch = throw "torch has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torch-hdf5 = throw "torch-hdf5 has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torch-repl = throw "torch-repl has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
+  transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
+  uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
@@ -509,6 +588,7 @@ mapAliases ({
   v4l_utils = v4l-utils; # added 2019-08-07
   v8_3_16_14 = throw "removed 2019-11-01: no longer referenced by other packages";
   valadoc = throw "deprecated 2019-10-10: valadoc was merged into vala 0.38";
+  vamp = { vampSDK = vamp-plugin-sdk; }; # added 2020-03-26
   vimbWrapper = vimb; # added 2015-01
   vimprobable2 = throw "vimprobable2 has been removed from nixpkgs. It relied on webkitgtk24x that has been removed."; # added 2019-12-05
   vimprobable2-unwrapped = vimprobable2; # added 2019-12-05
@@ -620,6 +700,11 @@ mapAliases ({
   clang_39 = llvm_4;
   clang_35 = llvm_4;
   clang_4 = llvm_4;
+
+  # added 2019-04-13
+  # *-polly pointed to llvmPackages_latest
+  llvm-polly = throw "clang is now built with polly-plugin by default";
+  clang-polly = throw "clang is now built with polly-plugin by default";
 
   /* Cleanup before 20.09 */
   oraclejdk8psu = throw ''

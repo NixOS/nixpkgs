@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python subprocess interface";
-    homepage = https://pypi.python.org/pypi/sh/;
+    homepage = "https://pypi.python.org/pypi/sh/";
     license = stdenv.lib.licenses.mit;
   };
 }

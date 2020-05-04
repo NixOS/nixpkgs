@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/deco;
+    homepage = "https://github.com/ebzzry/deco";
     description = "A simple root image setter";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

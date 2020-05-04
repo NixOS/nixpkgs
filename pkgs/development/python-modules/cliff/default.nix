@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "2.17.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f5a1c6b32047aa0d272398d311fd711d41dd5e1cd5195ebe36ebb47f464416fa";
+    sha256 = "0j9q6725226hdhdyy9b0qfjngdj35d3y7fxbmfxpr36ksbh0x6sj";
   };
 
   propagatedBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command Line Interface Formulation Framework";
-    homepage = https://docs.openstack.org/cliff/latest/;
+    homepage = "https://docs.openstack.org/cliff/latest/";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

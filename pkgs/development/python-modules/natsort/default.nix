@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Natural sorting for python";
-    homepage = https://github.com/SethMMorton/natsort;
+    homepage = "https://github.com/SethMMorton/natsort";
     license = lib.licenses.mit;
   };
 }

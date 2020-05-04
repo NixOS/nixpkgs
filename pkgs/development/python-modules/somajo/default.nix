@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "SoMaJo";
-  version = "2.0.4";
+  version = "2.0.5";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "tsproisl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "126jaslg8cfap2is3sy3v13xpl9drb80yc5lfsm1nw5s2xcxklqw";
+    sha256 = "01zvmqilnndh2b257z7bhcc7av5vhjm1g8gmdiiw15gcd2xfmqjs";
   };
 
   propagatedBuildInputs = [ regex ];

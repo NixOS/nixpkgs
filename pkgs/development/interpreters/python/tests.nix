@@ -2,6 +2,7 @@
 , runCommand
 , substituteAll
 , lib
+, callPackage
 }:
 
 let
@@ -36,17 +37,27 @@ let
       is_venv = "True";
       is_nixenv = "False";
     };
+
+  } // lib.optionalAttrs (python.pythonAtLeast "3.8") {
     # Venv built using Python Nix environment (python.buildEnv)
     # TODO: Cannot create venv from a  nix env
     # Error: Command '['/nix/store/ddc8nqx73pda86ibvhzdmvdsqmwnbjf7-python3-3.7.6-venv/bin/python3.7', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
-    # nixenv-venv = rec {
-    #   env = runCommand "${python.name}-venv" {} ''
-    #     ${pythonEnv.interpreter} -m venv $out
-    #   '';
-    #   interpreter = "${env}/bin/${pythonEnv.executable}";
-    #   is_venv = "True";
-    #   is_nixenv = "True";
-    # };
+    nixenv-venv = rec {
+      env = runCommand "${python.name}-venv" {} ''
+        ${pythonEnv.interpreter} -m venv $out
+      '';
+      interpreter = "${env}/bin/${pythonEnv.executable}";
+      is_venv = "True";
+      is_nixenv = "True";
+    };
+  };
+
+  # All PyPy package builds are broken at the moment
+  integrationTests = lib.optionalAttrs (python.pythonAtLeast "3.7"  && (!python.isPyPy)) rec {
+    # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
+    nix-pythonprefix-mypy = callPackage ./tests/test_nix_pythonprefix {
+      interpreter = python;
+    };
   };
 
   testfun = name: attrs: runCommand "${python.name}-tests-${name}" ({
@@ -60,4 +71,4 @@ let
     touch $out/success
   '';
 
-in lib.mapAttrs testfun envs 
+in lib.mapAttrs testfun envs // integrationTests

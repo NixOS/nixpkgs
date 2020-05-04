@@ -1,6 +1,6 @@
 { stdenv, buildGoModule, fetchurl
 , go, ncurses, notmuch, scdoc
-, python3, perl, w3m, dante, Security
+, python3, perl, w3m, dante
 }:
 
 let
@@ -29,8 +29,7 @@ in buildGoModule rec {
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 notmuch ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ python3 notmuch ];
 
   GOFLAGS="-tags=notmuch";
 
@@ -56,7 +55,7 @@ in buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "aerc is an email client for your terminal";
-    homepage = https://aerc-mail.org/;
+    homepage = "https://aerc-mail.org/";
     maintainers = with maintainers; [ tadeokondrak ];
     license = licenses.mit;
     platforms = platforms.unix;

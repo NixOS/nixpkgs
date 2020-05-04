@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Screenshot tool designed for elementary OS";
-    homepage = https://github.com/elementary/screenshot;
+    homepage = "https://github.com/elementary/screenshot";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

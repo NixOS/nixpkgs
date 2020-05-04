@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to parse Matroska files";
-    homepage = https://matroska.org/;
+    homepage = "https://matroska.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ spwhitt ];
     platforms = platforms.unix;

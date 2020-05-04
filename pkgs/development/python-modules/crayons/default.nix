@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "TextUI colors for Python";
-    homepage = https://github.com/kennethreitz/crayons;
+    homepage = "https://github.com/kennethreitz/crayons";
     license = licenses.mit;
   };
 }

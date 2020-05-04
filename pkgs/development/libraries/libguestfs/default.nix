@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     systemd fuse yajl libvirt gmp readline file hivex
     numactl xen libapparmor getopt perlPackages.ModuleBuild
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
-    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
+    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
     ++ stdenv.lib.optional javaSupport jdk;
 
   prePatch = ''

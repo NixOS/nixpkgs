@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pipelines and pipeline components for the analysis of image-based transcriptomics data";
-    homepage = https://spacetx-starfish.readthedocs.io/en/latest/;
+    homepage = "https://spacetx-starfish.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
     broken = true; # incompatible with latest python-dateutil, scikit-image

@@ -11,7 +11,7 @@
 , enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
 , enableJPEG2K    ? false, jasper  # disable jasper by default (many CVE)
 , enableEigen     ? true, eigen
-, enableOpenblas  ? true, openblas
+, enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false) &&
@@ -34,6 +34,8 @@
 
 , AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
 }:
+
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 let
   version = "4.1.2";
@@ -288,7 +290,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
-    homepage = https://opencv.org/;
+    homepage = "https://opencv.org/";
     license = with licenses; if enableUnfree then unfree else bsd3;
     maintainers = with maintainers; [mdaiter basvandijk];
     platforms = with platforms; linux ++ darwin;

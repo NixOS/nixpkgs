@@ -26,7 +26,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Trend Micro Locality Sensitive Hash";
-    homepage = https://github.com/trendmicro/tlsh;
+    homepage = "https://github.com/trendmicro/tlsh";
     license = licenses.asl20;
     platforms = platforms.unix;
   };

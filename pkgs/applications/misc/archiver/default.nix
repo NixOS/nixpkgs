@@ -1,7 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
-, Security
+, lib
 }:
 
 buildGoModule rec {
@@ -17,9 +16,7 @@ buildGoModule rec {
 
   modSha256 = "1mrfqhd0zb78rlqlj2ncb0srwjfl7rzhy2p9mwa82pgysvlp08gv";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easily create & extract archives, and compress & decompress files of various formats";
     homepage = "https://github.com/mholt/archiver";
     license = licenses.mit;

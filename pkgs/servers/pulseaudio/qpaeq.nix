@@ -13,7 +13,7 @@ let
     icon = "audio-volume-high";
     desktopName = "qpaeq";
     genericName = "Audio equalizer";
-    categories = "Music;Sound;";
+    categories = "AudioVideo;Audio;Mixer;";
     startupNotify = "false";
   };
 in
@@ -46,7 +46,7 @@ mkDerivation rec {
 
   meta = {
     description = "An equalizer interface for pulseaudio's equalizer sinks";
-    homepage = http://www.pulseaudio.org/;
+    homepage = "http://www.pulseaudio.org/";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 mkg20001 ];
     platforms = lib.platforms.unix;

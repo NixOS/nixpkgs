@@ -1,21 +1,19 @@
-{ stdenv, buildGoModule, fetchFromGitHub, makeWrapper, varnish, Security }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish }:
 
 buildGoModule rec {
   pname = "prometheus_varnish_exporter";
-  version = "1.5.2";
+  version = "unstable-2020-03-26";
 
   src = fetchFromGitHub {
     owner = "jonnenauha";
     repo = "prometheus_varnish_exporter";
-    rev = version;
-    sha256 = "0rpabw6a6paavv62f0gzhax9brzcgkly27rhkf0ihw8736gkw8ar";
+    rev = "f0f90fc69723de8b716cda16cb419e8a025130ff";
+    sha256 = "1viiiyvhpr7cnf8ykaaq4fzgg9xvn4hnlhv7cagy3jkjlmz60947";
   };
 
-  modSha256 = "0w1zg9jc2466srx9pdckw7rzn7ma4pbd0617b1h98v364wjzgj72";
+  modSha256 = "1vb720axjziiqcba4bdi528r6mc97ci0pfsk0ny50isrkh0s3jzz";
 
   nativeBuildInputs = [ makeWrapper ];
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   postInstall = ''
     wrapProgram $out/bin/prometheus_varnish_exporter \
@@ -24,10 +22,10 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";
     description = "Varnish exporter for Prometheus";
-    license = licenses.mit;
-    maintainers = with maintainers; [ MostAwesomeDude willibutz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MostAwesomeDude willibutz ];
   };
 }

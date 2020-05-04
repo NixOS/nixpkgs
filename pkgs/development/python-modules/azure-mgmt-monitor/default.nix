@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "09bhk6kpf1j1kgsyfdrfmfixrdj0iikx25dr1mh9dc6lci07i1cx";
+    sha256 = "170jyr1qzwhv5ihyrsg5d8qzjylqmg31dscd31jzi4i7bwqf3sb8";
   };
 
   propagatedBuildInputs = [
@@ -27,10 +27,7 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
-  postInstall = lib.optionalString isPy3k ''
-    rm -rf $out/${python.sitePackages}/azure/__init__.py
-    rm -rf $out/${python.sitePackages}/azure/mgmt/__init__.py
-  '';
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests
   doCheck = false;

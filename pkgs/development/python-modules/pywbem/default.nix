@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Support for the WBEM standard for systems management";
-    homepage = https://pywbem.github.io;
+    homepage = "https://pywbem.github.io";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ peterhoeg ];
   };

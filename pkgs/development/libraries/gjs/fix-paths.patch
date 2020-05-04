@@ -1,0 +1,13 @@
+diff --git a/installed-tests/debugger-test.sh b/installed-tests/debugger-test.sh
+index 0d118490..54c5507e 100755
+--- a/installed-tests/debugger-test.sh
++++ b/installed-tests/debugger-test.sh
+@@ -3,7 +3,7 @@
+ if test "$GJS_USE_UNINSTALLED_FILES" = "1"; then
+     gjs="$TOP_BUILDDIR/gjs-console"
+ else
+-    gjs=gjs-console
++    gjs=@gjsConsole@
+ fi
+ 
+ echo 1..1

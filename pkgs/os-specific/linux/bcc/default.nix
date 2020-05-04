@@ -4,12 +4,12 @@
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.13.0";
-  name = "bcc-${version}";
+  pname = "bcc";
+  version = "0.14.0";
 
   src = fetchurl {
     url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
-    sha256 = "15xpwf17x2j1c1wcb84cgfs35dp5w0rjd9mllmddmdjvn303wffx";
+    sha256 = "1hw02bib06fjyw61as5pmhf0qxy0wv0nw8fff2i8a9d1zcd8xf3p";
   };
   format = "other";
 
@@ -67,7 +67,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = https://iovisor.github.io/bcc/;
+    homepage    = "https://iovisor.github.io/bcc/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
   };

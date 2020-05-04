@@ -11,22 +11,20 @@
 , readline
 , systemd
 , udev
-}:
-
-stdenv.mkDerivation rec {
-  pname = "bluez";
-  version = "5.53";
-
-  src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "1g1qg6dz6hl3csrmz75ixr12lwv836hq3ckb259svvrg62l2vaiq";
-  };
-
+}: let
   pythonPath = with python3.pkgs; [
     dbus-python
     pygobject3
     recursivePthLoader
   ];
+in stdenv.mkDerivation rec {
+  pname = "bluez";
+  version = "5.54";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
+    sha256 = "1p2ncvjz6alr9n3l5wvq2arqgc7xjs6dqyar1l9jp0z8cfgapkb8";
+  };
 
   buildInputs = [
     alsaLib
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" "test" ];
+  outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
@@ -79,7 +77,7 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
-  postInstall = ''
+  postInstall = lib.optionalString doCheck ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
@@ -94,8 +92,8 @@ stdenv.mkDerivation rec {
       ln -s ../test/$a $test/bin/bluez-$a
     done
     popd
-    wrapPythonProgramsIn $test/test "$test/test $pythonPath"
-
+    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
+  '' + ''
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
@@ -119,6 +117,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
-    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
+    repositories.git = "https://git.kernel.org/pub/scm/bluetooth/bluez.git";
   };
 }

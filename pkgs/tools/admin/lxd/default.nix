@@ -1,22 +1,28 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+{ stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, libcap, libco-canonical, dqlite
 , raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
+, installShellFiles
 }:
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "3.22";
+  version = "4.0.1";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1j60xajcycqnnkasbghcvx3dvb5iadvvq2l3hh9i0sw3dk1wx4hn";
+    sha256 = "0sxkyjayn7yyiy9kvbdlpkl58lwsl2rhlxnncg628f2kad2zgkdx";
   };
+
+  postPatch = ''
+    substituteInPlace shared/usbid/load.go \
+      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+  '';
 
   preBuild = ''
     # unpack vendor
@@ -39,17 +45,16 @@ buildGoPackage rec {
       '')
     ]}
 
-    mkdir -p "$bin/share/bash-completion/completions/"
-    cp -av go/src/github.com/lxc/lxd/scripts/bash/lxd-client "$bin/share/bash-completion/completions/lxc"
+    installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ installShellFiles pkgconfig makeWrapper ];
   buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
                   raft-canonical.dev sqlite-replication udev.dev ];
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
-    homepage = https://linuxcontainers.org/lxd/;
+    homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz wucke13 ];
     platforms = platforms.linux;

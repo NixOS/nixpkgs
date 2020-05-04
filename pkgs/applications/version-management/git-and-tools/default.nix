@@ -30,13 +30,9 @@ let
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
-  gh = callPackage ./gh {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  gh = callPackage ./gh { };
 
-  ghq = callPackage ./ghq {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
 
@@ -67,12 +63,12 @@ let
 
   git-appraise = callPackage ./git-appraise {};
 
-  git-bug = callPackage ./git-bug {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  git-bug = callPackage ./git-bug { };
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
+
+  git-cinnabar = callPackage ./git-cinnabar { };
 
   git-codeowners = callPackage ./git-codeowners { };
 
@@ -140,9 +136,7 @@ let
 
   git-subrepo = callPackage ./git-subrepo { };
 
-  git-subtrac = callPackage ./git-subtrac {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  git-subtrac = callPackage ./git-subtrac { };
 
   git-sync = callPackage ./git-sync { };
 
@@ -173,29 +167,33 @@ let
 
   gita = python3Packages.callPackage ./gita {};
 
+  gitbatch = callPackage ./gitbatch { };
+
   gitflow = callPackage ./gitflow { };
 
   gitstatus = callPackage ./gitstatus { };
 
+  gitui = callPackage ./gitui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   grv = callPackage ./grv { };
 
-  hub = callPackage ./hub {
-    inherit (darwin) Security;
-  };
+  hub = callPackage ./hub { };
 
-  lab = callPackage ./lab {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  lab = callPackage ./lab { };
 
-  lefthook = callPackage ./lefthook {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  lefthook = callPackage ./lefthook { };
+
+  legit = callPackage ./legit { };
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 
   pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
   qgit = qt5.callPackage ./qgit { };
+
+  scmpuff = callPackage ./scmpuff { };
 
   stgit = callPackage ./stgit { };
 

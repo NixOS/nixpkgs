@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.shorewall.net/;
+    homepage = "http://www.shorewall.net/";
     description = "An IP gateway/firewall configuration tool for GNU/Linux";
     longDescription = ''
       Shorewall is a high-level tool for configuring Netfilter. You describe your

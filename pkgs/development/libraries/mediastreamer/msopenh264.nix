@@ -1,31 +1,49 @@
-{ stdenv, autoreconfHook, pkgconfig, mediastreamer, openh264
-, fetchurl, fetchpatch, cmake
+{ autoreconfHook
+, cmake
+, fetchFromGitLab
+, fetchpatch
+, mediastreamer
+, openh264
+, pkgconfig
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
-  pname = "mediastreamer-openh264";
-  version = "1.2.1";
+  pname = "msopenh264";
+  # Using master branch for linphone-desktop caused a chain reaction that many
+  # of its dependencies needed to use master branch too.
+  version = "unstable-2020-03-03";
 
-  src = fetchurl {
-    url = "https://www.linphone.org/releases/sources/plugins/msopenh264/msopenh264-${version}.tar.gz";
-    sha256 = "0rdxgazm52560g52pp6mp3mwx6j1z3h2zyizzfycp8y8zi92fqm8";
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
+    repo = pname;
+    rev = "2c3abf52824ad23a4caae7565ef158ef91767704";
+    sha256 = "140hs5lzpshzswvl39klcypankq3v2qck41696j22my7s4wsa0hr";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "msopenh264-build-with-openh264-v2.patch";
-      url = "https://git.pld-linux.org/?p=packages/mediastreamer-plugin-msopenh264.git;a=blob_plain;f=mediastreamer-plugin-msopenh264-openh264.patch;hb=344b8af379701a7e58b4ffb3cbac1517eff079fd";
-      sha256 = "10c24b0afchx78q28176pd8iz7i1nlf57f6v6lyqxpz60fm5nrcc";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook cmake pkgconfig ];
   buildInputs = [ mediastreamer openh264 ];
+
+  # Do not build static libraries
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO"
+    "-DCMAKE_SKIP_INSTALL_RPATH=ON"
+  ];
+
+  # CMAKE_INSTALL_PREFIX has no effect so let's install manually. See:
+  # https://gitlab.linphone.org/BC/public/msopenh264/issues/1
+  installPhase = ''
+    mkdir -p $out/lib/mediastreamer/plugins
+    cp src/libmsopenh264.so $out/lib/mediastreamer/plugins/
+  '';
 
   meta = with stdenv.lib; {
     description = "H.264 encoder/decoder plugin for mediastreamer2";
     homepage = "https://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

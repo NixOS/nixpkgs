@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ jinja2 six ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/domenkozar/mr.bob;
+    homepage = "https://github.com/domenkozar/mr.bob";
     description = "A tool to generate code skeletons from templates";
     license = licenses.bsd3;
   };

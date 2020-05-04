@@ -51,6 +51,8 @@ in stdenv.mkDerivation rec {
     mimeType = "x-scheme-handler/discord";
   };
 
+  passthru.updateScript = ./update-discord.sh;
+
   meta = with stdenv.lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";
     homepage = "https://discordapp.com/";

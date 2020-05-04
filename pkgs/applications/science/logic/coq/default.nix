@@ -33,6 +33,7 @@ let
    "8.10.1" = "072v2zkjzf7gj48137wpr3c9j0hg9pdhlr5l8jrgrwynld8fp7i4";
    "8.10.2" = "0znxmpy71bfw0p6x47i82jf5k7v41zbz9bdpn901ysn3ir8l3wrz";
    "8.11.0" = "1rfdic6mp7acx2zfwz7ziqk12g95bl9nyj68z4n20a5bcjv2pxpn";
+   "8.11.1" = "0qriy9dy36dajsv5qmli8gd6v55mah02ya334nw49ky19v7518m0";
   }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
@@ -160,7 +161,7 @@ self = stdenv.mkDerivation {
       together with an environment for semi-interactive development of
       machine-checked proofs.
     '';
-    homepage = http://coq.inria.fr;
+    homepage = "http://coq.inria.fr";
     license = licenses.lgpl21;
     branch = coq-version;
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];

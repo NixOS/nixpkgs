@@ -1,10 +1,10 @@
-{ stdenv, fetchurl
+{ mkDerivation, stdenv, fetchurl
 , pkgconfig, libtool, qmake
 , rsync, ssh
 }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "luckybackup";
   version = "0.5.0";
 

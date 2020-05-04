@@ -27,16 +27,16 @@ buildGoPackage rec {
   nativeBuildInputs = [
     pkgconfig
     dbus-factory
-    dde-api
-    go-dbus-factory
-    go-gir-generator
-    go-lib
     jq
     wrapGAppsHook
     deepin.setupHook
   ];
 
   buildInputs = [
+    dde-api
+    go-dbus-factory
+    go-gir-generator
+    go-lib
     alsaLib
     dde-daemon
     dde-dock
@@ -128,7 +128,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Starter of deepin desktop environment";
-    homepage = https://github.com/linuxdeepin/startdde;
+    homepage = "https://github.com/linuxdeepin/startdde";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

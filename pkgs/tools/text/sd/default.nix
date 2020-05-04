@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sd";
-  version = "0.6.5";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = pname;
-    rev = version;
-    sha256 = "1vxljmd1vh245yhv095i3l44pk915zr2pix4v9r8pz2fynp2nnmj";
+    rev = "v${version}";
+    sha256 = "0y1mabnp0sbvayn695x1yfw04d2bky0r69wyidld6hllq3kqn9y2";
   };
 
-  cargoSha256 = "0n4c0snmjfyk3z2mbzpqgb6ggyv4nqszdda035g3rzpbavzx9xb5";
+  cargoSha256 = "1ra6argxs5dmpxhrr3az21myp27fl3nkdjfqn8cam2xhld1y270l";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 

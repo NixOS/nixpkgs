@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-window-corner-preview";
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     description = "GNOME Shell extension showing a video preview on the corner of the screen";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];
-    homepage = https://github.com/medenagan/window-corner-preview;
+    homepage = "https://github.com/medenagan/window-corner-preview";
+    broken = stdenv.lib.versionAtLeast gnome3.gnome-shell.version "3.32"; # Doesn't support 3.34
   };
 }

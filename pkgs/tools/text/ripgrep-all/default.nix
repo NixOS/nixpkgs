@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "phiresky";
     repo = pname;
-    rev = version;
-    sha256 = "0fxvnd8qflzvqz2181njdhpbr4wdvd1jc6lcw38c3pknk9h3ymq9";
+    rev = "v${version}";
+    sha256 = "1nl03i36ilhxn5xbcry6pcr7vbl5667m43flpxaa0lf1wijzn5c2";
   };
 
-  cargoSha256 = "1ajj1glc9c1scnryyil7qg05gvyn1pk8dl2ivmv5h74vx0x8n0rv";
+  cargoSha256 = "0ndyd8qrvljkk6yvpsp0w17iizxb529sh5q2bj790m32x0gz2w8l";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
       a multitude of file types. rga wraps the awesome ripgrep and enables it
       to search in pdf, docx, sqlite, jpg, movie subtitles (mkv, mp4), etc.
     '';
-    homepage = https://github.com/phiresky/ripgrep-all;
+    homepage = "https://github.com/phiresky/ripgrep-all";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ zaninime ma27 ];
     platforms = platforms.all;

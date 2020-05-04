@@ -122,6 +122,7 @@ let
       XDP_SOCKETS        = whenAtLeast "4.19" yes;
       XDP_SOCKETS_DIAG   = whenAtLeast "4.19" yes;
       WAN                = yes;
+      TCP_CONG_CUBIC     = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
       CGROUP_NET_PRIO             = yes; # Required by systemd
@@ -176,6 +177,10 @@ let
       # Bridge Netfilter Configuration
       NF_TABLES_BRIDGE            = mkMerge [ (whenBetween "4.19" "5.3" yes)
                                               (whenAtLeast "5.3" module) ];
+
+      # needed for `dropwatch`
+      # Builtin-only since https://github.com/torvalds/linux/commit/f4b6bcc7002f0e3a3428bac33cf1945abff95450
+      NET_DROP_MONITOR = yes;
 
       # needed for ss
       INET_DIAG         = yes;
@@ -244,6 +249,7 @@ let
       SND_HDA_RECONFIG    = yes; # Support reconfiguration of jack functions
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
+      SND_HDA_CODEC_CA0132_DSP = whenOlder "5.8" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
@@ -603,9 +609,14 @@ let
 
     misc = {
       HID_BATTERY_STRENGTH = yes;
+      # enabled by default in x86_64 but not arm64, so we do that here
+      HIDRAW               = yes;
+
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
       KERNEL_XZ          = yes;
+
+      SYSVIPC            = yes;  # System-V IPC
 
       UNIX               = yes;  # Unix domain sockets.
 

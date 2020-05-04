@@ -73,7 +73,7 @@ stdenv.mkDerivation (args // {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://caml.inria.fr/ocaml;
+    homepage = "http://caml.inria.fr/ocaml";
     branch = versionNoPatch;
     license = with licenses; [
       qpl /* compiler */

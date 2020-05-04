@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A SOCKS proxy and relay";
-    homepage = http://socks-relay.sourceforge.net/;
+    homepage = "http://socks-relay.sourceforge.net/";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.bsd3;
   };

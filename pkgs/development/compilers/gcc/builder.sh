@@ -201,11 +201,11 @@ postConfigure() {
 
 
 preInstall() {
+    mkdir -p "$out/${targetConfig}/lib"
+    mkdir -p "$lib/${targetConfig}/lib"
     # Make ‘lib64’ symlinks to ‘lib’.
     if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
-        mkdir -p "$out/${targetConfig}/lib"
         ln -s lib "$out/${targetConfig}/lib64"
-        mkdir -p "$lib/${targetConfig}/lib"
         ln -s lib "$lib/${targetConfig}/lib64"
     fi
 }
@@ -216,6 +216,7 @@ postInstall() {
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "$lib"
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "$lib"
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "$lib"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "$lib"
     moveToOutput "share/gcc-*/python" "$lib"
 
     for i in "$lib/${targetConfig}"/lib/*.{la,py}; do

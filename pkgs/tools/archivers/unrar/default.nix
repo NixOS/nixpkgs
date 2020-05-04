@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unrar";
-  version = "5.9.1";
+  version = "5.9.2";
 
   src = fetchurl {
     url = "https://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    sha256 = "0071inswykarjbg4a80fz4n9xdinjfvxd9kmwz5gq0i1w2wd3c8f";
+    sha256 = "19nsxdvf9ll99hvgzq6f89ymxhwki224lygjdabrg8ghikqvmlvk";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utility for RAR archives";
-    homepage = https://www.rarlab.com/;
+    homepage = "https://www.rarlab.com/";
     license = licenses.unfreeRedistributable;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;

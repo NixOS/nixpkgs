@@ -181,6 +181,8 @@ stdenv.mkDerivation (args // {
 
   doCheck = args.doCheck or true;
 
+  strictDeps = true;
+
   inherit releaseDir;
 
   installPhase = args.installPhase or ''

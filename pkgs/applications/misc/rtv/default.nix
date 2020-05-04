@@ -38,7 +38,7 @@ buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/michael-lazar/rtv;
+    homepage = "https://github.com/michael-lazar/rtv";
     description = "Browse Reddit from your Terminal";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer wedens ];

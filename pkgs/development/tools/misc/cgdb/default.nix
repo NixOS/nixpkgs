@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A curses interface to gdb";
 
-    homepage = https://cgdb.github.io/;
+    homepage = "https://cgdb.github.io/";
 
-    repositories.git = git://github.com/cgdb/cgdb.git;
+    repositories.git = "git://github.com/cgdb/cgdb.git";
 
     license = licenses.gpl2Plus;
 

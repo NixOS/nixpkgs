@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext python3 libxml2 libxslt docbook_xsl docbook_xml_dtd_43
-    gtk-doc gobject-introspection makeWrapper
+    gtk-doc gobject-introspection makeWrapper glib
   ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     + ''
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
-
+    '' + stdenv.lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for image loading and manipulation";
-    homepage = http://library.gnome.org/devel/gdk-pixbuf/;
+    homepage = "http://library.gnome.org/devel/gdk-pixbuf/";
     maintainers = [ maintainers.eelco ];
     license = licenses.lgpl21;
     platforms = platforms.unix;

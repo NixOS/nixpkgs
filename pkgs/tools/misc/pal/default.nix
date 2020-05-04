@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = http://palcal.sourceforge.net/;
+    homepage = "http://palcal.sourceforge.net/";
     description = "Command-line calendar program that can keep track of events";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];

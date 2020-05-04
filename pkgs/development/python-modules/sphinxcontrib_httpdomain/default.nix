@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
-    homepage = https://bitbucket.org/birkenfeld/sphinx-contrib;
+    homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
     license = licenses.bsd0;
   };
 

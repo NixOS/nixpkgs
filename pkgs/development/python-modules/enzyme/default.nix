@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = https://github.com/Diaoul/enzyme;
+    homepage = "https://github.com/Diaoul/enzyme";
     license = with stdenv.lib; licenses.asl20;
     description = "Python video metadata parser";
   };

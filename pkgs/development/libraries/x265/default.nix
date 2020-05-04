@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for encoding h.265/HEVC video streams";
-    homepage    = http://x265.org;
+    homepage    = "http://x265.org";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

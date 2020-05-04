@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit version;
-    homepage = https://sourceforge.net/projects/reiser4/;
+    homepage = "https://sourceforge.net/projects/reiser4/";
     description = "Reiser4 utilities";
     license = licenses.gpl2;
     platforms = platforms.linux;

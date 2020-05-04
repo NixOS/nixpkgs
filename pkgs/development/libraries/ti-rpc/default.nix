@@ -1,11 +1,11 @@
 { fetchurl, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-1.2.5";
+  name = "libtirpc-1.2.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "1jl6a5kkw2vrp4gb6pmvf72rqimywvwfb9f7iz2xjg4wgq63bdpk";
+    sha256 = "1k6i6wma3xs7gmp54z587nd4yi5wrvg2ycl5g36zjnhx32jyjy22";
   };
 
   outputs = [ "out" "dev" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/libtirpc/;
+    homepage = "https://sourceforge.net/projects/libtirpc/";
     description = "The transport-independent Sun RPC implementation (TI-RPC)";
     license = licenses.bsd3;
     platforms = platforms.linux;

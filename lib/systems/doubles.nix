@@ -35,6 +35,8 @@ let
     "vc4-none"
 
     "js-ghcjs"
+
+    "aarch64-genode" "x86_64-genode"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -68,6 +70,7 @@ in {
   unix    = filterDoubles predicates.isUnix;
   wasi    = filterDoubles predicates.isWasi;
   windows = filterDoubles predicates.isWindows;
+  genode  = filterDoubles predicates.isGenode;
 
   embedded = filterDoubles predicates.isNone;
 

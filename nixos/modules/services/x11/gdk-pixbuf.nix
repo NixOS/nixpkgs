@@ -19,7 +19,7 @@ let
           continue
         fi
         GDK_PIXBUF_MODULEDIR="$module_dir" \
-          ${pkgs.gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders
+          ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${pkgs.gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders
       done
     ) > "$out"
   '';
@@ -37,7 +37,7 @@ in
   # If there is any package configured in modulePackages, we generate the
   # loaders.cache based on that and set the environment variable
   # GDK_PIXBUF_MODULE_FILE to point to it.
-  config = mkIf (cfg.modulePackages != []) {
+  config = mkIf (cfg.modulePackages != [] || pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform) {
     environment.variables = {
       GDK_PIXBUF_MODULE_FILE = "${loadersCache}";
     };

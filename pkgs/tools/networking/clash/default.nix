@@ -1,20 +1,18 @@
-{ stdenv, fetchFromGitHub, buildGoModule, Security }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "clash";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "Dreamacro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "150zpjchldm1632z6gkydgqhx2a612lpwf5lqngd2if99nas54kk";
+    sha256 = "08zwrnpiihlir83fryani8pr972lmj1sjvhjc5pzlw1hks88i9m2";
   };
 
   goPackagePath = "github.com/Dreamacro/clash";
-  modSha256 = "02bki2iq99lc9iq1mjf9rbxwspalrj7hjlk1h384w3d4s4x4fyxy";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  modSha256 = "05i8mzhxzkgcmaa4gazfl8pq3n8mc4prww0ghl6m28cy7a0vsh7f";
 
   buildFlagsArray = [
     "-ldflags="

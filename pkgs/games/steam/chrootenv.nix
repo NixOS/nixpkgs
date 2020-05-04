@@ -105,6 +105,12 @@ in buildFHSUserEnv rec {
 
     # called by steam's setup.sh
     file
+
+    # Prison Architect
+    libGLU
+    libuuid
+    libbsd
+    alsaLib
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;
@@ -152,8 +158,6 @@ in buildFHSUserEnv rec {
     xorg.libXt
     xorg.libXmu
     xorg.libxcb
-    libGLU
-    libuuid
     libogg
     libvorbis
     SDL

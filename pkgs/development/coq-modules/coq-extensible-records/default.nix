@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/gmalecha/coq-extensible-records;
+    homepage = "https://github.com/gmalecha/coq-extensible-records";
     description = "Implementation of extensible records in Coq";
     license = licenses.mit;
     maintainers = with maintainers; [ ptival ];

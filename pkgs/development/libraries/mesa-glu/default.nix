@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "9.0.1";
 
   src = fetchurl {
-    url = "ftp://ftp.freedesktop.org/pub/mesa/${pname}/${pname}-${version}.tar.xz";
+    url = "https://mesa.freedesktop.org/archive/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1g2m634p73mixkzv1qz1d0flwm390ydi41bwmchiqvdssqnlqnpv";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OpenGL utility library";
-    homepage = https://cgit.freedesktop.org/mesa/glu/;
+    homepage = "https://cgit.freedesktop.org/mesa/glu/";
     license = stdenv.lib.licenses.sgi-b-20;
     platforms = stdenv.lib.platforms.unix;
     broken = stdenv.hostPlatform.isAndroid;

@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     valgrind
+    libxslt
   ];
 
   buildInputs = [

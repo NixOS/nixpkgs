@@ -2,7 +2,7 @@
 , pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg_4, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, microsoft_gsl, hunspell
+, tl-expected, hunspell
 # TODO: Shouldn't be required:
 , pcre, xorg, utillinux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
 , xdg_utils
@@ -19,12 +19,12 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.9.21";
+  version = "2.1.1";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1b7z68q2sb2y203nf4p6lmz72zkpi5gyv9ypqi5h99bm2j6bbyg1";
+    sha256 = "0032csgzwfby5a8q8w9iks7ggv1dcqli3qyhksbzly2xzxmfzqaj";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg_4 openalSoft minizip libopus alsaLib libpulseaudio range-v3
-    tl-expected microsoft_gsl hunspell
+    tl-expected hunspell
     # TODO: Shouldn't be required:
     pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst
   ];
@@ -57,6 +57,7 @@ mkDerivation rec {
     "-DTDESKTOP_API_TEST=ON"
     "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
     "-DDESKTOP_APP_USE_PACKAGED_VARIANT=OFF"
+    "-DDESKTOP_APP_USE_PACKAGED_GSL=OFF"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON"
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'

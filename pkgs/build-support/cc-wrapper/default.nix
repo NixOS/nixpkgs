@@ -48,7 +48,7 @@ let
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
   default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc) && !(targetPlatform.useLLVM or false) then
-    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
+    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/${targetPlatform.config}"
   else if targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false) && !(targetPlatform.useLLVM or false) then
     "-isystem ${libcxx}/include/c++/v1"
   else "";
@@ -199,6 +199,12 @@ stdenv.mkDerivation {
       fi
     ''
 
+    + optionalString cc.langAda or false ''
+      wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
+      wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
+      wrap ${targetPrefix}gnatlink ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatlink
+    ''
+
     + optionalString cc.langFortran or false ''
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
@@ -283,6 +289,13 @@ stdenv.mkDerivation {
       ccLDFlags+=" -L${cc_solib}/lib"
       ccCFlags+=" -B${cc_solib}/lib"
 
+    '' + optionalString cc.langAda or false ''
+      basePath=$(echo $cc/lib/*/*/*)
+      ccCFlags+=" -B$basePath -I$basePath/adainclude"
+      gnatCFlags="-I$basePath/adainclude -I$basePath/adalib"
+
+      echo "$gnatCFlags" > $out/nix-support/gnat-cflags
+    '' + ''
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
@@ -351,6 +364,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     '' + optionalString targetPlatform.isNetBSD ''
       hardening_unsupported_flags+=" stackprotector fortify"
+    '' + optionalString cc.langAda or false ''
+      hardening_unsupported_flags+=" stackprotector strictoverflow"
     ''
 
     + optionalString targetPlatform.isWasm ''

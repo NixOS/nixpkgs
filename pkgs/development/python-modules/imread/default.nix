@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python package to load images as numpy arrays";
-    homepage = https://imread.readthedocs.io/en/latest/;
+    homepage = "https://imread.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ luispedro ];
     license = licenses.mit;
     platforms = platforms.unix;

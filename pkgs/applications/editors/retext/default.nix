@@ -54,7 +54,7 @@ in python.pkgs.buildPythonApplication {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/retext-project/retext/;
+    homepage = "https://github.com/retext-project/retext/";
     description = "Simple but powerful editor for Markdown and reStructuredText";
     license = licenses.gpl3;
     maintainers = with maintainers; [ klntsky ];

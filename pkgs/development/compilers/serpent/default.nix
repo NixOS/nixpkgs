@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       style, and at the same time adding special domain-specific
       features for contract programming.
     '';
-    homepage = https://github.com/ethereum/wiki/wiki/Serpent;
+    homepage = "https://github.com/ethereum/wiki/wiki/Serpent";
     license = with licenses; [ wtfpl ];
     maintainers = with maintainers; [ chris-martin ];
     platforms = with platforms; linux;

@@ -12,7 +12,7 @@ let
   # command-line to launch oauth2_proxy.
   providerSpecificOptions = {
     azure = cfg: {
-      azure.tenant = cfg.azure.tenant;
+      azure-tenant = cfg.azure.tenant;
       resource = cfg.azure.resource;
     };
 
@@ -44,6 +44,7 @@ let
     pass-access-token = passAccessToken;
     pass-basic-auth = passBasicAuth;
     pass-host-header = passHostHeader;
+    reverse-proxy = reverseProxy;
     proxy-prefix = proxyPrefix;
     profile-url = profileURL;
     redeem-url = redeemURL;
@@ -65,8 +66,8 @@ let
   } // lib.optionalAttrs (cfg.htpasswd.file != null) {
     display-htpasswd-file = cfg.htpasswd.displayForm;
   } // lib.optionalAttrs tls.enable {
-    tls-cert = tls.certificate;
-    tls-key = tls.key;
+    tls-cert-file = tls.certificate;
+    tls-key-file = tls.key;
     https-address = tls.httpsAddress;
   } // (getProviderOptions cfg cfg.provider) // cfg.extraConfig;
 
@@ -98,14 +99,21 @@ in
 
     ##############################################
     # PROVIDER configuration
+    # Taken from: https://github.com/pusher/oauth2_proxy/blob/master/providers/providers.go
     provider = mkOption {
       type = types.enum [
         "google"
-        "github"
         "azure"
+        "facebook"
+        "github"
+        "keycloak"
         "gitlab"
         "linkedin"
-        "myusa"
+        "login.gov"
+        "bitbucket"
+        "nextcloud"
+        "digitalocean"
+        "oidc"
       ];
       default = "google";
       description = ''
@@ -430,6 +438,17 @@ in
       default = null;
       description = ''
         Path to custom HTML templates.
+      '';
+    };
+
+    reverseProxy = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        In case when running behind a reverse proxy, controls whether headers
+	like <literal>X-Real-Ip</literal> are accepted. Usage behind a reverse
+        proxy will require this flag to be set to avoid logging the reverse
+        proxy IP address.
       '';
     };
 

@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://handbrake.fr/;
+    homepage = "http://handbrake.fr/";
     description = "A tool for converting video files and ripping DVDs";
     longDescription = ''
       Tool for converting and remuxing video files

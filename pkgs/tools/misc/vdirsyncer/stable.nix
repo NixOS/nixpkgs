@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   patches = [
     # Fixes for hypothesis: https://github.com/pimutils/vdirsyncer/pull/779
     (fetchpatch {
-      url = https://github.com/pimutils/vdirsyncer/commit/22ad88a6b18b0979c5d1f1d610c1d2f8f87f4b89.patch;
+      url = "https://github.com/pimutils/vdirsyncer/commit/22ad88a6b18b0979c5d1f1d610c1d2f8f87f4b89.patch";
       sha256 = "0dbzj6jlxhdidnm3i21a758z83sdiwzhpd45pbkhycfhgmqmhjpl";
     })
   ];
@@ -40,11 +40,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
-    make DETERMINISTIC_TESTS=true test
+    make DETERMINISTIC_TESTS=true PYTEST_ARGS="--deselect=tests/system/cli/test_sync.py::test_verbosity" test
   '';
 
   meta = with lib; {
-    homepage = https://github.com/pimutils/vdirsyncer;
+    homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
     license = licenses.mit;
     maintainers = with maintainers; [ loewenheim ];

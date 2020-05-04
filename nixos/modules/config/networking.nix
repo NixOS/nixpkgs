@@ -197,7 +197,7 @@ in
 
       } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
         # /etc/rpc: RPC program numbers.
-        rpc.source = pkgs.glibc.out + "/etc/rpc";
+        rpc.source = pkgs.stdenv.cc.libc.out + "/etc/rpc";
       };
 
       networking.proxy.envVars =

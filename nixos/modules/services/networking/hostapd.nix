@@ -49,6 +49,7 @@ in
     services.hostapd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable putting a wireless interface into infrastructure mode,
@@ -71,6 +72,7 @@ in
       };
 
       noScan = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Do not scan for overlapping BSSs in HT40+/- mode.
@@ -126,6 +128,7 @@ in
       };
 
       wpa = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Enable WPA (IEEE 802.11i/D3.0) to authenticate with the access point.

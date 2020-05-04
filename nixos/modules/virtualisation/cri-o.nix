@@ -4,8 +4,21 @@ with lib;
 
 let
   cfg = config.virtualisation.cri-o;
+
+  # Copy configuration files to avoid having the entire sources in the system closure
+  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+    cp ${filePath} $out
+  '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "virtualisation" "cri-o" "registries" ] [ "virtualisation" "containers" "registries" "search" ])
+  ];
+
+  meta = {
+    maintainers = lib.teams.podman.members;
+  };
+
   options.virtualisation.cri-o = {
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
@@ -32,20 +45,14 @@ in
       default = "/pause";
       description = "Pause command to be executed";
     };
-
-    registries = mkOption {
-      type = types.listOf types.str;
-      default = [ "docker.io" "quay.io" ];
-      description = "Registries to be configured for unqualified image pull";
-    };
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs;
-      [ cri-o cri-tools conmon cni-plugins iptables runc utillinux ];
-    environment.etc."crictl.yaml".text = ''
-      runtime-endpoint: unix:///var/run/crio/crio.sock
-    '';
+      [ cri-o cri-tools conmon iptables runc utillinux ];
+
+    environment.etc."crictl.yaml".source = copyFile "${pkgs.cri-o.src}/crictl.yaml";
+
     environment.etc."crio/crio.conf".text = ''
       [crio]
       storage_driver = "${cfg.storageDriver}"
@@ -53,35 +60,21 @@ in
       [crio.image]
       pause_image = "${cfg.pauseImage}"
       pause_command = "${cfg.pauseCommand}"
-      registries = [
-        ${concatMapStringsSep ", " (x: "\"" + x + "\"") cfg.registries}
-      ]
+
+      [crio.network]
+      plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
+      network_dir = "/etc/cni/net.d/"
 
       [crio.runtime]
       conmon = "${pkgs.conmon}/bin/conmon"
       log_level = "${cfg.logLevel}"
       manage_network_ns_lifecycle = true
     '';
-    environment.etc."containers/policy.json".text = ''
-      {"default": [{"type": "insecureAcceptAnything"}]}
-    '';
-    environment.etc."cni/net.d/20-cri-o-bridge.conf".text = ''
-      {
-        "cniVersion": "0.3.1",
-        "name": "crio-bridge",
-        "type": "bridge",
-        "bridge": "cni0",
-        "isGateway": true,
-        "ipMasq": true,
-        "ipam": {
-          "type": "host-local",
-          "subnet": "10.88.0.0/16",
-          "routes": [
-              { "dst": "0.0.0.0/0" }
-          ]
-        }
-      }
-    '';
+
+    environment.etc."cni/net.d/10-crio-bridge.conf".source = copyFile "${pkgs.cri-o.src}/contrib/cni/10-crio-bridge.conf";
+
+    # Enable common /etc/containers configuration
+    virtualisation.containers.enable = true;
 
     systemd.services.crio = {
       description = "Container Runtime Interface for OCI (CRI-O)";

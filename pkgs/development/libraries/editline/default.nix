@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "doc" ];
 
   meta = with stdenv.lib; {
-    homepage = http://troglobit.com/editline.html;
+    homepage = "http://troglobit.com/editline.html";
     description = "A readline() replacement for UNIX without termcap (ncurses)";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ dtzWill ];

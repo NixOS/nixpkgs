@@ -3,8 +3,8 @@
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
-, openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
-, librsvg, gnome_vfs, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
+, openssl, gperf, cppunit, poppler, utillinux
+, librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
@@ -62,6 +62,11 @@ in (stdenv.mkDerivation rec {
 
   patches = [
     ./xdg-open-brief.patch
+    (fetchpatch {
+      url = "https://git.pld-linux.org/gitweb.cgi?p=packages/libreoffice.git;a=blob_plain;f=poppler-0.86.patch;h=76b8356d5f22ef537a83b0f9b0debab591f152fe;hb=a2737a61353e305a9ee69640fb20d4582c218008";
+      name = "poppler-0.86.patch";
+      sha256 = "0q6k4l8imgp8ailcv0qx5l83afyw44hah24fi7gjrm9xgv5sbb8j";
+    })
   ];
 
   tarballPath = "external/tarballs";
@@ -347,13 +352,13 @@ in (stdenv.mkDerivation rec {
   buildInputs = with xorg;
     [ ant ArchiveZip boost cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gtk3 gtk2
+      freetype getopt gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU libGL mythes gst_all_1.gstreamer
       gst_all_1.gst-plugins-base glib libmysqlclient
-      neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
+      neon nspr nss openldap openssl pam perl pkgconfig poppler
       python3 sane-backends unzip vigra which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
@@ -370,7 +375,7 @@ in (stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
-    homepage = https://libreoffice.org/;
+    homepage = "https://libreoffice.org/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

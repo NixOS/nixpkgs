@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Dash Generator Script for Any HTML";
-    homepage    = https://github.com/technosophos/dashing;
+    homepage    = "https://github.com/technosophos/dashing";
     license     = licenses.mit;
     maintainers = [ ];
     platforms   = platforms.all;

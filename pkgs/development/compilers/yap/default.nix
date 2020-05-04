@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = {
-    homepage = http://www.dcc.fc.up.pt/~vsc/Yap/;
+    homepage = "http://www.dcc.fc.up.pt/~vsc/Yap/";
     description = "A ISO-compatible high-performance Prolog compiler";
     license = stdenv.lib.licenses.artistic2;
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Library supporting function dispatch on general data containers. C base and Python wrapper";
-    homepage = https://xnd.io/;
+    homepage = "https://xnd.io/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

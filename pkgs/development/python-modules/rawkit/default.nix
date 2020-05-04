@@ -14,7 +14,7 @@ buildPythonPackage rec {
   patches = [
     # Python 3.7 compatibility
     (fetchpatch {
-      url = https://github.com/photoshell/rawkit/commit/663e90afa835d398aedd782c87b8cd0bff64bc9f.patch;
+      url = "https://github.com/photoshell/rawkit/commit/663e90afa835d398aedd782c87b8cd0bff64bc9f.patch";
       sha256 = "1cdw0x9bgk0b5jnpjnmd8jpbaryarr3cjqizq44366qh3l0jycxy";
     })
   ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "CTypes based LibRaw bindings for Python";
-    homepage = https://rawkit.readthedocs.org/;
+    homepage = "https://rawkit.readthedocs.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ jfrankenau ];
   };

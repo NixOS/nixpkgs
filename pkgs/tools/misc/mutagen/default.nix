@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, CoreServices }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "mutagen";
@@ -13,11 +13,9 @@ buildGoModule rec {
 
   modSha256 = "1r6b4y6civk75if6nljl66pgv5qm7x05qqby1anf7s7cz7d1rc3g";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
-
   subPackages = [ "cmd/mutagen" "cmd/mutagen-agent" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Make remote development work with your local tools";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen/releases/tag/v${version}";

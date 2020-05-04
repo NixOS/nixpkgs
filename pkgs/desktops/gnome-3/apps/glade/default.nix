@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool itstool wrapGAppsHook docbook_xsl libxslt gobject-introspection
+    pkgconfig intltool itstool wrapGAppsHook docbook_xsl libxslt libxml2 gobject-introspection
   ];
   buildInputs = [
     gtk3 glib libxml2 python3 python3.pkgs.pygobject3
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Apps/Glade";
     description = "User interface designer for GTK applications";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.lgpl2;
     platforms = platforms.linux;
   };

@@ -1,11 +1,11 @@
 { stdenv, cmake, python3, fetchFromGitHub, emscriptenRev ? null, substituteAll }:
 
 let
-  defaultVersion = "91";
+  defaultVersion = "93";
 
   # Map from git revs to SHA256 hashes
   sha256s = {
-    version_91 = "1qsjqnzc5w9ny9v01bxkdvhh4kgbsia01x5vvac72m075v4mpgs4";
+    version_93 = "15y3703ha6mxcq168br0wlydas5rq66msrcsd650zrjz0ndxwsfx";
     "1.39.1" = "0ygm9m5322h4vfpf3j63q32qxk2l26yk62hh7dkb49j51zwl1y3y";
   };
 in
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/WebAssembly/binaryen;
+    homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
     platforms = platforms.all;
     maintainers = with maintainers; [ asppsa ];

@@ -42,7 +42,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/boto/botocore;
+    homepage = "https://github.com/boto/botocore";
     license = "bsd";
     description = "A low-level interface to a growing number of Amazon Web Services";
   };

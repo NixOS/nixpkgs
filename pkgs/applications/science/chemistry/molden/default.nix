@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
      description = "Display and manipulate molecular structures";
-     homepage = http://www.cmbi.ru.nl/molden/;
+     homepage = "http://www.cmbi.ru.nl/molden/";
      license = {
        fullName = "Free for academic/non-profit use";
-       url = http://www.cmbi.ru.nl/molden/CopyRight.html;
+       url = "http://www.cmbi.ru.nl/molden/CopyRight.html";
        free = false;
      };
      platforms = platforms.linux;

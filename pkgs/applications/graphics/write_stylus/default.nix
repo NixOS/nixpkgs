@@ -1,4 +1,4 @@
-{ stdenv, lib, qtbase, qtsvg, libglvnd, fetchurl, makeDesktopItem }:
+{ mkDerivation, stdenv, lib, qtbase, qtsvg, libglvnd, fetchurl, makeDesktopItem }:
 let
   # taken from: https://www.iconfinder.com/icons/50835/edit_pencil_write_icon
   # license: Free for commercial use
@@ -7,7 +7,7 @@ let
     sha256 = "0abdya42yf9alxbsmc2nf8jwld50zfria6z3d4ncvp1zw2a9jhb8";
   };
 in
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "write_stylus";
   version = "209";
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.styluslabs.com/;
+    homepage = "http://www.styluslabs.com/";
     description = "Write is a word processor for handwriting.";
     platforms = platforms.linux;
     license = stdenv.lib.licenses.unfree;

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     Operations, Performance and Security Management. If you need to
     know what is going on in your network, right now or historically,
     you will find Argus a useful tool. '';
-    homepage = http://qosient.com/argus;
+    homepage = "http://qosient.com/argus";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

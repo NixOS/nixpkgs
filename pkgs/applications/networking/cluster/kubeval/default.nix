@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, Security }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, makeWrapper }:
 
 buildGoModule rec {
   pname = "kubeval";
@@ -13,11 +13,9 @@ buildGoModule rec {
 
   modSha256 = "0y9x44y3bchi8xg0a6jmp2rmi8dybkl6qlywb6nj1viab1s8dd4y";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Validate your Kubernetes configuration files";
-    homepage = https://github.com/instrumenta/kubeval;
+    homepage = "https://github.com/instrumenta/kubeval";
     license = licenses.asl20;
     maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.all;

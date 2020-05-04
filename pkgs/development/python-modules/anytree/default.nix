@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Powerful and Lightweight Python Tree Data Structure";
-    homepage = https://github.com/c0fec0de/anytree;
+    homepage = "https://github.com/c0fec0de/anytree";
     license = licenses.asl20;
     maintainers = [ maintainers.worldofpeace ];
   };

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "0.13.4";
+  version = "0.13.6";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xd7vsybv6w5llvb85g6bx6r33lr0ki077rwzdvwb9c8w64fvs2h";
+    sha256 = "08d0zddqqymxj1qcp8c78r7mpii1piy6awaf135jxhzwi775sqqv";
   };
 
-  cargoSha256 = "16qad0m2vygwrbz40ww0mb0ba5wn2wna1n78bc8nxh60x0qiigi9";
+  cargoSha256 = "1cxvx51zkmhszmgwsi0aj469xz98v5nk79zvqfyma27gsnh8jczr";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     # install shell completion files
-    OUT_DIR=target/release/build/broot-*/out
+    OUT_DIR=$releaseDir/build/broot-*/out
 
     installShellCompletion --bash $OUT_DIR/{br,broot}.bash
     installShellCompletion --fish $OUT_DIR/{br,broot}.fish

@@ -24,7 +24,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Kubernetes log viewer";
-    homepage = https://github.com/boz/kail;
+    homepage = "https://github.com/boz/kail";
     license = licenses.mit;
     maintainers = with maintainers; [ offline vdemeester ];
   };

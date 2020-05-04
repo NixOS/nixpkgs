@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [raskin timokau];
     platforms = platforms.unix;
-    homepage = https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html;
+    homepage = "https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html";
   };
 }

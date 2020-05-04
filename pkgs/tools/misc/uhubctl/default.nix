@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, libusb
+, libusb1
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cgmwsf68g49k6q4jvz073bpjhg5p73kk1a4kbgkxmvx01gmbcmq";
   };
 
-  buildInputs = [ libusb ];
+  buildInputs = [ libusb1 ];
 
   installFlags = [ "prefix=${placeholder "out"}" ];
   meta = with stdenv.lib; {

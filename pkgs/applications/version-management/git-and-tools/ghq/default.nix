@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ghq";
@@ -13,8 +13,6 @@ buildGoModule rec {
 
   modSha256 = "0hlbhky3c6zva9khn73n6xgq57k5p8anskxy3g2m0wzhr72cyc41";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   buildFlagsArray = ''
     -ldflags=
       -X=main.Version=${version}
@@ -27,7 +25,7 @@ buildGoModule rec {
 
   meta = {
     description = "Remote repository management made easy";
-    homepage = https://github.com/x-motemen/ghq;
+    homepage = "https://github.com/x-motemen/ghq";
     maintainers = with stdenv.lib.maintainers; [ sigma ];
     license = stdenv.lib.licenses.mit;
   };

@@ -26,6 +26,6 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;
     license = licenses.mit;
-    homepage = https://travisf.net/i3-wk-switcher;
+    homepage = "https://travisf.net/i3-wk-switcher";
   };
 }

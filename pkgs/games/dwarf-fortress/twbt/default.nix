@@ -80,6 +80,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.linux;
-    homepage = https://github.com/mifki/df-twbt;
+    homepage = "https://github.com/mifki/df-twbt";
   };
 }

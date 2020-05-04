@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt DBus interface library for Deepin software";
-    homepage = https://github.com/linuxdeepin/dde-qt-dbus-factory;
+    homepage = "https://github.com/linuxdeepin/dde-qt-dbus-factory";
     license = with licenses; [ gpl3Plus lgpl2Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

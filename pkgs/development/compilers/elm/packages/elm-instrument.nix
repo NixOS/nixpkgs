@@ -3,15 +3,15 @@
 , fetchgit, filepath, free, HUnit, indents, json, mtl
 , optparse-applicative, parsec, process, QuickCheck, quickcheck-io
 , split, stdenv, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
-, text, elm
+, text
 }:
 mkDerivation {
   pname = "elm-instrument";
   version = "0.0.7";
   src = fetchgit {
-    url = "https://github.com/zwilias/elm-instrument.git";
-    sha256 = "14yfzwsyvgc6rzn19sdmwk2mc1vma9hcljnmjnmlig8mp0271v56";
-    rev = "31b527e405a6afdb25bb87ad7bd14f979e65cff7";
+    url = "https://github.com/zwilias/elm-instrument";
+    sha256 = "167d7l2547zxdj7i60r6vazznd9ichwc0bqckh3vrh46glkz06jv";
+    rev = "63e15bb5ec5f812e248e61b6944189fa4a0aee4e";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -28,7 +28,7 @@ mkDerivation {
     quickcheck-io split tasty tasty-golden tasty-hunit tasty-quickcheck
     text
   ];
-  homepage = "http://elm-lang.org";
+  homepage = "https://elm-lang.org";
   description = "Instrumentation library for Elm";
   license = stdenv.lib.licenses.bsd3;
 }

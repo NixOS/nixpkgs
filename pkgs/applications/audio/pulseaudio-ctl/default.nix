@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Control pulseaudio volume from the shell or mapped to keyboard shortcuts. No need for alsa-utils.";
-    homepage = https://bbs.archlinux.org/viewtopic.php?id=124513;
+    homepage = "https://bbs.archlinux.org/viewtopic.php?id=124513";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;

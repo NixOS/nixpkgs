@@ -67,7 +67,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.sylabs.io/;
+    homepage = "http://www.sylabs.io/";
     description = "Application containers for linux";
     license = licenses.bsd3;
     platforms = platforms.linux;

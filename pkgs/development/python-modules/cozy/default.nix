@@ -33,7 +33,7 @@ buildPythonPackage {
 
   meta = {
     description = "The collection synthesizer";
-    homepage = https://cozy.uwplse.org/;
+    homepage = "https://cozy.uwplse.org/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.MostAwesomeDude ];
   };

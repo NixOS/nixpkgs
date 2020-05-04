@@ -17,7 +17,7 @@ buildPythonPackage rec {
   checkInputs = [ mock pytest pytestcov pytest-flake8 tox ];
 
   meta = with lib; {
-    homepage = https://github.com/p1c2u/openapi-spec-validator;
+    homepage = "https://github.com/p1c2u/openapi-spec-validator";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvl ];

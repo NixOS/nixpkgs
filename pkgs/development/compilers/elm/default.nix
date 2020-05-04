@@ -4,7 +4,7 @@
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
-  hsPkgs = haskell.packages.ghc881.override {
+  hsPkgs = haskell.packages.ghc883.override {
     overrides = self: super: with haskell.lib;
       let elmPkgs = rec {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
@@ -28,7 +28,7 @@ let
             `package/nix/build.sh`
             */
             elm-format = justStaticExecutables (overrideCabal (self.callPackage ./packages/elm-format.nix {}) (drv: {
-              # GHC 8.8.1 support
+              # GHC 8.8.3 support
               # https://github.com/avh4/elm-format/pull/640
               patches = [(
                 fetchpatch {
@@ -52,14 +52,6 @@ let
             }));
 
             elm-instrument = justStaticExecutables (overrideCabal (self.callPackage ./packages/elm-instrument.nix {}) (drv: {
-              patches = [(
-                # GHC 8.8.1 and Cabal >= 1.25.0 support
-                # https://github.com/zwilias/elm-instrument/pull/3
-                fetchpatch {
-                  url = "https://github.com/turboMaCk/elm-instrument/commit/4272db2aea742c8b54509e536fa4f35d04f95da5.patch";
-                  sha256 = "1d1lc43lp3x5jfhlyb1b7na7nj1g1i1vc1np26pcisg9c2s7gjz6";
-                }
-              )];
               prePatch = ''
                 sed "s/desc <-.*/let desc = \"${drv.version}\"/g" Setup.hs --in-place
               '';
@@ -114,6 +106,14 @@ let
             ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
           '';
         };
+
+      create-elm-app = patchBinwrap [elmi-to-json] (nodePkgs.create-elm-app.override {
+        preRebuild = ''
+          rm node_modules/elm/install.js
+          echo "console.log('no-op');" > node_modules/elm/install.js
+        '';
+      });
+
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
 
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;

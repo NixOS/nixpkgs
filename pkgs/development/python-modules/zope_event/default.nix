@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An event publishing system";
-    homepage = https://pypi.python.org/pypi/zope.event;
+    homepage = "https://pypi.python.org/pypi/zope.event";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };

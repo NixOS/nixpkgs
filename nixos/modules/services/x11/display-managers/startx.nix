@@ -15,6 +15,7 @@ in
   options = {
     services.xserver.displayManager.startx = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the dummy "startx" pseudo-display manager,

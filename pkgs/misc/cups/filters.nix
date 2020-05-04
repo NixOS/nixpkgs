@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   doCheck = false; # fails 4 out of 6 tests
 
   meta = {
-    homepage = http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters;
+    homepage = "http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters";
     description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

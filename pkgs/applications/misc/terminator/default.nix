@@ -1,28 +1,64 @@
-{ stdenv, fetchurl, python2, keybinder3, intltool, file, gtk3, gobject-introspection
-, libnotify, wrapGAppsHook, vte
+{ stdenv
+, fetchFromGitHub
+, python3
+, keybinder3
+, intltool
+, file
+, gtk3
+, gobject-introspection
+, libnotify
+, wrapGAppsHook
+, vte
 }:
 
-python2.pkgs.buildPythonApplication rec {
-  name = "terminator-${version}";
-  version = "1.91";
+python3.pkgs.buildPythonApplication rec {
+  pname = "terminator";
+  version = "1.92";
 
-  src = fetchurl {
-    url = "https://launchpad.net/terminator/gtk3/${version}/+download/${name}.tar.gz";
-    sha256 = "95f76e3c0253956d19ceab2f8da709a496f1b9cf9b1c5b8d3cd0b6da3cc7be69";
+  src = fetchFromGitHub {
+    owner = "gnome-terminator";
+    repo = "terminator";
+    rev = "v${version}";
+    sha256 = "105f660wzf9cpn24xzwaaa09igg5h3qhchafv190v5nqck6g1ssh";
   };
 
-  nativeBuildInputs = [ file intltool wrapGAppsHook gobject-introspection ];
-  buildInputs = [ gtk3 vte libnotify keybinder3
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
+  nativeBuildInputs = [
+    file
+    intltool
+    gobject-introspection
+    wrapGAppsHook
   ];
-  propagatedBuildInputs = with python2.pkgs; [ pygobject3 psutil pycairo ];
+
+  buildInputs = [
+    gtk3
+    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
+    keybinder3
+    libnotify
+    python3
+    vte
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    configobj
+    dbus-python
+    pygobject3
+    psutil
+    pycairo
+  ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs run_tests tests po
+    # dbus-python is correctly passed in propagatedBuildInputs, but for some reason setup.py complains.
+    # The wrapped terminator has the correct path added, so ignore this.
+    substituteInPlace setup.py --replace "'dbus-python'," ""
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     ./run_tests
+
+    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
@@ -33,7 +69,7 @@ python2.pkgs.buildPythonApplication rec {
       quadkonsole, etc. in that the main focus is arranging terminals in grids
       (tabs is the most common default method, which Terminator also supports).
     '';
-    homepage = https://gnometerminator.blogspot.no/p/introduction.html;
+    homepage = "https://github.com/gnome-terminator/terminator";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;

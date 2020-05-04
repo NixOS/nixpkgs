@@ -51,7 +51,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Official Qt SoulSeek client";
-    homepage = https://www.slsknet.org;
+    homepage = "https://www.slsknet.org";
     license = licenses.unfree;
     maintainers = [ maintainers.genesis ];
     platforms = [ "x86_64-linux" ];

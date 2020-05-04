@@ -13,12 +13,12 @@ in stdenv.mkDerivation {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ scons libX11 libusb1 boost glib dbus-glib ];
+  nativeBuildInputs = [ pkgconfig scons.py2 ];
+  buildInputs = [ libX11 libusb1 boost glib dbus-glib ];
   dontUseSconsInstall = true;
 
   meta = with stdenv.lib; {
-    homepage = https://pingus.seul.org/~grumbel/xboxdrv/;
+    homepage = "https://pingus.seul.org/~grumbel/xboxdrv/";
     description = "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace";
     license = licenses.gpl3Plus;
     maintainers = [ ];

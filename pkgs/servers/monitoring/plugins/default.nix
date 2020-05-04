@@ -78,7 +78,7 @@ _EOF
 
   meta = {
     description = "Official monitoring plugins for Nagios/Icinga/Sensu and others.";
-    homepage    = https://www.monitoring-plugins.org;
+    homepage    = "https://www.monitoring-plugins.org";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice relrod ];

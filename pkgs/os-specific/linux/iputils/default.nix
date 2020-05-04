@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     ++ optional (!stdenv.hostPlatform.isMusl) libidn2;
 
   meta = {
-    homepage = https://github.com/iputils/iputils;
+    homepage = "https://github.com/iputils/iputils";
     description = "A set of small useful utilities for Linux networking";
     license = with licenses; [ gpl2Plus bsd3 sunAsIsLicense ];
     platforms = platforms.linux;

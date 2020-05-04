@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A generic non-JVM producer and consumer for Apache Kafka";
-    homepage = https://github.com/edenhill/kafkacat;
+    homepage = "https://github.com/edenhill/kafkacat";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ nyarly ];

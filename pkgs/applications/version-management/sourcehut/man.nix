@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "mansrht";
-  version = "0.14.1";
+  version = "0.14.7";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     rev = version;
-    sha256 = "13yar0sa24jyiq0l4p4bgq6p5crj148f26sxwyi37g76jqba4rfi";
+    sha256 = "CKXWVXr2P1D6Nz9/S5rOkuOi9piy66RreQv2RQ0KSfs=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/man.sr.ht;
+    homepage = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     description = "Wiki service for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

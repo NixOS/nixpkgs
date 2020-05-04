@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       and requires simpler specification files than offered by flex's C++
       option.
     '';
-    homepage = https://fbb-git.github.io/flexcpp/;
+    homepage = "https://fbb-git.github.io/flexcpp/";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "jwcrypto";
-  version = "0.6.0";
+  version = "0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a87ac0922d09d9a65011f76d99849f1fbad3d95439c7452cebf4ab0871c2b665";
+    sha256 = "002i60yidafpr642qcxrd74d8frbc4ci8vfysm05vqydcri1zgmd";
   };
 
   propagatedBuildInputs = [
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Implementation of JOSE Web standards";
-    homepage = https://github.com/latchset/jwcrypto;
+    homepage = "https://github.com/latchset/jwcrypto";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.costrouc ];
   };

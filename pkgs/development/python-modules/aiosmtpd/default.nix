@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://aiosmtpd.readthedocs.io/en/latest/;
+    homepage = "https://aiosmtpd.readthedocs.io/en/latest/";
     description = "Asyncio based SMTP server";
     longDescription = ''
       This is a server for SMTP and related protocols, similar in utility to the

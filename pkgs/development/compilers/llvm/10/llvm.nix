@@ -16,6 +16,7 @@
 , enableSharedLibraries ? true
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  || stdenv.isAarch32 # broken for the armv7l builder
 )
 , enablePolly ? true
 }:
@@ -31,8 +32,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "1abfi0zqbcwxf68dk00szpjxkcd44589va243af8sg97hljq6709";
-  polly_src = fetch "polly" "1fzg5934km69rwam6vgznk0p4slzhr0icwmj3jibw3p93ppa8k9r";
+  src = fetch pname "1pwgm6cr0xr5a0hrbqs1zvsvvjvy0yq1y47c96804wcs795s90yz";
+  polly_src = fetch "polly" "15sd3dq0w60jsb76pis09lkagj5iy43h9hg4kd9gx5l8cbnsdyrm";
 
   unpackPhase = ''
     unpackFile $src
@@ -161,7 +162,7 @@ in stdenv.mkDerivation (rec {
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    homepage    = http://llvm.org/;
+    homepage    = "https://llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;

@@ -10,7 +10,6 @@
 , glib
 , desktop-file-utils
 , gtk-doc
-, libtool
 , wrapGAppsHook
 , gnome3
 , itstool
@@ -66,7 +65,6 @@ in stdenv.mkDerivation rec {
     unzip
     intltool
     itstool
-    libtool
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
@@ -104,7 +102,7 @@ in stdenv.mkDerivation rec {
     description = "GNOME Character Map, based on the Unicode Character Database";
     homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

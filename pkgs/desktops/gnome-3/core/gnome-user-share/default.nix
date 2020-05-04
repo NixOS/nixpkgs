@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   patches = [
     # fix gio-unix-2.0 lookup
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gnome-user-share/commit/8772980d4732c15505b15dccff2ca3c97e96d49d.patch;
+      url = "https://gitlab.gnome.org/GNOME/gnome-user-share/commit/8772980d4732c15505b15dccff2ca3c97e96d49d.patch";
       sha256 = "03clzhrx72pq1cbmg2y24hvw4i1xsvrg9ip113fi5bc3w4gcji7p";
     })
   ];
@@ -87,9 +87,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://help.gnome.org/users/gnome-user-share/3.8;
+    homepage = "https://help.gnome.org/users/gnome-user-share/3.8";
     description = "Service that exports the contents of the Public folder in your home directory on the local network";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

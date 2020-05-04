@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
-    homepage = http://frotz.sourceforge.net/;
+    homepage = "http://frotz.sourceforge.net/";
     description = "A z-machine interpreter for Infocom games and other interactive fiction.";
     platforms = platforms.unix;
     maintainers = [ maintainers.nicknovitski ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Spectre & Meltdown vulnerability/mitigation checker for Linux";
-    homepage = https://github.com/speed47/spectre-meltdown-checker;
+    homepage = "https://github.com/speed47/spectre-meltdown-checker";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;

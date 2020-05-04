@@ -88,6 +88,7 @@ in
       };
 
       useTLS = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           If enabled, use TLS (encryption) over an LDAP (port 389)
@@ -109,6 +110,7 @@ in
 
       daemon = {
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = ''
             Whether to let the nslcd daemon (nss-pam-ldapd) handle the

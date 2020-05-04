@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
+, Babel
 , cssselect
 , dateutil
 , feedparser
@@ -24,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "weboob";
-  version = "1.5";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c9z9gid1mbm1cakb2wj6jjkbrmji8y8ac46iqpih9x1h498bhbs";
+    sha256 = "1c69vzf8sg8471lcaafpz9iw2q3rfj5hmcpqrs2k59fkgbvy32zw";
   };
 
   postPatch = ''
@@ -44,13 +45,12 @@ buildPythonPackage rec {
     }; p' weboob/browser/browsers.py weboob/browser/pages.py
   '';
 
-  setupPyBuildFlags = ["--qt" "--xdg"];
-
   checkInputs = [ nose ];
 
   nativeBuildInputs = [ pyqt5 ];
 
   propagatedBuildInputs = [
+    Babel
     cssselect
     dateutil
     feedparser
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = http://weboob.org;
+    homepage = "http://weboob.org";
     description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
     license = lib.licenses.agpl3;
   };

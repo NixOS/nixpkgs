@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cmake, pkgconfig, sword, boost, clucene_core
+{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, sword, boost, clucene_core
 , qtbase, qttools, qtsvg, qtwebkit
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
 
   version = "2.11.2";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Qt4 Bible study tool";
-    homepage = http://www.bibletime.info/;
+    homepage = "http://www.bibletime.info/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.piotr ];

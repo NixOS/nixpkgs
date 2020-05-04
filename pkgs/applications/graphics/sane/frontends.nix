@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sane-backends, libX11, gtk2, pkgconfig, libusb ? null }:
+{ stdenv, fetchurl, sane-backends, libX11, gtk2, pkgconfig, libusb-compat-0_1 ? null }:
 
 stdenv.mkDerivation rec {
   pname = "sane-frontends";
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ sane-backends libX11 gtk2 ]
-    ++ stdenv.lib.optional (libusb != null) libusb;
+    ++ stdenv.lib.optional (libusb-compat-0_1 != null) libusb-compat-0_1;
   nativeBuildInputs = [ pkgconfig ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Scanner Access Now Easy";
-    homepage    = http://www.sane-project.org/;
+    homepage    = "http://www.sane-project.org/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ peti ];
     platforms   = platforms.linux;

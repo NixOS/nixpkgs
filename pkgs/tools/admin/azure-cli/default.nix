@@ -1,12 +1,12 @@
 { stdenv, lib, python, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.1.0";
+  version = "2.4.0";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "0f4wrqp9f4n4mk73ybx08ybvmxx88r6g5cvx8ld6ybhl2w8bbn9v";
+    sha256 = "1j0h75cxrxa5yrijr7jfip7q5qrddaaqapd90f0qp2r4k9qb0y41";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -23,8 +23,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     substituteInPlace setup.py \
       --replace "javaproperties==0.5.1" "javaproperties" \
       --replace "pytz==2019.1" "pytz" \
-      --replace "mock~=2.0" "mock" \
-      --replace "azure-mgmt-reservations==0.3.1" "azure-mgmt-reservations~=0.3.1"
+      --replace "mock~=4.0" "mock"
 
     # remove namespace hacks
     # remove urllib3 because it was added as 'urllib3[secure]', which doesn't get handled well
@@ -93,6 +92,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-rdbms
     azure-mgmt-recoveryservices
     azure-mgmt-recoveryservicesbackup
+    azure-mgmt-redhatopenshift
     azure-mgmt-redis
     azure-mgmt-relay
     azure-mgmt-reservations

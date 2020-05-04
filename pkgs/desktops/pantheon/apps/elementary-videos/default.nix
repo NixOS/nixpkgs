@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.7.0";
+  version = "2.7.1";
 
   repoName = "videos";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1b6dqqmxa83fwlh9r0v918ikxd3mnwk0j5xssw1wk5l7q72s43w7";
+    sha256 = "00arim4i9bv9mbms1irkp44grkgrfnmqzraswyn1xiz9nvl1bsb9";
   };
 
   passthru = {
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Video player and library app designed for elementary OS";
-    homepage = https://github.com/elementary/videos;
+    homepage = "https://github.com/elementary/videos";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -1,0 +1,13 @@
+diff --git a/data/gala.gschema.xml b/data/gala.gschema.xml
+index 8032583..7f4f03c 100644
+--- a/data/gala.gschema.xml
++++ b/data/gala.gschema.xml
+@@ -58,7 +58,7 @@
+ 			<description>If enabled, dropping windows on vertical screen edges maximizes them vertically and resizes them horizontally to cover half of the available area. Dropping windows on the top screen edge maximizes them completely.</description>
+ 		</key>
+ 		<key type="b" name="use-new-notifications">
+-			<default>false</default>
++			<default>true</default>
+ 			<summary>If new notifications should be used</summary>
+ 			<description>If new notifications UI should be used, requires io.elemenetary.notifications to be present and running</description>
+ 		</key>

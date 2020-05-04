@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple and fast dictionary lookup tool";
-    homepage = https://www-user.tu-chemnitz.de/~fri/ding/;
+    homepage = "https://www-user.tu-chemnitz.de/~fri/ding/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux; # homepage says: unix-like except darwin
     maintainers = [ maintainers.exi ];

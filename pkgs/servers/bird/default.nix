@@ -36,7 +36,7 @@ let
 
       meta = {
         description = "BIRD Internet Routing Daemon";
-        homepage = http://bird.network.cz;
+        homepage = "http://bird.network.cz";
         license = licenses.gpl2Plus;
         maintainers = with maintainers; [ fpletz globin ];
         platforms = platforms.linux;

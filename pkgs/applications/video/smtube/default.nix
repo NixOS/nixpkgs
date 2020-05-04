@@ -20,7 +20,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Play and download Youtube videos";
-    homepage = http://smplayer.sourceforge.net/smtube.php;
+    homepage = "http://smplayer.sourceforge.net/smtube.php";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ vbgl ];
     platforms = platforms.linux;

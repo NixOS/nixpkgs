@@ -57,7 +57,7 @@ in stdenv.mkDerivation {
     description = "A Super Nintendo Entertainment System Emulator";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
-    homepage = http://www.zsnes.com;
+    homepage = "http://www.zsnes.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   name = "elinks-0.12pre6";
 
   src = fetchurl {
-    url = http://elinks.or.cz/download/elinks-0.12pre6.tar.bz2;
+    url = "http://elinks.or.cz/download/elinks-0.12pre6.tar.bz2";
     sha256 = "1nnakbi01g7yd3zqwprchh5yp45br8086b0kbbpmnclabcvlcdiq";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Full-featured text-mode web browser";
-    homepage = http://elinks.or.cz;
+    homepage = "http://elinks.or.cz";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

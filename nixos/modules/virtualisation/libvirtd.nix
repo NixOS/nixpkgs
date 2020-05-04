@@ -214,14 +214,14 @@ in {
     };
 
     systemd.services.libvirtd = {
-      description = "Libvirt Virtual Machine Management Daemon";
-
-      wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
       after = [ "systemd-udev-settle.service" "libvirtd-config.service" ]
               ++ optional vswitch.enable "ovs-vswitchd.service";
 
-      environment.LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
+      environment.LIBVIRTD_ARGS = escapeShellArgs (
+        [ "--config" configFile
+          "--timeout" "120"     # from ${libvirt}/var/lib/sysconfig/libvirtd
+        ] ++ cfg.extraOptions);
 
       path = [ cfg.qemuPackage ] # libvirtd requires qemu-img to manage disk images
              ++ optional vswitch.enable vswitch.package;
@@ -266,5 +266,8 @@ in {
       serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlockd virtlockd";
       restartIfChanged = false;
     };
+
+    systemd.sockets.libvirtd    .wantedBy = [ "sockets.target" ];
+    systemd.sockets.libvirtd-tcp.wantedBy = [ "sockets.target" ];
   };
 }

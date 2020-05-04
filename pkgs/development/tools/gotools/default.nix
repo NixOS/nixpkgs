@@ -1,17 +1,15 @@
-{ stdenv, go, buildGoModule, fetchgit, Security }:
+{ stdenv, go, buildGoModule, fetchgit }:
 
 buildGoModule rec {
   pname = "gotools-unstable";
-  version = "2019-11-14";
-  rev = "4191b8cbba092238a318a71cdff48b20b4e1e5d8";
+  version = "2020-04-21";
+  rev = "72e4a01eba4315301fd9ce00c8c2f492580ded8a";
 
   src = fetchgit {
     inherit rev;
     url = "https://go.googlesource.com/tools";
-    sha256 = "16m62m303j4wqfjr1401xpqpb9m11bs6qc2dhf6x2za2d9pycish";
+    sha256 = "0a8c7j4w784w441j3j3bh640vy1g6g214641qv485wyi0xj49anf";
   };
-
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   # Build of golang.org/x/tools/gopls fails with:
   #   can't load package: package golang.org/x/tools/gopls: unknown import path "golang.org/x/tools/gopls": cannot find module providing package golang.org/x/tools/gopls
@@ -23,7 +21,7 @@ buildGoModule rec {
     rm -rf gopls
   '';
 
-  modSha256 = "16cfzmfr9jv8wz0whl433xdm614dk63fzjxv6l1xvkagjmki49iy";
+  modSha256 = "1pijbkp7a9n2naicg21ydii6xc0g4jm5bw42lljwaks7211ag8k9";
 
   postConfigure = ''
     # Make the builtin tools available here

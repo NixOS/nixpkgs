@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -9,10 +10,7 @@
 , coreutils
 , accountsservice
 , dbus
-, flatpak
-, gtk3
 , pam
-, desktop-file-utils
 , polkit
 , glib-testing
 , python3
@@ -21,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.6.0";
+  version = "0.7.0";
 
   outputs = [ "bin" "out" "dev" "man" "installedTests" ];
 
@@ -30,16 +28,22 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = pname;
     rev = version;
-    sha256 = "COh6N3CmLIcxx6tW4jcP0m6TZv0Z1YJUM/nlG0RzYHQ=";
+    sha256 = "cP2l6nl6cuBQYwkmBj8APu/vH3jTeScXf3ffcuSfqlM=";
   };
 
   patches = [
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
 
-    # This is unnecessary and breaks when submodules are not available.
-    # https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/3
-    ./use-system-dependencies.patch
+    # Do not build things that are part of malcontent-ui package
+    ./better-separation.patch
+
+    # Fix pam installed test
+    # https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/50
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pwithnall/malcontent/commit/5d102eeb0604e65fc977ca77d4b249e986e634cc.patch";
+      sha256 = "5PD/eJBw/8Uqcia7ena9mu45DgREBFj0zUJpcd0vQ+8=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -47,15 +51,12 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     gobject-introspection
-    desktop-file-utils
     wrapGAppsHook
   ];
 
   buildInputs = [
     accountsservice
     dbus
-    flatpak
-    gtk3
     pam
     polkit
     glib-testing
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dinstalled_tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dui=disabled"
   ];
 
   postPatch = ''

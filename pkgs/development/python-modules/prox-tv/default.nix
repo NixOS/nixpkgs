@@ -1,13 +1,11 @@
 { lib
 , blas
+, lapack
 , buildPythonPackage
 , cffi
 , fetchFromGitHub
-, liblapack
 , nose
 , numpy
-, openblas
-, useOpenblas ? true
 }:
 
 buildPythonPackage {
@@ -21,8 +19,6 @@ buildPythonPackage {
     sha256 = "0mlrjbb5rw78dgijkr3bspmsskk6jqs9y7xpsgs35i46dvb327q5";
   };
 
-  patches = lib.optional useOpenblas ./use-openblas.patch;
-
   checkInputs = [
     nose
   ];
@@ -32,17 +28,12 @@ buildPythonPackage {
     cffi
   ];
 
-  buildInputs = (
-    if useOpenblas then
-      [ openblas ]
-    else
-      [ blas liblapack ]
-  );
+  buildInputs = [ blas lapack ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://github.com/albarji/proxTV;
+    homepage = "https://github.com/albarji/proxTV";
     description = "A toolbox for fast Total Variation proximity operators";
     license = licenses.bsd2;
     maintainers = with maintainers; [ multun ];

@@ -104,7 +104,7 @@ in makePackage {
   passthru.deps = deps;
 
   meta = with stdenv.lib; {
-    homepage = http://openjdk.java.net/projects/openjfx/;
+    homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
     description = "The next-generation Java client toolkit.";
     maintainers = with maintainers; [ abbradar ];

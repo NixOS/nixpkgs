@@ -5,7 +5,7 @@
 , qtquickcontrols, qtquickcontrols2
 , monero, unbound, readline, boost, libunwind
 , libsodium, pcsclite, zeromq, cppzmq
-, hidapi, libusb, protobuf, randomx
+, hidapi, libusb-compat-0_1, protobuf, randomx
 }:
 
 with stdenv.lib;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     qtxmlpatterns
     monero unbound readline
     boost libunwind libsodium pcsclite zeromq
-    cppzmq hidapi libusb protobuf randomx
+    cppzmq hidapi libusb-compat-0_1 protobuf randomx
   ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description  = "Private, secure, untraceable currency";
-    homepage     = https://getmonero.org/;
+    homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;
     platforms    = platforms.all;
     badPlatforms = platforms.darwin;

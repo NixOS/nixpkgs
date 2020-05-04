@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://strigi.sourceforge.net;
+    homepage = "http://strigi.sourceforge.net";
     description = "A very fast and efficient crawler to index data on your harddrive";
     license = "LGPL";
     maintainers = with stdenv.lib.maintainers; [ sander ];

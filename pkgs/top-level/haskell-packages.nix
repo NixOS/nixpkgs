@@ -4,7 +4,7 @@ let
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
     "ghc822Binary"
-    "ghc863Binary"
+    "ghc865Binary"
     "ghc844"
     "ghcjs"
     "ghcjs86"
@@ -42,7 +42,7 @@ in {
 
     ghc822Binary = callPackage ../development/compilers/ghc/8.2.2-binary.nix { };
 
-    ghc863Binary = callPackage ../development/compilers/ghc/8.6.3-binary.nix { };
+    ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
 
     ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
       bootPkgs = packages.ghc822Binary;
@@ -56,35 +56,30 @@ in {
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
-    ghc881 = callPackage ../development/compilers/ghc/8.8.1.nix {
-      bootPkgs = packages.ghc863Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_7;
-      llvmPackages = pkgs.llvmPackages_7;
-    };
     ghc882 = callPackage ../development/compilers/ghc/8.8.2.nix {
-      bootPkgs = packages.ghc863Binary;
+      bootPkgs = packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc883 = callPackage ../development/compilers/ghc/8.8.3.nix {
-      bootPkgs = packages.ghc863Binary;
+      bootPkgs = packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc8101 = callPackage ../development/compilers/ghc/8.10.1.nix {
-      bootPkgs = packages.ghc863Binary;
+      bootPkgs = packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc863Binary;
+      bootPkgs = packages.ghc883; # no binary yet
       inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_6;
-      llvmPackages = pkgs.llvmPackages_6;
+      buildLlvmPackages = buildPackages.llvmPackages_9;
+      llvmPackages = pkgs.llvmPackages_9;
+      libffi = pkgs.libffi;
     };
     ghcjs = compiler.ghcjs86;
     ghcjs86 = callPackage ../development/compilers/ghcjs-ng {
@@ -117,9 +112,9 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc863Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc863Binary;
-      ghc = bh.compiler.ghc863Binary;
+    ghc865Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc865Binary;
+      ghc = bh.compiler.ghc865Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
@@ -132,11 +127,6 @@ in {
       buildHaskellPackages = bh.packages.ghc865;
       ghc = bh.compiler.ghc865;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
-    };
-    ghc881 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc881;
-      ghc = bh.compiler.ghc881;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
     };
     ghc882 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc882;

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Merge YAML data files";
-    homepage = https://github.com/abbradar/yaml-merge;
+    homepage = "https://github.com/abbradar/yaml-merge";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

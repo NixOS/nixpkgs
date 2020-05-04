@@ -1,23 +1,21 @@
-{ stdenv, fetchFromGitHub, buildGoModule, Security }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "tendermint";
-  version = "0.32.3";
+  version = "0.32.11";
 
   src = fetchFromGitHub {
     owner = "tendermint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vpnw42a28glghdpgxmqhxd63cnbpghhazpzsdksqkw0i1l36ywr";
+    sha256 = "17p7khfiv5aflpl4imbqp8v7gignd6v6a7g80xlnzgix5ismh84l";
   };
 
-  modSha256 = "1h51zgvjq3bm09yhm54rk8a86cqa1zma3mx6pb0kq7k72xvhpx0a";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  modSha256 = "1sdjzj52gkqk51ml29hijzv64clmi38km5z7j7paf28dla2brfxq";
 
   meta = with stdenv.lib; {
     description = "Byzantine-Fault Tolerant State Machines. Or Blockchain, for short.";
-    homepage = https://tendermint.com/;
+    homepage = "https://tendermint.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ alexfmpe ];
     platforms = platforms.linux ++ platforms.darwin;

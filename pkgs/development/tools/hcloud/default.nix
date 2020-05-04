@@ -1,8 +1,8 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.16.1";
+  version = "1.16.2";
 
   goPackagePath = "github.com/hetznercloud/cli";
 
@@ -10,12 +10,10 @@ buildGoModule rec {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "1d6qa21sq79hr84nnn3j7w0776mnq58g8g1krpnh4d6bv3kc3lq7";
+    sha256 = "0cxh92df8gdl4bmr22pdvdxdkdjyfy0jv48y0k6awy1xz61r94ap";
   };
 
-  modSha256 = "1zy41hi2qzrdmih3pkpng8im576lhkr64zm66w73p7jyvy0kf9sx";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  modSha256 = "1sdp62q4rnx7dp4i0dhnc8kzi8h6zzjdy7ym0mk9r7xkxxx0s3ds";
 
   buildFlagsArray = [ "-ldflags=" "-w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
 

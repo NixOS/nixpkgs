@@ -18,11 +18,11 @@ in stdenv.mkDerivation {
 
   patches = [
     (fetchpatch {
-      url = https://repo.or.cz/a2jmidid.git/patch/24e3b8e543256ae8fdfb4b75eb9fd775f07c46e2;
+      url = "https://repo.or.cz/a2jmidid.git/patch/24e3b8e543256ae8fdfb4b75eb9fd775f07c46e2";
       sha256 = "1nxrvnhxlgqc9wbxnp1gnpw4wjyzxvymwcg1gh2nqzmssgfykfkc";
     })
     (fetchpatch {
-      url = https://repo.or.cz/a2jmidid.git/patch/7f82da7eb2f540a94db23331be98d42a58ddc269;
+      url = "https://repo.or.cz/a2jmidid.git/patch/7f82da7eb2f540a94db23331be98d42a58ddc269";
       sha256 = "1nab9zf0agbcj5pvhl90pz0cx1d204d4janqflc5ymjhy8jyrsdv";
     })
   ];

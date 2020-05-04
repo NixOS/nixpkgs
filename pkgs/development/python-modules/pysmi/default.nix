@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://pysmi.sf.net;
+    homepage = "http://pysmi.sf.net";
     description = "SNMP SMI/MIB Parser";
     license = licenses.bsd2;
     maintainers = with maintainers; [ koral ];

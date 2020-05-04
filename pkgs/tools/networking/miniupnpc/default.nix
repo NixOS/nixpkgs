@@ -20,7 +20,7 @@ let
       makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
       meta = with stdenv.lib; {
-        homepage = http://miniupnp.free.fr/;
+        homepage = "http://miniupnp.free.fr/";
         description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
         platforms = with platforms; linux ++ freebsd ++ darwin;
         license = licenses.bsd3;

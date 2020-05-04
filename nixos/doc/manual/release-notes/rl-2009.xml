@@ -24,6 +24,14 @@
     </para>
    </listitem>
    <listitem>
+    <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
+   </listitem>
+   <listitem>
+    <para>
+     We now distribute a GNOME ISO.
+    </para>
+   </listitem>
+   <listitem>
     <para>
      PHP now defaults to PHP 7.4, updated from 7.3.
     </para>
@@ -35,6 +43,22 @@
      been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
      in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
      make use of these new options instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     There is a new module for Podman(<varname>virtualisation.podman</varname>), a drop-in replacement for the Docker command line.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The new <varname>virtualisation.containers</varname> module manages configuration shared by the CRI-O and Podman modules.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Declarative Docker containers are renamed from <varname>docker-containers</varname> to <varname>virtualisation.oci-containers.containers</varname>.
+      This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
     </para>
    </listitem>
   </itemizedlist>
@@ -108,6 +132,191 @@
       <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The initrd SSH support now uses OpenSSH rather than Dropbear to
+     allow the use of Ed25519 keys and other OpenSSH-specific
+     functionality. Host keys must now be in the OpenSSH format, and at
+     least one pre-generated key must be specified.
+    </para>
+    <para>
+     If you used the <option>boot.initrd.network.ssh.host*Key</option>
+     options, you'll get an error explaining how to convert your host
+     keys and migrate to the new
+     <option>boot.initrd.network.ssh.hostKeys</option> option.
+     Otherwise, if you don't have any host keys set, you'll need to
+     generate some; see the <option>hostKeys</option> option
+     documentation for instructions.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       Since this release there's an easy way to customize your PHP
+       install to get a much smaller base PHP with only wanted
+       extensions enabled. See the following snippet installing a
+       smaller PHP with the extensions <literal>imagick</literal>,
+       <literal>opcache</literal>, <literal>pdo</literal> and
+       <literal>pdo_mysql</literal> loaded:
+
+       <programlisting>
+environment.systemPackages = [
+  (pkgs.php.withExtensions
+    ({ all, ... }: with all; [
+      imagick
+      opcache
+      pdo
+      pdo_mysql
+    ])
+  )
+];</programlisting>
+
+       The default <literal>php</literal> attribute hasn't lost any
+       extensions. The <literal>opcache</literal> extension has been
+       added.
+
+       All upstream PHP extensions are available under <package><![CDATA[php.extensions.<name?>]]></package>.
+     </para>
+     <para>
+       All PHP <literal>config</literal> flags have been removed for
+       the following reasons:
+
+       <itemizedlist>
+         <listitem>
+           <para>
+             The updated <literal>php</literal> attribute is now easily
+             customizable to your liking by using
+             <literal>php.withExtensions</literal> or
+             <literal>php.buildEnv</literal> instead of writing config files
+             or changing configure flags.             
+           </para>
+         </listitem>
+         <listitem>
+           <para>
+             The remaining configuration flags can now be set directly on
+             the <literal>php</literal> attribute. For example, instead of 
+
+             <programlisting>
+php.override {
+  config.php.embed = true;
+  config.php.apxs2 = false;
+}
+             </programlisting>
+
+             you should now write
+
+             <programlisting>
+php.override {
+  embedSupport = true;
+  apxs2Support = false;
+}
+             </programlisting>
+           </para>
+         </listitem>
+       </itemizedlist>
+
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+      Gollum received a major update to version 5.x and you may have to change
+      some links in your wiki when migrating from gollum 4.x. More information
+      can be found
+      <link xlink:href="https://github.com/gollum/gollum/wiki/5.0-release-notes#migrating-your-wiki">here</link>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Deluge 2.x was added and is used as default for new NixOS
+       installations where stateVersion is >= 20.09. If you are upgrading from a previous
+       NixOS version, you can set <literal>service.deluge.package = pkgs.deluge-2_x</literal>
+       to upgrade to Deluge 2.x and migrate the state to the new format.
+       Be aware that backwards state migrations are not supported by Deluge.
+     </para>
+   </listitem>
+
+   <listitem>
+    <para>
+      The NixOS options <literal>nesting.clone</literal> and
+      <literal>nesting.children</literal> have been deleted, and
+      replaced with named <xref linkend="opt-specialisation"/>
+      configurations.
+    </para>
+
+    <para>
+      Replace a <literal>nesting.clone</literal> entry with:
+
+<programlisting>{
+<link xlink:href="#opt-specialisation">specialisation.example-sub-configuration</link> = {
+  <link xlink:href="#opt-specialisation._name_.configuration">configuration</link> = {
+    ...
+  };
+};</programlisting>
+
+    </para>
+    <para>
+      Replace a <literal>nesting.children</literal> entry with:
+
+<programlisting>{
+<link xlink:href="#opt-specialisation">specialisation.example-sub-configuration</link> = {
+  <link xlink:href="#opt-specialisation._name_.inheritParentConfig">inheritParentConfig</link> = false;
+  <link xlink:href="#opt-specialisation._name_.configuration">configuration</link> = {
+    ...
+  };
+};</programlisting>
+    </para>
+
+    <para>
+     To switch to a specialised configuration at runtime you need to
+     run:
+<programlisting>
+# sudo /run/current-system/specialisation/example-sub-configuration/bin/switch-to-configuration test
+</programlisting>
+     Before you would have used:
+<programlisting>
+# sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
+</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The httpd web server previously started its main process as root
+     privileged, then ran worker processes as a less privileged identity user.
+     This was changed to start all of httpd as a less privileged user (defined by
+     <xref linkend="opt-services.httpd.user"/> and
+     <xref linkend="opt-services.httpd.group"/>). As a consequence, all files that
+     are needed for httpd to run (included configuration fragments, SSL
+     certificates and keys, etc.) must now be readable by this less privileged
+     user/group.
+    </para>
+    <para>
+     The default value for <xref linkend="opt-services.httpd.mpm"/>
+     has been changed from <literal>prefork</literal> to <literal>event</literal>. Along with
+     this change the default value for
+     <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.http2</link>
+     has been set to <literal>true</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>systemd-networkd</literal> option
+      <literal>systemd.network.networks.&lt;name&gt;.dhcp.CriticalConnection</literal>
+      has been removed following upstream systemd's deprecation of the same. It is recommended to use
+      <literal>systemd.network.networks.&lt;name&gt;.networkConfig.KeepConfiguration</literal> instead.
+      See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+      <manvolnum>5</manvolnum></citerefentry> for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>systemd-networkd</literal> option
+     <literal>systemd.network.networks._name_.dhcpConfig</literal>
+     has been renamed to
+     <xref linkend="opt-systemd.network.networks._name_.dhcpV4Config"/>
+     following upstream systemd's documentation change.
+     See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+     <manvolnum>5</manvolnum></citerefentry> for details.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -120,7 +329,20 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     <option>services.journald.rateLimitBurst</option> was updated from
+     <literal>1000</literal> to <literal>10000</literal> to follow the new
+     upstream systemd default.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <package>notmuch</package> package move its emacs-related binaries and
+     emacs lisp files to a separate output. They're not part
+     of the default <literal>out</literal> output anymore - if you relied on the
+     <literal>notmuch-emacs-mua</literal> binary or the emacs lisp files, access them via
+     the <literal>notmuch.emacs</literal> output.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

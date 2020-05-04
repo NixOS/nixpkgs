@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "pgcenter";
@@ -13,10 +13,8 @@ buildGoModule rec {
 
   modSha256 = "0kassq52v07zmffs6l066g0d3kfv6wmrh9g5cgk79bmyq13clqjj";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   meta = with stdenv.lib; {
-    homepage = https://pgcenter.org/;
+    homepage = "https://pgcenter.org/";
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
