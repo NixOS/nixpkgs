@@ -4,14 +4,10 @@
 , buildBowerComponents
 , fetchurl
 , nodejs
+, nodePackages
 }:
 
 let
-  nodePackages = import ./node-packages.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
-
   bowerPackages = buildBowerComponents {
     name = "${cryptpad.name}-bower-packages";
     # this list had to be tweaked by hand:
@@ -38,11 +34,7 @@ let
 
   # The cryptpad package attribute key changes for each release. Get it out
   # programatically instead.
-  cryptpad = findValue
-    (k: v: v.packageName == "cryptpad")
-    (throw "cryptpad not found")
-    nodePackages
-    ;
+  cryptpad = nodePackages."cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.13.0";
 
   combined = cryptpad.override {
     postInstall = ''
