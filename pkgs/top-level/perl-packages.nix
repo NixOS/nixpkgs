@@ -21202,6 +21202,22 @@ let
     };
   };
 
+  XMLRPCLite = buildPerlPackage {
+    pname = "XMLRPC-Lite";
+    version = "0.717";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PH/PHRED/XMLRPC-Lite-0.717.tar.gz";
+      sha256 = "0925md6jhzgpsibwgny4my461b2wngm8dhxlcry8pbqzrgrab7rs";
+    };
+    propagatedBuildInputs = [ SOAPLite ];
+    # disable tests that require network
+    preCheck = "rm t/{26-xmlrpc.t,37-mod_xmlrpc.t}";
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      description = "Client and server implementation of XML-RPC protocol";
+    };
+  };
+
   XMLRSS = buildPerlModule {
     pname = "XML-RSS";
     version = "1.61";
