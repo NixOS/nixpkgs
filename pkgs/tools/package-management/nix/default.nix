@@ -207,18 +207,18 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20200403_3473b19";
+    suffix = "pre20200501_941f952";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "3473b1950a90d596a3baa080fdfdb080f55a5cc0";
-      sha256 = "1bb7a8a5lzmb3pzq80zxd3s9y3qv757q7032s5wvp75la9wgvmvr";
+      rev = "941f95284ab57e9baa317791327cf1715d8564b5";
+      sha256 = "0d99jl5baxji5dmqb4fwmbffx0z04k0naanms5zzbwvxdmzn3yhs";
     };
 
     crates = fetchurl {
-      url = "https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz";
-      sha256 = "a83785553bb4bc5b28220562153e201ec555a00171466ac08b716f0c97aee45a";
+      url = "https://hydra.nixos.org/build/118093786/download/1/nix-vendored-crates-2.4pre20200501_941f952.tar.xz";
+      sha256 = "060f4n5srdbb8vsj0m14aqch7im79a4h5g3nrs41p1xc602vhcdl";
     };
 
     inherit storeDir stateDir confDir boehmgc;
