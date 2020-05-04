@@ -88,11 +88,21 @@ in
       };
     };
 
+    package = lib.mkOption {
+      type = types.package;
+      default = podmanPackage;
+      internal = true;
+      description = ''
+        The final Podman package (including extra packages).
+      '';
+    };
+
+
   };
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ podmanPackage ]
+    environment.systemPackages = [ cfg.package ]
       ++ lib.optional cfg.dockerCompat dockerCompat;
 
     environment.etc."containers/libpod.conf".text = ''
