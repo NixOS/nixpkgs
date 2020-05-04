@@ -6,4 +6,5 @@
 , "node-gyp"
 , "node-gyp-build"
 , "node-pre-gyp"
+, "pm2"
 ]

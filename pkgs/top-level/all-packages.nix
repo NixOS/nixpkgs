@@ -5980,6 +5980,8 @@ in
 
   pngquant = callPackage ../tools/graphics/pngquant { };
 
+  pm2 = nodePackages_12_x.pm2;
+
   podiff = callPackage ../tools/text/podiff { };
 
   podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
