@@ -100,7 +100,7 @@ rustPlatform.buildRustPackage rec {
   '' + (
     if stdenv.isDarwin then ''
       mkdir $out/Applications
-      cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
+      cp -r $releaseDir/osx/Alacritty.app $out/Applications/Alacritty.app
     '' else ''
       install -D extra/linux/Alacritty.desktop -t $out/share/applications/
       install -D extra/logo/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
