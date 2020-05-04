@@ -6414,6 +6414,8 @@ in
 
   safe = callPackage ../tools/security/safe { };
 
+  safety-cli = with python3.pkgs; toPythonApplication safety;
+
   safe-rm = callPackage ../tools/system/safe-rm { };
 
   safeeyes = callPackage ../applications/misc/safeeyes { };

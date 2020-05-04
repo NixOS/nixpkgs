@@ -5670,6 +5670,8 @@ in {
 
   safe = callPackage ../development/python-modules/safe { };
 
+  safety = callPackage ../development/python-modules/safety { };
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
