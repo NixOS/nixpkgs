@@ -676,6 +676,8 @@ in {
 
   dftfit = callPackage ../development/python-modules/dftfit { };
 
+  dicom2nifti = callPackage ../development/python-modules/dicom2nifti { };
+
   discid = callPackage ../development/python-modules/discid { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
