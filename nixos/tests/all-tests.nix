@@ -164,7 +164,6 @@ in
   kubernetes.rbac = handleTestOn ["x86_64-linux"] ./kubernetes/rbac.nix {};
   latestKernel.hardened = handleTest ./hardened.nix { latestKernel = true; };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
-  ldap = handleTest ./ldap.nix {};
   leaps = handleTest ./leaps.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
