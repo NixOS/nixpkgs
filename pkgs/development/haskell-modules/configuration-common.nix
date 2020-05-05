@@ -1500,4 +1500,18 @@ self: super: {
     haskell-lsp = self.haskell-lsp_0_19_0_0;
   });
 
+  # stackage right now is not new enough for hlint-3.0
+  ghc-lib-parser-ex_8_10_0_6 = super.ghc-lib-parser-ex_8_10_0_6.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
+  };
+
+  hlint = super.hlint.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_6;
+    extra = self.extra_1_7_1;
+    filepattern = self.filepattern.override {
+      extra = self.extra_1_7_1;
+    };
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
