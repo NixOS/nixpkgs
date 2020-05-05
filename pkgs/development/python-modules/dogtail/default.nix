@@ -55,6 +55,6 @@ buildPythonPackage {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
     homepage = https://gitlab.com/dogtail/dogtail;
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

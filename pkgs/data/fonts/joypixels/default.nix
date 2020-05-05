@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Emoji as a Service (formerly EmojiOne)";
     homepage = https://www.joypixels.com/;
     license = licenses.unfree;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

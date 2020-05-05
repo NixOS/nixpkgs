@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "GNOME Shell extension adding audio device chooser to panel";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     homepage = https://github.com/kgshank/gse-sound-output-device-chooser;
   };
 }

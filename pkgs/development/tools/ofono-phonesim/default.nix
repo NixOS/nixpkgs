@@ -34,7 +34,7 @@ mkDerivation {
     description = "Phone Simulator for modem testing";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

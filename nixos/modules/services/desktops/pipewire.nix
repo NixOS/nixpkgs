@@ -33,5 +33,5 @@ in {
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
   };
 
-  meta.maintainers = with lib.maintainers; [ jtojnar ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

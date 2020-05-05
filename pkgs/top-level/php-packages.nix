@@ -69,7 +69,7 @@ let
       description = "An application for building and managing Phars";
       license = licenses.mit;
       homepage = https://box-project.github.io/box2/;
-      maintainers = with maintainers; [ jtojnar ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -333,7 +333,7 @@ let
       description = "A tool to automatically fix PHP coding standards issues";
       license = licenses.mit;
       homepage = http://cs.sensiolabs.org/;
-      maintainers = with maintainers; [ jtojnar ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -366,7 +366,7 @@ let
       description = "This tool check syntax of PHP files faster than serial check with fancier output";
       license = licenses.bsd2;
       homepage = https://github.com/JakubOnderka/PHP-Parallel-Lint;
-      maintainers = with maintainers; [ jtojnar ];
+      maintainers = with maintainers; [ ];
     };
   };
 
