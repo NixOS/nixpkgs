@@ -13806,7 +13806,7 @@ in
 
   openct = callPackage ../development/libraries/openct { };
 
-  opencv = callPackage ../development/libraries/opencv {
+  opencv2 = callPackage ../development/libraries/opencv {
     inherit (darwin.apple_sdk.frameworks) Cocoa QTKit;
   };
 
@@ -13821,6 +13821,8 @@ in
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
   };
+
+  opencv = opencv4;
 
   openexr = callPackage ../development/libraries/openexr { };
 
