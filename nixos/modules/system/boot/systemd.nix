@@ -848,6 +848,10 @@ in
         [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
+      group = (mkMerge [
+        [ "mymachines" ]
+        (mkAfter [ "systemd" ])
+      ]);
     };
 
     environment.systemPackages = [ systemd ];
