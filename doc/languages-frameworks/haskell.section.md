@@ -103,8 +103,8 @@ command displays the complete list of available compilers:
 $ nix-env -f "<nixpkgs>" -qaP -A haskell.compiler
 haskell.compiler.ghc8101                 ghc-8.10.1
 haskell.compiler.integer-simple.ghc8101  ghc-8.10.1
-haskell.compiler.ghcHEAD                 ghc-8.11.20200403
-haskell.compiler.integer-simple.ghcHEAD  ghc-8.11.20200403
+haskell.compiler.ghcHEAD                 ghc-8.11.20200505
+haskell.compiler.integer-simple.ghcHEAD  ghc-8.11.20200505
 haskell.compiler.ghc822Binary            ghc-8.2.2-binary
 haskell.compiler.ghc844                  ghc-8.4.4
 haskell.compiler.ghc863Binary            ghc-8.6.3-binary
