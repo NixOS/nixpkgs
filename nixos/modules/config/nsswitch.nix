@@ -11,7 +11,6 @@ let
   # XXX Move these to their respective modules
   nssmdns = canLoadExternalModules && config.services.avahi.nssmdns;
   nsswins = canLoadExternalModules && config.services.samba.nsswins;
-  ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
 
   hostArray = mkMerge [
     (mkBefore [ "files" ])
@@ -19,16 +18,6 @@ let
     (mkIf nsswins [ "wins" ])
     (mkAfter [ "dns" ])
     (mkIf nssmdns (mkOrder 1501 [ "mdns" ])) # 1501 to ensure it's after dns
-  ];
-
-  passwdArray = mkMerge [
-    (mkBefore [ "files" ])
-    (mkIf ldap [ "ldap" ])
-  ];
-
-  shadowArray = mkMerge [
-    (mkBefore [ "files" ])
-    (mkIf ldap [ "ldap" ])
   ];
 
 in {
@@ -145,9 +134,9 @@ in {
     '';
 
     system.nssDatabases = {
-      passwd = passwdArray;
-      group = passwdArray;
-      shadow = shadowArray;
+      passwd = mkBefore [ "files" ];
+      group = mkBefore [ "files" ];
+      shadow = mkBefore [ "files" ];
       hosts = hostArray;
       services = mkBefore [ "files" ];
     };
