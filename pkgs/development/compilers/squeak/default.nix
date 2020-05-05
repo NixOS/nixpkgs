@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
    find . -type f -exec sed -i -e 's/\/usr\/bin\/env/${lib.escape ["/"] coreutils.outPath}\/bin\/env/g' {} \;
    ./scripts/updateSCCSVersions
    cd build.linux64x64/squeak.cog.spur/build
+   sed -i -e 's/configure --without-npsqueak/configure --without-npsqueak --disable-dynamicopenssl/g' mvm
    printf "\n" | ./mvm
    make
   '';
