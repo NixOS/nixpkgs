@@ -8523,6 +8523,12 @@
     githubId = 1141948;
     name = "Zack Grannan";
   };
+  zhenyavinogradov = {
+    email = "zhenyavinogradov@gmail.com";
+    github = "zhenyavinogradov";
+    githubId = 4730983;
+    name = "Zhenya Vinogradov";
+  };
   zimbatm = {
     email = "zimbatm@zimbatm.com";
     github = "zimbatm";
