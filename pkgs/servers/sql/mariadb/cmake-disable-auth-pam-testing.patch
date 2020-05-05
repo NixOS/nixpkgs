@@ -1,0 +1,12 @@
+diff --git a/plugin/auth_pam/CMakeLists.txt b/plugin/auth_pam/CMakeLists.txt
+index a556b870..918a26f9 100644
+--- a/plugin/auth_pam/CMakeLists.txt
++++ b/plugin/auth_pam/CMakeLists.txt
+@@ -22,7 +22,6 @@ IF(HAVE_PAM_APPL_H)
+                    COMPONENT Server)
+   ENDIF()
+   IF(TARGET auth_pam OR TARGET auth_pam_v1)
+-    ADD_SUBDIRECTORY(testing)
+     ADD_LIBRARY(pam_user_map MODULE mapper/pam_user_map.c)
+     TARGET_LINK_LIBRARIES(pam_user_map pam)
+     SET_TARGET_PROPERTIES (pam_user_map PROPERTIES PREFIX "")
