@@ -7266,7 +7266,7 @@ in {
 
   scour = callPackage ../development/python-modules/scour { };
 
-  pymssql = callPackage ../development/python-modules/pymssql { };
+  pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
