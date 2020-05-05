@@ -3,7 +3,7 @@
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
-      version = "1.4.2";
+      version = "1.5.0";
       name = "${stname}-${version}";
       outputs = [ "out" "icons" ];
 
@@ -11,10 +11,10 @@ let
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "0pfzpbdir2agwsyfjh1rxlyyd225xmyrr4k2g4vlg5r12kpcjwya";
+        sha256 = "sha256-8s4OLG5QgEneT8HSkWPpJDDaJTXD7+1anKalvF0Ow3s=";
       };
 
-      modSha256 = "0qjhb55nd8mlnswbk8bgl2sb9angmv8fnympmmyqj1dqa7lcs87z";
+      modSha256 = "sha256-AbOkuC6ZZdSvYzoowOKpVf7+zDz8zNlTJlmehmmnR+8=";
 
       patches = [
         ./add-stcli-target.patch
@@ -50,7 +50,13 @@ let
         homepage = "https://www.syncthing.net/";
         description = "Open Source Continuous File Synchronization";
         license = licenses.mpl20;
-        maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
+        maintainers = with maintainers; [
+          pshendry
+          joko
+          peterhoeg
+          andrew-d
+          ehmry
+        ];
         platforms = platforms.unix;
       };
     };
