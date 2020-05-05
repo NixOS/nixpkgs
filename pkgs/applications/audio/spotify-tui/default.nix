@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-tui";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "Rigellute";
     repo = "spotify-tui";
     rev = "v${version}";
-    sha256 = "15icg332iyacdn4ydr4nivblayg4xkcnjh4f0sjnhj4q173v8fq2";
+    sha256 = "1bdcfkfbvvn262p4j0nb4kvjzzgrvn3kxlif48yipqkkykzsgz6g";
   };
 
-  cargoSha256 = "0rw8pj74k88rvcr18837g356lwsn2vdq384yma9df462xd2cw823";
+  cargoSha256 = "13v2ilmfs9468kavlx6wrsp0dscppxbxgygwpdd35p5hq3vnhl7k";
 
-  nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optionals stdenv.isLinux [ python3 ];
-  buildInputs = [ openssl ]
-    ++ stdenv.lib.optional stdenv.isLinux libxcb
+  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkgconfig python3 ];
+  buildInputs = [ ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ openssl libxcb ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   meta = with stdenv.lib; {
