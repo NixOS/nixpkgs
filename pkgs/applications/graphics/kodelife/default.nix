@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kodelife";
-  version = "0.9.0.129";
+  version = "0.9.1.132";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       aarch64-linux = "0z2fqlf156348ha3zhv16kvqdx68fbwbzch2gzjm9x1na9n5k1ra";
       armv7l-linux  = "1ppwgrmgl1j2ws9mhrscvvkamd69a6xw7x35df6d30cyj97r0mzy";
       x86_64-darwin = "0f8vn6m3xzsiyxm2ka5wkbp63wvzrix6g1xrbpvcm3v2llmychkl";
-      x86_64-linux  = "035c1nlw0nim057sz3axpkcgkafqbm6gpr8hwr097vlrqll6w3dv";
+      x86_64-linux  = "01c9cl2hlz101jscr0x2n685ma27mb85rnvkl127sxks0flf168f";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
