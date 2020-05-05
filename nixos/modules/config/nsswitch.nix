@@ -95,7 +95,9 @@ with lib;
   config = {
     assertions = [
       {
-        # generic catch if the NixOS module adding to nssModules does not prevent it with specific message.
+        # Prevent users from disabling nscd, with nssModules being set.
+        # If disabling nscd is really necessary, it's still possible to opt out
+        # by forcing config.system.nssModules to [].
         assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
         message = "Loading NSS modules from path ${config.system.nssModules.path} requires nscd being enabled.";
       }
