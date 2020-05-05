@@ -400,6 +400,21 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
       The rkt module has been removed, it was archived by upstream.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <link xlink:href="https://bazaar.canonical.com">Bazaar</link> VCS is
+      unmaintained and, as consequence of the Python 2 EOL, the packages
+      <literal>bazaar</literal> and <literal>bazaarTools</literal> were
+      removed. Breezy, the backward compatible fork of Bazaar (see the
+      <link xlink:href="https://www.jelmer.uk/breezy-intro.html">announcement</link>),
+      was packaged as <literal>breezy</literal> and can be used instead.
+    </para>
+    <para>
+      Regarding Nixpkgs, <literal>fetchbzr</literal>,
+      <literal>nix-prefetch-bzr</literal> and Bazaar support in Hydra will
+      continue to work through Breezy.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
