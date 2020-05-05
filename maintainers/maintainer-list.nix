@@ -2038,6 +2038,12 @@
     githubId = 108501;
     name = "David Pflug";
   };
+  dramaturg = {
+    email = "seb@ds.ag";
+    github = "dramaturg";
+    githubId = 472846;
+    name = "Sebastian Krohn";
+  };
   drets = {
     email = "dmitryrets@gmail.com";
     github = "drets";
