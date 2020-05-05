@@ -758,7 +758,7 @@
     name = "Jonathan Glines";
   };
   avaq = {
-    email = "avaq+nixos@xs4all.nl";
+    email = "nixpkgs@account.avaq.it";
     github = "avaq";
     githubId = 1217745;
     name = "Aldwin Vlasblom";
@@ -4084,6 +4084,12 @@
     githubId = 6346418;
     name = "Kolby Crouch";
   };
+  kolloch = {
+    email = "info@eigenvalue.net";
+    github = "kolloch";
+    githubId = 339354;
+    name = "Peter Kolloch";
+  };
   konimex = {
     email = "herdiansyah@netc.eu";
     github = "konimex";
@@ -4421,6 +4427,16 @@
     keys = [{
       longkeyid = "rsa2048/0x68FF81E6A7850F49";
       fingerprint = "74F5 E5CC 19D3 B5CB 608F  6124 68FF 81E6 A785 0F49";
+    }];
+  };
+  lourkeur = {
+    name = "Louis Bettens";
+    email = "louis@bettens.info";
+    github = "lourkeur";
+    githubId = 15657735;
+    keys = [{
+      longkeyid = "ed25519/0xDFE1D4A017337E2A";
+      fingerprint = "5B93 9CFA E8FC 4D8F E07A  3AEA DFE1 D4A0 1733 7E2A";
     }];
   };
   luis = {
@@ -7129,6 +7145,12 @@
     github = "snaar";
     githubId = 602439;
     name = "Serguei Narojnyi";
+  };
+  snicket2100 = {
+    email = "57048005+snicket2100@users.noreply.github.com";
+    github = "snicket2100";
+    githubId = 57048005;
+    name = "snicket2100";
   };
   snyh = {
     email = "snyh@snyh.org";

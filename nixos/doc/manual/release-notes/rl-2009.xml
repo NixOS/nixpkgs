@@ -55,6 +55,12 @@
      The new <varname>virtualisation.containers</varname> module manages configuration shared by the CRI-O and Podman modules.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      Declarative Docker containers are renamed from <varname>docker-containers</varname> to <varname>virtualisation.oci-containers.containers</varname>.
+      This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

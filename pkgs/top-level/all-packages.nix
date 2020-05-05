@@ -1174,6 +1174,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
+
   bc = callPackage ../tools/misc/bc { };
 
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
@@ -1267,8 +1269,6 @@ in
   blobfuse = callPackage ../tools/filesystems/blobfuse { };
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
-
-  blsd = callPackage ../tools/misc/blsd { };
 
   bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
 
@@ -2927,9 +2927,7 @@ in
 
   dmd = callPackage ../development/compilers/dmd { };
 
-  dmg2img = callPackage ../tools/misc/dmg2img {
-    openssl = openssl_1_0_2;
-  };
+  dmg2img = callPackage ../tools/misc/dmg2img { };
 
   docbook2odf = callPackage ../tools/typesetting/docbook2odf { };
 
@@ -2973,6 +2971,10 @@ in
   drive = callPackage ../applications/networking/drive { };
 
   driftnet = callPackage ../tools/networking/driftnet {};
+
+  drill = callPackage ../tools/networking/drill {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   drone = callPackage ../development/tools/continuous-integration/drone { };
 
@@ -3064,6 +3066,8 @@ in
 
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
+  magic-vlsi = callPackage ../applications/science/electronics/magic-vlsi { };
+
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   rage = callPackage ../tools/security/rage {
@@ -3117,6 +3121,8 @@ in
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   wob = callPackage ../tools/misc/wob { };
+
+  xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
 
   xob = callPackage ../tools/X11/xob { };
 
@@ -7588,6 +7594,8 @@ in
 
   which = callPackage ../tools/system/which { };
 
+  whsniff = callPackage ../applications/networking/sniffers/whsniff { };
+
   woeusb = callPackage ../tools/misc/woeusb { };
 
   chase = callPackage ../tools/system/chase { };
@@ -9348,6 +9356,8 @@ in
   j = callPackage ../development/interpreters/j {};
 
   janet = callPackage ../development/interpreters/janet {};
+
+  jelly = callPackage ../development/interpreters/jelly {};
 
   jimtcl = callPackage ../development/interpreters/jimtcl {};
 
@@ -12198,6 +12208,11 @@ in
     }));
   icu66 = callPackage ../development/libraries/icu/66.nix ({
     nativeBuildRoot = buildPackages.icu66.override { buildRootOnly = true; };
+  } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+  }));
+  icu67 = callPackage ../development/libraries/icu/67.nix ({
+    nativeBuildRoot = buildPackages.icu67.override { buildRootOnly = true; };
   } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
@@ -18084,6 +18099,8 @@ in
 
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
 
+  pop-icon-theme = callPackage ../data/icons/pop-icon-theme { };
+
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
@@ -19788,6 +19805,8 @@ in
 
   hashit = callPackage ../tools/misc/hashit { };
 
+  hactool = callPackage ../tools/compression/hactool { };
+
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
@@ -19826,6 +19845,8 @@ in
   hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
 
   howl = callPackage ../applications/editors/howl { };
+
+  hpcg = callPackage ../tools/misc/hpcg/default.nix { };
 
   hpl = callPackage ../tools/misc/hpl { mpi = openmpi; };
 
@@ -21046,7 +21067,7 @@ in
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
-  octoprint-plugins = callPackage ../applications/misc/octoprint/plugins.nix { };
+  octoprint-plugins = throw ''octoprint-plugins are now part of the octoprint.python.pkgs package set.'';
 
   ocrad = callPackage ../applications/graphics/ocrad { };
 
@@ -21057,6 +21078,8 @@ in
   omegat = callPackage ../applications/misc/omegat.nix { };
 
   omxplayer = callPackage ../applications/video/omxplayer { };
+
+  inherit (python3Packages.callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
 
   openbox = callPackage ../applications/window-managers/openbox { };
 
@@ -21089,6 +21112,8 @@ in
   orca = python3Packages.callPackage ../applications/misc/orca {
     inherit (pkgs) pkgconfig;
   };
+
+  orca-c = callPackage ../applications/audio/orca-c {};
 
   osm2xmap = callPackage ../applications/misc/osm2xmap {
     libyamlcpp = libyamlcpp_0_3;
@@ -25710,7 +25735,9 @@ in
 
   physlock = callPackage ../misc/screensavers/physlock { };
 
-  pjsip = callPackage ../applications/networking/pjsip { };
+  pjsip = callPackage ../applications/networking/pjsip {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   pounce = callPackage ../servers/pounce { };
 
@@ -25926,7 +25953,7 @@ in
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
-  # TeX Live; see http://nixos.org/nixpkgs/manual/#sec-language-texlive
+  # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
   texlive = recurseIntoAttrs
     (callPackage ../tools/typesetting/tex/texlive { });
 
@@ -26443,4 +26470,7 @@ in
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
   zenstates = callPackage ../os-specific/linux/zenstates {};
+
+  vpsfree-client = callPackage ../tools/virtualization/vpsfree-client {};
+
 }

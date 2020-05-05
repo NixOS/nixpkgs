@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
         ${stdenv.lib.optionalString enablePlayer ''
           --prefix LD_LIBRARY_PATH : ${vlc}/lib
         ''}
+
+    mkdir -p $out/share/applications $out/share/icons $out/share/man/man1
+    cp $out/Tribler/Main/Build/Ubuntu/tribler.desktop $out/share/applications/tribler.desktop
+    cp $out/Tribler/Main/Build/Ubuntu/tribler_big.xpm $out/share/icons/tribler.xpm
+    cp $out/Tribler/Main/Build/Ubuntu/tribler.1 $out/share/man/man1/tribler.1
   '';
 
   meta = with stdenv.lib; {

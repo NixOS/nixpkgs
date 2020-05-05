@@ -1,17 +1,20 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 let
-  cfg = config.docker-containers;
+  cfg = config.virtualisation.oci-containers;
+  proxy_env = config.networking.proxy.envVars;
 
-  dockerContainer =
+  defaultBackend = options.virtualisation.oci-containers.backend.default;
+
+  containerOptions =
     { ... }: {
 
       options = {
 
         image = mkOption {
           type = with types; str;
-          description = "Docker image to run.";
+          description = "OCI image to run.";
           example = "library/hello-world";
         };
 
@@ -58,18 +61,19 @@ let
 
         log-driver = mkOption {
           type = types.str;
-          default = "none";
+          default = "journald";
           description = ''
             Logging driver for the container.  The default of
-            <literal>"none"</literal> means that the container's logs will be
-            handled as part of the systemd unit.  Setting this to
-            <literal>"journald"</literal> will result in duplicate logging, but
-            the container's logs will be visible to the <command>docker
-            logs</command> command.
+            <literal>"journald"</literal> means that the container's logs will be
+            handled as part of the systemd unit.
 
-            For more details and a full list of logging drivers, refer to the
-            <link xlink:href="https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver">
-            Docker engine documentation</link>
+            For more details and a full list of logging drivers, refer to respective backends documentation.
+
+            For Docker:
+            <link xlink:href="https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver">Docker engine documentation</link>
+
+            For Podman:
+            Refer to the docker-run(1) man page.
           '';
         };
 
@@ -172,10 +176,10 @@ let
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
-            Use the same name as the attribute under <literal>services.docker-containers</literal>.
+            Use the same name as the attribute under <literal>virtualisation.oci-containers</literal>.
           '';
           example = literalExample ''
-            services.docker-containers = {
+            virtualisation.oci-containers = {
               node1 = {};
               node2 = {
                 dependsOn = [ "node1" ];
@@ -184,10 +188,10 @@ let
           '';
         };
 
-        extraDockerOptions = mkOption {
+        extraOptions = mkOption {
           type = with types; listOf str;
           default = [];
-          description = "Extra options for <command>docker run</command>.";
+          description = "Extra options for <command>${defaultBackend} run</command>.";
           example = literalExample ''
             ["--network=host"]
           '';
@@ -205,24 +209,31 @@ let
     };
 
   mkService = name: container: let
-    mkAfter = map (x: "docker-${x}.service") container.dependsOn;
-  in rec {
+    dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
+  in {
     wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
-    after = [ "docker.service" "docker.socket" ] ++ mkAfter;
-    requires = after;
-    path = [ pkgs.docker ];
+    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ] ++ dependsOn;
+    requires = dependsOn;
+    environment = proxy_env;
+
+    path =
+      if cfg.backend == "docker" then [ pkgs.docker ]
+      else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
+      else throw "Unhandled backend: ${cfg.backend}";
 
     preStart = ''
-      docker rm -f ${name} || true
+      ${cfg.backend} rm -f ${name} || true
       ${optionalString (container.imageFile != null) ''
-        docker load -i ${container.imageFile}
+        ${cfg.backend} load -i ${container.imageFile}
         ''}
       '';
-    postStop = "docker rm -f ${name} || true";
-        
+    postStop = "${cfg.backend} rm -f ${name} || true";
+
     serviceConfig = {
+      StandardOutput = "null";
+      StandardError = "null";
       ExecStart = concatStringsSep " \\\n  " ([
-        "${pkgs.docker}/bin/docker run"
+        "${config.system.path}/bin/${cfg.backend} run"
         "--rm"
         "--name=${name}"
         "--log-driver=${container.log-driver}"
@@ -233,12 +244,12 @@ let
         ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
         ++ map (v: "-v ${escapeShellArg v}") container.volumes
         ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
-        ++ map escapeShellArg container.extraDockerOptions
+        ++ map escapeShellArg container.extraOptions
         ++ [container.image]
         ++ map escapeShellArg container.cmd
       );
 
-      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || docker stop ${name}"'';
+      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}"'';
 
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
@@ -263,19 +274,50 @@ let
   };
 
 in {
+  imports = [
+    (
+      lib.mkChangedOptionModule
+      [ "docker-containers"  ]
+      [ "virtualisation" "oci-containers" ]
+      (oldcfg: {
+        backend = "docker";
+        containers = lib.mapAttrs (n: v: builtins.removeAttrs (v // {
+          extraOptions = v.extraDockerOptions or [];
+        }) [ "extraDockerOptions" ]) oldcfg.docker-containers;
+      })
+    )
+  ];
 
-  options.docker-containers = mkOption {
-    default = {};
-    type = types.attrsOf (types.submodule dockerContainer);
-    description = "Docker containers to run as systemd services.";
+  options.virtualisation.oci-containers = {
+
+    backend = mkOption {
+      type = types.enum [ "podman" "docker" ];
+      default =
+        # TODO: Once https://github.com/NixOS/nixpkgs/issues/77925 is resolved default to podman
+        # if versionAtLeast config.system.stateVersion "20.09" then "podman"
+        # else "docker";
+        "docker";
+      description = "The underlying Docker implementation to use.";
+    };
+
+    containers = mkOption {
+      default = {};
+      type = types.attrsOf (types.submodule containerOptions);
+      description = "OCI (Docker) containers to run as systemd services.";
+    };
+
   };
 
-  config = mkIf (cfg != {}) {
-
-    systemd.services = mapAttrs' (n: v: nameValuePair "docker-${n}" (mkService n v)) cfg;
-
-    virtualisation.docker.enable = true;
-
-  };
+  config = lib.mkIf (cfg.containers != {}) (lib.mkMerge [
+    {
+      systemd.services = mapAttrs' (n: v: nameValuePair "${cfg.backend}-${n}" (mkService n v)) cfg.containers;
+    }
+    (lib.mkIf (cfg.backend == "podman") {
+      virtualisation.podman.enable = true;
+    })
+    (lib.mkIf (cfg.backend == "docker") {
+      virtualisation.docker.enable = true;
+    })
+  ]);
 
 }

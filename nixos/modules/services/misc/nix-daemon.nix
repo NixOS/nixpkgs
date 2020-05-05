@@ -283,7 +283,7 @@ in
       trustedBinaryCaches = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "http://hydra.nixos.org/" ];
+        example = [ "https://hydra.nixos.org/" ];
         description = ''
           List of binary cache URLs that non-root users can use (in
           addition to those specified using

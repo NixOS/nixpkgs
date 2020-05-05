@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
-    "--infodir=${placeholder "info"}"
+    "--infodir=${placeholder "info"}/share/info"
   ] ++ optional (!withEmacs) "--without-emacs"
     ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
     ++ optional (isNull ruby) "--without-ruby";

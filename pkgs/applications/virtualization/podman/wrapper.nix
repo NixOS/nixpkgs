@@ -28,7 +28,16 @@ let
   ] ++ extraPackages);
 
 in runCommand podman.name {
-  inherit (podman) name pname version meta outputs;
+  name = "${podman.pname}-wrapper-${podman.version}";
+  inherit (podman) pname version;
+
+  meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
   ];

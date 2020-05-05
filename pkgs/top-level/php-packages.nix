@@ -580,10 +580,10 @@ in
     };
 
     pdo_sqlsrv = buildPecl {
-      version = "5.8.0";
+      version = "5.8.1";
       pname = "pdo_sqlsrv";
 
-      sha256 = "0z4vbyd851b4jr6p69l2ylk91iihndsm2qjb429pxcv8g6dqzqll";
+      sha256 = "06ba4x34fgs092qq9w62y2afsm1nyasqiprirk4951ax9v5vcir0";
 
       internalDeps = [ php.extensions.pdo ];
 
@@ -691,10 +691,10 @@ in
     };
 
     sqlsrv = buildPecl {
-      version = "5.8.0";
+      version = "5.8.1";
       pname = "sqlsrv";
 
-      sha256 = "1kv4krk1w4hri99b0sdgwgy9c4y0yh217wx2y3irhkfi46kdrjnw";
+      sha256 = "0c9a6ghch2537vi0274vx0mn6nb1xg2qv7nprnf3xdfqi5ww1i9r";
 
       buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
 

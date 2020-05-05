@@ -4,6 +4,11 @@ with lib;
 
 let
   cfg = config.virtualisation.cri-o;
+
+  # Copy configuration files to avoid having the entire sources in the system closure
+  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+    cp ${filePath} $out
+  '';
 in
 {
   imports = [
@@ -45,9 +50,9 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs;
       [ cri-o cri-tools conmon iptables runc utillinux ];
-    environment.etc."crictl.yaml".text = ''
-      runtime-endpoint: unix:///var/run/crio/crio.sock
-    '';
+
+    environment.etc."crictl.yaml".source = copyFile "${pkgs.cri-o.src}/crictl.yaml";
+
     environment.etc."crio/crio.conf".text = ''
       [crio]
       storage_driver = "${cfg.storageDriver}"
@@ -66,23 +71,7 @@ in
       manage_network_ns_lifecycle = true
     '';
 
-    environment.etc."cni/net.d/20-cri-o-bridge.conf".text = ''
-      {
-        "cniVersion": "0.3.1",
-        "name": "crio-bridge",
-        "type": "bridge",
-        "bridge": "cni0",
-        "isGateway": true,
-        "ipMasq": true,
-        "ipam": {
-          "type": "host-local",
-          "subnet": "10.88.0.0/16",
-          "routes": [
-              { "dst": "0.0.0.0/0" }
-          ]
-        }
-      }
-    '';
+    environment.etc."cni/net.d/10-crio-bridge.conf".source = copyFile "${pkgs.cri-o.src}/contrib/cni/10-crio-bridge.conf";
 
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;

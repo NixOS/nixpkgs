@@ -1,6 +1,6 @@
 { lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm, ... }:
 
-let version = "0.106.3"; in
+let version = "0.114.0"; in
 
 buildGoModule {
   pname = "helmfile";
@@ -10,12 +10,12 @@ buildGoModule {
     owner = "roboll";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "0pwkkgdcj9vx6nk574iaqwn074qfpgqd1c44d3kr3xdbac89yfyf";
+    sha256 = "0486wcfizi8xljr29mznc4p11ggz4rvk5n53qvb30f7ry4ncc8n5";
   };
 
   goPackagePath = "github.com/roboll/helmfile";
 
-  modSha256 = "1yv2b44qac0rms66v0qg13wsga0di6hwxa4dh2l0b1xvaf75ysay";
+  modSha256 = "0j7w12rrnsv2h5v0bqh6sjq9anm51zs0p3nzlhwsksw9c98r9avk";
 
   nativeBuildInputs = [ makeWrapper ];
 

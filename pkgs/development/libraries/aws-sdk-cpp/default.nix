@@ -50,6 +50,12 @@ stdenv.mkDerivation rec {
       rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     '';
 
+  postFixupHooks = [
+    # This bodge is necessary so that the file that the generated -config.cmake file
+    # points to an existing directory.
+    ''mkdir -p $out/include''
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   patches = [
@@ -57,6 +63,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/aws/aws-sdk-cpp/commit/42991ab549087c81cb630e5d3d2413e8a9cf8a97.patch";
       sha256 = "0myq5cm3lvl5r56hg0sc0zyn1clbkd9ys0wr95ghw6bhwpvfv8gr";
     })
+    ./cmake-dirs.patch
   ];
 
   meta = with lib; {
