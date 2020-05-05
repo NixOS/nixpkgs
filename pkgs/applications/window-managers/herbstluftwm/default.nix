@@ -1,5 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, libX11, libXext, libXinerama, libXrandr
-, withDoc ? stdenv.buildPlatform == stdenv.targetPlatform, asciidoc ? null }:
+, withDoc ? stdenv.buildPlatform == stdenv.targetPlatform, asciidoc ? null
+, nixosTests }:
 
 # Doc generation is disabled by default when cross compiling because asciidoc
 # does not cross compile for now
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
     libXinerama
     libXrandr
   ];
+
+  passthru = {
+    tests.herbstluftwm = nixosTests.herbstluftwm;
+  };
 
   meta = {
     description = "A manual tiling window manager for X";
