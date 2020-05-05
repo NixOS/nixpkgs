@@ -70,7 +70,8 @@ stdenv.mkDerivation {
     "DATADIR=$(out)/share"
     "MANDIR=$(out)/share/man"
     "PERL=perl"
-  ];
+  ]
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
 
