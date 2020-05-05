@@ -42,11 +42,6 @@ in {
   };
   config = mkMerge [
     (mkIf cfg.enable {
-      assertions = singleton {
-        assertion = nscd.enable;
-        message = "nscd must be enabled through `services.nscd.enable` for SSSD to work.";
-      };
-
       systemd.services.sssd = {
         description = "System Security Services Daemon";
         wantedBy    = [ "multi-user.target" ];
