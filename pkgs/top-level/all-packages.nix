@@ -756,6 +756,8 @@ in
 
   berglas = callPackage ../tools/admin/berglas/default.nix { };
 
+  betterdiscordctl = callPackage ../tools/misc/betterdiscordctl { };
+
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
