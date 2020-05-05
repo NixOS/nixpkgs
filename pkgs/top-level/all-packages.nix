@@ -19162,6 +19162,8 @@ in
 
   kopia = callPackage ../tools/backup/kopia { };
 
+  koreader = callPackage ../applications/misc/koreader {};
+
   lato = callPackage ../data/fonts/lato {};
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
