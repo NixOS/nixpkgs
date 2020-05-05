@@ -53,7 +53,7 @@ in {
             wsrep_on = "ON";
             wsrep_debug = "OFF";
             wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera_25}/lib/galera/libgalera_smm.so";
+            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
             wsrep_cluster_address = "gcomm://";
             wsrep_cluster_name = "galera-rsync";
             wsrep_node_address = "192.168.2.1";
@@ -99,7 +99,7 @@ in {
             wsrep_on = "ON";
             wsrep_debug = "OFF";
             wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera_25}/lib/galera/libgalera_smm.so";
+            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
             wsrep_cluster_address = "gcomm://galera_04,galera_05,galera_06";
             wsrep_cluster_name = "galera-rsync";
             wsrep_node_address = "192.168.2.2";
@@ -145,7 +145,7 @@ in {
             wsrep_on = "ON";
             wsrep_debug = "OFF";
             wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera_25}/lib/galera/libgalera_smm.so";
+            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
             wsrep_cluster_address = "gcomm://galera_04,galera_05,galera_06";
             wsrep_cluster_name = "galera-rsync";
             wsrep_node_address = "192.168.2.3";

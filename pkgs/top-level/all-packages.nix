@@ -15865,8 +15865,7 @@ in
   mariadb-connector-c = mariadb-connector-c_3_1;
   mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
 
-  mariadb-galera = mariadb-galera_25;
-  mariadb-galera_25 = callPackage ../servers/sql/mariadb/galera/25.nix {
+  mariadb-galera = callPackage ../servers/sql/mariadb/galera {
     asio = asio_1_10;
   };
 
