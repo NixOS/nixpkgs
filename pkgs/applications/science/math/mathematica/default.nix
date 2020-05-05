@@ -11,7 +11,7 @@
 , glib
 , libssh2
 , ncurses
-, opencv
+, opencv2
 , openssl
 , unixODBC
 , xkeyboard_config
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     glib
     libssh2
     ncurses
-    opencv
+    opencv2
     openssl
     stdenv.cc.cc.lib
     unixODBC
