@@ -860,6 +860,8 @@ in
 
   boulder = callPackage ../tools/admin/boulder { };
 
+  btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
+
   buildbot = with python3Packages; toPythonApplication buildbot;
   buildbot-ui = with python3Packages; toPythonApplication buildbot-ui;
   buildbot-full = with python3Packages; toPythonApplication buildbot-full;
