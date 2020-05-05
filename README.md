@@ -34,6 +34,7 @@ See code for all available configurations.
 | [Apple MacBook Pro 10,1][]        | `<nixos-hardware/apple/macbook-pro/10-1>`          |
 | Apple MacBook Pro 12,1            | `<nixos-hardware/apple/macbook-pro/12-1>`          |
 | BeagleBoard PocketBeagle          | `<nixos-hardware/beagleboard/pocketbeagle>`        |
+| Dell Latitude 3480                | `<nixos-hardware/dell/latitude/3480>`              |
 | [Dell XPS E7240][]                | `<nixos-hardware/dell/e7240>`                      |
 | [Dell XPS 13 7390][]              | `<nixos-hardware/dell/xps/13-7390>`                |
 | [Dell XPS 13 9360][]              | `<nixos-hardware/dell/xps/13-9360>`                |
