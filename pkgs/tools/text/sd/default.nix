@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chmln/sd";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.amar1729 ];
+    maintainers = with maintainers; [ amar1729 filalex77 ];
   };
 }
