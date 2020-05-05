@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner="OpenSmalltalk";
     repo="opensmalltalk-vm";
     rev="${version}";
-    sha256 = "0bpwbnpy2sb4gylchfx50sha70z36bwgdxraym4vrr93l8pd3dix";
+    sha256 = "0qxnmw5q836m09y7pkii1dwkjsjwa86pyhwxj11hxsf815r15c0v";
   };
 
   buildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
    find . -type f -exec sed -i -e 's/\/usr\/bin\/env/${lib.escape ["/"] coreutils.outPath}\/bin\/env/g' {} \;
    ./scripts/updateSCCSVersions
-   cd build.linux64x64/squeak.cog.spur/build.debug
+   cd build.linux64x64/squeak.cog.spur/build
    printf "\n" | ./mvm
    make
   '';
