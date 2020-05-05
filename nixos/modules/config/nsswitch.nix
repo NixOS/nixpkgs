@@ -4,20 +4,7 @@
 
 with lib;
 
-let
-
-  # only with nscd up and running we can load NSS modules that are not integrated in NSS
-  canLoadExternalModules = config.services.nscd.enable;
-  # XXX Move these to their respective modules
-  nsswins = canLoadExternalModules && config.services.samba.nsswins;
-
-  hostArray = mkMerge [
-    (mkBefore [ "files" ])
-    (mkIf nsswins [ "wins" ])
-    (mkAfter [ "dns" ])
-  ];
-
-in {
+{
   options = {
 
     # NSS modules.  Hacky!
@@ -109,7 +96,7 @@ in {
     assertions = [
       {
         # generic catch if the NixOS module adding to nssModules does not prevent it with specific message.
-        assertion = config.system.nssModules.path != "" -> canLoadExternalModules;
+        assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
         message = "Loading NSS modules from path ${config.system.nssModules.path} requires nscd being enabled.";
       }
     ];
@@ -134,7 +121,10 @@ in {
       passwd = mkBefore [ "files" ];
       group = mkBefore [ "files" ];
       shadow = mkBefore [ "files" ];
-      hosts = hostArray;
+      hosts = mkMerge [
+        (mkBefore [ "files" ])
+        (mkAfter [ "dns" ])
+      ];
       services = mkBefore [ "files" ];
     };
   };
