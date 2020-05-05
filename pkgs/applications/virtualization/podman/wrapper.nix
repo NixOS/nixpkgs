@@ -28,21 +28,25 @@ let
   ] ++ extraPackages);
 
 in runCommand podman.name {
-  inherit (podman) name pname version meta outputs;
+  name = "${podman.pname}-wrapper-${podman.version}";
+  inherit (podman) pname version;
+
+  meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
   ];
 
 } ''
-  # Symlink everything but $bin from podman-unwrapped
-  ${
-    lib.concatMapStringsSep "\n"
-    (o: "ln -s ${podman.${o}} ${placeholder o}")
-    (builtins.filter (o: o != "bin")
-    podman.outputs)}
+  ln -s ${podman.man} $man
 
-  mkdir -p $bin/bin
-  ln -s ${podman-unwrapped}/share $bin/share
-  makeWrapper ${podman-unwrapped}/bin/podman $bin/bin/podman \
+  mkdir -p $out/bin
+  ln -s ${podman-unwrapped}/share $out/share
+  makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
     --prefix PATH : ${binPath}
 ''
