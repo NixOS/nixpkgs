@@ -21,6 +21,7 @@ let
     hw_mode=${cfg.hwMode}
     channel=${toString cfg.channel}
     ${optionalString (cfg.countryCode != null) ''country_code=${cfg.countryCode}''}
+    ${optionalString (cfg.countryCode != null) ''ieee80211d=1''}
 
     # logging (debug level)
     logger_syslog=-1
@@ -167,7 +168,10 @@ in
           Set as needed to indicate country in which device is operating.
           This can limit available channels and transmit power.
           These two octets are used as the first two octets of the Country String
-          (dot11CountryString)
+          (dot11CountryString).
+          If set this enables IEEE 802.11d. This advertises the countryCode and
+          the set of allowed channels and transmit power levels based on the
+          regulatory limits.
         '';
       };
 
