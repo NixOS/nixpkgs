@@ -76,9 +76,10 @@ in {
 
       system.nssModules = optional cfg.enable pkgs.sssd;
       system.nssDatabases = {
+        group = [ "sss" ];
         passwd = [ "sss" ];
-        shadow = [ "sss" ];
         services = [ "sss" ];
+        shadow = [ "sss" ];
       };
       services.dbus.packages = [ pkgs.sssd ];
     })
