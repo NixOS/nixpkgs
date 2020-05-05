@@ -17,11 +17,11 @@ rec {
 
   ansible_2_7 = with python3Packages; toPythonApplication (ansible.overrideAttrs(old: rec {
     pname = "ansible";
-    version = "2.7.15";
+    version = "2.7.17";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "1kjqr35c11njyi3f2rjab6821bhqcrdykv4285q76gwv0qynigwr";
+      sha256 = "1k2cz4w3r3an37305f40vi93wqixapls9y6ggkf75nbs7z27knwz";
     };
   }));
 
