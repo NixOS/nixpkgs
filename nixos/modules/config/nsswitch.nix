@@ -14,14 +14,12 @@ let
   nssmdns = canLoadExternalModules && config.services.avahi.nssmdns;
   nsswins = canLoadExternalModules && config.services.samba.nsswins;
   ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
-  resolved = canLoadExternalModules && config.services.resolved.enable;
 
   hostArray = mkMerge [
     (mkBefore [ "files" ])
     (mkIf mymachines [ "mymachines" ])
     (mkIf nssmdns [ "mdns_minimal [NOTFOUND=return]" ])
     (mkIf nsswins [ "wins" ])
-    (mkIf resolved [ "resolve [!UNAVAIL=return]" ])
     (mkAfter [ "dns" ])
     (mkIf nssmdns (mkOrder 1501 [ "mdns" ])) # 1501 to ensure it's after dns
     (mkIf myhostname (mkOrder 1600 [ "myhostname" ])) # 1600 to ensure it's always the last
@@ -133,11 +131,6 @@ in {
         # generic catch if the NixOS module adding to nssModules does not prevent it with specific message.
         assertion = config.system.nssModules.path != "" -> canLoadExternalModules;
         message = "Loading NSS modules from path ${config.system.nssModules.path} requires nscd being enabled.";
-      }
-      {
-        # resolved does not need to add to nssModules, therefore needs an extra assertion
-        assertion = resolved -> canLoadExternalModules;
-        message = "Loading systemd-resolved's nss-resolve NSS module requires nscd being enabled.";
       }
     ];
 
