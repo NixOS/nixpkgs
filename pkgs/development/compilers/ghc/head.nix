@@ -32,7 +32,7 @@
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
-, # Whetherto build terminfo.
+, # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
 , version ? "8.11.20200505"
