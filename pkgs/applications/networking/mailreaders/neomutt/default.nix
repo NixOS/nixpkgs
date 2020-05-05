@@ -1,28 +1,19 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell, sqlite, zlib
-, fetchpatch
+, glibcLocales
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200417";
+  version = "20200501";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "0s7943r2s14kavyjf7i70vca252l626539i09a9vk0i9sfi35vx5";
+    sha256 = "1xrs2bagrcg489zp7g39l3rrpgz8n1ji9cbr21wrnasfbhqcsmnx";
   };
-
-  patches = [
-    # Remove on next release. Fixes the `change-folder`
-    # macro (https://github.com/neomutt/neomutt/issues/2268)
-    (fetchpatch {
-      url = "https://github.com/neomutt/neomutt/commit/9e7537caddb9c6adc720bb3322a7512cf51ab025.patch";
-      sha256 = "1vmlvgnhx1ra3rnyjkpkv6lrqw8xfh2kkmqp43fqn9lnk3pkjxvv";
-    })
-  ];
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
@@ -95,8 +86,10 @@ stdenv.mkDerivation rec {
     (cd test-files && ./setup.sh)
 
     export NEOMUTT_TEST_DIR=$(pwd)/test-files
+    export LC_ALL="en_US.UTF-8"
   '';
 
+  checkInputs = [ glibcLocales ];
   checkTarget = "test";
   postCheck = "unset NEOMUTT_TEST_DIR";
 

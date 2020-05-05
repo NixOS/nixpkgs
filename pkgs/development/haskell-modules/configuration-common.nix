@@ -1430,6 +1430,31 @@ self: super: {
     amqp = dontCheck super.amqp_0_19_1;
   };
 
+  # HsYAML-aeson depends on a more modern version of HsYAML than the one
+  # available in stackage's LTS 14.23
+  HsYAML-aeson = super.HsYAML-aeson.override {
+    HsYAML = self.HsYAML_0_2_1_0;
+  };
+
+  stylish-haskell = super.stylish-haskell.override {
+    HsYAML = self.HsYAML_0_2_1_0;
+  };
+
+  # Needed for ghcide
+  haskell-lsp_0_19_0_0 = super.haskell-lsp_0_19_0_0.override {
+    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
+  };
+
+  # this will probably need to get updated with every ghcide update,
+  # we need an override because ghcide is tracking haskell-lsp closely.
+  ghcide = dontCheck (super.ghcide.override rec {
+    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
+    haskell-lsp = self.haskell-lsp_0_19_0_0;
+    regex-tdfa = self.regex-tdfa_1_3_1_0;
+    haddock-library = self.haddock-library_1_8_0;
+  });
+
+
   # 20.03 broken packages
 
   envy-extensible = markBroken super.envy-extensible;

@@ -13496,7 +13496,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  nss_3_51 = lowPrio (callPackage ../development/libraries/nss/3_51.nix { });
+  nss_3_52 = lowPrio (callPackage ../development/libraries/nss/3_52.nix { });
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
@@ -19989,6 +19989,8 @@ in
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
+
+  kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = buildPackages.go_1_13;

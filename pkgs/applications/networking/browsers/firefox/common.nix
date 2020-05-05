@@ -16,7 +16,7 @@
 
 ### backorted packages
 
-, nss_3_51
+, nss_3_52
 , sqlite_3_31_1
 
 ### optionals
@@ -94,7 +94,7 @@ let
 # backported dependencies where the versions on the stable release did not meet
 # Firefoxs requirements
 
-nss_pkg = if lib.versionAtLeast ffversion "74" then nss_3_51 else nss;
+nss_pkg = if lib.versionAtLeast ffversion "74" then nss_3_52 else nss;
 sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
 
 in

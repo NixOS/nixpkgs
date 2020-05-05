@@ -71,10 +71,10 @@ index 33d78dd..2b087db 100644
  
  #endif /* HEADER_LDCACHE_H */
 diff --git a/src/nvc_info.c b/src/nvc_info.c
-index cc96542..3fe7612 100644
+index 30e3cfd..6d12a50 100644
 --- a/src/nvc_info.c
 +++ b/src/nvc_info.c
-@@ -163,15 +163,13 @@ find_library_paths(struct error *err, struct nvc_driver_info *info, const char *
+@@ -167,15 +167,13 @@ find_library_paths(struct error *err, struct nvc_driver_info *info, const char *
          if (path_resolve_full(err, path, root, ldcache) < 0)
                  return (-1);
          ldcache_init(&ld, err, path);
@@ -91,7 +91,7 @@ index cc96542..3fe7612 100644
                  goto fail;
  
          info->nlibs32 = size;
-@@ -179,13 +177,11 @@ find_library_paths(struct error *err, struct nvc_driver_info *info, const char *
+@@ -183,13 +181,11 @@ find_library_paths(struct error *err, struct nvc_driver_info *info, const char *
          if (info->libs32 == NULL)
                  goto fail;
          if (ldcache_resolve(&ld, LIB32_ARCH, root, libs,
@@ -106,7 +106,7 @@ index cc96542..3fe7612 100644
          return (rv);
  }
  
-@@ -199,7 +195,7 @@ find_binary_paths(struct error *err, struct nvc_driver_info *info, const char *r
+@@ -203,7 +199,7 @@ find_binary_paths(struct error *err, struct nvc_driver_info *info, const char *r
          char path[PATH_MAX];
          int rv = -1;
  
@@ -116,10 +116,10 @@ index cc96542..3fe7612 100644
                  return (-1);
          }
 diff --git a/src/nvc_ldcache.c b/src/nvc_ldcache.c
-index d41a24d..65b7878 100644
+index 6ff380f..cbe6a69 100644
 --- a/src/nvc_ldcache.c
 +++ b/src/nvc_ldcache.c
-@@ -331,7 +331,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
+@@ -340,7 +340,7 @@ nvc_ldcache_update(struct nvc_context *ctx, const struct nvc_container *cnt)
          if (validate_args(ctx, cnt != NULL) < 0)
                  return (-1);
  

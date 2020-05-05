@@ -2523,6 +2523,8 @@ extra-packages:
   - happy <1.19.6                       # newer versions break Agda
   - happy == 1.19.9                     # for purescript
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
+  - haskell-lsp == 0.19.*               # required for ghcide
+  - haskell-lsp-types == 0.19.*         # required for ghcide
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hoogle == 5.0.14                    # required by hie-hoogle
@@ -5056,7 +5058,6 @@ broken-packages:
   - ghci-lib
   - ghci-ng
   - ghci-pretty
-  - ghcide
   - ghcjs-base-stub
   - ghcjs-dom-jsffi
   - ghcjs-fetch
@@ -5806,7 +5807,6 @@ broken-packages:
   - hiccup
   - hichi
   - hid-examples
-  - hie-bios
   - hie-core
   - hieraclus
   - hierarchical-clustering
