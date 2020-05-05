@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, glib, libX11, libXext, libXinerama, libXrandr
+{ stdenv, fetchurl, cmake, pkgconfig, libX11, libXext, libXinerama, libXrandr
 , withDoc ? stdenv.buildPlatform == stdenv.targetPlatform, asciidoc ? null }:
 
 # Doc generation is disabled by default when cross compiling because asciidoc
@@ -8,11 +8,11 @@ assert withDoc -> asciidoc != null;
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "0c1lf82z6a56g8asin91cmqhzk3anw0xwc44b31bpjixadmns57y";
+    sha256 = "0wbl1s1gwdc61ll6qmkwb56swjxv99by1dhi080bdqn0w8p75804";
   };
 
   outputs = [
