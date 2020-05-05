@@ -669,6 +669,8 @@ in
 
   aptly = callPackage ../tools/misc/aptly { };
 
+  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
