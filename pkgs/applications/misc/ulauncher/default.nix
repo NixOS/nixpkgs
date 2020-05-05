@@ -19,13 +19,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.7.3";
+  version = "5.7.5";
 
   disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "0wq2zsq3496fjfg89q01dsm7sb7kv92sycvqm6ad8z1z2kpisrbh";
+    sha256 = "0xzxyd6qk9v0plh18pgyfrizryklmwi8h3bbvllf5azbqgma29xi";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -99,8 +99,11 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  # explanation of $GDK_PIXBUF_MODULE_FILE
+  # https://github.com/NixOS/nixpkgs/issues/13537#issuecomment-332327760
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ wmctrl ]}")
+    gappsWrapperArgs+=(--prefix GDK_PIXBUF_MODULE_FILE : "$(echo ${librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache)")
   '';
 
   meta = with stdenv.lib; {
