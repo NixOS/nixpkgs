@@ -84,8 +84,14 @@ installPhase() {
             else
                 sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
             fi
-            install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia.json
+
+            if [ "$system" = "i686-linux" ]; then
+                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.i686.json
+            else
+                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.json
+            fi
         fi
+
         if [ -e nvidia_layers.json ]; then
             sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_layers.json > nvidia_layers.json.fixed
             install -Dm644 nvidia_layers.json.fixed $i/share/vulkan/implicit_layer.d/nvidia_layers.json
