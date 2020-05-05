@@ -322,7 +322,10 @@ let
       installPhase = ''
         mkdir -p "$out"
         tar -xf bazel-bin/tensorflow/tools/lib_package/libtensorflow.tar.gz -C "$out"
-        # Write pkgconfig file.
+        ${lib.optionalString mklSupport ''
+          # mkl-dnn
+          cp -Lr bazel-bin/_solib_${if cudaSupport then "local" else "k8"}/_U@mkl_Ulinux_S_S_Cmkl_Ulibs_Ulinux___Uexternal_Smkl_Ulinux_Slib/*.so $out/lib
+          ''}# Write pkgconfig file.
         mkdir "$out/lib/pkgconfig"
         cat > "$out/lib/pkgconfig/tensorflow.pc" << EOF
         Name: TensorFlow
