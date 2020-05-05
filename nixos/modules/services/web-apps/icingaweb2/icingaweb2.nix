@@ -168,7 +168,7 @@ in {
       ${poolName} = {
         user = "icingaweb2";
         phpOptions = ''
-          extension = ${pkgs.phpPackages.imagick}/lib/php/extensions/imagick.so
+          extension = ${pkgs.phpExtensions.imagick}/lib/php/extensions/imagick.so
           date.timezone = "${cfg.timezone}"
         '';
         settings = mapAttrs (name: mkDefault) {
