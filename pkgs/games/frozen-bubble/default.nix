@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, pkg-config, SDL, SDL_mixer, SDL_Pango, glib }:
+{ lib, makeDesktopItem, copyDesktopItems, fetchurl, perlPackages, pkgconfig, SDL, SDL_mixer, SDL_Pango, glib }:
 
 perlPackages.buildPerlModule {
   pname = "frozen-bubble";
@@ -10,16 +10,31 @@ perlPackages.buildPerlModule {
   };
   patches = [ ./fix-compilation.patch ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkgconfig copyDesktopItems ];
 
   buildInputs =  [ glib SDL SDL_mixer SDL_Pango perlPackages.SDL perlPackages.FileSlurp ];
   propagatedBuildInputs = with perlPackages; [ AlienSDL CompressBzip2 FileShareDir FileWhich IPCSystemSimple LocaleMaketextLexicon ];
 
   perlPreHook = "export LD=$CC";
 
-  meta = {
+  desktopItems = [ (makeDesktopItem {
+    name = "frozen-bubble";
+    exec = "frozen-bubble";
+    icon = "frozen-bubble";
+    desktopName = "Frozen Bubble";
+    comment     = "Pop out the bubbles!";
+    categories  = "Game;ArcadeGame;";
+  }) ];
+
+  postInstall = ''
+    for size in 16x16 32x32 48x48 64x64; do
+      install -Dm644 share/icons/frozen-bubble-icon-$size.png $out/share/icons/hicolor/$size/apps/frozen-bubble.png
+    done
+  '';
+
+  meta = with lib; {
     description = "Puzzle with Bubbles";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ puckipedia ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ puckipedia ];
   };
 }
