@@ -7328,6 +7328,8 @@ in {
 
   rxv     = callPackage ../development/python-modules/rxv     { };
 
+  pyln-client = callPackage ../development/python-modules/pyln-client { };
+
 });
 
 in fix' (extends overrides packages)
