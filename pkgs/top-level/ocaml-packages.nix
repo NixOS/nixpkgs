@@ -737,8 +737,6 @@ let
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
 
-    re2_p4 = callPackage ../development/ocaml-modules/re2 { };
-
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
@@ -1172,13 +1170,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core.nix {}
       else core_p4;
-
-    re2 =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.re2
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/re2.nix {}
-      else re2_p4;
 
     textutils =
       if lib.versionOlder "4.03" ocaml.version
