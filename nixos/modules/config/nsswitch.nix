@@ -9,15 +9,12 @@ let
   # only with nscd up and running we can load NSS modules that are not integrated in NSS
   canLoadExternalModules = config.services.nscd.enable;
   # XXX Move these to their respective modules
-  nssmdns = canLoadExternalModules && config.services.avahi.nssmdns;
   nsswins = canLoadExternalModules && config.services.samba.nsswins;
 
   hostArray = mkMerge [
     (mkBefore [ "files" ])
-    (mkIf nssmdns [ "mdns_minimal [NOTFOUND=return]" ])
     (mkIf nsswins [ "wins" ])
     (mkAfter [ "dns" ])
-    (mkIf nssmdns (mkOrder 1501 [ "mdns" ])) # 1501 to ensure it's after dns
   ];
 
 in {
