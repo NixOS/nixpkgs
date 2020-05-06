@@ -104,6 +104,10 @@ common = rec { # attributes common to both builds
   passthru.tests = {
     mariadb-galera-mariabackup = nixosTests.mariadb-galera-mariabackup;
     mariadb-galera-rsync = nixosTests.mariadb-galera-rsync;
+    mysql = nixosTests.mysql;
+    mysql-autobackup = nixosTests.mysql-autobackup;
+    mysql-backup = nixosTests.mysql-backup;
+    mysql-replication = nixosTests.mysql-replication;
   };
 
   meta = {
