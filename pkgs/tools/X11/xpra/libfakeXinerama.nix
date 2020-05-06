@@ -11,8 +11,6 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ libX11 libXinerama ];
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
   buildPhase = ''
     gcc -O2 -Wall fakeXinerama.c -fPIC -o libfakeXinerama.so.1.0 -shared
   '';
