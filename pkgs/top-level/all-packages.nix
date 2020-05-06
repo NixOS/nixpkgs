@@ -5603,6 +5603,7 @@ in
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { };
 
   openbazaar = callPackage ../applications/networking/openbazaar { };
+  openbazaar-client = callPackage ../applications/networking/openbazaar/client.nix { };
 
   opencc = callPackage ../tools/text/opencc { };
 
