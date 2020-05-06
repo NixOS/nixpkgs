@@ -612,6 +612,7 @@ mapAliases ({
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
   xbmcPlugins = kodiPlugins; # added 2018-04-25
+  xdg-utils = pkgs.xdg_utils; # added 2020-05-06
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xf86_input_mtrack = throw ("xf86_input_mtrack has been removed from nixpkgs as it hasn't been maintained"
