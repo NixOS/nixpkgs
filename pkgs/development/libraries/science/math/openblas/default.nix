@@ -178,11 +178,16 @@ EOF
     done
 
     # Setup symlinks for blas / lapack
-    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}${stdenv.lib.optionalString stdenv.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}${stdenv.lib.optionalString stdenv.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}${stdenv.lib.optionalString stdenv.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapacke${stdenv.hostPlatform.extensions.sharedLibrary}${stdenv.lib.optionalString stdenv.hostPlatform.isLinux ".3"}
-  '';
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapacke${stdenv.hostPlatform.extensions.sharedLibrary}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}.3
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}.3
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}.3
+    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapacke${stdenv.hostPlatform.extensions.sharedLibrary}.3
+    '';
 
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
