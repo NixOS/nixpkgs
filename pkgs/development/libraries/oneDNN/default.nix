@@ -1,11 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, substituteAll, cmake, bash }:
+{ stdenv, lib, fetchFromGitHub, cmake }:
 
 # This was originally called mkl-dnn, then it was renamed to dnnl, and it has
-# just recently been renamed again to oneDNN. In a follow-up, let's move the
-# attr and alias dnnl -> oneDNN. See here for details:
+# just recently been renamed again to oneDNN. See here for details:
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
 stdenv.mkDerivation rec {
-  pname = "dnnl";
+  pname = "oneDNN";
   version = "1.4";
 
   src = fetchFromGitHub {
