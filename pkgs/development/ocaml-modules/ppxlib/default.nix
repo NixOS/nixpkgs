@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, buildDunePackage
-, version ? "0.8.1"
+, version ? "0.13.0"
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
 }:
 
 let sha256 =
-  { "0.8.1" = "0vm0jajmg8135scbg0x60ivyy5gzv4abwnl7zls2mrw23ac6kml6";
+  { "0.13.0" = "0c54g22pm6lhfh3f7s5wbah8y48lr5lj3cqsbvgi99bly1b5vqvl";
     "0.12.0" = "1cg0is23c05k1rc94zcdz452p9zn11dpqxm1pnifwx5iygz3w0a1";
   }."${version}"
 ; in
