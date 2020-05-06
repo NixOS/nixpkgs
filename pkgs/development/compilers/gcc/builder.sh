@@ -202,34 +202,34 @@ postConfigure() {
 
 preInstall() {
     mkdir -p "$out/${targetConfig}/lib"
-    mkdir -p "$lib/${targetConfig}/lib"
+    mkdir -p "${!outputLib}/${targetConfig}/lib"
     # Make ‘lib64’ symlinks to ‘lib’.
     if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
         ln -s lib "$out/${targetConfig}/lib64"
-        ln -s lib "$lib/${targetConfig}/lib64"
+        ln -s lib "${!outputLib}/${targetConfig}/lib64"
     fi
 }
 
 
 postInstall() {
-    # Move runtime libraries to $lib.
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "$lib"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "$lib"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "$lib"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "$lib"
-    moveToOutput "share/gcc-*/python" "$lib"
+    # Move runtime libraries to lib output.
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "${!outputLib}"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "${!outputLib}"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "${!outputLib}"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "${!outputLib}"
+    moveToOutput "share/gcc-*/python" "${!outputLib}"
 
-    for i in "$lib/${targetConfig}"/lib/*.{la,py}; do
-        substituteInPlace "$i" --replace "$out" "$lib"
+    for i in "${!outputLib}/${targetConfig}"/lib/*.{la,py}; do
+        substituteInPlace "$i" --replace "$out" "${!outputLib}"
     done
 
     if [ -n "$enableMultilib" ]; then
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.so*" "$lib"
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.la"  "$lib"
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.dylib" "$lib"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.so*" "${!outputLib}"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.la"  "${!outputLib}"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.dylib" "${!outputLib}"
 
-        for i in "$lib/${targetConfig}"/lib64/*.{la,py}; do
-            substituteInPlace "$i" --replace "$out" "$lib"
+        for i in "${!outputLib}/${targetConfig}"/lib64/*.{la,py}; do
+            substituteInPlace "$i" --replace "$out" "${!outputLib}"
         done
     fi
 
@@ -251,10 +251,10 @@ postInstall() {
     fi
 
     if type "install_name_tool"; then
-        for i in "$lib"/lib/*.*.dylib; do
+        for i in "${!outputLib}"/lib/*.*.dylib; do
             install_name_tool -id "$i" "$i" || true
             for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
-              new_path=`echo "$old_path" | sed "s,$out,$lib,"`
+              new_path=`echo "$old_path" | sed "s,$out,${!outputLib},"`
               install_name_tool -change "$old_path" "$new_path" "$i" || true
             done
         done

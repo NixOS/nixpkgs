@@ -147,10 +147,10 @@ stdenv.mkDerivation ({
         --replace 'if (stdinc)' 'if (0)'
 
       substituteInPlace libgcc/config/t-slibgcc-darwin \
-        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
 
       substituteInPlace libgfortran/configure \
-        --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+        --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
     '';
 
   postPatch =
