@@ -682,6 +682,8 @@ in {
 
   parver = callPackage ../development/python-modules/parver { };
   arpeggio = callPackage ../development/python-modules/arpeggio { };
+  hdmf = callPackage ../development/python-modules/hdmf { };
+
   invoke = callPackage ../development/python-modules/invoke { };
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
@@ -934,6 +936,8 @@ in {
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
+
+  pynwb = callPackage ../development/python-modules/pynwb { };
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
