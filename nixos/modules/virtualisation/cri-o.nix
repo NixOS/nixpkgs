@@ -37,15 +37,17 @@ in
     };
 
     pauseImage = mkOption {
-      type = types.str;
-      default = "k8s.gcr.io/pause:3.2";
-      description = "Pause image for pod sandboxes to be used";
+      type = types.nullOr types.str;
+      default = null;
+      description = "Override the default pause image for pod sandboxes";
+      example = [ "k8s.gcr.io/pause:3.2" ];
     };
 
     pauseCommand = mkOption {
-      type = types.str;
-      default = "/pause";
-      description = "Pause command to be executed";
+      type = types.nullOr types.str;
+      default = null;
+      description = "Override the default pause command";
+      example = [ "/pause" ];
     };
 
     runtime = mkOption {
@@ -88,8 +90,8 @@ in
       storage_driver = "${cfg.storageDriver}"
 
       [crio.image]
-      pause_image = "${cfg.pauseImage}"
-      pause_command = "${cfg.pauseCommand}"
+      ${optionalString (cfg.pauseImage != null) ''pause_image = "${cfg.pauseImage}"''}
+      ${optionalString (cfg.pauseCommand != null) ''pause_command = "${cfg.pauseCommand}"''}
 
       [crio.network]
       plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
