@@ -34,7 +34,7 @@ let
 
         postInstall = ''
           for shell in bash zsh; do
-            $bin/bin/kops completion $shell > kops.$shell
+            $out/bin/kops completion $shell > kops.$shell
             installShellCompletion kops.$shell
           done
         '';

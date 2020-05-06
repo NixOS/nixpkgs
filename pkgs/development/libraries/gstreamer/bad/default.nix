@@ -106,6 +106,10 @@ in stdenv.mkDerivation rec {
     ./fix_pkgconfig_includedir.patch
   ];
 
+  # https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/950
+  # https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1235
+  postPatch = "sed '/^  opencv_dep =/s/< 4\.2\.0/< 4.4.0/' -i ext/opencv/meson.build";
+
   nativeBuildInputs = [
     meson
     ninja

@@ -49,6 +49,7 @@ in rec {
     # Configure Phase
     , configureFlags ? []
     , cmakeFlags ? []
+    , mesonFlags ? []
     , # Target is not included by default because most programs don't care.
       # Including it then would cause needless mass rebuilds.
       #
@@ -252,6 +253,32 @@ in rec {
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
           ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
           ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";
+
+          mesonFlags = if mesonFlags == null then null else let
+            # See https://mesonbuild.com/Reference-tables.html#cpu-families
+            cpuFamily = platform: with platform;
+              /**/ if isAarch32 then "arm"
+              else if isAarch64 then "aarch64"
+              else if isx86_32  then "x86"
+              else if isx86_64  then "x86_64"
+              else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;
+            crossFile = builtins.toFile "cross-file.conf" (''
+              [properties]
+              needs_exe_wrapper = true
+
+              [host_machine]
+              system = '${stdenv.targetPlatform.parsed.kernel.name}'
+              cpu_family = '${cpuFamily stdenv.targetPlatform}'
+              cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
+              endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
+            ''
+            # TODO should have target prefix too, issue #86077
+            + ''
+
+              [binaries]
+              pkgconfig = 'pkg-config'
+            '');
+          in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
         } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {

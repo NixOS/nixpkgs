@@ -34,7 +34,7 @@ buildGoPackage {
   inherit version;
   inherit src goPackagePath;
 
-  outputs = [ "bin" "man" "out" ];
+  outputs = [ "out" "man" ];
 
   excludedPackages = [ "integration" ];
 

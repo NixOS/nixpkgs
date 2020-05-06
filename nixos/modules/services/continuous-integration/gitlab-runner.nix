@@ -461,7 +461,7 @@ in
         moreutils
         remarshal
         utillinux
-        cfg.package.bin
+        cfg.package
       ] ++ cfg.extraPackages;
       reloadIfChanged = true;
       serviceConfig = {

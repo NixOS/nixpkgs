@@ -20,7 +20,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     for shell in bash zsh; do
-      $bin/bin/kind completion $shell > kind.$shell
+      $out/bin/kind completion $shell > kind.$shell
       installShellCompletion kind.$shell
     done
   '';

@@ -14,7 +14,7 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "bin" "out" "man" ];
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-md2man utillinux ];
 
@@ -33,7 +33,7 @@ buildGoPackage rec {
 
   installPhase = ''
     for b in bin/*; do
-      install -Dm555 $b $bin/$b
+      install -Dm555 $b $out/$b
     done
 
     make man

@@ -1,9 +1,13 @@
-{ stdenv, lib, buildPackages, automake, autoconf, libtool, which,
-  fetchpatch, openexr }:
+{ stdenv
+, buildPackages
+, cmake
+, libtool
+, openexr
+}:
 
 stdenv.mkDerivation rec {
   pname = "ilmbase";
-  version = lib.getVersion openexr;
+  version = stdenv.lib.getVersion openexr;
 
   # the project no longer provides separate tarballs. We may even want to merge
   # the ilmbase package into openexr in the future.
@@ -13,22 +17,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  preConfigure = ''
-    patchShebangs ./bootstrap
-    ./bootstrap
-  '';
-
-  # otherwise, the pkgconfig info for the libraries will not match the filenames
-  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--enable-namespaceversioning=no";
-  
+  nativeBuildInputs = [ cmake libtool ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ automake autoconf libtool which ];
 
-  NIX_CFLAGS_LINK = "-pthread";
-
-  patches = [
-    ./cross.patch
-  ];
+  patches = [ ./cross.patch ];
 
   # fails 1 out of 1 tests with
   # "lt-ImathTest: testBoxAlgo.cpp:892: void {anonymous}::boxMatrixTransform(): Assertion `b21 == b2' failed"

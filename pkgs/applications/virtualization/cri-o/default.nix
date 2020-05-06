@@ -30,7 +30,6 @@ buildGoPackage rec {
     sha256 = "142flmv54pj48rjqkd26fbxrcbx2cv6pdmrc33jgyvn6r99zliah";
   };
 
-  outputs = [ "bin" "out" ];
   nativeBuildInputs = [ git pkgconfig which ];
   buildInputs = [ btrfs-progs gpgme libapparmor libassuan libgpgerror
                  libseccomp libselinux lvm2 ]
@@ -43,9 +42,9 @@ buildGoPackage rec {
     make binaries BUILDTAGS="$BUILDTAGS"
   '';
   installPhase = ''
-    install -Dm755 bin/crio $bin/bin/crio${flavor}
-    install -Dm755 bin/crio-status $bin/bin/crio-status${flavor}
-    install -Dm755 bin/pinns $bin/bin/pinns${flavor}
+    install -Dm755 bin/crio $out/bin/crio${flavor}
+    install -Dm755 bin/crio-status $out/bin/crio-status${flavor}
+    install -Dm755 bin/pinns $out/bin/pinns${flavor}
   '';
 
   meta = with stdenv.lib; {

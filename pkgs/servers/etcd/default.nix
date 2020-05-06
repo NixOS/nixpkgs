@@ -22,7 +22,7 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -Dm755 bin/* bin/functional/cmd/* -t $bin/bin
+    install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
   '';
 
   passthru.tests = with nixosTests; {

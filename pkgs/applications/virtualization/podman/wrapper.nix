@@ -43,7 +43,12 @@ in runCommand podman.name {
   ];
 
 } ''
-  ln -s ${podman.man} $man
+  # Symlink everything but $out from podman-unwrapped
+  ${
+    lib.concatMapStringsSep "\n"
+    (o: "ln -s ${podman.${o}} ${placeholder o}")
+    (builtins.filter (o: o != "out")
+    podman.outputs)}
 
   mkdir -p $out/bin
   ln -s ${podman-unwrapped}/share $out/share
