@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, jansson }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, jansson }:
 
 stdenv.mkDerivation rec {
   pname = "jshon";
@@ -13,7 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jansson ];
 
-  patchPhase =
+  patches = [
+    (fetchpatch {
+      # https://github.com/keenerd/jshon/pull/62
+      url = "https://github.com/keenerd/jshon/commit/96b4e9dbf578be7b31f29740b608aa7b34df3318.patch";
+      sha256 = "0kwbn3xb37iqb5y1n8vhzjiwlbg5jmki3f38pzakc24kzc5ksmaa";
+    })
+  ];
+
+  postPatch =
     ''
       substituteInPlace Makefile --replace "/usr/" "/"
     '';
