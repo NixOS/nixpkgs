@@ -18,7 +18,7 @@ let
   ];
 
   sha256 = {
-    "x86_64-linux" = "0zb9j34dz7ybjix018bm8g0b6kilw9300q4ahcm22p0ggg528dh7";
+    "x86_64-linux" = "1yvqi86bw0kym401zwknhwq9041fxg047sbj3aydnfcqf11vrrmk";
     "i686-linux" = "0wsv4mvwrvsaz1pwiqs94b3854h5l8ff2dbb1ybxmvwjbfrkdcqc";
   }."${stdenv.system}";
 
@@ -29,7 +29,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.5.60";
+  version = "1.5.86";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
