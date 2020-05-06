@@ -1,12 +1,13 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , pantheon
 , meson
 , python3
 , ninja
 , hicolor-icon-theme
 , gtk3
-, inkscape
+, librsvg
 , xorg
 }:
 
@@ -23,6 +24,15 @@ stdenv.mkDerivation rec {
     sha256 = "1irkjj8xfpgkl5p56xhqa3w2s98b8lav7d1lxxrabdi87cjv3n33";
   };
 
+  patches = [
+    # Use rsvg-convert to fix the Inkscape 1.0 incompatibility.
+    # https://github.com/elementary/icons/pull/888
+    (fetchpatch {
+      url = "https://github.com/elementary/icons/commit/a4f35525fd0eb9e370fb89fb97e7a5d3f8794241.patch";
+      sha256 = "io2Y8RisRPgSNK8GOvtr/67zYZZq4Yi3SJ10xclrO2o=";
+    })
+  ];
+
   passthru = {
     updateScript = pantheon.updateScript {
       attrPath = "pantheon.${pname}";
@@ -31,7 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gtk3
-    inkscape
+    librsvg
     meson
     ninja
     python3
