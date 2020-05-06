@@ -1,5 +1,5 @@
---- cnijfilter/src/bjfimage.c	2006-10-30 18:48:59.000000000 -0600
-+++ cnijfilter/src/bjfimage.c	2011-11-01 09:46:06.000000000 -0500
+--- a/cnijfilter/src/bjfimage.c	2006-10-30 18:48:59.000000000 -0600
++++ b/cnijfilter/src/bjfimage.c	2011-11-01 09:46:06.000000000 -0500
 @@ -1575,7 +1575,7 @@
  		goto onErr;
  	}

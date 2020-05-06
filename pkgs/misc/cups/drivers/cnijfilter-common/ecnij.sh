@@ -56,9 +56,9 @@ ecnij_pkg_setup()
 {
 	CNIJFILTER_SRC+=( libs pstocanonij )
 	PRINTER_SRC+=( cnijfilter )
-	CNIJFILTER_SRC+=( backend )
-	CNIJFILTER_SRC+=( backendnet )
-	(( ${PV:0:1} >= 3 )) || ( (( ${PV:0:1} == 2 )) && (( ${PV:2:2} >= 80 )) ) &&
+	(( ${PV:0:1} >= 4 )) || ( (( ${PV:0:1} == 3 )) && (( ${PV:2:2} >= 10 )) ) &&
+		CNIJFILTER_SRC+=( backendnet )
+	(( ${PV:0:1} >= 3 )) || ( (( ${PV:0:1} == 2 )) && (( ${PV:2:2} >= 60 )) ) &&
 		CNIJFILTER_SRC+=( backend )
 	CNIJFILTER_SRC+=( cngpij )
 	if (( ${PV:0:1} == 4 )); then
@@ -66,7 +66,8 @@ ecnij_pkg_setup()
 		PRINTER_SRC+=( cnijnpr )
 	else
 		PRINTER_SRC+=( lgmon cngpijmon )
-		PRINTER_SRC+=( cngpijmon/cnijnpr )
+		( (( ${PV:0:1} == 3 )) && (( ${PV:2:2} >= 10 )) ) &&
+			PRINTER_SRC+=( cngpijmon/cnijnpr )
 	fi
 
 	if (( ${PV:0:1} == 4 )); then

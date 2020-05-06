@@ -1,5 +1,5 @@
---- cngpijmon/src/bjcupsmon_cups.c	2016-11-13 01:24:56.544741952 +0100
-+++ cngpijmon/src/bjcupsmon_cups.c	2016-11-13 01:30:31.112735961 +0100
+--- a/cngpijmon/src/bjcupsmon_cups.c	2016-11-13 01:24:56.544741952 +0100
++++ b/cngpijmon/src/bjcupsmon_cups.c	2016-11-13 01:30:31.112735961 +0100
 @@ -214,8 +215,8 @@
  	else {
  		pRequest = ippNew();

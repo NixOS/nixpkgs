@@ -1,5 +1,5 @@
---- cnijbe/src/Makefile.am	2014-08-08 22:40:21.697967931 +0200
-+++ cnijbe/src/Makefile.am	2014-08-08 22:41:44.972967317 +0200
+--- a/cnijbe/src/Makefile.am	2014-08-08 22:40:21.697967931 +0200
++++ b/cnijbe/src/Makefile.am	2014-08-08 22:41:44.972967317 +0200
 @@ -1,6 +1,6 @@
  ## Process this file with automake to produce Makefile.in
  

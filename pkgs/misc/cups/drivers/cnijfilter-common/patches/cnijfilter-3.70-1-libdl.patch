@@ -1,5 +1,5 @@
---- cngpijmon/cnijnpr/cnijnpr/Makefile.am	2016-11-13 01:57:23.494707086 +0100
-+++ cngpijmon/cnijnpr/cnijnpr/Makefile.am	2016-11-13 01:57:37.183706841 +0100
+--- a/cngpijmon/cnijnpr/cnijnpr/Makefile.am	2016-11-13 01:57:23.494707086 +0100
++++ b/cngpijmon/cnijnpr/cnijnpr/Makefile.am	2016-11-13 01:57:37.183706841 +0100
 @@ -5,7 +5,7 @@
  cnijnpr_SOURCES=\
  	cnijnpr.c

@@ -12,14 +12,14 @@
   glib,
 }:
 printers: { version, src, ... }@args:
-stdenv.mkDerivation ({
+stdenv.mkDerivation (args // {
   pname = "cnijfilter";
   nativeBuildInputs = [
     autoconf
     automake
     libtool
     glib.dev
-  ];
+  ] ++ (args.nativeBuildInputs or []);
 
   configurePhase = ''
     runHook preConfigure
@@ -27,6 +27,7 @@ stdenv.mkDerivation ({
     PRINTER_ID=(${stdenv.lib.escapeShellArgs (map (printer: printer.id) printers)})
     PRINTER_MODEL=(${stdenv.lib.escapeShellArgs (map (printer: printer.model) printers)})
     ecnij_pkg_setup
+    runHook postSetup
     ecnij_src_prepare
     ecnij_src_configure
     runHook postConfigure
@@ -62,4 +63,4 @@ stdenv.mkDerivation ({
   passthru = {
     inherit printers;
   };
-} // args)
+})

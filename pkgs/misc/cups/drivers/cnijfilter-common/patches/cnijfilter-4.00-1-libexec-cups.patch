@@ -1,5 +1,5 @@
---- cmdtocanonij/filter/Makefile.am	2012-12-21 17:27:54.370964561 +0100
-+++ cmdtocanonij/filter/Makefile.am	2012-12-21 18:22:48.804097963 +0100
+--- a/cmdtocanonij/filter/Makefile.am	2012-12-21 17:27:54.370964561 +0100
++++ b/cmdtocanonij/filter/Makefile.am	2012-12-21 18:22:48.804097963 +0100
 @@ -1,4 +1,4 @@
 -filterdir=$(libdir)/cups/filter
 +filterdir=$(libexecdir)/cups/filter

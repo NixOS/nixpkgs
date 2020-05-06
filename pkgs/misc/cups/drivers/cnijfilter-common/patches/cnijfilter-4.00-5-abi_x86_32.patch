@@ -1,5 +1,5 @@
---- backendnet/configure.in	2014-08-11 08:38:46.034984462 +0200
-+++ backendnet/configure.in	2014-08-11 08:35:42.902985813 +0200
+--- a/backendnet/configure.in	2014-08-11 08:38:46.034984462 +0200
++++ b/backendnet/configure.in	2014-08-11 08:35:42.902985813 +0200
 @@ -19,7 +19,11 @@
  AC_DEFINE_UNQUOTED(BJLIB_PATH, "$enable_libpath")
  AC_SUBST(BJLIB_PATH)
@@ -13,8 +13,8 @@
  AC_SUBST(ARC)
  
  # Checks for programs.
---- cnijfilter/configure.in	2014-08-11 08:39:44.426984031 +0200
-+++ cnijfilter/configure.in	2014-08-11 08:35:19.788985984 +0200
+--- a/cnijfilter/configure.in	2014-08-11 08:39:44.426984031 +0200
++++ b/cnijfilter/configure.in	2014-08-11 08:35:19.788985984 +0200
 @@ -43,7 +43,11 @@
  esac
  AC_SUBST(CNCL_LIB_ID)
@@ -28,8 +28,8 @@
  AC_SUBST(ARC)
  
  AC_PROG_CC
---- cnijnpr/configure.in	2014-08-11 08:41:12.712983380 +0200
-+++ cnijnpr/configure.in	2014-08-11 08:40:44.354983589 +0200
+--- a/cnijnpr/configure.in	2014-08-11 08:41:12.712983380 +0200
++++ b/cnijnpr/configure.in	2014-08-11 08:40:44.354983589 +0200
 @@ -37,7 +37,11 @@
  
  CFLAGS="-O2"

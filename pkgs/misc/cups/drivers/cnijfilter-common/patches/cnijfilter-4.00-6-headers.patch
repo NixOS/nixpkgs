@@ -1,5 +1,5 @@
---- cnijnpr/src/cnijnpr.c	2016-11-13 21:51:33.844977618 +0100
-+++ cnijnpr/src/cnijnpr.c	2016-11-13 21:52:03.129977094 +0100
+--- a/cnijnpr/src/cnijnpr.c	2016-11-13 21:51:33.844977618 +0100
++++ b/cnijnpr/src/cnijnpr.c	2016-11-13 21:52:03.129977094 +0100
 @@ -34,6 +34,8 @@
  #include <sys/ioctl.h>
  #include <net/if.h>
