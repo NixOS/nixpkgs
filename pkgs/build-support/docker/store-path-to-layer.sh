@@ -32,15 +32,13 @@ tar -cf "$layerPath/layer.tar"  \
 # to /nix/store. In order to create the correct structure
 # in the tar file, we transform the relative nix store
 # path to the absolute store path.
-for storePath in "$@"; do
-  n=$(basename "$storePath")
+basename -a "$@" |
   tar -C /nix/store -rpf "$layerPath/layer.tar" \
-      --hard-dereference --sort=name \
-      --mtime="@$SOURCE_DATE_EPOCH" \
-      --owner=0 --group=0 \
-      --transform="s,$n,/nix/store/$n," \
-      $n
-done
+    --verbatim-files-from --files-from - \
+    --hard-dereference --sort=name \
+    --mtime="@$SOURCE_DATE_EPOCH" \
+    --owner=0 --group=0 \
+    --transform="flags=rS;s,^,/nix/store/,"
 
 # Compute a checksum of the tarball.
 tarhash=$(tarsum < $layerPath/layer.tar)
