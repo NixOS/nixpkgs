@@ -32,10 +32,10 @@
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
-, # Whetherto build terminfo.
+, # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.11.20200403"
+, version ? "8.11.20200505"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -103,8 +103,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "4291bddaea3148908c55f235ee8978e1d9aa6f20";
-    sha256 = "1gs3mxmsdpsgsp7vnawx8mys0qwg4x2zhfrbciy3wv8nv13ar1af";
+    rev = "40c71c2cf38b4e134d81b7184a4d5e02949ae70c";
+    sha256 = "04h9rcyzm9w3an1z00hjs062dp7dl19b8pkyxjsypr7a2i9dmvkb";
   };
 
   enableParallelBuilding = true;
