@@ -23558,6 +23558,8 @@ in
     gtk = gtk2;
   };
 
+  mari0 = callPackage ../games/mari0 { };
+
   mars = callPackage ../games/mars { };
 
   megaglest = callPackage ../games/megaglest {};
