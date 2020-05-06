@@ -3701,7 +3701,12 @@ in
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
-  gitea = callPackage ../applications/version-management/gitea { };
+  gitea = callPackage ../applications/version-management/gitea {
+    # gitea 1.11 does not support go 1.14, which results in the wiki being broken:
+    # See https://github.com/go-gitea/gitea/issues/10552
+    # TODO: gitea 1.12 will probably work with go 1.14, by which this statement can be removed
+    buildGoPackage = buildGo113Package;
+  };
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
 
