@@ -9,7 +9,7 @@ let
     name = pname;
     exec = "${pname}-x11";
     icon = pname;
-    terminal = "False";
+    terminal = "false";
     comment = description;
     type = "Application";
     categories = "Game;RolePlaying;";
