@@ -418,12 +418,12 @@ let
 #    sha256 = "";
 #  };
 #  #github:jsoftware/general_dirtrees
-#  general_dirtrees = buildJAddonGitHub {
-#    name = "general_dirtrees";
-#    owner = "jsoftware";
-#    rev = "";
-#    sha256 = "";
-#  };
+ general_dirtrees = buildJAddonGitHub {
+   name = "general_dirtrees";
+   owner = "jsoftware";
+   rev = "25e439973f0a642d4ea8722ddc70ed13675cc6e6";
+   sha256 = "19v5s8i7za1qsr7yc8p9jprsjjr2m5xpzsvwv8h72mxz6kawwc2q";
+ };
 #  #github:jsoftware/general_dirutils
  general_dirutils = buildJAddonGitHub {
    name = "general_dirutils";
@@ -935,9 +935,41 @@ in stdenv.mkDerivation rec {
     cp -r $JLIB/{addons,system} "$out/share/j"
     cp -r $JLIB/bin "$out"
 
+
     # install addons
-    cp -r ${convert_json}/addons "$out/share/j"
-    cp -r ${general_dirutils}/addons "$out/share/j"
+
+    # AA TODO: find a nicer way to do this.  (from `tree -L 1 addons` in a git clone https://github.com/jsoftware/addonrepos)
+    mkdir -p "$out/share/j/addons/api"
+    mkdir -p "$out/share/j/addons/arc"
+    mkdir -p "$out/share/j/addons/convert"
+    mkdir -p "$out/share/j/addons/data"
+    mkdir -p "$out/share/j/addons/debug"
+    mkdir -p "$out/share/j/addons/demos"
+    mkdir -p "$out/share/j/addons/dev"
+    mkdir -p "$out/share/j/addons/docs"
+    mkdir -p "$out/share/j/addons/finance"
+    mkdir -p "$out/share/j/addons/format"
+    mkdir -p "$out/share/j/addons/games"
+    mkdir -p "$out/share/j/addons/general"
+    mkdir -p "$out/share/j/addons/graphics"
+    mkdir -p "$out/share/j/addons/gui"
+    mkdir -p "$out/share/j/addons/ide"
+    mkdir -p "$out/share/j/addons/labs"
+    mkdir -p "$out/share/j/addons/math"
+    mkdir -p "$out/share/j/addons/media"
+    mkdir -p "$out/share/j/addons/misc"
+    mkdir -p "$out/share/j/addons/mt"
+    mkdir -p "$out/share/j/addons/net"
+    mkdir -p "$out/share/j/addons/profiles"
+    mkdir -p "$out/share/j/addons/sockets"
+    mkdir -p "$out/share/j/addons/stats"
+    mkdir -p "$out/share/j/addons/tables"
+    mkdir -p "$out/share/j/addons/types"
+    mkdir -p "$out/share/j/addons/web"
+
+    cp -r ${convert_json}/addons/convert/json "$out/share/j/addons/convert/json"
+    cp -r ${general_dirtrees}/addons/general/dirtrees "$out/share/j/addons/general/dirtrees"
+    cp -r ${general_dirutils}/addons/general/dirutils "$out/share/j/addons/general/dirutils"
   '';
 
   meta = with stdenv.lib; {
