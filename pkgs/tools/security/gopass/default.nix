@@ -36,7 +36,7 @@ buildGoModule rec {
       installShellCompletion gopass.$shell
     done
   '' + stdenv.lib.optionalString passAlias ''
-    ln -s $bin/bin/gopass $bin/bin/pass
+    ln -s $out/bin/gopass $out/bin/pass
   '';
 
   postFixup = ''
