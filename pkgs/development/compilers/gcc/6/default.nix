@@ -6,6 +6,7 @@
 , langJava ? false
 , langGo ? false
 , profiledCompiler ? false
+, langJit ? false
 , staticCompiler ? false
 , enableShared ? true
 , enableLTO ? true
@@ -126,7 +127,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = if langJava || langGo then ["out" "man" "info"]
+  outputs = if langJava || langGo || langJit then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
@@ -136,13 +137,9 @@ stdenv.mkDerivation ({
   hardeningDisable = [ "format" "pie" ];
 
   prePatch =
-    (stdenv.lib.optionalString (langJava || langGo) ''
-      export lib=$out
-    '')
-
     # This should kill all the stdinc frameworks that gcc and friends like to
     # insert into default search paths.
-    + stdenv.lib.optionalString hostPlatform.isDarwin ''
+    stdenv.lib.optionalString hostPlatform.isDarwin ''
       substituteInPlace gcc/config/darwin-c.c \
         --replace 'if (stdinc)' 'if (0)'
 
@@ -244,6 +241,7 @@ stdenv.mkDerivation ({
       langGo
       langObjC
       langObjCpp
+      langJit
       ;
   };
 

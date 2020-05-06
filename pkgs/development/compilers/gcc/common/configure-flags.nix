@@ -20,6 +20,7 @@
 , langGo
 , langObjC
 , langObjCpp
+, langJit
 }:
 
 assert cloog != null -> stdenv.lib.versionOlder version "5";
@@ -121,6 +122,7 @@ let
           ++ lib.optional langObjC     "objc"
           ++ lib.optional langObjCpp   "obj-c++"
           ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
+          ++ lib.optional langJit      "jit"
           )
         )
       }"
@@ -173,7 +175,7 @@ let
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
-    ]
+    ] ++ lib.optional langJit "--enable-host-shared"
   ;
 
 in configureFlags

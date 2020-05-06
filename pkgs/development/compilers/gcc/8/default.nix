@@ -4,6 +4,7 @@
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langGo ? false
 , profiledCompiler ? false
+, langJit ? false
 , staticCompiler ? false
 , enableShared ? true
 , enableLTO ? true
@@ -82,7 +83,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" "man" "info" ];
+  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional (!langJit) "lib";
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -197,6 +198,7 @@ stdenv.mkDerivation ({
       langGo
       langObjC
       langObjCpp
+      langJit
       ;
   };
 
