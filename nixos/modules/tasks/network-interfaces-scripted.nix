@@ -242,11 +242,14 @@ let
           deviceDependency = if (config.boot.isContainer || i.name == "lo")
             then []
             else [ (subsystemDevice i.name) ];
+          dhcpDependency = if i.macAddress == null
+            then []
+            else [ "dhcpcd.service" ];
         in
         nameValuePair "network-link-${i.name}"
         { description = "Link configuration of ${i.name}";
           wantedBy = [ "network-interfaces.target" ];
-          before = [ "network-interfaces.target" ];
+          before = [ "network-interfaces.target" ] ++ dhcpDependency;
           bindsTo = deviceDependency;
           after = [ "network-pre.target" ] ++ deviceDependency;
           path = [ pkgs.iproute ];
