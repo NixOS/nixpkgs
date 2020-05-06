@@ -941,6 +941,8 @@ in {
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
 
+  mortgage = callPackage ../development/python-modules/mortgage { };
+
   msal = callPackage ../development/python-modules/msal { };
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
