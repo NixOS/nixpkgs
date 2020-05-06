@@ -180,7 +180,7 @@ stdenv.mkDerivation (args // {
     argstr = "${stdenv.lib.optionalString (buildType == "release") "--release"} --target ${rustTarget} --frozen";
   in ''
     runHook preCheck
-    echo "Running cargo cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
     cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '');
