@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
@@ -97,6 +97,9 @@ in with py.pkgs; buildPythonApplication rec {
     # From http, frontend and recorder components and auth.mfa_modules.totp
     sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode ciso8601
   ] ++ componentBuildInputs ++ extraBuildInputs;
+
+  # upstream only tests on Linux, so do we.
+  doCheck = stdenv.isLinux;
 
   checkInputs = [
     asynctest pytest pytest-aiohttp requests-mock hass-nabucasa netdisco pydispatcher
