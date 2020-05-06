@@ -4553,6 +4553,8 @@ in
 
   kst = libsForQt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
+  kstars = libsForQt5.callPackage ../applications/science/astronomy/kstars { };
+
   kytea = callPackage ../tools/text/kytea { };
 
   k6 = callPackage ../development/tools/k6 { };
@@ -13804,7 +13806,7 @@ in
 
   openct = callPackage ../development/libraries/openct { };
 
-  opencv = callPackage ../development/libraries/opencv {
+  opencv2 = callPackage ../development/libraries/opencv {
     inherit (darwin.apple_sdk.frameworks) Cocoa QTKit;
   };
 
@@ -13819,6 +13821,8 @@ in
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
   };
+
+  opencv = opencv4;
 
   openexr = callPackage ../development/libraries/openexr { };
 
@@ -20819,6 +20823,8 @@ in
 
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
 
+  ninjas2 = callPackage ../applications/audio/ninjas2 {};
+
   notion = callPackage ../applications/window-managers/notion { };
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
@@ -23598,7 +23604,7 @@ in
     lua = lua5_1;
   };
 
-  n2048 = callPackage ../games/n2048 {};
+  n2048 = callPackage ../games/n2048 { };
 
   naev = callPackage ../games/naev { };
 
@@ -23610,6 +23616,8 @@ in
   };
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
+  
+  netris = callPackage ../games/netris { };
 
   neverball = callPackage ../games/neverball { };
 

@@ -87,11 +87,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "V131/l05FKYFavRMXRaiW1bQkTCEn7MTyyD+bqYClU4=";
+    sha256 = "ga8MpbY9tTwr0jsmjEAMyFxDC+yD4LBTx5gXRXig31M=";
   };
 
   # libfwupd goes to lib
@@ -153,34 +153,6 @@ stdenv.mkDerivation rec {
     # Install plug-ins and libfwupdplugin to out,
     # they are not really part of the library.
     ./install-fwupdplugin-to-out.patch
-
-    # Make it easier to patch installed-tests directory.
-    # https://github.com/fwupd/fwupd/pull/2002
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/commit/2f12e38e61d982dea63778736e2b71d16f0e9925.patch";
-      sha256 = "goTyDj0v50FOQYCS+LhPjo0AEugubr6aBIGfO9ztZOA=";
-    })
-
-    # Install systemd files to our prefix.
-    # https://github.com/fwupd/fwupd/pull/2006
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/commit/463db5162fe4f6fea417973ff95a44ed51ec6402.patch";
-      sha256 = "I0TIfnCca83QpINABUINtl8nIB78dG8OR9MC/hP2hg8=";
-    })
-
-    # Fix installed tests.
-    # https://github.com/fwupd/fwupd/issues/2007
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/commit/c727742df3702fc934e2d9488c883dcbdfa59e9c.patch";
-      sha256 = "b9D2Xblf1VbpS5XZpHtwEJhzuq7+840l7skW5w0NMBU=";
-    })
-
-    # Fix build with bash-completion 2.10
-    # https://github.com/fwupd/fwupd/pull/2014
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/commit/0f035013dfb150c2c3fc7f51090103ba84bd1c06.patch";
-      sha256 = "VXRf5N3inaWThudk6pc4mtp6cMEIyybkdfqKin+9XSw=";
-    })
 
     # Installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.

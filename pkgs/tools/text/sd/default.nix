@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sd";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0y1mabnp0sbvayn695x1yfw04d2bky0r69wyidld6hllq3kqn9y2";
+    sha256 = "04jsni80jzhbb106283df34cdyp5p362l6m29kp30hnc6x49853q";
   };
 
-  cargoSha256 = "1ra6argxs5dmpxhrr3az21myp27fl3nkdjfqn8cam2xhld1y270l";
+  cargoSha256 = "1gwb76zys7gky42clzjs5g4hhgpfvzcw63chw9mnj703c7h0cgfh";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chmln/sd";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.amar1729 ];
+    maintainers = with maintainers; [ amar1729 filalex77 ];
   };
 }
