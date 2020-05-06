@@ -1,0 +1,38 @@
+From 6f2acdff42170204efc141179ef6b88cc70f41f6 Mon Sep 17 00:00:00 2001
+From: Matthew Bauer <mjbauer95@gmail.com>
+Date: Wed, 6 May 2020 15:43:05 -0500
+Subject: [PATCH] =?UTF-8?q?Don=E2=80=99t=20run=20make=5Flazy=5Fdefault=20o?=
+ =?UTF-8?q?n=20KDE?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+make_lazy_default tries to check what the default application is, but
+KDE has its own concept of default which may not match this. Skipping
+it here avoids annoyingly having KDE and xdg-utils become out-of-sync.
+
+Upstream MR: https://gitlab.freedesktop.org/xdg/xdg-utils/-/merge_requests/25 
+---
+ scripts/xdg-desktop-menu.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/xdg-desktop-menu.in b/scripts/xdg-desktop-menu.in
+index 9d837e1..52f1c3d 100644
+--- a/scripts/xdg-desktop-menu.in
++++ b/scripts/xdg-desktop-menu.in
+@@ -609,7 +609,11 @@ for desktop_file in $desktop_files; do
+                 echo "OnlyShowIn=Old;" >> $gnome_dir/$basefile
+             fi
+ 
+-            make_lazy_default "$xdg_dir" "$basefile"
++            detectDE
++
++            if [ "$DE" != "kde" ]; then
++                make_lazy_default "$xdg_dir" "$basefile"
++            fi
+ 
+             umask $save_umask
+             ;;
+-- 
+2.23.3
+
