@@ -22701,6 +22701,8 @@ in
       );
   };
 
+  write = qt5.callPackage ../applications/editors/write { };
+
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor {
