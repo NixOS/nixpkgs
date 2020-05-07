@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, readline, libedit, bc }:
+{ stdenv, lib, fetchFromGitHub, readline, libedit, bc, pkgs }:
 
 let
 
-  buildJAddonGitHub = { name, owner, rev, sha256 }: stdenv.mkDerivation { 
+  buildJAddonGitHub = attrs@{ name, owner, rev, sha256, ... }: stdenv.mkDerivation { 
     name = name;
     src = fetchFromGitHub {
       owner = owner;
@@ -10,6 +10,11 @@ let
       rev = rev;
       sha256 = sha256;
     };
+
+    propagatedBuildInputs = if lib.hasAttr "propagatedBuildInputs" attrs 
+    then attrs.propagatedBuildInputs
+    else [];
+
     configurePhase = ''
       # set this to nonempty string to disable default cmake configure
     '';
@@ -40,33 +45,35 @@ let
 #    sha256 = "";
 #  };
 #  #github:bobtherriault/media_videolabs
-#  media_videolabs = buildJAddonGitHub {
-#    name = "media_videolabs";
-#    owner = "bobtherriault";
-#    rev = "";
-#    sha256 = "";
-#  };
+ media_videolabs = buildJAddonGitHub {
+   name = "media_videolabs";
+   owner = "bobtherriault";
+   rev = "016398899525f5c06d0c6575a9830a8103e1ea0d";
+   sha256 = "1wg4nzzd1nis1l7a9y2fy64h9jnwb6iki9j0fh6zna8ca0sprfdy";
+ };
 #  #github:cdburke/convert_pjson
-#  convert_pjson = buildJAddonGitHub {
-#    name = "convert_pjson";
-#    owner = "cdburke";
-#    rev = "";
-#    sha256 = "";
-#  };
+ convert_pjson = buildJAddonGitHub {
+   name = "convert_pjson";
+   owner = "cdburke";
+   rev = "a64defe9adb24a0350517ab99121e8c75259983e";
+   sha256 = "1km259hnvc1qwxhvb6nz7pk79jz5rn62g43yhn6ma5bvfz5hj35r";
+ };
 #  #github:cdburke/data_sqlite
-#  data_sqlite = buildJAddonGitHub {
-#    name = "data_sqlite";
-#    owner = "cdburke";
-#    rev = "";
-#    sha256 = "";
-#  };
+# TODO: collect all addons propagatedBuildInputs in to the j package
+ #data_sqlite = buildJAddonGitHub {
+   #name = "data_sqlite";
+   #owner = "cdburke";
+   #rev = "331e04b7a357d47284adb71cc38bcbc563572f43";
+   #sha256 = "0kahwwvrd1aksbr5wk7jqq2zsfr20brzflka24iqqmqqf2995p77";
+   #propagatedBuildInputs = with pkgs; [ sqlite ];
+ #};
 #  #github:earthspot/math_cal
-#  math_cal = buildJAddonGitHub {
-#    name = "math_cal";
-#    owner = "earthspot";
-#    rev = "";
-#    sha256 = "";
-#  };
+ math_cal = buildJAddonGitHub {
+   name = "math_cal";
+   owner = "earthspot";
+   rev = "0a062ac8ba4a95efaec0d5748322e3d8161327fd";
+   sha256 = "0bsvhhhx3w8gdn5vblj6s754izrlm15f33s75mn9gnf2h22kl2k5";
+ };
 #  #github:earthspot/math_tabula
 #  math_tabula = buildJAddonGitHub {
 #    name = "math_tabula";
@@ -431,13 +438,14 @@ let
    rev = "8221d58878d2926dde42a7a1330ae5e994410c53";
    sha256 = "12jl7mi6wm5s3116gkv8j1x04dzxfhws7824jhpcdv97siafymdy";
  };
-#  #github:jsoftware/general_inifiles
-#  general_inifiles = buildJAddonGitHub {
-#    name = "general_inifiles";
-#    owner = "jsoftware";
-#    rev = "";
-#    sha256 = "";
-#  };
+##  #github:jsoftware/general_inifiles
+# TODO - handle pcre
+ general_inifiles = buildJAddonGitHub {
+   name = "general_inifiles";
+   owner = "jsoftware";
+   rev = "7e058a2ba1a5d2f1327cf0a52bd2d32d1342d9b3";
+   sha256 = "1x61gvarng6swxp6b61vah7g2dzf5yrzr8yfvd267cbrw18ibj74";
+ };
 #  #github:jsoftware/general_jod
 #  general_jod = buildJAddonGitHub {
 #    name = "general_jod";
@@ -968,8 +976,12 @@ in stdenv.mkDerivation rec {
     mkdir -p "$out/share/j/addons/web"
 
     cp -r ${convert_json}/addons/convert/json "$out/share/j/addons/convert/json"
+    cp -r ${convert_pjson}/addons/convert/pjson "$out/share/j/addons/convert/pjson"
     cp -r ${general_dirtrees}/addons/general/dirtrees "$out/share/j/addons/general/dirtrees"
     cp -r ${general_dirutils}/addons/general/dirutils "$out/share/j/addons/general/dirutils"
+    #cp -r ${general_inifiles}/addons/general/inifiles "$out/share/j/addons/general/inifiles"
+    cp -r ${media_videolabs}/addons/media/videolabs "$out/share/j/addons/media/videolabs"
+    cp -r ${math_cal}/addons/math/cal "$out/share/j/addons/math/cal"
   '';
 
   meta = with stdenv.lib; {
