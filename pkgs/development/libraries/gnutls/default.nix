@@ -59,8 +59,12 @@ stdenv.mkDerivation {
     "--disable-dependency-tracking"
     "--enable-fast-install"
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
-  ] ++ lib.optional guileBindings
-    [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
+  ] ++ lib.optional guileBindings [
+    "--enable-guile"
+    "--with-guile-site-dir=\${out}/share/guile/site"
+    "--with-guile-site-ccache-dir=\${out}/share/guile/site"
+    "--with-guile-extension-dir=\${out}/share/guile/site"
+  ];
 
   enableParallelBuilding = true;
 
