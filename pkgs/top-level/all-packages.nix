@@ -9999,6 +9999,8 @@ in
 
   cask = callPackage ../development/tools/cask { };
 
+  carthage = callPackage ../development/tools/carthage { };
+
   casperjs = callPackage ../development/tools/casperjs {
     inherit (texFunctions) fontsConf;
   };
