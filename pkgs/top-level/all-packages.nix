@@ -26666,6 +26666,8 @@ in
 
   quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
 
+  quake3hires = callPackage ../games/quake3/content/hires.nix { };
+
   quakespasm = callPackage ../games/quakespasm { };
   vkquake = callPackage ../games/quakespasm/vulkan.nix { };
 
