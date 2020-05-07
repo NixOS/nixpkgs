@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     description = "Crossover between Super Mario Bros. and Portal";
     platforms = platforms.linux;
     license = licenses.mit;
-    downloadPage = http://stabyourself.net/mari0/;
+    downloadPage = "https://stabyourself.net/mari0/";
   };
 
 }
