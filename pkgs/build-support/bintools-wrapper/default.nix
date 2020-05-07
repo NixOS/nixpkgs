@@ -85,7 +85,7 @@ stdenv.mkDerivation {
 
   inherit targetPrefix infixSalt;
 
-  outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
+  outputs = [ "out" ] ++ optionals propagateDoc ([ "man" ] ++ optional (bintools ? info) "info");
 
   passthru = {
     inherit bintools libc nativeTools nativeLibc nativePrefix;
@@ -259,14 +259,15 @@ stdenv.mkDerivation {
       printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
     ''
 
-    + optionalString propagateDoc ''
+    + optionalString propagateDoc (''
       ##
       ## Man page and info support
       ##
 
       ln -s ${bintools.man} $man
+    '' + optionalString (bintools ? info) ''
       ln -s ${bintools.info} $info
-    ''
+    '')
 
     + ''
       ##

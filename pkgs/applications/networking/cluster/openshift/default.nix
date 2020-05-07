@@ -61,8 +61,8 @@ in buildGoPackage rec {
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin
-    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
+    mkdir -p $out/bin
+    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$out/bin/"
     installShellCompletion --bash contrib/completions/bash/*
     installShellCompletion --zsh contrib/completions/zsh/*
   '';

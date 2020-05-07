@@ -15,8 +15,8 @@ buildGoPackage rec {
   };
 
   postInstall = ''
-    mkdir -p $bin/share
-    cp -R $src/frontend $bin/share
+    mkdir -p $out/share
+    cp -R $src/frontend $out/share
   '';
 
   meta = with stdenv.lib; {

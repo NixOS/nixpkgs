@@ -231,6 +231,10 @@ in
 
   };
 
+  meta = {
+    maintainers = lib.maintainers.mic92;
+  };
+
 
   ###### implementation
 

@@ -23,7 +23,7 @@ buildGoPackage rec {
   ];
 
   postInstall = ''
-    echo "complete -C $bin/bin/vault vault" > vault.bash
+    echo "complete -C $out/bin/vault vault" > vault.bash
     installShellCompletion vault.bash
   '';
 

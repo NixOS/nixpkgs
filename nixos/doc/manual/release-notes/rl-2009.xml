@@ -317,6 +317,15 @@ php.override {
      <manvolnum>5</manvolnum></citerefentry> for details.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      In the <literal>picom</literal> module, several options that accepted
+      floating point numbers encoded as strings (for example
+      <xref linkend="opt-services.picom.activeOpacity"/>) have been changed
+      to the (relatively) new native <literal>float</literal> type. To migrate
+      your configuration simply remove the quotes around the numbers.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -343,6 +352,11 @@ php.override {
      <literal>notmuch-emacs-mua</literal> binary or the emacs lisp files, access them via
      the <literal>notmuch.emacs</literal> output.
     </para>
+   </listitem>
+   <listitem>
+   <para>
+     The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
+   </para>
    </listitem>
   </itemizedlist>
  </section>

@@ -25,7 +25,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postInstall = ''
-    mv $bin/bin/gocode $bin/bin/gocode-gomod
+    mv $out/bin/gocode $out/bin/gocode-gomod
   '';
 
   meta = with stdenv.lib; {

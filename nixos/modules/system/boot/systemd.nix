@@ -405,6 +405,8 @@ let
     "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
   ];
 
+  proxy_env = config.networking.proxy.envVars;
+
 in
 
 {
@@ -1056,6 +1058,7 @@ in
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.mount" ];
+    systemd.services.systemd-importd.environment = proxy_env;
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";

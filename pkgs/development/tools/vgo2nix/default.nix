@@ -28,7 +28,7 @@ buildGoPackage {
   postInstall = with stdenv; let
     binPath = lib.makeBinPath [ nix-prefetch-git go ];
   in ''
-    wrapProgram $bin/bin/vgo2nix --prefix PATH : ${binPath}
+    wrapProgram $out/bin/vgo2nix --prefix PATH : ${binPath}
   '';
 
   meta = with stdenv.lib; {
