@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.7.2";
+  version = "1.7.3";
   rev = "v${version}";
 
   # Note: Currently only release tags are supported, because they have the Consul UI	
@@ -17,14 +17,14 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "1q587d8aqfkwg4fymr56fnf038vkxbdqz5yilz96dzny27dhspj4";
+    sha256 = "05p893mfdrlf5fy9ywwnqb7blw1ffidgviyyh6a3bp82wk49f8ph";
   };
 
   # This corresponds to paths with package main - normally unneeded but consul
   # has a split module structure in one repo
   subPackages = ["." "connect/certgen"];
 
-  modSha256 = "164834gr8a7qvp72ccjpkbbg4h8idrcxvcp1fl7yi59iqsswfr7b";
+  modSha256 = "01vyamfy9lcljzy99jmr48x0ypb12wab66n9kmj71mrvl50v8rzr";
 
   preBuild = ''	
   buildFlagsArray+=("-ldflags" "-X github.com/hashicorp/consul/version.GitDescribe=v${version} -X github.com/hashicorp/consul/version.Version=${version} -X github.com/hashicorp/consul/version.VersionPrerelease=")	
