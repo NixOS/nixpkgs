@@ -1,13 +1,14 @@
-{stdenv, fetchgit, mercurial, makeWrapper}:
+{stdenv, fetchFromGitHub, git, mercurial, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "fast-export";
-  version = "190107";
+  version = "200213";
 
-  src = fetchgit {
-    url = "git://repo.or.cz/fast-export.git";
+  src = fetchFromGitHub {
+    owner = "frej";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "14azfps9jd5anivcvfwflgsvqdyy6gm9jy284kzx2ng9f7871d14";
+    sha256 = "0hzyh66rlawxip4n2pvz7pbs0cq82clqv1d6c7hf60v1drjxw287";
   };
 
   buildInputs = [mercurial.python mercurial makeWrapper];
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
     for script in $out/bin/*.sh; do
       wrapProgram $script \
-        --prefix PATH : "${mercurial.python}/bin":$libexec \
+        --prefix PATH : "${git}/bin":"${mercurial.python}/bin":$libexec \
         --prefix PYTHONPATH : "${mercurial}/${mercurial.python.sitePackages}":$sitepackagesPath
     done
   '';
