@@ -29,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = false;  # otherwise runs OSX code on linux.
+  pythonImportsCheck = [ "vispy" ];
 
   meta = with lib; {
     homepage = "http://vispy.org/index.html";

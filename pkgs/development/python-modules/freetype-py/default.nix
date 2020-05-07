@@ -20,6 +20,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ freetype ];
 
+  pythonImportsCheck =  [ "freetype" ];
+
   meta = with lib; {
     homepage = "https://github.com/rougier/freetype-py";
     description = "FreeType (high-level Python API)";
