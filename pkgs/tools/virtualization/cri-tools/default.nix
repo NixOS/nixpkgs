@@ -1,8 +1,13 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ lib
+, buildGoPackage
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoPackage rec {
   pname = "cri-tools";
   version = "1.18.0";
+
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
@@ -12,15 +17,26 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/kubernetes-sigs/cri-tools";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildPhase = ''
     pushd go/src/${goPackagePath}
-    make all install BINDIR=$out/bin
+    make binaries VERSION=${version}
+  '';
+
+  installPhase = ''
+    make install BINDIR=$out/bin
+
+    for shell in bash fish zsh; do
+      $out/bin/crictl completion $shell > crictl.$shell
+      installShellCompletion crictl.$shell
+    done
   '';
 
   meta = with lib; {
     description = "CLI and validation tools for Kubelet Container Runtime Interface (CRI)";
     homepage = "https://github.com/kubernetes-sigs/cri-tools";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }
