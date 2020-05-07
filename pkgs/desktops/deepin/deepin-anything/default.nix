@@ -1,5 +1,14 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, pkgconfig, qtbase, udisks2-qt5, utillinux,
-  dtkcore, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qtbase
+, udisks2-qt5
+, utillinux
+, dtkcore
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-anything";
@@ -61,7 +70,7 @@ mkDerivation rec {
     searchHardCodedPaths $modsrc  # for debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin file search tool";

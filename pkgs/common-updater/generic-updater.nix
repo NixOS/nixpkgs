@@ -4,6 +4,7 @@
 , version
 , attrPath ? pname
 , versionLister
+, ignoredVersions ? ""
 , rev-prefix ? ""
 , odd-unstable ? false
 , patchlevel-unstable ? false
@@ -23,12 +24,18 @@ let
     version="$2"
     attr_path="$3"
     version_lister="$4"
-    rev_prefix="$5"
-    odd_unstable="$6"
-    patchlevel_unstable="$7"
+    ignored_versions="$5"
+    rev_prefix="$6"
+    odd_unstable="$7"
+    patchlevel_unstable="$8"
 
     # print header
     echo "# $pname-$version" >> ${fileForGitCommands}
+
+    function version_is_ignored() {
+      local tag="$1"
+      [ -n "$ignored_versions" ] && grep -E "$ignored_versions" <<< "$tag"
+    }
 
     function version_is_unstable() {
       local tag="$1"
@@ -68,7 +75,10 @@ let
     # find the newest tag
     # do not consider development versions
     for latest_tag in $tags; do
-      if version_is_unstable "$latest_tag"; then
+      if version_is_ignored "$latest_tag"; then
+        echo "#   skip ignored version: $pname-$latest_tag" >> ${fileForGitCommands}
+        latest_tag=
+      elif version_is_unstable "$latest_tag"; then
         echo "#   skip development version: $pname-$latest_tag" >> ${fileForGitCommands}
         latest_tag=
       else
@@ -95,4 +105,4 @@ let
   '';
 
 in
-[ updateScript pname version attrPath versionLister rev-prefix odd-unstable patchlevel-unstable ]
+[ updateScript pname version attrPath versionLister ignoredVersions rev-prefix odd-unstable patchlevel-unstable ]
