@@ -41,7 +41,7 @@ buildPythonPackage rec {
   checkPhase = "pytest -k 'not test_dlad and not test_monitor' heudiconv/tests";
 
   meta = with stdenv.lib; {
-    homepage = https://heudiconv.readthedocs.io;
+    homepage = "https://heudiconv.readthedocs.io";
     description = "Flexible DICOM converter for organizing imaging data";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
