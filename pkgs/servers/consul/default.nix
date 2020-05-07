@@ -5,13 +5,13 @@ buildGoModule rec {
   version = "1.7.3";
   rev = "v${version}";
 
-  # Note: Currently only release tags are supported, because they have the Consul UI	
-  # vendored. See	
-  #   https://github.com/NixOS/nixpkgs/pull/48714#issuecomment-433454834	
-  # If you want to use a non-release commit as `src`, you probably want to improve	
-  # this derivation so that it can build the UI's JavaScript from source.	
-  # See https://github.com/NixOS/nixpkgs/pull/49082 for something like that.	
-  # Or, if you want to patch something that doesn't touch the UI, you may want	
+  # Note: Currently only release tags are supported, because they have the Consul UI
+  # vendored. See
+  #   https://github.com/NixOS/nixpkgs/pull/48714#issuecomment-433454834
+  # If you want to use a non-release commit as `src`, you probably want to improve
+  # this derivation so that it can build the UI's JavaScript from source.
+  # See https://github.com/NixOS/nixpkgs/pull/49082 for something like that.
+  # Or, if you want to patch something that doesn't touch the UI, you may want
   # to apply your changes as patches on top of a release commit.
   src = fetchFromGitHub {
     owner = "hashicorp";
@@ -28,8 +28,11 @@ buildGoModule rec {
 
   modSha256 = "01vyamfy9lcljzy99jmr48x0ypb12wab66n9kmj71mrvl50v8rzr";
 
-  preBuild = ''	
-  buildFlagsArray+=("-ldflags" "-X github.com/hashicorp/consul/version.GitDescribe=v${version} -X github.com/hashicorp/consul/version.Version=${version} -X github.com/hashicorp/consul/version.VersionPrerelease=")	
+  preBuild = ''
+    buildFlagsArray+=("-ldflags"
+                      "-X github.com/hashicorp/consul/version.GitDescribe=v${version}
+                       -X github.com/hashicorp/consul/version.Version=${version}
+                       -X github.com/hashicorp/consul/version.VersionPrerelease=")
   '';
 
   meta = with stdenv.lib; {
