@@ -8205,6 +8205,12 @@
     githubId = 3889405;
     name = "vyp";
   };
+  vytis = {
+    name = "Vytis Šibonis";
+    email = "vytis@rwx.lt";
+    github = "vytis";
+    githubId = 33914;
+  };
   wamserma = {
     name = "Markus S. Wamser";
     email = "github-dev@mail2013.wamser.eu";
