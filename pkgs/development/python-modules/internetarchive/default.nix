@@ -54,5 +54,6 @@ buildPythonPackage rec {
     description = "A Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
     license = licenses.agpl3;
+    maintainers = [ maintainers.marsam ];
   };
 }
