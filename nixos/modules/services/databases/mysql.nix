@@ -320,6 +320,7 @@ in
         log-bin-index = "mysql-bin-${toString cfg.replication.serverId}.index";
         relay-log = "mysql-relay-bin";
         server-id = cfg.replication.serverId;
+        binlog-ignore-db = [ "information_schema" "performance_schema" "mysql" ];
       })
       (mkIf (!isMariaDB) {
         plugin-load-add = optional (cfg.ensureUsers != []) "auth_socket.so";
@@ -445,7 +446,6 @@ in
 
                         ( echo "stop slave;"
                           echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
-                          echo "set global slave_exec_mode='IDEMPOTENT';"
                           echo "start slave;"
                         ) | ${mysql}/bin/mysql -u root -N
                       ''}
