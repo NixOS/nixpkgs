@@ -58,7 +58,7 @@ in
     in {
     serviceConfig = {
       ExecStart = ''
-        ${pkgs.prometheus-snmp-exporter.bin}/bin/snmp_exporter \
+        ${pkgs.prometheus-snmp-exporter}/bin/snmp_exporter \
           --config.file=${escapeShellArg configFile} \
           --log.format=${escapeShellArg cfg.logFormat} \
           --log.level=${cfg.logLevel} \

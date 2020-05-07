@@ -16,8 +16,8 @@ buildGoPackage rec {
   subPackages = [ "." "tools/mount_gcsfuse" ];
 
   postInstall = ''
-    ln -s $bin/bin/mount_gcsfuse $bin/bin/mount.gcsfuse
-    ln -s $bin/bin/mount_gcsfuse $bin/bin/mount.fuse.gcsfuse
+    ln -s $out/bin/mount_gcsfuse $out/bin/mount.gcsfuse
+    ln -s $out/bin/mount_gcsfuse $out/bin/mount.fuse.gcsfuse
   '';
 
   meta = with lib;{

@@ -335,7 +335,7 @@ in
       description = "gitea";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ gitea.bin pkgs.gitAndTools.git ];
+      path = [ gitea pkgs.gitAndTools.git ];
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
@@ -347,11 +347,11 @@ in
           cp -f ${configFile} ${runConfig}
 
           if [ ! -e ${secretKey} ]; then
-              ${gitea.bin}/bin/gitea generate secret SECRET_KEY > ${secretKey}
+              ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
           fi
 
           if [ ! -e ${jwtSecret} ]; then
-              ${gitea.bin}/bin/gitea generate secret LFS_JWT_SECRET > ${jwtSecret}
+              ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${jwtSecret}
           fi
 
           KEY="$(head -n1 ${secretKey})"
@@ -374,7 +374,7 @@ in
         HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
         if [ "$HOOKS" ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' $HOOKS
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
@@ -383,7 +383,7 @@ in
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
         fi
       '';
 
@@ -392,7 +392,7 @@ in
         User = cfg.user;
         Group = "gitea";
         WorkingDirectory = cfg.stateDir;
-        ExecStart = "${gitea.bin}/bin/gitea web";
+        ExecStart = "${gitea}/bin/gitea web";
         Restart = "always";
 
         # Filesystem
@@ -450,7 +450,7 @@ in
        description = "gitea dump";
        after = [ "gitea.service" ];
        wantedBy = [ "default.target" ];
-       path = [ gitea.bin ];
+       path = [ gitea ];
 
        environment = {
          USER = cfg.user;
@@ -461,7 +461,7 @@ in
        serviceConfig = {
          Type = "oneshot";
          User = cfg.user;
-         ExecStart = "${gitea.bin}/bin/gitea dump";
+         ExecStart = "${gitea}/bin/gitea dump";
          WorkingDirectory = cfg.stateDir;
        };
     };

@@ -29,8 +29,6 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  outputs = [ "out" ];
-
   nativeBuildInputs = [
     pkgconfig
     dbus-factory
