@@ -5,11 +5,6 @@ buildGoModule rec {
   version = "0.5.0";
   rev = "v${version}";
 
-  buildPhase = ''
-    sed -i 'd#\$(d)/preload.sh > $@#' plugin/loader/Rules.mk
-    make install
-  '';
-
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "go-ipfs";
@@ -19,6 +14,11 @@ buildGoModule rec {
 
   postPatch = ''
     rm -rf test/dependencies
+    patchShebangs plugin/loader/preload.sh
+  '';
+
+  buildPhase = ''
+    make install
   '';
 
   modSha256 = "00xgsvpl47miy6paxl8yn6p76h6ssccackh50z0l4r5s7wcc25q8";
