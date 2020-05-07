@@ -8,11 +8,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "meson";
-  version = "0.54.0";
+  version = "0.54.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "3eVybXeBEqy9Sme7NjOrLuddM9HoeaYoOntKRMM2PCc=";
+    sha256 = "L3b7RXJ2K+E+5HkpJhAJG0UJr1eIvM6zkf4iK80Cltw=";
   };
 
   postFixup = ''
