@@ -1,4 +1,24 @@
-{ stdenv, fetchurl, openssl, nettle, expat, libevent, dns-root-data }:
+{ stdenv
+, lib
+, fetchurl
+, openssl
+, nettle
+, expat
+, libevent
+, dns-root-data
+, pkg-config
+  #
+  # By default unbound will not be built with systemd support. Unbound is a very
+  # commmon dependency. The transitive dependency closure of systemd also
+  # contains unbound.
+  # Since most (all?) (lib)unbound users outside of the unbound daemon usage do
+  # not need the systemd integration it is likely best to just default to no
+  # systemd integration.
+  # For the daemon use-case, that needs to notify systemd, use `unbound-with-systemd`.
+  #
+, withSystemd ? false
+, systemd ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
@@ -11,7 +31,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  buildInputs = [ openssl nettle expat libevent ];
+  buildInputs = [ openssl nettle expat libevent ] ++ lib.optionals withSystemd [ pkg-config systemd ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -25,6 +45,8 @@ stdenv.mkDerivation rec {
     "--enable-relro-now"
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isStatic [
     "--disable-flto"
+  ] ++ lib.optionals withSystemd [
+    "--enable-systemd"
   ];
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
@@ -33,7 +55,7 @@ stdenv.mkDerivation rec {
     make unbound-event-install
   '';
 
-  preFixup = stdenv.lib.optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit
+  preFixup = lib.optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit
     # Build libunbound again, but only against nettle instead of openssl.
     # This avoids gnutls.out -> unbound.lib -> openssl.out.
     # There was some problem with this on Darwin; let's not complicate non-Linux.
@@ -43,17 +65,17 @@ stdenv.mkDerivation rec {
       buildPhase
       installPhase
     ''
-    # get rid of runtime dependencies on $dev outputs
+  # get rid of runtime dependencies on $dev outputs
   + ''substituteInPlace "$lib/lib/libunbound.la" ''
-    + stdenv.lib.concatMapStrings
-      (pkg: " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
-      buildInputs;
+  + lib.concatMapStrings
+    (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
+    (builtins.filter (p: p != null) buildInputs);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
     maintainers = with maintainers; [ ehmry fpletz globin ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }
