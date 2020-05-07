@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.unbound;
 
   stateDir = "/var/lib/unbound";
@@ -17,12 +15,12 @@ let
   forward =
     optionalString (any isLocalAddress cfg.forwardAddresses) ''
       do-not-query-localhost: no
-    '' +
-    optionalString (cfg.forwardAddresses != []) ''
+    ''
+    + optionalString (cfg.forwardAddresses != []) ''
       forward-zone:
         name: .
-    '' +
-    concatMapStringsSep "\n" (x: "    forward-addr: ${x}") cfg.forwardAddresses;
+    ''
+    + concatMapStringsSep "\n" (x: "    forward-addr: ${x}") cfg.forwardAddresses;
 
   rootTrustAnchorFile = "${stateDir}/root.key";
 
@@ -31,19 +29,20 @@ let
 
   confFile = pkgs.writeText "unbound.conf" ''
     server:
+      ip-freebind: yes
       directory: "${stateDir}"
       username: unbound
-      chroot: "${stateDir}"
+      chroot: ""
       pidfile: ""
+      # when running under systemd there is no need to daemonize
+      do-daemonize: no
       ${interfaces}
       ${access}
       ${trustAnchor}
     ${cfg.extraConfig}
     ${forward}
   '';
-
 in
-
 {
 
   ###### interface
@@ -55,8 +54,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.unbound;
-        defaultText = "pkgs.unbound";
+        default = pkgs.unbound-with-systemd;
+        defaultText = "pkgs.unbound-with-systemd";
         description = "The unbound package to use";
       };
 
@@ -69,11 +68,14 @@ in
       interfaces = mkOption {
         default = [ "127.0.0.1" ] ++ optional config.networking.enableIPv6 "::1";
         type = types.listOf types.str;
-        description = "What addresses the server should listen on.";
+        description =  ''
+          What addresses the server should listen on. This supports the interface syntax documented in
+          <citerefentry><refentrytitle>unbound.conf</refentrytitle><manvolnum>8</manvolnum></citerefentry>.
+        '';
       };
 
       forwardAddresses = mkOption {
-        default = [ ];
+        default = [];
         type = types.listOf types.str;
         description = "What servers to forward queries to.";
       };
@@ -110,6 +112,9 @@ in
 
     networking.resolvconf.useLocalResolver = mkDefault true;
 
+
+    environment.etc."unbound/unbound.conf".source = confFile;
+
     systemd.services.unbound = {
       description = "Unbound recursive Domain Name Server";
       after = [ "network.target" ];
@@ -117,32 +122,63 @@ in
       wants = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        mkdir -m 0755 -p ${stateDir}/dev/
-        cp ${confFile} ${stateDir}/unbound.conf
-        ${optionalString cfg.enableRootTrustAnchor ''
-          ${cfg.package}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
-          chown unbound ${stateDir} ${rootTrustAnchorFile}
-        ''}
-        touch ${stateDir}/dev/random
-        ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
+      preStart = lib.mkIf cfg.enableRootTrustAnchor ''
+        ${cfg.package}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
       '';
 
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/unbound -d -c ${stateDir}/unbound.conf";
-        ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
+      restartTriggers = [
+        confFile
+      ];
 
-        ProtectSystem = true;
-        ProtectHome = true;
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/unbound -p -d -c /etc/unbound/unbound.conf";
+        ExecReload = "+/run/current-system/sw/bin/kill -HUP $MAINPID";
+
+        NotifyAccess = "main";
+        Type = "notify";
+
+        AmbientCapabilities = [
+          "CAP_NET_BIND_SERVICE"
+          "CAP_NET_RAW"
+          "CAP_SETGID"
+          "CAP_SETUID"
+          "CAP_SYS_CHROOT"
+          "CAP_SYS_RESOURCE"
+        ];
+
+        User = "unbound";
+
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
         PrivateDevices = true;
-        Restart = "always";
-        RestartSec = "5s";
+        PrivateTmp = true;
+        ProtectHome = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectSystem = "strict";
+        RuntimeDirectory = "unbound";
+        ConfigurationDirectory = "unbound";
+        StateDirectory = "unbound";
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "~@clock"
+          "@cpu-emulation"
+          "@debug"
+          "@keyring"
+          "@module"
+          "mount"
+          "@obsolete"
+          "@resources"
+        ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        RestrictSUIDSGID = true;
+        ReadWritePaths = [ "/run/unbound" "${stateDir}" ];
       };
     };
-
     # If networkmanager is enabled, ask it to interface with unbound.
     networking.networkmanager.dns = "unbound";
-
   };
-
 }
