@@ -1515,4 +1515,8 @@ self: super: {
     };
   };
 
+  # hasn‘t bumped upper bounds
+  # upstream: https://github.com/obsidiansystems/which/pull/6
+  which = doJailbreak super.which;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

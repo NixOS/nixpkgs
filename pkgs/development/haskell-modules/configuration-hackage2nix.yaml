@@ -2732,7 +2732,6 @@ broken-packages:
   - aeson-diff-generic
   - aeson-filthy
   - aeson-flowtyped
-  - aeson-gadt-th
   - aeson-injector
   - aeson-iproute
   - aeson-native
@@ -7799,7 +7798,6 @@ broken-packages:
   - neural
   - neural-network-blashs
   - neural-network-hmatrix
-  - neuron
   - newhope
   - newports
   - newsletter
@@ -8893,7 +8891,6 @@ broken-packages:
   - rhine
   - rhine-gloss
   - rhythm-game-tutorial
-  - rib
   - ribbit
   - RichConditional
   - ridley
@@ -10599,7 +10596,6 @@ broken-packages:
   - wheb-mongo
   - wheb-redis
   - wheb-strapped
-  - which
   - while-lang-parser
   - whim
   - whiskers
