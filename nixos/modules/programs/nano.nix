@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.programs.nano2;
+  cfg = config.programs.nano;
   colourType = lib.types.submodule {
     options = {
       bg = lib.mkOption {
@@ -70,7 +70,7 @@ in
 {
   ###### interface
   options = {
-    programs.nano2 = {
+    programs.nano = {
       enable = lib.mkEnableOption "configuration of nano by creating /etc/nanorc";
 
       afterEnds = lib.mkOption {
