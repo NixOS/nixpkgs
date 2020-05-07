@@ -1,7 +1,7 @@
 generic: {
   v44 = generic {
-    version = "4.4.7";
-    sha256 = "13gckz5ysmqr257mcmbbbf8l43f1jdk4iyn6a3ad8xjmj3kqyys9";
+    version = "4.4.8";
+    sha256 = "0l9n4l5179lf90krv1kb0lraipj7q4hyba6r48n6rj2zqx2j4mn0";
   };
 
   v40 = generic {
