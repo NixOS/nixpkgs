@@ -71,7 +71,7 @@ in
   ###### interface
   options = {
     programs.nano = {
-      enable = lib.mkEnableOption "configuration of nano by creating /etc/nanorc";
+      enable = lib.mkEnableOption "configuration of nano by creating <filename>/etc/nanorc</filename>";
 
       afterEnds = lib.mkOption {
         type = lib.types.bool;
@@ -111,7 +111,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          When saving a file, create a backup file by adding a tilde (~) to the file’s name.
+          When saving a file, create a backup file by adding a tilde (<code>~</code>) to the file’s name.
         '';
       };
 
@@ -158,7 +158,7 @@ in
                     <keycap>FN</keycap>
                     where <code>N</code> is a numeric value from 1 to 24.
                     Example: <keycap>F10</keycap>.
-                    (Often, <keycap>F13</keycap> to <keycap>F24</keycap> can be typed as <keycap>F1</keycap> to <keycap>F12</keycap> with <keycap>Shift</keycap>.)
+                    Often, <keycap>F13</keycap> to <keycap>F24</keycap> can be typed as <keycap>F1</keycap> to <keycap>F12</keycap> with <keycap>Shift</keycap>.
                   </para></listitem>
                   <listitem><para><keycap>Ins</keycap> or <keycap>Del</keycap>.</para></listitem>
                 </itemizedlist>
@@ -320,7 +320,7 @@ in
           Only closing punctuation (see <option>punctuation</option>),
             optionally followed by the specified closing brackets,
           can end sentences.
-          The default value is ""’)>]}".
+          The default value is <code>"’)>]}</code>.
         '';
       };
 
@@ -370,7 +370,7 @@ in
         default = null;
         description = ''
           Use this colour combination for the status bar when an error message is displayed.
-          The default value is brightwhite for foregorund and red for background.
+          The default value is brightwhite for foreground and red for background.
         '';
       };
 
@@ -394,7 +394,7 @@ in
         default = [];
         description = ''
           Extend the syntax previously defined as <option>name</option> with another <option>command</option>.
-          This allows adding a new color, icolor, header, magic, formatter, linter, comment or tabgives command
+          This allows adding a new colour, icolour, header, magic, formatter, linter, comment or tabgives command
             to an already defined syntax.
           Useful when you want to slightly improve a syntax defined in one of the system-installed files
             which normally are not writable.
@@ -442,7 +442,7 @@ in
         type = lib.types.listOf lib.types.path;
         default = [];
         description = ''
-          Additional Files to add to /etc/nanorc.
+          Additional Files to add to <filename>/etc/nanorc</filename>.
         '';
       };
 
@@ -485,7 +485,7 @@ in
           Set the opening and closing brackets that can be found by bracket searches.
           This may not include blank characters.
           The opening set must come before the closing set and the two sets must be in the same order.
-          The default value is "(<[{)>]}".
+          The default value is <code>(<[{)>]}</code>.
         '';
       };
 
@@ -496,7 +496,7 @@ in
           Enable mouse support, if available for your system.
           When enabled, mouse clicks can be used to place the cursor, set the mark (with a double click) and execute shortcuts.
           The mouse will work in the X Window System and on the console when gpm is running.
-          Text can still be selected through dragging by holding down the Shift key.
+          Text can still be selected through dragging by holding down the <keycap>Shift</keycap> key.
         '';
       };
 
@@ -504,7 +504,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          When reading in a file with ^R, insert it into a new buffer by default.
+          When reading in a file with <keycap>^R</keycap>, insert it into a new buffer by default.
         '';
       };
 
@@ -578,7 +578,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Preserve the XON and XOFF keys (^Q and ^S).
+          Preserve the XON and XOFF keys (<keycap>^Q</keycap> and <keycap>^S</keycap>).
         '';
       };
 
@@ -589,7 +589,7 @@ in
           Set the characters treated as closing punctuation when justifying paragraphs.
           This may not include blank characters.
           Only the specfified closing punctuation, optionally followed by closing brackets (see <option>brackets</option>), can end sentences.
-          The default value is "!.?".
+          The default value is <code>!.?</code>.
         '';
       };
 
@@ -607,8 +607,8 @@ in
         default = "";
         description = ''
           Set the regular expression for matching the quoting part of a line.
-          The default value is "^([ \t]*([!#%:;>|}]|//))+".
-          Note that \t stands for an actual Tab character.
+          The default value is <code>^([ \t]*([!#%:;>|}]|//))+</code>.
+          Note that <code>\t</code> stands for an actual Tab character.
           This makes it possible to rejustify blocks of quoted text when composing email and to rewrap blocks of line comments when writing source code.
         '';
       };
@@ -627,8 +627,10 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Interpret the Delete and Backspace keys differently so that both Backspace and Delete work properly.
-          You should only use this option when on your system either Backspace acts like Delete or Delete acts like Backspace.
+          Interpret the <keycap>Delete</keycap> and <keycap>Backspace</keycap> keys differently
+            so that both <keycap>Backspace</keycap> and <keycap>Delete</keycap> work properly.
+          You should only use this option when on your system either <keycap>Backspace</keycap> acts like <keycap>Delete</keycap>
+            or <keycap>Delete</keycap> acts like <keycap>Backspace</keycap>.
         '';
       };
 
@@ -645,7 +647,7 @@ in
         type = lib.types.nullOr colourType;
         default = null;
         description = ''
-          Specify the color combination to use for selected text.
+          Specify the colour combination to use for selected text.
         '';
       };
 
@@ -662,7 +664,7 @@ in
         default = false;
         description = ''
           Make the Home key smarter.
-          When Home is pressed anywhere but at the very beginning of non-whitespace characters on a line,
+          When <keycap>Home</keycap> is pressed anywhere but at the very beginning of non-whitespace characters on a line,
             the cursor will jump either forwards or backwards to that beginning.
           If the cursor is already at that position, it will jump to the true beginning of the line.
         '';
@@ -705,7 +707,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Allow nano to be suspended (with ^Z by default).
+          Allow nano to be suspended (with <keycap>^Z</keycap> by default).
         '';
       };
 
@@ -739,7 +741,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Save automatically on exit, don’t prompt.
+          Save automatically on exit, do not prompt.
         '';
       };
 
@@ -747,7 +749,7 @@ in
         type = lib.types.nullOr colourType;
         default = null;
         description = ''
-          Specify the color combination to use for the title bar.
+          Specify the colour combination to use for the title bar.
         '';
       };
 
@@ -821,7 +823,7 @@ in
         description = ''
           Save a file by default in Unix format.
           This overrides nano’s default behavior of saving a file in the format that it had.
-          (This option has no effect when you also use <option>noConvert</option>.)
+          This option has no effect when you also use <option>noConvert</option>.
         '';
       };
 
@@ -841,7 +843,7 @@ in
         description = ''
           Set the two characters used to indicate the presence of tabs and spaces.
           They must be single-column characters.
-          The default pair for a UTF-8 locale is "»⋅" and for other locales ">.".
+          The default pair for a UTF-8 locale is <code>»⋅</code> and for other locales <code>>.</code>.
         '';
       };
 
@@ -857,7 +859,7 @@ in
         type = lib.types.str;
         default = "";
         description = ''
-          Specify which other characters (besides the normal alphanumeric ones) should be considered as parts of words.
+          Specify which other characters besides the normal alphanumeric ones should be considered as parts of words.
           This overrides the option <option>wordbounds</option>.
         '';
       };
@@ -867,7 +869,7 @@ in
         default = false;
         description = ''
           Let an unmodified Backspace or Delete erase the marked region
-            (instead of a single character and without affecting the cutbuffer).
+            instead of a single character and without affecting the cutbuffer.
         '';
       };
     };
@@ -894,13 +896,13 @@ in
       lib.optional cfg.constantShow               "set constantshow"                                                        ++
       lib.optional cfg.cutFromCursor              "set cutfromcursor"                                                       ++
       lib.optional cfg.emptyLine                  "set emptyline"                                                           ++
-      lib.optional (cfg.errorColour != null)      "set errorcolor \"${cfg.errorColour.fg},${cfg.errorColour.bg}\""          ++
+      lib.optional (cfg.errorColour != null)      "set errorcolour \"${cfg.errorColour.fg},${cfg.errorColour.bg}\""          ++
       lib.optional (cfg.fill != null)             "set fill ${toString cfg.fill}"                                           ++
-      lib.optional (cfg.functionColour != null)   "set functioncolor \"${cfg.functionColour.fg},${cfg.functionColour.bg}\"" ++
+      lib.optional (cfg.functionColour != null)   "set functioncolour \"${cfg.functionColour.fg},${cfg.functionColour.bg}\"" ++
       lib.optional (cfg.guideStripe != null)      "set guidestripe ${toString cfg.guideStripe}"                             ++
       lib.optional cfg.historyLog                 "set historylog"                                                          ++
       lib.optional cfg.jumpyScrolling             "set jumpyscrolling"                                                      ++
-      lib.optional (cfg.keyColour != null)        "set keycolor \"${cfg.keyColour.fg},${cfg.keyColour.bg}\""                ++
+      lib.optional (cfg.keyColour != null)        "set keycolour \"${cfg.keyColour.fg},${cfg.keyColour.bg}\""                ++
       lib.optional cfg.lineNumbers                "set linenumbers"                                                         ++
       lib.optional cfg.locking                    "set locking"                                                             ++
       lib.optional (cfg.matchBrackets != "")      "set matchbrackets \"${cfg.matchBrackets}\""                              ++
@@ -909,7 +911,7 @@ in
       lib.optional cfg.noConvert                  "set noconvert"                                                           ++
       lib.optional cfg.noHelp                     "set nohelp"                                                              ++
       lib.optional cfg.noNewLines                 "set nonewlines"                                                          ++
-      lib.optional (cfg.numberColour != null)     "set numbercolor \"${cfg.numberColour.fg},${cfg.numberColour.bg}\""       ++
+      lib.optional (cfg.numberColour != null)     "set numbercolour \"${cfg.numberColour.fg},${cfg.numberColour.bg}\""       ++
       lib.optional (cfg.operatingDirectory != "") "set operatingdir \"${cfg.operatingDirectory}\""                          ++
       lib.optional cfg.positionLog                "set positionlog"                                                         ++
       lib.optional cfg.preserve                   "set preserve"                                                            ++
@@ -919,18 +921,18 @@ in
       lib.optional cfg.rawSequences               "set rawsequences"                                                        ++
       lib.optional cfg.rebindDelete               "set rebinddelete"                                                        ++
       lib.optional cfg.regexSearch                "set regexp"                                                              ++
-      lib.optional (cfg.selectedColour != null)   "set selectedcolor \"${cfg.selectedColour.fg},${cfg.selectedColour.bg}\"" ++
+      lib.optional (cfg.selectedColour != null)   "set selectedcolour \"${cfg.selectedColour.fg},${cfg.selectedColour.bg}\"" ++
       lib.optional cfg.showCursor                 "set showcursor"                                                          ++
       lib.optional cfg.smartHome                  "set smarthome"                                                           ++
       lib.optional cfg.softWrap                   "set softwrap"                                                            ++
       lib.optional (cfg.spellChecker != "")       "set speller \"${cfg.spellChecker}\""                                     ++
-      lib.optional (cfg.statusColour != null)     "set statuscolor \"${cfg.statusColour.fg},${cfg.statusColour.bg}\""       ++
-      lib.optional (cfg.stripeColour != null)     "set stripecolor \"${cfg.stripeColour.fg},${cfg.stripeColour.bg}\""       ++
+      lib.optional (cfg.statusColour != null)     "set statuscolour \"${cfg.statusColour.fg},${cfg.statusColour.bg}\""       ++
+      lib.optional (cfg.stripeColour != null)     "set stripecolour \"${cfg.stripeColour.fg},${cfg.stripeColour.bg}\""       ++
       lib.optional cfg.suspendable                "set suspendable"                                                         ++
       lib.optional (cfg.tabulatorSize > 0)        "set tabsize ${toString cfg.tabulatorSize}"                               ++
       lib.optional cfg.tabulatorToSpaces          "set tabstospaces"                                                        ++
       lib.optional cfg.temporaryFile              "set tempfile"                                                            ++
-      lib.optional (cfg.titleColour != null)      "set titlecolor \"${cfg.titleColour.fg},${cfg.titleColour.bg}\""          ++
+      lib.optional (cfg.titleColour != null)      "set titlecolour \"${cfg.titleColour.fg},${cfg.titleColour.bg}\""          ++
       lib.optional cfg.trimBlanks                 "set trimblanks"                                                          ++
       lib.optional cfg.unixFormat                 "set unix"                                                                ++
       lib.optional cfg.view                       "set view"                                                                ++
@@ -960,8 +962,8 @@ in
       [
         ""
         "# == CUSTOM SETTINGS =="
-      ]                                                                                                                     ++
-      [ cfg.nanorc ]
+        cfg.nanorc
+      ]
     );
   };
 }
