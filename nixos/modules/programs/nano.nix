@@ -877,7 +877,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.etc.nanorc.text = lib.concatStringsSep "\n" (
       [
-        "# This File was generated and will be overridden by the nixos-rebuid."
+        "# This File was generated and will be overridden by nixos-rebuild."
         ""
         "# == OPTIONS =="
       ]                                                                                                                     ++
