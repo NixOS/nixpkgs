@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "consul";
@@ -19,6 +19,8 @@ buildGoModule rec {
     inherit rev;
     sha256 = "05p893mfdrlf5fy9ywwnqb7blw1ffidgviyyh6a3bp82wk49f8ph";
   };
+
+  passthru.tests.consul = nixosTests.consul;
 
   # This corresponds to paths with package main - normally unneeded but consul
   # has a split module structure in one repo
