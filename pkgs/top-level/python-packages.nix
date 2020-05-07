@@ -4180,7 +4180,10 @@ in {
     inherit (pkgs.jsonnet) name src;
   };
 
-  jupyter_client = callPackage ../development/python-modules/jupyter_client { };
+  jupyter_client = if isPy3k then
+    callPackage ../development/python-modules/jupyter_client { }
+  else
+    callPackage ../development/python-modules/jupyter_client/5.nix { };
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
