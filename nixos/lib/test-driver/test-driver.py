@@ -141,7 +141,7 @@ class Logger:
         self.logfile = os.environ.get("LOGFILE", "/dev/null")
         self.logfile_handle = open(self.logfile, "wb")
         self.xml = XMLGenerator(self.logfile_handle, encoding="utf-8")
-        self.queue: "Queue[Dict[str, str]]" = Queue(1000)
+        self.queue: "Queue[Dict[str, str]]" = Queue()
 
         self.xml.startDocument()
         self.xml.startElement("logfile", attrs={})
@@ -389,11 +389,11 @@ class Machine:
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( {} ); echo '|!EOF' $?\n".format(command)
+        out_command = "( {} ); echo '|!=EOF' $?\n".format(command)
         self.shell.send(out_command.encode())
 
         output = ""
-        status_code_pattern = re.compile(r"(.*)\|\!EOF\s+(\d+)")
+        status_code_pattern = re.compile(r"(.*)\|\!=EOF\s+(\d+)")
 
         while True:
             chunk = self.shell.recv(4096).decode(errors="ignore")
