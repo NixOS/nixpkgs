@@ -98,7 +98,7 @@ let
 
   git-fame = callPackage ./git-fame {};
 
-  git-fast-export = callPackage ./fast-export { };
+  git-fast-export = callPackage ./fast-export { mercurial = mercurial_4; };
 
   git-filter-repo = callPackage ./git-filter-repo {
     pythonPackages = python3Packages;
