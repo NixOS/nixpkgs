@@ -24,7 +24,6 @@ in
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
   atd = handleTest ./atd.nix {};
-  automysqlbackup = handleTest ./automysqlbackup.nix {};
   avahi = handleTest ./avahi.nix {};
   babeld = handleTest ./babeld.nix {};
   bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
@@ -176,6 +175,8 @@ in
   magnetico = handleTest ./magnetico.nix {};
   magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
+  mariadb-galera-mariabackup = handleTest ./mysql/mariadb-galera-mariabackup.nix {};
+  mariadb-galera-rsync = handleTest ./mysql/mariadb-galera-rsync.nix {};
   mathics = handleTest ./mathics.nix {};
   matomo = handleTest ./matomo.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
@@ -197,9 +198,10 @@ in
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
   mxisd = handleTest ./mxisd.nix {};
-  mysql = handleTest ./mysql.nix {};
-  mysqlBackup = handleTest ./mysql-backup.nix {};
-  mysqlReplication = handleTest ./mysql-replication.nix {};
+  mysql = handleTest ./mysql/mysql.nix {};
+  mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix {};
+  mysql-backup = handleTest ./mysql/mysql-backup.nix {};
+  mysql-replication = handleTest ./mysql/mysql-replication.nix {};
   nagios = handleTest ./nagios.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
