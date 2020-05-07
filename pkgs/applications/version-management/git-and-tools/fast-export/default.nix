@@ -33,6 +33,29 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  doInstallCheck = true;
+  # deliberately not adding git or hg into installCheckInputs - package should
+  # be able to work without them in runtime env
+  installCheckPhase = ''
+    mkdir repo-hg
+    pushd repo-hg
+    ${mercurial}/bin/hg init
+    echo foo > bar
+    ${mercurial}/bin/hg add bar
+    ${mercurial}/bin/hg commit --message "baz"
+    popd
+
+    mkdir repo-git
+    pushd repo-git
+    ${git}/bin/git init
+    ${git}/bin/git config core.ignoreCase false  # for darwin
+    $out/bin/hg-fast-export.sh -r ../repo-hg/ --hg-hash
+    for s in "foo" "bar" "baz" ; do
+      (${git}/bin/git show | grep $s > /dev/null) && echo $s found
+    done
+    popd
+  '';
+
   meta = with stdenv.lib; {
     description = "Import mercurial into git";
     homepage = "https://repo.or.cz/w/fast-export.git";
