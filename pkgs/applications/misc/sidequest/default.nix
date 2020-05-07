@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildFHSUserEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib }:
+{ stdenv, lib, fetchurl, buildFHSUserEnv, makeDesktopItem, wrapGAppsHook, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib, gtk3 }:
 	let
 		pname = "sidequest";
 		version = "0.10.4";
@@ -19,16 +19,17 @@
 				sha256 = "1hd5093rn3y2l3gibzbylwbl0i4zh80a9bf1wb11jfv07x8n93cp";
 			};
 
-			buildInputs = [ makeWrapper ];
+			buildInputs = [ gtk3 ];
+			nativeBuildInputs = [ wrapGAppsHook ];
 
-			buildCommand = ''
+			installPhase = ''
 				mkdir -p "$out/lib/SideQuest" "$out/bin"
-				tar -xJf "$src" -C "$out/lib/SideQuest" --strip-components 1
+				cp -r . "$out/lib/SideQuest"
 
 				ln -s "$out/lib/SideQuest/sidequest" "$out/bin"
+			'';
 
-				fixupPhase
-
+			postFixup = ''
 				# mkdir -p "$out/share/applications"
 				# ln -s "${desktopItem}/share/applications/*" "$out/share/applications"
 
