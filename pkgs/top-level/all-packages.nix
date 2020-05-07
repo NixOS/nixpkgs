@@ -15531,6 +15531,10 @@ in
 
   hashi-ui = callPackage ../servers/hashi-ui {};
 
+  inherit (callPackage ../servers/hasura { })
+    hasura-cli
+    hasura-graphql-engine;
+
   heapster = callPackage ../servers/monitoring/heapster { };
 
   hbase = callPackage ../servers/hbase {};
@@ -23618,7 +23622,7 @@ in
   };
 
   nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
-  
+
   netris = callPackage ../games/netris { };
 
   neverball = callPackage ../games/neverball { };
