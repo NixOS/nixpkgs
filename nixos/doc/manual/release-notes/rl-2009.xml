@@ -327,6 +327,20 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
       <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
     </para>
    </listitem>
+
+   <listitem>
+    <para>
+      The configuration and state directories used by <literal>nixos-containers</literal>
+      have been moved from <literal>/etc/containers</literal> and <literal>/var/lib/containers</literal>
+      to <literal>/etc/nixos-containers</literal> and <literal>/var/lib/nixos-containers</literal>.
+
+      If you are bumping <xref linkend="opt-system.stateVersion" /> to 20.09 you are responsible for migrating these directories yourself.
+
+      This is to improve compatibility with <literal>libcontainer</literal> based software such as Podman and Skopeo
+      which assumes <literal>/etc/containers</literal>.
+    </para>
+   </listitem>
+
    <listitem>
     <para>
       <literal>vmware</literal> has been removed from the <literal>services.x11.videoDrivers</literal> defaults.
