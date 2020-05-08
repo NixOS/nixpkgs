@@ -34,7 +34,7 @@ in rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/lib $out/share/cached-nix-shell $out/share/man/man1 $out/var/empty
-    cp target/release/build/cached-nix-shell-*/out/trace-nix.so $out/lib
+    cp $releaseDir/build/cached-nix-shell-*/out/trace-nix.so $out/lib
     cp rcfile.sh $out/share/cached-nix-shell/rcfile.sh
     cp cached-nix-shell.1 $out/share/man/man1
   '';

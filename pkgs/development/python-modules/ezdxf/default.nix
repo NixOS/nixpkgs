@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, pyparsing, pytest }:
 
 buildPythonPackage rec {
-  version = "0.11";
+  version = "0.12";
   pname = "ezdxf";
 
   disabled = pythonOlder "3.5";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "mozman";
     repo = "ezdxf";
     rev = "v${version}";
-    sha256 = "167iw1j1c6195bwv6i8z1m7s0i27r0y0acxd2w76hvnq3a72jbsd";
+    sha256 = "1flcq96ljk5wqrmgsb4acflqzkg7rhlaxz0j5jxky9za0mj1x6dq";
   };
 
   checkInputs = [ pytest ];

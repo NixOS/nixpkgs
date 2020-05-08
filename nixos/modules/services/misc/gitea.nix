@@ -14,53 +14,9 @@ let
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
 
-    [database]
-    DB_TYPE = ${cfg.database.type}
-    ${optionalString (usePostgresql || useMysql) ''
-      HOST = ${if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port}
-      NAME = ${cfg.database.name}
-      USER = ${cfg.database.user}
-      PASSWD = #dbpass#
-    ''}
-    ${optionalString useSqlite ''
-      PATH = ${cfg.database.path}
-    ''}
-    ${optionalString usePostgresql ''
-      SSL_MODE = disable
-    ''}
+    ${generators.toINI {} cfg.settings}
 
-    [repository]
-    ROOT = ${cfg.repositoryRoot}
-
-    [server]
-    DOMAIN = ${cfg.domain}
-    HTTP_ADDR = ${cfg.httpAddress}
-    HTTP_PORT = ${toString cfg.httpPort}
-    ROOT_URL = ${cfg.rootUrl}
-    STATIC_ROOT_PATH = ${cfg.staticRootPath}
-    LFS_JWT_SECRET = #jwtsecret#
-
-    [session]
-    COOKIE_NAME = session
-    COOKIE_SECURE = ${boolToString cfg.cookieSecure}
-
-    [security]
-    SECRET_KEY = #secretkey#
-    INSTALL_LOCK = true
-
-    [log]
-    ROOT_PATH = ${cfg.log.rootPath}
-    LEVEL = ${cfg.log.level}
-
-    [service]
-    DISABLE_REGISTRATION = ${boolToString cfg.disableRegistration}
-
-    ${optionalString (cfg.mailerPasswordFile != null) ''
-      [mailer]
-      PASSWD = #mailerpass#
-    ''}
-
-    ${cfg.extraConfig}
+    ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
   '';
 in
 
@@ -279,9 +235,36 @@ in
         '';
       };
 
+      settings = mkOption {
+        type = with types; attrsOf (attrsOf (oneOf [ bool int str ]));
+        default = {};
+        description = ''
+          Gitea configuration. Refer to <link xlink:href="https://docs.gitea.io/en-us/config-cheat-sheet/"/>
+          for details on supported values.
+        '';
+        example = literalExample ''
+          {
+            "cron.sync_external_users" = {
+              RUN_AT_START = true;
+              SCHEDULE = "@every 24h";
+              UPDATE_EXISTING = true;
+            };
+            mailer = {
+              ENABLED = true;
+              MAILER_TYPE = "sendmail";
+              FROM = "do-not-reply@example.org";
+              SENDMAIL_PATH = "${pkgs.system-sendmail}/bin/sendmail";
+            };
+            other = {
+              SHOW_FOOTER_VERSION = false;
+            };
+          }
+        '';
+      };
+
       extraConfig = mkOption {
-        type = types.str;
-        default = "";
+        type = with types; nullOr str;
+        default = null;
         description = "Configuration lines appended to the generated gitea configuration file.";
       };
     };
@@ -293,6 +276,62 @@ in
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
     ];
+
+    services.gitea.settings = {
+      database = mkMerge [
+        {
+          DB_TYPE = cfg.database.type;
+        }
+        (mkIf (useMysql || usePostgresql) {
+          HOST = if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port;
+          NAME = cfg.database.name;
+          USER = cfg.database.user;
+          PASSWD = "#dbpass#";
+        })
+        (mkIf useSqlite {
+          PATH = cfg.database.path;
+        })
+        (mkIf usePostgresql {
+          SSL_MODE = "disable";
+        })
+      ];
+
+      repository = {
+        ROOT = cfg.repositoryRoot;
+      };
+
+      server = {
+        DOMAIN = cfg.domain;
+        HTTP_ADDR = cfg.httpAddress;
+        HTTP_PORT = cfg.httpPort;
+        ROOT_URL = cfg.rootUrl;
+        STATIC_ROOT_PATH = cfg.staticRootPath;
+        LFS_JWT_SECRET = "#jwtsecret#";
+      };
+
+      session = {
+        COOKIE_NAME = "session";
+        COOKIE_SECURE = cfg.cookieSecure;
+      };
+
+      security = {
+        SECRET_KEY = "#secretkey#";
+        INSTALL_LOCK = true;
+      };
+
+      log = {
+        ROOT_PATH = cfg.log.rootPath;
+        LEVEL = cfg.log.level;
+      };
+
+      service = {
+        DISABLE_REGISTRATION = cfg.disableRegistration;
+      };
+
+      mailer = mkIf (cfg.mailerPasswordFile != null) {
+        PASSWD = "#mailerpass#";
+      };
+    };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
       enable = mkDefault true;
@@ -435,9 +474,12 @@ in
 
     users.groups.gitea = {};
 
-    warnings = optional (cfg.database.password != "")
-      ''config.services.gitea.database.password will be stored as plaintext
-        in the Nix store. Use database.passwordFile instead.'';
+    warnings =
+      optional (cfg.database.password != "") ''
+        config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead.'' ++
+      optional (cfg.extraConfig != null) ''
+        services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
+      '';
 
     # Create database passwordFile default when password is configured.
     services.gitea.database.passwordFile =

@@ -52,12 +52,12 @@ in rec {
   mkKops = generic;
 
   kops_1_15 = mkKops {
-    version = "1.15.2";
-    sha256 = "1sjfd7pfi81ccq1dkgkh9xx6y94bqzlp727pvyf7l01x3d14z2b3";
+    version = "1.15.3";
+    sha256 = "0pzgrsl61nw8pm3s032lj020fw13x3fpzlj7lknsnd581f0gg4df";
   };
 
   kops_1_16 = mkKops {
-    version = "1.16.1";
-    sha256 = "04ji1703z6b3rd4wmccah68api0jj2bndzkgdzqi855gccqbmi5g";
+    version = "1.16.2";
+    sha256 = "1vhkjhx1n3f6ggw5cy1avs3sbqb2da6khck9zqd4s7almjbpc2h2";
   };
 }

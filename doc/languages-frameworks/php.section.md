@@ -1,10 +1,8 @@
-# PHP
+# PHP {#sec-php}
 
-## User Guide
+## User Guide {#ssec-php-user-guide}
 
-### Using PHP
-
-#### Overview
+### Overview {#ssec-php-user-guide-overview}
 
 Several versions of PHP are available on Nix, each of which having a
 wide variety of extensions and libraries available.
@@ -36,7 +34,7 @@ opcache extension shipped with PHP is available at
 `php.extensions.opcache` and the third-party ImageMagick extension at
 `php.extensions.imagick`.
 
-#### Installing PHP with extensions
+### Installing PHP with extensions {#ssec-php-user-guide-installing-with-extensions}
 
 A PHP package with specific extensions enabled can be built using
 `php.withExtensions`. This is a function which accepts an anonymous
@@ -64,7 +62,7 @@ To build your list of extensions from the ground up, you can simply
 ignore `enabled`:
 
 ```nix
-php.withExtensions ({ all, ... }: with all; [ opcache imagick ])
+php.withExtensions ({ all, ... }: with all; [ imagick opcache ])
 ```
 
 `php.withExtensions` provides extensions by wrapping a minimal php
@@ -89,14 +87,14 @@ php.buildEnv {
 }
 ```
 
-##### Example setup for `phpfpm`
+#### Example setup for `phpfpm` {#ssec-php-user-guide-installing-with-extensions-phpfpm}
 
 You can use the previous examples in a `phpfpm` pool called `foo` as
 follows:
 
 ```nix
 let
-  myPhp = php.withExtensions ({ all, ... }: with all; [ opcache imagick ]);
+  myPhp = php.withExtensions ({ all, ... }: with all; [ imagick opcache ]);
 in {
   services.phpfpm.pools."foo".phpPackage = myPhp;
 };
@@ -113,11 +111,27 @@ in {
 };
 ```
 
-##### Example usage with `nix-shell`
+#### Example usage with `nix-shell` {#ssec-php-user-guide-installing-with-extensions-nix-shell}
 
 This brings up a temporary environment that contains a PHP interpreter
 with the extensions `imagick` and `opcache` enabled:
 
 ```sh
 nix-shell -p 'php.withExtensions ({ all, ... }: with all; [ imagick opcache ])'
+```
+
+### Installing PHP packages with extensions {#ssec-php-user-guide-installing-packages-with-extensions}
+
+All interactive tools use the PHP package you get them from, so all
+packages at `php.packages.*` use the `php` package with its default
+extensions. Sometimes this default set of extensions isn't enough and
+you may want to extend it. A common case of this is the `composer`
+package: a project may depend on certain extensions and `composer`
+won't work with that project unless those extensions are loaded.
+
+Example of building `composer` with additional extensions:
+```nix
+(php.withExtensions ({ all, enabled }:
+  enabled ++ (with all; [ imagick redis ]))
+).packages.composer
 ```

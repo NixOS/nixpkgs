@@ -5,6 +5,7 @@
 , libuuid
 , gstreamer, gst-plugins-base, libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
+, libdrm, mesa
 , nss, nspr
 , patchelf, makeWrapper
 , isSnapshot ? false
@@ -37,6 +38,7 @@ in stdenv.mkDerivation rec {
     atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
     gstreamer libxml2 gst-plugins-base pango cairo gnome2.GConf
+    libdrm mesa
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = stdenv.lib.makeLibraryPath buildInputs

@@ -54,5 +54,6 @@ buildGoPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

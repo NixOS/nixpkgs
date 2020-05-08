@@ -100,6 +100,7 @@ mapAliases ({
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
   dmtx = dmtx-utils; # added 2018-04-25
+  dnnl = oneDNN; # added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   double_conversion = double-conversion; # 2017-11-22
@@ -576,6 +577,7 @@ mapAliases ({
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
   transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
+  trilium = throw "trilium has been removed. Please use trilium-desktop instead."; # added 2020-04-29
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   uberwriter = apostrophe; # added 2020-04-23
@@ -605,6 +607,7 @@ mapAliases ({
   winswitch = throw "winswitch has been removed from nixpkgs."; # added 2019-12-10
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
+  xp-pen-g430 = pentablet-driver; # added 2020-05-03
   xfceUnstable = xfce4-14; # added 2019-09-17
   xfce4-14 = xfce;
   xfce4-12 = throw "xfce4-12 has been replaced by xfce4-14"; # added 2020-03-14

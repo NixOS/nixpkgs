@@ -1,6 +1,6 @@
 /* TeX Live user docs
   - source: ../../../../../doc/languages-frameworks/texlive.xml
-  - current html: http://nixos.org/nixpkgs/manual/#sec-language-texlive
+  - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min

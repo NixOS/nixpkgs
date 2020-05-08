@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libmypaint";
-  version = "1.5.1";
+  version = "1.6.0";
 
   outputs = [ "out" "dev" ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "mypaint";
     repo = "libmypaint";
     rev = "v${version}";
-    sha256 = "1pxx8fjdabcindxhzgbhg4p7yanl4ihbd8kq71y2nyi9dqsjr2fw";
+    sha256 = "1fdyywm915mmilfmzp7lz4rnmm05kkw0adrdqpqi4n8icp4d530g";
   };
 
   nativeBuildInputs = [
@@ -42,10 +42,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    sed 's|python2|python|' -i autogen.sh
-  '';
 
   preConfigure = "./autogen.sh";
 

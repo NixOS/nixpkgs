@@ -1,5 +1,12 @@
-{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, go, gobject-introspection,
-  libgudev, deepin }:
+{ stdenv
+, fetchpatch
+, fetchFromGitHub
+, pkgconfig
+, go
+, gobject-introspection
+, libgudev
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "go-gir-generator";
@@ -40,7 +47,7 @@ stdenv.mkDerivation rec {
     "GOCACHE=$(TMPDIR)/go-cache"
   ];
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Generate static golang bindings for GObject";
