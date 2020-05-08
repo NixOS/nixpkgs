@@ -631,7 +631,7 @@ let
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon";
+          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon --quiet";
           StandardOutput = "syslog";
           StandardError = "syslog";
         };
