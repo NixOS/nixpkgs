@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tvraman/emacspeak/;
+    homepage = "https://github.com/tvraman/emacspeak/";
     description = "Emacs extension that provides spoken output";
     license = licenses.gpl2;
     maintainers = [ dema ];
