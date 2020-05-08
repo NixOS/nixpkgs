@@ -40,7 +40,7 @@ let
 
   piCfgFile = pkgs.writeText "privacyidea.cfg" ''
     SUPERUSER_REALM = [ '${concatStringsSep "', '" cfg.superuserRealm}' ]
-    SQLALCHEMY_DATABASE_URI = '${cfg.databaseURI}'
+    SQLALCHEMY_DATABASE_URI = 'postgresql:///privacyidea'
     SECRET_KEY = '${cfg.secretKey}'
     PI_PEPPER = '${cfg.pepper}'
     PI_ENCFILE = '${cfg.encFile}'
@@ -65,27 +65,11 @@ in
         '';
       };
 
-      runDir = mkOption {
-        type = types.str;
-        default = "/run/privacyidea";
-        description = ''
-          Directory where all PrivacyIDEA files will be placed by default.
-        '';
-      };
-
       superuserRealm = mkOption {
         type = types.listOf types.str;
         default = [ "super" "administrators" ];
         description = ''
           The realm where users are allowed to login as administrators.
-        '';
-      };
-
-      databaseURI = mkOption {
-        type = types.str;
-        default = "postgresql:///privacyidea";
-        description = ''
-          Database as SQLAlchemy URI to use for PrivacyIDEA.
         '';
       };
 
@@ -129,9 +113,9 @@ in
         '';
       };
 
-      adminPassword = mkOption {
-        type = types.str;
-        description = "Password for the admin user";
+      adminPasswordFile = mkOption {
+        type = types.path;
+        description = "File containing password for the admin user";
       };
 
       adminEmail = mkOption {
@@ -199,7 +183,7 @@ in
           uwsgi = {
             plugins = [ "python3" ];
             pythonpath = "${penv}/${uwsgi.python3.sitePackages}";
-            socket = "${cfg.runDir}/socket";
+            socket = "/run/privacyidea/socket";
             uid = cfg.user;
             gid = cfg.group;
             chmod-socket = 770;
@@ -209,7 +193,7 @@ in
             processes = 4;
             harakiri = 60;
             reload-mercy = 8;
-            stats = "${cfg.runDir}/stats.socket";
+            stats = "/run/privacyidea/stats.socket";
             max-requests = 2000;
             limit-as = 1024;
             reload-on-as = 512;
@@ -224,20 +208,19 @@ in
         path = with pkgs; [ openssl ];
         environment.PRIVACYIDEA_CONFIGFILE = piCfgFile;
         preStart = let
-          pi-manage = "${pkgs.sudo}/bin/sudo -u privacyidea -H PRIVACYIDEA_CONFIGFILE=${piCfgFile} ${penv}/bin/pi-manage";
+          pi-manage = "${pkgs.sudo}/bin/sudo -u privacyidea -HE ${penv}/bin/pi-manage";
           pgsu = config.services.postgresql.superUser;
           psql = config.services.postgresql.package;
         in ''
-          mkdir -p ${cfg.stateDir} ${cfg.runDir}
-          chown ${cfg.user}:${cfg.group} -R ${cfg.stateDir} ${cfg.runDir}
-          ln -sf ${piCfgFile} ${cfg.stateDir}/privacyidea.cfg
+          mkdir -p ${cfg.stateDir} /run/privacyidea
+          chown ${cfg.user}:${cfg.group} -R ${cfg.stateDir} /run/privacyidea
           if ! test -e "${cfg.stateDir}/db-created"; then
             ${pkgs.sudo}/bin/sudo -u ${pgsu} ${psql}/bin/createuser --no-superuser --no-createdb --no-createrole ${cfg.user}
             ${pkgs.sudo}/bin/sudo -u ${pgsu} ${psql}/bin/createdb --owner ${cfg.user} privacyidea
             ${pi-manage} create_enckey
             ${pi-manage} create_audit_keys
             ${pi-manage} createdb
-            ${pi-manage} admin add admin -e ${cfg.adminEmail} -p ${cfg.adminPassword}
+            ${pi-manage} admin add admin -e ${cfg.adminEmail} -p "$(cat ${cfg.adminPasswordFile})"
             ${pi-manage} db stamp head -d ${penv}/lib/privacyidea/migrations
             touch "${cfg.stateDir}/db-created"
             chmod g+r "${cfg.stateDir}/enckey" "${cfg.stateDir}/private.pem"
@@ -255,11 +238,11 @@ in
         };
       };
 
-      users.extraUsers.privacyidea = mkIf (cfg.user == "privacyidea") {
+      users.users.privacyidea = mkIf (cfg.user == "privacyidea") {
         group = cfg.group;
       };
 
-      users.extraGroups.privacyidea = mkIf (cfg.group == "privacyidea") {};
+      users.groups.privacyidea = mkIf (cfg.group == "privacyidea") {};
     })
 
     (mkIf cfg.ldap-proxy.enable {
@@ -285,11 +268,11 @@ in
         };
       };
 
-      users.extraUsers.pi-ldap-proxy = mkIf (cfg.ldap-proxy.user == "pi-ldap-proxy") {
+      users.users.pi-ldap-proxy = mkIf (cfg.ldap-proxy.user == "pi-ldap-proxy") {
         group = cfg.ldap-proxy.group;
       };
 
-      users.extraGroups.pi-ldap-proxy = mkIf (cfg.ldap-proxy.group == "pi-ldap-proxy") {};
+      users.groups.pi-ldap-proxy = mkIf (cfg.ldap-proxy.group == "pi-ldap-proxy") {};
     })
   ];
 

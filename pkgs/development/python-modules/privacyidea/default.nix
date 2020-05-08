@@ -30,6 +30,8 @@ buildPythonPackage rec {
   # issues with hardware token tests
   doCheck = false;
 
+  pythonImportsCheck = [ "privacyidea" ];
+
   postPatch = ''
     substituteInPlace privacyidea/lib/resolvers/LDAPIdResolver.py --replace \
       "/etc/privacyidea/ldap-ca.crt" \

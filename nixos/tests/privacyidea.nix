@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
       enable = true;
       secretKey = "testing";
       pepper = "testing";
-      adminPassword = "testing";
+      adminPasswordFile = pkgs.writeText "admin-password" "testing";
       adminEmail = "root@localhost";
     };
     services.nginx = {

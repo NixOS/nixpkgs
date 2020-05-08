@@ -12,7 +12,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ twisted ldaptor configobj ];
+
+  # python 2 zope.interface test import path issues
   doCheck = false;
+
+  pythonImportsCheck = [ "pi_ldapproxy" ];
 
   meta = with lib; {
     description = "LDAP Proxy to intercept LDAP binds and authenticate against privacyIDEA";
