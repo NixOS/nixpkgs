@@ -1086,6 +1086,15 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       <literal>config.systemd.services.${name}.path</literal> now returns a list of paths instead of a colon-separated string.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Caddy module now uses Caddy v2 by default. Caddy v1 can still be used by setting
+     <xref linkend="opt-services.caddy.package"/> to <literal>pkgs.caddy1</literal>.
+    </para>
+    <para>
+     New option <xref linkend="opt-services.caddy.adapter"/> has been added.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
