@@ -447,10 +447,6 @@ let
       then callPackage ../development/ocaml-modules/lablgtk-extras { }
       else callPackage ../development/ocaml-modules/lablgtk-extras/1.4.nix { };
 
-    lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview {
-      gtkmathview = callPackage ../development/libraries/gtkmathview { };
-    };
-
     labltk = callPackage ../development/ocaml-modules/labltk { };
 
     lacaml = callPackage ../development/ocaml-modules/lacaml { };
