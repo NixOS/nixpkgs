@@ -1,26 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, autoconf-archive, automake, pkgconfig, alsaLib, SDL2, SDL2_net, libGL, libGLU, libogg, opusfile }:
+{ stdenv, lib, fetchFromGitHub, autoconf, autoconf-archive, automake, autoreconfHook, pkgconfig, alsaLib, SDL2, SDL2_net, libGL, libGLU, libogg, opusfile }:
 
 stdenv.mkDerivation rec {
   pname = "dosbox-staging";
-  version = "v0.75.0";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = "dreamer";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "00n5k2ya7ml55wvrk40p9il01f9k2q2b5g9b20n5zvbgv0d8c5ps";
   };
 
+  enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf autoconf-archive automake SDL2 libGL libGLU libogg opusfile alsaLib SDL2_net ];
-
-  preConfigure = "./autogen.sh";
-
-  preBuild = ''
-    buildFlagsArray=( "CXXFLAGS=-O3 -DNDEBUG" )
-  '';
+  nativeBuildInputs = [ pkgconfig autoconf autoconf-archive automake autoreconfHook ];
+  buildInputs = [ SDL2 libGL libGLU libogg opusfile alsaLib SDL2_net ];
+  
+  CXXFLAGS = "-O3 -DNDEBUG";
 
   postInstall = ''
     mkdir -p $out/share/applications
