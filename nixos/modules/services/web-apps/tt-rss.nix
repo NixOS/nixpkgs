@@ -636,6 +636,7 @@ let
           StandardError = "syslog";
           Restart = "on-failure";
           RestartSec = "60";
+          SyslogIdentifier = "tt-rss";
         };
 
         wantedBy = [ "multi-user.target" ];
