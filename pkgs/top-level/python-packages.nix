@@ -4104,6 +4104,8 @@ in {
 
   ipy = callPackage ../development/python-modules/IPy { };
 
+  ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
+
   ipykernel = if pythonOlder "3.4" then
       callPackage ../development/python-modules/ipykernel/4.nix { }
     else
@@ -4180,7 +4182,10 @@ in {
     inherit (pkgs.jsonnet) name src;
   };
 
-  jupyter_client = callPackage ../development/python-modules/jupyter_client { };
+  jupyter_client = if isPy3k then
+    callPackage ../development/python-modules/jupyter_client { }
+  else
+    callPackage ../development/python-modules/jupyter_client/5.nix { };
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
@@ -5872,6 +5877,8 @@ in {
   testtools = callPackage ../development/python-modules/testtools { };
 
   traitlets = callPackage ../development/python-modules/traitlets { };
+
+  traittypes = callPackage ../development/python-modules/traittypes { };
 
   transitions = callPackage ../development/python-modules/transitions { };
 
