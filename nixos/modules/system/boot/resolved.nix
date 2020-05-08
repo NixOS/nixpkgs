@@ -144,6 +144,7 @@ in
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-resolved.service"
+      "dbus-org.freedesktop.resolve1.service"
     ];
 
     systemd.services.systemd-resolved = {
