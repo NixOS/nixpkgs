@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   checkInputs = [ numpy pandas xarray nose pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Trait types for NumPy, SciPy, XArray, and Pandas";
     homepage = "https://github.com/jupyter-widgets/traittypes";
     license = licenses.bsd3;
