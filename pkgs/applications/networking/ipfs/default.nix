@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "ipfs";
@@ -20,6 +20,8 @@ buildGoModule rec {
   buildPhase = ''
     make install
   '';
+
+  passthru.tests.ferm = nixosTests.ferm;
 
   modSha256 = "00xgsvpl47miy6paxl8yn6p76h6ssccackh50z0l4r5s7wcc25q8";
 
