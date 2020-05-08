@@ -116,7 +116,7 @@ let
         # https://github.com/ruby/ruby/commit/97a5af62a318fcd93a4e5e4428d576c0280ddbae
         buildFlags = lib.optionals atLeast27 [ "REVISION_LATEST=0" ];
 
-        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby_${tag}"]
+        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
           ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
