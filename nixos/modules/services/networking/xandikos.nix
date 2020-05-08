@@ -122,7 +122,7 @@ in
             ExecStart = ''
               ${cfg.package}/bin/xandikos \
                 --directory /var/lib/xandikos \
-                --listen_address ${cfg.address} \
+                --listen-address ${cfg.address} \
                 --port ${toString cfg.port} \
                 --route-prefix ${cfg.routePrefix} \
                 ${lib.concatStringsSep " " cfg.extraOptions}
