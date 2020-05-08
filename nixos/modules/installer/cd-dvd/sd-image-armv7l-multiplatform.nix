@@ -41,6 +41,9 @@ in
         [pi3]
         kernel=u-boot-rpi3.bin
 
+        [pi4]
+        kernel=u-boot-rpi4.bin
+
         # U-Boot used to need this to work, regardless of whether UART is actually used or not.
         # TODO: check when/if this can be removed.
         enable_uart=1
@@ -49,6 +52,7 @@ in
         (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
         cp ${pkgs.ubootRaspberryPi2}/u-boot.bin firmware/u-boot-rpi2.bin
         cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin firmware/u-boot-rpi3.bin
+        cp ${pkgs.ubootRaspberryPi4_32bit}/u-boot.bin firmware/u-boot-rpi4.bin
         cp ${configTxt} firmware/config.txt
       '';
     populateRootCommands = ''
