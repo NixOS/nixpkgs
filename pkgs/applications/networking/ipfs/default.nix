@@ -21,7 +21,7 @@ buildGoModule rec {
     make install
   '';
 
-  passthru.tests.ferm = nixosTests.ferm;
+  passthru.tests.ipfs = nixosTests.ipfs;
 
   modSha256 = "00xgsvpl47miy6paxl8yn6p76h6ssccackh50z0l4r5s7wcc25q8";
 
