@@ -634,6 +634,8 @@ let
           ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon --quiet";
           StandardOutput = "syslog";
           StandardError = "syslog";
+          Restart = "on-failure";
+          RestartSec = "60";
         };
 
         wantedBy = [ "multi-user.target" ];
