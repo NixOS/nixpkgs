@@ -22453,6 +22453,8 @@ in
 
   vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
 
+  code-server = callPackage ../servers/code-server { };
+
   vue = callPackage ../applications/misc/vue { };
 
   vuze = callPackage ../applications/networking/p2p/vuze { };
