@@ -31,6 +31,13 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ pkg-config packr ];
 
+  buildFlagsArray = ''
+    -ldflags=
+       -X blockbook/common.version=${version}
+       -X blockbook/common.gitcommit=${commit}
+       -X blockbook/common.buildDate=unknown
+  '';
+
   preBuild = lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192
   '' + ''
@@ -51,4 +58,3 @@ buildGoPackage rec {
     platforms = platforms.all;
   };
 }
-

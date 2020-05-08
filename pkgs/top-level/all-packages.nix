@@ -1183,7 +1183,9 @@ in
 
   blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
 
-  blockbook = callPackage ../servers/blockbook { };
+  blockbook = callPackage ../servers/blockbook { 
+    buildGoPackage = buildGo113Package;
+  };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
 
