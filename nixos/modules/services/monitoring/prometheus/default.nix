@@ -46,7 +46,7 @@ let
   cmdlineArgs = cfg.extraFlags ++ [
     "--storage.tsdb.path=${workingDir}/data/"
     "--config.file=${prometheusYml}"
-    "--web.listen-address=${cfg.listenAddress}"
+    "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
   ] ++
@@ -489,9 +489,17 @@ in {
       '';
     };
 
+    port = mkOption {
+      type = types.int;
+      default = 9090;
+      description = ''
+        Port to listen on.
+      '';
+    };
+
     listenAddress = mkOption {
       type = types.str;
-      default = "0.0.0.0:9090";
+      default = "0.0.0.0";
       description = ''
         Address to listen on for the web interface, API, and telemetry.
       '';
