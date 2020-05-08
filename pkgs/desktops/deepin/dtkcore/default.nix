@@ -1,4 +1,12 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, gsettings-qt
+, pythonPackages
+, deepin
+}:
 
 mkDerivation rec {
   pname = "dtkcore";
@@ -43,7 +51,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin tool kit core library";

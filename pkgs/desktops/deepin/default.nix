@@ -1,10 +1,16 @@
 { pkgs, makeScope, libsForQt5 }:
-
 let
   packages = self: with self; {
     setupHook = ./setup-hook.sh;
 
-    updateScript = callPackage ./update.nix { };
+    # Update script tailored to deepin packages from git repository
+    updateScript = { pname, version, src }:
+      pkgs.genericUpdater {
+        inherit pname version;
+        attrPath = "deepin.${pname}";
+        versionLister = "${pkgs.common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+        ignoredVersions = "^2014(\\.|rc)|^v[0-9]+";
+      };
 
     dbus-factory = callPackage ./dbus-factory { };
     dde-api = callPackage ./dde-api { };
@@ -56,4 +62,4 @@ let
   };
 
 in
-  makeScope libsForQt5.newScope packages
+makeScope libsForQt5.newScope packages

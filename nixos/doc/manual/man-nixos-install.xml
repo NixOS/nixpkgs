@@ -25,16 +25,6 @@
     </group>
    </arg>
    <arg>
-    <group choice='req'>
-     <arg choice='plain'>
-      <option>--print-build-logs</option>
-     </arg>
-     <arg choice='plain'>
-      <option>-L</option>
-     </arg>
-    </group>
-   </arg>
-   <arg>
     <arg choice='plain'>
      <option>-I</option>
     </arg>
@@ -176,12 +166,6 @@
      information is printed on standard error, never on standard
      output.</para>
      <para>Please note that this option may be specified repeatedly.</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>--print-build-logs</option> / <option>-L</option></term>
-    <listitem>
-     <para>Print the full build logs of <command>nix build</command> to stderr.</para>
     </listitem>
    </varlistentry>
    <varlistentry>

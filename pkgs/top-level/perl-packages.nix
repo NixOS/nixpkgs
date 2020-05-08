@@ -17055,6 +17055,20 @@ let
     };
   };
 
+  StringSimilarity = buildPerlPackage {
+    pname = "String-Similarity";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/String-Similarity-1.04.tar.gz";
+      sha256 = "0i9j3hljxw7j6yiii9nsscfj009vw6zv1q8cxwd75jxvj0idm3hz";
+    };
+    doCheck = true;
+    meta = {
+      license = with stdenv.lib.licenses; [ gpl2 ];
+      description = "Calculate the similarity of two strings";
+    };
+  };
+
   ShellCommand = buildPerlPackage {
     pname = "Shell-Command";
     version = "0.06";

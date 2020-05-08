@@ -2,15 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abseil-cpp";
-  date = "20191119";
-  rev = "8ba96a8244bbe334d09542e92d566673a65c1f78";
-  version = "${date}-${rev}";
+  version = "20200225.2";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
-    rev = rev;
-    sha256 = "089bvlspgdgi40fham20qy1m97gr1jh5k5czz49dincpd18j6inb";
+    rev = version;
+    sha256 = "0dwxg54pv6ihphbia0iw65r64whd7v8nm4wwhcz219642cgpv54y";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,6 +17,7 @@ stdenv.mkDerivation rec {
     description = "An open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";
     license = licenses.asl20;
+    platforms = platforms.all;
     maintainers = [ maintainers.andersk ];
   };
 }

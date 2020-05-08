@@ -145,7 +145,7 @@ genericBuild
     </listitem>
     <listitem>
      <para>
-      GNU Make. It has been patched to provide <quote>nested</quote> output that can be fed into the <command>nix-log2xml</command> command and <command>log2html</command> stylesheet to create a structured, readable output of the build steps performed by Make.
+      GNU Make.
      </para>
     </listitem>
     <listitem>
