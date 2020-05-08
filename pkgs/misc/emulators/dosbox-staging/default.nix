@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf autoconf-archive automake autoreconfHook ];
   buildInputs = [ SDL2 libGL libGLU libogg opusfile alsaLib SDL2_net ];
-  
-  CXXFLAGS = "-O3 -DNDEBUG";
+
+  preBuild = ''
+    makeFlagsArray+=(CFLAGS="-O3 -DNDEBUG" CXXFLAGS="-O3 -DNDEBUG")
+  '';
 
   postInstall = ''
     mkdir -p $out/share/applications
