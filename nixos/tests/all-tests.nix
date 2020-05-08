@@ -143,6 +143,7 @@ in
   initrdNetwork = handleTest ./initrd-network.nix {};
   installer = handleTest ./installer.nix {};
   iodine = handleTest ./iodine.nix {};
+  ipfs = handleTest ./ipfs.nix {};
   ipv6 = handleTest ./ipv6.nix {};
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
