@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "caddy";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ xfix ];
+    maintainers = [ xfix filalex77 ];
   };
 
   nodes = {
@@ -9,9 +9,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       services.caddy.enable = true;
       services.caddy.config = ''
         http://localhost {
-          gzip
+          encode gzip
 
-          root ${
+          root * ${
             pkgs.runCommand "testdir" {} ''
               mkdir "$out"
               echo hello world > "$out/example.html"
@@ -23,9 +23,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       specialisation.etag.configuration = {
         services.caddy.config = lib.mkForce ''
           http://localhost {
-            gzip
+            encode gzip
 
-            root ${
+            root * ${
               pkgs.runCommand "testdir2" {} ''
                 mkdir "$out"
                 echo changed > "$out/example.html"
