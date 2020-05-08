@@ -4019,12 +4019,6 @@
       fingerprint = "8992 44FC D291 5CA2 0A97  802C 156C 88A5 B0A0 4B2A";
     }];
   };
-  kjuvi = {
-    email = "quentin.vaucher@pm.me";
-    github = "kjuvi";
-    githubId = 17534323;
-    name = "Quentin Vaucher";
-  };
   kkallio = {
     email = "tierpluspluslists@gmail.com";
     name = "Karn Kallio";
@@ -8342,6 +8336,12 @@
     github = "xfix";
     githubId = 1297598;
     name = "Konrad Borowski";
+  };
+  xiorcale = {
+    email = "quentin.vaucher@pm.me";
+    github = "xiorcale";
+    githubId = 17534323;
+    name = "Quentin Vaucher";
   };
   xnaveira = {
     email = "xnaveira@gmail.com";

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       section in the NixOS manual.
     '';
     homepage = "https://github.com/stsdc/monitor";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };
