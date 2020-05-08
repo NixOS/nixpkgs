@@ -531,6 +531,15 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      to be used for every display-manager in NixOS.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Caddy module now uses Caddy v2 by default. Caddy v1 can still be used by setting
+     <xref linkend="opt-services.caddy.package"/> to <literal>pkgs.caddy1</literal>.
+    </para>
+    <para>
+     New option <xref linkend="opt-services.caddy.adapter"/> has been added.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
