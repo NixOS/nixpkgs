@@ -20,6 +20,7 @@ let
     ${cfg.package}/bin/caddy adapt \
       --config ${configFile} --adapter ${cfg.adapter} > $out
   '');
+  # TODO: validate with `caddy validate`?
   configJSON = pkgs.writeText "caddy-config.json" (builtins.toJSON
     (recursiveUpdate adaptedConfig tlsConfig));
 in {
@@ -28,18 +29,18 @@ in {
 
     config = mkOption {
       default = "";
-      # TODO: update example text on v2.0 release
       example = ''
         example.com {
-        gzip
-        minify
-        log syslog
-
-        root /srv/http
+          encode gzip
+          log
+          root /srv/http
         }
       '';
       type = types.lines;
-      description = "Verbatim Caddyfile to use";
+      description = ''
+        Verbatim Caddyfile to use.
+        Caddy v2 supports multiple config formats via adapters (see <option>services.caddy.adapter</option>).
+      '';
     };
 
     adapter = mkOption {
@@ -47,8 +48,7 @@ in {
       example = "nginx";
       type = types.str;
       description = ''
-        Name of the config adapter to use.
-
+        Name of the config adapter to use. Not applicable to Caddy v1.
         See https://caddyserver.com/docs/config-adapters for the full list.
       '';
     };
@@ -79,19 +79,20 @@ in {
         The data directory, for storing certificates. Before 17.09, this
         would create a .caddy directory. With 17.09 the contents of the
         .caddy directory are in the specified data directory instead.
+
+        Caddy v2 replaced CADDYPATH with XDG directories.
+        See https://caddyserver.com/docs/conventions#file-locations.
       '';
     };
 
     package = mkOption {
-      default = pkgs.caddy;
-      defaultText = "pkgs.caddy";
-      example = "pkgs.caddy2";
+      default = pkgs.caddy2;
+      defaultText = "pkgs.caddy2";
+      example = "pkgs.caddy";
       type = types.package;
       description = ''
         Caddy package to use.
-
-        Note: to use Caddy v2, set this to <option>pkgs.caddy2</option>.
-        v2 will become the default after it is released.
+        To use Caddy v1 (obsolete), set this to <option>pkgs.caddy</option>.
       '';
     };
   };
@@ -99,7 +100,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.caddy = {
       description = "Caddy web server";
-      # upstream unit: https://github.com/caddyserver/caddy/blob/master/dist/init/linux-systemd/caddy.service
+      # upstream unit: https://github.com/caddyserver/dist/blob/master/init/caddy.service
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ]; # systemd-networkd-wait-online.service
       wantedBy = [ "multi-user.target" ];
