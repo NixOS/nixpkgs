@@ -407,7 +407,7 @@ in
 
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ cfg.configFile ];
+      restartTriggers = [ cfg.configFile modulesDir ];
 
       serviceConfig = {
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
