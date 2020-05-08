@@ -17,8 +17,8 @@
 <prompt># </prompt>nixos-container create <replaceable>foo</replaceable>
 </screen>
   This creates the container’s root directory in
-  <filename>/var/lib/containers/<replaceable>foo</replaceable></filename> and a small configuration file
-  in <filename>/etc/containers/<replaceable>foo</replaceable>.conf</filename>. It also builds the
+  <filename>/var/lib/nixos-containers/<replaceable>foo</replaceable></filename> and a small configuration file
+  in <filename>/etc/nixos-containers/<replaceable>foo</replaceable>.conf</filename>. It also builds the
   container’s initial system configuration and stores it in
   <filename>/nix/var/nix/profiles/per-container/<replaceable>foo</replaceable>/system</filename>. You can
   modify the initial configuration of the container on the command line. For

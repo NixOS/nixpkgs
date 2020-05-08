@@ -48,7 +48,7 @@ containers.database = {
   To disable the container, just remove it from
   <filename>configuration.nix</filename> and run <literal>nixos-rebuild
   switch</literal>. Note that this will not delete the root directory of the
-  container in <literal>/var/lib/containers</literal>. Containers can be
+  container in <literal>/var/lib/nixos-containers</literal>. Containers can be
   destroyed using the imperative method: <literal>nixos-container destroy
   foo</literal>.
  </para>
