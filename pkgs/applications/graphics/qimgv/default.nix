@@ -16,24 +16,14 @@
 
 mkDerivation rec {
   pname = "qimgv";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "easymodo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yynjk47gjf2kjfb0ak4blxpb5irgqc1k59z726lwjd6gvg689fl";
+    sha256 = "0b2hddps969gjim2r9a22zaxmnzp600av2zz6icq66ksfrx1rpac";
   };
-
-  patches = [
-    # QtAtomicInt's `storeRelaxed` was introduced in Qt 5.14, while nixpkgs only
-    # has Qt 5.12. This appears to be the only instance of Qt 5.12
-    # incompatibility, and will be fixed in the next release.
-    (fetchpatch {
-      url = "https://github.com/easymodo/qimgv/commit/a39d6086ceb9445d2c16943e0719096a99920bf8.patch";
-      sha256 = "1z3ngv6i316hrdcdzig4jg6bcdbgfxjaxvm2jcfcw2dnfbfiq47s";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
