@@ -27,6 +27,8 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
+  install-shell-files = callPackage ./install-shell-files {};
+
   kernel-config = callPackage ./kernel.nix {};
 
   ld-library-path = callPackage ./ld-library-path {};
