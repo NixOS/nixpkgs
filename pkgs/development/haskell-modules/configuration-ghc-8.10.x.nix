@@ -138,4 +138,12 @@ self: super: {
     ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex super.ghc-lib-parser;
   };
 
+  # https://github.com/commercialhaskell/pantry/issues/21
+  pantry = appendPatch super.pantry (pkgs.fetchpatch {
+    name = "add-cabal-3.2.x-support.patch";
+    url = "https://patch-diff.githubusercontent.com/raw/commercialhaskell/pantry/pull/22.patch";
+    sha256 = "198hsfjsy83s7rp71llf05cwa3vkm74g73djg5p4sk4awm9s6vf2";
+    excludes = ["package.yaml"];
+  });
+
 }
