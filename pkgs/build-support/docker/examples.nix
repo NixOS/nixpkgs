@@ -231,14 +231,41 @@ rec {
     '';
   };
 
-  # 14. Create another layered image, for comparing layers with image 10.
+  # 14. Environment variable inheritance.
+  # Child image should inherit parents environment variables,
+  # optionally overriding them.
+  environmentVariables = let
+    parent = pkgs.dockerTools.buildImage {
+      name = "parent";
+      tag = "latest";
+      config = {
+        Env = [
+          "FROM_PARENT=true"
+          "LAST_LAYER=parent"
+        ];
+      };
+    };
+  in pkgs.dockerTools.buildImage {
+    name = "child";
+    fromImage = parent;
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    config = {
+      Env = [
+        "FROM_CHILD=true"
+        "LAST_LAYER=child"
+      ];
+    };
+  };
+
+  # 15. Create another layered image, for comparing layers with image 10.
   another-layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "another-layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
 
-  # 15. Create a layered image with only 2 layers
+  # 16. Create a layered image with only 2 layers
   two-layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "two-layered-image";
     tag = "latest";
@@ -247,7 +274,7 @@ rec {
     maxLayers = 2;
   };
 
-  # 16. Create a layered image with more packages than max layers.
+  # 17. Create a layered image with more packages than max layers.
   # coreutils and hello are part of the same layer
   bulk-layer = pkgs.dockerTools.buildLayeredImage {
     name = "bulk-layer";
@@ -258,7 +285,7 @@ rec {
     maxLayers = 2;
   };
 
-  # 17. Create a "layered" image without nix store layers. This is not
+  # 18. Create a "layered" image without nix store layers. This is not
   # recommended, but can be useful for base images in rare cases.
   no-store-paths = pkgs.dockerTools.buildLayeredImage {
     name = "no-store-paths";

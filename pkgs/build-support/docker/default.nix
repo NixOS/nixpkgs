@@ -773,13 +773,17 @@ rec {
 
         mkdir image
         touch baseFiles
+        baseEnvs='[]'
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
 
+          # Store the layers and the environment variables from the base image
           cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+          configName="$(cat ./image/manifest.json | jq -r '.[0].Config')"
+          baseEnvs="$(cat "./image/$configName" | jq '.config.Env // []')"
 
-          # Do not import the base image configuration and manifest
+          # Otherwise do not import the base image configuration and manifest
           chmod a+w image image/*.json
           rm -f image/*.json
 
@@ -859,7 +863,8 @@ rec {
         ) | sponge layer-list
 
         # Create image json and image manifest
-        imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
+        imageJson=$(cat ${baseJson} | jq '.config.Env = $baseenv + .config.Env' --argjson baseenv "$baseEnvs")
+        imageJson=$(echo "$imageJson" | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
 
         for layerTar in $(cat ./layer-list); do
