@@ -22223,6 +22223,8 @@ in
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
+  tinywm = callPackage ../applications/window-managers/tinywm { };
+
   tree-from-tags = callPackage ../applications/audio/tree-from-tags { };
 
   tdrop = callPackage ../applications/misc/tdrop { };
