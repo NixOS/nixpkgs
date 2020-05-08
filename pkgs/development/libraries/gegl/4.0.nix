@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     description = "Graph-based image processing framework";
     homepage = http://www.gegl.org;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

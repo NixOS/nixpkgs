@@ -115,6 +115,6 @@ stdenv.mkDerivation rec {
     ## Artwork is Creative Commons Attribution 4.0 International
     ## Non-artwork is MIT
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

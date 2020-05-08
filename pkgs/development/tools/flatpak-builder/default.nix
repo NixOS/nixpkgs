@@ -148,7 +148,7 @@ in stdenv.mkDerivation rec {
     description = "Tool to build flatpaks from source";
     homepage = https://flatpak.org/;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

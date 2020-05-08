@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "DeaDBeeF Infobar Plugin";
     homepage = https://bitbucket.org/dsimbiriatin/deadbeef-infobar;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.jtojnar ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

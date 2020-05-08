@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
     homepage = https://gitlab.gnome.org/World/design/contrast;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }
 

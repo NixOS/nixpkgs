@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.jtojnar ];
+    maintainers = [ ];
   };
 }

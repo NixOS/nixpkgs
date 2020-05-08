@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "A Grammar Checking library";
     homepage = https://www.abisource.com/projects/link-grammar/;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

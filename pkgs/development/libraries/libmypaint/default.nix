@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = http://mypaint.org/;
     description = "Library for making brushstrokes which is used by MyPaint and other projects";
     license = licenses.isc;
-    maintainers = with maintainers; [ goibhniu jtojnar ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.unix;
   };
 }
