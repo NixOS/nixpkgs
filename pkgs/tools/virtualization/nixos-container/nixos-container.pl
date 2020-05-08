@@ -138,8 +138,14 @@ if (defined $flake && $flake =~ /^(.*)#([^#"]+)$/) {
 mkpath("$configurationDirectory", 0, 0755);
 mkpath("$stateDirectory", 0, 0700);
 
+
 if ($action eq "list") {
     foreach my $confFile (glob "$configurationDirectory/*.conf") {
+        # Filter libpod configuration files
+        # From 22.05 and onwards this is not an issue any more as directories dont clash
+        if($confFile eq "/etc/containers/libpod.conf" || $confFile eq "/etc/containers/containers.conf" || $confFile eq "/etc/containers/registries.conf") {
+            next
+        }
         $confFile =~ /\/([^\/]+).conf$/ or next;
         print "$1\n";
     }
@@ -224,6 +230,11 @@ if ($action eq "create") {
     # Get an unused IP address.
     my %usedIPs;
     foreach my $confFile2 (glob "$configurationDirectory/*.conf") {
+        # Filter libpod configuration files
+        # From 22.05 and onwards this is not an issue any more as directories dont clash
+        if($confFile2 eq "/etc/containers/libpod.conf" || $confFile2 eq "/etc/containers/containers.conf" || $confFile2 eq "/etc/containers/registries.conf") {
+            next
+        }
         my $s = read_file($confFile2) or die;
         $usedIPs{$1} = 1 if $s =~ /^HOST_ADDRESS=([0-9\.]+)$/m;
         $usedIPs{$1} = 1 if $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m;
