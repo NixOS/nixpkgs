@@ -86,13 +86,13 @@ in {
     };
 
     package = mkOption {
-      default = pkgs.caddy2;
-      defaultText = "pkgs.caddy2";
-      example = "pkgs.caddy";
+      default = pkgs.caddy;
+      defaultText = "pkgs.caddy";
+      example = "pkgs.caddy1";
       type = types.package;
       description = ''
         Caddy package to use.
-        To use Caddy v1 (obsolete), set this to <option>pkgs.caddy</option>.
+        To use Caddy v1 (obsolete), set this to <literal>pkgs.caddy1</literal>.
       '';
     };
   };

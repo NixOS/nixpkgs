@@ -1509,12 +1509,8 @@ in
     '';
   });
 
-  caddy = callPackage ../servers/caddy {
-    buildGoModule = buildGo114Module;
-  };
-  caddy2 = callPackage ../servers/caddy/v2.nix {
-    buildGoModule = buildGo114Module;
-  };
+  caddy = callPackage ../servers/caddy { };
+  caddy1 = callPackage ../servers/caddy/v1.nix { };
   traefik = callPackage ../servers/traefik { };
 
   calamares = libsForQt514.callPackage ../tools/misc/calamares {
