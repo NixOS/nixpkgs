@@ -133,11 +133,6 @@ self: super: {
     sha256 = "0lhs4vx5qg5ldhnyb9z7k0jmxhmd2f34x4xbwv6vsljs9vr02pd8";
   });
 
-  # https://github.com/ndmitchell/hlint/issues/959
-  hlint = super.hlint.override {
-    ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex super.ghc-lib-parser;
-  };
-
   # https://github.com/commercialhaskell/pantry/issues/21
   pantry = appendPatch super.pantry (pkgs.fetchpatch {
     name = "add-cabal-3.2.x-support.patch";
