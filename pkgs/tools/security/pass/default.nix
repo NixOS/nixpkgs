@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage    = "https://www.passwordstore.org/";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher globin ma27 ];
+    maintainers = with maintainers; [ lovek323 fpletz tadfisher globin ma27 ];
     platforms   = platforms.unix;
 
     longDescription = ''

@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ flokli puckipedia the-kenny ];
+    maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
   };
 }

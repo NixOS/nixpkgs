@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "http://yaws.hyber.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu the-kenny ];
+    maintainers = with maintainers; [ goibhniu ];
   };
 
 }
