@@ -32,11 +32,11 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "2.3.1";
+  version = "3.0.3";
   src = fetchPypi {
     pname = "Sphinx";
     inherit version;
-    sha256 = "19a28nsb0w4bs6k8rdfyk6vzrcwdpvhs2wq77rgpmww59yvndrz6";
+    hash = "sha256:0wpmqfx4mxv5kv9xxd6wyfsm8vcnp8p99h14q7b6if2mv69gvvb2";
   };
   LC_ALL = "en_US.UTF-8";
 
