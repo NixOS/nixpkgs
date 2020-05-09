@@ -185,6 +185,8 @@ in
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
 
+  ptags = callPackage ../development/tools/misc/ptags { };
+
   demoit = callPackage ../servers/demoit { };
 
   deviceTree = callPackage ../os-specific/linux/device-tree {};
@@ -6414,6 +6416,8 @@ in
 
   safe = callPackage ../tools/security/safe { };
 
+  safety-cli = with python3.pkgs; toPythonApplication safety;
+
   safe-rm = callPackage ../tools/system/safe-rm { };
 
   safeeyes = callPackage ../applications/misc/safeeyes { };
@@ -10559,6 +10563,10 @@ in
 
   mdl = callPackage ../development/tools/misc/mdl { };
 
+  python-language-server = callPackage ../development/dotnet-modules/python-language-server {
+    inherit (dotnetPackages) Nuget;
+  };
+
   minify = callPackage ../development/web/minify { };
 
   minizinc = callPackage ../development/tools/minizinc { };
@@ -12422,6 +12430,8 @@ in
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
 
   libacr38u = callPackage ../tools/security/libacr38u { };
+
+  libaec = callPackage ../development/libraries/libaec { };
 
   libagar = callPackage ../development/libraries/libagar { };
   libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
@@ -20176,7 +20186,7 @@ in
 
   joe = callPackage ../applications/editors/joe { };
 
-  josm = callPackage ../applications/misc/josm { };
+  josm = callPackage ../applications/misc/josm { jre = jdk11; };
 
   jwm = callPackage ../applications/window-managers/jwm { };
 

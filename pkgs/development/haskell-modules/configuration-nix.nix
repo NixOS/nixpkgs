@@ -727,4 +727,7 @@ self: super: builtins.intersectAttrs super {
           --prefix PATH : "${path}"
       '';
     });
+
+  # Tests access homeless-shelter.
+  hie-bios = dontCheck super.hie-bios;
 }

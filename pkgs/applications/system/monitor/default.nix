@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 ="194s9rjh3yd2c3rf3zwxsxr2lwqfswjazj39yiyccy0wcxmxpv34";
+    sha256 ="1gd2i7gja4k9j4xac8jnls3v41d6qqhmqradz2jbsxwm2sk3cgcf";
     fetchSubmodules = true;
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       section in the NixOS manual.
     '';
     homepage = "https://github.com/stsdc/monitor";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

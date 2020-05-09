@@ -1,97 +1,151 @@
-{ stdenv, fetchFromGitHub, ncurses, which, graphviz, coq,
-  recurseIntoAttrs, withDoc ? false
+#############################
+# Main derivation: mathcomp #
+########################################################################
+# This file mainly provides the `mathcomp` derivation, which is        #
+# essentially a meta-package containing all core mathcomp libraries    #
+# (ssreflect fingroup algebra solvable field character). They can be   #
+# accessed individually through the paththrough attributes of mathcomp #
+# bearing the same names (mathcomp.ssreflect, etc).                    #
+#                                                                      #
+# Do not use overrideAttrs, but overrideMathcomp instead, which        #
+# regenerate a full mathcomp derivation with sub-derivations, and      #
+# behave the same as `mathcomp_`, described below.                     #
+########################################################################
+
+############################################################
+# Compiling a custom version of mathcomp using `mathcomp_` #
+##############################################################################
+# The prefered way to compile a custom version of mathcomp (other than a     #
+# released version which should be added to `mathcomp-config-initial`        #
+# and pushed to nixpkgs), is to apply the function `coqPackages.mathcomp_`   #
+# to either:                                                                 #
+# - a string without slash, which is interpreted as a github revision,       #
+#   i.e. either a tag, a branch or a commit hash                             #
+# - a string with slashes "owner/p_1/.../p_n", which is interpreted as       #
+#   github owner "owner" and revision "p_1/.../p_n".                         #
+# - a path which is interpreted as a local source for the repository,        #
+#   the name of the version is taken to be the basename of the path          #
+#   i.e. if the path is /home/you/git/package/branch/,                       #
+#        then "branch" is the name of the version                            #
+# - an attribute set which overrides some attributes (e.g. the src)          #
+#   if the version is updated, the name is automatically regenerated using   #
+#   the conventional schema "coq${coq.coq-version}-${pkgname}-${version}"    #
+# - a "standard" override function (old: new_attrs) to override the default  #
+#   attribute set, so that you can use old.${field} to patch the derivation. #
+##############################################################################
+
+#########################################################################
+# Example of use: https://github.com/math-comp/math-comp/wiki/Using-nix #
+#########################################################################
+
+#################################
+# Adding a new mathcomp version #
+#############################################################################
+# When adding a new version of mathcomp, add an attribute to `sha256` (use  #
+# ```sh                                                                     #
+# nix-prefetch-url --unpack                                                 #
+# https://github.com/math-comp/math-comp/archive/version.tar.gz             #
+# ```                                                                       #
+# to get the corresponding `sha256`) and to `coq-version` (read the release #
+# notes to check which versions of coq it is compatible with). Then add     #
+# it in `preference version`, if not all mathcomp-extra packages are        #
+# ready, you might want to give new release secondary priority.             #
+#############################################################################
+
+
+{ stdenv, fetchFromGitHub, ncurses, which, graphviz,
+  recurseIntoAttrs, withDoc ? false,
+  coqPackages,
+  mathcomp_, mathcomp, mathcomp-config,
 }:
 with builtins // stdenv.lib;
 let
-  ####################################
-  # CONFIGURATION (please edit this) #
-  ####################################
-  # sha256 of released mathcomp versions
-  mathcomp-sha256 = {
-    "1.10.0" = "1b9m6pwxxyivw7rgx82gn5kmgv2mfv3h3y0mmjcjfypi8ydkrlbv";
-    "1.9.0" = "0lid9zaazdi3d38l8042lczb02pw5m9wq0yysiilx891hgq2p81r";
-    "1.8.0" = "07l40is389ih8bi525gpqs3qp4yb2kl11r9c8ynk1ifpjzpnabwp";
-    "1.7.0" = "0wnhj9nqpx2bw6n1l4i8jgrw3pjajvckvj3lr4vzjb3my2lbxdd1";
-    "1.6.1" = "1ilw6vm4dlsdv9cd7kmf0vfrh2kkzr45wrqr8m37miy0byzr4p9i";
+  mathcomp-config-initial = rec {
+  #######################################################################
+  # CONFIGURATION (please edit this), it is exported as mathcomp-config #
+  #######################################################################
+    # sha256 of released mathcomp versions
+    sha256 = {
+      "1.11.0+beta1" = "12i3zznwajlihzpqsiqniv20rklj8d8401lhd241xy4s21fxkkjm";
+      "1.10.0"       = "1b9m6pwxxyivw7rgx82gn5kmgv2mfv3h3y0mmjcjfypi8ydkrlbv";
+      "1.9.0"        = "0lid9zaazdi3d38l8042lczb02pw5m9wq0yysiilx891hgq2p81r";
+      "1.8.0"        = "07l40is389ih8bi525gpqs3qp4yb2kl11r9c8ynk1ifpjzpnabwp";
+      "1.7.0"        = "0wnhj9nqpx2bw6n1l4i8jgrw3pjajvckvj3lr4vzjb3my2lbxdd1";
+      "1.6.1"        = "1ilw6vm4dlsdv9cd7kmf0vfrh2kkzr45wrqr8m37miy0byzr4p9i";
+    };
+    # versions of coq compatible with released mathcomp versions
+    coq-versions     = {
+      "1.11.0+beta1" = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
+      "1.10.0"       = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
+      "1.9.0"        = flip elem [ "8.7" "8.8" "8.9" "8.10" ];
+      "1.8.0"        = flip elem [ "8.7" "8.8" "8.9" ];
+      "1.7.0"        = flip elem [ "8.6" "8.7" "8.8" "8.9" ];
+      "1.6.1"        = flip elem [ "8.5"];
+    };
+
+    # sets the default version of mathcomp given a version of Coq
+    # this is currently computed using version-perference below
+    # but it can be set to a fixed version number
+    preferred-version = let v = head (
+      filter (mc: mathcomp-config.coq-versions.${mc} coq.coq-version)
+        mathcomp-config.version-preferences ++ ["0.0.0"]);
+     in if v == "0.0.0" then head mathcomp-config.version-preferences else v;
+
+    # mathcomp preferred versions by decreasing order
+    # (the first version in the list will be tried first)
+    version-preferences =
+      [ "1.10.0" "1.9.0" "1.11.0+beta1" "1.8.0" "1.7.0" "1.6.1" ];
+
+    # list of core mathcomp packages sorted by dependency order
+    packages = _version: # unused in current versions of mathcomp
+      # because the following list of packages is fixed for
+      # all versions of mathcomp up to 1.11.0
+      [ "ssreflect" "fingroup" "algebra" "solvable" "field" "character" "all" ];
+
+    # compute the dependencies of the core package pkg
+    # (assuming the total ordering above, change if necessary)
+    deps = version: pkg: if pkg == "single" then [] else
+      (pred-split-list (x: x == pkg) (mathcomp-config.packages version)).left;
   };
-  # versions of coq compatible with released mathcomp versions
-  mathcomp-coq-versions = {
-    "1.10.0" = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
-    "1.9.0" = flip elem ["8.7" "8.8" "8.9" "8.10"];
-    "1.8.0" = flip elem ["8.7" "8.8" "8.9"];
-    "1.7.0" = flip elem ["8.6" "8.7" "8.8" "8.9"];
-    "1.6.1" = flip elem ["8.5"];
-  };
-  # computes the default version of mathcomp given a version of Coq
-  max-mathcomp-version = last (naturalSort (attrNames mathcomp-coq-versions));
-  # mathcomp prefered version by decreasing order
-  # (the first version in the list will be tried first)
-  mathcomp-version-preference = [ "1.8.0" "1.9.0" "1.10.0" "1.7.0" "1.6.1" ];
 
   ##############################################################
   # COMPUTED using the configuration above (edit with caution) #
   ##############################################################
-  default-mathcomp-version = let v = head (
-    filter (mc: mathcomp-coq-versions.${mc} coq.coq-version)
-            mathcomp-version-preference ++ ["0.0.0"]);
-     in if v == "0.0.0" then max-mathcomp-version else v;
-
-  # list of core mathcomp packages sorted by dependency order
-  mathcomp-packages =
-    [ "ssreflect" "fingroup" "algebra" "solvable" "field" "character" "all" ];
-  # compute the dependencies of the core package pkg
-  # (assuming the total ordering above, rewrite if necessary)
-  mathcomp-deps = pkg: if pkg == "single" then [] else
-    (split (x: x == pkg) mathcomp-packages).left;
 
   # generic split function (TODO: move to lib?)
-  split = pred: l:
+  pred-split-list = pred: l:
     let loop = v: l: if l == [] then {left = v; right = [];}
       else let hd = builtins.head l; tl = builtins.tail l; in
       if pred hd then {left = v; right = tl;} else loop (v ++ [hd]) tl;
     in loop [] l;
 
-  # exported, documented at the end.
-  mathcompGen = mkMathcompGenFrom (_: {}) mathcomp-packages;
+  pkgUp = l: r: l // r // {
+    meta     = (l.meta or {}) // (r.meta or {});
+    passthru = (l.passthru or {}) // (r.passthru or {});
+  };
 
-  # exported, documented at the end.
-  mathcompGenSingle = mkMathcompGen (_: {}) "single";
+  coq = coqPackages.coq;
+  mathcomp-deps = mathcomp-config.deps mathcomp.config.preferred-version;
 
-  # mkMathcompGen: internal mathcomp package generator
-  # returns {error = ...} if impossible to generate
-  # returns {${mathcomp-pkg} = <derivation>} otherwise
-  mkMathcompGenFrom = o: l: mcv: fold (pkg: pkgs: pkgs // mkMathcompGen o pkg mcv) {} l;
-  mkMathcompGen = overrides: mathcomp-pkg: mathcomp-version:
+  # default set of attributes given a 'package' name.
+  # this attribute set will be extended using toOverrideFun
+  default-attrs = package:
     let
-      coq-version-check = mathcomp-coq-versions.${mathcomp-version} or (_: false);
-      pkgpath = {single = "mathcomp";}.${mathcomp-pkg} or "mathcomp/${mathcomp-pkg}";
-      pkgname = {single = "mathcomp";}.${mathcomp-pkg} or "mathcomp-${mathcomp-pkg}";
+      pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
+      pkgname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
-      echo "all.v" > Make
-      echo "-I ." >> Make
-      echo "-R . mathcomp.all" >> Make
+        echo "all.v"  > Make
+        echo "-I ." >>   Make
+        echo "-R . mathcomp.all" >> Make
       '';
-      is-released = builtins.isString mathcomp-version;
-      custom-version = if is-released then mathcomp-version else "custom";
-
-      # the base set of attributes for mathcomp
-      attrs = {
-        name = "coq${coq.coq-version}-${pkgname}-${custom-version}";
-
-        # used in ssreflect
-        version = custom-version;
-
-        src = if is-released then fetchFromGitHub {
-          owner = "math-comp";
-          repo = "math-comp";
-          rev = "mathcomp-${mathcomp-version}";
-          sha256 = mathcomp-sha256.${mathcomp-version};
-        } else mathcomp-version;
+    in
+      rec {
+        version = "master";
+        name = "coq${coq.coq-version}-${pkgname}-${version}";
 
         nativeBuildInputs = optionals withDoc [ graphviz ];
         buildInputs = [ ncurses which ] ++ (with coq.ocamlPackages; [ ocaml findlib camlp5 ]);
-        propagatedBuildInputs = [ coq ] ++
-           attrValues (mkMathcompGenFrom overrides (mathcomp-deps mathcomp-pkg) mathcomp-version);
+        propagatedBuildInputs = [ coq ];
         enableParallelBuilding = true;
 
         buildFlags = optional withDoc "doc";
@@ -101,7 +155,7 @@ let
         preBuild = ''
           patchShebangs etc/utils/ssrcoqdep || true
           cd ${pkgpath}
-        '' + optionalString (mathcomp-pkg == "all") pkgallMake;
+        '' + optionalString (package == "all") pkgallMake;
 
         installPhase = ''
           make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
@@ -110,67 +164,98 @@ let
         '';
 
         meta = with stdenv.lib; {
-          homepage = "https://math-comp.github.io/";
-          license = licenses.cecill-b;
-          maintainers = [ maintainers.vbgl maintainers.jwiegley ];
-          platforms = coq.meta.platforms;
+          homepage    = "https://math-comp.github.io/";
+          license     = licenses.cecill-b;
+          maintainers = [ maintainers.vbgl maintainers.jwiegley maintainers.cohencyril ];
+          platforms   = coq.meta.platforms;
         };
 
         passthru = {
-          compatibleCoqVersions = coq-version-check;
-          currentOverrides = overrides;
-          overrideMathcomp = moreOverrides:
-            (mkMathcompGen (old: let new = overrides old; in new // moreOverrides new)
-                          mathcomp-pkg mathcomp-version).${mathcomp-pkg};
-          mathcompGen = moreOverrides:
-            (mkMathcompGenFrom (old: let new = overrides old; in new // moreOverrides new)
-                          mathcomp-packages mathcomp-version);
+          mathcompDeps = mathcomp-deps package;
+          inherit package mathcomp-config;
+          compatibleCoqVersions = _: true;
         };
       };
+
+  # converts a string, path or attribute set into an override function
+  toOverrideFun = overrides:
+    if isFunction overrides then overrides else old:
+      let
+          pkgname = if old.passthru.package == "single" then "mathcomp"
+                    else "mathcomp-${old.passthru.package}";
+
+          string-attrs = if hasAttr overrides mathcomp-config.sha256 then
+                let version = overrides;
+                in {
+                  inherit version;
+                  src = fetchFromGitHub {
+                    owner  = "math-comp";
+                    repo   = "math-comp";
+                    rev    = "mathcomp-${version}";
+                    sha256 = mathcomp-config.sha256.${version};
+                  };
+                  passthru = old.passthru // {
+                    compatibleCoqVersions = mathcomp-config.coq-versions.${version};
+                    mathcompDeps = mathcomp-config.deps version old.passthru.package;
+                  };
+                }
+              else
+                let splitted = filter isString (split "/" overrides);
+                    owner    = head splitted;
+                    ref      = concatStringsSep "/" (tail splitted);
+                    version  = head (reverseList splitted);
+                in if length splitted == 1 then {
+                  inherit version;
+                  src = fetchTarball "https://github.com/math-comp/math-comp/archive/${version}.tar.gz";
+                } else {
+                  inherit version;
+                  src = fetchTarball "https://github.com/${owner}/math-comp/archive/${ref}.tar.gz";
+                };
+
+          attrs =
+            if overrides == null || overrides == "" then _: {}
+            else  if isString overrides then string-attrs
+            else  if isPath overrides then { version = baseNameOf overrides; src = overrides; }
+            else  if isAttrs overrides then pkgUp old overrides
+            else  let overridesStr = toString overrides; in
+                  abort "${overridesStr} not a legitimate overrides";
+      in
+        attrs // (if attrs?version && ! (attrs?name)
+                  then { name = "coq${coq.coq-version}-${pkgname}-${attrs.version}"; } else {});
+
+  # generates {ssreflect = «derivation ...» ; ... ; character = «derivation ...», ...}
+  mkMathcompGenSet = pkgs: o:
+    fold (pkg: pkgs: pkgs // {${pkg} = mkMathcompGen pkg o;}) {} pkgs;
+  # generates the derivation of one mathcomp package.
+  mkMathcompGen = package: overrides:
+    let
+      up = x: o: x // (toOverrideFun o x);
+      fixdeps = attrs:
+        let version = attrs.version or "master";
+            mcdeps  = if package == "single" then {}
+                      else mkMathcompGenSet (filter isString attrs.passthru.mathcompDeps) overrides;
+            allmc   = mkMathcompGenSet (mathcomp-config.packages version ++ [ "single" ]) overrides;
+        in {
+          propagatedBuildInputs = [ coq ]
+                                  ++ filter isDerivation attrs.passthru.mathcompDeps
+                                  ++ attrValues mcdeps
+          ;
+          passthru = allmc //
+                     { overrideMathcomp = o: mathcomp_ (old: up (up old overrides) o); };
+        };
     in
-    {${mathcomp-pkg} = stdenv.mkDerivation (attrs // overrides attrs);};
-
-getAttrOr = a: n: a.${n} or (throw a.error);
-
-mathcompCorePkgs_1_7 = mathcompGen "1.7.0";
-mathcompCorePkgs_1_8 = mathcompGen "1.8.0";
-mathcompCorePkgs_1_9 = mathcompGen "1.9.0";
-mathcompCorePkgs_1_10 = mathcompGen "1.10.0";
-mathcompCorePkgs     = recurseIntoAttrs
-  (mapDerivationAttrset dontDistribute (mathcompGen default-mathcomp-version));
-
-in {
-# mathcompGenSingle: given a version of mathcomp
-# generates an attribute set {single = <drv>;} with the single mathcomp derivation
-inherit mathcompGenSingle;
-mathcomp_1_7_single = getAttrOr (mathcompGenSingle "1.7.0") "single";
-mathcomp_1_8_single = getAttrOr (mathcompGenSingle "1.8.0") "single";
-mathcomp_1_9_single = getAttrOr (mathcompGenSingle "1.9.0") "single";
-mathcomp_1_10_single = getAttrOr (mathcompGenSingle "1.10.0") "single";
-mathcomp_single     = dontDistribute
- (getAttrOr (mathcompGenSingle default-mathcomp-version) "single");
-
-# mathcompGen: given a version of mathcomp
-# generates an attribute set {ssreflect = <drv>; ... character = <drv>; all = <drv>;}.
-# each of these have a special attribute overrideMathcomp which
-# must be used instead of overrideAttrs in order to also fix the dependencies
-inherit mathcompGen mathcompCorePkgs
-        mathcompCorePkgs_1_7 mathcompCorePkgs_1_8 mathcompCorePkgs_1_9
-	mathcompCorePkgs_1_10
-	;
-
-
-mathcomp     = getAttrOr mathcompCorePkgs     "all";
-mathcomp_1_7 = getAttrOr mathcompCorePkgs_1_7 "all";
-mathcomp_1_8 = getAttrOr mathcompCorePkgs_1_8 "all";
-mathcomp_1_9 = getAttrOr mathcompCorePkgs_1_9 "all";
-mathcomp_1_10 = getAttrOr mathcompCorePkgs_1_10 "all";
-
-ssreflect     = getAttrOr mathcompCorePkgs    "ssreflect";
-
-} //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}"; value = pkg;}) mathcompCorePkgs) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_7"; value = pkg;}) mathcompCorePkgs_1_7) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_8"; value = pkg;}) mathcompCorePkgs_1_8) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_9"; value = pkg;}) mathcompCorePkgs_1_9) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_10"; value = pkg;}) mathcompCorePkgs_1_10)
+      stdenv.mkDerivation (up (up (default-attrs package) overrides) fixdeps);
+in
+{
+  mathcomp-config    = mathcomp-config-initial;
+  mathcomp_          = mkMathcompGen "all";
+  mathcomp           = mathcomp_ mathcomp-config.preferred-version;
+  # mathcomp-single    = mathcomp.single;
+  ssreflect          = mathcomp.ssreflect;
+  mathcomp-ssreflect = mathcomp.ssreflect;
+  mathcomp-fingroup  = mathcomp.fingroup;
+  mathcomp-algebra   = mathcomp.algebra;
+  mathcomp-solvable  = mathcomp.solvable;
+  mathcomp-field     = mathcomp.field;
+  mathcomp-character = mathcomp.character;
+}

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "5.1.4";
+  version = "5.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f1f01df22f1229c8879501057877ccaf92a3b01c1d00db708aad5003e5f9238";
+    sha256 = "1a3hr7wx3ywwskr99hgp120dw9ab1vmcaxdixlsbd9bg6ly3fdr9";
   };
 
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
