@@ -34,7 +34,7 @@ buildPythonPackage rec {
     sha256 = "eb2b5e935f6a019317e455b6da83dd8650ac9ffd2ee73a7b657a30873d67a698";
   };
 
-  checkInputs = [ hypothesis mock pygments ];
+  checkInputs = [ hypothesis pygments ];
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
