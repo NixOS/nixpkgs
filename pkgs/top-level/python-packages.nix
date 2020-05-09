@@ -4056,7 +4056,10 @@ in {
 
   hydra = callPackage ../development/python-modules/hydra { };
 
-  hypothesis = callPackage ../development/python-modules/hypothesis { };
+  hypothesis = if isPy3k then
+    callPackage ../development/python-modules/hypothesis { }
+  else
+    callPackage ../development/python-modules/hypothesis/2.nix { };
 
   hydra-check = callPackage ../development/python-modules/hydra-check { };
 
