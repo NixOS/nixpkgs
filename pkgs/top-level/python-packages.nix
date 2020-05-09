@@ -4505,7 +4505,10 @@ in {
 
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
-  mock = callPackage ../development/python-modules/mock { };
+  mock = if pythonOlder "3.6" then
+    callPackage ../development/python-modules/mock/2.nix { }
+  else
+    callPackage ../development/python-modules/mock { };
 
   mock-open = callPackage ../development/python-modules/mock-open { };
 
