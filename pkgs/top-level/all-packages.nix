@@ -12304,7 +12304,7 @@ in
   itk4 = callPackage ../development/libraries/itk/4.x.nix { stdenv = gcc8Stdenv; };
 
   itk = callPackage ../development/libraries/itk {
-    stdenv = gcc8Stdenv;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   jasper = callPackage ../development/libraries/jasper { };
@@ -14438,7 +14438,10 @@ in
 
   simp_le = callPackage ../tools/admin/simp_le { };
 
-  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua51Packages.lua; };
+  simpleitk = callPackage ../development/libraries/simpleitk {
+    lua = lua51Packages.lua;
+    stdenv = gcc8Stdenv;
+  };
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
@@ -14869,7 +14872,7 @@ in
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
   vtk = callPackage ../development/libraries/vtk {
-    stdenv = gcc8Stdenv;
+    stdenv = if stdenv.isDarwin then stdenv else gcc8Stdenv;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
@@ -24354,7 +24357,7 @@ in
 
   est-sfs = callPackage ../applications/science/biology/est-sfs { };
 
-  ezminc = callPackage ../applications/science/biology/EZminc { };
+  ezminc = callPackage ../applications/science/biology/EZminc { stdenv = gcc8Stdenv; };
 
   exonerate = callPackage ../applications/science/biology/exonerate { };
 
