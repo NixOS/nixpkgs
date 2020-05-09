@@ -99,7 +99,7 @@ with lib;
         # If disabling nscd is really necessary, it's still possible to opt out
         # by forcing config.system.nssModules to [].
         assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
-        message = "Loading NSS modules from path ${config.system.nssModules.path} requires nscd being enabled.";
+        message = "Loading NSS modules from system.nssModules (${config.system.nssModules.path}), requires services.nscd.enable being set to true.";
       }
     ];
 
