@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/grosjo/fts-xapian";
     description = "Dovecot FTS plugin based on Xapian";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ julm ];
     platforms = platforms.unix;
   };
 }
