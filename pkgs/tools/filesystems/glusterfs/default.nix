@@ -81,17 +81,17 @@ stdenv.mkDerivation
       --replace '/bin/mount' '${utillinux}/bin/mount'
   '';
 
-   # Note that the VERSION file is something that is present in release tarballs
-   # but not in git tags (at least not as of writing in v3.10.1).
-   # That's why we have to create it.
-   # Without this, gluster (at least 3.10.1) will fail very late and cryptically,
-   # for example when setting up geo-replication, with a message like
-   #   Staging of operation 'Volume Geo-replication Create' failed on localhost : Unable to fetch master volume details. Please check the master cluster and master volume.
-   # What happens here is that the gverify.sh script tries to compare the versions,
-   # but fails when the version is empty.
-   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
-   preConfigure = ''
-     echo "v${s.version}" > VERSION
+  # Note that the VERSION file is something that is present in release tarballs
+  # but not in git tags (at least not as of writing in v3.10.1).
+  # That's why we have to create it.
+  # Without this, gluster (at least 3.10.1) will fail very late and cryptically,
+  # for example when setting up geo-replication, with a message like
+  #   Staging of operation 'Volume Geo-replication Create' failed on localhost : Unable to fetch master volume details. Please check the master cluster and master volume.
+  # What happens here is that the gverify.sh script tries to compare the versions,
+  # but fails when the version is empty.
+  # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
+  preConfigure = ''
+    echo "v${s.version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
     '';
