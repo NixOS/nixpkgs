@@ -113,7 +113,9 @@ let
                   unwrapped = php;
                   tests = nixosTests.php;
                   inherit (php-packages) packages extensions;
-                  inherit (php) meta;
+                  meta = php.meta // {
+                    outputsToInstall = [ "out" ];
+                  };
                 };
                 paths = [ php ];
                 postBuild = ''
