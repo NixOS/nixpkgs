@@ -1,0 +1,11 @@
+--- a/run_rustc/Makefile3
++++ b/run_rustc/Makefile
+@@ -9,7 +9,7 @@
+ OUTDIR_SUF ?= -$(RUSTC_VERSION)
+ endif
+ 
+-RUSTC_TARGET := x86_64-unknown-linux-gnu
++RUSTC_TARGET ?= x86_64-unknown-linux-gnu
+ 
+ OUTDIR := output$(OUTDIR_SUF)/
+ PREFIX := $(OUTDIR)prefix/

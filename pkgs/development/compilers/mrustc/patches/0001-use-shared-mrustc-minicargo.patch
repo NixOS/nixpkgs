@@ -1,0 +1,21 @@
+--- a/minicargo.mk
++++ b/minicargo.mk
+@@ -25,8 +25,8 @@
+ 
+ OUTDIR := output$(OUTDIR_SUF)/
+ 
+-MRUSTC := bin/mrustc
+-MINICARGO := tools/bin/minicargo
++MRUSTC ?= bin/mrustc
++MINICARGO ?= tools/bin/minicargo
+ RUSTC_OUT_BIN := rustc
+ ifeq ($(RUSTC_VERSION),1.29.0)
+   RUSTC_OUT_BIN := rustc_binary
+@@ -42,7 +42,6 @@
+ LLVM_TARGETS ?= X86;ARM;AArch64#;Mips;PowerPC;SystemZ;JSBackend;MSP430;Sparc;NVPTX
+ OVERRIDE_DIR := script-overrides/$(RUSTC_CHANNEL)-$(RUSTC_VERSION)$(OVERRIDE_SUFFIX)/
+ 
+-.PHONY: bin/mrustc tools/bin/minicargo
+ .PHONY: $(OUTDIR)libstd.rlib $(OUTDIR)libtest.rlib $(OUTDIR)libpanic_unwind.rlib $(OUTDIR)libproc_macro.rlib
+ .PHONY: $(OUTDIR)rustc $(OUTDIR)cargo
+ 

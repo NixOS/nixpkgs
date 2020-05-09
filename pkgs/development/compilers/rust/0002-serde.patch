@@ -1,0 +1,26 @@
+From 036c87c82793f1da9f98445e8e27462cc19bbe0a Mon Sep 17 00:00:00 2001
+From: John Ericson <John.Ericson@Obsidian.Systems>
+Date: Sat, 22 Feb 2020 14:38:38 -0500
+Subject: [PATCH] Allow getting `no_std` from the config file
+
+Currently, it is only set correctly in the sanity checking implicit
+default fallback code. Having a config file at all will for force
+`no_std = false`.
+---
+ src/bootstrap/config.rs | 3 +++
+ src/bootstrap/sanity.rs | 4 +---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+--- a/src/bootstrap/toolstate.rs
++++ b/src/bootstrap/toolstate.rs
+@@ -8,6 +8,9 @@
+ // option. This file may not be copied, modified, or distributed
+ // except according to those terms.
+ 
++
++use serde_json;
++
+ #[derive(Copy, Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+ #[serde(rename_all = "kebab-case")]
+ /// Whether a tool can be compiled, tested or neither
+

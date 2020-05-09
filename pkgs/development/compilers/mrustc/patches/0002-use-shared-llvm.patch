@@ -1,0 +1,35 @@
+--- a/minicargo.mk
++++ b/minicargo.mk
+@@ -37,7 +37,7 @@
+ 	RUSTCSRC := rustc-$(RUSTC_VERSION)-src/
+ endif
+ 
+-LLVM_CONFIG := $(RUSTCSRC)build/bin/llvm-config
++LLVM_CONFIG ?= $(RUSTCSRC)build/bin/llvm-config
+ RUSTC_TARGET ?= x86_64-unknown-linux-gnu
+ LLVM_TARGETS ?= X86;ARM;AArch64#;Mips;PowerPC;SystemZ;JSBackend;MSP430;Sparc;NVPTX
+ OVERRIDE_DIR := script-overrides/$(RUSTC_CHANNEL)-$(RUSTC_VERSION)$(OVERRIDE_SUFFIX)/
+
+--- a/run_rustc/Makefile
++++ b/run_rustc/Makefile
+@@ -20,7 +20,7 @@
+ LIBDIR_S := $(PREFIX_S)lib/rustlib/$(RUSTC_TARGET)/lib/
+ BINDIR_S := $(PREFIX_S)bin/
+ 
+-LLVM_CONFIG := $(RUST_SRC)../build/bin/llvm-config
++LLVM_CONFIG ?= $(RUST_SRC)../build/bin/llvm-config
+ LLVM_TARGETS ?= X86;ARM;AArch64#;Mips;PowerPC;SystemZ;JSBackend;MSP430;Sparc;NVPTX
+ 
+ RUSTC_ENV_VARS := CFG_COMPILER_HOST_TRIPLE=$(RUSTC_TARGET)
+--- a/rustc-1.29.0-src/src/librustc_llvm/lib.rs
+--- b/rustc-1.29.0-src/src/librustc_llvm/lib.rs
+@@ -23,6 +23,9 @@
+ #![feature(link_args)]
+ #![feature(static_nobundle)]
+ 
++// https://github.com/rust-lang/rust/issues/34486
++#[link(name = "ffi")] extern {}
++
+ // See librustc_cratesio_shim/Cargo.toml for a comment explaining this.
+ #[allow(unused_extern_crates)]
+ extern crate rustc_cratesio_shim;

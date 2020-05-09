@@ -1,0 +1,19 @@
+--- a/src/vendor/proc-macro2/Cargo.toml
++++ b/src/vendor/proc-macro2/Cargo.toml
+@@ -27,12 +27,14 @@
+ 
+ [lib]
+ doctest = false
++[dependencies]
++proc_macro = { path = "../../libproc_macro", optional = true }
+ [dependencies.unicode-xid]
+ version = "0.1"
+ 
+ [features]
+ default = ["proc-macro"]
+ nightly = ["proc-macro"]
+-proc-macro = []
++proc-macro = ["proc_macro"]
+ [badges.travis-ci]
+ repository = "alexcrichton/proc-macro2"
+
