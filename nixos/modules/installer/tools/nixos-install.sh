@@ -87,8 +87,11 @@ if [[ ! -e $NIXOS_CONFIG && -z $system ]]; then
 fi
 
 # A place to drop temporary stuff.
+tmpdir="$(mktemp -d -p $mountPoint)"
 trap "rm -rf $tmpdir" EXIT
-tmpdir="$(mktemp -d)"
+
+# store temporary files on target filesystem by default
+export TMPDIR=${TMPDIR:-$tmpdir}
 
 sub="auto?trusted=1"
 

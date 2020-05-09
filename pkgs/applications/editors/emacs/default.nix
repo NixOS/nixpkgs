@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ./tramp-detect-wrapped-gvfsd.patch
     # unbreak macOS unexec
     (fetchpatch {
-      url = https://github.com/emacs-mirror/emacs/commit/888ffd960c06d56a409a7ff15b1d930d25c56089.patch;
+      url = "https://github.com/emacs-mirror/emacs/commit/888ffd960c06d56a409a7ff15b1d930d25c56089.patch";
       sha256 = "08q3ygdigqwky70r47rcgzlkc5jy82xiq8am5kwwy891wlpl7frw";
     })
   ];
