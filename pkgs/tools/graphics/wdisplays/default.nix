@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gtk3, epoxy, wayland }:
-stdenv.mkDerivation {
-  pname = "wdisplays-unstable";
-  version = "2020-03-15";
+
+stdenv.mkDerivation rec {
+  pname = "wdisplays";
+  version = "1.0";
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
 
@@ -10,8 +11,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "cyclopsian";
     repo = "wdisplays";
-    rev = "0faafdc04d7dd47d3a4e385f348cb9d267f2e60d";
-    sha256 = "1y3bzh4mi6d67n6v0i8j5snpaikpbyr89acayr4m6bx85qnrq4g2";
+    rev = version;
+    sha256 = "1xhgrcihja2i7yg54ghbwr1v6kf8jnsfcp364yb97vkxskc4y21y";
   };
 
   meta = let inherit (stdenv) lib; in {
