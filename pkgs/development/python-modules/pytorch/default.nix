@@ -4,7 +4,7 @@
   openMPISupport ? false, openmpi ? null,
   buildDocs ? false,
   cudaArchList ? null,
-  numpy, pyyaml, cffi, click, typing, cmake, dnnl, hypothesis, numactl, psutil,
+  numpy, pyyaml, cffi, click, typing, cmake, oneDNN, hypothesis, numactl, psutil,
   linkFarm, symlinkJoin,
 
   # virtual pkg that consistently instantiates blas across nixpkgs
@@ -205,7 +205,7 @@ in buildPythonPackage rec {
     ninja
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
-  buildInputs = [ blas blas.provider dnnl ]
+  buildInputs = [ blas blas.provider oneDNN ]
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 
