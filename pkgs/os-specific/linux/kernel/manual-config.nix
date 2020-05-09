@@ -236,6 +236,14 @@ let
         # from drivers/ in the future; it adds 50M to keep all of its
         # headers on 3.10 though.
 
+        # Keep generated certificates to sign out of tree modules
+        mkdir -p $dev/lib/modules/${modDirVersion}/build/certs
+        for f in certs/signing_key.pem certs/signing_key.x509; do
+          if [ -f "$buildRoot/$f" ]; then
+            cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/certs
+          fi
+        done
+
         chmod u+w -R ..
         arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
 
