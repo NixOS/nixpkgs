@@ -17,7 +17,11 @@ with pkgs.lib;
 let
   packages = ( self:
 
+let unoverriddenPython = python; in
+
 let
+  python = unoverriddenPython.override { packageOverrides = overrides; };
+
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   callPackage = pkgs.newScope self;
