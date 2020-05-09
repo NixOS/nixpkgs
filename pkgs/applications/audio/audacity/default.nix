@@ -60,6 +60,5 @@ stdenv.mkDerivation rec {
     homepage = "http://audacityteam.org/";
     license = licenses.gpl2Plus;
     platforms = intersectLists platforms.linux platforms.x86; # fails on ARM
-    maintainers = with maintainers; [ the-kenny ];
   };
 }
