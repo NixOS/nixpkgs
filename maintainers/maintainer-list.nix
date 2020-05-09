@@ -5796,6 +5796,12 @@
     githubId = 15930073;
     name = "Moritz Scheuren";
   };
+  pablovsky = {
+    email = "dealberapablo07@gmail.com";
+    github = "pablo1107";
+    githubId = 17091659;
+    name = "Pablo Andres Dealbera";
+  };
   pacien = {
     email = "b4gx3q.nixpkgs@pacien.net";
     github = "pacien";
