@@ -12427,6 +12427,8 @@ in
 
   libacr38u = callPackage ../tools/security/libacr38u { };
 
+  libaec = callPackage ../development/libraries/libaec { };
+
   libagar = callPackage ../development/libraries/libagar { };
   libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
 
