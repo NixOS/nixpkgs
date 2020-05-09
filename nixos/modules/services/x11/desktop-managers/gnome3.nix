@@ -329,6 +329,15 @@ in
           enabled-extensions=${extensionUuids}
         '';
 
+     # Add a lock file, it prevents users from modifying / overriding the
+     # system (default) settings.
+     # FIXME: It doesn't work! Users can still change these settings.
+     # Ref. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/desktop_migration_and_administration_guide/custom-default-values-system-settings
+     environment.etc."dconf/db/local.d/locks/00-org-gnome-shell-enabled-extensions".text = ''
+       # Prevent this key from being overridden by users (enforcing declarative style)
+       /org/gnome/shell/enabled-extensions
+     '';
+
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
