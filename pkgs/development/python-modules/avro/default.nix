@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.9.1";
+  version = "1.9.2";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16pvgdv5pqx4zgjj0a4v5fz4brfjcrfx72mcmyvb2xqqp7q6ph4z";
+    sha256 = "4487f0e91d0d44142bd08b3c6da57073b720c3effb02eeb4e2e822804964c56b";
   };
 
   meta = with stdenv.lib; {
