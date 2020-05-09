@@ -56,10 +56,11 @@ let
 
   buildLuaApplication = args: buildLuarocksPackage ({namePrefix="";} // args );
 
-  buildLuarocksPackage = with pkgs.lib; makeOverridable(callPackage ../development/interpreters/lua-5/build-lua-package.nix {
-    inherit toLuaModule;
-    inherit lua;
-  });
+  buildLuarocksPackage = lib.makeOverridableWithName "overrideLuarocksAttrs"
+    (callPackage ../development/interpreters/lua-5/build-lua-package.nix {
+      inherit toLuaModule;
+      inherit lua;
+    });
 in
 with self; {
 
