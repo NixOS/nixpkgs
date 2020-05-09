@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = if stdenv.isDarwin
     then fetchurl {
-      url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
+      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
       sha256 = "1sfr5filsaqj93g5y4p9n8g5652dhr4whj25x4lifdxr2pp560xx";
     }
     else fetchurl {
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       to be expressed in a formal language and provides tools for proving those
       formulas in a logical calculus.
     '';
-    homepage = "http://isabelle.in.tum.de/";
+    homepage = "https://isabelle.in.tum.de/";
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.jwiegley ];
     platforms = stdenv.lib.platforms.linux;
