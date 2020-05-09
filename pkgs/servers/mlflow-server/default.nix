@@ -1,4 +1,4 @@
-{lib, python3, writeText}:
+{lib, python3, writeText, additionalPackages ? []}:
 
 let
   py = python3.pkgs;
@@ -10,7 +10,8 @@ py.toPythonApplication
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
       py.boto3
       py.mysqlclient
-    ];
+      py.psycopg2
+    ] ++ additionalPackages;
 
     postPatch = ''
       substituteInPlace mlflow/utils/process.py --replace \
