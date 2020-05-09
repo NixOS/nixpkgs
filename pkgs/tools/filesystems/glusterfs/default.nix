@@ -73,6 +73,12 @@ stdenv.mkDerivation
 
   postPatch = ''
     sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
+    substituteInPlace libglusterfs/src/glusterfs/lvm-defaults.h \
+      --replace '/sbin/' '${lvm2}/bin/'
+    substituteInPlace libglusterfs/src/glusterfs/compat.h \
+      --replace '/bin/umount' '${utillinux}/bin/umount'
+    substituteInPlace contrib/fuse-lib/mount-gluster-compat.h \
+      --replace '/bin/mount' '${utillinux}/bin/mount'
   '';
 
    # Note that the VERSION file is something that is present in release tarballs
