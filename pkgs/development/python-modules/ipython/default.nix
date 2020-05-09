@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.13.0";
+  version = "7.14.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca478e52ae1f88da0102360e57e528b92f3ae4316aabac80a2cd7f7ab2efb48a";
+    sha256 = "f0126781d0f959da852fb3089e170ed807388e986a8dd4e6ac44855845b0fb1c";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
