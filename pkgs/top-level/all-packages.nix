@@ -8412,6 +8412,16 @@ in
     profiledCompiler = false;
   });
 
+  libgccjit = gcc9.cc.override {
+    name = "libgccjit";
+    langFortran = false;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+    langJit = true;
+    enableLTO = false;
+  };
+
   gcj = gcj6;
   gcj6 = wrapCC (gcc6.cc.override {
     name = "gcj";
