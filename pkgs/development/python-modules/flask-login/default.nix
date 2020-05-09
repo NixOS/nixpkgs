@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Login";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v2j8zd558xfmgn3rfbw0xz4vizjcnk8kqw52q4f4d9ygfnc25f8";
+    sha256 = "0jqb3jfm92yyz4f8n3f92f7y59p8m9j98cyc19wavkjvbgqswcvd";
   };
 
   checkInputs = [ nose mock semantic-version ];
