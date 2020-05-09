@@ -1049,12 +1049,12 @@ If you want the whole of Nixpkgs to use your modifications, then you can use
 ```nix
 let
   pkgs = import <nixpkgs> {};
-  newpkgs = import pkgs.path { overlays = [ (pkgsself: pkgssuper: {
-    python27 = let
-      packageOverrides = self: super: {
-        numpy = super.numpy_1_10;
+  newpkgs = import pkgs.path { overlays = [ (self: super: {
+    python38 = let
+      packageOverrides = python-self: python-super: {
+        numpy = python-super.numpy_1_18.3;
       };
-    in pkgssuper.python27.override {inherit packageOverrides;};
+    in super.python38.override {inherit packageOverrides;};
   } ) ]; };
 in newpkgs.inkscape
 ```
