@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "mock";
-  version = "3.0.5";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83657d894c90d5681d62155c82bda9c1187827525880eda8ff5df4ec813437c3";
+    sha256 = "dd33eb70232b6118298d516bbcecd26704689c386594f0f3c4f13867b2c56f72";
   };
 
   propagatedBuildInputs = [ six pbr ] ++ lib.optionals isPy27 [ funcsigs ];
