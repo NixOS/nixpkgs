@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "tbm-utils";
-  version = "2.5.0";
+  version = "2.5.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02bmra9f0p1irhbrklxk9nhkvgwkn8042hx7z6c00qlhac1wlba2";
+    sha256 = "5909852f8ce350631cdaaecaf0aee45569148d22bd429360a1c92a203ba5706b";
   };
 
   propagatedBuildInputs = [ attrs pendulum pprintpp wrapt ];
