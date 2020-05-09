@@ -47,6 +47,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ./compiler-rt-armv7l.patch
   ] ++ stdenv.lib.optional (useLLVM) ./crtbegin-and-end.patch
     ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch;
 
