@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     bin/isabelle install $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A generic proof assistant";
 
     longDescription = ''
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
       formulas in a logical calculus.
     '';
     homepage = "https://isabelle.in.tum.de/";
-    license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.jwiegley ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.jwiegley ];
+    platforms = platforms.linux;
   };
 }
