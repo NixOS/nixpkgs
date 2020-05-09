@@ -14,7 +14,8 @@
 
 buildGoPackage rec {
   pname = "blockbook";
-  version = "0.3.1";
+  version = "0.3.2";
+  commit = "d1fd665";
 
   goPackagePath = "blockbook";
 
@@ -22,7 +23,7 @@ buildGoPackage rec {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    sha256 = "0qgd1f3b4vavw55mvpvwvlya39dx1c3kjsc7n46nn7kpc152jv1l";
+    sha256 = "0hcgz4b7k8ia4dnjg6bbii95sqg3clc40ybwwc4qz3jv21ikc54x";
   };
 
   goDeps = ./deps.nix;
@@ -30,6 +31,13 @@ buildGoPackage rec {
   buildInputs = [ bzip2 zlib snappy zeromq lz4 ];
 
   nativeBuildInputs = [ pkg-config packr ];
+
+  buildFlagsArray = ''
+    -ldflags=
+       -X blockbook/common.version=${version}
+       -X blockbook/common.gitcommit=${commit}
+       -X blockbook/common.buildDate=unknown
+  '';
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192
@@ -51,4 +59,3 @@ buildGoPackage rec {
     platforms = platforms.all;
   };
 }
-

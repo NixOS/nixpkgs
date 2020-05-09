@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./disable-popen.patch
     ./1.3.32-darwin-png-strlcat-fix.patch
+    ./CVE-2020-10938.patch
   ];
 
   configureFlags = [
