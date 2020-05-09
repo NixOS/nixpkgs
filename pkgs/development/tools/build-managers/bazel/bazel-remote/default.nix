@@ -64,7 +64,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "1n66hg1w5jv2rc8q4sjlaf0agvxr713aa40mbkhgjv57x9j7bgn0";
+    sha256 = "0000000000000000000000000000000000000000000000000000";
   };
 
   buildAttrs = {

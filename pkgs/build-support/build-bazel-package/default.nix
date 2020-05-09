@@ -42,7 +42,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
   inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
-    name = "${name}-deps";
+    name = "${name}-deps.tar.gz";
     inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
@@ -120,7 +120,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
         ln -sf "$new_target" "$symlink"
       done
 
-      cp -r $bazelOut/external $out
+      echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
+
+      (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
       runHook postInstall
     '';
@@ -128,7 +130,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
     dontFixup = true;
     allowedRequisites = [];
 
-    outputHashMode = "recursive";
+    outputHashMode = "flat";
     outputHashAlgo = "sha256";
     outputHash = fetchAttrs.sha256;
   });
@@ -143,7 +145,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
   preConfigure = ''
     mkdir -p "$bazelOut"
-    cp -r $deps $bazelOut/external
+    (cd $bazelOut && tar xfz $deps)
     chmod -R +w $bazelOut
     find $bazelOut -type l | while read symlink; do
       ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
