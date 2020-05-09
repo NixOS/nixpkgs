@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "5.0.6";
+  version = "5.0.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p6gnbapwzpg7h0wv52fn4dd3dlhxl5qziadkiqjl8xaz8yp3vys";
+    sha256 = "6ecb7637a35f806733e9d112eacfa599a58d7c3d4698fda2b5c86fff5d34b417";
   };
 
   disabled = !isPy3k;
