@@ -812,6 +812,8 @@ in
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
+  bashcards = callPackage ../tools/misc/bashcards { };
+
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
