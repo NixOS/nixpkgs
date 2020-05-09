@@ -19,7 +19,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.4.1";
+  version = "5.4.2";
   pname = "pytest";
 
   disabled = !isPy3k;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w7r0pl1rkzpvb7k3926zcc9brd071zc8b1r3wymz05qfmqf7pc4";
+    sha256 = "eb2b5e935f6a019317e455b6da83dd8650ac9ffd2ee73a7b657a30873d67a698";
   };
 
   checkInputs = [ hypothesis mock pygments ];
