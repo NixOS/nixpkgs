@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "0.9.3";
+  version = "0.9.4";
   
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f45acb297ab7cf3dd40140816143a2588f6938dbd70b8c46b59c7d8d1e93d55";
+    sha256 = "25782840f7ffc25dcf478d94535a2d815448de4aa6c71426be6abfa9ca417448";
   };
 
   propagatedBuildInputs = [ Babel celery importlib-metadata pytz tornado ];
