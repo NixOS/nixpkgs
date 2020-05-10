@@ -17143,6 +17143,7 @@ in
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
   librealsense = callPackage ../development/libraries/librealsense { };
+  librealsenseWithExamples = librealsense.override { buildExamples = true; };
 
   libsass = callPackage ../development/libraries/libsass { };
 
