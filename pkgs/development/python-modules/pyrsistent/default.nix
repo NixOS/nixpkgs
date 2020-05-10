@@ -3,7 +3,7 @@
 , fetchPypi
 , six
 , pytest_4
-, hypothesis
+, hypothesis_4
 , pytestrunner
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestrunner pytest_4 hypothesis ];
+  checkInputs = [ pytestrunner pytest_4 hypothesis_4 ];
 
   postPatch = ''
     substituteInPlace setup.py --replace 'pytest<5' 'pytest'
