@@ -816,6 +816,8 @@ in
 
   bashcards = callPackage ../tools/misc/bashcards { };
 
+  bazarr = callPackage ../servers/bazarr { };
+
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
