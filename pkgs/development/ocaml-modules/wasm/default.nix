@@ -6,13 +6,13 @@ else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-wasm-${version}";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "spec";
-    rev = "v${version}";
-    sha256 = "1jsgrjqzsdmm6f5pgd947nikj7pnxx1mqdnz16j7s62rg8x06h7d";
+    rev = "opam-${version}";
+    sha256 = "1kp72yv4k176i94np0m09g10cviqp2pnpm7jmiq6ik7fmmbknk7c";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];
