@@ -19,7 +19,7 @@ in {
         base = mkOption {
           default = "${config.boot.kernelPackages.kernel}/dtbs";
           defaultText = "\${config.boot.kernelPackages.kernel}/dtbs";
-          example = literalExample "pkgs.deviceTree_rpi";
+          example = literalExample "pkgs.device-tree_rpi";
           type = types.path;
           description = ''
             The package containing the base device-tree (.dtb) to boot. Contains
@@ -30,7 +30,7 @@ in {
         overlays = mkOption {
           default = [];
           example = literalExample
-            "[\"\${pkgs.deviceTree_rpi.overlays}/w1-gpio.dtbo\"]";
+            "[\"\${pkgs.device-tree_rpi.overlays}/w1-gpio.dtbo\"]";
           type = types.listOf types.path;
           description = ''
             A path containing device tree overlays (.dtbo) to be applied to all
