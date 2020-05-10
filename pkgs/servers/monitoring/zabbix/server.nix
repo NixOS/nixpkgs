@@ -21,7 +21,7 @@ in
       inherit version;
 
       src = fetchurl {
-        url = "mirror://sourceforge/zabbix/ZABBIX%20Latest%20Stable/${version}/zabbix-${version}.tar.gz";
+        url = "https://cdn.zabbix.com/stable/${version}/zabbix-${version}.tar.gz";
         inherit sha256;
       };
 

@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ the-kenny jwiegley ];
+    maintainers = with maintainers; [ jwiegley ];
   };
 }

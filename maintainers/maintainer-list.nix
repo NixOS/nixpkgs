@@ -1662,6 +1662,12 @@
       }
     ];
   };
+  cyplo = {
+    email = "nixos@cyplo.dev";
+    github = "cyplo";
+    githubId = 217899;
+    name = "Cyryl Płotnicki";
+  };
   d-goldin = {
     email = "dgoldin+github@protonmail.ch";
     github = "d-goldin";
@@ -7623,12 +7629,6 @@
     github = "thanegill";
     githubId = 1141680;
     name = "Thane Gill";
-  };
-  the-kenny = {
-    email = "moritz@tarn-vedra.de";
-    github = "the-kenny";
-    githubId = 31167;
-    name = "Moritz Ulrich";
   };
   thedavidmeister = {
     email = "thedavidmeister@gmail.com";

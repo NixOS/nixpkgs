@@ -85,6 +85,6 @@ stdenv.mkDerivation rec {
     homepage = "https://slic3r.org/";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor the-kenny ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }
