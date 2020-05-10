@@ -227,6 +227,7 @@ in
         license = licenses.bsd3;
         homepage = "https://phpmd.org/";
         maintainers = teams.php.members;
+        broken = !isPhp74;
       };
     };
  
