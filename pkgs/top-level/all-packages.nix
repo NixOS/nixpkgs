@@ -5679,6 +5679,8 @@ in
     stdenv = clangStdenv;
   };
 
+  oq = callPackage ../development/tools/oq { };
+
   out-of-tree = callPackage ../development/tools/out-of-tree { };
 
   oppai-ng = callPackage ../tools/misc/oppai-ng { };
