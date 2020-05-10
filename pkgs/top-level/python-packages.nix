@@ -7420,6 +7420,8 @@ in {
   tinytimer = callPackage ../development/python-modules/tinytimer { };
 
   pyensembl = callPackage ../development/python-modules/pyensembl { };
+
+  gffutils = callPackage ../development/python-modules/gffutils { };
 });
 
 in fix' (extends overrides packages)
