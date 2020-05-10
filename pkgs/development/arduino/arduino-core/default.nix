@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
 
     # Deliberately break build.xml's download statement in order to cause
     # an error if anything needed is missing from download.nix.
-    #substituteInPlace build/build.xml --replace "get src" "get error"
+    substituteInPlace build/build.xml --replace "get src" "get error"
 
     cd ./arduino-core && ant
     cd ../build && ant

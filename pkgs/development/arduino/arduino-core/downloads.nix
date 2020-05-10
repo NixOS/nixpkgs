@@ -69,7 +69,7 @@
     sha256 = "1dflfrg38f0312nxn6wkkgq1ql4hx3y9kplalix6mkqmzwrdvna4";
   };
   "build/Mouse-1.0.1.zip" = fetchurl {
-    url = "https://github.com/arduino- libraries/Mouse/archive/1.0.1.zip";
+    url = "https://github.com/arduino-libraries/Mouse/archive/1.0.1.zip";
     sha256 = "106jjqxzpf5lrs9akwvamqsblj5w2fb7vd0wafm9ihsikingiypr";
   };
   "build/Keyboard-1.0.2.zip" = fetchurl {
@@ -92,15 +92,20 @@
     url = "https://github.com/adafruit/Adafruit_CircuitPlayground/archive/1.10.4.zip";
     sha256 = "194az5pxxzs0wg4ng7w0zqrdw93qdyv02y0q2yy57dr4kwfrm6nl";
   };
-  "build/libastylej-2.05.1-4.zip" = fetchurl {
-    url = "https://downloads.arduino.cc/libastylej-2.05.1-4.zip";
-    sha256 = "0q307b85xba7izjh344kqby3qahg3f5zy18gg52sjk1lbkl9i39s";
-  };
   "build/liblistSerials-1.4.2.zip" = fetchurl {
     url = "https://downloads.arduino.cc/liblistSerials/liblistSerials-1.4.2.zip";
     sha256 = "1p58b421k92rbgwfgbihy0d04mby7kfssghpmjb4gk9yix09za3m";
   };
+  "build/WiFi101-Updater-ArduinoIDE-Plugin-0.10.10.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/archive/v0.10.10.zip";
+    sha256 = "1j6xy7ffrapk0brcfknaj72pvmzrf19sks8pm900ad7w897mksmv";
+  };
+   "build/libastylej-2.05.1-4.zip" = fetchurl {
+    url = "https://downloads.arduino.cc/libastylej-2.05.1-4.zip";
+    sha256 = "0q307b85xba7izjh344kqby3qahg3f5zy18gg52sjk1lbkl9i39s";
+  };
 }
+
 // optionalAttrs (system == "x86_64-linux") {
   "build/arduino-builder-linux64-1.4.4.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-linux64-1.4.4.tar.bz2";
@@ -123,6 +128,7 @@
     sha256 = "06zl8fwphknd0qdx87fcr1003gid1yqsazaj674mm9widqfd84v2";
   };
 }
+
 // optionalAttrs (system == "i686-linux") {
   "build/arduino-builder-linux32-1.4.4.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/arduino-builder-linux32-1.4.4.tar.bz2";
