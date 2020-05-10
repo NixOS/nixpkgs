@@ -443,6 +443,8 @@ with pkgs;
 
   ptouch-print = callPackage ../misc/ptouch-print { };
 
+  pyp = callPackage ../development/tools/pyp { };
+
   demoit = callPackage ../servers/demoit { };
 
   deviceTree = callPackage ../os-specific/linux/device-tree {};

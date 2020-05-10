@@ -6691,6 +6691,12 @@
     githubId = 55767703;
     name = "Iván Brito";
   };
+  Kha = {
+    email = "sebasti@nullri.ch";
+    github = "Kha";
+    githubId = 109126;
+    name = "Sebastian Ullrich";
+  };
   khumba = {
     email = "bog@khumba.net";
     github = "khumba";
