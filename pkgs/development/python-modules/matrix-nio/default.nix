@@ -19,7 +19,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "nio";
+  pname = "matrix-nio";
   version = "0.10.0";
 
   src = fetchFromGitHub {
