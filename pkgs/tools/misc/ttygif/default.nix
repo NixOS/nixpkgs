@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ttygif";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "icholy";
     repo = pname;
     rev = version;
-    sha256 = "18l26iacpfn4xqqv1ai6ncabn83mqv98c48gl265gfld66y7zbzn";
+    sha256 = "1w9c3h6hik2gglwsw8ww63piy66i4zqr3273wh5rc9r2awiwh643";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
