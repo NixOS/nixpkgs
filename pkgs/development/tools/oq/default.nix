@@ -2,19 +2,25 @@
 
 crystal.buildCrystalPackage rec {
   pname = "oq";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Blacksmoke16";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sf6rb5b6g7gzyq11l5868p3a1s5z8432swlpv457bfbbnbg6j6q";
+    sha256 = "1zg4kxpfi3sap4cwp42zg46j5dv0nf926qdqm7k22ncm6jdrgpgw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jq libxml2 ];
 
+  format = "crystal";
   crystalBinaries.oq.src = "src/oq_cli.cr";
+
+  preCheck = ''
+    mkdir bin
+    cp oq bin/oq
+  '';
 
   postInstall = ''
     wrapProgram "$out/bin/oq" \
