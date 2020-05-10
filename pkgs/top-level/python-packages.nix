@@ -4056,10 +4056,13 @@ in {
 
   hydra = callPackage ../development/python-modules/hydra { };
 
+  # File name is called 2.nix because this one will need to remain for Python 2.
+  hypothesis_4 = callPackage ../development/python-modules/hypothesis/2.nix { };
+
   hypothesis = if isPy3k then
     callPackage ../development/python-modules/hypothesis { }
   else
-    callPackage ../development/python-modules/hypothesis/2.nix { };
+    self.hypothesis_4;
 
   hydra-check = callPackage ../development/python-modules/hydra-check { };
 
