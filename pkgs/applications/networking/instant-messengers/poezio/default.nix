@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, pythonOlder
-, pytest, aiodns, slixmpp, pyinotify, potr, mpd2, cffi, pkgconfig }:
+, pytest, aiodns, slixmpp, pyinotify, potr, mpd2, cffi, pkgconfig, setuptools }:
 buildPythonApplication rec {
     pname = "poezio";
     version = "0.12.1";
@@ -7,7 +7,7 @@ buildPythonApplication rec {
     disabled = pythonOlder "3.4";
 
     checkInputs = [ pytest ];
-    propagatedBuildInputs = [ aiodns slixmpp pyinotify potr mpd2 cffi ];
+    propagatedBuildInputs = [ aiodns slixmpp pyinotify potr mpd2 cffi setuptools ];
     nativeBuildInputs = [ pkgconfig ];
 
     src = fetchFromGitHub {
