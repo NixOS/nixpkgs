@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     description = "A script to install DLLs needed to work around problems in Wine";
     license = stdenv.lib.licenses.lgpl21;
     homepage = "https://github.com/Winetricks/winetricks";
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

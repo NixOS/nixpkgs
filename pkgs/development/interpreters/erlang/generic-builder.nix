@@ -122,7 +122,7 @@ in stdenv.mkDerivation ({
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
+    maintainers = with maintainers; [ sjmackenzie couchemar gleber ];
     license = licenses.asl20;
   } // meta);
 }

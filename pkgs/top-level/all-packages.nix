@@ -930,6 +930,8 @@ in
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
+  genpass = callPackage ../tools/security/genpass { };
+
   genymotion = callPackage ../development/mobile/genymotion { };
 
   gaia = callPackage ../development/libraries/gaia { };
@@ -8195,6 +8197,7 @@ in
   gcc7Stdenv = overrideCC gccStdenv buildPackages.gcc7;
   gcc8Stdenv = overrideCC gccStdenv buildPackages.gcc8;
   gcc9Stdenv = overrideCC gccStdenv buildPackages.gcc9;
+  gcc10Stdenv = overrideCC gccStdenv buildPackages.gcc10;
 
   wrapCCMulti = cc:
     if stdenv.targetPlatform.system == "x86_64-linux" then let
@@ -8362,6 +8365,20 @@ in
     isl = if !stdenv.isDarwin then isl_0_17 else null;
   }));
 
+  gcc10 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/10 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    enableLTO = !stdenv.isi686;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_17 else null;
+  }));
+
   gfortran = gfortran9;
 
   gfortran48 = wrapCC (gcc48.cc.override {
@@ -8412,6 +8429,14 @@ in
     profiledCompiler = false;
   });
 
+  gfortran10 = wrapCC (gcc10.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
   gcj = gcj6;
   gcj6 = wrapCC (gcc6.cc.override {
     name = "gcj";
@@ -8436,6 +8461,15 @@ in
   });
 
   gnat9 = wrapCC (gcc9.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    gnatboot = gnat6;
+  });
+
+  gnat10 = wrapCC (gcc10.cc.override {
     name = "gnat";
     langC = true;
     langCC = false;
@@ -12302,7 +12336,7 @@ in
   itk4 = callPackage ../development/libraries/itk/4.x.nix { stdenv = gcc8Stdenv; };
 
   itk = callPackage ../development/libraries/itk {
-    stdenv = gcc8Stdenv;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   jasper = callPackage ../development/libraries/jasper { };
@@ -14436,7 +14470,10 @@ in
 
   simp_le = callPackage ../tools/admin/simp_le { };
 
-  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua51Packages.lua; };
+  simpleitk = callPackage ../development/libraries/simpleitk {
+    lua = lua51Packages.lua;
+    stdenv = gcc8Stdenv;
+  };
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
@@ -14867,7 +14904,7 @@ in
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
   vtk = callPackage ../development/libraries/vtk {
-    stdenv = gcc8Stdenv;
+    stdenv = if stdenv.isDarwin then stdenv else gcc8Stdenv;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
@@ -17990,7 +18027,7 @@ in
 
   manrope = callPackage ../data/fonts/manrope { };
 
-  matcha = callPackage ../data/themes/matcha { };
+  matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
 
@@ -22535,7 +22572,7 @@ in
 
   weechat = wrapWeechat weechat-unwrapped { };
 
-  weechatScripts = dontRecurseIntoAttrs (callPackage ../applications/networking/irc/weechat/scripts { });
+  weechatScripts = recurseIntoAttrs (callPackage ../applications/networking/irc/weechat/scripts { });
 
   westonLite = weston.override {
     pango = null;
@@ -23925,7 +23962,7 @@ in
     lua = lua5_1;
   };
 
-  tbe = callPackage ../games/the-butterfly-effect { };
+  tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
 
   teetertorture = callPackage ../games/teetertorture { };
 
@@ -24352,7 +24389,7 @@ in
 
   est-sfs = callPackage ../applications/science/biology/est-sfs { };
 
-  ezminc = callPackage ../applications/science/biology/EZminc { };
+  ezminc = callPackage ../applications/science/biology/EZminc { stdenv = gcc8Stdenv; };
 
   exonerate = callPackage ../applications/science/biology/exonerate { };
 
@@ -26486,6 +26523,10 @@ in
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
   kcli = callPackage ../development/tools/kcli {};
+
+  pxlib = callPackage ../development/libraries/pxlib {};
+
+  pxview = callPackage ../development/tools/pxview {};
 
   unstick = callPackage ../os-specific/linux/unstick {};
 

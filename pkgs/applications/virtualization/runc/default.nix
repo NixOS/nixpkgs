@@ -39,7 +39,7 @@ buildGoPackage rec {
 
   installPhase = ''
     install -Dm755 runc $out/bin/runc
-    installManPage man/*/*
+    installManPage man/*/*.[1-9]
   '';
 
   meta = with lib; {
