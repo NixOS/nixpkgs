@@ -25,8 +25,8 @@ let
   };
   # Some .so-files are later copied from .jar-s to $HOME, so patch them beforehand
   patchelfInJars =
-       lib.optional (stdenv.hostPlatform.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino3.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so";}
-    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") {jar = "share/arduino/lib/jssc-2.8.0-arduino3.jar"; file = "libs/linux/libjSSC-2.8_x86.so";}
+       lib.optional (stdenv.hostPlatform.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.9.1.jar"; file = "libs/linux/libjSSC-2.9.1_x86_64.so";}
+    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") {jar = "share/arduino/lib/jssc-2.8.9.1.jar"; file = "libs/linux/libjSSC-2.9.1_x86.so";}
   ;
   # abiVersion 6 is default, but we need 5 for `avrdude_bin` executable
   ncurses5 = ncurses.override { abiVersion = "5"; };
@@ -62,14 +62,14 @@ let
              + stdenv.lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  version = "1.8.9";
+  version = "1.8.12";
   name = "${flavor}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = version;
-    sha256 = "0kblq0bqap2zzkflrj6rmdi8dvqxa28fcwwrc3lfmbz2893ni3w4";
+    sha256 = "0lxkyvsh55biz2q20ba4qabraind5cpxznl41zfq027vl22j6kd2";
   };
 
   teensyduino_version = "147";
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
 
     # Deliberately break build.xml's download statement in order to cause
     # an error if anything needed is missing from download.nix.
-    substituteInPlace build/build.xml --replace "get src" "get error"
+    #substituteInPlace build/build.xml --replace "get src" "get error"
 
     cd ./arduino-core && ant
     cd ../build && ant

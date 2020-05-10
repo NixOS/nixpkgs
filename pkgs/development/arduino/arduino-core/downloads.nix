@@ -56,9 +56,9 @@
     url = "https://github.com/arduino-libraries/RobotIRremote/archive/2.0.0.zip";
     sha256 = "0j5smap74j8p3wc6k0h73b1skj4gkr7r25jbjh1j1cg052dxri86";
   };
-  "build/SpacebrewYun-1.0.1.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/SpacebrewYun/archive/1.0.1.zip";
-    sha256 = "1zs6ymlzw66bglrm0x6d3cvr52q85c8rlm525x0wags111xx3s90";
+  "build/SpacebrewYun-1.0.2.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/SpacebrewYun/archive/1.0.2.zip";
+    sha256 = "1d8smmsx12qhf2ldvmi93h48cvdyz4id5gd68cvf076wfyv6dks8";
   };
   "build/Temboo-1.2.1.zip" = fetchurl {
     url = "https://github.com/arduino-libraries/Temboo/archive/1.2.1.zip";
@@ -69,28 +69,28 @@
     sha256 = "1dflfrg38f0312nxn6wkkgq1ql4hx3y9kplalix6mkqmzwrdvna4";
   };
   "build/Mouse-1.0.1.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/Mouse/archive/1.0.1.zip";
+    url = "https://github.com/arduino- libraries/Mouse/archive/1.0.1.zip";
     sha256 = "106jjqxzpf5lrs9akwvamqsblj5w2fb7vd0wafm9ihsikingiypr";
   };
   "build/Keyboard-1.0.2.zip" = fetchurl {
     url = "https://github.com/arduino-libraries/Keyboard/archive/1.0.2.zip";
     sha256 = "17yfj95r1i7fb87q4krmxmaq07b4x2xf8cjngrj5imj68wgjck53";
   };
-  "build/SD-1.2.3.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/SD/archive/1.2.3.zip";
-    sha256 = "0i5hb5hmrsrhfgxx8w7zzrfrkc751vs63vhxrj6qvwazhfcdpjw2";
+  "build/SD-1.2.4.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/SD/archive/1.2.4.zip";
+    sha256 = "123g9px9nqcrsx696wqwzjd5s4hr55nxgfz95b7ws3v007i1f3fz";
   };
-  "build/Servo-1.1.3.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/Servo/archive/1.1.3.zip";
-    sha256 = "1m019a75cdn1fg0cwlzbahmaqvg8sgzr6v1812rd7rjh8ismiah6";
+  "build/Servo-1.1.6.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/Servo/archive/1.1.6.zip";
+    sha256 = "1z9k9lxzj5d3f8h9hy86f4k5wgfr2a9zcvjh76qmpvv6clcv3js3";
   };
   "build/LiquidCrystal-1.0.7.zip" = fetchurl {
     url = "https://github.com/arduino-libraries/LiquidCrystal/archive/1.0.7.zip";
     sha256 = "1wrxrqz3n4yrj9j1a2b7pdd7a1rlyi974ra7crv5amjng8817x9n";
   };
-  "build/Adafruit_Circuit_Playground-1.8.1.zip" = fetchurl {
-    url = "https://github.com/Adafruit/Adafruit_CircuitPlayground/archive/1.8.1.zip";
-    sha256 = "1fl24px4c42f6shpb3livwsxgpj866yy285274qrj4m1zl07f18q";
+  "build/Adafruit_Circuit_Playground-1.10.4.zip" = fetchurl {
+    url = "https://github.com/adafruit/Adafruit_CircuitPlayground/archive/1.10.4.zip";
+    sha256 = "194az5pxxzs0wg4ng7w0zqrdw93qdyv02y0q2yy57dr4kwfrm6nl";
   };
   "build/libastylej-2.05.1-4.zip" = fetchurl {
     url = "https://downloads.arduino.cc/libastylej-2.05.1-4.zip";
@@ -99,10 +99,6 @@
   "build/liblistSerials-1.4.2.zip" = fetchurl {
     url = "https://downloads.arduino.cc/liblistSerials/liblistSerials-1.4.2.zip";
     sha256 = "1p58b421k92rbgwfgbihy0d04mby7kfssghpmjb4gk9yix09za3m";
-  };
-  "build/shared/WiFi101-Updater-ArduinoIDE-Plugin-0.10.6.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/releases/download/v0.10.6/WiFi101-Updater-ArduinoIDE-Plugin-0.10.6.zip";
-    sha256 = "1k23xyr5dmr60y8hb9x24wrgd4mfgvrzky621p6fvawn5xbdq8a3";
   };
 }
 // optionalAttrs (system == "x86_64-linux") {
@@ -122,9 +118,9 @@
     url = "https://downloads.arduino.cc/tools/arduinoOTA-1.2.1-linux_amd64.tar.bz2";
     sha256 = "1ya834p2cqjj8k1ad3yxcnzd4bcgrlqsqsli9brq1138ac6k30jv";
   };
-  "build/avr-1.6.23.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/cores/avr-1.6.23.tar.bz2";
-    sha256 = "1al449r8hcdck7f4y295g7q388qvbn6qhk2zqdvws9kg4mzqsq8q";
+  "build/avr-1.8.2.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/cores/avr-1.8.2.tar.bz2";
+    sha256 = "06zl8fwphknd0qdx87fcr1003gid1yqsazaj674mm9widqfd84v2";
   };
 }
 // optionalAttrs (system == "i686-linux") {
