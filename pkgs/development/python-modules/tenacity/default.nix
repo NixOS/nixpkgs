@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "6.0.0";
+  version = "6.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "72f397c2bb1887e048726603f3f629ea16f88cb3e61e4ed3c57e98582b8e3571";
+    sha256 = "16ikf6n6dw1kzncs6vjc4iccl76f9arln59jhiiai27lzbkr1bi9";
   };
 
   nativeBuildInputs = [ pbr setuptools_scm ];
