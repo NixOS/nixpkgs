@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, readline, libedit, bc }:
+{ stdenv, fetchFromGitHub, readline, libedit, bc
+, avxSupport ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "j";
@@ -19,6 +21,9 @@ stdenv.mkDerivation rec {
     if stdenv.isLinux then "linux" else
     if stdenv.isDarwin then "darwin" else
     "unknown";
+  variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
+
+  j64x="j${bits}${variant}";
 
   doCheck = true;
 
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     sed -i $JLIB/bin/profile.ijs -e "s@'/usr/share/j/.*'@'$out/share/j'@;"
 
-    ./build_all.sh
+    j64x="${j64x}" ./build_all.sh
 
     cp $SOURCE_DIR/bin/${platform}/j${bits}*/* "$JLIB/bin"
   '';
