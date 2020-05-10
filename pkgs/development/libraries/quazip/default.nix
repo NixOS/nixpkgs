@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quazip";
-  version = "0.8.1";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "stachenov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1g473gnsbkvxpsv8lbsmhspn7jnq86b05zzgqh11r581v8ndvz5s";
+    sha256 = "0psvf3d9akyyx3bckc9325nmbp97xiagf8la4vhca5xn2f430fbn";
   };
 
   buildInputs = [ zlib qtbase ];
