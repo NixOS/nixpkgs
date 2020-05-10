@@ -320,10 +320,15 @@ in
 
       sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
 
+      peclDeps = [ php.extensions.apcu ];
+
       buildInputs = [
-        php.extensions.apcu
         pcre'
       ];
+
+      postInstall = ''
+        mv $out/lib/php/extensions/apc.so $out/lib/php/extensions/apcu_bc.so
+      '';
 
       meta.maintainers = lib.teams.php.members;
     };
@@ -341,13 +346,6 @@ in
       version = "2.6.1";
       pname = "couchbase";
 
-      buildInputs = [
-        pkgs.libcouchbase
-        pkgs.zlib
-        php.extensions.igbinary
-        php.extensions.pcs
-      ];
-
       src = pkgs.fetchFromGitHub {
         owner = "couchbase";
         repo = "php-couchbase";
@@ -356,7 +354,14 @@ in
       };
 
       configureFlags = [ "--with-couchbase" ];
+
+      buildInputs = [
+        pkgs.libcouchbase
+        pkgs.zlib
+      ];
       internalDeps = [ php.extensions.json ];
+      peclDeps = [ php.extensions.igbinary ];
+
       patches = [
         (pkgs.writeText "php-couchbase.patch" ''
           --- a/config.m4
@@ -383,7 +388,6 @@ in
       ];
 
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp74; # Build error
     };
 
     event = buildPecl {
@@ -557,8 +561,10 @@ in
 
       sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
 
+      internalDeps = [ php.extensions.tokenizer ];
+
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp74; # Build error
+      meta.broken = isPhp73; # Runtime failure on 7.3, build error on 7.4
     };
 
     pdo_oci = buildPecl rec {
