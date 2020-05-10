@@ -7407,6 +7407,19 @@ in {
 
   rxv     = callPackage ../development/python-modules/rxv     { };
 
+  typechecks = callPackage ../development/python-modules/typechecks { };
+
+  datacache = callPackage ../development/python-modules/datacache { };
+
+  memoized-property = callPackage ../development/python-modules/memoized-property { };
+
+  gtfparse = callPackage ../development/python-modules/gtfparse { };
+
+  serializable = callPackage ../development/python-modules/serializable { };
+
+  tinytimer = callPackage ../development/python-modules/tinytimer { };
+
+  pyensembl = callPackage ../development/python-modules/pyensembl { };
 });
 
 in fix' (extends overrides packages)
