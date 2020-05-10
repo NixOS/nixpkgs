@@ -22135,7 +22135,7 @@ in
 
   tendermint = callPackage ../tools/networking/tendermint { };
 
-  termdown = (newScope pythonPackages) ../applications/misc/termdown { };
+  termdown = python3Packages.callPackage ../applications/misc/termdown { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
