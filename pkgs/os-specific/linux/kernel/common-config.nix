@@ -645,6 +645,8 @@ let
 
       SYSVIPC            = yes;  # System-V IPC
 
+      AIO                = yes;  # POSIX asynchronous I/O
+
       UNIX               = yes;  # Unix domain sockets.
 
       MD                 = yes;     # Device mapper (RAID, LVM, etc.)
