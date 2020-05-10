@@ -360,6 +360,16 @@ php.override {
      The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
    </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>systemd.services._name_.confinement</literal> default
+     packages list now includes <literal>config.i18n.glibcLocales</literal>.
+     In many cases, <literal>pkgs.glibcLocales</literal> got pulled in
+     resulting in subtle bugs; since the default systemd service environment
+     sets <literal>$LOCALE_ARCHIVE</literal> the automatically pulled version
+     was not used.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

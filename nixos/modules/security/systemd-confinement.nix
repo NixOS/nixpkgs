@@ -48,9 +48,13 @@ in {
           ${lib.concatMapStringsSep ", " mkScOption [
             "ExecReload" "ExecStartPost" "ExecStartPre" "ExecStop"
             "ExecStopPost"
-          ]} and ${mkScOption "ExecStart"} options. If you want to have all the
-          dependencies of this systemd unit, you can use
-          <option>confinement.fullUnit</option>.
+          ]} and ${mkScOption "ExecStart"} options as well as binSh if set and
+          i18n.glibcLocales.
+          If you want to have all the dependencies of this systemd unit, you
+          can use <option>confinement.fullUnit</option>.
+          If you do not want any of the default packages you can set reset it
+          with lib.mkForce or mkOverride, but will need to specify all the
+          unit's packages.
 
           <note><para>The store paths listed in <option>path</option> are
           <emphasis role="strong">not</emphasis> included in the closure as
@@ -103,6 +107,7 @@ in {
         rootName = "${mkPathSafeName name}-chroot";
         inherit (config.confinement) binSh fullUnit;
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
+        i18nGlibcLocales = toplevelConfig.i18n.glibcLocales;
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
           RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
@@ -139,7 +144,8 @@ in {
           unitAttrs = toplevelConfig.systemd.units."${name}.service";
           allPkgs = lib.singleton (builtins.toJSON unitAttrs);
           unitPkgs = if fullUnit then allPkgs else execPkgs;
-        in unitPkgs ++ lib.optional (binSh != null) binSh;
+        in unitPkgs ++ lib.optional (binSh != null) binSh
+                    ++ lib.singleton i18nGlibcLocales;
       };
     }));
   };

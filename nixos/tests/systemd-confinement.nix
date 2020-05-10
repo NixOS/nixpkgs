@@ -51,7 +51,8 @@ import ./make-test-python.nix {
               )
         '';
       }
-      { testScript = ''
+      { config.confinement.packages = [ pkgs.perl ];
+        testScript = ''
           with subtest("full confinement with APIVFS"):
               machine.fail(
                   "chroot-exec ls -l /etc",
@@ -59,7 +60,10 @@ import ./make-test-python.nix {
                   "chroot-exec chown 65534 /bin",
               )
               machine.succeed(
-                  'test "$(chroot-exec id -u)" = 0', "chroot-exec chown 0 /bin",
+                  'test "$(chroot-exec id -u)" = 0',
+                  "chroot-exec chown 0 /bin",
+                  # this tests locale works
+                  'test "$(chroot-exec \'${pkgs.perl}/bin/perl -e "printf \\"1\\n\\""\')" = 1',
               )
         '';
       }
