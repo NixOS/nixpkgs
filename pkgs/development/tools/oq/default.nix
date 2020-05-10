@@ -14,7 +14,13 @@ crystal.buildCrystalPackage rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jq libxml2 ];
 
+  format = "crystal";
   crystalBinaries.oq.src = "src/oq_cli.cr";
+
+  preCheck = ''
+    mkdir bin
+    cp oq bin/oq
+  '';
 
   postInstall = ''
     wrapProgram "$out/bin/oq" \
