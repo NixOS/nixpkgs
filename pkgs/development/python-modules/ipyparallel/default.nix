@@ -31,6 +31,8 @@ buildPythonPackage rec {
   # Requires access to cluster
   doCheck = false;
 
+  disabled = !isPy3k;
+
   meta = {
     description = "Interactive Parallel Computing with IPython";
     homepage = "http://ipython.org/";
