@@ -61,6 +61,12 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A set of python modules for machine learning and data mining";
+    changelog = let
+      major = versions.major version;
+      minor = versions.minor version;
+      dashVer = replaceChars ["."] ["-"] version;
+    in
+      "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
