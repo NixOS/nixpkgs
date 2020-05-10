@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
+{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, utillinux }:
 
 with lib;
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/containerd/containerd";
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ go-md2man utillinux ];
+  nativeBuildInputs = [ go-md2man installShellFiles utillinux ];
 
   buildInputs = [ btrfs-progs ];
 
@@ -39,14 +39,7 @@ buildGoPackage rec {
     done
 
     make man
-    manRoot="$man/share/man"
-    mkdir -p "$manRoot"
-    for manFile in man/*; do
-      manName="$(basename "$manFile")" # "docker-build.1"
-      number="$(echo $manName | rev | cut -d'.' -f1 | rev)"
-      mkdir -p "$manRoot/man$number"
-      gzip -c "$manFile" > "$manRoot/man$number/$manName.gz"
-    done
+    installManPage man/*.[1-9]
   '';
 
   meta = {
