@@ -33,4 +33,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; unix;
   };
+
+  passthru.editorCommand = "sam";
 }

@@ -38,5 +38,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "moe";
 }
 # TODO: a configurable, global moerc file

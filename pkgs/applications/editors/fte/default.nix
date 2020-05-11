@@ -26,4 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.volth ];
     platforms = platforms.all;
   };
+
+  passthru.editorCommand = "fte";
 }

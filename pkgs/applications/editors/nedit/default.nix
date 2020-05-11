@@ -30,4 +30,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
   };
+
+  passthru.editorCommand = "nedit";
 }

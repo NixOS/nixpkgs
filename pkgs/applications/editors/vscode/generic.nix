@@ -16,6 +16,7 @@ in
     inherit pname version src sourceRoot;
 
     passthru = {
+      editorCommand = "${executableName} -w";
       inherit executableName;
     };
 

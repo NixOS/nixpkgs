@@ -60,4 +60,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "teco";
 }

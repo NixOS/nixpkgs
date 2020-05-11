@@ -39,4 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl1;
     maintainers = with maintainers; [ AndersonTorres ];
   };
+
+  passthru.editorCommand = "jupp";
 }

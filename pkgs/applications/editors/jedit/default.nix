@@ -59,4 +59,6 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = [ maintainers.vbgl ];
   };
+
+  passthru.editorCommand = "jedit";
 }

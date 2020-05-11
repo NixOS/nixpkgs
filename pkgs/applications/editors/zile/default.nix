@@ -53,4 +53,6 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "zile";
 }

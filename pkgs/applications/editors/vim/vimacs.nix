@@ -31,4 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ millerjason ];
   };
+
+  passthru.editorCommand = "vm";
 }

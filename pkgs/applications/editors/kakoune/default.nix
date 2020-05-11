@@ -46,4 +46,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "kak";
 }

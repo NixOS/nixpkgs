@@ -30,4 +30,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };
+
+  passthru.editorCommand = "micro";
 }

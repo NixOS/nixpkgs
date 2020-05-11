@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   passthru = {
+    editorCommand = "gedit -s";
+
     updateScript = gnome3.updateScript {
       packageName = "gedit";
       attrPath = "gnome3.gedit";

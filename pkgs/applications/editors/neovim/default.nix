@@ -138,4 +138,6 @@ in
       maintainers = with maintainers; [ manveru rvolosatovs ma27 ];
       platforms   = platforms.unix;
     };
+
+    passthru.editorCommand = "nvim";
   }

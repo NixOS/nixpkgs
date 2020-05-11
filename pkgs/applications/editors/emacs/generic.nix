@@ -191,4 +191,6 @@ in stdenv.mkDerivation {
       separately.
     '';
   };
+
+  passthru.editorCommand = "emacs";
 }

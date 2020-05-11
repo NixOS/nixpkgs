@@ -28,4 +28,8 @@ in
     '';
 
     meta = kakoune.meta // { priority = (kakoune.meta.priority or 0) - 1; };
+
+    passthru = kakoune.passthru // {
+      unwrapped = kakoune;
+    };
   }

@@ -141,4 +141,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     priority = 10;
   };
+
+  passthru.editorCommand = "vi";
 }

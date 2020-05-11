@@ -33,4 +33,6 @@ mkDerivation {
     knewstuff
   ];
   propagatedUserEnvPkgs = [ konsole ];
+
+  passthru.editorCommand = "kate --startanon";
 }

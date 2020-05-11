@@ -15,4 +15,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "joe";
 }

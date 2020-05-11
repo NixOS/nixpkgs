@@ -38,4 +38,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
     platforms = platforms.linux;
   };
+
+  passthru.editorCommand = "edbrowse";
 }

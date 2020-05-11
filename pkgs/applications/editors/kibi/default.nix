@@ -22,4 +22,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ robertodr ];
   };
+
+  passthru.editorCommand = "kibi";
 }

@@ -43,4 +43,6 @@ stdenv.mkDerivation {
     description = "A vi clone for Unix and other operating systems";
     license = stdenv.lib.licenses.free;
   };
+
+  passthru.editorCommand = "elvis";
 }

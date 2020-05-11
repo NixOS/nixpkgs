@@ -27,4 +27,6 @@ rec {
     maintainers = with maintainers; [ lovek323 equirosa ];
     platforms   = platforms.unix;
   };
+
+  passthru.editorCommand = "vim";
 }

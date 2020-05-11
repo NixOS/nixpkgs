@@ -31,4 +31,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ adsr ];
   };
+
+  passthru.editorCommand = "mle";
 }

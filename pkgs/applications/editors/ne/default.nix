@@ -33,4 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
   };
+
+  passthru.editorCommand = "ne";
 }

@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.linux;
   };
-}
 
+  passthru.editorCommand = "edit";
+}

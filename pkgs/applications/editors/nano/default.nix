@@ -53,4 +53,6 @@ in stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
   };
+
+  passthru.editorCommand = "nano";
 }

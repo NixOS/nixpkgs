@@ -30,4 +30,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = [ maintainers.rszibele ];
   };
+
+  passthru.editorCommand = "SciTE";
 }

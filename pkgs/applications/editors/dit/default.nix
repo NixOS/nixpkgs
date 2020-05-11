@@ -25,4 +25,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux;
     maintainers = with maintainers; [ davidak ];
   };
+
+  passthru.editorCommand = "dit";
 }
