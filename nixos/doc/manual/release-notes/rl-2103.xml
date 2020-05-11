@@ -26,6 +26,22 @@
    <listitem>
     <para>GNOME desktop environment was upgraded to 3.38, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.38/">release notes</link>.</para>
    </listitem>
+   <listitem>
+    <para>
+     There is a new set of options for configuring the default editor and pager:
+     <link linkend="opt-users.defaults.editor">users.defaults.editor</link>, and
+     <link linkend="opt-users.defaults.pager">users.defaults.pager</link>, respectively.
+     The <varname>EDITOR</varname> and <varname>PAGER</varname> environment variables can be modified
+     by changing the <varname>editorCommand</varname> and <varname>pagerCommand</varname> passthru
+     attributes, respectively. For instance:
+<programlisting>
+users.defaults = {
+  editor = pkgs.vim // { editorCommand = "gvim -f"; };
+  pager = pkgs.most;
+};
+</programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
