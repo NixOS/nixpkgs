@@ -10,6 +10,16 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaPackages
 3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
+## Update from overlay
+
+Alternatively, run the following command:
+
+./update-from-overlay
+
+It will update both melpa and elpa packages using
+https://github.com/nix-community/emacs-overlay. It's almost
+instantenous and formats commits for you.
+
 */
 
 { lib, external, pkgs }: variant: self: let
