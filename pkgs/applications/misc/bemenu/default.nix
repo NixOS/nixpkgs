@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Cloudef/bemenu";
     description = "Dynamic menu library and client program inspired by dmenu";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ thiagokokada lheckemann ];
+    maintainers = with maintainers; [ lheckemann ];
     platforms = with platforms; linux;
   };
 }
