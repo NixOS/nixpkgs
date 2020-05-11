@@ -42,6 +42,9 @@ buildPythonPackage rec {
     "test_subprocess_print"
     "test_subprocess_error"
     "test_ipython_start_kernel_no_userns"
+    
+    # see https://github.com/NixOS/nixpkgs/issues/87626
+    "test_unc_paths"    
   ] ++ lib.optionals (pythonOlder "3.8") [
     # flaky test https://github.com/ipython/ipykernel/issues/485
     "test_shutdown"
