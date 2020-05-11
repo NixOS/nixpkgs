@@ -2058,6 +2058,8 @@ in
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
 
+  nix-direnv = callPackage ../tools/misc/nix-direnv { };
+
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
@@ -4372,6 +4374,8 @@ in
   jackett = callPackage ../servers/jackett { };
 
   jade = callPackage ../tools/text/sgml/jade { };
+
+  jadx = callPackage ../tools/security/jadx { };
 
   jazzy = callPackage ../development/tools/jazzy { };
 
@@ -17063,7 +17067,7 @@ in
 
   # Hardened linux
   hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
-    structuredExtraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
+    structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
       inherit stdenv;
       inherit (kernel) version;
     };
@@ -19384,6 +19388,8 @@ in
 
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
+
+  genxword = callPackage ../applications/misc/genxword { };
 
   geoipupdate = callPackage ../applications/misc/geoipupdate/default.nix { };
 
@@ -24954,9 +24960,16 @@ in
 
   fped = callPackage ../applications/science/electronics/fped { };
 
+  # this is a wrapper for kicad.base and kicad.libraries
   kicad = callPackage ../applications/science/electronics/kicad { };
   kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
-  kicad-unstable = kicad.override { pname = "kicad-unstable"; debug = true; };
+  kicad-unstable = kicad.override { pname = "kicad-unstable"; stable = false; };
+  # mostly here so the kicad-unstable components (except packages3d) get built
+  kicad-unstable-small = kicad.override {
+    pname = "kicad-unstable-small";
+    stable = false;
+    with3d = false;
+  };
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
