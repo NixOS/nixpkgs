@@ -37,10 +37,6 @@ stdenv.mkDerivation rec {
     python3Packages.python
   ];
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
-
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/jgmenu"
     for f in $out/bin/jgmenu{,_run}; do
