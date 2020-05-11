@@ -1531,6 +1531,8 @@ in {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
+  sonopy = callPackage ../development/python-modules/sonopy { };
+
   sparse = callPackage ../development/python-modules/sparse { };
 
   spglib = callPackage ../development/python-modules/spglib { };
