@@ -5679,6 +5679,8 @@ in
     stdenv = clangStdenv;
   };
 
+  oq = callPackage ../development/tools/oq { };
+
   out-of-tree = callPackage ../development/tools/out-of-tree { };
 
   oppai-ng = callPackage ../tools/misc/oppai-ng { };
@@ -22133,7 +22135,7 @@ in
 
   tendermint = callPackage ../tools/networking/tendermint { };
 
-  termdown = (newScope pythonPackages) ../applications/misc/termdown { };
+  termdown = python3Packages.callPackage ../applications/misc/termdown { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
