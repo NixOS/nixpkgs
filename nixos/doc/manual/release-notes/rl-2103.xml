@@ -194,6 +194,12 @@ users.defaults = {
      <link linkend="opt-users.defaults.shell">users.defaults.shell</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <varname>programs.vim</varname> module has been removed.
+     Use <link linkend="opt-users.defaults.editor">users.defaults.editor</link> instead.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

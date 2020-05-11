@@ -70,6 +70,8 @@ with lib;
 
     (mkRemovedOptionModule [ "services" "seeks" ] "")
 
+    (mkRemovedOptionModule [ "programs" "vim" ] "Use users.defaults.editor instead")
+
     # Do NOT add any option renames here, see top of the file
   ];
 }
