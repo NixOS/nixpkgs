@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, isPy27
 , fetchPypi
 , enchant2
 }:
@@ -7,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyenchant";
   version = "3.0.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
