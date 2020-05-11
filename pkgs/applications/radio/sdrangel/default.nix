@@ -39,13 +39,13 @@ let
 
 in mkDerivation rec {
   pname = "sdrangel";
-  version = "4.11.12";
+  version = "4.14.5";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "0zbx0gklylk8npb3wnnmqpam0pdxl40f20i3wzwwh4gqrppxywzx";
+    sha256 = "0syv1h7w76qph13hjx1gykn28xfy02b13fdpv0x0jnr99s1jq313";
     fetchSubmodules = false;
   };
 
