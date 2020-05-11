@@ -8,6 +8,9 @@
 , menu-cache
 , xorg
 , makeWrapper
+, enableXfcePanelApplet ? false
+, xfce
+, gtk3
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +38,16 @@ stdenv.mkDerivation rec {
     xorg.libXinerama
     xorg.libXrandr
     python3Packages.python
+  ] ++ stdenv.lib.optionals enableXfcePanelApplet [
+    gtk3
+    xfce.libxfce4util
+    xfce.xfce4-panel
+  ];
+
+  configureFlags = [
+  ]
+  ++ stdenv.lib.optionals enableXfcePanelApplet [
+    "--with-xfce4-panel-applet"
   ];
 
   postFixup = ''
