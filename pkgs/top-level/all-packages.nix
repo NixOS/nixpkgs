@@ -19710,6 +19710,8 @@ in
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
+  lite = callPackage ../applications/editors/lite { };
+
   lollypop = callPackage ../applications/audio/lollypop { };
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
