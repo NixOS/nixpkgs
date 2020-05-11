@@ -66,12 +66,12 @@
 
 buildPythonPackage rec {
   pname = "fluidasserts";
-  version = "20.2.30165";
+  version = "20.2.40218";
   disabled = !isPy37;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wcplzfx89d3c6hvdgag860sl3infqmymy6ly6y6ah77pkc98x15";
+    sha256 = "b33ae7a14c57769b9da06c37bb19b6193291f12f159c42d7871ca22541ffa246";
   };
 
   patchPhase = ''

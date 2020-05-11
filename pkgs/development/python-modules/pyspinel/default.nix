@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyspinel";
-  version = "1.0.0a3";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0914a662d57a14bce9df21f22711b5c9b2fef37cf461be54ed35c6e229060fd4";
+    sha256 = "5cbfd0f6e9ef3b5cd3a4e72a9a0cee1fe50d518b43746be07a1fd17e883328c2";
   };
 
   propagatedBuildInputs = [ pyserial ipaddress future ];
