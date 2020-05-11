@@ -182,6 +182,12 @@ buildPythonPackage rec {
    # nosetests --cover-package=airflow
   '';
 
+  postInstall = ''
+    for prog in "$out"/bin/*; do
+        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:${gunicorn}/lib/${python.libPrefix}/site-packages:$(toPythonPath "$out")
+    done
+  '';
+
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = "http://airflow.apache.org/";
