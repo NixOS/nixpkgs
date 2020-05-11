@@ -26,7 +26,7 @@ let
       rpc-login=${rpc.user}:${rpc.password}
     ''}
     ${optionalString rpc.restricted ''
-      restrict-rpc=1
+      restricted-rpc=1
     ''}
 
     limit-rate-up=${toString limits.upload}
