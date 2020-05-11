@@ -48,6 +48,11 @@ buildPythonPackage rec {
     nose
   ];
 
+  patches = [
+    # fix for updated pygments version. Remove when updating to new version.
+    ./pygments-tests.patch
+  ];
+
   postPatch= ''
     substituteInPlace pelican/tests/test_pelican.py \
       --replace "'git'" "'${git}/bin/git'"
