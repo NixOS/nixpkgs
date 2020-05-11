@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "0.97-219";
+  version = "0.98-84";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     # Tailscale uses "git describe" as version numbers. v0.97-219
     # means "tag v0.97 plus 219 commits", which is what this rev is.
-    rev = "afbfe4f217a2a202f0eefe943c7c1ef648311339";
-    sha256 = "1an897ys3gycdmclqd0yqs9f7q88zxqxyc6r0gcgs4678svxhb68";
+    rev = "8b0be7475b9e10170f46adef1ebd34c9af3f785b";
+    sha256 = "13zr1qd31igxwkxwmgyjnnnj17x0lbbsiklj0n6zlb5kksq4a5vc";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,7 +18,7 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   goPackagePath = "tailscale.com";
-  modSha256 = "1xgdhbck3pkix10lfshzdszrv6d3p0hbx8jdjvswz7jjd0vzm4x1";
+  modSha256 = "18rzi3qwyxly58zp1h4ps1w4lp0nj991z27fvqk41r2pz3344bzc";
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
   postInstall = ''
