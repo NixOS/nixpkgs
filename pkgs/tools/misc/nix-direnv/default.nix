@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/nix-community/nix-direnv";
     license     = licenses.mit;
     platforms   = platforms.unix;
+    maintainers = with maintainers; [ mic92 ];
   };
 }
