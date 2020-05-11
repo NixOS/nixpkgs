@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-AutoIndex";
-  version = "0.6.2";
+  version = "0.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af2cdb34eefe6edbf43ce19200880829e8c2df3598000e75dc63c9b7e3478706";
+    sha256 = "ea319f7ccadf68ddf98d940002066278c779323644f9944b300066d50e2effc7";
   };
 
   propagatedBuildInputs = [
