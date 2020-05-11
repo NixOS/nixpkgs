@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -m500 -D direnvrc $out/share/nix-direnv/direnvrc
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
