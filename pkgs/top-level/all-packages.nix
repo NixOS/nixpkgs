@@ -8803,6 +8803,8 @@ with pkgs;
 
   runelite = callPackage ../games/runelite { };
 
+  runescape = callPackage ../games/runescape3 { };
+
   runningx = callPackage ../tools/X11/runningx { };
 
   rund = callPackage ../development/tools/rund { };
