@@ -7130,6 +7130,12 @@
     githubId = 1505617;
     name = "Sean Lee";
   };
+  SlothOfAnarchy = {
+    email = "slothofanarchy1@gmail.com";
+    github = "SlothOfAnarchy";
+    githubId = 12828415;
+    name = "Michel Weitbrecht";
+  };
   smakarov = {
     email = "setser200018@gmail.com";
     github = "setser";
