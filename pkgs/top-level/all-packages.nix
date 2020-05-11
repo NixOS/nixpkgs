@@ -1369,7 +1369,8 @@ in
 
   btfs = callPackage ../os-specific/linux/btfs { };
 
-  buildah = callPackage ../development/tools/buildah { };
+  buildah = callPackage ../development/tools/buildah/wrapper.nix { };
+  buildah-unwrapped = callPackage ../development/tools/buildah { };
 
   buildkit = callPackage ../development/tools/buildkit { };
 
