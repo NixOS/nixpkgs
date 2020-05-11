@@ -38,10 +38,27 @@ in {
         </programlisting>
       '';
     };
+
+    shell = mkOption {
+      type = types.shellPackage;
+      default = pkgs.bashInteractive;
+      defaultText = literalExample "pkgs.bashInteractive";
+      example = literalExample "pkgs.zsh";
+      description = ''
+        The package to use as the default shell.
+
+        To select an alternate shell from the package, set its
+        shellPath passthru to the executable path. For example:
+
+        <programlisting>
+        users.defaults.shell = pkgs.bashInteractive // { shellPath = "/bin/sh"; };
+        </programlisting>
+      '';
+    };
   };
 
   config = {
-    environment.systemPackages = [ cfg.editor cfg.pager ];
+    environment.systemPackages = [ cfg.editor cfg.pager cfg.shell ];
 
     environment.variables = {
       EDITOR = mkDefault cfg.editor.editorCommand;

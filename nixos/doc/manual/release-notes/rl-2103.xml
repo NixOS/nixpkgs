@@ -188,6 +188,12 @@ users.defaults = {
       please note that your non-root pools will now be forcibly imported.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <option>users.defaultUserShell</option> has been renamed to
+     <link linkend="opt-users.defaults.shell">users.defaults.shell</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
