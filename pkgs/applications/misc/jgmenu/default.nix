@@ -1,4 +1,14 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, pango, librsvg, libxml2, menu-cache, xorg, makeWrapper }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, python3Packages
+, pango
+, librsvg
+, libxml2
+, menu-cache
+, xorg
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "jgmenu";
@@ -27,7 +37,9 @@ stdenv.mkDerivation rec {
     python3Packages.python
   ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/jgmenu"
