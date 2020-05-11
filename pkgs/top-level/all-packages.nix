@@ -12173,6 +12173,8 @@ in
 
   haxor-news = callPackage ../applications/misc/haxor-news { };
 
+  hdt = callPackage ../development/libraries/hdt {};
+
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
   heyefi = haskellPackages.heyefi;
