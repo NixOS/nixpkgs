@@ -1101,6 +1101,8 @@ in {
 
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
 
+  pyache = callPackage ../development/python-modules/pyache { };
+
   pyaes = callPackage ../development/python-modules/pyaes { };
 
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
