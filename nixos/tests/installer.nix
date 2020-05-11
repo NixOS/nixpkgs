@@ -97,7 +97,7 @@ let
 
 
       def create_machine_named(name):
-          return create_machine({**default_flags, "name": "boot-after-install"})
+          return create_machine({**default_flags, "name": name})
 
 
       machine.start()
