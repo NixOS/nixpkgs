@@ -48,6 +48,13 @@ in
       description = "Pause command to be executed";
     };
 
+    runtime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Override the default runtime";
+      example = [ "crun" ];
+    };
+
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
@@ -91,6 +98,12 @@ in
       cgroup_manager = "systemd"
       log_level = "${cfg.logLevel}"
       manage_ns_lifecycle = true
+
+      ${optionalString (cfg.runtime != null) ''
+      default_runtime = "${cfg.runtime}"
+      [crio.runtime.runtimes]
+      [crio.runtime.runtimes.${cfg.runtime}]
+      ''}
     '';
 
     environment.etc."cni/net.d/10-crio-bridge.conf".source = copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/10-crio-bridge.conf";
