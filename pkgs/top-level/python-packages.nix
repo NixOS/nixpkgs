@@ -6409,6 +6409,8 @@ in {
 
   waitress-django = callPackage ../development/python-modules/waitress-django { };
 
+  wavio = callPackage ../development/python-modules/wavio { };
+
   web = callPackage ../development/python-modules/web { };
 
   webob = callPackage ../development/python-modules/webob { };
