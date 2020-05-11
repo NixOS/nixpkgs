@@ -142,5 +142,8 @@ stdenv.mkDerivation rec {
     priority = 10;
   };
 
-  passthru.editorCommand = "vi";
+  passthru = {
+    editorCommand = "vi";
+    pagerCommand = "less";
+  };
 }

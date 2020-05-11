@@ -70,4 +70,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
+
+  passthru.pagerCommand = "more";
 }
