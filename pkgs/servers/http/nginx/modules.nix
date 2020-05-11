@@ -140,6 +140,7 @@ in
       export LUAJIT_LIB="${pkgs.luajit}/lib"
       export LUAJIT_INC="${pkgs.luajit}/include/luajit-2.0"
     '';
+    allowMemoryWriteExecute = true;
   };
 
   lua-upstream = {
@@ -150,6 +151,7 @@ in
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
     inputs = [ pkgs.luajit ];
+    allowMemoryWriteExecute = true;
   };
 
   modsecurity = {
@@ -246,6 +248,7 @@ in
     in {
       src = ngx_pagespeed;
       inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
+      allowMemoryWriteExecute = true;
     };
 
   pam = {
