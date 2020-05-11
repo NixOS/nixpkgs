@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, stdenv, ncurses, musl }:
 
 stdenv.mkDerivation {
   name = "nvi-1.79";
@@ -16,20 +16,25 @@ stdenv.mkDerivation {
 
   # nvi tries to write to a usual tmp directory (/var/tmp),
   # so we will force it to use /tmp.
-  patchPhase = ''
+  postPatch = ''
     sed -i build/configure \
       -e s@vi_cv_path_preserve=no@vi_cv_path_preserve=/tmp/vi.recover@ \
       -e s@/var/tmp@@ \
       -e s@-lcurses@-lncurses@
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
+    cat ${stdenv.lib.getDev musl}/include/stropts.h | grep -v 'int ioctl' > include/sys/stropts.h
   '';
 
   configurePhase = ''
+    runHook preConfigure
     mkdir mybuild
     cd mybuild
     ../build/configure --prefix=$out --disable-curses
+    runHook postConfigure
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share/vi/catalog
     for a in dutch english french german ru_SU.KOI8-R spanish swedish; do
       cp ../catalog/$a $out/share/vi/catalog
@@ -45,6 +50,7 @@ stdenv.mkDerivation {
     ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/ex
     ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/view
     ln -s $out/bin/{,vi-}nvi # create a symlink so that all vi(m) users will find it
+    runHook postInstall
   '';
 
   meta = {
