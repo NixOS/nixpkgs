@@ -1,5 +1,15 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM,
-  mtdev, cairo, deepin, qtbase }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qtx11extras
+, libSM
+, mtdev
+, cairo
+, deepin
+, qtbase
+}:
 
 mkDerivation rec {
   pname = "qt5dxcb-plugin";
@@ -43,7 +53,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version; src = (builtins.head srcs); };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugin for DDE";

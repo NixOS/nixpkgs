@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
+{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
@@ -78,7 +78,7 @@ rec {
       sha256 = sha256;
     };
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ installShellFiles pkgconfig ];
     buildInputs = [
       makeWrapper removeReferencesTo go-md2man go libtool
     ] ++ optionals (stdenv.isLinux) [
@@ -147,9 +147,9 @@ rec {
         --prefix PATH : "$out/libexec/docker:$extraPath"
 
       # completion (cli)
-      install -Dm644 ./components/cli/contrib/completion/bash/docker $out/share/bash-completion/completions/docker
-      install -Dm644 ./components/cli/contrib/completion/fish/docker.fish $out/share/fish/vendor_completions.d/docker.fish
-      install -Dm644 ./components/cli/contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
+      installShellCompletion --bash ./components/cli/contrib/completion/bash/docker
+      installShellCompletion --fish ./components/cli/contrib/completion/fish/docker.fish
+      installShellCompletion --zsh ./components/cli/contrib/completion/zsh/_docker
 
       # Include contributed man pages (cli)
       # Generate man pages from cobra commands
@@ -163,16 +163,7 @@ rec {
       echo "Generate legacy manpages"
       ./man/md2man-all.sh -q
 
-      manRoot="$man/share/man"
-      mkdir -p "$manRoot"
-      for manDir in ./man/man?; do
-        manBase="$(basename "$manDir")" # "man1"
-        for manFile in "$manDir"/*; do
-          manName="$(basename "$manFile")" # "docker-build.1"
-          mkdir -p "$manRoot/$manBase"
-          gzip -c "$manFile" > "$manRoot/$manBase/$manName.gz"
-        done
-      done
+      installManPage man/*/*.[1-9]
     '';
 
     preFixup = ''

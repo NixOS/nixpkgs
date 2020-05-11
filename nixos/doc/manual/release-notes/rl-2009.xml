@@ -55,6 +55,12 @@
      The new <varname>virtualisation.containers</varname> module manages configuration shared by the CRI-O and Podman modules.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      Declarative Docker containers are renamed from <varname>docker-containers</varname> to <varname>virtualisation.oci-containers.containers</varname>.
+      This is to make it possible to use <literal>podman</literal> instead of <literal>docker</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -309,6 +315,15 @@ php.override {
      following upstream systemd's documentation change.
      See <citerefentry><refentrytitle>systemd.network</refentrytitle>
      <manvolnum>5</manvolnum></citerefentry> for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      In the <literal>picom</literal> module, several options that accepted
+      floating point numbers encoded as strings (for example
+      <xref linkend="opt-services.picom.activeOpacity"/>) have been changed
+      to the (relatively) new native <literal>float</literal> type. To migrate
+      your configuration simply remove the quotes around the numbers.
     </para>
    </listitem>
   </itemizedlist>

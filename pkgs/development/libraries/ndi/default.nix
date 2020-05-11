@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ndi";
-  fullVersion = "4.1.6";
+  fullVersion = "4.5.1";
   version = builtins.head (builtins.splitVersion fullVersion);
 
   src = requireFile rec {
     name    = "InstallNDISDK_v${version}_Linux.tar.gz";
-    sha256  = "0hki805j3hlci6w5ca2cajm5q0y9yihgvpsykkn8dzx8chw4pmsk";
+    sha256  = "04l57cfc88cdqa9015h5g1csr7xfjxp75x8qz8bsqk1dizp9ir6r";
     message = ''
       In order to use NDI SDK version ${fullVersion}, you need to comply with
       NewTek's license and download the appropriate Linux tarball from:

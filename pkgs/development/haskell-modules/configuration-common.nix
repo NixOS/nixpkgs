@@ -71,7 +71,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1jjw6ar8ddcncwzksyx2xky50sm2jg1zjr7iiqk0vn8qq0fn2gwy";
+      sha256 = "0adw72lw3ygls87w6i7hirf26gz991dkm992jb5f0h5nvy6d44pl";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -333,6 +333,7 @@ self: super: {
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
   network = dontCheck super.network;
+  network_2_6_3_1 = dontCheck super.network_2_6_3_1;
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
@@ -371,7 +372,7 @@ self: super: {
   static-resources = dontCheck super.static-resources;
   strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
   svndump = dontCheck super.svndump;
-  tar = dontCheck super.tar; #http://hydra.nixos.org/build/25088435/nixlog/2 (fails only on 32-bit)
+  tar = dontCheck super.tar; #https://hydra.nixos.org/build/25088435/nixlog/2 (fails only on 32-bit)
   th-printf = dontCheck super.th-printf;
   thumbnail-plus = dontCheck super.thumbnail-plus;
   tickle = dontCheck super.tickle;
@@ -1486,6 +1487,32 @@ self: super: {
   # Depends on selective >= 0.4, but the default of selective is 0.3
   headed-megaparsec = super.headed-megaparsec.override {
     selective = self.selective_0_4_1;
+  };
+
+  # Needed for ghcide
+  haskell-lsp_0_19_0_0 = super.haskell-lsp_0_19_0_0.override {
+    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
+  };
+
+  # this will probably need to get updated with every ghcide update,
+  # we need an override because ghcide is tracking haskell-lsp closely.
+  ghcide = dontCheck (super.ghcide.override rec {
+    haskell-lsp-types = self.haskell-lsp-types_0_19_0_0;
+    haskell-lsp = self.haskell-lsp_0_19_0_0;
+  });
+
+  # stackage right now is not new enough for hlint-3.0
+  ghc-lib-parser-ex_8_10_0_6 = super.ghc-lib-parser-ex_8_10_0_6.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
+  };
+
+  hlint = super.hlint.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_10_1_20200412;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_8_10_0_6;
+    extra = self.extra_1_7_1;
+    filepattern = self.filepattern.override {
+      extra = self.extra_1_7_1;
+    };
   };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

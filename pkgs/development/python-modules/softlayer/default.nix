@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
 , ptable
 , click
 , requests
@@ -17,6 +18,7 @@
 buildPythonPackage rec {
   pname = "softlayer-python";
   version = "5.8.4";
+  disabled = isPy27;
 
   propagatedBuildInputs = [ ptable click requests prompt_toolkit pygments urllib3 ];
 

@@ -32,6 +32,8 @@ mkDerivation rec {
   preConfigure = ''
     cmakeFlagsArray+=(
       "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix/iconengines"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
     )
   '';
 

@@ -8,11 +8,11 @@ let inherit (stdenv.lib) optional optionals; in
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "f2adf137d70955a4a20df90c5409e10be8e1127204a98b27d626ac090531a07e";
+    sha256 = "57f3c93a1b40dfa0431508203f559b7ea257afab79078c38bcddf960d5a4a501";
   };
 
   outputs = [ "bin" "out" "dev" ];

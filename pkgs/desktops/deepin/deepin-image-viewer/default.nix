@@ -1,6 +1,18 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, qtsvg,
-  qtx11extras, dtkcore, dtkwidget, qt5integration, freeimage, libraw,
-  libexif, deepin
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qttools
+, qtsvg
+, qtx11extras
+, dtkcore
+, dtkwidget
+, qt5integration
+, freeimage
+, libraw
+, libexif
+, deepin
 }:
 
 mkDerivation rec {
@@ -41,7 +53,7 @@ mkDerivation rec {
       -e "s,\$\$\[QT_INSTALL_PLUGINS\],$out/$qtPluginPrefix,"
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Image Viewer for Deepin Desktop Environment";

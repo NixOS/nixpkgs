@@ -65,7 +65,7 @@ in
 , # Shell code to build a netrc file for BASIC auth
   netrcPhase ? null
 
-, # Impure env vars (http://nixos.org/nix/manual/#sec-advanced-attributes)
+, # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
   # needed for netrcPhase
   netrcImpureEnvVars ? []
 

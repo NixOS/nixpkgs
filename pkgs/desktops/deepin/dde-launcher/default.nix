@@ -1,7 +1,24 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, dde-qt-dbus-factory,
-  dde-session-ui, deepin, deepin-desktop-schemas, deepin-wallpapers,
-  dtkcore, dtkwidget, gsettings-qt, qtsvg, qttools, qtx11extras,
-  which, xdg_utils, wrapGAppsHook, glib }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, dde-qt-dbus-factory
+, dde-session-ui
+, deepin
+, deepin-desktop-schemas
+, deepin-wallpapers
+, dtkcore
+, dtkwidget
+, gsettings-qt
+, qtsvg
+, qttools
+, qtx11extras
+, which
+, xdg_utils
+, wrapGAppsHook
+, glib
+}:
 
 mkDerivation rec {
   pname = "dde-launcher";
@@ -72,7 +89,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin Desktop Environment launcher module";

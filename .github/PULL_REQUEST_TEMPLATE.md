@@ -15,7 +15,7 @@ Reviewing guidelines: https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/do
 
 <!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
-- [ ] Tested using sandboxing ([nix.useSandbox](http://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS, or option `sandbox` in [`nix.conf`](http://nixos.org/nix/manual/#sec-conf-file) on non-NixOS linux)
+- [ ] Tested using sandboxing ([nix.useSandbox](https://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS, or option `sandbox` in [`nix.conf`](https://nixos.org/nix/manual/#sec-conf-file) on non-NixOS linux)
 - Built on platform(s)
    - [ ] NixOS
    - [ ] macOS

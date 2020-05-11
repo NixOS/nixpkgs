@@ -18,7 +18,7 @@ let
   packages = ( self:
 
 let
-  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   callPackage = pkgs.newScope self;
 
@@ -100,7 +100,7 @@ let
 
 in {
 
-  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
@@ -676,6 +676,8 @@ in {
 
   dftfit = callPackage ../development/python-modules/dftfit { };
 
+  dicom2nifti = callPackage ../development/python-modules/dicom2nifti { };
+
   discid = callPackage ../development/python-modules/discid { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
@@ -941,6 +943,8 @@ in {
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
 
+  mortgage = callPackage ../development/python-modules/mortgage { };
+
   msal = callPackage ../development/python-modules/msal { };
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
@@ -966,6 +970,8 @@ in {
   nbval = callPackage ../development/python-modules/nbval { };
 
   ndtypes = callPackage ../development/python-modules/ndtypes { };
+
+  neo = callPackage ../development/python-modules/neo { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
@@ -2694,6 +2700,8 @@ in {
 
   dpath = callPackage ../development/python-modules/dpath { };
 
+  dparse = callPackage ../development/python-modules/dparse { };
+
   dpkt = callPackage ../development/python-modules/dpkt {};
 
   urllib3 = callPackage ../development/python-modules/urllib3 {};
@@ -2914,6 +2922,8 @@ in {
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
+
+  heudiconv = callPackage ../development/python-modules/heudiconv { };
 
   hickle = callPackage ../development/python-modules/hickle { };
 
@@ -4096,6 +4106,8 @@ in {
 
   ipy = callPackage ../development/python-modules/IPy { };
 
+  ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
+
   ipykernel = if pythonOlder "3.4" then
       callPackage ../development/python-modules/ipykernel/4.nix { }
     else
@@ -4172,7 +4184,10 @@ in {
     inherit (pkgs.jsonnet) name src;
   };
 
-  jupyter_client = callPackage ../development/python-modules/jupyter_client { };
+  jupyter_client = if isPy3k then
+    callPackage ../development/python-modules/jupyter_client { }
+  else
+    callPackage ../development/python-modules/jupyter_client/5.nix { };
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
@@ -5655,6 +5670,8 @@ in {
 
   safe = callPackage ../development/python-modules/safe { };
 
+  safety = callPackage ../development/python-modules/safety { };
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
@@ -5864,6 +5881,8 @@ in {
   testtools = callPackage ../development/python-modules/testtools { };
 
   traitlets = callPackage ../development/python-modules/traitlets { };
+
+  traittypes = callPackage ../development/python-modules/traittypes { };
 
   transitions = callPackage ../development/python-modules/transitions { };
 
@@ -7266,7 +7285,7 @@ in {
 
   scour = callPackage ../development/python-modules/scour { };
 
-  pymssql = callPackage ../development/python-modules/pymssql { };
+  pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 

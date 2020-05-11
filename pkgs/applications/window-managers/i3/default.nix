@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
+{ fetchurl, stdenv, which, pkgconfig, makeWrapper, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb_run }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0z709cianlzw0x0qwq4361347354xd9ckj1v7vjvhb1zh3x91gws";
   };
 
-  nativeBuildInputs = [ which pkgconfig makeWrapper ];
+  nativeBuildInputs = [ which pkgconfig makeWrapper installShellFiles ];
 
   buildInputs = [
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       sed -i 's/which/command -v/' $program
     done
 
-    install -vD -t $out/share/man/man1 man/*.{1,man}
+    installManPage man/*.1
   '';
 
   separateDebugInfo = true;

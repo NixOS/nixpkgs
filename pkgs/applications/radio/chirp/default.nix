@@ -20,6 +20,5 @@ python2.pkgs.buildPythonApplication rec {
     homepage = "https://chirp.danplanet.com/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.the-kenny ];
   };
 }

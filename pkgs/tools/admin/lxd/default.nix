@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+{ stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, libcap, libco-canonical, dqlite
 , raft-canonical, sqlite-replication, udev
@@ -10,14 +10,19 @@
 
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.0.1";
+  version = "4.1";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0sxkyjayn7yyiy9kvbdlpkl58lwsl2rhlxnncg628f2kad2zgkdx";
+    sha256 = "0svzj57wwm43d2gnx0myr2p9pzjmkivwhgg0dww6zl169bx32liz";
   };
+
+  postPatch = ''
+    substituteInPlace shared/usbid/load.go \
+      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+  '';
 
   preBuild = ''
     # unpack vendor

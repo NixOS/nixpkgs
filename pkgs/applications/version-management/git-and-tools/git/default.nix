@@ -343,6 +343,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens globin ];
+    maintainers = with stdenv.lib.maintainers; [ peti wmertens globin ];
   };
 }

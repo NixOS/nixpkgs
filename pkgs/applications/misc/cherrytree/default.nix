@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "cherrytree";
-  version = "0.39.2";
+  version = "0.39.3";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
     rev = version;
-    sha256 = "1l6wh24bhp4yhmsfmc0r4n2n10nlilkv4cmv5sfl80i250fiw7xa";
+    sha256 = "1k9i7acpphx0if6ij2p9fkmj638ry6hcyr1rdr039a8zi8hq98gz";
 
   };
 

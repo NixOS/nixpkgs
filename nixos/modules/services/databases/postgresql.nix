@@ -34,13 +34,7 @@ in
 
     services.postgresql = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run PostgreSQL.
-        '';
-      };
+      enable = mkEnableOption "PostgreSQL Server";
 
       package = mkOption {
         type = types.package;
