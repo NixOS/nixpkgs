@@ -2391,6 +2391,8 @@ in {
 
   mxnet = callPackage ../development/python-modules/mxnet { };
 
+  mycroft-precise = callPackage ../development/python-modules/mycroft-precise { };
+
   parsy = callPackage ../development/python-modules/parsy { };
 
   portalocker = callPackage ../development/python-modules/portalocker { };
@@ -3234,6 +3236,8 @@ in {
   };
 
   poyo = callPackage ../development/python-modules/poyo { };
+
+  precise-runner = callPackage ../development/python-modules/precise-runner { };
 
   priority = callPackage ../development/python-modules/priority { };
 
