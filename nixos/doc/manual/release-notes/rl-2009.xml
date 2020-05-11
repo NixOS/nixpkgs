@@ -335,6 +335,15 @@ php.override {
       your configuration simply remove the quotes around the numbers.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      When using <literal>buildBazelPackage</literal> from Nixpkgs,
+      <literal>flat</literal> hash mode is now used for dependencies
+      instead of <literal>recursive</literal>. This is to better allow
+      using hashed mirrors where needed. As a result, these hashes
+      will have changed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

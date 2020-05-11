@@ -42,8 +42,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
   inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
-    name = "${name}-deps";
+    name = "${name}-deps.tar.gz";
     inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
+
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
@@ -120,9 +122,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
         ln -sf "$new_target" "$symlink"
       done
 
-      cp -r $bazelOut/external $out
+      echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
 
-      echo '${bazel.name}' > $out/.nix-bazel-version
+      (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
       runHook postInstall
     '';
@@ -130,7 +132,6 @@ in stdenv.mkDerivation (fBuildAttrs // {
     dontFixup = true;
     allowedRequisites = [];
 
-    outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = fetchAttrs.sha256;
   });
@@ -146,14 +147,15 @@ in stdenv.mkDerivation (fBuildAttrs // {
   preConfigure = ''
     mkdir -p "$bazelOut"
 
-    test "${bazel.name}" = "$(<$deps/.nix-bazel-version)" || {
+    (cd $bazelOut && tar xfz $deps)
+
+    test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
       echo "fixed output derivation was built for a different bazel version" >&2
-      echo "     got: $(<$deps/.nix-bazel-version)" >&2
+      echo "     got: $(<$bazelOut/external/.nix-bazel-version)" >&2
       echo "expected: ${bazel.name}" >&2
       exit 1
     }
 
-    cp -r $deps $bazelOut/external
     chmod -R +w $bazelOut
     find $bazelOut -type l | while read symlink; do
       ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
