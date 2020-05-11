@@ -93,6 +93,9 @@ let
     if !builtins.isBool val then toString val
     else if val then "1" else "0";
   mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
+
+  shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
+
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
@@ -178,10 +181,15 @@ EOF
     done
 
     # Setup symlinks for blas / lapack
-    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libblas${stdenv.hostPlatform.extensions.sharedLibrary}${stdenv.lib.optionalString stdenv.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}${stdenv.lib.optionalString stdenv.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}${stdenv.lib.optionalString stdenv.hostPlatform.isLinux ".3"}
-    ln -s $out/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/liblapacke${stdenv.hostPlatform.extensions.sharedLibrary}${stdenv.lib.optionalString stdenv.hostPlatform.isLinux ".3"}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
+  '' + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
   '';
 
   meta = with stdenv.lib; {
