@@ -96,20 +96,20 @@
     url = "https://downloads.arduino.cc/liblistSerials/liblistSerials-1.4.2.zip";
     sha256 = "1p58b421k92rbgwfgbihy0d04mby7kfssghpmjb4gk9yix09za3m";
   };
-  "build/WiFi101-Updater-ArduinoIDE-Plugin-0.10.10.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/archive/v0.10.10.zip";
-    sha256 = "1j6xy7ffrapk0brcfknaj72pvmzrf19sks8pm900ad7w897mksmv";
-  };
    "build/libastylej-2.05.1-4.zip" = fetchurl {
     url = "https://downloads.arduino.cc/libastylej-2.05.1-4.zip";
     sha256 = "0q307b85xba7izjh344kqby3qahg3f5zy18gg52sjk1lbkl9i39s";
   };
+  "build/WiFi101-Updater-ArduinoIDE-Plugin-0.10.10.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/archive/v0.10.10.zip";
+    sha256 = "1j6xy7ffrapk0brcfknaj72pvmzrf19sks8pm900ad7w897mksmv";
+  };
 }
 
 // optionalAttrs (system == "x86_64-linux") {
-  "build/arduino-builder-linux64-1.4.4.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-linux64-1.4.4.tar.bz2";
-    sha256 = "1m5b4rc9i235ra6isqdpjj9llddb5sldkhidb8c4i14mcqbdci1n";
+  "build/arduino-builder-linux64-1.5.2.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-linux64-1.5.2.tar.bz2";
+    sha256 = "0wypr9a2cbv9r0ignsr13raw09i3vfc5zvkjxp2xwb7mv35y77z3";
   };
   "build/linux/avr-gcc-5.4.0-atmel3.6.1-arduino2-x86_64-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avr-gcc-5.4.0-atmel3.6.1-arduino2-x86_64-pc-linux-gnu.tar.bz2";
@@ -130,9 +130,9 @@
 }
 
 // optionalAttrs (system == "i686-linux") {
-  "build/arduino-builder-linux32-1.4.4.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-linux32-1.4.4.tar.bz2";
-    sha256 = "0q3i1ba7vh14616d9ligizcz89yadr0skazxbrcq3mvvjqzbifw8";
+  "build/arduino-builder-linux32-1.5.2.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-linux32-1.5.2.tar.bz2";
+    sha256 = "1slzw8fzxkqsp2izjisjd1rxxbqkrq6n72jc4frk5z2gdm6zfa0l";
   };
   "build/linux/avr-gcc-5.4.0-atmel3.6.1-arduino2-i686-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avr-gcc-5.4.0-atmel3.6.1-arduino2-i686-pc-linux-gnu.tar.bz2";
@@ -148,9 +148,9 @@
   };
 }
 // optionalAttrs (system == "x86_64-darwin") {
-  "build/arduino-builder-macosx-1.4.4.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-macosx-1.4.4.tar.bz2";
-    sha256 = "1jp5kg32aiw062kcxlv660w38iaprifm8h3g2798izpwyfj0dmwg";
+  "build/arduino-builder-macosx-1.5.1.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-macosx-1.5.1.tar.bz2";
+    sha256 = "0iwy083m495mjfxcj173plfac423znv8zknbqk0x2ndp2xfz0yjv";
   };
   "build/macosx/avr-gcc-5.4.0-atmel3.6.1-arduino2-i386-apple-darwin11.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avr-gcc-5.4.0-atmel3.6.1-arduino2-i386-apple-darwin11.tar.bz2";
@@ -160,15 +160,15 @@
     url = "https://downloads.arduino.cc/tools/avrdude-6.3.0-arduino14-i386-apple-darwin11.tar.bz2";
     sha256 = "0qsa3sb3f480fm2z75fq14cqddw5hq8w8q0c2a9cw8i7aa8kkl27";
   };
-  "build/macosx/appbundler/appbundler-1.0ea-arduino4.jar.zip" = fetchurl {
-    url = "https://downloads.arduino.cc/appbundler-1.0ea-arduino4.jar.zip";
-    sha256 = "1vz0g98ancfqdf7yx5m3zrxmzb3fwp18zh5lkh2nyl5xlr9m368z";
+  "build/macosx/appbundler/appbundler-1.0ea-arduino5.jar.zip" = fetchurl {
+    url = "https://downloads.arduino.cc/appbundler-1.0ea-arduino5.jar.zip";
+    sha256 = "1ims951z7ajprqms7yd8ll83c79n7krhd9ljw30yn61f6jk46x82";
   };
 }
 // optionalAttrs (system == "armv6l-linux") {
-  "build/arduino-builder-linuxarm-1.4.4.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-linuxarm-1.4.4.tar.bz2";
-    sha256 = "03bhlhdkg1jx0d3lh9194xgaqsbank9njhlnwy8braa7pw4p58gn";
+  "build/arduino-builder-linuxarm-1.5.2.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-linuxarm-1.5.2.tar.bz2";
+    sha256 = "1vs2s5px07jb2sdv83qxkf9lxmsy8j4dm7bn3vpw5dcjqd3qdyww";
   };
   "build/linux/avr-gcc-5.4.0-atmel3.6.1-arduino2-armhf-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avr-gcc-5.4.0-atmel3.6.1-arduino2-armhf-pc-linux-gnu.tar.bz2";
