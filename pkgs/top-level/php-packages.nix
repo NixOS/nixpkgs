@@ -202,7 +202,35 @@ in
         maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
       };
     };
+ 
+    phpmd = mkDerivation rec {
+      version = "2.8.2";
+      pname = "phpmd";
 
+      src = pkgs.fetchurl {
+        url = "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
+        sha256 = "1i8qgzxniw5d8zjpypalm384y7qfczapfq70xmg129laq6xiqlqb";
+      };
+
+      phases = [ "installPhase" ];
+      buildInputs = [ pkgs.makeWrapper ];
+
+      installPhase = ''
+        mkdir -p $out/bin
+        install -D $src $out/libexec/phpmd/phpmd.phar
+        makeWrapper ${php}/bin/php $out/bin/phpmd \
+          --add-flags "$out/libexec/phpmd/phpmd.phar"
+      '';
+
+      meta = with pkgs.lib; {
+        description = "PHP code quality analyzer";
+        license = licenses.bsd3;
+        homepage = "https://phpmd.org/";
+        maintainers = teams.php.members;
+        broken = !isPhp74;
+      };
+    };
+ 
     phpstan = mkDerivation rec {
       version = "0.12.19";
       pname = "phpstan";
@@ -320,10 +348,15 @@ in
 
       sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
 
+      peclDeps = [ php.extensions.apcu ];
+
       buildInputs = [
-        php.extensions.apcu
         pcre'
       ];
+
+      postInstall = ''
+        mv $out/lib/php/extensions/apc.so $out/lib/php/extensions/apcu_bc.so
+      '';
 
       meta.maintainers = lib.teams.php.members;
     };
@@ -341,13 +374,6 @@ in
       version = "2.6.1";
       pname = "couchbase";
 
-      buildInputs = [
-        pkgs.libcouchbase
-        pkgs.zlib
-        php.extensions.igbinary
-        php.extensions.pcs
-      ];
-
       src = pkgs.fetchFromGitHub {
         owner = "couchbase";
         repo = "php-couchbase";
@@ -356,7 +382,14 @@ in
       };
 
       configureFlags = [ "--with-couchbase" ];
+
+      buildInputs = [
+        pkgs.libcouchbase
+        pkgs.zlib
+      ];
       internalDeps = [ php.extensions.json ];
+      peclDeps = [ php.extensions.igbinary ];
+
       patches = [
         (pkgs.writeText "php-couchbase.patch" ''
           --- a/config.m4
@@ -383,7 +416,6 @@ in
       ];
 
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp74; # Build error
     };
 
     event = buildPecl {
@@ -557,8 +589,10 @@ in
 
       sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
 
+      internalDeps = [ php.extensions.tokenizer ];
+
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp74; # Build error
+      meta.broken = isPhp73; # Runtime failure on 7.3, build error on 7.4
     };
 
     pdo_oci = buildPecl rec {

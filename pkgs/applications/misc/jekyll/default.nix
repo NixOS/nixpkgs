@@ -47,6 +47,7 @@ in bundlerApp {
       host sites right from your GitHub repositories.
     '';
     homepage    = "https://jekyllrb.com/";
+    #changelog   = "https://raw.githubusercontent.com/jekyll/jekyll/v${version}/History.markdown";
     license     = licenses.mit;
     maintainers = with maintainers; [ primeos pesterhazy ];
     platforms   = platforms.unix;

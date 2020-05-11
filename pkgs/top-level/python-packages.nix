@@ -1479,6 +1479,8 @@ in {
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
 
+  trimesh = callPackage ../development/python-modules/trimesh {};
+
   sentinel = callPackage ../development/python-modules/sentinel { };
 
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk {};

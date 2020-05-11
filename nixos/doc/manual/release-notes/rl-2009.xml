@@ -77,7 +77,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+      There is a new <xref linkend="opt-security.doas.enable"/> module that provides <command>doas</command>, a lighter alternative to <command>sudo</command> with many of the same features.
+    </para>
    </listitem>
   </itemizedlist>
 
@@ -275,6 +277,13 @@ php.override {
 <programlisting>
 # sudo /run/current-system/fine-tune/child-1/bin/switch-to-configuration test
 </programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The Nginx log directory has been moved to <literal>/var/log/nginx</literal>, the cache directory
+      to <literal>/var/cache/nginx</literal>. The option <literal>services.nginx.stateDir</literal> has
+      been removed.
     </para>
    </listitem>
    <listitem>

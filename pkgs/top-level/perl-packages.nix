@@ -17009,6 +17009,20 @@ let
     };
   };
 
+  StringInterpolate = buildPerlPackage {
+    pname = "String-Interpolate";
+    version = "0.32";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NE/NEILB/String-Interpolate-0.32.tar.gz;
+      sha256 = "15fwbpz3jdpdgmz794iw9hz2caxrnrw9pdwprxxkanpm92cdhaf7";
+    };
+    meta = with stdenv.lib; {
+      # https://metacpan.org/pod/String::Interpolate
+      description = "String::Interpolate - Wrapper for builtin the Perl interpolation engine.";
+      license = licenses.gpl1Plus;
+    };
+  };
+
   StringMkPasswd = buildPerlPackage {
     pname = "String-MkPasswd";
     version = "0.05";
