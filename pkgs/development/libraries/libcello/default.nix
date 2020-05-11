@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libcello-${version}";
+  pname = "libcello";
   version = "2.1.0";
 
   src = fetchurl {
