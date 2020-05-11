@@ -6605,6 +6605,8 @@ in {
 
   speaklater = callPackage ../development/python-modules/speaklater { };
 
+  speechpy = callPackage ../development/python-modules/speechpy { };
+
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
   pushbullet = callPackage ../development/python-modules/pushbullet { };
