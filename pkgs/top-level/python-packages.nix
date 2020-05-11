@@ -5062,6 +5062,8 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
+  prettyparse = callPackage ../development/python-modules/prettyparse { };
+
   property-manager = callPackage ../development/python-modules/property-manager { };
 
   prompt_toolkit = let
