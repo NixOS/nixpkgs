@@ -36,8 +36,6 @@ let
 
     astring = callPackage ../development/ocaml-modules/astring { };
 
-    async_extra_p4 = callPackage ../development/ocaml-modules/async_extra { };
-
     async_kernel_p4 = callPackage ../development/ocaml-modules/async_kernel { };
 
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
@@ -1200,13 +1198,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-unix.nix {}
       else async_unix_p4;
-
-    async_extra =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.async_extra
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/async-extra.nix {}
-      else async_extra_p4;
 
     # Apps / from all-packages
 
