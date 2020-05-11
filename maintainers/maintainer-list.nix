@@ -2248,6 +2248,12 @@
     githubId = 411447;
     name = "Leo Gaspard";
   };
+  ekpdt = {
+    email = "nix@pdtpartners.com";
+    github = "ekpdt";
+    githubId = 64796365;
+    name = "Elan Kugelmass";
+  };
   elasticdog = {
     email = "aaron@elasticdog.com";
     github = "elasticdog";

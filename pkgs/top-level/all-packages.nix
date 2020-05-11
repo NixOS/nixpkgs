@@ -15488,6 +15488,8 @@ in
 
   couchpotato = callPackage ../servers/couchpotato {};
 
+  cortextool = callPackage ../servers/monitoring/cortex/cortextool.nix {};
+
   dex-oidc = callPackage ../servers/dex { };
 
   doh-proxy = callPackage ../servers/dns/doh-proxy {
