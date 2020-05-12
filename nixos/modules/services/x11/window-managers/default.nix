@@ -28,6 +28,7 @@ in
     ./notion.nix
     ./ratpoison.nix
     ./sawfish.nix
+    ./smallwm.nix
     ./stumpwm.nix
     ./spectrwm.nix
     ./tinywm.nix

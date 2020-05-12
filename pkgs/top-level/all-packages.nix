@@ -19997,6 +19997,8 @@ in
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
+  smallwm = callPackage ../applications/window-managers/smallwm { };
+
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
   spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
