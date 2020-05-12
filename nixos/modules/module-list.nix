@@ -202,6 +202,7 @@
   ./security/sudo.nix
   ./security/doas.nix
   ./security/systemd-confinement.nix
+  ./security/systemd-sandbox.nix
   ./security/tpm2.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
