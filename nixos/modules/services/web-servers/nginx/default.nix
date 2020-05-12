@@ -463,6 +463,14 @@ in
         '';
       };
 
+      enableSandbox = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Starting Nginx web server with additional sandbox/hardening options.
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "nginx";
@@ -713,6 +721,7 @@ in
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
         # Security
         NoNewPrivileges = true;
+      } // optionalAttrs cfg.enableSandbox {
         # Sandboxing
         ProtectSystem = "strict";
         ProtectHome = mkDefault true;
