@@ -52,6 +52,6 @@ buildGoModule rec {
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mmahut maintainers."1000101" ];
-    platforms = platforms.all;
+    platforms = remove "aarch64-linux" platforms.unix;
   };
 }
