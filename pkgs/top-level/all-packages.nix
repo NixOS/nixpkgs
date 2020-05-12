@@ -7207,6 +7207,8 @@ in
 
   unrtf = callPackage ../tools/text/unrtf { };
 
+  unrpa = with python3Packages; toPythonApplication unrpa;
+
   untex = callPackage ../tools/text/untex { };
 
   untrunc = callPackage ../tools/video/untrunc { };
