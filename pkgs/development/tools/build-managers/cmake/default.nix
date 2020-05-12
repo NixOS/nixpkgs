@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+    # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
+      "CFLAGS=-D_FILE_OFFSET_BITS=64"
+      "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
+    ]
     ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
