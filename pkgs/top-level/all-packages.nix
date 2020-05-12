@@ -11054,6 +11054,8 @@ in
 
   vultr = callPackage ../development/tools/vultr { };
 
+  vultr-cli = callPackage ../development/tools/vultr-cli { };
+
   vulnix = callPackage ../tools/security/vulnix { };
 
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
