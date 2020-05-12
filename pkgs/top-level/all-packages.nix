@@ -3371,6 +3371,8 @@ in
 
   teamocil = callPackage ../tools/misc/teamocil { };
 
+  terminal_tarot = callPackage ../tools/misc/terminal_tarot { };
+
   the-way = callPackage ../development/tools/the-way {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
