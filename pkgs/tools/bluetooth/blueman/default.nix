@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0k49hgyglsrlszckjzrvlsdm9ysns3qgvczgcmwaz02vvwnb4zai";
+    sha256 = "1pngqbwapbvywhkmflapqvs0wa0af7d1a87wy56l5hg2r462xl1v";
   };
 
   nativeBuildInputs = [
