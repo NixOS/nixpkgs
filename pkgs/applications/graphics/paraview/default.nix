@@ -59,7 +59,7 @@ mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.paraview.org/;
+    homepage = "http://www.paraview.org/";
     description = "3D Data analysis and visualization application";
     license = licenses.free;
     maintainers = with maintainers; [ guibert ];

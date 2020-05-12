@@ -20,14 +20,14 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    mv $bin/bin/{internal,ct}
-    rm $bin/bin/tools
+    mv $out/bin/{internal,ct}
+    rm $out/bin/tools
   '';
 
   meta = {
     description = "Convert a Container Linux Config into Ignition";
     license = licenses.asl20;
-    homepage = https://github.com/coreos/container-linux-config-transpiler;
+    homepage = "https://github.com/coreos/container-linux-config-transpiler";
     maintainers = with maintainers; [elijahcaine];
     platforms = with platforms; unix;
   };

@@ -23,8 +23,6 @@ with pkgs;
       };
     in rec {
         isPy27 = pythonVersion == "2.7";
-        isPy33 = pythonVersion == "3.3"; # TODO: remove
-        isPy34 = pythonVersion == "3.4"; # TODO: remove
         isPy35 = pythonVersion == "3.5";
         isPy36 = pythonVersion == "3.6";
         isPy37 = pythonVersion == "3.7";
@@ -44,6 +42,10 @@ with pkgs;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
         inherit hasDistutilsCxxPatch pythonForBuild;
+
+        tests = callPackage ./tests.nix {
+          python = self;
+        };
   };
 
 in {
@@ -53,10 +55,10 @@ in {
     sourceVersion = {
       major = "2";
       minor = "7";
-      patch = "17";
+      patch = "18";
       suffix = "";
     };
-    sha256 = "0hds28cg226m8j8sr394nm9yc4gxhvlv109w0avsf2mxrlrz0hsd";
+    sha256 = "0hzgxl94hnflis0d6m4szjx0b52gah7wpmcg5g00q7am6xwhwb5n";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -92,10 +94,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "6";
+      patch = "7";
       suffix = "";
     };
-    sha256 = "0gskry19ylw91p38pdq36qcgk6h3x5i4ia0ik977kw2943kwr8jm";
+    sha256 = "0di1y2cna823qgk6sd2lvpjdm3g2qikdd50i2bjd330dpzqsk806";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -105,10 +107,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "8";
-      patch = "1";
+      patch = "2";
       suffix = "";
     };
-    sha256 = "1s4lwn5vzsajlc88m6hkghsvnjw4d00l2dsgng0m2w6vyqbl32bm";
+    sha256 = "1ps5v323cp5czfshqjmbsqw7nvrdpcbk06f62jbzaqik4gfffii6";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -119,9 +121,9 @@ in {
       major = "3";
       minor = "9";
       patch = "0";
-      suffix = "a3";
+      suffix = "a4";
     };
-    sha256 = "09l68jyfhhass3cqyqyp2cv3a3i86qs0x736isidmpbrbxsincva";
+    sha256 = "0qzy0wlq0izxk8ii28gy70v138g6xnz9sgsxpyayls2j04l6b5vz";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -143,6 +145,7 @@ in {
     stripTkinter = true;
     rebuildBytecode = false;
     stripBytecode = true;
+    includeSiteCustomize = false;
   }).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {

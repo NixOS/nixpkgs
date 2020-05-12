@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
     mv *.js metadata.json dbus.xml schemas locale "$extensions_dir"
   '';
 
+  uuid = "pidgin@muffinmad";
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/muffinmad/pidgin-im-gnome-shell-extension;
+    homepage = "https://github.com/muffinmad/pidgin-im-gnome-shell-extension";
     description = "Make Pidgin IM conversations appear in the Gnome Shell message tray";
     license = licenses.gpl2;
     platforms = platforms.linux;

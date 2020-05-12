@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       to support various Chinese input methods, including those based on
       modern dialects or historical diasystems of the Chinese language.
     '';
-    homepage = https://rime.im;
+    homepage = "https://rime.im";
     # Note that individual packages in this collection
     # may be released under different licenses
     license = licenses.gpl3;

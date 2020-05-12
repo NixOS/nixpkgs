@@ -1,30 +1,28 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "7.4.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "108p1p9bxhg4qzwfs6wqcakcvlpqw3w498jkz1vhmg6jp1mbmgdr";
+    sha256 = "0l18xavkj99cydp1dqrph00yq2px339zs6jcim59iq3zln1yn0n7";
   };
 
-  cargoSha256 = "1nhlarrl0m6as3j2547yf1xxjm88qy3v8jgvhd47z3f5s63bb6w5";
+  cargoSha256 = "1sdwbnncs1d45x1iqk3jv3r69fpkzrsxm4kjn89jmvd5nk8blvs2";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   preFixup = ''
-    install -Dm644 "$src/doc/fd.1" "$out/man/man1/fd.1"
+    installManPage "$src/doc/fd.1"
 
-    install -Dm644 target/release/build/fd-find-*/out/fd.bash \
-      "$out/share/bash-completion/completions/fd.bash"
-    install -Dm644 target/release/build/fd-find-*/out/fd.fish \
-      "$out/share/fish/vendor_completions.d/fd.fish"
-    install -Dm644 target/release/build/fd-find-*/out/_fd \
-      "$out/share/zsh/site-functions/_fd"
+    installShellCompletion $releaseDir/build/fd-find-*/out/fd.{bash,fish}
+    installShellCompletion --zsh $releaseDir/build/fd-find-*/out/_fd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple IRC client";
-    homepage = https://tools.suckless.org/sic/;
+    homepage = "https://tools.suckless.org/sic/";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
   };

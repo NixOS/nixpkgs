@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "txtorcon";
-  version = "19.1.0";
+  version = "20.0.0";
 
   checkInputs = [ pytest mock lsof GeoIP ];
   propagatedBuildInputs = [
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19ayn5w9ayxbb1m84l1s9qlb6kv7sz6sg34mzy8bnidc7qnfbn15";
+    sha256 = "0yipb41w2icbj50d3z1j92d8w6xhbqd1rnmd31vzb5k3g20x0b0j";
   };
 
   # zope.interface issue
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
-    homepage = https://github.com/meejah/txtorcon;
+    homepage = "https://github.com/meejah/txtorcon";
     maintainers = with lib.maintainers; [ jluttine ];
     # Currently broken on Python 2.7. See
     # https://github.com/NixOS/nixpkgs/issues/71826

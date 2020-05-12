@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1zv87nqhrzsxx0m891df4vagzssj3kblfv9yp7j96dw0vn9950qa";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = with qt5; [
      qt5.qtbase
@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
      qtsvg
      qtquickcontrols2
      qtgraphicaleffects
-     pkgconfig
      git
   ];
 

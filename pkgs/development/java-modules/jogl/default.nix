@@ -6,7 +6,7 @@
       version = "2.3.2";
 
       gluegen-src = fetchgit {
-        url = git://jogamp.org/srv/scm/gluegen.git;
+        url = "git://jogamp.org/srv/scm/gluegen.git";
         rev = "v${version}";
         sha256 = "00hybisjwqs88p24dds652bzrwbbmhn2dpx56kp4j6xpadkp33d0";
         fetchSubmodules = true;
@@ -16,7 +16,7 @@
       inherit version;
 
       src = fetchgit {
-        url = git://jogamp.org/srv/scm/jogl.git;
+        url = "git://jogamp.org/srv/scm/jogl.git";
         rev = "v${version}";
         sha256 = "0msi2gxiqm2yqwkmxqbh521xdrimw1fly20g890r357rcgj8fsn3";
         fetchSubmodules = true;
@@ -56,7 +56,7 @@
 
       meta = with stdenv.lib; {
         description = "Java libraries for 3D Graphics, Multimedia and Processing";
-        homepage = https://jogamp.org/;
+        homepage = "https://jogamp.org/";
         license = licenses.bsd3;
         platforms = [ "x86_64-linux" ];
       };

@@ -35,7 +35,7 @@ buildPythonPackage rec {
       on disk. It integrates deeply with btrfs so that scans are
       incremental and low-impact.
     '';
-    homepage = https://github.com/g2p/bedup;
+    homepage = "https://github.com/g2p/bedup";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bluescreen303 ];
   };

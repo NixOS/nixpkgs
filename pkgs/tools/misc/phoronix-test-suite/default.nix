@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, php, which, gnused, makeWrapper, gnumake, gcc }:
+{ stdenv, fetchurl, php, which, gnused, makeWrapper, gnumake, gcc, callPackage }:
 
 stdenv.mkDerivation rec {
   pname = "phoronix-test-suite";
-  version = "9.4.0";
+  version = "9.6.0";
 
   src = fetchurl {
     url = "https://phoronix-test-suite.com/releases/${pname}-${version}.tar.gz";
-    sha256 = "108h3zs7p9vmb56dwlw7wicv9z4kxbndl82075sx4c12rzrmssi9";
+    sha256 = "1wgw5lwpm3ylby2llnjiq356cdb3v1jghj7xq659c722wj617i88";
   };
 
   buildInputs = [ php ];
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     --set PHP_BIN ${php}/bin/php \
     --prefix PATH : ${stdenv.lib.makeBinPath [ gnumake gcc ]}
   '';
+
+  passthru.tests = {
+    simple-execution = callPackage ./tests.nix { };
+  };
 
   meta = with stdenv.lib; {
     description = "Open-Source, Automated Benchmarking";

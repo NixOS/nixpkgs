@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Ordered Multivalue Dictionary.";
-    homepage = https://github.com/gruns/orderedmultidict;
+    homepage = "https://github.com/gruns/orderedmultidict";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ vanzef ];
   };

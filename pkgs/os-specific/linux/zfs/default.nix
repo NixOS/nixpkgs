@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+{ stdenv, fetchFromGitHub, fetchpatch
+, autoreconfHook, utillinux, nukeReferences, coreutils
 , perl, buildPackages
 , configFile ? "all"
 
@@ -11,6 +12,7 @@
 
 # Kernel dependencies
 , kernel ? null
+, enablePython ? true
 }:
 
 with stdenv.lib;
@@ -40,7 +42,12 @@ let
         inherit rev sha256;
       };
 
-      patches = extraPatches;
+      patches = [ (fetchpatch {
+        # https://github.com/openzfs/zfs/pull/9961#issuecomment-585827288
+        # will be included in zfs 0.5.4 as well
+        url = "https://gist.githubusercontent.com/satmandu/67cbae9c4d461be0e64428a1707aef1c/raw/ba0fb65f17ccce5b710e4ce86a095de577f7dfe1/k5.6.3.patch";
+        sha256 = "0zay7cz078v7wcnk7xl96blp7j6y64q1migb91c7h66zkpikqvgb";
+      }) ] ++ extraPatches;
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
@@ -51,7 +58,12 @@ let
       '' + optionalString buildUser ''
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount" \
                                                       --replace "/bin/mount"              "${utillinux}/bin/mount"
-        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${nfs-utils}/bin/exportfs"
+        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${
+          # We don't *need* python support, but we set it like this to minimize closure size:
+          # If it's disabled by default, no need to enable it, even if we have python enabled
+          # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
+          nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
+        }/bin/exportfs"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
         substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d"
         substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
@@ -86,7 +98,8 @@ let
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs = optionals buildUser [ zlib libuuid attr ]
-        ++ optionals (buildUser) [ openssl python3 ]
+        ++ optional buildUser openssl
+        ++ optional (buildUser && enablePython) python3
         ++ optional stdenv.hostPlatform.isMusl libtirpc;
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
@@ -96,7 +109,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
-        (withFeatureAs buildUser "python" python3.interpreter)
+        (withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -164,7 +177,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        homepage = https://zfsonlinux.org/;
+        homepage = "https://zfsonlinux.org/";
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman fpletz globin ];

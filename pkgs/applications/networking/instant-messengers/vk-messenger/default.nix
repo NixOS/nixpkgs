@@ -3,18 +3,18 @@
 , wrapGAppsHook }:
 
 let
-  version = "4.5.2";
+  version = "5.0.1";
 in stdenv.mkDerivation {
   pname = "vk-messenger";
   inherit version;
   src = {
     i686-linux = fetchurl {
       url = "https://desktop.userapi.com/rpm/master/vk-${version}.i686.rpm";
-      sha256 = "11xsdmvd2diq3m61si87x2c08nap0vakcypm90wjmdjwayg3fdlw";
+      sha256 = "1ji23x13lzbkiqfrrwx1pj6gmms0p58cjmjc0y4g16kqhlxl60v6";
     };
     x86_64-linux = fetchurl {
       url = "https://desktop.userapi.com/rpm/master/vk-${version}.x86_64.rpm";
-      sha256 = "0j65d6mwj6rxczi0p9fsr6jh37jxw3a3h6w67xwgdvibb7lf3gbb";
+      sha256 = "01vvmia2qrxvrvavk9hkkyvfg4pg15m01grwb28884vy4nqw400y";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Simple and Convenient Messaging App for VK";
-    homepage = https://vk.com/messenger;
+    homepage = "https://vk.com/messenger";
     license = licenses.unfree;
     maintainers = [ maintainers.gnidorah ];
     platforms = ["i686-linux" "x86_64-linux"];

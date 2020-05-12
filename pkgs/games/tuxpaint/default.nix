@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Source Drawing Software for Children";
-    homepage = http://www.tuxpaint.org/;
+    homepage = "http://www.tuxpaint.org/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ woffs ];
     platforms = stdenv.lib.platforms.linux;

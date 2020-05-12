@@ -26,7 +26,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "A tool to generate native build files";
-    homepage = https://chromium.googlesource.com/external/gyp/+/master/README.md;
+    homepage = "https://chromium.googlesource.com/external/gyp/+/master/README.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
   };

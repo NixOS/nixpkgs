@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, systemd, libusb
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, systemd, libusb1
 , darwin }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libusb systemd ];
+    ++ stdenv.lib.optionals stdenv.isLinux [ libusb1 systemd ];
 
   enableParallelBuilding = true;
 

@@ -26,7 +26,7 @@ buildPythonPackage rec {
       Alternative implementation of django "sites" framework
       based on settings instead of models.
     '';
-    homepage = https://github.com/niwinz/django-sites;
+    homepage = "https://github.com/niwinz/django-sites";
     license = lib.licenses.bsd3;
   };
 }

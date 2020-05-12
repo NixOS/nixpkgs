@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Provides an asynchronous client and server implementation of the SSHv2 protocol on top of the Python asyncio framework";
-    homepage = https://asyncssh.readthedocs.io/en/latest;
+    homepage = "https://asyncssh.readthedocs.io/en/latest";
     license = licenses.epl20;
     maintainers = with maintainers; [ worldofpeace ];
   };

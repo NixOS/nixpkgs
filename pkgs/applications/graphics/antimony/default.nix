@@ -4,19 +4,19 @@
 }:
 
 let
-  gitRev    = "6dfe6822e0279a4cc2f1c60e85b42212627285fe";
+  gitRev    = "8fb4b0929ce84cf375bfb83a9d522ccd80681eaf";
   gitBranch = "develop";
   gitTag    = "0.9.3";
 in
   stdenv.mkDerivation {
     pname = "antimony";
-    version = "2019-10-30";
+    version = "2020-03-28";
 
     src = fetchFromGitHub {
       owner  = "mkeeter";
       repo   = "antimony";
       rev    = gitRev;
-      sha256 = "07zlkwlk79czq8dy85b6n3ds3g36l8qy4ix849ady6ia3gm8981j";
+      sha256 = "1s0zmq5jmhmb1wcsyaxfmii448g6x8b41mzvb1awlljj85qj0k2s";
     };
 
     patches = [ ./paths-fix.patch ];
@@ -29,11 +29,10 @@ in
 
     buildInputs = [
       libpng python3 python3.pkgs.boost
-      libGLU libGL qtbase wrapQtAppsHook
-      ncurses
+      libGLU libGL qtbase ncurses
     ];
 
-    nativeBuildInputs = [ cmake flex lemon ];
+    nativeBuildInputs = [ cmake flex lemon wrapQtAppsHook ];
 
     cmakeFlags= [
       "-DGITREV=${gitRev}"
@@ -45,7 +44,7 @@ in
 
     meta = with stdenv.lib; {
       description = "A computer-aided design (CAD) tool from a parallel universe";
-      homepage    = https://github.com/mkeeter/antimony;
+      homepage    = "https://github.com/mkeeter/antimony";
       license     = licenses.mit;
       maintainers = with maintainers; [ rnhmjoj ];
       platforms   = platforms.linux;

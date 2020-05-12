@@ -1,6 +1,7 @@
 { stdenv, buildGoPackage, fetchurl
 , cmake, xz, which, autoconf
 , ncurses6, libedit, libunwind
+, installShellFiles
 }:
 
 let
@@ -8,7 +9,7 @@ let
   linuxDeps  = [ ncurses6 ];
 
   buildInputs = if stdenv.isDarwin then darwinDeps else linuxDeps;
-  nativeBuildInputs = [ cmake xz which autoconf ];
+  nativeBuildInputs = [ installShellFiles cmake xz which autoconf ];
 
 in
 buildGoPackage rec {
@@ -41,8 +42,8 @@ buildGoPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D cockroachoss $bin/bin/cockroach
-    install -D cockroach.bash $bin/share/bash-completion/completions/cockroach.bash
+    install -D cockroachoss $out/bin/cockroach
+    installShellCompletion cockroach.bash
 
     mkdir -p $man/share/man
     cp -r man $man/share/man
@@ -50,14 +51,10 @@ buildGoPackage rec {
     runHook postInstall
   '';
 
-  # Unfortunately we have to keep an empty reference to $out, because it seems
-  # buildGoPackages only nukes references to the go compiler under $bin, effectively
-  # making all binary output under $bin mandatory. Ideally, we would just use
-  # $out and $man and remove $bin since there's no point in an empty path. :(
-  outputs = [ "bin" "man" "out" ];
+  outputs = [ "out" "man" ];
 
   meta = with stdenv.lib; {
-    homepage    = https://www.cockroachlabs.com;
+    homepage    = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";
     license     = licenses.asl20;
     platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];

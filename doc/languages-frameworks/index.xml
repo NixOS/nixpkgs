@@ -21,6 +21,7 @@
  <xi:include href="node.section.xml" />
  <xi:include href="ocaml.xml" />
  <xi:include href="perl.xml" />
+ <xi:include href="php.section.xml" />
  <xi:include href="python.section.xml" />
  <xi:include href="qt.xml" />
  <xi:include href="r.section.xml" />

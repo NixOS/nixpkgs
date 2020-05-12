@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper around isl, an integer set library";
-    homepage = https://github.com/inducer/islpy;
+    homepage = "https://github.com/inducer/islpy";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

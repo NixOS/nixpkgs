@@ -105,7 +105,7 @@ let
               name = "embed-pdf-viewer-plugin";
               # Download the theme from the wordpress site
               src = pkgs.fetchurl {
-                url = https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip;
+                url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
                 sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
               };
               # We need unzip to build this package
@@ -132,7 +132,7 @@ let
               name = "responsive-theme";
               # Download the theme from the wordpress site
               src = pkgs.fetchurl {
-                url = https://downloads.wordpress.org/theme/responsive.3.14.zip;
+                url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
                 sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
               };
               # We need unzip to build this package

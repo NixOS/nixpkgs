@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
-  version = "1.14.46";
+  version = "1.14.47";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bddmlzg719sjhlbzqlhb7chwk93qc7g68m2r9r8xz112jdradpa";
+    sha256 = "0kbpp9ksl7977xiga37sk1gdw1r039v6zviqznl7alvvg39yp26i";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME's Structured File Library";
-    homepage    = https://www.gnome.org/projects/libgsf;
+    homepage    = "https://www.gnome.org/projects/libgsf";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = stdenv.lib.platforms.unix;

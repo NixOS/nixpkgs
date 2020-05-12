@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python style guide checker (formerly called pep8)";
-    homepage = https://pycodestyle.readthedocs.io;
+    homepage = "https://pycodestyle.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [
       kamadorueda

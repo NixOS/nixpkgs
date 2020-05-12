@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OpenCL ICD Loader for ${opencl-headers.name}";
-    homepage    = https://forge.imag.fr/projects/ocl-icd/;
+    homepage    = "https://forge.imag.fr/projects/ocl-icd/";
     license     = licenses.bsd2;
     platforms = platforms.linux;
   };

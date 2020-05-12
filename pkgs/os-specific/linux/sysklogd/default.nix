@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "sysklogd-1.5.1";
 
   src = fetchurl {
-    url = http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.1.tar.gz;
+    url = "http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.1.tar.gz";
     sha256 = "00f2wy6f0qng7qzga4iicyzl9j8b7mp6mrpfky5jxj93ms2w2rji";
   };
 

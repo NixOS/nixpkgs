@@ -34,10 +34,12 @@ let
   enabled = nvidia_x11 != null;
 
   cfg = config.hardware.nvidia;
+
   pCfg = cfg.prime;
   syncCfg = pCfg.sync;
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
+  nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
 in
 
 {
@@ -127,6 +129,15 @@ in
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
         specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
         <option>hardware.nvidia.prime.intelBusId</option>).
+      '';
+    };
+
+    hardware.nvidia.nvidiaPersistenced = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Update for NVIDA GPU headless mode, i.e. nvidia-persistenced. It ensures all
+        GPUs stay awake even during headless mode.
       '';
     };
   };
@@ -219,6 +230,18 @@ in
         "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
       ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
         "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+
+    systemd.services."nvidia-persistenced" = mkIf nvidiaPersistencedEnabled {
+      description = "NVIDIA Persistence Daemon";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "forking";
+        Restart = "always";
+        PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+        ExecStart = "${nvidia_x11.persistenced}/bin/nvidia-persistenced --verbose";
+        ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
+      };
+    };
 
     boot.extraModulePackages = [ nvidia_x11.bin ];
 

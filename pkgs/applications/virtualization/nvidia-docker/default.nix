@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/NVIDIA/nvidia-docker;
+    homepage = "https://github.com/NVIDIA/nvidia-docker";
     description = "NVIDIA container runtime for Docker";
     license = licenses.bsd3;
     platforms = platforms.linux;

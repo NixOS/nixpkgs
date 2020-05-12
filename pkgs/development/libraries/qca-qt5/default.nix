@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt 5 Cryptographic Architecture";
-    homepage = http://delta.affinix.com/qca;
+    homepage = "http://delta.affinix.com/qca";
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;

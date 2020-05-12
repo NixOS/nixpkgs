@@ -44,7 +44,7 @@ vmTools.buildRPM (
       for rpmdir in $extraRPMs ; do
         echo "file rpm-extra $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)" >> $out/nix-support/hydra-build-products
       done
-    ''; # */
+    '';
 
     meta = (if args ? meta then args.meta else {}) // {
       description = "RPM package for ${diskImage.fullName}";

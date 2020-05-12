@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib curl expat fuse openssl python3 ];
 
   meta = {
-    homepage = http://afflib.sourceforge.net/;
+    homepage = "http://afflib.sourceforge.net/";
     description = "Advanced forensic format library";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsdOriginal;

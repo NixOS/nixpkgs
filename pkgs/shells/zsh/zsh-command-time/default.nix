@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Plugin that output time: xx after long commands";
-    homepage = https://github.com/popstas/zsh-command-time;
+    homepage = "https://github.com/popstas/zsh-command-time";
     license = licenses.mit;
     platforms = platforms.unix;
   };

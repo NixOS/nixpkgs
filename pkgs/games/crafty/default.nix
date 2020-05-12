@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   bookBin = fetchurl {
-    url = http://www.craftychess.com/downloads/book/book.bin;
+    url = "http://www.craftychess.com/downloads/book/book.bin";
     sha256 = "10rrgkr3hxm7pxdbc2jq8b5g74gfhzk4smahks3k8am1cmyq4p7r";
   };
 
   startPgn = fetchurl {
-    url = http://craftychess.com/downloads/book/start.pgn.gz;
+    url = "http://craftychess.com/downloads/book/start.pgn.gz";
     sha256 = "12g70mgfifwssfvndzq94pin34dizlixhsga75vgj7dakysi2p7f";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.craftychess.com/;
+    homepage = "http://www.craftychess.com/";
     description = "Chess program developed by Dr. Robert M. Hyatt";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.unix;

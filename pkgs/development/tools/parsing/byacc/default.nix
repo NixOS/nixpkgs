@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "byacc";
-  version = "20191125";
+  version = "20200330";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/byacc/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/byacc/${pname}-${version}.tgz"
     ];
-    sha256 = "1phw8410ly3msv03dmjfi8xkmrl1lrrk928fp1489amg6sz2w707";
+    sha256 = "1c0zyn6v286i09jlc8gx6jyaa5438qyy985rqsd76kb8ibfy56g0";
   };
 
   configureFlags = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Berkeley YACC";
-    homepage = https://invisible-island.net/byacc/byacc.html;
+    homepage = "https://invisible-island.net/byacc/byacc.html";
     license = licenses.publicDomain;
     platforms = platforms.unix;
   };

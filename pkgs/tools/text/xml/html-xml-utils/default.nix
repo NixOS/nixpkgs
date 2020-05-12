@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utilities for manipulating HTML and XML files";
-    homepage = http://www.w3.org/Tools/HTML-XML-utils/;
+    homepage = "http://www.w3.org/Tools/HTML-XML-utils/";
     license = licenses.w3c;
     platforms = platforms.all;
   };

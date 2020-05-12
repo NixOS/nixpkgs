@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "James Clark's DSSSL Engine";
     license = "custom";
-    homepage = http://www.jclark.com/jade/;
+    homepage = "http://www.jclark.com/jade/";
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ e-user ];
   };

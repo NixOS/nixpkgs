@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a2dcb07c6a4ff48bade69bb5d30d84a96911a7e9dcb76b6de975453f933332f8";
+    sha256 = "10crjlsn5vx03xwlnhga9faqq2rlw0qwabi45vnvhmz22qbd8w43";
   };
 
   checkInputs = [ flake8 nose ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Declarative Python programming using Parameters";
-    homepage = https://github.com/pyviz/param;
+    homepage = "https://github.com/pyviz/param";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

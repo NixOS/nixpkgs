@@ -3,13 +3,13 @@
 buildGoPackage rec {
   pname = "gitlab-workhorse";
 
-  version = "8.20.0";
+  version = "8.21.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "0a64qrbyxvpqgf5ksczn3kisbhyx6fcw58g5nlag4jnjj6w5i0wr";
+    sha256 = "065yy8zfxahpybk3mbvc492by1lvssqcbqm8i4yp09m669rk239w";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitlab-workhorse";
@@ -28,7 +28,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gitlab.com/;
+    homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin talyz ];
     license = licenses.mit;

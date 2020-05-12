@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       management, no track suggestions, no media player. Just a fast,
       efficient workflow tool.
     '';
-    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
+    homepage = "http://www.ibrahimshaath.co.uk/keyfinder/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

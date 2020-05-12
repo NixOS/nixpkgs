@@ -19,12 +19,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ google_cloud_logging ];
 
   checkPhase = ''
+    rm -r google
     pytest tests/unit
   '';
 
   meta = with stdenv.lib; {
     description = "Stackdriver Error Reporting API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

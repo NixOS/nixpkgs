@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/zopefoundation/zope.i18nmessageid;
+    homepage = "https://github.com/zopefoundation/zope.i18nmessageid";
     description = "Message Identifiers for internationalization";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

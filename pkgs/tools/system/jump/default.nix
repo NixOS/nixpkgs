@@ -32,7 +32,7 @@ buildGoModule rec {
       navigational habits by keeping track of the directories you visit. It
       strives to give you the best directory for the shortest search term.
     '';
-    homepage = https://github.com/gsamokovarov/jump;
+    homepage = "https://github.com/gsamokovarov/jump";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ sondr3 ];

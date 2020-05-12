@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   ] ++ lib.optional speechSupport speechd;
 
   meta = {
-    homepage = http://www.inference.org.uk/dasher/;
+    homepage = "http://www.inference.org.uk/dasher/";
     description = "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.Profpatsch ];

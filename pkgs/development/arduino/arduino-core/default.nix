@@ -1,9 +1,10 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, jdk, ant
-, libusb, libusb1, unzip, zlib, ncurses, readline
+, libusb-compat-0_1, libusb1, unzip, zlib, ncurses, readline
 , withGui ? false, gtk2 ? null, withTeensyduino ? false
   /* Packages needed for Teensyduino */
 , upx, fontconfig, xorg, gcc
-, atk, glib, pango, gdk-pixbuf, libpng12, expat, freetype,
+, atk, glib, pango, gdk-pixbuf, libpng12, expat, freetype
+, cairo, udev
 }:
 
 assert withGui -> gtk2 != null;
@@ -32,6 +33,7 @@ let
 
   teensy_libpath = stdenv.lib.makeLibraryPath [
     atk
+    cairo
     expat
     fontconfig
     freetype
@@ -40,13 +42,15 @@ let
     glib
     gtk2
     libpng12
-    libusb
+    libusb-compat-0_1
     pango
+    udev
     xorg.libSM
     xorg.libX11
     xorg.libXext
     xorg.libXft
     xorg.libXinerama
+    xorg.libXxf86vm
     zlib
   ];
   teensy_architecture =
@@ -92,7 +96,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ jdk ant libusb libusb1 unzip zlib ncurses5 readline
+  buildInputs = [ jdk ant libusb-compat-0_1 libusb1 unzip zlib ncurses5 readline
   ] ++ stdenv.lib.optionals withTeensyduino [ upx ];
   downloadSrcList = builtins.attrValues externalDownloads;
   downloadDstList = builtins.attrNames externalDownloads;
@@ -125,7 +129,7 @@ stdenv.mkDerivation rec {
   javaPath = lib.makeBinPath [jdk];
 
   # Everything else will be patched into rpath
-  rpath = (lib.makeLibraryPath [zlib libusb libusb1 readline ncurses5 stdenv.cc.cc]);
+  rpath = (lib.makeLibraryPath [zlib libusb-compat-0_1 libusb1 readline ncurses5 stdenv.cc.cc]);
 
   installPhase = ''
     mkdir -p $out/share/arduino
@@ -213,7 +217,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open-source electronics prototyping platform";
-    homepage = http://arduino.cc/;
+    homepage = "http://arduino.cc/";
     license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ antono auntie robberer bjornfor bergey ];

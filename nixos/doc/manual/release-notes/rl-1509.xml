@@ -22,7 +22,7 @@
     in excess of 8,000 Haskell packages. Detailed instructions on how to use
     that infrastructure can be found in the
     <link
-    xlink:href="http://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
+    xlink:href="https://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
     Guide to the Haskell Infrastructure</link>. Users migrating from an earlier
     release may find helpful information below, in the list of
     backwards-incompatible changes. Furthermore, we distribute 51(!) additional
@@ -555,7 +555,7 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
      the compiler now is the <literal>haskellPackages.ghcWithPackages</literal>
      function. The
      <link
-    xlink:href="http://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
+    xlink:href="https://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
      Guide to the Haskell Infrastructure</link> provides more information about
      this subject.
     </para>

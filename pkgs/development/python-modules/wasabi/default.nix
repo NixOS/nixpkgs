@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A lightweight console printing and formatting toolkit";
-    homepage = https://github.com/ines/wasabi;
+    homepage = "https://github.com/ines/wasabi";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk ];
     };

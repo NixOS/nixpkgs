@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://mike-fabian.github.io/ibus-typing-booster/;
+    homepage = "https://mike-fabian.github.io/ibus-typing-booster/";
     license = licenses.gpl3Plus;
     description = "A typing booster engine for the IBus platform";
     maintainers = with maintainers; [ ];

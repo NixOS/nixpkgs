@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   postInstall = "mkdir -p $out/share/osrm-backend && cp -r ../profiles $out/share/osrm-backend/profiles";
 
   meta = {
-    homepage = https://github.com/Project-OSRM/osrm-backend/wiki;
+    homepage = "https://github.com/Project-OSRM/osrm-backend/wiki";
     description = "Open Source Routing Machine computes shortest paths in a graph. It was designed to run well with map data from the Openstreetmap Project";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers;[ erictapen ];

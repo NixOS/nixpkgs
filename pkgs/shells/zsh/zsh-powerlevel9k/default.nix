@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A beautiful theme for zsh";
-    homepage = https://github.com/bhilburn/powerlevel9k;
+    homepage = "https://github.com/bhilburn/powerlevel9k";
     license = stdenv.lib.licenses.mit;
 
     platforms = stdenv.lib.platforms.unix;

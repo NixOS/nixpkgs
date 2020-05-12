@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Convert documents to .mobi for use with Amazon Kindle";
-    homepage = https://www.amazon.com/gp/feature.html?docId=1000765211;
+    homepage = "https://www.amazon.com/gp/feature.html?docId=1000765211";
     license = licenses.unfree;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" "x86_64-cygwin" "i686-cygwin" ];

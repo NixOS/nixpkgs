@@ -17,7 +17,7 @@ fetchzip {
 
   meta = with lib; {
     description = "Firmware for Intel 2200BG cards";
-    homepage = http://ipw2200.sourceforge.net/firmware.php;
+    homepage = "http://ipw2200.sourceforge.net/firmware.php";
     license = licenses.unfreeRedistributableFirmware;
     maintainers = with maintainers; [ sternenseemann ];
     platforms = platforms.linux;

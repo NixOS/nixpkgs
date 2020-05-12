@@ -16,7 +16,7 @@ buildPythonPackage rec {
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/un33k/python-slugify;
+      homepage = "https://github.com/un33k/python-slugify";
       description = "A Python Slugify application that handles Unicode";
       license = licenses.mit;
       platforms = platforms.all;

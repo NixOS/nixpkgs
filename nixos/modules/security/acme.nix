@@ -87,19 +87,19 @@ let
         default = {};
         example = literalExample ''
           {
-            "example.org" = "/srv/http/nginx";
+            "example.org" = null;
             "mydomain.org" = null;
           }
         '';
         description = ''
-          A list of extra domain names, which are included in the one certificate to be issued, with their
-          own server roots if needed.
+          A list of extra domain names, which are included in the one certificate to be issued.
+          Setting a distinct server root is deprecated and not functional in 20.03+
         '';
       };
 
       keyType = mkOption {
         type = types.str;
-        default = "ec384";
+        default = "ec256";
         description = ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
@@ -134,6 +134,27 @@ let
         description = ''
           Toggles lego DNS propagation check, which is used alongside DNS-01
           challenge to ensure the DNS entries required are available.
+        '';
+      };
+
+      ocspMustStaple = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Turns on the OCSP Must-Staple TLS extension.
+          Make sure you know what you're doing! See:
+          <itemizedlist>
+            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/" /></para></listitem>
+            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html" /></para></listitem>
+          </itemizedlist>
+        '';
+      };
+
+      extraLegoRenewFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional flags to pass to lego renew.
         '';
       };
     };
@@ -174,7 +195,7 @@ in
 
       renewInterval = mkOption {
         type = types.str;
-        default = "weekly";
+        default = "daily";
         description = ''
           Systemd calendar expression when to check for renewal. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
@@ -229,7 +250,7 @@ in
             "example.com" = {
               webroot = "/var/www/challenges/";
               email = "foo@example.com";
-              extraDomains = { "www.example.com" = null; "foo.example.com" = "/var/www/foo/"; };
+              extraDomains = { "www.example.com" = null; "foo.example.com" = null; };
             };
             "bar.example.com" = {
               webroot = "/var/www/challenges/";
@@ -280,39 +301,37 @@ in
                 # StateDirectory must be relative, and will be created under /var/lib by systemd
                 lpath = "acme/${cert}";
                 apath = "/var/lib/${lpath}";
-                spath = "/var/lib/acme/.lego";
-                rights = if data.allowKeysForGroup then "750" else "700";
+                spath = "/var/lib/acme/.lego/${cert}";
+                fileMode = if data.allowKeysForGroup then "640" else "600";
                 globalOpts = [ "-d" data.domain "--email" data.email "--path" "." "--key-type" data.keyType ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
                           ++ optionals (data.dnsProvider != null && !data.dnsPropagationCheck) [ "--dns.disable-cp" ]
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" name ]) data.extraDomains)
                           ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http" "--http.webroot" data.webroot ])
                           ++ optionals (cfg.server != null || data.server != null) ["--server" (if data.server == null then cfg.server else data.server)];
-                runOpts = escapeShellArgs (globalOpts ++ [ "run" ]);
-                renewOpts = escapeShellArgs (globalOpts ++ [ "renew" "--days" (toString cfg.validMinDays) ]);
+                certOpts = optionals data.ocspMustStaple [ "--must-staple" ];
+                runOpts = escapeShellArgs (globalOpts ++ [ "run" ] ++ certOpts);
+                renewOpts = escapeShellArgs (globalOpts ++
+                  [ "renew" "--days" (toString cfg.validMinDays) ] ++
+                  certOpts ++ data.extraLegoRenewFlags);
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
                   wants = [ "network-online.target" ];
-                  wantedBy = [ "multi-user.target" ];
+                  wantedBy = mkIf (!config.boot.isContainer) [ "multi-user.target" ];
                   serviceConfig = {
                     Type = "oneshot";
-                    # With RemainAfterExit the service is considered active even
-                    # after the main process having exited, which means when it
-                    # gets changed, the activation phase restarts it, meaning
-                    # the permissions of the StateDirectory get adjusted
-                    # according to the specified group
-                    RemainAfterExit = true;
                     User = data.user;
                     Group = data.group;
                     PrivateTmp = true;
-                    StateDirectory = "acme/.lego ${lpath}";
-                    StateDirectoryMode = rights;
+                    StateDirectory = "acme/.lego/${cert} acme/.lego/accounts ${lpath}";
+                    StateDirectoryMode = if data.allowKeysForGroup then "750" else "700";
                     WorkingDirectory = spath;
                     # Only try loading the credentialsFile if the dns challenge is enabled
                     EnvironmentFile = if data.dnsProvider != null then data.credentialsFile else null;
                     ExecStart = pkgs.writeScript "acme-start" ''
                       #!${pkgs.runtimeShell} -e
+                      test -L ${spath}/accounts -o -d ${spath}/accounts || ln -s ../accounts ${spath}/accounts
                       ${pkgs.lego}/bin/lego ${renewOpts} || ${pkgs.lego}/bin/lego ${runOpts}
                     '';
                     ExecStartPost =
@@ -324,17 +343,23 @@ in
 
                           # Test that existing cert is older than new cert
                           KEY=${spath}/certificates/${keyName}.key
+                          KEY_CHANGED=no
                           if [ -e $KEY -a $KEY -nt key.pem ]; then
+                            KEY_CHANGED=yes
                             cp -p ${spath}/certificates/${keyName}.key key.pem
                             cp -p ${spath}/certificates/${keyName}.crt fullchain.pem
                             cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
-                            ln -s fullchain.pem cert.pem
+                            ln -sf fullchain.pem cert.pem
                             cat key.pem fullchain.pem > full.pem
-                            chmod ${rights} *.pem
-                            chown '${data.user}:${data.group}' *.pem
                           fi
 
-                          ${data.postRun}
+                          chmod ${fileMode} *.pem
+                          chown '${data.user}:${data.group}' *.pem
+
+                          if [ "$KEY_CHANGED" = "yes" ]; then
+                            : # noop in case postRun is empty
+                            ${data.postRun}
+                          fi
                         '';
                       in
                         "+${script}";
@@ -375,7 +400,7 @@ in
 
                       # Give key acme permissions
                       chown '${data.user}:${data.group}' "${apath}/"{key,fullchain,full}.pem
-                      chmod ${rights} "${apath}/"{key,fullchain,full}.pem
+                      chmod ${fileMode} "${apath}/"{key,fullchain,full}.pem
                     '';
                   serviceConfig = {
                     Type = "oneshot";
@@ -400,7 +425,17 @@ in
       systemd.tmpfiles.rules =
         map (data: "d ${data.webroot}/.well-known/acme-challenge - ${data.user} ${data.group}") (filter (data: data.webroot != null) (attrValues cfg.certs));
 
-      systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
+      systemd.timers = let
+        # Allow systemd to pick a convenient time within the day
+        # to run the check.
+        # This allows the coalescing of multiple timer jobs.
+        # We divide by the number of certificates so that if you
+        # have many certificates, the renewals are distributed over
+        # the course of the day to avoid rate limits.
+        numCerts = length (attrNames cfg.certs);
+        _24hSecs = 60 * 60 * 24;
+        AccuracySec = "${toString (_24hSecs / numCerts)}s";
+      in flip mapAttrs' cfg.certs (cert: data: nameValuePair
         ("acme-${cert}")
         ({
           description = "Renew ACME Certificate for ${cert}";
@@ -409,8 +444,9 @@ in
             OnCalendar = cfg.renewInterval;
             Unit = "acme-${cert}.service";
             Persistent = "yes";
-            AccuracySec = "5m";
-            RandomizedDelaySec = "1h";
+            inherit AccuracySec;
+            # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
+            RandomizedDelaySec = "24h";
           };
         })
       );
@@ -422,7 +458,7 @@ in
   ];
 
   meta = {
-    maintainers = with lib.maintainers; [ abbradar fpletz globin m1cr0man ];
+    maintainers = lib.teams.acme.members;
     doc = ./acme.xml;
   };
 }

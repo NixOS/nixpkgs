@@ -29,7 +29,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "The best way to have DRY Django forms";
-    homepage = https://github.com/maraujop/django-crispy-forms;
+    homepage = "https://github.com/maraujop/django-crispy-forms";
     license = licenses.mit;
     maintainers = with maintainers; [ earvstedt ];
   };

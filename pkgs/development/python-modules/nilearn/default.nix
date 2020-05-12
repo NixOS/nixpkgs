@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest
+{ stdenv, buildPythonPackage, fetchPypi, pytest, nose
 , nibabel, numpy, pandas, scikitlearn, scipy, matplotlib, joblib }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     pytest nilearn/tests -k 'not test_cache_mixin_with_expand_user'  # accesses ~/
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest nose ];
 
   propagatedBuildInputs = [
     joblib
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://nilearn.github.io;
+    homepage = "http://nilearn.github.io";
     description = "A module for statistical learning on neuroimaging data";
     license = licenses.bsd3;
   };

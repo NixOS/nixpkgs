@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pytz zope_component ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/zopefoundation/zope.i18n;
+    homepage = "https://github.com/zopefoundation/zope.i18n";
     description = "Zope Internationalization Support";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

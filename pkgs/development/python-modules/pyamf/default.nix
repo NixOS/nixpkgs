@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "AMF (Action Message Format) support for Python";
-    homepage = https://pypi.python.org/pypi/PyAMF;
+    homepage = "https://pypi.python.org/pypi/PyAMF";
     license = licenses.mit;
   };
 }

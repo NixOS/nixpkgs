@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "HAProxy Exporter for the Prometheus monitoring system";
-    homepage = https://github.com/prometheus/haproxy_exporter;
+    homepage = "https://github.com/prometheus/haproxy_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;

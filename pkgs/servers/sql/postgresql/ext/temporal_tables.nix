@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Temporal Tables PostgreSQL Extension ";
-    homepage    = https://github.com/mlt/temporal_tables;
+    homepage    = "https://github.com/mlt/temporal_tables";
     maintainers = with maintainers; [ ggpeti ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.bsd2;

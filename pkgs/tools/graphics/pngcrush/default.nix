@@ -17,10 +17,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng ];
 
   meta = {
-    homepage = http://pmt.sourceforge.net/pngcrush;
+    homepage = "http://pmt.sourceforge.net/pngcrush";
     description = "A PNG optimizer";
     license = stdenv.lib.licenses.free;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

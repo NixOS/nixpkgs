@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utility library providing GObject-based interfaces and classes for commonly used data structures";
-    homepage = https://wiki.gnome.org/Projects/Libgee;
+    homepage = "https://wiki.gnome.org/Projects/Libgee";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

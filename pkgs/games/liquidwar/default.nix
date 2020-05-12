@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Quick tactics game";
-    homepage = https://www.gnu.org/software/liquidwar6/;
+    homepage = "https://www.gnu.org/software/liquidwar6/";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

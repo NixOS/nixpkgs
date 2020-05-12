@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A pyunit extension for dependency injection";
-    homepage = https://pypi.python.org/pypi/testscenarios;
+    homepage = "https://pypi.python.org/pypi/testscenarios";
     license = licenses.asl20;
   };
 

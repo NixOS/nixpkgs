@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
+{ lib, mkDerivation, fetchurl, fetchpatch, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
 , openssl, R, qtbase, qtxmlpatterns, qtsensors, qtwebengine, qtwebchannel
 , libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 , llvmPackages
@@ -8,7 +8,7 @@ with lib;
 let
   verMajor = "1";
   verMinor = "2";
-  verPatch = "1335";
+  verPatch = "5042";
   version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "2.1.2";
   gwtVer = "2.8.1";
@@ -26,11 +26,19 @@ mkDerivation rec {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "0jv1d4yznv2lzwp0fdf377vqpg0k2q4z9qvji4sj86fabj835lqd";
+    sha256 = "1n67fa357v51j3z1ma8v2ydfsx3y8n10k2svmfcf4mdzsi8w0kc5";
   };
 
   # Hack RStudio to only use the input R and provided libclang.
-  patches = [ ./r-location.patch ./clang-location.patch ];
+  patches = [ ./r-location.patch ./clang-location.patch
+              (fetchpatch {
+                # Fetch a patch to ensure Rstudio compiles against R
+                # 4.0.0, should be removed next 1.2.X Rstudio update
+                # or possibly 1.3.X
+                url = "https://github.com/rstudio/rstudio/commit/3fb2397c2f208bb8ace0bbaf269481ccb96b5b20.patch";
+                sha256 = "0qpgjy6aash0fc0xbns42cwpj3nsw49nkbzwyq8az01xwg81g0f3";
+              })
+            ];
   postPatch = ''
     substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}
     substituteInPlace src/cpp/core/libclang/LibClang.cpp \
@@ -57,7 +65,7 @@ mkDerivation rec {
   dictionaries = largeDicts ++ otherDicts;
 
   mathJaxSrc = fetchurl {
-    url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
+    url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip";
     sha256 = "0wbcqb9rbfqqvvhqr1pbqax75wp8ydqdyhp91fbqfqp26xzjv6lk";
   };
 
@@ -127,7 +135,7 @@ mkDerivation rec {
 
   meta = with lib;
     { description = "Set of integrated tools for the R language";
-      homepage = https://www.rstudio.com/;
+      homepage = "https://www.rstudio.com/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ ehmry changlinli ciil ];
       platforms = platforms.linux;

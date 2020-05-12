@@ -1,18 +1,18 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
-, pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, celery, alembic
-, importlib-metadata
+, pgpy, flask, bleach, misaka, humanize, html5lib, markdown, psycopg2, pygments
+, requests, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus_client
+, celery, alembic, importlib-metadata
 , sassc, nodejs
 , writeText }:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.57.2";
+  version = "0.59.13";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     rev = version;
-    sha256 = "11rfpb0wf1xzrhcnpahaghmi5626snzph0vsbxlmmqx75wf0p6mf";
+    sha256 = "5jc6MtG/cBry05Sq51UAFzSBvKKkdNTA67UIDvJt9uU=";
   };
 
   node_modules = fetchNodeModules {
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     bleach
     misaka
     humanize
+    html5lib
     markdown
     psycopg2
     pygments
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     cryptography
     beautifulsoup4
     sqlalchemy-utils
+    prometheus_client
 
     # Unofficial runtime dependencies?
     celery
@@ -60,7 +62,7 @@ buildPythonPackage rec {
   dontUseSetuptoolsCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/srht;
+    homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eadwu ];

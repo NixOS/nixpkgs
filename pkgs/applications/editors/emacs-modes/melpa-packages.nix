@@ -42,7 +42,9 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
   }: let
 
     inherit (import ./libgenerated.nix lib self) melpaDerivation;
-    super = lib.listToAttrs (map (melpaDerivation variant) (lib.importJSON archiveJson));
+    super = lib.listToAttrs (builtins.filter (s: s != null)
+                                             (map (melpaDerivation variant)
+                                                  (lib.importJSON archiveJson)));
 
     overrides = rec {
       shared = rec {
@@ -101,6 +103,11 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         evil-magit = super.evil-magit.overrideAttrs (attrs: {
           # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        eopengrok = super.eopengrok.overrideAttrs (attrs: {
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
@@ -170,6 +177,66 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        magit-find-file = super.magit-find-file.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-gh-pulls = super.magit-gh-pulls.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-imerge = super.magit-imerge.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-lfs = super.magit-lfs.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-org-todos = super.magit-org-todos.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-stgit = super.magit-stgit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-tbdiff = super.magit-tbdiff.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-topgit = super.magit-topgit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-vcsh = super.magit-vcsh.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-gerrit = super.magit-gerrit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         magit-annex = super.magit-annex.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
@@ -207,6 +274,12 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         });
 
         kubernetes = super.kubernetes.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        kubernetes-evil = super.kubernetes-evil.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
@@ -268,10 +341,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
         _0blayout = super."0blayout";
-        _0xc = super."0xc";
-        _2048-game = super."2048-game";
-        _4clojure = super."4clojure";
-        at = super."@";
         desktop-plus = super."desktop+";
         ghub-plus = super."ghub+";
         git-gutter-plus = super."git-gutter+";
@@ -282,10 +351,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         markdown-mode-plus = super."markdown-mode+";
         package-plus = super."package+";
         rect-plus = super."rect+";
-        term-plus = super."term+";
-        term-plus-key-intercept = super."term+key-intercept";
-        term-plus-mux = super."term+mux";
-        xml-plus = super."xml+";
       };
 
       stable = shared // {
@@ -358,13 +423,87 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           packageRequires = with self; [ evil highlight ];
         });
 
+        kapacitor = super.kapacitor.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         forge = super.forge.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
 
+        gerrit = super.gerrit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        gerrit-download = super.gerrit-download.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        github-pullrequest = super.github-pullrequest.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
         helm-rtags = fix-rtags super.helm-rtags;
+
+        jist = super.jist.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        mandoku = super.mandoku.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        mandoku-tls = super.mandoku-tls.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-p4 = super.magit-p4.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-rbr = super.magit-rbr.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-diff-flycheck = super.magit-diff-flycheck.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-reviewboard = super.magit-reviewboard.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-patch-changelog = super.magit-patch-changelog.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        magit-circleci = super.magit-circleci.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
 
         orgit =
           (super.orgit.overrideAttrs (attrs: {
@@ -413,6 +552,16 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         });
         # Legacy alias
         emacs-libvterm = unstable.vterm;
+
+        # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
+        _0xc = super."0xc";
+        _2048-game = super."2048-game";
+        _4clojure = super."4clojure";
+        at = super."@";
+        term-plus = super."term+";
+        term-plus-key-intercept = super."term+key-intercept";
+        term-plus-mux = super."term+mux";
+        xml-plus = super."xml+";
 
         w3m = super.w3m.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {

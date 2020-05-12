@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.netsurf-browser.org/;
+    homepage = "http://www.netsurf-browser.org/";
     description = "NetSurf SVG decoder";
     license = licenses.mit;
     maintainers = [ maintainers.samueldr ];

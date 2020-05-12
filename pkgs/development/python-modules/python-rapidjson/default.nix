@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/python-rapidjson/python-rapidjson;
+    homepage = "https://github.com/python-rapidjson/python-rapidjson";
     description = "Python wrapper around rapidjson ";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

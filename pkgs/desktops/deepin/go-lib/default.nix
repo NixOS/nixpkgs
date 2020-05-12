@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, glib, xorg, gdk-pixbuf, pulseaudio,
-  mobile-broadband-provider-info, deepin }:
+{ stdenv
+, fetchFromGitHub
+, glib
+, xorg
+, gdk-pixbuf
+, pulseaudio
+, mobile-broadband-provider-info
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "go-lib";
@@ -27,11 +34,11 @@ stdenv.mkDerivation rec {
     rm -r $out/share/go/src/pkg.deepin.io/lib/debian
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Go bindings for Deepin Desktop Environment development";
-    homepage = https://github.com/linuxdeepin/go-lib;
+    homepage = "https://github.com/linuxdeepin/go-lib";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

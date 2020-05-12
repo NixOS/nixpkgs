@@ -10,18 +10,18 @@
 
 buildGoModule rec {
   pname = "gotify-server";
-  # Note that when this is updated, along with the hash, the `ui.nix` file
-  # should include the same changes to the version and the sha256.
-  version = "2.0.14";
+  # should be update just like all other files imported like that via the
+  # `update.sh` script.
+  version = import ./version.nix;
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "server";
     rev = "v${version}";
-    sha256 = "0hyy9fki2626cgd78l7fkk67lik6g1pkcpf6xr3gl07dxwcclyr8";
+    sha256 = import ./source-sha.nix;
   };
 
-  modSha256 = "1awhbc8qs2bwv6y2vwd92r4ys0l1bzymrb36iamr040x961682wv";
+  modSha256 = import ./mod-sha.nix;
 
   postPatch = ''
     substituteInPlace app.go \
@@ -37,6 +37,10 @@ buildGoModule rec {
   preBuild = ''
     cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && packr
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   # Otherwise, all other subpackages are built as well and from some reason,
   # produce binaries which panic when executed and are not interesting at all

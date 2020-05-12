@@ -7,13 +7,13 @@ with stdenv.lib;
 mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-abc-" + version;
-  version = "0.20.12";
+  version = "0.21.5";
 
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    sha256 = "0ar3syrz7psf83bh24hn2y0mxjgn7cjqk2h8q4cgdp7mq55v8ynj";
+    sha256 = "1jx33n8dhn16iaxvmc56cxw0i5qk0ga5nf7qf9frwwq6zkglknga";
   };
 
   patches = [ ./fix-bitcoin-qt-build.patch ];
@@ -37,7 +37,7 @@ mkDerivation rec {
 
       Bitcoin ABC is a fork of the Bitcoin Core software project.
     '';
-    homepage = https://bitcoinabc.org/;
+    homepage = "https://bitcoinabc.org/";
     maintainers = with maintainers; [ lassulus ];
     license = licenses.mit;
     broken = stdenv.isDarwin;

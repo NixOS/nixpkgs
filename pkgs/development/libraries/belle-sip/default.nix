@@ -1,21 +1,35 @@
-{ stdenv, antlr3_4, libantlr3c, jre, mbedtls, fetchFromGitHub
-  , cmake, zlib, bctoolbox
+{ antlr3_4
+, bctoolbox
+, cmake
+, fetchFromGitLab
+, jre
+, libantlr3c
+, mbedtls
+, stdenv
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "1.6.3";
+  # Using master branch for linphone-desktop caused a chain reaction that many
+  # of its dependencies needed to use master branch too.
+  version = "unstable-2020-02-18";
 
-  src = fetchFromGitHub {
-    owner = "BelledonneCommunications";
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
     repo = pname;
-    rev = version;
-    sha256 = "0q70db1klvhca1af29bm9paka3gyii5hfbzrj4178gclsg7cj8fk";
+    rev = "0dcb13416eae87edf140771b886aedaf6be8cf60";
+    sha256 = "0pzxk8mkkg6zsnmj1bwggbdjv864psx89gglfm51h8s501kg11fv";
   };
 
   nativeBuildInputs = [ jre cmake ];
 
   buildInputs = [ zlib ];
+
+  # Do not build static libraries
+  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
@@ -29,9 +43,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = https://linphone.org/technical-corner/belle-sip;
+    homepage = "https://linphone.org/technical-corner/belle-sip";
     description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
-    license = licenses.gpl2;
+    license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

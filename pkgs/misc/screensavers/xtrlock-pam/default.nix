@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/aanatoly/xtrlock-pam;
+    homepage = "https://github.com/aanatoly/xtrlock-pam";
     description = "PAM based X11 screen locker";
     license = "unknown";
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];

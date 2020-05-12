@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "lightum-2014-06-07";
   src = fetchgit {
-    url = https://github.com/poliva/lightum;
+    url = "https://github.com/poliva/lightum";
     rev = "123e6babe0669b23d4c1dfa5511088608ff2baa8";
     sha256 = "01x24rcrkgksyvqpgkr9zafg3jgs8nqng8yf0hx0kbmcimar8dbp";
   };
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "MacBook automatic light sensor daemon";
-    homepage = https://github.com/poliva/lightum;
+    homepage = "https://github.com/poliva/lightum";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     platforms = stdenv.lib.platforms.linux;

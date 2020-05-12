@@ -41,9 +41,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to use HTTPSEverywhere in desktop applications";
-    homepage = https://gitlab.gnome.org/GNOME/libhttpseverywhere;
+    homepage = "https://gitlab.gnome.org/GNOME/libhttpseverywhere";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sternenseemann ] ++ gnome3.maintainers;
+    maintainers = with maintainers; [ sternenseemann ] ++ teams.gnome.members;
   };
 }

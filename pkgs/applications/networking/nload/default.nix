@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       using two graphs and provides additional info like total amount of
       transfered data and min/max network usage.
     '';
-    homepage = http://www.roland-riegel.de/nload/index.html;
+    homepage = "http://www.roland-riegel.de/nload/index.html";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

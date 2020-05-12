@@ -22,7 +22,7 @@ stdenv.mkDerivation {
                      "--with-openssl-inc=${openssl}/include" ];
   meta = {
     description = "ssldump is an SSLv3/TLS network protocol analyzer";
-    homepage = http://ssldump.sourceforge.net;
+    homepage = "http://ssldump.sourceforge.net";
     license = "BSD-style";
     maintainers = with stdenv.lib.maintainers; [ aycanirican ];
     platforms = stdenv.lib.platforms.linux;

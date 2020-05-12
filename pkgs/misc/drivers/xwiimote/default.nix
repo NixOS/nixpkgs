@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-doxygen=no" ];
 
   meta = {
-    homepage = http://dvdhrm.github.io/xwiimote;
+    homepage = "http://dvdhrm.github.io/xwiimote";
     description = "Userspace utilities to control connected Nintendo Wii Remotes";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;

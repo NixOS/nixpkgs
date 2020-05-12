@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
 , qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2
-, faad2, rtl-sdr, soapysdr-with-plugins, libusb, fftwSinglePrec, lame, mpg123 }:
+, faad2, rtl-sdr, soapysdr-with-plugins, libusb-compat-0_1, fftwSinglePrec, lame, mpg123 }:
 let
 
   version = "2.1";
@@ -23,7 +23,7 @@ in mkDerivation {
     faad2
     fftwSinglePrec
     lame
-    libusb
+    libusb-compat-0_1
     mpg123
     qtbase
     qtcharts
@@ -42,7 +42,7 @@ in mkDerivation {
 
   meta = with lib; {
     description = "A DAB/DAB+ Software Radio";
-    homepage = https://www.welle.io/;
+    homepage = "https://www.welle.io/";
     maintainers = with maintainers; [ ck3d markuskowa ];
     license = licenses.gpl2;
     platforms = with platforms; [ "x86_64-linux" "i686-linux" ] ++ darwin;

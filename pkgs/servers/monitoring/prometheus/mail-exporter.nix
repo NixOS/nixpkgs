@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage {
   pname = "mailexporter";
@@ -15,9 +15,11 @@ buildGoPackage {
 
   goDeps = ./mail-exporter_deps.nix;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
-    install -D -m 0444 -t $bin/share/man/man1 $src/man/mailexporter.1
-    install -D -m 0444 -t $bin/share/man/man5 $src/man/mailexporter.conf.5
+    installManPage $src/man/mailexporter.1
+    installManPage $src/man/mailexporter.conf.5
   '';
 
   meta = with stdenv.lib; {

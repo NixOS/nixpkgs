@@ -7,18 +7,18 @@
 
 buildPythonPackage rec {
   pname = "jmespath";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c";
+    sha256 = "1nf2ipzvigspy17r16dpkhzn1bqdmlak162rm8dy4wri2n6mr9fc";
   };
 
   buildInputs = [ nose ];
   propagatedBuildInputs = [ ply ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/boto/jmespath;
+    homepage = "https://github.com/boto/jmespath";
     description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
     license = "BSD";
   };

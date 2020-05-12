@@ -8,17 +8,18 @@ let
   # dictionary like Debian does.
   devaMapsSource = fetchzip {
     name = "aspell-u-deva";
-    url = "ftp://ftp.gnu.org/gnu/aspell/dict/mr/aspell6-mr-0.10-0.tar.bz2";
+    url = "https://ftp.gnu.org/gnu/aspell/dict/mr/aspell6-mr-0.10-0.tar.bz2";
     sha256 = "1v8cdl8x2j1d4vbvsq1xrqys69bbccd6mi03fywrhkrrljviyri1";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "aspell-0.60.8";
+  pname = "aspell";
+  version = "0.60.8";
 
   src = fetchurl {
-    url = "mirror://gnu/aspell/${name}.tar.gz";
+    url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
     sha256 = "1wi60ankalmh8ds7nplz434jd7j94gdvbahdwsr539rlad8pxdzr";
   };
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     patch interfaces/cc/aspell.h < ${./clang.patch}
   '';
 
+  nativeBuildInputs = [ perl ];
   buildInputs = [ perl ];
 
   doCheck = true;
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Spell checker for many languages";
-    homepage = http://aspell.net/;
+    homepage = "http://aspell.net/";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ ];
     platforms = with stdenv.lib.platforms; all;

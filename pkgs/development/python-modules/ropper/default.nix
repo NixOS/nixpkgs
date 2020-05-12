@@ -24,7 +24,7 @@ buildPythonApplication rec {
   checkInputs = [pytest];
   propagatedBuildInputs = [ capstone filebytes ];
   meta = with stdenv.lib; {
-    homepage = https://scoding.de/ropper/;
+    homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;
     description = "Show information about files in different file formats";
     maintainers = with maintainers; [ bennofs ];

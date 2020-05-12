@@ -3,6 +3,8 @@
 buildDunePackage rec {
   pname = "dune-configurator";
 
+  useDune2 = true;
+
   inherit (dune_2) src version;
 
   dontAddPrefix = true;

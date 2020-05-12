@@ -1,11 +1,13 @@
 { stdenv, lib, fetchFromGitHub
 , makeWrapper, unzip, which, writeTextFile
-, curl, tzdata, gdb, darwin, git
-, targetPackages, ldc
-, version ? "2.085.1"
-, dmdSha256 ? "0ccidfcawrcwdpfjwjiln5xwr4ffp8i2hwx52p8zn3xmc5yxm660"
-, druntimeSha256 ? "109f2glsqrlshk06761xlw4r5v22mivp873cq9g5gcax3g00k617"
-, phobosSha256 ? "0giispqqx8j8xg6c0hm7nx77bcahiwic8rvf12sws3sv5pizv8pr"
+, curl, tzdata, gdb, darwin, git, callPackage
+, targetPackages, fetchpatch, bash
+, dmdBootstrap ? callPackage ./bootstrap.nix { }
+, HOST_DMD ? "${dmdBootstrap}/bin/dmd"
+, version ? "2.091.1"
+, dmdSha256 ? "0brz0n84jdkhr4sq4k91w48p739psbhbb1jk2pi9q60psmx353yr"
+, druntimeSha256 ? "0smgpmfriffh110ksski1s5j921kmxbc2zjy0dyj9ksyrxbzklbl"
+, phobosSha256 ? "1n00anajgibrfs1xzvrmag28hvbvkc0w1fwlimqbznvhf28rhrxs"
 }:
 
 let
@@ -51,7 +53,17 @@ stdenv.mkDerivation rec {
   })
   ];
 
-  patchFlags = [ "--directory=dmd" "-p1" ];
+  patchFlags = [ "--directory=dmd" "-p1" "-F3" ];
+  patches = [
+    (fetchpatch {
+     url = "https://github.com/dlang/dmd/commit/4157298cf04f7aae9f701432afd1de7b7e05c30f.patch";
+     sha256 = "0v4xgqmrx5r8vbx5a4v88s0xnm23mam9nm99yfga7s2sxr0hi5p2";
+    })
+    (fetchpatch {
+     url = "https://github.com/dlang/dmd/commit/1b8a4c90b040bf2f0b68a2739de4991315580b13.patch";
+     sha256 = "1iih6aalv4fsw9mbrlrybhngkkchzzrzg7q8zl047w36c0x397cs";
+    })
+  ];
 
   sourceRoot = ".";
 
@@ -62,15 +74,17 @@ stdenv.mkDerivation rec {
       patchShebangs .
   '';
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+  postPatch = ''
+      substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+  ''
+  + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   ''
-
   + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
-  nativeBuildInputs = [ ldc makeWrapper unzip which gdb git ]
+  nativeBuildInputs = [ makeWrapper unzip which gdb git ]
 
   ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Foundation
@@ -89,7 +103,7 @@ stdenv.mkDerivation rec {
   # Buid and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
       cd dmd
-      make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=ldmd2
+      make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=${HOST_DMD}
       cd ../druntime
       make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
       cd ../phobos
@@ -143,12 +157,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Official reference compiler for the D language";
-    homepage = http://dlang.org/;
+    homepage = "http://dlang.org/";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
-    maintainers = with maintainers; [ ThomasMader ];
+    maintainers = with maintainers; [ ThomasMader lionello ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }
-

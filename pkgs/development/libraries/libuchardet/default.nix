@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";
-    homepage = https://www.freedesktop.org/wiki/Software/uchardet/;
+    homepage = "https://www.freedesktop.org/wiki/Software/uchardet/";
     license = licenses.mpl11;
     maintainers = with maintainers; [ cstrahan ];
     platforms = with platforms; unix;

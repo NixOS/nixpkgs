@@ -52,10 +52,23 @@
     };
   };
 
+  agda-input = self.trivialBuild {
+    pname = "agda-input";
+
+    inherit (external.Agda) src version;
+
+    postUnpack = "mv $sourceRoot/src/data/emacs-mode/agda-input.el $sourceRoot";
+
+    meta = {
+      description = "Standalone package providing the agda-input method without building Agda.";
+      inherit (external.Agda.meta) homepage license;
+    };
+  };
+
+  emacspeak = callPackage ./emacspeak {};
+
   ess-R-object-popup =
     callPackage ./ess-R-object-popup { };
-
-  filesets-plus = callPackage ./filesets-plus { };
 
   font-lock-plus = callPackage ./font-lock-plus { };
 
@@ -96,16 +109,7 @@
     };
   };
 
-  hexrgb = callPackage ./hexrgb { };
-
-  header2 = callPackage ./header2 { };
-
   helm-words = callPackage ./helm-words { };
-
-  icicles = callPackage ./icicles { };
-
-  lib-requires =
-    callPackage ./lib-requires { };
 
   org-mac-link =
     callPackage ./org-mac-link { };
@@ -121,11 +125,7 @@
 
   sv-kalender = callPackage ./sv-kalender { };
 
-  thingatpt-plus = callPackage ./thingatpt-plus { };
-
   tramp = callPackage ./tramp { };
-
-  yaoddmuse = callPackage ./yaoddmuse { };
 
   zeitgeist = callPackage ./zeitgeist { };
 

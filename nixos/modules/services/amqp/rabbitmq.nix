@@ -17,6 +17,7 @@ in {
   options = {
     services.rabbitmq = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the RabbitMQ server, an Advanced Message

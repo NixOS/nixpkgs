@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line editor for id3v2 tags";
-    homepage = http://id3v2.sourceforge.net/;
+    homepage = "http://id3v2.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
   };

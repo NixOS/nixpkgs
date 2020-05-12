@@ -14,7 +14,7 @@ mkDerivation rec {
     # master has the Qt5 version as of April 2018 but a formal release has not
     # yet been made so change this back to the proper upstream when such a
     # release is out
-    url    = git://anongit.kde.org/amarok.git;
+    url    = "git://anongit.kde.org/amarok.git";
     # url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
     rev    = "457fbda25a85a102bfda92aa7137e7ef5e4c8b00";
     sha256 = "1ig2mg8pqany6m2zplkrvldcv4ibxwsypnyv5igm7nz7ax82cd5j";

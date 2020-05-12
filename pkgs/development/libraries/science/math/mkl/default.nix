@@ -7,17 +7,20 @@ let
   # Release notes and download URLs are here:
   # https://registrationcenter.intel.com/en/products/
   version = "${year}.${spot}.${rel}";
-  year = "2019";
 
   # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
   # https://github.com/matthewbauer/undmg/issues/4
-  spot = if stdenvNoCC.isDarwin then "3" else "5";
-  rel = if stdenvNoCC.isDarwin then "199" else "281";
+  year = if stdenvNoCC.isDarwin then "2019" else "2020";
+  spot = if stdenvNoCC.isDarwin then "3" else "1";
+  rel = if stdenvNoCC.isDarwin then "199" else "217";
 
   rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
 
   # Intel openmp uses its own versioning, but shares the spot release patch.
-  openmp-ver = "19.0.${spot}-${rel}-19.0.${spot}-${rel}";
+  openmp = if stdenvNoCC.isDarwin then "19.0" else "19.1";
+  openmp-ver = "${openmp}.${spot}-${rel}-${openmp}.${spot}-${rel}";
+
+  shlibExt = stdenvNoCC.hostPlatform.extensions.sharedLibrary;
 
 in stdenvNoCC.mkDerivation {
   pname = "mkl";
@@ -31,8 +34,8 @@ in stdenvNoCC.mkDerivation {
       })
     else
       (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15816/l_mkl_${version}.tgz";
-        sha256 = "0zkk4rrq7g44acxaxhpd2053r66w169mww6917an0lxhd52fm5cr";
+        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16533/l_mkl_${version}.tgz";
+        sha256 = "0v86hrqg15mbc78m9qk8dbkaaq3mlwashgbf9n79kxpl1gilnah8";
       });
 
   nativeBuildInputs = if stdenvNoCC.isDarwin
@@ -110,7 +113,19 @@ in stdenvNoCC.mkDerivation {
       cp -r opt/intel/compilers_and_libraries_${version}/linux/compiler/lib/intel64_lin/*.so* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/lib/intel64_lin/*.so* $out/lib/
       cp -r opt/intel/compilers_and_libraries_${version}/linux/mkl/bin/pkgconfig/*dynamic*.pc $out/lib/pkgconfig
-    '');
+    '') + ''
+
+    # Setup symlinks for blas / lapack
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}
+  '' + stdenvNoCC.lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libblas${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
+    ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}".3"
+  '';
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
   # larger updated load commands do not fit. Use install_name_tool
@@ -136,7 +151,7 @@ in stdenvNoCC.mkDerivation {
       choice of compilers, languages, operating systems, and linking and
       threading models.
     '';
-    homepage = https://software.intel.com/en-us/mkl;
+    homepage = "https://software.intel.com/en-us/mkl";
     license = licenses.issl;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ bhipple ];

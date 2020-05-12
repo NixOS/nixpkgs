@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple and asynchronous API to work with e-mail protocols IMAP, POP and SMTP";
-    homepage    = http://libmailcore.com;
+    homepage    = "http://libmailcore.com";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan ];
   };

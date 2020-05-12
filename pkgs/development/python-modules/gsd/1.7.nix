@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/glotzer/gsd;
+    homepage = "https://bitbucket.org/glotzer/gsd";
     description = "General simulation data file format";
     license = licenses.bsd2;
     maintainers = [ maintainers.costrouc ];

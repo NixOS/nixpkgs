@@ -26,7 +26,7 @@ let
       doCheck = true;
 
       meta = with stdenv.lib; {
-        homepage = https://www.colm.net/open-source/ragel/;
+        homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
         inherit license;
         platforms = platforms.unix;

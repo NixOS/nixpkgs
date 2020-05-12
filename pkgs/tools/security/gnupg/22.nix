@@ -4,7 +4,7 @@
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
 , guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb ? null , openldap ? null
+, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
 , pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
 null
 }:
@@ -16,23 +16,26 @@ assert guiSupport -> pinentry != null && enableMinimal == false;
 stdenv.mkDerivation rec {
   pname = "gnupg";
 
-  version = "2.2.19";
+  version = "2.2.20";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "1h6yx6sdpz3lf9gdppgxqcf73baynr8gflmh43286fkgw3058994";
+    sha256 = "0c6a4v9p6qzhsw1pfcwc459bxpc8hma0w9z8iqb9khvligack9q4";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
-    readline libusb gnutls adns openldap zlib bzip2 sqlite
+    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
   ];
 
   patches = [
     ./fix-libusb-include-path.patch
     ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
+    ./tests-add-test-cases-for-import-without-uid.patch
+    ./allow-import-of-previously-known-keys-even-without-UI.patch
+    ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
   ];
   postPatch = ''
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
@@ -69,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gnupg.org;
+    homepage = "https://gnupg.org";
     description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''

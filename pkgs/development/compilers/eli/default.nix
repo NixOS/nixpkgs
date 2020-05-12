@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       construction with extensive libraries implementing common tasks, yet handling
       arbitrary special cases. Output is the C subset of C++.
     '';
-    homepage = http://eli-project.sourceforge.net/;
+    homepage = "http://eli-project.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ timokau ];
     platforms = stdenv.lib.platforms.linux;

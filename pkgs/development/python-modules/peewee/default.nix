@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib;{
     description = "a small, expressive orm";
-    homepage    = http://peewee-orm.com;
+    homepage    = "http://peewee-orm.com";
     license     = licenses.mit;
   };
 }

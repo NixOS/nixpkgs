@@ -82,7 +82,7 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
 
   meta = with stdenv.lib; {
-    homepage = http://deeplearning.net/software/theano/;
+    homepage = "http://deeplearning.net/software/theano/";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
     maintainers = with maintainers; [ maintainers.bcdarwin ];

@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "An XMPP client with OTR support";
-    homepage = https://github.com/agl/xmpp-client;
+    homepage = "https://github.com/agl/xmpp-client";
     license = licenses.bsd3;
     maintainers = with maintainers; [ codsl ];
   };

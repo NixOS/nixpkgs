@@ -13,13 +13,23 @@ let
 
   meta = with stdenv.lib; {
     inherit description;
-    homepage = https://github.com/zadam/trilium;
+    homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];
   };
 
-  version = "0.39.4";
+  version = "0.42.1";
+
+  desktopSource = {
+    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
+    sha256 = "0xcbkm6z1a0jh3qywlwcjk6l302cxgdfcq8sw30vbnz99cyarpvz";
+  };
+
+  serverSource = {
+    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
+    sha256 = "012l36z0n3fcdajj3v4w2bcb1619sdhg6cvy3y89b6rxl0h2wdiw";
+  };
 
 in {
   
@@ -28,16 +38,13 @@ in {
     inherit version;
     inherit meta;
 
-    src = fetchurl {
-      url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-      sha256 = "18wrnm13k0gg6aljpf6k7c5zia81zzkqc0sa1pgz0yzczydsfaa9";
-    };
+    src = fetchurl desktopSource;
   
     # Fetch from source repo, no longer included in release.
     # (they did special-case icon.png but we want the scalable svg)
     # Use the version here to ensure we get any changes.
     trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/src/public/images/trilium.svg";
+      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/trilium.svg";
       sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
     };
   
@@ -76,10 +83,7 @@ in {
     inherit version;
     inherit meta;
 
-    src = fetchurl {
-      url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-      sha256 = "06svdp25031p665pvlxdz10malvhxpczzrg90hpr1zymm6v8van3";
-    };
+    src = fetchurl serverSource;
 
     nativeBuildInputs = [
       autoPatchelfHook

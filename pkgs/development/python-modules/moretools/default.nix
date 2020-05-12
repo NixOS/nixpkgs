@@ -23,7 +23,7 @@ buildPythonPackage rec {
     description = ''
       Many more basic tools for python 2/3 extending itertools, functools, operator and collections
     '';
-    homepage = https://bitbucket.org/userzimmermann/python-moretools;
+    homepage = "https://bitbucket.org/userzimmermann/python-moretools";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

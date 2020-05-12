@@ -1,4 +1,5 @@
 { stdenv, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libtiff
+, fetchpatch
 , qtLib ? null
 , enablePython ? false, python ? null
 # Darwin support
@@ -20,6 +21,13 @@ stdenv.mkDerivation rec {
     url = "${meta.homepage}files/release/${majorVersion}/VTK-${version}.tar.gz";
     sha256 = "0nm7xwwj7rnsxjdv2ssviys8nhci4n9iiiqm2y14s520hl2dsp1d";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.kitware.com/vtk/vtk/-/commit/706f1b397df09a27ab8981ab9464547028d0c322.diff";
+      sha256 = "1q3pi5h40g05pzpbqp75xlgzvbfvyw8raza51svmi7d8dlslqybx";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -44,12 +52,12 @@ stdenv.mkDerivation rec {
   # At least, we use -fPIC for other packages to be able to use this in shared
   # objects.
   cmakeFlags = [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" "-DVTK_USE_SYSTEM_TIFF=1" "-DOPENGL_INCLUDE_DIR=${libGL}/include" ]
-    ++ optional (qtLib != null) [ "-DVTK_USE_QT:BOOL=ON" ]
+    ++ optional (qtLib != null) [ "-DVTK_Group_Qt:BOOL=ON" ]
     ++ optional stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
     ++ optional enablePython [ "-DVTK_WRAP_PYTHON:BOOL=ON" ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-7.0|' ./Parallel/Core/CMakeLists.txt
+    sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
   '';
@@ -58,9 +66,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
-    homepage = http://www.vtk.org/;
+    homepage = "https://www.vtk.org/";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
     platforms = with stdenv.lib.platforms; unix;
   };
 }

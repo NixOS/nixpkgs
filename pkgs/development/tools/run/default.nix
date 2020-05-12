@@ -14,7 +14,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Easily manage and invoke small scripts and wrappers";
-    homepage    = https://github.com/TekWizely/run;
+    homepage    = "https://github.com/TekWizely/run";
     license     = licenses.mit;
     maintainers = with maintainers; [ rawkode filalex77 ];
     platforms   = platforms.unix;

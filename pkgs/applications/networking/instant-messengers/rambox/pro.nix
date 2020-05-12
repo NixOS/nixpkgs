@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rambox-pro";
-  version = "1.2.2";
+  version = "1.3.1";
 
   dontBuild = true;
   dontStrip = true;
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.tar.gz";
-    sha256 = "1zzlfk86gzg20qapqz9s8p9vmak8vj1smkwn9yrzs2yisfqh0gpc";
+    sha256 = "1cy4h2yzrpr3gxd16p4323w06i67d82jjlyx737c3ngzw7aahmq1";
   };
 
   installPhase = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Messaging and emailing app that combines common web applications into one";
-    homepage = https://rambox.pro;
+    homepage = "https://rambox.pro";
     license = licenses.unfree;
     maintainers = with maintainers; [ chrisaw ];
     platforms = [ "i686-linux" "x86_64-linux" ];

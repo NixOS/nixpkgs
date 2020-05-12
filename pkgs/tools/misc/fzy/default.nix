@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A better fuzzy finder";
-    homepage = https://github.com/jhawthorn/fzy;
+    homepage = "https://github.com/jhawthorn/fzy";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;

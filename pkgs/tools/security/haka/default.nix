@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";
-    homepage = http://www.haka-security.org/;
+    homepage = "http://www.haka-security.org/";
     license = stdenv.lib.licenses.mpl20;
     maintainers = [ stdenv.lib.maintainers.tvestelind ];
     platforms = [ "x86_64-linux" "i686-linux" ]; # fails on aarch64

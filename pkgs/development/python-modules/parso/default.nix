@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python Parser";
-    homepage = https://github.com/davidhalter/parso;
+    homepage = "https://github.com/davidhalter/parso";
     license = lib.licenses.mit;
   };
 

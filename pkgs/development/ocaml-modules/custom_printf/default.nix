@@ -15,7 +15,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ type_conv sexplib_p4 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/custom_printf;
+    homepage = "https://github.com/janestreet/custom_printf";
     description = "Syntax extension for printf format strings";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

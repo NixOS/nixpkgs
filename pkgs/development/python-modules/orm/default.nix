@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An async ORM";
-    homepage = https://github.com/encode/orm;
+    homepage = "https://github.com/encode/orm";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

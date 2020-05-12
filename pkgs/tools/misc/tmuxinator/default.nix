@@ -1,4 +1,4 @@
-{ lib, buildRubyGem, ruby }:
+{ lib, buildRubyGem, ruby, installShellFiles }:
 
 # Cannot use bundleEnv because bundleEnv create stub with
 # BUNDLE_FROZEN='1' environment variable set, which broke everything
@@ -8,8 +8,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "1.1.4";
-  source.sha256 = "06ajfvsmq2040b7nk2ifih3sqxgwzih5j1d25nh4ilgjlrfmha98";
+  version = "2.0.1";
+  source.sha256 = "03q1q6majci0l6kzw6kv7r395jycrl862mlqmyydxcd29y8wm3m2";
 
   erubis = buildRubyGem rec {
     inherit ruby;
@@ -37,9 +37,15 @@ buildRubyGem rec {
 
   propagatedBuildInputs = [ erubis thor xdg ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion $GEM_HOME/gems/${gemName}-${version}/completion/tmuxinator.{bash,zsh,fish}
+  '';
+
   meta = with lib; {
     description = "Manage complex tmux sessions easily";
-    homepage    = https://github.com/tmuxinator/tmuxinator;
+    homepage    = "https://github.com/tmuxinator/tmuxinator";
     license     = licenses.mit;
     maintainers = with maintainers; [ auntie ericsagnes ];
     platforms   = platforms.unix;

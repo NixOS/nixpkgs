@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Report system-wide file access events";
-    homepage = https://launchpad.net/fatrace/;
+    homepage = "https://launchpad.net/fatrace/";
     license = licenses.gpl3Plus;
     longDescription = ''
       fatrace reports file access events from all running processes.

@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Process geospatial data to create maps and perform analyses";
     license = licenses.lgpl3;
-    homepage = https://scitools.org.uk/cartopy/docs/latest/;
+    homepage = "https://scitools.org.uk/cartopy/docs/latest/";
     maintainers = with maintainers; [ mredaelli ];
   };
 

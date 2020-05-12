@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Verbose logging for Python's logging module";
-    homepage = https://github.com/xolox/python-verboselogs;
+    homepage = "https://github.com/xolox/python-verboselogs";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

@@ -36,7 +36,7 @@ let
     bazelTarget = ":install";
 
     fetchAttrs = {
-      sha256 = "0mxma7jajm42v1hv6agl909xra0azihj588032ivhlmmh403x6wg";
+      sha256 = "0jlgmwcanfkhkwvh4vxibpi0zyyl6xkjzcz2xqn7raympqscq81a";
     };
 
     bazelFlags = [
@@ -84,7 +84,7 @@ in buildPythonPackage {
 
   meta = with lib; {
     description = "TensorFlow-based neural network library";
-    homepage = https://sonnet.dev;
+    homepage = "https://sonnet.dev";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
     platforms = platforms.linux;

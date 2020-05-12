@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";
     platforms = platforms.unix;
-    homepage = https://www.libsdl.org/projects/SDL_mixer/;
+    homepage = "https://www.libsdl.org/projects/SDL_mixer/";
     maintainers = with maintainers; [ MP2E ];
     license = licenses.zlib;
   };

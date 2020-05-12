@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     wxSVG is C++ library to create, manipulate and render
     Scalable Vector Graphics (SVG) files with the wxWidgets toolkit.
     '';
-    homepage = http://wxsvg.sourceforge.net/;
+    homepage = "http://wxsvg.sourceforge.net/";
     license = with licenses; gpl2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;

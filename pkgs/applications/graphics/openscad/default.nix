@@ -77,10 +77,9 @@ mkDerivation rec {
       machine parts but pretty sure is not what you are looking for when you are more
       interested in creating computer-animated movies.
     '';
-    homepage = http://openscad.org/;
+    homepage = "http://openscad.org/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers;
-      [ bjornfor raskin the-kenny gebner ];
+    maintainers = with stdenv.lib.maintainers; [ bjornfor raskin gebner ];
   };
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails. requires tcl?
 
   meta = with stdenv.lib; {
-    homepage = http://sqlcipher.net/;
+    homepage = "http://sqlcipher.net/";
     description = "Full Database Encryption for SQLite";
     platforms = platforms.unix;
     license = licenses.bsd3;

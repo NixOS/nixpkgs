@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPy34, fetchPypi, linuxHeaders }:
+{ lib, buildPythonPackage, fetchPypi, linuxHeaders }:
 
 buildPythonPackage rec {
   pname = "evdev";
@@ -17,11 +17,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  disabled = isPy34;  # see http://bugs.python.org/issue21121
-
   meta = with lib; {
     description = "Provides bindings to the generic input event interface in Linux";
-    homepage = https://pythonhosted.org/evdev;
+    homepage = "https://pythonhosted.org/evdev";
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;

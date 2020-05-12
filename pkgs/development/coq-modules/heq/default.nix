@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}" ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.mpi-sws.org/~gil/Heq/;
+    homepage = "https://www.mpi-sws.org/~gil/Heq/";
     description = "Heq : a Coq library for Heterogeneous Equality";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

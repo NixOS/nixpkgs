@@ -18,7 +18,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Extension to emulate keypresses and to get the layout information from the X server";
-    homepage = https://launchpad.net/virtkey;
+    homepage = "https://launchpad.net/virtkey";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
   };

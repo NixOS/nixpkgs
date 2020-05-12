@@ -1,9 +1,13 @@
 { stdenv, fetchFromGitHub, cmake, libusb1 }:
 
-# IMPORTANT: You need permissions to access the stlink usb devices. 
+let
+  # The Darwin build of stlink explicitly refers to static libusb.
+  libusb1' = if stdenv.isDarwin then libusb1.override { withStatic = true; } else libusb1;
+
+# IMPORTANT: You need permissions to access the stlink usb devices.
 # Add services.udev.pkgs = [ pkgs.stlink ] to your configuration.nix
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "stlink";
   version = "1.6.0";
 
@@ -14,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mlkrxjxg538335g59hjb0zc739dx4mhbspb26z5gz3lf7d4xv6x";
   };
 
-  buildInputs = [ cmake libusb1 ];
+  buildInputs = [ libusb1' ];
+  nativeBuildInputs = [ cmake ];
   patchPhase = ''
     sed -i 's@/etc/udev/rules.d@$ENV{out}/etc/udev/rules.d@' CMakeLists.txt
     sed -i 's@/etc/modprobe.d@$ENV{out}/etc/modprobe.d@' CMakeLists.txt

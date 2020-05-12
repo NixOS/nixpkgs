@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       together the convenience of a standalone interpreted language with the
       efficiency of a compiled language. It's ideal for fast prototyping.
     '';
-    homepage = http://faust.grame.fr/;
+    homepage = "http://faust.grame.fr/";
     license = licenses.gpl3;
   };
 }

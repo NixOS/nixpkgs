@@ -4,7 +4,8 @@ let
 
   runCommand' = runLocal: stdenv: name: env: buildCommand:
     stdenv.mkDerivation ({
-      inherit name buildCommand;
+      name = lib.strings.sanitizeDerivationName name;
+      inherit buildCommand;
       passAsFile = [ "buildCommand" ];
     }
     // (lib.optionalAttrs runLocal {

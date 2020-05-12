@@ -40,7 +40,7 @@ buildPythonPackage rec {
   # sparkpost is missing because it's not packaged yet
   meta = with stdenv.lib; {
     description = "Django email backends and webhooks for Mailgun";
-    homepage = https://github.com/anymail/django-anymail;
+    homepage = "https://github.com/anymail/django-anymail";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ivegotasthma ];
   };

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyviz_comms";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c1722a496b08eb20ae3f2fedcc1ebcd207567b62e6453c7198a0b8f78ae96049";
+    sha256 = "092nl8pq1jqdylj0xyqwgi5qxvhy6qj2nx2lwwfkbnixlg6g8bbi";
   };
 
   propagatedBuildInputs = [ param ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Launch jobs, organize the output, and dissect the results";
-    homepage = https://pyviz.org/;
+    homepage = "https://pyviz.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

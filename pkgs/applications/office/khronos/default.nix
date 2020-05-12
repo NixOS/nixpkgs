@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "khronos";
-  version = "1.0.5";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "0dk1b2d82gli3z35dn5p002lfkgq326janql0vn1z5hs8jvjakqh";
+    sha256 = "0d5ma1d86lh2apagwrwk0d1v1cm3fifjivhf530nlznb67vi1x80";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Track each task's time in a simple inobtrusive way";
     homepage = "https://github.com/lainsce/khronos";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

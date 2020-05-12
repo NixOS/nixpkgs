@@ -4,37 +4,40 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "searx";
-  version = "0.15.0";
+  version = "0.16.0";
 
   # Can not use PyPI because certain test files are missing.
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "searx";
     rev = "v${version}";
-    sha256 = "05si0fn57z1g80l6003cs0ypag2m6zyi3dgsi06pvjp066xbrjvd";
+    sha256 = "0hfa4nmis98yvghxw866rzjpmhb2ln8l6l8g9yx4m79b2lk76xcs";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace 'certifi==2017.11.5' 'certifi' \
-      --replace 'flask==1.0.2' 'flask==1.0.*' \
-      --replace 'flask-babel==0.11.2' 'flask-babel==0.11.*' \
-      --replace 'lxml==4.2.3' 'lxml==4.2.*' \
-      --replace 'idna==2.7' 'idna' \
+      --replace 'certifi==2019.3.9' 'certifi' \
+      --replace 'flask==1.0.2' 'flask' \
+      --replace 'flask-babel==0.12.2' 'flask-babel' \
+      --replace 'jinja2==2.10.1' 'jinja2' \
+      --replace 'lxml==4.3.3' 'lxml' \
+      --replace 'idna==2.8' 'idna' \
       --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
-      --replace 'pyopenssl==18.0.0' 'pyopenssl' \
-      --replace 'python-dateutil==2.7.3' 'python-dateutil==2.7.*'
+      --replace 'pyopenssl==19.0.0' 'pyopenssl' \
+      --replace 'python-dateutil==2.8.0' 'python-dateutil==2.8.*' \
+      --replace 'pyyaml==5.1' 'pyyaml'
     substituteInPlace requirements-dev.txt \
       --replace 'plone.testing==5.0.0' 'plone.testing' \
-      --replace 'pep8==1.7.1' 'pep8==1.7.*' \
-      --replace 'splinter==0.7.5' 'splinter' \
-      --replace 'selenium==3.5.0' 'selenium'
+      --replace 'pep8==1.7.0' 'pep8==1.7.*' \
+      --replace 'splinter==0.11.0' 'splinter' \
+      --replace 'selenium==3.141.0' 'selenium'
   '';
 
   propagatedBuildInputs = [
     pyyaml lxml grequests flaskbabel flask requests
     gevent speaklater Babel pytz dateutil pygments
     pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
+    jinja2
   ];
 
   checkInputs = [
@@ -44,13 +47,12 @@ buildPythonApplication rec {
 
   preCheck = ''
     rm tests/test_robot.py # A variable that is imported is commented out
-    rm tests/unit/engines/pubmed.py
   '';
 
   meta = with lib; {
-    homepage = https://github.com/asciimoo/searx;
+    homepage = "https://github.com/asciimoo/searx";
     description = "A privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ matejc fpletz globin ];
+    maintainers = with maintainers; [ matejc fpletz globin danielfullmer ];
   };
 }

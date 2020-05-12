@@ -17,9 +17,9 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = pkgs.python.buildEnv.override {
-    extraLibs = cfg.plugins pkgs.octoprint-plugins;
-  };
+  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
+
+  package = pkgs.octoprint;
 
 in
 {
@@ -106,7 +106,6 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pluginsEnv ];
-      environment.PYTHONPATH = makeSearchPathOutput "lib" pkgs.python.sitePackages [ pluginsEnv ];
 
       preStart = ''
         if [ -e "${cfg.stateDir}/config.yaml" ]; then
@@ -119,7 +118,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.octoprint}/bin/octoprint serve -b ${cfg.stateDir}";
+        ExecStart = "${pluginsEnv}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
       };

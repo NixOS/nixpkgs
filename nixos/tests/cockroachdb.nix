@@ -1,7 +1,7 @@
 # This performs a full 'end-to-end' test of a multi-node CockroachDB cluster
 # using the built-in 'cockroach workload' command, to simulate a semi-realistic
 # test load. It generally takes anywhere from 3-5 minutes to run and 1-2GB of
-# RAM (though each of 3 workers gets 1GB allocated)
+# RAM (though each of 3 workers gets 2GB allocated)
 #
 # CockroachDB requires synchronized system clocks within a small error window
 # (~500ms by default) on each node in order to maintain a multi-node cluster.
@@ -55,7 +55,7 @@ let
 
     {
       # Bank/TPC-C benchmarks take some memory to complete
-      virtualisation.memorySize = 1024;
+      virtualisation.memorySize = 2048;
 
       # Install the KVM PTP "Virtualized Clock" driver. This allows a /dev/ptp0
       # device to appear as a reference clock, synchronized to the host clock.
@@ -88,6 +88,8 @@ let
       services.cockroachdb.listen.address = myAddr;
       services.cockroachdb.join = lib.mkIf (joinNode != null) joinNode;
 
+      systemd.services.chronyd.unitConfig.ConditionPathExists = "/dev/ptp0";
+
       # Hold startup until Chrony has performed its first measurement (which
       # will probably result in a full timeskip, thanks to makestep)
       systemd.services.cockroachdb.preStart = ''
@@ -95,7 +97,7 @@ let
       '';
     };
 
-in import ./make-test.nix ({ pkgs, ...} : {
+in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "cockroachdb";
   meta.maintainers = with pkgs.stdenv.lib.maintainers;
     [ thoughtpolice ];
@@ -110,17 +112,13 @@ in import ./make-test.nix ({ pkgs, ...} : {
   # there's otherwise no way to guarantee that node1 will start before the others try
   # to join it.
   testScript = ''
-    $node1->start;
-    $node1->waitForUnit("cockroachdb");
-
-    $node2->start;
-    $node2->waitForUnit("cockroachdb");
-
-    $node3->start;
-    $node3->waitForUnit("cockroachdb");
-
-    $node1->mustSucceed("cockroach sql --host=192.168.1.1 --insecure -e 'SHOW ALL CLUSTER SETTINGS' 2>&1");
-    $node1->mustSucceed("cockroach workload init bank 'postgresql://root\@192.168.1.1:26257?sslmode=disable'");
-    $node1->mustSucceed("cockroach workload run bank --duration=1m 'postgresql://root\@192.168.1.1:26257?sslmode=disable'");
+    for node in node1, node2, node3:
+        node.start()
+        node.wait_for_unit("cockroachdb")
+    node1.succeed(
+        "cockroach sql --host=192.168.1.1 --insecure -e 'SHOW ALL CLUSTER SETTINGS' 2>&1",
+        "cockroach workload init bank 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
+        "cockroach workload run bank --duration=1m 'postgresql://root@192.168.1.1:26257?sslmode=disable'",
+    )
   '';
 })

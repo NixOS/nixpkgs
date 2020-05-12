@@ -40,6 +40,23 @@
    </para>
   </section>
 
+  <section xml:id="ssec-icon-theme-packaging">
+    <title>Packaging icon themes</title>
+
+    <para>
+      Icon themes may inherit from other icon themes. The inheritance is specified using the <literal>Inherits</literal> key in the <filename>index.theme</filename> file distributed with the icon theme. According to the <link xlink:href="https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html">icon theme specification</link>, icons not provided by the theme are looked for in its parent icon themes. Therefore the parent themes should be installed as dependencies for a more complete experience regarding the icon sets used.
+    </para>
+
+    <para>
+      The package <package>hicolor-icon-theme</package> provides a setup hook which makes symbolic links for the parent themes into the directory <filename>share/icons</filename> of the current theme directory in the nix store, making sure they can be found at runtime. For that to work the packages providing parent icon themes should be listed as propagated build dependencies, together with <package>hicolor-icon-theme</package>.
+    </para>
+
+    <para>
+      Also make sure that <filename>icon-theme.cache</filename> is installed for each theme provided by the package, and set <code>dontDropIconThemeCache</code> to <code>true</code> so that the cache file is not removed by the <package>gtk3</package> setup hook.
+    </para>
+
+  </section>
+
   <section xml:id="ssec-gnome-themes">
    <title>GTK Themes</title>
 
@@ -233,7 +250,7 @@ mkDerivation {
     </term>
     <listitem>
      <para>
-      You can rely on applications depending on the library set the necessary environment variables but that it often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
+      You can rely on applications depending on the library setting the necessary environment variables but that is often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
       <itemizedlist>
        <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext">
         <para>

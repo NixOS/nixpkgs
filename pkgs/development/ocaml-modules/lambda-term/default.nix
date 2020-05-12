@@ -28,7 +28,7 @@ buildDunePackage rec {
     console applications.
     '';
 
-    homepage = https://github.com/diml/lambda-term;
+    homepage = "https://github.com/diml/lambda-term";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [
       stdenv.lib.maintainers.gal_bolle

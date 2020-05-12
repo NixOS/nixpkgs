@@ -33,7 +33,7 @@ perlPackages.buildPerlPackage rec {
   meta = {
     description = "Downloads TV and radio from BBC iPlayer";
     license = licenses.gpl3Plus;
-    homepage = https://squarepenguin.co.uk/;
+    homepage = "https://squarepenguin.co.uk/";
     platforms = platforms.all;
     maintainers = with maintainers; [ rika ];
   };

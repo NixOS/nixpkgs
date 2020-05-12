@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "fmfn";
     repo = "BayesianOptimization";
     rev = "v${version}";
-    sha256 = "07sqymg6k5512k7wq4kbp7rsrkb4g90n0ck1f0b9s6glyfpcy4pq";
+    sha256 = "0ylip9xdi0cjzmdayxxpazdfaa9dl0sdcl2qsfn3p0cipj59bdvd";
   };
 
   propagatedBuildInputs = [

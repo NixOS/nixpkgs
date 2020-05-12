@@ -94,7 +94,12 @@ in
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
           networkConfig.IPv6PrivacyExtensions = "kernel";
-        } ];
+          linkConfig = optionalAttrs (i.macAddress != null) {
+            MACAddress = i.macAddress;
+          } // optionalAttrs (i.mtu != null) {
+            MTUBytes = toString i.mtu;
+          };
+        }];
       })))
       (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
         netdevs."40-${name}" = {

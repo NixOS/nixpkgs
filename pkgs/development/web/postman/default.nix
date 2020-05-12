@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "7.19.1";
+  version = "7.23.0";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "1p3614lhyn0qwqj99iqclpg4xfd3x4n1m34ya79530phqrrmnsh7";
+    sha256 = "0m3pjimpahc3kiwdq21rwyg6ckdh3avhzx3apmygisaz4gnab94d";
     name = "${pname}.tar.gz";
   };
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.getpostman.com;
+    homepage = "https://www.getpostman.com";
     description = "API Development Environment";
     license = licenses.postman;
     platforms = [ "x86_64-linux" ];

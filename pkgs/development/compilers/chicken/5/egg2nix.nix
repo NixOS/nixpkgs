@@ -21,9 +21,9 @@ eggDerivation {
 
   meta = {
     description = "Generate nix-expression from CHICKEN scheme eggs";
-    homepage = https://github.com/the-kenny/egg2nix;
+    homepage = "https://github.com/the-kenny/egg2nix";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny corngood ];
+    maintainers = with stdenv.lib.maintainers; [ corngood ];
   };
 }

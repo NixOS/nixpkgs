@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
   meta = {
-    homepage = http://zsync.moria.org.uk/;
+    homepage = "http://zsync.moria.org.uk/";
     description = "File distribution system using the rsync algorithm";
     license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];

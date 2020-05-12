@@ -17,6 +17,6 @@ buildPythonPackage rec {
     description = "A simple beanstalkd client library for Python";
     maintainers = with stdenv.lib.maintainers; [ aanderse ];
     license = with stdenv.lib.licenses; [ asl20 ];
-    homepage = https://github.com/earl/beanstalkc;
+    homepage = "https://github.com/earl/beanstalkc";
   };
 }

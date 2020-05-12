@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ncurses pkgconfig perl ];
 
   meta = {
-    homepage = http://hunspell.sourceforge.net/;
+    homepage = "http://hunspell.sourceforge.net/";
     description = "Thesaurus library from Hunspell project";
     license = stdenv.lib.licenses.bsd3;
     inherit (hunspell.meta) platforms;

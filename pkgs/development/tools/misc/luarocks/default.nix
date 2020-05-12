@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luarocks";
-  version = "3.3.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${version}";
-    sha256 = "0859k2b9pihmcw45fdsbwx936npcj3vbp3hxi1v3j7n61dkw7r0s";
+    sha256 = "0viiafmb8binksda79ah828q1dfnb6jsqlk7vyndl2xvx9yfn4y2";
   };
 
   patches = [ ./darwin-3.1.3.patch ];

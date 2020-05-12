@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
-    homepage    = http://frama-c.com/;
+    homepage    = "http://frama-c.com/";
     license     = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
     platforms   = stdenv.lib.platforms.unix;

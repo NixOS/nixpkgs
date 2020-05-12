@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Specifications for callback functions passed in to an API";
-    homepage = https://github.com/takluyver/backcall;
+    homepage = "https://github.com/takluyver/backcall";
     license = lib.licenses.bsd3;
   };
 

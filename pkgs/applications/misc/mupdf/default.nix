@@ -74,14 +74,15 @@ in stdenv.mkDerivation rec {
     Comment=PDF viewer
     Exec=$bin/bin/mupdf-x11 %f
     Terminal=false
+    MimeType=application/pdf;application/x-pdf;application/x-cbz;application/oxps;application/vnd.ms-xpsdocument;application/epub+zip
     EOF
   '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://mupdf.com;
-    repositories.git = git://git.ghostscript.com/mupdf.git;
+    homepage = "https://mupdf.com";
+    repositories.git = "git://git.ghostscript.com/mupdf.git";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra fpletz ];

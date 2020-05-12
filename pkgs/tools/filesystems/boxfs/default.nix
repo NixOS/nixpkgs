@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
       the terminal and in your browser. When you've done using your files,
       unmount the file system with `fusermount -u mountpoint`.
     '';
-    homepage = https://github.com/drotiro/boxfs2;
+    homepage = "https://github.com/drotiro/boxfs2";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

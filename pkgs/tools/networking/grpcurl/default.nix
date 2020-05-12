@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";
-    homepage = https://github.com/fullstorydev/grpcurl;
+    homepage = "https://github.com/fullstorydev/grpcurl";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ knl ];
   };

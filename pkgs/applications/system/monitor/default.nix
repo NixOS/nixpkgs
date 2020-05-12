@@ -18,13 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.6.2";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "0cqzxlzdbij26qgbbngqx6njcpcymkgvm29b7ipldgkssxp1mkkg";
+    sha256 ="1gd2i7gja4k9j4xac8jnls3v41d6qqhmqradz2jbsxwm2sk3cgcf";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -61,8 +62,13 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Manage processes and monitor system resources";
+    longDescription = ''
+      Manage processes and monitor system resources.
+      To use the wingpanel indicator in this application, see the Pantheon
+      section in the NixOS manual.
+    '';
     homepage = "https://github.com/stsdc/monitor";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

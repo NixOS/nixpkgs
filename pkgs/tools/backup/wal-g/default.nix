@@ -1,30 +1,28 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, brotli }:
+{ stdenv, buildGoModule, fetchFromGitHub, brotli }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "wal-g";
-  version = "0.2.14";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
-    owner  = "wal-g";
-    repo   = "wal-g";
-    rev    = "v${version}";
-    sha256 = "0rrn9kzcg3nw9qvzy58m4qacghv0pj7iyjh4yspc71n5nkamkfgm";
+    owner = "wal-g";
+    repo = "wal-g";
+    rev = "v${version}";
+    sha256 = "1hslhs9i4wib6c74gdq9yail958ff1y11pymjww2xr84wkwd9v7i";
   };
+
+  modSha256 = "0kwl5gwc5gc0cq2gldg13nvswp9wd90xiv1qb3g8yxcczywkpmrm";
 
   buildInputs = [ brotli ];
 
   doCheck = true;
 
-  goPackagePath = "github.com/wal-g/wal-g";
-
-  goDeps = ./deps.nix;
-
   subPackages = [ "main/pg" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/cmd/pg.WalgVersion=${version} -X ${goPackagePath}/cmd/pg.GitRevision=${src.rev}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/wal-g/wal-g/cmd/pg.WalgVersion=${version} -X github.com/wal-g/wal-g/cmd/pg.GitRevision=${src.rev}" ];
 
   postInstall = ''
-    mv $bin/bin/pg $bin/bin/wal-g
+    mv $out/bin/pg $out/bin/wal-g
   '';
 
   meta = {

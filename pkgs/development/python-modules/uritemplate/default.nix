@@ -18,7 +18,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/python-hyper/uritemplate;
+    homepage = "https://github.com/python-hyper/uritemplate";
     description = "URI template parsing for Humans";
     license = with licenses; [ asl20 bsd3 ];
     maintainers = with maintainers; [ matthiasbeyer ];

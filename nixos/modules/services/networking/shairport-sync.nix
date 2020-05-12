@@ -17,6 +17,7 @@ in
     services.shairport-sync = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable the shairport-sync daemon.

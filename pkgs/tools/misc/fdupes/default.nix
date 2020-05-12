@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       Such files are found by comparing file sizes and MD5 signatures,
       followed by a byte-by-byte comparison.
     '';
-    homepage = https://github.com/adrianlopezroche/fdupes;
+    homepage = "https://github.com/adrianlopezroche/fdupes";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.maggesi ];

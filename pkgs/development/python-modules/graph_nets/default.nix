@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Build Graph Nets in Tensorflow";
-    homepage = https://github.com/deepmind/graph_nets;
+    homepage = "https://github.com/deepmind/graph_nets";
     license = licenses.asl20;
     maintainers = with maintainers; [ timokau ];
   };

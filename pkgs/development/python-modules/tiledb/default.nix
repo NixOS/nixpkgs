@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface to the TileDB storage manager";
-    homepage = https://github.com/TileDB-Inc/TileDB-Py;
+    homepage = "https://github.com/TileDB-Inc/TileDB-Py";
     license = licenses.mit;
     maintainers = with maintainers; [ fridh ];
   };

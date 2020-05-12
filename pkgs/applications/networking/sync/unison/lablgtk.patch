@@ -1,0 +1,31 @@
+From 2e7ea9481c6c3ff2ec513c39f73cfe15c0763c06 Mon Sep 17 00:00:00 2001
+From: daviddavid <geiger.david68210@gmail.com>
+Date: Mon, 26 Feb 2018 13:36:36 +0100
+Subject: [PATCH] Fix for lablgtk >= 2.18.6
+
+---
+ src/uigtk2.ml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/uigtk2.ml b/src/uigtk2.ml
+index 2ba6d79..04c4da4 100644
+--- a/src/uigtk2.ml
++++ b/src/uigtk2.ml
+@@ -89,12 +89,12 @@ let fontItalic = lazy (Pango.Font.from_string "italic")
+ (* This does not work with the current version of Lablgtk, due to a bug
+ let icon =
+   GdkPixbuf.from_data ~width:48 ~height:48 ~has_alpha:true
+-    (Gpointer.region_of_string Pixmaps.icon_data)
++    (Gpointer.region_of_bytes Pixmaps.icon_data)
+ *)
+ let icon =
+   let p = GdkPixbuf.create ~width:48 ~height:48 ~has_alpha:true () in
+   Gpointer.blit
+-    (Gpointer.region_of_string Pixmaps.icon_data) (GdkPixbuf.get_pixels p);
++    (Gpointer.region_of_bytes Pixmaps.icon_data) (GdkPixbuf.get_pixels p);
+   p
+ 
+ let leftPtrWatch =
+-- 
+2.25.1
+

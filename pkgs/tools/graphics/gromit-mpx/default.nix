@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       to make annotations on the screen.
     '';
 
-    homepage = https://github.com/bk138/gromit-mpx;
+    homepage = "https://github.com/bk138/gromit-mpx";
     maintainers = with maintainers; [ pjones ];
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://marcomaggi.github.io/docs/cre2.html;
+    homepage = "http://marcomaggi.github.io/docs/cre2.html";
     description = "C Wrapper for RE2";
     license = licenses.bsd3;
     platforms = platforms.all;

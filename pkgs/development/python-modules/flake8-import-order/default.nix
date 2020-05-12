@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Flake8 and pylama plugin that checks the ordering of import statements";
-    homepage = https://github.com/PyCQA/flake8-import-order;
+    homepage = "https://github.com/PyCQA/flake8-import-order";
     license = with licenses; [ lgpl3 mit ];
   };
 }

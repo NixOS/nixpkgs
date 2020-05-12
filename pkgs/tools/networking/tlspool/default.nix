@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "A supercharged TLS daemon that allows for easy, strong and consistent deployment";
     license = licenses.gpl3;
-    homepage = http://www.tlspool.org;
+    homepage = "http://www.tlspool.org";
     maintainers = with maintainers; [ leenaars qknight ];
   };
 }

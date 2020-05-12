@@ -1,7 +1,7 @@
-{ config, stdenv, fetchFromGitHub
+{ mkDerivation, config, stdenv, fetchFromGitHub
 , fetchpatch, pkgconfig, perl, python, which
 , libX11, libxcb, libGLU, libGL
-, qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmake, makeWrapper
+, qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmake
 , libchardet
 , ffmpeg
 
@@ -29,7 +29,7 @@ assert pulseSupport -> libpulseaudio != null;
 assert cddaSupport -> libcdda != null;
 assert youtubeSupport -> youtube-dl != null;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "bomi";
   version = "0.9.11";
 
@@ -90,8 +90,9 @@ stdenv.mkDerivation rec {
     patchShebangs build-mpv
   '';
 
+  dontWrapQtApps = true;
   postInstall = ''
-    wrapProgram $out/bin/bomi \
+    wrapQtApp $out/bin/bomi \
       ${optionalString youtubeSupport "--prefix PATH ':' '${youtube-dl}/bin'"}
   '';
 
@@ -105,11 +106,11 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig perl python which qttools qmake ];
+  nativeBuildInputs = [ pkgconfig perl python which qttools qmake ];
 
   meta = with stdenv.lib; {
     description = "Powerful and easy-to-use multimedia player";
-    homepage = https://bomi-player.github.io/;
+    homepage = "https://bomi-player.github.io/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.linux;

@@ -83,6 +83,14 @@ in {
         '';
       };
 
+      group = mkOption {
+        type = types.str;
+        default = "root";
+        example = "wheel";
+        description =
+          "Group to grant acces to the Yggdrasil control socket.";
+      };
+
       openMulticastPort = mkOption {
         type = bool;
         default = false;
@@ -144,8 +152,9 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
 
+        Group = cfg.group;
         RuntimeDirectory = "yggdrasil";
-        RuntimeDirectoryMode = "0700";
+        RuntimeDirectoryMode = "0750";
         BindReadOnlyPaths = mkIf configFileProvided
           [ "${cfg.configFile}" ];
 

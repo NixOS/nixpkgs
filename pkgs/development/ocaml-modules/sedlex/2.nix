@@ -1,16 +1,15 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , fetchurl
+, buildDunePackage
 , ocaml
-, dune
-, findlib
 , gen
 , ppx_tools_versioned
 , ocaml-migrate-parsetree
 , uchar
 }:
 
-if stdenv.lib.versionOlder ocaml.version "4.02.3"
+if lib.versionOlder ocaml.version "4.02.3"
 then throw "sedlex is not available for OCaml ${ocaml.version}"
 else
 
@@ -28,8 +27,8 @@ let
     sha256 = "0gsb1jpj3mnqbjgbavi4l95gl6g4agq58j82km22fdfg63j3w3fk";
   };
 in
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-sedlex-${version}";
+buildDunePackage rec {
+  pname = "sedlex";
   version = "2.1";
 
   src = fetchFromGitHub {
@@ -39,9 +38,9 @@ stdenv.mkDerivation rec {
     sha256 = "05f6qa8x3vhpdz1fcnpqk37fpnyyq13icqsk2gww5idjnh6kng26";
   };
 
-  buildInputs = [ ocaml findlib dune ppx_tools_versioned ocaml-migrate-parsetree ];
-
-  propagatedBuildInputs = [ gen uchar ];
+  propagatedBuildInputs = [
+    gen uchar ocaml-migrate-parsetree ppx_tools_versioned
+  ];
 
   preBuild = ''
     ln -s ${DerivedCoreProperties} src/generator/data/DerivedCoreProperties.txt
@@ -49,21 +48,14 @@ stdenv.mkDerivation rec {
     ln -s ${PropList} src/generator/data/PropList.txt
   '';
 
-  buildFlags = [ "build" ];
-
-  installPhase = ''
-    make INSTALL_ARGS="--prefix=$out --libdir=$OCAMLFIND_DESTDIR" install
-  '';
-
-  createFindlibDestdir = true;
+  doCheck = true;
 
   dontStrip = true;
 
   meta = {
-    homepage = https://github.com/ocaml-community/sedlex;
+    homepage = "https://github.com/ocaml-community/sedlex";
     description = "An OCaml lexer generator for Unicode";
-    license = stdenv.lib.licenses.mit;
-    inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.marsam ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marsam ];
   };
 }

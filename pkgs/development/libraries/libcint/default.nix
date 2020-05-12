@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, openblas
+, blas
   # Check Inputs
 , python2
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openblas ];
+  buildInputs = [ blas ];
   cmakeFlags = [
     "-DENABLE_TEST=1"
     "-DQUICK_TEST=1"

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fsspec
-, pytest
+, pytestCheckHook
 , pythonOlder
 , cloudpickle
 , numpy
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.10.1";
+  version = "2.14.0";
 
   disabled = pythonOlder "3.5";
 
@@ -23,12 +23,14 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "035mr7385yf5ng5wf60qxr80529h8dsla5hymkyg68dxhkd0jvbr";
+    sha256 = "0kj46pwzvdw8ii1h45y48wxvjid89yp4cfak2h4b8z8xic73fqgj";
   };
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
+
+  dontUseSetuptoolsCheck = true;
 
   propagatedBuildInputs = [
     bokeh
@@ -50,13 +52,14 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  checkPhase = ''
-    pytest
-  '';
+  disabledTests = [
+    "test_argwhere_str"
+    "test_count_nonzero_str"
+  ];
 
   meta = {
     description = "Minimal task scheduling abstraction";
-    homepage = https://github.com/ContinuumIO/dask/;
+    homepage = "https://github.com/ContinuumIO/dask/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

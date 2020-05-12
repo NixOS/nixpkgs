@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ expat ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.unidata.ucar.edu/software/udunits/;
+    homepage = "https://www.unidata.ucar.edu/software/udunits/";
     description = "A C-based package for the programatic handling of units of physical quantities";
     license = licenses.bsdOriginal;
     platforms = platforms.linux;

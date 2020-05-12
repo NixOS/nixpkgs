@@ -9,7 +9,7 @@
 , imagemagick
 , netcat-gnu
 , p7zip
-, python2Packages
+, python2
 , unzip
 , wget
 , wine
@@ -27,25 +27,25 @@
 let
   version = "4.3.4";
 
-  binpath = stdenv.lib.makeBinPath
-    [ cabextract
-      python2Packages.python
-      gettext
-      glxinfo
-      gnupg
-      icoutils
-      imagemagick
-      netcat-gnu
-      p7zip
-      unzip
-      wget
-      wine
-      xdg-user-dirs
-      xterm
-      which
-      curl
-      jq
-    ];
+  binpath = stdenv.lib.makeBinPath [ 
+    cabextract
+    python
+    gettext
+    glxinfo
+    gnupg
+    icoutils
+    imagemagick
+    netcat-gnu
+    p7zip
+    unzip
+    wget
+    wine
+    xdg-user-dirs
+    xterm
+    which
+    curl
+    jq
+  ];
 
   ld32 =
     if stdenv.hostPlatform.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
@@ -53,6 +53,11 @@ let
     else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
+
+  python = python2.withPackages(ps: with ps; [
+    wxPython
+    setuptools
+  ]);
 
 in stdenv.mkDerivation {
   pname = "playonlinux";
@@ -65,15 +70,13 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs =
-    [ python2Packages.python
-      python2Packages.wxPython
-      python2Packages.setuptools
-      xorg.libX11
-      libGL
-    ];
+  buildInputs = [ 
+    xorg.libX11
+    libGL
+    python
+  ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs python tests/python
     sed -i "s/ %F//g" etc/PlayOnLinux.desktop
   '';
@@ -85,7 +88,6 @@ in stdenv.mkDerivation {
     install -D -m644 etc/PlayOnLinux.desktop $out/share/applications/playonlinux.desktop
 
     makeWrapper $out/share/playonlinux/playonlinux $out/bin/playonlinux \
-      --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
       --prefix PATH : ${binpath}
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
@@ -103,7 +105,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "GUI for managing Windows programs under linux";
-    homepage = https://www.playonlinux.com/;
+    homepage = "https://www.playonlinux.com/";
     license = licenses.gpl3;
     maintainers = [ maintainers.a1russell ];
     platforms = [ "x86_64-linux" "i686-linux" ];

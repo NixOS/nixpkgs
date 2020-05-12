@@ -96,7 +96,20 @@ in {
 
     config = mkOption {
       default = null;
-      type = with types; nullOr attrs;
+      # Migrate to new option types later: https://github.com/NixOS/nixpkgs/pull/75584
+      type =  with lib.types; let
+          valueType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            (lazyAttrsOf valueType)
+            (listOf valueType)
+          ]) // {
+            description = "Yaml value";
+            emptyValue.value = {};
+          };
+        in valueType;
       example = literalExample ''
         {
           homeassistant = {

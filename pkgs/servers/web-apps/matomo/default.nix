@@ -3,16 +3,16 @@
 let
   versions = {
     matomo = {
-      version = "3.13.2";
-      sha256 = "1psysdz60h5rvgbsflkfprygxnh3kq60snqamyss07rk0ahbcb16";
+      version = "3.13.5";
+      sha256 = "1b9a9jj86bb3f0093k6sz235iivvvqbcvkjqxwn7c9z7qsmpvbxr";
     };
 
     matomo-beta = {
-      version = "3.13.2";
+      version = "3.13.5";
       # `beta` examples: "b1", "rc1", null
       # TOOD when updating: use null if stable version is >= latest beta or release candidate
       beta = null;
-      sha256 = "1psysdz60h5rvgbsflkfprygxnh3kq60snqamyss07rk0ahbcb16";
+      sha256 = "1b9a9jj86bb3f0093k6sz235iivvvqbcvkjqxwn7c9z7qsmpvbxr";
     };
   };
   common = pname: { version, sha256, beta ? null }:
@@ -100,7 +100,7 @@ let
         meta = with stdenv.lib; {
           description = "A real-time web analytics application";
           license = licenses.gpl3Plus;
-          homepage = https://matomo.org/;
+          homepage = "https://matomo.org/";
           platforms = platforms.all;
           maintainers = with maintainers; [ florianjacob kiwi ];
         };

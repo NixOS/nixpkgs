@@ -1,22 +1,40 @@
-{ stdenv, pkgconfig, glib, libxml2, expat,
-  fftw, orc, lcms, imagemagick, openexr, libtiff, libjpeg, libgsf, libexif,
-  ApplicationServices,
-  python27, libpng ? null,
-  fetchFromGitHub,
-  autoreconfHook,
-  gtk-doc,
-  gobject-introspection,
+{ stdenv
+, pkgconfig
+, glib
+, libxml2
+, expat
+, fftw
+, orc
+, lcms
+, imagemagick
+, openexr
+, libtiff
+, libjpeg
+, libgsf
+, libexif
+, libheif
+, ApplicationServices
+, python27
+, libpng
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, gtk-doc
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vips";
-  version = "8.9.1";
+  version = "8.9.2";
+
+  outputs = [ "bin" "out" "man" "dev" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "01vgvzlygg3fzpinb0x1rdm2sqvnqxmvxbnlbg73ygdadv3l2s0v";
+    sha256 = "0pgvcp5yjk96izh7kjfprjd9kddx7zqrwwhm8dyalhrwbmj6c2q5";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -24,14 +42,39 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook gtk-doc gobject-introspection ];
-  buildInputs = [ glib libxml2 fftw orc lcms
-    imagemagick openexr libtiff libjpeg
-    libgsf libexif python27 libpng expat ]
-    ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+  nativeBuildInputs = [
+    pkgconfig
+    autoreconfHook
+    gtk-doc
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    glib
+    libxml2
+    fftw
+    orc
+    lcms
+    imagemagick
+    openexr
+    libtiff
+    libjpeg
+    libgsf
+    libexif
+    libheif
+    libpng
+    python27
+    libpng
+    expat
+  ] ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+
+  # Required by .pc file
+  propagatedBuildInputs = [
+    glib
+  ];
 
   autoreconfPhase = ''
-    ./autogen.sh
+    NOCONFIGURE=1 ./autogen.sh
   '';
 
   meta = with stdenv.lib; {

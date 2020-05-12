@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Timezone database for Python";
-    homepage = https://github.com/sdispater/pytzdata;
+    homepage = "https://github.com/sdispater/pytzdata";
     license = licenses.mit;
   };
 }

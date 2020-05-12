@@ -1,30 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, xorg, mesa }:
+{ stdenv, fetchurl, pkgconfig, xorg, mesa, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "libvdpau";
-  version = "1.2";
+  version = "1.4";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/uploads/14b620084c027d546fa0b3f083b800c6/${pname}-${version}.tar.bz2";
-    sha256 = "6a499b186f524e1c16b4f5b57a6a2de70dfceb25c4ee546515f26073cd33fa06";
+    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0c1zsfr6ypzwv8g9z50kdahpb7pirarq4z8avqqyyma5b9684n22";
   };
+  patches = [ ./installdir.patch ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
   buildInputs = with xorg; [ xorgproto libXext ];
 
   propagatedBuildInputs = [ xorg.libX11 ];
 
-  configureFlags = stdenv.lib.optional stdenv.isLinux
-    "--with-module-dir=${mesa.drivers.driverLink}/lib/vdpau";
+  mesonFlags = stdenv.lib.optional stdenv.isLinux
+    [ "-Dmoduledir=${mesa.drivers.driverLink}/lib/vdpau" ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lX11";
 
-  installFlags = [ "moduledir=$(out)/lib/vdpau" ];
-
   meta = with stdenv.lib; {
-    homepage = https://people.freedesktop.org/~aplattner/vdpau/;
+    homepage = "https://people.freedesktop.org/~aplattner/vdpau/";
     description = "Library to use the Video Decode and Presentation API for Unix (VDPAU)";
     license = licenses.mit; # expat version
     platforms = platforms.unix;

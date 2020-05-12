@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Code audit tool for python";
-    homepage = https://github.com/klen/pylama;
+    homepage = "https://github.com/klen/pylama";
     # ambiguous license declarations: https://github.com/klen/pylama/issues/64
     license = [ licenses.lgpl3 ];
     maintainers = with maintainers; [ dotlambda ];

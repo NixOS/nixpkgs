@@ -9,11 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1p3hafsxgs5d4za7n66lf5nz74qssfqpmk520cm7iq2njvvlqm2z";
   };
 
+  patches = [ ./lilv-pkgconfig.patch ];
+
   nativeBuildInputs = [ pkgconfig python3 wafHook ];
-  buildInputs = [ lv2 serd sord sratom ];
+  buildInputs = [ serd sord sratom ];
+  propagatedBuildInputs = [ lv2 ];
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/lilv;
+    homepage = "http://drobilla.net/software/lilv";
     description = "A C library to make the use of LV2 plugins";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];

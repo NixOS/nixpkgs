@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , pantheon
 , meson
 , ninja
@@ -9,18 +10,28 @@
 , granite
 , gtk3
 , switchboard
+, elementary-notifications
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0p0aj3bbjrh6x8wajqqb5yqm2iqfnj7kp16zf4hdr4siw0sx5p8n";
+    sha256 = "1ikq058svdan0whg4ks35m50apvbmzcz7h2wznxdbsimczzvj5sz";
   };
+
+  patches = [
+    # Fix do not disturb on NixOS
+    # https://github.com/elementary/switchboard-plug-notifications/pull/66
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-notifications/commit/c306366b39c3199f0b64eda73419005fcb5e29b8.patch";
+      sha256 = "0m018rfw5iv582sw6qgwc8lzn0j32ix1w47fvlfmx0kw04irl2x3";
+    })
+  ];
 
   passthru = {
     updateScript = pantheon.updateScript {
@@ -36,17 +47,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-notifications
     granite
     gtk3
     libgee
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
   meta = with stdenv.lib; {
     description = "Switchboard Notifications Plug";
-    homepage = https://github.com/elementary/switchboard-plug-notifications;
+    homepage = "https://github.com/elementary/switchboard-plug-notifications";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

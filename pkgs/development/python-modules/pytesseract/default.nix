@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytesseract";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b6hmz9dqfn8il1g5vyz6izsxqjrbvrr2gs8gwwadyz8fx4vghx8";
+    sha256 = "16l9b9f5v0a9j5jfgpd8irk9yhc9byzirrzv1rlkapdbz36sbn5g";
   };
 
   patches = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://pypi.org/project/pytesseract/;
+    homepage = "https://pypi.org/project/pytesseract/";
     license = licenses.asl20;
     description = "A Python wrapper for Google Tesseract";
     maintainers = with maintainers; [ ma27 ];

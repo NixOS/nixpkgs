@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "gym";
-  version = "0.15.6";
+  version = "0.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qpx4w6k42sb9ncjk4r6i22qjbcxcnha43svhvvq1nh7796xqzgd";
+    sha256 = "06h5b639nmzhmy4m1j3vigm86iv5pv7k8jy6xpldyd4jdlf37nn5";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A toolkit by OpenAI for developing and comparing your reinforcement learning agents";
-    homepage = https://gym.openai.com/;
+    homepage = "https://gym.openai.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
   };

@@ -226,7 +226,7 @@ stdenv.mkDerivation (rec {
 
   # TODO(@oxij): Stop referencing args here
   meta = {
-    homepage = http://www.xen.org/;
+    homepage = "http://www.xen.org/";
     description = "Xen hypervisor and related components"
                 + optionalString (args ? meta && args.meta ? description)
                                  " (${args.meta.description})";

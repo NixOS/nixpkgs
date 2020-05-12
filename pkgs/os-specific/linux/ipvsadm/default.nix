@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linux Virtual Server support programs";
-    homepage = http://www.linuxvirtualserver.org/software/ipvs.html;
+    homepage = "http://www.linuxvirtualserver.org/software/ipvs.html";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

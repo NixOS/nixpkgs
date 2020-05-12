@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "next";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "atlas-engineer";
     repo = "next";
     rev = version;
-    sha256 = "1gkmr746rqqg94698a051gv79fblc8n9dq0zg04llba44adhpmjl";
+    sha256 = "1gqkp185wcwaxr8py90hqk44nqjblrrdwvig19gizrbzr2gx2zhy";
   };
 
   nativeBuildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
-    homepage = https://next.atlas.engineer;
+    homepage = "https://next.atlas.engineer";
     license = licenses.bsd3;
     maintainers = [ maintainers.lewo ];
     platforms = [ "x86_64-linux" ];

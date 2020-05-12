@@ -1,22 +1,21 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.0";
+  version = "2.4.2";
   pname = "makeself";
 
   src = fetchFromGitHub {
     owner = "megastep";
     repo = "makeself";
     rev = "release-${version}";
-    sha256 = "1lw3gx1zpzp2wmzrw5v7k31vfsrdzadqha9ni309fp07g8inrr9n";
+    fetchSubmodules = true;
+    sha256 = "07cq7q71bv3fwddkp2863ylry2ivds00f8sjy8npjpdbkailxm21";
   };
 
-  # backported from https://github.com/megastep/makeself/commit/77156e28ff21231c400423facc7049d9c60fd1bd
-  patches = [ ./Use-rm-from-PATH.patch ];
+  patchPhase = "patchShebangs test";
 
-  postPatch = ''
-    sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i makeself.sh
-  '';
+  doCheck = true;
+  checkTarget = "test";
 
   installPhase = ''
     mkdir -p $out/{bin,share/{${pname}-${version},man/man1}}
@@ -26,8 +25,12 @@ stdenv.mkDerivation rec {
     cp makeself-header.sh $out/share/${pname}-${version}
   '';
 
+  fixupPhase = ''
+    sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i $out/bin/makeself
+  '';
+
   meta = with stdenv.lib; {
-    homepage = http://megastep.org/makeself;
+    homepage = "http://megastep.org/makeself";
     description = "Utility to create self-extracting packages";
     license = licenses.gpl2;
     maintainers = [ maintainers.wmertens ];

@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "prover9-2009-11a";
 
   src = fetchurl {
-    url = https://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz;
+    url = "https://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz";
     sha256 = "1l2i3d3h5z7nnbzilb6z92r0rbx0kh6yaxn2c5qhn3000xcfsay3";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://www.cs.unm.edu/~mccune/mace4/;
+    homepage = "https://www.cs.unm.edu/~mccune/mace4/";
     license = "GPL";
     description = "Automated theorem prover for first-order and equational logic";
     longDescription = ''

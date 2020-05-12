@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       utility. It also includes other, related, but arguably more advanced tools
       for OTA manipulation.
     '';
-    homepage = https://github.com/erfanoabdi/imgpatchtools;
+    homepage = "https://github.com/erfanoabdi/imgpatchtools";
     license = licenses.gpl3;
     maintainers = with maintainers; [ yegortimoshenko ];
     platforms = platforms.linux;

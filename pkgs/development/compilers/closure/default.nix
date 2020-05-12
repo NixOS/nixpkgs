@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "closure-compiler";
-  version = "20200204";
+  version = "20200406";
 
   src = fetchurl {
     url = "https://dl.google.com/closure-compiler/compiler-${version}.tar.gz";
-    sha256 = "0diqnvyfh8w7yf7l5zqvb4msw07n50k9grz0k2znykaqwmjsidx9";
+    sha256 = "1dd6fakavnadpm8h8r4d1saf9flm7ilhknfy0q6i5i237psjf7i5";
   };
 
   sourceRoot = ".";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for making JavaScript download and run faster";
-    homepage = https://developers.google.com/closure/compiler/;
+    homepage = "https://developers.google.com/closure/compiler/";
     license = licenses.asl20;
     platforms = platforms.all;
   };

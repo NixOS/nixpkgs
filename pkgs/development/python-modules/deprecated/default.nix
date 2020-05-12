@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "Deprecated";
-  version = "1.2.7";
+  version = "1.2.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "408038ab5fdeca67554e8f6742d1521cd3cd0ee0ff9d47f29318a4f4da31c308";
+    sha256 = "1k7c5kkh8jxxqdm0cbcvmhn3mwj0rcjwapwbzmm5r04n78lpvwqc";
   };
 
   propagatedBuildInputs = [ wrapt ];

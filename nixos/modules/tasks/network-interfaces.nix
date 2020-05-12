@@ -634,19 +634,23 @@ in
 
     networking.bonds =
       let
-        driverOptionsExample = {
-          miimon = "100";
-          mode = "active-backup";
-        };
+        driverOptionsExample =  ''
+          {
+            miimon = "100";
+            mode = "active-backup";
+          }
+        '';
       in mkOption {
         default = { };
-        example = literalExample {
-          bond0 = {
-            interfaces = [ "eth0" "wlan0" ];
-            driverOptions = driverOptionsExample;
-          };
-          anotherBond.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
-        };
+        example = literalExample ''
+          {
+            bond0 = {
+              interfaces = [ "eth0" "wlan0" ];
+              driverOptions = ${driverOptionsExample};
+            };
+            anotherBond.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
+          }
+        '';
         description = ''
           This option allows you to define bond devices that aggregate multiple,
           underlying networking interfaces together. The value of this option is
@@ -731,12 +735,14 @@ in
 
     networking.macvlans = mkOption {
       default = { };
-      example = literalExample {
-        wan = {
-          interface = "enp2s0";
-          mode = "vepa";
-        };
-      };
+      example = literalExample ''
+        {
+          wan = {
+            interface = "enp2s0";
+            mode = "vepa";
+          };
+        }
+      '';
       description = ''
         This option allows you to define macvlan interfaces which should
         be automatically created.
@@ -764,18 +770,20 @@ in
 
     networking.sits = mkOption {
       default = { };
-      example = literalExample {
-        hurricane = {
-          remote = "10.0.0.1";
-          local = "10.0.0.22";
-          ttl = 255;
-        };
-        msipv6 = {
-          remote = "192.168.0.1";
-          dev = "enp3s0";
-          ttl = 127;
-        };
-      };
+      example = literalExample ''
+        {
+          hurricane = {
+            remote = "10.0.0.1";
+            local = "10.0.0.22";
+            ttl = 255;
+          };
+          msipv6 = {
+            remote = "192.168.0.1";
+            dev = "enp3s0";
+            ttl = 127;
+          };
+        }
+      '';
       description = ''
         This option allows you to define 6-to-4 interfaces which should be automatically created.
       '';
@@ -826,16 +834,18 @@ in
 
     networking.vlans = mkOption {
       default = { };
-      example = literalExample {
-        vlan0 = {
-          id = 3;
-          interface = "enp3s0";
-        };
-        vlan1 = {
-          id = 1;
-          interface = "wlan0";
-        };
-      };
+      example = literalExample ''
+        {
+          vlan0 = {
+            id = 3;
+            interface = "enp3s0";
+          };
+          vlan1 = {
+            id = 1;
+            interface = "wlan0";
+          };
+        }
+      '';
       description =
         ''
           This option allows you to define vlan devices that tag packets
@@ -868,24 +878,26 @@ in
 
     networking.wlanInterfaces = mkOption {
       default = { };
-      example = literalExample {
-        wlan-station0 = {
-            device = "wlp6s0";
-        };
-        wlan-adhoc0 = {
-            type = "ibss";
-            device = "wlp6s0";
-            mac = "02:00:00:00:00:01";
-        };
-        wlan-p2p0 = {
-            device = "wlp6s0";
-            mac = "02:00:00:00:00:02";
-        };
-        wlan-ap0 = {
-            device = "wlp6s0";
-            mac = "02:00:00:00:00:03";
-        };
-      };
+      example = literalExample ''
+        {
+          wlan-station0 = {
+              device = "wlp6s0";
+          };
+          wlan-adhoc0 = {
+              type = "ibss";
+              device = "wlp6s0";
+              mac = "02:00:00:00:00:01";
+          };
+          wlan-p2p0 = {
+              device = "wlp6s0";
+              mac = "02:00:00:00:00:02";
+          };
+          wlan-ap0 = {
+              device = "wlp6s0";
+              mac = "02:00:00:00:00:03";
+          };
+        }
+      '';
       description =
         ''
           Creating multiple WLAN interfaces on top of one physical WLAN device (NIC).
@@ -1019,6 +1031,11 @@ in
         message = ''
           Temporary addresses are only needed when IPv6 is enabled.
         '';
+      })) ++ (forEach interfaces (i: {
+        assertion = (i.virtual && i.virtualType == "tun") -> i.macAddress == null;
+        message = ''
+          Setting a MAC Address for tun device ${i.name} isn't supported.
+        '';
       })) ++ [
         {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
@@ -1128,38 +1145,7 @@ in
           ${cfg.localCommands}
         '';
       };
-    } // (listToAttrs (forEach interfaces (i:
-      let
-        deviceDependency = if (config.boot.isContainer || i.name == "lo")
-          then []
-          else [ (subsystemDevice i.name) ];
-      in
-      nameValuePair "network-link-${i.name}"
-      { description = "Link configuration of ${i.name}";
-        wantedBy = [ "network-interfaces.target" ];
-        before = [ "network-interfaces.target" ];
-        bindsTo = deviceDependency;
-        after = [ "network-pre.target" ] ++ deviceDependency;
-        path = [ pkgs.iproute ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-        script =
-          ''
-            echo "Configuring link..."
-          '' + optionalString (i.macAddress != null) ''
-            echo "setting MAC address to ${i.macAddress}..."
-            ip link set "${i.name}" address "${i.macAddress}"
-          '' + optionalString (i.mtu != null) ''
-            echo "setting MTU to ${toString i.mtu}..."
-            ip link set "${i.name}" mtu "${toString i.mtu}"
-          '' + ''
-            echo -n "bringing up interface... "
-            ip link set "${i.name}" up && echo "done" || (echo "failed"; exit 1)
-          '';
-      })));
-
+    };
     services.mstpd = mkIf needsMstpd { enable = true; };
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };

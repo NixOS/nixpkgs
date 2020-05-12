@@ -17,10 +17,8 @@ in buildGoModule rec {
   modSha256 = "127xrah6xxrvc224g5dxn432sagrssx8v7phzapcsdajsnmagq6x";
 
   nativeBuildInputs = [
-    go
     scdoc
     python3.pkgs.wrapPython
-    notmuch
   ];
 
   patches = [
@@ -31,7 +29,7 @@ in buildGoModule rec {
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 perl ];
+  buildInputs = [ python3 notmuch ];
 
   GOFLAGS="-tags=notmuch";
 
@@ -57,7 +55,7 @@ in buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "aerc is an email client for your terminal";
-    homepage = https://aerc-mail.org/;
+    homepage = "https://aerc-mail.org/";
     maintainers = with maintainers; [ tadeokondrak ];
     license = licenses.mit;
     platforms = platforms.unix;

@@ -20,35 +20,33 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         }
       '';
 
-      nesting.clone = [
-        {
-          services.caddy.config = lib.mkForce ''
-            http://localhost {
-              gzip
+      specialisation.etag.configuration = {
+        services.caddy.config = lib.mkForce ''
+          http://localhost {
+            gzip
 
-              root ${
-                pkgs.runCommand "testdir2" {} ''
-                  mkdir "$out"
-                  echo changed > "$out/example.html"
-                ''
-              }
+            root ${
+              pkgs.runCommand "testdir2" {} ''
+                mkdir "$out"
+                echo changed > "$out/example.html"
+              ''
             }
-          '';
-        }
+          }
+        '';
+      };
 
-        {
-          services.caddy.config = ''
-            http://localhost:8080 {
-            }
-          '';
-        }
-      ];
+      specialisation.config-reload.configuration = {
+        services.caddy.config = ''
+          http://localhost:8080 {
+          }
+        '';
+      };
     };
   };
 
   testScript = { nodes, ... }: let
-    etagSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-1";
-    justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-2";
+    etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etag";
+    justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/config-reload";
   in ''
     url = "http://localhost/example.html"
     webserver.wait_for_unit("caddy")
@@ -77,7 +75,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert old_etag != new_etag, "Old ETag {} is the same as {}".format(
             old_etag, new_etag
         )
-    
+
     with subtest("config is reloaded on nixos-rebuild switch"):
         webserver.succeed(
             "${justReloadSystem}/bin/switch-to-configuration test >&2"

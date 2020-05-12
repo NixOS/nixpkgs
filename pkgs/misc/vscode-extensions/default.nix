@@ -76,8 +76,8 @@ in
     mktplcRef = {
       name = "language-haskell";
       publisher = "justusadam";
-      version = "2.6.0"; # see the note above
-      sha256 = "1891pg4x5qkh151pylvn93c4plqw6vgasa4g40jbma5xzq8pygr4";
+      version = "3.0.3";
+      sha256 = "1sg4g8h1gww4y67zix5f33v2gf121k2fcm6l1m7lygpkn40a8dsj";
     };
     meta = {
       license = stdenv.lib.licenses.bsd3;
@@ -140,6 +140,8 @@ in
     };
   };
 
+  matklad.rust-analyzer = callPackage ./rust-analyzer {};
+
   scala-lang.scala = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "scala";
@@ -156,8 +158,8 @@ in
     mktplcRef = {
       name = "metals";
       publisher = "scalameta";
-      version = "1.6.3";
-      sha256 = "1mc3awybzd2ql1b86inirhsw3j2c7cs0b0nvbjp38jjpq674bmj7";
+      version = "1.9.0";
+      sha256 = "0p2wbnw98zmjbfiz4mi1mh131s78r01kjnja339lwdigqxg88gi6";
     };
     meta = {
       license = stdenv.lib.licenses.asl20;

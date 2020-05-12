@@ -5,7 +5,7 @@
 , pkgconfig
 , meson
 , ninja
-, libusb
+, libusb1
 , pixman
 , glib
 , nss
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libusb
+    libusb1 # drop in 2.0 for gusb
     pixman
     glib
     nss
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://fprint.freedesktop.org/;
+    homepage = "https://fprint.freedesktop.org/";
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
     license = licenses.lgpl21;
     platforms = platforms.linux;

@@ -22,7 +22,7 @@ stdenv.mkDerivation  rec {
 
   meta = with stdenv.lib; {
     description = "High quality software synthesizer";
-    homepage = http://zynaddsubfx.sourceforge.net;
+    homepage = "http://zynaddsubfx.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu maintainers.nico202 ];

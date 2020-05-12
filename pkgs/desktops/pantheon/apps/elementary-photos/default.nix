@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.6.5";
+  version = "2.7.0";
 
   repoName = "photos";
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0r6d9y936nw4bn0jvixi1p62dy8qsgl2bx8g3889fndnhfnhbjv0";
+    sha256 = "09jjic165rmprc2cszsgj2m3j3f5p8v9pxx5mj66a0gj3ar3hfbd";
   };
 
   passthru = {
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   meta =  with stdenv.lib; {
     description = "Photo viewer and organizer designed for elementary OS";
-    homepage = https://github.com/elementary/photos;
+    homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -42,7 +42,10 @@ let
     inherit (config.system.nixos-generate-config) configuration;
   };
 
-  nixos-option = pkgs.callPackage ./nixos-option { };
+  nixos-option =
+    if lib.versionAtLeast (lib.getVersion pkgs.nix) "2.4pre"
+    then null
+    else pkgs.callPackage ./nixos-option { };
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -108,10 +111,10 @@ in
         # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
         # Select internationalisation properties.
-        # i18n = {
-        #   consoleFont = "Lat2-Terminus16";
-        #   consoleKeyMap = "us";
-        #   defaultLocale = "en_US.UTF-8";
+        # i18n.defaultLocale = "en_US.UTF-8";
+        # console = {
+        #   font = "Lat2-Terminus16";
+        #   keyMap = "us";
         # };
 
         # Set your time zone.
@@ -184,10 +187,9 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
-        nixos-option
         nixos-version
         nixos-enter
-      ];
+      ] ++ lib.optional (nixos-option != null) nixos-option;
 
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;

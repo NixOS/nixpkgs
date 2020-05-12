@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/w3c/epubcheck;
+    homepage = "https://github.com/w3c/epubcheck";
     description = "Validation tool for EPUB";
     license = with licenses; [ asl20 bsd3 mpl10 w3c ];
     platforms = platforms.all;

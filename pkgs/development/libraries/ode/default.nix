@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open Dynamics Engine";
-    homepage = https://sourceforge.net/projects/opende;
+    homepage = "https://sourceforge.net/projects/opende";
     platforms = platforms.linux;
     license = with licenses; [ bsd3 lgpl21 lgpl3 zlib ];
   };

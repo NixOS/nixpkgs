@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "drumkv1";
-  version = "0.9.12";
+  version = "0.9.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumkv1/${pname}-${version}.tar.gz";
-    sha256 = "0hmnmk9vvi43wl6say0dg7j088h7mmwmfdwjhsq89c7i7cpg78da";
+    sha256 = "0fr7pkp55zvjxf7p22drs93fsjgvqhbd55vxi0srhp2s2wzz5qak";
   };
 
   buildInputs = [ libjack2 alsaLib libsndfile liblo lv2 qt5.qtbase qt5.qttools ];
@@ -15,7 +15,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "An old-school drum-kit sampler synthesizer with stereo fx";
-    homepage = http://drumkv1.sourceforge.net/;
+    homepage = "http://drumkv1.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A console Google Drive client";
-    homepage = https://github.com/vitalif/grive2;
+    homepage = "https://github.com/vitalif/grive2";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

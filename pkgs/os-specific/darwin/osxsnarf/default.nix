@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Plan 9-inspired way to share your OS X clipboard.";
-    homepage = https://github.com/eraserhd/osxsnarf;
+    homepage = "https://github.com/eraserhd/osxsnarf";
     license = licenses.unlicense;
     platforms = platforms.darwin;
     maintainers = [ maintainers.eraserhd ];

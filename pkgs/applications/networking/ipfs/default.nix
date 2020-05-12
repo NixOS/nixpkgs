@@ -1,22 +1,33 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "ipfs";
-  version = "0.4.22";
+  version = "0.5.1";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "go-ipfs";
     inherit rev;
-    sha256 = "1drwkam2m1qdny51l7ja9vd33jffy8w0z0wbp28ajx4glp0kyra2";
+    sha256 = "11l55hlbixv1i25d3n216pkrwgcgac99fa88lyy3dailvminqxw7";
   };
 
-  modSha256 = "0jbzkifn88myk2vpd390clyl835978vpcfz912y8cnl26s6q677n";
+  postPatch = ''
+    rm -rf test/dependencies
+    patchShebangs plugin/loader/preload.sh
+  '';
+
+  buildPhase = ''
+    make install
+  '';
+
+  passthru.tests.ipfs = nixosTests.ipfs;
+
+  modSha256 = "13mpva3r6r2amw08g0bdggbxn933jjimngkvzgq1q5dksp4mivfk";
 
   meta = with stdenv.lib; {
     description = "A global, versioned, peer-to-peer filesystem";
-    homepage = https://ipfs.io/;
+    homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

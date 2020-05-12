@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "JACK audio recorder";
-    homepage = http://plugin.org.uk/timemachine/;
+    homepage = "http://plugin.org.uk/timemachine/";
     license = stdenv.lib.licenses.lgpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

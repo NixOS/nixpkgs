@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://ignitionrobotics.org/libraries/math;
+    homepage = "https://ignitionrobotics.org/libraries/math";
     description = "Math library by Ingition Robotics, created for the Gazebo project";
     license = licenses.asl20;
     maintainers = with maintainers; [ pxc ];

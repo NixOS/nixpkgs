@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python data analysis library that is optimized for humans instead of machines";
-    homepage    = https://github.com/wireservice/agate;
+    homepage    = "https://github.com/wireservice/agate";
     license     = with licenses; [ mit ];
     maintainers = with maintainers; [ vrthra ];
   };

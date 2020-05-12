@@ -2,10 +2,13 @@
 , gnutls, nettle
 }:
 
-let version = "4.1.7"; in
+if stdenv.lib.versionOlder ocaml.version "4.02"
+then throw "ocamlnet is not available for OCaml ${ocaml.version}"
+else
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ocamlnet-${version}";
+  version = "4.1.7";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/ocamlnet-${version}.tar.gz";

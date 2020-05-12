@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "texstudio";
-  version = "2.12.20";
+  version = "2.12.22";
 
   src = fetchFromGitHub {
     owner = "${pname}-org";
     repo = pname;
     rev = version;
-    sha256 = "0hywx2knqdrslzmm4if476ryf4ma0aw5j8kdp6lyrz2jx7az2gqa";
+    sha256 = "037jvsfln8wav17qj9anxz2a7p51v7ky85wmhdj2hgwp40al651g";
   };
 
   nativeBuildInputs = [ qmake wrapQtAppsHook pkgconfig ];
@@ -24,9 +24,9 @@ mkDerivation rec {
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.
     '';
-    homepage = http://texstudio.sourceforge.net;
+    homepage = "http://texstudio.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cfouche ];
+    maintainers = with maintainers; [ ajs124 cfouche ];
   };
 }

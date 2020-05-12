@@ -24,7 +24,7 @@ buildRustPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D target/release/tox-node $out/bin/tox-node
+    install -D $releaseDir/tox-node $out/bin/tox-node
 
     runHook postInstall
   '';
@@ -35,7 +35,7 @@ buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A server application to run tox node written in pure Rust";
-    homepage = https://github.com/tox-rs/tox-node;
+    homepage = "https://github.com/tox-rs/tox-node";
     license = [ licenses.mit ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ suhr ];

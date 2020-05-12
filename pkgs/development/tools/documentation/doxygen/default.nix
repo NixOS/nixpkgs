@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  name = "doxygen-1.8.17";
+  name = "doxygen-1.8.18";
 
   src = fetchurl {
     urls = [
       "mirror://sourceforge/doxygen/${name}.src.tar.gz" # faster, with https, etc.
       "http://doxygen.nl/files/${name}.src.tar.gz"
     ];
-    sha256 = "16dmv0gm1x8rvbm82fmjvi213q8fxqxinm75pcf595flya59ific";
+    sha256 = "0mh6s1ri1fs5yb27m0avnjsbcxpchgb9aaprq4bd3lj6vjg3s5qq";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://doxygen.nl/;
+    homepage = "http://doxygen.nl/";
     description = "Source code documentation generator tool";
 
     longDescription = ''

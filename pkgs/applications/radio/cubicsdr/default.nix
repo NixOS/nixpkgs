@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
 
   meta = with stdenv.lib; {
-    homepage = https://cubicsdr.com;
+    homepage = "https://cubicsdr.com";
     description = "Software Defined Radio application";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lasandell ];

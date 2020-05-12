@@ -27,25 +27,25 @@
   };
   "kicad-unstable" = {
     kicadVersion = {
-      version =			"2020-02-10";
+      version =			"2020-05-06";
       src = {
-        rev =			"1190e60dd426d246661e478db3287f266ec6cda2";
-        sha256 =		"0cgfad07j69cks97llj4hf3kga0d5qf728s89xwxrzcwm06k62bi";
+        rev =			"c92181621e2e51dc8aae1bd9f4483bb3301ffaa5";
+        sha256 =		"0s50xn5gbjy7yxnp9yiynxvxi2mkcrp6yghgdzclpm40rnfyi0v5";
       };
     };
     libVersion = {
-      version =			"2020-02-10";
+      version =			"2020-05-06";
       libSources = {
-        i18n.rev =		"26786c4ca804bad7eb072f1ef381f00b5a2ff3ee";
-        i18n.sha256 =		"0iqr1xfw4s677afjy9bn5y41z4isp327f9y90wypkxiwwq3dfkfl";
-        symbols.rev =		"35b7da2d211d7cc036b37ad7f5e40ef03faa1bc7";
-        symbols.sha256 =	"0wbfw1swbfvfp47cn48pxpqlygjs3xh568ydrrs51v3w102x8y64";
-        templates.rev =		"0c0490897f803ab8b7c3dad438b7eb1f80e0417c";
-        templates.sha256 =	"0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-        footprints.rev =	"9357b6f09312966c57fec9f66a516941d79c3038";
-        footprints.sha256 =	"0cgah1q0h012ffwfl220k7qb6hgbs0i91spq2j4v3lgpfr4g638d";
-        packages3d.rev =	"de368eb739abe41dfc3163e0e370477e857f9cc1";
-        packages3d.sha256 =	"0b3p5v8g24h6l7q3sbqz7ns0gnrf9l89glj86m5ybhizvls9vrrs";
+        i18n.rev =		"f29cab831eb823165fa2c5efab5d9c9b443e62e2";
+        i18n.sha256 =		"0cc0zvpml75yxphay3281f762ls08fzvv538cd5hmkr8xqlj3vbi";
+        symbols.rev =		"d4245ae8cf633095a0994ab01492bd56cd124112";
+        symbols.sha256 =	"11pynjgji3skw42q5mryz98f8z418k43jy6s2k90w6jv638z3cb0";
+        templates.rev =		"7db8d4d0ea0711f1961d117853547fb3edbc3857";
+        templates.sha256 =	"1hppcsrkn4dk6ggby6ckh0q65qxkywrbyxa4lwpaf7pxjyv498xg";
+        footprints.rev =	"3bff23ee339bc48490bb39deba5d8b2f1f42733e";
+        footprints.sha256 =	"0430r8k49ib6w1sjr8fx42szbz960yhlzg4w80jl5bwasq67nqwd";
+        packages3d.rev =	"889a3dd550233ec51baed4a04a01d4cc64a8d747";
+        packages3d.sha256 =	"152zv4j51v8skqlvrabblpcqpbn5yf3grisjj8vnwf7kdd41chb2";
       };
     };
   };

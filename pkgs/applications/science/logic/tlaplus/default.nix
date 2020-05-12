@@ -1,24 +1,24 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, jdk, jre, ant
+, adoptopenjdk-bin, jre, ant
 }:
 
 stdenv.mkDerivation rec {
   pname = "tlaplus";
-  version = "1.5.6";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner  = "tlaplus";
     repo   = "tlaplus";
     rev    = "refs/tags/v${version}";
-    sha256 = "0966mvgxamknj4hsp980qbxwda886w1dv309kn7isxn0420lfv4f";
+    sha256 = "1mm6r9bq79zks50yk0agcpdkw9yy994m38ibmgpb3bi3wkpq9891";
   };
 
-  buildInputs = [ makeWrapper jdk ant ];
+  buildInputs = [ makeWrapper adoptopenjdk-bin ant ];
 
-  buildPhase = "ant -f tlatools/customBuild.xml compile dist";
+  buildPhase = "ant -f tlatools/org.lamport.tlatools/customBuild.xml compile dist";
   installPhase = ''
     mkdir -p $out/share/java $out/bin
-    cp tlatools/dist/*.jar $out/share/java
+    cp tlatools/org.lamport.tlatools/dist/*.jar $out/share/java
 
     makeWrapper ${jre}/bin/java $out/bin/tlc2 \
       --add-flags "-cp $out/share/java/tla2tools.jar tlc2.TLC"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An algorithm specification language with model checking tools";
-    homepage    = http://lamport.azurewebsites.net/tla/tla.html;
+    homepage    = "http://lamport.azurewebsites.net/tla/tla.html";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

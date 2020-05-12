@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A utility for managing secrets in the cloud using AWS KMS and DynamoDB";
-    homepage = https://github.com/LuminalOSS/credstash;
+    homepage = "https://github.com/LuminalOSS/credstash";
     license = licenses.asl20;
   };
 }

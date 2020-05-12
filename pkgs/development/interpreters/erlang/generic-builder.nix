@@ -108,7 +108,7 @@ in stdenv.mkDerivation ({
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; ({
-    homepage = https://www.erlang.org/;
+    homepage = "https://www.erlang.org/";
     downloadPage = "https://www.erlang.org/download.html";
     description = "Programming language used for massively scalable soft real-time systems";
 
@@ -122,7 +122,7 @@ in stdenv.mkDerivation ({
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
+    maintainers = with maintainers; [ sjmackenzie couchemar gleber ];
     license = licenses.asl20;
   } // meta);
 }

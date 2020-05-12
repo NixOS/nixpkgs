@@ -2,22 +2,16 @@
 
 stdenv.mkDerivation {
   pname = "metamath";
-  version = "0.180";
+  version = "0.182";
 
   buildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "metamath";
     repo = "metamath-exe";
-    rev = "469e1b253f29be838411e2cc9c93d7704297059c";
-    sha256 = "0nazi7z8qrpn7nnmxk99ilwf8smkzh26jcvn17wyfnywxpdsb7wa";
+    rev = "5df616efe4119ff88daf77e7041d45b6fa39c578";
+    sha256 = "0amjdgy42c7jypf6sz98iczlxcyl9bqx67ws1q8w2zdqk2izsyjp";
   };
-
-  # the files necessary to build the DATA target are not in this distribution
-  # luckily, they're not really needed so we don't build it.
-  makeFlags = [ "DATA=" ];
-
-  installTargets = [ "install-exec" ];
 
   meta = with stdenv.lib; {
     description = "Interpreter for the metamath proof language";
@@ -27,7 +21,7 @@ stdenv.mkDerivation {
       in the Metamath Proof Explorer, and it generated its web pages. The *.mm
       ASCII databases (set.mm and others) are also included in this derivation.
     '';
-    homepage = http://us.metamath.org;
+    homepage = "http://us.metamath.org";
     downloadPage = "http://us.metamath.org/#downloads";
     license = licenses.gpl2;
     maintainers = [ maintainers.taneb ];

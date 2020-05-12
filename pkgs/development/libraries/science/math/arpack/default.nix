@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake
-, gfortran, openblas, eigen }:
+, gfortran, blas, lapack, eigen }:
 
 with stdenv.lib;
 
@@ -18,15 +18,16 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gfortran openblas eigen ];
+  buildInputs = [ gfortran blas lapack eigen ];
 
   doCheck = true;
 
-  BLAS_LIBS = "-L${openblas}/lib -lopenblas";
+  BLAS_LIBS = "-L${blas}/lib -lblas";
+  LAPACK_LIBS = "-L${lapack}/lib -llapack";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DINTERFACE64=${optionalString openblas.blas64 "1"}"
+    "-DINTERFACE64=${optionalString blas.isILP64 "1"}"
   ];
 
   preCheck = if stdenv.isDarwin then ''
@@ -45,7 +46,7 @@ stdenv.mkDerivation {
 
 
   meta = {
-    homepage = https://github.com/opencollab/arpack-ng;
+    homepage = "https://github.com/opencollab/arpack-ng";
     description = ''
       A collection of Fortran77 subroutines to solve large scale eigenvalue
       problems.

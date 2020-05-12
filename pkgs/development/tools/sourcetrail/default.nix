@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.sourcetrail.com;
+    homepage = "https://www.sourcetrail.com";
     description = "A cross-platform source explorer for C/C++ and Java";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;

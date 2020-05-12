@@ -1,17 +1,19 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "lf";
-  version = "13";
+  version = "14";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "1ld3q75v8rvp169w5p85z1vznqs9bhck6bm2f6fykxx16hmpb6ga";
+    sha256 = "0kl9yrgph1i0jbxhlg3k0411436w80xw1s8dzd7v7h2raygkb4is";
   };
 
-  modSha256 = "14fvn8yjm9cnpsmzgxw2dypr3h8h36mxrbk7zma42w8rsp46jpz7";
+  modSha256 = "1c6c6qg8yrhdhqsnqj3jw3x2hi8vrhfm47cp9xlkfnjfrz3nk6jp";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # TODO: Setting buildFlags probably isn't working properly. I've tried a few
   # variants, e.g.:
@@ -26,7 +28,9 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -D --mode=444 lf.1 $out/share/man/man1/lf.1
+    install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
+    installManPage lf.1
+    installShellCompletion etc/lf.{zsh,fish}
   '';
 
   meta = with lib; {
@@ -37,7 +41,8 @@ buildGoModule rec {
       the missing features are deliberately omitted since it is better if they
       are handled by external tools.
     '';
-    homepage = https://godoc.org/github.com/gokcehan/lf;
+    homepage = "https://godoc.org/github.com/gokcehan/lf";
+    changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

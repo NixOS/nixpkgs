@@ -1,18 +1,18 @@
 { lib, stdenv, fetchurl, vscode-utils, extractNuGet
 , icu, curl, openssl, lttng-ust, autoPatchelfHook
-, pythonUseFixed ? false, python  # When `true`, the python default setting will be fixed to specified.
-                                  # Use version from `PATH` for default setting otherwise.
-                                  # Defaults to `false` as we expect it to be project specific most of the time.
-, ctagsUseFixed ? true, ctags     # When `true`, the ctags default setting will be fixed to specified.
-                                  # Use version from `PATH` for default setting otherwise.
-                                  # Defaults to `true` as usually not defined on a per projet basis.
+, python3
+, pythonUseFixed ? false       # When `true`, the python default setting will be fixed to specified.
+                               # Use version from `PATH` for default setting otherwise.
+                               # Defaults to `false` as we expect it to be project specific most of the time.
+, ctagsUseFixed ? true, ctags  # When `true`, the ctags default setting will be fixed to specified.
+                               # Use version from `PATH` for default setting otherwise.
+                               # Defaults to `true` as usually not defined on a per projet basis.
 }:
 
-assert pythonUseFixed -> null != python;
 assert ctagsUseFixed -> null != ctags;
 
 let
-  pythonDefaultsTo = if pythonUseFixed then "${python}/bin/python" else "python";
+  pythonDefaultsTo = if pythonUseFixed then "${python3}/bin/python" else "python";
   ctagsDefaultsTo = if ctagsUseFixed then "${ctags}/bin/ctags" else "ctags";
 
   # The arch tag comes from 'PlatformName' defined here:
@@ -23,14 +23,14 @@ let
     else throw "Only x86_64 Linux and Darwin are supported.";
 
   languageServerSha256 = {
-    linux-x64 = "10qwi8lih5i6216d1vqsmviab73ha0d3zdvircrgrydkf0d4ancd";
-    osx-x64 = "08gjxs0bjhz5a9l35vvgwnvzshsyyqiqvb5hxv6w0k2ajgv5z7av";
+    linux-x64 = "1pmj5pb4xylx4gdx4zgmisn0si59qx51n2m1bh7clv29q6biw05n";
+    osx-x64 = "0ishiy1z9dghj4ryh95vy8rw0v7q4birdga2zdb4a8am31wmp94b";
   }.${arch};
 
   # version is languageServerVersion in the package.json
   languageServer = extractNuGet rec {
     name = "Python-Language-Server";
-    version = "0.4.127";
+    version = "0.5.30";
 
     src = fetchurl {
       url = "https://pvsc.azureedge.net/python-language-server-stable/${name}-${arch}.${version}.nupkg";
@@ -41,8 +41,8 @@ in vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2020.1.58038";
-    sha256 = "09iawy1p2akan090461137d4p5gqqf0aanm9i534p0kmbxmjfpqv";
+    version = "2020.3.71659";
+    sha256 = "1smhnhkfchmljz8aj1br70023ysgd2hj6pm1ncn1jxphf89qi1ja";
   };
 
   buildInputs = [
@@ -54,6 +54,11 @@ in vscode-utils.buildVscodeMarketplaceExtension {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    python3.pkgs.wrapPython
+  ];
+
+  pythonPath = with python3.pkgs; [
+    setuptools
   ];
 
   postPatch = ''
@@ -70,6 +75,8 @@ in vscode-utils.buildVscodeMarketplaceExtension {
     mkdir -p "$out/$installPrefix/languageServer.${languageServer.version}"
     cp -R --no-preserve=ownership ${languageServer}/* "$out/$installPrefix/languageServer.${languageServer.version}"
     chmod -R +wx "$out/$installPrefix/languageServer.${languageServer.version}"
+
+    patchPythonScript "$out/$installPrefix/pythonFiles/lib/python/isort/main.py"
   '';
 
   meta = with lib; {

@@ -1,6 +1,6 @@
 { stdenv, lib, lndir, makeWrapper
 , fetchFromGitHub, cmake
-, libusb, pkgconfig
+, libusb-compat-0_1, pkgconfig
 , usePython ? false
 , python, ncurses, swig2
 , extraPackages ? []
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
-  buildInputs = [ libusb ncurses ]
+  buildInputs = [ libusb-compat-0_1 ncurses ]
     ++ lib.optionals usePython [ python swig2 ];
 
   propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;
@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapySDR;
+    homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "avfs";
-  version = "1.1.1";
+  version = "1.1.2";
   src = fetchurl {
     url = "mirror://sourceforge/avf/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0fxzigpyi08ipqz30ihjcpqmmx8g7r1kqdqq1bnnznvnhrzyygn8";
+    sha256 = "035b6y49nzgswf5n70aph8pm48sbv9nqwlnp3wwbq892c39kk4xn";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://avf.sourceforge.net/;
+    homepage = "http://avf.sourceforge.net/";
     description = "Virtual filesystem that allows browsing of compressed files";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;

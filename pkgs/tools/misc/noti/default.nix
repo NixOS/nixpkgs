@@ -32,7 +32,7 @@ buildGoPackage rec {
 
       Never sit and wait for some long-running process to finish. Noti can alert you when it's done. You can receive messages on your computer or phone.
     '';
-    homepage = https://github.com/variadico/noti;
+    homepage = "https://github.com/variadico/noti";
     license = licenses.mit;
     maintainers = with maintainers; [ stites marsam ];
     platforms = platforms.all;

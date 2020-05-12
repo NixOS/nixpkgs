@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Library to simulate plate tectonics with Python bindings";
-    homepage    = https://github.com/Mindwerks/plate-tectonics;
+    homepage    = "https://github.com/Mindwerks/plate-tectonics";
     license     = licenses.lgpl3;
   };
 

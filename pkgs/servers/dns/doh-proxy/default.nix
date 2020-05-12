@@ -32,7 +32,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://facebookexperimental.github.io/doh-proxy/;
+    homepage = "https://facebookexperimental.github.io/doh-proxy/";
     description = "A proof of concept DNS-Over-HTTPS proxy";
     license = licenses.bsd3;
     maintainers = [ maintainers.qyliss ];

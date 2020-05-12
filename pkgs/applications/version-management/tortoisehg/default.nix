@@ -44,7 +44,7 @@ in python3Packages.buildPythonApplication {
 
     meta = {
       description = "Qt based graphical tool for working with Mercurial";
-      homepage = https://tortoisehg.bitbucket.io/;
+      homepage = "https://tortoisehg.bitbucket.io/";
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ danbst ];

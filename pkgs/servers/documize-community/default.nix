@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs, nixosTests }:
 
 buildGoModule rec {
   pname = "documize-community";
@@ -13,9 +13,11 @@ buildGoModule rec {
 
   modSha256 = "1z0v7n8klaxcqv7mvzf3jzgrp78zb4yiibx899ppk6i5qnj4xiv0";
 
-  buildInputs = [ go-bindata-assetfs go-bindata ];
+  nativeBuildInputs = [ go-bindata go-bindata-assetfs ];
 
   subPackages = [ "edition/community.go" ];
+
+  passthru.tests = { inherit (nixosTests) documize; };
 
   postInstall = ''
     # `buildGoModule` calls `go install` (without `go build` first), so
@@ -27,6 +29,6 @@ buildGoModule rec {
     description = "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
     license = licenses.agpl3;
     maintainers = with maintainers; [ ma27 elseym ];
-    homepage = https://www.documize.com/;
+    homepage = "https://www.documize.com/";
   };
 }

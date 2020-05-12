@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A handy s3 cli tool";
-    homepage = https://github.com/rsavordelli/s3bro;
+    homepage = "https://github.com/rsavordelli/s3bro";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

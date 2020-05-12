@@ -49,7 +49,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = https://f-droid.org;
+    homepage = "https://f-droid.org";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3;
     maintainers = [ lib.maintainers.pmiddend ];

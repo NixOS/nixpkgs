@@ -17,6 +17,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     services.xserver.enable = true;
     test-support.displayManager.auto.user = "alice";
     environment.systemPackages = [ pkgs.signal-desktop ];
+    virtualisation.memorySize = 1024;
   };
 
   enableOCR = true;

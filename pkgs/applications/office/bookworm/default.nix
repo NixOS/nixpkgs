@@ -1,15 +1,16 @@
 { stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk, libgee
-, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
+, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook
+, appstream, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
-  version = "unstable-2018-11-19";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "babluboy";
     repo = pname;
-    rev = "4c3061784ff42151cac77d12bf2a28bf831fdfc5";
-    sha256 = "0yrqxa60xlvz249kx966z5krx8i7h17ac0hjgq9p8f0irzy5yp0n";
+    rev = version;
+    sha256 = "0w0rlyahpgx0l6inkbj106agbnr2czil0vdcy1zzv70apnjz488j";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
     python2
     sqlite
     webkitgtk
+    appstream
+    desktop-file-utils
   ];
 
   postPatch = ''
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
      longDescription = ''
        Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
      '';
-     homepage = https://babluboy.github.io/bookworm/;
+     homepage = "https://babluboy.github.io/bookworm/";
      license = licenses.gpl3Plus;
      platforms = platforms.linux;
    };

@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gsm";
-  version = "1.0.18";
+  version = "1.0.19";
 
   src = fetchurl {
     url = "http://www.quut.com/gsm/${pname}-${version}.tar.gz";
-    sha256 = "041amvpz8cvxykl3pwqldrzxligmmzcg8ncdnxbg32rlqf3q1xh4";
+    sha256 = "1xkha9ss5g5qnfaybi8il0mcvp8knwg9plgh8404vh58d0pna0s9";
   };
 
   patchPhase = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lossy speech compression codec";
-    homepage    = http://www.quut.com/gsm/;
+    homepage    = "http://www.quut.com/gsm/";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ codyopel raskin ];
     platforms   = platforms.unix;

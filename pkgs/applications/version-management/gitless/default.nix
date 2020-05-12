@@ -17,7 +17,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://gitless.com/;
+    homepage = "https://gitless.com/";
     description = "A version control system built on top of Git";
     license = licenses.gpl2;
     platforms = platforms.all;

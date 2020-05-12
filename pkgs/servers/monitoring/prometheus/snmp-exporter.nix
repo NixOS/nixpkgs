@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "SNMP Exporter for Prometheus";
-    homepage = https://github.com/prometheus/snmp_exporter;
+    homepage = "https://github.com/prometheus/snmp_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ oida willibutz ];
     platforms = platforms.unix;

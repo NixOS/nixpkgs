@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1yybblprcn0cgcf9j76yckqcimm4h8l41cczxjvgp789p1pki3bn";
+    sha256 = "137809mplrsff1isxwbwa2v2y9ixhwzm4khiijm4mmjchi75wpvx";
   };
 
   passthru = {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Polkit Agent for the Pantheon Desktop";
-    homepage = https://github.com/elementary/pantheon-agent-polkit;
+    homepage = "https://github.com/elementary/pantheon-agent-polkit";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

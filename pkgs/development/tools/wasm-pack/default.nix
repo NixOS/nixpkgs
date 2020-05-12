@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A utility that builds rust-generated WebAssembly package";
-    homepage = https://github.com/rustwasm/wasm-pack;
+    homepage = "https://github.com/rustwasm/wasm-pack";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.dhkl ];
     platforms = platforms.all;

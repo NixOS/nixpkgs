@@ -26,9 +26,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical application to analyse disk usage in any GNOME environment";
-    homepage = https://wiki.gnome.org/Apps/DiskUsageAnalyzer;
+    homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -9,17 +9,18 @@
 , gtk-engine-murrine
 , gdk-pixbuf
 , librsvg
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "pop-gtk-theme";
-  version = "2020-02-10";
+  version = "2020-04-22";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "gtk-theme";
-    rev = "ed888e9dd5de142cb899e362beedaf694594cc7e";
-    sha256 = "0ryr1jx9pzij6pkv7sam07f90w5lbrzx0fj5vdxl94612mh76aad";
+    rev = "b3f98dfd61cfff81f69cdc7f57bce7a9efaa36f4";
+    sha256 = "0vhcc694x33sgcpbqkrc5bycbd7017k4iii0mjjxgd22jd5lzgkb";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     gtk3
     inkscape
     optipng
+    python3
   ];
 
   buildInputs = [
@@ -41,9 +43,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for file in $(find -name render-\*.sh); do
-      patchShebangs "$file"
+    patchShebangs .
 
+    for file in $(find -name render-\*.sh); do
       substituteInPlace "$file" \
         --replace 'INKSCAPE="/usr/bin/inkscape"' \
                   'INKSCAPE="inkscape"' \

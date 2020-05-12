@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/matejc/tarman;
+    homepage = "https://github.com/matejc/tarman";
     description = "Archive manager with curses interface";
     license = licenses.bsd0;
   };

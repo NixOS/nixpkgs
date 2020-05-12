@@ -8,12 +8,7 @@ let
 in {
   options = {
     services.devmon = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable devmon, an automatic device mounting daemon.
-        '';
-      };
+      enable = mkEnableOption "devmon, an automatic device mounting daemon";
     };
   };
 

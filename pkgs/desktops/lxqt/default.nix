@@ -1,48 +1,55 @@
 { pkgs, makeScope, libsForQt5 }:
-
 let
   packages = self: with self; {
+
+    # Update script tailored to LXQt packages from git repository
+    lxqtUpdateScript = { pname, version, src }:
+      pkgs.genericUpdater {
+        inherit pname version;
+        attrPath = "lxqt.${pname}";
+        versionLister = "${pkgs.common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+      };
 
     # For compiling information, see:
     # - https://github.com/lxqt/lxqt/wiki/Building-from-source
 
     ### BASE
-    libqtxdg = callPackage ./libqtxdg { };
-    lxqt-build-tools = callPackage ./lxqt-build-tools { };
-    libsysstat = callPackage ./libsysstat { };
-    liblxqt = callPackage ./liblxqt { };
+    libqtxdg = callPackage ./libqtxdg {};
+    lxqt-build-tools = callPackage ./lxqt-build-tools {};
+    libsysstat = callPackage ./libsysstat {};
+    liblxqt = callPackage ./liblxqt {};
 
     ### CORE 1
-    libfm-qt = callPackage ./libfm-qt { };
-    lxqt-about = callPackage ./lxqt-about { };
-    lxqt-admin = callPackage ./lxqt-admin { };
-    lxqt-config = callPackage ./lxqt-config { };
-    lxqt-globalkeys = callPackage ./lxqt-globalkeys { };
-    lxqt-notificationd = callPackage ./lxqt-notificationd { };
-    lxqt-openssh-askpass = callPackage ./lxqt-openssh-askpass { };
-    lxqt-policykit = callPackage ./lxqt-policykit { };
-    lxqt-powermanagement = callPackage ./lxqt-powermanagement { };
-    lxqt-qtplugin = callPackage ./lxqt-qtplugin { };
-    lxqt-session = callPackage ./lxqt-session { };
-    lxqt-sudo = callPackage ./lxqt-sudo { };
-    lxqt-themes = callPackage ./lxqt-themes { };
-    pavucontrol-qt = libsForQt5.callPackage ./pavucontrol-qt { };
-    qtermwidget = callPackage ./qtermwidget { };
+    libfm-qt = callPackage ./libfm-qt {};
+    lxqt-about = callPackage ./lxqt-about {};
+    lxqt-admin = callPackage ./lxqt-admin {};
+    lxqt-config = callPackage ./lxqt-config {};
+    lxqt-globalkeys = callPackage ./lxqt-globalkeys {};
+    lxqt-notificationd = callPackage ./lxqt-notificationd {};
+    lxqt-openssh-askpass = callPackage ./lxqt-openssh-askpass {};
+    lxqt-policykit = callPackage ./lxqt-policykit {};
+    lxqt-powermanagement = callPackage ./lxqt-powermanagement {};
+    lxqt-qtplugin = callPackage ./lxqt-qtplugin {};
+    lxqt-session = callPackage ./lxqt-session {};
+    lxqt-sudo = callPackage ./lxqt-sudo {};
+    lxqt-themes = callPackage ./lxqt-themes {};
+    pavucontrol-qt = libsForQt5.callPackage ./pavucontrol-qt {};
+    qtermwidget = callPackage ./qtermwidget {};
 
     ### CORE 2
-    lxqt-panel = callPackage ./lxqt-panel { };
-    lxqt-runner = callPackage ./lxqt-runner { };
-    pcmanfm-qt = callPackage ./pcmanfm-qt { };
+    lxqt-panel = callPackage ./lxqt-panel {};
+    lxqt-runner = callPackage ./lxqt-runner {};
+    pcmanfm-qt = callPackage ./pcmanfm-qt {};
 
     ### OPTIONAL
-    qterminal = callPackage ./qterminal { };
-    compton-conf = pkgs.qt5.callPackage ./compton-conf { };
-    obconf-qt = callPackage ./obconf-qt { };
-    lximage-qt = callPackage ./lximage-qt { };
-    qps = callPackage ./qps { };
-    screengrab = callPackage ./screengrab { };
-    qlipper = callPackage ./qlipper { };
-    lxqt-archiver = callPackage ./lxqt-archiver { };
+    qterminal = callPackage ./qterminal {};
+    compton-conf = pkgs.qt5.callPackage ./compton-conf {};
+    obconf-qt = callPackage ./obconf-qt {};
+    lximage-qt = callPackage ./lximage-qt {};
+    qps = callPackage ./qps {};
+    screengrab = callPackage ./screengrab {};
+    qlipper = callPackage ./qlipper {};
+    lxqt-archiver = callPackage ./lxqt-archiver {};
 
     preRequisitePackages = [
       pkgs.gvfs # virtual file systems support for PCManFM-QT
@@ -107,5 +114,5 @@ let
     ];
 
   };
-
-in makeScope libsForQt5.newScope packages
+in
+makeScope libsForQt5.newScope packages

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The SIXEL library for console graphics, and converter programs";
-    homepage = http://saitoha.github.com/libsixel;
+    homepage = "http://saitoha.github.com/libsixel";
     maintainers = with maintainers; [ vrthra ];
     license = licenses.mit;
     platforms = with platforms; unix;

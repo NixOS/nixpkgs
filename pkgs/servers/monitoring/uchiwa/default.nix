@@ -16,7 +16,7 @@ let
     goPackagePath = "github.com/${owner}/${repo}";
     inherit src;
     postInstall = ''
-      mkdir $out
+      mkdir -p $out
       cp go/src/github.com/sensu/uchiwa/public/index.html $out/
     '';
   };
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -p $out/bin $out/public
-    makeWrapper ${backend.bin}/bin/uchiwa $out/bin/uchiwa \
+    makeWrapper ${backend}/bin/uchiwa $out/bin/uchiwa \
       --add-flags "-p $out/public"
     ln -s ${backend.out}/index.html $out/public/index.html
     ln -s ${frontend.out}/bower_components $out/public/bower_components
@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A Dashboard for the sensu monitoring framework";
-    homepage    = http://sensuapp.org/;
+    homepage    = "http://sensuapp.org/";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;

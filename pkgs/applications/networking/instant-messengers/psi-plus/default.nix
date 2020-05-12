@@ -6,25 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "psi-plus";
-  version = "1.4.984";
+  version = "1.4.1159";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "1nii2nfi37i6mn79xmygscmm8ax75ky244wxkzlga0ya8i8wfjh7";
+    sha256 = "1k4ip2glkjsbb28gzffahi81kz90qkf213j89gsmcvbdjf4kp687";
   };
-
-  resources = fetchFromGitHub {
-    owner = "psi-plus";
-    repo = "resources";
-    rev = "2f1c12564f7506bf902a26040fdb47ead4df6b73";
-    sha256 = "1dgm9k052fq7f2bpx13kchg7sxb227dkn115lyspzvhnhprnypz2";
-  };
-
-  postUnpack = ''
-    cp -a "${resources}/iconsets" "$sourceRoot"
-  '';
 
   cmakeFlags = [
     "-DENABLE_PLUGINS=ON"
@@ -37,8 +26,6 @@ stdenv.mkDerivation rec {
     libidn qca2-qt5 libsecret libXScrnSaver hunspell
     libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "XMPP (Jabber) client";

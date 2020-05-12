@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ cffi six ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Ayrx/python-fastpbkdf2;
+    homepage = "https://github.com/Ayrx/python-fastpbkdf2";
     description = "Python bindings for fastpbkdf2";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jqueiroz ];

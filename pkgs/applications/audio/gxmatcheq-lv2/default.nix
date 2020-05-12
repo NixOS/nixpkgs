@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_DIR=$(out)/lib/lv2" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/brummer10/GxMatchEQ.lv2;
+    homepage = "https://github.com/brummer10/GxMatchEQ.lv2";
     description = "Matching Equalizer to apply EQ curve from one source to another source";
     maintainers = [ maintainers.magnetophon ];
     license = licenses.gpl3;

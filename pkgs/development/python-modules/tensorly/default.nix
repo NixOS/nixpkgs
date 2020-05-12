@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tensor learning in Python";
-    homepage = https://tensorly.org/;
+    homepage = "https://tensorly.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.bcdarwin ];
   };

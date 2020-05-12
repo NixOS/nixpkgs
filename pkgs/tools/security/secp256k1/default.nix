@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       Bitcoin Core. This library is a work in progress and is being used
       to research best practices. Use at your own risk.
     '';
-    homepage = https://github.com/bitcoin-core/secp256k1;
+    homepage = "https://github.com/bitcoin-core/secp256k1";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ chris-martin ];
     platforms = with platforms; unix;

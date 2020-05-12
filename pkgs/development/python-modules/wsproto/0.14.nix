@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Python, pure state-machine WebSocket implementation";
-    homepage = https://github.com/python-hyper/wsproto/;
+    homepage = "https://github.com/python-hyper/wsproto/";
     license = licenses.mit;
   };
 }

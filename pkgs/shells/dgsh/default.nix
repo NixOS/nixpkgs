@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "The Directed Graph Shell";
-    homepage = http://www.dmst.aueb.gr/dds/sw/dgsh;
+    homepage = "http://www.dmst.aueb.gr/dds/sw/dgsh";
     license = with licenses; asl20;
     maintainers = with maintainers; [ vrthra ];
     platforms = with platforms; all;

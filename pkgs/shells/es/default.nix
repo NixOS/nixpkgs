@@ -33,7 +33,7 @@ stdenv.mkDerivation {
         functional programming languages, such as Scheme,
         and the Tcl embeddable programming language.
       '';
-    homepage = http://wryun.github.io/es-shell/;
+    homepage = "http://wryun.github.io/es-shell/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ sjmackenzie ttuegel ];
     platforms = platforms.all;

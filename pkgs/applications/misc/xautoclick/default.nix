@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Autoclicker application, which enables you to automatically click the left mousebutton";
-    homepage = http://xautoclick.sourceforge.net;
+    homepage = "http://xautoclick.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

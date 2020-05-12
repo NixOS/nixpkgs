@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       only outputs MP3 frames with valid headers, even if there is extra garbage
       in its input stream
     '';
-    homepage = https://github.com/tomclegg/mp3cat;
+    homepage = "https://github.com/tomclegg/mp3cat";
     license = licenses.gpl2;
     maintainers = [ maintainers.omnipotententity ];
     platforms = platforms.all;

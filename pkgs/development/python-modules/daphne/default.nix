@@ -38,6 +38,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Django ASGI (HTTP/WebSocket) server";
     license = licenses.bsd3;
-    homepage = https://github.com/django/daphne;
+    homepage = "https://github.com/django/daphne";
   };
 }

@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     inherit version;
     description = "A minimal ftp server";
     downloadPage = "http://bftpd.sf.net/download.html";
-    homepage = http://bftpd.sf.net/;
+    homepage = "http://bftpd.sf.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

@@ -1,15 +1,28 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools,
-  qtx11extras, qtsvg, xorg, lxqt-build-tools, libfm-qt, libexif }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, qtbase
+, qttools
+, qtx11extras
+, qtsvg
+, xorg
+, lxqt-build-tools
+, libfm-qt
+, libexif
+, lxqtUpdateScript
+}:
 
 mkDerivation rec {
   pname = "lximage-qt";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "175l2w5w6iag01v05jq90pxx0al24wpw3mgsbcgqhl4z6h860r32";
+    sha256 = "1pz0ird5vyrz1xycfn2vqh628f2mzwrx0psnp4hqdmj1xk9bjkbp";
   };
 
   nativeBuildInputs = [
@@ -29,9 +42,11 @@ mkDerivation rec {
     libexif
   ];
 
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+
   meta = with lib; {
     description = "The image viewer and screenshot tool for lxqt";
-    homepage = https://github.com/lxqt/lximage-qt;
+    homepage = "https://github.com/lxqt/lximage-qt";
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

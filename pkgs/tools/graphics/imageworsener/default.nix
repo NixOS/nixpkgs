@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A raster image scaling and processing utility";
-    homepage = https://entropymine.com/imageworsener/;
+    homepage = "https://entropymine.com/imageworsener/";
     changelog = "https://github.com/jsummers/${pname}/blob/${version}/changelog.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ emily ];

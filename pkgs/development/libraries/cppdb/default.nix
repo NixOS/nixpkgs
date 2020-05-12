@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
   meta = with stdenv.lib; {
-    homepage = http://cppcms.com/sql/cppdb/;
+    homepage = "http://cppcms.com/sql/cppdb/";
     description = "C++ Connectivity library that supports MySQL, PostgreSQL, Sqlite3 databases and generic ODBC drivers";
     platforms = platforms.linux ;
     license = licenses.boost;

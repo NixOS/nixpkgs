@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library of the matchbox X window manager";
-    homepage = http://matchbox-project.org/;
+    homepage = "http://matchbox-project.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

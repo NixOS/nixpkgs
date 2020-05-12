@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Linux 8086 development environment";
-    homepage = http://v3.sk/~lkundrak/dev86/;
+    homepage = "http://v3.sk/~lkundrak/dev86/";
     platforms = stdenv.lib.platforms.linux;
   };
 }

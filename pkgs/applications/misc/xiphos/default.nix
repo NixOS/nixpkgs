@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xiphos";
-  version = "4.0.7";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "crosswire";
     repo = "xiphos";
     rev = version;
-    sha256 = "1vwf1ps6nrajxl1qbs6v1cgykmq5wn4j09j10gbcd3b2nvrprf3g";
+    sha256 = "14il9k4i58qbc78hcadw3gqy21sb9q661d75vlj6fwpczbzj7x1a";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook wafHook ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       and featureful environment for reading, study, and research using
       modules from The SWORD Project and elsewhere.
     '';
-    homepage = http://www.xiphos.org/;
+    homepage = "http://www.xiphos.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

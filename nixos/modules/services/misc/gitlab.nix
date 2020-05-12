@@ -180,7 +180,7 @@ let
         ${optionalString (cfg.smtp.passwordFile != null) ''password: "@smtpPassword@",''}
         domain: "${cfg.smtp.domain}",
         ${optionalString (cfg.smtp.authentication != null) "authentication: :${cfg.smtp.authentication},"}
-        enable_starttls_auto: ${toString cfg.smtp.enableStartTLSAuto},
+        enable_starttls_auto: ${boolToString cfg.smtp.enableStartTLSAuto},
         ca_file: "/etc/ssl/certs/ca-certificates.crt",
         openssl_verify_mode: '${cfg.smtp.opensslVerifyMode}'
       }

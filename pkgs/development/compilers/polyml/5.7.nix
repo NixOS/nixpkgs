@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
+  patches = [ ./5.7-new-libffi-FFI_SYSV.patch ];
+
   buildInputs = [ libffi gmp ];
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
@@ -30,9 +32,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
-    homepage = https://www.polyml.org/;
+    homepage = "https://www.polyml.org/";
     license = licenses.lgpl21;
     platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ maggesi yurrriq ];
+    maintainers = with maintainers; [ maggesi ];
   };
 }

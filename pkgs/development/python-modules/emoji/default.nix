@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Emoji for Python";
-    homepage = https://pypi.python.org/pypi/emoji/;
+    homepage = "https://pypi.python.org/pypi/emoji/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ joachifm ];
   };

@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     description = "CLI client for cheat.sh, a community driven cheat sheet";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz evanjs ];
-    homepage = https://github.com/chubin/cheat.sh;
+    homepage = "https://github.com/chubin/cheat.sh";
   };
 }
 

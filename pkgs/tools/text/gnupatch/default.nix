@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
          more original files, producing patched versions.
       '';
 
-    homepage = https://savannah.gnu.org/projects/patch;
+    homepage = "https://savannah.gnu.org/projects/patch";
 
     license = stdenv.lib.licenses.gpl3Plus;
 

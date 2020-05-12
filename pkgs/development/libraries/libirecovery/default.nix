@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, automake, autoconf, libtool, pkgconfig
-, libusb
+, libusb1
 , readline
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libusb
+    libusb1
     readline
   ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/libirecovery;
+    homepage = "https://github.com/libimobiledevice/libirecovery";
     description = "Library and utility to talk to iBoot/iBSS via USB on Mac OS X, Windows, and Linux";
     longDescription = ''
       libirecovery is a cross-platform library which implements communication to

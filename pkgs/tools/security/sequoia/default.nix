@@ -9,16 +9,16 @@ assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p17y6vsya8daglvl6yal3759x44dc062ah5vyra0k7dk82cc4pq";
+    sha256 = "0iwzi2ylrwz56s77cd4vcf89ig6ipy4w6kp2pfwqvd2d00x54dhk";
   };
 
-  cargoSha256 = "1x0iwcp7dppxyrggmszd62s52j54szw69n3qnlyl7cdpdr64ckqc";
+  cargoSha256 = "0jsmvs6hr9mhapz3a74wpfgkjkq3w10014j3z30bm659mxqrknha";
 
   nativeBuildInputs = [
     pkgconfig
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.libclang
     llvmPackages.clang
     ensureNewerSourcesForZipFilesHook
+    capnproto
   ] ++
     lib.optionals pythonSupport [ pythonPackages.setuptools ]
   ;
@@ -41,9 +42,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     nettle
-    capnproto
-  ]
-    ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
+  ] ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
   ;
 

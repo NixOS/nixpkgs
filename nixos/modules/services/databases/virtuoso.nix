@@ -13,10 +13,7 @@ with lib;
 
     services.virtuoso = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable Virtuoso Opensource database server.";
-      };
+      enable = mkEnableOption "Virtuoso Opensource database server";
 
       config = mkOption {
         default = "";

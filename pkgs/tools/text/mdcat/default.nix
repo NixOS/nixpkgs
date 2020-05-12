@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = pname;
     rev = "mdcat-${version}";
-    sha256 = "0qvlnjw0h2hnap1crnprdrynqvg7pywq32qin5fdkk4fv496wjhs";
+    sha256 = "10svzq7656lynfcgnbyaibfvv48i4289ymxfc0bn0212biyrl1zb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "12s0dakv37vvvd43xzkydr7w3cpp7sizk8s1kalg4b0xz6ydghcp";
+  cargoSha256 = "05nh3dfr7mdw21sdavyyjhr8sa4jcfqzwizbgg92ib7r834ir3m0";
 
   checkInputs = [ ansi2html ];
   checkPhase = ''
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "cat for markdown";
-    homepage = https://github.com/lunaryorn/mdcat;
+    homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ davidtwco ];
     platforms = platforms.all;

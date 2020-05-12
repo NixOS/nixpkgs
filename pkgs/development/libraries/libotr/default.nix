@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libgcrypt ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.cypherpunks.ca/otr/;
-    repositories.git = git://git.code.sf.net/p/otr/libotr;
+    homepage = "http://www.cypherpunks.ca/otr/";
+    repositories.git = "git://git.code.sf.net/p/otr/libotr";
     license = licenses.lgpl21;
     description = "Library for Off-The-Record Messaging";
     platforms = platforms.unix;

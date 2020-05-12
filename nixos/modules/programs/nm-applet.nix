@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  meta = {
+    maintainers = lib.teams.freedesktop.members;
+  };
+
   options.programs.nm-applet.enable = lib.mkEnableOption "nm-applet";
 
   config = lib.mkIf config.programs.nm-applet.enable {

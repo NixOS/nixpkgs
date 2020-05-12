@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "WRF postprocessing library for Python";
-    homepage = http://wrf-python.rtfd.org;
+    homepage = "http://wrf-python.rtfd.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mhaselsteiner ];
 	};

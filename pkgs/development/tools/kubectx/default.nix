@@ -4,13 +4,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "kubectx";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wkvmic29mkzfs6619wjs3mya8ffigwv9n1w9y7zkfvpi8gxa0a6";
+    sha256 = "1b22jk8zl944w5zn3s7ybkkbmzp9519x32pfqwd1malfly7dzf55";
   };
 
   buildInputs = [ makeWrapper ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fast way to switch between clusters and namespaces in kubectl!";
     license = licenses.asl20;
-    homepage = https://github.com/ahmetb/kubectx;
+    homepage = "https://github.com/ahmetb/kubectx";
     maintainers = with maintainers; [ periklis ];
     platforms = with platforms; unix;
   };

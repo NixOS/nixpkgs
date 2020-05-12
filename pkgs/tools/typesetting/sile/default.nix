@@ -13,11 +13,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "d89d5ce7d2bf46fb062e5299ffd8b5d821dc3cb3462a0e7c1109edeee111d856";
+    sha256 = "08j2vv6spnzz8bsh62wbdv1pjiziiba71cadscsy5hw6pklzndni";
   };
 
   configureFlags = [ "--with-system-luarocks" ];

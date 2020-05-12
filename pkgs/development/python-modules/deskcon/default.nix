@@ -7,7 +7,8 @@
 }:
 
 buildPythonPackage {
-  name = "deskcon-0.3";
+  pname = "deskcon";
+  version = "0.3";
   disabled = isPy3k;
 
   src = pkgs.fetchFromGitHub {
@@ -34,7 +35,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Integrates an Android device into a desktop";
-    homepage = https://github.com/screenfreeze/deskcon-desktop;
+    homepage = "https://github.com/screenfreeze/deskcon-desktop";
     license = licenses.gpl3;
   };
 

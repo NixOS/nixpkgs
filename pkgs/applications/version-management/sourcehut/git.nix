@@ -1,10 +1,10 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
 , buildGoModule
-, srht, pygit2, scmsrht }:
+, srht, minio, pygit2, scmsrht }:
 
 let
-  version = "0.43.3";
+  version = "0.50.3";
 
   buildShell = src: buildGoModule {
     inherit src version;
@@ -44,7 +44,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     rev = version;
-    sha256 = "1f9wfyri85bq4zi9xkbfcfb69q4abh0hz7p3lghj460hh9zxc57w";
+    sha256 = "dmcTee3hp6ZkwwunG4ouEVmCxQ1a9LfQ7oWpHxnKumc=";
   };
 
   patches = [
@@ -55,6 +55,7 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [
     srht
+    minio
     pygit2
     scmsrht
   ];
@@ -73,7 +74,7 @@ in buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/git.sr.ht;
+    homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

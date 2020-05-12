@@ -23,6 +23,8 @@ let
     restrict -6 ::1
 
     ${toString (map (server: "server " + server + " iburst\n") cfg.servers)}
+
+    ${cfg.extraConfig}
   '';
 
   ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup ${toString cfg.extraFlags}";
@@ -38,6 +40,7 @@ in
     services.ntp = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in
@@ -78,6 +81,17 @@ in
         default = config.networking.timeServers;
         description = ''
           The set of NTP servers from which to synchronise.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          fudge 127.127.1.0 stratum 10
+        '';
+        description = ''
+          Additional text appended to <filename>ntp.conf</filename>.
         '';
       };
 

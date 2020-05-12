@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1g86wl0sdn0wprfxff2q1yc1hiq9fndmzhyvj09cw51lzbab5faw";
+    sha256 = "173nxvj30xmbdj8fc3rbw0mlicxy6zbhxv01i7z5nmcdvpamkdx6";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       types of images can also be loaded.
     '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

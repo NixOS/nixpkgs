@@ -2,27 +2,27 @@
 , fetchFromGitHub
 , pkgconfig
 , libbladeRF
-, libusb
+, libusb1
 , ncurses
 , rtl-sdr
 }:
 
 stdenv.mkDerivation rec {
   pname = "dump1090";
-  version = "3.7.2";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vlv9bd805kid202xxkrnl51rh02cyrl055gbcqlqgk51j5rrq8w";
+    sha256 = "0c30x56h79hza9m6b9zp5y28jxx4f4n5xgaaw597l8agcm5iia0p";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
     libbladeRF
-    libusb
+    libusb1
     ncurses
     rtl-sdr
   ];

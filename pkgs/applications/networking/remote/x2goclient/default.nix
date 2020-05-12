@@ -32,7 +32,7 @@ mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
-    homepage = http://x2go.org/;
+    homepage = "http://x2go.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

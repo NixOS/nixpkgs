@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU, libGL }:
+{ mkDerivation, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU, libGL }:
 
 
-stdenv.mkDerivation {
+mkDerivation {
   name = "openbrf-unstable-2016-01-09";
 
   src = fetchFromGitHub {
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A tool to edit resource files (BRF)";
-    homepage = https://github.com/cfcohen/openbrf;
+    homepage = "https://github.com/cfcohen/openbrf";
     maintainers = with stdenv.lib.maintainers; [ abbradar ];
     license = licenses.free;
     platforms = platforms.linux;

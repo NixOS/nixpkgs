@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://pygments.org/;
+    homepage = "https://pygments.org/";
     description = "A generic syntax highlighter";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ];

@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, gnome3,
-  dde-polkit-agent, deepin }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qttools
+, gnome3
+, dde-polkit-agent
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "dpa-ext-gnomekeyring";
@@ -30,11 +37,11 @@ stdenv.mkDerivation rec {
     fixPath $out /usr dpa-ext-gnomekeyring.pro gnomekeyringextention.cpp
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "GNOME keyring extension for dde-polkit-agent";
-    homepage = https://github.com/linuxdeepin/dpa-ext-gnomekeyring;
+    homepage = "https://github.com/linuxdeepin/dpa-ext-gnomekeyring";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

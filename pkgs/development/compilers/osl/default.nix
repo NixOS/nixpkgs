@@ -31,7 +31,7 @@ in clangStdenv.mkDerivation rec {
   # TODO: How important is partio? CMake doesn't seem to find it
   meta = with stdenv.lib; {
     description = "Advanced shading language for production GI renderers";
-    homepage = http://opensource.imageworks.com/?p=osl;
+    homepage = "http://opensource.imageworks.com/?p=osl";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.bsd3;
     platforms = platforms.linux;

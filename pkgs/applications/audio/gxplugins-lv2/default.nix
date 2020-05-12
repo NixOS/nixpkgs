@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/brummer10/GxPlugins.lv2;
+    homepage = "https://github.com/brummer10/GxPlugins.lv2";
     description = "A set of extra lv2 plugins from the guitarix project";
     maintainers = [ maintainers.magnetophon ];
     license = licenses.gpl3;

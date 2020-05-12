@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/shssoichiro/oxipng;
+    homepage = "https://github.com/shssoichiro/oxipng";
     description = "A multithreaded lossless PNG compression optimizer";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];

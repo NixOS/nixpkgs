@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Components for building one-time password authentication systems";
-    homepage = https://www.nongnu.org/oath-toolkit/;
+    homepage = "https://www.nongnu.org/oath-toolkit/";
     platforms = with platforms; linux ++ darwin;
   };
 }

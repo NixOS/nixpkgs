@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0z9k3ssbfk2ky2w13avgyf202j1drsz9sv3834bp33cj1i2hc3qw";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+
   # ToDo: a52, etc.?
   buildInputs =
-    [ pkgconfig alsaLib libogg ]
+    [ alsaLib libogg ]
     ++ lib.optional (libpulseaudio != null) libpulseaudio
     ++ lib.optional (libjack2 != null) libjack2;
 

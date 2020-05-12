@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "qdarkstyle";
-  version = "2.8";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit version;
     pname = "QDarkStyle";
-    sha256 = "6a967c4b664446f8bed9df12d1032cf68cb54f186bfc9cbfdbbc756bf9a5d475";
+    sha256 = "0883vzg35fzpyl1aiijzpfcdfvpq5vi325w0m7xkx7nxplh02fym";
   };
 
   # No tests available
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A dark stylesheet for Python and Qt applications";
-    homepage = https://github.com/ColinDuquesnoy/QDarkStyleSheet;
+    homepage = "https://github.com/ColinDuquesnoy/QDarkStyleSheet";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];
   };

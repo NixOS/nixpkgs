@@ -83,11 +83,13 @@ stdenv.mkDerivation rec {
     pcre
     check
     python
-    # libdnf
+
+    # libdnf # vendored unstable branch
+    # required by vendored libdnf
     json_c
     zchunk
     libmodulemd_1
-    utillinux
+    utillinux # for smartcols.pc
     sqlite
     cppunit
   ];

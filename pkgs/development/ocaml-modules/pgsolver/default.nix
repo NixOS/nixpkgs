@@ -15,7 +15,7 @@ buildOasisPackage rec {
   propagatedBuildInputs = [ tcslib ocaml-sat-solvers ];
 
   meta = {
-    homepage = https://github.com/tcsprojects/pgsolver;
+    homepage = "https://github.com/tcsprojects/pgsolver";
     description = "A collection of tools for generating, manipulating and - most of all - solving parity games";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mgttlinger ];

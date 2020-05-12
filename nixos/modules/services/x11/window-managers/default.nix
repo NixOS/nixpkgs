@@ -30,6 +30,7 @@ in
     ./sawfish.nix
     ./stumpwm.nix
     ./spectrwm.nix
+    ./tinywm.nix
     ./twm.nix
     ./windowmaker.nix
     ./wmii.nix

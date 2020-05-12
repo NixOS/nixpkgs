@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
         This is the successor of Google's Cmockery.'';
 
-    homepage = https://cmocka.org/;
+    homepage = "https://cmocka.org/";
 
     license = licenses.asl20;
     platforms = platforms.all;

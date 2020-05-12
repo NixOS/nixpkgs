@@ -317,7 +317,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "The Swift Programming Language";
-    homepage = https://github.com/apple/swift;
+    homepage = "https://github.com/apple/swift";
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.asl20;
     # Swift doesn't support 32bit Linux, unknown on other platforms.

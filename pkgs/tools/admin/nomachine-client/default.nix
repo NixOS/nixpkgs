@@ -77,10 +77,10 @@ in
 
     meta = with stdenv.lib; {
       description = "NoMachine remote desktop client (nxplayer)";
-      homepage = https://www.nomachine.com/;
+      homepage = "https://www.nomachine.com/";
       license = {
         fullName = "NoMachine 6 End-User License Agreement";
-        url = https://www.nomachine.com/licensing-6;
+        url = "https://www.nomachine.com/licensing-6";
         free = false;
       };
       maintainers = with maintainers; [ talyz ];

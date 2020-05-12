@@ -21,12 +21,12 @@ with lib;
     (mkRemovedOptionModule [ "services" "firefox" "syncserver" "group" ] "")
     (mkRemovedOptionModule [ "services" "winstone" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
-    (mkRemovedOptionModule [ "environment.blcr.enable" ] "The BLCR module has been removed")
-    (mkRemovedOptionModule [ "services.beegfsEnable" ] "The BeeGFS module has been removed")
-    (mkRemovedOptionModule [ "services.beegfs" ] "The BeeGFS module has been removed")
-    (mkRemovedOptionModule [ "services.osquery" ] "The osquery module has been removed")
-    (mkRemovedOptionModule [ "services.fourStore" ] "The fourStore module has been removed")
-    (mkRemovedOptionModule [ "services.fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
+    (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
+    (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
+    (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
+    (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
       "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
     (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
@@ -47,6 +47,10 @@ with lib;
       brightnessctl don't require the udev rules anymore (they can use the
       systemd-logind API). Instead of using the module you can now
       simply add the brightnessctl package to environment.systemPackages.
+    '')
+
+    (mkRemovedOptionModule ["services" "prey" ] ''
+      prey-bash-client is deprecated upstream
     '')
 
     # Do NOT add any option renames here, see top of the file

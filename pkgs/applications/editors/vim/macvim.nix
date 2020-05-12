@@ -27,13 +27,13 @@ in
 stdenv.mkDerivation {
   pname = "macvim";
 
-  version = "8.1.2234";
+  version = "8.2.539";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-161";
-    sha256 = "1hp3y85pj1icz053g627a1wp5pnwgxhk07pyd4arwcxs2103agw4";
+    rev = "snapshot-163";
+    sha256 = "0ibc6h7zmk81dygkxd8a2rcq72zbqmr9kh64xhsm9h0p70505cdk";
   };
 
   enableParallelBuilding = true;
@@ -43,18 +43,7 @@ stdenv.mkDerivation {
     gettext ncurses cscope luajit ruby tcl perl python.pkg
   ];
 
-  patches = [ ./macvim.patch ./macvim-sparkle.patch ];
-
-  # The sparkle patch modified the nibs, so we have to recompile them
-  postPatch = ''
-    for nib in MainMenu Preferences; do
-      # redirect stdin/stdout/stderr to /dev/null because ibtool marks them nonblocking
-      # and not redirecting screws with subsequent commands.
-      # redirecting stderr is unfortunate but I don't know of a reasonable way to remove O_NONBLOCK
-      # from the fds.
-      /usr/bin/ibtool --compile src/MacVim/English.lproj/$nib.nib/keyedobjects.nib src/MacVim/English.lproj/$nib.nib >/dev/null 2>/dev/null </dev/null
-    done
-  '';
+  patches = [ ./macvim.patch ];
 
   configureFlags = [
       "--enable-cscope"
@@ -76,18 +65,21 @@ stdenv.mkDerivation {
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
       "--with-compiledby=Nix"
-      "LDFLAGS=-headerpad_max_install_names"
+      "--disable-sparkle"
   ];
 
   makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
 
+  # Remove references to Sparkle.framework from the project.
+  # It's unused (we disabled it with --disable-sparkle) and this avoids
+  # copying the unnecessary several-megabyte framework into the result.
+  postPatch = ''
+    echo "Patching file src/MacVim/MacVim.xcodeproj/project.pbxproj"
+    sed -e '/Sparkle\.framework/d' -i src/MacVim/MacVim.xcodeproj/project.pbxproj
+  '';
+
   # This is unfortunate, but we need to use the same compiler as Xcode,
   # but Xcode doesn't provide a way to configure the compiler.
-  #
-  # If you're willing to modify the system files, you can do this:
-  #   http://hamelot.co.uk/programming/add-gcc-compiler-to-xcode-6/
-  #
-  # But we don't have that option.
   preConfigure = ''
     CC=/usr/bin/clang
 
@@ -103,8 +95,34 @@ stdenv.mkDerivation {
   ''
   ;
 
+  # Because we're building with system clang, this means we're building against Xcode's SDK and
+  # linking against system libraries. The configure script is picking up Nix Libsystem (via ruby)
+  # so we need to patch that out or we'll get linker issues. The MacVim binary built by Xcode links
+  # against the system anyway so it doesn't really matter that the Vim binary will too. If we
+  # decide that matters, we can always patch it back to the Nix libsystem post-build.
+  # It also picks up libiconv, libunwind, and objc4 from Nix. These seem relatively harmless but
+  # let's strip them out too.
+  #
+  # Note: If we do add a post-build install_name_tool patch, we need to add the
+  # "LDFLAGS=-headerpad_max_install_names" flag to configureFlags and either patch it into the
+  # Xcode project or pass it as a flag to xcodebuild as well.
   postConfigure = ''
-    substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
+    substituteInPlace src/auto/config.mk \
+      --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include" \
+      --replace " -L${stdenv.cc.libc}/lib" "" \
+      --replace " -L${darwin.libobjc}/lib" "" \
+      --replace " -L${darwin.libunwind}/lib" "" \
+      --replace " -L${darwin.libiconv}/lib" ""
+
+    # All the libraries we stripped have -osx- in their name as of this time.
+    # Assert now that this pattern no longer appears in config.mk.
+    ( # scope variable
+      while IFS="" read -r line; do
+        if [[ "$line" == LDFLAGS*-osx-* ]]; then
+          echo "WARNING: src/auto/config.mk contains reference to Nix osx library" >&2
+        fi
+      done <src/auto/config.mk
+    )
 
     substituteInPlace src/MacVim/vimrc --subst-var-by CSCOPE ${cscope}/bin/cscope
   '';
@@ -145,7 +163,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Vim - the text editor - for macOS";
-    homepage    = https://github.com/macvim-dev/macvim;
+    homepage    = "https://github.com/macvim-dev/macvim";
     license = licenses.vim;
     maintainers = with maintainers; [ cstrahan lilyball ];
     platforms   = platforms.darwin;

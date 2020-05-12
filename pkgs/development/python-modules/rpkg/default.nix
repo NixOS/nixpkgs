@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for dealing with rpm packaging";
-    homepage = https://pagure.io/fedpkg;
+    homepage = "https://pagure.io/fedpkg";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };

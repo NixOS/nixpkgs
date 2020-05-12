@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ config, stdenv, fetchurl, fetchFromGitHub, makeWrapper, fetchpatch
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
 , ffmpeg_4, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
@@ -52,7 +52,7 @@
 , xvSupport          ? stdenv.isLinux, libXv         ? null
 , youtubeSupport     ? true,           youtube-dl    ? null
 , zimgSupport        ? true,           zimg          ? null
-, archiveSupport     ? false,          libarchive    ? null
+, archiveSupport     ? true,           libarchive    ? null
 , jackaudioSupport   ? false,          libjack2      ? null
 , openalSupport      ? true,           openalSoft    ? null
 , vapoursynthSupport ? false,          vapoursynth   ? null
@@ -191,6 +191,14 @@ in stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
   '';
 
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    # Fix cocoa backend. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/mpv-player/mpv/commit/188169854313b99d01da8f69fe129f0a487eb7c4.patch";
+      sha256 = "062sz4666prb2wg1rn5q8brqkzlq6lxn8sxic78a8lb0125c01f7";
+    })
+  ];
+
   postInstall = ''
     # Use a standard font
     mkdir -p $out/share/mpv
@@ -217,7 +225,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
-    homepage = https://mpv.io;
+    homepage = "https://mpv.io";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.darwin ++ platforms.linux;

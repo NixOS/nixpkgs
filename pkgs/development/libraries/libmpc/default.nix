@@ -27,7 +27,7 @@ stdenv.mkDerivation {
          built upon and follows the same principles as GNU MPFR.
       '';
 
-    homepage = http://mpc.multiprecision.org/;
+    homepage = "http://mpc.multiprecision.org/";
     license = stdenv.lib.licenses.lgpl2Plus;
 
     platforms = stdenv.lib.platforms.all;

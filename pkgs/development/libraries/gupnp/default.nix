@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
 
     # fix deadlock in gupnp-igd tests
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gupnp/commit/d208562657f62b34759896ca9e974bd582d1f963.patch;
+      url = "https://gitlab.gnome.org/GNOME/gupnp/commit/d208562657f62b34759896ca9e974bd582d1f963.patch";
       sha256 = "02kzsb4glxhgb1npf6qqgafiki0ws75sly5h470431mihc6sgp4f";
     })
     # fix breakage in gupnp-igd tests
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gupnp/commit/0648399acb989473119fe59d0b9f65c923e69483.patch;
+      url = "https://gitlab.gnome.org/GNOME/gupnp/commit/0648399acb989473119fe59d0b9f65c923e69483.patch";
       sha256 = "0ba0rngk3a4n3z4dmq06wzgh0n3q9la1nr25qdxqbwlszmxfxpjf";
     })
   ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.gupnp.org/;
+    homepage = "http://www.gupnp.org/";
     description = "An implementation of the UPnP specification";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

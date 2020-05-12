@@ -108,7 +108,7 @@ in stdenv.mkDerivation {
       --replace /opt/google/$appname/google-$appname $exe
     substituteInPlace $out/share/menu/google-$appname.menu \
       --replace /opt $out/share \
-      --replace $out/share/google/chrome/google-$appname $exe
+      --replace $out/share/google/$appname/google-$appname $exe
 
     for icon_file in $out/share/google/chrome*/product_logo_*[0-9].png; do
       num_and_suffix="''${icon_file##*logo_}"
@@ -133,7 +133,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A freeware web browser developed by Google";
-    homepage = https://www.google.com/chrome/browser/;
+    homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
     maintainers = [ maintainers.msteen ];
     platforms = [ "x86_64-linux" ];

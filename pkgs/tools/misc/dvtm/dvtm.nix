@@ -9,6 +9,7 @@ stdenv.mkDerivation {
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 
+  nativeBuildInputs = [ ncurses ];
   buildInputs = [ ncurses ];
 
   prePatch = ''
@@ -16,13 +17,11 @@ stdenv.mkDerivation {
       --replace /usr/share/terminfo $out/share/terminfo
   '';
 
-  installPhase = ''
-    make PREFIX=$out install
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Dynamic virtual terminal manager";
-    homepage = http://www.brain-dump.org/projects/dvtm;
+    homepage = "http://www.brain-dump.org/projects/dvtm";
     license = licenses.mit;
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.unix;

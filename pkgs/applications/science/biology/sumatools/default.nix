@@ -4,7 +4,7 @@ let
   stdenv = gccStdenv;
   meta = with stdenv.lib; {
     description = "Fast and exact comparison and clustering of sequences";
-    homepage = https://metabarcoding.org/sumatra;
+    homepage = "https://metabarcoding.org/sumatra";
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;
   };

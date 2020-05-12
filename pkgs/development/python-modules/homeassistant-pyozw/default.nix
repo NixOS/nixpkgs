@@ -11,5 +11,5 @@ python_openzwave.overridePythonAttrs (oldAttrs: rec {
   };
 
   patches = [];
-  meta.homepage = https://github.com/home-assistant/python-openzwave;
+  meta.homepage = "https://github.com/home-assistant/python-openzwave";
 })

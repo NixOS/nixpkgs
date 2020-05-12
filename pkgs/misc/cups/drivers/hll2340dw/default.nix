@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother hl-l2340dw printer driver";
     license = licenses.unfree;
     platforms = platforms.linux;

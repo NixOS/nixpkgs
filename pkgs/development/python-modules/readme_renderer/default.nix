@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "readme_renderer is a library for rendering readme descriptions for Warehouse";
-    homepage = https://github.com/pypa/readme_renderer;
+    homepage = "https://github.com/pypa/readme_renderer";
     license = lib.licenses.asl20;
   };
 }

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Prevents you from committing secrets and credentials into git repositories";
-    homepage = https://github.com/awslabs/git-secrets;
+    homepage = "https://github.com/awslabs/git-secrets";
     license = licenses.asl20;
     platforms = platforms.all;
   };

@@ -29,6 +29,7 @@ let
     "fritzbox"
     "json"
     "mail"
+    "mikrotik"
     "minio"
     "nextcloud"
     "nginx"
@@ -197,13 +198,25 @@ in
 
   config = mkMerge ([{
     assertions = [ {
-      assertion = (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null);
+      assertion = cfg.snmp.enable -> (
+        (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
+      );
       message = ''
         Please ensure you have either `services.prometheus.exporters.snmp.configuration'
           or `services.prometheus.exporters.snmp.configurationPath' set!
       '';
     } {
-      assertion = (cfg.mail.configFile == null) != (cfg.mail.configuration == {});
+      assertion = cfg.mikrotik.enable -> (
+        (cfg.mikrotik.configFile == null) != (cfg.mikrotik.configuration == null)
+      );
+      message = ''
+        Please specify either `services.prometheus.exporters.mikrotik.configuration'
+          or `services.prometheus.exporters.mikrotik.configFile'.
+      '';
+    } {
+      assertion = cfg.mail.enable -> (
+        (cfg.mail.configFile == null) != (cfg.mail.configuration == null)
+      );
       message = ''
         Please specify either 'services.prometheus.exporters.mail.configuration'
           or 'services.prometheus.exporters.mail.configFile'.

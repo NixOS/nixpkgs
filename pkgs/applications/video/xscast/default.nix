@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/KeyboardFire/xscast;
+    homepage = "https://github.com/KeyboardFire/xscast";
     license = licenses.mit;
     description = "Screencasts of windows with list of keystrokes overlayed";
     maintainers = with maintainers; [ ma27 ];

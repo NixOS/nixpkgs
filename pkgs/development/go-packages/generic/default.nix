@@ -203,16 +203,18 @@ let
     installPhase = args.installPhase or ''
       runHook preInstall
 
-      mkdir -p $bin
+      mkdir -p $out
       dir="$NIX_BUILD_TOP/go/bin"
-      [ -e "$dir" ] && cp -r $dir $bin
+      [ -e "$dir" ] && cp -r $dir $out
 
       runHook postInstall
     '';
 
     preFixup = preFixup + ''
-      find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
+      find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
+
+    strictDeps = true;
 
     shellHook = ''
       d=$(mktemp -d "--suffix=-$name")
@@ -233,18 +235,11 @@ let
 
     enableParallelBuilding = enableParallelBuilding;
 
-    # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-    outputs = args.outputs or [ "bin" "out" ];
-
     meta = {
       # Add default meta information
       homepage = "https://${goPackagePath}";
       platforms = go.meta.platforms or lib.platforms.all;
-    } // meta // {
-      # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.ehmry lib.maintainers.lethalman ];
-    };
+    } // meta;
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"

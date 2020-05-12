@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "0.4pre514_${builtins.substring 0 8 src.rev}";
+  version = "0.6pre600_${builtins.substring 0 8 src.rev}";
 
   src = fetchgit {
     url    = "http://git.kernel.dk/${pname}";
-    rev    = "2454d6301d83a714d0775662b512fd46dbf82a0d";
-    sha256 = "0qdycr0w0rymnizc4p5rh2qcnzr05afris4ggaawdg4zr07jms7k";
+    rev    = "f2e1f3590f7bed3040bd1691676b50839f7d5c39";
+    sha256 = "0wg0pgcbilbb2wg08hsvd18q1m8vdk46b3piz7qb1pvgyq01idj2";
   };
 
   separateDebugInfo = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Userspace library for the Linux io_uring API";
-    homepage    = https://git.kernel.dk/cgit/liburing/;
+    homepage    = "https://git.kernel.dk/cgit/liburing/";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

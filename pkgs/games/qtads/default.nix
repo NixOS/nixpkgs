@@ -18,7 +18,7 @@ mkDerivation rec {
   buildInputs = [ SDL2 fluidsynth libsndfile libvorbis mpg123 qtbase ];
 
   meta = with lib; {
-    homepage = https://realnc.github.io/qtads/;
+    homepage = "https://realnc.github.io/qtads/";
     description = "Multimedia interpreter for TADS games";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

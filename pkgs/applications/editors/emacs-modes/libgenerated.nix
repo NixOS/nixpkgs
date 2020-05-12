@@ -61,8 +61,9 @@ in {
         pname = builtins.replaceStrings [ "@" ] [ "at" ] ename;
         broken = ! isNull error;
       in
-      lib.nameValuePair ename (if hasSource then (
-        self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
+      if hasSource then
+        lib.nameValuePair ename (
+          self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
           melpaBuild {
             inherit pname;
             ename = ename;
@@ -85,6 +86,8 @@ in {
             };
           }
         ) {}
-      ) else null);
+      )
+    else
+      null;
 
 }

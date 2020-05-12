@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple Python wrapper around inotify";
-    homepage = https://github.com/chrisjbillington/inotify_simple;
+    homepage = "https://github.com/chrisjbillington/inotify_simple";
     license = licenses.bsd2;
     maintainers = with maintainers; [ earvstedt ];
   };

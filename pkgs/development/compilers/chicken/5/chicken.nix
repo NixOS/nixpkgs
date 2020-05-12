@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
 
 let
-  version = "5.1.0";
+  version = "5.2.0";
   platform = with stdenv;
     if isDarwin then "macosx"
     else if isCygwin then "cygwin"
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
-    sha256 = "0jsbp3kp0134f318j3wpd1n85gf8qzh034fn198gvazsv2l024aw";
+    sha256 = "1yl0hxm9cirgcp8jgxp6vv29lpswfvaw3zfkh6rsj0vkrv44k4c1";
   };
 
   setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
@@ -43,9 +43,9 @@ stdenv.mkDerivation {
   # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion
 
   meta = {
-    homepage = http://www.call-cc.org/;
+    homepage = "http://www.call-cc.org/";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny corngood ];
+    maintainers = with stdenv.lib.maintainers; [ corngood ];
     platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''

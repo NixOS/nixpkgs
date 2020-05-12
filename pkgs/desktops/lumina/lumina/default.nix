@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
       that is designed for use on any Unix-like operating system. It
       is based on QT5.
     '';
-    homepage = https://lumina-desktop.org;
+    homepage = "https://lumina-desktop.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
