@@ -295,6 +295,8 @@ let
       inherit (pkgs) gnuplot;
     };
 
+    hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
