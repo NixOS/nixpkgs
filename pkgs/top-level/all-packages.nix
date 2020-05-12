@@ -173,6 +173,8 @@ in
 
   colorz = callPackage ../tools/misc/colorz { };
 
+  cpu-x = callPackage ../applications/misc/cpu-x { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
