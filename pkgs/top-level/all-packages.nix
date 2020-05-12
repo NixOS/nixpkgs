@@ -883,6 +883,8 @@ in
 
   crc32c = callPackage ../development/libraries/crc32c { };
 
+  cudd = callPackage ../development/libraries/cudd { };
+
   cue = callPackage ../development/tools/cue { };
 
   deltachat-electron = callPackage
