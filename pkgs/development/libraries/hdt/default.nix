@@ -1,21 +1,19 @@
-{ stdenv, automake, autoconf, libtool, zlib, pkg-config, serd }:
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool, zlib, pkg-config, serd }:
 
 stdenv.mkDerivation rec {
   pname = "hdt";
   version = "1.3.3";
 
-  src = fetchGit {
-    name = "hdt-${version}";
-    url = "https://github.com/rdfhdt/hdt-cpp.git";
-    ref = "refs/tags/v${version}";
-    rev = "b90d8a3cbb9d976c4a654d25762ee5063ff32a76";
+  src = fetchFromGitHub {
+    owner = "rdfhdt";
+    repo = "hdt-cpp";
+    rev = "v${version}";
+    sha256 = "1vsq80jnix6cy78ayag7v8ajyw7h8dqyad1q6xkf2hzz3skvr34z";
   };
 
   phases = "unpackPhase patchPhase preConfigurePhases configurePhase buildPhase installPhase";
 
   buildInputs = [ automake autoconf libtool zlib pkg-config serd ];
-
-  propogatedBuildInputs = [];
 
   patchPhase = "patchShebangs ./autogen.sh";
 
