@@ -303,6 +303,8 @@ let
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
 
+    hkdf = callPackage ../development/ocaml-modules/hkdf { };
+
     hmap = callPackage ../development/ocaml-modules/hmap { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
