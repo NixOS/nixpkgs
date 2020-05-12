@@ -28,6 +28,7 @@
 , meta ? {}
 , target ? null
 , cargoVendorDir ? null
+, checkType ? buildType
 , ... } @ args:
 
 assert cargoVendorDir == null -> cargoSha256 != "unset";
@@ -191,7 +192,7 @@ stdenv.mkDerivation (args // {
   '';
 
   checkPhase = args.checkPhase or (let
-    argstr = "${stdenv.lib.optionalString (buildType == "release") "--release"} --target ${rustTarget} --frozen";
+    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
   in ''
     runHook preCheck
     echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
