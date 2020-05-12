@@ -462,7 +462,7 @@ in rec {
         export CC="gcc"
         export CPP="gcc -E"
         export NIX_CXXSTDLIB_LINK=""
-        export NIX_TARGET_CXXSTDLIB_LINK=""
+        export NIX_CXXSTDLIB_LINK_FOR_TARGET=""
         export OPENSSL_PREFIX=$(realpath openssl)
         # this fixes error: impure path 'LibFFIHeaderDirectives' used in link
         export NIX_ENFORCE_PURITY=0

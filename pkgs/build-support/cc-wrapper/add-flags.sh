@@ -5,15 +5,15 @@
 # wrapped binary just inherit the work of the forker's wrapper script.
 
 var_templates_list=(
-    NIX+CFLAGS_COMPILE
-    NIX+CFLAGS_COMPILE_BEFORE
-    NIX+CFLAGS_LINK
-    NIX+CXXSTDLIB_COMPILE
-    NIX+CXXSTDLIB_LINK
-    NIX+GNATFLAGS_COMPILE
+    NIX_CFLAGS_COMPILE
+    NIX_CFLAGS_COMPILE_BEFORE
+    NIX_CFLAGS_LINK
+    NIX_CXXSTDLIB_COMPILE
+    NIX_CXXSTDLIB_LINK
+    NIX_GNATFLAGS_COMPILE
 )
 var_templates_bool=(
-    NIX+ENFORCE_NO_NATIVE
+    NIX_ENFORCE_NO_NATIVE
 )
 
 accumulateRoles
@@ -21,37 +21,37 @@ accumulateRoles
 # We need to mangle names for hygiene, but also take parameters/overrides
 # from the environment.
 for var in "${var_templates_list[@]}"; do
-    mangleVarList "$var" ${role_infixes[@]+"${role_infixes[@]}"}
+    mangleVarList "$var" ${role_suffixes[@]+"${role_suffixes[@]}"}
 done
 for var in "${var_templates_bool[@]}"; do
-    mangleVarBool "$var" ${role_infixes[@]+"${role_infixes[@]}"}
+    mangleVarBool "$var" ${role_suffixes[@]+"${role_suffixes[@]}"}
 done
 
 # `-B@out@/bin' forces cc to use ld-wrapper.sh when calling ld.
-NIX_@infixSalt@_CFLAGS_COMPILE="-B@out@/bin/ $NIX_@infixSalt@_CFLAGS_COMPILE"
+NIX_CFLAGS_COMPILE_@suffixSalt@="-B@out@/bin/ $NIX_CFLAGS_COMPILE_@suffixSalt@"
 
 # Export and assign separately in order that a failing $(..) will fail
 # the script.
 
 if [ -e @out@/nix-support/libc-cflags ]; then
-    NIX_@infixSalt@_CFLAGS_COMPILE="$(< @out@/nix-support/libc-cflags) $NIX_@infixSalt@_CFLAGS_COMPILE"
+    NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/libc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
 
 if [ -e @out@/nix-support/cc-cflags ]; then
-    NIX_@infixSalt@_CFLAGS_COMPILE="$(< @out@/nix-support/cc-cflags) $NIX_@infixSalt@_CFLAGS_COMPILE"
+    NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/cc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
 
 if [ -e @out@/nix-support/gnat-cflags ]; then
-    NIX_@infixSalt@_GNATFLAGS_COMPILE="$(< @out@/nix-support/gnat-cflags) $NIX_@infixSalt@_GNATFLAGS_COMPILE"
+    NIX_GNATFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/gnat-cflags) $NIX_GNATFLAGS_COMPILE_@suffixSalt@"
 fi
 
 if [ -e @out@/nix-support/cc-ldflags ]; then
-    NIX_@infixSalt@_LDFLAGS+=" $(< @out@/nix-support/cc-ldflags)"
+    NIX_LDFLAGS_@suffixSalt@+=" $(< @out@/nix-support/cc-ldflags)"
 fi
 
 if [ -e @out@/nix-support/cc-cflags-before ]; then
-    NIX_@infixSalt@_CFLAGS_COMPILE_BEFORE="$(< @out@/nix-support/cc-cflags-before) $NIX_@infixSalt@_CFLAGS_COMPILE_BEFORE"
+    NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="$(< @out@/nix-support/cc-cflags-before) $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
 fi
 
 # That way forked processes will not extend these environment variables again.
-export NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET=1
+export NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@=1
