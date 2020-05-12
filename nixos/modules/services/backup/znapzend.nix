@@ -358,6 +358,12 @@ in
         default = false;
       };
 
+      features.oracleMode = mkEnableOption ''
+        Destroy snapshots one by one instead of using one long argument list.
+        If source and destination are out of sync for a long time, you may have
+        so many snapshots to destroy that the argument gets is too long and the
+        command fails.
+      '';
       features.recvu = mkEnableOption ''
         recvu feature which uses <literal>-u</literal> on the receiving end to keep the destination
         filesystem unmounted.
@@ -459,5 +465,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ infinisil ];
+  meta.maintainers = with maintainers; [ infinisil SlothOfAnarchy ];
 }
