@@ -14,8 +14,12 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.utf-8";
 
+  # remove version bounds
+  prePatch = ''
+    sed -i -e 's/==.*//g' requirements.txt
+  ''
   # ipaddress is part of the standard library of Python 3.3+
-  prePatch = lib.optionalString (!pythonOlder "3.3") ''
+  + lib.optionalString (!pythonOlder "3.3") ''
     substituteInPlace requirements.txt \
       --replace "ipaddress" ""
   '';
