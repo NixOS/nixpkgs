@@ -12,7 +12,6 @@ let
     exes = [
       "asciidoctor"
       "asciidoctor-pdf"
-      "asciidoctor-safe"
       "asciidoctor-epub3"
     ];
 
