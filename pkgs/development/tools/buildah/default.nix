@@ -25,7 +25,6 @@ buildGoPackage rec {
   outputs = [ "out" "man" ];
 
   goPackagePath = "github.com/containers/buildah";
-  excludedPackages = [ "tests" ];
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
@@ -35,11 +34,12 @@ buildGoPackage rec {
   buildPhase = ''
     pushd go/src/${goPackagePath}
     make GIT_COMMIT="unknown"
-    install -Dm755 buildah $out/bin/buildah
-    installShellCompletion --bash contrib/completions/bash/buildah
+    make -C docs
   '';
 
-  postBuild = ''
+  installPhase = ''
+    install -Dm755 buildah $out/bin/buildah
+    installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
   '';
 
@@ -49,5 +49,6 @@ buildGoPackage rec {
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    platforms = platforms.linux;
   };
 }
