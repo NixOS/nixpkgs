@@ -778,6 +778,8 @@ in
 
   ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
 
+  exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
+
   altermime = callPackage ../tools/networking/altermime {};
 
   alttab = callPackage ../tools/X11/alttab { };
