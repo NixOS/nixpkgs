@@ -11495,6 +11495,8 @@ in
 
   dotconf = callPackage ../development/libraries/dotconf { };
 
+  draco = callPackage ../development/libraries/draco { };
+
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
