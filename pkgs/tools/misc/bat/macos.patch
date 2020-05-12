@@ -1,0 +1,13 @@
+diff --git a/src/assets.rs b/src/assets.rs
+index 4f8556f..222abc2 100644
+--- a/src/assets.rs
++++ b/src/assets.rs
+@@ -336,7 +336,7 @@ mod tests {
+         assert_eq!(test.syntax_for_file("Makefile"), "Makefile");
+     }
+ 
+-    #[cfg(unix)]
++    #[cfg(all(unix,not(target_os = "macos")))]
+     #[test]
+     fn syntax_detection_invalid_utf8() {
+         use std::os::unix::ffi::OsStrExt;
