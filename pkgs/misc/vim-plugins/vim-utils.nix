@@ -399,9 +399,11 @@ rec {
       wrapGui ? false,
       vimExecutableName ? name,
       gvimExecutableName ? (lib.concatStrings [ "g" name ]),
+      vimExecutable ? "vim",
+      gvimExecutable ? "gvim",
     }: vimWithRC {
-      vimExecutable = "${vim}/bin/vim";
-      gvimExecutable = "${vim}/bin/gvim";
+      vimExecutable = "${vim}/bin/${vimExecutable}";
+      gvimExecutable = "${vim}/bin/${gvimExecutable}";
       inherit name wrapManual wrapGui vimExecutableName gvimExecutableName;
       vimrcFile = vimrcFile vimrcConfig;
       vimManPages = buildEnv {
