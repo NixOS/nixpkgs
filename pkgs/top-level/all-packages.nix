@@ -22536,6 +22536,8 @@ in
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
+  yeahwm = callPackage ../applications/window-managers/yeahwm { };
+
   vym = qt5.callPackage ../applications/misc/vym { };
 
   waon = callPackage ../applications/audio/waon { };
