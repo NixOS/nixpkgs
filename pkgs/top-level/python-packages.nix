@@ -4068,6 +4068,8 @@ in {
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 
+  unrpa = callPackage ../development/python-modules/unrpa { };
+
   lsi = callPackage ../development/python-modules/lsi { };
 
   hkdf = callPackage ../development/python-modules/hkdf { };
