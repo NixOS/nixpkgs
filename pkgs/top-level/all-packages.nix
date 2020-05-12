@@ -16292,6 +16292,8 @@ in
 
   audit = callPackage ../os-specific/linux/audit { };
 
+  b4 = callPackage ../applications/version-management/git-and-tools/b4 { };
+
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };

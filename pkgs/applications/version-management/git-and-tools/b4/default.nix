@@ -1,7 +1,7 @@
-{ stdenv, buildPythonApplication, fetchgit, lib, isPy27,
+{ stdenv, buildPythonPackage, fetchgit, lib, isPy27,
 requests }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "b4";
   version = "0.4.0";
   disabled = isPy27;
