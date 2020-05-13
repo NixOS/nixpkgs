@@ -32,7 +32,7 @@ let
 
   multipath_tools = import ./multipath-tools.nix {
     inherit stdenv fetchurl lvm2;
-    inherit (pkgs) readline systemd libaio gzip;
+    inherit (pkgs) fetchpatch readline systemd libaio gzip;
   };
 
   parted = import ./parted.nix {
