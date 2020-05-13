@@ -6,6 +6,7 @@
 , python3
 , gnome3
 , wrapGAppsHook
+, gobject-introspection
 }:
 
 let
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
     ninja
     jq
     wrapGAppsHook
+    gobject-introspection # for setup-hook
   ];
 
   buildInputs = [
@@ -32,6 +34,7 @@ stdenv.mkDerivation rec {
     python
     pygobject3
     requests
+    gobject-introspection # for Gio typelib
   ];
 
   cmakeFlags = [
