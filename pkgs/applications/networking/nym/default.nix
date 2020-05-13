@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
+  checkType = "debug";
+
   /*
   Nym's test presence::converting_mixnode_presence_into_topology_mixnode::it_returns_resolved_ip_on_resolvable_hostname tries to resolve nymtech.net.
   Since there is no external DNS resolution available in the build sandbox, we point cargo and its children (that's what we remove the 'unsetenv' call for) to a hosts file in which we statically resolve nymtech.net.
