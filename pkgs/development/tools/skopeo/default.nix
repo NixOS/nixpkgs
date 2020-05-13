@@ -10,6 +10,7 @@
 , installShellFiles
 , makeWrapper
 , fuse-overlayfs
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -47,6 +48,8 @@ buildGoModule rec {
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
   '';
+
+  passthru.tests.docker-tools = nixosTests.docker-tools;
 
   meta = with stdenv.lib; {
     description = "A command line utility for various operations on container images and image repositories";
