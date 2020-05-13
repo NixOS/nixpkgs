@@ -393,9 +393,7 @@ let
 
     irmin-watcher = callPackage ../development/ocaml-modules/irmin-watcher { };
 
-    jingoo = callPackage ../development/ocaml-modules/jingoo {
-      pcre = ocaml_pcre;
-    };
+    jingoo = callPackage ../development/ocaml-modules/jingoo { };
 
     js_of_ocaml =
     if lib.versionOlder "4.02" ocaml.version
