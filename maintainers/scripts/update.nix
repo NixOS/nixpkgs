@@ -9,6 +9,10 @@
 # TODO: add assert statements
 
 let
+  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = []; });
+
+  inherit (pkgs) lib;
+
   /* Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
    */
   nubOn = f: list:
@@ -16,21 +20,19 @@ let
       []
     else
       let
-        x = pkgs.lib.head list;
-        xs = pkgs.lib.filter (p: f x != f p) (pkgs.lib.drop 1 list);
+        x = lib.head list;
+        xs = lib.filter (p: f x != f p) (lib.drop 1 list);
       in
         [x] ++ nubOn f xs;
 
-  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = []; });
-
   packagesWith = cond: return: set:
     nubOn (pkg: pkg.updateScript)
-      (pkgs.lib.flatten
-        (pkgs.lib.mapAttrsToList
+      (lib.flatten
+        (lib.mapAttrsToList
           (name: pkg:
             let
               result = builtins.tryEval (
-                if pkgs.lib.isDerivation pkg && cond name pkg
+                if lib.isDerivation pkg && cond name pkg
                   then [(return name pkg)]
                 else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
                   then packagesWith cond return pkg
@@ -47,10 +49,10 @@ let
   packagesWithUpdateScriptAndMaintainer = maintainer':
     let
       maintainer =
-        if ! builtins.hasAttr maintainer' pkgs.lib.maintainers then
+        if ! builtins.hasAttr maintainer' lib.maintainers then
           builtins.throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
         else
-          builtins.getAttr maintainer' pkgs.lib.maintainers;
+          builtins.getAttr maintainer' lib.maintainers;
     in
       packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg &&
                                  (if builtins.hasAttr "maintainers" pkg.meta
@@ -66,7 +68,7 @@ let
 
   packagesWithUpdateScript = path:
     let
-      attrSet = pkgs.lib.attrByPath (pkgs.lib.splitString "." path) null pkgs;
+      attrSet = lib.attrByPath (lib.splitString "." path) null pkgs;
     in
       if attrSet == null then
         builtins.throw "Attribute path `${path}` does not exists."
@@ -77,7 +79,7 @@ let
 
   packageByName = name:
     let
-        package = pkgs.lib.attrByPath (pkgs.lib.splitString "." name) null pkgs;
+        package = lib.attrByPath (lib.splitString "." name) null pkgs;
     in
       if package == null then
         builtins.throw "Package with an attribute name `${name}` does not exists."
@@ -125,15 +127,15 @@ let
 
   packageData = package: {
     name = package.name;
-    pname = pkgs.lib.getName package;
-    updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
+    pname = lib.getName package;
+    updateScript = map builtins.toString (lib.toList package.updateScript);
   };
 
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
 
   optionalArgs =
-    pkgs.lib.optional (max-workers != null) "--max-workers=${max-workers}"
-    ++ pkgs.lib.optional (keep-going == "true") "--keep-going";
+    lib.optional (max-workers != null) "--max-workers=${max-workers}"
+    ++ lib.optional (keep-going == "true") "--keep-going";
 
   args = [ packagesJson ] ++ optionalArgs;
 
