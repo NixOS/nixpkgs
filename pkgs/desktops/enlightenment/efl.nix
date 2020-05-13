@@ -129,13 +129,10 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXi
     xorg.libXinerama
-    xorg.libXp
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
-    xorg.libxkbfile
-    xorg.xcbutilkeysyms
   ];
 
   dontDropIconThemeCache = true;
